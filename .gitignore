@@ -5,6 +5,7 @@
 **/ivy.xml.MD5
 **/.svn
 **/.sass-cache
+**/.tern-project
 
 /*.xml
 /*.properties
