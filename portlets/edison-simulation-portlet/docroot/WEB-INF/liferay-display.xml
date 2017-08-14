@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
+
+<display>
+	<category name="EDISON">
+	  <portlet id="edison-bestsimulation" />
+	  <portlet id="edison-myfile" />
+	  <portlet id="edison-monitoring" />
+	  <portlet id="edison-myrepository" />
+	  <portlet id="edison-statistics-user" />
+	  <portlet id="edison-statistics-app" />
+	  <portlet id="edison-statistics-exec" />
+	  <portlet id="edison-statistics-app-exec" />
+	  <portlet id="edison-statistics-class" />
+	  <portlet id="edison-data-collection" />
+	  <portlet id="edison-data-entry" />
+	  <portlet id="edison-workbench-monitoring"></portlet>
+	  <portlet id="edison-workbench-job-monitoring"></portlet>
+	  <portlet id="edison-workbench-job-status-and-result"></portlet>
+	</category>
+</display>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinder.InsertCustomUniversityExecute" >
+		<![CDATA[
+			INSERT INTO EDSIM_UniversityExecute (executeDate, universityField, userCnt, avgExeTime, exeCnt, cpuTime)		
+			SELECT
+              TOTAL.day AS executeDate,
+              TOTAL.affiliation AS universityField,
+              (
+		        SELECT COUNT(*)
+                FROM
+                  User_ U
+                  INNER JOIN (SELECT EXV.data_, EXV.classPK FROM ExpandoValue EXV WHERE EXV.columnId = #columnId#) AS EXV ON U.userId = EXV.classPK
+                WHERE
+                  EXV.data_ = TOTAL.affiliation
+              )AS userCnt,		  
+              CEIL(IFNULL(SUM(TOTAL.runtimeSum)/SUM(TOTAL.jobCnt),0)) AS averageRuntime,
+		      SUM(TOTAL.jobCnt) AS exeCnt,
+              IFNULL(SUM(TOTAL.runtimeSum),0)AS cputime
+		    FROM(
+		      SELECT
+                DATA.day,
+                DATA.affiliation,
+		        DATA.scienceAppId,
+		        COUNT(*) AS jobCnt,
+		        SUM(DATA.runtime) AS runtimeSum
+		      FROM
+		      (
+		        SELECT
+                  DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') AS day,
+		          A.simulationUuid,
+                  F.data_ AS affiliation,
+		          A.scienceAppId,		      
+		          A.userId,		      
+		          UNIX_TIMESTAMP(B.jobEndDt) - UNIX_TIMESTAMP(B.jobStartDt) AS runtime
+		        FROM
+		          (SELECT A.* FROM EDSIM_Simulation A WHERE A.testYn != true) A,
+		          EDSIM_SimulationJob B,
+		          EDAPP_ScienceApp C
+                  INNER JOIN (SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F ON C.authorId = F.classPK
+		        WHERE
+		          A.simulationUuid = B.simulationUuid		    
+		          AND A.scienceAppId IS NOT NULL
+		          AND A.scienceAppId = C.scienceAppId
+		          AND C.status = 1901004
+		          AND C.appType = "Solver"
+		          AND B.jobSubmitDt IS NOT NULL
+		          AND (DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') >= DATE_FORMAT(#startDt#, '%Y-%m-%d') AND DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') <= DATE_FORMAT(#endDt#, '%Y-%m-%d'))		    
+		      ) DATA
+		      GROUP BY DATA.day, DATA.scienceAppId, DATA.userId
+			) TOTAL
+        	GROUP BY TOTAL.day, TOTAL.affiliation
+			ORDER BY TOTAL.day DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinder.DeleteCustomUniversityExecute" >
+		<![CDATA[
+			DELETE 
+			FROM 
+  				EDSIM_UniversityExecute
+			WHERE 
+				(DATE_FORMAT(executeDate, '%Y-%m-%d') >= DATE_FORMAT(#startDt#, '%Y-%m-%d') AND DATE_FORMAT(executeDate, '%Y-%m-%d') <= DATE_FORMAT(#endDt#, '%Y-%m-%d'))
+		]]>
+	</sql>
+</custom-sql>

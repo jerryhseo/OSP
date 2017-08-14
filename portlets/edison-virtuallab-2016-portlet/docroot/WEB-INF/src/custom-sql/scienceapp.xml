@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.kisti.edison.service.persistence.VirtualLabClassScienceApp.getVirtualLabScienceAppList" >
+		<![CDATA[
+			SELECT  
+			 	A.scienceAppId, 
+		 		A.name, 
+		 	 	ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title,
+			 	A.version, 
+			 	A.userId, 
+			  	F.data_ as universityId, 
+				B.scienceAppSeqNo,
+				B.virtualLabId,
+				A.manualId,
+				A.groupId
+				<isNotEmpty property="classId">
+				,
+				(SELECT COUNT(*) FROM EDVIR_VirtualLabScienceAppLink B, EDVIR_VirtualLabScienceAppLinkClass C WHERE B.scienceAppId = A.scienceAppId AND B.scienceAppSeqNo = C.scienceAppSeqNo AND B.virtualLabId = #virtualLabId# AND C.classId = #classId# ) AS scienceAppCheck	
+				</isNotEmpty>  	
+		    FROM 
+		    	EDAPP_ScienceApp A, 
+		    	EDVIR_VirtualLabScienceAppLink B, 
+		    	(SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F 
+			WHERE 
+				A.scienceAppId = B.scienceAppId
+			AND 
+				A.userId = F.classPK
+			AND 
+				A.status = '1901004'
+			AND 
+				A.appType = 'Solver'
+			<isNotEmpty property="virtualLabId">
+		    AND
+		    	B.virtualLabId = #virtualLabId#
+			</isNotEmpty>
+			<isNotEmpty property="scienceAppId">
+		    AND
+		    	B.scienceAppId = #scienceAppId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.VirtualLabClassScienceApp.getVirtualLabClassScienceAppList" >
+		<![CDATA[
+			SELECT 
+				A.scienceAppId, 
+				A.name, 
+				ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title, 
+				A.version, 
+				A.userId, 
+				B.scienceAppSeqNo,
+				F.data_ as universityId,
+				C.scienceAppClassSeqNo,
+				C.classId,
+				A.manualId,
+				A.groupId
+			FROM
+				EDAPP_ScienceApp A,
+				EDVIR_VirtualLabScienceAppLink B,
+				EDVIR_VirtualLabScienceAppLinkClass C, 
+				(SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F 
+			WHERE
+				A.scienceAppId = B.scienceAppId
+			AND
+				B.scienceAppSeqNo = C.scienceAppSeqNo
+			AND 
+				A.userId = F.classPK
+			<isNotEmpty property="virtualLabId">
+		    AND 
+		    	B.virtualLabId = #virtualLabId#
+			</isNotEmpty>
+			<isNotEmpty property="classId">
+			AND
+				C.classId = #classId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.VirtualLabClassScienceApp.getScienceAppList" >
+		<![CDATA[
+		SELECT DATA.*
+			FROM(
+				SELECT 
+					   A.scienceAppId,
+				       A.name,
+				       A.version,
+				       A.userId,
+				       B.screenName,
+				       (SELECT COUNT(*)
+				        FROM EDVIR_VirtualLabScienceAppLink B
+				        WHERE B.virtualLabId = #virtualLabId# AND B.scienceAppId = A.scienceAppId) AS virtuallabScienceAppCheck
+				FROM
+				      EDAPP_ScienceApp A, User_ B
+				WHERE
+				      A.status = '1901004'
+				AND
+				      A.appType = 'Solver'
+				AND
+				      A.userId = B.userId
+				<isNotEmpty property="searchField">
+				AND   A.name like '%@@searchField@@%'
+				</isNotEmpty>
+          ) AS DATA
+			ORDER BY DATA.virtuallabScienceAppCheck DESC, DATA.name ASC
+  		]]>
+  		
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.VirtualLabClassScienceApp.getVirtualLabClassesInfo" >
+		<![CDATA[
+			SELECT 
+				B.scienceAppClassSeqNo, 
+				B.scienceAppSeqNo, 
+				B.classId, 
+				A.scienceAppId, 
+				A.virtualLabId
+			FROM 
+				EDVIR_VirtualLabScienceAppLink A, EDVIR_VirtualLabScienceAppLinkClass B
+			WHERE 
+				A.scienceAppSeqNo = B.scienceAppSeqNo
+			<isNotEmpty property="virtualLabId">
+		    AND
+		    	A.virtualLabId = #virtualLabId#
+			</isNotEmpty>
+			<isNotEmpty property="scienceAppId">
+		    AND
+		    	A.scienceAppId = #scienceAppId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.VirtualLabClassScienceApp.getVirtualLabInfo" >
+		<![CDATA[
+			SELECT 
+				A.scienceAppSeqNo,
+				A.scienceAppId,
+				A.virtualLabId
+			FROM 
+				EDVIR_VirtualLabScienceAppLink A
+			<isNotEmpty property="virtualLabId">
+			WHERE 
+		    	A.virtualLabId = #virtualLabId#
+			</isNotEmpty>
+			<isNotEmpty property="scienceAppId">
+		    AND
+		    	A.scienceAppId = #scienceAppId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	
+</custom-sql>

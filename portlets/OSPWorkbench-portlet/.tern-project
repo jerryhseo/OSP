@@ -1,0 +1,24 @@
+{
+  "ecmaVersion": 6,
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "outline": {
+      
+    },
+    "liferay": {
+      
+    },
+    "yui3": {
+      
+    },
+    "aui2.0.x": {
+      
+    }
+  },
+  "libs": [
+    "ecma5",
+    "browser"
+  ]
+}

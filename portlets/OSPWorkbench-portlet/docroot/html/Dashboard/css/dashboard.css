@@ -1,0 +1,218 @@
+/*상단타이틀 및 비쥬얼영역*/
+/*상단타이틀 및 비쥬얼영역 20170510*/
+.dashboard-portlet .rightcontentwrap{width:906px; float:right;} 
+
+.dashboard-portlet .topvisualtxt{height: 90px;width:906px;font-family: Arial, Nanum Barun Gothic, NanumGothic;background-image:url(../images/apppage/sub-top-bg.png);background-position:right -7px;background-repeat:no-repeat;background-color:#f9f9f9;background-size: contain;border:solid 1px #dfdfdf;float:right;position:relative;} 
+.dashboard-portlet .toptablewrap{ width:284px; float:left; border:solid 1px #ddd;} 
+.dashboard-portlet .topvisualtxt > .bigtxt{font-size:25px;color:#383838;font-weight:500;margin-top: 6px;margin-left: 25px;float:left;} 
+.dashboard-portlet .topvisualtxt > .stxt{font-size: 14px;color: #777;background: url(../images/apppage/smbl.gif) no-repeat 0 8px;padding-left: 10px;float: left;clear: both;position: absolute;left: 125px;top: 40px;} 
+.dashboard-portlet .topvisualtxt > .stxt.st2{position: absolute;left: 125px;top: 63px;} 
+.dashboard-portlet .topvisualtxt img{margin-top: 10px;width: 80px;height: 69px;margin-left: 20px;float:left;} 
+
+.dashboard-portlet .btn_box{width:300px;position:absolute;top: 52px;left: 810px;} 
+
+/*버튼*/
+.dashboard-portlet .btn_blue1{background:#2a8fee!important;
+	border:0px solid #426ca9!important;
+	color:#fff !important; font-size:13px; padding:7px 14px; border-radius:2px;}
+
+.dashboard-portlet .btn_blue1:hover{text-decoration:none !important;
+	background:#365789 !important;}
+
+.dashboard-portlet .btn_org{
+	background:#ee882a!important;
+	border:0px solid #426ca9!important;
+	color:#fff !important; font-size:15px; padding:9px 18px; border-radius:2px;
+	}
+.dashboard-portlet .btn_org:hover {
+	text-decoration:none !important;
+	background:#365789 !important;
+	}
+.dashboard-portlet .btn_leftsmall{
+	background:#cfeafe!important;
+	border:1px solid #c9c9c9!important;
+	color:#000 !important; font-size:1.5em !important; padding:5px 7px; border-radius:2px;
+	}
+.dashboard-portlet .btn_leftsmall:hover {
+	text-decoration:none !important; border:solid 1px #000000 !important;
+	/*background:#5ba8ec !important; color:#fff !important;*/
+	}
+.dashboard-portlet .icon{
+	background-repeat:no-repeat !important; 
+	background-position:7px  center !important; 
+	float:right;
+}
+	
+/*중앙컨텐츠*/	
+.dashboard-portlet .InputPortName {
+	font-size:15px;
+	color:#fff !important;
+	font-weight:500;
+	background-color:#1ABC9C !important;
+	line-height:2.5em !important;
+	margin:0; padding:0;
+	position:relative;
+	text-align:center;
+	cursor: pointer !important;
+}
+
+
+.dashboard-portlet .inputPort{
+	margin:0 !important;
+	padding:0 !important;
+	font-size:15px;
+	color:#383838 !important;
+	font-weight:500;
+	list-style-type:none;
+	background-color:#f9f9f9;
+	border-bottom:solid 1px #ddd;
+	line-height:2.8em;
+	position:relative;  
+}
+
+.dashboard-portlet .inputPort li{
+	margin:0;
+	padding:0;
+	font-size:15px;
+	font-weight:500;
+	list-style-type:none;
+	background-color:#f9f9f9;
+	border-bottom:solid 1px #ddd;
+	line-height:23px;
+	padding-left:27px;
+	position:relative;
+}
+
+.dashboard-portlet .inputPort li:hover{
+	color:#1ABC9C;
+	cursor: pointer;
+	border-right: 4px solid #1ABC9C;
+	background-color:#e9e9e9;
+}
+.dashboard-portlet .inputPortSelected{
+	color:#1ABC9C !important;
+	cursor: pointer !important;
+	border-right: 4px solid #1ABC9C !important;
+	background-color:#e9e9e9 !important;
+}
+
+.dashboard-portlet .inputPortEmpty{
+	color:#1ABC9C !important;
+	cursor: pointer !important;
+	border-right: 4px solid #1ABC9C !important;
+	background-color:red !important;
+}
+
+
+.dashboard-portlet .LogPortName {
+	font-size:11px;
+	color:#fff !important;
+	font-weight:500;
+	background-color:#585b5f !important;
+	line-height:25px !important;
+	margin:0; padding:0;
+	position:relative;
+	text-align:center;
+	cursor: pointer !important;
+}
+
+.dashboard-portlet .logPort{
+	margin:0 !important;
+	padding:0 !important;
+	font-size:11px;
+	color:#000;
+	font-weight:500;
+	list-style-type:none !important;
+	background-color:#f9f9f9;
+	border-bottom:solid 1px #ddd;
+	line-height:25px;
+	position:relative;
+}
+
+.dashboard-portlet .logPort li{
+	margin:0 !important;
+	padding:0 !important;
+	font-size:11px;
+	font-weight:500;
+	list-style-type:none !important;
+	background-color:#f9f9f9 !important;
+	border-bottom:solid 1px #ddd;
+	line-height:23px !important;
+	padding-left:27px !important;
+	position:relative;
+}
+.dashboard-portlet .logPort li:hover{
+	color:#777;
+	cursor: pointer;
+	border-right:#8db9e5 !important;
+	background-color:#e9e9e9;
+}
+
+.dashboard-portlet .logPort > li.logPortSelected {
+	color:#777;
+	background-color:#8db9e5 !important;
+} 
+
+
+.dashboard-portlet .OutputPortName{
+  font-size:15px;
+  color:#fff;
+  font-weight:500;
+  background-color:#0769ad  !important;
+  line-height:2.5em;
+  margin:0; padding:0;
+  position:relative;
+  text-align:center;
+  cursor: pointer !important;
+}
+
+.dashboard-portlet .outputPort{
+	margin:0 !important;
+	padding:0 !important;
+	font-size:15px;
+	color:#383838  !important;
+	font-weight:500;
+	list-style-type:none !important;
+	background-color:#f9f9f9;
+	border-bottom:solid 1px #ddd;
+	line-height:2.8em;
+	position:relative;  
+}
+.dashboard-portlet .outputPort li{
+	margin:0 !important;
+	padding:0 !important;
+	font-size:15px;
+	font-weight:500;
+	list-style-type:none !important;
+	background-color:#f9f9f9 !important;
+	border-bottom:solid 1px #ddd;
+	line-height:23px;
+	padding-left:27px !important;
+	position:relative;
+}
+
+.dashboard-portlet .outputPort li:hover{
+	color:#0769ad;
+	cursor: pointer;
+	border-right: 4px solid #0769ad;
+	background-color:#e9e9e9;
+}
+
+.dashboard-portlet .outputPortSelected {
+	color:#0769ad !important;
+	cursor: pointer;
+	border-right: 4px solid #0769ad;
+	background-color:#e9e9e9 !important;
+}
+
+.dashboard-portlet .has-sub{
+  background: url(../../../images/dashboard/icon_plus.png) 96% center no-repeat;
+}
+
+.dashboard-portlet .has-sub.active{
+   background: url(../../../images/dashboard/icon_minus.png) 96% center no-repeat;
+}
+
+.dashboard-portlet .hide{
+	display:none
+}

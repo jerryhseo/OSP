@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison.bestsimulation" auto-namespace-tables="true">
+	<author>EDISON</author>
+	<namespace>EDSIM</namespace>
+
+    <entity name="Simulation" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true" >
+		<!-- PK -->
+        <column name="simulationUuid" type="String" primary="true" />
+        <column name="groupId" type="long" primary="true" />
+
+		<!-- Fields -->
+        <column name="userId" type="long"/>
+        <column name="simulationTitle" type="String" localized="true"/>
+        <column name="scienceAppId" type="String"/> <!-- solverId 수정 scienceAppId -->
+        <column name="scienceAppName" type="String" localized="true"/> <!-- solverName 수정 scienceAppName -->
+        <column name="scienceAppVersion" type="String"/>
+        <column name="simulationCreateDt" type="Date"/>
+        <column name="cluster" type="String"/>
+        <column name="classId" type="long"></column>
+        <column name="customId" type="long"></column>
+        <column name="testYn" type="boolean"/>
+        
+		
+		<!-- ORDER -->
+		<order by="desc">
+			<order-column name="simulationCreateDt" />
+		</order>
+		
+		<finder name="SimulationUuid" return-type="Simulation">
+			<finder-column name="simulationUuid"/>
+		</finder>
+		<finder name="AppId" return-type="Collection">
+			<finder-column name="scienceAppId"/>
+		</finder>
+        <finder name="UserId" return-type="Collection">
+            <finder-column name="userId"></finder-column>
+        </finder>
+        <finder name="UserId_G" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="userId"></finder-column>
+        </finder>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="ScienceAppName" return-type="Collection">
+            <finder-column name="scienceAppName"></finder-column>
+        </finder>
+        <finder name="ScienceAppId" return-type="Collection">
+            <finder-column name="scienceAppId"></finder-column>
+        </finder>
+        <finder name="ScienceAppId_U" return-type="Collection">
+            <finder-column name="scienceAppId"></finder-column>
+            <finder-column name="userId"></finder-column>
+        </finder>
+        <finder name="ScienceAppId_G" return-type="Collection">
+            <finder-column name="scienceAppId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="ScienceAppId_U_G" return-type="Collection">
+            <finder-column name="scienceAppId"></finder-column>
+            <finder-column name="userId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+        </finder>
+    </entity>
+
+    <entity name="SimulationJob" local-service="true"
+    	remote-service="true" cache-enabled="false" tx-manager="true">
+    	<!-- PK fields -->
+    	<column name="jobSeqNo" type="long" primary="true"></column>
+    	<column name="simulationUuid" type="String" primary="true"></column>
+    	<column name="groupId" type="long" primary="true"></column>
+
+    	<!-- Fields -->
+    	<column name="jobUuid" type="String" />
+    	<column name="jobStatus" type="long" />
+    	<column name="jobStartDt" type="Date" />
+    	<column name="jobEndDt" type="Date" />
+    	<column name="jobTitle" type="String" localized="true" />
+    	<column name="jobExecPath" type="String" localized="true" />
+    	<column name="jobPhase" type="long" />
+    	<column name="jobSubmitDt" type="Date" />
+    	<column name="jobUniversityField" type="long" />
+    	<column name="jobInputDeckYn" type="boolean" />
+    	<column name="jobInputDeckName" type="String" />
+    	<column name="jobSubmit" type="boolean" />
+
+    	<!-- Order -->
+    	<order by="asc">
+    		<order-column name="jobStatus" />
+    	</order>
+
+    	<!-- Finder -->
+    	<finder name="simulationUuid" return-type="Collection">
+    		<finder-column name="simulationUuid" />
+    	</finder>
+
+    	<finder name="jobUuid" return-type="Collection">
+    		<finder-column name="simulationUuid" />
+    		<finder-column name="jobUuid" />
+    	</finder>
+
+
+    	<!-- PK fields -->
+
+    	<!-- Group instance -->
+
+    	<!-- Audit fields -->
+        <finder name="Uuid" return-type="SimulationJob">
+            <finder-column name="jobUuid"></finder-column>
+        </finder>
+        <finder name="Status" return-type="Collection">
+            <finder-column name="jobSubmit"></finder-column>
+            <finder-column name="jobStatus"></finder-column>
+        </finder>
+        <finder name="SimulationUuid_S" return-type="Collection">
+            <finder-column name="simulationUuid"></finder-column>
+            <finder-column name="jobSubmit"></finder-column>
+            <finder-column name="jobStatus"></finder-column>
+        </finder>
+        <finder name="SubmitStatus" return-type="Collection">
+            <finder-column name="jobSubmit"></finder-column>
+        </finder>
+    </entity>
+
+
+    <entity name="SimulationJobStatus" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+        <column name="statusSeq" type="long" primary="true" />
+		<column name="groupId" type="long" primary="true"></column>
+		<column name="simulationUuid" type="String" primary="true"></column>
+		<column name="jobUuid" type="String" primary="true"/>
+		
+		<!-- Fields -->
+		<column name="jobStatus" type="long"/>
+		<column name="jobStartDt" type="Date"/>
+		<column name="jobEndDt" type="Date"/>
+		<column name="writeDt" type="Date"/>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="statusSeq"/>
+		</order>
+		
+		<!-- Finder -->
+		<finder name="simulationUuid" return-type="Collection">
+			<finder-column name="groupId"/>
+			<finder-column name="simulationUuid"/>
+			<finder-column name="jobUuid"/>
+		</finder>
+		
+		
+	</entity>
+   
+	<entity name="SimulationJobData" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="jobUuid" type="String" primary="true"/>
+		
+		<!-- Fields -->
+		<column name="jobData" type="String" localized="true"/>
+	</entity>
+
+	<!-- 시뮬레이션 마이그레이션 테이블 -->
+	<entity name="SimulationExeStsMigration" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="scienceAppId" type="long" primary="true"/>
+		<column name="groupId" type="long" primary="true"/>
+		<column name="submitDate" type="String" primary="true"/>
+		
+		<!-- Fields -->
+		<column name="userCnt" type="long"/>
+		<column name="jobCnt" type="long"/>
+		<column name="runtime" type="long"/>
+	</entity>
+	
+	<!-- 사이언스앱 실행 통계 테이블 -->
+	<entity name="ScienceAppExecute" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="executeDate" type="String" primary="true"/>
+		<column name="scienceAppId" type="long" primary="true"/>		
+		
+		<!-- Fields -->
+		<column name="userCnt" type="long"/>
+		<column name="avgExeTime" type="long"/>
+		<column name="exeCnt" type="long"/>
+	</entity>
+
+    <!-- 기관별 사이언스앱  실행 통계 테이블 -->
+	<entity name="UniversityExecute" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="executeDate" type="String" primary="true"/>
+		<column name="universityField" type="long" primary="true"/>		
+		
+		<!-- Fields -->
+		<column name="userCnt" type="long"/>
+		<column name="avgExeTime" type="long"/>
+		<column name="exeCnt" type="long"/>
+		<column name="cpuTime" type="long"/>
+	</entity>	
+
+</service-builder>

@@ -1,0 +1,10 @@
+.workbench-portlet{
+	margin: 0;
+	padding: 0;
+	border: 3px solid #00c7e5;
+}
+	
+#p_p_id_workbench_WAR_OSPWorkbenchportlet_ > .portlet-borderless-container{
+	margin: 0 !important;
+	padding: inherit !important;
+}	

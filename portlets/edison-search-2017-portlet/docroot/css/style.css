@@ -1,0 +1,491 @@
+@charset "utf-8";
+.aui input[type="text"],
+.aui select,
+.aui textarea {
+    margin-bottom: 0
+}
+
+.edison #wrap .table1_list .localDiv td {
+    border-bottom: 0;
+    padding: 0
+}
+
+.aui .localDiv .input-localized-input {
+    display: inline-block;
+    margin: 5px 0 5px 0
+}
+
+.aui input,
+.aui textarea,
+.aui .uneditable-input {
+    width: inherit
+}
+
+.aui .control-group {
+    margin-bottom: 0
+}
+
+.aui .palette-container {
+    margin-top: 5px
+}
+
+.aui .tooltip {
+    display: none
+}
+
+.readOnlyClass {
+    background-color: #eee
+}
+
+span.requiredField {
+    color: red
+}
+
+#tabs_container {
+    width: 1149px;
+    margin: 0 auto;
+    height: 34px;
+    padding: 19px 10px 10px 10px
+}
+
+#tabs {
+    list-style: none;
+    margin: 0;
+    fint-size: 12px;
+    font-family: Arial, Nanum Barun Gothic, NanumGothic
+}
+
+#tabs li {
+    list-style: none;
+    display: inline
+}
+
+#tabs li a {
+    border: 2px solid #d2d2d2;
+    padding: 8px 35px;
+    color: #646464;
+    text-decoration: none;
+    background-color: #eef8fa;
+    border-bottom: 0;
+    outline: 0;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px
+}
+
+#tabs li a.active {
+    font: 13px malgun gothic;
+    color: #fff;
+    font-weight: bolder;
+    padding-top: 13px;
+    background-color: #7abced;
+    border: 3px solid #d2d2d2;
+    border-bottom: 0
+}
+
+#tabs li a:hover {
+    font: 13px malgun gothic;
+    font-weight: bolder;
+    border: 3px solid #d2d2d2;
+    border-bottom: 0
+}
+
+.tab_content {
+    display: none
+}
+
+#sciencedetail img {
+    padding-left: 10px;
+    vertical-align: middle
+}
+
+.sworkflowwrap {
+    width: 100%;
+    height: 385px;
+    background: url(/edison-appstore-portlet/images/bestSolver/workflowimgbg.jpg) repeat-x
+}
+
+.swimg {
+    width: 1220px;
+    margin: 0 auto
+}
+
+.swbtn {
+    width: 100%;
+    background: #eff0f2;
+    overflow: hidden;
+    text-align: center
+}
+
+.swbtn ul {
+    padding: 15px 0;
+    display: inline-block;
+    margin: 0 auto
+}
+
+.swbtn ul li {
+    float: left;
+    padding-right: 7px
+}
+
+.swconbox {
+    width: 1187px;
+    background: #fff;
+    height: 380px;
+    clear: both;
+    margin: 0 auto;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0 0 25px #ddd;
+    margin-bottom: 50px
+}
+
+.swcontitle {
+    font-size: 27px;
+    font-weight: 600
+}
+
+.swcontxt {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.serv_icon {
+    padding: 3px 10px;
+    border-radius: 35px;
+    -webkit-border-radius: 35px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 7px;
+    min-height: 11px;
+    border: solid 1px #646049;
+    background-color: #646049
+}
+
+.areabox {
+    width: 45px;
+    float: left;
+    margin-left: 240px;
+    margin-right: 12px;
+    text-align: center
+}
+
+.areabox1 {
+    width: 45px;
+    float: left;
+    margin-left: 12px;
+    margin-right: 12px;
+    text-align: center
+}
+
+.areatxt {
+    font-size: 19px;
+    color: #000;
+    font-weight: 400;
+    margin-top: 60px;
+    margin-right: 23px;
+    text-align: left
+}
+
+.areatxt1 {
+    font-size: 19px;
+    float: left;
+    color: #000;
+    font-weight: 400;
+    margin-top: 60px;
+    margin-right: 12px;
+    text-align: left
+}
+
+.tabmenu02 {
+    border-bottom: solid 2px #8fa4b5;
+    height: 38px;
+    overflow: hidden
+}
+
+.tabmenu02 ul {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.tabmenu02 ul li {
+    padding: 9px;
+    font-size: 16px;
+    color: #2e383f;
+    background-color: #c0cbd5;
+    width: 150px;
+    border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    text-align: center;
+    float: left;
+    margin-right: 2px;
+    cursor: pointer
+}
+
+.tabmenu02 ul li.on {
+    color: #fff;
+    background-color: #8fa4b5;
+    cursor: default
+}
+
+.tbcell03 {
+    background-color: #eee;
+    padding: 15px 10px 15px 25px;
+    font-size: 15px;
+    color: #000;
+    line-height: 25px
+}
+
+.tbcell04 {
+    background-color: #f7f7f7;
+    padding: 15px 10px;
+    font-size: 13px;
+    color: #666;
+    line-height: 25px
+}
+
+.tbcell05 {
+    background-color: #f7f7f7;
+    padding: 15px 10px 15px 25px;
+    font-size: 15px;
+    color: #000;
+    line-height: 25px
+}
+
+.tbcell06 {
+    background-color: #fdfdfd;
+    padding: 15px 10px;
+    font-size: 13px;
+    color: #666;
+    line-height: 25px
+}
+
+#btnGroupBottom {
+    padding: 10px;
+    float: right
+}
+
+.virtitlebox {
+    margin: 0 auto;
+    float: left;
+    width: 100%
+}
+
+.virtitlebox img {
+    float: left;
+    padding-top: 25px;
+    padding-right: 10px
+}
+
+.virtitle {
+    float: left;
+    font-size: 18px;
+    color: #000;
+    padding-top: 22px
+}
+
+.button0801 {
+    padding: 4px 10px 5px 10px;
+    height: 32px;
+    background: #606060;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: solid 1px #6a6a6b;
+    min-width: 90px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px
+}
+
+
+
+
+
+
+
+/*main - search*/
+div.main-search {width:390px;height:41px; padding-left:15px; background:url(../edison-appstore-portlet/images/mainSearchApp/search_bg.png) left bottom no-repeat; }
+div.main-search input{font-size:17px;color:#646464;border:solid 1px #fff; width:312px; height:22px;}
+div.main-search input[type="button"]{width:25px; height:25px; margin-left:18px; margin-top:11px; background:url(../edison-appstore-portlet/images/mainSearchApp/btn_search.gif)#fff left top no-repeat; text-align:center;border:solid 1px #fff;}
+
+div.main_app{width:320px; height:265px;}
+div.main_app div.apptitle {text-align:center; font-size:28px;color:#fff;}
+div.main_app div.appgroup {width:320px; height:167px;}
+div.main_app div.appgroup div.arrowleft {padding-top:0px; text-align:left;}
+div.main_app div.appgroup div.arrowright {padding-top:0px; text-align:left;}
+div.main_app div.appgroup div.appimg {padding-top:6px; padding-left:16px; background:url(../edison-appstore-portlet/images/mainSearchApp/s_app_bg.png) 8px 0px no-repeat;}
+div.main_app div.appinfo {word-break: keep-all; margin: 20px 0px 0px 5px; width:195px; font-size:15px; color:#fff;line-height:23px;}
+div.main_app div.appinfo_sub {word-break: keep-all; margin: 10px 0px 0px 5px; width:195px; font-size:15px; color:#fff;line-height:23px;}
+div.main-simul div.simtitle {font-size:36px; color:#fff; text-align:center;}
+div.main-simul div.simtitle a{color:#fff; text-decoration:none;}
+div.main-simul div.simbtn {vertical-align:bottom;}
+div.main-simul div.siminfo {margin-left:28px; padding-top:5px; font-size:16px; color:#f2efeb ;font-weight:400; vertical-align:top;}
+div.main-simul div.siminfo p{margin-top:11px; font-size:16px; font-weight:400;}
+
+.mainvisual_grey{width:1220px; margin:0 auto;height:45px; margin-top:11px; color:#fff;font-size:14px;}
+.mainvisual_grey_sub{width:1220px; margin:0 auto;height:45px; margin-top:13px; color:#fff;font-size:14px;}
+.mainvisual_grey span, .mainvisual_grey_sub span{color:#c2daef; font-size:12px;}
+
+/*main_5area*/
+.groupArea{height:138px;}
+.research{width:1220px; margin:0 auto; background:url(../edison-appstore-portlet/images/mainSearchApp/mainvisualbg02.jpg)#fff left top no-repeat; height:138px; text-align:center;}
+.areabox{width:45px; float:left; margin-left:240px; margin-right:12px; text-align:center;}
+.areabox1{width:45px; float:left; margin-left:12px; margin-right:12px; text-align:center;}
+.areatxt{font-size:19px; color:#000; font-weight:400; margin-top:60px; margin-right:23px; text-align:left;}
+.areatxt1{font-size:19px; float:left; color:#000; font-weight:400; margin-top:60px; margin-right:12px; text-align:left;}
+
+.tabmenu02{border-bottom:solid 2px #8fa4b5; height:38px; overflow:hidden;}
+.tabmenu02 ul{list-style:none; margin:0; padding:0;}
+.tabmenu02 ul li{padding:9px; font-size:16px; color:#2e383f; background-color:#c0cbd5; width:150px; border-radius:3px 3px 0px 0px; -webkit-border-radius:3px 3px 0px 0px; text-align:center; float:left; margin-right:2px; cursor:pointer;}
+.tabmenu02 ul li.on{color:#fff; background-color:#8fa4b5; cursor:default;}
+
+.tbcell03{background-color:#eeeeee; padding:15px 10px 15px 25px; font-size:15px; color:#000; line-height:25px;}
+.tbcell04{background-color:#f7f7f7; padding:15px 10px; font-size:13px; color:#666; line-height:25px;}
+.tbcell05{background-color:#f7f7f7; padding:15px 10px 15px 25px; font-size:15px; color:#000; line-height:25px;}
+.tbcell06{background-color:#fdfdfd; padding:15px 10px; font-size:13px; color:#666; line-height:25px;}
+
+
+#l_search {
+	position:absolute;
+	width:390px;
+	height:47px;
+	z-index:1;
+	top: 45px;
+	left: 66px;
+}
+#l_Simulation {
+	position:absolute;
+	width:208px;
+	height:50px;
+	z-index:2;
+	left: 380px;
+	top: 165px;
+}
+#l_Simulation01 {
+	position:absolute;
+	width:208px;
+	height:208px;
+	z-index:3;
+	left: 422px;
+	top: 226px;
+}
+#l_Simulation02 {
+	position:absolute;
+	width:153px;
+	height:115px;
+	z-index:4;
+	left: 625px;
+	top: 311px;
+}
+#l-app {
+	position:absolute;
+	width:340px;
+	height:352px;
+	z-index:5;
+	left: 805px;
+	top: 58px;
+}
+#l-apptitle {
+	position:absolute;
+	width:176px;
+	height:40px;
+	z-index:1;
+	left: 62px;
+	top: -1px;
+}
+#l-app-in {
+	position:absolute;
+	width:340px;
+	height:152px;
+	z-index:2;
+	top: 40px;
+	left: 0px;
+}
+#l-left {
+	position:absolute;
+	width:63px;
+	height:211px;
+	z-index:1;
+	left: -1px;
+	top: 91px;
+}
+#l-right {
+	position:absolute;
+	width:63px;
+	height:210px;
+	z-index:1;
+	left: 284px;
+	top: 91px;
+}
+#l-appinfo {
+	position: absolute;
+	top: 57px;
+	left: 50px;
+	width:206px;
+	height:217px;
+	overflow: hidden;
+}
+#l-appinfo ul{
+	width:412px;
+	margin:0px;
+}
+#l-appinfo ul li{
+	float:left;
+}
+
+#l-appimg {
+	position:absolute;
+	width:190px;
+	height:142px;
+	z-index:2;
+	left: 58px;
+	top: 57px;
+}
+#l-apptxt {
+	position:absolute;
+	width:204px;
+	height:105px;
+	z-index:3;
+	top: 300px;
+	left: 45px;
+}
+.appimg img {
+	width:168px;
+	height:114px;
+}
+img[usemap], map area{
+    outline: none;
+}
+
+#contents .mainvisualwrap{width:100%; background:url(../edison-appstore-portlet/images/mainSearchApp/mainvisualbg.jpg) repeat-x;height:511px;}
+#contents .mainvisual{width:1220px; margin:0 auto;background:url(../edison-appstore-portlet/images/mainSearchApp/mainvisualbg01.jpg) repeat-x;height:466px;}
+.mainvisual input{
+	color: #646464;
+}
+.mainvisual input:-ms-input-placeholder{
+	color:#9b9b9b;
+}
+/* UI Object */
+.mainvisual_grey .select{display:inline-block; position:absolute; border:1px solid #e0e0e0; margin-top:-5px; margin-left:230px;}
+.mainvisual_grey .select *{ margin:0; padding:0; cursor:pointer}
+.mainvisual_grey .select .my_value{overflow:visible; position:relative; top:0; left:0; z-index:2; border:1px solid #bababa; background:transparent; color:#666; text-align:left; line-height:19px; _line-height:normal}
+.mainvisual_grey .select .my_value.selected{}
+.mainvisual_grey .select.openlist .my_value,
+.mainvisual_grey .select .my_value.outLine{}
+.mainvisual_grey .select button.my_value{margin:3px; min-width:180px; cursor:pointer; color: #a3a3a3; font-size: 14px; height: 25px; text-indent: 5px; border: 0; outline:0;}
+.mainvisual_grey .select div.my_value{ height:19px; text-indent:8px}
+.mainvisual_grey .select .ctrl{float: right; display:inline-block; width:18px; height:19px; background:transparent;}
+.mainvisual_grey .select .arrow{width:0; height:0; border-top:6px solid #000; border-left:5px solid transparent; border-right:5px solid transparent; font-size:0; line-height:0}
+.mainvisual_grey .select ul{z-index:3; overflow:hidden; border:0; border-top:1px solid #bababa; border-bottom:1px solid #bababa; background:#fff; list-style:none}
+.mainvisual_grey .select ul.a_list{ display:none}
+.mainvisual_grey .select.openlist ul.a_list{ display:block}
+.mainvisual_grey .select ul.i_list{ left:-2000%}
+.mainvisual_grey .select.openlist ul.i_list{ left:0}
+.mainvisual_grey .select li{font-size: 14px; overflow:hidden; position:relative; height:31px; line-height:31px; border-left:1px solid #bababa; border-right:1px solid #bababa; white-space:nowrap}
+.mainvisual_grey .select li input.option{ position:absolute; width:100%; height:20px; line-height:20px}
+.mainvisual_grey .select li label{ position:absolute; top:0; left:0; width:100%; height:18px; background:#fff; color:#767676; line-height:18px; text-indent:8px; *text-indent:6px}
+.mainvisual_grey .select li a{ display:block; height:31px; background:#fff; color:#767676; line-height:31px; text-indent:8px; *text-indent:6px; text-decoration:none}
+.mainvisual_grey .select li.hover *{ background:#999; color:#fff}

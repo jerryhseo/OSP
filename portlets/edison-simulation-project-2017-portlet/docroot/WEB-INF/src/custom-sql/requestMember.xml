@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.kisti.edison.simulationProject.service.persistence.RequestMemberFinder.getCustomRequestMembertList" >
+		<![CDATA[
+			SELECT 
+			  RM.* ,
+			  U.firstName,
+			  U.screenName,
+			  F.data_ AS universityField
+			FROM
+			  EDSIMPRO_RequestMember RM
+             		INNER JOIN (SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F ON RM.userId = F.classPK ,
+              User_ U              
+			WHERE
+              RM.userId = U.userId
+              AND RM.simulationProjectId = #simulationProjectId#
+              <isNotEmpty property="searchRequestState">
+              	AND RM.requestState = #searchRequestState#
+              </isNotEmpty>
+              <isNotEmpty property="searchText">
+              	AND ( U.firstName like '%@@searchText@@%' OR U.screenName like '%@@searchText@@%' )
+              </isNotEmpty>
+			ORDER BY RM.requestDate DESC
+			LIMIT #begin#, #end#
+  		]]>
+  		
+	</sql>
+	<sql id="org.kisti.edison.simulationProject.service.persistence.RequestMemberFinder.getCustomRequestMemberCount" >
+		<![CDATA[
+		    SELECT COUNT(*) AS totalCount
+            FROM(
+               SELECT 
+                 RM.* ,
+			     U.firstName,
+                 U.screenName,
+                 F.data_ AS universityField
+			   FROM
+				 EDSIMPRO_RequestMember RM
+                   INNER JOIN (SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F ON RM.userId = F.classPK ,
+                 User_ U              
+			   WHERE
+                 RM.userId = U.userId
+                 AND RM.simulationProjectId = #simulationProjectId# 
+                 <isNotEmpty property="searchRequestState">
+                 	AND RM.requestState = #searchRequestState#
+                 </isNotEmpty>
+                 <isNotEmpty property="searchText">
+              		AND ( U.firstName like '%@@searchText@@%' OR U.screenName like '%@@searchText@@%' )
+              	 </isNotEmpty>
+			)RMLIST        
+  		]]>
+  		
+	</sql>	
+	
+</custom-sql>

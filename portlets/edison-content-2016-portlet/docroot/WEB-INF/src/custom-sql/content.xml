@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.content.service.persistence.getCountContentHeader" >
+		<![CDATA[
+		SELECT
+			COUNT(*) AS totalCnt 
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.content.service.persistence.getListContentHeader" >
+		<![CDATA[
+		
+		SELECT
+			DATA.uuid_, 
+			DATA.contentSeq, 
+			DATA.contentDiv, 
+			DATA.title, 
+			DATA.resume, 
+			DATA.contentFileNm, 
+			DATA.advancedStartFileNm, 
+			DATA.serviceLanguage, 
+			DATA.projectYn, 
+			DATA.projectId, 
+			DATA.viewCnt, 
+			DATA.insertId, 
+			DATA.insertDate, 
+			DATA.updateId, 
+			DATA.updateDate,
+			DATA.version, 
+			DATA.openYn,
+			(SELECT user.screenName FROM User_ user WHERE user.userId=DATA.insertId) screenName
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.content.service.persistence.getContentFromJoin" >
+	<![CDATA[
+		FROM(
+			SELECT A.* 
+			FROM
+				<isEqual property="isAdmin" propertyValue="false">
+				 	(
+						SELECT A.* FROM EDMED_Content A, EDAUT_UserGroupRoleCustom B
+						where 
+							A.contentSeq = B.customId
+							<isNotEmpty property="insertId"> 
+							AND 
+								B.userId = #insertId#
+							AND B.roleId = #roleId#
+							</isNotEmpty>
+					) A 
+				</isEqual>
+				<isEqual property="isAdmin" propertyValue="true">
+					EDMED_Content A
+				</isEqual>
+					
+				<isEqual property="categoryJoin" propertyValue="true">
+					,(SELECT * FROM AssetEntry WHERE classNameId = #classNameId#) B 
+					,AssetEntries_AssetCategories C	
+				</isEqual>	
+				
+				WHERE 1=1
+				<isEqual property="categoryJoin" propertyValue="true">
+					AND A.contentSeq = B.classPK
+					AND B.entryId = C.entryId
+				</isEqual>	
+	]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.content.service.persistence.getContentWhere" >
+		<!-- 사이트 일때만 category 조인, 포털은 조인 필요없음. -->
+		<!-- 통합검색은 category  조인-->
+		<![CDATA[
+				<isNotEmpty property="categoryIds">
+					AND C.categoryId in (#categoryIds#)			
+				</isNotEmpty>	
+		
+				<isNotEmpty property="searchText">
+				AND	ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') like '%@@searchText@@%'
+				</isNotEmpty>
+				
+				<isNotEmpty property="serviceLanguage">
+				AND
+					A.serviceLanguage LIKE '%@@serviceLanguage@@%' 
+				</isNotEmpty>
+				
+				<isNotEmpty property="contentDivList">
+				AND
+					A.contentDiv IN (#contentDivList#)
+				</isNotEmpty>
+					
+				<isNotEmpty property="contentSeq">
+				AND
+					A.contentSeq = #contentSeq#
+				</isNotEmpty>
+				<isNotEmpty property="openYn">
+				AND
+					A.openYn = #openYn#
+				</isNotEmpty>
+				GROUP BY A.contentSeq
+				ORDER BY insertDate DESC
+			)DATA
+			<isNotEmpty property="begin">
+				Limit #begin#, #end#
+			</isNotEmpty> 
+		]]>
+	</sql>
+	
+	
+	
+	<sql id="org.kisti.edison.content.service.persistence.getAssetEntryModelListHeader" >
+			SELECT 
+				contentSeq, 
+				contentDiv,
+				ExtractValue(title, 'root/Title[@language-id="@@languageId@@"]') as title,
+				ExtractValue(resume, 'root/Resume[@language-id="@@languageId@@"]') as resume,
+				version				 
+	</sql>
+	<sql id="org.kisti.edison.content.service.persistence.getAssetEntryModelWhere" >
+		<![CDATA[
+			FROM EDMED_Content
+			WHERE 
+			 	 serviceLanguage  like '%@@languageId@@%'
+			 	 
+			<isNotEmpty property="modelSeqList">
+			 	AND contentSeq in ( @@modelSeqList@@ )
+			</isNotEmpty>
+			<isNotEmpty property="modelSeqStr">
+			 	AND contentSeq = #modelSeqStr# 
+			</isNotEmpty>
+			<isNotEmpty property="contentDiv">
+			 	AND contentDiv = #contentDiv# 
+			</isNotEmpty>
+			<isNotEmpty property="openYn">
+			 	AND openYn = #openYn#
+			</isNotEmpty>
+			<isNotEmpty property="searchText">
+				AND	ExtractValue(title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchText@@%'
+			</isNotEmpty>
+			<isNotEmpty property="begin">
+				Limit #begin#, #end#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.content.service.persistence.getListGeneralForProject" >
+		<![CDATA[
+		SELECT
+			A.uuid_, 
+			A.contentSeq, 
+			A.contentDiv, 
+			A.title, 
+			A.resume, 
+			A.contentFileNm, 
+			A.advancedStartFileNm, 
+			A.serviceLanguage, 
+			A.projectYn, 
+			A.projectId, 
+			A.viewCnt, 
+			A.insertId, 
+			A.insertDate, 
+			A.updateId, 
+			A.updateDate,
+			A.version, 
+			A.openYn,
+			B.screenName, 	
+			B.firstName
+		FROM
+			EDMED_Content A, User_ B 
+		WHERE
+		A.insertId = B.userId
+		<isNotEmpty property="contentSeq"> 
+			AND A.contentSeq = #contentSeq#
+		</isNotEmpty>
+		<isNotEmpty property="userId"> 
+			AND A.insertId = #userId#
+		</isNotEmpty>
+		<isNotEmpty property="searchText">
+		AND	
+			(ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchText@@%' OR B.firstName LIKE '%@@searchText@@%')
+		</isNotEmpty>
+		<isNotEmpty property="projectCategoryId">
+			AND	 A.projectId = #projectCategoryId#
+		</isNotEmpty>
+ 		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.content.service.persistence.getListGeneralForProjectListCont" >
+		<![CDATA[
+		SELECT
+			COUNT(*) AS totalCnt
+		FROM
+			EDMED_Content A, User_ B 
+		WHERE
+		A.insertId = B.userId
+		<isNotEmpty property="contentSeq"> 
+			AND A.contentSeq = #contentSeq#
+		</isNotEmpty>
+		<isNotEmpty property="userId"> 
+			AND A.insertId = #userId#
+		</isNotEmpty>
+		<isNotEmpty property="searchText">
+		AND	
+			(ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchText@@%' OR B.firstName LIKE '%@@searchText@@%')
+		</isNotEmpty>
+		
+		<isNotEmpty property="projectCategoryId">
+			AND	 A.projectId = #projectCategoryId#
+		</isNotEmpty>
+		]]>
+	</sql>
+	
+</custom-sql>

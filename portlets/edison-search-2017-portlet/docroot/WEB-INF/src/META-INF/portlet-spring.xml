@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.edison.search.service.service.SearchLocalService" class="org.kisti.edison.search.service.service.impl.SearchLocalServiceImpl" />
+	<bean id="org.kisti.edison.search.service.service.persistence.SearchPersistence" class="org.kisti.edison.search.service.service.persistence.SearchPersistenceImpl" parent="basePersistence">
+		<property name="dataSource" ref="noDataSource" />
+	</bean>
+	<bean id="org.kisti.edison.search.service.service.SearchConditionLocalService" class="org.kisti.edison.search.service.service.impl.SearchConditionLocalServiceImpl" />
+	<bean id="org.kisti.edison.search.service.service.persistence.SearchConditionPersistence" class="org.kisti.edison.search.service.service.persistence.SearchConditionPersistenceImpl" parent="basePersistence">
+		<property name="dataSource" ref="noDataSource" />
+	</bean>
+</beans>

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.kisti.osp.icecap.model.DataCollection" />
+	<import class="com.kisti.osp.icecap.model.DataCollectionLayout" />
+	<import class="com.kisti.osp.icecap.model.DataEntry" />
+	<import class="com.kisti.osp.icecap.model.DataEntryProvenance" />
+	<import class="com.kisti.osp.icecap.model.DataType" />
+	<import class="com.kisti.osp.icecap.model.DataTypeAnalyzer" />
+	<import class="com.kisti.osp.icecap.model.DataTypeEditor" />
+	<import class="com.kisti.osp.icecap.model.DataTypeStructure" />
+	<class name="com.kisti.osp.icecap.model.impl.DataCollectionImpl" table="icecap_DataCollection">
+		<cache usage="read-write" />
+		<id name="collectionId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="version" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="title" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="targetLanguage" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="accessMethod" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="typeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="folderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataCollectionLayoutImpl" table="icecap_DataCollectionLayout">
+		<cache usage="read-write" />
+		<id name="collectionId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="layoutStr" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataEntryImpl" table="icecap_DataEntry">
+		<cache usage="read-write" />
+		<id name="entryId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="collectionId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="comments" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="path" type="com.liferay.portal.dao.orm.hibernate.StringType" column="path_" />
+		<property name="simulationSubjectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="productionTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="viewCount" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="downloadCount" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="lastAccessedDate" type="org.hibernate.type.TimestampType" />
+		<property name="fileEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataEntryProvenanceImpl" table="icecap_DataEntryProvenance">
+		<cache usage="read-write" />
+		<id name="entryId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="inputData" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="PROVStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataTypeImpl" table="icecap_DataType">
+		<cache usage="read-write" />
+		<id name="typeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="version" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="samplePath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="isFavorite" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="ownerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataTypeAnalyzerImpl" table="icecap_DataTypeAnalyzer">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="com.kisti.osp.icecap.service.persistence.DataTypeAnalyzerPK">
+			<key-property name="typeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="analyzerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="isDefault" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataTypeEditorImpl" table="icecap_DataTypeEditor">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="com.kisti.osp.icecap.service.persistence.DataTypeEditorPK">
+			<key-property name="typeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="editorId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="isDefault" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.kisti.osp.icecap.model.impl.DataTypeStructureImpl" table="icecap_DataTypeStructure">
+		<cache usage="read-write" />
+		<id name="typeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="structure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+</hibernate-mapping>

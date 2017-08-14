@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql >
+	<sql file="custom-sql/simulationProject.xml"/>
+	<sql file="custom-sql/scienceApp.xml"/>
+	<sql file="custom-sql/requestMember.xml"/>
+</custom-sql >

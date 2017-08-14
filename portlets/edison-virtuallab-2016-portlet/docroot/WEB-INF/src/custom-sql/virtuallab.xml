@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabList" >
+		<![CDATA[
+			SELECT 
+				A.* ,COUNT(*) as classCount
+			FROM
+				EDVIR_VirtualLab A, 
+				EDVIR_VirtualLabs_VirtualLabClasses B,
+				EDVIR_VirtualLabClass C
+				<isNotEmpty property="attending">
+				,
+					(SELECT 
+						F.*, G.classId
+					 FROM 
+					 	EDVIR_VirtualLabUser F,
+						EDVIR_VirtualLabClasses_VirtualLabUsers G
+					WHERE
+						F.virtualLabUserId = G.virtualLabUserId
+					AND
+						F.userId = #userId#
+					) AS H
+				</isNotEmpty>
+				,
+					(
+						SELECT P.professorSeq, CONCAT(U.firstName, U.middleName, U.lastName) professorName 
+						FROM EDVIR_Professor P, User_ U 
+						WHERE P.userId = U.userId
+					) PU
+			WHERE
+				A.virtualLabId = B.virtualLabId
+				AND
+					B.classId = C.classId
+					
+				AND 
+					A.professorSeq = PU.professorSeq
+				<isNotEmpty property="groupId">
+				AND
+					A.groupId = #groupId#
+				</isNotEmpty>
+				<isNotEmpty property="addClass">
+				AND
+					date(C.classEndDt) &gt; date(now()) 
+				AND
+					date(C.classStartDt) &lt; date(now())
+				AND
+					C.classUseYn = 'Y'
+				</isNotEmpty>
+				
+				<isNotEmpty property="attending">
+				AND
+					C.classId = H.classId
+				AND 
+					C.classUseYn = 'Y'
+				</isNotEmpty>
+				AND
+					A.virtualLabStatus = '1401002'
+				AND
+					A.virtualLabUseYn = 'Y'
+				
+				<isNotEmpty property="virtualLabUniversityField">
+				AND
+					A.virtualLabUniversityField = #virtualLabUniversityField#
+				</isNotEmpty>									
+				<isNotEmpty property="searchField">
+				AND
+					(
+					ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') like "%@@searchField@@%" 
+					OR PU.professorName like "%@@searchField@@%"
+				</isNotEmpty>
+				<isNotEmpty property="searchUniversityField">
+					OR A.virtualLabUniversityField in (@@searchUniversityField@@)
+				</isNotEmpty>
+				<isNotEmpty property="searchField">
+					)
+				</isNotEmpty>
+			GROUP BY A.virtualLabId
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabTabList" >
+		<![CDATA[
+			SELECT G.*, COUNT(*) virCount
+			FROM(
+				SELECT 
+					A.* ,COUNT(*) as count
+				FROM
+					EDVIR_VirtualLab                       A,
+					EDVIR_VirtualLabs_VirtualLabClasses B,
+					EDVIR_VirtualLabClass C
+					<isNotEmpty property="attending">
+					,
+						(SELECT 
+							F.*, G.classId
+						 FROM 
+						 	EDVIR_VirtualLabUser F,
+							EDVIR_VirtualLabClasses_VirtualLabUsers G
+						WHERE
+							F.virtualLabUserId = G.virtualLabUserId
+						AND
+							F.userId = #userId#
+						) AS H
+					</isNotEmpty>
+					,
+					(
+						SELECT 
+								P.professorSeq,
+								CONCAT(U.firstName, U.middleName, U.lastName) professorName
+						FROM 
+							EDVIR_Professor P, 
+							User_ U
+						WHERE 
+						P.userId = U.userId
+					) PU
+				WHERE
+					A.virtualLabId = B.virtualLabId
+					AND
+						B.classId = C.classId
+					AND
+						A.professorSeq = PU.professorSeq
+					<isNotEmpty property="groupId">
+					AND
+						A.groupId = #groupId#
+					</isNotEmpty>
+					<isNotEmpty property="addClass">
+					AND
+						date(C.classEndDt) &gt; date(now()) 
+					AND
+						date(C.classStartDt) &lt; date(now())
+					AND
+						C.classUseYn = 'Y'
+					</isNotEmpty>
+					<isNotEmpty property="attending">
+					AND
+						C.classId = H.classId
+					AND 
+						C.classUseYn = 'Y'
+					</isNotEmpty>
+					AND
+						A.virtualLabUseYn = 'Y'
+					AND
+						A.virtualLabStatus = '1401002'
+					<isNotEmpty property="searchField">
+					AND
+						(
+						ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') like "%@@searchField@@%" 
+						OR PU.professorName like "%@@searchField@@%"
+					</isNotEmpty>
+					<isNotEmpty property="searchUniversityField">
+						OR A.virtualLabUniversityField in (@@searchUniversityField@@)
+					</isNotEmpty>
+					<isNotEmpty property="searchField">
+						)
+					</isNotEmpty>
+				GROUP BY A.virtualLabId ) G
+			GROUP BY G.virtualLabUniversityField
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabAuthList" >
+		<![CDATA[
+			SELECT
+				C.*, D.*
+			FROM
+				EDVIR_VirtualLabClass D
+					INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses E On D.classId = E.classId
+					RIGHT JOIN	
+					(
+						SELECT 
+							A.*, count(B.classId) AS classCount
+						FROM
+							EDVIR_VirtualLabs_VirtualLabClasses B
+							RIGHT JOIN EDVIR_VirtualLab A ON B.virtualLabId = A.virtualLabId
+						WHERE
+							1=1
+							<isNotEmpty property="groupId">
+							AND
+							A.groupId = #groupId#
+							</isNotEmpty>
+							<isNotEmpty property="userId">
+							AND
+							A.userId = #userId#
+							</isNotEmpty>
+							AND
+							(
+							A.virtualLabStatus = '1401001'
+							OR
+							A.virtualLabStatus = '1401003'
+							)
+							AND
+							A.virtualLabUseYn = 'Y'
+						GROUP BY 
+							A.virtualLabId 
+					) AS C ON C.virtualLabId = E.virtualLabId
+			ORDER BY
+				C.virtualLabConfirmDt DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabClassRegisterList" >
+		<![CDATA[
+			SELECT
+				C.*, D.*, H.*
+			FROM
+				EDVIR_VirtualLabClass D
+					INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses E On D.classId = E.classId
+					RIGHT JOIN	(
+						SELECT
+							A.*, count(B.classId) AS classCount
+						FROM
+							EDVIR_VirtualLabs_VirtualLabClasses B
+							INNER JOIN EDVIR_VirtualLab A ON B.virtualLabId = A.virtualLabId
+						<isNotEmpty property="groupId">
+						WHERE
+							A.groupId = #groupId#
+							AND
+							A.virtualLabUseYn = 'Y'
+						</isNotEmpty>
+						GROUP BY 
+							A.virtualLabId 
+					) AS C ON C.virtualLabId = E.virtualLabId
+					INNER JOIN	(
+						SELECT
+							F.*, G.classId
+						FROM
+							EDVIR_VirtualLabUser F
+							INNER JOIN EDVIR_VirtualLabClasses_VirtualLabUsers G ON F.virtualLabUserId = G.virtualLabUserId
+						<isNotEmpty property="userId">
+						WHERE
+							F.userId = #userId#
+						</isNotEmpty>
+					) as H ON D.classId = H.classId
+			WHERE
+				D.classUseYn = 'Y'
+			ORDER BY
+				H.createDt DESC
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabClassRegisterInfo" >
+		<![CDATA[
+			SELECT
+				C.*, D.*, H.*
+			FROM
+				EDVIR_VirtualLabClass D
+				INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses E On D.classId = E.classId
+				RIGHT JOIN	(
+					SELECT
+						A.*, count(B.classId) AS classCount
+					FROM
+						EDVIR_VirtualLabs_VirtualLabClasses B
+						INNER JOIN EDVIR_VirtualLab A ON B.virtualLabId = A.virtualLabId
+					<isNotEmpty property="groupId">
+					WHERE 
+						A.groupId = #groupId#
+					</isNotEmpty>
+						AND
+							A.virtualLabUseYn = 'Y'
+					GROUP BY 
+						A.virtualLabId 
+				) AS C ON C.virtualLabId = E.virtualLabId
+				LEFT JOIN	(
+					SELECT
+						F.*, G.classId
+					FROM
+						EDVIR_VirtualLabUser F
+						INNER JOIN EDVIR_VirtualLabClasses_VirtualLabUsers G ON F.virtualLabUserId = G.virtualLabUserId
+					<isNotEmpty property="userId">
+					WHERE
+						F.userId = #userId#
+					</isNotEmpty>
+				) as H ON D.classId = H.classId
+			<isNotEmpty property="classId">
+			WHERE
+				D.classId = #classId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getListVirtualLab" >
+		<![CDATA[
+			SELECT
+				AA.*,
+				(SELECT 
+					COUNT(*)
+				FROM 
+					EDVIR_VirtualLabs_VirtualLabClasses B
+					INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId 
+				WHERE
+					B.virtualLabId = AA.virtualLabId
+					AND
+					C.classUseYn = 'Y'
+				) AS classCount
+			FROM
+				(
+				SELECT
+					A.virtualLabId,
+					A.virtualLabUniversityField,
+					A.virtualLabUseYn,
+					A.virtualLabDescription,
+					A.virtualLabTitle,
+					A.virtualLabStatus,
+					A.virtualLabConfirmDescription,
+					A.virtualLabConfirmDt,
+					A.virtualLabRequestDt,
+					/*A.virtualLabPersonName,*/
+					A.userId,
+					A.groupId,
+					A.iconId,
+					A.professorSeq,
+					CASE A.virtualLabStatus WHEN '1401001' THEN '1' ELSE '0' END AS requestCheck,
+					ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitleSearchField,
+					/*ExtractValue(A.virtualLabPersonName, 'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS virtualLabPersonNameSearchField*/
+					(
+						SELECT PU.professorName 
+						FROM (
+								SELECT 
+									P.professorSeq, 
+									CONCAT(U.firstName, U.middleName, U.lastName) professorName 
+								FROM 
+									EDVIR_Professor P, 
+									User_ U 
+								WHERE 
+									P.userId = U.userId
+						) PU 
+						WHERE A.professorSeq = PU.professorSeq
+					) virtualLabPersonNameSearchField
+				FROM
+					EDVIR_VirtualLab A, EDAUT_UserGroupRoleCustom U
+				WHERE
+					1=1
+					AND A.virtualLabId = U.customId
+					AND A.virtualLabUseYn = 'Y'
+				<isNotEmpty property="userId">
+				AND
+					U.userId = #userId#
+				AND 
+					U.roleId IN (SELECT roleId FROM Role_ WHERE name = 'Virtual Lab Owner' OR name = 'Virtual Lab Manager')  
+				</isNotEmpty>
+				<isNotEmpty property="groupId">
+				AND
+					A.groupId = #groupId#
+				</isNotEmpty>
+				<isNotEmpty property="statusSort">
+				AND
+					A.virtualLabStatus = #statusSort#
+				</isNotEmpty>
+				GROUP BY A.virtualLabId  
+			) AA
+			WHERE
+				1=1
+				<isNotEmpty property="searchField">
+				AND
+				(
+				AA.virtualLabTitleSearchField like "%@@searchField@@%" 
+				OR AA.virtualLabPersonNameSearchField like "%@@searchField@@%"
+				</isNotEmpty>
+				<isNotEmpty property="searchUniversityField">
+				OR AA.virtualLabUniversityField in (@@searchUniversityField@@)
+				</isNotEmpty>
+				<isNotEmpty property="searchField">
+				)
+				</isNotEmpty>
+			ORDER BY
+				(
+					CASE AA.virtualLabStatus
+					WHEN '1401001' THEN 1
+					WHEN '1401003' THEN 2
+					ELSE 3
+					END
+				),
+				AA.requestCheck DESC,
+				AA.virtualLabRequestDt DESC
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabCountClassRegisterList" >
+		<![CDATA[
+			SELECT
+				C.*, D.*
+			FROM
+				EDVIR_VirtualLabClass D
+					INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses E On D.classId = E.classId
+					RIGHT JOIN	(
+						SELECT
+							A.*, count(B.classId) AS classCount
+						FROM
+							EDVIR_VirtualLabs_VirtualLabClasses B
+							INNER JOIN EDVIR_VirtualLab A ON B.virtualLabId = A.virtualLabId
+						<isNotEmpty property="groupId">
+						WHERE
+							A.groupId = #groupId#
+							AND
+							A.virtualLabUseYn = 'Y'
+						</isNotEmpty>
+						GROUP BY 
+							A.virtualLabId 
+					) AS C ON C.virtualLabId = E.virtualLabId
+					INNER JOIN	(
+						SELECT
+							F.*, G.classId
+						FROM
+							EDVIR_VirtualLabUser F
+							INNER JOIN EDVIR_VirtualLabClasses_VirtualLabUsers G ON F.virtualLabUserId = G.virtualLabUserId
+						<isNotEmpty property="userId">
+						WHERE
+							F.userId = #userId#
+						</isNotEmpty>
+					) as H ON D.classId = H.classId
+			WHERE
+				D.classUseYn = 'Y'
+			ORDER BY
+				H.createDt DESC
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getListVirtualLabManagement" >
+		<![CDATA[
+			SELECT
+				A.virtualLabId,
+				A.userId,
+				A.groupId,
+				ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitleSearchField,
+				ExtractValue(A.virtualLabPersonName, 'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS virtualLabPersonNameSearchField,
+				A.virtualLabConfirmDescription,
+				A.virtualLabStatus,
+				A.virtualLabRequestDt,
+				A.virtualLabUniversityField,
+				A.virtualLabUseYn,
+				A.virtualLabDescription,
+				A.virtualLabConfirmDt,
+				CASE A.virtualLabStatus WHEN '1401001' THEN '1' ELSE '0' END AS requestCheck,
+				A.virtualLabTitle,
+				A.virtualLabPersonName
+			FROM
+				EDVIR_VirtualLab A, EDAUT_UserGroupRoleCustom U
+			WHERE
+				1=1
+			AND
+				A.virtualLabId = U.customId
+			<isNotEmpty property="userId">
+			AND
+				U.userId = #userId#
+			AND 
+				U.roleId IN (SELECT roleId FROM Role_ WHERE name = 'Virtual Lab Owner' OR name = 'Virtual Lab Manager')  
+			</isNotEmpty>
+			<isNotEmpty property="groupId">
+			AND
+				A.groupId = #groupId#
+			</isNotEmpty>
+			AND
+				A.virtualLabUseYn = 'Y'
+			GROUP BY 
+				A.virtualLabId  
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getVirtualLabGroup" >
+		<![CDATA[
+			SELECT 
+				groupId, 
+				name
+			FROM 
+				Group_
+			WHERE 
+				parentGroupId = 20181
+			AND
+				name IN('CFD', 'NANO', 'CHEM', 'CSD', 'DESIGN', 'CMED')
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getCountVirtualLabManagementStart" >
+		<![CDATA[
+			SELECT
+				COUNT(*) AS totalCount
+			FROM
+				(
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getCountVirtualLabEnd" >
+		<![CDATA[
+				) AS AAAA
+		]]>
+	</sql>
+	
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getListVirtualLabClassOrderBy" >
+		<![CDATA[
+			ORDER BY
+				AA.virtualLabConfirmDt DESC,
+				AA.virtualLabId DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.getCountVirtualLabStart" >
+		<![CDATA[
+			SELECT
+				COUNT(*) AS totalCount
+			FROM
+				(
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.virtuallaboratory.service.persistence.virtualLab.limit" >
+		<![CDATA[
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+</custom-sql>

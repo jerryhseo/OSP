@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.model.RequestMember">
+		<field name="requestSeq" type="long" />
+		<field name="simulationProjectId" type="long" />
+		<field name="userId" type="Long" />
+		<field name="requestDate" type="Date" />
+		<field name="processDate" type="Date" />
+		<field name="requestState" type="String" />
+	</model>
+	<model name="org.kisti.edison.model.SimProScienceAppLink">
+		<field name="simProScienceAppLinkId" type="long" />
+		<field name="simulationProjectId" type="long" />
+		<field name="scienceAppId" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.SimulationProject">
+		<field name="simulationProjectId" type="long" />
+		<field name="title" type="String" localized="true" />
+		<field name="serviceLanguage" type="String" />
+		<field name="projectOpenYn" type="boolean" />
+		<field name="explain" type="String" localized="true" />
+		<field name="iconId" type="long" />
+		<field name="imageFolderId" type="long" />
+		<field name="ownerId" type="long" />
+		<field name="insertId" type="long" />
+		<field name="insertDate" type="Date" />
+		<field name="updateId" type="long" />
+		<field name="updateDate" type="Date" />
+		<field name="templetId" type="long" />
+	</model>
+</model-hints>

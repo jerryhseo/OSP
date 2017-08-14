@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getVirtualClassInfo" >
+		<![CDATA[
+		SELECT
+			B.*, C.*
+		FROM
+			EDVIR_VirtualLabs_VirtualLabClasses A
+			INNER JOIN  EDVIR_VirtualLabClass B ON B.classId = A.classId
+			INNER JOIN  EDVIR_VirtualLab C ON C.virtualLabId = A.virtualLabId
+		<isNotEmpty property="classId">
+		WHERE
+			B.classId = #classId#
+			AND
+			B.classUseYn = 'Y'
+			AND
+			C.virtualLabUseYn = 'Y'
+		</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getVirtualClassList" >
+		<![CDATA[
+			SELECT 
+				B.*,
+				C.*,
+				(SELECT COUNT(*) FROM EDVIR_VirtualLabClasses_VirtualLabUsers  K  INNER JOIN EDVIR_VirtualLabUser L  ON K.virtualLabUserId = L.virtualLabUserId WHERE classId = A.classId) AS UserCount
+			FROM
+				EDVIR_VirtualLabs_VirtualLabClasses A
+				INNER JOIN  EDVIR_VirtualLab B ON B.virtualLabId = A.virtualLabId
+				INNER JOIN  EDVIR_VirtualLabClass C  ON C.classId = A.classId
+				<isNotEmpty property="userId">
+				INNER JOIN EDAUT_UserGroupRoleCustom U ON U.userId = #userId# AND U.groupId = #groupId# AND U.customId = C.classId AND U.roleId IN (SELECT roleId FROM Role_ WHERE name = #virtualLabClassOwnerName# OR name = #virtualLabClassManagerName#) 
+				</isNotEmpty>
+			WHERE
+				1=1
+				<isNotEmpty property="groupId">
+				AND
+				B.groupId = #groupId#
+				</isNotEmpty>
+				<isNotEmpty property="virtualLabId">
+				AND
+				B.virtualLabId = #virtualLabId#
+				</isNotEmpty>
+				AND
+				B.virtualLabUseYn = 'Y'
+				AND
+				C.classUseYn = 'Y'
+				Order By
+					C.classCreateDt DESC
+				<isNotEmpty property="begin">
+				LIMIT
+					#begin#, #end#
+				</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getVirtualClassListCount" >
+		<![CDATA[
+			SELECT 
+				COUNT(*) AS TotalCnt
+			FROM
+				EDVIR_VirtualLabs_VirtualLabClasses A
+				INNER JOIN  EDVIR_VirtualLab B ON B.virtualLabId = A.virtualLabId
+				INNER JOIN  EDVIR_VirtualLabClass C  ON C.classId = A.classId
+				<isNotEmpty property="userId">
+				INNER JOIN EDAUT_UserGroupRoleCustom U ON U.userId = #userId# AND U.groupId = #groupId# AND U.customId = C.classId AND U.roleId IN (SELECT roleId FROM Role_ WHERE name = #virtualLabClassOwnerName# OR name = #virtualLabClassManagerName#) 
+				</isNotEmpty>
+			WHERE
+				1=1
+				<isNotEmpty property="groupId">
+				AND
+				B.groupId = #groupId#
+				</isNotEmpty>
+				<isNotEmpty property="virtualLabId">
+				AND
+				B.virtualLabId = #virtualLabId#
+				</isNotEmpty>
+				AND
+				B.virtualLabUseYn = 'Y'
+				AND
+				C.classUseYn = 'Y'
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getVirtualClassBoardSeqList" >
+		<![CDATA[
+			SELECT
+				A.boardSeq AS boardSeq
+			FROM 
+				EDCON_Board A 
+			WHERE
+				A.groupId = #groupId#
+				AND
+				A.customId = #virtualClassCustomId#
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getListVirtualLabClassManagement" >
+		<![CDATA[
+			SELECT
+				AA.*,
+				E.*,
+				(SELECT 
+					COUNT(*)
+				FROM 
+					EDVIR_VirtualLabs_VirtualLabClasses B
+					INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId 
+				WHERE
+					B.virtualLabId = AA.virtualLabId
+					AND
+					C.classUseYn = 'Y'
+				) AS classCount,
+				(SELECT COUNT(case when B.requestSort = "TEMP" then 1 end) FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser B ON K.virtualLabUserId = B.virtualLabUserId	WHERE classId = E.classId) AS tempUserCount,
+				(SELECT COUNT(case when B.requestSort = "CONFIRM" then 1 end) FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser B ON K.virtualLabUserId = B.virtualLabUserId	WHERE classId = E.classId) AS userCount
+			FROM
+				(
+			SELECT
+				virtualLabId,
+				virtualLabUniversityField,
+				virtualLabUseYn,
+				virtualLabDescription,
+				virtualLabTitle,
+				virtualLabStatus,
+				virtualLabConfirmDescription,
+				virtualLabConfirmDt,
+				virtualLabRequestDt,
+				/*virtualLabPersonName,*/
+				userId,
+				groupId,
+				ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitleSearchField,
+				(SELECT PU.professorName 
+					FROM (
+							SELECT 
+								P.professorSeq, 
+								CONCAT(U.firstName, U.middleName, U.lastName) professorName 
+							FROM 
+								EDVIR_Professor P, 
+								User_ U 
+							WHERE 
+								P.userId = U.userId
+						) PU 
+					WHERE A.professorSeq = PU.professorSeq) virtualLabPersonNameSearchField
+				/*ExtractValue(A.virtualLabPersonName, 'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS virtualLabPersonNameSearchField*/
+			FROM
+				EDVIR_VirtualLab A
+			WHERE
+				1=1
+				<isNotEmpty property="groupId">
+				AND
+				A.groupId = #groupId#
+				</isNotEmpty>
+				<isNotEmpty property="statusSort">
+				AND 
+				A.virtualLabStatus = #statusSort#
+				</isNotEmpty>
+				AND
+					A.virtualLabUseYn = 'Y'
+			) AA
+			INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses D ON D.virtualLabId = AA.virtualLabId
+			INNER JOIN 
+				(
+				SELECT
+					classId,
+					virtualClassCd,
+					classUpdateDt,
+					classCreateDt,
+					classPersonnel,
+					classDescription,
+					classUseYn,
+					classEndDt,
+					classStartDt,
+					classTitle
+				FROM
+					EDVIR_VirtualLabClass
+				) E ON E.classId = D.classId
+			<isNotEmpty property="userId">
+			INNER JOIN EDAUT_UserGroupRoleCustom U ON U.userId = #userId# AND U.groupId = #groupId# AND ((U.customId = AA.virtualLabId AND U.roleId IN (SELECT roleId FROM Role_ WHERE name = #virtualLabOwnerName#)) OR (U.customId = E.classId AND U.roleId IN (SELECT roleId FROM Role_ WHERE name = #virtualLabClassOwnerName# OR name = #virtualLabClassManagerName#))) 
+			</isNotEmpty>
+			WHERE
+				1=1
+				<isNotEmpty property="searchField">
+				AND
+				(
+					AA.virtualLabTitleSearchField like "%@@searchField@@%"
+					OR	AA.virtualLabPersonNameSearchField like "%@@searchField@@%"
+				</isNotEmpty>
+				<isNotEmpty property="searchUniversityField">
+					OR	AA.virtualLabUniversityField in ( @@searchUniversityField@@ )
+				</isNotEmpty>
+				<isNotEmpty property="searchField">
+				)
+				</isNotEmpty>
+				AND
+					E.classUseYn = 'Y'
+			GROUP BY
+				E.classId
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getListVirtualLabClass" >
+		<![CDATA[
+			SELECT
+				AAA.*,
+				E.*,
+				(SELECT COUNT(case when B.requestSort = "TEMP" then 1 end) FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser B ON K.virtualLabUserId = B.virtualLabUserId	WHERE classId = E.classId) AS tempUserCount,
+				(SELECT COUNT(case when B.requestSort = "CONFIRM" then 1 end) FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser B ON K.virtualLabUserId = B.virtualLabUserId	WHERE classId = E.classId) AS userCount
+			FROM
+				(SELECT
+					AA.*,
+					(SELECT 
+						COUNT(*)
+					FROM 
+						EDVIR_VirtualLabs_VirtualLabClasses B
+						INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId 
+					WHERE
+						B.virtualLabId = AA.virtualLabId
+						AND
+						C.classUseYn = 'Y'
+					) AS classCount
+				FROM
+					(
+				SELECT
+					virtualLabId,
+					virtualLabUniversityField,
+					virtualLabUseYn,
+					virtualLabDescription,
+					virtualLabTitle,
+					virtualLabStatus,
+					virtualLabConfirmDescription,
+					virtualLabConfirmDt,
+					virtualLabRequestDt,
+					virtualLabPersonName,
+					userId,
+					groupId,
+					ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitleSearchField,
+					ExtractValue(A.virtualLabPersonName, 'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS virtualLabPersonNameSearchField
+				FROM
+					EDVIR_VirtualLab A
+				) AA
+					INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses Z ON AA.virtualLabId = Z.virtualLabId
+				WHERE
+					1=1
+					<isNotEmpty property="groupId">
+					AND
+					AA.groupId = #groupId#
+					</isNotEmpty>
+					<isNotEmpty property="statusSort">
+					AND 
+					AA.virtualLabStatus = #statusSort#
+					</isNotEmpty>
+					AND
+						AA.virtualLabUseYn = 'Y'
+					<isNotEmpty property="searchField">
+					AND
+					(
+						AA.virtualLabTitleSearchField like "%@@searchField@@%"
+						OR	AA.virtualLabPersonNameSearchField like "%@@searchField@@%"
+					</isNotEmpty>
+					<isNotEmpty property="searchUniversityField">
+						OR	AA.virtualLabUniversityField in ( @@searchUniversityField@@ )
+					</isNotEmpty>
+					<isNotEmpty property="searchField">
+					)
+					</isNotEmpty>
+				GROUP BY AA.virtualLabId
+				ORDER BY
+					AA.virtualLabConfirmDt DESC,
+					AA.virtualLabId DESC
+			) AAA
+			
+				INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses D ON D.virtualLabId = AAA.virtualLabId
+				INNER JOIN 
+					(
+					SELECT
+						classId,
+						virtualClassCd,
+						classUpdateDt,
+						classCreateDt,
+						classPersonnel,
+						classDescription,
+						classUseYn,
+						classEndDt,
+						classStartDt,
+						classTitle
+					FROM
+						EDVIR_VirtualLabClass
+					) E ON E.classId = D.classId
+			WHERE
+				1=1
+				AND
+				E.classUseYn = 'Y'
+			<isNotEmpty property="tempClassId">
+				AND
+				E.classId = #tempClassId#
+			</isNotEmpty>
+			ORDER BY
+				AAA.virtualLabConfirmDt DESC,
+				AAA.virtualLabId DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getVirtualLabClassList" >
+		<![CDATA[
+				SELECT 
+					A.*,
+					C.*, 
+					(SELECT COUNT(*) 
+					 FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser L ON K.virtualLabUserId = L.virtualLabUserId	
+					 WHERE classId = B.classId) AS userCount 
+				FROM
+					EDVIR_VirtualLab A, EDVIR_VirtualLabs_VirtualLabClasses B, EDVIR_VirtualLabClass C
+				WHERE 
+					A.virtualLabId = B.virtualLabId
+				AND 
+					B.classId = C.classId
+				AND 
+					C.classUseYn = 'Y'
+				AND 
+					A.virtualLabId = #virtualLabId#
+				AND	
+					A.groupId = #groupId#
+				AND 
+					date(C.classEndDt) >= date(now()) 
+				AND 
+					date(C.classStartDt) <= date(now())
+				<isNotEmpty property="searchField">
+				AND
+				(
+					C.classTitle like "%@@searchField@@%"
+				)
+				</isNotEmpty>
+			UNION
+				SELECT 
+					A.*,
+					C.*, 
+					(SELECT COUNT(*) 
+					 FROM EDVIR_VirtualLabClasses_VirtualLabUsers K INNER JOIN EDVIR_VirtualLabUser L ON K.virtualLabUserId = L.virtualLabUserId	
+					 WHERE classId = B.classId) AS userCount 
+				FROM 
+					EDVIR_VirtualLab A, 
+					EDVIR_VirtualLabs_VirtualLabClasses B, 
+					EDVIR_VirtualLabClass C, 
+					(SELECT 
+						F.*, 
+						G.classId
+					 FROM 
+						EDVIR_VirtualLabUser                           F,
+						EDVIR_VirtualLabClasses_VirtualLabUsers        G
+					 WHERE
+						F.virtualLabUserId = G.virtualLabUserId
+					 AND
+						F.userId = #curUserId#) AS H
+				WHERE 
+					A.virtualLabId = B.virtualLabId
+				AND 
+					B.classId = C.classId
+				AND 
+					C.classId = H.classId
+				AND 
+					C.classUseYn = 'Y'
+				AND 
+					A.virtualLabId = #virtualLabId#
+				AND	
+					A.groupId = #groupId#
+				<isNotEmpty property="searchField">
+				AND
+				(
+					C.classTitle like "%@@searchField@@%"
+				)
+				</isNotEmpty>
+		]]>
+	</sql>
+	
+	
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getCountVirtualLabClassEnd" >
+		<![CDATA[
+				) AS AAAA
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.getCountVirtualLabClassStart" >
+		<![CDATA[
+			SELECT
+				COUNT(*) AS totalCount
+			FROM
+				(
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.virtualLabClass.limit" >
+		<![CDATA[
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+</custom-sql>

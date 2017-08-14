@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison.search.service">
+  <author>yjpark</author>
+  <namespace>EDSEARCH</namespace>
+  <entity name="Search" local-service="true" remote-service="false" data-source="noDataSource">
+    <column name="id" type="long" primary="true" />
+  </entity>
+
+  <!-- companyGroupId, groupId, locale, categoryIds, searchText, begin, end -->
+  <entity name="SearchCondition" local-service="true" remote-service="false" data-source="noDataSource">
+    <column name="id" type="long" primary="true" />
+    <column name="searchKeyword" type="String" />
+    <column name="areaScienceApp" type="boolean" />
+    <column name="areaContents" type="boolean" />
+    <column name="areaSimulationProject" type="boolean" />
+    <column name="areaScienceData" type="boolean" />
+    <column name="parentCategory" type="boolean" />
+    <column name="categoryId" type="long" />
+    <column name="companyGroupId" type="long" />
+    <column name="groupId" type="long" />
+    <column name="currentPage" type="int" />
+    <column name="listSize" type="int" />
+    <column name="blockSize" type="int" />
+    <column name="classnote" type="boolean" />
+    <column name="manual" type="boolean" />
+    <column name="reference" type="boolean" />
+    <column name="advanced" type="boolean" />
+    
+    <column name="Solver" type="boolean" />
+    <column name="Converter" type="boolean" />
+    <column name="Editor" type="boolean" />
+    <column name="Analyzer" type="boolean" />
+  </entity>
+</service-builder>

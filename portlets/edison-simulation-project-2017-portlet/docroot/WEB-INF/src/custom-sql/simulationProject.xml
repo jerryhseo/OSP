@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimulationProjectFinder.getCustomMySimulationProjectList" >
+		<![CDATA[
+        	SELECT              
+              SIMPROLIST.simulationProjectId,
+              SIMPROLIST.title,
+              SIMPROLIST.serviceLanguage,
+              SIMPROLIST.projectOpenYn,
+              SIMPROLIST.explain_,
+              SIMPROLIST.iconId,
+              SIMPROLIST.imageFolderId,
+              SIMPROLIST.ownerId,
+              SIMPROLIST.insertId,
+              SIMPROLIST.insertDate,
+              SIMPROLIST.updateId,
+              SIMPROLIST.updateDate,
+              SIMPROLIST.templetId,
+              date_format(SIMPROLIST.insertDate, '%Y-%m-%d') AS insertDtStr,
+              (SELECT user.screenName FROM User_ user WHERE user.userId=SIMPROLIST.insertId) screenName
+            FROM
+            (
+              SELECT 
+                SIMPRO.*
+              FROM 
+                EDSIMPRO_SimulationProject SIMPRO, 
+                AssetEntry AE, 
+                AssetEntries_AssetCategories AE_AC
+              WHERE
+                SIMPRO.simulationProjectId = AE.classPK
+                AND AE.entryId = AE_AC.entryId
+                AND AE.classNameId = #classNameId#
+            <isNotEmpty property="categoryIds">    
+                AND AE_AC.categoryId IN(@@categoryIds@@)
+            </isNotEmpty>
+            <isNotEmpty property="simProIds">    
+                AND SIMPRO.simulationProjectId IN(@@simProIds@@)
+            </isNotEmpty>    
+            <isNotEmpty property="ownerId">
+                AND SIMPRO.ownerId = #ownerId#
+            </isNotEmpty>
+            <isNotEmpty property="searchValue">
+            	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+            </isNotEmpty>
+            <isNotEmpty property="projectOpenYn">    
+                AND SIMPRO.projectOpenYn = #projectOpenYn#
+            </isNotEmpty>
+            	GROUP BY
+              		SIMPRO.simulationProjectId    
+            ) SIMPROLIST
+            ORDER BY SIMPROLIST.insertDate DESC   
+            <isNotEmpty property="begin">	
+          		LIMIT #begin#, #end#
+          	</isNotEmpty>
+		]]>
+	</sql>
+
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimulationProjectFinder.getCustomMySimulationProjectCount" >
+		<![CDATA[
+        	SELECT 
+				COUNT(*) AS totalCount
+			FROM
+            (
+              SELECT 
+                SIMPRO.*
+              FROM 
+                EDSIMPRO_SimulationProject SIMPRO, 
+                AssetEntry AE, 
+                AssetEntries_AssetCategories AE_AC
+              WHERE
+                SIMPRO.simulationProjectId = AE.classPK
+                AND AE.entryId = AE_AC.entryId
+                AND AE.classNameId = #classNameId#
+            <isNotEmpty property="categoryIds">    
+                AND AE_AC.categoryId IN(@@categoryIds@@)
+            </isNotEmpty>
+            <isNotEmpty property="simProIds">    
+                AND AE_AC.categoryId IN(@@simProIds@@)
+            </isNotEmpty>     
+            <isNotEmpty property="ownerId">
+                AND SIMPRO.ownerId = #ownerId#
+            </isNotEmpty>
+            <isNotEmpty property="searchValue">
+            	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+            </isNotEmpty>
+            <isNotEmpty property="projectOpenYn">    
+                AND SIMPRO.projectOpenYn = #projectOpenYn#
+            </isNotEmpty>
+            	GROUP BY
+              		SIMPRO.simulationProjectId   
+            ) SIMPROLIST   
+			]]>
+	</sql>	
+
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimulationProjectFinder.getCustomSimulationProjectList" >
+		<![CDATA[
+        	SELECT              
+              SIMPROLIST.*
+            FROM
+            (
+              SELECT 
+                SIMPRO.*
+              FROM 
+                EDSIMPRO_SimulationProject SIMPRO, 
+                AssetEntry AE, 
+                AssetEntries_AssetCategories AE_AC
+              WHERE
+                SIMPRO.simulationProjectId = AE.classPK
+                AND AE.entryId = AE_AC.entryId
+                AND AE.classNameId = #classNameId#
+            <isNotEmpty property="categoryIds">    
+                AND AE_AC.categoryId IN(@@categoryIds@@)
+            </isNotEmpty>
+            <isNotEmpty property="simProIds">    
+                AND SIMPRO.simulationProjectId IN(@@simProIds@@)
+            </isNotEmpty>    
+            <isNotEmpty property="ownerId">
+                AND SIMPRO.ownerId = #ownerId#
+            </isNotEmpty>
+            <isNotEmpty property="searchValue">
+            	AND ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%' 
+            </isNotEmpty>
+            <isNotEmpty property="projectOpenYn">    
+                AND SIMPRO.projectOpenYn = #projectOpenYn#
+            </isNotEmpty>
+            <isNotEmpty property="languageId">
+				AND SIMPRO.serviceLanguage LIKE '%@@languageId@@%' 
+			</isNotEmpty>
+            	GROUP BY
+              		SIMPRO.simulationProjectId    
+            ) SIMPROLIST
+            ORDER BY SIMPROLIST.insertDate DESC   
+            <isNotEmpty property="begin">	
+          		LIMIT #begin#, #end#
+          	</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimulationProjectFinder.getCustomSimulationProjectCount" >
+		<![CDATA[
+        	SELECT 
+				COUNT(*) AS totalCount
+			FROM
+            (
+              SELECT 
+                SIMPRO.*
+              FROM 
+                EDSIMPRO_SimulationProject SIMPRO, 
+                AssetEntry AE, 
+                AssetEntries_AssetCategories AE_AC
+              WHERE
+                SIMPRO.simulationProjectId = AE.classPK
+                AND AE.entryId = AE_AC.entryId
+                AND AE.classNameId = #classNameId#
+            <isNotEmpty property="categoryIds">    
+                AND AE_AC.categoryId IN(@@categoryIds@@)
+            </isNotEmpty>
+            <isNotEmpty property="simProIds">    
+                AND SIMPRO.simulationProjectId IN(@@simProIds@@)
+            </isNotEmpty>     
+            <isNotEmpty property="ownerId">
+                AND SIMPRO.ownerId = #ownerId#
+            </isNotEmpty>
+            <isNotEmpty property="searchValue">
+            	AND ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+            </isNotEmpty>
+            <isNotEmpty property="projectOpenYn">    
+                AND SIMPRO.projectOpenYn = #projectOpenYn#
+            </isNotEmpty>
+            <isNotEmpty property="languageId">
+				AND SIMPRO.serviceLanguage LIKE '%@@languageId@@%' 
+			</isNotEmpty>
+            	GROUP BY
+              		SIMPRO.simulationProjectId   
+            ) SIMPROLIST   
+			]]>
+	</sql>	
+	
+</custom-sql>

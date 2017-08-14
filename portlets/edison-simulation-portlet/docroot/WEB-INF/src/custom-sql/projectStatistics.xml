@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.project.statistics.getMajorAchievementsSelectHeader" >
+	<![CDATA[
+		SELECT 
+			category.categoryId,
+			category.name,
+			property.key_,
+			property.value,
+			IFNULL
+			(
+				(
+				SELECT count(CONTENT.projectId)
+					FROM EDMED_Content CONTENT 
+					WHERE 
+							category.categoryId = CONTENT.projectId 
+						AND CONTENT.projectId != 0 AND CONTENT.projectYn= #projectYn# 
+					GROUP BY category.categoryId
+			),0	) CONCNT,
+			
+			IFNULL
+			(
+				(
+				SELECT count(SimulAPP.projectCategoryId) 
+					FROM(
+						SELECT APP.projectCategoryId, APP.scienceAppId, APP.groupId
+							FROM EDAPP_ScienceApp APP
+							INNER JOIN EDSIM_Simulation SIMULATION ON APP.scienceAppId = SIMULATION.scienceAppId
+							INNER JOIN (SELECT * FROM EDSIM_SimulationJob WHERE jobSubmit = true) JOB ON SIMULATION.simulationUuid = JOB.simulationUuid
+						WHERE APP.projectCategoryId != 0 
+						GROUP BY APP.scienceAppId
+				) SimulAPP
+					WHERE 
+						category.categoryId =  SimulAPP.projectCategoryId
+					GROUP BY SimulAPP.projectCategoryId
+			),	0) APPCNT	
+		FROM AssetCategory category
+		INNER JOIN AssetCategoryProperty property on category.categoryId = property.categoryId
+		WHERE property.key_ = #propertyKey#
+		ORDER BY category.categoryId ASC
+	]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.project.statistics.getRegistSwContentHeader" >
+		<![CDATA[
+			SELECT 
+				category.categoryId,
+				category.name,
+				property.key_,
+				property.value,
+		]]>
+	</sql>
+	<sql id="org.kisti.edison.project.statistics.getRegistSwBody" >
+		<![CDATA[
+			IFNULL
+			(
+				(
+				SELECT count(SimulAPP.projectCategoryId) 
+					FROM(
+						SELECT APP.projectCategoryId, APP.scienceAppId, APP.groupId
+							FROM EDAPP_ScienceApp APP
+							INNER JOIN (SELECT * FROM EDSIM_Simulation WHERE testYn != "Y") SIMULATION ON APP.scienceAppId = SIMULATION.scienceAppId
+							INNER JOIN (SELECT * FROM EDSIM_SimulationJob WHERE jobSubmit = true) JOB ON SIMULATION.simulationUuid = JOB.simulationUuid
+						WHERE APP.projectCategoryId != 0 
+						GROUP BY APP.scienceAppId
+				) SimulAPP
+					WHERE 
+						category.categoryId =  SimulAPP.projectCategoryId
+					GROUP BY SimulAPP.projectCategoryId
+			),	0) APPCNT
+		]]>
+	</sql>
+	<sql id="org.kisti.edison.project.statistics.getRegistSwContentFrom" >
+		<![CDATA[
+			FROM AssetCategory category
+			INNER JOIN AssetCategoryProperty property on category.categoryId = property.categoryId
+			WHERE property.key_ = #propertyKey#
+			ORDER BY category.categoryId ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.project.statistics.getAppDetail" >
+		<![CDATA[
+			SELECT
+				A.scienceAppId,
+				A.groupId,
+				A.categoryId,
+				A.name,
+				A.key_,
+				A.value,
+				ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') title,
+				A.data_,
+				A.authorId,
+				users.firstName,
+				users.screenName,
+				A.version,
+				A.runtime,
+				A.executeCount,
+				A.averageRuntime,
+				A.userCount,
+				DATE_FORMAT(A.createDate, '%Y-%m-%d') createDate
+			FROM(
+				SELECT
+					EXECUTE.scienceAppId,
+					EXECUTE.groupId,
+					EXECUTE.categoryId,
+					EXECUTE.name,
+					EXECUTE.key_,
+					EXECUTE.value,
+					EXECUTE.title,
+					EXECUTE.data_,
+					EXECUTE.authorId,
+					EXECUTE.version,
+					EXECUTE.runtime,
+					SUM(CASE WHEN EXECUTE.jobPhase = #jobPhase# THEN 1 ELSE 0 END) executeCount,
+					IFNULL(round(sum(EXECUTE.runtime)/SUM(CASE WHEN EXECUTE.jobPhase = #jobPhase# THEN 1 ELSE 0 END)),0) as averageRuntime,
+					COUNT(distinct(EXECUTE.userId)) userCount,
+					EXECUTE.createDate
+				FROM
+				(
+					SELECT
+						CATEGROY.categoryId,
+						CATEGROY.name,
+						APP.groupId,
+						PROPERTY.key_,
+						PROPERTY.value,
+						APP.scienceAppId,
+						APP.title,
+						EXPANDOVALUE.data_,
+						APP.userId as authorId,
+						APP.version,
+						SIMULATION.userId,
+						JOB.jobSeqNo,
+						JOB.jobPhase,
+						JOB.jobStartDt,
+						JOB.jobEndDt,
+						round(UNIX_TIMESTAMP(JOB.jobEndDt) - UNIX_TIMESTAMP(JOB.jobStartDt),0) runtime,
+						APP.createDate
+					FROM EDAPP_ScienceApp APP
+					INNER JOIN AssetCategory CATEGROY ON APP.projectCategoryId = CATEGROY.categoryId
+					INNER JOIN AssetCategoryProperty PROPERTY ON CATEGROY.categoryId = PROPERTY.categoryId
+					INNER JOIN (SELECT * FROM EDSIM_Simulation WHERE testYn !='Y') SIMULATION ON APP.scienceAppId = SIMULATION.scienceAppId
+					INNER JOIN (SELECT * FROM EDSIM_SimulationJob WHERE jobSubmit=true) JOB ON SIMULATION.simulationUuid = JOB.simulationUuid
+					INNER JOIN (SELECT * FROM ExpandoValue WHERE columnId = #columnId#) EXPANDOVALUE ON EXPANDOVALUE.classPK = APP.authorId
+				)EXECUTE GROUP BY EXECUTE.scienceAppId) A
+			INNER JOIN User_ users ON A.authorId = users.userId
+			<isNotEmpty property="categoryId">
+				WHERE  A.categoryId = #categoryId#
+			</isNotEmpty>
+			ORDER BY categoryId
+		]]>
+	</sql>
+</custom-sql>

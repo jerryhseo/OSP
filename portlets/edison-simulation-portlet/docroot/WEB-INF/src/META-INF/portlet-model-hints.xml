@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.bestsimulation.model.ScienceAppExecute">
+		<field name="executeDate" type="String" />
+		<field name="scienceAppId" type="long" />
+		<field name="userCnt" type="long" />
+		<field name="avgExeTime" type="long" />
+		<field name="exeCnt" type="long" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.Simulation">
+		<field name="simulationUuid" type="String" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="simulationTitle" type="String" localized="true" />
+		<field name="scienceAppId" type="String" />
+		<field name="scienceAppName" type="String" localized="true" />
+		<field name="scienceAppVersion" type="String" />
+		<field name="simulationCreateDt" type="Date" />
+		<field name="cluster" type="String" />
+		<field name="classId" type="long" />
+		<field name="customId" type="long" />
+		<field name="testYn" type="boolean" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.SimulationExeStsMigration">
+		<field name="scienceAppId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="submitDate" type="String" />
+		<field name="userCnt" type="long" />
+		<field name="jobCnt" type="long" />
+		<field name="runtime" type="long" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.SimulationJob">
+		<field name="jobSeqNo" type="long" />
+		<field name="simulationUuid" type="String" />
+		<field name="groupId" type="long" />
+		<field name="jobUuid" type="String" />
+		<field name="jobStatus" type="long" />
+		<field name="jobStartDt" type="Date" />
+		<field name="jobEndDt" type="Date" />
+		<field name="jobTitle" type="String" localized="true" />
+		<field name="jobExecPath" type="String" localized="true" />
+		<field name="jobPhase" type="long" />
+		<field name="jobSubmitDt" type="Date" />
+		<field name="jobUniversityField" type="long" />
+		<field name="jobInputDeckYn" type="boolean" />
+		<field name="jobInputDeckName" type="String" />
+		<field name="jobSubmit" type="boolean" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.SimulationJobData">
+		<field name="jobUuid" type="String" />
+		<field name="jobData" type="String" localized="true" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.SimulationJobStatus">
+		<field name="statusSeq" type="long" />
+		<field name="groupId" type="long" />
+		<field name="simulationUuid" type="String" />
+		<field name="jobUuid" type="String" />
+		<field name="jobStatus" type="long" />
+		<field name="jobStartDt" type="Date" />
+		<field name="jobEndDt" type="Date" />
+		<field name="writeDt" type="Date" />
+	</model>
+	<model name="org.kisti.edison.bestsimulation.model.UniversityExecute">
+		<field name="executeDate" type="String" />
+		<field name="universityField" type="long" />
+		<field name="userCnt" type="long" />
+		<field name="avgExeTime" type="long" />
+		<field name="exeCnt" type="long" />
+		<field name="cpuTime" type="long" />
+	</model>
+</model-hints>

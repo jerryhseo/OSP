@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.kisti.osp.icecap.model.DataCollection">
+		<field name="uuid" type="String" />
+		<field name="name" type="String" />
+		<field name="version" type="String" />
+		<field name="title" type="String" localized="true" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="description" type="String" localized="true" />
+		<field name="targetLanguage" type="String" />
+		<field name="status" type="int" />
+		<field name="accessMethod" type="String" />
+		<field name="collectionId" type="long" />
+		<field name="typeId" type="long" />
+		<field name="folderId" type="long" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataCollectionLayout">
+		<field name="collectionId" type="long" />
+		<field name="layoutStr" type="String" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataEntry">
+		<field name="entryId" type="long" />
+		<field name="collectionId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="comments" type="String" localized="true" />
+		<field name="path" type="String" />
+		<field name="simulationSubjectId" type="long" />
+		<field name="productionTime" type="long" />
+		<field name="viewCount" type="long" />
+		<field name="downloadCount" type="long" />
+		<field name="lastAccessedDate" type="Date" />
+		<field name="fileEntryId" type="long" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataEntryProvenance">
+		<field name="entryId" type="long" />
+		<field name="inputData" type="String" />
+		<field name="PROVStructure" type="String" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataType">
+		<field name="uuid" type="String" />
+		<field name="typeId" type="long" />
+		<field name="name" type="String" />
+		<field name="version" type="String" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="samplePath" type="String" />
+		<field name="status" type="int" />
+		<field name="description" type="String" localized="true" />
+		<field name="groupId" type="long" />
+		<field name="isFavorite" type="boolean" />
+		<field name="ownerId" type="long" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataTypeAnalyzer">
+		<field name="typeId" type="long" />
+		<field name="analyzerId" type="long" />
+		<field name="isDefault" type="boolean" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataTypeEditor">
+		<field name="typeId" type="long" />
+		<field name="editorId" type="long" />
+		<field name="isDefault" type="boolean" />
+	</model>
+	<model name="com.kisti.osp.icecap.model.DataTypeStructure">
+		<field name="typeId" type="long" />
+		<field name="structure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+	</model>
+</model-hints>

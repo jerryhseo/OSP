@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql >
+<sql file="custom-sql/virtuallab.xml"/>
+<sql file="custom-sql/virtualclass.xml"/>
+<sql file="custom-sql/virtuallabuser.xml"/>
+<sql file="custom-sql/scienceapp.xml"/>
+<sql file="custom-sql/survey.xml"/>
+<sql file="custom-sql/classnote.xml"/>
+<sql file="custom-sql/professor.xml"/>
+</custom-sql >

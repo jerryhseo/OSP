@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataCollectionModelImpl">
+		<attributes>
+			<id name="collectionId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="name" />
+			<basic name="version" />
+			<basic name="title" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="description" />
+			<basic name="targetLanguage" />
+			<basic name="status" />
+			<basic name="accessMethod" />
+			<basic name="typeId" />
+			<basic name="folderId" />
+			<transient name="descriptionCurrentLanguageId" />
+			<transient name="descriptionMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="titleCurrentLanguageId" />
+			<transient name="titleMap" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataCollectionLayoutModelImpl">
+		<attributes>
+			<id name="collectionId" />
+			<basic name="layoutStr" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataEntryModelImpl">
+		<attributes>
+			<id name="entryId" />
+			<basic name="collectionId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="comments" />
+			<basic name="path">
+				<column name="PATH_" />
+			</basic>
+			<basic name="simulationSubjectId" />
+			<basic name="productionTime" />
+			<basic name="viewCount" />
+			<basic name="downloadCount" />
+			<basic name="lastAccessedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="fileEntryId" />
+			<transient name="commentsCurrentLanguageId" />
+			<transient name="commentsMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataEntryProvenanceModelImpl">
+		<attributes>
+			<id name="entryId" />
+			<basic name="inputData" />
+			<basic name="PROVStructure" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataTypeModelImpl">
+		<attributes>
+			<id name="typeId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="name" />
+			<basic name="version" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="samplePath" />
+			<basic name="status" />
+			<basic name="description" />
+			<basic name="groupId" />
+			<basic name="isFavorite" />
+			<basic name="ownerId" />
+			<transient name="descriptionCurrentLanguageId" />
+			<transient name="descriptionMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataTypeAnalyzerModelImpl">
+		<id-class class="com.kisti.osp.icecap.service.persistence.DataTypeAnalyzerPK" />
+		<attributes>
+			<id name="typeId" />
+			<id name="analyzerId" />
+			<basic name="isDefault" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataTypeEditorModelImpl">
+		<id-class class="com.kisti.osp.icecap.service.persistence.DataTypeEditorPK" />
+		<attributes>
+			<id name="typeId" />
+			<id name="editorId" />
+			<basic name="isDefault" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.kisti.osp.icecap.model.impl.DataTypeStructureModelImpl">
+		<attributes>
+			<id name="typeId" />
+			<basic name="structure" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="com.kisti.osp.icecap.model.impl.DataCollectionImpl" name="DataCollection">
+		<table name="icecap_DataCollection" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataCollectionLayoutImpl" name="DataCollectionLayout">
+		<table name="icecap_DataCollectionLayout" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataEntryImpl" name="DataEntry">
+		<table name="icecap_DataEntry" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataEntryProvenanceImpl" name="DataEntryProvenance">
+		<table name="icecap_DataEntryProvenance" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataTypeImpl" name="DataType">
+		<table name="icecap_DataType" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataTypeAnalyzerImpl" name="DataTypeAnalyzer">
+		<table name="icecap_DataTypeAnalyzer" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataTypeEditorImpl" name="DataTypeEditor">
+		<table name="icecap_DataTypeEditor" />
+		<attributes />
+	</entity>
+	<entity class="com.kisti.osp.icecap.model.impl.DataTypeStructureImpl" name="DataTypeStructure">
+		<table name="icecap_DataTypeStructure" />
+		<attributes />
+	</entity>
+</entity-mappings>

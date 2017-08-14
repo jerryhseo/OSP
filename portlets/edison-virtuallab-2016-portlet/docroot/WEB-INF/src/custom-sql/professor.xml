@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.kisti.edison.service.persistence.professor.getProfessorList" >
+		<![CDATA[
+			SELECT
+				A.screenName,
+				A.emailAddress,
+				A.firstName,
+				A.middleName,
+				A.lastName,
+				D.professorSeq,
+				D.userId,
+				ExtractValue(D.record, 'root/Record[@language-id="@@languageId@@"]') AS record,
+				ExtractValue(D.paper, 'root/Paper[@language-id="@@languageId@@"]') AS paper,
+				ExtractValue(D.introduce, 'root/Introduce[@language-id="@@languageId@@"]') AS introduce,
+				D.homepage,
+				D.phone
+			FROM 
+				User_ A,
+				Users_Roles B,
+				Role_ C,
+				EDVIR_Professor D
+			WHERE
+				A.userId = B.userId
+			AND
+				B.roleId = C.roleId
+			AND
+				A.userId = D.userId
+			AND
+				C.roleId = #roleId#
+			<isNotEmpty property="searchField">
+			AND
+				(A.screenName LIKE "%@@searchField@@%" OR A.firstName LIKE "%@@searchField@@%")
+			</isNotEmpty>
+			<isNotEmpty property="begin">
+			LIMIT
+				@@begin@@, @@end@@
+			</isNotEmpty>
+			]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.professor.getCountProfessorStart" >
+		<![CDATA[
+			SELECT
+				COUNT(*) AS totalCount
+			FROM
+				(
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.professor.getCountProfessorEnd" >
+		<![CDATA[
+				) AS AAAA
+		]]>
+	</sql>
+</custom-sql>

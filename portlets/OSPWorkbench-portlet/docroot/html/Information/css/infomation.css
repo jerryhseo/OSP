@@ -1,0 +1,49 @@
+.infomation-portlet {
+/* 	background-image: url(../../../images/apppage/sub-top-bg.png); */
+/* 	background-position: center top; */
+/* 	background-repeat: no-repeat; */
+/* 	background-size: cover; */
+/* 	-webkit-background-size: cover; */
+/* 	-moz-background-size: cover; */
+/* 	-o-background-size: cover; */
+	height: 100%;
+	background-color: #d7f3e4;
+}
+
+.infomation-portlet > #infomationSection{
+	height: 100%;
+	display: table;
+}
+
+.infomation-portlet #infomationSection>div{
+	display: table-cell;
+	height: 100%;
+	width: 15%;
+	vertical-align: middle;
+}
+
+.infomation-portlet #infomationSection>.appIcon{
+	background-image: url(../../../images/apppage/noimage.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+.infomation-portlet #infomationSection>.appcontent{
+	width: 70%;
+}
+
+.infomation-portlet #infomationSection>.appcontent>ul{
+	display: inline-block;
+	padding: 0px 0px 0px 20px;
+	margin: 0;
+}
+
+.infomation-portlet #infomationSection>.appcontent>ul>li{
+	line-height: 15px;
+	list-style-position: outside;
+	list-style-type: square;
+	color: #383838;
+	font-size: 15px;
+	font-weight: 600;
+}

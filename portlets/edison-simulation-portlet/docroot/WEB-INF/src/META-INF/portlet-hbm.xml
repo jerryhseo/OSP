@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.kisti.edison.bestsimulation.model.ScienceAppExecute" />
+	<import class="org.kisti.edison.bestsimulation.model.Simulation" />
+	<import class="org.kisti.edison.bestsimulation.model.SimulationExeStsMigration" />
+	<import class="org.kisti.edison.bestsimulation.model.SimulationJob" />
+	<import class="org.kisti.edison.bestsimulation.model.SimulationJobData" />
+	<import class="org.kisti.edison.bestsimulation.model.SimulationJobStatus" />
+	<import class="org.kisti.edison.bestsimulation.model.UniversityExecute" />
+	<class name="org.kisti.edison.bestsimulation.model.impl.ScienceAppExecuteImpl" table="EDSIM_ScienceAppExecute">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.ScienceAppExecutePK">
+			<key-property name="executeDate" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="userCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="avgExeTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="exeCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationImpl" table="EDSIM_Simulation">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.SimulationPK">
+			<key-property name="simulationUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="simulationTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="scienceAppName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="scienceAppVersion" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="simulationCreateDt" type="org.hibernate.type.TimestampType" />
+		<property name="cluster" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="classId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="customId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="testYn" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationExeStsMigrationImpl" table="EDSIM_SimulationExeStsMigration">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.SimulationExeStsMigrationPK">
+			<key-property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="submitDate" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="userCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="runtime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationJobImpl" table="EDSIM_SimulationJob">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK">
+			<key-property name="jobSeqNo" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="simulationUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="jobUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobStatus" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobStartDt" type="org.hibernate.type.TimestampType" />
+		<property name="jobEndDt" type="org.hibernate.type.TimestampType" />
+		<property name="jobTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobExecPath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobPhase" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobSubmitDt" type="org.hibernate.type.TimestampType" />
+		<property name="jobUniversityField" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobInputDeckYn" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="jobInputDeckName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="jobSubmit" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationJobDataImpl" table="EDSIM_SimulationJobData">
+		<id name="jobUuid" type="java.lang.String">
+			<generator class="assigned" />
+		</id>
+		<property name="jobData" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationJobStatusImpl" table="EDSIM_SimulationJobStatus">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.SimulationJobStatusPK">
+			<key-property name="statusSeq" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="simulationUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="jobUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="jobStatus" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="jobStartDt" type="org.hibernate.type.TimestampType" />
+		<property name="jobEndDt" type="org.hibernate.type.TimestampType" />
+		<property name="writeDt" type="org.hibernate.type.TimestampType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.UniversityExecuteImpl" table="EDSIM_UniversityExecute">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePK">
+			<key-property name="executeDate" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="universityField" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="userCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="avgExeTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="exeCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="cpuTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

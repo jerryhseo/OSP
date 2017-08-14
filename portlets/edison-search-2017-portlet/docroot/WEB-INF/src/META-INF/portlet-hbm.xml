@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.kisti.edison.search.service.model.Search" />
+	<import class="org.kisti.edison.search.service.model.SearchCondition" />
+	<class name="org.kisti.edison.search.service.model.impl.SearchImpl" table="EDSEARCH_Search">
+		<cache usage="read-write" />
+		<id name="id" column="id_" type="long">
+			<generator class="assigned" />
+		</id>
+	</class>
+	<class name="org.kisti.edison.search.service.model.impl.SearchConditionImpl" table="EDSEARCH_SearchCondition">
+		<cache usage="read-write" />
+		<id name="id" column="id_" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="searchKeyword" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="areaScienceApp" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="areaContents" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="areaSimulationProject" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="areaScienceData" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="parentCategory" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="categoryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyGroupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="currentPage" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="listSize" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="blockSize" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="classnote" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="manual" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="reference" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="advanced" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="Solver" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="Converter" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="Editor" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="Analyzer" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+</hibernate-mapping>

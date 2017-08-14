@@ -1,0 +1,78 @@
+
+<%@page import="org.kisti.edison.science.model.ScienceApp"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-layout/layout-default-latest.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/html/Workbench/css/workbench.css">
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery/jquery-layout/jquery.layout-latest.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery/jquery.mousewheel.min.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_further_impl.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_scienceapp.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
+<script  type="text/javascript" src="<%=request.getContextPath()%>/js/osp/osp_workbench_layout.js"></script>
+
+<%
+String contentViewerId = "";
+String jobId = "";
+String contentURL = "";
+String contentType = "";
+String scienceAppId = "";
+ScienceApp scienceApp = null;
+String inputPorts = "";
+String logPorts = "";
+String outputPorts = "";
+String dataStructure = "";
+String pathType = "";
+String parent = "";
+String fileName = "";
+boolean relative = true;
+JSONObject workbenchLayout = (JSONObject)renderRequest.getAttribute("workbenchLayout");
+
+JSONArray jsonColumns = workbenchLayout.getJSONArray("columns_");
+Map<String, String> columns = new HashMap<String, String>();
+for( int i=0; i<jsonColumns.length(); i++){
+	JSONObject jsonColumn = jsonColumns.getJSONObject(i);
+
+	String currentPortlet =  jsonColumn.getString("currentPortlet_");
+	columns.put( jsonColumn.getString("id_"), currentPortlet );
+}
+
+String templateFile = "../../templates/"+workbenchLayout.getString("templateId_")+".jspf";
+System.out.println( "Template Name: "+templateFile);
+System.out.println(columns.toString());
+
+
+String workbenchType = (String)renderRequest.getAttribute("workbenchType");
+	
+if( workbenchType.equalsIgnoreCase("SIMULATION_WITH_APP")){
+	scienceApp = (ScienceApp)renderRequest.getAttribute("scienceApp");
+	inputPorts = (String)renderRequest.getAttribute("inputPorts");
+	logPorts = (String)renderRequest.getAttribute("logPorts");
+	outputPorts = (String)renderRequest.getAttribute("outputPorts");
+}
+else if( workbenchType.equalsIgnoreCase("CONTENT")){
+	contentType = (String)renderRequest.getAttribute("contentType");
+	contentURL = (String)renderRequest.getAttribute("contentURL");
+}
+else if( workbenchType.equalsIgnoreCase("MONITORING_ANALYSIS")){
+	jobId = (String)renderRequest.getAttribute("jobId");
+	pathType = (String)renderRequest.getAttribute( "pathType");
+	pathType = "file";
+	parent = (String)renderRequest.getAttribute("parent");
+	parent = "jobs/simulation_uuid/job_uuid.job/data";
+	fileName = (String)renderRequest.getAttribute("parent");
+	//relative = (String)renderRequest.getAttribute("relative");
+	outputPorts = (String)renderRequest.getAttribute("outputPort");
+
+}
+else{
+	System.out.println("Un-recognizable workbench type: "+workbenchType);
+}
+%>

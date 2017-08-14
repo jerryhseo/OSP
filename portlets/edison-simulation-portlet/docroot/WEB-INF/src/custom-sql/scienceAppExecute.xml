@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.bestsimulation.service.persistence.ScienceAppExecuteFinder.InsertCustomScienceAppExecute" >
+		<![CDATA[
+			INSERT INTO EDSIM_ScienceAppExecute (executeDate, scienceAppId, userCnt, avgExeTime, exeCnt)		
+			SELECT
+              TOTAL.day AS executeDate,		  
+		      TOTAL.scienceAppId,
+		      COUNT(*) AS userCnt,		  
+              CEIL(IFNULL(SUM(TOTAL.runtimeSum)/SUM(TOTAL.jobCnt),0)) AS averageRuntime,
+		      SUM(TOTAL.jobCnt) AS exeCnt
+		    FROM(
+		      SELECT
+                DATA.day,
+		        DATA.scienceAppId,
+		        DATA.userId,
+		        COUNT(*) AS jobCnt,
+		        SUM(DATA.runtime) AS runtimeSum
+		      FROM
+		      (
+		       SELECT
+                 DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') AS day,
+		         A.simulationUuid,
+		         A.scienceAppId,		      
+		         A.userId,		      
+		         UNIX_TIMESTAMP(B.jobEndDt) - UNIX_TIMESTAMP(B.jobStartDt) AS runtime
+		       FROM
+		         (SELECT A.* FROM EDSIM_Simulation A WHERE A.testYn != true) A,
+		         EDSIM_SimulationJob B,
+		         EDAPP_ScienceApp C		      
+		       WHERE
+		         A.simulationUuid = B.simulationUuid		    
+		         AND A.scienceAppId IS NOT NULL
+		         AND A.scienceAppId = C.scienceAppId
+		         AND C.status = 1901004
+		         AND C.appType = "Solver"
+		         AND B.jobSubmitDt IS NOT NULL
+		         AND (DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') >= DATE_FORMAT(#startDt#, '%Y-%m-%d') AND DATE_FORMAT(B.jobSubmitDt, '%Y-%m-%d') <= DATE_FORMAT(#endDt#, '%Y-%m-%d'))		    
+		       ) DATA
+		       GROUP BY DATA.day, DATA.scienceAppId, DATA.userId
+		    ) TOTAL
+            GROUP BY TOTAL.day, TOTAL.scienceAppId
+		    ORDER BY TOTAL.day DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.bestsimulation.service.persistence.ScienceAppExecuteFinder.DeleteCustomScienceAppExecute" >
+		<![CDATA[
+			DELETE 
+			FROM 
+  				EDSIM_ScienceAppExecute
+			WHERE 
+				(DATE_FORMAT(executeDate, '%Y-%m-%d') >= DATE_FORMAT(#startDt#, '%Y-%m-%d') AND DATE_FORMAT(executeDate, '%Y-%m-%d') <= DATE_FORMAT(#endDt#, '%Y-%m-%d'))
+		]]>
+	</sql>
+</custom-sql>

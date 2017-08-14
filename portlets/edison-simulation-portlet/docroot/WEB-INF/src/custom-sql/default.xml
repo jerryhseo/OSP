@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql >
+ 	<sql file="custom-sql/simulation.xml" />
+	<sql file="custom-sql/myFileMgnt.xml"/>
+	<sql file="custom-sql/monitoring.xml"/>
+	<sql file="custom-sql/statistics.xml"/>
+	<sql file="custom-sql/projectStatistics.xml"/>
+	<sql file="custom-sql/scienceAppExecute.xml"/>
+	<sql file="custom-sql/universityExecute.xml"/>	
+</custom-sql >

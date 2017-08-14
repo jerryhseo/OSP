@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+
+	<sql
+		id="org.kisti.edison.science.service.persistence.ScienceAppFavoriteFinder.getFavoriteAppList">
+		<![CDATA[
+			SELECT  
+				D.scienceAppId, 
+				D.groupId, 
+				D.name, 
+				D.version,
+				ExtractValue(D.title, 'root/Title[@language-id="@@languageId@@"]') as title,
+				ExtractValue(D.manualId, 'root/ManualId[@language-id="@@languageId@@"]') as manualId
+			FROM 
+				EDAPP_ScienceAppFavorite        A,
+				AssetEntry                      B,
+				AssetEntries_AssetCategories    C,
+				EDAPP_ScienceApp                D
+			WHERE
+				B.classPK = A.scienceAppId
+			AND 
+				B.entryId = C.entryId
+			AND 
+				A.scienceAppId = D.scienceAppId
+			AND 
+				D.status = 1901004
+			<isNotEmpty property="userId">
+			AND 
+				A.userId = #userId#
+			</isNotEmpty>	
+			<isNotEmpty property="categoryIds">
+				AND 
+					C.categoryId in (#categoryIds#)			
+			</isNotEmpty>
+			GROUP BY A.scienceAppId
+		]]>
+	</sql>
+
+</custom-sql>

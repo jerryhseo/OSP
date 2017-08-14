@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimProScienceAppLinkFinder.getScienceAppList" >
+		<![CDATA[
+		SELECT DATA.*
+			FROM(
+				SELECT 
+					   A.scienceAppId,
+				       A.name,
+				       ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title,
+				       A.version,
+				       A.userId,
+				       B.screenName
+				FROM
+				      EDAPP_ScienceApp A, User_ B
+				WHERE
+				      A.status = '1901004'
+				AND
+				      A.appType = 'Solver'
+				AND
+				      A.userId = B.userId
+				<isNotEmpty property="searchField">
+				AND   A.name like '%@@searchField@@%'
+				</isNotEmpty>
+				<isNotEmpty property="targetLanguage">
+				AND
+					A.targetLanguage LIKE '%@@languageId@@%'
+				</isNotEmpty>
+          ) AS DATA
+			ORDER BY DATA.name ASC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty>
+  		]]>
+  		
+	</sql>
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimProScienceAppLinkFinder.getScienceAppCount" >
+		<![CDATA[
+		SELECT COUNT(*) AS totalCnt
+			FROM(
+				SELECT 
+					   A.scienceAppId,
+				       A.name,
+				       A.version,
+				       A.userId,
+				       B.screenName
+				FROM
+				      EDAPP_ScienceApp A, User_ B
+				WHERE
+				      A.status = '1901004'
+				AND
+				      A.appType = 'Solver'
+				AND
+				      A.userId = B.userId
+				<isNotEmpty property="searchField">
+				AND   A.name like '%@@searchField@@%'
+				</isNotEmpty>
+				<isNotEmpty property="targetLanguage">
+				AND
+					A.targetLanguage LIKE '%@@languageId@@%'
+				</isNotEmpty>
+          ) AS DATA
+			ORDER BY DATA.name ASC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty>
+  		]]>
+  		
+	</sql>
+	<sql id="org.kisti.edison.simulationProject.service.persistence.SimProScienceAppLinkFinder.getSelectScienceAppList" >
+		<![CDATA[
+			SELECT DATA.*
+			FROM(
+				SELECT 
+					   A.scienceAppId,
+				       A.name,
+				       A.version,
+				       A.userId,
+               		   A.iconId,
+				       B.screenName				       
+				FROM
+				      EDAPP_ScienceApp A, User_ B
+				WHERE
+				      A.status = '1901004'
+				AND
+				      A.appType = 'Solver'
+				AND
+				      A.userId = B.userId
+				<isNotEmpty property="scienceAppIds">				      
+				AND
+				 	  A.scienceAppId IN (@@scienceAppIds@@)
+				</isNotEmpty>
+				<isNotEmpty property="targetLanguage">
+				AND
+					A.targetLanguage LIKE '%@@languageId@@%'
+				</isNotEmpty> 	  	      
+          ) AS DATA
+			ORDER BY DATA.name ASC
+  		]]>
+  		
+	</sql>
+	
+	<!-- ASSET 포트릿 조회 쿼리 -->
+	<sql
+		id="org.kisti.edison.simulationProject.service.persistence.SimProScienceAppLinkFinder.getAssetEntryModelCountHeader">
+		<![CDATA[
+			SELECT COUNT(*) AS totalCnt
+		]]>
+	</sql>
+	<!-- ASSET 포트릿 조회 쿼리 -->
+	<sql
+		id="org.kisti.edison.simulationProject.service.persistence.SimProScienceAppLinkFinder.getAssetEntryModelWhere">
+		<![CDATA[
+			FROM EDAPP_ScienceApp
+			WHERE 
+			 	 targetLanguage  like '%@@languageId@@%'
+			<isNotEmpty property="modelSeqList">
+			 	AND scienceAppId in ( @@modelSeqList@@ )
+			</isNotEmpty>
+			<isNotEmpty property="modelSeqStr">
+			 	AND scienceAppId = #modelSeqStr# 
+			</isNotEmpty>
+			<isNotEmpty property="searchText">
+				AND	
+					(
+						ExtractValue(title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchText@@%'
+					 OR name like '%@@searchText@@%'
+					)
+			</isNotEmpty>
+			<isNotEmpty property="status">
+			 	AND status = #status#
+			</isNotEmpty>
+			<isNotEmpty property="begin">
+				Limit #begin#, #end#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+</custom-sql>

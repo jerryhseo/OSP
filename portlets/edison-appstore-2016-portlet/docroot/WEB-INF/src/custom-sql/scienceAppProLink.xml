@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.service.persistence.ScienceAppProLinkFinder.getSimulationProjectList" >
+		<![CDATA[
+			SELECT DATA.*
+			FROM(
+				SELECT 
+					A.simulationProjectId,
+				    ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title,
+				    ExtractValue(A.explain_, 'root/Explain[@language-id="@@languageId@@"]') AS explain_,				       
+				    A.ownerId,
+				    B.screenName
+				FROM
+				      EDSIMPRO_SimulationProject A, User_ B
+				WHERE
+					A.ownerId = B.userId
+				<isNotEmpty property="projectOpenYn">    
+                	AND A.projectOpenYn = #projectOpenYn#
+            	</isNotEmpty>
+            	<isNotEmpty property="languageId">
+					AND A.serviceLanguage LIKE '%@@languageId@@%' 
+				</isNotEmpty>		
+	       		<isNotEmpty property="searchField">
+	        		AND	ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchField@@%'				
+				</isNotEmpty>      
+      		) AS DATA
+			ORDER BY DATA.title ASC
+			<isNotEmpty property="begin">	
+          		LIMIT #begin#, #end#
+          	</isNotEmpty>
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.ScienceAppProLinkFinder.getSimulationProjectCount" >
+		<![CDATA[
+			SELECT COUNT(*) AS totalCnt
+			FROM(
+				SELECT 
+					A.simulationProjectId,
+				    ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title,
+				    ExtractValue(A.explain_, 'root/Explain[@language-id="@@languageId@@"]') AS explain_,				       
+				    A.ownerId,
+				    B.screenName
+				FROM
+				      EDSIMPRO_SimulationProject A, User_ B
+				WHERE
+					A.ownerId = B.userId
+				<isNotEmpty property="projectOpenYn">    
+                	AND A.projectOpenYn = #projectOpenYn#
+            	</isNotEmpty>
+            	<isNotEmpty property="languageId">
+					AND A.serviceLanguage LIKE '%@@languageId@@%' 
+				</isNotEmpty>		
+	       		<isNotEmpty property="searchField">
+	        		AND	ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchField@@%'				
+				</isNotEmpty>      
+      		) AS DATA			
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.ScienceAppProLinkFinder.getSelectSimulationProjectList" >
+		<![CDATA[
+			SELECT DATA.*
+			FROM(
+				SELECT 
+					A.simulationProjectId,
+				    ExtractValue(A.title, 'root/Title[@language-id="@@languageId@@"]') AS title,	
+				    ExtractValue(A.explain_, 'root/Explain[@language-id="@@languageId@@"]') AS explain_,			       
+				    A.ownerId,
+				    A.iconId,
+				    B.screenName
+				FROM
+				  	EDSIMPRO_SimulationProject A, User_ B
+				WHERE
+				  	A.ownerId = B.userId
+				<isNotEmpty property="projectOpenYn">    
+                	AND A.projectOpenYn = #projectOpenYn#
+            	</isNotEmpty> 	
+			  	<isNotEmpty property="languageId">
+					AND A.serviceLanguage LIKE '%@@languageId@@%' 
+				</isNotEmpty>				
+				<isNotEmpty property="projectIds">				      
+					AND
+				 	  	A.simulationProjectId IN (@@projectIds@@)
+				</isNotEmpty> 	  	      
+          ) AS DATA
+			ORDER BY DATA.title ASC
+		]]>
+	</sql>
+</custom-sql>

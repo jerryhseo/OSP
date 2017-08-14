@@ -1,0 +1,139 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.kisti.osp.icecap.service.persistence;
+
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+
+import java.io.Serializable;
+
+/**
+ * @author Young-K. Suh and Jerry H. Seo
+ * @generated
+ */
+public class DataTypeAnalyzerPK implements Comparable<DataTypeAnalyzerPK>,
+	Serializable {
+	public long typeId;
+	public long analyzerId;
+
+	public DataTypeAnalyzerPK() {
+	}
+
+	public DataTypeAnalyzerPK(long typeId, long analyzerId) {
+		this.typeId = typeId;
+		this.analyzerId = analyzerId;
+	}
+
+	public long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(long typeId) {
+		this.typeId = typeId;
+	}
+
+	public long getAnalyzerId() {
+		return analyzerId;
+	}
+
+	public void setAnalyzerId(long analyzerId) {
+		this.analyzerId = analyzerId;
+	}
+
+	@Override
+	public int compareTo(DataTypeAnalyzerPK pk) {
+		if (pk == null) {
+			return -1;
+		}
+
+		int value = 0;
+
+		if (typeId < pk.typeId) {
+			value = -1;
+		}
+		else if (typeId > pk.typeId) {
+			value = 1;
+		}
+		else {
+			value = 0;
+		}
+
+		if (value != 0) {
+			return value;
+		}
+
+		if (analyzerId < pk.analyzerId) {
+			value = -1;
+		}
+		else if (analyzerId > pk.analyzerId) {
+			value = 1;
+		}
+		else {
+			value = 0;
+		}
+
+		if (value != 0) {
+			return value;
+		}
+
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof DataTypeAnalyzerPK)) {
+			return false;
+		}
+
+		DataTypeAnalyzerPK pk = (DataTypeAnalyzerPK)obj;
+
+		if ((typeId == pk.typeId) && (analyzerId == pk.analyzerId)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return (String.valueOf(typeId) + String.valueOf(analyzerId)).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		StringBundler sb = new StringBundler(10);
+
+		sb.append(StringPool.OPEN_CURLY_BRACE);
+
+		sb.append("typeId");
+		sb.append(StringPool.EQUAL);
+		sb.append(typeId);
+
+		sb.append(StringPool.COMMA);
+		sb.append(StringPool.SPACE);
+		sb.append("analyzerId");
+		sb.append(StringPool.EQUAL);
+		sb.append(analyzerId);
+
+		sb.append(StringPool.CLOSE_CURLY_BRACE);
+
+		return sb.toString();
+	}
+}

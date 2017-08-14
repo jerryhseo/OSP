@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.virtuallaboratory.model.ClassNote">
+		<field name="classNoteSeq" type="long" />
+		<field name="classId" type="long" />
+		<field name="contentSeq" type="long" />
+		<field name="isContent" type="String" />
+		<field name="fileEntryId" type="long" />
+		<field name="description" type="String" localized="true" />
+		<field name="insertDate" type="Date" />
+		<field name="updateDate" type="Date" />
+		<field name="insertId" type="long" />
+		<field name="updateId" type="long" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.Professor">
+		<field name="professorSeq" type="long" />
+		<field name="userId" type="long" />
+		<field name="record" type="String" localized="true" />
+		<field name="paper" type="String" localized="true" />
+		<field name="homepage" type="String" />
+		<field name="introduce" type="String" localized="true" />
+		<field name="phone" type="String" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.Survey">
+		<field name="surveySeqNo" type="long" />
+		<field name="surveyUseYn" type="String" />
+		<field name="surveyTitle" type="String" localized="true" />
+		<field name="surveyStartDate" type="String" />
+		<field name="surveyEndDate" type="String" />
+		<field name="surveyStatus" type="String" />
+		<field name="surveyCreateDate" type="Date" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.SurveyAnswer">
+		<field name="SurveyAnswerId" type="long" />
+		<field name="userId" type="long" />
+		<field name="virtualLabId" type="long" />
+		<field name="classId" type="long" />
+		<field name="subjectivityAnswer" type="String" localized="true" />
+		<field name="objecttivityAnswer" type="String" />
+		<field name="answerDate" type="Date" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.SurveyQuestion">
+		<field name="questionSeqNo" type="long" />
+		<field name="questionDivCd" type="String" />
+		<field name="questionTitle" type="String" localized="true" />
+		<field name="question1" type="String" localized="true" />
+		<field name="question2" type="String" localized="true" />
+		<field name="question3" type="String" localized="true" />
+		<field name="question4" type="String" localized="true" />
+		<field name="question5" type="String" localized="true" />
+		<field name="question6" type="String" localized="true" />
+		<field name="question7" type="String" localized="true" />
+		<field name="question8" type="String" localized="true" />
+		<field name="question9" type="String" localized="true" />
+		<field name="question10" type="String" localized="true" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLab">
+		<field name="virtualLabId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="virtualLabRequestDt" type="Date" />
+		<field name="virtualLabConfirmDt" type="Date" />
+		<field name="virtualLabConfirmDescription" type="String" />
+		<field name="virtualLabStatus" type="String" />
+		<field name="virtualLabTitle" type="String" localized="true" />
+		<field name="virtualLabDescription" type="String" localized="true" />
+		<field name="virtualLabUseYn" type="String" />
+		<field name="virtualLabUniversityField" type="String" />
+		<field name="iconId" type="long" />
+		<field name="professorSeq" type="long" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabClass">
+		<field name="classId" type="long" />
+		<field name="classTitle" type="String" localized="true" />
+		<field name="classStartDt" type="String" />
+		<field name="classEndDt" type="String" />
+		<field name="classUseYn" type="String" />
+		<field name="classDescription" type="String" localized="true" />
+		<field name="classPersonnel" type="int" />
+		<field name="classCreateDt" type="Date" />
+		<field name="classUpdateDt" type="Date" />
+		<field name="virtualClassCd" type="String" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabClassScienceApp">
+		<field name="scienceAppSeqNo" type="long" />
+		<field name="scienceAppId" type="long" />
+		<field name="createDate" type="Date" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabClassStsMigration">
+		<field name="groupId" type="long" />
+		<field name="virtualLabId" type="long" />
+		<field name="classId" type="long" />
+		<field name="universityField" type="String" />
+		<field name="virtualLabTitle" type="String" localized="true" />
+		<field name="virtualLabPersonName" type="String" localized="true" />
+		<field name="classTitle" type="String" localized="true" />
+		<field name="virtualClassCd" type="String" />
+		<field name="classCreateDt" type="Date" />
+		<field name="scienceAppId" type="String" />
+		<field name="scienceAppName" type="String" />
+		<field name="registerStudentCnt" type="long" />
+		<field name="executeCount" type="long" />
+		<field name="executeStudentcount" type="long" />
+		<field name="avgerageRuntime" type="long" />
+		<field name="cputime" type="long" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabScienceAppLink">
+		<field name="scienceAppSeqNo" type="long" />
+		<field name="scienceAppId" type="long" />
+		<field name="virtualLabId" type="long" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabScienceAppLinkClass">
+		<field name="scienceAppClassSeqNo" type="long" />
+		<field name="classId" type="long" />
+		<field name="scienceAppSeqNo" type="long" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabUser">
+		<field name="virtualLabUserId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userStudentNumber" type="String" />
+		<field name="authRole" type="String" />
+		<field name="userUseYn" type="String" />
+		<field name="requestSort" type="String" />
+		<field name="processNote" type="String" />
+		<field name="processDate" type="Date" />
+		<field name="createDt" type="Date" />
+		<field name="updateDt" type="Date" />
+	</model>
+	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabUserTemp">
+		<field name="seqNo" type="long" />
+		<field name="virtualLabId" type="long" />
+		<field name="classId" type="long" />
+		<field name="userStudentNumber" type="String" />
+		<field name="userName" type="String" />
+		<field name="status" type="boolean" />
+	</model>
+</model-hints>

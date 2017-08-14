@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison">
+	<author>edison</author>
+	<namespace>EDSIMPRO</namespace>
+
+	<entity name="SimulationProject" local-service="true" >
+		<!-- Primary Key -->
+		<column name="simulationProjectId" type="long" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="title" type="String" localized="true" ></column>
+		<column name="serviceLanguage" type="String"></column>
+		<column name="projectOpenYn" type="boolean"></column>
+		<column name="explain" type="String" localized="true"></column>
+		<column name="iconId" type="long"></column>
+		<column name="imageFolderId" type="long"></column>
+		<column name="ownerId" type="long"></column>
+		<column name="insertId" type="long"></column>
+		<column name="insertDate" type="Date"></column>
+		<column name="updateId" type="long"></column>
+		<column name="updateDate" type="Date"></column>
+		<column name= "templetId" type="long"></column>
+		
+		<!-- Order -->
+		<order by="desc">
+			<order-column name="insertDate" />
+		</order>
+		
+		<!-- finder -->
+		<finder name="OwnerId" return-type="Collection" unique="false">
+            <finder-column name="ownerId"></finder-column>
+        </finder>
+		
+		<!-- custom Entity -->
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
+	</entity>
+	
+	<entity name="SimProScienceAppLink" local-service="true" >
+		<!-- Primary Key -->
+		<column name="simProScienceAppLinkId" type="long" primary="true"></column>
+		<column name="simulationProjectId" type="long" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="scienceAppId" type="Long"></column>		
+		
+		<!-- finder -->
+		<finder name="SimulationProjectId" return-type="Collection" unique="false">
+            <finder-column name="simulationProjectId"></finder-column>
+        </finder>
+        
+	</entity>
+	
+	<entity name="RequestMember" local-service="true" >
+		<!-- Primary Key -->
+		<column name="requestSeq" type="long" primary="true"></column>
+		<column name="simulationProjectId" type="long" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="userId" type="Long"></column>
+		<column name="requestDate" type="Date"></column>
+		<column name="processDate" type="Date"></column>
+		<column name="requestState" type="String"></column>
+		
+		<!-- finder -->
+		<finder name="SimulationProjectId" return-type="Collection" unique="false">
+            <finder-column name="simulationProjectId"></finder-column>
+        </finder>
+        
+		<finder name="SimulationProjectIdAndUseId" return-type="Collection" unique="false">
+			<finder-column name="userId"></finder-column>
+            <finder-column name="simulationProjectId"></finder-column>
+        </finder>
+	</entity>	
+	
+</service-builder>

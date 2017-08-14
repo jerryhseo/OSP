@@ -1,0 +1,84 @@
+<script>
+//var $ = $.noConflict();
+
+var <portlet:namespace/>workbenchType = '<%=workbenchType%>';
+var <portlet:namespace/>workbenchLayout = new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>'));
+
+var <portlet:namespace/>scienceApp;
+var <portlet:namespace/>inputPorts;
+var <portlet:namespace/>logPorts;
+var <portlet:namespace/>outputPorts;
+
+//$('#<portlet:namespace/>canvasPanel').outerHeight(<portlet:namespace/>workbenchLayout.height());
+
+Liferay.on('portletReady', function( eventData ){
+	console.log( 'Portlet Ready: '+eventData.portletId);
+	var myId = '<%=portletDisplay.getId()%>';
+	if( eventData.portletId !== myId ){
+		var data = {
+				portletId: '<%=portletDisplay.getId()%>',
+				targetPortlet: eventData.portletId,
+		};
+
+		Liferay.fire( OSP.Event.OSP_HANDSHAKE, data);
+		
+		console.log( 'HANDSHAKE sent to: '+eventData.portletId);
+	}
+});
+
+
+Liferay.on( OSP.Event.OSP_REQUEST_PORT_INFO, function(e){
+	var myId = '<%=portletDisplay.getId()%>';
+	if( e.portletId === myId ){
+		if( !<portlet:namespace/>scienceApp )
+			<portlet:namespace/>scienceApp = new OSP.ScienceApp();
+		var scienceApp = <portlet:namespace/>scienceApp;
+		
+		var eventData = {
+				portletId: myId,
+				targetPortlet: e.portletId,
+		}
+		if( '<%=inputPorts%>' ){
+			scienceApp.deserializeInputPorts(JSON.parse('<%=inputPorts%>'));
+		}
+		if( '<%=logPorts%>' ){
+			scienceApp.deserializeLogPorts(JSON.parse('<%=logPorts%>'));
+		}
+		if( '<%=outputPorts%>' ){
+			scienceApp.deserializeOutputPorts(JSON.parse('<%=outputPorts%>'));
+		}
+
+		eventData.scienceApp = scienceApp;
+		Liferay.fire(OSP.Event.OSP_RESPONSE_PORT_INFO, eventData );
+	}
+});
+
+Liferay.on( OSP.Event.OSP_PORT_SELECTED, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if( e.portletId === myId ){
+		console.log( 'PORT_SELECTED: '+e.portName);
+	}
+});
+
+Liferay.on( OSP.Event.OSP_NEW_SIMULATION, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if( e.portletId === myId ){
+		console.log( 'OSP_NEW_SIMULATION: '+e.simulationName);
+	}
+});
+
+Liferay.on( OSP.Event.OSP_ADD_JOB, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if( e.portletId === myId ){
+		console.log( 'OSP_ADD_JOB: .....');
+	}
+});
+
+Liferay.on( OSP.Event.OSP_SUBMIT_SIMULATION, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if( e.portletId === myId ){
+		console.log( 'OSP_SUBMIT_SIMULATION: .....');
+	}
+});
+
+</script>

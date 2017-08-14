@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+	<sql id="org.kisti.edison.service.persistence.classNote.getVirtualLabClassNoteList" >
+		<![CDATA[
+			SELECT 
+				A.classNoteSeq,
+				A.classId,
+				A.contentSeq,
+				A.isContent,
+				A.fileEntryId,
+				ExtractValue(description, 'root/Description[@language-id="@@languageId@@"]') AS description,
+				A.insertDate,
+				A.insertId,
+				ExtractValue(description, 'root/Resume[@language-id="@@languageId@@"]')   AS resume
+			FROM 
+				EDVIR_ClassNote A
+			WHERE 
+				A.isContent = 'false'
+				<isNotEmpty property="classId">
+				AND 
+					classId = #classId#
+				</isNotEmpty>
+			UNION
+			SELECT 
+				A.classNoteSeq,
+				A.classId,
+				A.contentSeq,
+				A.isContent,
+				A.fileEntryId,
+				ExtractValue(description, 'root/Description[@language-id="@@languageId@@"]') AS description,
+				A.insertDate,
+				A.insertId,
+				ExtractValue(description, 'root/Resume[@language-id="@@languageId@@"]')    AS resume
+			FROM 
+				EDVIR_ClassNote A, EDMED_Content B
+			WHERE 
+				A.contentSeq = B.contentSeq
+			AND
+				B.openYn = 'Y'
+			<isNotEmpty property="languageId">
+			AND
+				B.serviceLanguage LIKE "%@@languageId@@%"
+			</isNotEmpty>
+			<isNotEmpty property="classId">
+			AND 
+				classId = #classId#
+			</isNotEmpty>
+		]]>
+	</sql>
+	
+	
+</custom-sql>

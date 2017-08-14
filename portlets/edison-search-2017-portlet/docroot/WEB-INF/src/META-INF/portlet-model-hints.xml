@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.search.service.model.Search">
+		<field name="id" type="long" />
+	</model>
+	<model name="org.kisti.edison.search.service.model.SearchCondition">
+		<field name="id" type="long" />
+		<field name="searchKeyword" type="String" />
+		<field name="areaScienceApp" type="boolean" />
+		<field name="areaContents" type="boolean" />
+		<field name="areaSimulationProject" type="boolean" />
+		<field name="areaScienceData" type="boolean" />
+		<field name="parentCategory" type="boolean" />
+		<field name="categoryId" type="long" />
+		<field name="companyGroupId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="currentPage" type="int" />
+		<field name="listSize" type="int" />
+		<field name="blockSize" type="int" />
+		<field name="classnote" type="boolean" />
+		<field name="manual" type="boolean" />
+		<field name="reference" type="boolean" />
+		<field name="advanced" type="boolean" />
+		<field name="Solver" type="boolean" />
+		<field name="Converter" type="boolean" />
+		<field name="Editor" type="boolean" />
+		<field name="Analyzer" type="boolean" />
+	</model>
+</model-hints>

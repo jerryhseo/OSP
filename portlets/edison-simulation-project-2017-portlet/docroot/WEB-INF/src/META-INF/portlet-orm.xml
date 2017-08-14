@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.kisti.edison.model.impl.RequestMemberModelImpl">
+		<id-class class="org.kisti.edison.service.persistence.RequestMemberPK" />
+		<attributes>
+			<id name="requestSeq" />
+			<id name="simulationProjectId" />
+			<basic name="userId" />
+			<basic name="requestDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="processDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="requestState" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.SimProScienceAppLinkModelImpl">
+		<id-class class="org.kisti.edison.service.persistence.SimProScienceAppLinkPK" />
+		<attributes>
+			<id name="simProScienceAppLinkId" />
+			<id name="simulationProjectId" />
+			<basic name="scienceAppId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.SimulationProjectModelImpl">
+		<attributes>
+			<id name="simulationProjectId" />
+			<basic name="title" />
+			<basic name="serviceLanguage" />
+			<basic name="projectOpenYn" />
+			<basic name="explain">
+				<column name="EXPLAIN_" />
+			</basic>
+			<basic name="iconId" />
+			<basic name="imageFolderId" />
+			<basic name="ownerId" />
+			<basic name="insertId" />
+			<basic name="insertDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="updateId" />
+			<basic name="updateDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="templetId" />
+			<transient name="explainCurrentLanguageId" />
+			<transient name="explainMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="titleCurrentLanguageId" />
+			<transient name="titleMap" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.kisti.edison.model.impl.RequestMemberImpl" name="RequestMember">
+		<table name="EDSIMPRO_RequestMember" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.SimProScienceAppLinkImpl" name="SimProScienceAppLink">
+		<table name="EDSIMPRO_SimProScienceAppLink" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.SimulationProjectImpl" name="SimulationProject">
+		<table name="EDSIMPRO_SimulationProject" />
+		<attributes />
+	</entity>
+</entity-mappings>

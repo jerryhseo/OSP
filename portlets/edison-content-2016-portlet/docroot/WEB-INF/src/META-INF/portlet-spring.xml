@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.edison.content.service.AdvancedContentLocalService" class="org.kisti.edison.content.service.impl.AdvancedContentLocalServiceImpl" />
+	<bean id="org.kisti.edison.content.service.AdvancedContentService" class="org.kisti.edison.content.service.impl.AdvancedContentServiceImpl" />
+	<bean id="org.kisti.edison.content.service.persistence.AdvancedContentPersistence" class="org.kisti.edison.content.service.persistence.AdvancedContentPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.content.service.ContentLocalService" class="org.kisti.edison.content.service.impl.ContentLocalServiceImpl" />
+	<bean id="org.kisti.edison.content.service.ContentService" class="org.kisti.edison.content.service.impl.ContentServiceImpl" />
+	<bean id="org.kisti.edison.content.service.persistence.ContentPersistence" class="org.kisti.edison.content.service.persistence.ContentPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.content.service.persistence.ContentFinder" class="org.kisti.edison.content.service.persistence.ContentFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.content.service.GeneralContentLocalService" class="org.kisti.edison.content.service.impl.GeneralContentLocalServiceImpl" />
+	<bean id="org.kisti.edison.content.service.GeneralContentService" class="org.kisti.edison.content.service.impl.GeneralContentServiceImpl" />
+	<bean id="org.kisti.edison.content.service.persistence.GeneralContentPersistence" class="org.kisti.edison.content.service.persistence.GeneralContentPersistenceImpl" parent="basePersistence" />
+</beans>

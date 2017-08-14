@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.kisti.edison.model.RequestMember" />
+	<import class="org.kisti.edison.model.SimProScienceAppLink" />
+	<import class="org.kisti.edison.model.SimulationProject" />
+	<class name="org.kisti.edison.model.impl.RequestMemberImpl" table="EDSIMPRO_RequestMember">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.service.persistence.RequestMemberPK">
+			<key-property name="requestSeq" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="simulationProjectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="requestDate" type="org.hibernate.type.TimestampType" />
+		<property name="processDate" type="org.hibernate.type.TimestampType" />
+		<property name="requestState" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.kisti.edison.model.impl.SimProScienceAppLinkImpl" table="EDSIMPRO_SimProScienceAppLink">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.service.persistence.SimProScienceAppLinkPK">
+			<key-property name="simProScienceAppLinkId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="simulationProjectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.kisti.edison.model.impl.SimulationProjectImpl" table="EDSIMPRO_SimulationProject">
+		<cache usage="read-write" />
+		<id name="simulationProjectId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="title" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="serviceLanguage" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="projectOpenYn" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="explain" type="com.liferay.portal.dao.orm.hibernate.StringType" column="explain_" />
+		<property name="iconId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="imageFolderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="ownerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="insertId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="insertDate" type="org.hibernate.type.TimestampType" />
+		<property name="updateId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="updateDate" type="org.hibernate.type.TimestampType" />
+		<property name="templetId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

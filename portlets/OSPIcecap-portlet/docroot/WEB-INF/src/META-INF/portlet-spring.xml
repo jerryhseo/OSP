@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.kisti.osp.icecap.service.DataCollectionLocalService" class="com.kisti.osp.icecap.service.impl.DataCollectionLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataCollectionService" class="com.kisti.osp.icecap.service.impl.DataCollectionServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataCollectionPersistence" class="com.kisti.osp.icecap.service.persistence.DataCollectionPersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataCollectionFinder" class="com.kisti.osp.icecap.service.persistence.DataCollectionFinderImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataCollectionLayoutLocalService" class="com.kisti.osp.icecap.service.impl.DataCollectionLayoutLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataCollectionLayoutService" class="com.kisti.osp.icecap.service.impl.DataCollectionLayoutServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataCollectionLayoutPersistence" class="com.kisti.osp.icecap.service.persistence.DataCollectionLayoutPersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataEntryLocalService" class="com.kisti.osp.icecap.service.impl.DataEntryLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataEntryService" class="com.kisti.osp.icecap.service.impl.DataEntryServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataEntryPersistence" class="com.kisti.osp.icecap.service.persistence.DataEntryPersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataEntryFinder" class="com.kisti.osp.icecap.service.persistence.DataEntryFinderImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataEntryProvenanceLocalService" class="com.kisti.osp.icecap.service.impl.DataEntryProvenanceLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataEntryProvenanceService" class="com.kisti.osp.icecap.service.impl.DataEntryProvenanceServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataEntryProvenancePersistence" class="com.kisti.osp.icecap.service.persistence.DataEntryProvenancePersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeLocalService" class="com.kisti.osp.icecap.service.impl.DataTypeLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeService" class="com.kisti.osp.icecap.service.impl.DataTypeServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataTypePersistence" class="com.kisti.osp.icecap.service.persistence.DataTypePersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeAnalyzerLocalService" class="com.kisti.osp.icecap.service.impl.DataTypeAnalyzerLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeAnalyzerService" class="com.kisti.osp.icecap.service.impl.DataTypeAnalyzerServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataTypeAnalyzerPersistence" class="com.kisti.osp.icecap.service.persistence.DataTypeAnalyzerPersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeEditorLocalService" class="com.kisti.osp.icecap.service.impl.DataTypeEditorLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeEditorService" class="com.kisti.osp.icecap.service.impl.DataTypeEditorServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataTypeEditorPersistence" class="com.kisti.osp.icecap.service.persistence.DataTypeEditorPersistenceImpl" parent="basePersistence" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeStructureLocalService" class="com.kisti.osp.icecap.service.impl.DataTypeStructureLocalServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.DataTypeStructureService" class="com.kisti.osp.icecap.service.impl.DataTypeStructureServiceImpl" />
+	<bean id="com.kisti.osp.icecap.service.persistence.DataTypeStructurePersistence" class="com.kisti.osp.icecap.service.persistence.DataTypeStructurePersistenceImpl" parent="basePersistence" />
+</beans>

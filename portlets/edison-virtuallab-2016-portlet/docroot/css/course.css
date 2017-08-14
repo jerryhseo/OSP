@@ -1,0 +1,394 @@
+/* 2017-03-28 추가-------------------------------------------------------------------------- */
+/* 공통 */
+.label_cfd {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    background-color: rgb(236, 20, 28);
+    padding: 2px 4px;
+    margin-top: 5px;
+}
+
+.label_nano {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    padding: 2px 4px;
+    background-color: rgb(181, 210, 27);
+    margin-top: 5px;
+}
+
+.label_chem {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    padding: 2px 4px;
+    background-color: rgb(249, 210, 0);
+    margin-top: 5px;
+}
+.label_csd {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    padding: 2px 4px;
+    background-color: rgb(12, 140, 213);
+    margin-top: 5px;
+}
+.label_design {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    padding: 2px 4px;
+    background-color: rgb(98, 40, 142);
+    margin-top: 5px;
+}
+
+.label_cmed {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 16px;
+    color: white;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: rgba(0,0,0,0.25) 0px -1px 0px ;
+    padding: 2px 4px;
+    background-color: rgb(17, 167, 156);
+}
+
+.label_fieldNm{
+	background-color: #488f06;
+	border-radius: 3px;
+	display: inline-block;;
+	padding : 2px 4px;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 14px;
+	color: #ffffff;
+	vertical-align: baseline;
+	white-space: nowrap;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	margin-top: 5px;
+	
+}
+/* 사이언스앱 */
+.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;}
+
+.appDescription{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.concustomHr {
+    width: 100%;
+    font-size: 1px;
+    color: rgba(0, 0, 0, 0);
+    line-height: 1px;
+
+    background-color: rgb(236, 236, 236);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.appDetailBtn{
+	margin-top: 18px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+/* 강좌 메인 */
+
+.mainImage{
+	float: left;
+	width: 18%;
+}
+
+.mainInfo{
+	width: 85%;
+	margin-left: 15%
+}
+
+.concustomHr {
+    width: 100%;
+    font-size: 1px;
+    color: rgba(0, 0, 0, 0);
+    line-height: 1px;
+
+    background-color: rgb(236, 236, 236);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.customHr {
+    width: 100%;
+    font-size: 1px;
+    color: rgba(0, 0, 0, 0);
+    line-height: 1px;
+
+    background-color: rgb(236, 236, 236);
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+
+.mainButton{
+	float: right;
+	margin-right: 20px;
+}
+
+.endButton{
+	background-color: #f49645;
+	padding : 8px 10px 12px 10px;
+	border : solid 1px #f49645;
+	min-width: 90px;
+	color : #fff;
+	font-weight: 600;
+	font-size: 14px;
+	border-radius: 3px;
+	cursor: default;
+}
+
+.mainDescription{
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 21px;
+	font-weight: 200;
+}
+
+.mainTitle{
+	float: left;
+}
+
+/* 강좌 목록 */
+.imgDiv{
+	width: 25%;
+	height: 95%;
+	float: left;
+	margin: 5px;
+}
+
+.infoDiv{
+	float: left;
+	width: 70%;
+	margin-left: 10px;
+	height: 100%;
+	
+}
+
+
+.course_card {
+    margin-top: 30px !important; 
+    margin-right: 10px !important; 
+    margin-left: 10px !important; 
+    margin-bottom: 30px !important; 
+    background-color: #fff;
+}
+.course_card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 8px;
+}
+
+/* Add some padding inside the card container */
+.container_card {
+    padding: 5px 16px;
+}
+
+.courselist{
+	float: left;
+	width: 80%;
+	margin-left: 30px;
+}
+
+.noncourselist{
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.coursetab{
+	float: left;
+	width: 12%;
+	margin-top: 30px;
+	border: solid 1px;
+	color: #ddd;
+}
+
+.category_list {
+    margin-top: 5px !important;
+    margin-right: 10px !important;
+    margin-left: 40px !important;
+    margin-bottom: 5px !important;
+    font-size: 14px;
+    color: #000000;
+    cursor: pointer;
+
+}
+.category_header {
+    margin-top: 3px !important;
+    margin-right: 10px !important;
+    margin-left: 40px !important;
+    margin-bottom: 3px !important;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+    color: #000000;
+    cursor: pointer;
+
+}
+
+.course_card_category {
+    margin-left: 5px;
+    margin-right:5px;
+    border: solid 1px;
+    color: #ddd;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    float: left;
+    width: 100%;
+}
+
+.course_card_category .choose{
+	background-color: #eee;
+	font-weight: bold;
+}
+
+.tabtable{
+	width: 100%;
+}
+
+.tabtable_tr{
+	border-bottom: solid 1px;
+}
+
+.category_tab_td:hover{
+	color: #000000;
+	background-color: #ddd;
+}
+
+.nocourselist{
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+.course_warp{
+	float: left;
+	width: 15%;
+	margin-top : 20px;
+}
+
+/*classNote */
+.button02_1{
+	padding : 2px 20px 2px 15px;
+	height : 30px;
+	background: url(../images/swicon_02.png) no-repeat 13px 7px;
+	background-color: #7a92aa;
+	padding-left: 37px;
+	border-radius: 3px;
+	border: solid 0 #6a6a6b;
+	min-width: 70px;
+	color: #fff;
+	font-weight: 600;
+	font-size: 15px;
+	text-shadow: 0 0 0 #777;
+	
+}
+
+.classnotetitlebox{
+	margin:  0 auto;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.classnotetitle{
+	font-size: 18px;
+	color : #000;
+	padding-top: 22px;
+	font-family: Tahoma,Arial,Nanum Barun Gothic,"나눔고딕",NanumGothic;
+}
+
+.filetitlebox{
+	margin : 0 auto;
+	width: 100%;
+}
+
+.filetitle{
+	margin-bottom: 20px;
+	font-size: 18px;
+	color : #000;
+	padding-top : 22px;
+	font-family: Tahoma,Arial,Nanum Barun Gothic,"나눔고딕",NanumGothic;
+}
+
+
+/* 교수이력관리 및 교수 정보조회 */
+.professorTitle{
+	font-size: 20px;
+	margin-bottom: 20px;
+	font-weight: 200;
+	margin-top: 20px;
+}
+
+.professorDescription{
+	margin-left: 30px;
+	font-size: 13px;
+	font-weight: 100;
+	word-break : break-all;
+	margin-right: 50px;
+}
+
+.professorSubTitle{
+	margin-left: 30px;
+	font-size: 13px;
+	font-weight: 100;
+	word-break : break-all;
+	margin-right: 10px;
+	float: left;
+	width: 75px;
+}
+
+.professorDescription p{
+	margin : 0;
+}
+
+.professorViewImage{
+	float: left;
+	width: 15%;
+	margin-left: 50px;
+	margin-top: 20px;
+}
+.professorWarp{
+	width: 80%;
+	margin-left: 20%;
+}
+
+.professorManagementImage{
+	margin-left: 10%;
+}
+ 

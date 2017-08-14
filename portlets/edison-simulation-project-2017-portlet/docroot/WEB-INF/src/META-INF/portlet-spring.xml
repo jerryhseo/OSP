@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.edison.service.RequestMemberLocalService" class="org.kisti.edison.service.impl.RequestMemberLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.RequestMemberService" class="org.kisti.edison.service.impl.RequestMemberServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.RequestMemberPersistence" class="org.kisti.edison.service.persistence.RequestMemberPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.RequestMemberFinder" class="org.kisti.edison.service.persistence.RequestMemberFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.SimProScienceAppLinkLocalService" class="org.kisti.edison.service.impl.SimProScienceAppLinkLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.SimProScienceAppLinkService" class="org.kisti.edison.service.impl.SimProScienceAppLinkServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.SimProScienceAppLinkPersistence" class="org.kisti.edison.service.persistence.SimProScienceAppLinkPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.SimProScienceAppLinkFinder" class="org.kisti.edison.service.persistence.SimProScienceAppLinkFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.SimulationProjectLocalService" class="org.kisti.edison.service.impl.SimulationProjectLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.SimulationProjectService" class="org.kisti.edison.service.impl.SimulationProjectServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.SimulationProjectPersistence" class="org.kisti.edison.service.persistence.SimulationProjectPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.SimulationProjectFinder" class="org.kisti.edison.service.persistence.SimulationProjectFinderImpl" parent="basePersistence" />
+</beans>

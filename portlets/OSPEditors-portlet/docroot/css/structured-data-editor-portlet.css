@@ -1,0 +1,32 @@
+.structured-data-editor-portlet{
+	padding:0;
+	margin: 0;
+	overflow:hidden;
+}
+.structured-data-editor-portlet .fixed-top-button-first{
+	position:absolute;
+	top:10px;
+	right: 20px;
+	width:20px;
+	height:20px;
+	margin-top:10px;
+}
+
+.structured-data-editor-portlet .fixed-top-button-second{
+	position:absolute;
+	top:10px;
+	right: 50px;
+	width:20px;
+	height:20px;
+	margin-top:10px;
+}
+.structured-data-editor-portlet .canvas{
+	margin: 0;
+	overflow:auto; 
+}
+.structured-data-editor-portlet .canvas ul, ol {
+	font-size: 12px;
+	color: black;
+	margin: 0 0 10px 3px;
+	padding: 0;
+}

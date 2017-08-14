@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataEntryFinder.retrieveCountDataEntry.header" >
+	<![CDATA[	
+		SELECT
+			COUNT(*) AS totalCnt
+	]]>
+	</sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataEntryFinder.retrieveListDataEntry.header" >
+	<![CDATA[
+		SELECT
+			DATA.entryId, 
+			DATA.collectionId, 
+			DATA.groupId, 
+			DATA.companyId, 
+			DATA.userId, 
+			DATA.createDate, 
+			DATA.comments, 
+			DATA.path_, 
+			DATA.simulationSubjectId, 
+			DATA.productionTime, 
+			DATA.viewCount, 
+			DATA.downloadCount, 
+			DATA.lastAccessedDate, 
+			DATA.fileEntryId
+	]]>
+	</sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataEntryFinder.retrieveDataEntry.where" >
+	<![CDATA[
+		FROM
+		(
+			SELECT 
+				D.* 
+				FROM
+					icecap_DataCollection A,
+					(SELECT * FROM AssetEntry WHERE classNameId = #classNameId#) B,
+					AssetEntries_AssetCategories C,
+					icecap_DataEntry D
+				WHERE 
+						A.collectionId = B.classPK
+					AND B.entryId = C.entryId
+					AND A.collectionId = D.collectionId
+					
+					<isNotEmpty property="searchText">
+					AND	
+						A.name like '%@@searchText@@%'
+					</isNotEmpty>
+					
+					<isNotEmpty property="categoryIds">
+					AND 
+						C.categoryId in (#categoryIds#)			
+					</isNotEmpty>	
+					
+					<isNotEmpty property="userId">
+					AND 
+						D.userId = #userId#
+					</isNotEmpty>
+				GROUP BY D.entryId
+		)DATA
+		ORDER BY createDate DESC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty> 
+	]]>
+	</sql>
+	
+</custom-sql>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataCollectionFinder.retrieveCountDataCollection.header" >
+	<![CDATA[	
+		SELECT
+			COUNT(*) AS totalCnt
+	]]>
+	</sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataCollectionFinder.retrieveListDataCollection.header" >
+	<![CDATA[
+		SELECT
+			DATA.uuid_, 
+			DATA.collectionId, 
+			DATA.name, 
+			DATA.version, 
+			DATA.title, 
+			DATA.groupId, 
+			DATA.companyId, 
+			DATA.userId, 
+			DATA.createDate,
+			DATA.modifiedDate, 
+			DATA.description, 
+			DATA.targetLanguage, 
+			DATA.status, 
+			DATA.accessMethod, 
+			DATA.typeId,
+            DATA.folderId
+	]]>
+	</sql>
+	
+	<sql id="com.kisti.osp.icecap.service.persistence.DataCollectionFinder.retrieveDataCollection.where" >
+	<![CDATA[
+		FROM
+		(
+			SELECT 
+				A.* 
+				FROM
+					icecap_DataCollection A,
+					(SELECT * FROM AssetEntry WHERE classNameId = #classNameId#) B,
+					AssetEntries_AssetCategories C
+				WHERE 
+						A.collectionId = B.classPK
+					AND B.entryId = C.entryId
+					
+					<isNotEmpty property="categoryIds">
+					AND 
+						C.categoryId in (#categoryIds#)			
+					</isNotEmpty>	
+					<isNotEmpty property="searchText">
+					AND	
+						A.name like '%@@searchText@@%'
+					</isNotEmpty>
+					<isNotEmpty property="userId">
+					AND 
+						A.userId = #userId#
+					</isNotEmpty>
+					<isNotEmpty property="languageId">
+					AND
+						A.targetLanguage LIKE '%@@languageId@@%' 
+					</isNotEmpty>
+					
+					AND A.status = 0
+				
+				
+				GROUP BY A.collectionId
+		)DATA
+		ORDER BY createDate DESC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty> 
+	]]>
+	</sql>
+	<sql id="com.kisti.osp.icecap.service.persistence.DataCollectionFinder.retrieveCountRelatedAssetDataCollection.where" >
+	<![CDATA[
+		FROM
+			icecap_DataCollection
+		WHERE  
+			status = 0
+			<isNotEmpty property="modelSeqList">
+		 	AND 
+			 	collectionId in ( @@modelSeqList@@ )
+			</isNotEmpty>
+			<isNotEmpty property="modelSeqStr">
+		 	AND 
+			 	colledtionId = #modelSeqList#
+			</isNotEmpty>
+			<isNotEmpty property="searchText">
+			AND	
+				name like '%@@searchText@@%'
+			</isNotEmpty>
+			<isNotEmpty property="userId">
+			AND 
+				userId = #userId#
+			</isNotEmpty>
+			<isNotEmpty property="languageId">
+			AND
+				targetLanguage LIKE '%@@languageId@@%' 
+			</isNotEmpty>
+		ORDER BY createDate DESC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty> 
+			
+	]]>
+	</sql>
+	
+</custom-sql>
