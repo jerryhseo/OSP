@@ -73,6 +73,7 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 		async : false,
 		data : searchForm,
 		success: function(msg) {
+		    console.log(msg);
 			var virtualLabRegisterList = msg.virtualLabRegisterList;
 			var groupId = msg.groupId;
 			var curPage = msg.curPage;
@@ -93,6 +94,7 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 				$("#<portlet:namespace/>registrationListBody").append($rowResult);
 			} else {
 				
+					console.log("virtualLabRegisterList ", virtualLabRegisterList);
 				for(var i = 0; i < virtualLabRegisterList.length; i++) {
 					$rowResult = $("<tr/>");
 					
@@ -151,37 +153,24 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 						
 						virtualLabCount--;
 					} else if (virtualLabRegisterList[i].virtualLabStatus == "1401003") {
-						if(labOwner == "labOwner"){
-							$("<td/>").css("text-align","center")
-								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' />")
-												   .css("font-weight", "600")
-												   .css("color", "red")
-												   .css("margin","0")
-								  )
-								  .appendTo($rowResult);
-							$("<td/>").css("text-align","center")
-								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
-													   .addClass("button01b")
-													   .attr("type", "button")
-													   .attr("onClick","<portlet:namespace/>openDeniedDialog('" + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" + virtualLabRegisterList[i].virtualLabConfirmDescription + "','" + virtualLabRegisterList[i].virtualLabId +"')")
-								  )
-								  .appendTo($rowResult);
-						}else{
-							$("<td/>").css("text-align","center")
-								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' />")
-											  	   .css("font-weight", "600")
-											 	   .css("color", "red")
-											  	   .css("margin","0")
-								  )
-								  .appendTo($rowResult);
-							$("<td/>").css("text-align","center")
-								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
-													.addClass("button01b")
-													.attr("type", "button")
-	    											.attr("onClick","<portlet:namespace/>openDeniedDialog('" + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" + virtualLabRegisterList[i].virtualLabConfirmDescription + "','0')")
-								  )
-								  .appendTo($rowResult);
-						}
+						$("<td/>").css("text-align","center")
+							  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' />")
+											   .css("font-weight", "600")
+											   .css("color", "red")
+											   .css("margin","0")
+							  )
+							  .appendTo($rowResult);
+						$("<td/>").css("text-align","center")
+							  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
+												   .addClass("button01b")
+												   .attr("type", "button")
+												   .attr("onClick","<portlet:namespace/>openDeniedDialog('" 
+												         + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" 
+												         + virtualLabRegisterList[i].virtualLabConfirmDescription + "','" 
+												         + virtualLabRegisterList[i].virtualLabId +"')")
+							  )
+							  .appendTo($rowResult);
+						
 						virtualLabCount--;
 					} else {
 						$("<td/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")

@@ -40,6 +40,7 @@ import org.kisti.edison.virtuallaboratory.model.Professor;
 import org.kisti.edison.virtuallaboratory.model.VirtualLab;
 import org.kisti.edison.virtuallaboratory.model.VirtualLabClass;
 import org.kisti.edison.virtuallaboratory.model.VirtualLabUser;
+import org.kisti.edison.virtuallaboratory.portlet.virtualLabRegistrationList.VirtualLabRegistrationListController;
 import org.kisti.edison.virtuallaboratory.service.ProfessorLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabClassLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.base.VirtualLabLocalServiceBaseImpl;
@@ -47,6 +48,8 @@ import org.kisti.edison.virtuallaboratory.service.base.VirtualLabLocalServiceBas
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -76,6 +79,8 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
  * @see org.kisti.edison.service.VirtualLabLocalServiceUtil
  */
 public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
+    
+    private static Log log = LogFactoryUtil.getLog(VirtualLabLocalServiceBaseImpl.class);
 
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -113,11 +118,9 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 				}
 				virtualLabPersistence.update(virtualLab);
 			} catch (NoSuchVirtualLabException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new SystemException(e);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			    throw new SystemException(e);
 			}
 		} else {
 			long virtualLabSeq = CounterLocalServiceUtil.increment(VirtualLab.class.getName());
@@ -174,9 +177,7 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 					if(professor != null &&professor.getUserId() !=0){
 						User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 						if(professorUser != null){
-							virtualLabProfessorName = professorUser.getFirstName() + " "
-									+ professorUser.getMiddleName() + " "
-									+ professorUser.getLastName();
+							virtualLabProfessorName = professorUser.getFirstName();
 						}
 					}
 					
@@ -230,9 +231,7 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -244,16 +243,11 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 					resultRow.put("virtualLabStatus", virtualLab.getVirtualLabStatus());
 					resultRow.put("virtualLabUniversityField", EdisonExpndoUtil.getCommonCdSearchFieldValue(virtualLab.getVirtualLabUniversityField(), EdisonExpando.CDNM, locale));
 					resultRow.put("groupId", String.valueOf(virtualLab.getGroupId()));
-					Group group;
-					try {
-						group = GroupLocalServiceUtil.fetchGroup(virtualLab.getGroupId());
-						if (group != null) {
-							resultRow.put("groupName", group.getName());
-						}
-					} catch (SystemException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					Group group = GroupLocalServiceUtil.fetchGroup(virtualLab.getGroupId());
+					if (group != null) {
+						resultRow.put("groupName", group.getName());
 					}
+
 				}
 				
 				if(virtualLabClass != null) {
@@ -295,9 +289,7 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 					if(professor != null &&professor.getUserId() !=0){
 						User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 						if(professorUser != null){
-							virtualLabProfessorName = professorUser.getFirstName() + " "
-									+ professorUser.getMiddleName() + " "
-									+ professorUser.getLastName();
+							virtualLabProfessorName = professorUser.getFirstName();
 						}
 					}
 					
@@ -392,15 +384,7 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 					resultRow.put("iconUuid", iconDl.getUuid());
 					resultRow.put("iconTitle", iconDl.getTitle());
 				}catch (Exception e){
-					if(e instanceof NoSuchFileEntryException){
-					}else{
-						try {
-							throw new PortalException(e);
-						} catch (PortalException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
+					log.error("getVirtualLabInfomation DL Error", e);
 				}
 			}
 		}
@@ -470,9 +454,7 @@ public class VirtualLabLocalServiceImpl extends VirtualLabLocalServiceBaseImpl {
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -655,9 +637,7 @@ public List<Map<String, Object>> getVirtualLabGroup() throws SystemException {
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -697,15 +677,7 @@ public List<Map<String, Object>> getVirtualLabGroup() throws SystemException {
 							resultRow.put("iconUuid", iconDl.getUuid());
 							resultRow.put("iconTitle", iconDl.getTitle());
 						}catch (Exception e){
-							if(e instanceof NoSuchFileEntryException){
-							}else{
-								try {
-									throw new PortalException(e);
-								} catch (PortalException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
+						    log.error("getVirtualLabInfomation DL Error", e);
 						}
 					}
 					

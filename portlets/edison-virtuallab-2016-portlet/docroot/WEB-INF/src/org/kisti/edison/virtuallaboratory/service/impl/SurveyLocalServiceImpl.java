@@ -326,9 +326,7 @@ public class SurveyLocalServiceImpl extends SurveyLocalServiceBaseImpl {
 					if(professor != null &&professor.getUserId() !=0){
 						User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 						if(professorUser != null){
-							virtualLabProfessorName = professorUser.getFirstName() + " "
-													+ professorUser.getMiddleName() + " "
-													+ professorUser.getLastName();
+							virtualLabProfessorName = professorUser.getFirstName();
 						}
 					}
 					

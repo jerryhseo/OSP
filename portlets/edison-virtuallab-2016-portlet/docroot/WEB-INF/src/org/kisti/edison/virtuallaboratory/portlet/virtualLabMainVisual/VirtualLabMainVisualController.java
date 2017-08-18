@@ -206,8 +206,17 @@ public class VirtualLabMainVisualController {
 	
 	@ResourceMapping(value="virtualLabDisable")
 	public void virtualLabDisable(ResourceRequest request, ResourceResponse response) throws Exception {
+	    if(log.isDebugEnabled()){
+	        log.debug("virtualLabDisable parameters");
+	        for(String key : request.getParameterMap().keySet()){
+	            String[] values = (String[])request.getParameterMap().get(key);
+	            for(String value : values){
+	                log.debug(key + ": " + value);
+	            }
+	        }
+	    }
 		User user = PortalUtil.getUser(request);
-		long groupId = PortalUtil.getScopeGroupId(request);
+		long groupId = ParamUtil.getLong(request, "groupId", PortalUtil.getScopeGroupId(request));
 		long companyId = PortalUtil.getCompanyId(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 		Locale locale = themeDisplay.getLocale();
@@ -217,6 +226,10 @@ public class VirtualLabMainVisualController {
 		long virtualLabId = ParamUtil.get(request, "virtualLabId", 0L);
 		Role virtualLabOwnerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_OWNER);
 		
+		log.info(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR));
+		log.info(EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR));
+		log.info(EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER));
+		log.info(UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), virtualLabId));
 		if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) ||	// 포털 Admin Check
 				EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR) ||	// 사이트 Admin Check
 				EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER) ||	// 사이트 Owner Check

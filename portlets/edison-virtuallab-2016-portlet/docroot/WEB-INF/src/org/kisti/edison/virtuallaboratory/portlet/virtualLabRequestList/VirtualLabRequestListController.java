@@ -11,8 +11,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import net.sf.json.JSONObject;
-
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -24,6 +22,8 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -33,9 +33,12 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
+import net.sf.json.JSONObject;
+
 @Controller
 @RequestMapping("VIEW")
 public class VirtualLabRequestListController {
+    private static Log _log = LogFactoryUtil.getLog(VirtualLabRequestListController.class);
 	
 	@RequestMapping//default
 	public String view(RenderRequest request, ModelMap model) {
@@ -87,17 +90,24 @@ public class VirtualLabRequestListController {
 	
 	@ResourceMapping(value="getSitePagePlid")
 	public void getSitePagePlid(ResourceRequest request, ResourceResponse response) throws SystemException, IOException, PortalException {
+	    if(_log.isDebugEnabled()){
+            _log.debug("getSitePagePlid parameters");
+            for(String key : request.getParameterMap().keySet()){
+                String[] values = (String[])request.getParameterMap().get(key);
+                for(String value : values){
+                    _log.debug(key + ": " + value);
+                }
+            }
+        }
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
-		Map params = RequestUtil.getParameterMap(request);
-		long groupId = GetterUtil.get(params.get("groupId"), 0);
+		long groupId = ParamUtil.get(request, "groupId", 0);
 		User user = PortalUtil.getUser(request);
 		
 		long requestPlid = 0;
-		
 		if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) ||
 			EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR) ||
 			EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)) {
-			requestPlid = PortalUtil.getPlidFromPortletId(groupId, "edisonvirtuallabrequestmanagement_WAR_edisonvirtuallab2016portlet");
+			requestPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), "edisonvirtuallabrequestmanagement_WAR_edisonvirtuallab2016portlet");
 		}
 		
 		JSONObject obj = new JSONObject();

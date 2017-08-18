@@ -231,9 +231,14 @@ public class VirtualLabRegistrationListController {
 	public void cancelVirtualLabResource(ResourceRequest request, ResourceResponse response) throws SystemException, IOException, PortalException {
 		long userId = PortalUtil.getUserId(request);
 		String virtualLabId = ParamUtil.get(request, "virtualLabId", "0");
+		User user = PortalUtil.getUser(request);
 		
 		VirtualLab virtualLab = VirtualLabLocalServiceUtil.getVirtualLab(Long.parseLong(virtualLabId));
-		if(userId == virtualLab.getUserId()) {
+		long virtualLabGroupId = virtualLab.getGroupId();
+		if(userId == virtualLab.getUserId() ||
+		    EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.ADMINISTRATOR) ||
+            EdisonUserUtil.isSiteRole(user, virtualLabGroupId, EdisonRoleConstants.SITE_OWNER) ||
+            EdisonUserUtil.isSiteRole(user, virtualLabGroupId, EdisonRoleConstants.SITE_ADMINISTRATOR)  ) {
 			VirtualLabLocalServiceUtil.deleteVirtualLab(virtualLab);
 		}
 		

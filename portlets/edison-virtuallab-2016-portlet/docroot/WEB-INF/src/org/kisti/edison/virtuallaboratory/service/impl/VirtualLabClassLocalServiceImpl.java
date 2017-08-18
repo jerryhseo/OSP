@@ -102,9 +102,7 @@ public class VirtualLabClassLocalServiceImpl
 					if(professor != null &&professor.getUserId() !=0){
 						User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 						if(professorUser != null){
-							virtualLabProfessorName = professorUser.getFirstName() + " "
-									+ professorUser.getMiddleName() + " "
-									+ professorUser.getLastName();
+							virtualLabProfessorName = professorUser.getFirstName();
 						}
 					}
 					
@@ -175,9 +173,7 @@ public class VirtualLabClassLocalServiceImpl
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -297,9 +293,7 @@ public class VirtualLabClassLocalServiceImpl
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -393,9 +387,7 @@ public class VirtualLabClassLocalServiceImpl
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						
@@ -492,9 +484,7 @@ public List<Map<String, Object>> getVirtualLabClassList(Map<String, Object> para
 						if(professor != null &&professor.getUserId() !=0){
 							User professorUser = UserLocalServiceUtil.getUser(professor.getUserId());
 							if(professorUser != null){
-								virtualLabProfessorName = professorUser.getFirstName() + " "
-										+ professorUser.getMiddleName() + " "
-										+ professorUser.getLastName();
+								virtualLabProfessorName = professorUser.getFirstName();
 							}
 						}
 						

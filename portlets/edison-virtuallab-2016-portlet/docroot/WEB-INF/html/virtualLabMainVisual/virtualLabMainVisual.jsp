@@ -113,7 +113,7 @@
 						<tr class="puptrline">
 							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-tutor' /></th>
 							<td class="puptxt">
-								<input id="<portlet:namespace/>virtualLabProfessor" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width:190px; margin: 4px;" value="${labInfo.professorFirstName } ${labInfo.professorMiddleName } ${labInfo.professorLastName }"/>
+								<input id="<portlet:namespace/>virtualLabProfessor" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width:190px; margin: 4px;" value="${labInfo.professorFirstName}"/>
 								<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="button01b" />
 							</td>
 							<c:if test="${role eq 'MANAGER' }">
@@ -194,7 +194,8 @@ function <portlet:namespace/>syscommoncdPopup(){
 
 function <portlet:namespace/>virtualLabDisable(virtualLabId) {
 	var dataForm = {
-		"<portlet:namespace/>virtualLabId" : virtualLabId
+		"<portlet:namespace/>virtualLabId" : virtualLabId,
+		"<portlet:namespace/>groupId": ${groupId}
 	}
 	
 	if(confirm("<liferay-ui:message key='edison-virtuallab-delete-alert' />")){	
@@ -206,7 +207,7 @@ function <portlet:namespace/>virtualLabDisable(virtualLabId) {
 			success: function(msg) {
 				var result = msg.result;
 				if(result == "300" || result == "400") {
-					alert("<liferay-ui:message key='edison-data-delete-error=Data' />");
+					alert("<liferay-ui:message key='edison-data-delete-error' />");
 				} else if (result == "200") {
 					alert("<liferay-ui:message key='edison-data-delete-success' />");
 					<portlet:namespace/>moveLabList();
