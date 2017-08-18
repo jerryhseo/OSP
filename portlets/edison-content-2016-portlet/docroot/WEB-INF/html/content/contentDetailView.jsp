@@ -124,7 +124,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			<c:choose>
 				<c:when test="${fn:length(fileList) > 0}">
 					<c:forEach var="file" items="${fileList }">
-						<img src="/documents/${file.fileRepositoryId }/${file.fileEntryId }/${file.fileTitle }/${file.fileUuid }?imageThumbnail=2"  width="104px" height="78px" onerror="this.src='${contextPath }/images/noimage.png'">
+						<img src="/documents/${file.fileRepositoryId }/${file.fileEntryId }/${file.fileTitle }/${file.fileUuid }?imageThumbnail=2" style="width:104px;height:78px;" onerror="this.src='${contextPath }/images/noimage.png'">
 					</c:forEach> 
 				</c:when>
 				<c:otherwise>

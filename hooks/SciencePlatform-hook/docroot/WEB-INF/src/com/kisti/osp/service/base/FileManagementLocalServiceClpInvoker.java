@@ -212,44 +212,65 @@ public class FileManagementLocalServiceClpInvoker {
 				"java.lang.String", "boolean"
 			};
 
-		_methodName75 = "readFirstFileContent";
+		_methodName75 = "getFile";
 
 		_methodParameterTypes75 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "boolean"
+				"java.lang.String", "boolean"
 			};
 
-		_methodName76 = "getFirstFileName";
+		_methodName76 = "readFileContent";
 
 		_methodParameterTypes76 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "boolean"
 			};
 
-		_methodName77 = "saveFileContent";
+		_methodName77 = "readFirstFileContent";
 
 		_methodParameterTypes77 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName78 = "getFirstFileName";
+
+		_methodParameterTypes78 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName79 = "saveFileContent";
+
+		_methodParameterTypes79 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "boolean"
 			};
 
-		_methodName78 = "saveInputFile";
+		_methodName80 = "saveInputFile";
 
-		_methodParameterTypes78 = new String[] {
+		_methodParameterTypes80 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName79 = "readDLAppEntry";
+		_methodName81 = "readDLAppEntry";
 
-		_methodParameterTypes79 = new String[] {
+		_methodParameterTypes81 = new String[] {
 				"javax.portlet.PortletResponse", "long"
 			};
 
-		_methodName80 = "readOutLogFile";
+		_methodName82 = "writeToClient";
 
-		_methodParameterTypes80 = new String[] {
+		_methodParameterTypes82 = new String[] {
+				"javax.portlet.PortletResponse", "java.lang.String",
+				"com.liferay.portal.kernel.json.JSONObject"
+			};
+
+		_methodName83 = "readOutLogFile";
+
+		_methodParameterTypes83 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "long"
 			};
@@ -483,17 +504,17 @@ public class FileManagementLocalServiceClpInvoker {
 
 		if (_methodName75.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
-			FileManagementLocalServiceUtil.readFirstFileContent((javax.portlet.PortletRequest)arguments[0],
+			FileManagementLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				((Boolean)arguments[4]).booleanValue());
+				(java.lang.String)arguments[2],
+				((Boolean)arguments[3]).booleanValue());
 
 			return null;
 		}
 
 		if (_methodName76.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
-			FileManagementLocalServiceUtil.getFirstFileName((javax.portlet.PortletRequest)arguments[0],
+			FileManagementLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
 				((Boolean)arguments[4]).booleanValue());
@@ -503,6 +524,26 @@ public class FileManagementLocalServiceClpInvoker {
 
 		if (_methodName77.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
+			FileManagementLocalServiceUtil.readFirstFileContent((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				((Boolean)arguments[4]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName78.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
+			FileManagementLocalServiceUtil.getFirstFileName((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				((Boolean)arguments[4]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName79.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
 			FileManagementLocalServiceUtil.saveFileContent((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Boolean)arguments[3]).booleanValue());
@@ -510,24 +551,33 @@ public class FileManagementLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName78.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
+		if (_methodName80.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
 			return FileManagementLocalServiceUtil.saveInputFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
 				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
 		}
 
-		if (_methodName79.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
+		if (_methodName81.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
 			FileManagementLocalServiceUtil.readDLAppEntry((javax.portlet.PortletResponse)arguments[0],
 				((Long)arguments[1]).longValue());
 
 			return null;
 		}
 
-		if (_methodName80.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
+		if (_methodName82.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
+			FileManagementLocalServiceUtil.writeToClient((javax.portlet.PortletResponse)arguments[0],
+				(java.lang.String)arguments[1],
+				(com.liferay.portal.kernel.json.JSONObject)arguments[2]);
+
+			return null;
+		}
+
+		if (_methodName83.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
 			return FileManagementLocalServiceUtil.readOutLogFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Long)arguments[3]).longValue());
@@ -616,4 +666,10 @@ public class FileManagementLocalServiceClpInvoker {
 	private String[] _methodParameterTypes79;
 	private String _methodName80;
 	private String[] _methodParameterTypes80;
+	private String _methodName81;
+	private String[] _methodParameterTypes81;
+	private String _methodName82;
+	private String[] _methodParameterTypes82;
+	private String _methodName83;
+	private String[] _methodParameterTypes83;
 }

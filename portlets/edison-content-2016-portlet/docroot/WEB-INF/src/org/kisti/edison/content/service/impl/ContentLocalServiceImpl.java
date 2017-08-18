@@ -1248,6 +1248,9 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 			File existFolder = new File(downloadDir);
 			if(!existFolder.exists()){
 				existFolder.mkdirs();
+			}else{
+				existFolder.delete();
+				existFolder.mkdirs();
 			}
 
 			outStream = new BufferedOutputStream(new FileOutputStream(downloadDir + File.separator + localFileName));

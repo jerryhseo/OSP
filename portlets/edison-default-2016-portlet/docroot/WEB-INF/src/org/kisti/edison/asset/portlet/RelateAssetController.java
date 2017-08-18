@@ -85,18 +85,18 @@ public class RelateAssetController{
 				long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
 				
 				if(themeDisplay.isSignedIn()){
-	  			if(parentGroupId == 0){// 포탈
-	  				// admin 만 모든 목록
-	  				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser())){
-	  					isMgrBtn = true;
-	  				}
-	  			}else{
-	  				// admin, site admin 모든 목록
-	  				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser()) || EdisonUserUtil.isSiteRole(themeDisplay
-	  					.getUser(), themeDisplay.getScopeGroupId(), EdisonRoleConstants.SITE_ADMINISTRATOR)){
-	  					isMgrBtn = true;
-	  				}
-	  			}
+		  			if(parentGroupId == 0){// 포탈
+		  				// admin 만 모든 목록
+		  				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser())){
+		  					isMgrBtn = true;
+		  				}
+		  			}else{
+		  				// admin, site admin 모든 목록
+		  				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser()) || EdisonUserUtil.isSiteRole(themeDisplay
+		  					.getUser(), themeDisplay.getScopeGroupId(), EdisonRoleConstants.SITE_ADMINISTRATOR)){
+		  					isMgrBtn = true;
+		  				}
+		  			}
 				}
 
 				customModelAssetEntry = AssetEntryLocalServiceUtil.getEntry(Group.class.getName(), groupId);

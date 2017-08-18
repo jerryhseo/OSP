@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="Plugin_EDSIM_SimulationJobDataService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationJobDataServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationJobDataServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationJobDataServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationJobDataService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+</deployment>

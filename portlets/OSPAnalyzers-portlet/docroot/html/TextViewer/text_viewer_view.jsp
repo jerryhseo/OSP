@@ -193,6 +193,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
+			<portlet:namespace/>action = e.action;
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
 				OSP.Event.OSP_LOAD_DATA
@@ -312,7 +313,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.fileName(),
+            <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
     };
         
@@ -323,6 +324,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
         dataType : 'json',
         success: function(data) {
             inputData.name( data.fileName );
+            inputData.type(OSP.Enumeration.PathType.FILE);
             <portlet:namespace/>loadData( inputData, 'READ_FILE' );
         },
         error:function(data,e){
@@ -339,7 +341,7 @@ function <portlet:namespace/>loadData( inputData, command ){
             <portlet:namespace/>command: command,
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.fileName(),
+            <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
     };
     <portlet:namespace/>currentData = inputData;

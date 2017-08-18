@@ -547,6 +547,10 @@ public class SimulationJobLocalServiceImpl
 			monitoringList = simulationJobFinder.getMonitoringList(groupId, userId,  searchValue, jobStatus, 0, 0, begin, end);
 		}
 		
+		log.info("monitoringList.size() : " + monitoringList.size());
+		log.info("groupId : " + groupId + ", " + "userId : " + userId + ", " + "searchValue : " + searchValue + ", " + "jobStatus : " + jobStatus + ", " + "simulationUuid : " + simulationUuid);
+		log.info("jobSeqNo : " + jobSeqNo + ", " + "classId : " + classId + ", " + "customId : " + customId + ", " + "begin : " + begin + ", " + "end : " + end);
+		
 		Map <String, Object> resultRow = null;
 		for (int i = 0; i < monitoringList.size(); i++) {
 			Object[] resultArray = monitoringList.get(i);

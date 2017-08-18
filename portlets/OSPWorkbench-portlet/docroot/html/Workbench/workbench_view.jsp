@@ -52,12 +52,13 @@
 	long classId = (Long) renderRequest.getAttribute("classId");
 	long customId = (Long) renderRequest.getAttribute("customId");
 
-	if (workbenchType.equalsIgnoreCase("SIMULATION_WITH_APP")) {
+	if (workbenchType.equalsIgnoreCase("SIMULATION_WITH_APP")
+	    || workbenchType.equalsIgnoreCase("SIMULATION_RERUN")) {
 		scienceApp = (ScienceApp) renderRequest.getAttribute("scienceApp");
 		inputPorts = (String) renderRequest.getAttribute("inputPorts");
 		logPorts = (String) renderRequest.getAttribute("logPorts");
 		outputPorts = (String) renderRequest.getAttribute("outputPorts");
-	} else {
+	}else {
 		System.out.println("Un-recognizable workbench type: " + workbenchType);
 	}
 %>
@@ -157,6 +158,18 @@ Liferay.on('portletReady', function( e ){
 				//console.log('Workbench: ', <portlet:namespace/>workbench);
 				break;
 			case OSP.Enumeration.WorkbenchType.SIMULATION_RERUN:
+				var scienceApp = new OSP.ScienceApp();
+				scienceApp.id( <%=scienceApp.getScienceAppId()%> );
+				scienceApp.name( '<%=scienceApp.getName()%>' );
+				scienceApp.version( '<%=scienceApp.getVersion()%>' );
+				scienceApp.runType( '<%=scienceApp.getRunType()%>' );
+				scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );
+				if( '<%=logPorts%>' !== '' )
+					scienceApp.deserializeLogPorts( JSON.parse('<%=logPorts%>') );
+				if( '<%=outputPorts%>' !== '' )
+					scienceApp.deserializeOutputPorts( JSON.parse('<%=outputPorts%>') );
+				
+				<portlet:namespace/>workbench.scienceApp(scienceApp);
 				break;
 			default:
 				console.log( '[ERROR] Un-recognizable workbench type or not supported yet: '+<portlet:namespace/>workbench.type());
@@ -190,16 +203,15 @@ Liferay.on('portletReady', function( e ){
 
 function <portlet:namespace/>handShakeCallback( sourceId, targetId ){
     var portlet = <portlet:namespace/>workbench.getPortlet( targetId );
-    var data = {};
     if( portlet.portType() ){
-        data.action = portlet.portType();
         console.log('++++++++++++++++++++++++++++++++');
         console.log( portlet );
     }
+    
 	var eventData = {
 			portletId: sourceId,
 			targetPortlet: targetId,
-			data: data
+			action: portlet.portType()
 	};
 	
 	Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
@@ -241,7 +253,9 @@ Liferay.on(
 				if( sample ){
 					data = {
 							<portlet:namespace/>command: 'READ_DLENTRY',
-							<portlet:namespace/>dlEntryId: sample.dlEntryId()
+							<portlet:namespace/>dlEntryId: sample.dlEntryId(),
+                            <portlet:namespace/>dataTypeName: dataType.name,
+                            <portlet:namespace/>dataTypeVersion: dataType.version
 					};
 				}
 				else{
@@ -259,25 +273,35 @@ Liferay.on(
 					dataType: 'json',
 					data: data,
 					success:function(result){
+					    console.log( 'Read Sample Result', result);
+					    if( result.error ){
+					        alert( result.error );
+					        return;
+					    }
+					    
 						var contentType = result.contentType;
-						var content = result.content;
 						
 						var inputData = new OSP.InputData();
 						inputData.type( contentType);
 						inputData.order( port.order() );
 						inputData.portName( port.name() );
 						switch( contentType ){
-						case 'fileContent':
-							inputData.context( content );
-							break;
-						case 'structuredData':
-							var ospDataType = new OSP.DataType();
-							ospDataType.deserializeStructure( JSON.parse(content) );
-							inputData.context( ospDataType.structure() );
-							break;
-						default:
-							console.log('[ERROR] Wrong sample data type.'+contentType);
-							return;
+							case 'fileContent':
+								inputData.context( result.fileContent );
+								break;
+							case 'structuredData':
+								var ospDataType = new OSP.DataType();
+								ospDataType.deserializeStructure( JSON.parse(result.dataStructure) );
+								console.log( 'OSP Data Type: ', ospDataType.structure() );
+								if( result.fileContent ){
+								    console.log( '------result.fileContent ', result.fileContent );
+								    ospDataType.loadStructure( result.fileContent );
+								}
+								inputData.context( ospDataType.structure() );
+								break;
+							default:
+								console.log('[ERROR] Wrong sample data type.'+contentType);
+								return;
 						}
 						
 						<portlet:namespace/>setJobInputData( portlet.portName(), inputData )
@@ -643,11 +667,16 @@ Liferay.on(
 			console.log('OSP_CREATE_JOB: ['+e.portletId+', '+new Date()+']');
 			
 			var simulation = <portlet:namespace/>workbench.workingSimulation();
+			var scienceApp = <portlet:namespace/>workbench.scienceApp();
 			if( !simulation )	return;
+			if( !scienceApp )	return;
 			
+			console.log(scienceApp);
 			var data = {
 					<portlet:namespace/>command: 'CREATE_JOB',
-					<portlet:namespace/>simulationUuid: simulation.uuid()
+					<portlet:namespace/>simulationUuid: simulation.uuid(),
+					<portlet:namespace/>scienceAppVersion: scienceApp.version(),
+					<portlet:namespace/>scienceAppName: scienceApp.name()
 			};
 			
 			$.ajax({
@@ -781,6 +810,8 @@ Liferay.on(
                     return;
                 }
 
+                <portlet:namespace/>noticeJobStatusChanged( workingJob.uuid() );
+                
                 var scienceApp = <portlet:namespace/>workbench.scienceApp();
                 var logPorts = scienceApp.logPorts();
                 var outputPorts = scienceApp.outputPorts();
@@ -821,6 +852,7 @@ Liferay.on(
 
                             Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
                         }
+                        
                         break;
                     default:
                         // Do nothing
@@ -830,23 +862,23 @@ Liferay.on(
 );
 
 Liferay.on(
-		OSP.Event.OSP_REQUEST_PATH,
-		function( e ){
-			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-				console.log('OSP_REQUEST_PATH: ['+e.portletId+', '+new Date()+']');
-				<portlet:namespace/>handleRequestPath( e.portletId );
-			}
-		}
+           OSP.Event.OSP_REQUEST_PATH,
+           function( e ){
+               if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+                   console.log('OSP_REQUEST_PATH: ['+e.portletId+', '+new Date()+']');
+                   <portlet:namespace/>handleRequestPath( e.portletId );
+               }
+           }
 );
 
 Liferay.on(
-		OSP.Event.OSP_REQUEST_OUTPUT_PATH,
-		function( e ){
-			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-				console.log('OSP_REQUEST_OUTPUT_PATH: ['+e.portletId+', '+new Date()+']');
-				<portlet:namespace/>handleRequestOutputPath( e.portletId );
-			}
-		}
+           OSP.Event.OSP_REQUEST_OUTPUT_PATH,
+           function( e ){
+               if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+                   console.log('OSP_REQUEST_OUTPUT_PATH: ['+e.portletId+', '+new Date()+']');
+                   <portlet:namespace/>handleRequestOutputPath( e.portletId );
+               }
+           }
 );
 
 Liferay.on(
@@ -913,10 +945,10 @@ function <portlet:namespace/>defaultSimulationTitle(){
  
 function <portlet:namespace/>createSimulation( title ){
 	var now = new Date();
+	var scienceApp = <portlet:namespace/>workbench.scienceApp();
 	if( !title )
 		title = newSimulation.getDefaultTitle( scienceApp.name(), now );
 	
-	var scienceApp = <portlet:namespace/>workbench.scienceApp();
 	var data = {
 			<portlet:namespace/>command: 'CREATE_SIMULATION',
 			<portlet:namespace/>scienceAppId: scienceApp.id(),
@@ -1160,12 +1192,14 @@ function <portlet:namespace/>submitSimulation( simulation ){
 			<portlet:namespace/>jobs: JSON.stringify( jobsToSubmit )
 		},
 		success: function( submittedJobs ){
-		    console.log( 'submittedJobs ****************');
-		    console.log( submittedJobs );
-		    console.log( '**************** submittedJobs');
 			for( var index in submittedJobs ){
 				var jobUuids = submittedJobs[index];
+	            console.log( 'jobUuids ****************');
+	            console.log( jobUuids );
+	            console.log( '**************** jobUuids');
 				var job = simulation.getJob( jobUuids.tempUuid );
+				if( !job )  continue;
+				
 				job.uuid( jobUuids.uuid );
 				job.isSubmit( true );
 				job.dirty(false);
@@ -1175,8 +1209,7 @@ function <portlet:namespace/>submitSimulation( simulation ){
 					portletId: <portlet:namespace/>workbench.id(),
 					targetPortlet: 'BROADCAST',
 					data:{
-						simulationUuid: simulation.uuid(),
-						jobUuid: job.uuid()
+						simulationUuid: simulation.uuid()
 					}
 			};
 			
@@ -1464,6 +1497,7 @@ function <portlet:namespace/>handleRequestOutputPath( targetPortlet ){
 						<portlet:namespace/>handleRequestOutputPath( targetPortlet );
 					}
 					else{
+					    console.log( 'Working Job Status: '+ workingJob.status());
 						switch( workingJob.status() ){
 							case 'INITIALIZE_FAILED':
 							case 'INITIALIZED':
@@ -1691,5 +1725,22 @@ function <portlet:namespace/>submitUpload( uploadFile, targetFolder, fileName ){
 			Liferay.fire( OSP.Event.OSP_REFRESH, eventData );
 		}
 	});
+}
+
+function <portlet:namespace/>noticeJobStatusChanged( jobUuid ){
+    var layout = <portlet:namespace/>workbench.layout();
+    var simulation = <portlet:namespace/>workbench.workingSimulation();
+    var data = {
+                simulationUuid: simulation.uuid(),
+                jobUuid: jobUuid
+    };
+    
+    var statusPortlet = layout.getPortlet( '_DOWNLOAD_' );
+    var eventData = {
+                     portletId: <portlet:namespace/>workbench.id(),
+                     targetPortlet: statusPortlet.instanceId(),
+                     data: data
+    };
+    Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
 }
 </script>

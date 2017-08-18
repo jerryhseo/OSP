@@ -99,7 +99,7 @@
  portletName="Workbench_WAR_OSPWorkbenchportlet"
  windowState="<%=LiferayWindowState.NORMAL.toString()%>" 
  portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-	<liferay-portlet:param name="workbenchType" value="APPRERUN" />
+	<liferay-portlet:param name="workbenchType" value="SIMULATION_RERUN" />
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
@@ -1111,6 +1111,7 @@ function <portlet:namespace/>restartSimulation(p_scienceAppId, p_jobUuid){
 	params += "&" +thisPortletNamespace+ "classId=0";
 	params += "&" +thisPortletNamespace+ "testYn=false";
 
+	console.log(URL + params);
 	location.href = URL + params;
 }
 

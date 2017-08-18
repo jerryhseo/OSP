@@ -82,10 +82,6 @@ public class FileExplorerPortlet extends MVCPortlet {
 			
 			Path targetPath = basePath.resolve(parentPath).resolve(fileName); 
 
-			_log.debug("basePath: "+basePath.toString());
-			_log.debug("Parent Folder: "+parentPath.toString());
-			_log.debug("File Name: "+fileName);
-
 			JSONArray fileInfos = null;
 			JSONObject resultJSON = JSONFactoryUtil.createJSONObject();
 			if( pathType.equalsIgnoreCase("file") ){

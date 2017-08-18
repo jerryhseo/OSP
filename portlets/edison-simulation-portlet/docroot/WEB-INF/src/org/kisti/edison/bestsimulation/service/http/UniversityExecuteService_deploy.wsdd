@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="Plugin_EDSIM_UniversityExecuteService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.UniversityExecuteServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="UniversityExecuteServiceSoap" />
+		<parameter name="wsdlServiceElement" value="UniversityExecuteServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_UniversityExecuteService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+</deployment>

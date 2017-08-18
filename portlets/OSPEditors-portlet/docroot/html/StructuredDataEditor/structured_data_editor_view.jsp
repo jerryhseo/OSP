@@ -97,7 +97,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( myId === e.targetPortlet ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.data.action;
+				<portlet:namespace/>action = e.action;
 				
 				var events = [
 					OSP.Event.OSP_LOAD_DATA,
@@ -134,12 +134,12 @@ Liferay.on(
 
 Liferay.on( 
 		OSP.Event.OSP_LOAD_DATA, 
-		function(eventData){
+		function(e){
 			var myId = '<%=portletDisplay.getId()%>';
-			if( eventData.targetPortlet === myId ){
-				//console.log( 'OSP_LOAD_DATA event received ');
-				var inputData = new OSP.InputData( eventData.data );
-				//console.log( inputData );
+			if( e.targetPortlet === myId ){
+			    console.log('SDE OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']');
+				var inputData = new OSP.InputData( e.data );
+				console.log( inputData );
 		
 				<portlet:namespace/>loadStructure(inputData);
 			}

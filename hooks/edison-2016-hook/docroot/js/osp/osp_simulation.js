@@ -207,7 +207,15 @@
 			
 			J.proliferate = function( portNames ){
 				var jobsToSubmit = [];
-				jobsToSubmit.push( J.clone() );
+				if( J.isSubmit() ){
+				    var clone = J.clone();
+				    clone.isSubmit(false);
+				    clone.removeProperty(OSP.Constants.UUID);
+				    jobsToSubmit.push( clone );
+				}
+				else
+				    jobsToSubmit.push( J );
+				
 				for( var index in portNames ){
 					var portName = portNames[index];
 					//console.log('portName: '+portName);
@@ -241,7 +249,7 @@
 								var jsonCloneJobs = JSON.parse(JSON.stringify(jobsToSubmit));
 								var cloneJobs = [];
 								for( var cloneIndex in jsonCloneJobs ){
-									var cloneJob = new Job();
+									var cloneJob = new Job( jsonCloneJobs[cloneIndex] );
 									var data = new OSP.InputData();
 									data.portName( inputData.portName() );
 									data.order( inputData.order() );
@@ -261,13 +269,11 @@
 						for( var jobIndex in jobsToSubmit ){
 							//console.log('jobIndex: '+jobIndex);
 							var job = jobsToSubmit[jobIndex];
-							var data = inputData.clone();
-							//console.log( 'data: ', data);
-							job.inputData( portName, data );
+							job.inputData( portName, inputData.clone() );
 						}
 					}
 				}
-				// console.log( 'jobsToSubmit', jobsToSubmit);
+				//console.log( 'jobsToSubmit', jobsToSubmit);
 				return jobsToSubmit;
 			};
 			

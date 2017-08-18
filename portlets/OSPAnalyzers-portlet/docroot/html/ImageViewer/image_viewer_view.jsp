@@ -173,6 +173,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
+			<portlet:namespace/>action = e.action;
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
 				OSP.Event.OSP_LOAD_DATA
@@ -253,7 +254,7 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function(e){
-		  //$("#<portlet:namespace/>canvas").empty();
+		  $("#<portlet:namespace/>canvas").empty();
 		}
 );
 
@@ -271,7 +272,7 @@ function <portlet:namespace/>loadImage( inputData, zooming ){
 	    <portlet:namespace/>getFirstFileName( inputData, zooming );
 		break;
 	case OSP.Enumeration.PathType.URL:
-		serveResourceURL = inputData.uri();
+	    alert('Un supported yet.');
 		break;
 	default:
 		alert('Un supported yet.');
@@ -288,7 +289,7 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('pathType', inputData.type());
         serveResourceURL.setParameter('fileName', inputData.name());
         serveResourceURL.setParameter('relative', inputData.relative());
-        serveResourceURL.setParameter('command', 'READ_FILE');
+        serveResourceURL.setParameter('command', 'READ_IMAGE');
     
         if($('#<portlet:namespace/>canvas').hasClass('iviewer_cursor')){
             $('#<portlet:namespace/>canvas').iviewer('loadImage', serveResourceURL.toString());
@@ -318,6 +319,7 @@ function <portlet:namespace/>getFirstFileName( argData, zooming ){
         dataType : 'json',
         success: function(data) {
             inputData.name( data.fileName );
+            inputData.type(OSP.Enumeration.PathType.FILE);
             <portlet:namespace/>loadData( inputData, zooming );
         },
         error:function(data,e){

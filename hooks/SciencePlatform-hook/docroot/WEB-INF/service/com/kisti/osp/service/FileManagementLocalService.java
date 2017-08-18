@@ -348,6 +348,22 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public void getFile(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String filePath, boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public void readFileContent(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String contentType, java.lang.String filePath,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
 	public void readFirstFileContent(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -383,9 +399,13 @@ public interface FileManagementLocalService extends BaseLocalService,
 
 	public void readDLAppEntry(javax.portlet.PortletResponse portletResponse,
 		long dlEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
+		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
+
+	public void writeToClient(javax.portlet.PortletResponse portletResponse,
+		java.lang.String errorMessage,
+		com.liferay.portal.kernel.json.JSONObject data)
+		throws java.io.IOException;
 
 	public java.util.Map<java.lang.String, java.lang.Object> readOutLogFile(
 		javax.portlet.PortletRequest portletRequest,

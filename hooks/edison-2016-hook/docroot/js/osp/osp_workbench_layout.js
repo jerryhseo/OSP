@@ -131,6 +131,7 @@
 					portletURL.setPortletId( P.instanceId() );
 					portletURL.setParameter( 'eventEnable', eventEnable);
 					portletURL.setParameter( 'connector', connector);
+					portletURL.setParameter( 'action', P.portType());
 					portletURL.setWindowState(windowState);
 
 					$.ajax({

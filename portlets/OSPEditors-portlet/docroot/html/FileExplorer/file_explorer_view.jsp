@@ -106,7 +106,7 @@ if( !<portlet:namespace/>eventEnable ){
 		initData = new OSP.InputData(JSON.parse(inputData));
 	}
 
-	<portlet:namespace/>initFileExplorer(initData, true, <portlet:namespace/>action );
+	<portlet:namespace/>initFileExplorer(initData, true );
 }
 
 
@@ -273,7 +273,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.data.action;
+				<portlet:namespace/>action = e.action;
 				
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
@@ -383,12 +383,11 @@ function <portlet:namespace/>initFileExplorer( inputData, init ){
 				<portlet:namespace/>selectedFile.name( filePath.name() ? filePath.name() : '' );
 				break;
 			case OSP.Enumeration.PathType.EXT:
-				<portlet:namespace/>basePath = OSP.Util.removeEndSlashes ( inputData.parent() );
-				var filePath = OSP.Util.convertToPath( <portlet:namespace/>selectedFile.parent() );
+			    <portlet:namespace/>basePath = OSP.Util.removeEndSlashes ( inputData.parent() );
+				var filePath = OSP.Util.convertToPath( inputData.name() );
 				<portlet:namespace/>selectedFile.parent( filePath.parent() );
-				<portlet:namespace/>selectedFile.name( OSP.Util.mergePath( filePath.name(), <portlet:namespace/>extension));
+				<portlet:namespace/>selectedFile.name( filePath.name() );
 				<portlet:namespace/>extension = <portlet:namespace/>selectedFile.name();
-				
 				break;
 			default:
 				<portlet:namespace/>selectedFile.type( OSP.Enumeration.PathType.FOLDER );

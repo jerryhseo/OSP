@@ -308,31 +308,38 @@ public class SimulationLocalServiceClpInvoker {
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName120 = "deleteJob";
+		_methodName120 = "addJob";
 
 		_methodParameterTypes120 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName121 = "deleteJob";
+
+		_methodParameterTypes121 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName121 = "deleteAllJobs";
-
-		_methodParameterTypes121 = new String[] { "java.lang.String" };
-
-		_methodName122 = "getJobData";
+		_methodName122 = "deleteAllJobs";
 
 		_methodParameterTypes122 = new String[] { "java.lang.String" };
 
-		_methodName123 = "getSimulationsByAppId";
+		_methodName123 = "getJobData";
 
-		_methodParameterTypes123 = new String[] { "long" };
+		_methodParameterTypes123 = new String[] { "java.lang.String" };
 
 		_methodName124 = "getSimulationsByAppId";
 
-		_methodParameterTypes124 = new String[] { "long", "int", "int" };
+		_methodParameterTypes124 = new String[] { "long" };
 
-		_methodName125 = "countSimulationsByAppId";
+		_methodName125 = "getSimulationsByAppId";
 
-		_methodParameterTypes125 = new String[] { "long" };
+		_methodParameterTypes125 = new String[] { "long", "int", "int" };
+
+		_methodName126 = "countSimulationsByAppId";
+
+		_methodParameterTypes126 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -655,38 +662,45 @@ public class SimulationLocalServiceClpInvoker {
 
 		if (_methodName120.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes120, parameterTypes)) {
+			return SimulationLocalServiceUtil.addJob((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(com.liferay.portal.service.ServiceContext)arguments[3]);
+		}
+
+		if (_methodName121.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
 			SimulationLocalServiceUtil.deleteJob((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1]);
 
 			return null;
 		}
 
-		if (_methodName121.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
+		if (_methodName122.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
 			SimulationLocalServiceUtil.deleteAllJobs((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName122.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
-			return SimulationLocalServiceUtil.getJobData((java.lang.String)arguments[0]);
-		}
-
 		if (_methodName123.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes123, parameterTypes)) {
-			return SimulationLocalServiceUtil.getSimulationsByAppId(((Long)arguments[0]).longValue());
+			return SimulationLocalServiceUtil.getJobData((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName124.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes124, parameterTypes)) {
+			return SimulationLocalServiceUtil.getSimulationsByAppId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName125.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
 			return SimulationLocalServiceUtil.getSimulationsByAppId(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName125.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
+		if (_methodName126.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes126, parameterTypes)) {
 			return SimulationLocalServiceUtil.countSimulationsByAppId(((Long)arguments[0]).longValue());
 		}
 
@@ -801,4 +815,6 @@ public class SimulationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes124;
 	private String _methodName125;
 	private String[] _methodParameterTypes125;
+	private String _methodName126;
+	private String[] _methodParameterTypes126;
 }

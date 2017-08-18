@@ -691,6 +691,16 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID, java.lang.String scienceAppName,
+		java.lang.String scienceAppVersion,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.addJob(simulationUUID, scienceAppName,
+			scienceAppVersion, sc);
+	}
+
+	@Override
 	public void deleteJob(java.lang.String simulationUuid,
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {

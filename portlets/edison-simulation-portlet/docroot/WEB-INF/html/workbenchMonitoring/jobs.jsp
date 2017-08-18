@@ -223,6 +223,7 @@ function <portlet:namespace/>fireOspJobSelected(simulationUuid, jobUuid){
 }
 
 function <portlet:namespace/>fireSelectJob(eventName, simulationUuid, jobUuid, jobStatus, isJobSubmit){
+    console.log("<portlet:namespace/>fireSelectJob ", eventName, simulationUuid, jobUuid, jobStatus, isJobSubmit);    
   if(jobUuid){
     $("#<portlet:namespace/>jobUuid").val(jobUuid);
     <portlet:namespace/>fireOspJobSelected(simulationUuid, jobUuid);

@@ -47,6 +47,9 @@ import org.kisti.edison.bestsimulation.service.base.SimulationLocalServiceBaseIm
 import org.kisti.edison.bestsimulation.service.persistence.SimulationPK;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
+import org.kisti.edison.science.NoSuchScienceAppException;
+import org.kisti.edison.science.model.ScienceApp;
+import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HttpFileUtil;
@@ -1405,6 +1408,13 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			ServiceContext sc ) throws SystemException{
 		SimulationPK simulationPK = new SimulationPK(uuid, sc.getScopeGroupId());
 		Simulation simulation = super.createSimulation(simulationPK);
+		long simulationGroupId = sc.getScopeGroupId();
+		try{
+            ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
+            simulationGroupId = scienceApp.getGroupId();
+        }catch (NoSuchScienceAppException e){
+            throw new SystemException(e);
+        }
 		
 		simulation.setSimulationTitle(title);
 		simulation.setClassId(srcClassCode);
@@ -1417,7 +1427,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		simulation.setSimulationCreateDt(new Date());
 		
 		simulation.setUserId(sc.getUserId());
-		simulation.setGroupId(sc.getScopeGroupId());
+		simulation.setGroupId(simulationGroupId);
 		
 		return super.addSimulation(simulation);
 	}
@@ -1430,6 +1440,17 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	public SimulationJob addJob ( String simulationUUID, ServiceContext sc) throws SystemException{
 		SimulationJob job = super.simulationJobLocalService.addJob(simulationUUID, sc.getScopeGroupId());
 		return job;
+	}
+	public SimulationJob addJob ( String simulationUUID, String scienceAppName, String scienceAppVersion, ServiceContext sc) throws SystemException{
+	    long groupId = sc.getScopeGroupId();
+	    try{
+	        ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
+	        groupId = scienceApp.getGroupId();
+	    }catch(NoSuchScienceAppException e){
+	        throw new SystemException(e);
+	    }
+	    SimulationJob job = super.simulationJobLocalService.addJob(simulationUUID, groupId);
+	    return job;
 	}
 	
 	public void deleteJob(String simulationUuid, String jobUuid ) throws SystemException{

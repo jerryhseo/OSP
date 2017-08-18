@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<globalConfiguration>
+		<parameter name="adminPassword" value="admin" />
+		<parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl" />
+		<parameter name="sendXsiTypes" value="true" />
+		<parameter name="sendMultiRefs" value="true" />
+		<parameter name="sendXMLDeclaration" value="true" />
+		<parameter name="axis.sendMinimizedElements" value="true" />
+		<requestFlow>
+			<handler type="java:org.apache.axis.handlers.JWSHandler">
+				<parameter name="scope" value="session" />
+			</handler>
+			<handler type="java:org.apache.axis.handlers.JWSHandler">
+				<parameter name="scope" value="request" />
+				<parameter name="extension" value=".jwr" />
+			</handler>
+		</requestFlow>
+	</globalConfiguration>
+	<handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder" />
+	<handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper" />
+	<handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler" />
+	<transport name="http">
+		<requestFlow>
+			<handler type="URLMapper" />
+			<handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler" />
+		</requestFlow>
+	</transport>
+	<transport name="local">
+		<responseFlow>
+			<handler type="LocalResponder" />
+		</responseFlow>
+	</transport>
+	<service name="Plugin_EDSIM_ScienceAppExecuteService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.ScienceAppExecuteServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="ScienceAppExecuteServiceSoap" />
+		<parameter name="wsdlServiceElement" value="ScienceAppExecuteServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_ScienceAppExecuteService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_SimulationExeStsMigrationService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationExeStsMigrationServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationExeStsMigrationServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationExeStsMigrationServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationExeStsMigrationService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_SimulationJobDataService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationJobDataServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationJobDataServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationJobDataServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationJobDataService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_SimulationJobService" provider="java:RPC" style="rpc" use="encoded">
+		<operation xmlns:operNS="urn:http.service.bestsimulation.edison.kisti.org" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="updateSimulationJob" qname="operNS:updateSimulationJob" returnQName="updateSimulationJobReturn" returnType="rtns:boolean" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="gid" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="simulationUuid" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobSeqNo" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobUuid" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobStatus" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobStartDt" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobEndDt" type="tns:string"></parameter>
+		</operation>
+		<parameter name="allowedMethods" value="updateSimulationJob" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationJobServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationJobServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationJobServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationJobService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_SimulationJobStatusService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationJobStatusServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationJobStatusServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationJobStatusServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationJobStatusService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_SimulationService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+	<service name="Plugin_EDSIM_UniversityExecuteService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.UniversityExecuteServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="UniversityExecuteServiceSoap" />
+		<parameter name="wsdlServiceElement" value="UniversityExecuteServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_UniversityExecuteService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+</deployment>

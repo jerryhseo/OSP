@@ -2769,46 +2769,47 @@
 				//console.log('**************************************');
 				for(var i in lines){
 				    var line = lines[i].trim();
-				    if( line.length <= 0 )  continue;
-				    
-					var pair = [];
-					pair[0] = line.slice(0, line.indexOf(valueDelimiter));
-					pair[1] = line.slice(line.indexOf(valueDelimiter)+1, line.length );
-					//console.log(line);
+                    if ( line.charAt(0) === commentChar || line.length <= 0 ){
+                        continue;
+                    }
+                    //console.log('Line: '+ line);
+                    
+                    var pair = line.split( valueDelimiter );
+                    
 					var parameterName = pair[0].trim();
 					if( parameterName.length === 0) continue;
-					var parameterValue;
-					if ( parameterName.charAt(0) == commentChar  )
-						parameterValue = parameterName.slice(1);
-					else {
-						parameterValue = pair[1].trim();
-						var parameter = DS.parameter(parameterName);
-						//console.log('parameter value: '+parameter.type());
-						switch(parameter.type()){
-						case OSP.Constants.VECTOR:
-						    var vectorForm = DS.vectorForm();
-						    parameterValue = parameterValue.replace(/\{|\[|\}|\]|,/g, ' ');
-						    var form = [];
-						    var elements = parameterValue.split( ' ' );
-						    for( var index in elements ){
-						      if( elements[index] && elements[index].trim() )
-						        form.push( elements[index].trim() );
-						    }
-							parameter.value(form);
-							break;
-						case OSP.Constants.NUMERIC:
-							if(parameter.sweeped() === true){
-								parameter.sweeped(false);
-								DS.decreaseSweepCount();
-							}
-							//alert(parameterName + ': '+parameter.sweeped());
-						default:
-							parameter.value(parameterValue);
-							//console.log('value: '+parameterValue);
-						}
 
-						parameter.active(true);
+					var parameterValue = pair[1].trim();
+			        //console.log( 'valueDelimiter: ['+valueDelimiter+']' );
+				    //console.log( 'Param Name: '+parameterName);
+				    //console.log( 'Param Value: '+parameterValue); 
+					    
+					var parameter = DS.parameter(parameterName);
+					//console.log('parameter: '+parameter);
+					switch(parameter.type()){
+        				case OSP.Constants.VECTOR:
+        				    var vectorForm = DS.vectorForm();
+        				    parameterValue = parameterValue.replace(/\{|\[|\}|\]|,/g, ' ');
+        				    var form = [];
+        				    var elements = parameterValue.split( ' ' );
+        				    for( var index in elements ){
+        				      if( elements[index] && elements[index].trim() )
+        				        form.push( elements[index].trim() );
+        				    }
+        					parameter.value(form);
+        					break;
+        				case OSP.Constants.NUMERIC:
+        					if(parameter.sweeped() === true){
+        						parameter.sweeped(false);
+        						DS.decreaseSweepCount();
+        					}
+        					//alert(parameterName + ': '+parameter.sweeped());
+        				default:
+        					parameter.value(parameterValue);
+        					//console.log('value: '+parameterValue);
 					}
+
+					parameter.active(true);
 				}
 			};
 
@@ -4312,10 +4313,13 @@
 		
 		DataType.loadStructure = function( content ){
 			var structure = DataType.structure();
+			console.log( 'OSP Structure: ', structure );
 			if( !structure ){
 				console.log('[ERROR] no data structure: '+DataType.name() );
+				console.log( content );
 				return false;
 			}
+			
 			structure.loadInput( content );
 
 			return structure;

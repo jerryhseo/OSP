@@ -3,7 +3,6 @@
 <%@include file="../init.jsp"%>
 
 <script src="<%=request.getContextPath() %>/js/onedplot/oneDplot.js"></script>
-
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 
 <style>
@@ -191,6 +190,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
+			//<portlet:namespace/>action = e.action;
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
 				OSP.Event.OSP_LOAD_DATA

@@ -309,31 +309,38 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName49 = "deleteJob";
+		_methodName49 = "addJob";
 
 		_methodParameterTypes49 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName50 = "deleteJob";
+
+		_methodParameterTypes50 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName50 = "deleteAllJobs";
-
-		_methodParameterTypes50 = new String[] { "java.lang.String" };
-
-		_methodName51 = "getJobData";
+		_methodName51 = "deleteAllJobs";
 
 		_methodParameterTypes51 = new String[] { "java.lang.String" };
 
-		_methodName52 = "getSimulationsByAppId";
+		_methodName52 = "getJobData";
 
-		_methodParameterTypes52 = new String[] { "long" };
+		_methodParameterTypes52 = new String[] { "java.lang.String" };
 
 		_methodName53 = "getSimulationsByAppId";
 
-		_methodParameterTypes53 = new String[] { "long", "int", "int" };
+		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "countSimulationsByAppId";
+		_methodName54 = "getSimulationsByAppId";
 
-		_methodParameterTypes54 = new String[] { "long" };
+		_methodParameterTypes54 = new String[] { "long", "int", "int" };
+
+		_methodName55 = "countSimulationsByAppId";
+
+		_methodParameterTypes55 = new String[] { "long" };
 	}
 
 	@Override
@@ -2074,12 +2081,52 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID, java.lang.String scienceAppName,
+		java.lang.String scienceAppVersion,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName49,
+					_methodParameterTypes49,
+					new Object[] {
+						ClpSerializer.translateInput(simulationUUID),
+						
+					ClpSerializer.translateInput(scienceAppName),
+						
+					ClpSerializer.translateInput(scienceAppVersion),
+						
+					ClpSerializer.translateInput(sc)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.bestsimulation.model.SimulationJob)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public void deleteJob(java.lang.String simulationUuid,
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName49,
-				_methodParameterTypes49,
+			_invokableLocalService.invokeMethod(_methodName50,
+				_methodParameterTypes50,
 				new Object[] {
 					ClpSerializer.translateInput(simulationUuid),
 					
@@ -2107,8 +2154,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	public void deleteAllJobs(java.lang.String simulationUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName50,
-				_methodParameterTypes50,
+			_invokableLocalService.invokeMethod(_methodName51,
+				_methodParameterTypes51,
 				new Object[] { ClpSerializer.translateInput(simulationUuid) });
 		}
 		catch (Throwable t) {
@@ -2135,8 +2182,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName51,
-					_methodParameterTypes51,
+			returnObj = _invokableLocalService.invokeMethod(_methodName52,
+					_methodParameterTypes52,
 					new Object[] { ClpSerializer.translateInput(jobUuid) });
 		}
 		catch (Throwable t) {
@@ -2169,8 +2216,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName52,
-					_methodParameterTypes52, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName53,
+					_methodParameterTypes53, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2198,8 +2245,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName53,
-					_methodParameterTypes53,
+			returnObj = _invokableLocalService.invokeMethod(_methodName54,
+					_methodParameterTypes54,
 					new Object[] { scienceAppId, start, end });
 		}
 		catch (Throwable t) {
@@ -2227,8 +2274,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName54,
-					_methodParameterTypes54, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName55,
+					_methodParameterTypes55, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2358,4 +2405,6 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	private String[] _methodParameterTypes53;
 	private String _methodName54;
 	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

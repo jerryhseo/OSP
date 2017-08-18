@@ -265,6 +265,7 @@ public class AppManagerController{
 					assetEntry.setClassName(ScienceApp.class.getName());
 					assetEntry.setClassPK(scienceAppId);
 					assetEntry.setTitle(GetterUtil.getString(data.get("name")));
+					assetEntry.setVisible(true);
 					AssetEntryLocalServiceUtil.addAssetEntry(assetEntry);
 				}
 				

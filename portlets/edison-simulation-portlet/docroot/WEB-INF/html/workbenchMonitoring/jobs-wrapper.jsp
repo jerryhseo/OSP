@@ -96,6 +96,7 @@ preferences.store();
     
     Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_UUID, function(eventData){
       if(eventData.targetPortlet === <portlet:namespace/>thisPortletId ){
+        console.log(OSP.Event.OSP_RESPONSE_SIMULATION_UUID," recieved ", eventData);
         if(eventData.data && eventData.data.simulationUuid){
           $("#<portlet:namespace/>simulationUuid").val(eventData.data.simulationUuid);
           <portlet:namespace/>loadJobs(1);
@@ -108,6 +109,7 @@ preferences.store();
     Liferay.on(OSP.Event.OSP_REFRESH_JOBS, function(eventData){
       if(eventData.targetPortlet === <portlet:namespace/>thisPortletId
           || eventData.targetPortlet === "BROADCAST"){
+          console.log(OSP.Event.OSP_REFRESH_JOBS," recieved ", eventData);
         if(eventData.data && eventData.data.simulationUuid){
           $("#<portlet:namespace/>simulationUuid").val(eventData.data.simulationUuid);
           if(eventData.data.jobUuid){
@@ -136,15 +138,13 @@ preferences.store();
   Liferay.on(OSP.Event.OSP_REQUEST_WORKING_JOB_INFO, function(eventData){
       if(eventData.targetPortlet === "BROADCAST"
           || eventData.targetPortlet === <portlet:namespace/>thisPortletId){
-        var e = {
-          portletId : <portlet:namespace/>thisPortletId,
-          targetPortlet : eventData.portletId,
-          data : {
-            simulationUuid : $("#<portlet:namespace/>simulationUuid").val(),
-            jobUuid : $("#<portlet:namespace/>jobUuid").val()
-          }
-        }
-        Liferay.fire('OSP_JOB_SELECTED', e);
+          console.log(OSP.Event.OSP_REQUEST_WORKING_JOB_INFO," recieved ", eventData);
+          if(eventData.data.simulationUuid){
+            $("#<portlet:namespace/>simulationUuid").val(eventData.data.simulationUuid);
+            <portlet:namespace/>loadJobs(1);
+          }else{
+            <portlet:namespace/>errlog(eventData);
+          }        
       }
     });
   });

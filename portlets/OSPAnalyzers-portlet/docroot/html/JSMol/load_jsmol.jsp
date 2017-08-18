@@ -9,51 +9,38 @@
 
     <div id="canvas" class="common-analyzer-portlet"></div>
 
-    <%
-    String urlToLoad = (String)request.getAttribute("urlToLoad");
-    %>
-    
     <script>
 
     
 /***********************************************************************
- * Global variables section
- ***********************************************************************/
-var urlToLoad;
-var jmol_1;
-
-/***********************************************************************
- * Initailization section using parameters
-***********************************************************************/
-<portlet:namespace/>loadJSMolFile( urlToLoad) );
-
-/***********************************************************************
  * Golbal functions
  ***********************************************************************/
-function <portlet:namespace/>loadJSMolFile( urlToLoad ){
+function loadJSMolFile( urlToLoad, width, height ){
+        console.log( 'URL To Load: '+ urlToLoad );
+        if( !urlToLoad )    return;
+        
         var Info = {
-                  color: "#000000",
-                  height: 100%,
-                  width: 100%,
+                  color: '#000000',
+                  height: height,
+                  width: width,
                   //script: "load "+"/jsmol-portlet/temp/ospjm2548440710626419920.tmp",
                   //script: "load "+ fileInfos.tempFilePath.replace(/\\/g, '/'),
-                  script: "load "+ urlToLoad,
+                  script: 'load '+ urlToLoad,
                   //script: "load " + '/jsmol-portlet/js/jsmol/data/1crn.pdb',
-                  use: "HTML5",
-                  j2sPath: "<%=request.getContextPath()%>/js/jsmol/j2s",
-                  jarPath: "<%=request.getContextPath()%>/js/jsmol/java",
-                  jarFile: "JmolAppletSigned0.jar",
+                  use: 'HTML5',
+                  j2sPath: '<%=request.getContextPath()%>/js/jsmol/j2s',
+                  jarPath: '<%=request.getContextPath()%>/js/jsmol/java',
+                  jarFile: 'JmolAppletSigned0.jar',
                   isSigned: true,
-                  serverURL: "<%=request.getContextPath()%>/js/jsmol/php/jsmol.php",
+                  serverURL: '<%=request.getContextPath()%>/js/jsmol/php/jsmol.php',
                   disableInitialConsole: true
         };
 
         Jmol.setDocument(0);
         Jmol.getApplet('jmol_1', Info);
-        <portlet:namespace/>jmol_1 = jmol_1;
         $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
-    });
 }
+    
 </script>
 
 </body>

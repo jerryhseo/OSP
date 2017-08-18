@@ -133,7 +133,7 @@ public class FileManagementLocalServiceImpl
 	
 	private String extractExtension( String fileName ){
 		int lastIndex = fileName.lastIndexOf('.');
-		if( lastIndex < 0 )	return "";
+		if( lastIndex < 0 )	return fileName;
 		
 		return fileName.substring(lastIndex);
 	}
@@ -141,8 +141,6 @@ public class FileManagementLocalServiceImpl
 	private JSONArray lookUpFolder( File folder, String filter ) throws IOException{
 		if( !folder.isDirectory() || !folder.exists() )		throw new FileNotFoundException(folder.getAbsolutePath());
 		
-//		System.out.println("targetFolder: "+ folder.getPath());
-//		System.out.println("filter: "+filter);
 		File[] files;
 		if( filter == null || filter.isEmpty() )
 			files = folder.listFiles();
@@ -520,11 +518,37 @@ public class FileManagementLocalServiceImpl
 			PortletResponse portletResponse,
 			String filePath,
 			boolean isJobResult) throws PortalException, SystemException, IOException{
-		Path target = this.getUserHome(portletRequest, isJobResult).resolve(filePath);
-		_log.debug("readFileContent() target: "+target.toString());
-		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
-		_log.info("target file : " + target.toFile().getAbsolutePath());
-		ServletResponseUtil.write(httpResponse, target.toFile() );
+	    readFileContent(portletRequest, portletResponse, null, filePath, isJobResult);
+	}
+	
+	public void getFile(
+	    PortletRequest portletRequest,
+        PortletResponse portletResponse,
+        String filePath,
+        boolean isJobResult) throws PortalException, SystemException, IOException{
+	    
+	    HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
+        HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+        Path target = this.getUserHome(portletRequest, isJobResult).resolve(filePath);
+	
+	    ServletResponseUtil.sendFile(
+	        httpRequest, httpResponse, target.getFileName().toString(), Files.readAllBytes(target));
+	}
+	
+	public void readFileContent(
+	    PortletRequest portletRequest,
+	    PortletResponse portletResponse,
+	    String contentType,
+	    String filePath,
+	    boolean isJobResult) throws PortalException, SystemException, IOException{
+	    Path target = this.getUserHome(portletRequest, isJobResult).resolve(filePath);
+	    _log.debug("readFileContent() target: "+target.toString());
+	    HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+	    _log.info("target file : " + target.toFile().getAbsolutePath());
+	    if(contentType != null && !contentType.isEmpty()){
+	        httpResponse.setContentType(contentType);
+	    }
+	    ServletResponseUtil.write(httpResponse, target.toFile() );
 	}
 	
 	public void readFirstFileContent(

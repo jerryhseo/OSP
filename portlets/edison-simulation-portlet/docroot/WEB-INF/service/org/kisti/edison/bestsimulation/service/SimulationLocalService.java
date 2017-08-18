@@ -557,6 +557,12 @@ public interface SimulationLocalService extends BaseLocalService,
 		com.liferay.portal.service.ServiceContext sc)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID, java.lang.String scienceAppName,
+		java.lang.String scienceAppVersion,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public void deleteJob(java.lang.String simulationUuid,
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException;

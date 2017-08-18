@@ -204,7 +204,7 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.data.action;
+				<portlet:namespace/>action = e.action;
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,

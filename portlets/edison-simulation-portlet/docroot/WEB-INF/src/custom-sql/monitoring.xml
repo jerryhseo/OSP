@@ -40,8 +40,6 @@
 			A.simulationUuid = B.simulationUuid
 		AND
 			B.jobStatus > 1701004 
-		AND 
-			B.jobPhase = 1301003
 		AND
 			A.groupId = #groupId#
 		AND 
@@ -116,8 +114,6 @@
 					A.simulationUuid = B.simulationUuid
 				AND
 					B.jobStatus > 1701004 
-				AND 
-					B.jobPhase = 1301003
 				AND
 					A.groupId = #groupId#
 				AND 
@@ -190,7 +186,7 @@
 		AND
 			B.jobStatus > 1701004 
 		AND 
-			B.jobPhase = 1301003
+            B.jobSubmit = true
 		AND 
 			B.jobUuid IS NOT NULL
 		AND 

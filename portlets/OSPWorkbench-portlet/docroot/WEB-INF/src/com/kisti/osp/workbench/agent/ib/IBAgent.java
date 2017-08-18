@@ -323,7 +323,7 @@ public class IBAgent {
 			userScreenName = String.valueOf(user.getScreenName());
 		}
 		
-		Path filePath = Paths.get(userScreenName);
+		Path filePath = Paths.get("/EDISON/LDAP/DATA").resolve(userScreenName);
 		if( isJobResult ){
 			filePath = filePath.resolve("jobs").resolve(path);
 		}
@@ -332,9 +332,17 @@ public class IBAgent {
 		}
 			
 		
-		String apiUrl = URL+"/api/file/encode?path="+filePath.toString();
+		String apiUrl = URL+"/api/file/encode";
 		
 		HttpURLConnection connection = connect( apiUrl, "POST", "application/json", "application/json" );
+		
+		JSONObject jsonPath = JSONFactoryUtil.createJSONObject();
+		jsonPath.put("path", filePath.toString() );
+		
+		OutputStream outStream = connection.getOutputStream();
+		outStream.write(jsonPath.toString().getBytes() );
+		outStream.flush();
+		outStream.close();
 		
 		BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
 		String line = "";
@@ -378,22 +386,6 @@ public class IBAgent {
 		String apiUrl = URL+_simulationAPI+"/"+simulationUuid+"/job/submit";
 		System.out.println("IB URL: "+apiUrl);
 		apiUrl = HttpUtil.addParameter(apiUrl, "url", callbackUrl);
-		
-		/*
-		Map<String, String> commandOptions = new HashMap<>();
-		Set<String> optionNames = files.keySet();
-		for(String optionName : optionNames ){
-			String fileId = "";
-			try {
-				fileId = this.getFileId(files.get(optionName));
-			} catch (JSONException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			commandOptions.put(optionName, fileId);
-		}
-		*/
 		
 		IBJob job = new IBJob(
 				runType, 

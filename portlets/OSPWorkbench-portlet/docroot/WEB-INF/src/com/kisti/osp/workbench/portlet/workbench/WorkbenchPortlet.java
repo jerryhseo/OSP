@@ -4,25 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -31,7 +22,6 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.kisti.edison.bestsimulation.NoSuchSimulationException;
 import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
@@ -45,7 +35,6 @@ import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.xml.sax.SAXException;
 
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
@@ -53,7 +42,6 @@ import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
-import com.kisti.osp.workbench.agent.ib.IBJob;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -63,25 +51,16 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.security.RandomUtil;
-import com.liferay.portal.kernel.servlet.ServletRequestUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.LayoutTemplateConstants;
-import com.liferay.portal.model.Theme;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.ServiceContextUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -119,11 +98,16 @@ public class WorkbenchPortlet extends MVCPortlet {
 			throws IOException, PortletException {
 		
 		String workbenchType = ParamUtil.getString(renderRequest, "workbenchType", "SIMULATION_WITH_APP");
-		_log.info("workbenchType: "+workbenchType);
+		_log.info("workbench parameters");
+		for(String key : renderRequest.getParameterMap().keySet()){
+		    String[] values = (String[])renderRequest.getParameterMap().get(key);
+		    for(String value : values){
+		        _log.info(key + ": " + value);
+		    }
+		}
 		
 		long customId =  ParamUtil.getLong(renderRequest, "customId", 0);
 		long classId =  ParamUtil.getLong(renderRequest, "classId", 0);
-		
 		
 		if( workbenchType.equalsIgnoreCase("SIMULATION_WITH_APP")){
 			try {
@@ -139,6 +123,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			SimulationJob job = null;
 			try {
 				job = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
+				_log.info("SIMULATION_RERUN job Info : " + job.getModelAttributes().toString());
 				String simulationUUID = job.getSimulationUuid(); 
 				Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUUID);
 				String jobInputData = SimulationLocalServiceUtil.getJobData(jobUuid);
@@ -712,7 +697,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			System.out.println("Job UUID to be submitted: "+jobUuid);
 			if( jobUuid.isEmpty() || isJobSubmitted ){
 				try {
-					job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
+					job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
 				} catch (SystemException e) {
 					_log.error("Job creation failed: "+jobUuid);
 					throw new IOException();
@@ -720,6 +705,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			}
 			else{
 				try {
+					System.out.println("SimulationJobLocalServiceUtil.getJob(): "+jobUuid);
 					job = SimulationJobLocalServiceUtil.getJob(jobUuid);
 				} catch (NoSuchSimulationJobException | SystemException e2) {
 					_log.error("Getting job failed: "+jobUuid);
@@ -849,14 +835,42 @@ public class WorkbenchPortlet extends MVCPortlet {
 	
 	protected void readDLEntry( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
 		long dlEntryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		
-		JSONObject content = JSONFactoryUtil.createJSONObject();
+		JSONObject result = JSONFactoryUtil.createJSONObject();
 		String fileContent = this.readDLFileContent( dlEntryId );
 		
-		content.put("contentType", "fileContent");
-		content.put("content", fileContent);
-		ServletResponseUtil.write(httpResponse, content.toString());
+		DataType dataType;
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			result.put("contentType", "fileContent");
+			result.put("fileContent", fileContent);
+		}
+		else{
+			result.put("contentType", "structuredData");
+			result.put("fileContent", fileContent);
+			result.put("dataStructure", dataTypeStructure.getStructure());
+		}
+		
+		ServletResponseUtil.write(httpResponse, result.toString());
 	}
 	
 	protected void readDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
@@ -865,7 +879,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		
 		DataType dataType;
-		JSONObject content = JSONFactoryUtil.createJSONObject();
+		JSONObject result = JSONFactoryUtil.createJSONObject();
 		try {
 			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
 		} catch (SystemException e) {
@@ -882,18 +896,32 @@ public class WorkbenchPortlet extends MVCPortlet {
 			throw new IOException();
 		}
 		
-		if( dataTypeStructure == null ){
-			String fileContent = this.readDLFileContent(Long.parseLong(dataType.getSamplePath()));
-			content.put("contentType", "fileContent");
-			content.put("content", fileContent);
+		long sampleDLEntryId = Long.parseLong(dataType.getSamplePath());
+		System.out.println("Data Type Sample ID: "+ dataType.getSamplePath() );
+		if( sampleDLEntryId > 0 ){
+			String fileContent = this.readDLFileContent(sampleDLEntryId);
+			if( dataTypeStructure == null ){
+				result.put("contentType", "fileContent");
+				result.put("fileContent", fileContent);
+			}
+			else{
+				result.put("contentType", "structuredData");
+				result.put("fileContent", fileContent);
+				result.put("dataStructure", dataTypeStructure.getStructure());
+			}
 		}
 		else{
-			content.put("contentType", "structuredData");
-			content.put("content", dataTypeStructure.getStructure());
+			if( dataTypeStructure == null ){
+				result.put("error", "Data type ["+dataTypeName+"-"+dataTypeVersion+"] has no sample file.");
+			}
+			else{
+				result.put("contentType", "structuredData");
+				result.put("dataStructure", dataTypeStructure.getStructure());
+			}
 		}
 
-		this.jsonObjectPrint(content);
-		ServletResponseUtil.write(httpResponse, content.toString());
+		this.jsonObjectPrint(result);
+		ServletResponseUtil.write(httpResponse, result.toString());
 	}
 	
 	protected void getDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
@@ -1095,6 +1123,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 	
 	protected void createJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
+		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
 		
 		ServiceContext sc = null;
 		try {
@@ -1111,7 +1141,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		SimulationJob job = null;
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
 		} catch ( SystemException e) {
 			_log.error("Adding job: "+e.getMessage());
 			throw new PortletException();
@@ -1132,12 +1162,20 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
 		
+		System.out.println("loadJob()****************************************");
+		System.out.println("SimulationUUID: "+ simulationUuid);
+		System.out.println("JobUUID: "+ jobUuid);
+		System.out.println("End of loadJob()****************************************");
+		
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		
 		SimulationJob job = null;
 		try {
-			job = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
+			job = SimulationJobLocalServiceUtil.getJob(jobUuid);
 		} catch (SystemException e) {
+			_log.error("Getting job info: ", e);
+			throw new PortletException(e);
+		} catch (NoSuchSimulationJobException e) {
 			_log.error("Getting job info: ", e);
 			throw new PortletException(e);
 		}
@@ -1302,10 +1340,21 @@ public class WorkbenchPortlet extends MVCPortlet {
 			portalUrl += serverName+":"+themeDisplay.getServerPort();
 		}
 		
+		Simulation simulation = null;
+        try{
+            simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+        }catch (NoSuchSimulationException | SystemException e){
+            _log.error("no simulation", e);
+        }
+		
 		//portalUrl = "http://150.183.247.221:8080";
 		
 		String url = portalUrl +_callbackAPI;
-		url = HttpUtil.addParameter(url, "gid", String.valueOf(themeDisplay.getScopeGroupId()));
+		if(simulation == null){
+		    url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
+		}else{
+		    url = HttpUtil.addParameter(url, "gid", simulation.getGroupId());
+		}
 		url = HttpUtil.addParameter(url, "simulationUuid", simulationUuid); 
 		url = HttpUtil.addParameter(url, "jobSeqNo", jobSeqNo); 
 		

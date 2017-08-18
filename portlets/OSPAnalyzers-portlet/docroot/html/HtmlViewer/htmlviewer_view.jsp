@@ -44,6 +44,7 @@
  ***********************************************************************/
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
+var <portlet:namespace/>action = '<%=action%>';
 
 /***********************************************************************
  * Initailization section using parameters
@@ -67,6 +68,7 @@ Liferay.on(
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
       <portlet:namespace/>connector = e.portletId;
+      <portlet:namespace/>action = e.action;
       var events = [ 
           OSP.Event.OSP_EVENTS_REGISTERED, 
           OSP.Event.OSP_LOAD_DATA

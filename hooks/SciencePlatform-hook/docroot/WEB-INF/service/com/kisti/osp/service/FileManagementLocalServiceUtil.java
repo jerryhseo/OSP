@@ -416,6 +416,29 @@ public class FileManagementLocalServiceUtil {
 			isJobResult);
 	}
 
+	public static void getFile(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String filePath, boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.getFile(portletRequest, portletResponse, filePath, isJobResult);
+	}
+
+	public static void readFileContent(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String contentType, java.lang.String filePath,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.readFileContent(portletRequest, portletResponse, contentType,
+			filePath, isJobResult);
+	}
+
 	public static void readFirstFileContent(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -467,10 +490,17 @@ public class FileManagementLocalServiceUtil {
 
 	public static void readDLAppEntry(
 		javax.portlet.PortletResponse portletResponse, long dlEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
+		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		getService().readDLAppEntry(portletResponse, dlEntryId);
+	}
+
+	public static void writeToClient(
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String errorMessage,
+		com.liferay.portal.kernel.json.JSONObject data)
+		throws java.io.IOException {
+		getService().writeToClient(portletResponse, errorMessage, data);
 	}
 
 	public static java.util.Map<java.lang.String, java.lang.Object> readOutLogFile(

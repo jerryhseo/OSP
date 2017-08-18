@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="Plugin_EDSIM_SimulationJobService" provider="java:RPC" style="rpc" use="encoded">
+		<operation xmlns:operNS="urn:http.service.bestsimulation.edison.kisti.org" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="updateSimulationJob" qname="operNS:updateSimulationJob" returnQName="updateSimulationJobReturn" returnType="rtns:boolean" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="gid" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="simulationUuid" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobSeqNo" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobUuid" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobStatus" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobStartDt" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="jobEndDt" type="tns:string"></parameter>
+		</operation>
+		<parameter name="allowedMethods" value="updateSimulationJob" />
+		<parameter name="className" value="org.kisti.edison.bestsimulation.service.http.SimulationJobServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="SimulationJobServiceSoap" />
+		<parameter name="wsdlServiceElement" value="SimulationJobServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_EDSIM_SimulationJobService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.bestsimulation.edison.kisti.org" />
+	</service>
+</deployment>
