@@ -2774,18 +2774,18 @@
                     }
                     //console.log('Line: '+ line);
                     
-                    var pair = line.split( valueDelimiter );
+                    var delimiterIndex = line.indexOf( valueDelimiter );
                     
-					var parameterName = pair[0].trim();
+					var parameterName = line.slice(0, delimiterIndex ).trim();
 					if( parameterName.length === 0) continue;
 
-					var parameterValue = pair[1].trim();
+					var parameterValue = line.slice(delimiterIndex+valueDelimiter.length, line.length ).trim();
 			        //console.log( 'valueDelimiter: ['+valueDelimiter+']' );
 				    //console.log( 'Param Name: '+parameterName);
 				    //console.log( 'Param Value: '+parameterValue); 
 					    
 					var parameter = DS.parameter(parameterName);
-					//console.log('parameter: '+parameter);
+					//console.log('parameter: ', parameter);
 					switch(parameter.type()){
         				case OSP.Constants.VECTOR:
         				    var vectorForm = DS.vectorForm();
