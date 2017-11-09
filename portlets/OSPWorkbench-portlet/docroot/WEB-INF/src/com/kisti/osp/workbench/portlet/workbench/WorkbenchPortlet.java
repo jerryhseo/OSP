@@ -56,6 +56,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
@@ -237,11 +238,11 @@ public class WorkbenchPortlet extends MVCPortlet {
 		super.serveResource(resourceRequest, resourceResponse);
 	}
 	
-	private JSONObject createJob( String simulationUuid, ServiceContext sc ) throws PortletException, JSONException, SystemException{
+	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc ) throws PortletException, JSONException, SystemException{
 		SimulationJob job = null;
 		
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
 		} catch (SystemException e) {
 			_log.error("Adding New Job Failed For:  "+ simulationUuid);
 			throw new PortletException();
@@ -1012,7 +1013,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		JSONObject jsonJob = null;
 		try {
-			jsonJob = this.createJob(simulation.getSimulationUuid(), sc);
+			jsonJob = this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc);
 		} catch (JSONException | SystemException e1) {
 			_log.error("Creating job : "+simulation.getSimulationUuid());
 			throw new PortletException();
@@ -1125,6 +1126,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
 		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
+		String initData = ParamUtil.getString(resourceRequest, "initData", StringPool.BLANK);
 		
 		ServiceContext sc = null;
 		try {
@@ -1145,6 +1147,15 @@ public class WorkbenchPortlet extends MVCPortlet {
 		} catch ( SystemException e) {
 			_log.error("Adding job: "+e.getMessage());
 			throw new PortletException();
+		}
+		
+		if( !initData.isEmpty() ){
+			try {
+				SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), initData);
+			} catch (SystemException e) {
+				_log.error("Adding job data: "+e.getMessage());
+				throw new PortletException();
+			}
 		}
 		
 		JSONObject jsonJob = null;

@@ -659,6 +659,79 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	*/
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupId(groupId, userId);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByGroupId(groupId, start, end);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupId(groupId, userId,
+			start, end);
+	}
+
+	@Override
+	public int countByUserIdAndGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupId(groupId);
+	}
+
+	@Override
+	public int countByUserIdAndGroupId(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupId(groupId, userId);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupIdAndTitle(groupId,
+			userId, tittleKeyword, start, end);
+	}
+
+	@Override
+	public long countByUserIdAndGroupIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupIdAndTitle(groupId,
+			userId, tittleKeyword);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupIdAndTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByGroupIdAndTitle(groupId,
+			tittleKeyword, start, end);
+	}
+
+	@Override
+	public long countByGroupIdAndTitle(long groupId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByGroupIdAndTitle(groupId,
+			tittleKeyword);
+	}
+
+	/**
 	* Added By Jerry H. Seo
 	*
 	* @throws SystemException

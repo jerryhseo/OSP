@@ -20,6 +20,18 @@
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>edison-multitab</css-class-wrapper>		
 	</portlet>
+	<portlet>
+		<portlet-name>edison-comment</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<css-class-wrapper>edison-comment</css-class-wrapper>		
+	</portlet>
+	<portlet>
+		<portlet-name>edison-comment-crud</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<css-class-wrapper>edison-comment-crud</css-class-wrapper>		
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

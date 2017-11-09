@@ -320,53 +320,57 @@ public class SimulationJobLocalServiceClpInvoker {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName121 = "addJob";
+		_methodName121 = "getJobsBySimulationUuidWithAdditionalCondition";
 
-		_methodParameterTypes121 = new String[] { "java.lang.String", "long" };
+		_methodParameterTypes121 = new String[] { "java.lang.String" };
 
-		_methodName122 = "getJob";
+		_methodName122 = "addJob";
 
-		_methodParameterTypes122 = new String[] { "java.lang.String" };
+		_methodParameterTypes122 = new String[] { "java.lang.String", "long" };
 
-		_methodName123 = "getJobsByAppUuid";
+		_methodName123 = "getJob";
 
 		_methodParameterTypes123 = new String[] { "java.lang.String" };
 
 		_methodName124 = "getJobsByAppUuid";
 
-		_methodParameterTypes124 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes124 = new String[] { "java.lang.String" };
 
-		_methodName125 = "countJobsByAppUuid";
+		_methodName125 = "getJobsByAppUuid";
 
-		_methodParameterTypes125 = new String[] { "java.lang.String" };
+		_methodParameterTypes125 = new String[] { "java.lang.String", "int", "int" };
 
-		_methodName126 = "getJobsBySimulationUuid";
+		_methodName126 = "countJobsByAppUuid";
 
 		_methodParameterTypes126 = new String[] { "java.lang.String" };
 
 		_methodName127 = "getJobsBySimulationUuid";
 
-		_methodParameterTypes127 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes127 = new String[] { "java.lang.String" };
 
-		_methodName128 = "countJobsBySimulationUuid";
+		_methodName128 = "getJobsBySimulationUuid";
 
-		_methodParameterTypes128 = new String[] { "java.lang.String" };
+		_methodParameterTypes128 = new String[] { "java.lang.String", "int", "int" };
 
-		_methodName129 = "getJobInputData";
+		_methodName129 = "countJobsBySimulationUuid";
 
 		_methodParameterTypes129 = new String[] { "java.lang.String" };
 
-		_methodName130 = "deleteJobsBySimulationUuid";
+		_methodName130 = "getJobInputData";
 
 		_methodParameterTypes130 = new String[] { "java.lang.String" };
 
-		_methodName131 = "getJobWorkingDirPath";
+		_methodName131 = "deleteJobsBySimulationUuid";
 
 		_methodParameterTypes131 = new String[] { "java.lang.String" };
 
-		_methodName132 = "deleteJob";
+		_methodName132 = "getJobWorkingDirPath";
 
 		_methodParameterTypes132 = new String[] { "java.lang.String" };
+
+		_methodName133 = "deleteJob";
+
+		_methodParameterTypes133 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -719,68 +723,73 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		if (_methodName121.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.addJob((java.lang.String)arguments[0],
-				((Long)arguments[1]).longValue());
+			return SimulationJobLocalServiceUtil.getJobsBySimulationUuidWithAdditionalCondition((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName122.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJob((java.lang.String)arguments[0]);
+			return SimulationJobLocalServiceUtil.addJob((java.lang.String)arguments[0],
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName123.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes123, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsByAppUuid((java.lang.String)arguments[0]);
+			return SimulationJobLocalServiceUtil.getJob((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName124.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes124, parameterTypes)) {
+			return SimulationJobLocalServiceUtil.getJobsByAppUuid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName125.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
 			return SimulationJobLocalServiceUtil.getJobsByAppUuid((java.lang.String)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName125.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.countJobsByAppUuid((java.lang.String)arguments[0]);
-		}
-
 		if (_methodName126.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes126, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsBySimulationUuid((java.lang.String)arguments[0]);
+			return SimulationJobLocalServiceUtil.countJobsByAppUuid((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName127.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes127, parameterTypes)) {
+			return SimulationJobLocalServiceUtil.getJobsBySimulationUuid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName128.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
 			return SimulationJobLocalServiceUtil.getJobsBySimulationUuid((java.lang.String)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName128.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.countJobsBySimulationUuid((java.lang.String)arguments[0]);
-		}
-
 		if (_methodName129.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes129, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobInputData((java.lang.String)arguments[0]);
+			return SimulationJobLocalServiceUtil.countJobsBySimulationUuid((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName130.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
+			return SimulationJobLocalServiceUtil.getJobInputData((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName131.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
 			SimulationJobLocalServiceUtil.deleteJobsBySimulationUuid((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName131.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
+		if (_methodName132.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes132, parameterTypes)) {
 			return SimulationJobLocalServiceUtil.getJobWorkingDirPath((java.lang.String)arguments[0]);
 		}
 
-		if (_methodName132.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes132, parameterTypes)) {
+		if (_methodName133.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes133, parameterTypes)) {
 			SimulationJobLocalServiceUtil.deleteJob((java.lang.String)arguments[0]);
 
 			return null;
@@ -919,4 +928,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes131;
 	private String _methodName132;
 	private String[] _methodParameterTypes132;
+	private String _methodName133;
+	private String[] _methodParameterTypes133;
 }

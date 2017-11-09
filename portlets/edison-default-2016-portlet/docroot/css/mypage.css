@@ -49,6 +49,9 @@
 /*데이터타입  */
 .mpleft ul li.myDataType{background:url(../images/mypage/icon05off.png) no-repeat 11px 17px;}
 .mpleft ul li.myDataType.select{background:url(../images/mypage/icon05.png) no-repeat 11px 17px; background-color: #ffffff}
+/*가스터빈 내 파일 관리*/
+.mpleft ul li.eturbMyFile{background:url(../images/mypage/icon05off.png) no-repeat 11px 17px;}
+.mpleft ul li.eturbMyFile.select{background:url(../images/mypage/icon05.png) no-repeat 11px 17px; background-color: #ffffff}
 
 .mprightcont{width:974px;float:right;border-top:solid 1px #454545;border-left:solid 1px #454545; padding-left:17px; padding-right:20px; min-height:700px;padding-top:10px;}
 

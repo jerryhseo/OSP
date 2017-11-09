@@ -63,6 +63,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 
 var <portlet:namespace/>initData;
+var <portlet:namespace/>currentData;
 var <portlet:namespace/>action = '<%=action%>';
 
 /***********************************************************************
@@ -93,7 +94,6 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog(
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-
 $('#<portlet:namespace/>openLocal').click(function(){
     $('#<portlet:namespace/>selectFile').click();
 });
@@ -163,7 +163,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
     AUI().use('liferay-portlet-url', function(A){
         var dialogURL = Liferay.PortletURL.createRenderURL();
         dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
-        var initData = <portlet:namespace/>initData;
         dialogURL.setParameter('inputData', JSON.stringify(inputData));
         //dialogURL.setParameter('loadNow', true);
         dialogURL.setParameter('mode', mode);
@@ -307,7 +306,6 @@ function <portlet:namespace/>drawJSMol( inputData ){
         serveResourceUrl.setParameter('relative', inputData.relative());
         
         $('#<portlet:namespace/>canvas').each(function(){
-                        console.log( 'ID: '+$(this).attr('id'));
                         $(this).one("load", function(){
                                         $(this).prop('contentWindow').loadJSMolFile(serveResourceUrl.toString(), $('#<portlet:namespace/>canvas').width(), $('#<portlet:namespace/>canvas').height());
                                     }

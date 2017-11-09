@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
+	<portlet>
+        <portlet-name>simulation-monitoring-tree-view</portlet-name>
+        <display-name>Simulation Monitoring Tree View</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/simulation/portlet/monitoring/simulation-monitoring-portlet.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>Simulation Monitoring Tree View</title>
+            <short-title>Simulation Monitoring Tree View</short-title>
+            <keywords>Simulation Monitoring Tree View</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-editor-dashboard</portlet-name>
+        <display-name>Eturb Editor Dashboard</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/editor/portlet/dashboard/editor-dashboard-portlet.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>Eturb Editor Dashboard</title>
+            <short-title>Eturb Editor Dashboard</short-title>
+            <keywords>Eturb Editor Dashboard</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-editor-myfile</portlet-name>
+        <display-name>Eturb Editor Myfile</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/simulation/portlet/myfile/simulation-myfile-portlet.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>Eturb Editor Myfile</title>
+            <short-title>Eturb Editor Myfile</short-title>
+            <keywords>Eturb Editor Myfile</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
+    
+    <portlet>
+    	<portlet-name>tree-view-monitoring</portlet-name>
+    	<display-name>Tree View Monitoring</display-name>
+    	<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+    	<init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/simulation/portlet/monitoring/tree-view-monitoring-portlet.xml</value>
+        </init-param>
+    	<expiration-cache>0</expiration-cache>
+    	<supports>
+    		<mime-type>text/html</mime-type>
+    	</supports>
+    	<portlet-info>
+    		<title>Tree View Monitoring</title>
+    		<short-title>Tree View Monitoring</short-title>
+    		<keywords></keywords>
+    	</portlet-info>
+    	<security-role-ref>
+    		<role-name>administrator</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>guest</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>power-user</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>user</role-name>
+    	</security-role-ref>
+    </portlet>
+    <portlet>
+        <portlet-name>eturb-analyzer</portlet-name>
+        <display-name>Eturb Analyzer</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/analyzer/portlet/viewer/eturbanalyzer-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>Eturb Analyzer</title>
+            <short-title>Eturb Analyzer</short-title>
+            <keywords>Eturb Analyzer</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-detail-page</portlet-name>
+        <display-name>Eturb Detail Page</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:org/kisti/eturb/detailPage/portlet/detailPage-portlet.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <portlet-info>
+            <title>Eturb Detail Page</title>
+            <short-title>Eturb Detail Page</short-title>
+            <keywords>Eturb Detail Page</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
+</portlet-app>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.eturb.dbservice.service.ProjectLocalService" class="org.kisti.eturb.dbservice.service.impl.ProjectLocalServiceImpl" />
+	<bean id="org.kisti.eturb.dbservice.service.persistence.ProjectPersistence" class="org.kisti.eturb.dbservice.service.persistence.ProjectPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.eturb.dbservice.service.SimulationLocalService" class="org.kisti.eturb.dbservice.service.impl.SimulationLocalServiceImpl" />
+	<bean id="org.kisti.eturb.dbservice.service.persistence.SimulationPersistence" class="org.kisti.eturb.dbservice.service.persistence.SimulationPersistenceImpl" parent="basePersistence" />
+</beans>

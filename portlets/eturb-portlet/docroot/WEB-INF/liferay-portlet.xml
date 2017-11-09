@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
+
+<liferay-portlet-app>
+	<portlet>
+        <portlet-name>simulation-monitoring-tree-view</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <css-class-wrapper>simulation-monitoring-tree-view</css-class-wrapper>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-editor-dashboard</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <css-class-wrapper>eturb-editor-dashboard</css-class-wrapper>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-editor-myfile</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <header-portlet-css>/css/etrub-monitoring.css</header-portlet-css>
+        <css-class-wrapper>eturb-editor-myfile</css-class-wrapper>
+        <add-default-resource>true</add-default-resource>
+    </portlet>
+    
+    <portlet>
+    	<portlet-name>tree-view-monitoring</portlet-name>
+    	<icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <header-portlet-css>/css/etrub-monitoring.css</header-portlet-css>
+        <header-portlet-css>/css/jstreestyle.css</header-portlet-css>
+        <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
+        <header-portlet-css>/css/jquery.contextMenu.css</header-portlet-css>
+        <header-portlet-javascript>/js/jquery.contextMenu.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
+    	<css-class-wrapper>
+    		tree-view-monitoring-portlet
+    	</css-class-wrapper>
+    </portlet>
+    <portlet>
+        <portlet-name>eturb-analyzer</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <css-class-wrapper>eturb-analyzer</css-class-wrapper>
+        <add-default-resource>true</add-default-resource>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>eturb-detail-page</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <css-class-wrapper>eturb-detail-page</css-class-wrapper>
+    </portlet>
+    
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>

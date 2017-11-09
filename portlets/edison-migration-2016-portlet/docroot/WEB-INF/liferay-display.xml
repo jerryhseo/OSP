@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
+
+<display>
+	<category name="EDISON">
+		<category name="EDISON Migration">
+			<portlet id="edison-migration-content" />
+			<portlet id="edison-migration-user" />
+			<portlet id="edison-migration-workspace" />
+			<portlet id="edison-migration-inputdeck" />
+			<portlet id="edison-migration-user-visitsite" />
+			<portlet id="edison-migration-simulation" />
+			<portlet id="edison-migration-inputdeck-unicode" />
+			<portlet id="edison-migration-port" />
+			<portlet id="edison-migration-app-layout" />
+			<portlet id="edison-migration-app-category" />
+			<portlet id="edison-migration-datatype" />
+			<portlet id="edison-migration-port-app-id" />
+		</category>
+	</category>
+</display>  

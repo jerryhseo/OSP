@@ -2,7 +2,6 @@
 <%@ include file="/common/init.jsp"%>
 
 <portlet:defineObjects />
-
 <c:if test="${searchResults.appCount > 0}">
   <ul>
     <c:forEach items="${searchResults.appResults}" var="element">
@@ -16,7 +15,8 @@
             <c:if test="${empty element.current_manualId or element.current_manualId eq 0}">
                 <img src="${contextPath}/images/search/btn_manual_none.jpg" style="height: 24px; cursor: default;"/>
             </c:if>
-            <c:if test="${workBenchPlid ne 0}">
+            
+            <c:if test="${workBenchPlid ne 0 and isSignedIn}">
                 <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;" 
                     onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
             </c:if>

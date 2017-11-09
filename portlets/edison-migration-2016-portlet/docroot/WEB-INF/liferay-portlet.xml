@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
+
+<liferay-portlet-app>
+	<portlet>
+		<portlet-name>edison-migration-content</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-migration-content</css-class-wrapper>	
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-user</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-migration-user</css-class-wrapper>	
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-workspace</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-migration-user</css-class-wrapper>	
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-inputdeck</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
+		<css-class-wrapper>edison-migration-inputdeck</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-user-visitsite</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-migration-user-visitsite</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-simulation</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
+		<css-class-wrapper>edison-migration-simulation</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-inputdeck-unicode</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-migration-inputdeck-unicode</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-port</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-migration-port</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-app-layout</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-migration-app-layout</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-app-category</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-migration-app-category</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-datatype</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-migration-datatype</css-class-wrapper>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-migration-port-app-id</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-migration-port-app-id</css-class-wrapper>
+	</portlet>
+	
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>

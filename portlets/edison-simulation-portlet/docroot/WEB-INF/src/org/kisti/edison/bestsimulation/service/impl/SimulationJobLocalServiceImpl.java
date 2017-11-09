@@ -70,6 +70,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -1418,6 +1419,22 @@ public class SimulationJobLocalServiceImpl
 	public int getCountVirtualClassStatistics(Map<String, Object> params, Locale locale) {
 		return simulationJobFinder.getCountVirtualClassStatistics(params, locale);
 	}
+	
+	/* etrub */
+	
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public List<SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(String simulationUuid)
+        throws SystemException{
+	    DynamicQuery query = DynamicQueryFactoryUtil.forClass(
+	        SimulationJob.class, "job", PortletClassLoaderUtil.getClassLoader());
+	    query.add(PropertyFactoryUtil.forName("primaryKey.simulationUuid").eq(simulationUuid));
+	    query.add(RestrictionsFactoryUtil.gt("job.jobStatus", MonitoringStatusConstatns.SUBMISSION_FAILED))
+	         .add(RestrictionsFactoryUtil.eq("job.jobSubmit", true));
+	    List jobs = getSimulationJobLocalService().dynamicQuery(query);
+	    return jobs == null ? null : (List<SimulationJob>) jobs;
+	}
+	
+	/* etrub */
 	
 	
 	/**

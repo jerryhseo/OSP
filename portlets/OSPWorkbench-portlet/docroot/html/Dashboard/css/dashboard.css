@@ -103,6 +103,12 @@
 	background-color:red !important;
 }
 
+.dashboard-portlet .portInvalid{
+	color:#1ABC9C !important;
+	cursor: pointer !important;
+	border-right: 4px solid red !important;
+	background-color: #444444 !important;
+}
 
 .dashboard-portlet .LogPortName {
 	font-size:11px;
@@ -184,7 +190,7 @@
 	font-size:15px;
 	font-weight:500;
 	list-style-type:none !important;
-	background-color:#f9f9f9 !important;
+	background-color:#696969;
 	border-bottom:solid 1px #ddd;
 	line-height:23px;
 	padding-left:27px !important;
@@ -195,7 +201,7 @@
 	color:#0769ad;
 	cursor: pointer;
 	border-right: 4px solid #0769ad;
-	background-color:#e9e9e9;
+	background-color:#949494;
 }
 
 .dashboard-portlet .outputPortSelected {

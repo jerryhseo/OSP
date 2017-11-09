@@ -14,8 +14,8 @@
 
 package com.kisti.osp.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,19 +26,22 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.CopyOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -64,7 +67,9 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
 /**
  * The implementation of the file management local service.
@@ -232,48 +237,44 @@ public class FileManagementLocalServiceImpl
 //		System.out.println("create tempFile");
 		if( Files.notExists(targetPath) )	throw new FileNotFoundException(targetPath.toString());
 		
-		HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
-		System.out.println("getPortalContext: " + portletRequest.getPortalContext());
-		System.out.println("getPortletContext: " + httpRequest.getContextPath());
-		/*
-		portletRequest.getPortalContext();
-
+		String tempRealPath = portletRequest.getPortletSession().getPortletContext().getRealPath(this.TEMP_DIR_NAME);
+		Path baseTempDir = Paths.get( tempRealPath );
+		if( !Files.exists(baseTempDir)){
+			Files.createDirectory(baseTempDir);
+		}
+		Path relativeTempPath = baseTempDir.getFileName();
+		baseTempDir = this.getUniqueUuidFilePath(baseTempDir, "", "");
+		Files.createDirectory( baseTempDir );
+		baseTempDir.toFile().deleteOnExit();
 		
-		final Path baseTempDir = portletRequest.getContextPath() + "/"+ this.TEMP_DIR_NAME;
-		final Path tempFilePath = baseTempPath.resolve(targetPath.getFileName());
+		relativeTempPath = relativeTempPath.resolve(baseTempDir.getFileName());
+		final Path tempFilePath = baseTempDir.resolve(targetPath.getFileName());
+		if(isJobResult){
+		    Path relTargetPath = Paths.get(target);
+		    Iterator<Path> iter = relTargetPath.iterator();
+		    int index = 0;
+		    while(iter.hasNext()){
+		        Path thisPath = iter.next();
+		        if(index++ < 2){
+		            continue;
+		        }
+		        relativeTempPath = relativeTempPath.resolve(thisPath);
+		    }
+		    
+		}else{
+		    relativeTempPath = relativeTempPath.resolve(target);
+		}
+		
 		if( Files.isRegularFile(targetPath, LinkOption.NOFOLLOW_LINKS) ){
 			Files.copy(targetPath, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
 		}
 		else if ( Files.isDirectory(targetPath, LinkOption.NOFOLLOW_LINKS) ){
-//			System.out.println("temp folder creation: "+srcFilePath);
-			Files.walkFileTree(targetPath,  new SimpleFileVisitor<Path>() {
-				@Override
-				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException{
-					Path path = targetPath.relativize(dir);
-					Path tempPath = tempFilePath.resolve(path);
-					if( !Files.exists(tempPath) ){
-						Path tempFolder = Files.createDirectory(tempPath);
-						tempFolder.toFile().deleteOnExit();
-					}
-					return FileVisitResult.CONTINUE;
-				}
-
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					Path path = targetPath.relativize(file);
-					Path tempPath = tempFilePath.resolve(path);
-					Files.copy(file, tempPath, StandardCopyOption.REPLACE_EXISTING);
-					tempPath.toFile().deleteOnExit();
-					return FileVisitResult.CONTINUE;
-				}
-			});
+			Files.walkFileTree(targetPath,  new OSPFileVisitor( targetPath, tempFilePath) );
 		}
 		else
 			throw new FileNotFoundException(targetPath.toString()+": is not a regular file.");
-		return tempFilePath.getFileName().toString();
-				*/
-
-		return "";
+		
+		return relativeTempPath.toString();
 	}
 
 	public JSONArray getFolderInformation( 
@@ -387,6 +388,21 @@ public class FileManagementLocalServiceImpl
 	}
 	
 	public void download(
+	    PortletRequest portletRequest, 
+        PortletResponse portletResponse, 
+        long dlFileEntryId) throws PortalException, SystemException, IOException{
+	    HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
+        HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+        
+	    DLFileEntry dlFileEntry = DLFileEntryServiceUtil.getFileEntry(dlFileEntryId);
+	    InputStream inputStream = dlFileEntry.getContentStream();
+        String fileName = dlFileEntry.getTitle();
+        ServletResponseUtil.sendFile(
+            httpRequest, httpResponse, fileName, inputStream, 
+            dlFileEntry.getSize(), "application/octet-stream", "attachment");
+	}
+	
+	public void download(
 			PortletRequest portletRequest, 
 			PortletResponse portletResponse, 
 			String targetFolder, 
@@ -426,6 +442,18 @@ public class FileManagementLocalServiceImpl
 			ServletResponseUtil.sendFile(httpRequest, httpResponse, zipPath.getFileName().toString(), Files.readAllBytes(zipPath), "application/octet-stream", "attachment");
 		}
 	}
+	   
+    public void downloadFromText(
+        PortletRequest portletRequest, 
+        PortletResponse portletResponse,
+        String fileName,
+        String fileContext) throws PortalException, SystemException, IOException{
+        HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
+        HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+        InputStream inputStream = new ByteArrayInputStream(fileContext.getBytes("UTF-8"));
+        ServletResponseUtil.sendFile(
+            httpRequest, httpResponse, fileName, inputStream, "text/plain");
+    }
 	
 	private void addZipEntry( ZipOutputStream zipOutputStream, Path fileName, Path base ) throws IOException{
 		Path filePath = base.resolve(fileName);
@@ -637,11 +665,7 @@ public class FileManagementLocalServiceImpl
 		Path target = this.getUserHome(portletRequest, false).resolve(inputsPath).resolve(fileName);
 		_log.info("Target path to save input: "+target.toString());
 		
-		if( !Files.exists(target.getParent()) )
-			Files.createDirectories(target.getParent());
-		
-		OpenOption[] openOptions = new OpenOption[] { StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING};
-		Files.write(target, content.getBytes(StandardCharsets.UTF_8), openOptions);
+		writeTextFile(content, target);
 		
 		JSONObject path = JSONFactoryUtil.createJSONObject();
 		path.put("parent_", inputsPath.toString());
@@ -651,6 +675,19 @@ public class FileManagementLocalServiceImpl
 		
 		return path;
 	}
+
+    public void writeTextFile(String content, Path target) throws IOException{
+        if(!Files.exists(target.getParent())){
+            Files.createDirectories(target.getParent());
+        }
+        Files.write(target, content.getBytes(StandardCharsets.UTF_8), 
+            new OpenOption[]{
+                StandardOpenOption.CREATE_NEW, 
+                StandardOpenOption.WRITE, 
+                StandardOpenOption.TRUNCATE_EXISTING
+                }
+        );
+    }
 	
 	public void readDLAppEntry ( PortletResponse portletResponse, long dlEntryId ) throws SystemException, IOException{
 		FileEntry fileEntry;
@@ -708,6 +745,16 @@ public class FileManagementLocalServiceImpl
         return result;
 	}
     
+    public String readTextFile(Path path) throws IOException{
+        return readTextAndLastPosition(path, 0).getText();
+    }
+    
+    public String getAbolutePath( PortletRequest portletRequest, String path, boolean isJobResult ) throws PortalException, SystemException{
+    	Path absolutePath = this.getUserHome(portletRequest, isJobResult).resolve(path);
+    	
+    	return absolutePath.toString();
+    }
+    
     private TextAndLastPosition readTextAndLastPosition(Path path, long lastPoistion) throws IOException{
         FileChannel fcIn = FileChannel.open(path, StandardOpenOption.READ);
         ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
@@ -740,5 +787,47 @@ public class FileManagementLocalServiceImpl
         public long getLastPosition(){
             return lastPosition;
         }
+    }
+    
+    static class OSPFileVisitor extends SimpleFileVisitor<Path>{
+    	Path targetPath;
+    	Path tempFilePath;
+    	
+    	public OSPFileVisitor( Path targetPath, Path tempPath ){
+    		this.targetPath = targetPath;
+    		this.tempFilePath = tempPath;
+    	}
+    	
+		@Override
+		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+			Path path = targetPath.relativize(dir);
+			Path tempPath = tempFilePath.resolve(path);
+			if( !Files.exists(tempPath) ){
+				Path tempFolder = null;
+				try {
+					tempFolder = Files.createDirectory(tempPath);
+					tempFolder.toFile().deleteOnExit();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return FileVisitResult.CONTINUE;
+		}
+
+		@Override
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs){
+			Path path = targetPath.relativize(file);
+			Path tempPath = tempFilePath.resolve(path);
+			try {
+				Files.copy(file, tempPath, StandardCopyOption.REPLACE_EXISTING);
+				tempPath.toFile().deleteOnExit();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return FileVisitResult.CONTINUE;
+		}
+
     }
 }

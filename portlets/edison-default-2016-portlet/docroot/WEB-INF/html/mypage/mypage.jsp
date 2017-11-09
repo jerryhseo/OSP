@@ -42,6 +42,8 @@
 		jspFile = "edisondatatypeeditor_WAR_edisonappstore2016portlet";
 	}else if(clickTab.equals("myHistory")){
 		jspFile = "edisonprofessormanagement_WAR_edisonvirtuallab2016portlet";
+	}else if(clickTab.equals("eturbMyFile")){
+		jspFile = "simulationmonitoringtreeview_WAR_eturbportlet";
 	}
 %>
 <div>

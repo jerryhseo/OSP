@@ -604,6 +604,13 @@ public class SimulationJobLocalServiceUtil {
 		return getService().getCountVirtualClassStatistics(params, locale);
 	}
 
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
+	}
+
 	/**
 	* Added By Jerry H. Seo
 	*

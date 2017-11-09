@@ -129,10 +129,11 @@ public class SearchController{
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         try{
-        model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(searchCondition));
+            model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(searchCondition));
         }catch (Exception e){
-        throw new SystemException(e);
+            throw new SystemException(e);
         }
+        model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
         model.addAttribute("workBenchPlid", workBenchPlid);
         model.addAttribute("appstorePlid", appstorePlid);
         model.addAttribute("contentsPlid", contentsPlid);
@@ -149,6 +150,8 @@ public class SearchController{
         log.debug("app type search view");
         response.setContentType("text/html; charset=UTF-8");
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
+            "Workbench_WAR_OSPWorkbenchportlet");
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         log.debug("Paging");
@@ -159,6 +162,8 @@ public class SearchController{
         String paging = PagingUtil.getPaging(request.getContextPath(), portletNameSpace + "loadApps",
             searchResults.getAppCount(), searchCondition.getCurrentPage(), searchCondition.getListSize(),
             searchCondition.getBlockSize());
+        model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
+        model.addAttribute("workBenchPlid", workBenchPlid);
         model.addAttribute("searchResults", searchResults);
         model.addAttribute("paging", paging);
         return "search/type";

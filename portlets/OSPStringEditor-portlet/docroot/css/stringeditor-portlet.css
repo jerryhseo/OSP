@@ -1,0 +1,16 @@
+.stringeditor-portlet{
+	padding:0;
+	margin: 0;
+	height:inherit;
+}
+
+.stringeditor-portlet .canvasPanel{
+	margin: 0;
+	padding:0;
+	border: none;
+	height:100%;
+	overflow:auto; 
+}
+.stringeditor-portlet .canvas{
+	margin: 10;
+}

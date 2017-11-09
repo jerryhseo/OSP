@@ -187,6 +187,7 @@ public class ScienceAppstoreController {
 			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
 			
 			model.addAttribute("workBenchPlid", plid);
+			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
 			model.addAttribute("solver", solver);
 			
 			model.addAttribute("params",params);

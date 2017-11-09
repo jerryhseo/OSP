@@ -1,0 +1,33 @@
+#debug {
+    margin-left: 400px;
+    width: 200px;
+    background: beige;
+    font-size: 9pt;
+    opacity: 0.5;
+    border: 1px solid gray;
+    padding: 10px;
+}
+
+#viewport {
+    float: left;
+    border: 1px solid black;
+    overflow: auto;
+    width: 350px;
+}
+
+#content {
+    position: relative;
+    overflow: hidden;
+}
+
+.row {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    border-bottom: 1px dotted blue;
+    font-size: 9pt;
+}
+
+.row:hover {
+    background: rgba(0,0,255,0.05);
+}

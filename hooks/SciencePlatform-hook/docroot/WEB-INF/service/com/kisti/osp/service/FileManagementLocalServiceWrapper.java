@@ -404,6 +404,16 @@ public class FileManagementLocalServiceWrapper
 
 	@Override
 	public void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		_fileManagementLocalService.download(portletRequest, portletResponse,
+			dlFileEntryId);
+	}
+
+	@Override
+	public void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String targetFolder, java.lang.String[] files,
 		boolean isJobResult)
@@ -412,6 +422,17 @@ public class FileManagementLocalServiceWrapper
 			java.io.IOException {
 		_fileManagementLocalService.download(portletRequest, portletResponse,
 			targetFolder, files, isJobResult);
+	}
+
+	@Override
+	public void downloadFromText(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String fileName, java.lang.String fileContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		_fileManagementLocalService.downloadFromText(portletRequest,
+			portletResponse, fileName, fileContext);
 	}
 
 	@Override
@@ -509,6 +530,12 @@ public class FileManagementLocalServiceWrapper
 	}
 
 	@Override
+	public void writeTextFile(java.lang.String content,
+		java.nio.file.Path target) throws java.io.IOException {
+		_fileManagementLocalService.writeTextFile(content, target);
+	}
+
+	@Override
 	public void readDLAppEntry(javax.portlet.PortletResponse portletResponse,
 		long dlEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -535,6 +562,22 @@ public class FileManagementLocalServiceWrapper
 			java.io.IOException {
 		return _fileManagementLocalService.readOutLogFile(portletRequest,
 			simulationUuid, jobUuid, lastPosition);
+	}
+
+	@Override
+	public java.lang.String readTextFile(java.nio.file.Path path)
+		throws java.io.IOException {
+		return _fileManagementLocalService.readTextFile(path);
+	}
+
+	@Override
+	public java.lang.String getAbolutePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String path,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _fileManagementLocalService.getAbolutePath(portletRequest, path,
+			isJobResult);
 	}
 
 	/**

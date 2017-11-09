@@ -195,24 +195,24 @@ public class FileManagementLocalServiceClpInvoker {
 
 		_methodParameterTypes69 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"long"
+			};
+
+		_methodName70 = "download";
+
+		_methodParameterTypes70 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String[][]", "boolean"
 			};
 
-		_methodName73 = "checkValidFile";
+		_methodName71 = "downloadFromText";
 
-		_methodParameterTypes73 = new String[] {
+		_methodParameterTypes71 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "boolean"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName74 = "readFileContent";
-
-		_methodParameterTypes74 = new String[] {
-				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "boolean"
-			};
-
-		_methodName75 = "getFile";
+		_methodName75 = "checkValidFile";
 
 		_methodParameterTypes75 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -223,56 +223,86 @@ public class FileManagementLocalServiceClpInvoker {
 
 		_methodParameterTypes76 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "boolean"
+				"java.lang.String", "boolean"
 			};
 
-		_methodName77 = "readFirstFileContent";
+		_methodName77 = "getFile";
 
 		_methodParameterTypes77 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "boolean"
+				"java.lang.String", "boolean"
 			};
 
-		_methodName78 = "getFirstFileName";
+		_methodName78 = "readFileContent";
 
 		_methodParameterTypes78 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "boolean"
 			};
 
-		_methodName79 = "saveFileContent";
+		_methodName79 = "readFirstFileContent";
 
 		_methodParameterTypes79 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName80 = "getFirstFileName";
+
+		_methodParameterTypes80 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName81 = "saveFileContent";
+
+		_methodParameterTypes81 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "boolean"
 			};
 
-		_methodName80 = "saveInputFile";
+		_methodName82 = "saveInputFile";
 
-		_methodParameterTypes80 = new String[] {
+		_methodParameterTypes82 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName81 = "readDLAppEntry";
+		_methodName83 = "writeTextFile";
 
-		_methodParameterTypes81 = new String[] {
+		_methodParameterTypes83 = new String[] {
+				"java.lang.String", "java.nio.file.Path"
+			};
+
+		_methodName84 = "readDLAppEntry";
+
+		_methodParameterTypes84 = new String[] {
 				"javax.portlet.PortletResponse", "long"
 			};
 
-		_methodName82 = "writeToClient";
+		_methodName85 = "writeToClient";
 
-		_methodParameterTypes82 = new String[] {
+		_methodParameterTypes85 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject"
 			};
 
-		_methodName83 = "readOutLogFile";
+		_methodName86 = "readOutLogFile";
 
-		_methodParameterTypes83 = new String[] {
+		_methodParameterTypes86 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "long"
+			};
+
+		_methodName87 = "readTextFile";
+
+		_methodParameterTypes87 = new String[] { "java.nio.file.Path" };
+
+		_methodName88 = "getAbolutePath";
+
+		_methodParameterTypes88 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String", "boolean"
 			};
 	}
 
@@ -475,6 +505,15 @@ public class FileManagementLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
 			FileManagementLocalServiceUtil.download((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
+				((Long)arguments[2]).longValue());
+
+			return null;
+		}
+
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+			FileManagementLocalServiceUtil.download((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2],
 				(java.lang.String[])arguments[3],
 				((Boolean)arguments[4]).booleanValue());
@@ -482,29 +521,18 @@ public class FileManagementLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName73.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
-			FileManagementLocalServiceUtil.checkValidFile((javax.portlet.PortletRequest)arguments[0],
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+			FileManagementLocalServiceUtil.downloadFromText((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2],
-				((Boolean)arguments[3]).booleanValue());
-
-			return null;
-		}
-
-		if (_methodName74.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
-			FileManagementLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
-				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2],
-				((Boolean)arguments[3]).booleanValue());
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 
 			return null;
 		}
 
 		if (_methodName75.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
-			FileManagementLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
+			FileManagementLocalServiceUtil.checkValidFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2],
 				((Boolean)arguments[3]).booleanValue());
@@ -516,25 +544,25 @@ public class FileManagementLocalServiceClpInvoker {
 				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
 			FileManagementLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				((Boolean)arguments[4]).booleanValue());
+				(java.lang.String)arguments[2],
+				((Boolean)arguments[3]).booleanValue());
 
 			return null;
 		}
 
 		if (_methodName77.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
-			FileManagementLocalServiceUtil.readFirstFileContent((javax.portlet.PortletRequest)arguments[0],
+			FileManagementLocalServiceUtil.getFile((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				((Boolean)arguments[4]).booleanValue());
+				(java.lang.String)arguments[2],
+				((Boolean)arguments[3]).booleanValue());
 
 			return null;
 		}
 
 		if (_methodName78.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
-			FileManagementLocalServiceUtil.getFirstFileName((javax.portlet.PortletRequest)arguments[0],
+			FileManagementLocalServiceUtil.readFileContent((javax.portlet.PortletRequest)arguments[0],
 				(javax.portlet.PortletResponse)arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
 				((Boolean)arguments[4]).booleanValue());
@@ -544,6 +572,26 @@ public class FileManagementLocalServiceClpInvoker {
 
 		if (_methodName79.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
+			FileManagementLocalServiceUtil.readFirstFileContent((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				((Boolean)arguments[4]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName80.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
+			FileManagementLocalServiceUtil.getFirstFileName((javax.portlet.PortletRequest)arguments[0],
+				(javax.portlet.PortletResponse)arguments[1],
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
+				((Boolean)arguments[4]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName81.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
 			FileManagementLocalServiceUtil.saveFileContent((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Boolean)arguments[3]).booleanValue());
@@ -551,24 +599,32 @@ public class FileManagementLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName80.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
+		if (_methodName82.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
 			return FileManagementLocalServiceUtil.saveInputFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
 				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
 		}
 
-		if (_methodName81.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
+		if (_methodName83.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+			FileManagementLocalServiceUtil.writeTextFile((java.lang.String)arguments[0],
+				(java.nio.file.Path)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName84.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
 			FileManagementLocalServiceUtil.readDLAppEntry((javax.portlet.PortletResponse)arguments[0],
 				((Long)arguments[1]).longValue());
 
 			return null;
 		}
 
-		if (_methodName82.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
 			FileManagementLocalServiceUtil.writeToClient((javax.portlet.PortletResponse)arguments[0],
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.kernel.json.JSONObject)arguments[2]);
@@ -576,11 +632,23 @@ public class FileManagementLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName83.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+		if (_methodName86.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
 			return FileManagementLocalServiceUtil.readOutLogFile((javax.portlet.PortletRequest)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Long)arguments[3]).longValue());
+		}
+
+		if (_methodName87.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
+			return FileManagementLocalServiceUtil.readTextFile((java.nio.file.Path)arguments[0]);
+		}
+
+		if (_methodName88.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes88, parameterTypes)) {
+			return FileManagementLocalServiceUtil.getAbolutePath((javax.portlet.PortletRequest)arguments[0],
+				(java.lang.String)arguments[1],
+				((Boolean)arguments[2]).booleanValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -650,10 +718,10 @@ public class FileManagementLocalServiceClpInvoker {
 	private String[] _methodParameterTypes68;
 	private String _methodName69;
 	private String[] _methodParameterTypes69;
-	private String _methodName73;
-	private String[] _methodParameterTypes73;
-	private String _methodName74;
-	private String[] _methodParameterTypes74;
+	private String _methodName70;
+	private String[] _methodParameterTypes70;
+	private String _methodName71;
+	private String[] _methodParameterTypes71;
 	private String _methodName75;
 	private String[] _methodParameterTypes75;
 	private String _methodName76;
@@ -672,4 +740,14 @@ public class FileManagementLocalServiceClpInvoker {
 	private String[] _methodParameterTypes82;
 	private String _methodName83;
 	private String[] _methodParameterTypes83;
+	private String _methodName84;
+	private String[] _methodParameterTypes84;
+	private String _methodName85;
+	private String[] _methodParameterTypes85;
+	private String _methodName86;
+	private String[] _methodParameterTypes86;
+	private String _methodName87;
+	private String[] _methodParameterTypes87;
+	private String _methodName88;
+	private String[] _methodParameterTypes88;
 }

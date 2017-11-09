@@ -78,6 +78,7 @@ public class MyPageController {
 	10. 나의 프로젝트(myProject)
 	11. 사이트 가입/탈퇴(siteJoin)
 	12. 나의이력관리(myHistory)
+	13. 가스터빈 myFile(eturbMyFile)
  * 
  */
 	
@@ -93,14 +94,13 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 		powerAdmin = true;
 	}else{
 		if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.TEMP_USER)){
-			userViewPageTabStr = "favoriteApp,myFile,myClass";
+			userViewPageTabStr = "favoriteApp,myFile,myClass,eturbMyFile";
 		}else{
-			userViewPageTabStr = "favoriteApp,myScienceData,myCourse,myClass,myFile,myContent,myProject,siteJoin";
+			userViewPageTabStr = "favoriteApp,myScienceData,myCourse,myClass,myFile,myContent,myProject,siteJoin,myWorkspace";
 			
 			if(EdisonUserUtil.isDeveloperThan(user)){
 				userViewPageTabStr = StringUtil.add(userViewPageTabStr, "myApp",",");
 				userViewPageTabStr = StringUtil.add(userViewPageTabStr, "myDataType",",");
-				userViewPageTabStr = StringUtil.add(userViewPageTabStr, "myWorkspace",",");
 			}
 			
 			if(EdisonUserUtil.isTutorThan(user)){
@@ -208,6 +208,11 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 				tabName=LanguageUtil.get(locale,"edison-default-myHistory");
 				tabValue = "myHistory";
 			}
+			if(tab.contains("eturbMyFile")){
+				tabName=LanguageUtil.get(locale,"edison-myfile-title");
+				tabValue = "eturbMyFile";
+			}
+			
 			if(liClass.contains("select")){                 
 				tabString.append("<li class=\""+liClass+"\">"+tabName+ "&nbsp;&nbsp;&nbsp;&nbsp;<img src='/edison-default-2016-portlet/images/mypage/swarrow01.png' width='11' height='18'></li>");
 			}else{

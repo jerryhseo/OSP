@@ -381,6 +381,14 @@ public class FileManagementLocalServiceUtil {
 	}
 
 	public static void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService().download(portletRequest, portletResponse, dlFileEntryId);
+	}
+
+	public static void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String targetFolder, java.lang.String[] files,
 		boolean isJobResult)
@@ -390,6 +398,18 @@ public class FileManagementLocalServiceUtil {
 		getService()
 			.download(portletRequest, portletResponse, targetFolder, files,
 			isJobResult);
+	}
+
+	public static void downloadFromText(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String fileName, java.lang.String fileContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.downloadFromText(portletRequest, portletResponse, fileName,
+			fileContext);
 	}
 
 	public static void checkValidFile(
@@ -488,6 +508,11 @@ public class FileManagementLocalServiceUtil {
 			scienceAppVersion, simulationTime, jobNumber, fileName, content);
 	}
 
+	public static void writeTextFile(java.lang.String content,
+		java.nio.file.Path target) throws java.io.IOException {
+		getService().writeTextFile(content, target);
+	}
+
 	public static void readDLAppEntry(
 		javax.portlet.PortletResponse portletResponse, long dlEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -513,6 +538,19 @@ public class FileManagementLocalServiceUtil {
 		return getService()
 				   .readOutLogFile(portletRequest, simulationUuid, jobUuid,
 			lastPosition);
+	}
+
+	public static java.lang.String readTextFile(java.nio.file.Path path)
+		throws java.io.IOException {
+		return getService().readTextFile(path);
+	}
+
+	public static java.lang.String getAbolutePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String path,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getAbolutePath(portletRequest, path, isJobResult);
 	}
 
 	public static void clearService() {

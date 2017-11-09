@@ -55,6 +55,7 @@ import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HttpFileUtil;
 import org.kisti.edison.util.TokenProviderUtil;
 import org.kisti.edison.util.VCRegisterUtil;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -149,8 +150,6 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
   
   private void addClassAndCustomCondition(long classId, long customId, DynamicQuery query){
     if(classId > 0 && customId > 0){
-      System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! addtional query"
-          + classId + ", " + customId);
       query.add(RestrictionsFactoryUtil.eq("sim.classId", classId))
           .add(RestrictionsFactoryUtil.eq("sim.customId", customId));
     }
@@ -1390,6 +1389,76 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	 * ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	 */	
 	
+	/* eturb simulation monitoring */ 
+	public List<Simulation> findByUserIdAndGroupId(long groupId, long userId) throws SystemException{
+	    return findByUserIdAndGroupId(groupId, userId);
+	}
+	
+	public List<Simulation> findByGroupId(long groupId, int start, int end) throws SystemException{
+	    return getSimulationPersistence().findByGroupId(groupId, start, end);
+	}
+	
+    public List<Simulation> findByUserIdAndGroupId(long groupId, long userId, int start, int end)
+        throws SystemException{
+        return getSimulationPersistence().findByUserId_G(groupId, userId, start, end);
+	}
+	
+	public int countByUserIdAndGroupId(long groupId) throws SystemException{
+	    return getSimulationPersistence().countByGroupId(groupId);
+	}
+	
+	public int countByUserIdAndGroupId(long groupId, long userId) throws SystemException{
+	    return getSimulationPersistence().countByUserId_G(groupId, userId);
+	}
+	
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public List<Simulation> findByUserIdAndGroupIdAndTitle(
+        long groupId, long userId, String tittleKeyword, int start,int end) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(groupId, userId, tittleKeyword);
+        query.addOrder(OrderFactoryUtil.desc("sim.simulationCreateDt"));
+        List result = getSimulationLocalService().dynamicQuery(query, start, end);
+        return result == null ? null : (List<Simulation>)result;
+    }
+    
+    public long countByUserIdAndGroupIdAndTitle(
+        long groupId, long userId, String tittleKeyword) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(groupId, userId, tittleKeyword);
+        return getSimulationLocalService().dynamicQueryCount(query);
+    }
+    
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public List<Simulation> findByGroupIdAndTitle(
+        long groupId, String tittleKeyword, int start,int end) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(groupId, tittleKeyword);
+        query.addOrder(OrderFactoryUtil.desc("sim.simulationCreateDt"));
+        List result = getSimulationLocalService().dynamicQuery(query, start, end);
+        return result == null ? null : (List<Simulation>)result;
+    }
+    
+    public long countByGroupIdAndTitle(long groupId, String tittleKeyword) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(groupId, tittleKeyword);
+        return getSimulationLocalService().dynamicQueryCount(query);
+    }
+
+    private DynamicQuery makeSimulationsQueryWithTitle(long groupId, String tittleKeyword){
+        DynamicQuery query = DynamicQueryFactoryUtil.forClass(
+            Simulation.class, "sim", PortletClassLoaderUtil.getClassLoader());
+        query.add(PropertyFactoryUtil.forName("primaryKey.groupId").eq(groupId));
+        if(StringUtils.hasText(tittleKeyword)){
+            query.add(RestrictionsFactoryUtil.like("sim.simulationTitle", "%" + tittleKeyword + "%"));
+        }
+        return query;
+    }
+    
+    private DynamicQuery makeSimulationsQueryWithTitle(long groupId, long userId, String tittleKeyword){
+        return makeSimulationsQueryWithTitle(groupId, tittleKeyword)
+            .add(RestrictionsFactoryUtil.eq("sim.userId", userId));
+    }
+    /* eturb simulation monitoring **/
 	
 	/**
 	 *  Added By Jerry H. Seo

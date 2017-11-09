@@ -20,6 +20,7 @@
 	<%if(currentURL.indexOf("control_panel")>0){ %>
 		<ul aria-label="<%= LanguageUtil.get(pageContext, "breadcrumb") %>" class="breadcrumb">
 			<%= breadcrumbString %>
+			
 		</ul>
 	<%}else{ %>
 		<div class="subnaviwrap">
@@ -44,11 +45,13 @@
 				%>
 				<ul>
 					<%if(showBreadCrumbString){ %>
-						<li class="home">
-							<a href="<%=PortalUtil.getHomeURL(request)%>">
-								<i class="icon-home icon-large"></i>
-							</a>
-						</li>
+						<%if(GetterUtil.getBoolean(request.getAttribute("liferay-ui:breadcrumb:showParentGroups"))){ %>
+							<li class="home">
+								<a href="<%=PortalUtil.getHomeURL(request)%>">
+									<i class="icon-home icon-large"></i>
+								</a>
+							</li>
+						<% }%>
 						<%= breadcrumbString %>
 					<% }%>
 				</ul>

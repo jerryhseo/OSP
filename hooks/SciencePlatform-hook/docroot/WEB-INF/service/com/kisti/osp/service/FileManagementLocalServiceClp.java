@@ -196,24 +196,24 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 
 		_methodParameterTypes32 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String[][]", "boolean"
+				"long"
 			};
 
-		_methodName33 = "checkValidFile";
+		_methodName33 = "download";
 
 		_methodParameterTypes33 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "boolean"
+				"java.lang.String", "java.lang.String[][]", "boolean"
 			};
 
-		_methodName34 = "readFileContent";
+		_methodName34 = "downloadFromText";
 
 		_methodParameterTypes34 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "boolean"
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName35 = "getFile";
+		_methodName35 = "checkValidFile";
 
 		_methodParameterTypes35 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
@@ -224,56 +224,86 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 
 		_methodParameterTypes36 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "boolean"
+				"java.lang.String", "boolean"
 			};
 
-		_methodName37 = "readFirstFileContent";
+		_methodName37 = "getFile";
 
 		_methodParameterTypes37 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
-				"java.lang.String", "java.lang.String", "boolean"
+				"java.lang.String", "boolean"
 			};
 
-		_methodName38 = "getFirstFileName";
+		_methodName38 = "readFileContent";
 
 		_methodParameterTypes38 = new String[] {
 				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
 				"java.lang.String", "java.lang.String", "boolean"
 			};
 
-		_methodName39 = "saveFileContent";
+		_methodName39 = "readFirstFileContent";
 
 		_methodParameterTypes39 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName40 = "getFirstFileName";
+
+		_methodParameterTypes40 = new String[] {
+				"javax.portlet.PortletRequest", "javax.portlet.PortletResponse",
+				"java.lang.String", "java.lang.String", "boolean"
+			};
+
+		_methodName41 = "saveFileContent";
+
+		_methodParameterTypes41 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "boolean"
 			};
 
-		_methodName40 = "saveInputFile";
+		_methodName42 = "saveInputFile";
 
-		_methodParameterTypes40 = new String[] {
+		_methodParameterTypes42 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName41 = "readDLAppEntry";
+		_methodName43 = "writeTextFile";
 
-		_methodParameterTypes41 = new String[] {
+		_methodParameterTypes43 = new String[] {
+				"java.lang.String", "java.nio.file.Path"
+			};
+
+		_methodName44 = "readDLAppEntry";
+
+		_methodParameterTypes44 = new String[] {
 				"javax.portlet.PortletResponse", "long"
 			};
 
-		_methodName42 = "writeToClient";
+		_methodName45 = "writeToClient";
 
-		_methodParameterTypes42 = new String[] {
+		_methodParameterTypes45 = new String[] {
 				"javax.portlet.PortletResponse", "java.lang.String",
 				"com.liferay.portal.kernel.json.JSONObject"
 			};
 
-		_methodName43 = "readOutLogFile";
+		_methodName46 = "readOutLogFile";
 
-		_methodParameterTypes43 = new String[] {
+		_methodParameterTypes46 = new String[] {
 				"javax.portlet.PortletRequest", "java.lang.String",
 				"java.lang.String", "long"
+			};
+
+		_methodName47 = "readTextFile";
+
+		_methodParameterTypes47 = new String[] { "java.nio.file.Path" };
+
+		_methodName48 = "getAbolutePath";
+
+		_methodParameterTypes48 = new String[] {
+				"javax.portlet.PortletRequest", "java.lang.String", "boolean"
 			};
 	}
 
@@ -1337,6 +1367,48 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 
 	@Override
 	public void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName32,
+				_methodParameterTypes32,
+				new Object[] {
+					ClpSerializer.translateInput(portletRequest),
+					
+				ClpSerializer.translateInput(portletResponse),
+					
+				dlFileEntryId
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String targetFolder, java.lang.String[] files,
 		boolean isJobResult)
@@ -1344,8 +1416,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName32,
-				_methodParameterTypes32,
+			_invokableLocalService.invokeMethod(_methodName33,
+				_methodParameterTypes33,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1384,54 +1456,9 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 	}
 
 	@Override
-	public void checkValidFile(javax.portlet.PortletRequest portletRequest,
+	public void downloadFromText(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
-		java.lang.String filePath, boolean isJobResult)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		try {
-			_invokableLocalService.invokeMethod(_methodName33,
-				_methodParameterTypes33,
-				new Object[] {
-					ClpSerializer.translateInput(portletRequest),
-					
-				ClpSerializer.translateInput(portletResponse),
-					
-				ClpSerializer.translateInput(filePath),
-					
-				isJobResult
-				});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof java.io.IOException) {
-				throw (java.io.IOException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-	}
-
-	@Override
-	public void readFileContent(javax.portlet.PortletRequest portletRequest,
-		javax.portlet.PortletResponse portletResponse,
-		java.lang.String filePath, boolean isJobResult)
+		java.lang.String fileName, java.lang.String fileContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
@@ -1443,9 +1470,9 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 					
 				ClpSerializer.translateInput(portletResponse),
 					
-				ClpSerializer.translateInput(filePath),
+				ClpSerializer.translateInput(fileName),
 					
-				isJobResult
+				ClpSerializer.translateInput(fileContext)
 				});
 		}
 		catch (Throwable t) {
@@ -1474,7 +1501,7 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 	}
 
 	@Override
-	public void getFile(javax.portlet.PortletRequest portletRequest,
+	public void checkValidFile(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String filePath, boolean isJobResult)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1521,14 +1548,104 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 	@Override
 	public void readFileContent(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
-		java.lang.String contentType, java.lang.String filePath,
-		boolean isJobResult)
+		java.lang.String filePath, boolean isJobResult)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName36,
 				_methodParameterTypes36,
+				new Object[] {
+					ClpSerializer.translateInput(portletRequest),
+					
+				ClpSerializer.translateInput(portletResponse),
+					
+				ClpSerializer.translateInput(filePath),
+					
+				isJobResult
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void getFile(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String filePath, boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName37,
+				_methodParameterTypes37,
+				new Object[] {
+					ClpSerializer.translateInput(portletRequest),
+					
+				ClpSerializer.translateInput(portletResponse),
+					
+				ClpSerializer.translateInput(filePath),
+					
+				isJobResult
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void readFileContent(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String contentType, java.lang.String filePath,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName38,
+				_methodParameterTypes38,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1576,8 +1693,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName37,
-				_methodParameterTypes37,
+			_invokableLocalService.invokeMethod(_methodName39,
+				_methodParameterTypes39,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1624,8 +1741,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName38,
-				_methodParameterTypes38,
+			_invokableLocalService.invokeMethod(_methodName40,
+				_methodParameterTypes40,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1670,8 +1787,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName39,
-				_methodParameterTypes39,
+			_invokableLocalService.invokeMethod(_methodName41,
+				_methodParameterTypes41,
 				new Object[] {
 					ClpSerializer.translateInput(portletRequest),
 					
@@ -1719,8 +1836,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName40,
-					_methodParameterTypes40,
+			returnObj = _invokableLocalService.invokeMethod(_methodName42,
+					_methodParameterTypes42,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1765,13 +1882,42 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 	}
 
 	@Override
+	public void writeTextFile(java.lang.String content,
+		java.nio.file.Path target) throws java.io.IOException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName43,
+				_methodParameterTypes43,
+				new Object[] {
+					ClpSerializer.translateInput(content),
+					
+				ClpSerializer.translateInput(target)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public void readDLAppEntry(javax.portlet.PortletResponse portletResponse,
 		long dlEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName41,
-				_methodParameterTypes41,
+			_invokableLocalService.invokeMethod(_methodName44,
+				_methodParameterTypes44,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -1805,8 +1951,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 		com.liferay.portal.kernel.json.JSONObject data)
 		throws java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName42,
-				_methodParameterTypes42,
+			_invokableLocalService.invokeMethod(_methodName45,
+				_methodParameterTypes45,
 				new Object[] {
 					ClpSerializer.translateInput(portletResponse),
 					
@@ -1843,8 +1989,8 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName43,
-					_methodParameterTypes43,
+			returnObj = _invokableLocalService.invokeMethod(_methodName46,
+					_methodParameterTypes46,
 					new Object[] {
 						ClpSerializer.translateInput(portletRequest),
 						
@@ -1880,6 +2026,77 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 		}
 
 		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String readTextFile(java.nio.file.Path path)
+		throws java.io.IOException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName47,
+					_methodParameterTypes47,
+					new Object[] { ClpSerializer.translateInput(path) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String getAbolutePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String path,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName48,
+					_methodParameterTypes48,
+					new Object[] {
+						ClpSerializer.translateInput(portletRequest),
+						
+					ClpSerializer.translateInput(path),
+						
+					isJobResult
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -1969,4 +2186,14 @@ public class FileManagementLocalServiceClp implements FileManagementLocalService
 	private String[] _methodParameterTypes42;
 	private String _methodName43;
 	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
+	private String _methodName46;
+	private String[] _methodParameterTypes46;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
 }

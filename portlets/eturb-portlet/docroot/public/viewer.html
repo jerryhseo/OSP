@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CFD viewer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<link href="/eturb-portlet/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="/eturb-portlet/libs/bootstrap-slider/css/bootstrap-slider.min.css" rel="stylesheet">
+	    <link href="/eturb-portlet/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+	    <link href="/eturb-portlet/libs/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
+	    <link href="/eturb-portlet/libs/infinite-tree/infinite-tree.css" rel="stylesheet">
+        
+	    
+	    <link href="/eturb-portlet/css/viewer.css" rel="stylesheet">
+        <!-- link href="/css/bootstrap-treeview.min.css" rel="stylesheet">
+        <link href="/css/virtual-scroll.css" rel="stylesheet" -->
+	    
+	    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+	  
+		<style>
+			body {
+				font-family:Malgun Gothic;
+				font-size:13px;
+				
+				margin: 0px;
+				overflow:hidden;	
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+				color: #0080ff;
+			}
+
+			.navbar {
+			    min-height: 0px;
+			    margin-bottom: 4px;
+			}
+
+			.nav-justified>li {
+			    display: table-cell;
+			    width: 1%;
+			}
+			
+		</style>
+	</head>
+	
+	
+	
+	
+	<body>
+
+	
+	    <div class="container-fluid full-height">
+	        <div class="row full-height">
+	      		<div class="tool-bar">
+	
+	      			<div class="ctx-btn-group">
+	      				<a class="single-icon-btn active" id="SceneTreeButton" title="Scenetree">
+	      					<i class="fa fa-bars"></i>
+	      				</a>
+	  					<a class="single-icon-btn has-tooltip" id="ZoomInButton"  title="Zoom in"> 
+							<i class="fa fa-search-plus"></i> 
+								
+						</a> 
+						<a class="single-icon-btn has-tooltip" id="ZoomOutButton" title="Zoom out">
+							<i class="fa fa-search-minus"></i> 
+							
+						</a> 
+						<a class="single-icon-btn has-tooltip" id="RefreshButton" title="Reset view">
+							<i class="fa fa-refresh"></i> 
+						</a>
+						<a class="single-icon-btn has-tooltip" id="CrosshairButton" title="Set Camera Center from Selection&#10;Shortcut: 's'">
+							<i class="fa fa-crosshairs"></i> 
+						</a>
+					</div>
+										
+					<div class="ctx-btn-group" id="ViewModeListBox">
+						<div class="ctx-btn has-drop has-tooltip" title="Change view mode">
+							<span class="ctx-label">Orthogonal</span>
+							<i class="fa fa-angle-down"></i>
+							<ul class="drop" style="width: 140px;">
+								<li>
+									<a class="selected" class="" name="ORTHOGRAPHIC" id="OrthographicListBoxItem">Orthogonal</a>
+	
+								</li>
+								<li>
+									<a name="PERSPECTIVE" id="PerspectiveListBoxItem">Perspective</a>
+									
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="ctx-btn-group" id="OrientationDropdown">
+	
+						<div class="single-icon-btn has-drop has-tooltip" title="Change orientation view">
+							<i class="fa fa-arrows"></i> 
+							<i class="fa fa-angle-down"></i> 
+							<ul class="drop" style="width: 130px;">
+								<li>
+									<a class="" name="top" id="TopViewButton">Top view(+y)</a>
+								</li>
+								<li>
+									<a class="" name="bottom" id="BottomViewButton">Bottom view(-y)</a>
+								</li>
+								<li>
+									<a class="" name="left" id="LeftViewButton">Left view(-x)</a>
+								</li>
+								<li>
+									<a class="" name="right" id="RightViewButton">Right view(+x)</a>
+								</li>
+								
+								<li>
+									<a class="" name="front" id="FrontViewButton">Front view(+z)</a>
+								</li>
+								<li>
+									<a class="" name="back" id="BackViewButton">Back view(-z)</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+	
+					<div class="ctx-btn-group single-icon-toggle-group" id="RenderingMode" style="padding: 0 10px;">
+						<a class="single-icon-btn" has-tooltip id="RenderSurfaces" title="Surfaces">
+							<img src="/eturb-portlet/images/cube_surfaces.svg" width="16px"/>
+						</a>
+						<a class="single-icon-btn active" has-tooltip id="RenderSurfacesWithWireframes" title="Surfaces with wireframes">
+							<img src="/eturb-portlet/images/cube_surfaces_wireframes.svg" width="16px"/>
+						</a>
+						<a class="single-icon-btn" has-tooltip id="RenderWireframes" title="Wireframes">
+							<img src="/eturb-portlet/images/cube_wireframes.svg" width="16px"/>
+						</a>
+					</div>
+	
+					<div class="ctx-btn-group single-icon-toggle-group pick-mode-group">
+						<a class="single-icon-btn has-tooltip volumes-icon" id="PickVolumes" title="Pick Volumes">
+	
+							<svg enable-background="new 0 0 40.165 39.035" height="39.035px" id="Layer_1" version="1.1" viewBox="0 0 40.165 39.035" width="40.165px" x="0px" xml:space="preserve" y="0px"> 
+								<polyline fill="#EF3B24" id="volume" points="3.513,24.725 19.326,5.397 21.209,5.649 35.264,26.483 32.881,28.49 14.808,34.515 9.787,33.009 4.013,24.977"></polyline> 
+								<circle cx="4.015" cy="24.099" r="4.015"></circle> 
+								<circle cx="12.172" cy="35.018" r="4.018"></circle> 
+								<circle cx="36.146" cy="27.111" r="4.019"></circle> 
+								<circle cx="20.08" cy="4.017" r="4.018"></circle> 
+								<polygon points="11.752,36.239 3.521,24.443 4.51,23.754 12.217,34.8 35.949,26.542 36.344,27.68"></polygon> 
+								<polygon points="12.755,35.167 11.59,34.869 18.806,6.573 4.486,24.475 3.545,23.722 21.354,1.46"></polygon> 
+								<rect height="1.204" transform="matrix(0.5711 0.8209 -0.8209 0.5711 24.8332 -16.4019)" width="28.134" x="14.046" y="14.961"></rect> 
+							</svg>
+						</a>
+						<a class="single-icon-btn has-tooltip faces-icon active" id="PickSurfaces" title="Pick Surfaces">
+	
+							<svg enable-background="new 0 0 40.164 39.035" height="39.035px" id="Layer_1" version="1.1" viewBox="0 0 40.164 39.035" width="40.164px" x="0px" xml:space="preserve" y="0px"> 
+								<g> 
+									<circle cx="4.015" cy="24.099" r="4.015"></circle> 
+									<circle cx="36.146" cy="27.111" r="4.019"></circle> 
+									<polygon points="11.489,35.864 2.776,23.378 36.201,26.511 36.09,27.711 5.254,24.819 12.479,35.175"></polygon> 
+									<rect height="25.717" transform="matrix(0.7809 0.6246 -0.6246 0.7809 11.4192 -4.4451)" width="1.205" x="11.444" y="1.199"></rect> 
+									<polygon fill="#EF3B24" id="faces" points="19.955,5.021 11.983,35.77 35.828,26.476"></polygon> 
+									<circle cx="12.172" cy="35.018" r="4.018"></circle> 
+									<circle cx="20.079" cy="4.017" r="4.019"></circle> 
+									<polygon points="12.619,36.087 12.219,34.952 35.201,26.807 19.585,4.361 20.573,3.672 37.09,27.416"></polygon> 
+								</g> 
+								<rect height="30.685" transform="matrix(0.9692 0.2461 -0.2461 0.9692 5.1516 -3.4336)" width="1.208" x="15.707" y="3.548"></rect> 
+							</svg>
+						</a>
+	
+						<a class="single-icon-btn has-tooltip edges-icon" id="PickEdges" title="Pick Edges">
+	
+							<svg height="39.035" id="Layer_1" version="1.1" viewBox="0 0 40.165 39.035" width="40.165001" xml:space="preserve"> 
+								<path d="M 11.752,36.239 2.777,23.378 38.962,26.77 11.752,36.239 z M 5.254,24.819 12.217,34.8 33.331,27.452 5.254,24.819 z" id="path7663"></path> 
+								<path d="M 19.642463,4.2491349 12.160748,35.173593" id="path8637" style="fill:#000000;fill-rule:evenodd;stroke:#ef3b24;stroke-width:4.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"></path> 
+								<circle cx="12.172" cy="35.018002" id="circle7669" r="4.0180001" transform="translate(-0.01125271,0.15559158)"></circle> 
+								<circle cx="36.146" cy="27.111" id="circle7671" r="4.0190001" transform="translate(-0.70607651,-0.34219485)"></circle> 
+								<circle cx="20.08" cy="4.0170002" id="circle7673" r="4.0180001" transform="translate(-16.039718,19.68856)"></circle> 
+								<path d="M 3.2674836,23.89147 18.888428,3.5579365 35.439924,26.768805" id="path8633" style="fill:none;stroke:#000000;stroke-opacity:1"></path> 
+								<circle cx="4.0159998" cy="24.099001" id="circle7667" r="4.0159998" transform="translate(15.626463,-19.849866)"></circle> 
+							</svg>
+						</a>
+	
+						<a class="single-icon-btn has-tooltip nodes-icon" id="PickNodes" title="Pick Nodes">
+	
+							<svg height="40.917" id="Layer_1" version="1.1" viewBox="0 0 40.166 40.917" width="40.166" xml:space="preserve"> 
+								<circle cx="4.0159998" cy="25.981001" r="4.0159998"></circle> 
+								<circle cx="12.173" cy="36.900002" r="4.0190001"></circle> 
+								<circle cx="36.146999" cy="28.993999" r="4.0190001"></circle> 
+								<path d="M 11.752,38.122 2.777,25.261 38.963,28.653 11.752,38.122 z M 5.254,26.702 12.217,36.683 33.332,29.335 5.254,26.702 z"></path> 
+								<polygon points="11.59,36.752 18.807,8.456 4.486,26.358 3.545,25.605 21.354,3.343 12.756,37.049"></polygon> 
+								<rect height="1.204" transform="matrix(0.5711,0.8209,-0.8209,0.5711,26.3799,-15.5949)" width="28.132999" x="14.047" y="16.844"></rect> 
+								<g id="g8771" style="fill:#ef3b24;fill-opacity:1;stroke:none" transform="matrix(1.0546219,0,0,1.0546219,-0.99309364,0.10204464)"> 
+									<circle cx="20.268999" cy="5.711" id="node" r="5.7119999" style="fill:#ef3b24;fill-opacity:1;stroke:none"></circle> 
+								</g> 
+							</svg>
+						</a>
+	
+					</div>
+	
+					<div class="ctx-btn-group single-icon-toggle-group">
+						<a class="single-icon-btn has-tooltip" id="BoxSelectButton" title="Activate box selection&#10;Shortcut: 'b'">
+							<svg enable-background="new 0 0 60.855 60.708" fill="#535353" height="15px" id="Layer_1" version="1.1" viewBox="0 0 60.855 60.708" width="15px" x="0px" xml:space="preserve" y="0px"> 
+								<rect height="3.917" width="11.833" x="20.083"></rect> 
+								<rect height="3.917" width="11.833" x="20.083" y="36.083"></rect> 
+								<rect height="7.833" width="3.917" x="0.041" y="16.208"></rect> 
+								<rect height="7.833" width="3.916" x="48.041" y="16.208"></rect> 
+								<polygon points="48.041,0 40,0 40,3.917 48.041,3.917 48.041,8.125 51.957,8.125 51.957,3.917 51.957,0"></polygon> 
+								<polygon points="3.916,0 11.957,0 11.957,3.917 3.916,3.917 3.916,8.125 0,8.125 0,3.917 0,0"></polygon> 
+								<polygon points="4,40.125 12.041,40.125 12.041,36.207 4,36.207 4,32 0.083,32 0.083,36.207 0.083,40.125"></polygon> 
+								<polygon points="40.451,27.468 60.855,47.183 51.773,47.347 56.546,58.634 51.773,60.708 46.869,49.551 40.419,55.969"></polygon> 
+							</svg>
+						</a>
+						<a class="single-icon-btn" id="RulerSelectButton" title="Activate ruler selection&#10;Shortcut: 'r'">
+							<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px" x="0px" y="0px" viewBox="0 0 33 33" style="enable-background:new 0 0 33 33;" xml:space="preserve">
+								<g>
+									<path d="M10.577,32.998c-0.133,0-0.26-0.053-0.354-0.146L0.146,22.773c-0.195-0.195-0.195-0.512,0-0.707L22.07,0.143
+										c0.188-0.188,0.52-0.188,0.707,0l10.076,10.078c0.195,0.195,0.195,0.512,0,0.707L10.93,32.852
+										C10.836,32.945,10.709,32.998,10.577,32.998z M1.207,22.42l9.37,9.371l21.216-21.217l-9.369-9.371L1.207,22.42z"></path>
+									<g>
+										<path d="M21.144,7.207c-0.128,0-0.256-0.049-0.354-0.146l-2.467-2.467c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0
+											l2.467,2.467c0.195,0.195,0.195,0.512,0,0.707C21.4,7.158,21.272,7.207,21.144,7.207z"></path>
+										<path d="M19.119,12.396c-0.128,0-0.256-0.049-0.354-0.146l-4.049-4.049c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0
+											l4.049,4.049c0.195,0.195,0.195,0.512,0,0.707C19.375,12.348,19.247,12.396,19.119,12.396z"></path>
+										<path d="M13.928,14.424c-0.128,0-0.256-0.049-0.354-0.146l-2.467-2.467c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0
+											l2.467,2.467c0.195,0.195,0.195,0.512,0,0.707C14.184,14.375,14.056,14.424,13.928,14.424z"></path>
+										<path d="M11.901,19.615c-0.128,0-0.256-0.049-0.354-0.146L7.498,15.42c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0
+											l4.049,4.049c0.195,0.195,0.195,0.512,0,0.707C12.157,19.566,12.029,19.615,11.901,19.615z"></path>
+										<path d="M6.711,21.64c-0.128,0-0.256-0.049-0.354-0.146l-2.467-2.467c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0
+											l2.467,2.467c0.195,0.195,0.195,0.512,0,0.707C6.967,21.591,6.839,21.64,6.711,21.64z"></path>
+									</g>
+								</g>
+	
+							</svg>
+						</a>
+					</div>
+					
+					<div class="ctx-btn-group ctx-row">
+						<div id="SelectionDropdownMenu">
+							<div class="single-icon-btn has-drop has-tooltip" title="Change selection mode">
+								<i class="fa fa-mouse-pointer"></i>
+								<i class="fa fa-angle-down"></i>
+								<ul class="drop" style="width: 160px;">
+									<li>
+										<a class="" name="selectAll" id="SelectAllNavLink">Select all</a>
+									</li>
+									<li>
+										<a class="" name="clearSelection" id="ClearSelectionNavLink">Clear selection</a>
+									</li>
+									<li>
+										<a class="" name="invertSelection" id="InvertSelectionNavLink">Invert selection</a>
+									</li>
+									<!--<li>
+										<a class="" name="isolateSelection" id="IsolateSelectionNavLink">Isolate selection</a>
+									</li>-->
+									<li>
+										<a class="" name="hideSelection" id="HideSelectionNavLink">Hide selection</a>
+									</li>
+									<li>
+										<a class="" name="invertVisibility" id="InvertVisibilityNavLink">Invert visibility</a>
+									</li>
+									<li>
+										<a class="" name="showAll" id="UnhideAllNavLink">Show all</a>
+									</li>
+								</ul>	
+							</div>
+						</div>
+						<a class="single-icon-btn has-tooltip" name="hideSelection" id="HideSelectionButton" title="Hide Selection">
+							<i class="fa fa-eye-slash"></i>
+	
+	
+						</a>
+	
+						<a class="single-icon-btn has-tooltip" name="showAll" id="UnhideAllButton" title="Show All">
+							<i class="fa fa-eye"></i>
+	
+	
+						</a>
+	
+					</div>
+					
+					<!--  <div class="ctx-btn-group ctx-row">
+						<div class="ctx-btn open-modal" title="Create a new entity set from selection">
+							Create set
+						</div>
+						
+					</div>-->
+					<div class="modal" id="CreateSetModal" role="dialog" data-backdrop="static" data-keyboard="false">
+						<div class="modal-dialog">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Create set from selection</h4>
+								</div>
+								<div class="modal-body">
+									<div class="form-left-aligned form-horizontal singleInputDialog">
+										<fieldset>
+											<div class="form-group">
+												<label class="control-label col-sm-6">Name of new set</label>
+												<div class="col-sm-6 controls">
+													<input type="text" class="form-control" maxlength="100" id="textBox">
+												</div>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary btn-sm" id="submitButton">
+										<i class="fa fa-check"></i> Create
+									</button>
+									<button type="button" class="btn btn-default btn-sm" id="closeButton">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal" id="ErrorDialogBox" data-backdrop="false" data-keyboard="false" style="white-space: normal;"> 
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">×</button>
+									<h4 class="modal-title">Error</h4>
+								</div>
+								<div class="modal-body">
+									<b>Please select at least one topological entity of the geometry or mesh by picking them in the viewer.</b>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-sm btn-primary" id="closeButton">OK</button>
+									
+									
+										
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="treebar" class="nopadding">
+					<div role="tabpanel" id="scenetree" class="tab-pane active">
+						<div id="treeview">
+							<div id="treeview-content"></div>
+						</div>
+					</div>
+				</div>
+	
+				<div id="sidebar" class="nopadding" style="display: none;">
+					<ul id="edit-tabs" class="navbar nav-pills nav-justified" style="">
+	
+						<li role="presentation" data-tab="scene" style="display: none;">
+							<a href="#scene" aria-controls="scene" role="tab" data-toggle="pill"></a>
+						</li>
+						
+						<li role="presentation" data-tab="view" class="active">
+							<a href="#view" aria-controls="view" role="tab" data-toggle="pill"></a>
+						</li>
+	
+						<li role="presentation" data-tab="materials" style="display: none;">
+							<a href="#materials" aria-controls="materials" role="tab" data-toggle="pill"></a>
+						</li>
+	                    
+					</ul>
+					
+					
+					<!-- Tab panes -->
+					<div id="edit-props" class="tab-content">
+						<div role="tabpanel" class="tab-pane" id="scene">
+	
+							<div class="panel-group" id="accordion-scene" role="tablist" aria-multiselectable="true">
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="heading-scene-general">
+										<h6 class="panel-title" style="font-size: 12px !important;">
+											<a data-toggle="collapse" data-target="#collapse-scene-general" aria-expanded="true" aria-controls="collapse-scene-general"> Geometry </a>
+										</h6>
+									</div>
+									<div id="collapse-scene-general" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-scene-general">
+											
+										<div class="panel-body">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<span>Parameters</span>
+												</div>
+												
+												
+												<ul class="list-group">
+												  <li class="list-group-item active">Dimension: X</li>
+												  <li class="list-group-item">Dimension: Y</li>
+												  <li class="list-group-item">Dimension: Z</li>
+												</ul>												
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								
+								
+								
+								<!-- / general -->
+	
+	
+	
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-scene-background">
+										<h6 class="panel-title" style="font-size: 12px !important;">
+											<a data-toggle="collapse"
+												data-target="#collapse-scene-background" aria-expanded="true"
+												aria-controls="collapse-scene-background"> Mesh </a> 
+												<span class="pull-right"> 
+												<input id='background-check' type="checkbox" data-toggle="toggle" data-size="mini">
+											</span>
+										</h6>
+									</div>
+						
+														
+							        <div class="panel-body" style="color:black">
+							          <div class="col-sm-12 nopadding">              
+						              
+						              	<select class='form-control mesh-select'>
+		
+											<option label='Structured'>2d grid/2d Structured.p3d</option>
+						              		<option label='Unstructured'>airfoil/naca5012xyz.dat_high.msh</option>				
+											<option label='Hybrid'>airfoil/naca0012.msh</option>
+		
+		
+						              		<option>2d grid/2d Structured naca0012.p3d</option>
+						              		<option>3d grid/3d structured_small size.p3d</option>
+						              		<option>3d grid/3d structured_big size.p3d</option>
+						              		<option>3d grid/3d structured_big size.p3d.zip</option>
+						              		
+						              		<option>2d grid/n0012_113-33.p2dfmt</option>
+						              		<option>2d grid/n0012_225-65.p2dfmt</option>
+						              		<option>3d grid/n0012_113-33.p3dfmt</option>
+						              		<option>3d grid/n0012_225-65.p3dfmt</option>
+						              		
+															              		
+											<option>msh/test_block.msh</option>
+											<option>msh/engine_block.msh</option>
+											
+											<option>msh/test_block_bin.msh</option>
+											<option>msh/engine_block_bin.msh</option>
+											<option>msh/3d structured_small size.msh</option>
+											<option>msh/indheat.msh</option>
+											<option>msh/Turbine blade STP.msh</option>
+											<option>msh/box3dhole.msh</option>
+											<option>msh/test_hybrid.msh</option>
+											<option>msh/t6.msh</option>
+											<option>msh/t13.msh</option>
+						              	</select>             
+							          </div>
+							          <div>
+							          	<span id='mesh-progress'></span>
+							          </div>
+							          <div>
+							          	<span id='mesh-title'></span>
+							          </div>
+							          <div>
+							          	<span id='mesh-info'></span>
+							          </div>
+							        </div>
+							        
+								
+									
+									<div id="collapse-scene-background" role="tabpanel" aria-labelledby="heading-scene-background" class="panel-collapse collapse">
+								      <div class="panel-body">
+								        <div class="`">
+								          <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle form-control">Choose Background&nbsp;&nbsp;<span class="caret"></span></button>
+								
+								           <button type="button" class="btn btn-primary form-control fileUpload">
+								            <span>Upload</span>
+								            <input type="file" accept="image/x-png, image/jpeg" multiple="" class="imgUpload bg-upload upload file-input objmtl"/>
+								          </button>
+								          <ul style="width:100%" class="dropdown-menu"></ul>
+								        </div>
+								      </div>
+								    </div>
+								</div>
+								<!-- / fixed background -->
+							</div>
+						</div>
+						
+						<div role="tabpanel" class="tab-pane active" id="view">
+	
+	
+	
+							<div class="panel-group" id="accordion-view" role="tablist"
+								aria-multiselectable="true">
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-view-lights">	 
+										<button class="btn btn-primary form-control save" style="margin-bottom: 10px;">Save</button>
+										<h6 class="panel-title" style="font-size: 12px !important;">
+											<a data-toggle="collapse"
+												data-target="#collapse-view-general"
+												href="#collapse-view-lights" aria-expanded="true"
+												aria-controls="collapse-view-lights">DISPLAY</a>
+	                                           
+										</h6>
+									</div>
+									
+									
+									<div id="collapse-view-lights"
+										class="panel-collapse collapse in" role="tabpanel"
+										aria-labelledby="heading-view-lights">
+										<div class="panel-body">
+		
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<span>VISIBILITY</span>
+												</div>
+												<div class="panel-body">
+													<div class='col-sm-12 nopadding'>
+														<input class="visibility-enable" type="checkbox" data-type="points"/> Points
+													</div>
+													
+													<div class='col-sm-12 nopadding'>
+														<input class="visibility-enable" type="checkbox" data-type="lines"/> Lines
+													</div>
+													
+													<div class='col-sm-12 nopadding'>
+														<input class="visibility-enable" type="checkbox" data-type="surfaces"/> Surfaces
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+											
+												
+												
+	
+	
+									
+									
+									<div id="collapse-view-lights"
+										class="panel-collapse collapse in" role="tabpanel"
+										aria-labelledby="heading-view-lights">
+										<div class="panel-body">
+		
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<span>ClipPlane Distance</span>
+												</div>
+												<div class="panel-body">
+													<div class='col-sm-12 col-xs-12 nopadding'>
+														<div class='col-sm-3 col-xs-3 nopadding'>
+															<input class="clip-enable" type="checkbox" data-axis="x"/> X
+														</div>
+														<div class='col-sm-9 col-xs-9 nopadding'>
+															<input class='clip-slider' type="slider" data-axis='x' class='form-control slider-input'
+															data-slider-min="-1" data-slider-max="1"
+															data-slider-step="0.01" data-slider-value="0" 
+															/>
+														</div>
+													</div>
+													
+													<div class='col-sm-12 col-xs-12 nopadding'>
+														<div class='col-sm-3 col-xs-3 nopadding'>
+															<input class="clip-enable" type="checkbox" data-axis="y"/> Y
+														</div>
+														<div class='col-sm-9 col-xs-9 nopadding'>
+															<input class='clip-slider' type="slider" data-axis='y' class='form-control slider-input'
+															data-slider-min="-1" data-slider-max="1"
+															data-slider-step="0.01" data-slider-value="0" 
+															/>
+														</div>
+													</div>
+													
+													<div class='col-sm-12 col-xs-12 nopadding'>
+														<div class='col-sm-3 col-xs-3 nopadding'>
+															<input class="clip-enable" type="checkbox" data-axis="z"/> Z
+														</div>
+														<div class='col-sm-9 col-xs-9 nopadding'>
+															<input class='clip-slider' type="slider" data-axis='z' class='form-control slider-input'
+															data-slider-min="-1" data-slider-max="1"
+															data-slider-step="0.01" data-slider-value="0" 
+															/>
+														</div>
+													</div>
+												</div>
+											</div>
+														
+										</div>				
+									</div>				
+													
+									<div id="collapse-view-camera"
+										class="panel-collapse collapse in" role="tabpanel"
+										aria-labelledby="heading-view-camera">
+										<div class="panel-body">
+		
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<span>VIEW</span>
+												</div>
+												<div class="panel-body">
+													<div class='col-sm-12 nopadding'>
+														POSITION <input class="view-position" data-type="position" disabled/> 
+													</div>
+													
+													<div class='col-sm-12 nopadding'>
+														TARGET <input class="view-target" data-type="target" disabled/> 
+													</div>
+													
+												</div>
+											</div>
+										</div>
+									</div>
+	
+								</div>
+							</div>
+								
+								<!-- / general -->
+	
+	
+	
+	
+	
+	
+						</div> 
+						<div role="tabpanel" class="tab-pane " id="materials">
+	
+							<div class="panel-group" id="accordion-materials" role="tablist"
+								aria-multiselectable="true">
+								<div class="panel panel-default">
+									<div class="" role="tabpanel" aria-labelledby="">
+										<div class="panel-body">
+											<select id="model-mesh-select" class="form-control">
+	
+											</select>
+										</div>
+									</div>
+								</div>
+								<!-- / meshes -->
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-diffuse">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse"
+											data-target="#collapse-materials-diffuse" aria-expanded="true"
+											aria-controls="collapse-materials-diffuse"> DIFFUSE </span> 
+											<span class="pull-right"> 
+												<input id="diffuse-visible"	type="checkbox" data-path="visible" data-toggle="toggle" data-size="mini">
+											</span>
+										</span>
+									</div>
+									<div id="collapse-materials-diffuse"
+										class="panel-collapse collapse in" role="tabpanel"
+										aria-labelledby="heading-materials-diffuse">
+										<div class="panel-body vertical-align color-group">
+	
+											<div class='col-sm-3 nopadding'>
+												<input type='color' class='form-control nopadding multiply'
+													data-axis='rgb' data-path='color' data-texture='map' />
+											</div>
+	
+											<div class="col-sm-9 nopadding">
+												<input type="color-slider" class='form-control slider-input'
+													data-target="color" data-slider-min="0"
+													data-slider-max="100" data-slider-step="1">
+											</div>
+	
+										</div>
+	
+									</div>
+								</div>
+								<!-- / diffuse -->
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-specular">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse"
+											data-target="#collapse-materials-specular"
+											aria-expanded="true"
+											aria-controls="collapse-materials-specular"> SPECULAR </span>
+	
+										</span>
+									</div>
+									<div id="collapse-materials-specular"
+										class="panel-collapse collapse" role="tabpanel"
+										aria-labelledby="heading-materials-specular">
+										<div class="panel-body">
+	
+											<div class=' vertical-align color-group'>
+												<div class='col-sm-3 nopadding'>
+													<input type='color' class='form-control nopadding multiply'
+														data-axis='rgb' data-path='specular' data-texture='specularMap' />
+												</div>
+												<div class="col-sm-9 nopadding">
+													<input type="color-slider" class='form-control slider-input'
+														data-target="specular" data-slider-min="0"
+														data-slider-max="100" data-slider-step="1">
+												</div>
+											</div>
+	
+	
+											<div class='col-sm-12 nopadding  vertical-align'>
+												<div class='col-sm-3'>
+													<label>Shininess</label>
+												</div>
+												<div class="col-sm-9 nopadding">
+													<input type="slider" class='form-control slider-input' data-path="shininess" data-slider-min="0" data-slider-max="100" data-slider-step="1">
+												</div>
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								<!-- / specular -->
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-alphamap">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse" data-target="#collapse-materials-alphamap" aria-expanded="true" aria-controls="collapse-materials-alphamap"> TRANSPARENCY </span> 
+											<span class="pull-right"> 
+											<input id="transp-enable" type="checkbox" data-path="transparent" data-toggle="toggle" data-size="mini">
+										</span>
+										</span>
+									</div>
+									<div id="collapse-materials-alphamap" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-materials-alphamap">
+										<div class="panel-body">
+	
+											<div class='col-sm-12 nopadding'>
+	
+												<select class="form-control" data-path='blending'>
+													<option>NoBlending</option>
+													<option>NormalBlending</option>
+													<option>AdditiveBlending</option>
+													<option>SubtractiveBlending</option>
+													<option>MultiplyBlending</option>
+													<option>CustomBlending</option>
+												</select>
+	
+											</div>
+	
+											<div class='col-sm-12 nopadding vertical-align'>
+												<div class='col-sm-3 nopadding'>
+													<input type='color' class='form-control nopadding' data-path='alphaMap' data-texture="transparent" data-type='texture' />
+												</div>
+	
+												<div class="col-sm-9 nopadding">
+													<input type="slider" class='form-control slider-input'
+														data-path="opacity" data-slider-min="0" data-slider-max="1"
+														data-slider-step="0.01" data-slider-value='100'>
+												</div>
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								<!-- / alphamap -->
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-emissive">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse" data-target="#collapse-materials-emissive" aria-expanded="true" aria-controls="collapse-materials-emissive"> EMISSIVE </span>
+	
+											<!--  span class="pull-right">
+											 <input id="emissive-enable" type="checkbox" data-path="emissive" data-toggle="toggle" data-size="mini">
+											</span-->
+										</span>
+									</div>
+									<div id="collapse-materials-emissive"
+										class="panel-collapse collapse" role="tabpanel"
+										aria-labelledby="heading-materials-emissive">
+										<div class="panel-body vertical-align color-group">
+	
+											<div class='col-sm-3 nopadding'>
+												<input type='color' class='form-control nopadding multiply'
+													data-axis='rgb' data-path='emissive'
+													data-texture='emissiveMap' />												
+											</div>
+											
+											
+	
+											<div class="col-sm-9 nopadding">
+												<input type="color-slider" class='form-control slider-input'
+													data-target="emissive" data-slider-min="0"
+													data-slider-max="100" data-slider-step="1">
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								<!-- / emissive -->
+	
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-bump">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse" data-target="#collapse-materials-bump" aria-expanded="true" aria-controls="collapse-materials-bump"> NORMAL/BUMP MAP </span>
+										</span>
+									</div>
+									<div id="collapse-materials-bump" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-materials-bump">
+										
+											
+										<div class="panel-body">
+											<ul class='nav nav-pills nav-justified'>
+												<li class='active'><a data-toggle='pill' href='#normalMap'>Normal Map</a></li>
+												<li><a data-toggle='tab' href='#bumpMap'>Bump Map</a></li>
+											</ul>
+											<div class='tab-content'>
+												<div id='normalMap' class='tab-pane fade in active'>
+													<div class='col-sm-3 nopadding'>
+														<input type='color' class='form-control nopadding' data-path="normal" data-texture='normalMap' />
+													</div>
+	
+													<div class="col-sm-9 nopadding">
+														<input type="slider" class='form-control slider-input' data-path="normalScale" data-slider-min="0" data-slider-max="100" data-slider-step="1">
+													</div>
+													<div class="col-sm-12 nopadding">
+														<input type="checkbox" id="invertY">Invert Y
+													</div>
+												</div>
+												<div id='bumpMap' class='tab-pane fade'>
+														<div class='col-sm-3 nopadding'>
+															<input type='color' class='form-control nopadding' data-axis='rgb' data-path="bump" data-texture='bumpMap' />
+													</div>
+		
+													<div class="col-sm-9 nopadding">
+														<input type="slider" class='form-control slider-input' data-path="bumpScale" data-slider-min="0.001" data-slider-max="1" data-slider-step="0.001">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- / bump -->
+	
+	
+	
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-environment">
+										<span class="panel-title" style="font-size: 12px !important;">
+											<span data-toggle="collapse"
+											data-target="#collapse-materials-environment"
+											aria-expanded="true"
+											aria-controls="collapse-materials-environment">
+												ENVIRONMENT </span> <span class="pull-right"> <input
+												id="envmap-enable" type="checkbox" data-path='envMap'
+												data-toggle="toggle" data-size="mini">
+										</span>
+										</span>
+									</div>
+									<div id="collapse-materials-environment"
+										class="panel-collapse collapse" role="tabpanel"
+										aria-labelledby="heading-materials-environment">
+										<div class="panel-body">
+	
+											<ul class='nav nav-pills nav-justified'>
+												<li class='active'><a data-toggle='pill'
+													href='#reflection'>Reflection</a></li>
+												<li><a data-toggle='tab' href='#refraction'>Refraction</a></li>
+											</ul>
+	
+											<div class='tab-content'>
+												<div id='reflection' class='tab-pane fade in active'>
+													<div class='col-sm-12 nopadding'>
+														<input type="slider" class='form-control slider-input'
+															data-path="reflectivity" data-slider-min="0"
+															data-slider-max="1" data-slider-step="0.01">
+													</div>
+												</div>
+												<div id='refraction' class='tab-pane fade'>
+													<div class='col-sm-12 nopadding'>
+														<input type="slider" class='form-control slider-input'
+															data-path="refractionRatio" data-slider-min="0"
+															data-slider-max="1" data-slider-step="0.01">
+													</div>
+												</div>
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								<!-- / environment -->
+	
+	
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab"
+										id="heading-materials-faces">
+										<h6 class="panel-title" style="font-size: 12px !important;">
+											<label data-toggle="collapse"
+												data-target="#collapse-materials-faces" aria-expanded="true"
+												aria-controls="collapse-materials-faces"> FACES </label>
+										</h6>
+									</div>
+									<div id="collapse-materials-faces"
+										class="panel-collapse collapse" role="tabpanel"
+										aria-labelledby="heading-materials-faces">
+										<div class="panel-body">
+	
+											<div class='col-sm-12 nopadding'>
+	
+												<select class="form-control" data-path='side'>
+													<option>FrontSide</option>
+													<option>BackSide</option>
+													<option>DoubleSide</option>
+												</select>
+	
+											</div>
+	
+										</div>
+									</div>
+								</div>
+								<!-- / faces -->
+	
+	
+							</div>
+	
+							<form style="display: none" class="color-popover no-hide-color">
+							    <fieldset class="no-hide-color">
+							      <ul class="nav nav-pills nav-justified">
+							        <li class="active"><a data-toggle="pill" href="#color">Color</a></li>
+							        <li><a data-toggle="tab" href="#texture">Texture</a></li>
+							      </ul>
+							      <div class="tab-content">
+							        <div id="color" class="tab-pane fade in active">
+							          <input type="text" class="color-placer"/>
+							        </div>
+							        <div id="texture" class="tab-pane fade">
+							          <button type="button" data-toggle="modal" data-target="#manage-texture" class="form-control texture-manage btn btn-info">Manage Texture</button>
+							          <div class="dropdown">
+											<button class="btn btn-primary dropdown-toggle form-control" type="button" data-toggle="dropdown">
+												Choose Texture <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style='width: 100%'>
+											</ul>
+										</div>
+							          
+							        </div>
+							      </div>
+							    </fieldset>
+							
+							  </form>
+							  
+							  <form style="display: none" class="texture-popover no-hide-texture">
+							    <fieldset class="no-hide-texture">
+							      <ul class="nav nav-pills nav-justified">
+							        <li class="active"><a data-toggle="tab" href="#texture2">Texture</a></li>
+							      </ul>
+							      <div class="tab-content">
+							        
+							        <div id="texture2" class="tab-pane fade in active">
+							          <button type="button" data-toggle="modal" data-target="#manage-texture" class="form-control texture-manage btn btn-info">Manage Texture</button>
+							          <div class="dropdown">
+											<button class="btn btn-primary dropdown-toggle form-control" type="button" data-toggle="dropdown">
+												Choose Texture <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" style='width: 100%'>
+											</ul>
+										</div>
+							          
+							        </div>
+							      </div>
+							    </fieldset>
+							  </form>
+							<!-- Modal -->
+							
+							<div id="manage-texture" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+	
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">Manage Textures</h4>
+											<button type='button' class="fileUpload btn btn-info" id='upload-texture'>
+	
+												<span>Upload Textures</span> 
+												<input class="upload file-input objmtl" type="file" accept=".png;.jpg" multiple="">
+	
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Some text in the modal.</p>
+											<ul class='list-group'>
+	
+											</ul>
+											
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+			<div id="editarea" class="full-height" style="padding-left: 0px !important; padding-right: 0px !important; width:100%;" >
+	
+	
+				<div id="container" class="model-viewer viewer" style="height:100%; width: 100%;">
+					<div id="circle-bar" style="position: relative; display: none;"></div>
+					<div class="loading-container">
+				         <div class="main-progress">
+				         </div>
+				     </div>
+				     
+				     <div class="gui enabled">
+				     	<div class="hotspot-controls-responsive">
+				     		<div data-title="Previous Annotation" data-action="prev-annotation">
+				     			<div class="icon fa fa-caret-left"></div>
+				     		</div>
+				     		<div data-title="Next Annotation" data-action="next-annotation">
+				     			<div class="icon fa fa-caret-right"></div>
+				     		</div>
+				     	</div>
+				     	<div class="controls">
+							
+							<div class="spacer"></div>
+							<div class="general-controls widget">
+								<!-- a href="#" class="control tooltip1 help" data-title="Help"> 
+									<i class="fa fa-question"></i>
+								</a--> 
+								<a href="#" class="control tooltip1 settings has-menu" title="Settings" data-title="Settings"> 
+									<i class="fa fa-gear"></i>
+									<div class="control-menu settings-menu">
+										<div class="control-menu-wrapper">
+											<div class="control-menu-list">
+												<div class="setting" data-setting="shadingStyle" data-setting-group="" data-setting-type="">
+													<p class="setting-label">Rendering</p>
+													<p class="setting-value" data-value="defaultmat">Default</p>
+												</div>
+												<div class="setting" data-setting="annotationsVisible" data-setting-group="annotation" data-setting-type="" style="display: none;">
+													<p class="setting-label">Annotations</p>
+													<p class="setting-value" data-value="true">Visible</p>
+												</div>
+												<div class="setting" data-setting="viewpointsVisible" data-setting-group="viewpoint" data-setting-type="" style="display: none;">
+													<p class="setting-label">Viewpoints</p>
+													<p class="setting-value" data-value="true">Visible</p>
+												</div>
+												<div class="setting" data-setting="cycleMode" data-setting-group="animation" data-setting-type="" style="display: none;">
+													<p class="setting-label">Anim. Cycle</p>
+													<p class="setting-value" data-value="one">One</p>
+												</div>
+												<div class="setting" data-setting="speed" data-setting-group="animation" data-setting-type="" style="display: none;">
+													<p class="setting-label">Anim. Speed</p>
+													<p class="setting-value" data-value="1">x1</p>
+												</div>
+												<div class="setting" data-setting="viewerMode" data-setting-group="" data-setting-type="">
+													<p class="setting-label">Navigation</p>
+													<p class="setting-value" data-value="0">Orbit</p>
+												</div>
+	
+											</div>
+											<div class="control-menu-pane"></div>
+										</div>
+									</div> 
+	
+								</a> 
+								
+								<a id="fsBtn" class="control tooltip1 tooltip-right-bound fullscreen full-screen" data-title="Fullscreen"> 
+									<i class="fa fa-arrows-alt"></i>								
+								</a>
+							</div>
+						</div>
+						
+				     </div>
+				     	<div class="loadingInfoPanel">
+				     		<div class="infoPanel file-list">
+
+				     		</div>
+				     	</div>
+				     	<div class="normalInfo infoPanel normalInfoPanel">
+							<div class="normalInfoLabel">
+								<div class="normal-name"></div>
+								<div class="label-x">x<span class="normal-x"></span></div>
+								<div class="label-y">y<span class="normal-y"></span></div>
+								<div class="label-z">z<span class="normal-z"></span></div>
+
+							</div>
+						</div>
+						<div class="pickInfo infoPanel EntityNamePanel">
+							<div class="EntityNameLabel">&nbsp;</div>
+						</div>
+						<div class="distInfo infoPanel distPanel">
+							<div class="distLabel">&nbsp;</div>
+						</div>
+						<div id="rubber" style="border:1px solid blue; z-index: 100; pointer-events:none; display:none; "></div>			
+					<!--  end of model-viewer-->
+	
+				</div>
+			</div>
+	
+	    </div><!-- /.container -->
+	    
+        
+    	<script src="/eturb-portlet/js/engine.js"></script>
+
+		
+		<script src="/eturb-portlet/js/viewer.js"></script>
+
+		     	
+ 
+	</body>
+</html>

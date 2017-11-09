@@ -13,7 +13,7 @@
 	<div class="virtitlebox">
 		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 		<div class="virtitle">
-			<liferay-ui:message key="edison-workflow-science-app"/>			
+			<liferay-ui:message key="edison-simulation-project-science-app"/>
 		</div>
 	</div>
 	<div class="h10"></div>

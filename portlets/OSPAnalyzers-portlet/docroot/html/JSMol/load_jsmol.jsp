@@ -11,21 +11,27 @@
 
     <script>
 
+    var currentUrl;
     
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
+$(window).resize( function(e){
+    loadJSMolFile( currentUrl, $(window).width(), $(window).height() );
+});
+ 
 function loadJSMolFile( urlToLoad, width, height ){
         console.log( 'URL To Load: '+ urlToLoad );
         if( !urlToLoad )    return;
+        currentUrl = urlToLoad;
         
         var Info = {
                   color: '#000000',
-                  height: height,
-                  width: width,
+                  height: $(window).height()-45,
+                  width: $(window).width()-18,
                   //script: "load "+"/jsmol-portlet/temp/ospjm2548440710626419920.tmp",
                   //script: "load "+ fileInfos.tempFilePath.replace(/\\/g, '/'),
-                  script: 'load '+ urlToLoad,
+                  script: 'load '+ currentUrl,
                   //script: "load " + '/jsmol-portlet/js/jsmol/data/1crn.pdb',
                   use: 'HTML5',
                   j2sPath: '<%=request.getContextPath()%>/js/jsmol/j2s',

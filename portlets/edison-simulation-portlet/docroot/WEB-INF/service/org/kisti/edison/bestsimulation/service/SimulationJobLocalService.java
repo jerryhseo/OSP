@@ -492,6 +492,11 @@ public interface SimulationJobLocalService extends BaseLocalService,
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Added By Jerry H. Seo
 	*

@@ -68,7 +68,8 @@ Liferay.on(OSP.Event.OSP_HANDSHAKE, function(e){
 		var eventData = {
 			portletId: myId,
 			targetPortlet: <portlet:namespace/>connector,
-			data: events
+			portletType: OSP.Enumeration.PortType.DASHBOARD,
+			data: events,
 		};
 		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
 	}
@@ -91,16 +92,57 @@ Liferay.on(
 Liferay.on(OSP.Event.OSP_RESPONSE_PORT_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		var scienceApp = <portlet:namespace/>scienceApp;
+		console.log('OSP_RESPONSE_PORT_INFO: ['+e.portletId+', '+new Date()+']', e.data.scienceApp);
+		<portlet:namespace/>scienceApp = e.data.scienceApp;
 		
-		if( e.data.inputPorts )
-			scienceApp.inputPorts( e.data.inputPorts );
-		if( e.data.logPorts)
-			scienceApp.logPorts( e.data.logPorts );
-		if( e.data.outputPorts )
-			scienceApp.outputPorts( e.data.outputPorts );
-		//console.log( scienceApp );
-		<portlet:namespace/>displayPorts();
+		var inputPorts = <portlet:namespace/>scienceApp.inputPortsArray(); 
+		<portlet:namespace/>displayPorts(inputPorts, OSP.Enumeration.PortType.INPUT);
+
+		var logPorts = <portlet:namespace/>scienceApp.logPortsArray(); 
+		<portlet:namespace/>displayPorts(logPorts, OSP.Enumeration.PortType.LOG);
+
+		var outputPorts = <portlet:namespace/>scienceApp.outputPortsArray(); 
+		<portlet:namespace/>displayPorts( outputPorts, OSP.Enumeration.PortType.OUTPUT);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REFRESH_PORTS_STATUS, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		console.log('OSP_REFRESH_PORTS_STATUS: ['+e.portletId+', '+new Date()+']', e.data.scienceApp);
+		<portlet:namespace/>scienceApp = e.data.scienceApp;
+		
+		var inputPorts = <portlet:namespace/>scienceApp.inputPortsArray(); 
+		<portlet:namespace/>displayPorts(inputPorts, OSP.Enumeration.PortType.INPUT);
+
+		var logPorts = <portlet:namespace/>scienceApp.logPortsArray(); 
+		<portlet:namespace/>displayPorts(logPorts, OSP.Enumeration.PortType.LOG);
+
+		var outputPorts = <portlet:namespace/>scienceApp.outputPortsArray(); 
+		<portlet:namespace/>displayPorts( outputPorts, OSP.Enumeration.PortType.OUTPUT);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		console.log('OSP_PORT_STATUS_CHANGED: ['+e.portletId+', '+new Date()+']', e.data.status);
+		
+		var $item = $('#<portlet:namespace/>'+e.data.portName);
+		switch( e.data.status ){
+			case OSP.Enumeration.PortStatus.READY:
+				$item.removeClass( 'inputPortEmpty' );
+				// $item.addClass( css.selected );
+				break;
+			case OSP.Enumeration.PortStatus.LOG_VALID:
+			case OSP.Enumeration.PortStatus.OUTPUT_VALID:
+				$item.removeClass( 'portInvalid' );
+				break;
+			case OSP.Enumeration.PortStatus.LOG_INVALID:
+			case OSP.Enumeration.PortStatus.OUTPUT_INVALID:
+				$item.addClass( 'portInvalid' );
+				break;
+		}
 	}
 });
 
@@ -108,93 +150,95 @@ Liferay.on(OSP.Event.OSP_RESPONSE_PORT_INFO, function( e ){
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-function <portlet:namespace/>displayPort( header, list, ports, selectClass ){
-	header.addClass("has-sub");
-	header.addClass('active');
-	header.click(function(){
-		if(list.is(':visible')){
-			header.removeClass('active');
-			list.addClass('hide').slideUp('normal');
+function <portlet:namespace/>displayPorts( ports, portType ){
+	var $headerSection;
+	var $itemSection;
+	var css = {};
+	
+	switch( portType ){
+		case OSP.Enumeration.PortType.INPUT:
+			$headerSection = $('#<portlet:namespace/>inputPortSectionHeader');
+			$itemSection = $('#<portlet:namespace/>inputPortList');
+			css.selected = 'inputPortSelected';
+			css.empty = 'inputPortEmpty';
+			break;
+		case OSP.Enumeration.PortType.LOG:
+			$headerSection = $('#<portlet:namespace/>logPortSectionHeader');
+			$itemSection = $('#<portlet:namespace/>logPortList');
+			css.selected = 'logPortSelected';
+			css.invalid = 'portInvalid';
+			break;
+		case OSP.Enumeration.PortType.OUTPUT:
+			$headerSection = $('#<portlet:namespace/>outputPortSectionHeader');
+			$itemSection = $('#<portlet:namespace/>outputPortList');
+			css.selected = 'outputPortSelected';
+			css.invalid = 'portInvalid';
+		default:
+	}
+	
+	if( ports.length <=0 ){
+		$headerSection.css('display', 'none');
+		return;
+	}
+	
+	$headerSection.addClass('has-sub');
+	$headerSection.addClass('active');
+	$headerSection.click(function(){
+		if($itemSection.is(':visible')){
+			$headerSection.removeClass('active');
+			$itemSection.addClass('hide').slideUp('normal');
 		}
 		else{
-			header.addClass('active');
-			list.removeClass('hide').slideDown('normal');
+			$headerSection.addClass('active');
+			$itemSection.removeClass('hide').slideDown('normal');
 		}
 	});
 	
 	var i=0;
-	list.empty();
+	$itemSection.empty();
 	console.log( ports );
 	
 	for( var index in ports ){
-		var inputPort = ports[index];
-		console.log( 'Dashboard: ', inputPort );
+		var port = ports[index];
+		var portStatus = port.status();
+		
 		var $item;
-		if(i == 0){
-			$item = $('<li class="'+selectClass+'">'+inputPort.name()+'</li>');
+		if(i === 0){
+			$item = $('<li id="<portlet:namespace/>'+port.name()+'" class="'+css.selected+'">'+port.name()+'</li>');
 		}else{
-			$item = $('<li>'+inputPort.name()+'</li>');
+			$item = $('<li  id=<portlet:namespace/>"'+port.name()+'>'+port.name()+'</li>');
 		}
 		
 		$item.click(function(){
-			$(this).addClass(selectClass);
-			$(this).siblings().removeClass(selectClass);
+			$(this).addClass(css.selected);
+			$(this).siblings().removeClass(css.selected);
 			
 			var eventData = {
 					portletId: '<%=portletDisplay.getId()%>',
 					targetPortlet:<portlet:namespace/>connector,
-					portName: $(this).text()
+					portName: $(this).text(),
+					portType: portType
 			}
 			Liferay.fire( OSP.Event.OSP_PORT_SELECTED, eventData);
 		});
 		
-		list.append( $item );
+		switch( portType ){
+			case OSP.Enumeration.PortType.INPUT:
+				if( portStatus === OSP.Enumeration.PortStatus.EMPTY ){
+					$item.addClass( css.empty );
+				}
+				break;
+			case OSP.Enumeration.PortType.LOG:
+			case OSP.Enumeration.PortType.OUTPUT:
+				if( portStatus === OSP.Enumeration.PortStatus.INVALID ){
+					$item.addClass( css.invalid );
+				}
+				break;
+		}
+		
+		$itemSection.append( $item );
 		i++;
 	}
-}
-
-function <portlet:namespace/>displayPorts(){
-	var inputPorts = <portlet:namespace/>scienceApp.inputPortsArray(); 
-	if(inputPorts.length > 0){
-		<portlet:namespace/>displayPort( 
-				$('#<portlet:namespace/>inputPortSectionHeader'),
-				$('#<portlet:namespace/>inputPortList'),
-				inputPorts,
-				'inputPortSelected');
-		
-	}
-	else{
-		$('#<portlet:namespace/>inputPortSectionHeader').css('display', 'none');
-	}
-
-	var logPorts = <portlet:namespace/>scienceApp.logPortsArray(); 
-	if(logPorts.length > 0){
-		console.log( 'Log Ports: ', logPorts);
-		<portlet:namespace/>displayPort( 
-				$('#<portlet:namespace/>logPortSectionHeader'),
-				$('#<portlet:namespace/>logPortList'),
-				logPorts,
-				'logPortSelected');
-		
-	}
-	else{
-		$('#<portlet:namespace/>logPortSectionHeader').css('display', 'none');
-	}
-
-
-	var outputPorts = <portlet:namespace/>scienceApp.outputPortsArray(); 
-	if(outputPorts.length > 0){
-		<portlet:namespace/>displayPort( 
-				$('#<portlet:namespace/>outputPortSectionHeader'),
-				$('#<portlet:namespace/>outputPortList'),
-				outputPorts,
-				"outputPortSelected");
-		
-	}
-	else{
-		$('#<portlet:namespace/>outputPortSectionHeader').css('display', 'none');
-	}
-
 }
 
 //Add Simulation

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.eturb.dbservice" auto-namespace-tables="true">
+	<author>EDISON</author>
+	<namespace>ETURB</namespace>
+
+	<entity name="Project" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="projectId" type="long" primary="true"></column>
+		<column name="userId" type="long" primary="true"></column>
+		
+		<!-- Fields -->
+		<column name="name" type="String"></column>
+		<column name="projectStructure" type="String"></column>
+		<column name="analyzerStructure" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		
+		
+		<order by="desc">
+			<order-column name="projectId" order-by="desc"></order-column>
+			<order-column name="createDate" order-by="desc"></order-column>
+		</order>
+		<!-- Finders -->
+		<finder name="UserId" return-type="Collection" unique="false">
+			<finder-column name="userId"></finder-column>
+		</finder>
+		
+	</entity>
+	
+	<entity name="Simulation" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="projectId" type="long" primary="true"></column>
+		<column name="executeId" type="String" primary="true"></column>
+		
+		<!-- Fields -->
+		<column name="executeDataStructure" type="String"></column>
+		<column name="executeDate" type="Date"></column>
+		
+		<!-- Finders -->
+		<finder name="ProjectId" return-type="Collection" unique="false">
+			<finder-column name="projectId"></finder-column>
+		</finder>
+	</entity>
+</service-builder>

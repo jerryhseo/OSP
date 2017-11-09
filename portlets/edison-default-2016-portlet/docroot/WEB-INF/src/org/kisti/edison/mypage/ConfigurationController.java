@@ -53,7 +53,7 @@ public class ConfigurationController implements ConfigurationAction{
 
 		String tabArray[] = {
 			"favoriteApp", "myApp", "myDataType", "myHistory", "myScienceData", "myCourse",
-			"myClass", "myFile", "myWorkspace", "myContent", "myProject", "siteJoin" 
+			"myClass", "myFile", "myWorkspace", "myContent", "myProject", "siteJoin" ,"eturbMyFile"
 		};
 		renderRequest.setAttribute("tabArray", tabArray);
 

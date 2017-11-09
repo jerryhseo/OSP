@@ -637,6 +637,13 @@ public class SimulationJobLocalServiceWrapper
 			locale);
 	}
 
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationJobLocalService.getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
+	}
+
 	/**
 	* Added By Jerry H. Seo
 	*

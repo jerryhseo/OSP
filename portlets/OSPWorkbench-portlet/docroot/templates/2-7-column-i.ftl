@@ -81,7 +81,6 @@ $('#${namespace}outerLayout').layout({
 							},
 							center:{
 								onresize_end: function(){
-										console.log( 'pane resized: '+$(this).height());
 								}
 							}
 						}

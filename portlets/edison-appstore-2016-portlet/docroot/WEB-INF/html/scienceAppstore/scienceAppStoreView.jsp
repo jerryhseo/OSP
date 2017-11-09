@@ -340,13 +340,13 @@
 					<c:if test="${empty solver.current_manualId}">
 						<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 					</c:if>
-					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0}">
+					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${params.solverId}');"/>
 					</c:if>
-					<c:if test="${solver.appType eq 'Editor'}">
+					<c:if test="${solver.appType eq 'Editor' and isSignedIn}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor();"/>
 					</c:if>
-					<c:if test="${solver.appType eq 'Analyzer'}">
+					<c:if test="${solver.appType eq 'Analyzer' and isSignedIn}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer();"/>
 					</c:if>
 				</li>
@@ -399,13 +399,13 @@
 							<c:if test="${empty historyApp.current_manualId}">
 								<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 							</c:if>
-							<c:if test="${historyApp.appType eq 'Solver' and workBenchPlid ne 0}">
+							<c:if test="${historyApp.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${historyApp.scienceAppId}');"/>
 							</c:if>
-							<c:if test="${historyApp.appType eq 'Editor'}">							
+							<c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor('${historyApp.scienceAppId}', ${historyApp.exeFileNm});"/>
 							</c:if>
-							<c:if test="${historyApp.appType eq 'Analyzer'}">
+							<c:if test="${historyApp.appType eq 'Analyzer' and isSignedIn}">
 							${historyApp}
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer(('${historyApp.scienceAppId}');"/>
 							</c:if>

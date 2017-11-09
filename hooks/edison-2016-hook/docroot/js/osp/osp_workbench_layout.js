@@ -136,18 +136,20 @@
 
 					$.ajax({
 						url: portletURL.toString(),
-						dataType:'text',
 						type:'POST',
 						async: false,
+						dataType:'text',
 						success: function( renderResult ){
-							var $portletDiv = $('<div>').attr('id', P.getNamespace());
+							var $portletDiv = $('<div>');
+							$portletDiv.attr('id', P.getNamespace());
 							$portletDiv.css( 'height', 'inherit');
+							$portletDiv.css( 'overflow', 'overlay');
 							$portletDiv.html( renderResult );
 							$targetDiv.append( $portletDiv );
 							callback( connector, P.instanceId() );
 						},
 						error: function(){
-							console.log('AJAX loading failed');
+							console.log('AJAX loading failed', P);
 						}
 					});
 				}); 
@@ -343,9 +345,7 @@
 				targetPortlet.status( true );
 				
 				var $targetDiv = $('#'+C.getPortletSectionId(connector));
-				
 				targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
-				
 			};
 			
 			C.loadData = function( instanceId/* or portName*/, connector ){
@@ -354,7 +354,7 @@
 				return portlet.loadData( connector );
 			};
 
-			C.switchDisplayPortlet = function( targetPortlet/* or port name*/, connector, eventEnable, windowState, callback){
+			C.switchDisplayPortlet = function( targetPortlet, connector, eventEnable, windowState, callback){
 				var currentPortletId = C.currentPortlet();
 				if( !currentPortletId )	return false;
 				var currentPortlet = C.getPortlet( currentPortletId );
@@ -641,25 +641,14 @@
 					targetPortlet = column.getPortlet('_DOWNLOAD_');
 					column.currentPortlet( targetPortlet.instanceId() );
 				}
-				else
+				else{
 					targetPortlet = column.getPortlet(portletId);
-				
-				if( portName ){
-	                var portName = targetPortlet.portName();
-	                console.log( 'portName: '+portName);
-    				if( scienceApp.inputPort( portName ) ){
-    				    targetPortlet.portType('input');
-    				}
-    				else if( scienceApp.logPort( portName ) ){
-    				    targetPortlet.portType('log');
-    				}
-    				else if( scienceApp.outputPort( portName ) ){
-                        targetPortlet.portType('output');
-                    }
-    				else{
-    				    console.log(' Un-Known port type: '+ portName );
-    				    return false;
-    				}
+					var portName = targetPortlet.portName();
+					if( portName ){
+						var portType = scienceApp.getPortType( portName );
+
+						targetPortlet.portType( portType );
+					}
 				}
 				
 				column.loadPortlet( 
@@ -679,7 +668,7 @@
 			return portlet.loadData();
 		};
 		
-		Layout.switchDisplayColumnPortlet = function( scienceApp, toPortletId /* or port name */, connector, eventEnable, windowState, callback ){
+		Layout.switchDisplayColumnPortlet = function( portType, toPortletId /* or port name */, connector, eventEnable, windowState, callback ){
 			var column = Layout.getColumn(toPortletId);
 			if( !column ){
 				console.log('[ERROR]no column: '+toPortletId);
@@ -690,21 +679,7 @@
 			var targetPortlet = Layout.getPortlet(toPortletId);
             var portName = targetPortlet.portName();
             if( portName ){
-                if( scienceApp.inputPort( portName ) ){
-                    targetPortlet.portType('input');
-                }
-                else if( scienceApp.logPort( portName ) ){
-                    targetPortlet.portType('log');
-                }
-                else if( scienceApp.outputPort( portName ) ){
-                    targetPortlet.portType('output');
-                }
-                else if( portName === '_DOWNLOAD_' ){
-                    // Do nothing
-                }
-                else{
-                    console.log(' Un-Known port type: '+ portName );
-                }
+                targetPortlet.portType(portType);
             }
 
 			return column.switchDisplayPortlet(targetPortlet, connector, eventEnable, windowState, callback);
@@ -912,6 +887,26 @@
 						targetPortlet: 'BROADCAST'
 					}
 			);
+		};
+		
+		Workbench.simulationMonitorPortlet = function ( monitorId ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SIMULATION_MONITOR_PORTLET, arguments));
+		};
+		
+		Workbench.jobMonitorPortlet = function( monitorId ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_MONITOR_PORTLET, arguments));
+		};
+		
+		Workbench.dashboardPortlet = function( dashboardId ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.DASHBOARD_PORTLET, arguments));
+		};
+		
+		Workbench.jobStatusPortlet = function( jobStatusPortletId ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_STATUS_PORTLET, arguments));
+		};
+		
+		Workbench.scienceAppInfoPortlet = function( portletId ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SCIENCE_APP_INFO_PORTLET, arguments));
 		};
 		
 		Workbench.print = function( msg ){

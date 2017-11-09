@@ -4,11 +4,12 @@
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/image-viewer-portlet.css">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/iviewer-0.7.11/jquery.iviewer.css">
-
-<script src="<%=request.getContextPath() %>/js/iviewer-0.7.11/jquery.iviewer.min.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
+<portlet:renderURL var="renderURL">
+    <portlet:param name="jspPage" value="/html/ImageViewer/load_image.jsp"/>
+</portlet:renderURL>
+
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
@@ -21,7 +22,7 @@ boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="row-fluid image-viewer-portlet common-analyzer-portlet" >
+<div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
 	<div class="span12" style="height:inherit;">
 		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
 			<div class="dropdown-wrapper" >
@@ -36,8 +37,9 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 				</div>
 			</div>	
 		</div>
-		<div class="row-fluid canvasPanel" id="<portlet:namespace/>canvasPanel">
-			<div class ="span12 canvas" id="<portlet:namespace/>canvas" align="center"></div>
+		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
+			<iframe class ="span12 canvas" id="<portlet:namespace/>canvas" src="<%=renderURL.toString()%>">
+			</iframe>
 		</div>
 		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
 			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
@@ -172,6 +174,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet === myId ){
+			console.log('[ImageViewer]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
 			<portlet:namespace/>connector = e.portletId;
 			<portlet:namespace/>action = e.action;
 			var events = [
@@ -193,6 +196,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
+			console.log('[ImageViewer]OSP_EVENTS_REGISTERED: ['+e.portletId+', '+new Date()+']');
 		  var eventData = {
 	         portletId: myId,
 	         targetPortlet: <portlet:namespace/>connector
@@ -207,6 +211,7 @@ Liferay.on(
   function(e){
     var myId = '<%=portletDisplay.getId()%>';
 	if( e.targetPortlet === myId ){
+		console.log('[ImageViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 	  <portlet:namespace/>initData = new OSP.InputData( e.data );
 	  if( <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ){
 	      <portlet:namespace/>initData.parent(
@@ -222,7 +227,7 @@ Liferay.on(
 	OSP.Event.OSP_RESPONSE_DATA,
 	function( e ){
 		if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
-		    console.log('ImageViewer OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+			console.log('[ImageViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 			if( e.portletId === <portlet:namespace/>fileExplorerId ){
 				var inputData = new OSP.InputData( e.data );
 				
@@ -242,6 +247,7 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_REFRESH_OUTPUT_VIEW,
 		function(e){
+			console.log('[ImageViewer]OSP_REFRESH_OUTPUT_VIEW: ['+e.portletId+', '+new Date()+']');
 			var eventData = {
 					portletId: '<%=portletDisplay.getId()%>',
 					targetPortlet: <portlet:namespace/>connector
@@ -254,6 +260,7 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function(e){
+			console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
 		  $("#<portlet:namespace/>canvas").empty();
 		}
 );
@@ -290,15 +297,14 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('fileName', inputData.name());
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
-    
-        if($('#<portlet:namespace/>canvas').hasClass('iviewer_cursor')){
-            $('#<portlet:namespace/>canvas').iviewer('loadImage', serveResourceURL.toString());
-        }else{
-            $('#<portlet:namespace/>canvas').iviewer({
-                src: serveResourceURL.toString(), 
-                zoom: zooming, 
-                update_on_resize:true});
-        }
+
+       	$('#<portlet:namespace/>canvas').each(function(){
+           $(this).prop('contentWindow').loadImage(
+                                                   serveResourceURL.toString(), 
+                                                   $('#<portlet:namespace/>ground').width(), 
+                                                   $('#<portlet:namespace/>ground').height()-50,
+                                                   zooming);
+    	});
     });
 }
 

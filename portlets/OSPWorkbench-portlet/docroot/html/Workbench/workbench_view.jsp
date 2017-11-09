@@ -81,44 +81,46 @@
 		id="<portlet:namespace/>hiddenSection"
 		style="display: none;"
 	>
-		<div
-			id="<portlet:namespace/>fileExplorer"
-			title="Select a file"
-		>
-			<div id="<portlet:namespace/>confirmDialog">
-				<p id="<portlet:namespace/>confirmMessage">Simulation is not
-					saved. Would you like to save current simulation?</p>
-			</div>
-			<div id="<portlet:namespace/>confirmOverlapDialog">
-				<input
-					type="text"
-					id="<portlet:namespace/>uploadFileName"
-				/><br />
-				<p id="<portlet:namespace/>confirmMessage">File already exists.
-					Change file name or just click 'OK' button to overlap.</p>
-			</div>
-			<div id='<portlet:namespace/>newSimulationDialog'>
-				<input
-					type="text"
-					id="<portlet:namespace/>newSimulationTitle"
-					style="width: 95%;"
-				/>
-			</div>
-			<div id='<portlet:namespace/>getCoresDialog'>
-				<input
-					type="text"
-					id="<portlet:namespace/>numberOfCores"
-					style="width: 95%;"
-				/>
-			</div>
+		<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+            <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+            <div>
+                <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+            </div>
+        </div>
+		
+		<div id="<portlet:namespace/>confirmDialog">
+			<p>Simulation is not saved. Would you like to save current simulation?</p>
+		</div>
+		<div id="<portlet:namespace/>confirmOverlapDialog">
 			<input
-				type="file"
-				id="<portlet:namespace/>selectLocalFile"
-				name="<portlet:namespace/>uploadFile"
+				type="text"
+				id="<portlet:namespace/>uploadFileName"
+			/><br />
+			<p>File already exists.Change file name or just click 'OK' button to overlap.</p>
+		</div>
+		<div id='<portlet:namespace/>newSimulationDialog'>
+			<input
+				type="text"
+				id="<portlet:namespace/>newSimulationTitle"
+				style="width: 95%;"
 			/>
 		</div>
+		<div id='<portlet:namespace/>getCoresDialog'>
+			<input
+				type="text"
+				id="<portlet:namespace/>numberOfCores"
+				style="width: 95%;"
+			/>
+		</div>
+		<input
+			type="file"
+			id="<portlet:namespace/>selectLocalFile"
+			name="<portlet:namespace/>uploadFile"
+		/>
 	</div>
 </div>
+
 <script>
 /***********************************************************************
  * Global variables section
@@ -129,7 +131,16 @@ var <portlet:namespace/>workbench = new OSP.Workbench();
 
 var <portlet:namespace/>uploadProcess = {};
 var <portlet:namespace/>dialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPEditorsportlet_INSTANCE_workbench';
+var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPEditorsportlet'
+				+ '<portlet:namespace/>'.substring('<portlet:namespace/>'.indexOf('_INSTANCE_'));
+
+$('#<portlet:namespace/>fileExplorer').dialog({
+	autoOpen: false,
+	resizable: false,
+	height: 600,
+	width: 450,
+	modal: true
+});				
 
 /***********************************************************************
  * Initailization section and handling Liferay events
@@ -140,6 +151,7 @@ Liferay.on('portletReady', function( e ){
 		<portlet:namespace/>workbench.type ( '<%=workbenchType%>' );
 		<portlet:namespace/>workbench.classId( <%=classId%> );
 		<portlet:namespace/>workbench.customId( <%=customId%> );
+		<portlet:namespace/>workbench.jobStatusPortlet('_DOWNLOAD_');
 		
 		switch( <portlet:namespace/>workbench.type() ){
 			case OSP.Enumeration.WorkbenchType.SIMULATION_WITH_APP:
@@ -155,7 +167,6 @@ Liferay.on('portletReady', function( e ){
 					scienceApp.deserializeOutputPorts( JSON.parse('<%=outputPorts%>') );
 				
 				<portlet:namespace/>workbench.scienceApp(scienceApp);
-				//console.log('Workbench: ', <portlet:namespace/>workbench);
 				break;
 			case OSP.Enumeration.WorkbenchType.SIMULATION_RERUN:
 				var scienceApp = new OSP.ScienceApp();
@@ -189,7 +200,6 @@ Liferay.on('portletReady', function( e ){
 				<portlet:namespace/>columns: '<%=columns.toString()%>'
 			},
 			success: function( result ){
-				//console.log("serveResourceURL.toString() ",  result );
 				$('#<portlet:namespace/>canvas').html( result );
 				
 				<portlet:namespace/>workbench.loadPortlets( true, '<%=LiferayWindowState.EXCLUSIVE%>', <portlet:namespace/>handShakeCallback);
@@ -203,10 +213,6 @@ Liferay.on('portletReady', function( e ){
 
 function <portlet:namespace/>handShakeCallback( sourceId, targetId ){
     var portlet = <portlet:namespace/>workbench.getPortlet( targetId );
-    if( portlet.portType() ){
-        console.log('++++++++++++++++++++++++++++++++');
-        console.log( portlet );
-    }
     
 	var eventData = {
 			portletId: sourceId,
@@ -226,6 +232,23 @@ Liferay.on(
 		function( e ){
 			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 				console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']');
+				switch( e.portletType ){
+					case OSP.Enumeration.PortType.DASHBOARD:
+						<portlet:namespace/>workbench.dashboardPortlet( e.portletId );
+						break;
+					case OSP.Enumeration.PortType.SIMULATION_MONITOR:
+						<portlet:namespace/>workbench.simulationMonitorPortlet( e.portletId );
+						break;
+					case OSP.Enumeration.PortType.JOB_MONITOR:
+						<portlet:namespace/>workbench.jobMonitorPortlet( e.portletId );
+						break;
+					case OSP.Enumeration.PortType.JOB_STATUS:
+						<portlet:namespace/>workbench.jobStatusPorltet( e.portletId );
+						break;
+					case OSP.Enumeration.PortType.APP_INFO:
+						<portlet:namespace/>workbench.scienceAppInfoPortlet( e.portletId );
+						break;
+				}
 				
 				if( <portlet:namespace/>workbench.registerEvents( e.portletId, e.data ))
 					<portlet:namespace/>workbench.fire( OSP.Event.OSP_EVENTS_REGISTERED, e.portletId, e.data );
@@ -244,8 +267,6 @@ Liferay.on(
 				var port = scienceApp.getPort( portlet.portName() );
 				var dataType = port.dataType();
 				
-				console.log('Science App Port: ', port );
-
 				var sample = port.sample();
 				var dlEntryId = 0;
 				var command;
@@ -265,7 +286,6 @@ Liferay.on(
 							<portlet:namespace/>dataTypeVersion: dataType.version
 					};
 				}
-				//console.log( 'sample: ', sample);
 				$.ajax({
 					url: '<%=serveResourceURL.toString()%>',
 					type:'POST',
@@ -273,7 +293,6 @@ Liferay.on(
 					dataType: 'json',
 					data: data,
 					success:function(result){
-					    console.log( 'Read Sample Result', result);
 					    if( result.error ){
 					        alert( result.error );
 					        return;
@@ -292,9 +311,7 @@ Liferay.on(
 							case 'structuredData':
 								var ospDataType = new OSP.DataType();
 								ospDataType.deserializeStructure( JSON.parse(result.dataStructure) );
-								console.log( 'OSP Data Type: ', ospDataType.structure() );
 								if( result.fileContent ){
-								    console.log( '------result.fileContent ', result.fileContent );
 								    ospDataType.loadStructure( result.fileContent );
 								}
 								inputData.context( ospDataType.structure() );
@@ -355,7 +372,6 @@ Liferay.on(
 						<portlet:namespace/>dataTypeVersion: portDataType.version
 					},
 					success: function( result ){
-						console.log( 'Data Type Sample: ', result );
 						inputData.dlEntryId( result.dlEntryId );
 						<portlet:namespace/>setJobInputData( portlet.portName(), inputData );
 					},
@@ -368,28 +384,44 @@ Liferay.on(
 );
 
 Liferay.on(
+		OSP.Event.OSP_REQUEST_FILE_URL,
+		function( e ){
+			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+				console.log('OSP_REQUEST_FILE_URL: ['+e.portletId+', '+new Date()+']', e);
+				
+				var inputData;
+				if( e.data.action === OSP.Enumeration.Action.SELECT ){
+					<portlet:namespace/>openFileExplorer( e.data );
+
+					var eventData = {
+					                 portletId: <portlet:namespace/>workbench.id(),
+					                 tragetPortlet: e.portletId,
+					                 data: data
+					};
+					
+					Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+				}
+				else if( e.data.action === OSP.Enumeration.Action.DEFAULT ){
+					inputData = <portlet:namespace/>getFileURL( e.portletId );
+				}
+				
+				var eventData = {
+				                 portletId: <portlet:namespace/>workbench.id(),
+				                 targetPortlet: e.portletId,
+				                 data: OSP.Util.toJSON( inputData )
+				}
+				
+			}
+		}
+);
+
+Liferay.on(
 		OSP.Event.OSP_REQUEST_PORT_INFO,
 		function( e ){
 			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 				console.log('OSP_REQUEST_PORT_INFO: ['+e.portletId+', '+new Date()+']');
 				
-				var scienceApp = <portlet:namespace/>workbench.scienceApp();
-				
-				// set input ports' status
-				var inputPorts = scienceApp.inputPorts();
-				
-				for( var portName in inputPorts ){
-					var inputPort = inputPorts[portName];
-					inputPort.status( OSP.Enumeration.DataStatus.CLEAN );
-				}
-				
-				var data = {
-						inputPorts: inputPorts,
-						outputPorts: scienceApp.outputPorts(),
-						logPorts: scienceApp.logPorts()
-				};
-							
-				<portlet:namespace/>workbench.fire( OSP.Event.OSP_RESPONSE_PORT_INFO, e.portletId, data );
+				<portlet:namespace/>handleRequestPortInfo( e.portletId );
 			}
 		}
 );
@@ -442,22 +474,7 @@ Liferay.on(
 		function( e ){
 			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 				console.log('OSP_PORT_SELECTED: ['+e.portletId+', '+new Date()+']');
-				//console.log( 'Selected Port Name: '+e.portName);
-				var layout = <portlet:namespace/>workbench.layout();
-				var prevPortlet = layout.getVisualPortlet(e.portName);
-					
-				if( e.portName === prevPortlet.portName() ){
-					console.log(e.portName+' already visual. Do nothing.');
-				}
-				else{
-						layout.switchDisplayColumnPortlet( 
-						        <portlet:namespace/>workbench.scienceApp(),
-								e.portName, 
-								<portlet:namespace/>workbench.id(), 
-								true, 
-								'<%=LiferayWindowState.EXCLUSIVE%>', 
-								<portlet:namespace/>handShakeCallback );
-				}
+				<portlet:namespace/>handlePortSelected( e.portName );
 			}
 		}
 );
@@ -466,9 +483,8 @@ Liferay.on(
 		OSP.Event.OSP_RESPONSE_DATA,
 		function( e ){
 			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-				console.log('OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+				console.log('OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']', e);
 				var portName = e.data.portName;
-				//console.log( 'portName: '+portName );
 			}
 		}
 );
@@ -478,7 +494,7 @@ Liferay.on(
 		function( e ){
 			if( <portlet:namespace/>workbench.id() !== e.targetPortlet )
 				return;
-			console.log('OSP_DATA_CHANGED: ['+e.portletId+', '+new Date()+']');
+			console.log('OSP_DATA_CHANGED: ['+e.portletId+', '+new Date()+']', e.data);
 			
 			var portlet = <portlet:namespace/>workbench.getPortlet( e.portletId );
 			var portName = portlet.portName();
@@ -498,27 +514,31 @@ Liferay.on(
 			
 			var simulation = <portlet:namespace/>workbench.workingSimulation(); 
 			var job = simulation.workingJob();
-			//console.log('Data Changed WorkingJob: ', job);
+
 			if( !job ){
 				alert('No working job. At least one job should be selected...');
 				return;
 			}
 			
 			var data = new OSP.InputData( e.data );
-			var inputData = new OSP.InputData();
-			inputData.type( data.type() );
-			inputData.portName( port.name() );
-			inputData.order(port.order() );
-			inputData.parent( data.parent() );
-			inputData.name( data.name() );
-			inputData.uri( data.uri() );
-			inputData.id( data.id() );
-			inputData.relative( true );
-			inputData.dirty( true );
-			inputData.context( data.context() );
-			
-			job.inputData( portName, inputData );
-			console.log( 'OSP_DATA_CHANGED:', e.data);
+			data.portName( port.name() );
+			data.order(port.order() );
+			data.relative( true );
+			data.dirty( true );
+
+			if( job.isSubmit() ){
+				var eventData = {
+				                 portletId: <portlet:namespace/>workbench.id(),
+				                 targetPortlet: <portlet:namespace/>workbench.id(),
+				                 data: data
+				};
+				Liferay.fire( OSP.Event.OSP_CREATE_JOB, eventData );
+			}
+			else{
+				job.inputData( portName, data );
+				
+				<portlet:namespace/>firePortStatusChanged( portName, OSP.Enumeration.PortStatus.READY );
+			}
 		}
 );
 
@@ -664,19 +684,22 @@ Liferay.on(
 		function( e ){
 			if( <portlet:namespace/>workbench.id() !== e.targetPortlet )
 				return;
+			
 			console.log('OSP_CREATE_JOB: ['+e.portletId+', '+new Date()+']');
 			
 			var simulation = <portlet:namespace/>workbench.workingSimulation();
 			var scienceApp = <portlet:namespace/>workbench.scienceApp();
-			if( !simulation )	return;
-			if( !scienceApp )	return;
+			if( !simulation || !scienceApp){
+				console.log('[ERROR] Cannot create job: working simulation or science app is invalid.');
+				return;
+			}
 			
-			console.log(scienceApp);
 			var data = {
 					<portlet:namespace/>command: 'CREATE_JOB',
 					<portlet:namespace/>simulationUuid: simulation.uuid(),
 					<portlet:namespace/>scienceAppVersion: scienceApp.version(),
-					<portlet:namespace/>scienceAppName: scienceApp.name()
+					<portlet:namespace/>scienceAppName: scienceApp.name(),
+					<portlet:namespace/>initData: e.data ? e.data : '' 
 			};
 			
 			$.ajax({
@@ -686,22 +709,15 @@ Liferay.on(
 				data  : data,
 				dataType : 'json',
 				success: function(jsonJob ) {
-					//console.log( 'new Job: ', jsonJob );
-					var job = simulation.newJob(jsonJob);
-					simulation.addJob( job );
-					simulation.workingJob( job );
-					
 					var eventData = {
-							portletId: <portlet:namespace/>workbench.id(),
-							targetPortlet: 'BROADCAST',
-							data: {
-								simulationUuid: simulation.uuid(),
-								jobUuid: job.uuid()
-							}
-					};
-					
+										portletId: <portlet:namespace/>workbench.id(),
+										targetPortlet: 'BROADCAST',
+										data: {
+											simulationUuid: simulation.uuid(),
+											jobUuid: jsonJob.uuid_
+										}
+								};
 					Liferay.fire( OSP.Event.OSP_REFRESH_JOBS, eventData );
-					Liferay.fire( OSP.Event.OSP_INITIALIZE, {} );
 				},
 				error:function(data,e){
 					console.log(data);
@@ -730,8 +746,6 @@ Liferay.on(
 				else{
 					<portlet:namespace/>setNumberOfCores( job );
 				}
-				
-				
 			}
 		}
 );
@@ -744,8 +758,6 @@ Liferay.on(
 				console.log('OSP_JOB_SELECTED: ['+e.portletId+', '+new Date()+']');
 				var jobUuid = e.data.jobUuid;
 				<portlet:namespace/>handleJobSelected( jobUuid );
-				
-				console.log('************ workbench:', <portlet:namespace/>workbench);
 			}
 		}
 );
@@ -769,9 +781,11 @@ Liferay.on(
 				
 				var simulation = <portlet:namespace/>workbench.workingSimulation();
 				var layout = <portlet:namespace/>workbench.layout();
+				var scienceApp = <portlet:namespace/>workbench.scienceApp();
+				var jobStatusPort = <portlet:namespace/>workbench.jobStatusPortlet(); 
 				layout.switchDisplayColumnPortlet( 
-                        <portlet:namespace/>workbench.scienceApp(),
-						'_DOWNLOAD_', 
+                        OSP.Enumeration.PortType.OUTPUT,
+                        jobStatusPort, 
 						<portlet:namespace/>workbench.id(), 
 						true, 
 						'<%=LiferayWindowState.EXCLUSIVE%>', 
@@ -810,52 +824,54 @@ Liferay.on(
                     return;
                 }
 
-                <portlet:namespace/>noticeJobStatusChanged( workingJob.uuid() );
+                <portlet:namespace/>fireJobStatusChanged( workingJob.uuid() );
                 
                 var scienceApp = <portlet:namespace/>workbench.scienceApp();
                 var logPorts = scienceApp.logPorts();
                 var outputPorts = scienceApp.outputPorts();
 
-                switch( status ){
-                    case '1701011':
-                        for( var portName in outputPorts ){
-                            var port = outputPorts[portName];
-                            var layout = <portlet:namespace/>workbench.layout();
-                            var portlet = layout.getPortlet( portName );
+                var isLogValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.LOG, workingJob.status() );
+                var isOutputValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.OUTPUT, workingJob.status() );
+                if( isOutputValid ){
+                    for( var portName in outputPorts ){
+                        var port = outputPorts[portName];
+                        var layout = <portlet:namespace/>workbench.layout();
+                        var portlet = layout.getPortlet( portName );
 
-                            var inputData = new OSP.InputData( OSP.Util.toJSON(port.outputData()) );
-                            var parentPath = OSP.Util.mergePath( simulation.getJobOutputFolder(workingJob), inputData.parent() );
-            
-                            inputData.parent( parentPath );
-                            inputData.relative(true);
+                        var inputData = new OSP.InputData( OSP.Util.toJSON(port.outputData()) );
+                        var parentPath = OSP.Util.mergePath( simulation.getJobOutputFolder(workingJob), inputData.parent() );
+        
+                        inputData.parent( parentPath );
+                        inputData.relative(true);
 
-                            var eventData = {
-                                    portletId: <portlet:namespace/>workbench.id(),
-                                    targetPortlet: portlet.instanceId(),
-                                    data: OSP.Util.toJSON(inputData)
-                            };
+                        var eventData = {
+                                portletId: <portlet:namespace/>workbench.id(),
+                                targetPortlet: portlet.instanceId(),
+                                data: OSP.Util.toJSON(inputData)
+                        };
 
-                            Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
-                        }
-                    case '1701006':
-                    case '1701012':
-                        for( var portName in logPorts ){
-                            var port = logPorts[portName];
-                            var layout = <portlet:namespace/>workbench.layout();
-                            var portlet = layout.getPortlet( portName );
+                        Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 
-                            var eventData = {
-                                             portletId: <portlet:namespace/>workbench.id(),
-                                             targetPortlet: portlet.instanceId(),
-                                             data: OSP.Util.toJSON(port.outputData())
-                            };
+                        <portlet:namespace/>firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
+                    }
+                }
+                
+                if( isLogValid ){
+                    for( var portName in logPorts ){
+                        var port = logPorts[portName];
+                        var layout = <portlet:namespace/>workbench.layout();
+                        var portlet = layout.getPortlet( portName );
 
-                            Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
-                        }
-                        
-                        break;
-                    default:
-                        // Do nothing
+                        var eventData = {
+                                         portletId: <portlet:namespace/>workbench.id(),
+                                         targetPortlet: portlet.instanceId(),
+                                         data: OSP.Util.toJSON(port.outputData())
+                        };
+
+                        Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+
+                        <portlet:namespace/>firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
+                    }
                 }
             }
         }
@@ -884,12 +900,10 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_UPLOAD_FILE,
 		function( e ){
-			console.log('OSP_UPLOAD_FILE: ['+e.portletId+', '+new Date()+']');
 			if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 				console.log('OSP_UPLOAD_FILE: ['+e.portletId+', '+new Date()+']');
 				<portlet:namespace/>uploadProcess.portletId = e.portletId;
 				<portlet:namespace/>uploadProcess.targetFolder = e.data.targetFolder;
-				console.log( 'Upload Process: ', <portlet:namespace/>uploadProcess );
 				$('#<portlet:namespace/>selectLocalFile').click();
 			}
 		}
@@ -903,35 +917,374 @@ Liferay.on(
 				console.log('OSP_SAVEAS_FILE: ['+e.portletId+', '+new Date()+']');
 				
 				var inputData = new OSP.InputData( e.data );
-				console.log( 'Save Context: ', inputData );
 				var filePath = OSP.Util.mergePath( inputData.parent(), inputData.name() );
-				console.log( 'SaveAs filePath: '+filePath );
-				/*
-				$.ajax({
-					url: '<%=serveResourceURL.toString()%>',
-					type: 'POST',
-					dataType: 'json',
-					data: {
-						<portlet:namespace/>command: 'SAVE_AS',
-						<portlet:namespace/>filePath: filePath,
-						<portlet:namespace/>content: inputData.context()
-					},
-					success: function( result ){
-						alert('Saved');
-					},
-					error: function( data, e ){
-						
-					}
-				});
-				*/
 			}
 		}
 );
 
+$("#<portlet:namespace/>file-explorer-ok").click(function(e){
+	e.preventDefault();
+	var eventData = {
+			portletId : '<%=portletDisplay.getId()%>',
+			targetPortlet : <portlet:namespace/>fileExplorerId,
+			action: 'FILE_PATH'
+	};
+	
+	Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+});
+
+$("#<portlet:namespace/>file-explorer-cancel").click(function(e){
+	e.preventDefault();
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+});
 
 /***********************************************************************
- * Click events and binding functions 
+ * Click OSP event handling functions 
  ***********************************************************************/
+function <portlet:namespace/>handleRequestSimulationUuid( targetPortlet ){
+	setTimeout( 
+		function(){
+			simulation = <portlet:namespace/>workbench.workingSimulation();
+			if( !simulation ){
+				<portlet:namespace/>handleRequestSimulationUuid(targetPortlet);
+			}
+			else{
+				var eventData = {
+				    portletId: "<%=portletDisplay.getId()%>",
+				    targetPortlet: targetPortlet,
+				    data:{
+  						simulationUuid: simulation.uuid(),
+				    }
+				};
+				Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_UUID, eventData);
+			}
+		}, 
+		10
+	);
+}
+
+	function <portlet:namespace/>handleJobSelected(jobUuid ){
+		setTimeout(
+				function(){
+					var simulation = <portlet:namespace/>workbench.workingSimulation();
+					if( ! simulation )
+						<portlet:namespace/>handleJobSelected(jobUuid );
+					else{
+						var job = simulation.getJob( jobUuid );
+						var eventData = {
+								portletId: '<%=portletDisplay.getId()%>',
+								targetPortlet: 'BROADCAST',
+						};
+						
+						if( !job ){
+							$.ajax({
+								url : '<%=serveResourceURL.toString()%>',
+								type : 'POST',
+								dataType: 'json',
+								data : {
+									<portlet:namespace/>command: 'LOAD_JOB',
+									<portlet:namespace/>simulationUuid: simulation.uuid(),
+									<portlet:namespace/>jobUuid: jobUuid
+								},
+								success : function( jsonJob ) {
+									var job = simulation.newJob( jsonJob );
+									if( job.isSubmit() )
+										job.dirty( false );
+									simulation.addJob( job );
+									simulation.workingJob( job );
+									<portlet:namespace/>loadJobData( job );
+
+									eventData.data = {
+											simulationUuid: simulation.uuid(),
+											jobUuid: job.uuid()
+									};
+									Liferay.fire(OSP.Event.OSP_REFRESH_JOB_STATUS, eventData);
+									var dashboard = <portlet:namespace/>workbench.dashboardPortlet();
+									if( dashboard ){
+										<portlet:namespace/>fireRefreshPortsStatus(dashboard);
+									}
+								},
+								error: function( data, e ){
+									console.log(data);
+									console.log('AJAX ERROR-->'+e);
+								}
+							});
+						}
+						else{
+							simulation.workingJob( job );
+							
+							eventData.data = {
+									simulationUuid: simulation.uuid(),
+									jobUuid: job.uuid()
+							};
+							Liferay.fire(OSP.Event.OSP_REFRESH_JOB_STATUS, eventData);
+							<portlet:namespace/>loadJobData( job );
+							var dashboard = <portlet:namespace/>workbench.dashboardPortlet();
+							if( dashboard ){
+								<portlet:namespace/>fireRefreshPortsStatus(dashboard);
+							}
+							//Liferay.fire(OSP.Event.OSP_INITIALIZE, {});
+							
+						}
+					}
+				},
+				10
+		);
+	}
+
+	function <portlet:namespace/>handleRequestPath( targetPortlet ){
+		setTimeout(
+				function(){
+					var simulation = <portlet:namespace/>workbench.workingSimulation();
+					if( !simulation ){
+						<portlet:namespace/>handleRequestPath( targetPortlet );
+					}
+					else{
+						var workingJob = simulation.workingJob();
+						if( !workingJob ){
+							<portlet:namespace/>handleRequestPath( targetPortlet );
+						}
+						else{
+							var portlet = <portlet:namespace/>workbench.getPortlet( targetPortlet );
+							var scienceApp = <portlet:namespace/>workbench.scienceApp();
+							var inputPort = scienceApp.inputPort( portlet.portName() );
+							
+							var inputData = new OSP.InputData();
+							inputData.portName( inputPort.name() );
+							inputData.order( inputPort.order() );
+							inputData.type(OSP.Enumeration.PathType.FOLDER);
+							inputData.parent( '' );
+							inputData.name('');
+							inputData.relative(true);
+							
+							<portlet:namespace/>setJobInputData( portlet.portName(), inputData )
+							
+							<portlet:namespace/>workbench.fire( 
+									OSP.Event.OSP_LOAD_DATA, 
+									targetPortlet, 
+									OSP.Util.toJSON(inputData) );
+						}
+					}
+				},
+				10
+		);
+	}
+
+	function <portlet:namespace/>handleRequestOutputPath( targetPortlet ){
+		setTimeout(
+				function(){
+					var simulation = <portlet:namespace/>workbench.workingSimulation();
+					if( !simulation ){
+						<portlet:namespace/>handleRequestOutputPath( targetPortlet );
+					}
+					else{
+						var workingJob = simulation.workingJob();
+						if( !workingJob ){
+							<portlet:namespace/>handleRequestOutputPath( targetPortlet );
+						}
+						else{
+						    var isOutputValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.OUTPUT, workingJob.status());
+						    if( !isOutputValid ){
+						    	return;
+						    }
+						    
+							var portlet = <portlet:namespace/>workbench.getPortlet( targetPortlet );
+							var scienceApp = <portlet:namespace/>workbench.scienceApp();
+							var outputPorts = scienceApp.outputPorts();
+							if( !outputPorts ){
+								// To do: display Download portlet
+								return;
+							}
+
+							var outputPort = scienceApp.getPort( portlet.portName() );
+							var portData = outputPort.outputData();	
+
+							var parentPath =OSP.Util.mergePath( simulation.getJobOutputFolder(workingJob), portData.parent() );
+							
+							var inputData = new OSP.InputData();
+							inputData.type(portData.type());
+							inputData.parent( parentPath );
+							inputData.name(portData.name());
+							inputData.relative(true);
+							
+							<portlet:namespace/>workbench.fire( 
+									OSP.Event.OSP_LOAD_DATA, 
+									targetPortlet, 
+									OSP.Util.toJSON(inputData) );
+						}
+					}
+				},
+				10
+		);
+	}
+
+	function <portlet:namespace/>handleRequestJobUuid( targetPortlet ){
+		setTimeout(
+				function(){
+					var simulation = <portlet:namespace/>workbench.workingSimulation();
+					if( !simulation ){
+						<portlet:namespace/>handleRequestJobUuid( targetPortlet );
+					}
+					else{
+						var workingJob = simulation.workingJob();
+						if( !workingJob ){
+							<portlet:namespace/>handleRequestJobUuid( targetPortlet );
+						}
+						else{
+							var eventData = {
+									portletId: '<%=portletDisplay.getId()%>',
+									targetPortlet: targetPortlet,
+									data:{
+										simulationUuid: simulation.uuid(),
+										jobUuid: workingJob.uuid()
+									}
+							};
+							
+							Liferay.fire( OSP.Event.OSP_RESPONSE_JOB_UUID, eventData );
+						}
+					}
+				},
+				10
+		);
+	}
+
+	function <portlet:namespace/>handleRequestPortInfo( targetPortletId ){
+		setTimeout(
+			function(){
+				var simulation = <portlet:namespace/>workbench.workingSimulation();
+				if( !simulation ){
+					<portlet:namespace/>handleRequestPortInfo( targetPortletId );
+				}
+				else{
+					var job = simulation.workingJob();
+					if( !job ){
+						<portlet:namespace/>handleRequestPortInfo( targetPortletId );
+					}
+					else{
+						<portlet:namespace/>evaluatePortsStatus();
+						
+						var eventData = {
+						                 portletId: <portlet:namespace/>workbench.id(),
+						                 targetPortlet: targetPortletId,
+						                 data: {
+						                	scienceApp: <portlet:namespace/>workbench.scienceApp() 
+						                 }
+						};
+						Liferay.fire( OSP.Event.OSP_RESPONSE_PORT_INFO, eventData );
+					}
+				}
+			}, 
+			10
+		);
+	}
+
+	function <portlet:namespace/>handlePortSelected( portName ){
+		console.log( 'handlePortSelected(): '+portName);
+		setTimeout(
+					function(){
+						var simulation = <portlet:namespace/>workbench.workingSimulation();
+						if( !simulation ){
+							<portlet:namespace/>handlePortSelected( portName );
+						}
+						else{
+							var job = simulation.workingJob();
+							if( !job ){
+								<portlet:namespace/>handlePortSelected( portName );
+							}
+							else{
+								var layout = <portlet:namespace/>workbench.layout();
+								var scienceApp = <portlet:namespace/>workbench.scienceApp();
+								var isInputPort = scienceApp.inputPort( portName ) ? true : false;
+								var isLogPort = scienceApp.logPort( portName ) ? true : false;
+							
+								if( isInputPort){
+									<portlet:namespace/>switchPortletByPortName( portName, layout, scienceApp );
+								}
+								else if( isLogPort ){
+									var isLogValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.LOG, job.status() );
+									if( isLogValid ){
+										<portlet:namespace/>switchPortletByPortName( portName, layout, scienceApp );
+									}
+									else {
+										<portlet:namespace/>fireShowJobStatus( simulation.uuid(), job.uuid() );
+									}
+								}
+								else{
+									var isOutputValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.OUTPUT, job.status() );
+									if( isOutputValid ){
+										<portlet:namespace/>switchPortletByPortName( portName, layout, scienceApp );
+									}
+									else {
+										<portlet:namespace/>fireShowJobStatus( simulation.uuid(), job.uuid() );
+									}
+								}
+							}
+						}
+					},
+		           10
+		);
+	}
+	
+/***********************************************************************
+ * Firing OSP Events
+ ***********************************************************************/
+	function <portlet:namespace/>fireShowJobStatus( simulationUuid, jobUuid ){
+		var eventData = {
+		                 portletId: <portlet:namespace/>workbench.id(),
+		                 targetPortlet: <portlet:namespace/>workbench.id(),
+		                 data: {
+		                	simulationUuid: simulationUuid,
+		                	jobUuid: jobUuid
+		                 }
+		};
+		
+		Liferay.fire( OSP.Event.OSP_SHOW_JOB_STATUS, eventData );
+	}
+
+	function <portlet:namespace/>firePortStatusChanged( portName, status ){
+		var eventData = {
+		                 portletId: <portlet:namespace/>workbench.id(),
+		                 targetPortlet: <portlet:namespace/>workbench.dashboardPortlet(),
+		                 data: {
+		                	 portName: portName,
+		                	 status: status
+		                 }
+		};
+		
+		Liferay.fire( OSP.Event.OSP_PORT_STATUS_CHANGED, eventData );
+	}
+
+	function <portlet:namespace/>fireRefreshPortsStatus( targetPortlet ){
+		<portlet:namespace/>evaluatePortsStatus();
+		
+		var eventData = {
+		                 portletId: <portlet:namespace/>workbench.id(),
+		                 targetPortlet: targetPortlet,
+		                 data: {
+		                	scienceApp: <portlet:namespace/>workbench.scienceApp() 
+		                 }
+		};
+		Liferay.fire( OSP.Event.OSP_REFRESH_PORTS_STATUS, eventData );
+	}
+
+	function <portlet:namespace/>fireJobStatusChanged( jobUuid ){
+	    var layout = <portlet:namespace/>workbench.layout();
+	    var simulation = <portlet:namespace/>workbench.workingSimulation();
+	    var data = {
+	                simulationUuid: simulation.uuid(),
+	                jobUuid: jobUuid
+	    };
+	    
+	    var statusPortlet = layout.getPortlet( <portlet:namespace/>workbench.jobStatusPortlet() );
+	    var eventData = {
+	                     portletId: <portlet:namespace/>workbench.id(),
+	                     targetPortlet: statusPortlet.instanceId(),
+	                     data: data
+	    };
+	    Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
+	}
+
 
 
 /***********************************************************************
@@ -1028,7 +1381,6 @@ function <portlet:namespace/>loadSimulation( simulationUuid ){
 		data  : data,
 		dataType : 'json',
 		success: function(jsonSimulation) {
-			//console.log( 'Loaded Simulation: ', jsonSimulation );
 			var simulation = new OSP.Simulation( jsonSimulation );
 			var scienceApp = <portlet:namespace/>workbench.scienceApp();
 			simulation.runType( scienceApp.runType() );
@@ -1090,7 +1442,6 @@ function <portlet:namespace/>deleteSimulation( simulation, targetPortlet ){
 		data  : data,
 		dataType : 'json',
 		success: function(result ) {
-			console.log( 'deleteSimulation: ', result );
 			var simulationUuid = result.simulationUuid;
 			
 			<portlet:namespace/>workbench.removeSimulation( simulationUuid );
@@ -1125,7 +1476,6 @@ function <portlet:namespace/>submitJob( job ){
 		dataType: 'text',
 		data : ajaxData,
 		success : function(status){
-			console.log( 'submitSuccess: ', status);
 			job.status( status );
 			job.dirty(false);
 			job.isSubmit( true );
@@ -1151,8 +1501,6 @@ function <portlet:namespace/>submitJob( job ){
 function <portlet:namespace/>submitSimulation( simulation ){
 	var scienceApp = <portlet:namespace/>workbench.scienceApp();
 	var simulationCreateTime = simulation.createTime();
-	console.log( 'Simulation create Time: ', simulationCreateTime );
-	//console.log('Dirty Jobs: ', dirtyJobs);
 	
 	var jobsToSubmit = [];
 	var dirtyJobs = simulation.getDirtyJobs();
@@ -1163,7 +1511,6 @@ function <portlet:namespace/>submitSimulation( simulation ){
 		console.log( 'inputPortNames: ', inputPortNames );
 		
 		var proliferatedJobs = job.proliferate( inputPortNames );
-		//console.log( 'proliferated Jobs: ', proliferatedJobs );
 		for( var jobIndex in proliferatedJobs ){
 			var proliferatedJob = proliferatedJobs[jobIndex];
 			
@@ -1172,8 +1519,6 @@ function <portlet:namespace/>submitSimulation( simulation ){
 			}
 			jobsToSubmit.push( proliferatedJob );
 		}
-		//jobsToSumbit = jobsToSubmit.concat( proliferatedJobs );
-		//console.log( 'Jobs To Submit: ', jobsToSubmit);
 	}
 	
 	console.log( 'Jobs To Submit: ', jobsToSubmit);
@@ -1194,9 +1539,6 @@ function <portlet:namespace/>submitSimulation( simulation ){
 		success: function( submittedJobs ){
 			for( var index in submittedJobs ){
 				var jobUuids = submittedJobs[index];
-	            console.log( 'jobUuids ****************');
-	            console.log( jobUuids );
-	            console.log( '**************** jobUuids');
 				var job = simulation.getJob( jobUuids.tempUuid );
 				if( !job )  continue;
 				
@@ -1229,65 +1571,96 @@ function <portlet:namespace/>loadJobData( job ){
     var outputPorts = scienceApp.outputPorts();
     var logPorts = scienceApp.logPorts();
 
-    <portlet:namespace/>resetInputPortlets( job, inputPorts);
-    <portlet:namespace/>resetLogOutputPortlets(job, logPorts, outputPorts );
+    <portlet:namespace/>resetPortlets( job, inputPorts, OSP.Enumeration.PortType.INPUT );
+    <portlet:namespace/>resetPortlets(job, logPorts, OSP.Enumeration.PortType.LOG );
+    <portlet:namespace/>resetPortlets(job, outputPorts, OSP.Enumeration.PortType.OUTPUT );
 }
 
-function <portlet:namespace/>resetInputPortlets( job, inputPorts ){
+function <portlet:namespace/>resetPortlets( job, ports, portType ){
 	var layout = <portlet:namespace/>workbench.layout();
+	
+	var fireLoadData = function( ports, resultFolder ){
+	    for( var portName in ports ){
+	        var portlet = layout.getPortlet( portName );
+	        var port = ports[portName];
+	        
+	        var portData = port.outputData();
+	        var inputData = new OSP.InputData();
+	        inputData.type( portData.type() );
+	        
+	        var parentPath = OSP.Util.mergePath( resultFolder, portData.parent() );
+	        inputData.parent( parentPath );
+	        inputData.name( portData.name() );
+	        inputData.relative( true );
 
-	for( var portName in inputPorts ){
-        var portlet = layout.getPortlet( portName );
-        var inputData = job.inputData( portName );
-        var eventData = {
-                         portletId: <portlet:namespace/>workbench.id(),
-                         targetPortlet: portlet.instanceId()
-                     };
-        if( !inputData ){
-            eventData.data = {};
-            Liferay.fire( OSP.Event.OSP_INITIALIZE, eventData );
-        }
-        else{
-            eventData.data = OSP.Util.toJSON( inputData );
-            Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
-        }
-    }
-};
-
-function <portlet:namespace/>resetLogOutputPortlets (job, logPorts, outputPorts ){
-    var layout = <portlet:namespace/>workbench.layout();
-
-    var resetPortlets = function( ports ){
-        for( var portName in ports ){
-            var portlet = layout.getPortlet( portName );
-            var port = ports[portName];
-            
-            var portData = port.outputData();
-            var inputData = new OSP.InputData();
-            inputData.type( portData.type() );
-            
-            var simulation = <portlet:namespace/>workbench.workingSimulation(); 
-            var parentPath = OSP.Util.mergePath( simulation.getJobOutputFolder(job), portData.parent() );
-            inputData.parent( parentPath );
-            inputData.name( portData.name() );
-            inputData.relative( true );
-
-            var eventData = {
-                             portletId: <portlet:namespace/>workbench.id(),
-                             targetPortlet: portlet.instanceId(),
-                             data: OSP.Util.toJSON( inputData )
-                             };
-            Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
-        }
-    };
-    
-    switch( job.status() ){
-    	case 'SUCCESS':
-    	    resetPortlets( outputPorts );
-    	case 'RUNNING':
-    	case 'FAILED':
-    		resetPortlets( logPorts );
-    }
+	        var eventData = {
+	                         portletId: <portlet:namespace/>workbench.id(),
+	                         targetPortlet: portlet.instanceId(),
+	                         data: OSP.Util.toJSON( inputData )
+	                         };
+	        Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+	    }
+	};
+	
+	switch( portType ){
+		case OSP.Enumeration.PortType.INPUT:
+			for( var portName in ports ){
+		        var portlet = layout.getPortlet( portName );
+		        var inputData = job.inputData( portName );
+		        var eventData = {
+		                         portletId: <portlet:namespace/>workbench.id(),
+		                         targetPortlet: portlet.instanceId()
+		                     };
+		        if( !inputData ){
+		            eventData.data = {};
+		            Liferay.fire( OSP.Event.OSP_INITIALIZE, eventData );
+		        }
+		        else{
+		            eventData.data = OSP.Util.toJSON( inputData );
+		            Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+		        }
+		    }
+			break;
+		case OSP.Enumeration.PortType.LOG:
+			var isLogValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.LOG, job.status() );
+			if( isLogValid ){
+			    var simulation = <portlet:namespace/>workbench.workingSimulation();
+			    var resultFolder = simulation.getJobOutputFolder(job);
+			    
+			    fireLoadData( ports, resultFolder );
+			}
+			else{
+				var eventData = {
+				                 portletId: <portlet:namespace/>workbench.id(),
+				                 targetPortlet: <portlet:namespace/>workbench.id(),
+				                 data: {}
+				};
+				
+				Liferay.fire( OSP.Event.OSP_SHOW_JOB_STATUS, eventData );
+			}
+			break;
+		case OSP.Enumeration.PortType.OUTPUT:
+			var isOutputValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.OUTPUT, job.status() );
+			if( isOutputValid ){
+			    var simulation = <portlet:namespace/>workbench.workingSimulation();
+			    var resultFolder = simulation.getJobOutputFolder(job);
+			    
+			    fireLoadData( ports, resultFolder );
+			}
+			else{
+				var eventData = {
+				                 portletId: <portlet:namespace/>workbench.id(),
+				                 targetPortlet: <portlet:namespace/>workbench.id(),
+				                 data: {}
+				};
+				
+				Liferay.fire( OSP.Event.OSP_SHOW_JOB_STATUS, eventData );
+			}
+			
+		    break;
+		default:
+			console.log('[ERROR] Unknown port type - resetPortlets(): '+portType);
+	}
 };
 
 function <portlet:namespace/>saveInputs( 
@@ -1320,11 +1693,10 @@ function <portlet:namespace/>saveInputs(
 		}
 	});
 
-	//console.log('Saved Input File Info', fileInfo );
 	return fileInfo;
 }
 
-function <portlet:namespace/>deleteJob( simulationUuid, jobUuid, targetPortlet ){
+function <portlet:namespace/>deleteJob( simulationUuid, jobUuid, tagetPortlet ){
 	var data = {
 			<portlet:namespace/>command: 'DELETE_JOB',
 			<portlet:namespace/>simulationUuid: simulationUuid,
@@ -1338,7 +1710,6 @@ function <portlet:namespace/>deleteJob( simulationUuid, jobUuid, targetPortlet )
 		data  : data,
 		dataType : 'json',
 		success: function(result ) {
-			console.log( 'deleteJob: ', result );
 			var eventData = {
 					portletId: <portlet:namespace/>workbench.id(),
 					targetPortlet: targetPortlet,
@@ -1356,228 +1727,104 @@ function <portlet:namespace/>deleteJob( simulationUuid, jobUuid, targetPortlet )
 	});
 }
 
-function <portlet:namespace/>handleRequestSimulationUuid( targetPortlet ){
-  setTimeout( 
-		function(){
-		  simulation = <portlet:namespace/>workbench.workingSimulation();
-			console.log(simulation);
-			if( !simulation ){
-				<portlet:namespace/>handleRequestSimulationUuid(targetPortlet);
+
+function <portlet:namespace/>evaluatePortsStatus(){
+	var simulation = <portlet:namespace/>workbench.workingSimulation();
+	var job = simulation.workingJob();
+	var scienceApp = <portlet:namespace/>workbench.scienceApp();
+
+	var ports = scienceApp.inputPorts();
+	if( ports ){
+		for( var portName in ports ){
+			var portData = job.inputData( portName );
+			var port = ports[portName];
+			if( !portData ){
+				port.status( OSP.Enumeration.PortStatus.EMPTY );
 			}
 			else{
-				var eventData = {
-				    portletId: "<%=portletDisplay.getId()%>",
-				    targetPortlet: targetPortlet,
-				    data:{
-  						simulationUuid: simulation.uuid(),
-				    }
-				};
-				Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_UUID, eventData);
+				if( portData.dirty() ){
+					port.status( OSP.Enumeration.PortStatus.READY );
+				}
+				else{
+					port.status( OSP.Enumeration.PortStatus.EMPTY );
+				}
 			}
-		}, 
-		10
-	);
+		}
+	}
+	
+	ports = scienceApp.logPorts();
+	if( ports ){
+		var isLogValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.LOG, job.status() );
+		for( var portName in ports ){
+			var port = ports[portName];
+			if( isLogValid ){
+				port.status( OSP.Enumeration.PortStatus.LOG_VALID );
+			}
+			else{
+				port.status( OSP.Enumeration.PortStatus.LOG_INVALID );
+			}
+		}
+	}
+	
+	ports = scienceApp.outputPorts();
+	if( ports ){
+		var isOutputValid = <portlet:namespace/>isValid( OSP.Enumeration.PortType.OUTPUT, job.status() );
+		for( var portName in ports ){
+			var port = ports[portName];
+			
+			if( isOutputValid ){
+				port.status( OSP.Enumeration.PortStatus.OUTPUT_VALID );
+			}
+			else{
+				port.status( OSP.Enumeration.PortStatus.OUTPUT_INVALID );
+			}
+		}
+	}
 }
+		
+function <portlet:namespace/>switchPortletByPortName( portName, layout, scienceApp ){
+	var prevPortlet = layout.getVisualPortlet(portName);
+	var portType = scienceApp.getPortType(portName) === 'NPT' ? OSP.Enumeration.PortType.OUTPUT : scienceApp.getPortType(portName);
+	var portlet = layout.getPortlet( portName );
+	
+	if( portName === prevPortlet.portName() ){
+		console.log(portName+' already visual. Do nothing.');
+	}
+	else{
+		layout.switchDisplayColumnPortlet( 
+		        portType,
+				portName, 
+				<portlet:namespace/>workbench.id(), 
+				true, 
+				'<%=LiferayWindowState.EXCLUSIVE%>', 
+				<portlet:namespace/>handShakeCallback );
+	}
 
-function <portlet:namespace/>handleJobSelected(jobUuid ){
-	setTimeout(
-			function(){
-				var simulation = <portlet:namespace/>workbench.workingSimulation();
-				if( ! simulation )
-					<portlet:namespace/>handleJobSelected(jobUuid );
-				else{
-					var job = simulation.getJob( jobUuid );
-					//console.log('Job loaded: ', job );
-					var eventData = {
-							portletId: '<%=portletDisplay.getId()%>',
-							targetPortlet: 'BROADCAST',
-					};
-					
-					if( !job ){
-						$.ajax({
-							url : '<%=serveResourceURL.toString()%>',
-							type : 'POST',
-							dataType: 'json',
-							data : {
-								<portlet:namespace/>command: 'LOAD_JOB',
-								<portlet:namespace/>simulationUuid: simulation.uuid(),
-								<portlet:namespace/>jobUuid: jobUuid
-							},
-							success : function( jsonJob ) {
-								console.log( 'jsonJob', jsonJob);
-								
-								var job = simulation.newJob( jsonJob );
-								if( job.isSubmit() )
-									job.dirty( false );
-								simulation.addJob( job );
-								simulation.workingJob( job );
-								<portlet:namespace/>loadJobData( job );
+	if( portType === OSP.Enumeration.PortType.OUTPUT ){
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		if( <portlet:namespace/>isValid(OSP.Enumeration.PortType.OUTPUT, job.status()) ){
+			var outputPort = scienceApp.outputPort( portName );
+			var portData = outputPort.outputData();	
 
-								eventData.data = {
-										simulationUuid: simulation.uuid(),
-										jobUuid: job.uuid()
-								};
-								Liferay.fire(OSP.Event.OSP_REFRESH_JOB_STATUS, eventData);
-								//Liferay.fire(OSP.Event.OSP_INITIALIZE, {});
-							},
-							error: function( data, e ){
-								console.log(data);
-								console.log('AJAX ERROR-->'+e);
-							}
-						});
-					}
-					else{
-						simulation.workingJob( job );
-						//console.log('New Working Job: '+job.uuid());
-						<portlet:namespace/>loadJobData( job );
-						
-						eventData.data = {
-								simulationUuid: simulation.uuid(),
-								jobUuid: job.uuid()
-						};
-						Liferay.fire(OSP.Event.OSP_REFRESH_JOB_STATUS, eventData);
-						//Liferay.fire(OSP.Event.OSP_INITIALIZE, {});
-					}
-				}
-			},
-			10
-	);
-
-	<portlet:namespace/>workbench.print('After selecting job');
-}
-
-function <portlet:namespace/>handleRequestPath( targetPortlet ){
-	setTimeout(
-			function(){
-				var simulation = <portlet:namespace/>workbench.workingSimulation();
-				if( !simulation ){
-					<portlet:namespace/>handleRequestPath( targetPortlet );
-				}
-				else{
-					var workingJob = simulation.workingJob();
-					if( !workingJob ){
-						<portlet:namespace/>handleRequestPath( targetPortlet );
-					}
-					else{
-						var portlet = <portlet:namespace/>workbench.getPortlet( targetPortlet );
-						var scienceApp = <portlet:namespace/>workbench.scienceApp();
-						var inputPort = scienceApp.inputPort( portlet.portName() );
-						
-						var inputData = new OSP.InputData();
-						inputData.portName( inputPort.name() );
-						inputData.order( inputPort.order() );
-						inputData.type(OSP.Enumeration.PathType.FOLDER);
-						inputData.parent( '' );
-						inputData.name('');
-						inputData.relative(true);
-						
-						<portlet:namespace/>setJobInputData( portlet.portName(), inputData )
-						
-						<portlet:namespace/>workbench.fire( 
-								OSP.Event.OSP_LOAD_DATA, 
-								targetPortlet, 
-								OSP.Util.toJSON(inputData) );
-					}
-				}
-			},
-			10
-	);
-}
-
-function <portlet:namespace/>handleRequestOutputPath( targetPortlet ){
-	setTimeout(
-			function(){
-				var simulation = <portlet:namespace/>workbench.workingSimulation();
-				if( !simulation ){
-					<portlet:namespace/>handleRequestOutputPath( targetPortlet );
-				}
-				else{
-					var workingJob = simulation.workingJob();
-					if( !workingJob ){
-						<portlet:namespace/>handleRequestOutputPath( targetPortlet );
-					}
-					else{
-					    console.log( 'Working Job Status: '+ workingJob.status());
-						switch( workingJob.status() ){
-							case 'INITIALIZE_FAILED':
-							case 'INITIALIZED':
-							case 'SUBMISSION_FAILED':
-							case 'QUEUED':
-								// To do: Show Queue Status 
-							case 'SUSPEND_REQUESTED':
-							case 'SUSPENDED':
-								// To do: Show Suspended Status
-							case 'CANCEL_REQUESTED':
-							case 'CANCELED':
-								// To do: Show Cancel Status
-								break;
-							case 'SUCCESS':
-								var portlet = <portlet:namespace/>workbench.getPortlet( targetPortlet );
-								var scienceApp = <portlet:namespace/>workbench.scienceApp();
-								var outputPorts = scienceApp.outputPorts();
-								if( !outputPorts ){
-									// To do: display Download portlet
-									return;
-								}
-
-								var outputPort = scienceApp.getPort( portlet.portName() );
-								var portData = outputPort.outputData();	
-
-								var parentPath =OSP.Util.mergePath( simulation.getJobOutputFolder(workingJob), portData.parent() );
-								
-								var inputData = new OSP.InputData();
-								inputData.type(portData.type());
-								inputData.parent( parentPath );
-								inputData.name(portData.name());
-								inputData.relative(true);
-								
-								<portlet:namespace/>workbench.fire( 
-										OSP.Event.OSP_LOAD_DATA, 
-										targetPortlet, 
-										OSP.Util.toJSON(inputData) );
-								break;
-                            case 'RUNNING':
-							case 'FAILED':
-								// To do: Show Failed Status
-								break;
-							default:
-								console.log('Unknown-status: '+workingJob.status());
-						}
-					}
-				}
-			},
-			10
-	);
-}
-
-function <portlet:namespace/>handleRequestJobUuid( targetPortlet ){
-	setTimeout(
-			function(){
-				var simulation = <portlet:namespace/>workbench.workingSimulation();
-				if( !simulation ){
-					<portlet:namespace/>handleRequestJobUuid( targetPortlet );
-				}
-				else{
-					var workingJob = simulation.workingJob();
-					if( !workingJob ){
-						<portlet:namespace/>handleRequestJobUuid( targetPortlet );
-					}
-					else{
-						var eventData = {
-								portletId: '<%=portletDisplay.getId()%>',
-								targetPortlet: targetPortlet,
-								data:{
-									simulationUuid: simulation.uuid(),
-									jobUuid: workingJob.uuid()
-								}
-						};
-						
-						Liferay.fire( OSP.Event.OSP_RESPONSE_JOB_UUID, eventData );
-					}
-				}
-			},
-			10
-	);
+			var parentPath =OSP.Util.mergePath( simulation.getJobOutputFolder(job), portData.parent() );
+			
+			var inputData = new OSP.InputData();
+			inputData.type(portData.type());
+			inputData.parent( parentPath );
+			inputData.name(portData.name());
+			inputData.relative(true);
+			
+			var eventData = {
+			                 portletId: <portlet:namespace/>workbench.id(),
+			                 targetPortlet: portlet.instanceId(),
+			                 data: OSP.Util.toJSON( inputData )
+			};
+			
+			Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+		}
+	}
 }
 
 function <portlet:namespace/>setJobInputData( portName, inputData ){
@@ -1589,7 +1836,6 @@ function <portlet:namespace/>setJobInputData( portName, inputData ){
 					var job = simulation.workingJob();
 					if( !job )	<portlet:namespace/>setJobInputData( portName, inputData );
 					else{
-						console.log( ' +++ setJobInputData: '+portName, inputData );
 						job.inputData( portName, inputData );
 					}
 				}
@@ -1635,14 +1881,12 @@ $('#<portlet:namespace/>selectLocalFile').bind(
 		'change', 
 		function(event){
 			var uploadFile = $(this)[0].files[0];
-			//console.log( 'UploadFile: '+uploadFile);
 			
 			var uploadFileName = $(this).val();
 			var slashIndex = uploadFileName.lastIndexOf('\\');
 			if( slashIndex < 0 )
 				slashIndex = uploadFileName.lastIndexOf('/'); 
 			uploadFileName = uploadFileName.slice(slashIndex+1);
-			// $('#<portlet:namespace/>fileName').val( uploadFileName);
 			
 			// check that file name is duplicated using AJAX.
 			var duplicated;
@@ -1727,20 +1971,53 @@ function <portlet:namespace/>submitUpload( uploadFile, targetFolder, fileName ){
 	});
 }
 
-function <portlet:namespace/>noticeJobStatusChanged( jobUuid ){
-    var layout = <portlet:namespace/>workbench.layout();
-    var simulation = <portlet:namespace/>workbench.workingSimulation();
-    var data = {
-                simulationUuid: simulation.uuid(),
-                jobUuid: jobUuid
-    };
-    
-    var statusPortlet = layout.getPortlet( '_DOWNLOAD_' );
-    var eventData = {
-                     portletId: <portlet:namespace/>workbench.id(),
-                     targetPortlet: statusPortlet.instanceId(),
-                     data: data
-    };
-    Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
+/**
+ * Check log or outputs are valid or not. It is determined by  job status.
+ * ARGS
+ * outputType: String, one of OSP.Enumeration.PortType.LOG, OSP.Enumeration.PortType.OUTPUT 
+ */
+function <portlet:namespace/>isValid( outputType, jobStatus ){
+	switch( outputType ){
+		case OSP.Enumeration.PortType.LOG:
+			switch( jobStatus ){
+				case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+				case OSP.Enumeration.JobStatus.INITIALIZED:
+				case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+				case OSP.Enumeration.JobStatus.QUEUED:
+					return false;
+				case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+				case OSP.Enumeration.JobStatus.SUSPENDED:
+				case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+				case OSP.Enumeration.JobStatus.CANCELED:
+				case OSP.Enumeration.JobStatus.SUCCESS:
+				case OSP.Enumeration.JobStatus.RUNNING:
+				case OSP.Enumeration.JobStatus.FAILED:
+					return true;
+				default: 
+					console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+					return false;
+			}
+			break;
+		case OSP.Enumeration.PortType.OUTPUT:
+			switch( jobStatus ){
+				case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+				case OSP.Enumeration.JobStatus.INITIALIZED:
+				case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+				case OSP.Enumeration.JobStatus.QUEUED:
+				case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+				case OSP.Enumeration.JobStatus.SUSPENDED:
+				case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+				case OSP.Enumeration.JobStatus.CANCELED:
+				case OSP.Enumeration.JobStatus.RUNNING:
+				case OSP.Enumeration.JobStatus.FAILED:
+					return false;
+				case OSP.Enumeration.JobStatus.SUCCESS:
+					return true;
+				default: 
+					console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+					return false;
+			}
+		break;
+	}
 }
 </script>

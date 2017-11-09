@@ -6,6 +6,8 @@
 **/.svn
 **/.sass-cache
 **/.tern-project
+**/.eslintrc.js
+**/target/
 
 /*.xml
 /*.properties
@@ -75,3 +77,8 @@
 /tools/*/*/*/lib
 /tools/node*
 _sass_cache_*.css
+
+
+**/docroot/WEB-INF/sql/
+**/docroot/WEB-INF/tld/*
+!**/docroot/WEB-INF/tld/edison-ui.tld

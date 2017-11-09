@@ -176,13 +176,16 @@ public class DataTypeEditorController{
 				long groupId = themeDisplay.getScopeGroupId();
 				Locale locale = themeDisplay.getLocale();
 				//EDISON EDITOR 목록 조회
-				String[] editorAppTypes = {ScienceAppConstants.APP_TYPE_EDITOR};
-				String[] editorTypes = {ScienceAppConstants.EDITOR_TYPE_FILE,ScienceAppConstants.EDITOR_TYPE_INPUT_DECK,ScienceAppConstants.EDITOR_TYPE_TEXT};
-				List<Map<String, Object>> editorList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, editorAppTypes, editorTypes, "", "", "1901004", 0, 0,true);
+                String[] editorAppTypes = {ScienceAppConstants.APP_TYPE_EDITOR};
+                //String[] editorTypes = {ScienceAppConstants.EDITOR_TYPE_FILE,
+                    ///ScienceAppConstants.EDITOR_TYPE_INPUT_DECK, ScienceAppConstants.EDITOR_TYPE_TEXT};
+				List<Map<String, Object>> editorList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
+				    groupId, locale, 0, editorAppTypes, null, "", "", "1901004", 0, 0,true);
 				
 				//EDISON ANALYZER 목록 조회
 				String[] analyzerAppTypes = {ScienceAppConstants.APP_TYPE_ANALYZER};
-				List<Map<String, Object>> analyzerList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, analyzerAppTypes, null, "", "", "1901004", 0, 0,true);
+				List<Map<String, Object>> analyzerList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
+				    groupId, locale, 0, analyzerAppTypes, null, "", "", "1901004", 0, 0,true);
 				
 				model.addAttribute("editorList", editorList);
 				model.addAttribute("analyzerList", analyzerList);

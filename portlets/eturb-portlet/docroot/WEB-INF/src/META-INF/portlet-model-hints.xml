@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.eturb.dbservice.model.Project">
+		<field name="projectId" type="long" />
+		<field name="userId" type="long" />
+		<field name="name" type="String" />
+		<field name="projectStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="analyzerStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+	<model name="org.kisti.eturb.dbservice.model.Simulation">
+		<field name="projectId" type="long" />
+		<field name="executeId" type="String" />
+		<field name="executeDataStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="executeDate" type="Date" />
+	</model>
+</model-hints>

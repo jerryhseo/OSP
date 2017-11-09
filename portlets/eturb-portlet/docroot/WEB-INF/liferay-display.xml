@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
+
+<display>
+	<category name="eTurb">
+		<portlet id="simulation-monitoring-tree-view" />
+		<portlet id="eturb-editor-dashboard" />
+		<portlet id="tree-view-monitoring"></portlet>
+        <portlet id="eturb-editor-myfile" />
+        <portlet id="eturb-analyzer"></portlet>
+        <portlet id="eturb-detail-page"></portlet>
+	</category>
+</display>

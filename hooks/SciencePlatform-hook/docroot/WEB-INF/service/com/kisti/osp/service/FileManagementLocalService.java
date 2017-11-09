@@ -327,9 +327,22 @@ public interface FileManagementLocalService extends BaseLocalService,
 			java.io.IOException;
 
 	public void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String targetFolder, java.lang.String[] files,
 		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public void downloadFromText(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String fileName, java.lang.String fileContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
@@ -397,6 +410,9 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	public void writeTextFile(java.lang.String content,
+		java.nio.file.Path target) throws java.io.IOException;
+
 	public void readDLAppEntry(javax.portlet.PortletResponse portletResponse,
 		long dlEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -414,4 +430,14 @@ public interface FileManagementLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
+
+	public java.lang.String readTextFile(java.nio.file.Path path)
+		throws java.io.IOException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getAbolutePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String path,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

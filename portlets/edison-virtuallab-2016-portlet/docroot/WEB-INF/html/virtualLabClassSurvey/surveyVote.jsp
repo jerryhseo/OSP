@@ -7,6 +7,17 @@
 
 <liferay-portlet:renderURL var="surveyVoteURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.NORMAL.toString() %>" />
 
+<style type="text/css">
+input[type="radio"].no-margin{
+	margin: 0 5px 0 0;
+}
+
+#_edisonvirtuallabclasssurvey_WAR_edisonvirtuallab2016portlet_questionTable label{
+	display: inline;
+	margin-right: 10px;
+}
+</style>
+
 <script>
 
 $(document).ready(function () {		
@@ -43,69 +54,84 @@ function surveySetting(surveySeqNo){
 					$("<td/>").addClass("question").addClass(dataMap.dataList[i].questionDivCd).attr("colspan", "3").text(dataMap.dataList[i].questionTitle).appendTo($trNode);
 					$questionTable.append($trNode);	
 					if(dataMap.dataList[i].questionDivCd == "SVY_02_001"){
-						var rowCnt = 1;
+						$questionTr = $("<tr/>").appendTo($questionTable);
+						$questionTr.append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />"))
+						$questContentTd = $("<td/>").appendTo($questionTr);
+						
+// 						var rowCnt = 1;
 						if(dataMap.dataList[i].question1 != null && dataMap.dataList[i].question1 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 1"))
-									  .append($("<td/>").text(dataMap.dataList[i].question1))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("1")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("1").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question1)
+							).appendTo($questContentTd);
+							
 						}	
 						if(dataMap.dataList[i].question2 != null && dataMap.dataList[i].question2 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 2"))
-									  .append($("<td/>").text(dataMap.dataList[i].question2))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("2")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("2").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question2)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question3 != null && dataMap.dataList[i].question3 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 3"))
-									  .append($("<td/>").text(dataMap.dataList[i].question3))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("3")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("3").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question3)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question4 != null && dataMap.dataList[i].question4 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 4"))
-									  .append($("<td/>").text(dataMap.dataList[i].question4))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("4")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("4").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question4)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question5 != null && dataMap.dataList[i].question5 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 5"))
-									  .append($("<td/>").text(dataMap.dataList[i].question5))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("5")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("5").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question5)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question6 != null && dataMap.dataList[i].question6 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 6"))
-									  .append($("<td/>").text(dataMap.dataList[i].question6))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("6")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("6").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question6)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question7 != null && dataMap.dataList[i].question7 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 7"))
-									  .append($("<td/>").text(dataMap.dataList[i].question7))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("7")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("7").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question7)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question8 != null && dataMap.dataList[i].question8 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 8"))
-									  .append($("<td/>").text(dataMap.dataList[i].question8))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("8")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("8").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question8)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question9 != null && dataMap.dataList[i].question9 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 9"))
-									  .append($("<td/>").text(dataMap.dataList[i].question9))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("9")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("9").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question9)
+							).appendTo($questContentTd);
 						}	
 						if(dataMap.dataList[i].question10 != null && dataMap.dataList[i].question10 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 10"))
-									  .append($("<td/>").text(dataMap.dataList[i].question10))
-									  .append($("<td/>").append($("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("10")).css("text-align", "center")).appendTo($questionTable);
-							rowCnt++;
+							$("<label/>").append(
+								$("<input/>").attr("type","radio").attr("name", "<portlet:namespace/>objecttivityAnswer"+num).val("10").addClass("no-margin")
+							).append(
+								$("<span/>").text(dataMap.dataList[i].question10)
+							).appendTo($questContentTd);
 						}	
 						
-						$trNode.find("th:first").attr("rowspan", rowCnt);
+						$trNode.find("th:first").attr("rowspan", 2);
 						
 					}else if(dataMap.dataList[i].questionDivCd == "SVY_02_002"){
 						$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer' />"))

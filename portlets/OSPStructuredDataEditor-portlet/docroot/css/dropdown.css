@@ -1,0 +1,32 @@
+.editor-portlet .dropdown-wrapper {}
+.structured-data-editor-portlet.editor-portlet .dropdown-wrapper {float: right;}
+.editor-portlet .dropdown {
+  position: relative;
+  display: inline-block;
+  min-width: 30px;
+  cursor: pointer;
+}
+
+.editor-portlet .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 130px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    margin-top: 0;
+    padding: 5px 5px;
+    z-index: 100;
+}
+
+.editor-portlet .dropdown:hover .dropdown-content {
+    display: block;
+    left: -100px;
+}
+
+.editor-portlet .dropdown .dropdown-content .dropdown-item{
+  padding: 2px 2px 2px 2px;
+}
+
+.editor-portlet .dropdown .dropdown-content .dropdown-item:hover {
+	background-color: #949494;
+}

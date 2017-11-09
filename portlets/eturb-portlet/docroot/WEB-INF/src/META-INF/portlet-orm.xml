@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.kisti.eturb.dbservice.model.impl.ProjectModelImpl">
+		<id-class class="org.kisti.eturb.dbservice.service.persistence.ProjectPK" />
+		<attributes>
+			<id name="projectId" />
+			<id name="userId" />
+			<basic name="name" />
+			<basic name="projectStructure" />
+			<basic name="analyzerStructure" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.eturb.dbservice.model.impl.SimulationModelImpl">
+		<id-class class="org.kisti.eturb.dbservice.service.persistence.SimulationPK" />
+		<attributes>
+			<id name="projectId" />
+			<id name="executeId" />
+			<basic name="executeDataStructure" />
+			<basic name="executeDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.kisti.eturb.dbservice.model.impl.ProjectImpl" name="Project">
+		<table name="ETURB_Project" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.eturb.dbservice.model.impl.SimulationImpl" name="Simulation">
+		<table name="ETURB_Simulation" />
+		<attributes />
+	</entity>
+</entity-mappings>

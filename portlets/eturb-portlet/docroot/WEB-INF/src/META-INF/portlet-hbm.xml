@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.kisti.eturb.dbservice.model.Project" />
+	<import class="org.kisti.eturb.dbservice.model.Simulation" />
+	<class name="org.kisti.eturb.dbservice.model.impl.ProjectImpl" table="ETURB_Project">
+		<composite-id name="primaryKey" class="org.kisti.eturb.dbservice.service.persistence.ProjectPK">
+			<key-property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="projectStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="analyzerStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+	</class>
+	<class name="org.kisti.eturb.dbservice.model.impl.SimulationImpl" table="ETURB_Simulation">
+		<composite-id name="primaryKey" class="org.kisti.eturb.dbservice.service.persistence.SimulationPK">
+			<key-property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="executeId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="executeDataStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="executeDate" type="org.hibernate.type.TimestampType" />
+	</class>
+</hibernate-mapping>
