@@ -1,0 +1,68 @@
+<nav id="mainmenu">
+	<ul>
+		#set($menu_index = 0)
+		#foreach($nav_item in $nav_items)
+			#if ($htmlUtil.escape($nav_item.getName())=='HOME')
+			#else
+				#if ($nav_item.isSelected())
+					#set ($onClass = "menu-on")
+				#else
+					#set ($onClass = "")
+				#end
+				#if ($nav_item.hasChildren())
+					<li class="class-toggle-off-click hasChildren" data-target-node="#$nav_item.getLayout().getAncestorPlid()_sub_menu" menu-index=$menu_index children-cnt=$nav_item.getChildren().size()>
+						<div id="$nav_item.getLayout().getAncestorPlid()_sub_menu" class="submenu">
+							<ul>
+								#foreach($nav_child in $nav_item.getChildren())
+									#if ($nav_child.isSelected())
+										#set ($onChildClass = "menu-on")
+									#else
+										#set ($onChildClass = "")
+									#end
+									<li>
+										#if ($stringUtil.toUpperCase($nav_child.getLayout().getType()) =="URL")
+											#set ($custom-menu-url=$nav_child.getLayout().getExpandoBridge().getAttribute($languageUtil.format($locale, "edison-menu-link-custom-field","")))
+											#if($custom-menu-url=="")
+												<a href="$nav_child.getURL()" class="$onChildClass" $nav_child.getTarget() target="_blank">
+													$nav_child.getName()
+												</a>
+											#else
+												<a href="$custom-menu-url" class="$onChildClass" $nav_child.getTarget() target="_blank">
+													$nav_child.getName()
+												</a>
+											#end
+										#else
+											<a href="$nav_child.getURL()" class="$onChildClass" $nav_child.getTarget()>
+												$nav_child.getName() 
+											</a>
+										#end
+									</li>
+								#end
+							</ul>
+						</div>
+						<a href="javascript:;" class="$onClass">$htmlUtil.escape($nav_item.getName())</a>
+					</li>
+				#else
+					<li>
+						<a href="$nav_item.getURL()" class="$onClass">$htmlUtil.escape($nav_item.getName())</a>
+					</li>
+				#end
+			#end
+			#set($menu_index = $menu_index+1)
+		#end
+	</ul>
+</nav>
+
+
+#if ($is_signed_in)
+	<div class="slidemenuicon" style="padding-top:12px;">
+		<img src="/image/user_male_portrait?img_id=$user.portraitId&amp;" width="40px">
+	</div>
+#else
+	<div class="slidemenuicon">
+		<img src="$images_folder/custom/menu/top_slidemenu.png" width="24px" height="18px">
+	</div>
+#end
+
+
+

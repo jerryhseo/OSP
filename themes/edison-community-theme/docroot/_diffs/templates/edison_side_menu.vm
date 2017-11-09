@@ -1,0 +1,80 @@
+#set($availableLocales = $languageUtil.getAvailableLocales())
+#set($selectedLanguageIds=[])
+#foreach( $availableLocale in $availableLocales )
+		#set($VOID = $selectedLanguageIds.add($availableLocale))
+#end
+
+<div class="nslidemenu" id="nslidemenu">
+	<div class="class-toggle-content">
+		<div class="slidemenuicon">
+			<img src="$images_folder/custom/menu/top_closed_btn.png" width="24" height="18">
+		</div>
+		
+		<div class="account">
+			#if (!$is_signed_in)
+				<a title="Manage My Account" href="$edisonLoginURL">
+					<span class="welcome-text">$languageUtil.format($locale, "Sign-in","")</span>
+				</a>
+				<a title="Manage My Account" href="$termOfUseURL">
+					<span class="welcome-text">$languageUtil.format($locale, "Register-edison","")</span>
+				</a>
+			#else
+				#if(!$temp_user)
+					<a class="edison-use-dialog" data-controlpanelcategory="my" title="Manage My Account" href="$httpUtil.addParameter($my_account_url,"edison_myaccount","go")">
+						<span class="welcome-text">My Account</span>
+					</a>
+				#end
+				<a title="Manage My Account" href="$sign_out_url">
+					<span class="welcome-text">$languageUtil.format($locale, "Sign-out","")</span>
+				</a>
+			#end
+		</div>
+		
+		<nav aria-label="Site Pages" role="navigation">
+			<ul>
+				#if (!$is_signed_in)
+				 	
+				 	<li>
+						<a href="/web${page_group.getParentGroup().friendlyURL}">
+							$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($$page_group.getParentGroup().descriptiveName)),"")
+						</a>
+					</li>
+					
+					
+					#set ($groupLocalServiceUtil = $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
+					#foreach($site in $groupLocalServiceUtil.getGroups($themeDisplay.getCompanyId(),$page_group.getParentGroupId(),true))
+						#if ($site.groupId==$themeDisplay.getScopeGroupId())
+							#set ($siteOnClass = "site-on")
+						#else
+							#set ($siteOnClass = "")
+						#end
+						<li>
+							<a href="/web${site.friendlyURL}" class="$siteOnClass">
+								$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
+							</a>
+						</li>
+					#end
+				#else
+					#foreach($site in $sortTool.sort($user.MySiteGroups,'groupId:asc'))
+						#if ($site.hasPublicLayouts())
+							#if ($site.groupId==$themeDisplay.getScopeGroupId())
+								#set ($siteOnClass = "site-on")
+							#else
+								#set ($siteOnClass = "")
+							#end
+							<li>
+								<a href="/web${site.friendlyURL}" class="$siteOnClass">
+									$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
+								</a>
+							</li>
+						#end
+					#end
+				#end
+			</ul>
+		</nav>
+		
+		<div class="language">
+			$taglibLiferay.language(null, null, "languageId",$arrayUtil.toStringArray($selectedLanguageIds.toArray()), 0)
+		</div>
+	</div>
+</div>
