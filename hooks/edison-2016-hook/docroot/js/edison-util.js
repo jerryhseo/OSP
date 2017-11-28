@@ -153,6 +153,9 @@ function bStart(){
         message: $('#loadingBox'),
         css: { 
         	color: '#FFF',
+            top:  ($(window).height() - 400) /2 + 'px', 
+            //left: ($(window).width() - 400) /2 + 'px', 
+            left: '500px',
             width: '700px' 
         } 
     });	

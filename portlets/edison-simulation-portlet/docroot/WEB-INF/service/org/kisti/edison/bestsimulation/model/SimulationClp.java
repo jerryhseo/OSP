@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -93,7 +93,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 		attributes.put("simulationTitle", getSimulationTitle());
 		attributes.put("scienceAppId", getScienceAppId());
 		attributes.put("scienceAppName", getScienceAppName());
-		attributes.put("scienceAppVersion", getScienceAppVersion());
 		attributes.put("simulationCreateDt", getSimulationCreateDt());
 		attributes.put("cluster", getCluster());
 		attributes.put("classId", getClassId());
@@ -139,12 +138,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 
 		if (scienceAppName != null) {
 			setScienceAppName(scienceAppName);
-		}
-
-		String scienceAppVersion = (String)attributes.get("scienceAppVersion");
-
-		if (scienceAppVersion != null) {
-			setScienceAppVersion(scienceAppVersion);
 		}
 
 		Date simulationCreateDt = (Date)attributes.get("simulationCreateDt");
@@ -536,30 +529,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 	}
 
 	@Override
-	public String getScienceAppVersion() {
-		return _scienceAppVersion;
-	}
-
-	@Override
-	public void setScienceAppVersion(String scienceAppVersion) {
-		_scienceAppVersion = scienceAppVersion;
-
-		if (_simulationRemoteModel != null) {
-			try {
-				Class<?> clazz = _simulationRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setScienceAppVersion",
-						String.class);
-
-				method.invoke(_simulationRemoteModel, scienceAppVersion);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
 	public Date getSimulationCreateDt() {
 		return _simulationCreateDt;
 	}
@@ -833,7 +802,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 		clone.setSimulationTitle(getSimulationTitle());
 		clone.setScienceAppId(getScienceAppId());
 		clone.setScienceAppName(getScienceAppName());
-		clone.setScienceAppVersion(getScienceAppVersion());
 		clone.setSimulationCreateDt(getSimulationCreateDt());
 		clone.setCluster(getCluster());
 		clone.setClassId(getClassId());
@@ -892,7 +860,7 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -906,8 +874,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 		sb.append(getScienceAppId());
 		sb.append(", scienceAppName=");
 		sb.append(getScienceAppName());
-		sb.append(", scienceAppVersion=");
-		sb.append(getScienceAppVersion());
 		sb.append(", simulationCreateDt=");
 		sb.append(getSimulationCreateDt());
 		sb.append(", cluster=");
@@ -925,7 +891,7 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.bestsimulation.model.Simulation");
@@ -954,10 +920,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 		sb.append(
 			"<column><column-name>scienceAppName</column-name><column-value><![CDATA[");
 		sb.append(getScienceAppName());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>scienceAppVersion</column-name><column-value><![CDATA[");
-		sb.append(getScienceAppVersion());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>simulationCreateDt</column-name><column-value><![CDATA[");
@@ -994,7 +956,6 @@ public class SimulationClp extends BaseModelImpl<Simulation>
 	private String _scienceAppId;
 	private String _scienceAppName;
 	private String _scienceAppNameCurrentLanguageId;
-	private String _scienceAppVersion;
 	private Date _simulationCreateDt;
 	private String _cluster;
 	private long _classId;

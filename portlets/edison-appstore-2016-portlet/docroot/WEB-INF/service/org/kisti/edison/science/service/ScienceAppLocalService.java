@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -996,10 +996,4 @@ public interface ScienceAppLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getMyAppListForProjectCount(java.util.Map params,
 		java.util.Locale locale);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public org.kisti.edison.science.model.ScienceApp getScienceApp(
-		java.lang.String scienceAppName, java.lang.String scienceAppVersion)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			org.kisti.edison.science.NoSuchScienceAppException;
 }

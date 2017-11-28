@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -99,11 +99,11 @@ public class ScienceAppCompileSoap implements Serializable {
 		_scienceAppId = scienceAppId;
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return _userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		_userId = userId;
 	}
 
@@ -132,7 +132,7 @@ public class ScienceAppCompileSoap implements Serializable {
 	}
 
 	private long _scienceAppId;
-	private long _userId;
+	private Long _userId;
 	private String _compileUrl;
 	private String _result;
 	private Date _createDate;

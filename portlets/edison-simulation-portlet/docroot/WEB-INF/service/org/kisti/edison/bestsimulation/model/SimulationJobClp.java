@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -89,6 +89,7 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 		attributes.put("jobSeqNo", getJobSeqNo());
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("groupId", getGroupId());
+		attributes.put("simulationJobId", getSimulationJobId());
 		attributes.put("jobUuid", getJobUuid());
 		attributes.put("jobStatus", getJobStatus());
 		attributes.put("jobStartDt", getJobStartDt());
@@ -123,6 +124,12 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long simulationJobId = (Long)attributes.get("simulationJobId");
+
+		if (simulationJobId != null) {
+			setSimulationJobId(simulationJobId);
 		}
 
 		String jobUuid = (String)attributes.get("jobUuid");
@@ -261,6 +268,29 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 				Method method = clazz.getMethod("setGroupId", long.class);
 
 				method.invoke(_simulationJobRemoteModel, groupId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public long getSimulationJobId() {
+		return _simulationJobId;
+	}
+
+	@Override
+	public void setSimulationJobId(long simulationJobId) {
+		_simulationJobId = simulationJobId;
+
+		if (_simulationJobRemoteModel != null) {
+			try {
+				Class<?> clazz = _simulationJobRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSimulationJobId", long.class);
+
+				method.invoke(_simulationJobRemoteModel, simulationJobId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -909,6 +939,7 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 		clone.setJobSeqNo(getJobSeqNo());
 		clone.setSimulationUuid(getSimulationUuid());
 		clone.setGroupId(getGroupId());
+		clone.setSimulationJobId(getSimulationJobId());
 		clone.setJobUuid(getJobUuid());
 		clone.setJobStatus(getJobStatus());
 		clone.setJobStartDt(getJobStartDt());
@@ -979,7 +1010,7 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{jobSeqNo=");
 		sb.append(getJobSeqNo());
@@ -987,6 +1018,8 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 		sb.append(getSimulationUuid());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
+		sb.append(", simulationJobId=");
+		sb.append(getSimulationJobId());
 		sb.append(", jobUuid=");
 		sb.append(getJobUuid());
 		sb.append(", jobStatus=");
@@ -1018,7 +1051,7 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(52);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.bestsimulation.model.SimulationJob");
@@ -1035,6 +1068,10 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
 		sb.append(getGroupId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationJobId</column-name><column-value><![CDATA[");
+		sb.append(getSimulationJobId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>jobUuid</column-name><column-value><![CDATA[");
@@ -1093,6 +1130,7 @@ public class SimulationJobClp extends BaseModelImpl<SimulationJob>
 	private long _jobSeqNo;
 	private String _simulationUuid;
 	private long _groupId;
+	private long _simulationJobId;
 	private String _jobUuid;
 	private long _jobStatus;
 	private Date _jobStartDt;

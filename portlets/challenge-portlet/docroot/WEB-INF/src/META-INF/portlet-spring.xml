@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="edison.challenge.service.builder.service.AgencyLocalService" class="edison.challenge.service.builder.service.impl.AgencyLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.AgencyService" class="edison.challenge.service.builder.service.impl.AgencyServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.AgencyPersistence" class="edison.challenge.service.builder.service.persistence.AgencyPersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.AwardLocalService" class="edison.challenge.service.builder.service.impl.AwardLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.AwardService" class="edison.challenge.service.builder.service.impl.AwardServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.AwardPersistence" class="edison.challenge.service.builder.service.persistence.AwardPersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.AwardhistoryLocalService" class="edison.challenge.service.builder.service.impl.AwardhistoryLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.AwardhistoryService" class="edison.challenge.service.builder.service.impl.AwardhistoryServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.AwardhistoryPersistence" class="edison.challenge.service.builder.service.persistence.AwardhistoryPersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.ChallengeLocalService" class="edison.challenge.service.builder.service.impl.ChallengeLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.ChallengeService" class="edison.challenge.service.builder.service.impl.ChallengeServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.ChallengePersistence" class="edison.challenge.service.builder.service.persistence.ChallengePersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.ChallengeMemberLocalService" class="edison.challenge.service.builder.service.impl.ChallengeMemberLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.ChallengeMemberService" class="edison.challenge.service.builder.service.impl.ChallengeMemberServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.ChallengeMemberPersistence" class="edison.challenge.service.builder.service.persistence.ChallengeMemberPersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.ChallengeTeamLocalService" class="edison.challenge.service.builder.service.impl.ChallengeTeamLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.ChallengeTeamService" class="edison.challenge.service.builder.service.impl.ChallengeTeamServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.ChallengeTeamPersistence" class="edison.challenge.service.builder.service.persistence.ChallengeTeamPersistenceImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.persistence.ChallengeTeamFinder" class="edison.challenge.service.builder.service.persistence.ChallengeTeamFinderImpl" parent="basePersistence" />
+	<bean id="edison.challenge.service.builder.service.ChildChallengeLocalService" class="edison.challenge.service.builder.service.impl.ChildChallengeLocalServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.ChildChallengeService" class="edison.challenge.service.builder.service.impl.ChildChallengeServiceImpl" />
+	<bean id="edison.challenge.service.builder.service.persistence.ChildChallengePersistence" class="edison.challenge.service.builder.service.persistence.ChildChallengePersistenceImpl" parent="basePersistence" />
+</beans>

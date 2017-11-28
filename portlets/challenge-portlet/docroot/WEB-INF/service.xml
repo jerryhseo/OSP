@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="edison.challenge.service.builder">
+	<author>kyj</author>
+	<namespace>edison</namespace>
+	<entity name="Challenge" local-service="true">
+		<!-- PK fields -->
+		<column name="challengeid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="name" type="String" localized="true"></column>	
+		<column name="description" type="String" localized="true"></column>
+		
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="challengeid" />
+		</order>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+    </entity>
+    
+    
+    <entity name="ChildChallenge" local-service="true">
+	    <!-- PK fields -->
+		<column name="childid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="number" type="int"></column>
+		<column name="presentationDay" type="Date"></column>
+		<column name="paperStartDay" type="Date"></column>
+		<column name="paperEndDay" type="Date"></column>
+		<column name="evaluationStartDay" type="Date"></column>
+		<column name="evaluationEndDay" type="Date"></column>
+		<column name="challengeStartDay" type="Date"></column>
+		<column name="challengeEndDay" type="Date"></column>
+		<column name="status" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="challengeid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="challengeEndDay" />
+		</order>
+		
+		<!-- Finder -->
+        <finder name="challengeCollect" return-type="Collection">
+			<finder-column name="challengeid" />
+		</finder>
+		<finder name="childCollect" return-type="Collection">
+			<finder-column name="childid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		
+    </entity>
+    
+    <entity name="Agency" local-service="true">
+	    <!-- PK fields -->
+		<column name="agencyid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="name" type="String" localized="true"></column>
+		<column name="level" type="String"></column>
+		<column name="url" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="childid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="agencyid" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="childCollect" return-type="Collection">
+			<finder-column name="childid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+    </entity>
+    
+    <entity name="Award" local-service="true">
+	    <!-- PK fields -->
+		<column name="awardid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="awardGradeName" type="String" localized="true"></column>
+		<column name="awardName" type="String" localized="true"></column>
+		<column name="prize" type="String" localized="true"></column>
+		<column name="number" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="childid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="childid" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="childCollect" return-type="Collection">
+			<finder-column name="childid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+    </entity>
+    
+	<entity name="ChallengeTeam" local-service="true">
+	    <!-- PK fields -->
+		<column name="chTeamid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="teamName" type="String" localized="true"></column>
+		<column name="subject" type="String" localized="true"></column>
+		<column name="paperPDFstatus" type="boolean"></column>
+		<column name="paperstatus" type="boolean"></column>
+		<column name="presentationstatus" type="boolean"></column>
+		<column name="registerDay" type="Date"></column>
+		<column name="registerid" type="String"></column>
+		
+		<!-- Audit fields : paper attribute -->
+		<column name="paperName" type="String" localized="true"></column>
+        <column name="paperAbstract" type="String" localized="true"></column>
+		<column name="paperFileName" type="String"></column>
+		<column name="paperSubmissionDay" type="Date"></column>
+		<column name="paperModifyDay" type="Date"></column>
+		
+		<!-- Audit fields : pdf paper attribute -->
+		<column name="paperPDFFileName" type="String"></column>
+		<column name="paperPDFSubmissionDay" type="Date"></column>
+		<column name="paperPDFModifyDay" type="Date"></column>
+		
+		<!-- Audit fields : presentation attribute -->
+		<column name="presentationName" type="String"></column>
+		<column name="presentationFileName" type="String"></column>
+		<column name="presentationSubmissionDay" type="Date"></column>
+		<column name="presentationModifyDay" type="Date"></column>
+		
+		<column name="filepath" type="String"></column>
+		
+		
+		<!-- FK fields -->
+		<column name="childid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="childid" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="childCollect" return-type="Collection">
+			<finder-column name="childid" />
+		</finder>
+		<finder name="teamCollect" return-type="Collection">
+			<finder-column name="chTeamid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		
+    </entity>
+    
+    <entity name="ChallengeMember" local-service="true">
+	    <!-- PK fields -->
+	    <column name="chMemberid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="fullName" type="String" localized="true"></column>
+		<column name="screenName" type="String" localized="true"></column>
+		<column name="email" type="String"></column>
+		<column name="leader" type="boolean"></column>
+		<column name="falculty" type="String" localized="true"></column>
+		<column name="major" type="String" localized="true"></column>
+		<column name="grade" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="chTeamid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="chTeamid" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="teamCollect" return-type="Collection">
+			<finder-column name="chTeamid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+    </entity>
+    
+    <entity name="Awardhistory" local-service="true">
+	    <!-- PK fields -->
+		<column name="awardhistoryid" primary="true" type="long" id-type="increment"></column>
+		
+		<!-- Audit fields -->
+		<column name="name" type="String"></column>
+		<column name="prize" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="chTeamid" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="chTeamid" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="teamCollect" return-type="Collection">
+			<finder-column name="chTeamid" />
+		</finder>
+		
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+    </entity>
+</service-builder>

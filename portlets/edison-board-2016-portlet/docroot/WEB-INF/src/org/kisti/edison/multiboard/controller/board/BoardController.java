@@ -24,6 +24,7 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.kisti.edison.model.EdisonFileConstants;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
@@ -38,6 +39,7 @@ import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -63,7 +65,6 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
-import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -276,6 +277,16 @@ public class BoardController {
 		boolean isDefaultUserWrite = ParamUtil.getBoolean(request, "isDefaultUserWrite",false);
 		
 		try {
+		    
+		    String boardSeq = ParamUtil.getString(request, "boardSeq", "");
+            if(!StringUtils.hasText(boardSeq) 
+                || ( NumberUtils.isNumber(boardSeq) 
+                    && NumberUtils.toLong(boardSeq) <= 0)){
+                log.error("BoardSeq is not valid.");
+                SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
+                return null;
+            }
+		    
 			//VIEW가 아니면서 (게시물 보기) 로그인이 안되어있을 경우 홈 화면으로 보냄
 			if(!mode.equals("VIEW") && !themeDisplay.isSignedIn()) {
 				model.addAttribute("backURL", themeDisplay.getPortalURL() + "/c/portal/login");
@@ -792,7 +803,14 @@ public class BoardController {
 		try {
 			Map params = RequestUtil.getParameterMap(request);
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
-			
+			String boardSeq = ParamUtil.getString(request, "boardSeq", "");
+			if(!StringUtils.hasText(boardSeq) 
+			    || ( NumberUtils.isNumber(boardSeq) 
+			        && NumberUtils.toLong(boardSeq) <= 0)){
+			    log.error("boardSeq is not valid.");
+			    SessionErrors.add(request, EdisonMessageConstants.DELETE_ERROR);
+			    return;
+			}
 			//parameter
 			boolean maxWindowStatus = GetterUtil.get(params.get("maxWindowStatus"), false);
 			String customId = ParamUtil.getString(request, "customId");
@@ -807,11 +825,7 @@ public class BoardController {
 			preFix += customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
 			String folderSeq = preFix + "_" + CustomUtil.strNull(params.get("boardSeq"));
 			
-			try{
-				EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
-			}catch (NoSuchFolderException e) {
-				
-			}
+			EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
 			
 			PortletURL portletURL = PortletURLFactoryUtil.create(request, PortalUtil.getPortletId(request), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 			

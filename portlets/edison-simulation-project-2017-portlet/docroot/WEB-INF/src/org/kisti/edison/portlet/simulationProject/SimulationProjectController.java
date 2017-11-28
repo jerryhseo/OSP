@@ -19,6 +19,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.kisti.edison.constants.SimulationProjectConstants;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
@@ -39,6 +40,7 @@ import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -178,21 +180,30 @@ public class SimulationProjectController {
 		Map params = RequestUtil.getParameterMap(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		long simulationProjectId = Long.parseLong(CustomUtil.strNull(params.get("simulationProjectId"), "0"));
-		long simulationClassId = ClassNameLocalServiceUtil.getClassNameId(SimulationProject.class);
-		long groupId = themeDisplay.getScopeGroupId();
-		long portalGroupId = groupId;
-		long userId = themeDisplay.getUserId();
-		
-		User user = themeDisplay.getUser();
-		Locale locale = themeDisplay.getLocale();
-		
-		String currentPage = CustomUtil.strNull(params.get("currentPage"), "1");
-		String listSize = CustomUtil.strNull(params.get("listSize"), "10");
-        String methodName = CustomUtil.strNull(params.get("methodName"));
-        String searchValue = CustomUtil.strNull(params.get("searchText"));
-		
 		try{
+		    String simulationProjectIdStr = ParamUtil.getString(request, "simulationProjectId", "");
+		    if(!StringUtils.hasText(simulationProjectIdStr)
+		        || NumberUtils.isNumber(simulationProjectIdStr)
+		        && NumberUtils.toLong(simulationProjectIdStr) <= 0){
+		        log.error("SimulationProjectId is not valid.");
+		        SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
+		        return null;
+		    }
+		    
+    		long simulationProjectId = Long.parseLong(CustomUtil.strNull(params.get("simulationProjectId"), "0"));
+    		long simulationClassId = ClassNameLocalServiceUtil.getClassNameId(SimulationProject.class);
+    		long groupId = themeDisplay.getScopeGroupId();
+    		long portalGroupId = groupId;
+    		long userId = themeDisplay.getUserId();
+    		
+    		User user = themeDisplay.getUser();
+    		Locale locale = themeDisplay.getLocale();
+    		
+    		String currentPage = CustomUtil.strNull(params.get("currentPage"), "1");
+    		String listSize = CustomUtil.strNull(params.get("listSize"), "10");
+            String methodName = CustomUtil.strNull(params.get("methodName"));
+            String searchValue = CustomUtil.strNull(params.get("searchText"));
+		
 			
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("listSize", listSize);

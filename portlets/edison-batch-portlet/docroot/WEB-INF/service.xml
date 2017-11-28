@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison.simulation">
+	<author>edison</author>
+	<namespace>EDBAT</namespace>
+	
+    <!-- 기관별 사이언스앱  실행 통계 테이블 -->
+	<entity name="BatchMonitoring" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="batSeqNo" type="long" primary="true"/>	<!-- 배치 순번  -->
+		
+		<!-- Fields -->
+		<column name="batDiv" type="String"/>   <!-- 구분(앱별실행통계배치 or 기관별실행통계배치) -->
+		<column name="manualYN" type="String"/> <!-- 수동배치실행 여부  -->
+		<column name="status" type="String"/>   <!-- 배치 실행 상태 -->
+		<column name="message" type="String" localized="true"/>  
+		<column name="insertId" type="long"/>   <!-- 배치 실행 아이디 -->
+		<column name="exeDate" type="Date"/>    <!-- 실행 일자 -->
+	</entity>	
+
+	
+</service-builder>

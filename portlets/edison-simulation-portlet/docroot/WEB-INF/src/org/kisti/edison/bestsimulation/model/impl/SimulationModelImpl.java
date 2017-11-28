@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -77,14 +77,13 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 			{ "simulationTitle", Types.VARCHAR },
 			{ "scienceAppId", Types.VARCHAR },
 			{ "scienceAppName", Types.VARCHAR },
-			{ "scienceAppVersion", Types.VARCHAR },
 			{ "simulationCreateDt", Types.TIMESTAMP },
 			{ "cluster", Types.VARCHAR },
 			{ "classId", Types.BIGINT },
 			{ "customId", Types.BIGINT },
 			{ "testYn", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDSIM_Simulation (simulationUuid VARCHAR(75) not null,groupId LONG not null,userId LONG,simulationTitle STRING null,scienceAppId VARCHAR(75) null,scienceAppName STRING null,scienceAppVersion VARCHAR(75) null,simulationCreateDt DATE null,cluster VARCHAR(75) null,classId LONG,customId LONG,testYn BOOLEAN,primary key (simulationUuid, groupId))";
+	public static final String TABLE_SQL_CREATE = "create table EDSIM_Simulation (simulationUuid VARCHAR(75) not null,groupId LONG not null,userId LONG,simulationTitle STRING null,scienceAppId VARCHAR(75) null,scienceAppName STRING null,simulationCreateDt DATE null,cluster VARCHAR(75) null,classId LONG,customId LONG,testYn BOOLEAN,primary key (simulationUuid, groupId))";
 	public static final String TABLE_SQL_DROP = "drop table EDSIM_Simulation";
 	public static final String ORDER_BY_JPQL = " ORDER BY simulation.simulationCreateDt DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDSIM_Simulation.simulationCreateDt DESC";
@@ -102,10 +101,9 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 			true);
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long SCIENCEAPPID_COLUMN_BITMASK = 2L;
-	public static long SCIENCEAPPNAME_COLUMN_BITMASK = 4L;
-	public static long SIMULATIONUUID_COLUMN_BITMASK = 8L;
-	public static long USERID_COLUMN_BITMASK = 16L;
-	public static long SIMULATIONCREATEDT_COLUMN_BITMASK = 32L;
+	public static long SIMULATIONUUID_COLUMN_BITMASK = 4L;
+	public static long USERID_COLUMN_BITMASK = 8L;
+	public static long SIMULATIONCREATEDT_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -126,7 +124,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		model.setSimulationTitle(soapModel.getSimulationTitle());
 		model.setScienceAppId(soapModel.getScienceAppId());
 		model.setScienceAppName(soapModel.getScienceAppName());
-		model.setScienceAppVersion(soapModel.getScienceAppVersion());
 		model.setSimulationCreateDt(soapModel.getSimulationCreateDt());
 		model.setCluster(soapModel.getCluster());
 		model.setClassId(soapModel.getClassId());
@@ -203,7 +200,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		attributes.put("simulationTitle", getSimulationTitle());
 		attributes.put("scienceAppId", getScienceAppId());
 		attributes.put("scienceAppName", getScienceAppName());
-		attributes.put("scienceAppVersion", getScienceAppVersion());
 		attributes.put("simulationCreateDt", getSimulationCreateDt());
 		attributes.put("cluster", getCluster());
 		attributes.put("classId", getClassId());
@@ -249,12 +245,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 
 		if (scienceAppName != null) {
 			setScienceAppName(scienceAppName);
-		}
-
-		String scienceAppVersion = (String)attributes.get("scienceAppVersion");
-
-		if (scienceAppVersion != null) {
-			setScienceAppVersion(scienceAppVersion);
 		}
 
 		Date simulationCreateDt = (Date)attributes.get("simulationCreateDt");
@@ -555,12 +545,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 
 	@Override
 	public void setScienceAppName(String scienceAppName) {
-		_columnBitmask |= SCIENCEAPPNAME_COLUMN_BITMASK;
-
-		if (_originalScienceAppName == null) {
-			_originalScienceAppName = _scienceAppName;
-		}
-
 		_scienceAppName = scienceAppName;
 	}
 
@@ -606,26 +590,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		setScienceAppName(LocalizationUtil.updateLocalization(
 				scienceAppNameMap, getScienceAppName(), "ScienceAppName",
 				LocaleUtil.toLanguageId(defaultLocale)));
-	}
-
-	public String getOriginalScienceAppName() {
-		return GetterUtil.getString(_originalScienceAppName);
-	}
-
-	@JSON
-	@Override
-	public String getScienceAppVersion() {
-		if (_scienceAppVersion == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _scienceAppVersion;
-		}
-	}
-
-	@Override
-	public void setScienceAppVersion(String scienceAppVersion) {
-		_scienceAppVersion = scienceAppVersion;
 	}
 
 	@JSON
@@ -797,7 +761,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		simulationImpl.setSimulationTitle(getSimulationTitle());
 		simulationImpl.setScienceAppId(getScienceAppId());
 		simulationImpl.setScienceAppName(getScienceAppName());
-		simulationImpl.setScienceAppVersion(getScienceAppVersion());
 		simulationImpl.setSimulationCreateDt(getSimulationCreateDt());
 		simulationImpl.setCluster(getCluster());
 		simulationImpl.setClassId(getClassId());
@@ -868,8 +831,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 
 		simulationModelImpl._originalScienceAppId = simulationModelImpl._scienceAppId;
 
-		simulationModelImpl._originalScienceAppName = simulationModelImpl._scienceAppName;
-
 		simulationModelImpl._columnBitmask = 0;
 	}
 
@@ -913,14 +874,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 			simulationCacheModel.scienceAppName = null;
 		}
 
-		simulationCacheModel.scienceAppVersion = getScienceAppVersion();
-
-		String scienceAppVersion = simulationCacheModel.scienceAppVersion;
-
-		if ((scienceAppVersion != null) && (scienceAppVersion.length() == 0)) {
-			simulationCacheModel.scienceAppVersion = null;
-		}
-
 		Date simulationCreateDt = getSimulationCreateDt();
 
 		if (simulationCreateDt != null) {
@@ -949,7 +902,7 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -963,8 +916,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		sb.append(getScienceAppId());
 		sb.append(", scienceAppName=");
 		sb.append(getScienceAppName());
-		sb.append(", scienceAppVersion=");
-		sb.append(getScienceAppVersion());
 		sb.append(", simulationCreateDt=");
 		sb.append(getSimulationCreateDt());
 		sb.append(", cluster=");
@@ -982,7 +933,7 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.bestsimulation.model.Simulation");
@@ -1011,10 +962,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 		sb.append(
 			"<column><column-name>scienceAppName</column-name><column-value><![CDATA[");
 		sb.append(getScienceAppName());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>scienceAppVersion</column-name><column-value><![CDATA[");
-		sb.append(getScienceAppVersion());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>simulationCreateDt</column-name><column-value><![CDATA[");
@@ -1061,8 +1008,6 @@ public class SimulationModelImpl extends BaseModelImpl<Simulation>
 	private String _originalScienceAppId;
 	private String _scienceAppName;
 	private String _scienceAppNameCurrentLanguageId;
-	private String _originalScienceAppName;
-	private String _scienceAppVersion;
 	private Date _simulationCreateDt;
 	private String _cluster;
 	private long _classId;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -71,6 +71,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 			{ "jobSeqNo", Types.BIGINT },
 			{ "simulationUuid", Types.VARCHAR },
 			{ "groupId", Types.BIGINT },
+			{ "simulationJobId", Types.BIGINT },
 			{ "jobUuid", Types.VARCHAR },
 			{ "jobStatus", Types.BIGINT },
 			{ "jobStartDt", Types.TIMESTAMP },
@@ -84,7 +85,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 			{ "jobInputDeckName", Types.VARCHAR },
 			{ "jobSubmit", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDSIM_SimulationJob (jobSeqNo LONG not null,simulationUuid VARCHAR(75) not null,groupId LONG not null,jobUuid VARCHAR(75) null,jobStatus LONG,jobStartDt DATE null,jobEndDt DATE null,jobTitle STRING null,jobExecPath STRING null,jobPhase LONG,jobSubmitDt DATE null,jobUniversityField LONG,jobInputDeckYn BOOLEAN,jobInputDeckName VARCHAR(75) null,jobSubmit BOOLEAN,primary key (jobSeqNo, simulationUuid, groupId))";
+	public static final String TABLE_SQL_CREATE = "create table EDSIM_SimulationJob (jobSeqNo LONG not null,simulationUuid VARCHAR(75) not null,groupId LONG not null,simulationJobId LONG,jobUuid VARCHAR(75) null,jobStatus LONG,jobStartDt DATE null,jobEndDt DATE null,jobTitle STRING null,jobExecPath STRING null,jobPhase LONG,jobSubmitDt DATE null,jobUniversityField LONG,jobInputDeckYn BOOLEAN,jobInputDeckName VARCHAR(75) null,jobSubmit BOOLEAN,primary key (jobSeqNo, simulationUuid, groupId))";
 	public static final String TABLE_SQL_DROP = "drop table EDSIM_SimulationJob";
 	public static final String ORDER_BY_JPQL = " ORDER BY simulationJob.jobStatus ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDSIM_SimulationJob.jobStatus ASC";
@@ -100,10 +101,9 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.kisti.edison.bestsimulation.model.SimulationJob"),
 			true);
-	public static long JOBSTATUS_COLUMN_BITMASK = 1L;
-	public static long JOBSUBMIT_COLUMN_BITMASK = 2L;
-	public static long JOBUUID_COLUMN_BITMASK = 4L;
-	public static long SIMULATIONUUID_COLUMN_BITMASK = 8L;
+	public static long JOBUUID_COLUMN_BITMASK = 1L;
+	public static long SIMULATIONUUID_COLUMN_BITMASK = 2L;
+	public static long JOBSTATUS_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -121,6 +121,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		model.setJobSeqNo(soapModel.getJobSeqNo());
 		model.setSimulationUuid(soapModel.getSimulationUuid());
 		model.setGroupId(soapModel.getGroupId());
+		model.setSimulationJobId(soapModel.getSimulationJobId());
 		model.setJobUuid(soapModel.getJobUuid());
 		model.setJobStatus(soapModel.getJobStatus());
 		model.setJobStartDt(soapModel.getJobStartDt());
@@ -202,6 +203,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		attributes.put("jobSeqNo", getJobSeqNo());
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("groupId", getGroupId());
+		attributes.put("simulationJobId", getSimulationJobId());
 		attributes.put("jobUuid", getJobUuid());
 		attributes.put("jobStatus", getJobStatus());
 		attributes.put("jobStartDt", getJobStartDt());
@@ -236,6 +238,12 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long simulationJobId = (Long)attributes.get("simulationJobId");
+
+		if (simulationJobId != null) {
+			setSimulationJobId(simulationJobId);
 		}
 
 		String jobUuid = (String)attributes.get("jobUuid");
@@ -361,6 +369,17 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 	@JSON
 	@Override
+	public long getSimulationJobId() {
+		return _simulationJobId;
+	}
+
+	@Override
+	public void setSimulationJobId(long simulationJobId) {
+		_simulationJobId = simulationJobId;
+	}
+
+	@JSON
+	@Override
 	public String getJobUuid() {
 		if (_jobUuid == null) {
 			return StringPool.BLANK;
@@ -395,17 +414,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 	public void setJobStatus(long jobStatus) {
 		_columnBitmask = -1L;
 
-		if (!_setOriginalJobStatus) {
-			_setOriginalJobStatus = true;
-
-			_originalJobStatus = _jobStatus;
-		}
-
 		_jobStatus = jobStatus;
-	}
-
-	public long getOriginalJobStatus() {
-		return _originalJobStatus;
 	}
 
 	@JSON
@@ -712,19 +721,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 	@Override
 	public void setJobSubmit(boolean jobSubmit) {
-		_columnBitmask |= JOBSUBMIT_COLUMN_BITMASK;
-
-		if (!_setOriginalJobSubmit) {
-			_setOriginalJobSubmit = true;
-
-			_originalJobSubmit = _jobSubmit;
-		}
-
 		_jobSubmit = jobSubmit;
-	}
-
-	public boolean getOriginalJobSubmit() {
-		return _originalJobSubmit;
 	}
 
 	public long getColumnBitmask() {
@@ -823,6 +820,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		simulationJobImpl.setJobSeqNo(getJobSeqNo());
 		simulationJobImpl.setSimulationUuid(getSimulationUuid());
 		simulationJobImpl.setGroupId(getGroupId());
+		simulationJobImpl.setSimulationJobId(getSimulationJobId());
 		simulationJobImpl.setJobUuid(getJobUuid());
 		simulationJobImpl.setJobStatus(getJobStatus());
 		simulationJobImpl.setJobStartDt(getJobStartDt());
@@ -897,14 +895,6 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 		simulationJobModelImpl._originalJobUuid = simulationJobModelImpl._jobUuid;
 
-		simulationJobModelImpl._originalJobStatus = simulationJobModelImpl._jobStatus;
-
-		simulationJobModelImpl._setOriginalJobStatus = false;
-
-		simulationJobModelImpl._originalJobSubmit = simulationJobModelImpl._jobSubmit;
-
-		simulationJobModelImpl._setOriginalJobSubmit = false;
-
 		simulationJobModelImpl._columnBitmask = 0;
 	}
 
@@ -923,6 +913,8 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		}
 
 		simulationJobCacheModel.groupId = getGroupId();
+
+		simulationJobCacheModel.simulationJobId = getSimulationJobId();
 
 		simulationJobCacheModel.jobUuid = getJobUuid();
 
@@ -998,7 +990,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{jobSeqNo=");
 		sb.append(getJobSeqNo());
@@ -1006,6 +998,8 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		sb.append(getSimulationUuid());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
+		sb.append(", simulationJobId=");
+		sb.append(getSimulationJobId());
 		sb.append(", jobUuid=");
 		sb.append(getJobUuid());
 		sb.append(", jobStatus=");
@@ -1037,7 +1031,7 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(52);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.bestsimulation.model.SimulationJob");
@@ -1054,6 +1048,10 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
 		sb.append(getGroupId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationJobId</column-name><column-value><![CDATA[");
+		sb.append(getSimulationJobId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>jobUuid</column-name><column-value><![CDATA[");
@@ -1117,11 +1115,10 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 	private String _simulationUuid;
 	private String _originalSimulationUuid;
 	private long _groupId;
+	private long _simulationJobId;
 	private String _jobUuid;
 	private String _originalJobUuid;
 	private long _jobStatus;
-	private long _originalJobStatus;
-	private boolean _setOriginalJobStatus;
 	private Date _jobStartDt;
 	private Date _jobEndDt;
 	private String _jobTitle;
@@ -1134,8 +1131,6 @@ public class SimulationJobModelImpl extends BaseModelImpl<SimulationJob>
 	private boolean _jobInputDeckYn;
 	private String _jobInputDeckName;
 	private boolean _jobSubmit;
-	private boolean _originalJobSubmit;
-	private boolean _setOriginalJobSubmit;
 	private long _columnBitmask;
 	private SimulationJob _escapedModel;
 }

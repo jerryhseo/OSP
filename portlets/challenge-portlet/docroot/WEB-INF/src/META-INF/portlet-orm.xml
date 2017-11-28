@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.AgencyModelImpl">
+		<attributes>
+			<id name="agencyid" />
+			<basic name="name" />
+			<basic name="level" />
+			<basic name="url" />
+			<basic name="childid" />
+			<transient name="modelAttributes" />
+			<transient name="nameCurrentLanguageId" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.AwardModelImpl">
+		<attributes>
+			<id name="awardid" />
+			<basic name="awardGradeName" />
+			<basic name="awardName" />
+			<basic name="prize" />
+			<basic name="number">
+				<column name="NUMBER_" />
+			</basic>
+			<basic name="childid" />
+			<transient name="awardGradeNameCurrentLanguageId" />
+			<transient name="awardGradeNameMap" />
+			<transient name="awardNameCurrentLanguageId" />
+			<transient name="awardNameMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="prizeCurrentLanguageId" />
+			<transient name="prizeMap" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.AwardhistoryModelImpl">
+		<attributes>
+			<id name="awardhistoryid" />
+			<basic name="name" />
+			<basic name="prize" />
+			<basic name="chTeamid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.ChallengeModelImpl">
+		<attributes>
+			<id name="challengeid" />
+			<basic name="name" />
+			<basic name="description" />
+			<transient name="descriptionCurrentLanguageId" />
+			<transient name="descriptionMap" />
+			<transient name="modelAttributes" />
+			<transient name="nameCurrentLanguageId" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.ChallengeMemberModelImpl">
+		<attributes>
+			<id name="chMemberid" />
+			<basic name="fullName" />
+			<basic name="screenName" />
+			<basic name="email" />
+			<basic name="leader" />
+			<basic name="falculty" />
+			<basic name="major" />
+			<basic name="grade" />
+			<basic name="chTeamid" />
+			<transient name="falcultyCurrentLanguageId" />
+			<transient name="falcultyMap" />
+			<transient name="fullNameCurrentLanguageId" />
+			<transient name="fullNameMap" />
+			<transient name="majorCurrentLanguageId" />
+			<transient name="majorMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="screenNameCurrentLanguageId" />
+			<transient name="screenNameMap" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.ChallengeTeamModelImpl">
+		<attributes>
+			<id name="chTeamid" />
+			<basic name="teamName" />
+			<basic name="subject" />
+			<basic name="paperPDFstatus" />
+			<basic name="paperstatus" />
+			<basic name="presentationstatus" />
+			<basic name="registerDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="registerid" />
+			<basic name="paperName" />
+			<basic name="paperAbstract" />
+			<basic name="paperFileName" />
+			<basic name="paperSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperPDFFileName" />
+			<basic name="paperPDFSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperPDFModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="presentationName" />
+			<basic name="presentationFileName" />
+			<basic name="presentationSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="presentationModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="filepath" />
+			<basic name="childid" />
+			<transient name="modelAttributes" />
+			<transient name="paperAbstractCurrentLanguageId" />
+			<transient name="paperAbstractMap" />
+			<transient name="paperNameCurrentLanguageId" />
+			<transient name="paperNameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="subjectCurrentLanguageId" />
+			<transient name="subjectMap" />
+			<transient name="teamNameCurrentLanguageId" />
+			<transient name="teamNameMap" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="edison.challenge.service.builder.model.impl.ChildChallengeModelImpl">
+		<attributes>
+			<id name="childid" />
+			<basic name="number">
+				<column name="NUMBER_" />
+			</basic>
+			<basic name="presentationDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperStartDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperEndDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="evaluationStartDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="evaluationEndDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="challengeStartDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="challengeEndDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="challengeid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="edison.challenge.service.builder.model.impl.AgencyImpl" name="Agency">
+		<table name="edison_Agency" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.AwardImpl" name="Award">
+		<table name="edison_Award" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.AwardhistoryImpl" name="Awardhistory">
+		<table name="edison_Awardhistory" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.ChallengeImpl" name="Challenge">
+		<table name="edison_Challenge" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.ChallengeMemberImpl" name="ChallengeMember">
+		<table name="edison_ChallengeMember" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.ChallengeTeamImpl" name="ChallengeTeam">
+		<table name="edison_ChallengeTeam" />
+		<attributes />
+	</entity>
+	<entity class="edison.challenge.service.builder.model.impl.ChildChallengeImpl" name="ChildChallenge">
+		<table name="edison_ChildChallenge" />
+		<attributes />
+	</entity>
+</entity-mappings>

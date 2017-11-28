@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<script src="<c:url value="/js/jquery-1.10.2.min.js" />"></script>
-<script src="<c:url value="/js/jquery-ui-1.10.4.custom.min.js" />"></script>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.min.css" media="screen"/>
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/jquery/jquery-ui.min.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/myfile.css" media="screen"/>
 
@@ -78,7 +75,7 @@
 <script type="text/javascript">
 AUI().ready(function() {
 	$("#icebreaker-file-upload-dialog-close-btn").click(function() {
-		$("#icebreaker-file-upload-dialog").dialog("close");
+	    $('#icebreaker-file-upload-dialog').dialog('close');
 	});
 });
 	

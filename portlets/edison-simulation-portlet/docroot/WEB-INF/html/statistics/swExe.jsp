@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp" %>
 
-<script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
-<script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 <script type="text/javascript" src="${contextPath}/js/main.js"></script>
 
 <liferay-portlet:renderURL var="statisticsViewURL" portletMode='view'></liferay-portlet:renderURL>
@@ -100,6 +98,8 @@
 	<div style="float:right;height:33px;padding-top: 7px;">Result : <span id="totalSpan"></span></div>
 </div>
 
+<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+
 <script type="text/javascript">
 //liferay-ui 탭 이벤트 return Script
 function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
@@ -115,6 +115,7 @@ function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
 }
 
 function <portlet:namespace/>dataSearch(){
+    bStart();
 	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	
 	jQuery.ajax({
@@ -128,7 +129,9 @@ function <portlet:namespace/>dataSearch(){
 			setBar(data.barChartDateList);
 		},error:function(msg){
 			alert("System Exception dataSearch: " + msg);
-		}
+		},complete: function(){
+            bEnd();
+        }
 
 	});
 }

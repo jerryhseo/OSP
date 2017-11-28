@@ -16,9 +16,10 @@
 	<liferay-portlet:param name="searchByPrePage" value="${searchByPrePage}" />
 	<liferay-portlet:param name="portType" value="${portType}" />
 	<liferay-portlet:param name="portName" value="${portName}" />
-	
-	<liferay-portlet:param name="redirectName" value="${redirectName}" />
-	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
+	<c:if test="<%=LiferayWindowState.isPopUp(request)%>">
+        <liferay-portlet:param name="redirectName" value="${redirectName}" />
+        <liferay-portlet:param name="redirectURL" value="${redirectURL}" />
+	</c:if>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:resourceURL var="dataTypeViewURL" escapeXml="false" id="dataTypeView" copyCurrentRenderParameters="false"/>

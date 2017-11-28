@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+<sql id="edison.challenge.service.builder.service.persistence.getTeamAppList" >
+		<![CDATA[
+		SELECT DISTINCT A.scienceAppName
+		FROM
+			(SELECT EDSIM_Simulation.scienceAppName, EDSIM_Simulation.userId, EDSIM_Simulation.scienceAppId, EDSIM_Simulation.simulationUuid FROM	EDSIM_Simulation inner join 
+				(SELECT User_.userId FROM User_ INNER JOIN 
+					(SELECT M.screenName FROM edison_ChallengeTeam T 
+						INNER JOIN edison_ChallengeMember M WHERE T.chTeamid = #teamID# AND T.chTeamid = M.chTeamid ) AS chMember 
+					ON User_.screenName = chMember.screenName) AS userIDList
+			ON EDSIM_Simulation.userId = userIDList.userId ) AS A,
+			EDSIM_SimulationJob B,
+			EDAPP_ScienceApp C
+		WHERE
+			B.jobSubmitDt IS NOT NULL AND 
+			A.scienceAppId IS NOT NULL AND
+			B.jobSubmitDt BETWEEN DATE_FORMAT(#startDate#, '%Y-%m-%d') AND DATE_FORMAT(#endDate#, '%Y-%m-%d') AND
+			B.testYn != 'Y' AND
+			C.status = 1901004 AND
+			C.appType = "Solver" AND	
+			A.simulationUuid = B.simulationUuid AND 
+			A.scienceAppId = C.scienceAppId
+		]]>
+</sql>
+<sql id="edison.challenge.service.builder.service.persistence.getCPUUseage" >
+		<![CDATA[
+		SELECT                  
+			SUM(UNIX_TIMESTAMP(B.jobEndDt) - UNIX_TIMESTAMP(B.jobStartDt))/count(*) AS av
+		FROM
+			(SELECT EDSIM_Simulation.scienceAppName, EDSIM_Simulation.userId, EDSIM_Simulation.scienceAppId, EDSIM_Simulation.simulationUuid FROM	EDSIM_Simulation inner join 
+				(SELECT User_.userId FROM User_ INNER JOIN 
+					(SELECT M.screenName FROM edison_ChallengeTeam T 
+						INNER JOIN edison_ChallengeMember M WHERE T.chTeamid = #teamID# AND T.chTeamid = M.chTeamid ) AS chMember 
+					ON User_.screenName = chMember.screenName) AS userIDList
+			ON EDSIM_Simulation.userId = userIDList.userId ) AS A,
+			EDSIM_SimulationJob B,
+			EDAPP_ScienceApp C,
+			User_ U
+		WHERE
+			B.testYn != "Y" AND
+			B.jobSubmitDt BETWEEN DATE_FORMAT(#startDate#, '%Y-%m-%d') AND DATE_FORMAT(#endDate#, '%Y-%m-%d') AND
+			C.status = 1901004 AND
+			C.appType = "Solver" AND
+			A.scienceAppId IS NOT NULL AND
+			B.jobSubmitDt IS NOT NULL AND
+			A.simulationUuid = B.simulationUuid AND
+			A.scienceAppId = C.scienceAppId AND
+			A.userId = U.userId
+		]]>
+</sql>
+</custom-sql>

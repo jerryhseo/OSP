@@ -5,8 +5,6 @@
 <liferay-portlet:resourceURL var="getStatisticsUserURL"		id="getStatisticsUser"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
-<script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
-<script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
 <% 
 	//Tab Setting
@@ -87,7 +85,8 @@
 </div>	
 <br><br>
 
-  
+<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+
 <script type="text/javascript">
 //liferay-ui 탭 이벤트 return Script
 function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){	
@@ -95,6 +94,7 @@ function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
 }
 
 function <portlet:namespace/>dataSearch(){
+    bStart();
 	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	jQuery.ajax({
 		type: "POST",
@@ -107,7 +107,9 @@ function <portlet:namespace/>dataSearch(){
 			setBar(data.barChartDateList);
 		},error:function(msg){
 			alert("System Exception dataSearch: " + msg);
-		}
+		},complete: function(){
+            bEnd();
+        }
 
 	});
 }
@@ -240,7 +242,6 @@ function dtCheckBox(){
 	
 			$("img.ui-datepicker-trigger").attr("style", "margin-left:2px; vertical-align:middle; cursor: Pointer; width: 18px;");
 	
-			
 			chart1 = new Highcharts.Chart({
 				chart: {
 					renderTo: 'container1',
@@ -320,7 +321,6 @@ function dtCheckBox(){
 				}
 			}
 			});
-	
 			<portlet:namespace/>dataSearch();
 	});
 

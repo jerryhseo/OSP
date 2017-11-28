@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
-import com.liferay.portal.util.PortalUtil;
 
 import org.kisti.edison.science.service.ClpSerializer;
 import org.kisti.edison.science.service.ScienceAppCompileLocalServiceUtil;
@@ -141,19 +140,19 @@ public class ScienceAppCompileClp extends BaseModelImpl<ScienceAppCompile>
 	}
 
 	@Override
-	public long getUserId() {
+	public Long getUserId() {
 		return _userId;
 	}
 
 	@Override
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		_userId = userId;
 
 		if (_scienceAppCompileRemoteModel != null) {
 			try {
 				Class<?> clazz = _scienceAppCompileRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setUserId", long.class);
+				Method method = clazz.getMethod("setUserId", Long.class);
 
 				method.invoke(_scienceAppCompileRemoteModel, userId);
 			}
@@ -161,16 +160,6 @@ public class ScienceAppCompileClp extends BaseModelImpl<ScienceAppCompile>
 				throw new UnsupportedOperationException(e);
 			}
 		}
-	}
-
-	@Override
-	public String getUserUuid() throws SystemException {
-		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
-	}
-
-	@Override
-	public void setUserUuid(String userUuid) {
-		_userUuid = userUuid;
 	}
 
 	@Override
@@ -422,8 +411,7 @@ public class ScienceAppCompileClp extends BaseModelImpl<ScienceAppCompile>
 	}
 
 	private long _scienceAppId;
-	private long _userId;
-	private String _userUuid;
+	private Long _userId;
 	private String _compileUrl;
 	private String _result;
 	private Date _createDate;

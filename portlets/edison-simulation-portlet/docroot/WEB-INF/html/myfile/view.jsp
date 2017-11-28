@@ -937,11 +937,11 @@ AUI().ready(function(){
 	    	$(this).css('overflow', 'visible');
 	    	$(this).removeClass("ui-widget-content");
 	    	$(this).parent().removeClass("ui-widget-content");
-	    	
-
+	        
 	    	$('.ui-widget-overlay').bind('click',function(){
-	    		$("#icebreaker-file-upload-dialog").dialog("close");
-	    	})
+	    		$('#icebreaker-file-upload-dialog').dialog('close');
+	    	});
+	    	
 	    },
 	    close: function() {
 	    	$("#icebreaker-file-upload-dialog").empty();
@@ -972,9 +972,8 @@ function openPopUpFileUpload(){
 	URL = URL + "&<portlet:namespace/>workflowType=<%=workflowType%>";
 	URL = URL + "&<portlet:namespace/>vcToken="+vcToken+"&<portlet:namespace/>destFolerId="+selectNode+"&<portlet:namespace/>destFolerParents="+nodeParents;
 	
-	$("#icebreaker-file-upload-dialog").load(URL, function (e) {
-		$("#icebreaker-file-upload-dialog").dialog("open")
-	});
+	$("#icebreaker-file-upload-dialog").load(URL).dialog("open");
+	
 }
 
 //file path return 

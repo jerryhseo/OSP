@@ -156,7 +156,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
             }
             
             String gBatisQuery = GBatisUtil.getGBatis(params, sql.toString());
-            System.out.println("gBatisQuery : " + gBatisQuery);
             
             SQLQuery query = session.createSQLQuery(gBatisQuery);
             
@@ -212,9 +211,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			
 			
 			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
-			
-			System.out.println("gBatisQuery : " + gBatisQuery);
-			
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			query.addEntity("EDSIM_Simulation", SimulationImpl.class);
 			query.addEntity("EDSIM_SimulationJob", SimulationJobImpl.class);
@@ -267,8 +263,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			}
 			
 			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
-			
-			System.out.println("gBatisQuery : " + gBatisQuery);
 			
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			query.addScalar("totalCnt", Type.INTEGER);

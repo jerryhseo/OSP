@@ -6,8 +6,6 @@
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="searchSelect"		id="searchSelect"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
-<script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
-<script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 <script type="text/javascript" src="${contextPath}/js/main.js"></script>
 
 <% 
@@ -95,7 +93,8 @@
 </div>	
 <br><br>
 
-  
+<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+
 <script type="text/javascript">
 //liferay-ui 탭 이벤트 return Script
 function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){	
@@ -103,6 +102,7 @@ function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
 }
 
 function <portlet:namespace/>dataSearch(){
+    bStart();
 	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	jQuery.ajax({
 		type: "POST",
@@ -115,8 +115,9 @@ function <portlet:namespace/>dataSearch(){
 			setBar(data.barChartDateList);
 		},error:function(msg){
 			alert("System Exception dataSearch: " + msg);
-		}
-
+        },complete: function(){
+            bEnd();
+        }
 	});
 }
 

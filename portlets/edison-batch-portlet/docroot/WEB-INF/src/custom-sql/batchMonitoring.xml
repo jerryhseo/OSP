@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom-sql>
+	<sql id="org.kisti.edison.simulation.service.persistence.BatchMonitoringFinder.getCustomBatchMonitoringList" >
+		<![CDATA[
+        	SELECT 
+				EDBM.batSeqNo,
+				EDBM.batDiv,
+				EDBM.manualYN,
+				EDBM.status,
+          		EDBM.message,
+          		USERS.firstName AS insertName,
+          		DATE_FORMAT(EDBM.exeDate, '%Y-%m-%d') AS exeDate
+			FROM 
+				EDBAT_BatchMonitoring EDBM
+              		LEFT OUTER JOIN User_ USERS on EDBM.insertId = USERS.userId
+          	ORDER BY EDBM.exeDate DESC	
+          	LIMIT #begin#, #end#
+			]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.simulation.service.persistence.BatchMonitoringFinder.getCustomBatchMonitoringCount" >
+		<![CDATA[
+        	SELECT 
+				COUNT(*) AS totalCount
+			FROM 
+				EDBAT_BatchMonitoring
+			]]>
+	</sql>	
+	
+</custom-sql>

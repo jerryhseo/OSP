@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.login.model.LoginLog">
+		<field name="id" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="userId" type="long" />
+	</model>
+</model-hints>

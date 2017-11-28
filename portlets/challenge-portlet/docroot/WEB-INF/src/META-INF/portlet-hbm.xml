@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="edison.challenge.service.builder.model.Agency" />
+	<import class="edison.challenge.service.builder.model.Award" />
+	<import class="edison.challenge.service.builder.model.Awardhistory" />
+	<import class="edison.challenge.service.builder.model.Challenge" />
+	<import class="edison.challenge.service.builder.model.ChallengeMember" />
+	<import class="edison.challenge.service.builder.model.ChallengeTeam" />
+	<import class="edison.challenge.service.builder.model.ChildChallenge" />
+	<class name="edison.challenge.service.builder.model.impl.AgencyImpl" table="edison_Agency">
+		<cache usage="read-write" />
+		<id name="agencyid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="level" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="url" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="childid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.AwardImpl" table="edison_Award">
+		<cache usage="read-write" />
+		<id name="awardid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="awardGradeName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="awardName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="prize" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="number" type="com.liferay.portal.dao.orm.hibernate.StringType" column="number_" />
+		<property name="childid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.AwardhistoryImpl" table="edison_Awardhistory">
+		<cache usage="read-write" />
+		<id name="awardhistoryid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="prize" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="chTeamid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.ChallengeImpl" table="edison_Challenge">
+		<cache usage="read-write" />
+		<id name="challengeid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.ChallengeMemberImpl" table="edison_ChallengeMember">
+		<cache usage="read-write" />
+		<id name="chMemberid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="fullName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="screenName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="leader" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="falculty" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="major" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="grade" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="chTeamid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.ChallengeTeamImpl" table="edison_ChallengeTeam">
+		<cache usage="read-write" />
+		<id name="chTeamid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="teamName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="subject" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperPDFstatus" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="paperstatus" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="presentationstatus" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="registerDay" type="org.hibernate.type.TimestampType" />
+		<property name="registerid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperAbstract" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperPDFFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperPDFSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperPDFModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="presentationName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="presentationFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="presentationSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="presentationModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="filepath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="childid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="edison.challenge.service.builder.model.impl.ChildChallengeImpl" table="edison_ChildChallenge">
+		<cache usage="read-write" />
+		<id name="childid" type="long">
+			<generator class="increment" />
+		</id>
+		<property name="number" type="com.liferay.portal.dao.orm.hibernate.IntegerType" column="number_" />
+		<property name="presentationDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperStartDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperEndDay" type="org.hibernate.type.TimestampType" />
+		<property name="evaluationStartDay" type="org.hibernate.type.TimestampType" />
+		<property name="evaluationEndDay" type="org.hibernate.type.TimestampType" />
+		<property name="challengeStartDay" type="org.hibernate.type.TimestampType" />
+		<property name="challengeEndDay" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="challengeid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -55,7 +55,6 @@ public class SimulationWrapper implements Simulation, ModelWrapper<Simulation> {
 		attributes.put("simulationTitle", getSimulationTitle());
 		attributes.put("scienceAppId", getScienceAppId());
 		attributes.put("scienceAppName", getScienceAppName());
-		attributes.put("scienceAppVersion", getScienceAppVersion());
 		attributes.put("simulationCreateDt", getSimulationCreateDt());
 		attributes.put("cluster", getCluster());
 		attributes.put("classId", getClassId());
@@ -101,12 +100,6 @@ public class SimulationWrapper implements Simulation, ModelWrapper<Simulation> {
 
 		if (scienceAppName != null) {
 			setScienceAppName(scienceAppName);
-		}
-
-		String scienceAppVersion = (String)attributes.get("scienceAppVersion");
-
-		if (scienceAppVersion != null) {
-			setScienceAppVersion(scienceAppVersion);
 		}
 
 		Date simulationCreateDt = (Date)attributes.get("simulationCreateDt");
@@ -545,26 +538,6 @@ public class SimulationWrapper implements Simulation, ModelWrapper<Simulation> {
 		java.util.Map<java.util.Locale, java.lang.String> scienceAppNameMap,
 		java.util.Locale defaultLocale) {
 		_simulation.setScienceAppNameMap(scienceAppNameMap, defaultLocale);
-	}
-
-	/**
-	* Returns the science app version of this simulation.
-	*
-	* @return the science app version of this simulation
-	*/
-	@Override
-	public java.lang.String getScienceAppVersion() {
-		return _simulation.getScienceAppVersion();
-	}
-
-	/**
-	* Sets the science app version of this simulation.
-	*
-	* @param scienceAppVersion the science app version of this simulation
-	*/
-	@Override
-	public void setScienceAppVersion(java.lang.String scienceAppVersion) {
-		_simulation.setScienceAppVersion(scienceAppVersion);
 	}
 
 	/**

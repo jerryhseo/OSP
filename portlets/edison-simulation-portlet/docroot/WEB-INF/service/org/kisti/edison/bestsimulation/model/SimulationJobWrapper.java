@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -53,6 +53,7 @@ public class SimulationJobWrapper implements SimulationJob,
 		attributes.put("jobSeqNo", getJobSeqNo());
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("groupId", getGroupId());
+		attributes.put("simulationJobId", getSimulationJobId());
 		attributes.put("jobUuid", getJobUuid());
 		attributes.put("jobStatus", getJobStatus());
 		attributes.put("jobStartDt", getJobStartDt());
@@ -87,6 +88,12 @@ public class SimulationJobWrapper implements SimulationJob,
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long simulationJobId = (Long)attributes.get("simulationJobId");
+
+		if (simulationJobId != null) {
+			setSimulationJobId(simulationJobId);
 		}
 
 		String jobUuid = (String)attributes.get("jobUuid");
@@ -241,6 +248,26 @@ public class SimulationJobWrapper implements SimulationJob,
 	@Override
 	public void setGroupId(long groupId) {
 		_simulationJob.setGroupId(groupId);
+	}
+
+	/**
+	* Returns the simulation job ID of this simulation job.
+	*
+	* @return the simulation job ID of this simulation job
+	*/
+	@Override
+	public long getSimulationJobId() {
+		return _simulationJob.getSimulationJobId();
+	}
+
+	/**
+	* Sets the simulation job ID of this simulation job.
+	*
+	* @param simulationJobId the simulation job ID of this simulation job
+	*/
+	@Override
+	public void setSimulationJobId(long simulationJobId) {
+		_simulationJob.setSimulationJobId(simulationJobId);
 	}
 
 	/**

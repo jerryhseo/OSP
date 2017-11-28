@@ -29,7 +29,6 @@
 			<basic name="simulationTitle" />
 			<basic name="scienceAppId" />
 			<basic name="scienceAppName" />
-			<basic name="scienceAppVersion" />
 			<basic name="simulationCreateDt">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
@@ -67,6 +66,7 @@
 			<id name="jobSeqNo" />
 			<id name="simulationUuid" />
 			<id name="groupId" />
+			<basic name="simulationJobId" />
 			<basic name="jobUuid" />
 			<basic name="jobStatus" />
 			<basic name="jobStartDt">

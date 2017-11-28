@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -319,58 +319,6 @@ public class SimulationJobLocalServiceClpInvoker {
 		_methodParameterTypes120 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
-
-		_methodName121 = "getJobsBySimulationUuidWithAdditionalCondition";
-
-		_methodParameterTypes121 = new String[] { "java.lang.String" };
-
-		_methodName122 = "addJob";
-
-		_methodParameterTypes122 = new String[] { "java.lang.String", "long" };
-
-		_methodName123 = "getJob";
-
-		_methodParameterTypes123 = new String[] { "java.lang.String" };
-
-		_methodName124 = "getJobsByAppUuid";
-
-		_methodParameterTypes124 = new String[] { "java.lang.String" };
-
-		_methodName125 = "getJobsByAppUuid";
-
-		_methodParameterTypes125 = new String[] { "java.lang.String", "int", "int" };
-
-		_methodName126 = "countJobsByAppUuid";
-
-		_methodParameterTypes126 = new String[] { "java.lang.String" };
-
-		_methodName127 = "getJobsBySimulationUuid";
-
-		_methodParameterTypes127 = new String[] { "java.lang.String" };
-
-		_methodName128 = "getJobsBySimulationUuid";
-
-		_methodParameterTypes128 = new String[] { "java.lang.String", "int", "int" };
-
-		_methodName129 = "countJobsBySimulationUuid";
-
-		_methodParameterTypes129 = new String[] { "java.lang.String" };
-
-		_methodName130 = "getJobInputData";
-
-		_methodParameterTypes130 = new String[] { "java.lang.String" };
-
-		_methodName131 = "deleteJobsBySimulationUuid";
-
-		_methodParameterTypes131 = new String[] { "java.lang.String" };
-
-		_methodName132 = "getJobWorkingDirPath";
-
-		_methodParameterTypes132 = new String[] { "java.lang.String" };
-
-		_methodName133 = "deleteJob";
-
-		_methodParameterTypes133 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -721,80 +669,6 @@ public class SimulationJobLocalServiceClpInvoker {
 				(java.util.Locale)arguments[1]);
 		}
 
-		if (_methodName121.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsBySimulationUuidWithAdditionalCondition((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName122.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.addJob((java.lang.String)arguments[0],
-				((Long)arguments[1]).longValue());
-		}
-
-		if (_methodName123.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes123, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJob((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName124.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes124, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsByAppUuid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName125.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsByAppUuid((java.lang.String)arguments[0],
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue());
-		}
-
-		if (_methodName126.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes126, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.countJobsByAppUuid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName127.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes127, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsBySimulationUuid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName128.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobsBySimulationUuid((java.lang.String)arguments[0],
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue());
-		}
-
-		if (_methodName129.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes129, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.countJobsBySimulationUuid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName130.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobInputData((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName131.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
-			SimulationJobLocalServiceUtil.deleteJobsBySimulationUuid((java.lang.String)arguments[0]);
-
-			return null;
-		}
-
-		if (_methodName132.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes132, parameterTypes)) {
-			return SimulationJobLocalServiceUtil.getJobWorkingDirPath((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName133.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes133, parameterTypes)) {
-			SimulationJobLocalServiceUtil.deleteJob((java.lang.String)arguments[0]);
-
-			return null;
-		}
-
 		throw new UnsupportedOperationException();
 	}
 
@@ -904,30 +778,4 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes119;
 	private String _methodName120;
 	private String[] _methodParameterTypes120;
-	private String _methodName121;
-	private String[] _methodParameterTypes121;
-	private String _methodName122;
-	private String[] _methodParameterTypes122;
-	private String _methodName123;
-	private String[] _methodParameterTypes123;
-	private String _methodName124;
-	private String[] _methodParameterTypes124;
-	private String _methodName125;
-	private String[] _methodParameterTypes125;
-	private String _methodName126;
-	private String[] _methodParameterTypes126;
-	private String _methodName127;
-	private String[] _methodParameterTypes127;
-	private String _methodName128;
-	private String[] _methodParameterTypes128;
-	private String _methodName129;
-	private String[] _methodParameterTypes129;
-	private String _methodName130;
-	private String[] _methodParameterTypes130;
-	private String _methodName131;
-	private String[] _methodParameterTypes131;
-	private String _methodName132;
-	private String[] _methodParameterTypes132;
-	private String _methodName133;
-	private String[] _methodParameterTypes133;
 }

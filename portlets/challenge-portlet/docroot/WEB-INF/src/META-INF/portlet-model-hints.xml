@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="edison.challenge.service.builder.model.Agency">
+		<field name="agencyid" type="long" />
+		<field name="name" type="String" localized="true" />
+		<field name="level" type="String" />
+		<field name="url" type="String" />
+		<field name="childid" type="long" />
+	</model>
+	<model name="edison.challenge.service.builder.model.Award">
+		<field name="awardid" type="long" />
+		<field name="awardGradeName" type="String" localized="true" />
+		<field name="awardName" type="String" localized="true" />
+		<field name="prize" type="String" localized="true" />
+		<field name="number" type="String" />
+		<field name="childid" type="long" />
+	</model>
+	<model name="edison.challenge.service.builder.model.Awardhistory">
+		<field name="awardhistoryid" type="long" />
+		<field name="name" type="String" />
+		<field name="prize" type="String" />
+		<field name="chTeamid" type="long" />
+	</model>
+	<model name="edison.challenge.service.builder.model.Challenge">
+		<field name="challengeid" type="long" />
+		<field name="name" type="String" localized="true" />
+		<field name="description" type="String" localized="true" />
+	</model>
+	<model name="edison.challenge.service.builder.model.ChallengeMember">
+		<field name="chMemberid" type="long" />
+		<field name="fullName" type="String" localized="true" />
+		<field name="screenName" type="String" localized="true" />
+		<field name="email" type="String" />
+		<field name="leader" type="boolean" />
+		<field name="falculty" type="String" localized="true" />
+		<field name="major" type="String" localized="true" />
+		<field name="grade" type="String" />
+		<field name="chTeamid" type="long" />
+	</model>
+	<model name="edison.challenge.service.builder.model.ChallengeTeam">
+		<field name="chTeamid" type="long" />
+		<field name="teamName" type="String" localized="true" />
+		<field name="subject" type="String" localized="true" />
+		<field name="paperPDFstatus" type="boolean" />
+		<field name="paperstatus" type="boolean" />
+		<field name="presentationstatus" type="boolean" />
+		<field name="registerDay" type="Date" />
+		<field name="registerid" type="String" />
+		<field name="paperName" type="String" localized="true">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="paperAbstract" type="String" localized="true">
+			<hint name="max-length">3000</hint>
+		</field>
+		<field name="paperFileName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="paperSubmissionDay" type="Date" />
+		<field name="paperModifyDay" type="Date" />
+		<field name="paperPDFFileName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="paperPDFSubmissionDay" type="Date" />
+		<field name="paperPDFModifyDay" type="Date" />
+		<field name="presentationName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="presentationFileName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="presentationSubmissionDay" type="Date">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="presentationModifyDay" type="Date" />
+		<field name="filepath" type="String">
+			<hint name="max-length">5000</hint>
+		</field>
+		<field name="childid" type="long" />
+	</model>
+	<model name="edison.challenge.service.builder.model.ChildChallenge">
+		<field name="childid" type="long" />
+		<field name="number" type="int" />
+		<field name="presentationDay" type="Date" />
+		<field name="paperStartDay" type="Date" />
+		<field name="paperEndDay" type="Date" />
+		<field name="evaluationStartDay" type="Date" />
+		<field name="evaluationEndDay" type="Date" />
+		<field name="challengeStartDay" type="Date" />
+		<field name="challengeEndDay" type="Date" />
+		<field name="status" type="String" />
+		<field name="challengeid" type="long" />
+	</model>
+</model-hints>

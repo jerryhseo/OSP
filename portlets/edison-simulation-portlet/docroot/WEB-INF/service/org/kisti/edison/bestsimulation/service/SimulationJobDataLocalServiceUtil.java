@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -279,19 +279,6 @@ public class SimulationJobDataLocalServiceUtil {
 		java.lang.String jobUuid, java.lang.String jobData)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().modifySimulationJobData(jobUuid, jobData);
-	}
-
-	/**
-	* Added by Jerry H. Seo, from July 5, 2017
-	*
-	* @throws SystemException
-	* @throws NoSuchSimulationJobDataException
-	*/
-	public static org.kisti.edison.bestsimulation.model.SimulationJobData replaceJobData(
-		java.lang.String prevUuid, java.lang.String newUuid,
-		java.lang.String jobData)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().replaceJobData(prevUuid, newUuid, jobData);
 	}
 
 	public static void clearService() {

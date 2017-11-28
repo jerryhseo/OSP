@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
+    <portlet>
+        <portlet-name>Manager</portlet-name>
+        <display-name>Manager</display-name>
+        <portlet-class>edison.challenge.portlet.manager.ManagerPortlet</portlet-class>
+        <init-param>
+            <name>view-template</name>
+            <value>/html/managerChallenge/view.jsp</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+        <supported-locale>ko_KR</supported-locale>
+        <supported-locale>en_US</supported-locale>
+        <resource-bundle>content.Language_en</resource-bundle>
+        <portlet-info>
+            <title>Manager</title>
+            <short-title>Manager</short-title>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+    </portlet>
+    <portlet>
+    	<portlet-name>team-information</portlet-name>
+    	<display-name>Team Information</display-name>
+    	<portlet-class>
+    		edison.challenge.portlet.team.TeamInformation
+    	</portlet-class>
+    	<init-param>
+    		<name>view-template</name>
+    		<value>/html/teaminformation/view.jsp</value>
+    	</init-param>
+    	<expiration-cache>0</expiration-cache>
+    	<supports>
+    		<mime-type>text/html</mime-type>
+    		<portlet-mode>view</portlet-mode>
+    	</supports>
+    	<supported-locale>ko_KR</supported-locale>
+        <supported-locale>en_US</supported-locale>
+    	<resource-bundle>content.Language_en</resource-bundle>
+    	<portlet-info>
+    		<title>Team Information</title>
+    		<short-title>Team Information</short-title>
+    		<keywords></keywords>
+    	</portlet-info>
+    	<security-role-ref>
+    		<role-name>administrator</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>guest</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>power-user</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>user</role-name>
+    	</security-role-ref>
+    </portlet>
+    <portlet>
+    	<portlet-name>team-member-information</portlet-name>
+    	<display-name>Team Member Information</display-name>
+    	<portlet-class>
+    		edison.challenge.portlet.team.TeamMemberInformation
+    	</portlet-class>
+    	<init-param>
+    		<name>view-template</name>
+    		<value>/html/teammemberinformation/view.jsp</value>
+    	</init-param>
+    	<expiration-cache>0</expiration-cache>
+    	<supports>
+    		<mime-type>text/html</mime-type>
+    		<portlet-mode>view</portlet-mode>
+    	</supports>
+    	<portlet-info>
+    		<title>Team Member Information</title>
+    		<short-title>Team Member Information</short-title>
+    		<keywords></keywords>
+    	</portlet-info>
+    	<security-role-ref>
+    		<role-name>administrator</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>guest</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>power-user</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>user</role-name>
+    	</security-role-ref>
+    </portlet>
+    <portlet>
+    	<portlet-name>evaluation-team</portlet-name>
+    	<display-name>Evaluation Team</display-name>
+    	<portlet-class>
+    		edison.challenge.portlet.eveluation.EvaluationTeam
+    	</portlet-class>
+    	<init-param>
+    		<name>view-template</name>
+    		<value>/html/evaluationteam/view.jsp</value>
+    	</init-param>
+    	<expiration-cache>0</expiration-cache>
+    	<supports>
+    		<mime-type>text/html</mime-type>
+    		<portlet-mode>view</portlet-mode>
+    	</supports>
+    	<portlet-info>
+    		<title>Evaluation Team</title>
+    		<short-title>Evaluation Team</short-title>
+    		<keywords></keywords>
+    	</portlet-info>
+    	<security-role-ref>
+    		<role-name>administrator</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>guest</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>power-user</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>user</role-name>
+    	</security-role-ref>
+    </portlet>
+    <portlet>
+    	<portlet-name>team-management</portlet-name>
+    	<display-name>Team Management</display-name>
+    	<portlet-class>
+    		edison.challenge.portlet.teammanagement.TeamManagement
+    	</portlet-class>
+    	<init-param>
+    		<name>view-template</name>
+    		<value>/html/teammanagement/view.jsp</value>
+    	</init-param>
+    	<expiration-cache>0</expiration-cache>
+    	<supports>
+    		<mime-type>text/html</mime-type>
+    		<portlet-mode>view</portlet-mode>
+    	</supports>
+    	<portlet-info>
+    		<title>Team Management</title>
+    		<short-title>Team Management</short-title>
+    		<keywords></keywords>
+    	</portlet-info>
+    	<security-role-ref>
+    		<role-name>administrator</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>guest</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>power-user</role-name>
+    	</security-role-ref>
+    	<security-role-ref>
+    		<role-name>user</role-name>
+    	</security-role-ref>
+    </portlet>
+</portlet-app>

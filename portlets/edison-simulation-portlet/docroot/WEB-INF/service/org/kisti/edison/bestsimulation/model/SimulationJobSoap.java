@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,6 +36,7 @@ public class SimulationJobSoap implements Serializable {
 		soapModel.setJobSeqNo(model.getJobSeqNo());
 		soapModel.setSimulationUuid(model.getSimulationUuid());
 		soapModel.setGroupId(model.getGroupId());
+		soapModel.setSimulationJobId(model.getSimulationJobId());
 		soapModel.setJobUuid(model.getJobUuid());
 		soapModel.setJobStatus(model.getJobStatus());
 		soapModel.setJobStartDt(model.getJobStartDt());
@@ -124,6 +125,14 @@ public class SimulationJobSoap implements Serializable {
 
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
+	}
+
+	public long getSimulationJobId() {
+		return _simulationJobId;
+	}
+
+	public void setSimulationJobId(long simulationJobId) {
+		_simulationJobId = simulationJobId;
 	}
 
 	public String getJobUuid() {
@@ -233,6 +242,7 @@ public class SimulationJobSoap implements Serializable {
 	private long _jobSeqNo;
 	private String _simulationUuid;
 	private long _groupId;
+	private long _simulationJobId;
 	private String _jobUuid;
 	private long _jobStatus;
 	private Date _jobStartDt;

@@ -107,12 +107,13 @@ public class DataTypeEditorController{
 		String redirectURL = "";
 		String redirectName = "";
 		if(!request.getWindowState().equals(LiferayWindowState.POP_UP)){
-			redirectURL = EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent());
+            redirectURL = EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent());
 			redirectName = GetterUtil.getString(params.get("redirectName"),"My EDISON");
 		}else{
 			redirectURL = GetterUtil.getString(params.get("redirectURL"),EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
 			redirectName = GetterUtil.getString(params.get("redirectName"),"My EDISON");
 		}
+		
 		
 		model.addAttribute("redirectURL", redirectURL);
 		model.addAttribute("redirectName", redirectName);

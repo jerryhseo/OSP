@@ -79,6 +79,7 @@
 AUI().ready(function() {
 	$("#icebreaker-file-upload-dialog-close-btn").click(function() {
 		$("#icebreaker-file-upload-dialog").dialog("close");
+		
 	});
 });
 	

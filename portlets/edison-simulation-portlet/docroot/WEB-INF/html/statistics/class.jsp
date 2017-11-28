@@ -17,7 +17,6 @@
 <liferay-portlet:resourceURL var="classStatisticsListURL" 	escapeXml="false"	 id="classStatisticsList"  copyCurrentRenderParameters="false"/>
 
 <liferay-portlet:resourceURL var="classStatisticsExcelDownLoadURL"		id="classStatisticsExcelDownLoad"	escapeXml="false" copyCurrentRenderParameters="false"/>
-<script src="${contextPath}/js/jquery.blockUI.js"></script>
 <script type="text/javascript">
 
 
