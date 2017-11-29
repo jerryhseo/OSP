@@ -15,6 +15,7 @@
 /*.markdown
 /*.bnd
 /*/*.xml
+!/misc/jalopy.xml
 /*/*.bat
 /*/*.sh
 /*/*.txt
@@ -79,6 +80,7 @@
 _sass_cache_*.css
 
 
+**/docroot/META-INF
 **/docroot/WEB-INF/sql/
 **/docroot/WEB-INF/tld/*
 !**/docroot/WEB-INF/tld/edison-ui.tld
