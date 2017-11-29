@@ -584,6 +584,12 @@ public class ScienceAppLocalServiceClpInvoker {
 		_methodParameterTypes282 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
+
+		_methodName283 = "getScienceApp";
+
+		_methodParameterTypes283 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1324,6 +1330,12 @@ public class ScienceAppLocalServiceClpInvoker {
 				(java.util.Locale)arguments[1]);
 		}
 
+		if (_methodName283.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes283, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getScienceApp((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1553,4 +1565,6 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes281;
 	private String _methodName282;
 	private String[] _methodParameterTypes282;
+	private String _methodName283;
+	private String[] _methodParameterTypes283;
 }

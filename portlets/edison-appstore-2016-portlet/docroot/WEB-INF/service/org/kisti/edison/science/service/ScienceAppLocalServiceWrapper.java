@@ -372,7 +372,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	database, returns null. If appVersion is not follows versioning
 	rules, returns null. Otherwise returns a ScienceApp instance with
 	initialized data.
-
+	
 	Some attributes of the returned instance are set initial value as
 	followings: -stage: ScienceAppConstants.EMPTY -authorId: current
 	user id of service context instance -createDate: date created of
@@ -1001,10 +1001,9 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 통합 검색 앱 조회 서비스
+	* 占쎈벏鍮�野껓옙源�占쏙옙鈺곌퀬��占쎌뮆�э옙占�    *
 	*
-	* @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
-	*/
+	* @param categoryIds -> Category 鈺곌퀬�뜹첎占쏙옙袁⑤빜 野껋럩��옙癒�뮉 null 占쎈굝��     */
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppFromExplore(
 		long companyGroupId, long groupId, java.util.Locale locale,
@@ -1017,10 +1016,9 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 통합 검색 앱 카운트 서비스
+	* 占쎈벏鍮�野껓옙源�占쏙옙燁삳똻�ワ옙占쏙옙�뺥돩占쏙옙     *
 	*
-	* @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
-	*/
+	* @param categoryIds -> Category 鈺곌퀬�뜹첎占쏙옙袁⑤빜 野껋럩��옙癒�뮉 null 占쎈굝��     */
 	@Override
 	public int countScienceAppFromExplore(long companyGroupId, long groupId,
 		java.util.Locale locale, java.lang.String[] appTypes,
@@ -1032,8 +1030,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* EDISON - MAIN 추천 앱 조회
-	*/
+	* EDISON - MAIN �곕뗄荑�占쏙옙鈺곌퀬��     */
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListHotScienceApp(
 		long companyGroupId, long groupId, java.util.Locale locale,
@@ -1099,13 +1096,11 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 앱 이름을 통한 앱 LIST 조회
-	*
+	* 占쏙옙占쎈�已ワ옙占쏙옙��립 占쏙옙LIST 鈺곌퀬��     *
 	* @param companyGroupId - themeDisplay.getCompanyGroupId()
 	* @param groupId        - PortalUtil.getScopeGroupId(request)
 	* @param locale         - themeDisplay.getLocale()
-	* @param appName        - 앱 이름
-	* @param categorySearch - 카테고리 조회 여부(PORTAL->false,SITE->true)
+	* @param appName        - 占쏙옙占쎈�已�     * @param categorySearch - 燁삳똾�믤�醫듼봺 鈺곌퀬��占싼됵옙(PORTAL->false,SITE->true)
 	* @return List<Map<String, Object>>
 	* @throws SystemException
 	* @throws PortalException
@@ -1121,19 +1116,15 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 카테고리를 제외한 앱 조회
+	* 燁삳똾�믤�醫듼봺�쒙옙占쎌뮇�낉옙占쏙옙占썼�怨좎돳
 	*
-	* @param groupId - 조회 하는 분야의 GROUP ID (PortalUtil.getScopeGroupId(request))
-	* @param locale  - 현재 EDISON 포털의 LOCALE (themeDisplay.getLocale())
-	* @param authorId - 소유자 ID
-	* @param appTypes - 앱 종류 (ScienceAppConstants 참조),null 허용
-	* @param editorTypes  - editor 종류 (ScienceAppConstants 참조),null 허용
-	* @param searchType   - 검색타입(APP_MANAGER_SEARCH_ALL,SWORGNM)
-	* @param searchText   - 검색어
-	* @param status       - 앱 상태
-	* @param begin
+	* @param groupId - 鈺곌퀬��占쎌꼶���브쑴鍮욑옙占폞ROUP ID (PortalUtil.getScopeGroupId(request))
+	* @param locale  - 占쎄쑴��EDISON 占싼뗪쉭占쏙옙LOCALE (themeDisplay.getLocale())
+	* @param authorId - 占쎈슣��옙占폠D
+	* @param appTypes - 占쏙옙�ル굝履�(ScienceAppConstants 筌〓챷��,null 占쎈뜆��     * @param editorTypes  - editor �ル굝履�(ScienceAppConstants 筌〓챷��,null 占쎈뜆��     * @param searchType   - 野껓옙源뗰옙占쎌뿯(APP_MANAGER_SEARCH_ALL,SWORGNM)
+	* @param searchText   - 野껓옙源뗰옙占�    * @param status       - 占쏙옙占쎄낱源�     * @param begin
 	* @param end
-	* @param lanuageSearch - 앱의 서비스 언어별 조회 여부
+	* @param lanuageSearch - 占쎄퉮��占쎌뮆�э옙占쏙옙紐꾨선癰귨옙鈺곌퀬��占싼됵옙
 	*/
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
@@ -1232,8 +1223,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스 - 리스트
-	* 입력된 검색어로 사이언스앱을 조회함
+	* �울옙�댐옙類ｋ궖(Asset) 占싼뗰옙�깆슦肉됵옙占쏙옙��쒙옙�롫뮉 占쎌뮆�э옙占� �귐딅뮞占쏙옙     * 占쎈굝�곤옙占썲칰占쎄퉳占쎈�以�占싼딆뵠占쎈챷�わ옙源놁뱽 鈺곌퀬�띰옙占�    *
 	*
 	* @param params
 	* @return
@@ -1245,8 +1235,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스  - 카운트
-	* 입력된 검색어로 사이언스앱을 조회함
+	* �울옙�댐옙類ｋ궖(Asset) 占싼뗰옙�깆슦肉됵옙占쏙옙��쒙옙�롫뮉 占쎌뮆�э옙占�- 燁삳똻�ワ옙占�    * 占쎈굝�곤옙占썲칰占쎄퉳占쎈�以�占싼딆뵠占쎈챷�わ옙源놁뱽 鈺곌퀬�띰옙占�    *
 	*
 	* @param params
 	* @return
@@ -1257,9 +1246,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스  - 리스트
-	* entryId(Asset) 와 관련된 모든 사이언스 앱 리스트를 조회함.
-	*
+	* �울옙�댐옙類ｋ궖(Asset) 占싼뗰옙�깆슦肉됵옙占쏙옙��쒙옙�롫뮉 占쎌뮆�э옙占�- �귐딅뮞占쏙옙     * entryId(Asset) 占쏙옙�울옙�댐옙占쏙쭗�ㅻ군 占싼딆뵠占쎈챷��占쏙옙�귐딅뮞占쎈챶占�鈺곌퀬�띰옙占�     *
 	* @param params
 	* @return
 	*/
@@ -1271,8 +1258,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 
 	/**
 	* ScienceApp Mirgation = 2017-03-23 HKD
-	* 기존 등록된 ScienceApp을 AssetEntry 등록 및 AssetCategory에 등록
-	*
+	* 疫꿸퀣��占쎄퉭以됵옙占폮cienceApp占쏙옙AssetEntry 占쎄퉭以�獄쏉옙AssetCategory占쏙옙占쎄퉭以�     *
 	* @param scienceApp
 	* @return
 	* @throws PortalException
@@ -1287,7 +1273,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	}
 
 	/**
-	* 에디슨 프로젝트 에서 사용하는 Method
+	* 占쎈Ŧ逾믭옙占쏙옙袁⑥쨮占쎌빜��占쎈Ŋ苑�占싼딆뒠占쎌꼶��Method
 	*
 	* @param params
 	* @param locale
@@ -1308,6 +1294,15 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 		java.util.Locale locale) {
 		return _scienceAppLocalService.getMyAppListForProjectCount(params,
 			locale);
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceApp(
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return _scienceAppLocalService.getScienceApp(scienceAppName,
+			scienceAppVersion);
 	}
 
 	/**

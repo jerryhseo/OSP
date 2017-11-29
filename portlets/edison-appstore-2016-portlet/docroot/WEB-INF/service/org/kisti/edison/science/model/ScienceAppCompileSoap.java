@@ -99,11 +99,11 @@ public class ScienceAppCompileSoap implements Serializable {
 		_scienceAppId = scienceAppId;
 	}
 
-	public Long getUserId() {
+	public long getUserId() {
 		return _userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(long userId) {
 		_userId = userId;
 	}
 
@@ -132,7 +132,7 @@ public class ScienceAppCompileSoap implements Serializable {
 	}
 
 	private long _scienceAppId;
-	private Long _userId;
+	private long _userId;
 	private String _compileUrl;
 	private String _result;
 	private Date _createDate;

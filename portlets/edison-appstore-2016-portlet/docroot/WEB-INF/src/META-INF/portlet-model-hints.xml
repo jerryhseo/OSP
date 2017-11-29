@@ -213,7 +213,7 @@
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppCompile">
 		<field name="scienceAppId" type="long" />
-		<field name="userId" type="Long" />
+		<field name="userId" type="long" />
 		<field name="compileUrl" type="String" />
 		<field name="result" type="String">
 			<hint name="max-length">4096</hint>

@@ -121,7 +121,7 @@ public class ScienceAppCompileCacheModel implements CacheModel<ScienceAppCompile
 	}
 
 	public long scienceAppId;
-	public Long userId;
+	public long userId;
 	public String compileUrl;
 	public String result;
 	public long createDate;
