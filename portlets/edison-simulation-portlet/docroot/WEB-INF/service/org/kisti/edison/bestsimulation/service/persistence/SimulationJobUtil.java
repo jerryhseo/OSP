@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -461,6 +461,617 @@ public class SimulationJobUtil {
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().countByjobUuid(simulationUuid, jobUuid);
+	}
+
+	/**
+	* Returns the simulation job where jobUuid = &#63; or throws a {@link org.kisti.edison.bestsimulation.NoSuchSimulationJobException} if it could not be found.
+	*
+	* @param jobUuid the job uuid
+	* @return the matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findByUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence().findByUuid(jobUuid);
+	}
+
+	/**
+	* Returns the simulation job where jobUuid = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param jobUuid the job uuid
+	* @return the matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchByUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid(jobUuid);
+	}
+
+	/**
+	* Returns the simulation job where jobUuid = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param jobUuid the job uuid
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchByUuid(
+		java.lang.String jobUuid, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid(jobUuid, retrieveFromCache);
+	}
+
+	/**
+	* Removes the simulation job where jobUuid = &#63; from the database.
+	*
+	* @param jobUuid the job uuid
+	* @return the simulation job that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob removeByUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence().removeByUuid(jobUuid);
+	}
+
+	/**
+	* Returns the number of simulation jobs where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @return the number of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(jobUuid);
+	}
+
+	/**
+	* Returns all the simulation jobs where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @return the matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findByStatus(
+		boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByStatus(jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns a range of all the simulation jobs where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @return the range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findByStatus(
+		boolean jobSubmit, long jobStatus, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByStatus(jobSubmit, jobStatus, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the simulation jobs where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findByStatus(
+		boolean jobSubmit, long jobStatus, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByStatus(jobSubmit, jobStatus, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findByStatus_First(
+		boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findByStatus_First(jobSubmit, jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchByStatus_First(
+		boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByStatus_First(jobSubmit, jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findByStatus_Last(
+		boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findByStatus_Last(jobSubmit, jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchByStatus_Last(
+		boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByStatus_Last(jobSubmit, jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the simulation jobs before and after the current simulation job in the ordered set where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationJobPK the primary key of the current simulation job
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a simulation job with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob[] findByStatus_PrevAndNext(
+		org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK simulationJobPK,
+		boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findByStatus_PrevAndNext(simulationJobPK, jobSubmit,
+			jobStatus, orderByComparator);
+	}
+
+	/**
+	* Removes all the simulation jobs where jobSubmit = &#63; and jobStatus = &#63; from the database.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByStatus(boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByStatus(jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns the number of simulation jobs where jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @return the number of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByStatus(boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByStatus(jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns all the simulation jobs where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @return the matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySimulationUuid_S(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findBySimulationUuid_S(simulationUuid, jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns a range of all the simulation jobs where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @return the range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySimulationUuid_S(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findBySimulationUuid_S(simulationUuid, jobSubmit,
+			jobStatus, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the simulation jobs where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySimulationUuid_S(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findBySimulationUuid_S(simulationUuid, jobSubmit,
+			jobStatus, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findBySimulationUuid_S_First(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySimulationUuid_S_First(simulationUuid, jobSubmit,
+			jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchBySimulationUuid_S_First(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySimulationUuid_S_First(simulationUuid, jobSubmit,
+			jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findBySimulationUuid_S_Last(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySimulationUuid_S_Last(simulationUuid, jobSubmit,
+			jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchBySimulationUuid_S_Last(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySimulationUuid_S_Last(simulationUuid, jobSubmit,
+			jobStatus, orderByComparator);
+	}
+
+	/**
+	* Returns the simulation jobs before and after the current simulation job in the ordered set where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationJobPK the primary key of the current simulation job
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a simulation job with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob[] findBySimulationUuid_S_PrevAndNext(
+		org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK simulationJobPK,
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySimulationUuid_S_PrevAndNext(simulationJobPK,
+			simulationUuid, jobSubmit, jobStatus, orderByComparator);
+	}
+
+	/**
+	* Removes all the simulation jobs where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63; from the database.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeBySimulationUuid_S(
+		java.lang.String simulationUuid, boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeBySimulationUuid_S(simulationUuid, jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns the number of simulation jobs where simulationUuid = &#63; and jobSubmit = &#63; and jobStatus = &#63;.
+	*
+	* @param simulationUuid the simulation uuid
+	* @param jobSubmit the job submit
+	* @param jobStatus the job status
+	* @return the number of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countBySimulationUuid_S(java.lang.String simulationUuid,
+		boolean jobSubmit, long jobStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countBySimulationUuid_S(simulationUuid, jobSubmit, jobStatus);
+	}
+
+	/**
+	* Returns all the simulation jobs where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @return the matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySubmitStatus(
+		boolean jobSubmit)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findBySubmitStatus(jobSubmit);
+	}
+
+	/**
+	* Returns a range of all the simulation jobs where jobSubmit = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobSubmit the job submit
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @return the range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySubmitStatus(
+		boolean jobSubmit, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findBySubmitStatus(jobSubmit, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the simulation jobs where jobSubmit = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobSubmit the job submit
+	* @param start the lower bound of the range of simulation jobs
+	* @param end the upper bound of the range of simulation jobs (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> findBySubmitStatus(
+		boolean jobSubmit, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findBySubmitStatus(jobSubmit, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findBySubmitStatus_First(
+		boolean jobSubmit,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySubmitStatus_First(jobSubmit, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation job in the ordered set where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchBySubmitStatus_First(
+		boolean jobSubmit,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySubmitStatus_First(jobSubmit, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob findBySubmitStatus_Last(
+		boolean jobSubmit,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySubmitStatus_Last(jobSubmit, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation job in the ordered set where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation job, or <code>null</code> if a matching simulation job could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob fetchBySubmitStatus_Last(
+		boolean jobSubmit,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBySubmitStatus_Last(jobSubmit, orderByComparator);
+	}
+
+	/**
+	* Returns the simulation jobs before and after the current simulation job in the ordered set where jobSubmit = &#63;.
+	*
+	* @param simulationJobPK the primary key of the current simulation job
+	* @param jobSubmit the job submit
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next simulation job
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationJobException if a simulation job with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob[] findBySubmitStatus_PrevAndNext(
+		org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK simulationJobPK,
+		boolean jobSubmit,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getPersistence()
+				   .findBySubmitStatus_PrevAndNext(simulationJobPK, jobSubmit,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the simulation jobs where jobSubmit = &#63; from the database.
+	*
+	* @param jobSubmit the job submit
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeBySubmitStatus(boolean jobSubmit)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeBySubmitStatus(jobSubmit);
+	}
+
+	/**
+	* Returns the number of simulation jobs where jobSubmit = &#63;.
+	*
+	* @param jobSubmit the job submit
+	* @return the number of matching simulation jobs
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countBySubmitStatus(boolean jobSubmit)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countBySubmitStatus(jobSubmit);
 	}
 
 	/**

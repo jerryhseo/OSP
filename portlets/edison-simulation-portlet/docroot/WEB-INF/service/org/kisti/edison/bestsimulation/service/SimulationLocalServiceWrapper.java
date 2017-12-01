@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -659,16 +659,159 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	*/
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupId(groupId, userId);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByGroupId(groupId, start, end);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupId(groupId, userId,
+			start, end);
+	}
+
+	@Override
+	public int countByUserIdAndGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupId(groupId);
+	}
+
+	@Override
+	public int countByUserIdAndGroupId(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupId(groupId, userId);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndGroupIdAndTitle(groupId,
+			userId, tittleKeyword, start, end);
+	}
+
+	@Override
+	public long countByUserIdAndGroupIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndGroupIdAndTitle(groupId,
+			userId, tittleKeyword);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupIdAndTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByGroupIdAndTitle(groupId,
+			tittleKeyword, start, end);
+	}
+
+	@Override
+	public long countByGroupIdAndTitle(long groupId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByGroupIdAndTitle(groupId,
+			tittleKeyword);
+	}
+
+	/**
 	* Added By Jerry H. Seo
 	*
 	* @throws SystemException
 	* @throws PortalException
 	*/
 	@Override
+	public org.kisti.edison.bestsimulation.model.Simulation addSimulation(
+		java.lang.String uuid, java.lang.String title, long scienceAppId,
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion,
+		long srcClassCode, long srcClassId,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.addSimulation(uuid, title, scienceAppId,
+			scienceAppName, scienceAppVersion, srcClassCode, srcClassId, sc);
+	}
+
+	@Override
+	public void deleteSimulation(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationException {
+		_simulationLocalService.deleteSimulation(simulationUuid);
+	}
+
+	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.addJob(simulationUUID, sc);
+	}
+
+	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID, java.lang.String scienceAppName,
+		java.lang.String scienceAppVersion,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.addJob(simulationUUID, scienceAppName,
+			scienceAppVersion, sc);
+	}
+
+	@Override
+	public void deleteJob(java.lang.String simulationUuid,
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationLocalService.deleteJob(simulationUuid, jobUuid);
+	}
+
+	@Override
+	public void deleteAllJobs(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationLocalService.deleteAllJobs(simulationUuid);
+	}
+
+	@Override
 	public java.lang.String getJobData(java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _simulationLocalService.getJobData(jobUuid);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> getSimulationsByAppId(
+		long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.getSimulationsByAppId(scienceAppId);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> getSimulationsByAppId(
+		long scienceAppId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.getSimulationsByAppId(scienceAppId,
+			start, end);
+	}
+
+	@Override
+	public int countSimulationsByAppId(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countSimulationsByAppId(scienceAppId);
 	}
 
 	/**

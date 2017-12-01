@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -574,6 +574,12 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 
 		_methodParameterTypes111 = new String[] {
 				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName112 = "getScienceApp";
+
+		_methodParameterTypes112 = new String[] {
+				"java.lang.String", "java.lang.String"
 			};
 	}
 
@@ -4362,6 +4368,45 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceApp(
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName112,
+					_methodParameterTypes112,
+					new Object[] {
+						ClpSerializer.translateInput(scienceAppName),
+						
+					ClpSerializer.translateInput(scienceAppVersion)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof org.kisti.edison.science.NoSuchScienceAppException) {
+				throw (org.kisti.edison.science.NoSuchScienceAppException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceApp)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -4585,4 +4630,6 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes110;
 	private String _methodName111;
 	private String[] _methodParameterTypes111;
+	private String _methodName112;
+	private String[] _methodParameterTypes112;
 }

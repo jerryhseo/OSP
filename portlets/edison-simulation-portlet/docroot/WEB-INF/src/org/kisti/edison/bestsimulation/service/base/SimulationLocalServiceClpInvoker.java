@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -290,9 +290,98 @@ public class SimulationLocalServiceClpInvoker {
 				"java.lang.String"
 			};
 
-		_methodName117 = "getJobData";
+		_methodName117 = "findByUserIdAndGroupId";
 
-		_methodParameterTypes117 = new String[] { "java.lang.String" };
+		_methodParameterTypes117 = new String[] { "long", "long" };
+
+		_methodName118 = "findByGroupId";
+
+		_methodParameterTypes118 = new String[] { "long", "int", "int" };
+
+		_methodName119 = "findByUserIdAndGroupId";
+
+		_methodParameterTypes119 = new String[] { "long", "long", "int", "int" };
+
+		_methodName120 = "countByUserIdAndGroupId";
+
+		_methodParameterTypes120 = new String[] { "long" };
+
+		_methodName121 = "countByUserIdAndGroupId";
+
+		_methodParameterTypes121 = new String[] { "long", "long" };
+
+		_methodName122 = "findByUserIdAndGroupIdAndTitle";
+
+		_methodParameterTypes122 = new String[] {
+				"long", "long", "java.lang.String", "int", "int"
+			};
+
+		_methodName123 = "countByUserIdAndGroupIdAndTitle";
+
+		_methodParameterTypes123 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName124 = "findByGroupIdAndTitle";
+
+		_methodParameterTypes124 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
+
+		_methodName125 = "countByGroupIdAndTitle";
+
+		_methodParameterTypes125 = new String[] { "long", "java.lang.String" };
+
+		_methodName128 = "addSimulation";
+
+		_methodParameterTypes128 = new String[] {
+				"java.lang.String", "java.lang.String", "long",
+				"java.lang.String", "java.lang.String", "long", "long",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName129 = "deleteSimulation";
+
+		_methodParameterTypes129 = new String[] { "java.lang.String" };
+
+		_methodName130 = "addJob";
+
+		_methodParameterTypes130 = new String[] {
+				"java.lang.String", "com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName131 = "addJob";
+
+		_methodParameterTypes131 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName132 = "deleteJob";
+
+		_methodParameterTypes132 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName133 = "deleteAllJobs";
+
+		_methodParameterTypes133 = new String[] { "java.lang.String" };
+
+		_methodName134 = "getJobData";
+
+		_methodParameterTypes134 = new String[] { "java.lang.String" };
+
+		_methodName135 = "getSimulationsByAppId";
+
+		_methodParameterTypes135 = new String[] { "long" };
+
+		_methodName136 = "getSimulationsByAppId";
+
+		_methodParameterTypes136 = new String[] { "long", "int", "int" };
+
+		_methodName137 = "countSimulationsByAppId";
+
+		_methodParameterTypes137 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -591,7 +680,131 @@ public class SimulationLocalServiceClpInvoker {
 
 		if (_methodName117.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes117, parameterTypes)) {
+			return SimulationLocalServiceUtil.findByUserIdAndGroupId(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName118.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes118, parameterTypes)) {
+			return SimulationLocalServiceUtil.findByGroupId(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName119.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes119, parameterTypes)) {
+			return SimulationLocalServiceUtil.findByUserIdAndGroupId(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName120.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes120, parameterTypes)) {
+			return SimulationLocalServiceUtil.countByUserIdAndGroupId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName121.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes121, parameterTypes)) {
+			return SimulationLocalServiceUtil.countByUserIdAndGroupId(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName122.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes122, parameterTypes)) {
+			return SimulationLocalServiceUtil.findByUserIdAndGroupIdAndTitle(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue());
+		}
+
+		if (_methodName123.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes123, parameterTypes)) {
+			return SimulationLocalServiceUtil.countByUserIdAndGroupIdAndTitle(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
+		}
+
+		if (_methodName124.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes124, parameterTypes)) {
+			return SimulationLocalServiceUtil.findByGroupIdAndTitle(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName125.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes125, parameterTypes)) {
+			return SimulationLocalServiceUtil.countByGroupIdAndTitle(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName128.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes128, parameterTypes)) {
+			return SimulationLocalServiceUtil.addSimulation((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1],
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				((Long)arguments[5]).longValue(),
+				((Long)arguments[6]).longValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[7]);
+		}
+
+		if (_methodName129.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes129, parameterTypes)) {
+			SimulationLocalServiceUtil.deleteSimulation((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName130.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
+			return SimulationLocalServiceUtil.addJob((java.lang.String)arguments[0],
+				(com.liferay.portal.service.ServiceContext)arguments[1]);
+		}
+
+		if (_methodName131.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
+			return SimulationLocalServiceUtil.addJob((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(com.liferay.portal.service.ServiceContext)arguments[3]);
+		}
+
+		if (_methodName132.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes132, parameterTypes)) {
+			SimulationLocalServiceUtil.deleteJob((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName133.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes133, parameterTypes)) {
+			SimulationLocalServiceUtil.deleteAllJobs((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName134.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes134, parameterTypes)) {
 			return SimulationLocalServiceUtil.getJobData((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName135.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes135, parameterTypes)) {
+			return SimulationLocalServiceUtil.getSimulationsByAppId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName136.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes136, parameterTypes)) {
+			return SimulationLocalServiceUtil.getSimulationsByAppId(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName137.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes137, parameterTypes)) {
+			return SimulationLocalServiceUtil.countSimulationsByAppId(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -689,4 +902,40 @@ public class SimulationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes116;
 	private String _methodName117;
 	private String[] _methodParameterTypes117;
+	private String _methodName118;
+	private String[] _methodParameterTypes118;
+	private String _methodName119;
+	private String[] _methodParameterTypes119;
+	private String _methodName120;
+	private String[] _methodParameterTypes120;
+	private String _methodName121;
+	private String[] _methodParameterTypes121;
+	private String _methodName122;
+	private String[] _methodParameterTypes122;
+	private String _methodName123;
+	private String[] _methodParameterTypes123;
+	private String _methodName124;
+	private String[] _methodParameterTypes124;
+	private String _methodName125;
+	private String[] _methodParameterTypes125;
+	private String _methodName128;
+	private String[] _methodParameterTypes128;
+	private String _methodName129;
+	private String[] _methodParameterTypes129;
+	private String _methodName130;
+	private String[] _methodParameterTypes130;
+	private String _methodName131;
+	private String[] _methodParameterTypes131;
+	private String _methodName132;
+	private String[] _methodParameterTypes132;
+	private String _methodName133;
+	private String[] _methodParameterTypes133;
+	private String _methodName134;
+	private String[] _methodParameterTypes134;
+	private String _methodName135;
+	private String[] _methodParameterTypes135;
+	private String _methodName136;
+	private String[] _methodParameterTypes136;
+	private String _methodName137;
+	private String[] _methodParameterTypes137;
 }

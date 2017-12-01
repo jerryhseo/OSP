@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -372,7 +372,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	database, returns null. If appVersion is not follows versioning
 	rules, returns null. Otherwise returns a ScienceApp instance with
 	initialized data.
-
+	
 	Some attributes of the returned instance are set initial value as
 	followings: -stage: ScienceAppConstants.EMPTY -authorId: current
 	user id of service context instance -createDate: date created of
@@ -1308,6 +1308,15 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 		java.util.Locale locale) {
 		return _scienceAppLocalService.getMyAppListForProjectCount(params,
 			locale);
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceApp(
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return _scienceAppLocalService.getScienceApp(scienceAppName,
+			scienceAppVersion);
 	}
 
 	/**

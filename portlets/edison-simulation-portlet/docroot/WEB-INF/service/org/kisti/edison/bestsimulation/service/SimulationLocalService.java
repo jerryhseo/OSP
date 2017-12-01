@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -536,13 +536,96 @@ public interface SimulationLocalService extends BaseLocalService,
 		java.lang.String jobUuid) throws java.io.IOException;
 
 	/**
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	*/
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
+		long groupId, long userId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByUserIdAndGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByUserIdAndGroupId(long groupId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException;
+
+	public long countByUserIdAndGroupIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupIdAndTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public long countByGroupIdAndTitle(long groupId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Added By Jerry H. Seo
 	*
 	* @throws SystemException
 	* @throws PortalException
 	*/
+	public org.kisti.edison.bestsimulation.model.Simulation addSimulation(
+		java.lang.String uuid, java.lang.String title, long scienceAppId,
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion,
+		long srcClassCode, long srcClassId,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteSimulation(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationException;
+
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUUID, java.lang.String scienceAppName,
+		java.lang.String scienceAppVersion,
+		com.liferay.portal.service.ServiceContext sc)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteJob(java.lang.String simulationUuid,
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteAllJobs(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getJobData(java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> getSimulationsByAppId(
+		long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> getSimulationsByAppId(
+		long scienceAppId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countSimulationsByAppId(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

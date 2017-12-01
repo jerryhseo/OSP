@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -138,7 +138,7 @@ public class ScienceAppCompileWrapper implements ScienceAppCompile,
 	* @return the user ID of this science app compile
 	*/
 	@Override
-	public java.lang.Long getUserId() {
+	public long getUserId() {
 		return _scienceAppCompile.getUserId();
 	}
 
@@ -148,8 +148,30 @@ public class ScienceAppCompileWrapper implements ScienceAppCompile,
 	* @param userId the user ID of this science app compile
 	*/
 	@Override
-	public void setUserId(java.lang.Long userId) {
+	public void setUserId(long userId) {
 		_scienceAppCompile.setUserId(userId);
+	}
+
+	/**
+	* Returns the user uuid of this science app compile.
+	*
+	* @return the user uuid of this science app compile
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.lang.String getUserUuid()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppCompile.getUserUuid();
+	}
+
+	/**
+	* Sets the user uuid of this science app compile.
+	*
+	* @param userUuid the user uuid of this science app compile
+	*/
+	@Override
+	public void setUserUuid(java.lang.String userUuid) {
+		_scienceAppCompile.setUserUuid(userUuid);
 	}
 
 	/**
