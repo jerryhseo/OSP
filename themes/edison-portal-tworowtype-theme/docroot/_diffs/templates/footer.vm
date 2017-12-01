@@ -1,0 +1,16 @@
+<!--footer sitemap-->
+<div class="footer">
+	<ul>
+		<li>COPYRIGHT(C) 2017 NISN, KISTI ALL RIGHTS RESERVED.</li>
+		<li><span><a href = "$privateInfoURL" style="cursor:pointer;" target="_self">$infomation_text</a></span></li>
+		<li>E-mail. $propsUtil.get("admin.email.from.address")</li>
+	</ul>
+	
+	<div class="fbanner">
+		<ul>
+			<li><a href="http://www.msip.go.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner01.gif" width="103" height="22"/></a></li>
+			<li><a href="http://www.nrf.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner02.gif" width="83" height="29"/></a></li>
+			<li><a href="http://www.kisti.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner03.gif" width="119" height="25"/></a></li>
+		</ul>
+	</div>
+</div>
