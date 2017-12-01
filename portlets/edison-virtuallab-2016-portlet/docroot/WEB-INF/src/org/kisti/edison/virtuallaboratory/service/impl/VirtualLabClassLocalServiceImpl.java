@@ -136,6 +136,7 @@ public class VirtualLabClassLocalServiceImpl
 				resultRow.put("classDescriptionMap", virtualLabClass.getClassDescription());
 				resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 				resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+				resultRow.put("classCurriculumUrl", virtualLabClass.getClassCurriculumUrl());
 				resultRow.put("classStartDt", virtualLabClass.getClassStartDt());
 				resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
 				resultRow.put("classEndDt", virtualLabClass.getClassEndDt());
@@ -226,6 +227,7 @@ public class VirtualLabClassLocalServiceImpl
 		virtualLabClass.setClassStartDt((String) params.get("classStartDt"));
 		virtualLabClass.setClassEndDt((String) params.get("classEndDt"));
 		virtualLabClass.setClassPersonnel((Integer) params.get("classPersonnel"));
+		virtualLabClass.setClassCurriculumUrl((String) params.get("classCurriculumUrl"));
 		virtualLabClass = virtualLabClassPersistence.update(virtualLabClass);
 		virtualLabPersistence.addVirtualLabClass(virtualLabId, virtualLabClass);
 		

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -106,20 +106,6 @@ public interface SimulationJobModel extends BaseModel<SimulationJob> {
 	 * @param groupId the group ID of this simulation job
 	 */
 	public void setGroupId(long groupId);
-
-	/**
-	 * Returns the simulation job ID of this simulation job.
-	 *
-	 * @return the simulation job ID of this simulation job
-	 */
-	public long getSimulationJobId();
-
-	/**
-	 * Sets the simulation job ID of this simulation job.
-	 *
-	 * @param simulationJobId the simulation job ID of this simulation job
-	 */
-	public void setSimulationJobId(long simulationJobId);
 
 	/**
 	 * Returns the job uuid of this simulation job.

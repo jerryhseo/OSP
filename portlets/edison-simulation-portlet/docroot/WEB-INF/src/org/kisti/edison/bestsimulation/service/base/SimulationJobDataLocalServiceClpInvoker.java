@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -119,6 +119,12 @@ public class SimulationJobDataLocalServiceClpInvoker {
 		_methodParameterTypes82 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName83 = "replaceJobData";
+
+		_methodParameterTypes83 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -228,6 +234,12 @@ public class SimulationJobDataLocalServiceClpInvoker {
 				(java.lang.String)arguments[1]);
 		}
 
+		if (_methodName83.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+			return SimulationJobDataLocalServiceUtil.replaceJobData((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -269,4 +281,6 @@ public class SimulationJobDataLocalServiceClpInvoker {
 	private String[] _methodParameterTypes77;
 	private String _methodName82;
 	private String[] _methodParameterTypes82;
+	private String _methodName83;
+	private String[] _methodParameterTypes83;
 }

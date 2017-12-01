@@ -60,6 +60,7 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 		attributes.put("classCreateDt", getClassCreateDt());
 		attributes.put("classUpdateDt", getClassUpdateDt());
 		attributes.put("virtualClassCd", getVirtualClassCd());
+		attributes.put("classCurriculumUrl", getClassCurriculumUrl());
 
 		return attributes;
 	}
@@ -124,6 +125,12 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 
 		if (virtualClassCd != null) {
 			setVirtualClassCd(virtualClassCd);
+		}
+
+		String classCurriculumUrl = (String)attributes.get("classCurriculumUrl");
+
+		if (classCurriculumUrl != null) {
+			setClassCurriculumUrl(classCurriculumUrl);
 		}
 	}
 
@@ -592,6 +599,26 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 	@Override
 	public void setVirtualClassCd(java.lang.String virtualClassCd) {
 		_virtualLabClass.setVirtualClassCd(virtualClassCd);
+	}
+
+	/**
+	* Returns the class curriculum url of this virtual lab class.
+	*
+	* @return the class curriculum url of this virtual lab class
+	*/
+	@Override
+	public java.lang.String getClassCurriculumUrl() {
+		return _virtualLabClass.getClassCurriculumUrl();
+	}
+
+	/**
+	* Sets the class curriculum url of this virtual lab class.
+	*
+	* @param classCurriculumUrl the class curriculum url of this virtual lab class
+	*/
+	@Override
+	public void setClassCurriculumUrl(java.lang.String classCurriculumUrl) {
+		_virtualLabClass.setClassCurriculumUrl(classCurriculumUrl);
 	}
 
 	@Override

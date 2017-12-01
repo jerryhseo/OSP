@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,7 +38,7 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{jobSeqNo=");
 		sb.append(jobSeqNo);
@@ -46,8 +46,6 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 		sb.append(simulationUuid);
 		sb.append(", groupId=");
 		sb.append(groupId);
-		sb.append(", simulationJobId=");
-		sb.append(simulationJobId);
 		sb.append(", jobUuid=");
 		sb.append(jobUuid);
 		sb.append(", jobStatus=");
@@ -91,7 +89,6 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 		}
 
 		simulationJobImpl.setGroupId(groupId);
-		simulationJobImpl.setSimulationJobId(simulationJobId);
 
 		if (jobUuid == null) {
 			simulationJobImpl.setJobUuid(StringPool.BLANK);
@@ -161,7 +158,6 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 		jobSeqNo = objectInput.readLong();
 		simulationUuid = objectInput.readUTF();
 		groupId = objectInput.readLong();
-		simulationJobId = objectInput.readLong();
 		jobUuid = objectInput.readUTF();
 		jobStatus = objectInput.readLong();
 		jobStartDt = objectInput.readLong();
@@ -189,7 +185,6 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 		}
 
 		objectOutput.writeLong(groupId);
-		objectOutput.writeLong(simulationJobId);
 
 		if (jobUuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -234,7 +229,6 @@ public class SimulationJobCacheModel implements CacheModel<SimulationJob>,
 	public long jobSeqNo;
 	public String simulationUuid;
 	public long groupId;
-	public long simulationJobId;
 	public String jobUuid;
 	public long jobStatus;
 	public long jobStartDt;

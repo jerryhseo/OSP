@@ -116,6 +116,7 @@
 		<property name="classCreateDt" type="org.hibernate.type.TimestampType" />
 		<property name="classUpdateDt" type="org.hibernate.type.TimestampType" />
 		<property name="virtualClassCd" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="classCurriculumUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="org.kisti.edison.virtuallaboratory.model.impl.VirtualLabClassScienceAppImpl" table="EDVIR_VirtualLabClassScienceApp">
 		<cache usage="read-write" />

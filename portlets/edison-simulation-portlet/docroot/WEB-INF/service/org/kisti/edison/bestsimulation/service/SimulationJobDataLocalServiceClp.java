@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -120,6 +120,12 @@ public class SimulationJobDataLocalServiceClp
 
 		_methodParameterTypes19 = new String[] {
 				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName20 = "replaceJobData";
+
+		_methodParameterTypes20 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 	}
 
@@ -714,6 +720,43 @@ public class SimulationJobDataLocalServiceClp
 		return (org.kisti.edison.bestsimulation.model.SimulationJobData)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationJobData replaceJobData(
+		java.lang.String prevUuid, java.lang.String newUuid,
+		java.lang.String jobData)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] {
+						ClpSerializer.translateInput(prevUuid),
+						
+					ClpSerializer.translateInput(newUuid),
+						
+					ClpSerializer.translateInput(jobData)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.bestsimulation.model.SimulationJobData)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -753,4 +796,6 @@ public class SimulationJobDataLocalServiceClp
 	private String[] _methodParameterTypes17;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
 }

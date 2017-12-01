@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,7 +38,7 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{simulationUuid=");
 		sb.append(simulationUuid);
@@ -52,6 +52,8 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 		sb.append(scienceAppId);
 		sb.append(", scienceAppName=");
 		sb.append(scienceAppName);
+		sb.append(", scienceAppVersion=");
+		sb.append(scienceAppVersion);
 		sb.append(", simulationCreateDt=");
 		sb.append(simulationCreateDt);
 		sb.append(", cluster=");
@@ -102,6 +104,13 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 			simulationImpl.setScienceAppName(scienceAppName);
 		}
 
+		if (scienceAppVersion == null) {
+			simulationImpl.setScienceAppVersion(StringPool.BLANK);
+		}
+		else {
+			simulationImpl.setScienceAppVersion(scienceAppVersion);
+		}
+
 		if (simulationCreateDt == Long.MIN_VALUE) {
 			simulationImpl.setSimulationCreateDt(null);
 		}
@@ -133,6 +142,7 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 		simulationTitle = objectInput.readUTF();
 		scienceAppId = objectInput.readUTF();
 		scienceAppName = objectInput.readUTF();
+		scienceAppVersion = objectInput.readUTF();
 		simulationCreateDt = objectInput.readLong();
 		cluster = objectInput.readUTF();
 		classId = objectInput.readLong();
@@ -174,6 +184,13 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 			objectOutput.writeUTF(scienceAppName);
 		}
 
+		if (scienceAppVersion == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(scienceAppVersion);
+		}
+
 		objectOutput.writeLong(simulationCreateDt);
 
 		if (cluster == null) {
@@ -194,6 +211,7 @@ public class SimulationCacheModel implements CacheModel<Simulation>,
 	public String simulationTitle;
 	public String scienceAppId;
 	public String scienceAppName;
+	public String scienceAppVersion;
 	public long simulationCreateDt;
 	public String cluster;
 	public long classId;

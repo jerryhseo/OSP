@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -339,6 +339,21 @@ public interface SimulationModel extends BaseModel<Simulation> {
 	 */
 	public void setScienceAppNameMap(Map<Locale, String> scienceAppNameMap,
 		Locale defaultLocale);
+
+	/**
+	 * Returns the science app version of this simulation.
+	 *
+	 * @return the science app version of this simulation
+	 */
+	@AutoEscape
+	public String getScienceAppVersion();
+
+	/**
+	 * Sets the science app version of this simulation.
+	 *
+	 * @param scienceAppVersion the science app version of this simulation
+	 */
+	public void setScienceAppVersion(String scienceAppVersion);
 
 	/**
 	 * Returns the simulation create dt of this simulation.

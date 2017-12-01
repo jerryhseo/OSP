@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.simulation.model.BatchMonitoring">
+		<field name="batSeqNo" type="long" />
+		<field name="batDiv" type="String" />
+		<field name="manualYN" type="String" />
+		<field name="status" type="String" />
+		<field name="message" type="String" localized="true" />
+		<field name="insertId" type="long" />
+		<field name="exeDate" type="Date" />
+	</model>
+</model-hints>
