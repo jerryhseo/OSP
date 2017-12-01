@@ -1,0 +1,10 @@
+#*
+This file allows you to override and define new Velocity variables.
+*#
+#set ($css_class = "${css_class} edison ")
+
+#if($themeDisplay.getLanguageId()=="en_US")
+	#set ($infomation_text="Privacy Policy")
+#else
+	#set ($infomation_text="개인정보처리방침")
+#end
