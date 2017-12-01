@@ -81,9 +81,10 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 			{ "classPersonnel", Types.INTEGER },
 			{ "classCreateDt", Types.TIMESTAMP },
 			{ "classUpdateDt", Types.TIMESTAMP },
-			{ "virtualClassCd", Types.VARCHAR }
+			{ "virtualClassCd", Types.VARCHAR },
+			{ "classCurriculumUrl", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDVIR_VirtualLabClass (classId LONG not null primary key,classTitle STRING null,classStartDt VARCHAR(75) null,classEndDt VARCHAR(75) null,classUseYn VARCHAR(75) null,classDescription STRING null,classPersonnel INTEGER,classCreateDt DATE null,classUpdateDt DATE null,virtualClassCd VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table EDVIR_VirtualLabClass (classId LONG not null primary key,classTitle STRING null,classStartDt VARCHAR(75) null,classEndDt VARCHAR(75) null,classUseYn VARCHAR(75) null,classDescription STRING null,classPersonnel INTEGER,classCreateDt DATE null,classUpdateDt DATE null,virtualClassCd VARCHAR(75) null,classCurriculumUrl VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDVIR_VirtualLabClass";
 	public static final String ORDER_BY_JPQL = " ORDER BY virtualLabClass.classCreateDt DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDVIR_VirtualLabClass.classCreateDt DESC";
@@ -121,6 +122,7 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 		model.setClassCreateDt(soapModel.getClassCreateDt());
 		model.setClassUpdateDt(soapModel.getClassUpdateDt());
 		model.setVirtualClassCd(soapModel.getVirtualClassCd());
+		model.setClassCurriculumUrl(soapModel.getClassCurriculumUrl());
 
 		return model;
 	}
@@ -235,6 +237,7 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 		attributes.put("classCreateDt", getClassCreateDt());
 		attributes.put("classUpdateDt", getClassUpdateDt());
 		attributes.put("virtualClassCd", getVirtualClassCd());
+		attributes.put("classCurriculumUrl", getClassCurriculumUrl());
 
 		return attributes;
 	}
@@ -299,6 +302,12 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 
 		if (virtualClassCd != null) {
 			setVirtualClassCd(virtualClassCd);
+		}
+
+		String classCurriculumUrl = (String)attributes.get("classCurriculumUrl");
+
+		if (classCurriculumUrl != null) {
+			setClassCurriculumUrl(classCurriculumUrl);
 		}
 	}
 
@@ -616,6 +625,22 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 		_virtualClassCd = virtualClassCd;
 	}
 
+	@JSON
+	@Override
+	public String getClassCurriculumUrl() {
+		if (_classCurriculumUrl == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _classCurriculumUrl;
+		}
+	}
+
+	@Override
+	public void setClassCurriculumUrl(String classCurriculumUrl) {
+		_classCurriculumUrl = classCurriculumUrl;
+	}
+
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
@@ -730,6 +755,7 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 		virtualLabClassImpl.setClassCreateDt(getClassCreateDt());
 		virtualLabClassImpl.setClassUpdateDt(getClassUpdateDt());
 		virtualLabClassImpl.setVirtualClassCd(getVirtualClassCd());
+		virtualLabClassImpl.setClassCurriculumUrl(getClassCurriculumUrl());
 
 		virtualLabClassImpl.resetOriginalValues();
 
@@ -857,12 +883,20 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 			virtualLabClassCacheModel.virtualClassCd = null;
 		}
 
+		virtualLabClassCacheModel.classCurriculumUrl = getClassCurriculumUrl();
+
+		String classCurriculumUrl = virtualLabClassCacheModel.classCurriculumUrl;
+
+		if ((classCurriculumUrl != null) && (classCurriculumUrl.length() == 0)) {
+			virtualLabClassCacheModel.classCurriculumUrl = null;
+		}
+
 		return virtualLabClassCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{classId=");
 		sb.append(getClassId());
@@ -884,6 +918,8 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 		sb.append(getClassUpdateDt());
 		sb.append(", virtualClassCd=");
 		sb.append(getVirtualClassCd());
+		sb.append(", classCurriculumUrl=");
+		sb.append(getClassCurriculumUrl());
 		sb.append("}");
 
 		return sb.toString();
@@ -891,7 +927,7 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.virtuallaboratory.model.VirtualLabClass");
@@ -937,6 +973,10 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 			"<column><column-name>virtualClassCd</column-name><column-value><![CDATA[");
 		sb.append(getVirtualClassCd());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>classCurriculumUrl</column-name><column-value><![CDATA[");
+		sb.append(getClassCurriculumUrl());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -959,5 +999,6 @@ public class VirtualLabClassModelImpl extends BaseModelImpl<VirtualLabClass>
 	private Date _classCreateDt;
 	private Date _classUpdateDt;
 	private String _virtualClassCd;
+	private String _classCurriculumUrl;
 	private VirtualLabClass _escapedModel;
 }

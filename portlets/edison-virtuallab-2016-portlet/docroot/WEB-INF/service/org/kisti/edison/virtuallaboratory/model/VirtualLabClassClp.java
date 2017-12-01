@@ -94,6 +94,7 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 		attributes.put("classCreateDt", getClassCreateDt());
 		attributes.put("classUpdateDt", getClassUpdateDt());
 		attributes.put("virtualClassCd", getVirtualClassCd());
+		attributes.put("classCurriculumUrl", getClassCurriculumUrl());
 
 		return attributes;
 	}
@@ -158,6 +159,12 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 
 		if (virtualClassCd != null) {
 			setVirtualClassCd(virtualClassCd);
+		}
+
+		String classCurriculumUrl = (String)attributes.get("classCurriculumUrl");
+
+		if (classCurriculumUrl != null) {
+			setClassCurriculumUrl(classCurriculumUrl);
 		}
 	}
 
@@ -599,6 +606,30 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 		}
 	}
 
+	@Override
+	public String getClassCurriculumUrl() {
+		return _classCurriculumUrl;
+	}
+
+	@Override
+	public void setClassCurriculumUrl(String classCurriculumUrl) {
+		_classCurriculumUrl = classCurriculumUrl;
+
+		if (_virtualLabClassRemoteModel != null) {
+			try {
+				Class<?> clazz = _virtualLabClassRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setClassCurriculumUrl",
+						String.class);
+
+				method.invoke(_virtualLabClassRemoteModel, classCurriculumUrl);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getVirtualLabClassRemoteModel() {
 		return _virtualLabClassRemoteModel;
 	}
@@ -757,6 +788,7 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 		clone.setClassCreateDt(getClassCreateDt());
 		clone.setClassUpdateDt(getClassUpdateDt());
 		clone.setVirtualClassCd(getVirtualClassCd());
+		clone.setClassCurriculumUrl(getClassCurriculumUrl());
 
 		return clone;
 	}
@@ -810,7 +842,7 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{classId=");
 		sb.append(getClassId());
@@ -832,6 +864,8 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 		sb.append(getClassUpdateDt());
 		sb.append(", virtualClassCd=");
 		sb.append(getVirtualClassCd());
+		sb.append(", classCurriculumUrl=");
+		sb.append(getClassCurriculumUrl());
 		sb.append("}");
 
 		return sb.toString();
@@ -839,7 +873,7 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.virtuallaboratory.model.VirtualLabClass");
@@ -885,6 +919,10 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 			"<column><column-name>virtualClassCd</column-name><column-value><![CDATA[");
 		sb.append(getVirtualClassCd());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>classCurriculumUrl</column-name><column-value><![CDATA[");
+		sb.append(getClassCurriculumUrl());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -903,6 +941,7 @@ public class VirtualLabClassClp extends BaseModelImpl<VirtualLabClass>
 	private Date _classCreateDt;
 	private Date _classUpdateDt;
 	private String _virtualClassCd;
+	private String _classCurriculumUrl;
 	private BaseModel<?> _virtualLabClassRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.virtuallaboratory.service.ClpSerializer.class;
 }

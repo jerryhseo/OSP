@@ -41,6 +41,7 @@ public class VirtualLabClassSoap implements Serializable {
 		soapModel.setClassCreateDt(model.getClassCreateDt());
 		soapModel.setClassUpdateDt(model.getClassUpdateDt());
 		soapModel.setVirtualClassCd(model.getVirtualClassCd());
+		soapModel.setClassCurriculumUrl(model.getClassCurriculumUrl());
 
 		return soapModel;
 	}
@@ -175,6 +176,14 @@ public class VirtualLabClassSoap implements Serializable {
 		_virtualClassCd = virtualClassCd;
 	}
 
+	public String getClassCurriculumUrl() {
+		return _classCurriculumUrl;
+	}
+
+	public void setClassCurriculumUrl(String classCurriculumUrl) {
+		_classCurriculumUrl = classCurriculumUrl;
+	}
+
 	private long _classId;
 	private String _classTitle;
 	private String _classStartDt;
@@ -185,4 +194,5 @@ public class VirtualLabClassSoap implements Serializable {
 	private Date _classCreateDt;
 	private Date _classUpdateDt;
 	private String _virtualClassCd;
+	private String _classCurriculumUrl;
 }

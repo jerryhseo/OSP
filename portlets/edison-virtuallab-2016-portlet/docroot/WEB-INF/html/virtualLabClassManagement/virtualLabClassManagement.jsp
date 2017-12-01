@@ -621,6 +621,12 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 							</td>
 						</tr>
 						<tr>
+							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-curriculum-url' /></th>
+							<td>
+								<input id="<portlet:namespace/>classCurriculumUrl" name="<portlet:namespace/>classCurriculumUrl" type="text" style="margin-bottom:0px;" value="${virtualLabClassInfo.classCurriculumUrl}"/>
+							</td>
+						</tr>
+						<tr>
 							<td colspan="2" style="text-align: right;border-bottom: 0px;">
 								<c:if test="${empty virtualLabClassInfo}">
 									<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="button0801"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />

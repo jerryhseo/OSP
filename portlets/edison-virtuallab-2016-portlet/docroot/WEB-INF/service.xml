@@ -54,6 +54,7 @@
 		<column name="classCreateDt" type="Date"></column>
 		<column name="classUpdateDt" type="Date"></column>
 		<column name="virtualClassCd" type="String"></column>
+		<column name="classCurriculumUrl" type="String"></column>
 
 		<!-- Order By -->
 		<order by="desc">

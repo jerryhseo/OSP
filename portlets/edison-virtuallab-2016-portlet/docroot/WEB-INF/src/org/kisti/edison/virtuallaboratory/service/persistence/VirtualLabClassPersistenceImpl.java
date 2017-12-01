@@ -346,6 +346,7 @@ public class VirtualLabClassPersistenceImpl extends BasePersistenceImpl<VirtualL
 		virtualLabClassImpl.setClassCreateDt(virtualLabClass.getClassCreateDt());
 		virtualLabClassImpl.setClassUpdateDt(virtualLabClass.getClassUpdateDt());
 		virtualLabClassImpl.setVirtualClassCd(virtualLabClass.getVirtualClassCd());
+		virtualLabClassImpl.setClassCurriculumUrl(virtualLabClass.getClassCurriculumUrl());
 
 		return virtualLabClassImpl;
 	}
