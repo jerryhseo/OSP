@@ -227,12 +227,13 @@ public class RequestMemberLocalServiceImpl
 		
 		boolean isMember = false;
 		
-		List<Team> userTeams = TeamLocalServiceUtil.getUserTeams(userId, portalGroupId);
-		if(userTeams != null){
-			for(Team userTeam : userTeams){
-				long userTeamId = userTeam.getTeamId();
-				if(userTeamId == simulationProjectId){
+		List<RequestMember> requestMemberList = requestMemberPersistence.findBySimulationProjectIdAndUseId(userId, simulationProjectId);
+		if(requestMemberList != null){
+			for(RequestMember requestMember : requestMemberList){
+				// 가입 승인된 requestMember
+				if("2003002".equals(requestMember.getRequestState()) && requestMember.getProcessDate() != null){
 					isMember = true;
+					break;
 				}
 			}
 		}
