@@ -40,7 +40,7 @@
                 AND SIMPRO.simulationProjectId IN(@@simProIds@@)
             </isNotEmpty>    
             <isNotEmpty property="ownerId">
-                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002)
+                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002 AND SIMPRO.projectOpenYn = 1)
             </isNotEmpty>
             <isNotEmpty property="searchValue">
             	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
@@ -82,7 +82,7 @@
                 AND AE_AC.categoryId IN(@@simProIds@@)
             </isNotEmpty>     
             <isNotEmpty property="ownerId">
-                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002)
+                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002 AND SIMPRO.projectOpenYn = 1)
             </isNotEmpty>
             <isNotEmpty property="searchValue">
             	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
