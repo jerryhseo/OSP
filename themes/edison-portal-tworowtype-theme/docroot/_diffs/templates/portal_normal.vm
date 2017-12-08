@@ -11,6 +11,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	$theme.include($top_head_include)
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
 	
 	<script type="text/javascript">
 		var agent = navigator.userAgent.toLowerCase();
@@ -35,46 +38,70 @@
 					rv = parseFloat(RegExp.$1);    
 				}
 			return rv; 
-		} 
+		}
+		
+		function openRelationSite() {
+		    document.getElementById("mySidenav").style.width = "250px";
+		}
+		
+		function closeNav() {
+		    document.getElementById("mySidenav").style.width = "0";
+		}
+		
+		$(function () {
+		    $('a[href="#fullscreen"]').on('click', function(event) {
+		        event.preventDefault();
+		    	
+		    	var target = $(this).attr("target");
+		    	$(target).addClass('open');
+		    	if(target=='#themesearch'){$('#themesearch > form > input[type="search"]').focus();}
+		    });
+		    
+		    $('.fullscreen, .fullscreen button.close').on('click keyup', function(event) {
+		        if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+		            $(this).removeClass('open');
+		        }
+		    });
+		});
 	</script>
 </head>
 
 <body class="$css_class">
-	#if ($is_signed_in)
+	#if ($dock_show)
 		#dockbar()
 	#end
-
+	
 	$theme.include($body_top_include)
 
-	<div id="wrap">
-		<header id="banner">
-			<div class="logo">
-				<a href="$site_main_url"><img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width"/></a>
-			</div>
-		</header/>
+	<header id="banner" role="banner">
+		#parse ("$full_templates_path/navigation.vm")
+	</header>
+	#parse ("$full_templates_path/sitemap.vm")
+	
+	<div class="container-fluid" id="wrapper">
+		<div id="content">
 		
-		<article>
-			<div class="$content_class">
-				#if ($selectable)
-					$theme.include($content_include)
-				#else
-					$portletDisplay.recycle()
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
 		
-					$portletDisplay.setTitle($the_title)
-		
-					$theme.wrapPortlet("portlet.vm", $content_include)
-				#end
-			</div>
-		</article>
-		
-		<footer class="footerwrap">
-			#parse ("$full_templates_path/footer.vm")
-		</footer>
 	</div>
+	
+	<footer id="footer" role="contentinfo">
+		#parse ("$full_templates_path/footer.vm")
+	</footer>
+	
+	
 	$theme.include($body_bottom_include)
 	
 	$theme.include($bottom_include)
-
 </body>
 
 </html>

@@ -26,6 +26,8 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	@import "aui/alloy-font-awesome/scss/extras";
 	@import "aui/alloy-font-awesome/scss/icons-alloy";
 	@import "aui/alloy-font-awesome/scss/icons-alloy-extra";
+	
+	@import "edison/scss/custom-edison";// Custom EDISON
 
 	background-color: $bodyBackground;
 	color: $textColor;
