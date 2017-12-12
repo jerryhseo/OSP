@@ -10,7 +10,7 @@
 	.logintitle {
 		font-size: 27px;
 		color: #000;
-		padding: 0px 20px 12px 0px;
+		padding: 20px 20px 12px 0px;
 		font-family: Arial, Nanum Barun Gothic,NanumGothic;
 		float: left;
 	}
@@ -34,6 +34,14 @@
 		padding: 22px 30px;
 		text-align: left;
 	}
+	
+	.buttonbox08 {
+		margin: 0 auto;
+		overflow: hidden;
+		padding-top: 15px;
+		padding-bottom: 10px;
+		text-align: center;
+	}
 </style>
 <script type="text/javascript">
 function check(){
@@ -42,7 +50,7 @@ function check(){
 </script>
 
 
-<aui:fieldset cssClass="body_layout">
+<aui:fieldset cssClass="body_layout container">
 	<div class="logintitlebox">
 			<div class="logintitle">개인정보처리방침</div>
 	</div>
@@ -224,7 +232,7 @@ EDISON의 자체적인 개인정보 불만처리, 피해구제 결과에 만족�
 		<div style="clear:left;"></div>
 		<div class="borderline"></div>
 		<div class="buttonbox08">
-			<input type="button" name="fullsize" id="fullsize" value="확인" onclick="check();" class="button08">
+			<input type="button" name="fullsize" id="fullsize" value="확인" onclick="check();" class="btn btn-primary">
 		</div>
 	</div>
 </aui:fieldset>
