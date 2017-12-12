@@ -11,8 +11,10 @@ This file allows you to override and define new Velocity variables.
 
 #if($themeDisplay.getLanguageId()=="en_US")
 	#set ($infomation_text="Privacy Policy")
+	#set ($search_keyword="type keyword(s) here")
 #else
 	#set ($infomation_text="개인정보처리방침")
+	#set ($search_keyword="검색어를 입력 하세요")
 #end
 
 #if($permissionChecker.isOmniadmin()||$permissionChecker.isGroupAdmin($group_id))

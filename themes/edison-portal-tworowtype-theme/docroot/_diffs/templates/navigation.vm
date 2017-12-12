@@ -99,24 +99,3 @@
 		</ul>
 	</div>
 </nav>
-
-
-<div id="themesearch" class="fullscreen">
-	<button type="button" class="close">×</button>
-	<form>
-		<input type="search" value="" placeholder="KeyWord" />
-		<button type="submit" class="btn btn-primary">Search</button>
-	</form>
-</div>
-
-<div id="mySidenav" class="sidenav">
-	<button type="button" class="closebtn" onclick="closeNav()">×</button>
-	<a href="/web${edisongroup.friendlyURL}">
-		$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($edisongroup.descriptiveName)),"")
-	</a>
-	#foreach ($site in$sortTool.sort($siteGroups,'groupId:asc'))
-		<a href="/web${site.friendlyURL}">
-			$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
-		</a>
-	#end
-</div>

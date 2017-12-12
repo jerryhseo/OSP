@@ -28,7 +28,27 @@ ul, ol {list-style:none;}
 		padding-right:15px;
 	}
 }
+
+#banner {
+	-webkit-transform: translateY(0);
+	-moz-transform: translateY(0);
+	-ms-transform: translateY(0);
+	-o-transform: translateY(0);
+	transform: translateY(0);
+	-webkit-transition: right 0.5s, -webkit-transform 0.25s;
+	-moz-transition: right 0.5s, -moz-transform 0.25s;
+	-o-transition: right 0.5s, -o-transform 0.25s;
+	transition: right 0.5s, transform 0.25s; 
+}
 	
+.hide-banner #banner{
+	-webkit-transform: translateY(-60px);
+	-moz-transform: translateY(-60px);
+	-ms-transform: translateY(-60px);
+	-o-transform: translateY(-60px);
+	transform: translateY(-60px); 
+}
+
 .edison {
 	.navbar{
 		margin-bottom:0px;
@@ -140,7 +160,7 @@ ul, ol {list-style:none;}
 	.fullscreen:after{clear:both;}
 	
 	.fullscreen{
-		z-index:100;
+		z-index: 1050;
 		position: fixed;
 		top: 0px;
 		left: 0px;

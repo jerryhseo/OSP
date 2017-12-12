@@ -30,6 +30,8 @@ AUI().ready(
 				}
 			);
 			var WIN = A.getWin();
+			var BODY = A.getBody();
+			
 			var banner = A.one('#banner');
 			var triggerPos = 200;
 			var lastScrollPos = 0;
@@ -46,12 +48,15 @@ AUI().ready(
 				
 				if (scrollPos < (savedScrollPos - 100) && scrollPos>100) {
 					savedScrollPos = scrollPos + 100;
+					BODY.removeClass('hide-banner');
 					banner.addClass('navbar-fixed-top');
 				}
 				else if (scrollPos > triggerPos) {
+					BODY.addClass('hide-banner');
 					banner.removeClass('navbar-fixed-top');
 				}
 				else {
+					BODY.removeClass('hide-banner');
 					banner.removeClass('navbar-fixed-top');
 				}
 			}
