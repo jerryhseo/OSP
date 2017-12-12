@@ -95,7 +95,7 @@
 				<li><a href="$themeDisplay.getURLSignIn()"><span class="icon-large icon-signin"></span> $languageUtil.format($locale, "Sign-in","")</a></li>
 			#end
 			
-			<li><button class="btn btn-info navbar-btn" onclick="openRelationSite();">Relation Site</button></li>
+			<li><button class="btn btn-info navbar-btn" onclick="openRelationSite();">EDISON'S</button></li>
 		</ul>
 	</div>
 </nav>

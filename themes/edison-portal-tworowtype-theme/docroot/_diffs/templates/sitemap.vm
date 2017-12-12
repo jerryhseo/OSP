@@ -61,11 +61,11 @@
 <div id="mySidenav" class="sidenav">
 	<button type="button" class="closebtn" onclick="closeNav()">×</button>
 	<a href="/web${edisongroup.friendlyURL}">
-		$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($edisongroup.descriptiveName)),"")
+		EDISON
 	</a>
 	#foreach ($site in$sortTool.sort($siteGroups,'groupId:asc'))
 		<a href="/web${site.friendlyURL}">
-			$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
+			$getterUtil.get($site.getExpandoBridge().getAttribute("SiteName").get($locale), $site.descriptiveName)
 		</a>
 	#end
 </div>
