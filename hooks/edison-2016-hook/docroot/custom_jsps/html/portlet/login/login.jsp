@@ -30,9 +30,8 @@
 	.loginbox {
 		margin: 0 auto;
 		width: 99%;
-		height:270px;
+		height:350px;
 		border: solid 6px #e5e5e5;
-		text-align: center;
 		padding-top: 40px;
 		padding-bottom: 25px;
 		text-align: center;
@@ -85,10 +84,9 @@
 		width: 90px;
 		height: 45px;
 		display: inline-block;
-		padding-left: 290px;
 		text-align: left;
-		margin: 0px;
 		cursor: default;
+		margin-left: 290px;
 	}
 	
 	.buttonbox09 {
@@ -291,13 +289,13 @@
 							<ul>
 								<li>
 									<label><liferay-ui:message key="edison-id"/></label>
-									<aui:input label="" size="37" cssClass="clearable" type="text" name="login" value="<%= login %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;" autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" showRequiredLabel="<%= false %>" maxLength="32">
+									<aui:input label="" size="37" cssClass="clearable" type="text" name="login" value="<%= login %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;height: 41px;" autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" showRequiredLabel="<%= false %>" maxLength="32">
 										<aui:validator name="required"/>
 									</aui:input>
 								</li>
 								<li>
 									<label><liferay-ui:message key="edison-password"/></label>
-									<aui:input label="" size="37" cssClass="clearable" type="password" value="<%= password %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;" name="password" showRequiredLabel="<%= false %>">
+									<aui:input label="" size="37" cssClass="clearable" type="password" value="<%= password %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;height: 41px;" name="password" showRequiredLabel="<%= false %>">
 										<aui:validator name="required"/>
 									</aui:input>
 								</li>
@@ -308,7 +306,7 @@
 						</div>
 						
 						<div class="loginboxin01">
-							<table class="table7" width="935">
+							<table class="table7" width="860px">
 								<tbody>
 									<tr>
 										<td colspan="8" class="loginline"></td>
