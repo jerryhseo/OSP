@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
-<script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.min.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/myfile.css" media="screen"/>
+<script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 
 <%
 	String returnId = request.getAttribute("returnId")!= null?(String)request.getAttribute("returnId"):"";
@@ -76,39 +76,10 @@
 	
 	<!--right contents-->
 	<div class="rightcontent" style="overflow: auto;">
-		<!--table-->
-		<div class="tablemf_list borderno">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<colgroup>
-		        	<col width="*">
-					<c:choose>
-						<c:when test="<%=popupState%>"> <!-- popup일떄 -->
-							<col width="20%">
-							<col width="12%">
-							<col width="10%" />
-							<col width="10%" />
-						</c:when>
-						<c:otherwise>
-							<col width="25%">
-							<col width="15%">
-						</c:otherwise>
-					</c:choose> 
-				</colgroup>
-		            <thead>
-						<tr>
-							<th scope="col"><input value="all" id="<portlet:namespace/>filechkAll" type="checkbox" class="allCheckBox"><liferay-ui:message key="edison-table-list-header-file-nm"/> </th>
-							<th scope="col"><liferay-ui:message key="edison-science-appstore-toolkit-change-date"/></th>
-							<th scope="col"><liferay-ui:message key="edison-table-list-header-file-size"/></th>
-							<c:if test="<%=popupState%>">
-								<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-file-choice"/></th>
-								<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-path-copy"/></th>
-							</c:if>
-						</tr>
-					</thead>
-					<tbody id ="fileTableBody">
-					</tbody>
-			</table>
-		</div>
+		<div class="myfilefolderlist">
+              <ul id ="fileTableBody">
+              </ul>
+            </div>
 	</div> <!-- //right contents-->                                    
 </div>
 </aui:form>
@@ -194,7 +165,9 @@ $(function(){
         	<portlet:namespace/>deleteFolder();
         }
     });
+	
 });
+
 //최상위 폴더 목록 가져오기
 function <portlet:namespace/>getRepositoryFolder(){
 	var arr = [];
@@ -275,6 +248,7 @@ function <portlet:namespace/>getChildFile(folderId){
 	
 	var groupId = $("#<portlet:namespace/>groupId").val();
 	var vcToken = $("#<portlet:namespace/>vcToken").val();
+	var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 	
 	jQuery.ajax({
 		type: "POST",
@@ -282,6 +256,7 @@ function <portlet:namespace/>getChildFile(folderId){
 		data: {
 			"<portlet:namespace/>groupId" : groupId,
 			"<portlet:namespace/>vcToken" : vcToken,
+			"<portlet:namespace/>icebreakerUrl" : icebreakerUrl,
 			"<portlet:namespace/>selectFolderId" : selectFolder
 		},
 		async : false,
@@ -290,43 +265,53 @@ function <portlet:namespace/>getChildFile(folderId){
 			var dataMap = data.dataList;
 			
 			$fileTableBody = $("#fileTableBody");
-			$("#fileTableBody tr").remove();
+			//$("#fileTableBody tr").remove();
+			$("#fileTableBody li").remove();
 			if(dataSize>0){
 				for(var i=0 ; i<dataSize; i++ ){
-					$tr = $("<tr></tr>").appendTo($fileTableBody);
-					if(i%2 == 1){ $tr.addClass("tablebgtr"); }
-					
-					$label = $("<label/>");
-					$checkBox = $("<input/>").attr("type","checkbox").attr("name","<portlet:namespace/>fileChk").attr("value",dataMap[i].fileId);
-					$img = $("<img/>").attr("src","${contextPath}/images/myfile/myfile-icon05.png").attr("width","14").attr("height","16");
-					
-					$fileName = $("<span/>").attr("id","fileDownLoad").text(dataMap[i].fileName);
-					
-					$label = $label.append($checkBox).append("&nbsp;&nbsp;").append($img).append("&nbsp;").append($fileName).css("word-break","break-all");
-					$("<td></td>").addClass("name").append($label).appendTo($tr);
-					$("<td></td>").addClass("TC").append(dataMap[i].lastModified).appendTo($tr);
-					$("<td></td>").addClass("TC").append(dataMap[i].fileSize).appendTo($tr);
-					
-					if(<%=popupState%>){
-						$fileSelectBt = $("<input/>").attr("type","button").attr("name","fieChoice").attr("id","fieChoice").attr("value",Liferay.Language.get('edison-myfile-choice')).addClass("button03").attr("onclick","<portlet:namespace/>fileChoice('"+dataMap[i].fileId+"', '"+dataMap[i].fileName+"', '"+dataMap[i].path+"');");
-						$copyPathBt = $("<input/>").attr("type","button").attr("name","fullsize").attr("id","fullsize").attr("value","Copy").addClass("button03").attr("onclick","<portlet:namespace/>clipUrl('"+dataMap[i].fileId+"', '"+dataMap[i].fileName+"', '"+dataMap[i].path+"');");
-						
-						$("<td></td>").addClass("TC").append($fileSelectBt).appendTo($tr);	
-						$("<td></td>").addClass("TC").append($copyPathBt).appendTo($tr);	
-					}
+					var fileObj = new Object();
+                    
+                    var fileName = dataMap[i].fileName;
+                    
+                    $li = $("<li/>").attr("class", "<portlet:namespace/>file").attr("file-name", fileName).appendTo($fileTableBody);
+                    if(i%2 == 1){ $li.addClass("tablebgtr"); }
+                    
+                    
+                    $label = $("<label/>");
+                    $checkBox = $("<input/>").attr("type","checkbox").attr("name","<portlet:namespace/>fileChk")
+                                             .attr("onclick", "<portlet:namespace/>showSelectBtn();").attr("value",dataMap[i].fileId).attr("style", "float:left;");
+                    $img = $("<img/>").attr("src","${contextPath}/images/myfile/file03.png").attr("width","35px");
+                    $fileName = $("<span/>").attr("id","<portlet:namespace/>thisFileName").text(fileName)
+                                            .css({
+                                                "float" : "left",
+                                                "width" : "125px",
+                                                "white-space" : "nowrap",
+                                                "overflow" : "hidden",
+                                                "text-overflow" : "ellipsis"
+                                            });
+                    $lastModified = $("<span/>").text(dataMap[i].lastModified).attr("style", "float:left;");
+                    $fileSize = $("<span/>").attr("class","filesize").text(dataMap[i].fileSize).attr("style", "float:left;");
+                    
+                    $label = $label.append($checkBox).append("&nbsp;&nbsp;").append($img).append("&nbsp;")
+                                                     .append($fileName).append("<br/>")
+                                                     .append($lastModified).append("<br/>")
+                                                     .append($fileSize).css("word-break","break-all");
+                    $label.appendTo($li);
+                    
+                    fileObj.text =  fileName;
+                    fileObj.id = dataMap[i].fileId;
+                    fileObj.size = dataMap[i].fileSize;
+                    fileObj.type = "file";
+                    
+                    returnFileList.push(fileObj);
 
 				}
 			}else{
-				$tr = $("<tr></tr>").appendTo($fileTableBody);
-				
-				var colspan = 4;
-				if(<%=popupState%>){
-					colspan = 6;	
-				}
-				$("<td></td>").addClass("TC")
-							  .text(Liferay.Language.get('edison-there-are-no-data'))
-							  .attr("colspan",colspan)
-							  .appendTo($tr);
+				$li = $("<li>").appendTo($fileTableBody);
+			    $("<span>").addClass("TC")
+			    			.text(Liferay.Language.get('edison-there-are-no-data'))
+			    			.attr("colspan",4)
+			    			.appendTo($li);
 			} 
 		},error:function(data,e){ 
 			alert(Liferay.Language.get('edison-data-search-error'));
@@ -368,7 +353,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			  return true;  //allow all other operations	 	
 		    }
 	   },
-	   "state" : "open",
+	   /* "state" : "open", */
 	    "types" : {
 	        "open" : {
 	        	"icon" : "${contextPath}/images/myfile/myfile-icon01.png"

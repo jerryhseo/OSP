@@ -601,6 +601,7 @@ public class MyFileController {
 			
 			if(!"".equals(icebreakerUrl)){
 				URL url = new URL(icebreakerUrl + "/api/folder/"+selectFolderId+"/"+newFolderName);
+				System.out.println("url : " + url);
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				
 				
