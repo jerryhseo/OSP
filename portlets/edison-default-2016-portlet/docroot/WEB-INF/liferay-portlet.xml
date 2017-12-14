@@ -71,6 +71,15 @@
 		<instanceable>false</instanceable>
 		<css-class-wrapper>edison-my-page</css-class-wrapper>
 	</portlet>	
+	
+	
+	<portlet>
+		<portlet-name>edison-template</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<css-class-wrapper>edison-template container</css-class-wrapper>
+	</portlet>	
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>
