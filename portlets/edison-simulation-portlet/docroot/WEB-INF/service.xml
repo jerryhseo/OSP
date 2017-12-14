@@ -197,5 +197,20 @@
 		<column name="exeCnt" type="long"/>
 		<column name="cpuTime" type="long"/>
 	</entity>	
+	
+	<!-- 시뮬레이션 공유 테이블 -->
+	<entity name="SimulationShare" local-service="true" remote-service="true" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+    	<column name="shareSeqno" type="long" primary="true"></column>
+		<column name="jobSeqNo" type="long" primary="true"></column>
+    	<column name="jobUuid" type="String"  primary="true" />		
+    	<column name="simulationUuid" type="String" primary="true"></column>
+
+		
+		<!-- Fields -->
+		<column name="classId" type="long"></column>
+		<column name="customId" type="long"></column>
+		<column name="simulationShareDt" type="Date"></column>
+	</entity>
 
 </service-builder>

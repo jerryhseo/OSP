@@ -38,6 +38,7 @@
 <liferay-portlet:resourceURL var="renameFolderURL" id="renameFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteFolderURL" id="deleteFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="moveFolderURL"   id="moveFolder"	 copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="copyFileURL"   id="copyFile"   copyCurrentRenderParameters="false" escapeXml="false"/>
 
 <liferay-portlet:resourceURL var="deleteFileURL" id="deleteFile" copyCurrentRenderParameters="false" escapeXml="false"/>
 
@@ -126,8 +127,13 @@ $(function(){
 	}else{
 		//초기 jstree init
 		if(folderArr != null){
+			var homeChildFileList = <portlet:namespace/>getChildFile("HOME");
+            
+            /* 하위 파일 List 추가 */
+            folderArr = folderArr.concat(homeChildFileList);
+			
 			<portlet:namespace/>initJstree(folderArr,"", null);
-			<portlet:namespace/>getChildFile("HOME");
+			//<portlet:namespace/>getChildFile("HOME");
 		}		
 	}
 	$("#myfileTree").jstree("deselect_all");
@@ -208,12 +214,14 @@ function <portlet:namespace/>getChildFolder(folderId){
 	
 	var groupId = $("#<portlet:namespace/>groupId").val();
 	var vcToken = $("#<portlet:namespace/>vcToken").val();
+	var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=getChildFolderURL%>",
 		data: {
 			"<portlet:namespace/>groupId" : groupId,
 			"<portlet:namespace/>vcToken" : vcToken,
+			"<portlet:namespace/>icebreakerUrl" : icebreakerUrl,
 			"<portlet:namespace/>selectFolderId" : selectFolder
 		},
 		async : false,
@@ -244,11 +252,23 @@ function <portlet:namespace/>getChildFolder(folderId){
 
 //선택한 폴더의 하위파일 목록 가져오기
 function <portlet:namespace/>getChildFile(folderId){
+	
+	var returnFileList = new Array();
+	
 	var selectFolder = folderId+"";
+	
+	var liferayWindowState = "${liferayWindowState}";
 	
 	var groupId = $("#<portlet:namespace/>groupId").val();
 	var vcToken = $("#<portlet:namespace/>vcToken").val();
 	var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
+	
+	var folderArr = null;
+	if(folderId === "HOME"){
+        folderArr = <portlet:namespace/>getRepositoryFolder();
+    } else {
+        folderArr = <portlet:namespace/>getChildFolder(folderId);
+    }
 	
 	jQuery.ajax({
 		type: "POST",
@@ -325,6 +345,7 @@ function <portlet:namespace/>getChildFile(folderId){
 			}
 		}
 	});
+	return returnFileList;
 }
 
 //jstree initial
@@ -333,7 +354,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 	var rootData = [{
 		"id":"HOME",
 		"text":"HOME",
-		"type":"open",
+		/* "type":"open", */
 		"children": dataArr,
 		"li_attr":{
 			"childLength" : dataArr.length			
@@ -344,6 +365,10 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 	$("#myfileTree").jstree({
 	   "core" : {
 		  "data": rootData,
+		  "themes" : {
+              "name" : "proton",
+              "responsive" : true
+          },
 		  "check_callback" : function(operation, node, node_parent, node_position) {
 			  if (operation === "move_node") {
             	  //return $.inArray(this.get_type(node), this.get_rules(node_parent).type) != -1;
@@ -355,18 +380,26 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 	   },
 	   /* "state" : "open", */
 	    "types" : {
-	        "open" : {
+	        /* "open" : {
 	        	"icon" : "${contextPath}/images/myfile/myfile-icon01.png"
 	        },
 	        "close" : {
 	          	"icon" : "${contextPath}/images/myfile/myfile-icon02.png"
-	        }
+	        } */
+	        "top" : {
+                
+            },
+            "file" : {
+                "icon" : "icon-file",
+                "a_attr" : { "onclick" : "<portlet:namespace/>viewerSubmit('"+this+"')"}
+            }
 	    },
 	    "contextmenu":{
 	    	"items": contextMenu
         },
        "progressive_render" : true,
-	   "plugins" : [ "contextmenu", "state", "dnd", "types","progressive_render" ]
+       "plugins" : ["types", "contextmenu",  "dnd", "progressive_render"]
+	   /* "plugins" : [ "contextmenu", "state", "dnd", "types","progressive_render" ] */
 	}).bind("loaded.jstree", function(event, data) { 
 		 //$(this).jstree("open_all");//현재 최상위폴더만 있으므로 open_all하면 열린 폴더 없음
 
@@ -397,7 +430,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 		//아이콘변경
 		<portlet:namespace/>iconChange();
 	}).bind("select_node.jstree",function(evt, data){//노드 선택 이벤트
-		var length = data.node.children.length;
+		/* var length = data.node.children.length;
 		
 		if(data.node.id != "HOME"){
 			//HOME가 아닐때
@@ -420,7 +453,38 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
     	<portlet:namespace/>iconChange();
     	//파일목록 가져오기
 	   	<portlet:namespace/>getChildFile(data.node.id);
-    	
+    	 */
+		if(data.node.type!="file"){
+            var length = data.node.children.length;
+        
+            //파일목록 가져오기
+            var selectNodeChildFile = <portlet:namespace/>getChildFile(data.node.id);
+            
+            if(data.node.id != "HOME"){
+                //HOME가 아닐때
+                var childFolderArr = <portlet:namespace/>getChildFolder(data.node.id);
+                
+                /* 하위 파일 List 추가 */
+                childFolderArr = childFolderArr.concat(selectNodeChildFile); 
+                
+                //노드 child와 api의 하위폴더 개수와 다르면 child node create
+                if( length != childFolderArr.length ){
+                    if(childFolderArr.length>0){
+                        $('#myfileTree').jstree().delete_node(data.node.children);
+                        for(var j=0; j<childFolderArr.length; j++){
+                            var obj = childFolderArr[j];
+                            console.log(obj);
+                            $('#myfileTree').jstree().create_node( data.node.id ,  obj , "last", false);
+                            
+                        } 
+                    } 
+                }
+                $("#myfileTree").jstree("toggle_node", data.node.id);
+            }
+            
+            //아이콘변경
+            <portlet:namespace/>iconChange();
+        }
 	}).bind("click.jstree", function (e, datap) { //아이콘 클릭 이벤트
 		//클릭해서 노드가 없는거는 붙이기
 		//클릭li 하위노드수하고 api온 자바하고 다르면 select li시키기
@@ -448,9 +512,14 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			var sourceId = data.node.id;
 			var targetId = data.parent;
 			
+			var targetId = data.parent;
+            var nodeType = data.node.type;      // node type : default, file
+			
 			var tree = $('#myfileTree').jstree(true);
 			var node = tree.get_node(targetId);				 
 			var nodeParents = node.parents;
+			
+			var destPath = $('#myfileTree').jstree(true).get_path(node, "/") + "/"+sourceNodeName;
 			
 		   if(sourceId != "" || targetId != ""){
 			   var groupId = $("#<portlet:namespace/>groupId").val();
@@ -460,20 +529,31 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			 		type: "POST",
 			 		url: "<%=moveFolderURL%>",
 			 		data: {
+			 			"<portlet:namespace/>nodeType" : nodeType,
+			 			"<portlet:namespace/>destPath" : destPath,
 			 			"<portlet:namespace/>groupId" : groupId,
 			 			"<portlet:namespace/>vcToken" : vcToken,
 			 			"<portlet:namespace/>sourceId" : sourceId,
-			 			"<portlet:namespace/>targetId" : targetId,
-			 			"<portlet:namespace/>targetId" : targetId,
+			 			"<portlet:namespace/>targetId" : targetId
 			 		},
 			 		async : true,
 			 		success: function(data) {
 						$("#myfileTree").jstree("destroy");
 						var folderArr = <portlet:namespace/>getRepositoryFolder();
+						
+						var homeChildFileList = <portlet:namespace/>getChildFile("HOME");
+						/* 하위 파일 List 추가 */
+                        folderArr = folderArr.concat(homeChildFileList);
+						
 						<portlet:namespace/>initJstree(folderArr, targetId, nodeParents);
 						
 			 	    	if(data.status == 200 || data.status == 201){
-			 	    		alert(Liferay.Language.get('edison-simulation-myfile-move-alert'));
+			 	    		/* alert(Liferay.Language.get('edison-simulation-myfile-move-alert')); */
+			 	    		if(nodeType == "file"){
+                                alert(Liferay.Language.get('edison-simulation-myfile-move-file-alert'));
+                            } else {
+                                alert(Liferay.Language.get('edison-simulation-myfile-move-alert'));
+                            }
 			 	    	}else{
 			 	    		alert(Liferay.Language.get('edison-data-update-error'));	
 			 	    	}
@@ -506,7 +586,9 @@ function contextMenu(node){
 
 	var tree = $('#myfileTree').jstree(true);
 	var selectNode = $("#myfileTree").jstree("get_selected");
-	 if(selectNode != "HOME") {//선택한 노드가 없거나 루트선택
+	var selectNodeType = null;
+	
+	/* if(selectNode != "HOME") {//선택한 노드가 없거나 루트선택
 		var items =  {
 				"Create": {
 					"label": Liferay.Language.get('edison-simulation-myfile-create-folder'),
@@ -540,7 +622,90 @@ function contextMenu(node){
 		};
 		 
 		return items;
-	}
+	} */
+	if(selectNode.length == 1){
+        selectNodeType = tree.get_node(selectNode).type;
+    } else if(1 < selectNode.length){
+        /* Multi File Selection */
+        for(var i=0; i<selectNode.length; i++){
+            nodeType = selectNodeType = tree.get_node(selectNode[i]).type;
+            if(nodeType != "file"){
+                selectNodeType = null;
+                return;
+            }
+        }
+    }
+    
+    if(selectNode != "HOME" && selectNodeType != "file") {//ì íí ë¸ëê° ìê±°ë ë£¨í¸ì í
+        var items =  {
+                "Create": {
+                    "label": Liferay.Language.get('edison-simulation-myfile-create-folder'),
+                    "action": function (data) {
+                        <portlet:namespace/>createFolder();
+                    } 
+                },
+                "Rename": {
+                    "label": Liferay.Language.get('edison-simulation-myfile-rename-folder'),
+                    "action": function (data) {
+                        <portlet:namespace/>renameFolder();
+                        }
+                    },
+                "Delete": {
+                    "label": Liferay.Language.get('edison-simulation-myfile-delete-folder'),
+                    "action": function (data) {
+                        <portlet:namespace/>deleteFolder();
+                        }
+                    },
+                "Paste": {
+                    "label": Liferay.Language.get('edison-simulation-myfile-paste-file'),
+                    "action": function (data) {
+                        <portlet:namespace/>pasteFile();
+                        }
+                    }
+                };
+         
+        return items;
+    } if(selectNode != "HOME" && selectNodeType == "file") { // file contextMenu
+        var items =  {
+            "Copy": {
+                "label": Liferay.Language.get('edison-simulation-myfile-copy-file'),
+                "action": function (data) {
+                    <portlet:namespace/>copyFile();
+                }
+            },
+            "Cut": {
+                "label": "Cut",
+                "action": function (data) {
+                    <portlet:namespace/>cutFile();
+                }
+            },
+            "Delete": {
+                "label": Liferay.Language.get('edison-button-file-delete'),
+                "action": function (data) {
+                    <portlet:namespace/>checkfileDelete();
+                }
+            },
+            "Download": {
+                "label": Liferay.Language.get('download-file'),
+                "action": function (data) {
+                    <portlet:namespace/>checkfileDownload();
+                }
+            }
+        };
+     
+        return items;
+    } else if(selectNode == "HOME") {
+        var items =  {
+                "Create": {
+                    "label": Liferay.Language.get('edison-simulation-myfile-create-folder'),
+                    "action": function (data) {
+                        <portlet:namespace/>createFolder();
+                    } 
+                }
+        };
+         
+        return items;
+    }
 }
 
 //create Folder 버튼 클릭시 폴더 생성
@@ -833,6 +998,107 @@ function <portlet:namespace/>fileDivWidthEvent2(){
 
 //check된 file 다운로드
 function <portlet:namespace/>checkfileDownload(){
+    
+    var tree = $('#myfileTree').jstree(true);
+    var selectFileNode = $("#myfileTree").jstree("get_selected");
+    selectNodeType = tree.get_node(selectFileNode[0]).type;
+    
+    $iframeDiv = $("#fileDownloadIframe");
+    $iframeDiv.empty();
+    
+    if(selectNodeType != 'file' && $("input[name=<portlet:namespace/>fileChk]:checked").length == 0 ){
+        alert(Liferay.Language.get('edison-simulation-myfile-download-not-select-alert'));
+    }else{
+        if(selectNodeType == 'file'){
+            /* jstree에서 contextMenu를 이용하여 다운로드 */
+            for(var i=0; i<selectFileNode.length; i++){
+                $iframe = $("<iframe/>").attr("src","<%=icebreakerPublicUrl%>/api/file/download?id="+selectFileNode[i]).attr("style", "display:none;");
+                $iframeDiv.append($iframe);
+            }
+            
+        } else {
+            $("input[name=<portlet:namespace/>fileChk]:checked").each(function() {
+                $fileId = $(this).val();
+                $iframe = $("<iframe/>").attr("src","<%=icebreakerPublicUrl%>/api/file/download?id="+$fileId).attr("style", "display:none;");
+                $iframeDiv.append($iframe);
+            });
+        }
+    }
+    $("#<portlet:namespace/>filechkAll").prop("checked",false);
+}
+
+//check된 file 삭제
+function <portlet:namespace/>checkfileDelete(){
+    var tree = $('#myfileTree').jstree(true);
+    var selectFileNode = $("#myfileTree").jstree("get_selected");
+    selectNodeType = tree.get_node(selectFileNode[0]).type;
+    
+    var deleteFile = [];
+    if(selectNodeType != 'file' && $("input[name=<portlet:namespace/>fileChk]:checked").length == 0 ){
+        alert(Liferay.Language.get('edison-simulation-myfile-delete-not-select-alert'));
+        return false;
+    }else{
+        
+        if(confirm(Liferay.Language.get('edison-simulation-myfile-delete-file-confirm-alert'))){
+            
+            if(selectNodeType == 'file'){
+                /* jstree에서 contextMenu를 이용하여 파일삭제 */
+                for(var i=0; i<selectFileNode.length; i++){
+                    deleteFile.push(selectFileNode[i]);
+                }
+            } else {
+                $("input[name=<portlet:namespace/>fileChk]:checked").each(function() {
+                    deleteFile.push($(this).val());
+                });
+            }
+                
+            var groupId = $("#<portlet:namespace/>groupId").val();
+            var vcToken = $("#<portlet:namespace/>vcToken").val();
+            
+            if(deleteFile.length > 0){
+                var selectNode = $("#myfileTree").jstree("get_selected");
+                if(selectNodeType != 'file' && selectNode == ""){//선택한 노드가 없음
+                    selectNode = "HOME";
+                } else if(selectNodeType == 'file'){
+                    selectNode = tree.get_node(selectFileNode[0]).parents[0];
+                    console.log("parent node : "+ selectNode);
+                }
+
+                bStart();
+                jQuery.ajax({
+                    type: "POST",
+                    url: "<%=deleteFileURL%>",
+                    data: {
+                        "<portlet:namespace/>groupId" : groupId,
+                        "<portlet:namespace/>vcToken" : vcToken,
+                        "<portlet:namespace/>deletefileId" : deleteFile.valueOf()
+                    },
+                    async : true,
+                    success: function(data) {
+                        
+                        if(data.status == 200){
+                            $("#myfileTree").jstree("refresh");
+                            <portlet:namespace/>getChildFile(selectNode);
+                            $("#<portlet:namespace/>filechkAll").prop("checked",false);
+                            alert(Liferay.Language.get('edison-simulation-myfile-delete-filet-alert'));
+                        }else{
+                            alert(Liferay.Language.get('edison-data-delete-error'));
+                        }
+                    },error: function(){
+                        bEnd();
+                        alert(Liferay.Language.get('edison-data-delete-error'));
+                    },complete: function(){
+                        bEnd();
+                    }
+                });  
+            }
+        }
+    }
+}
+
+<%-- 
+//check된 file 다운로드
+function <portlet:namespace/>checkfileDownload(){
 	$iframeDiv = $("#fileDownloadIframe");
 	$iframeDiv.empty();
 	
@@ -902,9 +1168,8 @@ function <portlet:namespace/>checkfileDelete(){
 			}
 		}
 	}
-	
 }	
-
+ --%>
 	
 //dialogue initial
 AUI().ready(function(){
@@ -986,7 +1251,104 @@ function <portlet:namespace/>fileChoice(fileId, fileNm, filePath){
 }
 
 
+/* Save copyNode */
+var selectCopyNode = null;
+var fileCut = false;
 
+function <portlet:namespace/>cutFile(){
+	fileCut = true;
+	<portlet:namespace/>copyFile();
+}
+
+/* 파일 복사 */
+function <portlet:namespace/>copyFile(){
+    
+    var tree = $('#myfileTree').jstree(true);
+    var multiSelectNode = $("#myfileTree").jstree("get_selected");
+    var selectNode = null;
+    
+    selectNode = multiSelectNode;
+    
+    // selectCopyNode 초기화
+    selectCopyNode = null;
+    selectCopyNode = selectNode;
+    
+    if(selectCopyNode != null){
+        alert(Liferay.Language.get('edison-simulation-myfile-copy-file-alert'));
+    }
+}
+
+/* 파일 붙여넣기 */
+function <portlet:namespace/>pasteFile(){
+	
+    var tree = $('#myfileTree').jstree(true);
+    var targetNode = tree.get_node($("#myfileTree").jstree("get_selected"));
+    var targetId = targetNode.id;
+    
+    var copyFilesArray = new Array();
+    
+    for(var i=0; i<selectCopyNode.length; i++){
+        // JSON으로 데이터 만들어서 array에 Push
+        var jsonNodeInfo = new Object();
+        
+        jsonNodeInfo.sourceId = tree.get_node(selectCopyNode[i]).id;
+        jsonNodeInfo.sourceFileName = tree.get_node(selectCopyNode[i]).text;
+        
+        copyFilesArray.push(JSON.stringify(jsonNodeInfo));
+    }
+    
+    var node = tree.get_node(targetId);              
+    var nodeParents = node.parents;
+    var destPath = $('#myfileTree').jstree(true).get_path(node, "/") + "/";
+    destPath = destPath.replace("HOME/", "");
+    
+    if(0 < copyFilesArray.length && targetId != ""){
+        var groupId = $("#<portlet:namespace/>groupId").val();
+        var vcToken = $("#<portlet:namespace/>vcToken").val();
+        bStart();
+        jQuery.ajax({
+             type: "POST",
+             url: "<%=copyFileURL%>",
+             data : {
+                 "<portlet:namespace/>copyFilesArray" : copyFilesArray,
+                 "<portlet:namespace/>copyFilesArrayLength" : copyFilesArray.length,
+                 "<portlet:namespace/>destPath" : destPath,
+                 "<portlet:namespace/>groupId" : groupId,
+                 "<portlet:namespace/>vcToken" : vcToken,
+                 "<portlet:namespace/>targetId" : targetId
+             },
+             async : true,
+             success: function(data) {
+                 $("#myfileTree").jstree("destroy");
+                 var folderArr = <portlet:namespace/>getRepositoryFolder();
+                 //var homeChildFileList = <portlet:namespace/>getChildFile("HOME");
+                 
+                 /* 하위 파일 List 추가 */
+                 //folderArr = folderArr.concat(homeChildFileList);
+                 
+                 <portlet:namespace/>initJstree(folderArr, targetId, nodeParents);
+                 
+                 if(data.status == 200 || data.status == 201){
+                     alert(Liferay.Language.get('edison-simulation-myfile-create-file-alert'));
+                 }else{
+                     alert(Liferay.Language.get('edison-data-update-error'));    
+                 }
+                 
+             },error:function(){
+                 bEnd();
+                 alert(Liferay.Language.get('edison-data-update-error')); 
+             },complete: function(){
+                 bEnd();
+             }
+         });
+    }
+    if(fileCut){
+		// file Delete
+		//<portlet:namespace/>deleteFolder();
+		fileCut = false;
+		return;
+	}
+}
 
 
 /***삭제****/

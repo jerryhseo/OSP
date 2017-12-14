@@ -36,6 +36,8 @@ import org.kisti.edison.bestsimulation.model.SimulationJobData;
 import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.impl.SimulationShareLocalServiceImpl;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
@@ -245,7 +247,31 @@ public class SimulationController {
 		}
 		return "simulation";
 	}
-
+	
+	@ResourceMapping(value ="simulationSharing" )
+	public void simulationSharing(ResourceRequest request, ResourceResponse response) throws IOException, NumberFormatException, PortalException, SystemException, ParseException{
+		System.out.println("simulationSharing");
+		Map<String, Object> params = RequestUtil.getParameterMap(request);
+		
+		int customId = Integer.parseInt(CustomUtil.strNull(params.get("customId"), "0"));
+		int classId = Integer.parseInt(CustomUtil.strNull(params.get("classId"), "0"));
+		
+		String simulationUuid = CustomUtil.strNull(params.get("simulationUuid"));
+		String simulationJobUuid = CustomUtil.strNull(params.get("simulationJobUuid"));
+		int simulationJobSeqNo = Integer.parseInt(CustomUtil.strNull(params.get("simulationJobSeqNo"), "0"));
+		
+		// TODO 공유 기능 구현
+		boolean shareResult =  SimulationShareLocalServiceUtil.sharingSimulationJob(classId, customId, simulationJobSeqNo, simulationJobUuid, simulationUuid);
+		
+		JSONObject obj = new JSONObject();
+		// TODO success 결과 전송
+		obj.put("shareResult", shareResult);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
+	
 	@ResourceMapping(value ="getScienceApp" )
 	public void getScienceApp(ResourceRequest request, ResourceResponse response) throws IOException, NumberFormatException, PortalException, SystemException, ParseException{
 		Map<String, Object> params = RequestUtil.getParameterMap(request);

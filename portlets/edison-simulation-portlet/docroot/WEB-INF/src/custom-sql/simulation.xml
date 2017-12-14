@@ -159,4 +159,30 @@
 	]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.service.persistence.SimulationJob.getMaxShareSeqNoSimulationShare">
+	<![CDATA[
+		SELECT 
+			IFNULL(MAX(shareSeqNo),0)+1 AS maxShareSeqNo
+		FROM
+			EDSIM_SimulationShare
+		WHERE
+				jobSeqNo = #jobSeqNo#
+			AND jobUuid = #jobUuid#
+			AND simulationUuid = #simulationUuid#
+	]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.SimulationJob.getSharedSimulationJobCustomId">
+	<![CDATA[
+		SELECT 
+			customId
+		FROM
+			EDSIM_SimulationShare
+		WHERE 
+				jobSeqNo = #jobSeqNo#
+			AND jobUuid = #jobUuid#
+			AND simulationUuid = #simulationUuid#
+	]]>
+	</sql>
+	
 </custom-sql>

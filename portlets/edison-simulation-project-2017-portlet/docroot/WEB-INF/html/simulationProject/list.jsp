@@ -70,7 +70,12 @@
 					<th scope="col"><liferay-ui:message key="edison-table-list-header-title"/></th>
 					<th scope="col"><liferay-ui:message key="edison-workflow-public-status"/></th>
 					<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-date"/></th>
+					<c:if test="${portletWindowState ne 'pop_up' }">
+						<th scope="col"><liferay-ui:message key="edison-table-list-header-date"/></th>
+					</c:if>
+					<c:if test="${portletWindowState eq 'pop_up' }">
+						<th scope="col"></th>s
+					</c:if>
 				</tr>
 			</thead>
 			<tbody id="<portlet:namespace/>mySimulationProjectListBody">
@@ -88,9 +93,15 @@
 								<td class="TC">
 									${seq - status.index}
 								</td>
-								<td style="cursor:pointer;" onclick="<portlet:namespace/>goDetailView('${mySimulationProject.simulationProjectId}');" >
-									<div style="word-break:break-all;" class="ellipsis">${mySimulationProject.title}</div>
-								</td>
+								<!-- pop up인 경우 title style, onclick function 제거 -->
+								<c:if test="${portletWindowState ne 'pop_up' }">
+									<td style="cursor:pointer;" onclick="<portlet:namespace/>goDetailView('${mySimulationProject.simulationProjectId}');" >
+								</c:if>
+								<c:if test="${portletWindowState eq 'pop_up' }">
+									<td>
+								</c:if>
+										<div style="word-break:break-all;" class="ellipsis">${mySimulationProject.title}</div>
+									</td>
 								<td class="TC" >
 									<c:if test="${mySimulationProject.projectOpenYn eq true}"><liferay-ui:message key='edison-simulation-project-public' /></c:if>
 									<c:if test="${mySimulationProject.projectOpenYn ne true}"><liferay-ui:message key='edison-simulation-project-private' /></c:if>
@@ -99,7 +110,20 @@
 									${mySimulationProject.screenName}
 								</td>
 								<td class="TC">
-									${mySimulationProject.insertDtStr}
+									<c:if test="${portletWindowState ne 'pop_up' }">
+										${mySimulationProject.insertDtStr}
+									</c:if>
+									<!-- popup인 경우 선택버튼 추가 -->
+									<c:if test="${portletWindowState eq 'pop_up'}">
+										<c:choose>
+											<c:when test="${fn:contains(customIdList, mySimulationProject.simulationProjectId)}">
+											</c:when>
+											<c:otherwise>
+												<!-- mouse hover 필요 -->
+												<input style="cursor: pointer;" type="button" class="topbtn" onclick="<portlet:namespace/>selectProjectForShare('${mySimulationProject.title}', '${mySimulationProject.simulationProjectId}', '${simulationClassId}');" value="<liferay-ui:message key='edison-table-list-header-select' />" />
+											</c:otherwise>
+										</c:choose>
+									</c:if>
 								</td>
 							</tr>	
 						</c:forEach>
@@ -111,15 +135,87 @@
 	
 	<div id="<portlet:namespace/>paging" class="paging">${paging}</div>
 	
-	<div class="buttonbox"style="width:auto; position:absolute; right:1%; bottom: 24px;">
-		<c:if test="${not empty userId || userId ne null }">
-			<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>goCreateManagementPage();" 
-				value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create'/>" type="button">
-		</c:if>
-	</div>
+	<c:if test="${portletWindowState ne 'pop_up' }">
+		<div class="buttonbox"style="width:auto; position:absolute; right:1%; bottom: 24px;">
+			<c:if test="${not empty userId || userId ne null }">
+				<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>goCreateManagementPage();" 
+					value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create'/>" type="button">
+			</c:if>
+		</div>
+	</c:if>
 </div>
 
 <script type="text/javascript">
+
+/* 시뮬레이션 공유 */
+function <portlet:namespace/>selectProjectForShare(projectTitle, customId, classId){
+	if(confirm("\'" + projectTitle + "\' <liferay-ui:message key='edison-share-simulation-in-project-alert'/>") == true){
+		AUI().use("liferay-portlet-url", function(a) {
+			var portletURL = Liferay.PortletURL.createResourceURL();
+			portletURL.setPortletId("edisonbestsimulation_WAR_edisonsimulationportlet");
+			portletURL.setResourceId("simulationSharing");
+			portletURL.setParameter("classId", classId);
+			portletURL.setParameter("customId", customId);		// projectId
+			portletURL.setParameter("simulationUuid", "${simulationUuid}");
+			portletURL.setParameter("simulationJobUuid", "${simulationJobUuid}");
+			portletURL.setParameter("simulationJobSeqNo", "${simulationJobSeqNo}");
+			
+			jQuery.ajax({
+				type: "POST",
+				url: portletURL,		// simulationController로 요청하는 URL
+				async : false,
+				dataType: 'json',
+				success: function(result) {
+					// Close Popup
+					if(result.shareResult){
+						<portlet:namespace/>writeTimeLineAboutSharing(customId);
+					}
+					<portlet:namespace/>closePopup('${dialogId}');
+				},error:function(jqXHR, textStatus, errorThrown){
+					alert("<liferay-ui:message key='edison-share-simulation-failed-message'/>");
+				}
+			});
+		});
+	} else{
+	}
+}
+
+/* Popup close */
+Liferay.provide(window,'<portlet:namespace />closePopup',
+	function(popupIdToClose) {
+		Liferay.Util.getWindow(popupIdToClose).destroy(); // You can try toggle/hide whatever You want
+		},
+	['liferay-util-window']
+);
+	
+/* 시뮬레이션 공유 시간, 정보 - 타임라인 생성 */
+function <portlet:namespace/>writeTimeLineAboutSharing(customId){
+	
+	var commentMessage = "<liferay-ui:message key='edison-share-simulation-success-message'/></br>" +
+	                     "<liferay-ui:message key='edison-table-list-header-simulation-nm'/> : ${simulationTitle}</br>" +
+	                     "<liferay-ui:message key='edison-simulation-execute-job-create-list-job-name'/> : ${simulationJobTitle}</br>";
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createResourceURL();
+		portletURL.setPortletId("edisoncomment_WAR_edisonboard2016portlet");
+		portletURL.setResourceId("writeTimeLineAboutSharing");
+		portletURL.setParameter("groupBoardSeq", customId);		// projectId
+		portletURL.setParameter("comment", commentMessage);
+		
+		jQuery.ajax({
+			type: "POST",
+			url: portletURL,
+			async : false,
+			dataType: 'json',
+			success: function(result) {
+				
+			},error:function(jqXHR, textStatus, errorThrown){
+				alert("<liferay-ui:message key='edison-share-timeline-failed-message'/>");
+			}
+		});
+	});
+}
+
 
 AUI().ready(function() {
 	$("#<portlet:namespace/>display").css("display", "block");
