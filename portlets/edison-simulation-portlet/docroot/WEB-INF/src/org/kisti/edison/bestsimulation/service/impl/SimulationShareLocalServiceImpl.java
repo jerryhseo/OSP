@@ -15,14 +15,11 @@
 package org.kisti.edison.bestsimulation.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import org.kisti.edison.bestsimulation.model.SimulationShare;
 import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.base.SimulationShareLocalServiceBaseImpl;
-import org.kisti.edison.bestsimulation.service.persistence.SimulationShareFinderImpl;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK;
-import org.kisti.edison.bestsimulation.service.persistence.SimulationSharePersistenceImpl;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -57,11 +54,9 @@ public class SimulationShareLocalServiceImpl
 	private final String ICEBREAKER_TEMP_PATH = PropsUtil.get(PropsKeys.LIFERAY_HOME)+"/ICEBREAKER_TEMP";
 	
 	public boolean sharingSimulationJob(int classId, int customId, int jobSeqNo, String jobUuid, String simulationUuid){
-		System.out.println("sharingSimulationJob");
 		try {
 			
 			long shareSeqNo = simulationShareFinder.getMaxShareSeqNoSimulationShare(jobSeqNo, jobUuid, simulationUuid);
-			System.out.println("shareSeqNoTest : " + shareSeqNo);
 			
 			SimulationSharePK simulationSharePK = new SimulationSharePK();
 			simulationSharePK.setShareSeqno(shareSeqNo);
