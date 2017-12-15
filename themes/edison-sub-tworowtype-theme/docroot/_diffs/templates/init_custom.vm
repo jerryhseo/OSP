@@ -1,0 +1,56 @@
+#*
+This file allows you to override and define new Velocity variables.
+*#
+
+
+#if($themeDisplay.getLanguageId()=="en_US")
+	#set ($infomation_text="Privacy Policy")
+	#set ($search_keyword="type keyword(s) here")
+#else
+	#set ($infomation_text="개인정보처리방침")
+	#set ($search_keyword="검색어를 입력 하세요")
+#end
+
+#if($permissionChecker.isOmniadmin()||$permissionChecker.isGroupAdmin($group_id))
+	#set ($dock_show=true)
+#else
+	#set ($dock_show=false)
+#end
+
+#if ($is_signed_in)
+	#foreach($role in $user.getRoles())
+		#if($role.getName() == "Temp User")
+			#set ($temp_user =true)
+		#end
+	#end
+#else
+		
+#end
+
+
+#set($groupLocalService= $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
+#set($parentGroupId = $themeDisplay.getScopeGroup().getParentGroupId())
+#if ($parentGroupId != 0)
+	#set($edisongroup=$themeDisplay.getScopeGroup().getParentGroup())
+	#set($siteGroups = $groupLocalService.getGroups($themeDisplay.getCompanyId(),$parentGroupId,true))
+#else
+	#set($edisongroup=$themeDisplay.getScopeGroup())
+	#set($siteGroups = $groupLocalService.getGroups($themeDisplay.getCompanyId(),$themeDisplay.getScopeGroupId(),true))
+#end
+
+
+#set($availableLocales = $languageUtil.getAvailableLocales())
+#set($selectedLanguageIds=[])
+#foreach( $availableLocale in $availableLocales )
+    #if($locale != $availableLocale) 
+        #set($VOID = $selectedLanguageIds.add($availableLocale))
+    #end
+#end
+
+
+#set ($browserErrorMsg = $languageUtil.format($locale, "edison-browser-not-support",""))
+#set ($browserErrorCompMsg = $languageUtil.format($locale, "edison-browser-not-support-compatibility",""))
+
+
+#set($privateInfoURL=$company_url+"/-/privateinfopolicy/view")
+#set($termOfUseURL=$company_url+"/-/termsofuse/view")
