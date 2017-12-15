@@ -43,7 +43,7 @@
 <script type="text/javascript">
 	$(function () {
 		$('.filterable .btn-filter').click(function(){
-	        var $panel = $(this).parents('.filterable'),
+	        var $panel = $(this).parents('#<portlet:namespace/>filterTable'),
 	        $filters = $panel.find('.filters .filter')
 	        if ($filters.prop('disabled') == true) {
 	            $filters.prop('disabled', false);
@@ -544,7 +544,7 @@
 
 
 
-<div class="table-responsive panel filterable edison-panel">
+<div class="table-responsive panel filterable edison-panel" id="<portlet:namespace/>filterTable">
 	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left">
 			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>

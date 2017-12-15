@@ -69,7 +69,7 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.mypage.ConfigurationController</configuration-action-class>
 		<instanceable>false</instanceable>
-		<css-class-wrapper>edison-my-page</css-class-wrapper>
+		<css-class-wrapper>edison-my-page container</css-class-wrapper>
 	</portlet>	
 	
 	
