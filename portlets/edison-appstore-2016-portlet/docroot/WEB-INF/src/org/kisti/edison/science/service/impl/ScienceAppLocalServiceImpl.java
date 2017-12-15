@@ -67,9 +67,6 @@ import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -82,7 +79,6 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -1492,6 +1488,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(userOrgCode, EdisonExpando.CDNM,locale);
 			
 			Map<String, Object> resultRow = scienceApp.getModelAttributes();
+			resultRow.put("statusName", EdisonExpndoUtil.getCommonCdSearchFieldValue(scienceApp.getStatus(), EdisonExpando.CDNM, locale));
 			resultRow.put("title", scienceApp.getTitle(locale));
 			
 			if(StringUtils.hasText(scienceApp.getManualId(locale))){
