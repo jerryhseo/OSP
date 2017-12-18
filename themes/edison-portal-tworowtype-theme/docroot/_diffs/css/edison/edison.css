@@ -7,28 +7,6 @@ ul, ol {list-style:none;}
 	display:none;
 }
 
-.main{
-	#wrapper{
-		padding:0px;
-		
-		.row-fluid{
-			margin-left:0px;
-			margin-right:0px;
-		}
-		
-		.portlet-column{
-			padding : 0px;
-		}
-	}
-}
-
-.sub{
-	#wrapper{
-		padding-left:15px;
-		padding-right:15px;
-	}
-}
-
 #banner {
 	-webkit-transform: translateY(0);
 	-moz-transform: translateY(0);
@@ -50,6 +28,18 @@ ul, ol {list-style:none;}
 }
 
 .edison {
+	#wrapper{
+		padding:0px;
+		
+		.row-fluid{
+			margin-left:0px;
+			margin-right:0px;
+		}
+		
+		.portlet-column{
+			padding : 0px;
+		}
+	}
 	.navbar{
 		margin-bottom:0px;
 	}

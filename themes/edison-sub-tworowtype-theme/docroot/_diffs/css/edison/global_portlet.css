@@ -1,0 +1,92 @@
+.edison{
+	/*table List CSS*/
+	@media (max-width: 979px) {
+		.edison-panel .btn{
+			padding: 6px 12px;
+			font-size: 13.5px;
+		}
+	
+		.edison-panel .btn .caret{
+			margin-top: unset;
+		}
+	}
+	
+	.edison-panel{
+		border: 0;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+		
+		img.title-img{
+			float: left;
+			margin-right: 5px;
+		}
+		
+		.pagination>li>a, .pagination>li>span { border-radius: 50% !important;margin: 0 5px;}
+		
+		
+		.panel-heading{
+			border-bottom: 2px solid #7f8c8d;
+			background-color: #ffffff;
+			
+			h3 {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				line-height: normal;
+				width: 50%;
+				padding-top: 8px;
+				font-weight: 600;
+			}
+			
+			.input-group input[type="text"]{
+				height: 32px;
+			}
+		}
+		
+		.edison-table{
+			border-bottom: 1px solid #dddddd !important;
+			
+			thdead tr{
+				word-break: break-word;
+			}
+			
+			th{
+				text-align: center;
+				vertical-align: middle !important;
+			}
+			
+			td{
+				cursor: pointer;
+				vertical-align: middle;
+			}
+			td.center{
+				text-align: center;
+			}
+		}
+	}
+	
+	.filterable.edison-panel{
+		.filters .filter[disabled] {
+		    background-color: transparent;
+		    border: none;
+		    cursor: auto;
+		    box-shadow: none;
+		    padding: 0;
+		    height: auto;
+		    text-align: center;
+		}
+		.filters .filter[disabled]::-webkit-input-placeholder {
+		    color: #333;
+		}
+		.filters .filter[disabled]::-moz-placeholder {
+		    color: #333;
+		}
+		.filters .filter[disabled]:-ms-input-placeholder {
+		    color: #333;
+		}
+	}
+	
+	
+	
+	
+}

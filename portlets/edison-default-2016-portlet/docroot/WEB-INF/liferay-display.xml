@@ -10,5 +10,6 @@
 		<portlet id="edison-site-join" />
 		<portlet id="edison-my-page" />
 		<portlet id="edison-relate-asset" />
+		<portlet id="edison-template" />
 	</category>
 </display>

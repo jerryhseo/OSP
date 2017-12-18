@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE look-and-feel PUBLIC "-//Liferay//DTD Look and Feel 6.2.0//EN" "http://www.liferay.com/dtd/liferay-look-and-feel_6_2_0.dtd">
+
+<look-and-feel>
+	<compatibility>
+		<version>6.2.5+</version>
+	</compatibility>
+	<theme id="edison-sub-tworowtype" name="Edison Sub Tworowtype">
+		<root-path>/</root-path>
+		<css-path>${root-path}/css</css-path>
+		<images-path>${root-path}/images</images-path>
+		<javascript-path>${root-path}/js</javascript-path>
+		<settings>
+			<setting key="content-title" value="Edison" configurable="true" type="text"></setting>
+			<setting key="portlet-setup-show-borders-default" value="false"></setting>
+		</settings>
+		
+		<color-scheme id="01" name="red">
+			<default-cs>true</default-cs>
+			<css-class>red</css-class>
+		</color-scheme>
+		<color-scheme id="02" name="green">
+			<css-class>green</css-class>
+		</color-scheme>
+		<color-scheme id="03" name="yellow">
+			<css-class>yellow</css-class>
+		</color-scheme>
+		<color-scheme id="04" name="blue">
+			<css-class>blue</css-class>
+		</color-scheme>
+		<color-scheme id="05" name="purple">
+			<css-class>purple</css-class>
+		</color-scheme>
+		<color-scheme id="06" name="emerald">
+			<css-class>emerald</css-class>
+		</color-scheme>
+		<color-scheme id="07" name="brown">
+			<css-class>brown</css-class>
+		</color-scheme>
+		<color-scheme id="08" name="navy">
+			<css-class>navy</css-class>
+		</color-scheme>
+	</theme>
+</look-and-feel>
