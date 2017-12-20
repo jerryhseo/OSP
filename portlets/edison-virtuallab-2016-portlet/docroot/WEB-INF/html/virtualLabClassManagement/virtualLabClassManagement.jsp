@@ -613,6 +613,12 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 							</td>
 						</tr>
 						<tr>
+							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-external-student-number' /></th>
+							<td>
+								<input id="<portlet:namespace/>classExternalPersonnel" name="<portlet:namespace/>classExternalPersonnel" type="number" min="1" max="999" value="${virtualLabClassInfo.classExternalPersonnel}"/>
+							</td>
+						</tr>
+						<tr>
 							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-manager' /><br><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-id-search' /></th>
 							<td>
 								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="margin-bottom:0px;"/>
