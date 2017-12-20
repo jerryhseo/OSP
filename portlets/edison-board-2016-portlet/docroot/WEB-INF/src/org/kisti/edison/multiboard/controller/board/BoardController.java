@@ -129,7 +129,7 @@ public class BoardController {
 			
 			List popupList = new ArrayList();
 			if(popState){		
-				List boardPopupList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100, boardGroupId, customId, "", themeDisplay.getLocale(), 0, true, String.valueOf(boardGroupId));
+				List boardPopupList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100, boardGroupId, customId, "", themeDisplay.getLocale(), 0, true, String.valueOf(boardGroupId), "");
 				
 				Map cookieMap = new java.util.HashMap();
 	
@@ -194,6 +194,10 @@ public class BoardController {
 			model.addAttribute("divSort", divSort);
 			model.addAttribute("popupList", popupList);
 			
+			boolean isVirtualClass = Boolean.parseBoolean(ParamUtil.getString(request, "isVirtualClass"));
+			model.addAttribute("isVirtualClass", isVirtualClass);
+			String virtualLabId = ParamUtil.getString(request, "virtualLabId");
+			model.addAttribute("virtualLabId", virtualLabId);
 			
 		} catch (Exception e) {
 			log.error(e);
@@ -230,7 +234,13 @@ public class BoardController {
 		int listSize = Integer.parseInt(CustomUtil.strNull(params.get("listSize"), "10"));
 		int currentPage = Integer.parseInt(CustomUtil.strNull(params.get("currentPage"), "1"));
 		
-
+		// 강좌에서 호출하였을 경우 virtualLabId추출
+		boolean isVirtualClass = Boolean.parseBoolean(CustomUtil.strNull(params.get("isVirtualClass"), "false"));
+		String virtualLabId = "";
+		if(isVirtualClass){
+			virtualLabId = CustomUtil.strNull(params.get("virtualLabId"), "");
+		}
+		
 		String searchValue = CustomUtil.strNull(params.get("searchValue"));
 		Long divCd = Long.parseLong(((PortletRequest) request).getPreferences().getValue("divCd", "100"));
 		int blockSize = Integer.parseInt(((PortletRequest) request).getPreferences().getValue("blockSize", "10"));
@@ -247,7 +257,8 @@ public class BoardController {
 			siteGroup = String.valueOf(ParamUtil.get(request, "groupId", ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId())));
 		}
 		
-		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, 0, false, siteGroup);
+		// 강좌에서 호출 -> 강의들의 질의응답 추출 , 그 외에는 해당 페이지 내의 boardList만 추출 :: 추출을 위해 virtualLabId(Parameter) 추가
+		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, 0, false, siteGroup, virtualLabId);
 		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, 0, siteGroup);
 		String paging = PagingUtil.getPaging(request.getContextPath(), CustomUtil.strNull(params.get("methodName")), totalCount, currentPage, listSize, blockSize);
 		
@@ -256,6 +267,7 @@ public class BoardController {
 		obj.put("boardList", boardList);
 		obj.put("seq", totalCount - ((currentPage - 1)*listSize));
 		obj.put("paging", paging);
+		obj.put("isVirtualClass", isVirtualClass);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
@@ -396,7 +408,7 @@ public class BoardController {
 			List replyList = new ArrayList();
 			
 			if(boardDiv.getReplyYn() && !GetterUtil.get(params.get("boardSeq"), "").equals("")){
-				List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100000, boardGroupId, customId, "", locale, GetterUtil.get(params.get("boardSeq"), 0L), false, siteGroup);
+				List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100000, boardGroupId, customId, "", locale, GetterUtil.get(params.get("boardSeq"), 0L), false, siteGroup, "");
 				
 				List replyFileList = null;
 				Map map = null;

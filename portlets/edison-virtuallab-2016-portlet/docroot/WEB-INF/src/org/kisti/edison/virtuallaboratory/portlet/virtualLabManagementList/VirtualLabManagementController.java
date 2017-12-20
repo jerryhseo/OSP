@@ -32,8 +32,10 @@ import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.virtuallaboratory.model.VirtualLabClass;
+import org.kisti.edison.virtuallaboratory.model.VirtualLabUser;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabClassLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabLocalServiceUtil;
+import org.kisti.edison.virtuallaboratory.service.VirtualLabUserLocalServiceUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -414,6 +416,28 @@ public class VirtualLabManagementController {
 		model.addAttribute("admin", adminCheck);
 		model.addAttribute("virtualLabId", virtualLabId);
 		model.addAttribute("groupId", groupId);
+		
+		long classId = ParamUtil.get(request, "classId", 0L);
+		String classTitle = ParamUtil.get(request, "classTitle", "");
+		boolean isCustomAdmin = false; 
+		boolean isDefaultUserWrite = false; 
+		Role virtualLabClassOwnerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_OWNER);
+		Role virtualLabClassManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
+		
+		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| //
+		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
+		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
+		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
+			isCustomAdmin = true;
+		}else{
+			isDefaultUserWrite = true;
+		}
+		
+		model.addAttribute("classId", classId);
+		model.addAttribute("isCustomAdmin", isCustomAdmin);
+		model.addAttribute("isDefaultUserWrite", isDefaultUserWrite);
+		model.addAttribute("classTitle", classTitle);
+		model.addAttribute("redirectURL", EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
 				
 		return "virtualLabManagementList/virtualLabManagementDetail";
 	}
@@ -430,14 +454,17 @@ public class VirtualLabManagementController {
 		long groupId = ParamUtil.get(request, "groupId", themeDisplay.getSiteGroupId());
 		String classTitle = ParamUtil.get(request, "classTitle", "");
 		boolean isCustomAdmin = false; 
-		boolean isDefaultUserWrite = false; 
+		boolean isDefaultUserWrite = false;
+		boolean isVirtualLabClassMmember = false;
+		boolean isSiteAdministrator = false;
+		String authYn = "N";
 		
 		Role virtualLabOwnerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_OWNER);
 		Role virtualLabManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_MANAGER);
 		Role virtualLabClassOwnerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_OWNER);
 		Role virtualLabClassManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
 		
-		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| //
+		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
 		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
 		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
 		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
@@ -446,12 +473,29 @@ public class VirtualLabManagementController {
 			isDefaultUserWrite = true;
 		}
 		
+		/* Check isSiteAdministrator */
+		if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)){
+			isSiteAdministrator = true;
+		}
+		
+		/* Check virtualLabUser(Member) */
+		VirtualLabUser virtualLabUser = VirtualLabUserLocalServiceUtil.getVirtualLabUserInfo(Long.parseLong(CustomUtil.strNull(classId)), user.getUserId());
+		if(virtualLabUser != null && virtualLabUser.getAuthRole().equals("STUDENT")){
+			isVirtualLabClassMmember = true;
+		}
+		
+		/* 관리자, 수강생인 경우 코멘트 작성 기능 사용 가능  */
+		if(isCustomAdmin || isSiteAdministrator || isVirtualLabClassMmember){
+			authYn = "Y";
+		}
+		
 		model.addAttribute("classId", classId);
 		model.addAttribute("groupId", groupId);
 		model.addAttribute("isCustomAdmin", isCustomAdmin);
 		model.addAttribute("isDefaultUserWrite", isDefaultUserWrite);
 		model.addAttribute("classTitle", classTitle);
 		model.addAttribute("redirectURL", EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
+		model.addAttribute("authYn", authYn);
 		
 		return "virtualLabClassManagementList/virtualLabClassManagementDetail";
 	}

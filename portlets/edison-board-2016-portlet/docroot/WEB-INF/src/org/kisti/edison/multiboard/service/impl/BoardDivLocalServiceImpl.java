@@ -30,6 +30,7 @@ import org.kisti.edison.util.CustomUtil;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 
 /**
  * The implementation of the board div local service.
@@ -54,16 +55,16 @@ public class BoardDivLocalServiceImpl extends BoardDivLocalServiceBaseImpl {
 
 	protected static Logger logger = Logger.getLogger(Main.class.getName());
 	
-	public List getCustomListBoard(long divCd, int start, int listSize, long groupId, String customId, String searchValue, Locale locale, long groupBoardSeq, boolean popupYn, String siteGroup ) throws SystemException, NoSuchUserException  {
+	public List getCustomListBoard(long divCd, int start, int listSize, long groupId, String customId, String searchValue, Locale locale, long groupBoardSeq, boolean popupYn, String siteGroup, String virtualLabId ) throws SystemException, NoSuchUserException  {
 			
-		List<Object[]> boardList = boardFinder.getCustomListBoard(divCd, start, listSize, groupId, customId, searchValue, groupBoardSeq, popupYn, siteGroup);
+		List<Object[]> boardList = boardFinder.getCustomListBoard(divCd, start, listSize, groupId, customId, searchValue, groupBoardSeq, popupYn, siteGroup, virtualLabId);
 		
 		List returnList = new ArrayList();
 		Map map = null;
 		String contentMain = "";
 		if(boardList != null && boardList.size() > 0){
 			for(int i=0; i<boardList.size();i++){
-
+				
 				Board board = (Board)boardList.get(i)[0];
 				
 				map = new HashMap();
@@ -89,6 +90,11 @@ public class BoardDivLocalServiceImpl extends BoardDivLocalServiceBaseImpl {
 				map.put("writerDate", CustomUtil.dateToStringFormat(board.getWriterDate(), "yyyy-MM-dd"));
 				map.put("writerName", userPersistence.findByPrimaryKey(board.getWriterId()).getFirstName());
 				map.put("replyCount", (Integer)boardList.get(i)[2]);
+				if(boardList.get(i).length > 3){
+					map.put("classTitle", LocalizationUtil.getLocalization(String.valueOf(boardList.get(i)[3]), locale.getLanguage()));
+					map.put("classId", (Integer)boardList.get(i)[4]);
+				}
+				
 				returnList.add(map);
 			}
 		}
