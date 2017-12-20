@@ -55,6 +55,7 @@
 		<column name="classUpdateDt" type="Date"></column>
 		<column name="virtualClassCd" type="String"></column>
 		<column name="classCurriculumUrl" type="String"></column>
+		<column name="classExternalPersonnel" type="int"></column>
 
 		<!-- Order By -->
 		<order by="desc">

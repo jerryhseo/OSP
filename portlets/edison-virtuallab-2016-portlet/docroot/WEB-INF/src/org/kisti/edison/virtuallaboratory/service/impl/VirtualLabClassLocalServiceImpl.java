@@ -136,6 +136,7 @@ public class VirtualLabClassLocalServiceImpl
 				resultRow.put("classDescriptionMap", virtualLabClass.getClassDescription());
 				resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 				resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+				resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 				resultRow.put("classCurriculumUrl", virtualLabClass.getClassCurriculumUrl());
 				resultRow.put("classStartDt", virtualLabClass.getClassStartDt());
 				resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
@@ -228,9 +229,9 @@ public class VirtualLabClassLocalServiceImpl
 		virtualLabClass.setClassEndDt((String) params.get("classEndDt"));
 		virtualLabClass.setClassPersonnel((Integer) params.get("classPersonnel"));
 		virtualLabClass.setClassCurriculumUrl((String) params.get("classCurriculumUrl"));
+		virtualLabClass.setClassExternalPersonnel((Integer) params.get("classExternalPersonnel"));
 		virtualLabClass = virtualLabClassPersistence.update(virtualLabClass);
 		virtualLabPersistence.addVirtualLabClass(virtualLabId, virtualLabClass);
-		
 		
 		List<VirtualLabScienceAppLink> scienceAppLink = virtualLabScienceAppLinkPersistence.findByVirtualLabId(virtualLabId);
 		for(VirtualLabScienceAppLink scienceAppLinkClass : scienceAppLink){
