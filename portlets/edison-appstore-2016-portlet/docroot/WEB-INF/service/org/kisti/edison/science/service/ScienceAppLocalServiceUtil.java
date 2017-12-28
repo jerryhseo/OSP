@@ -941,70 +941,57 @@ public class ScienceAppLocalServiceUtil {
 			appTypes, categoryIds, searchText);
 	}
 
-	/**
-	* EDISON - MAIN �곕뗄荑�占쏙옙鈺곌퀬��     */
-	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListHotScienceApp(
-		long companyGroupId, long groupId, java.util.Locale locale,
-		long[] appIds, int begin, int end)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .retrieveListHotScienceApp(companyGroupId, groupId, locale,
-			appIds, begin, end);
-	}
-
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppAsManager(
 		long companyGroupId, long groupId, java.util.Locale locale,
 		long managerId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean categorySearch, int begin, int end)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean categorySearch, int begin, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .retrieveListScienceAppAsManager(companyGroupId, groupId,
-			locale, managerId, appTypes, editorTypes, searchType, searchText,
-			status, categorySearch, begin, end);
+			locale, managerId, appTypes, editorTypes, searchMap, status,
+			categorySearch, begin, end);
 	}
 
 	public static int countScienceAppAsManager(long companyGroupId,
 		long groupId, java.util.Locale locale, long managerId,
 		java.lang.String[] appTypes, java.lang.String[] editorTypes,
-		java.lang.String searchType, java.lang.String searchText,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
 		java.lang.String status, boolean categorySearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .countScienceAppAsManager(companyGroupId, groupId, locale,
-			managerId, appTypes, editorTypes, searchType, searchText, status,
-			categorySearch);
+			managerId, appTypes, editorTypes, searchMap, status, categorySearch);
 	}
 
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppAsCategory(
 		long companyGroupId, long groupId, java.util.Locale locale,
 		long authorId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status, int begin,
-		int end, boolean lanuageSearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, int begin, int end, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .retrieveListScienceAppAsCategory(companyGroupId, groupId,
-			locale, authorId, appTypes, editorTypes, searchType, searchText,
-			status, begin, end, lanuageSearch);
+			locale, authorId, appTypes, editorTypes, searchMap, status, begin,
+			end, lanuageSearch);
 	}
 
 	public static int countListScienceAppAsCategory(long companyGroupId,
 		long groupId, java.util.Locale locale, long authorId,
 		java.lang.String[] appTypes, java.lang.String[] editorTypes,
-		java.lang.String searchType, java.lang.String searchText,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
 		java.lang.String status, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .countListScienceAppAsCategory(companyGroupId, groupId,
-			locale, authorId, appTypes, editorTypes, searchType, searchText,
-			status, lanuageSearch);
+			locale, authorId, appTypes, editorTypes, searchMap, status,
+			lanuageSearch);
 	}
 
 	/**
@@ -1041,26 +1028,25 @@ public class ScienceAppLocalServiceUtil {
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
 		long groupId, java.util.Locale locale, long authorId,
 		java.lang.String[] appTypes, java.lang.String[] editorTypes,
-		java.lang.String searchType, java.lang.String searchText,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
 		java.lang.String status, int begin, int end, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .retrieveListScienceApp(groupId, locale, authorId, appTypes,
-			editorTypes, searchType, searchText, status, begin, end,
-			lanuageSearch);
+			editorTypes, searchMap, status, begin, end, lanuageSearch);
 	}
 
 	public static int countListScienceApp(long groupId,
 		java.util.Locale locale, long authorId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean lanuageSearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .countListScienceApp(groupId, locale, authorId, appTypes,
-			editorTypes, searchType, searchText, status, lanuageSearch);
+			editorTypes, searchMap, status, lanuageSearch);
 	}
 
 	public static java.util.Map<java.lang.String, java.lang.Object> getScienceAppReturnObject(
