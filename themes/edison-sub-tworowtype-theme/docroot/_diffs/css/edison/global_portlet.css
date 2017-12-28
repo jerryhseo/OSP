@@ -1,4 +1,115 @@
 .edison{
+	/*edison tab CSS*/
+	.contabmenu{
+		background: url(@theme_image_path@/custom/portlet/tabs/subtab_bgline.gif) repeat-x;
+		font-size: 16px;
+		height: 52px;
+		margin: 0 auto;
+		width: 100%;
+		
+		.nav-tabs {
+			border-bottom: none;
+			
+			li:first-child { 
+				border-left: solid 1px #d2d2d2;
+			}
+			
+			li{
+				height: 51px;
+				margin: 0px;
+				border-right: solid 1px #d2d2d2;
+				background: url(@theme_image_path@/custom/portlet/tabs/subtab_area.jpg) repeat-x;
+				
+				a{
+					border: none;
+					padding: 17px 5px 10px 0px;
+					margin: 0px;
+					cursor: pointer;
+					text-align: center;
+				}
+				
+				a:link{color: #000; text-decoration:none;outline:none;border:0px;}
+				a:visited{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:over{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:focus{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:active{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:hover{color:#000; text-decoration:none;outline:none;border:0px;}
+				
+				
+				.CFD{
+					background: url(@theme_image_path@/custom/portlet/tabs/cfdlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.NANO{
+					background: url(@theme_image_path@/custom/portlet/tabs/nanologooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CHEM{
+					background: url(@theme_image_path@/custom/portlet/tabs/chemlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CSD{
+					background: url(@theme_image_path@/custom/portlet/tabs/csdlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.DESIGN{
+					background: url(@theme_image_path@/custom/portlet/tabs/designlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CMED{
+					background: url(@theme_image_path@/custom/portlet/tabs/cmedlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+			}
+			
+			li.active{
+				height: 52px;
+				border-left: solid 1px #000;
+				border-right: solid 1px #000;
+				border-top: solid 1px #000;
+				border-bottom: solid 1px #fff;
+				background-color: #fff;
+				background: none;
+				
+				.CFD{
+					background: url(@theme_image_path@/custom/portlet/tabs/cfdlogo.png) no-repeat 10px 8px;
+				}
+				
+				.NANO{
+					background: url(@theme_image_path@/custom/portlet/tabs/nanologo.png) no-repeat 10px 8px;
+				}
+				
+				.CHEM{
+					background: url(@theme_image_path@/custom/portlet/tabs/chemlogo.png) no-repeat 10px 8px;
+				}
+				
+				.CSD{
+					background: url(@theme_image_path@/custom/portlet/tabs/csdlogo.png) no-repeat 10px 8px;
+				}
+				
+				.DESIGN{
+					background: url(@theme_image_path@/custom/portlet/tabs/designlogo.png) no-repeat 10px 8px;
+				}
+				.CMED{
+					background: url(@theme_image_path@/custom/portlet/tabs/cmedlogo.png) no-repeat 10px 8px;
+				}
+			}
+			
+			
+		}
+	}
+	
 	/*table List CSS*/
 	@media (max-width: 979px) {
 		.edison-panel .btn{
