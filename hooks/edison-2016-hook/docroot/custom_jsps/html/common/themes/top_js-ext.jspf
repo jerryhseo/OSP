@@ -33,6 +33,9 @@
 <script src="/edison-2016-hook/js/Highcharts-4.2.7/js/modules/exporting.js"></script>
 <script src="/edison-2016-hook/js/Highcharts-4.2.7/js/themes/gray.js"></script>
 
+<script src="/edison-2016-hook/js/bootstrap/3.3.7/bootstrap.min.js"></script>
+
+
 <link type="text/css" rel="stylesheet" href="/edison-2016-hook/css/jquery/jquery-ui.min.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="/edison-2016-hook/css/jquery/jquery-ui.structure.min.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="/edison-2016-hook/css/jquery/jquery-ui.theme.min.css" media="screen"/>
