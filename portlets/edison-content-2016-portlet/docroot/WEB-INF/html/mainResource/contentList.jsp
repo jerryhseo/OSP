@@ -36,26 +36,6 @@
 	</div>
 </div>
 
-<style>
-	.edison-content .container{
-		background-color: #adcbe3;
-	}
-	.edison-content .fillgauge {
-		width: 100%;
-	}
-	.edison-content .clusterName {
-		text-align: center;
-		color: #000000;
-		margin-bottom: 40px;
-	}
-	.edison-content .title {
-		text-align: center;
-		color: #FFFFFF;
-		font-size: 30px;
-		margin: 40px 0px;
-	}
-</style>
-
 <script src="http://d3js.org/d3.v2.min.js" language="JavaScript"></script>
 <script src="${contextPath}/js/liquidFillGauge.js" language="JavaScript"></script>
 <script type="text/javascript">
