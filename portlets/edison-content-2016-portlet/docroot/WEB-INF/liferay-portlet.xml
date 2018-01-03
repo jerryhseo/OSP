@@ -18,10 +18,8 @@
 		<configuration-action-class>org.kisti.edison.content.portlet.mainResource.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-content</css-class-wrapper>
+		<css-class-wrapper>edison-content container-fluid</css-class-wrapper>
 	</portlet>
-	
-	
 	
 	<role-mapper>
 		<role-name>administrator</role-name>

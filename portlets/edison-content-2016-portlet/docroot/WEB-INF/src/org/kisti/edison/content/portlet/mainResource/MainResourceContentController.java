@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,9 +77,12 @@ public class MainResourceContentController {
 								dataMap.put("siteName", group.getName());
 								dataMap.put("clusterCount", jsonArray.size());
 								dataMap.put("clusterName", returnObj.get("name"));
-								dataMap.put("total", returnObj.getJSONObject("runtime").get("totalCores"));	// 
-								dataMap.put("used", returnObj.getJSONObject("runtime").get("busyCores"));
+								int total = (int) returnObj.getJSONObject("runtime").get("totalCores");
+								dataMap.put("total", total); 
+								int used = (int) returnObj.getJSONObject("runtime").get("busyCores");
+								dataMap.put("used", used);
 								dataMap.put("avail", returnObj.getJSONObject("runtime").get("freeCores"));
+								dataMap.put("usage", ((double)used/(double)total*100));		// System Resource Statistics
 								
 								clusterList.add(dataMap);
 							}
@@ -104,9 +108,12 @@ public class MainResourceContentController {
 						dataMap.put("siteName", siteName);
 						dataMap.put("clusterCount", jsonArray.size());
 						dataMap.put("clusterName", returnObj.get("name"));
-						dataMap.put("total", returnObj.getJSONObject("runtime").get("totalCores"));	// 
-						dataMap.put("used", returnObj.getJSONObject("runtime").get("busyCores"));
+						int total = (int) returnObj.getJSONObject("runtime").get("totalCores");
+						dataMap.put("total", total); 
+						int used = (int) returnObj.getJSONObject("runtime").get("busyCores");
+						dataMap.put("used", used);
 						dataMap.put("avail", returnObj.getJSONObject("runtime").get("freeCores"));
+						dataMap.put("usage", ((double)used/(double)total*100));		// System Resource Statistics
 						
 						clusterList.add(dataMap);
 					}
