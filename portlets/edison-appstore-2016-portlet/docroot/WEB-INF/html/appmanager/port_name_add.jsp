@@ -23,13 +23,13 @@
 			<img id="port-name-close-btn" name="port-name-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer; float: right;"/>
 		</div>
 	</div>
-	
-	
-	<div style="padding: 20px;">
-		<input type="text" id="portName" size="40" maxlength="30" onKeydown="if(event.keyCode ==13){<portlet:namespace/>checkName();return false;}" />
-	</div>
-	<div class="popupbtnGroup" style="height:40px;">
-		<input name="add" type="button" value="<liferay-ui:message key="add"/>" class="graybtn" onclick="<portlet:namespace/>checkName();"/>
+	<div class="newWcont01">
+		<div class="input-group">
+			<input type="text" class="field" id="portName" size="40" maxlength="30" onKeydown="if(event.keyCode ==13){<portlet:namespace/>checkName();return false;}" />
+			<span class="input-group-btn">
+				<button class="btn btn-primary" type="button" onclick="<portlet:namespace/>checkName();"><span class="icon-ok"> <liferay-ui:message key="add"/></span></button>
+			</span>
+		</div>
 	</div>
 </div>
 <script type="text/javascript">

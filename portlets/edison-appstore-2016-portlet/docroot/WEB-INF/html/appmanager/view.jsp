@@ -14,9 +14,8 @@
 <liferay-theme:defineObjects />
 
 <c:set var="contextPath" value="<%=request.getContextPath() %>" scope="page" />
-
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/scienceappmanager.css" media="screen"/>
+
 <%
 	String clickTab = GetterUtil.get(request.getParameter("clickTab"), "m01");
 	String jspFile = "";
@@ -27,6 +26,8 @@
 	}else if(clickTab.equals("m03")){
 		jspFile = "port_infomation";
 	}else if(clickTab.equals("m04")){
+		jspFile = "app_layout";
+	}else if(clickTab.equals("m05")){
 		jspFile = "public_infomation";
 	}
 	
@@ -77,15 +78,15 @@
 		padding : 0px;
 	}
 </style>
-
-<div class="swleft">
-	${tabStr}
+<div class="container">
+	<div class="swleft">
+		${tabStr}
+	</div>
+	<div class="swrightcont">
+		<liferay-util:include page='<%= "/WEB-INF/html/appmanager/" + jspFile + ".jsp" %>' servletContext="<%=this.getServletContext() %>">
+		</liferay-util:include>
+	</div>
 </div>
-<div class="swrightcont">
-	<liferay-util:include page='<%= "/WEB-INF/html/appmanager/" + jspFile + ".jsp" %>' servletContext="<%=this.getServletContext() %>">
-	</liferay-util:include>
-</div>
-
 <script type="text/javascript">
 	function tabAction(tabValue){
 		var searchParameter = "";

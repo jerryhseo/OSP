@@ -660,7 +660,6 @@ public class AppManagerController{
 	protected Map<String,Object> tabCreateAndStatusButtonView(long scienceAppId, boolean isPort,String clickTab, Locale locale, Map<String,Object> data) throws PortalException, SystemException{
 		
 		Map<String,Object> returnMap = new HashMap<String,Object>();
-		int publicCnt = 0;
 		
 		String[] tabs = null;
 		int activateTab = 1;
@@ -669,9 +668,9 @@ public class AppManagerController{
 		
 		if(scienceAppId == 0){
 			if(isPort){
-				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail"};
+				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail", "m05fail"};
 			}else{
-				tabs = new String[]{"m01fail", "m02fail", "m04fail"};
+				tabs = new String[]{"m01fail", "m02fail", "m05fail"};
 			}
 		}else{
 			String tabsStr = "";
@@ -713,6 +712,18 @@ public class AppManagerController{
 					}
 					activateTab++;
 				}
+				
+				if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
+					if(clickTab.equals("m04")){
+						tabsStr +=",m04over";
+					}else{
+						tabsStr +=",m04out";
+					}
+					activateTab++;
+				}else{
+					tabsStr +=",m04fail";
+					appStatusButtonView = false;
+				}
 			}
 			
 			
@@ -729,19 +740,15 @@ public class AppManagerController{
 			}
 			
 			if(DescroptionCheck){
-				publicCnt++;
-				activateTab++;
-			}
-			
-			if(publicCnt==0){
-				tabsStr +=",m04fail";
-				appStatusButtonView = false;
-			}else{
-				if(clickTab.equals("m04")){
-					tabsStr +=",m04over";
+				if(clickTab.equals("m05")){
+					tabsStr +=",m05over";
 				}else{
-					tabsStr +=",m04out";
+					tabsStr +=",m05out";
 				}
+				activateTab++;
+			}else{
+				tabsStr +=",m05fail";
+				appStatusButtonView = false;
 			}
 			
 			tabs = StringUtil.split(tabsStr);
@@ -784,8 +791,13 @@ public class AppManagerController{
 			}; 
 			
 			if(tab.contains("m04")){
-				tabName=LanguageUtil.get(locale,"edison-science-appstore-view-tab-public-data");
+				tabName="Layout";
 				tabValue = "m04";
+			};
+			
+			if(tab.contains("m05")){
+				tabName=LanguageUtil.get(locale,"edison-science-appstore-view-tab-public-data");
+				tabValue = "m05";
 			};
 			
 			if(liClass.contains("select")){

@@ -32,7 +32,7 @@
 		margin-bottom: 0px;
 	}
 	
-	.aui .text_field{
+	.aui puptxt. .text_field{
 		width: 280px;
 		height: 100px;
 		resize: none;
@@ -103,8 +103,8 @@
 			
 		</table>
 		<c:if test="${mode eq 'add' }">
-			<div class="popupbtnGroup" style="height:20px;margin-top: 10px;">
-				<input type="button" class="graybtn" onclick="<portlet:namespace/>saveRequestLib()" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+			<div style="text-align:center;" style="margin-top: 10px;">
+				<button class="btn btn-success" type="button" onclick="<portlet:namespace/>saveRequestLib();"><span class="icon-ok"> <liferay-ui:message key='edison-virtuallab-save' /></span></button>
 			</div>
 		</c:if>
 	</div>

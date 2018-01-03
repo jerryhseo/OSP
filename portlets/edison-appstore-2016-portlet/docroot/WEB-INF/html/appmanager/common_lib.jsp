@@ -21,38 +21,33 @@
 			<img id="common-lib-close-btn" name="common-lib-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer; float: right;"/>
 		</div>
 	</div>
-	
 	<div class="newWcont01">
-		<div class="tabletopbox">
-			<div class="search">
-				<div class="searchbox">
-					<input type="text" id="<portlet:namespace/>commonSearchValue" name="<portlet:namespace/>searchValue" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchCommonLib();" autocomplete="off"/>
-					<input type="button" onClick="<portlet:namespace/>searchCommonLib()" class="btnsearch" />
+		<div class="table-responsive panel edison-panel">
+			<div class="panel-heading clearfix">
+				<div class="input-group">
+					<input type="text" class="field" id="<portlet:namespace/>commonSearchValue" name="<portlet:namespace/>searchValue" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchCommonLib();" autocomplete="off"/>
+					<div class="input-group-btn">
+						<button class="btn btn-default" type="button" onClick="<portlet:namespace/>searchCommonLib();"><i class="icon-search"></i></button>
+						<button class="btn btn-default" onClick="<portlet:namespace/>searchListAll();">Clear</button>
+					</div>
 				</div>
-				<input type="button" onClick="<portlet:namespace/>searchListAll()" class="button01" value="<liferay-ui:message key='edison-button-all-search' />" />
 			</div>
-		</div>
-		
-		<div class="table0_list borderno" style="min-height: 400px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<table class = "table table-bordered table-hover edison-table">
 				<thead>
-					<tr style="word-break: break-word;">
-						<th width="15%"><liferay-ui:message key='edison-table-list-header-index' /></th>
-						<th width="*"><liferay-ui:message key='edison-table-list-header-file-nm' /></th>
-						<th width="20%">Path</th>
-						<th width="10%"><liferay-ui:message key='version' /></th>
-						<th width="10%">Kernel Version</th>
-						<th width="10%">CLib Version</th>
-						<th width="10%">System Archive</th>
-						
-					</tr>
+					<th width="15%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+					<th width="*"><liferay-ui:message key='edison-table-list-header-file-nm' /></th>
+					<th width="20%">Path</th>
+					<th width="10%"><liferay-ui:message key='version' /></th>
+					<th width="10%">Kernel Version</th>
+					<th width="10%">CLib Version</th>
+					<th width="10%">System Archive</th>
 				</thead>
 				<tbody id="<portlet:namespace/>commonLibBody">
 					
 				</tbody>
 			</table>
+			<div class="text-center" id="commonLibPage"></div>
 		</div>
-		<div class="paging" id="commonLibPage"></div>
 	</div>
 </div>
 

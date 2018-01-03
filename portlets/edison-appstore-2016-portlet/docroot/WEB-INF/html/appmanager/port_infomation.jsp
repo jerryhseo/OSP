@@ -37,30 +37,27 @@
 </liferay-portlet:resourceURL>
 
 <style type="text/css">
-	.aui input[type="text"],
-	.aui textarea{
-		margin-bottom: 0px;
-	}
-	
 	.aui .long_field{
-		width: 350px;
+		width: 350px !important;
 	}
 	
 	.aui .short_field{
-		width: 150px;
+		width: 150px !important;
 	}
 	
 	.aui .too_long_field{
-		width: 500px;
-	}
-	
-	.aui .text_field{
-		width: 98%;
-		resize: none;
+		width: 500px !important;
 	}
 	
 	.aui .swrightcont .alert{
 		margin-top: 10px;
+	}
+	
+	.aui .text_field{
+		width: 100%;
+		resize: none;
+		height:auto;
+		margin-bottom: 10px;
 	}
 </style>
 
@@ -72,82 +69,67 @@
 	<aui:input name="templetId" type="hidden" value="" label=""/>
 	<aui:input name="actionMode" value="${mode}" type="hidden"/>
 </aui:form>
-
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		Command Line
-	</div>
-	<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-		<input class="addIp button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
-		
-		<c:if test="${data.status gt 1901003}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
-		</c:if>
-		<c:if test="${appStatusButtonView}">
-			<c:if test="${data.status eq '1901001'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			Command Line
+		</h3>
+		<div class="btn-group pull-right">
+			<input class=" button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
+			
+			<c:if test="${data.status gt 1901003}">
+				<input class=" button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
 			</c:if>
-			<c:if test="${data.status eq '1901002' && isAdmin}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
-			</c:if>
-			<c:if test="${data.status eq '1901003'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+			<c:if test="${appStatusButtonView}">
+				<c:if test="${data.status eq '1901001'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901002' && isAdmin}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901003'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				
+				<c:if test="${data.status eq '1901004'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+				</c:if>
 			</c:if>
 			
-			<c:if test="${data.status eq '1901004'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+			<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			
+			<c:if test="${ownerThan}">
+				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
 			</c:if>
-		</c:if>
-		
-<%-- 		<c:if test="${data.status le 1901002}"> --%>
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
-<%-- 		</c:if> --%>
-		
-		<c:if test="${ownerThan}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
-		</c:if>
+		</div>
 	</div>
 </div>
-<div class="h10"></div>
 <div style="margin:0 auto;text-align: center;">
-	<textarea id="commandTextArea" disabled="disabled" class="text_field">
-	
-	</textarea>
+	<textarea id="commandTextArea" disabled="disabled" class="text_field"></textarea>
 </div>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-input-port' />
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-toolkit-input-port' />
+		</h3>
+		
+		<div class="btn-group pull-right">
+			<button class="btn btn-default noUpdateHidden" type="button" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','INPUT');"><span class="icon-search"> <liferay-ui:message key='edison-science-appstore-toolkit-input-port'/> <liferay-ui:message key='add'/></span></button>
+		</div>
 	</div>
-	<div style="margin: 0 auto;overflow: hidden;padding-top: 18px;padding-bottom: 5px;text-align: center;float: right;">
-		<input class="button0801 noUpdateHidden" type="button" value="<liferay-ui:message key='edison-science-appstore-toolkit-input-port'/> <liferay-ui:message key='add'/>" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','INPUT');">
-	</div>
-</div>
-<div class="h10"></div>
-<div class="table1_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="10%" />
-			<col width="30%"/>
-			<col width="*" />
-			<col width="15%" />
-			<col width="15%" />
-			<col width="5%" />
-			<col width="10%" />
-		</colgroup>
+	<table class = "table table-bordered table-hover edison-table">
 		<thead>
-			<tr>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
-				<th align="center" scope="col">Sample File</th>
-				<th align="center" scope="col"><liferay-ui:message key='required' /></th>
-				<th align="center" scope="col">Default</th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-button-board-delete' /></th>
-			</tr>
+			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+			<th width="30%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="*"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
+			<th width="15%">Sample File</th>
+			<th width="15%"><liferay-ui:message key='required' /></th>
+			<th width="5%">Default</th>
+			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
 		</thead>
 		<tbody id="<portlet:namespace/>inputPortListBody">
 			
@@ -155,37 +137,27 @@
 	</table>
 </div>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-log-port' />
+
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-toolkit-log-port' />
+		</h3>
+		
+		<div class="btn-group pull-right">
+			<button class="btn btn-default noUpdateHidden" type="button" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','LOG');"><span class="icon-search"> <liferay-ui:message key='edison-science-appstore-toolkit-log-port'/> <liferay-ui:message key='add'/></span></button>
+		</div>
 	</div>
-	<div style="margin: 0 auto;overflow: hidden;padding-top: 18px;padding-bottom: 5px;text-align: center;float: right;">
-		<input class="button0801 noUpdateHidden" type="button" value="<liferay-ui:message key='edison-science-appstore-toolkit-log-port'/> <liferay-ui:message key='add'/>" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','LOG');">
-	</div>
-</div>
-<div class="h10"></div>
-<div class="table1_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="10%" />
-			<col width="15%" />
-			<col width="*%"/>
-			<col width="15%" />
-			<col width="10%" />
-			<col width="5%" />
-			<col width="10%" />
-		</colgroup>
+	<table class = "table table-bordered table-hover edison-table">
 		<thead>
-			<tr>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
-				<th align="center" scope="col">File Path</th>
-				<th align="center" scope="col">Default</th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-button-board-delete' /></th>
-			</tr>
+			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="*"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
+			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
+			<th width="10%">File Path</th>
+			<th width="5%">Default</th>
+			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
 		</thead>
 		<tbody id="<portlet:namespace/>logPortListBody">
 			
@@ -193,39 +165,28 @@
 	</table>
 </div>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-out-port' />
+
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-toolkit-out-port' />
+		</h3>
+		
+		<div class="btn-group pull-right">
+			<button class="btn btn-default noUpdateHidden" type="button" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','OUTPUT');"><span class="icon-search"> <liferay-ui:message key='edison-science-appstore-toolkit-out-port'/> <liferay-ui:message key='add'/></span></button>
+		</div>
 	</div>
-	<div style="margin: 0 auto;overflow: hidden;padding-top: 18px;padding-bottom: 5px;text-align: center;float: right;">
-		<input class="button0801 noUpdateHidden" type="button" value="<liferay-ui:message key='edison-science-appstore-toolkit-out-port'/> <liferay-ui:message key='add'/>" onclick="<portlet:namespace/>portNameOpen('${scienceAppId}','OUTPUT');">
-	</div>
-</div>
-<div class="h10"></div>
-<div class="table1_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="10%" />
-			<col width="*" />
-			<col width="20%"/>
-			<col width="15%" />
-			<col width="10%" />
-			<col width="5%" />
-			<col width="5%" />
-			<col width="10%" />
-		</colgroup>
+	<table class = "table table-bordered table-hover edison-table">
 		<thead>
-			<tr>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
-				<th align="center" scope="col">File Path</th>
-				<th align="center" scope="col"><liferay-ui:message key='required' /></th>
-				<th align="center" scope="col">Default</th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-button-board-delete' /></th>
-			</tr>
+			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+			<th width="*"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="20%"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
+			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
+			<th width="10%">File Path</th>
+			<th width="8%"><liferay-ui:message key='required' /></th>
+			<th width="5%">Default</th>
+			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
 		</thead>
 		<tbody id="<portlet:namespace/>outputPortListBody">
 			
@@ -237,11 +198,11 @@
 	
 </div>
 
-<div id="port-sampe-file-dialog" title="sample-file" class="bigpopupbox" style="display: none;">
+<div id="port-sampe-file-dialog" title="sample-file" style="display: none;">
 	
 </div>
 
-<div id="port-app-selector-dialog" title="sample-file" class="bigpopupbox" style="display: none;">
+<div id="port-app-selector-dialog" title=""port-app-selector" class="bigpopupbox" style="display: none;">
 	
 </div>
 
@@ -336,7 +297,7 @@ AUI().ready(function() {
 	$("#port-sampe-file-dialog").dialog({
 		autoOpen: false,
 		width: 900,
-		height: 'auto',
+		height: '300',
 	    modal: true,
 	    resizable: false,
 	    show: {effect:'fade', speed: 800}, 
@@ -449,7 +410,7 @@ AUI().ready(function() {
 				$body.find("tr:not(:has(#1))").remove();
 				
 				$rowResult = $("<tr/>").appendTo($body);
-				$("<td/>").text(Liferay.Language.get('edison-there-are-no-data')).attr("colspan",colspan).addClass("TC").appendTo($rowResult);
+				$("<td/>").text(Liferay.Language.get('edison-there-are-no-data')).attr("colspan",colspan).addClass("center").appendTo($rowResult);
 			}
 		}
 		
@@ -480,7 +441,7 @@ AUI().ready(function() {
 			
 			if(array.length==0){
 				$rowResult = $("<tr/>").appendTo($body);
-				$("<td/>").text(Liferay.Language.get('edison-there-are-no-data')).attr("colspan",colspan).addClass("TC").appendTo($rowResult);
+				$("<td/>").text(Liferay.Language.get('edison-there-are-no-data')).attr("colspan",colspan).addClass("center").appendTo($rowResult);
 			}else{
 				var outPutforms = OSP.Constants.getDefinedPathTypes();
 				for(var i=0; i<array.length;i++){
@@ -521,8 +482,7 @@ AUI().ready(function() {
 						
 						$select = $("<select/>").attr("onChange","<portlet:namespace/>changeDataType('"+portType+"','"+data[OSP.Constants.NAME]+"',this.value)")
 												.attr("id","<portlet:namespace/>"+portType+"_"+data[OSP.Constants.NAME]+"_dataType")
-												.addClass("noupdate")
-												.css("width","100px");
+												.addClass("aui-field-select noupdate");
 						
 						for(var j=0; j<outPutforms.length;j++){
 							$("<option/>").val(outPutforms[j]).html(outPutforms[j]).appendTo($select);
@@ -536,7 +496,7 @@ AUI().ready(function() {
 						$("<td/>").css("text-align","center")
 								  .append(
 										$("<input/>").attr("type","text")
-													 .addClass("short_field checkFilePath noupdate")
+													 .addClass("field checkFilePath noupdate")
 													 .attr("id","<portlet:namespace/>"+portType+"_"+data[OSP.Constants.NAME]+"_fileName")
 													 .attr("data_name",data[OSP.Constants.NAME])
 													 .on("focusout",function(){
@@ -549,8 +509,7 @@ AUI().ready(function() {
 					
 					if(portType!='LOG'){
 						$select = $("<select/>").attr("onChange","<portlet:namespace/>changeMandatory('"+data[OSP.Constants.NAME]+"','"+portType+"',this.value)")
-												.addClass("noupdate")
-												.css("width","60px");
+												.addClass("aui-field-select noupdate");
 
 						$("<option/>").val("N")
 									 .html("N")
@@ -574,10 +533,10 @@ AUI().ready(function() {
 					
 					$("<td/>").css("text-align","center")
 							  .append(
-									 $("<input/>").attr("type","button")
-									 			  .addClass("graybtn noUpdateHidden")
-									 			  .val(Liferay.Language.get('edison-button-board-delete'))
+									 $("<button/>").attr("type","button")
+									 			  .addClass("btn btn-warning noUpdateHidden")
 									 			  .attr("onClick","<portlet:namespace/>deleteMap('"+data[OSP.Constants.NAME]+"','"+portType+"')")
+									 			  .html("<span class='icon-trash'> "+Liferay.Language.get('edison-button-board-delete')+"</span>")
 									  ).appendTo($rowResult);
 					
 					if(data[OSP.Constants.MANDATORY]){
