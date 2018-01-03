@@ -27,9 +27,13 @@ ul, ol {list-style:none;}
 	transform: translateY(-60px); 
 }
 
+.home.edison #wrapper{
+	padding:0px;
+}
+
 .edison {
 	#wrapper{
-		padding:0px;
+		padding: 0 5em 0;
 		
 		.row-fluid{
 			margin-left:0px;
