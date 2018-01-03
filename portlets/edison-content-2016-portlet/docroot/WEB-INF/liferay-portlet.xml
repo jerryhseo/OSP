@@ -17,7 +17,6 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.content.portlet.mainResource.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
-		<header-portlet-css>/css/mainResource.css</header-portlet-css>
 		<css-class-wrapper>edison-mainResource</css-class-wrapper>
 	</portlet>
 	

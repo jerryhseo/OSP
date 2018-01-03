@@ -2,6 +2,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
+<style type="text/css">
+	.edison-mainResource{
+		background-color: #adcbe3;
+	}
+	.edison-mainResource .fillgauge {
+		width: 100%;
+	}
+	.edison-mainResource .clusterName {
+		text-align: center;
+		color: #000000;
+		margin-bottom: 40px;
+	}
+	.edison-mainResource .title {
+		text-align: center;
+		color: #FFFFFF;
+		font-size: 30px;
+		margin: 40px 0px;
+	}
+</style>
+
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12 title">
