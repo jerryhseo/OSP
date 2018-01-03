@@ -11,9 +11,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	$theme.include($top_head_include)
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
-	
 	
 	<script type="text/javascript">
 		var agent = navigator.userAgent.toLowerCase();

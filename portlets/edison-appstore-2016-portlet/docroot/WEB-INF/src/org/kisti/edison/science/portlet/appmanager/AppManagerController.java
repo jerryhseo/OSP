@@ -158,31 +158,34 @@ public class AppManagerController{
 		long userId = themeDisplay.getUserId();
 		
 		String status = CustomUtil.strNull(params.get("searchStatus"));
-		String searchType = CustomUtil.strNull(params.get("searchOption"));
-		String searchText = CustomUtil.strNull(params.get("searchValue"));
-		String searchAppType = CustomUtil.strNull(params.get("searchAppType"),"ALL");
+		String searchAppType = CustomUtil.strNull(params.get("searchAppType"),"");
+		
+		Map<String,Object>searchParam = new HashMap<String,Object>();
+		searchParam.put("likeSwNameAndSwTitle", CustomUtil.strNull(params.get("likeSwNameAndSwTitle")));
+		searchParam.put("likeUserName", CustomUtil.strNull(params.get("likeUserName")));
+		searchParam.put("likeOrgName", CustomUtil.strNull(params.get("likeOrgName")));
 		
 		String[] appTypes = null;
-		if(!searchAppType.equals("ALL")){
+		if(!searchAppType.equals("")){
 			appTypes = new String []{searchAppType};
 		}
 		if(listTabValue.equals("owner_sw")){
 			
 			if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)){
 				if(isPortal){
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, appTypes, null,searchParam, status, begin, end,false);
 				}else{
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, 0, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, 0, appTypes, null, searchParam, status, begin, end,false);
 				}
 			}else{
 				if(isPortal){
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, userId, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, userId, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, userId, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, userId, appTypes, null, searchParam, status, begin, end,false);
 				}else{
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, userId, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, userId, appTypes, null, searchParam, status, begin, end,false);
 				}
 			}
 		}else{
@@ -191,8 +194,8 @@ public class AppManagerController{
 			if(!isPortal){
 				categorySearch = true;
 			}
-			totalCnt = ScienceAppLocalServiceUtil.countScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status, categorySearch);
-			swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status, categorySearch, begin, end);
+			totalCnt = ScienceAppLocalServiceUtil.countScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status, categorySearch);
+			swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status, categorySearch, begin, end);
 		}
 		
 		String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", totalCnt, curPage, linePerPage, pagePerBlock);
@@ -202,7 +205,6 @@ public class AppManagerController{
 		model.addAttribute("searchAppType", CustomUtil.strNull(params.get("searchAppType")));
 		model.addAttribute("swList", swList);
 		model.addAttribute("pagingStr", pagingStr);
-		model.addAttribute("pageNum", totalCnt- (curPage-1) * linePerPage);
 		model.addAttribute("pageNum", totalCnt- (curPage-1) * linePerPage);
 		
 		
