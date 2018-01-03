@@ -1,55 +1,77 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-
-<div style="margin-bottom : 30px; padding-right:45px;">
-	<div class="noticetit">
-		System Resource Statistics
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12 title">
+			SYSTEM RESOURCE STATISTICS
+		</div>		
 	</div>
-	<div class="table0_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-				<th width="20%">Site</th>
-				<th width="20%">Cluster</th>
-				<th width="15%">Total</th>
-				<th width="15%">Used</th>
-				<th width="15%">Avail</th>
-			</tr>
-			<c:choose>
-				<c:when test="${!empty clusterList}">
-					<c:set var="siteTemp" value="0" />
-					<c:forEach items="${clusterList}" var="model">
-						<c:if test="${siteTemp ne model.siteName }">
-							<tr>
-								<td class="TC" rowspan="${model.clusterCount}"><liferay-ui:message key='${model.siteName}'/></td>
-								<td class="TC">${model.clusterName}</td>
-								<td class="TC">${model.total}</td>
-								<td class="TC">${model.used}</td>
-								<td class="TC">${model.avail}</td>
-							</tr>
-						</c:if>
-						<c:if test="${siteTemp eq model.siteName }">
-							<tr>
-								<td class="TC">${model.clusterName}</td>
-								<td class="TC">${model.total}</td>
-								<td class="TC">${model.used}</td>
-								<td class="TC">${model.avail}</td>
-							</tr>
-						</c:if>
-						<c:set var="siteTemp" value="${model.siteName}" />
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<tr>
-						<td colspan="5" style="text-align: center;">
-							<liferay-ui:message key='edison-there-are-no-data'/>
-						</td>
-					</tr>
-				</c:otherwise>
-			</c:choose>
-		</table>
+	<div class="row">
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge1" class="fillgauge"></svg>
+			<div id="clusterName1" class="clusterName"></div>
+		</div>
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge2" class="fillgauge"></svg>
+			<div id="clusterName2" class="clusterName"></div>
+		</div>
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge3" class="fillgauge"></svg>
+			<div id="clusterName3" class="clusterName"></div>
+		</div>
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge4" class="fillgauge"></svg>
+			<div id="clusterName4" class="clusterName"></div>
+		</div>
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge5" class="fillgauge"></svg>
+			<div id="clusterName5" class="clusterName"></div>
+		</div>
+		<div class="col-xs-4 col-md-2">
+			<svg id="fillgauge6" class="fillgauge"></svg>
+			<div id="clusterName6" class="clusterName"></div>
+		</div>
 	</div>
 </div>
-<script type="text/javascript">
 
+<style>
+	.edison-content .container{
+		background-color: #adcbe3;
+	}
+	.edison-content .fillgauge {
+		width: 100%;
+	}
+	.edison-content .clusterName {
+		text-align: center;
+		color: #000000;
+		margin-bottom: 40px;
+	}
+	.edison-content .title {
+		text-align: center;
+		color: #FFFFFF;
+		font-size: 30px;
+		margin: 40px 0px;
+	}
+</style>
+
+<script src="http://d3js.org/d3.v2.min.js" language="JavaScript"></script>
+<script src="${contextPath}/js/liquidFillGauge.js" language="JavaScript"></script>
+<script type="text/javascript">
+	<c:forEach items="${clusterList}" var="item" varStatus="status">
+		var amountUsingResource = "${item.usage}";
+		var config = liquidFillGaugeDefaultSettings();
+		config.circleColor = "#F9F9F9";
+		config.waveColor = "#5BC8A0";
+		config.waveAnimateTime = 1000;
+		config.waveHeight = 0.1;
+		if(0 < amountUsingResource){
+			config.minValue = 10;
+		}
+		
+		var gauge = loadLiquidFillGauge("fillgauge${status.count}", amountUsingResource, config);
+		
+		$("#clusterName${status.count}").text("${item.clusterName}");
+	</c:forEach>
 </script>
