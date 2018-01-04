@@ -262,6 +262,10 @@ public interface ScienceAppInputPortsLocalService extends BaseLocalService,
 	public java.lang.String getInputPortsJsonString(long scienceAppId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getInputPortsJsonArray(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public void removeAllInputPorts()
 		throws com.liferay.portal.kernel.exception.SystemException;
 

@@ -42,6 +42,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -82,6 +83,23 @@ public class ScienceAppInputPortsLocalServiceImpl
 		ScienceAppInputPorts ports = super.fetchScienceAppInputPorts(scienceAppId);
 		if(ports != null) {
 			result = ports.getInputPorts();
+		}
+		return result;
+	}
+	
+	
+	public String getInputPortsJsonArray(long scienceAppId) throws SystemException{
+		String result = "";
+		ScienceAppInputPorts ports = super.fetchScienceAppInputPorts(scienceAppId);
+		if(ports != null) {
+			net.sf.json.JSONObject inputPortJson = JSONObject. fromObject(JSONSerializer.toJSON(ports.getInputPorts()));
+			JSONArray inputPortArray = new JSONArray();
+			Set<String> set = inputPortJson.keySet();
+			for (String names : set) {
+				JSONObject jsonPort = inputPortJson.getJSONObject(names);
+				inputPortArray.add(jsonPort);
+			}
+			result = inputPortArray.toString();
 		}
 		return result;
 	}

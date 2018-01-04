@@ -385,7 +385,7 @@ public class AppManagerController{
   				model.addAttribute("exeFileUpload",exeFileUpload);
 				}
 				
-			}else if(clickTab.equals("m03")){
+			}else if(clickTab.equals("m03")||clickTab.equals("m04")){
 				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
 				long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
 				long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
@@ -418,7 +418,7 @@ public class AppManagerController{
 //				}
 				
 				mode = Constants.UPDATE;
-			}else if(clickTab.equals("m04")){
+			}else if(clickTab.equals("m05")){
 				mode = Constants.UPDATE;
 				//CKEditor
 				boolean isPortal = themeDisplay.getScopeGroup().getParentGroupId()==0?true:false;

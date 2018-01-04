@@ -122,21 +122,25 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 
 		_methodParameterTypes171 = new String[] { "long" };
 
-		_methodName172 = "removeAllInputPorts";
+		_methodName172 = "getInputPortsJsonArray";
 
-		_methodParameterTypes172 = new String[] {  };
+		_methodParameterTypes172 = new String[] { "long" };
 
-		_methodName173 = "getScienceAppInputPortsesCount";
+		_methodName173 = "removeAllInputPorts";
 
-		_methodParameterTypes173 = new String[] { "long" };
+		_methodParameterTypes173 = new String[] {  };
 
-		_methodName174 = "getInputPortsCountByPotyTypeId";
+		_methodName174 = "getScienceAppInputPortsesCount";
 
 		_methodParameterTypes174 = new String[] { "long" };
 
-		_methodName175 = "addSampeFile";
+		_methodName175 = "getInputPortsCountByPotyTypeId";
 
-		_methodParameterTypes175 = new String[] {
+		_methodParameterTypes175 = new String[] { "long" };
+
+		_methodName176 = "addSampeFile";
+
+		_methodParameterTypes176 = new String[] {
 				"long", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext",
 				"com.liferay.portal.kernel.upload.UploadPortletRequest"
@@ -257,23 +261,28 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 
 		if (_methodName172.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+			return ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonArray(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName173.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
 			ScienceAppInputPortsLocalServiceUtil.removeAllInputPorts();
 
 			return null;
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
-			return ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(((Long)arguments[0]).longValue());
-		}
-
 		if (_methodName174.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
-			return ScienceAppInputPortsLocalServiceUtil.getInputPortsCountByPotyTypeId(((Long)arguments[0]).longValue());
+			return ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName175.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes175, parameterTypes)) {
+			return ScienceAppInputPortsLocalServiceUtil.getInputPortsCountByPotyTypeId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.addSampeFile(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.service.ServiceContext)arguments[2],
@@ -331,4 +340,6 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes174;
 	private String _methodName175;
 	private String[] _methodParameterTypes175;
+	private String _methodName176;
+	private String[] _methodParameterTypes176;
 }

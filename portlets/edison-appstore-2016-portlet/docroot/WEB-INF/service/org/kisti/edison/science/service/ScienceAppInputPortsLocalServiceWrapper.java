@@ -304,6 +304,12 @@ public class ScienceAppInputPortsLocalServiceWrapper
 	}
 
 	@Override
+	public java.lang.String getInputPortsJsonArray(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppInputPortsLocalService.getInputPortsJsonArray(scienceAppId);
+	}
+
+	@Override
 	public void removeAllInputPorts()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_scienceAppInputPortsLocalService.removeAllInputPorts();
