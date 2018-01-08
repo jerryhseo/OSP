@@ -385,7 +385,7 @@ public class AppManagerController{
   				model.addAttribute("exeFileUpload",exeFileUpload);
 				}
 				
-			}else if(clickTab.equals("m03")||clickTab.equals("m04")){
+			}else if(clickTab.equals("m03")){
 				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
 				long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
 				long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
@@ -418,6 +418,50 @@ public class AppManagerController{
 //				}
 				
 				mode = Constants.UPDATE;
+			}else if(clickTab.equals("m04")){
+				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"");
+				String paramTemplateId = CustomUtil.strNull(params.get("templateId")).equals("")?appTemplateId:CustomUtil.strNull(params.get("templateId"));
+				boolean isPortDraw = true;
+				if(appTemplateId.equals("")){
+					
+				}else{
+					if(appTemplateId.equals(paramTemplateId)&&!paramTemplateId.equals("")){
+						isPortDraw = false;
+					}
+				}
+				
+				if(isPortDraw){
+					long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
+					long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
+					long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+					
+					//port 조회
+					String inputPorts = "";
+					if(inputCnt!=0){
+						inputPorts = ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+					}
+					
+					String outputPorts = "";
+					if(outputCnt!=0){
+						outputPorts = ScienceAppOutputPortsLocalServiceUtil.getOutputPortsJsonString(scienceAppId);
+					}
+					
+					String logPorts = "";
+					if(logCnt!=0){
+						logPorts = ScienceAppLocalServiceUtil.getScienceAppLogPorts(scienceAppId);
+					}
+					
+					data.put("inputPorts", inputPorts);
+					data.put("outputPorts", outputPorts);
+					data.put("logPorts", logPorts);
+				}else{
+					data.put("layout", scienceApp.getLayout());
+				}
+				
+				data.put("isPortDraw", isPortDraw);
+				data.put("templateId", paramTemplateId);
+				model.addAttribute("templateJSP", paramTemplateId);
+				
 			}else if(clickTab.equals("m05")){
 				mode = Constants.UPDATE;
 				//CKEditor
@@ -529,9 +573,6 @@ public class AppManagerController{
 					String outputPorts = CustomUtil.strNull(params.get("outputPorts"));
 					String logPorts = CustomUtil.strNull(params.get("logPorts"));
 					
-					String layout = CustomUtil.strNull(params.get("layout"));
-					String templetId = CustomUtil.strNull(params.get("templetId"));
-					
 					if(!inputPorts.equals("")){
 						long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
 						
@@ -568,13 +609,16 @@ public class AppManagerController{
 						}
 					}
 					
+				}else if(actionType.equals("appLayout")){
+					String layout = CustomUtil.strNull(params.get("layout"));
+					String templetId = CustomUtil.strNull(params.get("templetId"));
+					
 					if(!layout.equals("")){
 						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 						scienceApp.setLayout(layout);
 						scienceApp.setTempletId(templetId);
 						ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
 					}
-					
 				}else if(actionType.equals("publicData")){
 					ServiceContext sc = ServiceContextFactory.getInstance(ScienceApp.class.getName(), request);
 					scienceAppId = appInfomation(sc, params, groupId, companyId);

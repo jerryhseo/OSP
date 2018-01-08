@@ -11,12 +11,8 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6 col">
+		<div class="col-md-12 col">
 			<ul class="sortable-list ui-sortable list-group" id="column-5" data-init-area="output">
-			</ul>
-		</div>
-		<div class="col-md-6 col">
-			<ul class="sortable-list ui-sortable list-group" id="column-6">
 			</ul>
 		</div>
 	</div>
