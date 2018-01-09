@@ -30,6 +30,31 @@
 	String templateJSP = GetterUtil.get(request.getAttribute("templateJSP"), "");
 %>
 <style type="text/css">
+
+	.science-app-manager-portlet .panel-success > .panel-heading{
+		background-color: #dff0d8;
+	}
+	
+	.science-app-manager-portlet .panel-success > .panel-heading a:after{
+		content: "<liferay-ui:message key='edison-science-appstore-toolkit-input-port' />";
+	}
+	
+	.science-app-manager-portlet .panel-warning > .panel-heading{
+		background-color: #fcf8e3;
+	}
+	
+	.science-app-manager-portlet .panel-warning > .panel-heading a:after{
+		content: "<liferay-ui:message key='edison-science-appstore-toolkit-log-port' />";
+	}
+	
+	.science-app-manager-portlet .panel-danger > .panel-heading{
+		background-color: #f2dede;
+	}
+	
+	.science-app-manager-portlet .panel-danger > .panel-heading a:after{
+		content: "<liferay-ui:message key='edison-science-appstore-toolkit-out-port' />";
+	}
+	
 	.science-app-manager-portlet .layout-wrap .btn {
 		border-color: #dddddd;
 	}
@@ -111,10 +136,14 @@
 		margin-right: 0px;
 	}
 	
-	.science-app-manager-portlet .sortableLayout ul.sortable-list{
+	.science-app-manager-portlet .gridLayoutArea ul.sortable-list{
 		min-height: 100px;
 		padding: 0px;
 		margin: 20px 0px;
+	}
+	
+	.science-app-manager-portlet .sortableLayout.portLayoutArea ul.sortable-list li.sortable-item{
+		background-color: #ffffff;
 	}
 	
 	.science-app-manager-portlet .sortableLayout ul.sortable-list li.sortable-item{
@@ -145,12 +174,27 @@
 		content: "                <liferay-ui:message key='edison-science-appstore-toolkit-out-port' />";
 	}
 	
+	.science-app-manager-portlet .gridLayoutArea ul.sortable-list li.list-group-item-default.INPUT:after{
+		content: "                <liferay-ui:message key='edison-science-appstore-toolkit-input-port' />";
+	}
+	
+	.science-app-manager-portlet .gridLayoutArea ul.sortable-list li.list-group-item-default.LOG:after{
+		content: "                <liferay-ui:message key='edison-science-appstore-toolkit-log-port' />";
+	}
+	
+	.science-app-manager-portlet .gridLayoutArea ul.sortable-list li.list-group-item-default.OUTPUT:after{
+		content: "                <liferay-ui:message key='edison-science-appstore-toolkit-out-port' />";
+	}
+	
 	.science-app-manager-portlet .sortableLayout .row .col{
 		border: solid 2px #fafafa;
 		background-color: #D2EBEE;
 	}
 	
-	.ui-state-highlight { height: 44px; line-height: 10px;}
+	.science-app-manager-portlet .ui-state-highlight { height: 44px; line-height: 10px;}
+	.science-app-manager-portlet .taglib-icon-help{
+		cursor: pointer;
+	}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -216,8 +260,8 @@ function <portlet:namespace/>layoutResult(){
 	});
 }
 
-function <portlet:namespace/>cancelSortable(id){
-	$("#"+id).detach().appendTo('#systemTool');
+function <portlet:namespace/>cancelSortable(target,id){
+	$("#"+id).detach().appendTo('#'+target);
 }
 
 function <portlet:namespace/>actionCall(mode){
@@ -245,62 +289,51 @@ function <portlet:namespace/>actionCall(mode){
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
 			var columnId = $(this).attr("id");
 			var sortedIDs = $(this).sortable("toArray");
-			var portId = "";
 			var portInstanceId = "";
 			var currentPortlet = true;
-			if(sortedIDs.length==0){
-				Layout.addPortlet(columnId,portInstanceId,false,portId);
-			}else{
-				for(var i=0;i<sortedIDs.length;i++){
-					portId = nullToStr(sortedIDs[i]);
-					portInstanceId = nullToStr($(".sortable-list li[id='"+portId+"']").attr("data-port-portlet"));
-					Layout.addPortlet(columnId,portInstanceId,currentPortlet,portId);
-					currentPortlet = false;
-				}
+			for(var i=0;i<sortedIDs.length;i++){
+				$liObject = $(".sortable-list li[id='"+sortedIDs[i]+"']");
+				var portName = $liObject.attr("data-port-name");
+				var portInstanceId = $liObject.attr("data-port-portlet");
+// 				alert("columnId==>"+columnId+"___portInstanceId==>"+portInstanceId+"__portName==>"+portName+"__currentPortlet==>"+currentPortlet);
+				Layout.addPortlet(columnId,portInstanceId,currentPortlet,portName);
+				currentPortlet = false;
 			}
 			
 		});
 		
 		$("#<portlet:namespace/>layout").val(JSON.stringify(Layout));
 		$("#<portlet:namespace/>templetId").val(templateId);
-		
+// 		console.log(JSON.stringify(Layout));
 	 	submitForm(<portlet:namespace/>frm);
 	}
 
 }
 
 function <portlet:namespace/>drawPort(portType,data){
+	
 	if(data!=''){
-		var targetUL,liStyle,array,dataPortPortlet;
+		var targetUL,array,dataPortPortlet;
 		if(portType=='INPUT'){
 			scienceApp.deserializeInputPorts(JSON.parse(data));
 			targetUL = $(".gridLayoutArea ul[data-init-area*='input']");
-			liStyle = "list-group-item-success";
 			array = scienceApp.inputPortsArray();
 			dataPortPortlet = OSP.Constants.DEFAULT_EDITOR;
 		}else if(portType=='OUTPUT'){
 			scienceApp.deserializeOutputPorts(JSON.parse(data));
 			targetUL = $(".gridLayoutArea ul[data-init-area*='output']");
-			liStyle = "list-group-item-danger";
 			array = scienceApp.outputPortsArray();
 			dataPortPortlet = OSP.Constants.DEFAULT_ANALYZER;
 		}else if(portType=='LOG'){
 			scienceApp.deserializeLogPorts(JSON.parse(data));
 			targetUL = $(".gridLayoutArea ul[data-init-area*='log']");
-			liStyle = "list-group-item-warning";
 			array = scienceApp.logPortsArray();
 			dataPortPortlet = OSP.Constants.DEFAULT_ANALYZER;
 		}
 		
-		
 		for(var i=0; i<array.length;i++){
 			var data = array[i];
-			$portLi = $("<li/>").addClass("sortable-item list-group-item "+liStyle).attr("id",data[OSP.Constants.NAME])
-								.attr("data-port-portlet",data[dataPortPortlet])
-								.append(
-									$("<span/>").addClass("icon-move").text("   "+data[OSP.Constants.NAME])
-								);
-			targetUL.append($portLi);
+			$("#"+data[OSP.Constants.NAME]+"_"+data[dataPortPortlet]).detach().appendTo(targetUL);
 		}
 	}
 }
@@ -316,20 +349,22 @@ function <portlet:namespace/>drawLayout(layout){
 			for(var j=0; j<column.portlets().length;j++){
 				var portlet = column.portlets()[j];
 				
-				var instanceId = portlet.instanceId();
-				if(!portlet.portName()){
-					$("#"+instanceId).detach().appendTo($targetUL);
-				}else{
-					var portName = portlet.portName();
-					$portLi = $("<li/>").addClass("sortable-item list-group-item").attr("id",portName)
-										.attr("data-port-portlet",instanceId)
-										.append(
-											$("<span/>").addClass("icon-move").text("   "+portName)
-										);
-					$targetUL.append($portLi);
-				}
+				var portName = portlet.portName();
+				var instanceId = <portlet:namespace/>destroyInstanceId(portlet.instanceId());
+				var liObjectId = portName+"_"+instanceId;
+				$("#"+liObjectId).detach().appendTo($targetUL);
 			}
 		}
+	}
+}
+
+
+function <portlet:namespace/>destroyInstanceId(instanceId){
+	var instanceIndex = instanceId.indexOf('_INSTANCE_');
+	if(instanceIndex > -1){
+		return instanceId.substring(0,instanceIndex);
+	}else{
+		return instanceId;
 	}
 }
 </script>
@@ -386,16 +421,16 @@ function <portlet:namespace/>drawLayout(layout){
 	<div class="panel-body layout-wrap">
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>noFlowLayoutArea">
 			<label class="btn layoutMethod">
+				<div class="method layout-3"></div>
+				<input type="radio" name="templates" value="1-row-2-column"> 
+			</label>
+			<label class="btn layoutMethod">
 				<div class="method layout-1"></div>
 				<input type="radio" name="templates" value="2-row-2-2-column"> 
 			</label>
 			<label class="btn layoutMethod">
 				<div class="method layout-2"></div>
 				<input type="radio" name="templates" value="2-row-1-1-column"> 
-			</label>
-			<label class="btn layoutMethod">
-				<div class="method layout-3"></div>
-				<input type="radio" name="templates" value="1-row-2-column"> 
 			</label>
 			<label class="btn layoutMethod">
 				<div class="method layout-4"></div>
@@ -422,41 +457,82 @@ function <portlet:namespace/>drawLayout(layout){
 			</label>
 		</div>
 	</div>
-	<c:if test="${!empty data.templateId}">
-		<div class="panel-footer">
-			<div class="row">
-				<div class="panel-group col-md-4" id="accordion" style="margin-top: 15px;">
-			        <div class="panel panel-default">
-			            <div class="panel-heading">
-			                <h4 class="panel-title">
-			                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">System Tool <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/></a>
-			                </h4>
-			            </div>
-			            <div id="collapseOne" class="panel-collapse collapse in">
-			                <div class="panel-body sortableLayout">
-								<ul class="sortable-list ui-sortable list-group" id="systemTool">
-									<li class="sortable-item list-group-item list-group-item-info" id="system-1">
-										<span class="icon-move"> App Log Viewer   <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/> 
-											<i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('system-1');"></i>
-										</span>
-									</li>
-									<li class="sortable-item list-group-item list-group-item-info" id="system-2">
-										<span class="icon-move"> Result File Download   <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
-											<i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('system-2');"></i>
-										</span>
-									</li>
-								</ul>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-			    <div class="col-md-8">
-			    	<liferay-util:include page='<%= "/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext() %>" >
-					</liferay-util:include>
-			    </div>
+	<div class="panel-footer">
+		<div class="row">
+			<div class="panel-group col-md-4" id="accordion" style="margin-top: 15px;">
+				<c:if test="${!empty data.portList}">
+					<c:set var="panelCss" value="panel panel-defalut"></c:set>
+					<c:set var="liCss" value="list-group-item-default"></c:set>
+					<c:forEach items="${data.portList}" var="portMap" varStatus="status">
+						<c:if test="${portMap.portType eq 'INPUT' }">
+							<c:set var="panelCss" value="panel  panel-success"></c:set>
+							<c:set var="liCss" value="list-group-item-success"></c:set>
+						</c:if>
+						<c:if test="${portMap.portType eq 'LOG' }">
+							<c:set var="panelCss" value="panel  panel-warning "></c:set>
+							<c:set var="liCss" value="list-group-item-warning "></c:set>
+						</c:if>
+						<c:if test="${portMap.portType eq 'OUTPUT' }">
+							<c:set var="panelCss" value="panel  panel-danger  "></c:set>
+							<c:set var="liCss" value="list-group-item-danger  "></c:set>
+						</c:if>
+						
+						<c:if test="${fn:length(portMap.appList) lt 2}">
+							<c:set var="panelStyle" value="display:none;"></c:set>
+						</c:if>
+						
+						<div class="${panelCss}" style="${panelStyle}">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_${status.index}">
+										${portMap.portName}
+									</a>
+								</h4>
+							</div>
+							<div id="collapse_${status.index}" class="panel-collapse collapse">
+								<div class="panel-body sortableLayout portLayoutArea">
+									<ul class="sortable-list ui-sortable list-group" id="port_${portMap.portName}_ul">
+										<c:forEach items="${portMap.appList}" var="portAppData">
+											<c:if test="${portAppData.type eq 'Editor' }">
+												<c:set var="icon" value="icon-edit"></c:set>
+											</c:if>
+											<c:if test="${portAppData.type eq 'Analyzer' }">
+												<c:set var="icon" value="icon-picture"></c:set>
+											</c:if>
+											
+											<c:choose>
+												<c:when test="${portAppData.isDefault}">
+													<li class="sortable-item list-group-item list-group-item-default ${portMap.portType}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}">
+														<span class="icon-move"> 
+															<i class="${icon}"></i>
+															${portMap.portName}_DEFAULT   <liferay-ui:icon-help message="${portAppData.title}"/> 
+														</span>
+													</li>
+												</c:when>
+												<c:otherwise>
+													<li class="sortable-item list-group-item ${liCss}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}">
+														<span class="icon-move"> 
+															<i class="${icon}"></i>
+															${portMap.portName}_${portAppData.name}   <liferay-ui:icon-help message="${portAppData.title}"/> 
+															<i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('port_${portMap.portName}_ul','${portMap.portName}_${portAppData.exeFileName}');"></i>
+														</span>
+													</li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</c:if>
 		    </div>
-		</div>
-	</c:if>
+		    <div class="col-md-8">
+		    	<liferay-util:include page='<%= "/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext() %>" >
+				</liferay-util:include>
+		    </div>
+	    </div>
+	</div>
 </div>
 <button class="btn btn-default" type="button" onClick="<portlet:namespace/>layoutResult();"><span class="icon-user"> Result</span></button>
 

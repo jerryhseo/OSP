@@ -145,6 +145,10 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 				"com.liferay.portal.service.ServiceContext",
 				"com.liferay.portal.kernel.upload.UploadPortletRequest"
 			};
+
+		_methodName177 = "portAppList";
+
+		_methodParameterTypes177 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -289,6 +293,12 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 				(com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[3]);
 		}
 
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
+			return ScienceAppInputPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -342,4 +352,6 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes175;
 	private String _methodName176;
 	private String[] _methodParameterTypes176;
+	private String _methodName177;
+	private String[] _methodParameterTypes177;
 }

@@ -286,4 +286,9 @@ public interface ScienceAppInputPortsLocalService extends BaseLocalService,
 		com.liferay.portal.kernel.upload.UploadPortletRequest upload)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

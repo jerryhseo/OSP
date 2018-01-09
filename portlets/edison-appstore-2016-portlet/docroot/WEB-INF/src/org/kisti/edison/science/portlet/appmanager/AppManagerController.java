@@ -419,22 +419,35 @@ public class AppManagerController{
 				
 				mode = Constants.UPDATE;
 			}else if(clickTab.equals("m04")){
-				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"");
+				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
 				String paramTemplateId = CustomUtil.strNull(params.get("templateId")).equals("")?appTemplateId:CustomUtil.strNull(params.get("templateId"));
+				
+				
 				boolean isPortDraw = true;
-				if(appTemplateId.equals("")){
-					
-				}else{
-					if(appTemplateId.equals(paramTemplateId)&&!paramTemplateId.equals("")){
-						isPortDraw = false;
-					}
+				if(appTemplateId.equals(paramTemplateId)&&!scienceApp.getLayout().equals("")){
+					isPortDraw = false;
 				}
 				
+				List<Map<String,Object>> portList = new ArrayList<Map<String,Object>>();
+				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
+				long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
+				long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+				
+				if(inputCnt!=0){
+					portList.addAll(ScienceAppInputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				if(logCnt!=0){
+					portList.addAll(ScienceAppLogPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				if(outputCnt!=0){
+					portList.addAll(ScienceAppOutputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				data.put("portList", portList);
+				
 				if(isPortDraw){
-					long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
-					long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
-					long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
-					
 					//port 조회
 					String inputPorts = "";
 					if(inputCnt!=0){
