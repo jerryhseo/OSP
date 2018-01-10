@@ -286,6 +286,11 @@ public class ScienceAppInputPortsLocalServiceUtil {
 		return getService().getInputPortsJsonString(scienceAppId);
 	}
 
+	public static java.lang.String getInputPortsJsonArray(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getInputPortsJsonArray(scienceAppId);
+	}
+
 	public static void removeAllInputPorts()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().removeAllInputPorts();
@@ -311,6 +316,13 @@ public class ScienceAppInputPortsLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().addSampeFile(scienceAppId, portName, sc, upload);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().portAppList(scienceAppId, locale);
 	}
 
 	public static void clearService() {

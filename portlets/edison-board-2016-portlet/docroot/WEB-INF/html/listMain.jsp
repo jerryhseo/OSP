@@ -87,7 +87,9 @@
 		document.mainBoardForm<portlet:namespace/>.<portlet:namespace/>currentPage.value=p_currentPage;
 		var boardInputForm = {
 						"<portlet:namespace/>methodName" : "getBoardList<portlet:namespace/>",
-						"<portlet:namespace/>currentPage" : p_currentPage
+						"<portlet:namespace/>currentPage" : p_currentPage,
+						"<portlet:namespace/>virtualLabId" : "${virtualLabId}",
+						"<portlet:namespace/>isVirtualClass" : "${isVirtualClass}"
 						};
 		jQuery.ajax({
 			type: "POST",
@@ -97,7 +99,7 @@
 			success: function(data) {
 				var boardList = data.boardList;
 				var divCd = data.divCd;
-				$("#boardListBody<portlet:namespace/>").empty();			
+				$("#boardListBody<portlet:namespace/>").empty();
 				
 				if(boardList.length == 0){
 					$vRow = $("<div/>").addClass("notice-mtr")
@@ -110,11 +112,18 @@
 					$("#boardListBody<portlet:namespace/>").append($vRow);
 				}else{
 					for(var i = 0 ; i < boardList.length; i++ ){
+						var classTitle = boardList[i].classTitle;
+						var classId = boardList[i].classId;
+						var divVirtualLabClass = ""
+						if(classTitle != undefined && classId != undefined){
+							divVirtualLabClass = "<span classId='" + classId + "'>[" + classTitle + "]</span>&emsp;";
+						}
+						
 						$vRow = $("<div/>").addClass("notice-mtr")
 										   .attr("onclick", "javascript:viewClick<portlet:namespace/>('"+boardList[i].boardSeq+"','${maxWindowStatus}')")
 										   .append(
 												   $("<div/>").addClass("notice-mtitle")
-															  .html("<p><a href='javascript:;'>"+boardList[i].title+"</a></p>")
+															  .html("<p><a href='javascript:;'>" + divVirtualLabClass + boardList[i].title+"</a></p>")
 											)
 										   .append(
 												   $("<div/>").addClass("notice-mdate")

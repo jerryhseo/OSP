@@ -16,8 +16,10 @@ package org.kisti.edison.science.service.impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +31,10 @@ import org.kisti.edison.science.service.base.ScienceAppInputPortsLocalServiceBas
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonFileUtil;
 
+import com.kisti.osp.icecap.model.DataType;
+import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
+import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
+import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -42,6 +48,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -82,6 +89,23 @@ public class ScienceAppInputPortsLocalServiceImpl
 		ScienceAppInputPorts ports = super.fetchScienceAppInputPorts(scienceAppId);
 		if(ports != null) {
 			result = ports.getInputPorts();
+		}
+		return result;
+	}
+	
+	
+	public String getInputPortsJsonArray(long scienceAppId) throws SystemException{
+		String result = "";
+		ScienceAppInputPorts ports = super.fetchScienceAppInputPorts(scienceAppId);
+		if(ports != null) {
+			net.sf.json.JSONObject inputPortJson = JSONObject. fromObject(JSONSerializer.toJSON(ports.getInputPorts()));
+			JSONArray inputPortArray = new JSONArray();
+			Set<String> set = inputPortJson.keySet();
+			for (String names : set) {
+				JSONObject jsonPort = inputPortJson.getJSONObject(names);
+				inputPortArray.add(jsonPort);
+			}
+			result = inputPortArray.toString();
 		}
 		return result;
 	}
@@ -163,5 +187,59 @@ public class ScienceAppInputPortsLocalServiceImpl
 			new PortalException(e);
 		}
 		return returnMap;
+	}
+	
+	
+	public List<Map<String,Object>> portAppList(long scienceAppId, Locale locale) throws SystemException, PortalException{
+		List<Map<String,Object>> portAppList = new ArrayList<Map<String, Object>>();
+		ScienceAppInputPorts ports = super.fetchScienceAppInputPorts(scienceAppId);
+		if(ports != null) {
+			net.sf.json.JSONObject inputPortJson = JSONObject. fromObject(JSONSerializer.toJSON(ports.getInputPorts()));
+			Set<String> set = inputPortJson.keySet();
+			for (String names : set) {
+				JSONObject jsonPort = inputPortJson.getJSONObject(names);
+				String portName = jsonPort.getString("name_");
+				String portDefaultEditor = jsonPort.getString("defaultEditor_");
+				
+				JSONObject dataTypeJson = jsonPort.getJSONObject("dataType_");
+				String dataTypeName = dataTypeJson.getString("name");
+				String dataTypeVersion = dataTypeJson.getString("version");
+				
+				Map<String,Object> portMap = new HashMap<String,Object>();
+				portMap.put("portName", portName);
+				portMap.put("portDefaultNameSpace", portDefaultEditor);
+				portMap.put("portType", "INPUT");
+				
+				List<Map<String,Object>> appList = new ArrayList<Map<String, Object>>();
+				
+				DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+				List<Map<String, Object>> searchList = new ArrayList<Map<String, Object>>();
+				searchList.addAll(DataTypeEditorLocalServiceUtil.retrieveDataTypeEditorList(dataType.getTypeId()));
+				searchList.addAll(DataTypeAnalyzerLocalServiceUtil.retrieveDataTypeAnalyzerList(dataType.getTypeId()));
+				
+				for(Map<String,Object> searchMap : searchList){
+					Map<String,Object> appMap = new HashMap<String,Object>();
+					long searchScienceAppId = GetterUtil.getLong(searchMap.get("editorId"),0)==0?GetterUtil.getLong(searchMap.get("analyzerId"),0):GetterUtil.getLong(searchMap.get("editorId"),0);
+					
+					if(searchScienceAppId!=0){
+						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(searchScienceAppId);
+						if(scienceApp.getStatus()==1901004){
+							appMap.put("name", scienceApp.getName());
+							appMap.put("exeFileName", scienceApp.getExeFileName());
+							appMap.put("title", scienceApp.getTitle(locale));
+							appMap.put("type", scienceApp.getAppType());
+							boolean isDefault = scienceApp.getExeFileName().equals(portDefaultEditor)?true:false;
+							appMap.put("isDefault", isDefault);
+							appList.add(appMap);
+						}
+					}
+				}
+				
+				portMap.put("appList", appList);
+				portAppList.add(portMap);
+				
+			}
+		}
+		return portAppList;
 	}
 }

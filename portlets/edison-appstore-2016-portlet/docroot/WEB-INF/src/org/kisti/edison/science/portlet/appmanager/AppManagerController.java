@@ -158,31 +158,34 @@ public class AppManagerController{
 		long userId = themeDisplay.getUserId();
 		
 		String status = CustomUtil.strNull(params.get("searchStatus"));
-		String searchType = CustomUtil.strNull(params.get("searchOption"));
-		String searchText = CustomUtil.strNull(params.get("searchValue"));
-		String searchAppType = CustomUtil.strNull(params.get("searchAppType"),"ALL");
+		String searchAppType = CustomUtil.strNull(params.get("searchAppType"),"");
+		
+		Map<String,Object>searchParam = new HashMap<String,Object>();
+		searchParam.put("likeSwNameAndSwTitle", CustomUtil.strNull(params.get("likeSwNameAndSwTitle")));
+		searchParam.put("likeUserName", CustomUtil.strNull(params.get("likeUserName")));
+		searchParam.put("likeOrgName", CustomUtil.strNull(params.get("likeOrgName")));
 		
 		String[] appTypes = null;
-		if(!searchAppType.equals("ALL")){
+		if(!searchAppType.equals("")){
 			appTypes = new String []{searchAppType};
 		}
 		if(listTabValue.equals("owner_sw")){
 			
 			if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)){
 				if(isPortal){
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, appTypes, null,searchParam, status, begin, end,false);
 				}else{
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, 0, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, 0, appTypes, null, searchParam, status, begin, end,false);
 				}
 			}else{
 				if(isPortal){
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, userId, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, userId, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, userId, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, userId, appTypes, null, searchParam, status, begin, end,false);
 				}else{
-					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status,false);
-					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, userId, appTypes, null, searchType, searchText, status, begin, end,false);
+					totalCnt = ScienceAppLocalServiceUtil.countListScienceAppAsCategory(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status,false);
+					swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId,locale, userId, appTypes, null, searchParam, status, begin, end,false);
 				}
 			}
 		}else{
@@ -191,8 +194,8 @@ public class AppManagerController{
 			if(!isPortal){
 				categorySearch = true;
 			}
-			totalCnt = ScienceAppLocalServiceUtil.countScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status, categorySearch);
-			swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchType, searchText, status, categorySearch, begin, end);
+			totalCnt = ScienceAppLocalServiceUtil.countScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status, categorySearch);
+			swList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsManager(companyGroupId, groupId, locale, userId, appTypes, null, searchParam, status, categorySearch, begin, end);
 		}
 		
 		String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", totalCnt, curPage, linePerPage, pagePerBlock);
@@ -202,7 +205,6 @@ public class AppManagerController{
 		model.addAttribute("searchAppType", CustomUtil.strNull(params.get("searchAppType")));
 		model.addAttribute("swList", swList);
 		model.addAttribute("pagingStr", pagingStr);
-		model.addAttribute("pageNum", totalCnt- (curPage-1) * linePerPage);
 		model.addAttribute("pageNum", totalCnt- (curPage-1) * linePerPage);
 		
 		
@@ -417,6 +419,63 @@ public class AppManagerController{
 				
 				mode = Constants.UPDATE;
 			}else if(clickTab.equals("m04")){
+				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
+				String paramTemplateId = CustomUtil.strNull(params.get("templateId")).equals("")?appTemplateId:CustomUtil.strNull(params.get("templateId"));
+				
+				
+				boolean isPortDraw = true;
+				if(appTemplateId.equals(paramTemplateId)&&!scienceApp.getLayout().equals("")){
+					isPortDraw = false;
+				}
+				
+				List<Map<String,Object>> portList = new ArrayList<Map<String,Object>>();
+				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
+				long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
+				long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+				
+				if(inputCnt!=0){
+					portList.addAll(ScienceAppInputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				if(logCnt!=0){
+					portList.addAll(ScienceAppLogPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				if(outputCnt!=0){
+					portList.addAll(ScienceAppOutputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				}
+				
+				data.put("portList", portList);
+				
+				if(isPortDraw){
+					//port 조회
+					String inputPorts = "";
+					if(inputCnt!=0){
+						inputPorts = ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+					}
+					
+					String outputPorts = "";
+					if(outputCnt!=0){
+						outputPorts = ScienceAppOutputPortsLocalServiceUtil.getOutputPortsJsonString(scienceAppId);
+					}
+					
+					String logPorts = "";
+					if(logCnt!=0){
+						logPorts = ScienceAppLocalServiceUtil.getScienceAppLogPorts(scienceAppId);
+					}
+					
+					data.put("inputPorts", inputPorts);
+					data.put("outputPorts", outputPorts);
+					data.put("logPorts", logPorts);
+				}else{
+					data.put("layout", scienceApp.getLayout());
+				}
+				
+				data.put("isPortDraw", isPortDraw);
+				data.put("templateId", paramTemplateId);
+				model.addAttribute("templateJSP", paramTemplateId);
+				
+			}else if(clickTab.equals("m05")){
 				mode = Constants.UPDATE;
 				//CKEditor
 				boolean isPortal = themeDisplay.getScopeGroup().getParentGroupId()==0?true:false;
@@ -527,9 +586,6 @@ public class AppManagerController{
 					String outputPorts = CustomUtil.strNull(params.get("outputPorts"));
 					String logPorts = CustomUtil.strNull(params.get("logPorts"));
 					
-					String layout = CustomUtil.strNull(params.get("layout"));
-					String templetId = CustomUtil.strNull(params.get("templetId"));
-					
 					if(!inputPorts.equals("")){
 						long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
 						
@@ -566,13 +622,16 @@ public class AppManagerController{
 						}
 					}
 					
+				}else if(actionType.equals("appLayout")){
+					String layout = CustomUtil.strNull(params.get("layout"));
+					String templetId = CustomUtil.strNull(params.get("templetId"));
+					
 					if(!layout.equals("")){
 						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 						scienceApp.setLayout(layout);
 						scienceApp.setTempletId(templetId);
 						ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
 					}
-					
 				}else if(actionType.equals("publicData")){
 					ServiceContext sc = ServiceContextFactory.getInstance(ScienceApp.class.getName(), request);
 					scienceAppId = appInfomation(sc, params, groupId, companyId);
@@ -658,7 +717,6 @@ public class AppManagerController{
 	protected Map<String,Object> tabCreateAndStatusButtonView(long scienceAppId, boolean isPort,String clickTab, Locale locale, Map<String,Object> data) throws PortalException, SystemException{
 		
 		Map<String,Object> returnMap = new HashMap<String,Object>();
-		int publicCnt = 0;
 		
 		String[] tabs = null;
 		int activateTab = 1;
@@ -667,9 +725,9 @@ public class AppManagerController{
 		
 		if(scienceAppId == 0){
 			if(isPort){
-				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail"};
+				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail", "m05fail"};
 			}else{
-				tabs = new String[]{"m01fail", "m02fail", "m04fail"};
+				tabs = new String[]{"m01fail", "m02fail", "m05fail"};
 			}
 		}else{
 			String tabsStr = "";
@@ -711,6 +769,18 @@ public class AppManagerController{
 					}
 					activateTab++;
 				}
+				
+				if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
+					if(clickTab.equals("m04")){
+						tabsStr +=",m04over";
+					}else{
+						tabsStr +=",m04out";
+					}
+					activateTab++;
+				}else{
+					tabsStr +=",m04fail";
+					appStatusButtonView = false;
+				}
 			}
 			
 			
@@ -727,19 +797,15 @@ public class AppManagerController{
 			}
 			
 			if(DescroptionCheck){
-				publicCnt++;
-				activateTab++;
-			}
-			
-			if(publicCnt==0){
-				tabsStr +=",m04fail";
-				appStatusButtonView = false;
-			}else{
-				if(clickTab.equals("m04")){
-					tabsStr +=",m04over";
+				if(clickTab.equals("m05")){
+					tabsStr +=",m05over";
 				}else{
-					tabsStr +=",m04out";
+					tabsStr +=",m05out";
 				}
+				activateTab++;
+			}else{
+				tabsStr +=",m05fail";
+				appStatusButtonView = false;
 			}
 			
 			tabs = StringUtil.split(tabsStr);
@@ -782,8 +848,13 @@ public class AppManagerController{
 			}; 
 			
 			if(tab.contains("m04")){
-				tabName=LanguageUtil.get(locale,"edison-science-appstore-view-tab-public-data");
+				tabName="Layout";
 				tabValue = "m04";
+			};
+			
+			if(tab.contains("m05")){
+				tabName=LanguageUtil.get(locale,"edison-science-appstore-view-tab-public-data");
+				tabValue = "m05";
 			};
 			
 			if(liClass.contains("select")){

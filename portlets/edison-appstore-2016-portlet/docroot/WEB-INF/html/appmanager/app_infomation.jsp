@@ -6,14 +6,6 @@
 
 <%@ page import="org.kisti.edison.science.Exception.ScienceAppException" %>
 
-<!-- ckeditor -->
-<%@ page import="com.liferay.portal.kernel.util.StringBundler"%>
-<%@ page import="com.liferay.portal.kernel.util.HttpUtil"%>
-<%@ page import="com.liferay.portal.kernel.util.StringPool"%>
-<%@ page import="com.liferay.portal.service.GroupLocalServiceUtil"%>
-<%@ page import="com.liferay.portal.model.Group"%>
-<!-- ------- -->
-
 
 <portlet:actionURL var="submitURL" copyCurrentRenderParameters="false" name="appAction">
 	<portlet:param name="clickTab" value="${clickTab}"/>
@@ -55,36 +47,22 @@
 	boolean isPort = GetterUtil.getBoolean(request.getAttribute("isPort"), false);
 %>
 <style type="text/css">
-	.aui input[type="text"],
-	.aui textarea{
-		margin-bottom: 0px;
-	}
-	
 	.aui .long_field{
-		width: 350px;
+		width: 350px !important;
 	}
 	
 	.aui .short_field{
-		width: 150px;
+		width: 150px !important;
 	}
 	
 	.aui .too_long_field{
-		width: 500px;
-	}
-	
-	.aui .text_field{
-		width: 700px;
-		height: 100px;
-		resize: none;
+		width: 500px !important;
 	}
 	
 	.aui .swrightcont .alert{
 		margin-top: 10px;
 	}
 </style>
-<!-- ckeditor  -->
-<%-- <script type="text/javascript" src="${contextPath}/editor/ckeditor/ckeditor.js" charset="utf-8"></script> --%>
-
 <c:if test="<%= SessionErrors.contains(renderRequest, ScienceAppException.class.getName()) %>">
 	<%
 		ScienceAppException sae = (ScienceAppException)SessionErrors.get(renderRequest, ScienceAppException.class.getName());
@@ -99,45 +77,43 @@
 		</c:if>
 	</div>
 </c:if>
-
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
-	</div>
-	<div style="width:70%; float:right; text-align:right; padding-top:15px;">
-		<input class="addIp button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
-		
-		<c:if test="${data.status gt 1901003}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
-		</c:if>
-		
-		<c:if test="${appStatusButtonView}">
-			<c:if test="${data.status eq '1901001'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
-			</c:if>
-<%-- 			<c:if test="${data.status eq '1901002' && isAdmin}"> --%>
-			<c:if test="${data.status eq '1901002'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
-			</c:if>
-			<c:if test="${data.status eq '1901003'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
+		</h3>
+		<div class="btn-group pull-right">
+			<input class="button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
+			<c:if test="${data.status gt 1901003}">
+				<input class="button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
 			</c:if>
 			
-			<c:if test="${data.status eq '1901004'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+			<c:if test="${appStatusButtonView}">
+				<c:if test="${data.status eq '1901001'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901002'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901003'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				
+				<c:if test="${data.status eq '1901004'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+				</c:if>
 			</c:if>
-		</c:if>
-		
-		<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
-		<c:if test="${!empty scienceAppId && ownerThan }">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
-		</c:if>
+			
+			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			<c:if test="${!empty scienceAppId && ownerThan }">
+				<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
+			</c:if>
+		</div>
 	</div>
 </div>
-<div class="h10"></div>
 <div class="table1_list">
 	<aui:form name="frm" method="POST" action="<%=submitURL%>">
 		<aui:input name="actionMode" value="${mode}" type="hidden"/>
@@ -157,7 +133,7 @@
 				<td>
 					<c:choose>
 						<c:when test="${empty scienceAppId}">
-							<aui:input name="name" type="text" cssClass="long_field" label="" value="" maxLength="100">
+							<aui:input name="name" type="text" cssClass="long_field field" label="" value="" maxLength="100">
 								<aui:validator name="required"/>
 								<aui:validator  name="custom"  errorMessage="<%=exceptionNameMsg%>">
 									function (val, fieldNode, ruleValue) {
@@ -174,7 +150,7 @@
 							<p style="color: red;">※ <liferay-ui:message key='edison-appstore-solver-nm-save-not-modify' /></p>
 						</c:when>
 						<c:otherwise>
-							<input name="name" value="${data.name}" type="text" class="long_field" readonly="readonly"/>
+							<input name="name" value="${data.name}" type="text" class="field long_field" readonly="readonly"/>
 						</c:otherwise>
 					</c:choose>
 				</td>
@@ -182,7 +158,7 @@
 				<td>
 					<c:choose>
 						<c:when test="${empty scienceAppId}">
-							<aui:input name="version" type="text" cssClass="short_field" label="" value="" placeholder="ex) 1.0.0" >
+							<aui:input name="version" type="text" cssClass="field short_field" label="" value="" placeholder="ex) 1.0.0" >
 								<aui:validator name="required"/>
 								<aui:validator  name="custom"  errorMessage="<%=exceptionVersionMsg%>">
 									function (val, fieldNode, ruleValue) {
@@ -197,7 +173,7 @@
 							</aui:input>
 						</c:when>
 						<c:otherwise>
-							<input name="<portlet:namespace/>version" value="${data.version}" type="text" class="short_field" readonly="readonly"/>
+							<input name="<portlet:namespace/>version" value="${data.version}" type="text" class="field short_field" readonly="readonly"/>
 						</c:otherwise>
 					</c:choose>
 				</td>
@@ -230,7 +206,7 @@
 					<liferay-ui:message key='edison-table-list-header-app-title' /><span class="requiredField"> *</span>
 				</th>
 				<td colspan="3">
-					<liferay-ui:input-localized name="title" xml="${data.title}" cssClass="too_long_field"  type="input"/>
+					<liferay-ui:input-localized name="title" xml="${data.title}" cssClass=" field too_long_field"  type="input"/>
 				</td>
 			</tr>
 			<tr>
@@ -258,20 +234,23 @@
 			<tr>
 				<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
 				<td colspan="3">
+					<div class="input-group">
 					<c:choose>
 						<c:when test="${mode == 'add'}">
-							<aui:input name="now_userScreenName" type="text" value="${userScreenName}" label="" cssClass="short_field" readonly="readonly"/>
+							<aui:input name="now_userScreenName" type="text" value="${userScreenName}" label="" cssClass="field short_field" readonly="readonly"/>
 						</c:when>
 						<c:otherwise>
-							<input id="<portlet:namespace/>now_userScreenName" name="<portlet:namespace/>now_userScreenName" type="text" value="${data.userScreenName}" style="width: 120px;" readonly="readonly"/>
+							<input id="<portlet:namespace/>now_userScreenName" name="<portlet:namespace/>now_userScreenName" type="text" value="${data.userScreenName}" class="field short_field" readonly="readonly"/>
 							
 							<c:if test="${mode eq 'update' && ownerThan }">
-								<input id="<portlet:namespace/>userScreenName_owner" name="<portlet:namespace/>userScreenName_owner" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:1px;" onkeypress="<portlet:namespace/>onKeyDown('owner');"/>
-								<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="button01b" value="<liferay-ui:message key='edison-appstore-solver-transfer' />" onClick="<portlet:namespace/>getUserInfo('owner')"/>
+								<input id="<portlet:namespace/>userScreenName_owner" name="<portlet:namespace/>userScreenName_owner" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" onkeypress="<portlet:namespace/>onKeyDown('owner');" class="field long_field"/>
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getUserInfo('owner');"><span class="icon-user"> <liferay-ui:message key='edison-appstore-solver-transfer' /></span></button>
+								</span>
 							</c:if>
 						</c:otherwise>
 					</c:choose>
-					
+					</div>
 				</td>
 			</tr>
 		</table>
@@ -279,49 +258,39 @@
 	
 	
 	<c:if test="${!empty scienceAppId && ownerThan }">
-		<div class="virtitlebox">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-			<div class="virtitle">
-				<liferay-ui:message key='edison-appstore-solver-manager' />
-			</div>
-			<div class="search01">
-				<div class="searchbox01">
-					<form id="userSearchManagerForm" name="userSearchManagerForm" method="post" onsubmit="return false;">
-						<input id="<portlet:namespace/>type" name="<portlet:namespace/>type" type="hidden" value="manager"  />
-						<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}" />
-						<input id="<portlet:namespace/>userScreenName_manager" name="<portlet:namespace/>userScreenName_manager" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:1px;" onkeypress="<portlet:namespace/>onKeyDown('manager');"/>
-						<input type="button" class="btnsearch" value="" onclick="<portlet:namespace/>getUserInfo('manager');">
-					</form>
+		<form id="userSearchManagerForm" name="userSearchManagerForm" method="post" onsubmit="return false;">
+			<div class="table-responsive panel edison-panel">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-appstore-solver-manager' />
+					</h3>
+					
+					<div class="input-group">
+						<input id="<portlet:namespace/>userScreenName_manager" name="<portlet:namespace/>userScreenName_manager" type="text" maxlength="15" class="form-control" placeholder="<liferay-ui:message key='edison-table-list-header-userid'/>" onKeydown="if(event.keyCode ==13)<portlet:namespace/>getUserInfo('manager');">
+						<span class="input-group-btn">
+							<input id="<portlet:namespace/>type" name="<portlet:namespace/>type" type="hidden" value="manager"  />
+							<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}" />
+							<button class="btn btn-default" type="button" onclick="<portlet:namespace/>getUserInfo('manager');"><i class="icon-search"></i></button>
+						</span>
+					</div>
 				</div>
+				<table class = "table table-bordered table-hover edison-table">
+					<thead>
+						<tr>
+							<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-usernm' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-email' /></th>
+							<th width=15%""><liferay-ui:message key='edison-table-list-header-date' /></th>
+							<th width="15%"><liferay-ui:message key='edison-button-board-delete' /></th>
+						</tr>
+					</thead>
+					<tbody id="<portlet:namespace/>appManagerListBody">
+					</tbody>
+				</table>
 			</div>
-		</div>
-		
-		<div class="h10"></div>
-		<div class="table1_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<colgroup>
-					<col width="10%" />
-					<col width="20%" />
-					<col width="20%" />
-					<col width="20%" />
-					<col width="15%" />
-					<col width="15%" />
-				</colgroup>
-				<thead>
-					<tr>
-						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
-						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-usernm' /></th>
-						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-email' /></th>
-						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-date' /></th>
-						<th align="center" scope="col"><liferay-ui:message key='edison-button-board-delete' /></th>
-					</tr>
-				</thead>
-				<tbody id="<portlet:namespace/>appManagerListBody">
-				</tbody>
-			</table>
-		</div>
-		
+		</form>
 	</c:if>
 </div>
 
@@ -366,7 +335,7 @@
 			<input id="<portlet:namespace/>managerUserId" name="<portlet:namespace/>managerUserId" type="hidden">
 			<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}">
 			<div style="text-align:center;">
-				<input id="register_request_button" name="<portlet:namespace />register_request_button" class="yellowbtn" type="button" value="<liferay-ui:message key='edison-button-register' />" onclick="<portlet:namespace/>addAppManager()"/>
+				<button class="btn btn-success" type="button" onclick="<portlet:namespace/>addAppManager();"><span class="icon-ok"> <liferay-ui:message key='edison-button-register' /></span></button>
 			</div>
 		</form>
 	</div>
@@ -413,7 +382,7 @@
 			<input id="<portlet:namespace/>pre_userScreenName" name="<portlet:namespace/>pre_userScreenName" type="hidden">
 			<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}">
 			<div style="text-align:center;">
-				<input id="register_request_button" name="<portlet:namespace />register_request_button" class="yellowbtn" type="button" value="<liferay-ui:message key='edison-button-register' />" onclick="<portlet:namespace/>updateAppOwner()"/>
+				<button class="btn btn-success" type="button" onclick="<portlet:namespace/>updateAppOwner();"><span class="icon-ok"> <liferay-ui:message key='edison-button-register' /></span></button>
 			</div>
 		</form>
 	</div>
@@ -616,10 +585,6 @@
 					for(var i = 0; i < appManagerList.length; i++) {
 						$rowResult = $("<tr/>");
 						
-	 					if(i%2 == 1){
-	 						$rowResult.addClass("tablebgtr");
-	 					}
-						
 						$("<td/>").text(i+1)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
@@ -682,16 +647,17 @@
 			var pre = $("#<portlet:namespace/>now_userScreenName").val();
 			var post = $("#<portlet:namespace/>userScreenName_owner").val();
 			if( pre == post ){
-				alert("<liferay-ui:message key='edison-appstore-fail-owner' />")
+				alert(Liferay.Language.get('edison-appstore-fail-owner'));
 				return false;
 			}
-			//현재아이디와 입력아이디가 같은경우 제외
+			
+			/*현재아이디와 입력아이디가 같은경우 제외*/
 			var data = {
 					<portlet:namespace/>type : "owner",
 					<portlet:namespace/>scienceAppId : "${scienceAppId}",
 					<portlet:namespace/>now_userScreenName : "${data.userScreenName}",
 					<portlet:namespace/>userScreenName_owner : post
-			}
+			};
 			
 			jQuery.ajax({
 				type: "POST",
@@ -752,14 +718,14 @@
 			});
 		}
 	}
-	3+
+	
 	function <portlet:namespace/>onKeyDown(role) {
 		if(role == 'owner'){
 			if(event.keyCode == 13 && $("#<portlet:namespace/>userScreenName_owner").val() != ""){
 				var pre = $("#<portlet:namespace/>now_userScreenName").val();
 				var post = $("#<portlet:namespace/>userScreenName_owner").val();
 				if( pre == post ){
-					alert("<liferay-ui:message key='edison-appstore-fail-owner' />")
+					alert(Liferay.Language.get('edison-appstore-fail-owner'));
 					return false;
 				}
 				<portlet:namespace/>getUserInfo('owner');

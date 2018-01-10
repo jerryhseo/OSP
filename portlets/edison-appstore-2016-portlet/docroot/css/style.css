@@ -163,11 +163,6 @@ div.main-simul div.siminfo p{margin-top:11px; font-size:16px; font-weight:400;}
 
 #btnGroupBottom{padding: 10px;float: right;}
 
-
-.virtitlebox{margin:0 auto; float:left; width:100%; }
-.virtitlebox img{float:left; padding-top:25px; padding-right:10px;}
-.virtitle{float:left; font-size:18px; color:#000; padding-top:22px;}
-
 .button0801{padding:4px 10px 5px 10px; height:32px; background:#606060;  border-radius:3px; -webkit-border-radius:3px; border:solid 1px #6a6a6b; min-width:90px; color:#fff; font-weight:600; font-size:14px;}
 
 .mainProjectDownBtn{

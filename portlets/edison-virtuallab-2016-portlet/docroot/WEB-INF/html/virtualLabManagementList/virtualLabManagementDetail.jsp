@@ -42,9 +42,17 @@
 			            <liferay-portlet:runtime portletName="edisonvirtuallabsurveyoption_WAR_edisonvirtuallab2016portlet"  queryString="&virtualLabId=${virtualLabId}&groupId=${groupId}&admin=${admin}" />
 			        </div>
 			    </div>
+			    <!-- 강좌 내 강의들의 질문답변 전체 출력 -->
+			    <div class="portlet-layout row-fluid">
+			        <div class="portlet-column portlet-column-last span6" id="column-5">
+			            <liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_HRmNo2UFaZ1Z"  queryString="&customId=class_${classId}&boardGroupId=${groupId}&redirectName=${classTitle}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }&virtualLabId=${virtualLabId}&isVirtualClass=true" />
+			        </div>
+			    </div>
 			</c:when>
+			<%-- <c:when test="${admin eq 'Y' || }">
+			
+			</c:when> --%>
 			<c:otherwise>
-			    
 			    <div class="portlet-layout row-fluid">
 			        <div class="portlet-column portlet-column-only span12" id="column-4">
 			            <liferay-portlet:runtime portletName="edisonvirtuallabclassmanagementlist_WAR_edisonvirtuallab2016portlet"   queryString="&virtualLabId=${virtualLabId}&groupId=${groupId}&admin=${admin}" />

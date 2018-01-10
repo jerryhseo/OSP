@@ -135,6 +135,10 @@ public class ScienceAppOutputPortsLocalServiceClp
 		_methodName23 = "getOutPortsCountByPotyTypeId";
 
 		_methodParameterTypes23 = new String[] { "long" };
+
+		_methodName24 = "portAppList";
+
+		_methodParameterTypes24 = new String[] { "long", "java.util.Locale" };
 	}
 
 	@Override
@@ -835,6 +839,45 @@ public class ScienceAppOutputPortsLocalServiceClp
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
+					new Object[] {
+						scienceAppId,
+						
+					ClpSerializer.translateInput(locale)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -882,4 +925,6 @@ public class ScienceAppOutputPortsLocalServiceClp
 	private String[] _methodParameterTypes22;
 	private String _methodName23;
 	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
 }

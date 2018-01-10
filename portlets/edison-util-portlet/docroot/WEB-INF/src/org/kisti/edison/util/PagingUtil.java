@@ -21,31 +21,33 @@ public class PagingUtil {
 		String nextButton	= "<img src='"+contextPath+"/images/nextpage.png' width='30' height='30' />";
 		String lastButton	= "<img src='"+contextPath+"/images/lastpage.png' width='30' height='30' />";
 		
+		retStr.append("<ul class=\"pagination\">");
 		
 		/* 이전블록 가기 */
 		if( curBlock > 1 ){
-			retStr.append("<ul><li><a href='#' onclick=\'"+methodName+"(1);return false;\'>"+firstButton+"</a></li>");
-			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+(startPage-1)+");return false;\'>"+preButton+"</a></li>");
+//			retStr.append("<ul><li><a href='#' onclick=\'"+methodName+"(1);return false;\'>"+firstButton+"</a></li>");
+			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+(startPage-1)+");return false;\'>&laquo;</a></li>");
 		} else {
-			retStr.append("<ul><li>" + preButton + "</li>");
+//			retStr.append("<li><a href='#'>&laquo;</a></li>");
 		}
 		
 		for(int i=startPage ; i<=endPage ; i++ ){
 			if( i==currentPage ){
-				retStr.append("<li class=\'select\'><b>"+i+"</b></li>");
+				retStr.append("<li class=\'active\'><a href='#'>"+i+"</a></li>");
 			} else {
 				retStr.append("<li><a href='#' onclick=\'"+methodName+"("+i+");return false;\'>"+i+"</a></li>");
 			}
 		}
 
 		/* 다음블록 가기 */
-		retStr.append("&nbsp;");
 		if( curBlock < totalBlock ){
-			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+(endPage+1)+");return false;\'>"+nextButton+"</a></li>");
-			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+totalPage+");return false;\'>"+lastButton+"</a></li></ul>");			
+			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+(endPage+1)+");return false;\'>&raquo;</a></li>");
+//			retStr.append("<li><a href='#' onclick=\'"+methodName+"("+totalPage+");return false;\'>"+lastButton+"</a></li></ul>");			
 		} else {
-			retStr.append("<li>" + nextButton + "</li></ul>");
+//			retStr.append("<li>&raquo;</li></ul>");
 		}
+		
+		retStr.append("</ul>");
 		
 		return retStr.toString();
 	}

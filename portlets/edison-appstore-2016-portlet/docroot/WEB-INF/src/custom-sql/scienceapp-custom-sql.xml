@@ -214,42 +214,34 @@
 			
 			
 			
-			
-			<isNotEmpty property="APP_MANAGER_SEARCH_ALL">
+			<isNotEmpty property="likeSwNameAndSwTitle">
 				AND	(
-						A.name LIKE '%@@searchValue@@%'
+						A.name LIKE '%@@likeSwNameAndSwTitle@@%'
 					OR
-						EXTRACTVALUE(A.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@searchValue@@%'
-					OR
-						U.firstName LIKE '%@@searchValue@@%'
-					OR
-						E.data_ IN (#searchOrgCode#)
+						EXTRACTVALUE(A.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@likeSwNameAndSwTitle@@%'
 				)
 			</isNotEmpty>
-			<isNotEmpty property="SWNM">
-			AND
-				A.name LIKE '%@@searchValue@@%'
+			
+			<isNotEmpty property="likeSwName">
+				AND A.name LIKE '%@@likeSwName@@%'
 			</isNotEmpty>
 			
-			<isNotEmpty property="SWTITLE">
-			AND
-				EXTRACTVALUE(A.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@searchValue@@%'
+			<isNotEmpty property="likeSwTitle">
+				AND EXTRACTVALUE(A.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@likeSwTitle@@%'
 			</isNotEmpty>
 			
-			<isNotEmpty property="SWUSERNM">
-			AND
-				U.firstName LIKE '%@@searchValue@@%'
+			<isNotEmpty property="likeUserName">
+				AND U.firstName LIKE '%@@likeUserName@@%'
 			</isNotEmpty>
 			
-			<isNotEmpty property="SWORGNM">
-			AND
-				E.data_ IN (#searchOrgCode#)
+			<isNotEmpty property="likeOrgCode">
+				AND E.data_ IN (#likeOrgCode#)
 			</isNotEmpty>
 			
-			<isNotEmpty property="SWDEV">
-			AND 
-				EXTRACTVALUE(A.developers, 'root/Developers[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+			<isNotEmpty property="likeDeveloper">
+				AND EXTRACTVALUE(A.developers, 'root/Developers[@language-id="@@targetLanguage@@"]') LIKE '%@@likeDeveloper@@%'
 			</isNotEmpty>
+			
 			
 			<isNotEmpty property="MAINSEARCHAPPLIST">
 			AND

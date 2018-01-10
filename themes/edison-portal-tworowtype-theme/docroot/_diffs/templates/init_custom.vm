@@ -1,12 +1,8 @@
 #*
 This file allows you to override and define new Velocity variables.
 *#
-
-
 #if($stringUtil.trim($stringUtil.toUpperCase($layout.getName('en_US')))=='HOME')
-	#set ($css_class = "${css_class} edison main")
-#else
-	#set ($css_class = "${css_class} edison sub")
+	#set ($css_class = "${css_class} home")
 #end
 
 #if($themeDisplay.getLanguageId()=="en_US")

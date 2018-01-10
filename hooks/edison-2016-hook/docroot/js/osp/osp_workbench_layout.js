@@ -437,7 +437,7 @@
 			var columnIds = [];
 			for( var index in columns ){
 				var column = columns[index];
-				columnids.push( column.id() );
+				columnIds.push( column.id() );
 			}
 			return columnIds;
 		};

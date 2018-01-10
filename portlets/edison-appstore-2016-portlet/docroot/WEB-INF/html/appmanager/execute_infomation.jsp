@@ -51,21 +51,16 @@
 
 
 <style type="text/css">
-	.aui input[type="text"],
-	.aui textarea{
-		margin-bottom: 0px;
-	}
-	
 	.aui .long_field{
-		width: 350px;
+		width: 350px !important;
 	}
 	
 	.aui .short_field{
-		width: 150px;
+		width: 150px !important;
 	}
 	
 	.aui .too_long_field{
-		width: 500px;
+		width: 500px !important;
 	}
 	
 	.aui .swrightcont .alert{
@@ -105,7 +100,7 @@
 		margin-top: 10px; 
 	}
 	.aui .text_field{
-		width: 98%;
+		width: 100%;
 		resize: none;
 		height:auto;
 		margin-bottom: 10px;
@@ -120,51 +115,45 @@
 </style>
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="200" style="display: none;"/>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-appstore-execute-information' />
-	</div>
-	<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-		<input class="addIp button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-appstore-execute-information' />
+		</h3>
+		<div class="btn-group pull-right">
+			<input class="button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
 		
-		<c:if test="${data.status gt 1901003}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
-		</c:if>
-		<c:if test="${appStatusButtonView}">
-			<c:if test="${data.status eq '1901001'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+			<c:if test="${data.status gt 1901003}">
+				<input class="button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
 			</c:if>
-			<c:if test="${data.status eq '1901002' && isAdmin}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
-			</c:if>
-			<c:if test="${data.status eq '1901003'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
-<%-- 				<c:if test="${data.isPort == false}">  --%>
-<%--  					<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">  --%>
-<%-- 				</c:if>  --%>
+			<c:if test="${appStatusButtonView}">
+				<c:if test="${data.status eq '1901001'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901002' && isAdmin}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901003'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				
+				<c:if test="${data.status eq '1901004'}">
+					<input class="button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+				</c:if>
 			</c:if>
 			
-			<c:if test="${data.status eq '1901004'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
-<%-- 				<c:if test="${data.isPort == false}"> --%>
-<%-- 					<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button"> --%>
-<%-- 				</c:if> --%>
+			<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			
+			<c:if test="${ownerThan}">
+				<input class="button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
 			</c:if>
-		</c:if>
-		
-<%-- 		<c:if test="${data.status le 1901002}"> --%>
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
-<%-- 		</c:if> --%>
-		
-		<c:if test="${ownerThan}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
-		</c:if>
+		</div>
 	</div>
 </div>
-<div class="h10"></div>
+
 <div class="table1_list">
 	<aui:form name="frm" method="POST" action="<%=submitURL%>">
 		<aui:input name="actionMode" value="${mode}" type="hidden"/>
@@ -270,15 +259,16 @@
 	
 	
 <c:if test="${data.isPort}">
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-		<div class="virtitle">
-			<liferay-ui:message key="edison-appstore-file-compile"/>
+	<div class="edison-panel">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key="edison-appstore-file-compile"/>
+			</h3>
 		</div>
 	</div>
-	<div class="h10"></div>
 	<div style="margin:0 auto;text-align: center;">
-		<textarea id="commandTextArea" disabled="disabled" class="text_field" rows="3" style="width: 98% !important; height: auto !important;">${ binFolderListToStr}</textarea>
+		<textarea id="commandTextArea" disabled="disabled" class="text_field" rows="3">${ binFolderListToStr}</textarea>
 	</div>
 
 	<div class="table1_list">
@@ -345,7 +335,7 @@
 						</aui:input>
 					</td>
 					<td class="TC">
-						<input class="addIp button02_1" value="file save" type="submit" id="<portlet:namespace/>fileSave"/>
+						<input class="button02_1" value="file save" type="submit" id="<portlet:namespace/>fileSave"/>
 					</td>
 					<td>
 						<span id="fileUpladMsg">
@@ -361,12 +351,13 @@
 				</tr>
 				<tr id="<portlet:namespace/>uploadOption_compileUrl" class="uploadOptionTr">
 					<th>GitHub URL</th>
-					<td colspan="2">
-						<input type="text" class="field too_long_field noupdate" id="<portlet:namespace/>gitHubUrl" value="${scienceAppCompile.compileUrl }"/><br/>
-
-					</td>
-					<td>
-						<input type="button" class="addIp button02_1" value="compile" id="<portlet:namespace/>gitHubCompileBtn" onclick="<portlet:namespace/>gitHubCompile()"/>
+					<td colspan="3">
+						<div class="input-group">
+							<input type="text" class="field too_long_field noupdate" id="<portlet:namespace/>gitHubUrl" value="${scienceAppCompile.compileUrl }"/><br/>
+							<span class="input-group-btn">
+								<button class="btn btn-info"  id="<portlet:namespace/>gitHubCompileBtn" onclick="<portlet:namespace/>gitHubCompile();" type="button"><span class="icon-search"> compile</span></button>
+							</span>
+						</div>
 					</td>
 				</tr>
 			</table>
@@ -383,52 +374,41 @@
 
 
 <c:if test="${data.isPort}">
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-		<div class="virtitle">
-			<liferay-ui:message key='edison-science-appstore-library-request' />
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key='edison-science-appstore-library-request' />
+			</h3>
+			<div class="btn-group pull-right">
+				<c:if test="${!isOsWindow}">
+				</c:if>
+					<button class="btn btn-default" onclick="<portlet:namespace/>openCommonLibPopup();" type="button"><span class="icon-search"> <liferay-ui:message key='views' /></span></button>
+				<button class="btn btn-default" onclick="<portlet:namespace/>RequestLibPopup();" type="button"><span class="icon-arrow-right"> <liferay-ui:message key='edison-appstore-request' /></span></button>
+			</div>
 		</div>
-		<div style="margin: 0 auto;overflow: hidden;padding-top: 18px;padding-bottom: 5px;text-align: center;float: right;">
-			<c:if test="${!isOsWindow}">
-				<input class="button0801" type="button" onclick="<portlet:namespace/>openCommonLibPopup();" value="<liferay-ui:message key='views' />">
-			</c:if>
-			<input class="button0801" type="button" onclick="<portlet:namespace/>RequestLibPopup('');" value="<liferay-ui:message key='edison-appstore-request' />">
-		</div>
-	</div>
-	<div class="h10"></div>
-	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="10%" />
-				<col width="*"/>
-				<col width="20%" />
-				<col width="20%" />
-				<col width="15%" />
-			</colgroup>
+		
+		<table class = "table table-bordered table-hover edison-table">
 			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-file-nm' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='version' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-date'/></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-status' /></th>
-				</tr>
+				<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+				<th width="*"><liferay-ui:message key='edison-table-list-header-file-nm' /></th>
+				<th width="20%"><liferay-ui:message key='version' /></th>
+				<th width="20%"><liferay-ui:message key='edison-table-list-header-date'/></th>
+				<th width="15%"><liferay-ui:message key='edison-table-list-header-status' /></th>
 			</thead>
 			<tbody id="<portlet:namespace/>libraryRequestList">
 				
 			</tbody>
 		</table>
-		<div id="pageListDiv" class="paging">
-			
-		</div>
+		<div class="text-center" id="pageListDiv"></div>
 	</div>
 </c:if>
 
-<div id="request-lib-dialog" title="request-lib" class="bigpopupbox" style="display: none;">
+<div id="request-lib-dialog" title="request-lib" style="display: none;">
 	
 </div>
 
-<div id="common-lib-dialog" title="common-lib" class="bigpopupbox" style="display: none;">
+<div id="common-lib-dialog" title="common-lib" style="display: none;">
 	
 </div>
 <!-- 	Progress Bar	  -->
@@ -527,7 +507,7 @@ AUI().ready(function() {
 	$("#request-lib-dialog").dialog({
 		autoOpen: false,
 		width: 500,
-		height: 'auto',
+		height: 600,
 	    modal: true,
 	    resizable: false,
 	    dialogClass: 'no-dialog-padding',
@@ -707,8 +687,8 @@ function <portlet:namespace/>searchRequestLib(p_curPage){
 
 $("#common-lib-dialog").dialog({
 	autoOpen: false,
-	width: 900,
-	height: 600,
+	width: 850,
+	height: 700,
     modal: true,
     resizable: false,
     show: {effect:'fade', speed: 800}, 

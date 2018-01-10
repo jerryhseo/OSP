@@ -6,7 +6,7 @@
 		<portlet-name>science-app-manager</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>science-app-manager-portlet</css-class-wrapper>
+		<css-class-wrapper>science-app-manager-portlet container-fluid</css-class-wrapper>
 	</portlet>
 	
 	<portlet>

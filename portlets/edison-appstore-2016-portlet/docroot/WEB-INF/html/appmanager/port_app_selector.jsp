@@ -2,13 +2,9 @@
 <%@ include file="/common/init.jsp"%>
 <style type="text/css">
 #port-app-selector-dialog label{
-	display: inline;
 	margin-bottom: 0px;
 	font-size: 17px;
-}
-
-.defaultAppRadio{
-	margin: 0px;
+	cursor: pointer;
 }
 
 </style>
@@ -25,44 +21,45 @@
 		</div>
 	</div>
 	<div class="newWcont01">
-		<c:if test="${!empty appList}">
-			<div style="width:50%; float:right; text-align:right; padding-bottom:15px;">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>appSave();return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button"/>
+		<div class="table-responsive panel edison-panel">
+			<div class="panel-heading clearfix">
+				<div class="btn-group pull-right">
+					<c:if test="${!empty appList}">
+						<button class="btn btn-primary" type="button" onClick="<portlet:namespace/>appSave();"><span class="icon-ok"> <liferay-ui:message key='edison-button-save'/></span></button>
+					</c:if>
+				</div>
 			</div>
-		</c:if>	
-		<table width="470" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;">
-			<colgroup>
-				<col width="*" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="left">Default App</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:choose>
-					<c:when test="${!empty appList}">
-						<c:forEach items="${appList}" var="data" varStatus="status">
+			<table class = "table table-bordered table-hover edison-table">
+				<thead>
+					<tr>
+						<th width="*">Default App</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:choose>
+						<c:when test="${!empty appList}">
+							<c:forEach items="${appList}" var="data" varStatus="status">
+								<tr>
+									<td>
+										<label>
+											<input type="radio" name="defaultAppId" class="defaultAppRadio" id="defaultAppRadio_${status.index}" value="${data.scienceAppId}" 
+												<c:if test="${'data.scienceAppId' == 'defaultAppId' }">checked="checked"</c:if>
+											/>
+											${data.name}
+										</label>
+									</td>
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
 							<tr>
-								<td>
-									<input type="radio" name="defaultAppId" class="defaultAppRadio" id="defaultAppRadio_${status.index}" value="${data.scienceAppId}" 
-										<c:if test="${'data.scienceAppId' == 'defaultAppId' }">checked="checked"</c:if>
-									/>
-									<label for='defaultAppRadio_${status.index}'>
-										${data.name}
-									</label>
-								</td>
+								<td class="center"><liferay-ui:message key='edison-there-are-no-data'/></td>
 							</tr>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<tr>
-							<td class="TC"><liferay-ui:message key='edison-there-are-no-data'/></td>
-						</tr>
-					</c:otherwise>
-				</c:choose>
-			</tbody>
-		</table>
+						</c:otherwise>
+					</c:choose>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 

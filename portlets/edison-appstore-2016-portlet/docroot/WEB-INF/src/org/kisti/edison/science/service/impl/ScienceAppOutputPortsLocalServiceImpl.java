@@ -14,12 +14,22 @@
 
 package org.kisti.edison.science.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
+import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.model.ScienceAppOutputPorts;
+import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.base.ScienceAppOutputPortsLocalServiceBaseImpl;
 
+import com.kisti.osp.icecap.model.DataType;
+import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
+import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
+import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -99,5 +109,58 @@ public class ScienceAppOutputPortsLocalServiceImpl
 		}
 		//return scienceAppInputPortsPersistence.countWithDynamicQuery(query);
 		return resultEqualCnt;
+	}
+	
+	public List<Map<String,Object>> portAppList(long scienceAppId, Locale locale) throws SystemException, PortalException{
+		List<Map<String,Object>> portAppList = new ArrayList<Map<String, Object>>();
+		ScienceAppOutputPorts ports = super.fetchScienceAppOutputPorts(scienceAppId);
+		if(ports != null) {
+			net.sf.json.JSONObject outputPortJson = JSONObject. fromObject(JSONSerializer.toJSON(ports.getOutputPorts()));
+			Set<String> set = outputPortJson.keySet();
+			for (String names : set) {
+				JSONObject jsonPort = outputPortJson.getJSONObject(names);
+				String portName = jsonPort.getString("name_");
+				String portDefaultAnalyzer = jsonPort.getString("defaultAnalyzer_");
+				
+				JSONObject dataTypeJson = jsonPort.getJSONObject("dataType_");
+				String dataTypeName = dataTypeJson.getString("name");
+				String dataTypeVersion = dataTypeJson.getString("version");
+				
+				Map<String,Object> portMap = new HashMap<String,Object>();
+				portMap.put("portName", portName);
+				portMap.put("portDefaultNameSpace", portDefaultAnalyzer);
+				portMap.put("portType", "OUTPUT");
+				
+				List<Map<String,Object>> appList = new ArrayList<Map<String, Object>>();
+				
+				DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+				List<Map<String, Object>> searchList = new ArrayList<Map<String, Object>>();
+				searchList.addAll(DataTypeEditorLocalServiceUtil.retrieveDataTypeEditorList(dataType.getTypeId()));
+				searchList.addAll(DataTypeAnalyzerLocalServiceUtil.retrieveDataTypeAnalyzerList(dataType.getTypeId()));
+				
+				for(Map<String,Object> searchMap : searchList){
+					Map<String,Object> appMap = new HashMap<String,Object>();
+					long searchScienceAppId = GetterUtil.getLong(searchMap.get("editorId"),0)==0?GetterUtil.getLong(searchMap.get("analyzerId"),0):GetterUtil.getLong(searchMap.get("editorId"),0);
+					
+					if(searchScienceAppId!=0){
+						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(searchScienceAppId);
+						if(scienceApp.getStatus()==1901004){
+							appMap.put("name", scienceApp.getName());
+							appMap.put("exeFileName", scienceApp.getExeFileName());
+							appMap.put("title", scienceApp.getTitle(locale));
+							appMap.put("type", scienceApp.getAppType());
+							boolean isDefault = scienceApp.getExeFileName().equals(portDefaultAnalyzer)?true:false;
+							appMap.put("isDefault", isDefault);
+							appList.add(appMap);
+						}
+					}
+				}
+				
+				portMap.put("appList", appList);
+				portAppList.add(portMap);
+				
+			}
+		}
+		return portAppList;
 	}
 }

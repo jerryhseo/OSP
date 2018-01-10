@@ -17,7 +17,7 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 
 public class BoardFinderImpl extends BasePersistenceImpl<Board> implements BoardFinder{
 
-	public List<Object[]> getCustomListBoard(long divCd, int begin, int listSize, long groupId, String customId, String searchValue, long groupBoardSeq, boolean popupYn, String siteGroup) {
+	public List<Object[]> getCustomListBoard(long divCd, int begin, int listSize, long groupId, String customId, String searchValue, long groupBoardSeq, boolean popupYn, String siteGroup, String virtualLabId) {
 		StringBuffer sql = new StringBuffer();
 		Session session = null;
 		try {
@@ -42,6 +42,10 @@ public class BoardFinderImpl extends BasePersistenceImpl<Board> implements Board
             params.put("customId", customId.equals("")?" ":customId);
             if(customId.equals("")) params.put("customId", " ");
             if(!searchValue.equals("")) params.put("searchValue", searchValue);
+            if(!virtualLabId.equals("")){
+            	params.put("customId", "");
+            	params.put("virtualLabId", virtualLabId);
+            }
             params.put("groupBoardSeq", groupBoardSeq);
             
             if(popupYn) {
@@ -57,6 +61,11 @@ public class BoardFinderImpl extends BasePersistenceImpl<Board> implements Board
             query.addEntity("EDCON_Board", BoardImpl.class);
             query.addEntity("EDCON_BoardDiv", BoardDivImpl.class);
             query.addScalar("replyCount", Type.INTEGER);
+            
+            if(!virtualLabId.equals("")){
+            	query.addScalar("classTitle", Type.STRING);
+            	query.addScalar("classId", Type.INTEGER);
+            }
             
             return (List<Object[]>) query.list();
 		} catch (Exception e) {

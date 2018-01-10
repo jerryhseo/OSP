@@ -1,4 +1,115 @@
 .edison{
+	/*edison tab CSS*/
+	.contabmenu{
+		background: url(@theme_image_path@/custom/portlet/tabs/subtab_bgline.gif) repeat-x;
+		font-size: 16px;
+		height: 52px;
+		margin: 0 auto;
+		width: 100%;
+		
+		.nav-tabs {
+			border-bottom: none;
+			
+			li:first-child { 
+				border-left: solid 1px #d2d2d2;
+			}
+			
+			li{
+				height: 51px;
+				margin: 0px;
+				border-right: solid 1px #d2d2d2;
+				background: url(@theme_image_path@/custom/portlet/tabs/subtab_area.jpg) repeat-x;
+				
+				a{
+					border: none;
+					padding: 17px 5px 10px 0px;
+					margin: 0px;
+					cursor: pointer;
+					text-align: center;
+				}
+				
+				a:link{color: #000; text-decoration:none;outline:none;border:0px;}
+				a:visited{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:over{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:focus{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:active{color:#000; text-decoration:none;outline:none;border:0px;}
+				a:hover{color:#000; text-decoration:none;outline:none;border:0px;}
+				
+				
+				.CFD{
+					background: url(@theme_image_path@/custom/portlet/tabs/cfdlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.NANO{
+					background: url(@theme_image_path@/custom/portlet/tabs/nanologooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CHEM{
+					background: url(@theme_image_path@/custom/portlet/tabs/chemlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CSD{
+					background: url(@theme_image_path@/custom/portlet/tabs/csdlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.DESIGN{
+					background: url(@theme_image_path@/custom/portlet/tabs/designlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+				
+				.CMED{
+					background: url(@theme_image_path@/custom/portlet/tabs/cmedlogooff.png) no-repeat 10px 8px;
+					text-align: left;
+					padding: 17px 5px 10px 53px;
+				}
+			}
+			
+			li.active{
+				height: 52px;
+				border-left: solid 1px #000;
+				border-right: solid 1px #000;
+				border-top: solid 1px #000;
+				border-bottom: solid 1px #fff;
+				background-color: #fff;
+				background: none;
+				
+				.CFD{
+					background: url(@theme_image_path@/custom/portlet/tabs/cfdlogo.png) no-repeat 10px 8px;
+				}
+				
+				.NANO{
+					background: url(@theme_image_path@/custom/portlet/tabs/nanologo.png) no-repeat 10px 8px;
+				}
+				
+				.CHEM{
+					background: url(@theme_image_path@/custom/portlet/tabs/chemlogo.png) no-repeat 10px 8px;
+				}
+				
+				.CSD{
+					background: url(@theme_image_path@/custom/portlet/tabs/csdlogo.png) no-repeat 10px 8px;
+				}
+				
+				.DESIGN{
+					background: url(@theme_image_path@/custom/portlet/tabs/designlogo.png) no-repeat 10px 8px;
+				}
+				.CMED{
+					background: url(@theme_image_path@/custom/portlet/tabs/cmedlogo.png) no-repeat 10px 8px;
+				}
+			}
+			
+			
+		}
+	}
+	
 	/*table List CSS*/
 	@media (max-width: 979px) {
 		.edison-panel .btn{
@@ -46,12 +157,17 @@
 		.edison-table{
 			border-bottom: 1px solid #dddddd !important;
 			
+			thdead tr{
+				word-break: break-word;
+			}
+			
 			th{
 				text-align: center;
 				vertical-align: middle !important;
 			}
 			td{
 				cursor: pointer;
+				vertical-align: middle;
 			}
 			td.center{
 				text-align: center;
@@ -80,7 +196,36 @@
 		}
 	}
 	
+	/*popup*/
+	.newWindow{margin:0; padding:0;font-family: Tahoma,Arial, Nanum Barun Gothic, NanumGothic;}
+	.newWindow .newWcont01 {padding: 20px 30px 25px 30px;}
+	.newWheader{margin:0 auto; background-color:#ebebeb; border-top:solid 2px #000; width:100%; height:54px; margin:0; padding:0;}
+	.newWtitlebox{
+		margin:0 auto; float:left; width:60%;
+		img{float:left; margin: 10px 10px 0px 30px;} 
+	}
+	.newWtitle{float:left; font-size:18px; color:#000; padding-top:14px;}
+	.newWclose img{margin:0 auto; margin:16px 17px 0 50px; float:right;}
 	
 	
 	
+	/*table1_list*/
+	.table1_list{line-height:2.0em; width:100%; border-collapse:collapse; font-size:14px;}
+	.borderno{border-top:0px solid #6a8ec6;}
+	.table1_list a{text-decoration:none;} 
+	.table1_list a:hover{color:#000; text-decoration:none;}
+	.table1_list caption {text-align:right; padding-right:15px; color:#777;width:100%; padding-bottom:5px;}
+	.table1_list th {border-bottom:1px solid #b4b4b4; padding:8px; color:#383838; font-weight:600; background-color:#f7f7f7; text-align:center; font-size:15px;}
+	.table1_list td.bottom {border-bottom:1px solid #9397AE;}
+	.table1_list td {border-right:0px solid #e2e2e2; color:#777777; border-bottom:1px solid #ccc; padding:8px; vertical-align:middle;}
+	.table1_list td img{vertical-align:middle;}
+	.table1_list td.view{padding-top:15px; padding-bottom:20px; min-height:250px;}
+	.table1_list td.attach{color:#555;}
+	.tablebgtr{background-color:#fafafc;}
+	.tablebgtr01{background-color:#f0f1f5;}
+	.tablebgtr02{background-color:#f7f7f7;}
+	.tablebgtr03{background-color:#fbfbfb;}
+	.tablebg01{background-color:#ededed;}
+	.table1_list td.title{font-weight:500; color:#383838; font-size:17px;}
+	.table1_list td.title1{font-size:15px; font-weight:600; background-color:#f7f7f7; color:#383838;}
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$theme.getSetting("content-title")</title>
+
+	<meta content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	$theme.include($top_head_include)
+	<script type="text/javascript">
+		var agent = navigator.userAgent.toLowerCase();
+		if(agent.indexOf("msie")!=-1){
+			var trident = navigator.userAgent.match(/Trident\/(\d.\d)/i);
+			var tridentVer = trident[1];
+			if(tridentVer!="7.0"&&tridentVer!="6.0"){
+				alert("$browserErrorMsg");
+			}else{
+				var ieVer = getInternetExplorerVersion()
+				if(ieVer<11)
+					alert("$browserErrorCompMsg"+ieVer);
+			}
+		}
+		
+		function getInternetExplorerVersion() {    
+			var rv = -1; // Return value assumes failure.    
+			if (navigator.appName == 'Microsoft Internet Explorer') {        
+				var ua = navigator.userAgent;        
+				var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");        
+				if (re.exec(ua) != null)            
+					rv = parseFloat(RegExp.$1);    
+				}
+			return rv; 
+		}
+		
+		function openRelationSite() {
+		    document.getElementById("mySidenav").style.width = "350px";
+		}
+		
+		function closeNav() {
+		    document.getElementById("mySidenav").style.width = "0";
+		}
+		
+		$(function () {
+		    $('a[href="#fullscreen"]').on('click', function(event) {
+		        event.preventDefault();
+		    	
+		    	var target = $(this).attr("target");
+		    	$(target).addClass('open');
+		    	if(target=='#themesearch'){$('#themesearch > form > input[type="search"]').focus();}
+		    });
+		    
+		    $('.fullscreen, .fullscreen button.close').on('click keyup', function(event) {
+		        if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+		            $(this).removeClass('open');
+		        }
+		    });
+		});
+	</script>
+</head>
+
+<body class="$css_class edison">
+	#if ($dock_show)
+		#dockbar()
+	#end
+	
+	$theme.include($body_top_include)
+
+	<header id="banner" role="banner">
+		#parse ("$full_templates_path/navigation.vm")
+	</header>
+	#parse ("$full_templates_path/sitemap.vm")
+	
+	<div class="container-fluid" id="wrapper">
+		<div id="content">
+		
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
+		
+	</div>
+	
+	<footer id="footer" role="contentinfo">
+		#parse ("$full_templates_path/footer.vm")
+	</footer>
+	
+	
+	$theme.include($body_bottom_include)
+	
+	$theme.include($bottom_include)
+</body>
+
+</html>

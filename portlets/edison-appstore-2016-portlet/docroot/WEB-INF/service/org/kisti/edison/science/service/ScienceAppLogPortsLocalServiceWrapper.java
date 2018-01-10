@@ -316,6 +316,14 @@ public class ScienceAppLogPortsLocalServiceWrapper
 		return _scienceAppLogPortsLocalService.getScienceAppLogPortsesCount(scienceAppId);
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLogPortsLocalService.portAppList(scienceAppId, locale);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
