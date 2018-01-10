@@ -122,7 +122,7 @@ public class DataTypeEditorController{
 		
 		//DATA SEARCH
 		int curPage = Integer.parseInt(CustomUtil.strNull(params.get("p_curPage"), "1"));
-		int linePerPage = 10;
+		int linePerPage = 15;
 		int pagePerBlock = 5;
 		int begin = (curPage - 1) * linePerPage;
 		int end = begin+linePerPage;

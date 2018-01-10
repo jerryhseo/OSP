@@ -8,7 +8,6 @@ ul, ol {list-style:none;}
 }
 
 #banner {
-	display: initial;
 	-webkit-transform: translateY(0);
 	-moz-transform: translateY(0);
 	-ms-transform: translateY(0);

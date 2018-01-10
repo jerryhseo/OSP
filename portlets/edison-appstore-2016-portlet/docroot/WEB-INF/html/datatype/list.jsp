@@ -2,10 +2,7 @@
 <%@ include file="/common/init.jsp"%>
 <%@ page import="com.liferay.portal.kernel.util.Constants"%>
 
-
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/datatypeeditor.css" media="screen"/>
-
+<%-- <link type="text/css" rel="stylesheet" href="${contextPath}/css/datatypeeditor.css" media="screen"/> --%>
 
 <%
 	String portletWindowState = (String)request.getAttribute("portletWindowState");
@@ -37,119 +34,120 @@
 </portlet:actionURL>
 
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
+<style type="text/css">
+	.edison-data-type-editor .swtabtitle{width:35%; float:left; background:url(${contextPath}/images/appmanager/swarrow02.png) no-repeat 20px 13px; padding-left:40px; border:solid 1px #d1d1d1; color:#ee843e; font-size:15px; line-height:2.4em; border-bottom: solid 1px #fff;z-index:90;position:relative;}
+	.edison-data-type-editor .swrightcon{width:100%; padding:20px; font-size:15px; font-weight:500; color:#555; outline:solid 1px #d1d1d1; margin-top:33px; line-height:1.6em;overflow-x: hidden;overflow-y: auto;margin: 1px;}
+</style>
+
 
 <!-- http://61.85.104.246:8080/web/portal/my-edison?p_p_id=edisondatatypeeditor_WAR_edisonappstore2016portlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1 -->
 <form id="<portlet:namespace/>modifyDataTypeForm" name="<portlet:namespace/>modifyDataTypeForm" method="post">
 	<aui:input name="dataTypeId" type="hidden"/>
 	<aui:input name="mode" type="hidden"/>
 </form>
+<div class="panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			Data Type Editor
+		</h3>
+		<div class="input-group">
+			<input type="text" id="<portlet:namespace/>searchName" class="form-control" placeholder="<liferay-ui:message key="edison-table-list-header-data-type-name"/>" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchDataTypeList(1);" value="${searchName}" autofocus="autofocus">
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="button" onclick="<portlet:namespace/>searchDataTypeList(1);return false;"><i class="icon-search"></i></button>
+				<button class="btn btn-default" onclick="<portlet:namespace/>initDataTypeList();">Clear</button>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-5">
+				<table class = "table table-bordered table-hover edison-table">
+					<thead>
+						<th width="30%"><liferay-ui:message key="edison-table-list-header-data-type-name"/></th>
+						<th width="10%"><liferay-ui:message key="version"/></th>
+					</thead>
+					<tbody>
+						<c:choose>
+							<c:when test="${!empty listDataType}">
+								<c:forEach items="${listDataType}" var="dataMap" varStatus="status">
+									<tr id="portTypeTr_${dataMap.typeId}" style="word-break:break-word" onclick="<portlet:namespace/>dataTypeView('${dataMap.typeId}')">
+										<td>${dataMap.name}</td>
+										<td class="center">V${dataMap.version}</td>
+									</tr>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<tr>
+									<td colspan="3">
+										<liferay-ui:message key="edison-there-are-no-data"/>
+									</td>
+								</tr>
+							</c:otherwise>
+						</c:choose>
+					</tbody>
+				</table>
+				<div class="text-center">${pagingStr}</div>
+			</div>
+			<div class="col-md-7">
+				<div class="swtabtitle"><liferay-ui:message key="preview"/></div>
+				<div class="swrightcon" style="height: 525px;">
+					<div id="<portlet:namespace/>sampleFilePreviewDiv" style="display: none;">
+						<div class="divLine">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+							SAMPLE FILE
+						</div>
+					
+					</div>
+					<div id="<portlet:namespace/>commentDiv" style="display: none;">
+						<div class="divLine">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+							COMMENT
+						</div>
+					</div>
+					<div id="<portlet:namespace/>editorPreviewDiv" style="display: none;">
+						<div class="divLine">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+							EDITOR
+						</div>
+					</div>
+					<div id="<portlet:namespace/>analyzerPreviewDiv" style="display: none;">
+						<div class="divLine">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+							ANALYZER
+						</div>
+					</div>
+					<div id="<portlet:namespace/>variableDiv" style="display: none;">
+						<div class="divLine">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+							STRUCTURE
+						</div>
+						<div id="<portlet:namespace/>inputPreview" class="inputPreview">
+							<liferay-portlet:runtime portletName="StructuredDataViewer_WAR_OSPAnalyzersportlet_INSTANCE_datatype" queryString=""/>
+			<%-- 				<liferay-portlet:runtime portletName="structureddataviewer_WAR_OSPAnalyzersportlet" queryString=""/> --%>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="pull-right" style="margin: 18px 0px;">
+					<button class="btn btn-primary" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.ADD%>');"><span class="icon-check">   <liferay-ui:message key="edison-appstore-add"/></sapn></button>
+					<c:choose>
+						<c:when test="<%=LiferayWindowState.isPopUp(request)%>">
+							<button class="btn btn-success choiceButton" type="button" onclick="<portlet:namespace/>dataTypeChoice();"><span class="icon-ok">   <liferay-ui:message key="select"/></sapn></button>
+						</c:when>
+						<c:otherwise>
+							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.COPY%>');" style="display: none;"><span class="icon-copy">   <liferay-ui:message key="copy"/></sapn></button>
+							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.UPDATE%>');" style="display: none;"><span class="icon-edit">   <liferay-ui:message key="update-data"/></sapn></button>
+							<button class="btn btn-primary choiceButton" type="button" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.DELETE%>');" style="display: none;"><span class="icon-trash">   <liferay-ui:message key="delete"/></sapn></button>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		Data Type Editor
-	</div>
-</div>
-<div class="swpopleft">
-	<div class="tablesw_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="80%" >
-				<col width="*" >
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="TL"><liferay-ui:message key="edison-table-list-header-data-type-name"/></th>
-					<th scope="col"><liferay-ui:message key="version"/></th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:choose>
-					<c:when test="${!empty listDataType}">
-						<c:forEach items="${listDataType}" var="dataMap">
-							<tr class="bgcolor2" id="portTypeTr_${dataMap.typeId}" style="cursor: pointer;word-break:break-word" onclick="<portlet:namespace/>dataTypeView('${dataMap.typeId}')">
-								<td>${dataMap.name}</td>
-								<td>V${dataMap.version}</td>
-							</tr>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<tr>
-							<td colspan="2">
-								<liferay-ui:message key="edison-there-are-no-data"/>
-							</td>
-						</tr>
-					</c:otherwise>
-				</c:choose>
-			</tbody>
-		</table>
-	</div>
-	<div id="pageListDiv" class="paging">
-		${pagingStr}
-	</div>
-</div>
-
-<div class="swpopright">
-	<input class="addIp button005_1" onclick="<portlet:namespace/>initDataTypeList();" value="<liferay-ui:message key="edison-button-board-initialize"/>" type="button" style="float: right;">
-	
-	<div class="swtabtitle"><liferay-ui:message key="preview"/></div>
-	<div class="swsearchbox">
-		<div class="searchbox" style="float:right;">
-			<input type="text" id="<portlet:namespace/>searchName" size="30" maxlength="30" onKeydown="if(event.keyCode ==13){<portlet:namespace/>searchDataTypeList(1);return false;}" value="${searchName}" autofocus="autofocus"/>
-			<input type="button" id="keyWordB" onclick="<portlet:namespace/>searchDataTypeList(1);return false;"/>
-		</div>
-	</div>
-	<div class="swrightcon" style="height: 450px;">
-		<div id="<portlet:namespace/>sampleFilePreviewDiv" style="display: none;">
-			<div class="divLine">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				SAMPLE FILE
-			</div>
-		
-		</div>
-		<div id="<portlet:namespace/>commentDiv" style="display: none;">
-			<div class="divLine">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				COMMENT
-			</div>
-		</div>
-		<div id="<portlet:namespace/>editorPreviewDiv" style="display: none;">
-			<div class="divLine">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				EDITOR
-			</div>
-		</div>
-		<div id="<portlet:namespace/>analyzerPreviewDiv" style="display: none;">
-			<div class="divLine">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				ANALYZER
-			</div>
-		</div>
-		<div id="<portlet:namespace/>variableDiv" style="display: none;">
-			<div class="divLine">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				STRUCTURE
-			</div>
-			<div id="<portlet:namespace/>inputPreview" class="inputPreview">
-				<liferay-portlet:runtime portletName="StructuredDataViewer_WAR_OSPAnalyzersportlet_INSTANCE_datatype" queryString=""/>
-<%-- 				<liferay-portlet:runtime portletName="structureddataviewer_WAR_OSPAnalyzersportlet" queryString=""/> --%>
-			</div>
-		</div>
-	</div>
-	<div class="swrightconbtnbox">
-		<input class="addIp button08_2" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.ADD%>');" value="<liferay-ui:message key="edison-appstore-add"/>" type="button"/>
-		<c:choose>
-			<c:when test="<%=LiferayWindowState.isPopUp(request)%>">
-				<input class="addIp button08_2 choiceButton" onclick="<portlet:namespace/>dataTypeChoice();" value="<liferay-ui:message key="select"/>" type="button"  style="display: none;"/>
-			</c:when>
-			<c:otherwise>
-				<input class="addIp button08_2 choiceButton" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.COPY%>');" value="<liferay-ui:message key="copy"/>" type="button" style="display: none;"/>
-				<input class="addIp button08_2 choiceButton" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.UPDATE%>');" value="<liferay-ui:message key="update-data"/>" type="button" style="display: none;"/>
-				<input class="addIp button08_2 choiceButton" onclick="<portlet:namespace/>dataTypeModify('<%=Constants.DELETE%>');" value="<liferay-ui:message key="delete"/>" type="button" style="display: none;"/>
-			</c:otherwise>
-		</c:choose>
-	</div>
-</div>
 <script type="text/javascript">
 	function <portlet:namespace/>searchDataTypeList(p_curPage){
 		var searchParameter = "";
