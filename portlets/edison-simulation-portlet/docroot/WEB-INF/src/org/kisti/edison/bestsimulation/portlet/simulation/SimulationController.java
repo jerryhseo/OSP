@@ -288,24 +288,39 @@ public class SimulationController {
 		out.write(obj.toString());
 	}
 
-	@ResourceMapping(value ="searchList" )
-	public void searchList(ResourceRequest request, ResourceResponse response) throws IOException, NumberFormatException, PortalException, SystemException{
+	@SuppressWarnings("serial")
+    @ResourceMapping(value ="searchList" )
+	public void searchList(ResourceRequest request, ResourceResponse response) 
+	    throws IOException, NumberFormatException, PortalException, SystemException{
 		Map<String, Object> params = RequestUtil.getParameterMap(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
-		long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"), "0"));
 		long companyGroupId = themeDisplay.getCompany().getGroupId();
 
 		int curPage = Integer.parseInt(CustomUtil.strNull(params.get("curPage"), "1"));
 		int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "6"));
-		String searchText = CustomUtil.strNull(params.get("searchText"));
+		final String searchText = CustomUtil.strNull(params.get("searchText"));
 
 		int pagePerBlock = 5;
 
 		String[] appTypes = {ScienceAppConstants.APP_TYPE_SOLVER};
-		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(companyGroupId, themeDisplay.getLocale(), 0, appTypes, null, "SWNM", searchText, "1901004",true);
-		List<Map<String, Object>> scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceApp(companyGroupId, themeDisplay.getLocale(), 0, appTypes, null, "SWNM", searchText, "1901004", (curPage - 1) * linePerPage, linePerPage,true);
+		
+		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(
+            companyGroupId, themeDisplay.getLocale(), 0, appTypes, null, 
+            new HashMap<String, Object>(){{
+                put("searchType", "SWNM");
+                put("searchText", searchText);
+            }}, "1901004", true);
+		
+		List<Map<String, Object>> scienceAppList =
+		    ScienceAppLocalServiceUtil.retrieveListScienceApp(
+		        companyGroupId, themeDisplay.getLocale(), 0, appTypes, null,
+		        new HashMap<String, Object>(){{
+	                put("searchType", "SWNM");
+	                put("searchText", searchText);
+	            }}, "1901004", (curPage - 1) * linePerPage, linePerPage, true);
 
-		String pagingStr = PagingUtil.getPaging(request.getContextPath(), "dataSearchList", totalCnt, curPage, linePerPage, pagePerBlock);
+		String pagingStr = PagingUtil.getPaging(
+		    request.getContextPath(), "dataSearchList", totalCnt, curPage, linePerPage, pagePerBlock);
 
 		JSONObject obj = new JSONObject();
 
