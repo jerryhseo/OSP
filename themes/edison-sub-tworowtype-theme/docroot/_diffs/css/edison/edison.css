@@ -27,18 +27,12 @@ ul, ol {list-style:none;}
 	transform: translateY(-60px); 
 }
 
-.home.edison #wrapper{
-	padding:0px;
+.portal-popup.edison {
+	padding: 0 20px;
 }
-
 .edison {
 	#wrapper{
-		padding: 0 5em 0;
-		
-		.row-fluid{
-			margin-left:0px;
-			margin-right:0px;
-		}
+		padding: 0 30px;
 		
 		.portlet-column{
 			padding : 0px;
