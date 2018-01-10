@@ -106,23 +106,23 @@ public class SimulationJobDataLocalServiceClpInvoker {
 				"org.kisti.edison.bestsimulation.model.SimulationJobData"
 			};
 
-		_methodName76 = "getBeanIdentifier";
+		_methodName84 = "getBeanIdentifier";
 
-		_methodParameterTypes76 = new String[] {  };
+		_methodParameterTypes84 = new String[] {  };
 
-		_methodName77 = "setBeanIdentifier";
+		_methodName85 = "setBeanIdentifier";
 
-		_methodParameterTypes77 = new String[] { "java.lang.String" };
+		_methodParameterTypes85 = new String[] { "java.lang.String" };
 
-		_methodName82 = "modifySimulationJobData";
+		_methodName90 = "modifySimulationJobData";
 
-		_methodParameterTypes82 = new String[] {
+		_methodParameterTypes90 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName83 = "replaceJobData";
+		_methodName91 = "replaceJobData";
 
-		_methodParameterTypes83 = new String[] {
+		_methodParameterTypes91 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 	}
@@ -216,26 +216,26 @@ public class SimulationJobDataLocalServiceClpInvoker {
 			return SimulationJobDataLocalServiceUtil.updateSimulationJobData((org.kisti.edison.bestsimulation.model.SimulationJobData)arguments[0]);
 		}
 
-		if (_methodName76.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
+		if (_methodName84.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
 			return SimulationJobDataLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName77.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
 			SimulationJobDataLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName82.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
+		if (_methodName90.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			return SimulationJobDataLocalServiceUtil.modifySimulationJobData((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1]);
 		}
 
-		if (_methodName83.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+		if (_methodName91.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
 			return SimulationJobDataLocalServiceUtil.replaceJobData((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
@@ -275,12 +275,12 @@ public class SimulationJobDataLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName76;
-	private String[] _methodParameterTypes76;
-	private String _methodName77;
-	private String[] _methodParameterTypes77;
-	private String _methodName82;
-	private String[] _methodParameterTypes82;
-	private String _methodName83;
-	private String[] _methodParameterTypes83;
+	private String _methodName84;
+	private String[] _methodParameterTypes84;
+	private String _methodName85;
+	private String[] _methodParameterTypes85;
+	private String _methodName90;
+	private String[] _methodParameterTypes90;
+	private String _methodName91;
+	private String[] _methodParameterTypes91;
 }

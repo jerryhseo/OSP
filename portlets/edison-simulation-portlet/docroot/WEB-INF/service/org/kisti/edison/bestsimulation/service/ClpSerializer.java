@@ -31,6 +31,7 @@ import org.kisti.edison.bestsimulation.model.SimulationExeStsMigrationClp;
 import org.kisti.edison.bestsimulation.model.SimulationJobClp;
 import org.kisti.edison.bestsimulation.model.SimulationJobDataClp;
 import org.kisti.edison.bestsimulation.model.SimulationJobStatusClp;
+import org.kisti.edison.bestsimulation.model.SimulationShareClp;
 import org.kisti.edison.bestsimulation.model.UniversityExecuteClp;
 
 import java.io.ObjectInputStream;
@@ -133,6 +134,10 @@ public class ClpSerializer {
 			return translateInputSimulationJobStatus(oldModel);
 		}
 
+		if (oldModelClassName.equals(SimulationShareClp.class.getName())) {
+			return translateInputSimulationShare(oldModel);
+		}
+
 		if (oldModelClassName.equals(UniversityExecuteClp.class.getName())) {
 			return translateInputUniversityExecute(oldModel);
 		}
@@ -208,6 +213,16 @@ public class ClpSerializer {
 		SimulationJobStatusClp oldClpModel = (SimulationJobStatusClp)oldModel;
 
 		BaseModel<?> newModel = oldClpModel.getSimulationJobStatusRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputSimulationShare(BaseModel<?> oldModel) {
+		SimulationShareClp oldClpModel = (SimulationShareClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getSimulationShareRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -464,6 +479,43 @@ public class ClpSerializer {
 		}
 
 		if (oldModelClassName.equals(
+					"org.kisti.edison.bestsimulation.model.impl.SimulationShareImpl")) {
+			return translateOutputSimulationShare(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
+		if (oldModelClassName.equals(
 					"org.kisti.edison.bestsimulation.model.impl.UniversityExecuteImpl")) {
 			return translateOutputUniversityExecute(oldModel);
 		}
@@ -611,6 +663,11 @@ public class ClpSerializer {
 		}
 
 		if (className.equals(
+					"org.kisti.edison.bestsimulation.NoSuchSimulationShareException")) {
+			return new org.kisti.edison.bestsimulation.NoSuchSimulationShareException();
+		}
+
+		if (className.equals(
 					"org.kisti.edison.bestsimulation.NoSuchUniversityExecuteException")) {
 			return new org.kisti.edison.bestsimulation.NoSuchUniversityExecuteException();
 		}
@@ -676,6 +733,16 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setSimulationJobStatusRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputSimulationShare(BaseModel<?> oldModel) {
+		SimulationShareClp newModel = new SimulationShareClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setSimulationShareRemoteModel(oldModel);
 
 		return newModel;
 	}
