@@ -532,7 +532,7 @@ public interface VirtualLabLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 강좌 리스트 조회(클래스가 현재 날짜 기준으로 6개월안에 포함된 데이터)
+	* 媛뺤쥖 由ъ뒪��議고쉶(�대옒�ㅺ� �꾩옱 �좎쭨 湲곗��쇰줈 6媛쒖썡�덉뿉 �ы븿���곗씠��
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabList(
