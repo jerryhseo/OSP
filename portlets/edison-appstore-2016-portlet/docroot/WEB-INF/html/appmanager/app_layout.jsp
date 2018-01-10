@@ -123,6 +123,11 @@
 		background-size: 50px;
 	}
 	
+	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-8{
+		background-image:url(/edison-appstore-2016-portlet/images/appmanager/layout/layout08.png);
+		background-size: 50px;
+	}
+	
 	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method:hover {
 		border : solid 3px #ffffff;
 		outline: none !important;
@@ -133,7 +138,7 @@
 		display: none;
 	}
 	.science-app-manager-portlet .sortableLayout .row{
-		margin-right: 0px;
+/* 		margin-right: 0px; */
 	}
 	
 	.science-app-manager-portlet .gridLayoutArea ul.sortable-list{
@@ -234,6 +239,20 @@ function <portlet:namespace/>layoutAreaViewInit(){
 			<portlet:namespace/>drawPort('OUTPUT','${data.outputPorts}');
 		}else{
 			<portlet:namespace/>drawLayout('${data.layout}');
+		}
+		
+		//draw 할 port가 없을 경우 Setting
+		var portAreaDisplayNone = true;
+		$("#<portlet:namespace/>port > .panel").each(function(i,e){
+			if($(this).css("display")!="none"){
+				portAreaDisplayNone = false;
+				return false;
+			}
+		});
+		
+		if(portAreaDisplayNone){
+			$("#<portlet:namespace/>portCol").css("display","none");
+			$("#<portlet:namespace/>layoutCol").attr("class","col-md-12");
 		}
 	}
 }
@@ -444,6 +463,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 		
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>flowLayoutArea" style="display: none;">
 			<label class="btn layoutMethod">
+				<div class="method layout-8"></div>
+				<input type="radio" name="templates" value="flow-1-row-1-column"> 
+			</label>
+			<label class="btn layoutMethod">
 				<div class="method layout-6"></div>
 				<input type="radio" name="templates" value="flow-1-row-2-column"> 
 			</label>
@@ -458,12 +481,27 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 		</div>
 	</div>
 	<div class="panel-footer">
-		<div class="row">
-			<div class="panel-group col-md-4" id="accordion" style="margin-top: 15px;">
+		<div class="row" style="margin: 0px;">
+			<div class="panel-group col-md-4" id="<portlet:namespace/>portCol" style="margin-top: 15px;">
 				<c:if test="${!empty data.portList}">
 					<c:set var="panelCss" value="panel panel-defalut"></c:set>
 					<c:set var="liCss" value="list-group-item-default"></c:set>
 					<c:forEach items="${data.portList}" var="portMap" varStatus="status">
+						<c:set var="panelStyle" value="display:none;"></c:set>
+						<c:choose>
+							<c:when test="${fn:indexOf(data.templateId, 'flow') ne -1}">
+								<c:if test="${portMap.portType eq 'OUTPUT' && fn:length(portMap.appList) gt 1}">
+									<c:set var="panelStyle" value="display:block;"></c:set>
+								</c:if>
+							</c:when>
+							<c:otherwise>
+								<c:if test="${fn:length(portMap.appList) gt 1}">
+									<c:set var="panelStyle" value="display:block;"></c:set>
+								</c:if>
+							</c:otherwise>
+						</c:choose>
+						
+						
 						<c:if test="${portMap.portType eq 'INPUT' }">
 							<c:set var="panelCss" value="panel  panel-success"></c:set>
 							<c:set var="liCss" value="list-group-item-success"></c:set>
@@ -475,10 +513,6 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 						<c:if test="${portMap.portType eq 'OUTPUT' }">
 							<c:set var="panelCss" value="panel  panel-danger  "></c:set>
 							<c:set var="liCss" value="list-group-item-danger  "></c:set>
-						</c:if>
-						
-						<c:if test="${fn:length(portMap.appList) lt 2}">
-							<c:set var="panelStyle" value="display:none;"></c:set>
 						</c:if>
 						
 						<div class="${panelCss}" style="${panelStyle}">
@@ -527,7 +561,7 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 					</c:forEach>
 				</c:if>
 		    </div>
-		    <div class="col-md-8">
+		    <div class="col-md-8" id="<portlet:namespace/>layoutCol">
 		    	<liferay-util:include page='<%= "/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext() %>" >
 				</liferay-util:include>
 		    </div>
