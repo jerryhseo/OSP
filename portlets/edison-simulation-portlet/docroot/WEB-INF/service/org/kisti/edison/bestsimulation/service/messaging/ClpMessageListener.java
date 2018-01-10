@@ -30,6 +30,8 @@ import org.kisti.edison.bestsimulation.service.SimulationJobStatusLocalServiceUt
 import org.kisti.edison.bestsimulation.service.SimulationJobStatusServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationShareServiceUtil;
 import org.kisti.edison.bestsimulation.service.UniversityExecuteLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.UniversityExecuteServiceUtil;
 
@@ -66,6 +68,9 @@ public class ClpMessageListener extends BaseMessageListener {
 			SimulationJobStatusLocalServiceUtil.clearService();
 
 			SimulationJobStatusServiceUtil.clearService();
+			SimulationShareLocalServiceUtil.clearService();
+
+			SimulationShareServiceUtil.clearService();
 			UniversityExecuteLocalServiceUtil.clearService();
 
 			UniversityExecuteServiceUtil.clearService();

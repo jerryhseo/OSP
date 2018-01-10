@@ -96,7 +96,8 @@ create table EDVIR_VirtualLabClass (
 	classCreateDt DATE null,
 	classUpdateDt DATE null,
 	virtualClassCd VARCHAR(75) null,
-	classCurriculumUrl VARCHAR(75) null
+	classCurriculumUrl VARCHAR(75) null,
+	classExternalPersonnel INTEGER
 );
 
 create table EDVIR_VirtualLabClassScienceApp (

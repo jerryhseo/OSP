@@ -42,6 +42,7 @@ public class VirtualLabClassSoap implements Serializable {
 		soapModel.setClassUpdateDt(model.getClassUpdateDt());
 		soapModel.setVirtualClassCd(model.getVirtualClassCd());
 		soapModel.setClassCurriculumUrl(model.getClassCurriculumUrl());
+		soapModel.setClassExternalPersonnel(model.getClassExternalPersonnel());
 
 		return soapModel;
 	}
@@ -184,6 +185,14 @@ public class VirtualLabClassSoap implements Serializable {
 		_classCurriculumUrl = classCurriculumUrl;
 	}
 
+	public int getClassExternalPersonnel() {
+		return _classExternalPersonnel;
+	}
+
+	public void setClassExternalPersonnel(int classExternalPersonnel) {
+		_classExternalPersonnel = classExternalPersonnel;
+	}
+
 	private long _classId;
 	private String _classTitle;
 	private String _classStartDt;
@@ -195,4 +204,5 @@ public class VirtualLabClassSoap implements Serializable {
 	private Date _classUpdateDt;
 	private String _virtualClassCd;
 	private String _classCurriculumUrl;
+	private int _classExternalPersonnel;
 }

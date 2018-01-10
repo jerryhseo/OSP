@@ -82,6 +82,7 @@
 		<field name="classUpdateDt" type="Date" />
 		<field name="virtualClassCd" type="String" />
 		<field name="classCurriculumUrl" type="String" />
+		<field name="classExternalPersonnel" type="int" />
 	</model>
 	<model name="org.kisti.edison.virtuallaboratory.model.VirtualLabClassScienceApp">
 		<field name="scienceAppSeqNo" type="long" />

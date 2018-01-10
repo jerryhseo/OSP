@@ -38,7 +38,7 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{classId=");
 		sb.append(classId);
@@ -62,6 +62,8 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 		sb.append(virtualClassCd);
 		sb.append(", classCurriculumUrl=");
 		sb.append(classCurriculumUrl);
+		sb.append(", classExternalPersonnel=");
+		sb.append(classExternalPersonnel);
 		sb.append("}");
 
 		return sb.toString();
@@ -138,6 +140,8 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 			virtualLabClassImpl.setClassCurriculumUrl(classCurriculumUrl);
 		}
 
+		virtualLabClassImpl.setClassExternalPersonnel(classExternalPersonnel);
+
 		virtualLabClassImpl.resetOriginalValues();
 
 		return virtualLabClassImpl;
@@ -156,6 +160,7 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 		classUpdateDt = objectInput.readLong();
 		virtualClassCd = objectInput.readUTF();
 		classCurriculumUrl = objectInput.readUTF();
+		classExternalPersonnel = objectInput.readInt();
 	}
 
 	@Override
@@ -215,6 +220,8 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 		else {
 			objectOutput.writeUTF(classCurriculumUrl);
 		}
+
+		objectOutput.writeInt(classExternalPersonnel);
 	}
 
 	public long classId;
@@ -228,4 +235,5 @@ public class VirtualLabClassCacheModel implements CacheModel<VirtualLabClass>,
 	public long classUpdateDt;
 	public String virtualClassCd;
 	public String classCurriculumUrl;
+	public int classExternalPersonnel;
 }

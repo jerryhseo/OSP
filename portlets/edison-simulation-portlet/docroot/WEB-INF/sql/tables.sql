@@ -69,6 +69,17 @@ create table EDSIM_SimulationJobStatus (
 	primary key (statusSeq, groupId, simulationUuid, jobUuid)
 );
 
+create table EDSIM_SimulationShare (
+	shareSeqno LONG not null,
+	jobSeqNo LONG not null,
+	jobUuid VARCHAR(75) not null,
+	simulationUuid VARCHAR(75) not null,
+	classId LONG,
+	customId LONG,
+	simulationShareDt DATE null,
+	primary key (shareSeqno, jobSeqNo, jobUuid, simulationUuid)
+);
+
 create table EDSIM_UniversityExecute (
 	executeDate VARCHAR(75) not null,
 	universityField LONG not null,

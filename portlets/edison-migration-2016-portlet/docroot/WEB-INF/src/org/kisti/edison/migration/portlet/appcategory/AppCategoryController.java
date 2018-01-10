@@ -2,6 +2,7 @@ package org.kisti.edison.migration.portlet.appcategory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -39,7 +41,8 @@ public class AppCategoryController {
 	
 	private static Log log = LogFactoryUtil.getLog(AppCategoryController.class);
 	
-	@RequestMapping//default
+	@SuppressWarnings("serial")
+    @RequestMapping//default
 	public String view(RenderRequest request, ModelMap model) throws PortalException, SystemException{
 		//MIRGRATION CHECK
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(AssetEntry.class);
@@ -54,11 +57,16 @@ public class AppCategoryController {
 		long groupId = PortalUtil.getScopeGroupId(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		Locale locale = themeDisplay.getLocale();
-		String searchType = "";
-		String searchText = "";
+		final String searchType = "";
+		final String searchText = "";
 		String status = "";
 		
-		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, null, null, searchType, searchText, status,false);
+		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(
+		    groupId, locale, 0, null, null, 
+		    new HashMap<String, Object>(){{
+		        put("searchType", searchType);
+		        put("searchText", searchText);
+		    }}, status, false);
 		model.addAttribute("appCnt", totalCnt);
 		
 		return "migration";
