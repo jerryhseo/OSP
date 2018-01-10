@@ -45,21 +45,29 @@ public class ApplayoutController {
 	
 	private static Log log = LogFactoryUtil.getLog(ApplayoutController.class);
 	
-	@RequestMapping//default
+	@SuppressWarnings("serial")
+    @RequestMapping//default
 	public String view(RenderRequest request, ModelMap model) throws PortalException, SystemException{
 		long groupId = PortalUtil.getScopeGroupId(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		Locale locale = themeDisplay.getLocale();
 		String[] appTypes = new String []{ScienceAppConstants.APP_TYPE_SOLVER,ScienceAppConstants.APP_TYPE_CONVERTER};
-		String searchType = "";
-		String searchText = "";
+		final String searchType = "";
+		final String searchText = "";
 		String status = "";
 		
 		int begin = 0;
 		int end = 0;
+
+		Map<String, Object> searchMap = new HashMap<String, Object>(){{
+            put("searchType", searchType);
+            put("searchText", searchText);
+        }};
 		
-		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status,false);
-		List<Map<String,Object>> swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(groupId, locale, 0, appTypes, null, searchType, searchText, status, begin, end,false);
+		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(
+            groupId, locale, 0, null, appTypes, searchMap, status, false);
+		List<Map<String,Object>> swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
+		    groupId, locale, 0, appTypes, null, searchMap, status, begin, end, false);
 		List<String> swAppIds = new ArrayList<String>();
 		for(Map<String,Object>swData : swList){
 			swAppIds.add(CustomUtil.strNull(swData.get("scienceAppId"),"0"));
