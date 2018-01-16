@@ -829,53 +829,55 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 }
 </script>
 <div class="h10"></div>
-<div class="virtitlebox"><img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle"><liferay-ui:message key='edison-virtuallab-student-infomation' /></div> 
-	<div class="search01">
-		<div class="buttonbox0802">
-			<input id="<portlet:namespace/>addStudentBtn" name="<portlet:namespace/>addStudentBtn" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-student-add' />"/>
-			<input id="addStudentAllBtn" name="addStudentAllBtn" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-excel-add' />" onClick="studentExcelInsert();return false;"/>
-		</div>
-		<div class="searchbox01">
-			<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
-			<input id="search_button" name="search_button" type="button" class="btnsearch" onClick="<portlet:namespace/>dataSearchList()"/>
+<div class="table-responsive panel edison-panel">
+	<div class="virtitlebox panel-heading clearfix"><img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
+		<div class="virtitle"><liferay-ui:message key='edison-virtuallab-student-infomation' /></div> 
+		<div class="search01">
+			<div class="buttonbox0802">
+				<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" class="form-control" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
+				<button id="search_button" name="search_button" class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
+				<input id="<portlet:namespace/>addStudentBtn" name="<portlet:namespace/>addStudentBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-student-add' />"/>
+				<input id="addStudentAllBtn" name="addStudentAllBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-excel-add' />" onClick="studentExcelInsert();return false;"/>
+			</div>
+			<!-- <div class="searchbox01">
+			</div> -->
 		</div>
 	</div>
-</div>
-<div class="h10"></div>
-<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-	<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
-	<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
-</form>
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="5%" />
-			<col width="15%" />
-			<col width="10%" />
-			<col width="10%" />
-			<col width="10%" />
-			<col width="15%" />
-			<col width="10%" />
-			<col width="10%" />
-			<col width="13%" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-code' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='name' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-survey-participation' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-sw-data-result' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-simulation-monitoring-title' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-student-management' /></th>
-				<th align="center" scope="col"></th>
-			</tr>
-		</thead>
-		<tbody id="<portlet:namespace/>virtualClassStudentListBody">
-		</tbody>
-	</table>
+	<div class="h10"></div>
+	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
+		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
+	</form>
+	<div class="table7_list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="5%" />
+				<col width="15%" />
+				<col width="10%" />
+				<col width="10%" />
+				<col width="10%" />
+				<col width="15%" />
+				<col width="10%" />
+				<col width="10%" />
+				<col width="13%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-code' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='name' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-survey-participation' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-sw-data-result' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-simulation-monitoring-title' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-student-management' /></th>
+					<th align="center" scope="col"></th>
+				</tr>
+			</thead>
+			<tbody id="<portlet:namespace/>virtualClassStudentListBody">
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <div id="<portlet:namespace/>spaceDiv" align="center"></div>

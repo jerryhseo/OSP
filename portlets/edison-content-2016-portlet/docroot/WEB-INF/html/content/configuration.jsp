@@ -24,8 +24,8 @@
 <aui:form action="<%= configurationURL %>" method="post" name="configForm">
 	<input name="<portlet:namespace/>tabUseValue" id="<portlet:namespace/>tabUseValue"  type="hidden" />
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="table1_list borderno table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<colgroup>
 			<col width="25%" />
 			<col width="25%" />

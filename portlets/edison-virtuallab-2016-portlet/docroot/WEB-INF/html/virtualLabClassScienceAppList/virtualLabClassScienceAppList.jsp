@@ -207,15 +207,16 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 }
 
 </aui:script>
+<div class="table-responsive panel edison-panel">
 <c:choose>
 	<c:when test="${virtualLabScienceAppList == 0 && role eq 'member' }">
 	</c:when>
 	<c:otherwise>
 		<c:choose>
 			<c:when test="${role eq 'admin' }">
-				<div class="virtitlebox">
+				<div class="virtitlebox panel-heading clearfix">
 					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
+					<div class="virtitle ">
 						<c:choose>
 							<c:when test="${empty classId || classId == 0}">
 								<liferay-ui:message key='edison-virtuallab-scienceapp' />
@@ -225,8 +226,8 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 							</c:otherwise>
 						</c:choose>
 					</div>
-					<div class="buttonbox0801">
-						<input id="<portlet:namespace/>scienceAppManagementButton" name="<portlet:namespace/>scienceAppManagementButton" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openScienceAppListPopup()"/>
+					<div class="buttonbox0801 ">
+						<input id="<portlet:namespace/>scienceAppManagementButton" name="<portlet:namespace/>scienceAppManagementButton" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openScienceAppListPopup()"/>
 					</div>
 				</div>
 			</c:when>
@@ -236,7 +237,7 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 		</c:choose>
 		<div class="h10"></div>
 		<div class="table6_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
 				<colgroup>
 					<col width="*" />
 					<col width="100" />
@@ -251,3 +252,4 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 		</div>
 	</c:otherwise>
 </c:choose>
+</div>

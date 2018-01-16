@@ -288,12 +288,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 
 </script>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
-	</div>
-</div>
 
 <div class="h30"></div>
 
@@ -301,8 +295,16 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 	<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 </form>
 
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<div class="table-responsive panel edison-panel" style="float: left;">
+	<div class="panel-heading clearfix">
+		<div class="virtitlebox">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
+			</h3>
+		</div>
+	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="9%" />
 			<col width="20%" />

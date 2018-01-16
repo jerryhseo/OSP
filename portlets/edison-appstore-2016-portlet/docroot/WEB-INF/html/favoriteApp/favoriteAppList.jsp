@@ -150,8 +150,8 @@ function <portlet:namespace/>moveSimulation(groupId, solverId) {
 
 <div class="h10"></div>
 
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
+<div class="table-responsive panel edison-panel" style="float: left;">
+	<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
 		<colgroup>
 			<col width="40" />
 			<col width="*" />

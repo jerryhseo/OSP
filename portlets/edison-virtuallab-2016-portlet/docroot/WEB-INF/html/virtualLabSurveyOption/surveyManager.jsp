@@ -8,31 +8,31 @@
 	<liferay-portlet:param name="myaction" value="updateSurveyStatus" />
 </liferay-portlet:actionURL>
 
-	<div class="virtitlebox">
+<div class="table-responsive panel edison-panel">
+	<div class="virtitlebox panel-heading clearfix">
 		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 		<div class="virtitle">
 			<liferay-ui:message key='edison-virtuallab-survey' />
 		</div>
 		<div class="buttonbox0801">
-			<input id="<portlet:namespace/>surveyOptionDialog" name="<portlet:namespace/>surveyOptionDialog" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />" onclick="<portlet:namespace/>surveyOption();"/>
+			<input id="<portlet:namespace/>surveyOptionDialog" name="<portlet:namespace/>surveyOptionDialog" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />" onclick="<portlet:namespace/>surveyOption();"/>
 		</div>
 	</div>
 	
-	<div class="h5"></div>
+	<!-- <div class="h5"></div> -->
 	
 	<form id="searchForm" name="searchForm" method="post">
 		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
 	</form>
-	<div class="table1_list" style="display: inline-block; margin-bottom: 10px;">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="70%" />
-				<col width="30%" />
-			</colgroup>
-			<tbody id="<portlet:namespace/>surveyManagerListBody">
-			</tbody>
-		</table>
-	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+		<colgroup>
+			<col width="70%" />
+			<col width="30%" />
+		</colgroup>
+		<tbody id="<portlet:namespace/>surveyManagerListBody">
+		</tbody>
+	</table>
+</div>
 
 <div id="<portlet:namespace/>survey-option-dialog" style="display:none; background-color: #fff;" class="newWindow">
 	<div class="newWheader">

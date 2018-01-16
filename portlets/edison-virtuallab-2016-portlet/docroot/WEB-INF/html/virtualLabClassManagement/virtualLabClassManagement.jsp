@@ -525,18 +525,20 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 
 </script>
 
+<div class="table-responsive panel edison-panel">
 	<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 		<div class="virtitle"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' /></div> 
 		<div class="buttonbox0801">
 			<input type="hidden" id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" value="${virtualLabClassInfo.curPage}" />
-			<input id="<portlet:namespace/>virtualLabClassCreateBtn" name="<portlet:namespace/>virtualLabClassCreateBtn" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-new-class-create' />" onClick="<portlet:namespace/>setClassDataClear()"/>
+			<input id="<portlet:namespace/>virtualLabClassCreateBtn" name="<portlet:namespace/>virtualLabClassCreateBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-new-class-create' />" onClick="<portlet:namespace/>setClassDataClear()"/>
 		</div>
 	</div>
 	
 	<div class="h5"></div>
 
-	<div class="table7_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<!-- <div class="table7_list"> -->
+	<div>
+		<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
 			<colgroup>
 				<col width="5%" />
 				<col width="25%" />
@@ -562,9 +564,10 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			<tbody id="<portlet:namespace/>virtualLabClassListBody">
 			</tbody>
 		</table>
+		
+		<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
 	</div>
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv"></div>
 	<div class="h30"></div>
 	
 	<div id="<portlet:namespace/>virtualClass-add-dialog" title="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />" class="newWindow" style="background-color:#fff; display:none;">
@@ -695,3 +698,4 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			</div>
 		</form>
 	</div>
+</div>

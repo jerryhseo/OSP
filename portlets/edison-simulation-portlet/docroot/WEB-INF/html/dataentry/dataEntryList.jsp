@@ -16,48 +16,53 @@
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
 </liferay-portlet:renderURL>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-<%-- 		<liferay-ui:message key='edison-data-collection-title' /> --%>
-		<liferay-ui:message key='edison-default-mysciencedata'/>
-	</div>
-</div>
-
-<div class="h10"></div>
-
-<div class="tabletopbox clear">
-	<div class="search">
-		<div class="searchbox">
-			<input name="<portlet:namespace/>textfield" type="text"
-				id="<portlet:namespace/>textfield"
-				placeholder="Data Collection <liferay-ui:message key="edison-table-list-header-name"/>"
-				size="40"
-				onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataEntryList('');" 
-				value="${searchText }"
-			/>
-			<input type="button" name="fullsize" id="fullsize" value="" class="btnsearch" onclick="<portlet:namespace/>dataEntryList('');">
-		</div>
-		
-		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="button01" onclick="<portlet:namespace/>dataEntryListAllSearch();">
-	</div>
-	
-	<!--우편 셀렉트-->
-	<div class="tabletopright">
-		<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" class="selectview" style="line-height: 15px;" s>
-<%-- 			<option value="5">5<liferay-ui:message key="edison-search-views"/></option> --%>
-			<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-			<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-			<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-		</select>
-	</div>
-</div> 
 
 <aui:form name="entryForm" method="post">
 	<aui:input type="hidden" name="isAdmin" value="${isAdmin }"></aui:input>	
 	<aui:input type="hidden" name="groupId" value="${groupId }"></aui:input>
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="내 사이언스데이터 테이블">
+	<%-- <input type="hidden" id="<portlet:namespace/>selectLine" name="<portlet:namespace/>selectLine" value="" /> --%>
+	
+	<%-- <div class="tabletopbox clear" style="display: ;">
+		<!--우편 셀렉트-->
+		<div class="tabletopright">
+			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" class="selectview" style="line-height: 15px;">
+				<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
+				<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+				<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+				<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+			</select>
+		</div>
+	</div>  --%>
+	
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key='edison-default-mysciencedata'/>
+			</h3>
+			
+			<div class="input-group">
+				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
+					   id="<portlet:namespace/>textfield"
+					   placeholder="Data Collection <liferay-ui:message key="edison-table-list-header-name"/>"
+					   size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataEntryList('');" value="${searchText }"
+				/>
+				
+				<div class="input-group-btn" style="width: 30%;">
+					<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataEntryList('');"></i></button>
+					
+					<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dataEntryListAllSearch();">
+					
+					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" style="line-height: 15px;">
+						<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+						<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+						<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellpadding="0" cellspacing="0" summary="내 사이언스데이터 테이블">
 			<colgroup>
 				<col width="10%" />
 				<col width="25%" />
@@ -103,64 +108,70 @@
 				</c:choose>
 			</tbody>
 		</table>
+		<div class="text-center">${pagingStr}</div>
 	</div>
 
-	<div class="paging">
-		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
-	</div>
+	<%-- <div class="paging">
+		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${pagingStr }</div>
+	</div> --%>
 	
-	<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>createCollection">
-		<input type="button" class="button06" value="<liferay-ui:message key="edison-virtuallab-virtualLabClassManagement-class-create" />" onclick="<portlet:namespace/>createDataEntry()"/>
+	<div class="buttonbox" style="bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>createCollection">
+		<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-virtualLabClassManagement-class-create" />" onclick="<portlet:namespace/>createDataEntry()"/>
 	</div>
 </aui:form>
 
 
 
 <script>
-$(function(){
-	$("#<portlet:namespace/>select_line").val('${searchLine}');
-})
-
-var currentPage = 0;
-function <portlet:namespace/>dataEntryListAllSearch(){
-	 $("#<portlet:namespace/>textfield").val("");
-	 <portlet:namespace/>dataEntryList('');
-}
-function <portlet:namespace/>dataEntryList(p_currentPage){
-	currentPage = p_currentPage;
-	var searchParameter = <portlet:namespace/>createSearchParameterSting('');
-	location.href="<%=DataEntrySearchURL%>"+searchParameter;
-}
-
-
-function <portlet:namespace/>createDataEntry(){
-	var mode = "<%=Constants.ADD%>";
-	var searchParameter = <portlet:namespace/>createSearchParameterSting(mode);
-	location.href="<%=manageViewDataEntryURL%>"+searchParameter;
-}
-
-function <portlet:namespace/>moveEntryMgt(entryId){
-	var mode = "<%=Constants.UPDATE%>";
-	var searchParameter = <portlet:namespace/>createSearchParameterSting(mode);
-	searchParameter += "&<portlet:namespace/>dataEntryId="+entryId;
-	location.href="<%=manageViewDataEntryURL%>"+searchParameter;
-}
-function <portlet:namespace/>createSearchParameterSting(mode){
+	$(function(){
+		$("#<portlet:namespace/>select_line").val('${searchLine}');
+		/* $('#<portlet:namespace/>selectLine').val('${searchLine}');
+		console.log("searchLine --> ${searchLine}"); */
+	})
 	
-	var searchText = $("#<portlet:namespace/>textfield").val();
-	var searchLine = $("#<portlet:namespace/>select_line").val();
-	var groupId = $("#<portlet:namespace/>groupId").val();
-	var isAdmin = $("#<portlet:namespace/>isAdmin").val();
+	/* function changeListSize<portlet:namespace/>(value){
+		$('input[id=<portlet:namespace/>selectLine]').val(value);
+	} */
 	
-	var searchParameter = "";
-	if( searchText !="")searchParameter += "&<portlet:namespace/>searchText="+searchText;
-	if( mode != "" ) searchParameter += "&<portlet:namespace/>mode="+mode;
+	var currentPage = 0;
+	function <portlet:namespace/>dataEntryListAllSearch(){
+		$("#<portlet:namespace/>textfield").val("");
+		<portlet:namespace/>dataEntryList('');
+	}
+	function <portlet:namespace/>dataEntryList(p_currentPage){
+		currentPage = p_currentPage;
+		var searchParameter = <portlet:namespace/>createSearchParameterSting('');
+		location.href="<%=DataEntrySearchURL%>"+searchParameter;
+	}
 	
-	searchParameter += "&<portlet:namespace/>groupId="+groupId;
-	searchParameter += "&<portlet:namespace/>isAdmin="+isAdmin;
-	searchParameter += "&<portlet:namespace/>currentPage="+currentPage;
-	searchParameter += "&<portlet:namespace/>searchLine="+searchLine;
 	
-	return searchParameter;
-}
+	function <portlet:namespace/>createDataEntry(){
+		var mode = "<%=Constants.ADD%>";
+		var searchParameter = <portlet:namespace/>createSearchParameterSting(mode);
+		location.href="<%=manageViewDataEntryURL%>"+searchParameter;
+	}
+	
+	function <portlet:namespace/>moveEntryMgt(entryId){
+		var mode = "<%=Constants.UPDATE%>";
+		var searchParameter = <portlet:namespace/>createSearchParameterSting(mode);
+		searchParameter += "&<portlet:namespace/>dataEntryId="+entryId;
+		location.href="<%=manageViewDataEntryURL%>"+searchParameter;
+	}
+	function <portlet:namespace/>createSearchParameterSting(mode){
+		var searchText = $("#<portlet:namespace/>textfield").val();
+		var searchLine = $("#<portlet:namespace/>select_line").val();
+		var groupId = $("#<portlet:namespace/>groupId").val();
+		var isAdmin = $("#<portlet:namespace/>isAdmin").val();
+		
+		var searchParameter = "";
+		if( searchText !="")searchParameter += "&<portlet:namespace/>searchText="+searchText;
+		if( mode != "" ) searchParameter += "&<portlet:namespace/>mode="+mode;
+		
+		searchParameter += "&<portlet:namespace/>groupId="+groupId;
+		searchParameter += "&<portlet:namespace/>isAdmin="+isAdmin;
+		searchParameter += "&<portlet:namespace/>currentPage="+currentPage;
+		searchParameter += "&<portlet:namespace/>searchLine="+searchLine;
+		
+		return searchParameter;
+	}
 </script>

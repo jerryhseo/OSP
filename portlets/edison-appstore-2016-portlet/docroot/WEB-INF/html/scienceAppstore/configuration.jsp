@@ -128,9 +128,8 @@ ul.target {
 <aui:form action="<%= configurationURL %>" method="post" name="tabSetting">
 	<input name="<portlet:namespace/>myaction" type="hidden" value="tab"/>
 	<input name="<portlet:namespace/>tabUseValue" id="<portlet:namespace/>tabUseValue"  type="hidden" />
-
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<colgroup>
 			<col width="25%" />
 			<col width="25%" />
@@ -204,54 +203,55 @@ ul.target {
 </div>
 </aui:form>
 
-<h3>SolverType</h3>
-
 <aui:form action="<%= configurationURL %>" method="post" name="fm">
 	<input name="<portlet:namespace/>myaction" type="hidden" value="category"/>
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-		<colgroup>
-			<col width="10%" />
-			<col width="10%" />
-			<col width="65%" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th>ParentCategoryName</th>
-				<th>CategoryName</th>
-				<th>ImageFileName</th>
-			</tr>
-	    </thead>
-		<tbody id="keySetBody">
-			<c:set var="stateIndex" value="${1}"></c:set>
-			<c:forEach items="${allSolverTypeList}" var="solverTypeList" varStatus="typeListStatus">
-				
-				<c:forEach items="${solverTypeList}" var="solverType" varStatus="typeStatus">
-					<tr id="<portlet:namespace/>tr_${stateIndex}">
-					<c:if test="${typeStatus.index eq 0}">
-						<td rowspan="${fn:length(solverTypeList)}">${parentCategoryList[typeListStatus.index].title}</td>
-					</c:if>
-						<td>
-							<input type="hidden" id="<portlet:namespace/>numberArray" name="<portlet:namespace/>numberArray" value="${stateIndex}" />
-							<input type="hidden" id="<portlet:namespace/>categoryId_${stateIndex}" name="<portlet:namespace/>categoryId_${stateIndex}" value="${solverType.categoryId}" />
-							<input type="hidden" id="<portlet:namespace/>companyId_${stateIndex}" name="<portlet:namespace/>companyId_${stateIndex}" value="${solverType.companyId}" />
-							<input type="hidden" id="<portlet:namespace/>userId_${stateIndex}" name="<portlet:namespace/>userId_${stateIndex}" value="${solverType.userId}" />
-							<input type="hidden" id="<portlet:namespace/>userName_${stateIndex}" name="<portlet:namespace/>userName_${stateIndex}" value="${solverType.userName}" />
-							<input type="hidden" id="<portlet:namespace/>categoryTitle_${stateIndex}" name="<portlet:namespace/>categoryTitle_${stateIndex}" value="${solverType.title}" />
-							${solverType.title}
-						</td>
-						<td>
-							<input type="hidden" id="<portlet:namespace/>categoryPropertyId_${stateIndex}" name="<portlet:namespace/>categoryPropertyId_${stateIndex}" value="${solverType.image.categoryPropertyId}" />
-							<input type="text" id="<portlet:namespace/>categoryImage_${stateIndex}" name="<portlet:namespace/>categoryImage_${stateIndex}" value="${solverType.image.value}" />
-						</td>
-					</tr>
-					<c:set var="stateIndex" value="${stateIndex + 1}"></c:set>
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h3>SolverType</h3>
+		</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="10%" />
+				<col width="10%" />
+				<col width="65%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>ParentCategoryName</th>
+					<th>CategoryName</th>
+					<th>ImageFileName</th>
+				</tr>
+		    </thead>
+			<tbody id="keySetBody">
+				<c:set var="stateIndex" value="${1}"></c:set>
+				<c:forEach items="${allSolverTypeList}" var="solverTypeList" varStatus="typeListStatus">
+					
+					<c:forEach items="${solverTypeList}" var="solverType" varStatus="typeStatus">
+						<tr id="<portlet:namespace/>tr_${stateIndex}">
+						<c:if test="${typeStatus.index eq 0}">
+							<td rowspan="${fn:length(solverTypeList)}">${parentCategoryList[typeListStatus.index].title}</td>
+						</c:if>
+							<td>
+								<input type="hidden" id="<portlet:namespace/>numberArray" name="<portlet:namespace/>numberArray" value="${stateIndex}" />
+								<input type="hidden" id="<portlet:namespace/>categoryId_${stateIndex}" name="<portlet:namespace/>categoryId_${stateIndex}" value="${solverType.categoryId}" />
+								<input type="hidden" id="<portlet:namespace/>companyId_${stateIndex}" name="<portlet:namespace/>companyId_${stateIndex}" value="${solverType.companyId}" />
+								<input type="hidden" id="<portlet:namespace/>userId_${stateIndex}" name="<portlet:namespace/>userId_${stateIndex}" value="${solverType.userId}" />
+								<input type="hidden" id="<portlet:namespace/>userName_${stateIndex}" name="<portlet:namespace/>userName_${stateIndex}" value="${solverType.userName}" />
+								<input type="hidden" id="<portlet:namespace/>categoryTitle_${stateIndex}" name="<portlet:namespace/>categoryTitle_${stateIndex}" value="${solverType.title}" />
+								${solverType.title}
+							</td>
+							<td>
+								<input type="hidden" id="<portlet:namespace/>categoryPropertyId_${stateIndex}" name="<portlet:namespace/>categoryPropertyId_${stateIndex}" value="${solverType.image.categoryPropertyId}" />
+								<input type="text" id="<portlet:namespace/>categoryImage_${stateIndex}" name="<portlet:namespace/>categoryImage_${stateIndex}" value="${solverType.image.value}" />
+							</td>
+						</tr>
+						<c:set var="stateIndex" value="${stateIndex + 1}"></c:set>
+					</c:forEach>
+					
 				</c:forEach>
-				
-			</c:forEach>
-		</tbody>
-	</table>
+			</tbody>
+		</table>
 	</div>
 <div>
 	<input type="submit" value="SAVE" style="float: right;" />

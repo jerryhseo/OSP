@@ -27,6 +27,7 @@ function workspaceView(userId){
 	var searchField = searchForm.<portlet:namespace/>searchField.value;
 	var selectLine = searchForm.<portlet:namespace/>select_line.value;
 	var selectStatus = searchForm.<portlet:namespace/>selectStatus.value;
+	console.log("selectLine : " + selectLine);
 	
 	URL +="&<portlet:namespace/>curPage="+curPage;
 	URL +="&<portlet:namespace/>searchField="+searchField;
@@ -52,6 +53,7 @@ function <portlet:namespace/>dataSearchList(curPage){
 	}
 
 	var paramData = $("form[name=searchParamForm]").serialize();
+	console.log("paramData : " + paramData);
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=workspaceListURL%>",
@@ -95,42 +97,55 @@ function <portlet:namespace/>dataSearchList(curPage){
 }
 </script>
 
-<!-- 페이지 타이틀 & 네비게이션 -->
+<!-- <div class="tabletopbox">
+	
+</div> -->
 
-<h1>
-	<liferay-ui:message key='edison-appstore-workspace-request-list' />	
-</h1>
-
-<div class="tabletopbox">
-	<form method="post" name="searchParamForm" style="margin: 0px;" onsubmit="return false;">
-		<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
-		
-		<div class="search">
-			<div class="searchbox">
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${params.searchField}"/>
-				<input id="search_button" name="<portlet:namespace />search_button" type="button" class="btnsearch" onclick="<portlet:namespace/>dataSearchList(1)"/>
+<div class="table-responsive panel edison-panel" style="min-height: 530px;">
+	
+	<div class="panel-heading clearfix">
+		<form method="post" name="searchParamForm" style="margin: 0px;" onsubmit="return false;">
+			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
+			
+			<%-- <div class="tabletopright">
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview" style="line-height: 15px;">
+					<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
+					<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
+					<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
+					<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
+				</select>
+			</div> --%>
+			
+			<!-- 페이지 타이틀 & 네비게이션 -->
+			<h3 class="panel-title pull-left">
+				<liferay-ui:message key='edison-appstore-workspace-request-list' />	
+			</h3>
+			
+			<div class="input-group">
+				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${params.searchField}"/>
+				
+				<div class="input-group-btn" style="width: 20%;">
+					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList('1');"><i class="icon-search"></i></button>
+					<input class="btn btn-default dropdown-toggle" id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" onclick="<portlet:namespace/>dataSearchList(0)" />
+					
+	 				<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="line-height: 15px;">
+						<option value="0">ALL</option>
+						${statusOptionStr}
+					</select>
+					
+					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" style="line-height: 15px;">
+						<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
+						<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
+						<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
+						<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
+					</select>
+				</div>
 			</div>
-			<input id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01" onclick="<portlet:namespace/>dataSearchList(0)" />
-		</div>
-		<div class="tabletopright" style="right: 150px;">
-			<select id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview" style="line-height: 15px;">
-				<option value="0">ALL</option>
-				${statusOptionStr}
-			</select>
-		</div>
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview" style="line-height: 15px;">
-				<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
-				<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
-				<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
-				<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
-			</select>
-		</div>
-	</form>
-</div>
-
-<div class="table1_list borderno" style="min-height: 530px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+			
+		</form>
+	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<thead>
 		    <tr>
 			    <th width="5%" ><liferay-ui:message key='edison-table-list-header-index' /></th>

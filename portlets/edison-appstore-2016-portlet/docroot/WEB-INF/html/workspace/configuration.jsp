@@ -10,8 +10,8 @@ input[type="file"]{width:500px;border:1px solid #CCCCCC;margin-bottom:2px;}
 <c:set var="workspace_amespace" value="_edisonworkspace_WAR_edisonappstore2016portlet_"></c:set>
 <aui:form action="<%= configurationURL %>" method="post" name="sampleFileSetting" enctype="multipart/form-data">
 	<input name="<portlet:namespace/>myaction" type="hidden" value="fileSetting"/>
-	<div id="manualFileListDiv" class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div id="manualFileListDiv" class="table1_list table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
 				<col width="10%" />
 				<col width="*" />
@@ -35,8 +35,8 @@ input[type="file"]{width:500px;border:1px solid #CCCCCC;margin-bottom:2px;}
 		 </table>	
 	</div>
 	<br>
-	<div id="securityFileListDiv" class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div id="securityFileListDiv" class="table1_list table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
 				<col width="10%" />
 				<col width="*" />

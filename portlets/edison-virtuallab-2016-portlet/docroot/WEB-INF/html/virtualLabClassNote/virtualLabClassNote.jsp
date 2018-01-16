@@ -192,37 +192,39 @@ function(popupIdToClose) {
 	<aui:input type="hidden" value="${groupId }" name="groupId" />
 </form>
 
-<c:choose>
-	<c:when test="${getVirtualLabClassNoteList == 0 && role eq 'member' }">
-	</c:when>
-	<c:otherwise>
-		<c:choose>
-			<c:when test="${role eq 'admin' }">
-				<div class="virtitlebox">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
-						<liferay-ui:message key='edison-course-class-material' />
+<div class="panel edison-panel">
+	<c:choose>
+		<c:when test="${getVirtualLabClassNoteList == 0 && role eq 'member' }">
+		</c:when>
+		<c:otherwise>
+			<c:choose>
+				<c:when test="${role eq 'admin' }">
+					<div class="virtitlebox panel-heading clearfix">
+						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+						<div class="virtitle">
+							<liferay-ui:message key='edison-course-class-material' />
+						</div>
+						<div class="buttonbox0801">
+							<input id="<portlet:namespace/>classNoteManagementButton" name="<portlet:namespace/>classNoteManagementButton" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openClassNotePopup()"/>
+						</div>
 					</div>
-					<div class="buttonbox0801">
-						<input id="<portlet:namespace/>classNoteManagementButton" name="<portlet:namespace/>classNoteManagementButton" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openClassNotePopup()"/>
-					</div>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<h3><liferay-ui:message key='edison-course-class-material-member' /></h3>
-			</c:otherwise>
-		</c:choose>
-		<div class="h10"></div>
-		<div class="table6_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
-				<colgroup>
-					<col width="*" />
-					<col width="120" />
-					<col width="120" />
-				</colgroup>
-				<tbody id="<portlet:namespace/>virtualLabClassNoteBody">
-				</tbody>
-			</table>
-		</div>
-	</c:otherwise>
-</c:choose>
+				</c:when>
+				<c:otherwise>
+					<h3><liferay-ui:message key='edison-course-class-material-member' /></h3>
+				</c:otherwise>
+			</c:choose>
+			<!-- <div class="h10"></div> -->
+			<div class="table6_list">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
+					<colgroup>
+						<col width="*" />
+						<col width="120" />
+						<col width="120" />
+					</colgroup>
+					<tbody id="<portlet:namespace/>virtualLabClassNoteBody">
+					</tbody>
+				</table>
+			</div>
+		</c:otherwise>
+	</c:choose>
+</div>
