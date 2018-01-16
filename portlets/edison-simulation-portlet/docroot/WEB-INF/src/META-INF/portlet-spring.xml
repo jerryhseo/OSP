@@ -21,6 +21,10 @@
 	<bean id="org.kisti.edison.bestsimulation.service.SimulationJobStatusLocalService" class="org.kisti.edison.bestsimulation.service.impl.SimulationJobStatusLocalServiceImpl" />
 	<bean id="org.kisti.edison.bestsimulation.service.SimulationJobStatusService" class="org.kisti.edison.bestsimulation.service.impl.SimulationJobStatusServiceImpl" />
 	<bean id="org.kisti.edison.bestsimulation.service.persistence.SimulationJobStatusPersistence" class="org.kisti.edison.bestsimulation.service.persistence.SimulationJobStatusPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.bestsimulation.service.SimulationShareLocalService" class="org.kisti.edison.bestsimulation.service.impl.SimulationShareLocalServiceImpl" />
+	<bean id="org.kisti.edison.bestsimulation.service.SimulationShareService" class="org.kisti.edison.bestsimulation.service.impl.SimulationShareServiceImpl" />
+	<bean id="org.kisti.edison.bestsimulation.service.persistence.SimulationSharePersistence" class="org.kisti.edison.bestsimulation.service.persistence.SimulationSharePersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.bestsimulation.service.persistence.SimulationShareFinder" class="org.kisti.edison.bestsimulation.service.persistence.SimulationShareFinderImpl" parent="basePersistence" />
 	<bean id="org.kisti.edison.bestsimulation.service.UniversityExecuteLocalService" class="org.kisti.edison.bestsimulation.service.impl.UniversityExecuteLocalServiceImpl" />
 	<bean id="org.kisti.edison.bestsimulation.service.UniversityExecuteService" class="org.kisti.edison.bestsimulation.service.impl.UniversityExecuteServiceImpl" />
 	<bean id="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistence" class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistenceImpl" parent="basePersistence" />

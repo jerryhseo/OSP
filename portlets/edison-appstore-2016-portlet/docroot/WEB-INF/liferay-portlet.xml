@@ -232,7 +232,7 @@
 	<portlet>
 		<portlet-name>edison-data-type-editor</portlet-name>
 		<icon>/icon.png</icon>
-		<css-class-wrapper>edison-port-type-editor-portlet</css-class-wrapper>
+		<css-class-wrapper>edison-data-type-editor container-fluid</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	

@@ -269,4 +269,9 @@ public interface ScienceAppLogPortsLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long getScienceAppLogPortsesCount(long scienceAppId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

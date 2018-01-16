@@ -1,4 +1,13 @@
 .edison{
+	div.h10{height:10px; clear:both;}
+	div.h15{height:15px; clear:both;}
+	div.h20{height:20px; clear:both;}
+	div.h25{height:25px; clear:both;}
+	div.h30{height:30px; clear:both;}
+	div.h35{height:35px; clear:both;}
+	div.h40{height:40px; clear:both;}
+	div.h50{height:50px; clear:both;}
+	
 	/*edison tab CSS*/
 	.contabmenu{
 		background: url(@theme_image_path@/custom/portlet/tabs/subtab_bgline.gif) repeat-x;
@@ -147,6 +156,11 @@
 				width: 50%;
 				padding-top: 8px;
 				font-weight: 600;
+				
+				a{
+					color: #0af;
+					text-decoration: none;
+				}
 			}
 			
 			.input-group input[type="text"]{
@@ -218,6 +232,7 @@
 	.table1_list th {border-bottom:1px solid #b4b4b4; padding:8px; color:#383838; font-weight:600; background-color:#f7f7f7; text-align:center; font-size:15px;}
 	.table1_list td.bottom {border-bottom:1px solid #9397AE;}
 	.table1_list td {border-right:0px solid #e2e2e2; color:#777777; border-bottom:1px solid #ccc; padding:8px; vertical-align:middle;}
+	.table1_list td.TC {text-align: center;}
 	.table1_list td img{vertical-align:middle;}
 	.table1_list td.view{padding-top:15px; padding-bottom:20px; min-height:250px;}
 	.table1_list td.attach{color:#555;}

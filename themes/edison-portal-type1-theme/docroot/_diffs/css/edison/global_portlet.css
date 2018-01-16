@@ -1,4 +1,13 @@
 .edison{
+	div.h10{height:10px; clear:both;}
+	div.h15{height:15px; clear:both;}
+	div.h20{height:20px; clear:both;}
+	div.h25{height:25px; clear:both;}
+	div.h30{height:30px; clear:both;}
+	div.h35{height:35px; clear:both;}
+	div.h40{height:40px; clear:both;}
+	div.h50{height:50px; clear:both;}
+	
 	/*edison_tab - START*/
 	.contabmenu{
 		background: url(@theme_image_path@/custom/portlet/tabs/subtab_bgline.gif) repeat-x;

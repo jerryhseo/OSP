@@ -61,6 +61,7 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 		attributes.put("classUpdateDt", getClassUpdateDt());
 		attributes.put("virtualClassCd", getVirtualClassCd());
 		attributes.put("classCurriculumUrl", getClassCurriculumUrl());
+		attributes.put("classExternalPersonnel", getClassExternalPersonnel());
 
 		return attributes;
 	}
@@ -131,6 +132,13 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 
 		if (classCurriculumUrl != null) {
 			setClassCurriculumUrl(classCurriculumUrl);
+		}
+
+		Integer classExternalPersonnel = (Integer)attributes.get(
+				"classExternalPersonnel");
+
+		if (classExternalPersonnel != null) {
+			setClassExternalPersonnel(classExternalPersonnel);
 		}
 	}
 
@@ -619,6 +627,26 @@ public class VirtualLabClassWrapper implements VirtualLabClass,
 	@Override
 	public void setClassCurriculumUrl(java.lang.String classCurriculumUrl) {
 		_virtualLabClass.setClassCurriculumUrl(classCurriculumUrl);
+	}
+
+	/**
+	* Returns the class external personnel of this virtual lab class.
+	*
+	* @return the class external personnel of this virtual lab class
+	*/
+	@Override
+	public int getClassExternalPersonnel() {
+		return _virtualLabClass.getClassExternalPersonnel();
+	}
+
+	/**
+	* Sets the class external personnel of this virtual lab class.
+	*
+	* @param classExternalPersonnel the class external personnel of this virtual lab class
+	*/
+	@Override
+	public void setClassExternalPersonnel(int classExternalPersonnel) {
+		_virtualLabClass.setClassExternalPersonnel(classExternalPersonnel);
 	}
 
 	@Override

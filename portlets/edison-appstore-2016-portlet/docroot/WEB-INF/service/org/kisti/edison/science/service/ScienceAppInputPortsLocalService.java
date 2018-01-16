@@ -262,6 +262,10 @@ public interface ScienceAppInputPortsLocalService extends BaseLocalService,
 	public java.lang.String getInputPortsJsonString(long scienceAppId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getInputPortsJsonArray(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public void removeAllInputPorts()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -280,6 +284,11 @@ public interface ScienceAppInputPortsLocalService extends BaseLocalService,
 		long scienceAppId, java.lang.String portName,
 		com.liferay.portal.service.ServiceContext sc,
 		com.liferay.portal.kernel.upload.UploadPortletRequest upload)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

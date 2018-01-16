@@ -61,6 +61,15 @@
 		<field name="jobEndDt" type="Date" />
 		<field name="writeDt" type="Date" />
 	</model>
+	<model name="org.kisti.edison.bestsimulation.model.SimulationShare">
+		<field name="shareSeqno" type="long" />
+		<field name="jobSeqNo" type="long" />
+		<field name="jobUuid" type="String" />
+		<field name="simulationUuid" type="String" />
+		<field name="classId" type="long" />
+		<field name="customId" type="long" />
+		<field name="simulationShareDt" type="Date" />
+	</model>
 	<model name="org.kisti.edison.bestsimulation.model.UniversityExecute">
 		<field name="executeDate" type="String" />
 		<field name="universityField" type="long" />
