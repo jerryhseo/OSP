@@ -190,7 +190,7 @@ public class BoardDivLocalServiceClpInvoker {
 		_methodParameterTypes64 = new String[] {
 				"long", "int", "int", "long", "java.lang.String",
 				"java.lang.String", "java.util.Locale", "long", "boolean",
-				"java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName65 = "getCustomCountBoard";
@@ -443,7 +443,7 @@ public class BoardDivLocalServiceClpInvoker {
 				(java.util.Locale)arguments[6],
 				((Long)arguments[7]).longValue(),
 				((Boolean)arguments[8]).booleanValue(),
-				(java.lang.String)arguments[9]);
+				(java.lang.String)arguments[9], (java.lang.String)arguments[10]);
 		}
 
 		if (_methodName65.equals(name) &&

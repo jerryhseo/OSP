@@ -71,118 +71,134 @@
 	if(originalBoardPlid == 0) originalBoardPlid = plid;
 %>
 	
-	<c:choose>
-		<c:when test="${empty redirectName }">
-			<h1>${boardDivTitle}</h1>
-		</c:when>
-		<c:otherwise>
-		   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
-		</c:otherwise>
-	</c:choose>
-	
 	<form name="<portlet:namespace/>boardModifyForm" action="<%=getBoardRenderURL%>" method="post" style="margin:0px;">
 		<input type="hidden" id="<portlet:namespace/>currentPage" name="<portlet:namespace/>currentPage" value="1">
 		<input type="hidden" id="<portlet:namespace/>searchValue" name="<portlet:namespace/>searchValue" value="">
 		<input type="hidden" id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" value="">
 	</form>
-	<div class="tabletopbox01">
-		<div class="search">
-			<div class="searchbox">
+	
+	<div class="table-responsive panel edison-panel">
+	
+		<!-- Board Title -->
+		<c:choose>
+			<c:when test="${empty redirectName }">
+				<h1>${boardDivTitle}</h1>
+			</c:when>
+			<c:otherwise>
+			   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
+			</c:otherwise>
+		</c:choose>
+		
+		<!-- Board Contents -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left"></h3>
+			
+			<div class="input-group">
 				<c:if test="${boardDiv.divNm=='FAQ'}">
-					<input type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder-faq' />">
+					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder-faq' />">
 				</c:if>
 				<c:if test="${boardDiv.divNm!='FAQ'}">
-					<input type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder' />">
+					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder' />">
 				</c:if>
-				<input type="button" onClick="getBoardList<portlet:namespace/>(1)" class="btnsearch">
+				
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button"><i class="icon-search"></i></button>
+					
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						Paging  <span class="caret"></span>
+	 				</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<li value="10" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">10<liferay-ui:message key='edison-search-views' /></a></li>
+						<li value="20" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">20<liferay-ui:message key='edison-search-views' /></a></li>
+						<li value="30" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">30<liferay-ui:message key='edison-search-views' /></a></li>
+						<li value="40" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">40<liferay-ui:message key='edison-search-views' /></a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
 			</div>
-			<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="searchAllClick<portlet:namespace/>()" class="button03">
 		</div>
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" onchange="getBoardList<portlet:namespace/>(1)" class="selectview">
-				<option value="10" <c:if test="${listSize == '10' }"> selected="selected"</c:if> >10<liferay-ui:message key='edison-search-views' /></option>
-				<option value="20" <c:if test="${listSize == '20' }"> selected="selected"</c:if>>20<liferay-ui:message key='edison-search-views' /></option>
-				<option value="30" <c:if test="${listSize == '30' }"> selected="selected"</c:if>>30<liferay-ui:message key='edison-search-views' /></option>
-				<option value="40" <c:if test="${listSize == '40' }"> selected="selected"</c:if>>40<liferay-ui:message key='edison-search-views' /></option>
-			</select>
+		
+		<!-- FAQ 게시판 체크 -->
+		<c:choose>
+			<c:when test="${boardDiv.divNm=='FAQ'}">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+						<colgroup id="boardColgroup">
+							<col width="70" />
+							<col width="50" />
+							<col width="*" />
+							<col width="150" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-index' /></th>
+								<th></th>
+								<th><liferay-ui:message key='edison-table-list-header-title' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-date' /></th>
+							</tr>
+						</thead>
+						<tbody id="boardListBody<portlet:namespace/>">
+						</tbody>
+					</table>
+			</c:when>
+			<c:otherwise>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+						<colgroup id="boardColgroup">
+							<col width="8%" />
+							<col/>
+							<col width="12%" />
+							<col width="10%" />
+							<col width="8%" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-index' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-title' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-name' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-date' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-views' /></th>
+							</tr>
+						</thead>
+						<tbody id="boardListBody<portlet:namespace/>">
+						</tbody>
+					</table>
+			</c:otherwise>
+		</c:choose>
+		
+		<!-- pagination -->
+		<div class="text-center">
+			<ul id="pagination<portlet:namespace/>" class="pagination">
+			</ul>
 		</div>
 	</div>
 	
-	<!-- FAQ 게시판 체크 -->
-	<c:choose>
-		<c:when test="${boardDiv.divNm=='FAQ'}">
-			<div class="table1_list borderno">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-					<colgroup id="boardColgroup">
-						<col width="70" />
-						<col width="50" />
-						<col width="*" />
-						<col width="150" />
-					</colgroup>
-					<thead>
-					<tr>
-						<th><liferay-ui:message key='edison-table-list-header-index' /></th>
-						<th></th>
-						<th><liferay-ui:message key='edison-table-list-header-title' /></th>
-						<th><liferay-ui:message key='edison-table-list-header-date' /></th>
-					</tr>
-					</thead>
-					<tbody id="boardListBody<portlet:namespace/>">
-					</tbody>
-				</table>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="table1_list borderno">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-					<colgroup id="boardColgroup">
-						<col width="8%" />
-						<col/>
-						<col width="12%" />
-						<col width="10%" />
-						<col width="8%" />
-					</colgroup>
-					<thead>
-					<tr>
-						<th><liferay-ui:message key='edison-table-list-header-index' /></th>
-						<th><liferay-ui:message key='edison-table-list-header-title' /></th>
-						<th><liferay-ui:message key='edison-table-list-header-name' /></th>
-						<th><liferay-ui:message key='edison-table-list-header-date' /></th>
-						<th><liferay-ui:message key='edison-table-list-header-views' /></th>
-					</tr>
-					</thead>
-					<tbody id="boardListBody<portlet:namespace/>">
-					</tbody>
-				</table>
-			</div>
-		</c:otherwise>
-	</c:choose>
 	
-	<div id="paging<portlet:namespace/>" class="paging"></div>
-		
 	<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;">
 		<c:choose>
 			<c:when test="${isCustomAdmin}">
-				<input class="button02" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
+				<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
 			</c:when>
 			<c:otherwise>
 				<c:if test="${isDefaultUserWrite}">
-					<input class="button02" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
+					<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
 				</c:if>
 			</c:otherwise>
 		</c:choose>
 		
 		<c:if test="${redirectURL ne ''}">
-			<input class="button02" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
+			<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
 		</c:if>
 	</div>
 
 	<script type="text/javascript">
 	
+	function changeListSize<portlet:namespace/>(value){
+		$('input[id=<portlet:namespace/>listSize]').val(value);
+	}
+	
 	function getBoardList<portlet:namespace/>(p_currentPage){
 		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>currentPage.value=p_currentPage;
 		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>searchValue.value=$("#<portlet:namespace/>searchText").val();
-		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>listSize.value=$('select[id=<portlet:namespace/>listSize]').val();
+		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>listSize.value=$('input[id=<portlet:namespace/>listSize]').val();
 		
 		
 		var boardInputForm = {
@@ -199,7 +215,8 @@
 			success: function(data) {
 				var boardList = data.boardList;		
 				
-				$("#boardListBody<portlet:namespace/> tr:not(:has(#1))").remove();			
+				$("#pagination<portlet:namespace/> li").remove();
+				$("#boardListBody<portlet:namespace/> tr:not(:has(#1))").remove();
 				$vRow = $("<tr/>");
 				
 				if("${boardDiv.divNm}"=='FAQ') {
@@ -218,20 +235,20 @@
 											  .attr("onclick","viewDownRow('" + (data.seq - i) + "')");
 							
 							$("<td/>").text(data.seq-i)
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
-							$("<td/>").addClass("TC")
+							$("<td/>").addClass("TC center")
 									  .append($("<img/>").attr("src", "${contextPath}/images/Q.png"))
 									  .appendTo($vRow);
 							$("<td/>").html(boardList[i].title + (boardList[i].replyCount > 0? "<b>("+boardList[i].replyCount+")</b>":"") )
-									  .addClass("TL")
+									  .addClass("TL center")
 									  .appendTo($vRow);
 							$("<td/>").html(boardList[i].writerDate )
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
 							$("#boardListBody<portlet:namespace/>").append($vRow);
 							
-							$vRow = $("<tr/>").addClass("faqContent")
+							$vRow = $("<tr/>").addClass("faqContent center")
 											  .attr("id", "faqContent_" + (data.seq-i));
 							
 							$("<td/>").appendTo($vRow);
@@ -270,9 +287,7 @@
 							}
 							
 							$("#boardListBody<portlet:namespace/>").append($vRow);
-							
 						}
-
 					}
 				} else {
 					if(boardList.length == 0){
@@ -293,27 +308,47 @@
 		 					}
 							
 							$("<td/>").text(data.seq-i)
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
 		
 							$("<td/>").html(boardList[i].title + (boardList[i].replyCount > 0? "<b>("+boardList[i].replyCount+")</b>":"") )
 									  .addClass("TL")
 									  .appendTo($vRow);
 							$("<td/>").html(boardList[i].writerName)
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
 							$("<td/>").html(boardList[i].writerDate )
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
 							$("<td/>").html(boardList[i].readCnt )
-									  .addClass("TC")
+									  .addClass("TC center")
 									  .appendTo($vRow);
 							$("#boardListBody<portlet:namespace/>").append($vRow);
 						}
 					}
 				}
 				
-				$("#paging<portlet:namespace/>").html(data.paging);
+				// pagination
+				leftPageBtn_li = $("<li/>").css("cursor", "pointer");
+				leftPageBtn_a = $("<a/>").html("&laquo;"); 
+				leftPageBtn_li.append(leftPageBtn_a);
+				$("#pagination<portlet:namespace/>").append(leftPageBtn_li);
+				
+				for(var i=0; i<data.pageCount; i++){
+					page_li = $("<li/>").attr("onclick", "getBoardList<portlet:namespace/>(" + (i+1) + ");return false")
+					                    .css("cursor", "pointer");
+					if(p_currentPage == (i+1)){
+						page_li.attr("class", "active");
+					}
+					page_a = $("<a/>").text((i+1));
+					page_li.append(page_a);
+					$("#pagination<portlet:namespace/>").append(page_li);
+				}
+				
+				rightPageBtn_li = $("<li/>").css("cursor", "pointer");
+				rightPageBtn_a = $("<a/>").html("&raquo;"); 
+				rightPageBtn_li.append(rightPageBtn_a);
+				$("#pagination<portlet:namespace/>").append(rightPageBtn_li);
 				
 			},error:function(data,e){ 
 				alert("list:::BoardList===>"+e);
