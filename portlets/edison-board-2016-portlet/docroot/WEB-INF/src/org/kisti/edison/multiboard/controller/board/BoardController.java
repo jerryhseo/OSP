@@ -62,6 +62,7 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -93,6 +94,8 @@ public class BoardController {
 		Map params = RequestUtil.getParameterMap(request);
 		String mainListYn = request.getPreferences().getValue("mainListYn", "N");
 		String maxWindowStatus = GetterUtil.get(params.get("maxWindowStatus"), "N");
+		String viewStructure = request.getPreferences().getValue("viewStructure", "N");
+		Long divCd=0l;
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
 			long companyId = PortalUtil.getCompanyId(request);
@@ -116,7 +119,7 @@ public class BoardController {
 				isDefaultUserWrite=false;
 			}
 			
-			Long divCd = ParamUtil.getLong(request, "divCd",0);
+			divCd = ParamUtil.getLong(request, "divCd",0);
 			if(divCd==0){
 				divCd = Long.parseLong(request.getPreferences().getValue("divCd", "100"));
 			}
@@ -172,6 +175,11 @@ public class BoardController {
 				}
 			}
 			
+			/*통합검색*/
+			long searchPlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/search").getPlid();
+			PortletURL searchUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", searchPlid, PortletRequest.RENDER_PHASE);
+			model.addAttribute("searchURL", searchUrl);
+			
 			//parameter
 			model.addAttribute("isCustomAdmin", isCustomAdmin);
 			model.addAttribute("customId", customId);
@@ -215,6 +223,9 @@ public class BoardController {
 		}
 		
 		if(mainListYn.equals("Y") && maxWindowStatus.equals("N")){
+			if(divCd == 100 && viewStructure.equals("card")){
+				return "list_cardType";		//	card 형태의 공지사항 게시판
+			}
 			return "listMain";
 		}else{
 			return "list";
@@ -262,12 +273,20 @@ public class BoardController {
 		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, 0, siteGroup);
 		String paging = PagingUtil.getPaging(request.getContextPath(), CustomUtil.strNull(params.get("methodName")), totalCount, currentPage, listSize, blockSize);
 		
+		int pageCount = 0;		// 구현해야하는 pagination 개수
+		if(totalCount % listSize == 0){
+			pageCount = (totalCount / listSize);
+		} else {
+			pageCount = (totalCount / listSize)+1;
+		}
+		
 		JSONObject obj = new JSONObject();
 		obj.put("divCd", divCd);	// divCd(구분코드)를 넘겨주어 어떤 게시판인지 확인
 		obj.put("boardList", boardList);
 		obj.put("seq", totalCount - ((currentPage - 1)*listSize));
 		obj.put("paging", paging);
 		obj.put("isVirtualClass", isVirtualClass);
+		obj.put("pageCount", pageCount);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();

@@ -28,6 +28,9 @@
 	}
 	
 	int i=1;
+	
+	String[] mainListYn = (String[]) prefsMap.get("mainListYn");
+	String savedMainListYn =  mainListYn[0].toString();
 %>
 <script src="/edison-board-2016-portlet/js/jquery.1.10.2.js"></script> 
 <script src="/edison-board-2016-portlet/js/jquery-ui.1.10.4.js"></script>
@@ -122,10 +125,20 @@ function <portlet:namespace/>preferenceDelete(trId){
 	<portlet:namespace/>fm.submit();
 }
 
+function <portlet:namespace/>selectMainListYn(selectedMainListYn){
+	var divCd = $(".<portlet:namespace/>divCd option:selected").val();
+	if(divCd == 100 && selectedMainListYn == 'Y'){
+		$("tr.<portlet:namespace/>viewStructure").show();
+	} else {
+		$("tr.<portlet:namespace/>viewStructure").hide();
+		$("input:radio[class=<portlet:namespace/>viewStructure]:input:radio[value='N']").prop("checked", true);
+	}
+}
+
 </script>
 
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="container-fluid container table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
        	<thead>
 			<tr>
 				<th>this Portlet plid (originalBoardPlid)</th>
@@ -149,8 +162,8 @@ function <portlet:namespace/>preferenceDelete(trId){
 <aui:form action="<%= configurationURL %>" method="post" name="boardSetting">
 <input name="<portlet:namespace/>myaction" type="hidden" value="option"/>
 
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="table1_list borderno" style="display: none;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<colgroup>
 			<col width="25%" />
 			<col width="25%" />
@@ -167,13 +180,11 @@ function <portlet:namespace/>preferenceDelete(trId){
 	    </thead>
 		<tbody>
 <%
+	String contextPath = request.getContextPath();
 	String key = "";
 	String value = "";
 	List<Map<String,Object>> boardDivList = (List<Map<String,Object>>)renderRequest.getAttribute("boardDivList");
 	String divSortOption = "";
-	
-	
-	
 %>		
 		</tbody>
 	</table>
@@ -218,10 +229,12 @@ function <portlet:namespace/>preferenceDelete(trId){
 <aui:form action="<%= configurationURL %>" method="post" name="option">
 <input name="<portlet:namespace/>myaction" type="hidden" value="option"/>
 
-<input type="button" value="Add preferences" onclick="<portlet:namespace/>addPreferences()">
-
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<input type="button" value="Add preferences" onclick="<portlet:namespace/>addPreferences()">
+		</div>
+		
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<colgroup>
 			<col width="25%" />
 			<col width="25%" />
@@ -276,7 +289,7 @@ function <portlet:namespace/>preferenceDelete(trId){
 				out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+i+"\">\n");
 				out.print("	<td>"+i+"</td>\n");
 				out.print("	<td><input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"divCd\" size=\"20\">divCd</td>\n");
-				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\">"+divCdOption+"</select></td>\n");
+				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"_"+PortalUtil.getPortletId(request)+"_divCd\">"+divCdOption+"</select></td>\n");
 				out.print("<td></td>");
 				out.print("</tr>\n");
 				i=i+1;
@@ -290,7 +303,7 @@ function <portlet:namespace/>preferenceDelete(trId){
 				out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+i+"\">\n");
 				out.print("	<td>"+i+"</td>\n");
 				out.print("	<td><input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"mainListYn\" size=\"20\">mainListYn</td>\n");
-				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\">"+mainListOption+"</select></td>\n");
+				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"_"+PortalUtil.getPortletId(request)+"_selectMainListYn(this.value)\">"+mainListOption+"</select></td>\n");
 				out.print("<td></td>");
 				out.print("</tr>\n");
 				i=i+1;
@@ -310,6 +323,49 @@ function <portlet:namespace/>preferenceDelete(trId){
 				out.print("<td></td>");
 				out.print("</tr>\n");
 				i=i+1;
+			}else if(key.equals("viewStructure")){
+				String structureValue ="";
+				String defaultRadioBtnChecked = "";
+				if(value.equals("N")){
+					defaultRadioBtnChecked = "checked";
+				}
+				String defaultRadioBtn = "<input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" value=\"N\" style=\"display:none;\" "+defaultRadioBtnChecked+" />";
+				if(value.equals("list")){
+					structureValue = "<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"list\" checked/><i class=\"icon-reorder icon-3x\"></label>LIST"
+									+"<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"card\"/><i class=\"icon-th-large icon-1x\"></label>CARD"
+									+ defaultRadioBtn;
+				} else if(value.equals("card")){
+					structureValue = "<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"list\"/><i class=\"icon-reorder icon-3x\"></label>LIST"
+									+"<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"card\" checked/><i class=\"icon-th-large icon-1x\"></label>CARD"
+									+ defaultRadioBtn;
+				} else if(value.equals("N")){
+					structureValue = "<input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"list\"/><i class=\"icon-reorder\">LIST" 
+									+"<input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
+											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
+											+ " value=\"card\"/><i class=\"icon-th-large\">CARD"
+									+ defaultRadioBtn;
+				}
+				
+				if(savedMainListYn.equals("Y")){
+					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+i+"\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\">\n");
+				} else {
+					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+i+"\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" style=\"display:none;\">\n");
+				}
+				out.print("	<td>"+i+"</td>\n");
+				out.print("	<td><input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"viewStructure\" size=\"20\">viewStructure</td>\n");
+				out.print("<td colspan='2'>"+structureValue+"</td>");
+				out.print("</tr>\n");
+				i=i+1;
 			}
 		}
 		
@@ -318,7 +374,7 @@ function <portlet:namespace/>preferenceDelete(trId){
 			key = CustomUtil.strNull(thisEntry.getKey());
 			value = CustomUtil.strNull(thisEntry.getValue()[0]);
 			
-			if(!key.equals("divSort") && !key.equals("divCd") && !key.equals("mainListYn") && !key.equals("originalBoardPortletName") && !key.equals("originalBoardPlid")){
+			if(!key.equals("divSort") && !key.equals("divCd") && !key.equals("mainListYn") && !key.equals("originalBoardPortletName") && !key.equals("originalBoardPlid") && !key.equals("viewStructure")){
 				out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+i+"\">\n");
 				out.print("	<td>"+i+"</td>\n");
 				out.print("	<td><input type=\"text\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\""+key+"\" size=\"20\"></td>\n");
@@ -388,6 +444,7 @@ function <portlet:namespace/>preferenceDelete(trId){
 
 <script type="text/javascript">
 trIndex = "<%=i%>";
+
 </script>
 
 <%-- 	<aui:button-row> --%>
@@ -401,8 +458,8 @@ trIndex = "<%=i%>";
 <h4>BoardDivs</h4>
 <aui:form action="<%= configurationURL %>" method="post" name="boardDiv">
 <input name="<portlet:namespace/>myaction" type="hidden" value="boardDiv"/>
-<div class="table1_list borderno">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+<div class="table-responsive panel edison-panel">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list">
 		<colgroup>
 			<col width="14%" />
 			<col width="14%" />

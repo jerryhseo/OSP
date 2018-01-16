@@ -190,7 +190,7 @@ public class BoardDivLocalServiceClp implements BoardDivLocalService {
 		_methodParameterTypes35 = new String[] {
 				"long", "int", "int", "long", "java.lang.String",
 				"java.lang.String", "java.util.Locale", "long", "boolean",
-				"java.lang.String"
+				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName36 = "getCustomCountBoard";
@@ -1200,7 +1200,8 @@ public class BoardDivLocalServiceClp implements BoardDivLocalService {
 	public java.util.List getCustomListBoard(long divCd, int start,
 		int listSize, long groupId, java.lang.String customId,
 		java.lang.String searchValue, java.util.Locale locale,
-		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup)
+		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup,
+		java.lang.String virtualLabId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -1227,7 +1228,9 @@ public class BoardDivLocalServiceClp implements BoardDivLocalService {
 						
 					popupYn,
 						
-					ClpSerializer.translateInput(siteGroup)
+					ClpSerializer.translateInput(siteGroup),
+						
+					ClpSerializer.translateInput(virtualLabId)
 					});
 		}
 		catch (Throwable t) {

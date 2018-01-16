@@ -21,7 +21,7 @@ public interface BoardFinder {
 	public java.util.List<java.lang.Object[]> getCustomListBoard(long divCd,
 		int begin, int listSize, long groupId, java.lang.String customId,
 		java.lang.String searchValue, long groupBoardSeq, boolean popupYn,
-		java.lang.String siteGroup);
+		java.lang.String siteGroup, java.lang.String virtualLabId);
 
 	public int getCustomCountBoard(long divCd, long groupId,
 		java.lang.String customId, java.lang.String searchValue,

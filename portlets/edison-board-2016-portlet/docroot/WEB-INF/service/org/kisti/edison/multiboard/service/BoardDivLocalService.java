@@ -364,7 +364,8 @@ public interface BoardDivLocalService extends BaseLocalService,
 	public java.util.List getCustomListBoard(long divCd, int start,
 		int listSize, long groupId, java.lang.String customId,
 		java.lang.String searchValue, java.util.Locale locale,
-		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup)
+		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup,
+		java.lang.String virtualLabId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException;
 
