@@ -27,7 +27,6 @@ function workspaceView(userId){
 	var searchField = searchForm.<portlet:namespace/>searchField.value;
 	var selectLine = searchForm.<portlet:namespace/>select_line.value;
 	var selectStatus = searchForm.<portlet:namespace/>selectStatus.value;
-	console.log("selectLine : " + selectLine);
 	
 	URL +="&<portlet:namespace/>curPage="+curPage;
 	URL +="&<portlet:namespace/>searchField="+searchField;
@@ -53,7 +52,6 @@ function <portlet:namespace/>dataSearchList(curPage){
 	}
 
 	var paramData = $("form[name=searchParamForm]").serialize();
-	console.log("paramData : " + paramData);
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=workspaceListURL%>",
