@@ -151,7 +151,15 @@
 						</c:choose>
 					</tbody>
 				</table>
-				<div class="text-center">${pagingStr}</div>
+				<div class="row" style="margin: 0px;">
+					<div class="col-md-7 text-center">${pagingStr}</div>
+					<div class="col-md-5" style="margin: 18px 0px;">
+						<div class="btn-group pull-right">
+							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('true');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-register' /></span></button>
+							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-editor-register' /></span></button>
+						</div>
+					</div>
+				</div>
 			</div>
 			
 			<script type="text/javascript">

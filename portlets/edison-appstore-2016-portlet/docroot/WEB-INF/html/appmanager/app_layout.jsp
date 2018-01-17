@@ -234,9 +234,9 @@ function <portlet:namespace/>layoutAreaViewInit(){
 		$radioObject.parent().addClass("active");
 		
 		if('${data.isPortDraw}'=='true'){
-			<portlet:namespace/>drawPort('INPUT','${data.inputPorts}');
-			<portlet:namespace/>drawPort('LOG','${data.logPorts}');
-			<portlet:namespace/>drawPort('OUTPUT','${data.outputPorts}');
+			<portlet:namespace/>drawPortFromLayout('INPUT','${data.inputPorts}');
+			<portlet:namespace/>drawPortFromLayout('LOG','${data.logPorts}');
+			<portlet:namespace/>drawPortFromLayout('OUTPUT','${data.outputPorts}');
 		}else{
 			<portlet:namespace/>drawLayout('${data.layout}');
 		}
@@ -329,7 +329,7 @@ function <portlet:namespace/>actionCall(mode){
 
 }
 
-function <portlet:namespace/>drawPort(portType,data){
+function <portlet:namespace/>drawPortFromLayout(portType,data){
 	
 	if(data!=''){
 		var targetUL,array,dataPortPortlet;

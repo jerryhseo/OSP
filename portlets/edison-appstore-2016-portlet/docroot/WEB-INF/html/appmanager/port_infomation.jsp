@@ -65,8 +65,7 @@
 	<aui:input name="inputPorts" type="hidden" value="" label=""/>
 	<aui:input name="outputPorts" type="hidden" value="" label=""/>
 	<aui:input name="logPorts" type="hidden" value="" label=""/>
-	<aui:input name="layout" type="hidden" value="" label=""/>
-	<aui:input name="templetId" type="hidden" value="" label=""/>
+	<aui:input name="initLayout" type="hidden" value="false" label=""/>
 	<aui:input name="actionMode" value="${mode}" type="hidden"/>
 </aui:form>
 <div class="edison-panel">
@@ -208,17 +207,15 @@
 
 <script type="text/javascript">
 AUI().ready(function() {
-	<portlet:namespace/>drawPort('INPUT','${data.inputPorts}','init');
-	<portlet:namespace/>drawPort('LOG','${data.logPorts}','init');
-	<portlet:namespace/>drawPort('OUTPUT','${data.outputPorts}','init');
+	<portlet:namespace/>drawPort('INPUT','${data.inputPorts}',false);
+	<portlet:namespace/>drawPort('LOG','${data.logPorts}',false);
+	<portlet:namespace/>drawPort('OUTPUT','${data.outputPorts}',false);
 // 	<portlet:namespace/>noUpdateDisabled('${data.status}');
 });
 
 	var scienceApp = new OSP.ScienceApp();
-// 	var inputPortMap = null
-// 	var outputPortMap = null;
-// 	var logPortMap = null;
-	
+	/* port infomation change check */
+	var <portlet:namespace/>portChange = false;
 	
 	function <portlet:namespace/>portNameOpen(scienceAppId,portType){
 		var renderParameter = "";
@@ -245,7 +242,7 @@ AUI().ready(function() {
 					{
 						dialog: {
 							width:1024,
-							height:780,
+							height:900,
 							cache: false,
 							draggable: false,
 							resizable: false,
@@ -321,7 +318,7 @@ AUI().ready(function() {
 	$("#port-app-selector-dialog").dialog({
 		autoOpen: false,
 		width: 900,
-		height: 'auto',
+		height: '400',
 	    modal: true,
 	    resizable: false,
 	    show: {effect:'fade', speed: 800}, 
@@ -363,7 +360,7 @@ AUI().ready(function() {
 	}
 	
 	
-	function <portlet:namespace/>drawPort(portType,data,init){
+	function <portlet:namespace/>drawPort(portType,data,portChangeCheck){
 		var draw = false;
 		if(data!=''){
 			if(portType=='INPUT'){
@@ -378,40 +375,22 @@ AUI().ready(function() {
 			}
 			draw = true;
 		}else{
-			if(init==''){
-				if(portType=='INPUT'){
-					$("#<portlet:namespace/>inputPorts").val("");
-					$("#<portlet:namespace/>inputPorts").val(JSON.stringify(scienceApp.inputPorts()));
-				}else if(portType=='OUTPUT'){
-					$("#<portlet:namespace/>outputPorts").val("");
-					$("#<portlet:namespace/>outputPorts").val(JSON.stringify(scienceApp.outputPorts()));
-				}else if(portType=='LOG'){
-					$("#<portlet:namespace/>logPorts").val("");
-					$("#<portlet:namespace/>logPorts").val(JSON.stringify(scienceApp.logPorts()));
-				}
-				draw = true;
-			}else{
-				var colspan = 0;
-				if(portType=='INPUT'||portType=='LOG'){
-					colspan = 7;
-				}else{
-					colspan = 8;
-				}
-				
-				//초기조회시
-				if(portType=='INPUT'){
-					$body = $("#<portlet:namespace/>inputPortListBody");
-				}else if(portType=='OUTPUT'){
-					$body = $("#<portlet:namespace/>outputPortListBody");
-				}else if(portType=='LOG'){
-					$body = $("#<portlet:namespace/>logPortListBody");
-				}
-				
-				$body.find("tr:not(:has(#1))").remove();
-				
-				$rowResult = $("<tr/>").appendTo($body);
-				$("<td/>").text(Liferay.Language.get('edison-there-are-no-data')).attr("colspan",colspan).addClass("center").appendTo($rowResult);
+			if(portType=='INPUT'){
+				$("#<portlet:namespace/>inputPorts").val("");
+				$("#<portlet:namespace/>inputPorts").val(JSON.stringify(scienceApp.inputPorts()));
+			}else if(portType=='OUTPUT'){
+				$("#<portlet:namespace/>outputPorts").val("");
+				$("#<portlet:namespace/>outputPorts").val(JSON.stringify(scienceApp.outputPorts()));
+			}else if(portType=='LOG'){
+				$("#<portlet:namespace/>logPorts").val("");
+				$("#<portlet:namespace/>logPorts").val(JSON.stringify(scienceApp.logPorts()));
 			}
+			draw = true;
+		}
+		
+		
+		if(portChangeCheck&&'${data.portExist}'=='true'&&!<portlet:namespace/>portChange){
+			<portlet:namespace/>portChange = true;
 		}
 		
 		if(draw){
@@ -607,7 +586,7 @@ AUI().ready(function() {
 			}
 		}
 		
-		<portlet:namespace/>drawPort('OUTPUT','','');
+		<portlet:namespace/>drawPort('OUTPUT','',false);
 	}
 	
 	function <portlet:namespace/>changeFileName(portType,name,value){
@@ -649,7 +628,7 @@ AUI().ready(function() {
 			alert(Liferay.Language.get('expression-is-not-valid'));
 			$("#<portlet:namespace/>_"+portType+"_"+name+"_fileName").val('');
 		}
-		<portlet:namespace/>drawPort(portType,'','');
+		<portlet:namespace/>drawPort(portType,'',false);
 	}
 	
 	function <portlet:namespace/>changeMandatory(name,portType,status){
@@ -665,7 +644,7 @@ AUI().ready(function() {
 			scienceApp.logPort(name).mandatory(manadatory);
 		}
 		
-		<portlet:namespace/>drawPort(portType,'','');
+		<portlet:namespace/>drawPort(portType,'',false);
 	}
 	
 	function <portlet:namespace/>deleteMap(name,portType){
@@ -678,7 +657,7 @@ AUI().ready(function() {
 				scienceApp.removeLogPort(name);
 			}
 			
-			<portlet:namespace/>drawPort(portType,'','');
+			<portlet:namespace/>drawPort(portType,'',true);
 		}
 	}
 	
@@ -710,7 +689,7 @@ AUI().ready(function() {
 		}
 		
 		console.log(JSON.stringify(scienceApp,null,4));
-		<portlet:namespace/>drawPort(portType,'','');
+		<portlet:namespace/>drawPort(portType,'',true);
 	}
 	
 	function <portlet:namespace/>searchDataType(portType,dataTypeId){
@@ -758,10 +737,11 @@ AUI().ready(function() {
 		
 		var checkVal = true;
 		$("input[class*=checkFilePath][id$=fileName]").each(function(){
-			var val = $(this).val();
+			var $this = $(this);
+			var val = $this.val();
 			if(val.trim()==""){
 				alert(Liferay.Language.get('this-field-is-mandatory'));
-				$(this).focus();
+				setTimeout(function() {$this.focus();}, 50);
 				checkVal = false;
 				return false;
 			}
@@ -769,83 +749,12 @@ AUI().ready(function() {
 		
 		if(checkVal){
 			if(mode=='<%=Constants.ADD%>'){
-				var Layout = new OSP.Layout();
-				Layout.templateId('2-6-column-i');
-				Layout.height(0.7);
-				
-				var column1 = Layout.addPortlet('column-1','edisonworkbenchmonitoring_WAR_edisonsimulationportlet',true);
-				column1.height(0.3);
-				
-				var column2 = Layout.addPortlet('column-2','edisonworkbenchjobmonitoring_WAR_edisonsimulationportlet',true);
-				column2.height(0.3);
-				
-				var column3 = Layout.addPortlet('column-3','Dashboard_WAR_OSPWorkbenchportlet',true);
-				column3.height(0.4);
-				
-				var column4 = Layout.addPortlet('column-4','Information_WAR_OSPWorkbenchportlet',true);
-				column4.height(0.2);
-				
-				var inputPortArray = scienceApp.inputPortsArray();
-				var editorFirst = true;
-				var column5 = null;
-				for(var i=0; i<inputPortArray.length;i++){
-					var data = inputPortArray[i];
-					if(data[OSP.Constants.DEFAULT_EDITOR]==0){
-						alert(Liferay.Language.get('edison-science-appstore-port-no-default-error-msg',[''+data[OSP.Constants.NAME]+'','Editor']));
-						return false;
-					}
-					
-					column5 = Layout.addPortlet('column-5',data[OSP.Constants.DEFAULT_EDITOR],editorFirst,data[OSP.Constants.NAME])
-					editorFirst = false;
-				}
-				if(column5!=null){
-					column5.height('0.8');
-				}
-					
-				
-				var column6 = Layout.addPortlet('column-6','edisonworkbenchjobstatusandresult_WAR_edisonsimulationportlet',false,'_DOWNLOAD_');
-				column6.height('0.8');
-				
-				var column6CurrentId = false;
-				var outputPortArray = scienceApp.outputPortsArray();
-				for(var i=0; i<outputPortArray.length;i++){
-					var data = outputPortArray[i];
-					if(data[OSP.Constants.DEFAULT_ANALYZER]==0){
-						alert(Liferay.Language.get('edison-science-appstore-port-no-default-error-msg',[''+data[OSP.Constants.NAME]+'','Analyzer']));
-						return false;
-					}
-
-					/*fileExplorer는 Current Portlet이 되면 안됨. 첫번째 analyzer가 CurrentPortlet이 되여야하므로 display boolean 값 추가*/
-					if(i == 0){
-						Layout.addPortlet('column-6',data[OSP.Constants.DEFAULT_ANALYZER],true,data[OSP.Constants.NAME]);
-						column6CurrentId = true;
-					}else{
-						Layout.addPortlet('column-6',data[OSP.Constants.DEFAULT_ANALYZER],false,data[OSP.Constants.NAME]);
-					}
+				if(<portlet:namespace/>portChange){
+					alert("Port 정보 변경으로 인하여 Layout을 새롭게 작성 해야 합니다.");
+					$("#<portlet:namespace/>initLayout").val("true");
 				}
 				
 				
-				var logPortArray = scienceApp.logPortsArray();
-				if(logPortArray.length>0){
-					for(var i=0; i<logPortArray.length;i++){
-						var data = logPortArray[i];
-						if(data[OSP.Constants.DEFAULT_ANALYZER]==0){
-							alert(Liferay.Language.get('edison-science-appstore-port-no-default-error-msg',[''+data[OSP.Constants.NAME]+'','Analyzer']));
-							return false;
-						}
-						
-						/*oupputPort 가 없을 경우에도 Log port 는 currentPortlet이 될수 있음*/
-						var logPortDisplay = false;
-						if(!column6CurrentId){
-							column6CurrentId = true;
-							logPortDisplay = true;
-						}
-						Layout.addPortlet('column-6',data[OSP.Constants.DEFAULT_ANALYZER],logPortDisplay,data[OSP.Constants.NAME]);
-					}
-				}
-// 				console.log(JSON.stringify(Layout,null,4));
-				$("#<portlet:namespace/>layout").val(JSON.stringify(Layout));
-				$("#<portlet:namespace/>templetId").val('2-6-column-i');
 			}
 			submitForm(<portlet:namespace/>frm);
 		}

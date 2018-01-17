@@ -91,7 +91,7 @@ function <portlet:namespace/>appSave(){
 			targetObejct = scienceApp.outputPort('${portName}');
 			targetObejct.defaultAnalyzer(defaultAppId);
 		}
-		<portlet:namespace/>drawPort('${portType}','','');
+		<portlet:namespace/>drawPort('${portType}','',true);
 		$("#port-app-selector-dialog").dialog("close");
 	}else{
 		alert(Liferay.Language.get('edison-this-field-is-required',['app']));

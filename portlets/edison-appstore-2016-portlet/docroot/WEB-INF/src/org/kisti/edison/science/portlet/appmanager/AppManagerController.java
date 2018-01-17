@@ -410,13 +410,12 @@ public class AppManagerController{
 				data.put("outputPorts", outputPorts);
 				data.put("logPorts", logPorts);
 				
-				//DATATYPE SEARCH 에서 넘어 올경우 PARAMETER 추가
-//				boolean dataTypeOpen = GetterUtil.getBoolean(params.get("openDataType"),false);
-//				if(dataTypeOpen){
-//					data.put("dataTypeOpen", dataTypeOpen);
-//					data.put("dataTypeSearchName", GetterUtil.getString(params.get("openDataTypeSearchName")));
-//				}
-				
+				//port update 여부 확인을 위한 초기 변수 셋팅
+				if(inputCnt==0&&outputCnt==0&&logCnt==0){
+					data.put("portExist", false);
+				}else{
+					data.put("portExist", true);
+				}
 				mode = Constants.UPDATE;
 			}else if(clickTab.equals("m04")){
 				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
@@ -622,6 +621,12 @@ public class AppManagerController{
 						}
 					}
 					
+					boolean initLayout = GetterUtil.getBoolean(params.get("initLayout"),false);
+					if(initLayout){
+						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+						scienceApp.setLayout("");
+						ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
+					}
 				}else if(actionType.equals("appLayout")){
 					String layout = CustomUtil.strNull(params.get("layout"));
 					String templetId = CustomUtil.strNull(params.get("templetId"));
