@@ -57,6 +57,8 @@
 									
 									#if ($nav_child.isSelected())
 										#set ($nav_child_css_class = "active")
+									#else
+										#set ($nav_child_css_class = "deactive")
 									#end
 									
 									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">

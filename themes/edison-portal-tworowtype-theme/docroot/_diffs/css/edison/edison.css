@@ -8,15 +8,15 @@ ul, ol {list-style:none;}
 }
 
 #banner {
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	-ms-transform: translateY(0);
-	-o-transform: translateY(0);
-	transform: translateY(0);
-	-webkit-transition: right 0.5s, -webkit-transform 0.25s;
-	-moz-transition: right 0.5s, -moz-transform 0.25s;
-	-o-transition: right 0.5s, -o-transform 0.25s;
-	transition: right 0.5s, transform 0.25s; 
+/* 	-webkit-transform: translateY(0); */
+/* 	-moz-transform: translateY(0); */
+/* 	-ms-transform: translateY(0); */
+/* 	-o-transform: translateY(0); */
+/* 	transform: translateY(0); */
+/* 	-webkit-transition: right 0.5s, -webkit-transform 0.25s; */
+/* 	-moz-transition: right 0.5s, -moz-transform 0.25s; */
+/* 	-o-transition: right 0.5s, -o-transform 0.25s; */
+/* 	transition: right 0.5s, transform 0.25s;  */
 }
 	
 .hide-banner #banner{
