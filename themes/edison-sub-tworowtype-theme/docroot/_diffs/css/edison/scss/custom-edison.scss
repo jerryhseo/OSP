@@ -12,10 +12,13 @@
 			margin-top: 18px;
 		}
 		
-		.navbar-nav > .active > a{
+		.navbar-nav > li.active{
+			border-bottom: solid 3px #ff5454;
+		}
+		
+		.navbar-nav > li.active > a{
 			background-color: #f8f8f8;
 			font-weight: 600;
-			border-bottom: solid 3px #ff5454;
 		}
 		
 		.navbar-nav > li > a{
