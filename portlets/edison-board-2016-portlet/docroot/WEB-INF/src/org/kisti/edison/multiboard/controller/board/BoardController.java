@@ -225,6 +225,8 @@ public class BoardController {
 		if(mainListYn.equals("Y") && maxWindowStatus.equals("N")){
 			if(divCd == 100 && viewStructure.equals("card")){
 				return "list_cardType";		//	card 형태의 공지사항 게시판
+			} else if(divCd == 100 && viewStructure.equals("list")){
+				return "list";
 			}
 			return "listMain";
 		}else{
