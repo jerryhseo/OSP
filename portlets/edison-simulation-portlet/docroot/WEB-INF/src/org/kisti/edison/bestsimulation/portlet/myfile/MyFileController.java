@@ -33,6 +33,7 @@ import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HttpFileUtil;
+import org.kisti.edison.util.MyFileIcebreakerTokenUtil;
 import org.kisti.edison.util.MyFileIcebreakerUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.util.TokenProviderUtil;
@@ -144,7 +145,7 @@ public class MyFileController {
 						}
 					}
 				}else{//icebreaker 계정은 있으나 포털에 expando가 없는 경우 expando 추가 생성
-					icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
+					icebreakerVcToken = MyFileIcebreakerTokenUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
 				}
 			}else{ // Icebreaker 계정이 없는경우
 				//icebreaker 계정도 없는 경우 생성
@@ -152,7 +153,7 @@ public class MyFileController {
 				
 				if (resultRegist == 201) {
 					//icebreaker 가입이 성공한 경우 신규 토큰 발행 및 커스텀 필드 추가
-					icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
+					icebreakerVcToken = MyFileIcebreakerTokenUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
 				}
 			}
 			
