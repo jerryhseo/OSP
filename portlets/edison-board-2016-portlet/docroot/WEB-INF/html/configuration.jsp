@@ -135,6 +135,10 @@ function <portlet:namespace/>selectMainListYn(selectedMainListYn){
 	}
 }
 
+function <portlet:namespace/>changeView(val){
+	console.log("val : " + val);
+} 
+
 </script>
 
 	<div class="container-fluid container table-responsive panel edison-panel">
@@ -333,26 +337,30 @@ function <portlet:namespace/>selectMainListYn(selectedMainListYn){
 				if(value.equals("list")){
 					structureValue = "<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"list\" checked/><i class=\"icon-reorder icon-3x\"></label>LIST"
+											+ " value=\"list\" onchange=\"_"+PortalUtil.getPortletId(request)+"_changeView(this.value)\" checked/>"
+											+ "<img src=\"/edison-board-2016-portlet/images/layout_list.png\" /></label>&emsp;"
 									+"<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"card\"/><i class=\"icon-th-large icon-1x\"></label>CARD"
+											+ " value=\"card\" onchange=\"_"+PortalUtil.getPortletId(request)+"_changeView(this.value)\"  />"
+											+ "<img src=\"/edison-board-2016-portlet/images/layout_card.png\" /></label>"
 									+ defaultRadioBtn;
 				} else if(value.equals("card")){
 					structureValue = "<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"list\"/><i class=\"icon-reorder icon-3x\"></label>LIST"
+											+ " value=\"list\" onchange=\"_"+PortalUtil.getPortletId(request)+"_changeView(this.value)\" />"
+											+ "<img src=\"/edison-board-2016-portlet/images/layout_list.png\" /></label>&emsp;"
 									+"<label><input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"card\" checked/><i class=\"icon-th-large icon-1x\"></label>CARD"
+											+ " value=\"card\" onchange=\"_"+PortalUtil.getPortletId(request)+"_changeView(this.value)\" checked/>"
+											+ "<img src=\"/edison-board-2016-portlet/images/layout_card.png\" /></label>"
 									+ defaultRadioBtn;
 				} else if(value.equals("N")){
 					structureValue = "<input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"list\"/><i class=\"icon-reorder\">LIST" 
+											+ " value=\"list\"/>" 
 									+"<input type=\"radio\" class=\"_"+PortalUtil.getPortletId(request)+"_viewStructure\" "
 											+ "id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" "
-											+ " value=\"card\"/><i class=\"icon-th-large\">CARD"
+											+ " value=\"card\"/>"
 									+ defaultRadioBtn;
 				}
 				

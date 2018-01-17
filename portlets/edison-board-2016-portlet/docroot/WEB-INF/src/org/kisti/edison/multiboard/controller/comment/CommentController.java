@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -112,6 +113,8 @@ public class CommentController {
         ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
         Map params = RequestUtil.getParameterMap(request);
         
+        Iterator<String> keys = params.keySet().iterator();
+        
         //VIEW가 아니면서 (게시물 보기) 로그인이 안되어있을 경우 홈 화면으로 보냄
         if(!themeDisplay.isSignedIn()) {
             return;
@@ -141,7 +144,7 @@ public class CommentController {
             
             // divCd : board 구분(700 : commant)      boardGroupId : Portlet Theme에 지정된 boardGroupId      searchValue : 검색 값
             // groupBoardSeq : 댓글이 위치한 게시글의 boardSeq        siteGroupId :
-            List<Map<String,Object>> boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup);
+            List<Map<String,Object>> boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup, "");
             
             // 첨부파일, 댓글 및 comment(reply) 작성자 Img 추출
             String preFix = customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
@@ -164,7 +167,7 @@ public class CommentController {
                     
                     // 댓글 갯수 추출
                     groupBoardSeq = Long.parseLong((String) boardList.get(i).get("boardSeq"));
-                    List<Map<String,Object>> boardReplyList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup);
+                    List<Map<String,Object>> boardReplyList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup, "");
                     
                     replyCntMap.put((String) boardList.get(i).get("boardSeq"), boardReplyList.size());
                     
