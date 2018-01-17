@@ -2,6 +2,7 @@
 <%@ include file="/common/init.jsp"%>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstreestyle.min.css" media="screen"/>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/jstree/themes/proton/style.css" media="screen"/>    <!-- nav style -->
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/myfile.css" media="screen"/>
 <script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
@@ -81,7 +82,7 @@
               <ul id ="fileTableBody">
               </ul>
             </div>
-	</div> <!-- //right contents-->                                    
+	</div> <!-- //right contents-->
 </div>
 </aui:form>
 
@@ -91,7 +92,7 @@
 </div>
 
 <div style="width:45%; float:right; text-align:right;">
-	<input class="addIp button08_1" onclick="openPopUpFileUpload();" value=<liferay-ui:message key='edison-button-upload'/> type="button"/> 
+	<input class="addIp button08_1" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
 	<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
 	<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
 </div>
@@ -354,7 +355,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 	var rootData = [{
 		"id":"HOME",
 		"text":"HOME",
-		/* "type":"open", */
+		"type":"open",
 		"children": dataArr,
 		"li_attr":{
 			"childLength" : dataArr.length			
@@ -375,7 +376,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
                   //return node_parent.parent === "#"; //only allow dropping inside nodes of type '#'
 				  return node_parent.id != "#";
               }
-			  return true;  //allow all other operations	 	
+			  return true;  //allow all other operations
 		    }
 	   },
 	   /* "state" : "open", */
@@ -419,7 +420,6 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 								
 				    	} 
 				    }
-				    
 				}
 			}
 		}
