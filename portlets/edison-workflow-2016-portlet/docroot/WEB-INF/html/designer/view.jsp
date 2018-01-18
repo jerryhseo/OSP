@@ -208,9 +208,9 @@
 </div>
 
   
-<script src="${contextPath}/js/jquery-knob/dist/jquery.knob.min.js"></script>
+<script src="${contextPath}/js/jquery-knob/jquery.knob.min.js"></script>
 <script src="${contextPath}/js/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="${contextPath}/js/fastclick/lib/fastclick.js"></script>
+<script src="${contextPath}/js/fastclick/fastclick.js"></script>
 <script src="${contextPath}/js/adminlte/adminlte.js"></script>
 <script>
 </script>
