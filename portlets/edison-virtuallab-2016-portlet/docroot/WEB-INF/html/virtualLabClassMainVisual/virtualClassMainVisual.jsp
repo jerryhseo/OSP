@@ -12,7 +12,7 @@
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
 
-<style type="text/css">
+<!-- <style type="text/css">
 input[type="password"]{
 	margin-bottom: 0px;
 }
@@ -47,7 +47,9 @@ input[type="password"]{
 	color: #ffeab8;
 }
 
-</style>
+</style> -->
+
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualClassMainVisual.css" media="screen"/>
 
 <script type="text/javascript">
 AUI().ready(function() {
@@ -213,9 +215,67 @@ function <portlet:namespace/>myClass(){
 }
 </aui:script>
 
-<div class="contentwrap">
+<div class="topbgwrap">
+	<div class="classtopbg">
+		<!--location-->
+		<%-- <div class="classlocation">
+			<ul>
+				<li>
+					<img src="${contextPath}/images/home_icon.png" width="14" height="13"> &nbsp;>
+				</li>
+				<li>
+					교육 &nbsp;>
+				</li>
+				<li>
+					CLASS
+				</li>
+			</ul>
+		</div> --%>
+		
+		
+		<div class="classttxt">
+			<img src="${contextPath}/images/subtop_txt.png" width="643" height="40">
+			<span>
+				<img src="${contextPath}/images/class_txt.png" width="233" height="82">
+			</span>
+		</div>
+		
+		
+		<!--class 정보-->
+		<div class="infobox">
+			<ul>
+				<li><a href="#">${classInfo.classTitle }</a></li>
+				<li><a href="#">Professor : ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</a></li>
+			</ul>
+		</div>
+		
+		<!--공지사항-->
+		<div class="classnotice">
+			<div class="noticemore">
+				<img src="${contextPath}/images/more_icon.png" width="17" height="17">
+			</div>
+			<ul>
+				<li>공지사항</li>
+				<li><a href="#">강의자료 업데이트 알림</a></li>
+				<li>강의사이언스 앱 업데이트 알림</li>
+				<li>강의자료 업데이트 알림</li>
+				<li>강의 사이언스 업데이트 알림</li>
+			</ul>
+		</div>
+
+		<!--버튼-->
+		<div class="classtbtn">
+			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-modify-my-info"/></a>&nbsp; 			<!-- 내 정보 수정 -->
+			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-student-management"/></a>&nbsp; 		<!-- 학생 관리 	-->
+			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-survey"/></a>							<!-- 설문조사	-->
+		</div>
+
+	</div>
+</div>
+
+<%-- <div class="contentwrap">
 	<div class="classvisual">
-		<div class="cvtxt01"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/>${classInfo.classTitle }</div>
+		<div class="cvtxt01"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/>${classInfo.classTitle }</div>	
 		<div class="cvtxt02"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/><span>Professor :</span> ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</div>
 		<c:if test="${role eq 'TEMP'}">
 			<div class="cvtxt02"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/>
@@ -226,11 +286,11 @@ function <portlet:namespace/>myClass(){
 			</div>
 		</c:if>
 		<div class="vlbtn" style="float:right; margin-right:10px;">
-			<input type="button" value="<liferay-ui:message key='edison-button-board-list' />" class="button06" onclick="<portlet:namespace/>moveClassList()" />
-			<input type="button" value="<liferay-ui:message key='edison-course-class-myclass-list' />" class="button06" onclick="<portlet:namespace/>myClass()"  />
+			<input type="button" value="<liferay-ui:message key='edison-button-board-list' />" class="button06" onclick="<portlet:namespace/>moveClassList()" />	<!-- 목록 > 강좌로 이동-->
+			<input type="button" value="<liferay-ui:message key='edison-course-class-myclass-list' />" class="button06" onclick="<portlet:namespace/>myClass()"  />	<!-- 나의 강의 목록 : myEdison > 수강현황 -->
 		</div>
 	</div>
-</div>
+</div> --%>
 
 <div id="<portlet:namespace/>tempUserPasswordUpdate-dialog" class="newWindow" style="background-color:#fff; display:none;">
 	<div class="newWheader">

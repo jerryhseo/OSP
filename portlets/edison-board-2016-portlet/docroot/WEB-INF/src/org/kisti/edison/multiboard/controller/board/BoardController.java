@@ -227,6 +227,8 @@ public class BoardController {
 				return "list_cardType";		//	card 형태의 공지사항 게시판
 			} else if(divCd == 100 && viewStructure.equals("list")){
 				return "list";
+			} else if(divCd == 200){
+				return "listQnA";
 			}
 			return "listMain";
 		}else{
@@ -242,6 +244,7 @@ public class BoardController {
 		
 		//parameter
 		long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
+		long groupBoardSeq = ParamUtil.get(request, "groupBoardSeq", 0);	// QnA > 답변 데이터 추출을 위한 Parameter 추가
 		String customId = ParamUtil.getString(request, "customId");
 		
 		int listSize = Integer.parseInt(CustomUtil.strNull(params.get("listSize"), "10"));
@@ -271,8 +274,8 @@ public class BoardController {
 		}
 		
 		// 강좌에서 호출 -> 강의들의 질의응답 추출 , 그 외에는 해당 페이지 내의 boardList만 추출 :: 추출을 위해 virtualLabId(Parameter) 추가
-		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, 0, false, siteGroup, virtualLabId);
-		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, 0, siteGroup);
+		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, false, siteGroup, virtualLabId);
+		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, groupBoardSeq, siteGroup);
 		String paging = PagingUtil.getPaging(request.getContextPath(), CustomUtil.strNull(params.get("methodName")), totalCount, currentPage, listSize, blockSize);
 		
 		int pageCount = 0;		// 구현해야하는 pagination 개수
