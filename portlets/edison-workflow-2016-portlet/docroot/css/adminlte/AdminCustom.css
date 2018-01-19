@@ -28,7 +28,6 @@
 
 .sidebar-menu li.header {
  padding: 10px 25px 10px 15px;
- font-size: 17px;
  color: #000000;
 }
 
@@ -47,10 +46,12 @@
  font-weight: 400;
 }
 
-.sidebar-menu>li.header>.header-inner {
+#body-div .header-inner {
  margin: 0px 7px 0px 7px;
- padding: 18px 5px 18px 10px;
+ padding: 15px 5px 15px 10px;
  border-bottom: 1px #c5c5c5 solid;
+ font-size: 18px;
+ line-height: 1;
 }
 
 .sidebar {
@@ -121,4 +122,53 @@ a#mobile-toggle:hover, a#mobile-toggle:focus {
  .sidebar-open #mobile-toggle {
   display: none;
  }
+}
+
+.menu-panel{
+    position: absolute;
+    z-index: 2;
+    display: none;
+}
+
+.menu-panel .form-group{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+.menu-panel .box{
+    border-radius: 0;
+    height: calc(100vh - 103px);
+    margin-bottom: 0px;
+}
+.menu-panel .box > .box-header > .box-tools {
+    top: 10px;
+}
+@media ( min-width : 768px) {
+ .menu-panel{width: calc(100vw - 230px);}
+}
+
+@media ( max-width : 767px) {
+ .menu-panel{width: 100vw;}
+}
+
+@media (max-width: 979px) and (max-width: 767px) {
+    .aui .btn {
+      -webkit-box-sizing: unset;
+      -moz-box-sizing: unset;
+      box-sizing: unset;
+      display: unset;
+      margin-top: unset;
+    } 
+}
+
+@media (max-width: 979px) {
+  .aui .btn {
+    padding: unset;
+    font-size: unset; 
+  }
+}
+
+.skin-black-light .sidebar-menu > li:hover > a,
+.skin-black-light .sidebar-menu > li.active > a {
+  color: #ff5454;
+  background: #f4f4f5;
 }

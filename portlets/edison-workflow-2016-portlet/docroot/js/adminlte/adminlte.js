@@ -240,10 +240,10 @@ throw new Error('AdminLTE requires jQuery')
   BoxWidget.prototype.remove = function () {
     var removedEvent = $.Event(Event.removed);
 
-    $(this.element).slideUp(this.options.animationSpeed, function () {
-      $(this.element).trigger(removedEvent);
-      $(this.element).remove();
-    }.bind(this));
+    $(this.element).animate({width: 'hide'},this.options.animationSpeed, function () {
+        $(this.element).trigger(removedEvent);
+        $(this.element).remove();
+      }.bind(this));
   };
 
   // Private
