@@ -63,6 +63,8 @@ function <portlet:namespace/>dataSearchList() {
 			var rowResult;
 			$("#<portlet:namespace/>virtualLabClassScienceAppBody tr:not(:has(#1))").remove();
 			
+			/* 수정해야 할 코드 */
+			$("#<portlet:namespace/>scienceappContent").html("");
 			if(virtualLabScienceAppList.length == 0) {
 				/* $("#<portlet:namespace/>scienceapp").attr("align","center")
 													.text("<liferay-ui:message key='edison-there-are-no-data' />"); */
@@ -109,6 +111,7 @@ function <portlet:namespace/>dataSearchList() {
 			} else {
 				
 				for(var i = 0; i < virtualLabScienceAppList.length; i++) {
+					
 					scienceApp = $("<div/>").addClass("scienceapp");
 					scienceappUl = $("<ul/>");
 					

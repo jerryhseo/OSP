@@ -137,9 +137,9 @@
 			<div class="conwraptit01 rightt">
 				질문과 답변
 				<div class="moreicon">
-					<a href="#">
+					<a href="#" onclick="goList<portlet:namespace/>('${maxWindowStatus}');" style="cursor: pointer;">
 						MORE
-						<img src="${contextPath}/images/moreicon.png" width="11" height="11" onclick="goList<portlet:namespace/>('${maxWindowStatus}');" style="cursor: pointer;">
+						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
 					</a>
 				</div>
 			</div>
