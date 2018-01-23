@@ -208,39 +208,45 @@ function historyback(){
 }
 
 </script>
-<form name="surveyForm" method="post">
-<input type="hidden" name="<portlet:namespace/>surveySeqNo" value="${surveyMap.surveySeqNo}">
-<div class="h1">
-	<liferay-ui:message key='edison-virtuallab-survey' />
-</div>
-<div class="table1_list" >
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="75%" />
-		</colgroup>
-		<tr>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
-			<td>
-				${surveyMap.surveyTitle}
-			</td>
-		</tr>
-	</table>
-</div>
-<div class="table1_list" style="border-top: 0px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="10%" />
-			<col width="70%" />
-			<col width="5%" />
-		</colgroup>
-		<tbody id="<portlet:namespace/>questionTable">
-		</tbody>
-	</table>
-</div>
-</form>
-<div style="text-align: right; margin-top: 10px;">
-	<input type="button" class="button0801" onclick="historyback()" value="<liferay-ui:message key='cancel' />" />
-	<input type="button" class="button0801" onclick="onclickConfirm()"value="<liferay-ui:message key='edison-button-register' />" />
+
+<div class="table-responsive panel edison-panel" style="width: 1200px; margin: 0 auto;">
+	<form name="surveyForm" method="post">
+		<input type="hidden" name="<portlet:namespace/>surveySeqNo" value="${surveyMap.surveySeqNo}">
+		<div class="panel-heading clearfix">
+			<h1>
+				<liferay-ui:message key='edison-virtuallab-survey' />
+			</h1>
+		</div>
+		
+		<div class="table1_list" >
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+				<colgroup>
+					<col width="15%" />
+					<col width="75%" />
+				</colgroup>
+				<tr>
+					<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
+					<td>
+						${surveyMap.surveyTitle}
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="table1_list" style="border-top: 0px;">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+				<colgroup>
+					<col width="15%" />
+					<col width="10%" />
+					<col width="70%" />
+					<col width="5%" />
+				</colgroup>
+				<tbody id="<portlet:namespace/>questionTable">
+				</tbody>
+			</table>
+		</div>
+	</form>
+	<div style="text-align: right; margin-top: 10px;">
+		<input type="button" class="btn btn-default" onclick="historyback()" value="<liferay-ui:message key='cancel' />" />
+		<input type="button" class="btn btn-default" onclick="onclickConfirm()"value="<liferay-ui:message key='edison-button-register' />" />
+	</div>
 </div>

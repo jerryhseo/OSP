@@ -246,13 +246,13 @@ function <portlet:namespace/>dataSearchList(curPage) {
 					$("<td/>").text(virtualLabClassList[i].userCount + "/" +  virtualLabClassList[i].classPersonnel )
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='button01b' onclick='event.cancelBubble=true; <portlet:namespace/>deleteStudent(\"" + virtualLabClassList[i].virtualLabId + "\",\"" + virtualLabClassList[i].classId + "\",\"" + groupId + "\")'/>")
+					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='btn btn-default' onclick='event.cancelBubble=true; <portlet:namespace/>deleteStudent(\"" + virtualLabClassList[i].virtualLabId + "\",\"" + virtualLabClassList[i].classId + "\",\"" + groupId + "\")'/>")
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-delete' />' class='button01b' onclick='event.cancelBubble=true; <portlet:namespace/>virtualLabClassDisable(\"" + virtualLabClassList[i].virtualLabId + "\",\"" + virtualLabClassList[i].classId + "\",\"" + groupId + "\")'/>")
+					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-delete' />' class='btn btn-default' onclick='event.cancelBubble=true; <portlet:namespace/>virtualLabClassDisable(\"" + virtualLabClassList[i].virtualLabId + "\",\"" + virtualLabClassList[i].classId + "\",\"" + groupId + "\")'/>")
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type=\"button\" onclick=\"event.cancelBubble=true; <portlet:namespace/>setClassData('" + virtualLabClassList[i].classId + "')\" class=\"button01b\" value=\"<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-update' />\" />")
+					$("<td/>").html("<input type=\"button\" onclick=\"event.cancelBubble=true; <portlet:namespace/>setClassData('" + virtualLabClassList[i].classId + "')\" class=\"btn btn-default\" value=\"<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-update' />\" />")
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					$("#<portlet:namespace/>virtualLabClassListBody").append($rowResult);
@@ -526,15 +526,18 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 </script>
 
 <div class="table-responsive panel edison-panel">
-	<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' /></div> 
-		<div class="buttonbox0801">
-			<input type="hidden" id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" value="${virtualLabClassInfo.curPage}" />
-			<input id="<portlet:namespace/>virtualLabClassCreateBtn" name="<portlet:namespace/>virtualLabClassCreateBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-new-class-create' />" onClick="<portlet:namespace/>setClassDataClear()"/>
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />
+		</h3>
+		<div class="input-group">
+			<div class="input-group-btn">
+				<input type="hidden" id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" value="${virtualLabClassInfo.curPage}" />
+				<input id="<portlet:namespace/>virtualLabClassCreateBtn" name="<portlet:namespace/>virtualLabClassCreateBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-new-class-create' />" onClick="<portlet:namespace/>setClassDataClear()" style="float: right;"/>
+			</div>
 		</div>
 	</div>
-	
-	<div class="h5"></div>
 
 	<!-- <div class="table7_list"> -->
 	<div>

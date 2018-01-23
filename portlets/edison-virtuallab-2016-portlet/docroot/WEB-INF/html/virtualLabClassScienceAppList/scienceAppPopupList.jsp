@@ -91,11 +91,11 @@ function <portlet:namespace/>dataSearchList(reset) {
 								.text(virtualLabScienceAppList[i].scienceAppName)
 								.appendTo($trNode);
 					
-					$("<td/>").css("text-align","center")
+					$("<td/>").addClass("center")
 								.text("Ver "+virtualLabScienceAppList[i].scienceAppVersion)
 								.appendTo($trNode);
 					
-					$("<td/>").css("text-align","center")
+					$("<td/>").addClass("center")
 								.text(virtualLabScienceAppList[i].userFirstName)
 								.appendTo($trNode);
 					$("#<portlet:namespace/>scienceAppListBody").append($trNode);
@@ -138,21 +138,23 @@ function <portlet:namespace/>onKeyDown(e){
 <div class="tabletopbox">
 	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" style="margin:0px;">
 		<div class="search">
-			<div class="searchbox">
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-app-name' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
-				<input id="search_button" name="search_button" type="button" class="btnsearch" onClick="<portlet:namespace/>dataSearchList()"/>
+			<div class="searchbox input-group">
+				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-app-name' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+				<div class="input-group-btn">
+					<button id="search_button" name="search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
+					<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList(0)" ><liferay-ui:message key='edison-button-all-search' /></button>
+					<button type="button" class="btn btn-default" style="float:right;margin-left: 10px" onclick="Liferay.Util.getOpener().<portlet:namespace />closePopup('scienceAppDialog');"><liferay-ui:message key='close' /></button>
+					<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" style="float:right;" onClick="<portlet:namespace/>insertClassScienceApp()" ><liferay-ui:message key='edison-virtuallab-save' /></button>
+				</div>
 			</div>
-			<input id="total_search_button" name="total_search_button" type="button" class="button01" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>dataSearchList(0)" />
-			<input type="button" value="<liferay-ui:message key='close' />" class="button01" style="float:right;margin-left: 10px" onclick="Liferay.Util.getOpener().<portlet:namespace />closePopup('scienceAppDialog');"/>
-			<input id="total_search_button" name="total_search_button" type="button" class="button01" style="float:right;" value="<liferay-ui:message key='edison-virtuallab-save' />" onClick="<portlet:namespace/>insertClassScienceApp()" />
 		</div>
 		
 	</form>
 </div>
-<div class="table0_list borderno">
+<div class="table-responsive panel edison-panel">
 	<form id="scienceAppForm" name="scienceAppForm" method="post" onsubmit="return false;" style="margin:0px;">
 	<input type="hidden" id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" value=${virtualLabId}>
-	<table id="scienceAppTable" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+	<table id="scienceAppTable" class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
 		<colgroup>
 			<col width="5%" />
 			<col width="60%" />

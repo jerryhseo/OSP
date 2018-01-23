@@ -8,6 +8,8 @@
 <liferay-portlet:renderURL var="myClassURL" portletName="edisonmypage_WAR_edisondefault2016portlet" plid="${myClassPlid}">
 	<liferay-portlet:param name="clickTab" value="myClass" />
 </liferay-portlet:renderURL> 
+<liferay-portlet:resourceURL var="getSurveyListURL" id="getSurveyList" copyCurrentRenderParameters="false" />
+
 <% 
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
@@ -179,6 +181,104 @@ function <portlet:namespace/>checkValidation() {
 	});
 }
 
+/* 공지사항 리스트 */
+<portlet:namespace/>getNoticeBoardList();
+function <portlet:namespace/>getNoticeBoardList(){
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createResourceURL();
+		portletURL.setPortletId("edisonmultiboard_WAR_edisonboard2016portlet");
+		portletURL.setResourceId("getBoardListTest");
+		portletURL.setParameter("boardGroupId","${classInfo.groupId}");
+		portletURL.setParameter("customId","class_${classInfo.classId}");
+		
+		jQuery.ajax({
+			type: "POST",
+			url: portletURL,		// simulationController로 요청하는 URL
+			async : false,
+			dataType: 'json',
+			success: function(result) {
+				console.log("success");
+			},error:function(jqXHR, textStatus, errorThrown){
+				console.log("error");
+			}
+		});
+	});
+}
+
+/* 설문조사 */
+function <portlet:namespace/>openSurvey(){
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId("edisonvirtuallabclasssurvey_WAR_edisonvirtuallab2016portlet"); 
+		portletURL.setParameter("classId", "${classInfo.classId}");
+		portletURL.setParameter("groupId", "${classInfo.groupId}");
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					width:1024,
+					height:720,
+					cache: false,
+					draggable: false,
+					resizable: false,
+					modal: true,
+					destroyOnClose: true,
+					after: {
+						render: function(event) {
+							$("button.btn.close").on("click", function(e){
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+			id: "surveyDialog",
+			uri: portletURL.toString(),
+			title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+			}
+		);
+		
+	});
+}
+
+/* 학생관리 */
+function <portlet:namespace/>openStudentManagement(){
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId("edisonvirtuallabclassstudentmanagement_WAR_edisonvirtuallab2016portlet"); 
+		portletURL.setParameter("classId", "${classInfo.classId}");
+		portletURL.setParameter("groupId", "${classInfo.groupId}");
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					width:1024,
+					height:720,
+					cache: false,
+					draggable: false,
+					resizable: false,
+					modal: true,
+					destroyOnClose: true,
+					after: {
+						render: function(event) {
+							$("button.btn.close").on("click", function(e){
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+			id: "studentManagementDialog",
+			uri: portletURL.toString(),
+			title: "<liferay-ui:message key='edison-virtuallab-student-infomation' />",
+			}
+		);
+		
+	});
+}
+
 </script>
 
 <aui:script>
@@ -197,6 +297,16 @@ function <portlet:namespace/>moveClassList() {
 		window.location.href = portletURL.toString();
 	});
 	
+	jQuery.ajax({
+		type: "POST",
+		url: "",
+		data  : searchData,
+		success: function(data) {
+			openWindow(renderURL, dialogId);
+		},error:function(data,e){
+			alert("tagScript ERROR-->"+e);
+		}
+	});
 	
 }
 
@@ -244,8 +354,8 @@ function <portlet:namespace/>myClass(){
 		<!--class 정보-->
 		<div class="infobox">
 			<ul>
-				<li><a href="#">${classInfo.classTitle }</a></li>
-				<li><a href="#">Professor : ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</a></li>
+				<li>${classInfo.classTitle }</li>
+				<li>Professor : ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</li>
 			</ul>
 		</div>
 		
@@ -255,6 +365,7 @@ function <portlet:namespace/>myClass(){
 				<img src="${contextPath}/images/more_icon.png" width="17" height="17">
 			</div>
 			<ul>
+				<!-- boardController에서 공지사항 추출 -->
 				<li>공지사항</li>
 				<li><a href="#">강의자료 업데이트 알림</a></li>
 				<li>강의사이언스 앱 업데이트 알림</li>
@@ -264,10 +375,12 @@ function <portlet:namespace/>myClass(){
 		</div>
 
 		<!--버튼-->
-		<div class="classtbtn">
-			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-modify-my-info"/></a>&nbsp; 			<!-- 내 정보 수정 -->
-			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-student-management"/></a>&nbsp; 		<!-- 학생 관리 	-->
-			<a href="" class="btn_linec"><liferay-ui:message key="edison-virtuallab-survey"/></a>							<!-- 설문조사	-->
+		<div class="classtbtn" align="right">
+			<div class="btn_linec"><liferay-ui:message key="edison-virtuallab-modify-my-info"/></div>&nbsp; 			<!-- 내 정보 수정 -->
+			<c:if test="${role eq 'MANAGER' || role eq 'ADMIN' }">
+				<div class="btn_linec" onclick="<portlet:namespace/>openStudentManagement();"><liferay-ui:message key="edison-virtuallab-student-management"/></div>&nbsp; 		<!-- 학생 관리 	-->
+			</c:if>
+			<div class="btn_linec" onclick="<portlet:namespace/>openSurvey();"><liferay-ui:message key="edison-virtuallab-survey"/></div>							<!-- 설문조사	-->
 		</div>
 
 	</div>

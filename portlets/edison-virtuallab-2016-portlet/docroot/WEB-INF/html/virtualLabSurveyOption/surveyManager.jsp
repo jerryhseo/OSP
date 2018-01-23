@@ -10,12 +10,14 @@
 
 <div class="table-responsive panel edison-panel">
 	<div class="virtitlebox panel-heading clearfix">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-survey' />
-		</div>
-		<div class="buttonbox0801">
-			<input id="<portlet:namespace/>surveyOptionDialog" name="<portlet:namespace/>surveyOptionDialog" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />" onclick="<portlet:namespace/>surveyOption();"/>
+		</h3>
+		<div class="input-group">
+			<div class="input-group-btn">
+				<input id="<portlet:namespace/>surveyOptionDialog" name="<portlet:namespace/>surveyOptionDialog" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />" onclick="<portlet:namespace/>surveyOption();" style="float: right;"/>
+			</div>
 		</div>
 	</div>
 	
@@ -29,6 +31,12 @@
 			<col width="70%" />
 			<col width="30%" />
 		</colgroup>
+		<thead>
+			<tr style="border-bottom:1px solid #bcd1d6;">
+				<th align="center" scope="col" style="text-align: center;"><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
+				<th align="center" scope="col" style="text-align: center;"><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-period' /></th>
+			</tr>
+		</thead>
 		<tbody id="<portlet:namespace/>surveyManagerListBody">
 		</tbody>
 	</table>
@@ -68,7 +76,7 @@
 		</div>
 		
 		<div style="text-align: right; margin:0px 30px 25px 0px;">
-			<input class="button06" id="<portlet:namespace/>survey_request_button" name="<portlet:namespace/>survey_request_button" type="submit" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+			<input class="btn btn-default" id="<portlet:namespace/>survey_request_button" name="<portlet:namespace/>survey_request_button" type="submit" value="<liferay-ui:message key='edison-virtuallab-save' />" />
 		</div>
 	</form>
 </div>

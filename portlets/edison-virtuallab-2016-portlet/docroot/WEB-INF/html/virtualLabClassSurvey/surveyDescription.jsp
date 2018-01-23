@@ -119,38 +119,43 @@ function historyback(){
 }
 
 </script>
-<h1>
-	<liferay-ui:message key='edison-virtuallab-survey' />
-</h1>
 
-<div class="table1_list" >
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="75%" />
-		</colgroup>
-		<tr>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
-			<td>
-				${surveyMap.surveyTitle}
-			</td>					
-		</tr>
-	</table>
-</div>
-
-<div class="table1_list" style="border-top: 0px;">
-	<table id="questionTable" width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="10%" />
-			<col width="60%" />
-			<col width="10%" />
-		</colgroup>
-		<tbody id="<portlet:namespace/>questionTable">
-		</tbody>
-	</table>
-</div>
-<div style="height: 15px;"></div>
-<div style="text-align: right; margin-top: 10px;">
-	<input type="button" class="button0801" onclick="historyback()" value="<liferay-ui:message key='cancel' />" />
+<div class="table-responsive panel edison-panel" style="width: 1200px; margin: 0 auto;">
+	<div class="panel-heading clearfix">
+		<h1>
+			<liferay-ui:message key='edison-virtuallab-survey' />
+		</h1>
+	</div>
+	
+	<div class="table1_list" >
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data">
+			<colgroup>
+				<col width="15%" />
+				<col width="75%" />
+			</colgroup>
+			<tr>
+				<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
+				<td>
+					${surveyMap.surveyTitle}
+				</td>					
+			</tr>
+		</table>
+	</div>
+	
+	<div class="table1_list" style="border-top: 0px;">
+		<table id="questionTable" width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+			<colgroup>
+				<col width="15%" />
+				<col width="10%" />
+				<col width="60%" />
+				<col width="10%" />
+			</colgroup>
+			<tbody id="<portlet:namespace/>questionTable">
+			</tbody>
+		</table>
+	</div>
+	<div style="height: 15px;"></div>
+	<div style="text-align: right; margin-top: 10px;">
+		<input type="button" class="btn btn-default" onclick="historyback()" value="<liferay-ui:message key='cancel' />" />
+	</div>
 </div>
