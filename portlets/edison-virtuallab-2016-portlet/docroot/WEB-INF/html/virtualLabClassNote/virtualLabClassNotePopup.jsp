@@ -297,7 +297,7 @@ function <portlet:namespace/>tabChange(value){
 
 <br />
 
-<div id="<portlet:namespace/>contentDiv">
+<div id="<portlet:namespace/>contentDiv" class="table-responsive panel edison-panel">
 	<div class="virtitlebox">
 		<img src="/edison-virtuallab-2016-portlet/images/title_virtual.png" width="20" height="20"> 
 		<div class="virtitle" style="margin-bottom: 20px;"><liferay-ui:message key="edison-asset-select-related-information"/></div>
@@ -308,21 +308,26 @@ function <portlet:namespace/>tabChange(value){
 	<!--table view -->
 	<div class="tabletopbox clear">
 		<div class="search">
-			<div class="searchbox">
-				<input name="<portlet:namespace/>textfield" type="text"
+			<div class="input-group">
+				<input name="<portlet:namespace/>textfield" type="text" class="form-control"
 					id="<portlet:namespace/>textfield"
 					placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
 					size="40"
 					onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
-				<input type="button" name="fullsize" id="fullsize" value=""
+				<!-- <input  value=""
 					class="btnsearch"
-					onclick="<portlet:namespace/>searchListEntry(1);">
+					> -->
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);">
+						<i class="icon-search"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
 	
 	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table table-bordered table-hover edison-table">
 			<thead id="<portlet:namespace/>otherTableHeader">
 				<tr>
 					<th width="40%"><liferay-ui:message key="edison-table-list-header-title"/></th>
@@ -356,7 +361,7 @@ function <portlet:namespace/>tabChange(value){
 			<input id="<portlet:namespace/>classNoteSeq" name="<portlet:namespace/>classNoteSeq" type="hidden" value="0">
 			<div class="h20"></div>
 			<div class="table2_list">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed; ">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
 					<colgroup>
 						<col width="20%" />
 						<col width="80%" />
@@ -380,7 +385,7 @@ function <portlet:namespace/>tabChange(value){
 			</div>
 			<div class="h20"></div>
 			<div style="text-align: right; margin:20px 25px 30px 0px;">
-				<input id="<portlet:namespace/>file_creation_button" name="<portlet:namespace/>file_creation_button" type="submit" value="<liferay-ui:message key='registration' />" class="button06" />
+				<input id="<portlet:namespace/>file_creation_button" name="<portlet:namespace/>file_creation_button" type="submit" value="<liferay-ui:message key='registration' />" class="btn btn-default" />
 			</div>
 		</form>
 	</div>

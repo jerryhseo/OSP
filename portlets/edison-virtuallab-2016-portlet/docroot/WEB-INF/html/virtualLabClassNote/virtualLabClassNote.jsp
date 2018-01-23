@@ -285,8 +285,8 @@ function(popupIdToClose) {
 			<div class="conwraptit01">
 				강의자료 다운로드
 				<div class="moreicon">
-					<a href="#">
-						MORE
+					<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
+						<liferay-ui:message key='edison-virtuallab-scienceapp-management' />
 						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
 					</a> 
 				</div>

@@ -66,48 +66,8 @@ function <portlet:namespace/>dataSearchList() {
 			/* 수정해야 할 코드 */
 			$("#<portlet:namespace/>scienceappContent").html("");
 			if(virtualLabScienceAppList.length == 0) {
-				/* $("#<portlet:namespace/>scienceapp").attr("align","center")
-													.text("<liferay-ui:message key='edison-there-are-no-data' />"); */
-				for(var i=0; i<4; i++){
-					
-					scienceApp = $("<div/>").addClass("scienceapp");
-					scienceappUl = $("<ul/>");
-					
-					/* science app title */
-					scienceAppTitle = $("<a/>").text("This is title")
-											   .attr("onclick", "event.cancelBubble=true; <portlet:namespace/>moveScienceAppDetail('" + 0 +"', '"+ 0 + "');")
-											   .css("cursor", "pointer");
-					
-					$("<li/>").addClass("scienceappTitle")
-							  .append(scienceAppTitle)
-							  .appendTo(scienceappUl);
-					
-					/* science app version / univ name / user name */
-					$("<li/>").html("Ver 1.1.0"
-									+"<br>KISTI"
-									+"<br>EDISON")
-									.appendTo(scienceappUl);
-					
-					manualDownloadIcon = $("<img/>").attr("src", "${contextPath}/images/download_icon.png")
-													.attr("width", "9")
-													.attr("height", "12");
-					flag = true;
-					if(flag) {
-						$("<div/>").addClass("manualdnbtn")
-								   .text("MANUAL ")
-								   .append(manualDownloadIcon)
-								   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + 0 + "');")
-								   .css("cursor", "pointer")
-								   .appendTo(scienceappUl);
-					} else {
-						$("<div/>").addClass("manualdnbtn")
-						   .text("NO MANUAL")
-						   .appendTo(scienceappUl);
-					}
-					
-					scienceappUl.appendTo(scienceApp);
-					$("#<portlet:namespace/>scienceappContent").append(scienceApp);
-				}
+				$("#<portlet:namespace/>scienceapp").attr("align","center")
+													.text("<liferay-ui:message key='edison-there-are-no-data' />");
 			} else {
 				
 				for(var i = 0; i < virtualLabScienceAppList.length; i++) {
