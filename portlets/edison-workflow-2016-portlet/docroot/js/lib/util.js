@@ -1,5 +1,5 @@
 var consoleLog = {
-  loggingLevel: { info: true, debug: true, error: true },
+  loggingLevel: { info: true, debug: false, error: true },
   setLoggingLevel : function(loggingLevelJson){
     this.loggingLevel = loggingLevelJson;
   },
@@ -17,6 +17,69 @@ var consoleLog = {
     if(console && this.loggingLevel.error){
       console.log(msg);
     }
+  }
+};
+
+var aSyncAjaxHelper = {
+  "get": function (requestUrl, callback, errorCallback) {
+    var resultData;
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      method: 'GET',
+      timeout: 10000,
+    }).done(function (result) {
+      resultData = result;
+      if(callback){ callback(result) };
+      consoleLog.debug(requestUrl + " success");
+    }).fail(function () {
+      consoleLog.debug(requestUrl + " error");
+      if(errorCallback){ errorCallback(); }
+    }).always(function () {
+      consoleLog.debug(requestUrl + " complete");
+    });
+  },
+  "post": function (requestUrl, jsonData, callback) {
+    var resultData;
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      data : jsonData,
+      method: 'POST',
+      timeout: 10000,
+    }).done(function (result) {
+      resultData = result;
+      if(callback){ callback(result) };
+      consoleLog.debug(requestUrl + " success");
+    }).fail(function (msg) {
+      consoleLog.debug(requestUrl + " fail ");
+      consoleLog.debug(msg);
+    }).always(function (msg) {
+      consoleLog.debug(requestUrl + " complete");
+      consoleLog.debug(msg);
+    });
+  },
+  "jsonPost": function (requestUrl, jsonData, callback) {
+    var resultData;
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      data : jsonData,
+      method: "POST",
+      dataType: "json",
+      timeout: 10000,
+    }).done(function (result) {
+      resultData = result;
+      if(callback){ callback(result) };
+      consoleLog.debug(requestUrl + " success");
+    }).fail(function (msg) {
+      consoleLog.debug(requestUrl + " fail ");
+      consoleLog.debug(msg);
+    }).always(function (msg) {
+      consoleLog.debug(requestUrl + " complete");
+      consoleLog.debug(msg);
+    });
   }
 };
 
