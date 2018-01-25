@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
+
 <body>
 	<div class="columns-1-2-1" id="main-content" role="main">
 	
@@ -10,11 +11,12 @@
 	        <liferay-portlet:runtime portletName="edisonvirtuallabclassmainvisual_WAR_edisonvirtuallab2016portlet_INSTANCE_44oBtU3CyBWo"  queryString="&classId=${classId}&groupId=${groupId}" />
 	    </div>
 	</div>
-	<div class="row">
+	<!-- 설문조사 -->
+	<%-- <div class="row">	
 	    <div class="portlet-column portlet-column-only span12" id="column-3">
 	        <liferay-portlet:runtime portletName="edisonvirtuallabclasssurvey_WAR_edisonvirtuallab2016portlet"  queryString="&classId=${classId}&groupId=${groupId}" />
 	    </div>
-	</div>
+	</div> --%>
 	<div class="row">
 	    <div class="portlet-column portlet-column-only span12" id="column-2">
 	        <liferay-portlet:runtime portletName="edisonvirtuallabclassscienceapplist_WAR_edisonvirtuallab2016portlet"  queryString="&classId=${classId}&groupId=${groupId}" />

@@ -129,6 +129,13 @@
 	  <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 	  <css-class-wrapper>edison-workbench-job-status-and-result</css-class-wrapper>
     <add-default-resource>true</add-default-resource>
+    
+	</portlet>
+	<portlet>
+		<portlet-name>SimulationDashboard</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>dashboard-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

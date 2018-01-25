@@ -1,0 +1,195 @@
+/** The Magic **/
+.simulation-workbench .btn-breadcrumb .btn:not(:last-child):after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 10px solid white;
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  left: 100%;
+  z-index: 3;
+}
+.simulation-workbench .btn-breadcrumb .btn:not(:last-child):before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-left: 10px solid rgb(173, 173, 173);
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  margin-left: 1px;
+  left: 100%;
+  z-index: 3;
+}
+
+/** The Spacing **/
+.simulation-workbench .btn-breadcrumb .btn {
+  padding:6px 12px 6px 24px;
+}
+.simulation-workbench .btn-breadcrumb .btn:first-child {
+  padding:6px 6px 6px 10px;
+}
+.simulation-workbench .btn-breadcrumb .btn:last-child {
+  padding:6px 18px 6px 24px;
+}
+
+/** Default button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-default:not(:last-child):after {
+  border-left: 10px solid #fff;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-default:not(:last-child):before {
+  border-left: 10px solid #ccc;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-default:hover:not(:last-child):after {
+  border-left: 10px solid #ebebeb;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-default:hover:not(:last-child):before {
+  border-left: 10px solid #adadad;
+}
+
+/** Primary button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-primary:not(:last-child):after {
+  border-left: 10px solid #428bca;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-primary:not(:last-child):before {
+  border-left: 10px solid #357ebd;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):after {
+  border-left: 10px solid #3276b1;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):before {
+  border-left: 10px solid #285e8e;
+}
+
+/** Success button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-success:not(:last-child):after {
+  border-left: 10px solid #5cb85c;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-success:not(:last-child):before {
+  border-left: 10px solid #4cae4c;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-success:hover:not(:last-child):after {
+  border-left: 10px solid #47a447;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-success:hover:not(:last-child):before {
+  border-left: 10px solid #398439;
+}
+
+/** Danger button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-danger:not(:last-child):after {
+  border-left: 10px solid #d9534f;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-danger:not(:last-child):before {
+  border-left: 10px solid #d43f3a;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-danger:hover:not(:last-child):after {
+  border-left: 10px solid #d2322d;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-danger:hover:not(:last-child):before {
+  border-left: 10px solid #ac2925;
+}
+
+/** Warning button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-warning:not(:last-child):after {
+  border-left: 10px solid #f0ad4e;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-warning:not(:last-child):before {
+  border-left: 10px solid #eea236;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-warning:hover:not(:last-child):after {
+  border-left: 10px solid #ed9c28;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-warning:hover:not(:last-child):before {
+  border-left: 10px solid #d58512;
+}
+
+/** Info button **/
+.simulation-workbench .btn-breadcrumb .btn.btn-info:not(:last-child):after {
+  border-left: 10px solid #5bc0de;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-info:not(:last-child):before {
+  border-left: 10px solid #46b8da;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-info:hover:not(:last-child):after {
+  border-left: 10px solid #39b3d7;
+}
+.simulation-workbench .btn-breadcrumb .btn.btn-info:hover:not(:last-child):before {
+  border-left: 10px solid #269abc;
+}
+
+/** Workbench portlet Custom CSS **/
+.simulation-workbench .sidebar-collapse .sidebar .pagination{
+	display: none;
+}
+
+.simulation-workbench .sidebar .pagination{
+	padding-left: 45px;
+	display: block;
+}
+
+.simulation-workbench .sidebar .treeview-menu i.success{
+	color: green;
+}
+.simulation-workbench .sidebar .treeview-menu i.fail{
+	color: red;
+}
+
+.simulation-workbench .sidebar .sidebar-menu li.menu-open ul.treeview-menu{
+	padding-left: 13px;
+}
+
+.simulation-workbench .sub-col{
+		outline: 3px solid #dddddd;
+}
+
+.simulation-workbench .workbench-layout-area{
+	position: relative;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+.simulation-workbench .workbench-layout-area .row{
+	position: relative;
+}
+
+.simulation-workbench .content-header{
+/* 		padding-bottom: 15px; */
+}
+.simulation-workbench .devider {
+	position: absolute;
+	z-index: 3;
+	width: 40px;
+	height: 40px;
+	cursor: move;
+/* 		border-radius: 50%; */
+/* 		border: 1px solid #dedede; */
+}
+
+/*aui css error*/
+.simulation-workbench .collapse {
+	display: none;
+}
+
+#port-remote {
+    position: absolute;
+    z-index: 9;
+}
+
+#mydivheader {
+    cursor: move;
+    z-index: 10;
+}
+
+
+
+
+
+
+
+

@@ -35,6 +35,7 @@ AUI().ready(
 			var banner = A.one('#banner');
 			var triggerPos = 200;
 			var lastScrollPos = 0;
+			var savedScrollPos = 0;
 			
 			var displayBanner = function() {
 				

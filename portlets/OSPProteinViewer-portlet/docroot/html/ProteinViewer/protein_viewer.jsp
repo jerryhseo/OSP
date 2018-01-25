@@ -75,7 +75,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>action = '<%=action%>';
-var <portlet:namespace/>eventEnable = JSPN.parse('<%=eventEnable%>');
+var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
 
 /***********************************************************************
@@ -202,7 +202,11 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
-			<portlet:namespace/>action = e.action;
+			if( e.action )
+				<portlet:namespace/>action = e.action;
+			else
+				<portlet:namespace/>action = 'output';
+				
 			var events = [
 				'OSP_EVENTS_REGISTERED',
 				'OSP_LOAD_DATA',

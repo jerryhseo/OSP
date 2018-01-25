@@ -63,7 +63,7 @@
 										#set ($nav_child_css_class = "active")
 									#end
 									
-									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
+									<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" role="presentation">
 										<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child_url" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
 									</li>
 								#end

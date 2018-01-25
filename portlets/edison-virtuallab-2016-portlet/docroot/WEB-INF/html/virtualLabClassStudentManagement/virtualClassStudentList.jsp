@@ -525,7 +525,7 @@ function <portlet:namespace/>dataSearchList() {
 					$("<td/>").text(virtualClassStudentList[i].executeCount)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-simulation-monitoring-title' />' class='button01b' onclick=\"<portlet:namespace/>searchMonitoring('" + virtualClassStudentList[i].userId + "')\"/>")
+					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-simulation-monitoring-title' />' class='btn btn-default' onclick=\"<portlet:namespace/>searchMonitoring('" + virtualClassStudentList[i].userId + "')\"/>")
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					if(virtualClassStudentList[i].requestSort == "REQUEST") {
@@ -533,7 +533,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-approve' />' class='button01b' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "CONFIRM" + "\", \"" + virtualClassStudentList[i].userId + "\")'/><input type='button' value='<liferay-ui:message key='edison-virtuallab-denial' />' style='margin-left:10px;' class='button01b' onclick='<portlet:namespace/>deniedDialogOpen(\"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-approve' />' class='btn btn-default' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "CONFIRM" + "\", \"" + virtualClassStudentList[i].userId + "\")'/><input type='button' value='<liferay-ui:message key='edison-virtuallab-denial' />' style='margin-left:10px;' class='btn btn-default' onclick='<portlet:namespace/>deniedDialogOpen(\"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "CONFIRM") {
@@ -541,7 +541,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />' class='button01b' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "REQUEST" + "\", \"" + virtualClassStudentList[i].userId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />' class='btn btn-default' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "REQUEST" + "\", \"" + virtualClassStudentList[i].userId + "\")'/>")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "DENIED") {
@@ -549,7 +549,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />' class='button01b' onclick='alert(\"" + virtualClassStudentList[i].processNote +"\");' />")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />' class='btn btn-default' onclick='alert(\"" + virtualClassStudentList[i].processNote +"\");' />")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "TEMP") {
@@ -557,7 +557,7 @@ function <portlet:namespace/>dataSearchList() {
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='button01b' onclick='studentDelete(\"" + virtualClassStudentList[i].userScreenName + "\", \"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='btn btn-default' onclick='studentDelete(\"" + virtualClassStudentList[i].userScreenName + "\", \"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					} else {
@@ -830,54 +830,52 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 </script>
 <div class="h10"></div>
 <div class="table-responsive panel edison-panel">
-	<div class="virtitlebox panel-heading clearfix"><img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle"><liferay-ui:message key='edison-virtuallab-student-infomation' /></div> 
-		<div class="search01">
-			<div class="buttonbox0802">
-				<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" class="form-control" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
+	<div class="virtitlebox panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-virtuallab-student-infomation' />
+		</h3>
+		<div class="input-group">
+			<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" class="form-control" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
+			<div class="input-group-btn">
 				<button id="search_button" name="search_button" class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
 				<input id="<portlet:namespace/>addStudentBtn" name="<portlet:namespace/>addStudentBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-student-add' />"/>
 				<input id="addStudentAllBtn" name="addStudentAllBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-excel-add' />" onClick="studentExcelInsert();return false;"/>
 			</div>
-			<!-- <div class="searchbox01">
-			</div> -->
 		</div>
 	</div>
-	<div class="h10"></div>
 	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
 		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
 	</form>
-	<div class="table7_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
-			<colgroup>
-				<col width="5%" />
-				<col width="15%" />
-				<col width="10%" />
-				<col width="10%" />
-				<col width="10%" />
-				<col width="15%" />
-				<col width="10%" />
-				<col width="10%" />
-				<col width="13%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-code' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='name' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-survey-participation' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-sw-data-result' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-simulation-monitoring-title' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-student-management' /></th>
-					<th align="center" scope="col"></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>virtualClassStudentListBody">
-			</tbody>
-		</table>
-	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+		<colgroup>
+			<col width="5%" />
+			<col width="15%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="15%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="13%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-code' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='name' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-survey-participation' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-sw-data-result' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-simulation-monitoring-title' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-student-management' /></th>
+				<th align="center" scope="col"></th>
+			</tr>
+		</thead>
+		<tbody id="<portlet:namespace/>virtualClassStudentListBody">
+		</tbody>
+	</table>
 </div>
 
 <div id="<portlet:namespace/>spaceDiv" align="center"></div>
@@ -1015,7 +1013,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="graybtn" onclick="studentUpdate()"/>
+			<input id="virtualLab_update_button" name="virtualLab_update_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="graybtn" onclick="studentUpdate()"/>
 		</div>
 	</form>
 </div>

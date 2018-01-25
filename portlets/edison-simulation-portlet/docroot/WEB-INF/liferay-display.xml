@@ -18,4 +18,7 @@
 	  <portlet id="edison-workbench-job-monitoring"></portlet>
 	  <portlet id="edison-workbench-job-status-and-result"></portlet>
 	</category>
+	<category name="OSP Workbench">
+		<portlet id="SimulationDashboard" />
+	</category>
 </display>

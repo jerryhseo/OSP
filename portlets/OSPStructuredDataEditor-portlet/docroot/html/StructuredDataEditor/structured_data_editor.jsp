@@ -102,7 +102,10 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( myId === e.targetPortlet ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.action;
+				if( e.action )
+					<portlet:namespace/>action = e.action;
+				else
+					<portlet:namespace/>action = 'input';
 				
 				var events = [
 					OSP.Event.OSP_LOAD_DATA,
@@ -130,8 +133,7 @@ Liferay.on(
 						targetPortlet: <portlet:namespace/>connector
 				};
 				
-				//console.log( 'OSP_EVENTS_REGISTERED event received ');
-				Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData );
+				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
 			}
 		}
 );
@@ -171,13 +173,15 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
-			console.log('<portlet:namespace/> OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-			var eventData = {
-					portletId: '<%=portletDisplay.getId()%>',
-					targetPortlet: <portlet:namespace/>connector
-			};
-			
-			Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData );
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+				console.log('<portlet:namespace/> OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
+				var eventData = {
+						portletId: '<%=portletDisplay.getId()%>',
+						targetPortlet: <portlet:namespace/>connector
+				};
+				
+				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
+			}
 		}
 );
 
@@ -226,27 +230,17 @@ function <portlet:namespace/>loadStructure( inputData ){
 		});
 		break;
 	case OSP.Enumeration.PathType.FILE:
-		$.ajax({
-			url: '<%=serveResourceURL.toString()%>',
-			type:'POST',
-			async: false,
-			dataType:'text',
-			data:{
-				<portlet:namespace/>command: 'READ_FILE',
-				<portlet:namespace/>action: <portlet:namespace/>action,
-				<portlet:namespace/>parentPath: inputData.parent(),
-				<portlet:namespace/>fileName: inputData.name()
-			},
-			success:function(result){
-				dataType.loadStructure( result );
-			},
-			error: function(){
-				console.log('[ERROR] AJAX FAILED during READ_SAMPLE');
-			}
-		});
-		break;
+		var eventData = {
+		                 portletId: '<%=portletDisplay.getId()%>',
+		                 targetPortlet: <portlet:namespace/>connector,
+		                 data: JSON.parse( JSON.stringify(inputData) )
+		}
+		
+		Liferay.fire( OSP.Event.OSP_READ_STRUCTURED_DATA_FILE, eventData );
+		return;
 	default:
 		alert( 'Un-known dataType: '+inputData.type());
+		return;
 	}
 		
 	$('#<portlet:namespace/>canvas').empty();

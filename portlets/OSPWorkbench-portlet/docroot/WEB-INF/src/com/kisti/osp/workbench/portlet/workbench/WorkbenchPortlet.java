@@ -1,12 +1,17 @@
 package com.kisti.osp.workbench.portlet.workbench;
 
+import java.awt.JobAttributes;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +28,12 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteStreamHandler;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.kisti.edison.bestsimulation.NoSuchSimulationException;
 import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
 import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
@@ -56,7 +67,9 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
@@ -64,7 +77,10 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import freemarker.template.Configuration;
@@ -93,6 +109,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 	private static final String _DEFAULT_CLASS_ID = " ";
 	private static final String _DEFAULT_JOB_TITLE = "job";
 	private static final String _DEFAULT_JOB_DESCRIPTION = " ";
+	
+	private static final String _DEFAULT_TEMP_DIR="/EDISON/LDAP/TEMP";
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -173,6 +191,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 
 		String command = ParamUtil.getString(resourceRequest, "command");
 		_log.debug("ServeResource Command: "+command);
+		System.out.println("ServeResource Command: "+command);
 		String action = ParamUtil.getString(resourceRequest, "action", "input");
 		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
 		
@@ -187,6 +206,12 @@ public class WorkbenchPortlet extends MVCPortlet {
 		}
 		else if( command.equalsIgnoreCase("GET_DATATYPE_SAMPLE")){
 			this.getDataTypeSample(resourceRequest, resourceResponse);
+		}
+		else if( command.equalsIgnoreCase("GET_DATA_STRUCTURE")){
+			this.getDataStructure(resourceRequest, resourceResponse);
+		}
+		else if ( command.equalsIgnoreCase("GET_DATA_STRUCTURE_WITH_DATA") ){
+			this.getDataStructureWithData(resourceRequest, resourceResponse);
 		}
 		else if ( command.equalsIgnoreCase("CREATE_SIMULATION") ){
 			this.createSimulation(resourceRequest, resourceResponse);
@@ -225,7 +250,11 @@ public class WorkbenchPortlet extends MVCPortlet {
 		else if( command.equalsIgnoreCase("DOWNLOAD")){
 		}
 		else if( command.equalsIgnoreCase("UPLOAD")){
-			this.uploadIBFile(resourceRequest, resourceResponse);
+			try {
+				this.uploadIBFile(resourceRequest, resourceResponse);
+			} catch (SystemException | PortalException e) {
+				e.printStackTrace();
+			}
 		}
 		else if( command.equalsIgnoreCase("SAVE_AS")){
 			this.saveAsIBFile(resourceRequest, resourceResponse);
@@ -261,7 +290,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			_log.error("[ERROR] Wrong file entry: "+dlEntryId);
 			throw new PortletException();
 		}
-		
+		//System.out.println("Sample file title: "+fileEntry.getTitle());
 		InputStream stream = null;
 		try {
 			stream = fileEntry.getContentStream();
@@ -276,6 +305,41 @@ public class WorkbenchPortlet extends MVCPortlet {
 			stream.close();
 		
 		return content;
+	}
+	
+	private String uploadDLFile( PortletRequest resourceRequest, long dlEntryId, String parent, String fileName ) throws PortletException, IOException, PortalException, SystemException{
+		if( dlEntryId <= 0){
+			System.out.println("uploadDLFile: dlEntryId should be lager than 0.");
+			return "";
+		}
+		
+		Path tempPath = Paths.get(_DEFAULT_TEMP_DIR).resolve( String.valueOf(dlEntryId) );// Data should be inserted by SystemPropertyService.
+		FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
+		if( !Files.exists(tempPath) ){
+			InputStream stream = null;
+			try {
+				stream = fileEntry.getContentStream();
+				if( Validator.isNotNull(stream) )
+					Files.copy(stream, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (PortalException | SystemException e1) {
+				_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
+				throw new PortletException();
+			} finally{
+				if( Validator.isNotNull(stream) ){
+					stream.close();
+				}
+			}
+		}
+		
+		if( Validator.isNull(fileName)){
+			fileName = fileEntry.getTitle(); 
+		}
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
+		String fileId = ibAgent.uploadFile( tempPath, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
+		
+		return fileId;
 	}
 
 	private JSONObject getContentLayout( float layoutHeight, String portletId){
@@ -540,6 +604,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			break;
 		}
 		
+		/*
 		String strInputs = "";
 		try {
 			strInputs = SimulationJobLocalServiceUtil.getJobInputData(job.getJobUuid());
@@ -552,6 +617,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			JSONArray jsonInputs = JSONFactoryUtil.createJSONArray(strInputs);
 			json.put("inputs_", jsonInputs);
 		}
+		*/
 		
 		return json;
 	}
@@ -634,11 +700,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String scienceAppName = ParamUtil.getString(portletRequest, "scienceAppName");
 		String scienceAppVersion = ParamUtil.getString(portletRequest, "scienceAppVersion");
 		
-		Date now = new Date();
-		SimpleDateFormat fomatter = new SimpleDateFormat("yyyy.MM.dd HH.mm.ss");
-		String simulationTime = fomatter.format(now);
-		System.out.println("Simulation Time: "+simulationTime);
-		
 		JSONArray jobs = null;
 		try {
 			jobs = JSONFactoryUtil.createJSONArray(ParamUtil.getString(portletRequest, "jobs" ));
@@ -687,6 +748,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		//Set execution and files
 		Map<String, String> files = new LinkedHashMap<>();
+		Map<String, JSONObject> progArgs = new LinkedHashMap<>();
+		
 		JSONArray submitedJobs = JSONFactoryUtil.createJSONArray();
 					
 		int jobCount = jobs.length();
@@ -721,55 +784,139 @@ public class WorkbenchPortlet extends MVCPortlet {
 			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
 			this.jsonArrayPrint(jobData);
 			
-			try {
-				System.out.println("Job Data will be stored: "+job.getJobUuid());
-				SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), jobData.toString());
-			} catch (SystemException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
+			Date date = new Date();
 			for( int dataIndex = 0; dataIndex<jobData.length(); dataIndex++){
 				JSONObject inputData = jobData.getJSONObject(dataIndex);
 				this.jsonObjectPrint(inputData);
 				String portName = inputData.getString("portName_");
 				String pathType = inputData.getString("type_");
+				
+				
 				if( pathType.equalsIgnoreCase("fileContent") ){
-					Date date = new Date();
-					String fileName = portName.replaceAll("-", "" )+"_"+date.getTime();
+					String inputParent = inputData.getString("parent_", "");
+					String inputFileName = inputData.getString("name_", "");
+					Path parentPath = null;
+					if( Validator.isNull(parentPath) ){
+						SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+						parentPath = Paths.get(dateForm.format(date));
+					}
+					else{
+						parentPath = Paths.get(inputParent);
+					}
+					
+					if( Validator.isNull(inputFileName) ){
+						inputFileName = portName.replaceAll("-", "");
+					}
+					
+					String tempFileName = "";
+					tempFileName = portName.replaceAll("-", "" )+"_"+date.getTime();
+					
+					Path tempTarget = Paths.get(_DEFAULT_TEMP_DIR).resolve(tempFileName);
+					String content = inputData.getString("context_");
+					Files.createFile( tempTarget );
+					Files.write(tempTarget, content.getBytes());
+				
+					
 					try {
-						String fileId = ibAgent.uploadFile(fileName, inputData.getString("context_"), _DEFAULT_CLUSTER);
+						String fileId = ibAgent.uploadFile(tempTarget, parentPath, Paths.get(inputFileName), _DEFAULT_CLUSTER);
 						System.out.println("File Id After IB Upload: "+fileId);
+						
+						JSONObject argVal = JSONFactoryUtil.createJSONObject();
+						argVal.put("type", "FILE_ID");
+						argVal.put("value", fileId);
+						progArgs.put(portName, argVal);
+						
 						files.put(portName, fileId);
+						inputData.put("type_", "file");
+						inputData.put("parent_", parentPath.toString());
+						inputData.put("name_", inputFileName);
+						inputData.remove("context_");
 					} catch (JSONException | SystemException e) {
-						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (PortalException e) {
 						e.printStackTrace();
 					}
 				}
 				else if( pathType.equalsIgnoreCase("dlEntryId")){
-					String content = this.readDLFileContent(inputData.getLong("id_"));
-					Date date = new Date();
-					String fileName = portName.replaceAll("-", "" )+"_"+date.getTime();
+					long fileEntryId = inputData.getLong("id_");
+					String inputParent = inputData.getString("parent_", "");
+					String inputFileName = inputData.getString("name_", "");
+					Path parentPath = null;
+					if( Validator.isNull(parentPath) ){
+						SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+						parentPath = Paths.get(dateForm.format(date));
+					}
+					else{
+						parentPath = Paths.get(inputParent);
+					}
+					
+					if( Validator.isNull(inputFileName) ){
+						try {
+							FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+							inputFileName = fileEntry.getTitle();
+						} catch (PortalException | SystemException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					String fileId = "";
 					try {
-						String fileId = ibAgent.uploadFile(fileName, content, _DEFAULT_CLUSTER);
-						System.out.println("File Id After IB Upload: "+fileId);
-						files.put(portName, fileId);
-					} catch (JSONException | SystemException e) {
+						fileId = this.uploadDLFile(portletRequest, fileEntryId, parentPath.toString(), inputFileName);
+					} catch (PortalException | SystemException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "FILE_ID");
+					argVal.put("value", fileId);
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, fileId);
+					
+					inputData.put("type_", "file");
+					inputData.put("parent_", parentPath.toString());
+					inputData.put("name_", inputFileName);
+					inputData.remove("id_");
 				}
 				else if( pathType.equalsIgnoreCase("file")){
-					String fileName = Paths.get(inputData.getString("parent_"))
-												.resolve(inputData.getString("name_")).toString();
+					Path target = Paths.get(inputData.getString("parent_"))
+												.resolve(inputData.getString("name_"));
+					System.out.println("Port Data get IB File ID: "+target.toString());
 					try {
-						// String fileId =  ibAgent.getFileId(fileName);
-						String fileId =  ibAgent.getFileId(fileName, false);
+						String fileId =  ibAgent.getFileId(target.toString(), false);
+						
+						JSONObject argVal = JSONFactoryUtil.createJSONObject();
+						argVal.put("type", "FILE_ID");
+						argVal.put("value", fileId);
+						progArgs.put(portName, argVal);
+						
 						files.put(portName, fileId);
 					} catch (JSONException | SystemException e) {
+						e.printStackTrace();
+					} catch (PortalException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					/* Make input data link
+					String fileId = null;
+					
+					Path source = parentPath.resolve(inputFileName);
+					Path targetParent =  Paths.get(String.valueOf(date.getTime()));
+					Path targetFile = Paths.get(inputFileName);
+					
+					try {
+						fileId = ibAgent.linkFile(source, targetParent, targetFile, _DEFAULT_CLUSTER);
+						files.put(portName, fileId);
+					} catch (SystemException | PortalException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					inputData.put("parent_", targetParent.toString());
+					*/
 				}
 				else if ( pathType.equalsIgnoreCase("folder")){
 					
@@ -780,10 +927,20 @@ public class WorkbenchPortlet extends MVCPortlet {
 				else if ( pathType.equalsIgnoreCase("uri")){
 					
 				}
+				else if( pathType.equalsIgnoreCase("context") ){
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "STRING");
+					argVal.put("value", inputData.getString("context_"));
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, inputData.getString("context_"));
+				}
 				else{
 					_log.error("Un-defined path type: " + pathType);
 					throw new PortletException();
 				}
+				
+				inputData.put( "dirty_", false);
 			}
 			
 			JSONObject result = ibAgent.submit(
@@ -798,7 +955,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 					_DEFAULT_CLASS_ID, 
 					exePath, 
 					dependencies, 
-					files,
+					progArgs,
 					cluster, 
 					mpiAttributes, 
 					this.getJobStatusCallbackURL( portletRequest, simulationUuid, job.getJobSeqNo())
@@ -822,6 +979,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 				try {
 					SimulationJobLocalServiceUtil.updateSimulationJob(job);
 					SimulationJobDataLocalServiceUtil.replaceJobData(jobUuid, job.getJobUuid(), jobData.toString());
+					System.out.println("+++++Replaced Job Data ");
+					System.out.println(jobData.toString());
 				} catch (SystemException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -842,6 +1001,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		JSONObject result = JSONFactoryUtil.createJSONObject();
 		String fileContent = this.readDLFileContent( dlEntryId );
+		String fileName = "";
 		
 		DataType dataType;
 		try {
@@ -859,6 +1019,14 @@ public class WorkbenchPortlet extends MVCPortlet {
 		} catch (SystemException e1) {
 			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
 			throw new IOException();
+		}
+		
+		try {
+			FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
+			result.put("fileName", fileEntry.getTitle());
+		} catch (PortalException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if( dataTypeStructure == null ){
@@ -898,27 +1066,30 @@ public class WorkbenchPortlet extends MVCPortlet {
 		}
 		
 		long sampleDLEntryId = Long.parseLong(dataType.getSamplePath());
-		System.out.println("Data Type Sample ID: "+ dataType.getSamplePath() );
 		if( sampleDLEntryId > 0 ){
-			String fileContent = this.readDLFileContent(sampleDLEntryId);
-			if( dataTypeStructure == null ){
+			try {
+				FileEntry dlFileEntry = DLAppLocalServiceUtil.getFileEntry(sampleDLEntryId);
+				System.out.println("DLFileEntry Name: "+ dlFileEntry.getTitle());
+				result.put("fileName", dlFileEntry.getTitle());
+			} catch (PortalException | SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		if( Validator.isNull(dataTypeStructure) ){
+			System.out.println("Data Type Sample ID: "+ dataType.getSamplePath() );
+			
+			
+			if( sampleDLEntryId > 0 ){
+				String fileContent = this.readDLFileContent(sampleDLEntryId);
 				result.put("contentType", "fileContent");
 				result.put("fileContent", fileContent);
 			}
-			else{
-				result.put("contentType", "structuredData");
-				result.put("fileContent", fileContent);
-				result.put("dataStructure", dataTypeStructure.getStructure());
-			}
 		}
 		else{
-			if( dataTypeStructure == null ){
-				result.put("error", "Data type ["+dataTypeName+"-"+dataTypeVersion+"] has no sample file.");
-			}
-			else{
 				result.put("contentType", "structuredData");
 				result.put("dataStructure", dataTypeStructure.getStructure());
-			}
 		}
 
 		this.jsonObjectPrint(result);
@@ -928,6 +1099,9 @@ public class WorkbenchPortlet extends MVCPortlet {
 	protected void getDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
 		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
 		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
+		String fileName = ParamUtil.getString(resourceRequest, "fileName");
+		
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		
 		DataType dataType;
@@ -957,6 +1131,78 @@ public class WorkbenchPortlet extends MVCPortlet {
 
 		this.jsonObjectPrint(sample);
 		ServletResponseUtil.write(httpResponse, sample.toString());
+	}
+	
+	protected void getDataStructure( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		
+		DataType dataType = null;
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		ServletResponseUtil.write(httpResponse, dataTypeStructure.getStructure());
+	}
+	
+	protected void getDataStructureWithData( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
+		String fileName = ParamUtil.getString(resourceRequest, "fileName");
+		boolean isJobResult = ParamUtil.getBoolean(resourceRequest, "isJobResult", false);
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		DataType dataType = null;
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			throw new PortletException("No Data Structure: "+dataTypeName);
+		}
+		
+		byte[] fileContent = null;
+		try {
+			fileContent = FileManagementLocalServiceUtil.readFileContent(resourceRequest, Paths.get(parentPath).resolve(fileName).toString(), isJobResult);
+		} catch (PortalException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		result.put("dataStructure", dataTypeStructure.getStructure());
+		result.put("structuredData", new String(fileContent) );
+		
+		this.jsonObjectPrint(result);
+		ServletResponseUtil.write(httpResponse, result.toString());
 	}
 	
 	protected void createSimulation( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
@@ -1126,11 +1372,11 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
 		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
-		String initData = ParamUtil.getString(resourceRequest, "initData", StringPool.BLANK);
+		String initData = ParamUtil.getString(resourceRequest, "initData", "");
 		
 		ServiceContext sc = null;
 		try {
-			sc = ServiceContextFactory.getInstance(resourceRequest);
+			sc = ServiceContextFactory.getInstance(SimulationJob.class.getName(), resourceRequest);
 			//sc.setUserId( user.getUserId() );
 			sc.setCreateDate( new Date() );
 			sc.setModifiedDate( new Date() );
@@ -1149,7 +1395,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 			throw new PortletException();
 		}
 		
-		if( !initData.isEmpty() ){
+		if( Validator.isNotNull(initData) ){
+			System.out.println("+++++++++Job Init Data: \n "+initData);
 			try {
 				SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), initData);
 			} catch (SystemException e) {
@@ -1207,20 +1454,19 @@ public class WorkbenchPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 		if( jobData != null ){
-			JSONArray inputs = null;
-			try {
-				System.out.println("loadJob inputs: "+jobData.getJobData());
-				inputs = JSONFactoryUtil.createJSONArray(jobData.getJobData());
-				System.out.println("++++++++JOB DATA:        ");
-				this.jsonArrayPrint(inputs);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String inputs = "";
+			System.out.println("loadJob inputs: "+jobData.getJobData());
+			inputs = jobData.getJobData();
+			System.out.println("++++++++JOB DATA:        ");
+			System.out.println(inputs);
 			jsonJob.put("inputs_", inputs);
 		}
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = themeDisplay.getUser();
+		System.out.println("User Screen Name: "+user.getScreenName());
 		this.jsonObjectPrint(jsonJob);
+		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
 	
@@ -1244,44 +1490,28 @@ public class WorkbenchPortlet extends MVCPortlet {
 		ServletResponseUtil.write(httpResponse, result.toString() );
 	}
 	
-	protected void uploadIBFile(ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException{
+	protected void uploadIBFile(ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, SystemException, PortalException, IOException{
 		String targetFolder = ParamUtil.getString(resourceRequest, "targetFolder");
+		targetFolder = targetFolder.replaceAll(" ", "_");
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
+		fileName = fileName.replaceAll(" ", "_");
 		String uploadFileParam = "uploadFile";
 		
 		_log.debug("UPLOAD targetFolder: "+ targetFolder);
 		_log.debug("UPLOAD fileName: "+ fileName);
-		Path target = Paths.get(targetFolder).resolve(fileName);
-		System.out.println("Upload target path: "+target.toString());
-		
+
+		// copy to system temp directory
+		Path tempFile = Paths.get(_DEFAULT_TEMP_DIR).resolve(fileName);
+		this.upload(
+				resourceRequest, 
+				tempFile.toString(), 
+				uploadFileParam, 
+				false);
+
+		// copy to ib shared directory
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		User user = themeDisplay.getUser();
-		Group group = themeDisplay.getScopeGroup();
-
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
-		File uploadedFile = uploadRequest.getFile(uploadFileParam);
-		byte[] content = null;
-		try {
-			content = Files.readAllBytes( uploadedFile.toPath() );
-		} catch (IOException e) {
-			_log.error("Upload File read error: "+ uploadedFile.toString());
-			throw new PortletException();
-		}
-		
-		String userScreenName = user.getScreenName();
-		if( userScreenName.equalsIgnoreCase("edison") )
-			userScreenName = "edisonadm";
-
-		
-		IBAgent ibAgent = new IBAgent(group, user);
-		
-		String fileId = "";
-		try {
-			fileId = ibAgent.uploadFile(target.toString(), new String(content), _DEFAULT_CLUSTER);
-		} catch (JSONException | SystemException | IOException e) {
-			_log.error("IB Upload File error "+ uploadedFile.toString());
-			throw new PortletException();
-		}
+		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
+		String fileId = ibAgent.uploadFile( tempFile, Paths.get(targetFolder), Paths.get(fileName), _DEFAULT_CLUSTER );
 		
 		JSONObject uploadResult = JSONFactoryUtil.createJSONObject();
 		uploadResult.put("fileId", fileId);
@@ -1299,6 +1529,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String filePath = ParamUtil.getString(resourceRequest, "filePath");
 		String content = ParamUtil.getString(resourceRequest, "content");
 		
+		/*
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		User user = themeDisplay.getUser();
 		Group group = themeDisplay.getScopeGroup();
@@ -1314,7 +1545,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		String fileId = "";
 		try {
-			fileId = ibAgent.uploadFile(filePath, content, _DEFAULT_CLUSTER);
+			fileId = ibAgent.uploadFile(Paths.get(filePath), content.getBytes(), _DEFAULT_CLUSTER);
 		} catch (JSONException | SystemException | IOException e) {
 			_log.error("IB SaveAs File error "+ filePath);
 			throw new PortletException();
@@ -1330,6 +1561,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			_log.error("Upload File response error: "+ fileId);
 			throw new PortletException();
 		}
+		*/
 	}
 	
 	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo ){
@@ -1373,6 +1605,40 @@ public class WorkbenchPortlet extends MVCPortlet {
 		return url;
 	}
 	
+	private DefaultExecuteResultHandler execute(CommandLine cmdLine, Map<String, String> environment, OutputStream outStream,
+            OutputStream errorStream) throws ExecuteException, IOException {
+        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+        ExecuteStreamHandler streamHandler = new PumpStreamHandler(outStream, errorStream);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setExitValue(0);
+        executor.setStreamHandler(streamHandler);
+        if (environment != null) {
+            executor.execute(cmdLine, environment, resultHandler);
+        } else {
+            executor.execute(cmdLine, resultHandler);
+        }
+        return resultHandler;
+    }
+	
+	private void upload( 
+			PortletRequest portletRequest, 
+			String target,
+			String uploadFileName,
+			boolean isJobResult) throws SystemException, PortalException, IOException{
+		
+		Path targetPath = Paths.get(_DEFAULT_TEMP_DIR).resolve(target);// Data should be inserted by SystemPropertyService.
+
+		System.out.println("Upload Target: "+targetPath.toString());
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(portletRequest);
+		
+		System.out.println(uploadRequest.getFileName(uploadFileName));
+		
+		// Get the uploaded file as a file.
+		File uploadedFile = uploadRequest.getFile(uploadFileName);
+		
+		// Move the existing temporary file to new location.
+		Files.copy(uploadedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+	}
 	
 	private static final String _callbackAPI = "/api/jsonws/edison-simulation-portlet.simulationjob/update-simulation-job";
 }

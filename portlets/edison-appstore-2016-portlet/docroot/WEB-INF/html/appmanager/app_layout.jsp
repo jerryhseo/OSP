@@ -243,13 +243,12 @@ function <portlet:namespace/>layoutAreaViewInit(){
 		
 		//draw 할 port가 없을 경우 Setting
 		var portAreaDisplayNone = true;
-		$("#<portlet:namespace/>port > .panel").each(function(i,e){
+		$("#<portlet:namespace/>portCol > .panel").each(function(i,e){
 			if($(this).css("display")!="none"){
 				portAreaDisplayNone = false;
 				return false;
 			}
 		});
-		
 		if(portAreaDisplayNone){
 			$("#<portlet:namespace/>portCol").css("display","none");
 			$("#<portlet:namespace/>layoutCol").attr("class","col-md-12");
@@ -265,18 +264,6 @@ function <portlet:namespace/>layoutAreaViewEvent(){
 		$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
 		$("#<portlet:namespace/>flowLayoutArea").css("display","none");
 	}
-}
-
-function <portlet:namespace/>layoutResult(){
-	$( ".gridLayoutArea .sortable-list" ).each(function() {
-		var sortedIDs = $(this).sortable("toArray");
-		for(var i=0;i<sortedIDs.length;i++){
-			var portId = sortedIDs[i];
-			alert("portID ===>"+portId);
-			var portInstanceId = $(".sortable-list li[id='"+portId+"']").attr("data-port-portlet");
-			alert("portID ===>"+portInstanceId);
-		}
-	});
 }
 
 function <portlet:namespace/>cancelSortable(target,id){
@@ -301,9 +288,9 @@ function <portlet:namespace/>actionCall(mode){
 		Layout.templateId(templateId);
 		
 		//System Default Portlet Set
-		Layout.addPortlet('column-1','Simulation',true);
-		Layout.addPortlet('column-2','SimulationJob',true);
-		
+		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
+		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
+		Layout.addPortlet('column-3','ScienceAppPort_WAR_edisonappstore2016portlet',true);
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
 			var columnId = $(this).attr("id");
@@ -568,5 +555,4 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 	    </div>
 	</div>
 </div>
-<button class="btn btn-default" type="button" onClick="<portlet:namespace/>layoutResult();"><span class="icon-user"> Result</span></button>
 

@@ -5,7 +5,7 @@
 <head>
 </head>
 <body>
-	<div class="columns-1-2-1" id="main-content" role="main">
+	<div class="columns-1-2-1" id="main-content" role="main" style="width: 1200px; margin: 0 auto;">
 	    <div class="portlet-layout row-fluid">
 	        <div class="portlet-column portlet-column-only span12" id="column-1">
 	            <liferay-portlet:runtime portletName="edisonvirtuallabmainvisual_WAR_edisonvirtuallab2016portlet_INSTANCE_EhuMMjcuMQwq"  queryString="&virtualLabId=${virtualLabId}&groupId=${groupId}&admin=${admin} }" />

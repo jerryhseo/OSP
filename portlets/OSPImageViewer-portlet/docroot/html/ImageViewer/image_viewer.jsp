@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
@@ -28,6 +29,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 <div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
 	<div class="span12" style="height:inherit;">
 		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
+			<div class="span8 offset1" id="<portlet:namespace/>title"></div>
 			<div class="dropdown-wrapper" >
 				<div class="dropdown">
                   <i class="icon-reorder icon-menu"></i>
@@ -63,8 +65,12 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_iv"
-    + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_iv";
+if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
+	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+else
+	<portlet:namespace/>fileExplorerId += '001';
+	
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>action = '<%=action%>';
@@ -160,12 +166,14 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
-		dialogURL.setParameter('action', <portlet:namespace/>action);
+		// dialogURL.setParameter('action', <portlet:namespace/>action ? <portlet:namespace/>action : 'output' );
+		dialogURL.setParameter('action', <portlet:namespace/>action );
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
 		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 		
+		console.log( 'Open fileExplorer '+<portlet:namespace/>action);
 		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
 		    $<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}else{
@@ -270,8 +278,11 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function(e){
-			console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-		  $("#<portlet:namespace/>canvas").empty();
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
+				console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
+		  		<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png', 100);
+		  		<portlet:namespace/>setTitle('');
+			}
 		}
 );
 
@@ -311,6 +322,8 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         <portlet:namespace/>drawImage(
                                                    serveResourceURL.toString(), 
                                                    zooming);
+        
+        <portlet:namespace/>setTitle(inputData.name());
     });
 }
 
@@ -332,8 +345,28 @@ function <portlet:namespace/>drawImage( url, zooming ){
 	);
 }
 
+function <portlet:namespace/>clearImage(){
+    setTimeout(
+	    function(){
+	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
+	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
+	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.clearImage) {
+	   	    	iframe.contentWindow.clearImage ();
+	    	} 
+	    	else{
+	    		<portlet:namespace/>clearImage();
+	    	}
+	    }, 
+	    10
+	);
+}
+
+
 function <portlet:namespace/>getFirstFileName( argData, zooming ){
     var inputData = argData.clone();
+    console.log('Image viewer: ', inputData );
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
@@ -406,6 +439,10 @@ function <portlet:namespace/>checkPath( filePath, command ){
 			console.log('AJAX ERROR-->', data, e);
 		}
 	});
+}
+
+function <portlet:namespace/>setTitle( title ){
+	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
 }
 
 </script>

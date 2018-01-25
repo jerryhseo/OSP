@@ -63,63 +63,70 @@
 		font-size: 15px;
 	}
 	
+	.selectview.dropdown-menu{
+		display: block;
+		position: relative;
+	}
+	
 </style>
 
 <body>
-	<div><h3><liferay-ui:message key='edison-course-class-list' /></h3></div>
-	<div class="portlet-body">
-		<div style="float: left;">	
-			<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-				<input type="text" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="height:28px; margin-top: 10px" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
-				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-				<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}"/>
-				<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}"/>
-				<input type="button" onClick="<portlet:namespace/>dataSearchList()" class="btn_blue" value="<liferay-ui:message key='edison-button-search' />" />
-				<input type="button" onClick="<portlet:namespace/>dataSearchList(0)" class="btn_blue" value="<liferay-ui:message key='edison-button-all-search' />" />
-				
-			</form>
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h3><liferay-ui:message key='edison-course-class-list' /></h3>
+			<div style="float: left;">	
+				<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+					<input type="text" id="<portlet:namespace/>search_parameter" class="form-control" name="<portlet:namespace/>search_parameter" style="height:28px; margin-top: 10px" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+					<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+					<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}"/>
+					<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}"/>
+					<input type="button" onClick="<portlet:namespace/>dataSearchList()" class="btn btn-default" value="<liferay-ui:message key='edison-button-search' />" />
+					<input type="button" onClick="<portlet:namespace/>dataSearchList(0)" class="btn btn-default" value="<liferay-ui:message key='edison-button-all-search' />" />
+					
+				</form>
+			</div>
+			<div class="topright">
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview dropdown-menu">	<!-- selectview -->
+					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+					<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+				</select>
+			</div>
 		</div>
-		<div class="topright">
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview">
-				<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-				<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-				<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-				<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-			</select>
+		<div class="h10"></div>
+		
+		<div class="table7_list onhover">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+				<colgroup>
+					<col width="5%" />
+					<col width="20%" />
+					<col width="15%" />
+					<col width="15%" />
+					<col width="20%" />
+					<col width="12%" />
+					<col width="13%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-affiliation' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-creation-date' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-total-number4' /></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>virtualLabListBody">
+				</tbody>
+			</table>
 		</div>
+		
+		<div id="<portlet:namespace/>spaceDiv" align="center"></div>
+		<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+		<div class="h20"></div>
 	</div>
-	<div class="h10"></div>
-	
-	<div class="table7_list onhover">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="5%" />
-				<col width="20%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="20%" />
-				<col width="12%" />
-				<col width="13%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-affiliation' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-creation-date' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-total-number4' /></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>virtualLabListBody">
-			</tbody>
-		</table>
-	</div>
-	
-	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
-	<div class="h20"></div>
 </body>
 
 <div id="register-request-dialog" title="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />" class="newWindow" style="background-color: #fff; display:none;" >

@@ -183,25 +183,29 @@ function <portlet:namespace/>onKeyDown() {
 }
 
 </script>
-<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
-		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
-		<div class="virtitle"><liferay-ui:message key='edison-virtuallab-admin' /></div>
-		<div class="search01">
-			<div class="searchbox01">
-				<input id="<portlet:namespace/>userScreenName" name="<portlet:namespace/>userScreenName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin:1px 0;" onkeypress="<portlet:namespace/>onKeyDown();"/>
-				<input id="search_button" name="search_button" type="button" class="btnsearch" onClick="<portlet:namespace/>getUserInfo()"/>
-			</div>
-			<div class="virsearch"><liferay-ui:message key='edison-virtuallab-search-manager' /></div>
-		</div>
-	</form>
-</div>
 
 <div class="h5"></div> 
 
-<div class="table6_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-virtuallab-admin' />
+		</h3>
+		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+			<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
+			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
+			<div class="input-group">
+				<input id="<portlet:namespace/>userScreenName" class="form-control" name="<portlet:namespace/>userScreenName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin:1px 0; float: right; width: 250px;" onkeypress="<portlet:namespace/>onKeyDown();"/>
+				<div class="virsearch" style="float: right;"><liferay-ui:message key='edison-virtuallab-search-manager' /></div>
+				<div class="input-group-btn">
+					<button id="search_button" name="search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>getUserInfo()"><i class="icon-search"></i></button>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="70" />
 			<col width="*" />

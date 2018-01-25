@@ -11,18 +11,17 @@
     </style>
 	<script>
 		var namespace;
-		var basePath;
+		var inDownload = false;
 		
 		function setNamespace( ns ){
 			namespace = ns;
 		}
 		
-		function loadFileExplorer( staticPath, parentPath, fileList, width, height ){
+		function loadFileExplorer( parentPath, fileList, width, height ){
 			$('#canvas').width( width );
 			$('#canvas').height( height );
-			basePath = staticPath;
 			
-			drawFileExplorer( fileList, mergePath( basePath, parentPath) );
+			drawFileExplorer( fileList, parentPath );
 		}
 		
 		function passSelectedFile( folderPath, fileName, type ){
@@ -61,6 +60,31 @@
 				return parent;
 			
 			return parent+'/'+child;
+		}
+		
+		function showCheckbox( flag ){
+			inDownload = flag;
+			if( flag ){
+				$('#panel').jstree().show_checkboxes();
+			}
+			else{
+				$('#panel').jstree().hide_checkboxes();
+			}
+			
+			// $('#panel').jstree().redraw(true);
+		}
+		
+		function getSelectedFiles(){
+			var selectedNodes = $('#panel').jstree(true).get_selected();
+			for( var index in  selectedNodes ){
+				var node = selectedNodes[index];
+				if( node === '..' ){
+					selectedNodes = OSP.Util.removeArrayElement(selectedNodes, index);
+					break;
+				}
+			}
+			
+			return selectedNodes;
 		}
 		
 		function drawFileExplorer( fileInfoList, parentPath )
@@ -135,8 +159,12 @@
 						'sort': function (a, b) {
 								return this.get_text(a).toLowerCase() > this.get_text(b).toLowerCase() ? 1 : -1; 
 						},
+						'checkbox': {
+							'keep_selected_style': false,
+							'visible': inDownload
+						},
 						'progressive_render' : true,
-						'plugins' : ['state', 'dnd', 'sort', 'types', 'progressive_render' , 'hotkeys']
+						'plugins' : ['state', 'dnd', 'sort', 'types', 'progressive_render' , 'hotkeys', 'changed', 'checkbox']
 				}).bind('loaded.jstree', function(event, data) { 
 						$('#panel').jstree('open_all');
 						$('#panel').jstree('deselect_all');
@@ -144,11 +172,16 @@
 						if( data.node.type == 'file' ){
 							var parentPath = getParentPath( data.node.id );
 							var folderName = getFileName( data.node.id );
-							passSelectedFile( parentPath, folderName, 'file' );
+							if( !inDownload ){
+								passSelectedFile( parentPath, folderName, 'file' );
+							}
 						}else if( data.node.type == 'closed-folder'){
+							console.log( 'getParentPath: '+data.node.id);
 							var parentPath = getParentPath( data.node.id );
 							var folderName = getFileName( data.node.id );
-							passSelectedFile( parentPath, folderName, 'folder' );
+							if( !inDownload ){
+								passSelectedFile( parentPath, folderName, 'folder' );
+							}
 							lookupFolder( parentPath, folderName );
 						}
 						else if( data.node.type == 'prev-folder' ){
@@ -156,7 +189,9 @@
 							var nextRootPath = getParentPath( data.node.id );
 							var selectFolderName = getFileName( data.node.id );
 
-							passSelectedFile( nextRootPath, selectFolderName, 'folder' );
+							if( !inDownload ){
+								passSelectedFile( nextRootPath, selectFolderName, 'folder' );
+							}
 							lookupFolder( nextRootPath, selectFolderName );
 						}
 				});

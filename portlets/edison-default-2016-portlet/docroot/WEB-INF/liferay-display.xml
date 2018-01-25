@@ -11,5 +11,6 @@
 		<portlet id="edison-my-page" />
 		<portlet id="edison-relate-asset" />
 		<portlet id="edison-template" />
+		<portlet id="edison-workbench-template" />
 	</category>
 </display>

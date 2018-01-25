@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height:90%;">
+<html style="height:85%;">
 <head>
     <script src="<%=request.getContextPath()%>/js/Highcharts-4.2.7/api/js/jquery-1.11.3.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/Highcharts-4.2.7/js/highcharts.js"></script>
@@ -19,20 +19,19 @@
 	</div>
 </div>
 
-<div id="canvas" style="height:100%;"></div>
+<div id="canvas" style="height:85%;"></div>
 
 <script>
 
     var currentData;
     var currentTitle;
     var currentSubtitle;
-    var currentHighCharts;
     
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
 $(window).resize( function(e){
-    //drawPlot( currentData, currentTitle, currentSubtitle );
+    loadPlot( currentData, currentTitle, currentSubtitle );
 });
  
 function drawPlot( plotData, title, subtitle){
@@ -40,7 +39,7 @@ function drawPlot( plotData, title, subtitle){
     currentTitle = title;
     currentSubtitle = subtitle;
     
-	var highCharts = currentHighCharts;
+	var highCharts = highCharts;
 	var loadedSeriesMap = OSPPlot.SeriesMap();
 	
 	var highChartsConfig = OSPPlot.onedToHighChartsConfig( plotData, title, subtitle, loadedSeriesMap );
@@ -59,8 +58,8 @@ function drawPlot( plotData, title, subtitle){
 		highCharts.setTitle( null, { text: subtitle }, false );
 	}else{
 	    $('#canvas').highcharts( highChartsConfig );
-	    currentHighCharts = $('#canvas').highcharts();
-	    highCharts = currentHighCharts;
+	    highCharts = $('#canvas').highcharts();
+	    highCharts = highCharts;
 		
 		$.each(['line', 'spline', 'area', 'areaspline', 'scatter', 'logarithmic'], function (i, type) {
 			$('#' + type).on('click', function () {
