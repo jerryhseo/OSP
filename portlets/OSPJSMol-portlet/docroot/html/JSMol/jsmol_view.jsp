@@ -20,6 +20,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 <div class="row-fluid jsmol-portlet common-analyzer-portlet">
     <div class="span12" style="height:inherit;">
         <div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
+          <div class="span8 offset1" id="<portlet:namespace/>title"></div>
           <div class="dropdown-wrapper" >
             <div class="dropdown">
                       <i class="icon-reorder icon-menu"></i>
@@ -194,7 +195,10 @@ Liferay.on(
   		var myId = '<%=portletDisplay.getId()%>';
   		if( e.targetPortlet === myId ){
   			<portlet:namespace/>connector = e.portletId;
-  			<portlet:namespace/>action = e.action;
+  			if( e.action )
+  				<portlet:namespace/>action = e.action;
+  			else
+  				<portlet:namespace/>action = 'output';	
   			var events = [
   				OSP.Event.OSP_EVENTS_REGISTERED,
   				OSP.Event.OSP_LOAD_DATA
@@ -318,6 +322,8 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	        serveResourceUrl.setParameter('relative', inputData.relative());
 	    	        
 		    	    iframe.contentWindow.loadJSMolFile(serveResourceUrl.toString());
+		    	    
+		    	    $('#<portlet:namespace/>title').html(inputData.name());
 	    	    });
 	    	} 
 	    	else{

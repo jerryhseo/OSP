@@ -65,15 +65,18 @@ $('#<portlet:namespace/>canvas').on('change', function(){
  ***********************************************************************/
 Liferay.on(
 		OSP.Event.OSP_HANDSHAKE,
-		function( eventData ){
+		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( eventData.targetPortlet === myId ){
-				<portlet:namespace/>connector = eventData.portletId;
-				<portlet:namespace/>action = eventData.action;
+				<portlet:namespace/>connector = e.portletId;
+				if( e.action )
+					<portlet:namespace/>action = e.action;
+				else
+					<portlet:namespace/>action = 'input';
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
-					OSP.Event.OSP_REQUEST_DATA,
+					OSP.Event.OSP_REQUEST_DATA
 					OSP.Event.OSP_LOAD_DATA
 				];
 				var eventData = {
@@ -135,7 +138,9 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
-			$('#<portlet:namespace/>canvas').val('');
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+				$('#<portlet:namespace/>canvas').val('');
+			}
 		}
 );
 

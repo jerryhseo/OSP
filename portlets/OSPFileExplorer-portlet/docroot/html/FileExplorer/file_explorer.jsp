@@ -84,7 +84,6 @@ var <portlet:namespace/>action = '<%=action %>';
 
 var <portlet:namespace/>extension;
 var <portlet:namespace/>sampleSelected = false;
-var <portlet:namespace/>basePath = '';
 var <portlet:namespace/>selectedFile;
 
 var <portlet:namespace/>runningMode = '_DEBUG_';
@@ -96,20 +95,21 @@ if( <portlet:namespace/>mode === 'VIEW' ){
 	$('#<portlet:namespace/>menuSection').css('display', 'none');
 }
 
+console.log('FileExplorer eventEnable: '+ <portlet:namespace/>eventEnable);
 if( !<portlet:namespace/>eventEnable ){
 	var inputData = '<%=inputData%>';
 	if( !inputData ){
-	    <portlet:namespace/>basePath = new OSP.InputData();
-	    <portlet:namespace/>basePath.parent( '');
-	    <portlet:namespace/>basePath.name('');
-	    <portlet:namespace/>basePath.type(OSP.Enumeration.PathType.FOLDER);
-	    <portlet:namespace/>basePath.relative( true );
+	    <portlet:namespace/>selectedFile = new OSP.InputData();
+	    <portlet:namespace/>selectedFile.parent( '');
+	    <portlet:namespace/>selectedFile.name('');
+	    <portlet:namespace/>selectedFile.type(OSP.Enumeration.PathType.FOLDER);
+	    <portlet:namespace/>selectedFile.relative( true );
 	}
 	else{
-	    <portlet:namespace/>basePath = new OSP.InputData(JSON.parse(inputData));
+	    <portlet:namespace/>selectedFile = new OSP.InputData(JSON.parse(inputData));
 	}
 	<portlet:namespace/>passNamespace();
-	<portlet:namespace/>initFileExplorer(<portlet:namespace/>basePath, true );
+	<portlet:namespace/>initFileExplorer(<portlet:namespace/>selectedFile, true );
 }
 
 function <portlet:namespace/>passNamespace(){
@@ -144,12 +144,11 @@ function <portlet:namespace/>iframeReady(){
  $('#<portlet:namespace/>upload').click(function(){
 	 var targetFolder;
 	 if( <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.FOLDER ){
-		 targetFolder = OSP.Util.mergePath( <portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent());
-		 targetFolder = OSP.Util.mergePath( targetFolder, <portlet:namespace/>selectedFile.name() );
+		 targetFolder = OSP.Util.mergePath( <portlet:namespace/>selectedFile.parent(), <portlet:namespace/>selectedFile.name() );
 	 }
 	 else if ( <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.FILE || 
 			   <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.EXT){
-		 targetFolder = OSP.Util.mergePath( <portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent());
+		 targetFolder = <portlet:namespace/>selectedFile.parent();
 	 }
 	 
 	 var eventData = {
@@ -178,29 +177,20 @@ $('#<portlet:namespace/>sample').click(function(){
 });
 
 $('#<portlet:namespace/>download').click(function(){
+	var iframe = document.getElementById('<portlet:namespace/>canvas');
+	
 	if( <portlet:namespace/>downloadMode === false ){
 		<portlet:namespace/>downloadMode = true;
-		$('#<portlet:namespace/>canvas').find('i.jstree-checkbox').css('display', 'inline');
+		iframe.contentWindow.showCheckbox( <portlet:namespace/>downloadMode );
 		alert('To download files, select files to be downloaded and SELECT AGAIN download menu.');
-		$('#<portlet:namespace/>canvas').jstree().redraw(true);
 		return;
 	}
 	
-	var selectedNodes = $('#<portlet:namespace/>canvas').jstree(true).get_selected();
-	for( var index in  selectedNodes ){
-		var node = selectedNodes[index];
-		if( node === '..' ){
-			selectedNodes = OSP.Util.removeArrayElement(selectedNodes, index);
-			break;
-		}
-	}
-	//console.log( selectedNodes );
-	//console.log('Parent of selected: '+ OSP.Util.mergePath(<portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent()));
-	
+	var selectedFiles = iframe.contentWindow.getSelectedFiles();
 	data = {
 		<portlet:namespace/>command: 'DOWNLOAD',
-		<portlet:namespace/>fileNames: JSON.stringify(selectedNodes),
-		<portlet:namespace/>folderPath: OSP.Util.mergePath(<portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent())
+		<portlet:namespace/>fileNames: JSON.stringify(selectedFiles),
+		<portlet:namespace/>folderPath: <portlet:namespace/>selectedFile.parent()
 	};
 	
 	var base = '<%=serveResourceURL.toString()%>';
@@ -209,10 +199,9 @@ $('#<portlet:namespace/>download').click(function(){
 	
 	//console.log( 'Download URL: '+ url);
 	($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
-
+	
 	<portlet:namespace/>downloadMode = false;
-	$('#<portlet:namespace/>canvas').jstree().uncheck_all();
-	$('#<portlet:namespace/>canvas').find('i.jstree-checkbox').css('display', 'none');
+	iframe.contentWindow.showCheckbox( <portlet:namespace/>downloadMode );
 });
 
 $('#<portlet:namespace/>selectFile').bind(
@@ -232,11 +221,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			
 			// check that file name is duplicated using AJAX.
 			var duplicated;
-			var target = OSP.Util.mergePath(
-							<portlet:namespace/>basePath,
-							uploadFolder
-			);
-			target = OSP.Util.mergePath( target, uploadFileName );
+			var target = OSP.Util.mergePath( uploadFolder, uploadFileName );
 			
 			$.ajax({
 				url: '<%=serveResourceURL.toString()%>',
@@ -270,7 +255,7 @@ $('#<portlet:namespace/>selectFile').bind(
 							'OK': function() {
 								<portlet:namespace/>submitUpload( 
 										uploadFile, 
-										OSP.Util.mergePath( <portlet:namespace/>basePath, uploadFolder),
+										uploadFolder,
 										$('#<portlet:namespace/>uploadFileName').val()
 								);
 								$( this ).dialog( "close" );
@@ -285,7 +270,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			else{
 				<portlet:namespace/>submitUpload(
 						uploadFile, 
-						OSP.Util.mergePath( <portlet:namespace/>basePath, uploadFolder),
+						uploadFolder,
 						uploadFileName
 				);
 			}
@@ -301,7 +286,10 @@ $('#<portlet:namespace/>selectFile').bind(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.action;
+				if( e.action )
+					<portlet:namespace/>action = e.action;
+				else
+					<portlet:namespace/>action = 'input';
 				
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
@@ -343,6 +331,8 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
+				console.log('['+myId+'] OSP_LOAD_DATA: ', e );
+				
 				var inputData = new OSP.InputData( e.data );
 				
 				<portlet:namespace/>initFileExplorer( inputData );
@@ -355,16 +345,10 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-			    var data = new OSP.InputData();
-				data.type(<portlet:namespace/>selectedFile.type());
-				data.parent(OSP.Util.mergePath(<portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent()));
-				data.name($('#<portlet:namespace/>selectedFile').val());
-				data.relative( <portlet:namespace/>selectedFile.relative())
-				
 				var eventData = {
 					portletId: myId,
 					targetPortlet:e.portletId,
-					data: OSP.Util.toJSON(data),
+					data: OSP.Util.toJSON(<portlet:namespace/>selectedFile),
 					action: e.action
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
@@ -375,12 +359,14 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
-			var inputData = new OSP.InputData();
-			inputData.type( OSP.Enumeration.PathType.FOLDER);
-			inputData.parent( '' );
-			inputData.name('');
-			inputData.relative(true);
-			<portlet:namespace/>initFileExplorer( inputData );
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+				var inputData = new OSP.InputData();
+				inputData.type( OSP.Enumeration.PathType.FOLDER);
+				inputData.parent( '' );
+				inputData.name('');
+				inputData.relative(true);
+				<portlet:namespace/>initFileExplorer( inputData );
+			}
 		}
 );
 
@@ -407,18 +393,20 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
 		case OSP.Enumeration.PathType.FOLDER:
-			<portlet:namespace/>basePath = OSP.Util.removeEndSlashes ( inputData.parent() );
 			var filePath = OSP.Util.convertToPath( inputData.name().trim() );
-			<portlet:namespace/>selectedFile.parent(filePath.parent() ? filePath.parent() : '');
+			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), filePath.parent()));
 			<portlet:namespace/>selectedFile.name( filePath.name() ? filePath.name() : '' );
 			break;
 		case OSP.Enumeration.PathType.EXT:
-		    <portlet:namespace/>basePath = OSP.Util.removeEndSlashes ( inputData.parent() );
-			var filePath = OSP.Util.convertToPath( inputData.name() );
-			<portlet:namespace/>selectedFile.parent( filePath.parent() );
+			var filePath = OSP.Util.convertToPath( inputData.name().trim() );
+			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), filePath.parent()));
 			<portlet:namespace/>selectedFile.name( filePath.name() );
 			<portlet:namespace/>extension = <portlet:namespace/>selectedFile.name();
 			break;
+		case OSP.Enumeration.PathType.DLENTRY_ID:
+			$('#<portlet:namespace/>selectedFile').val( '--- sample selected ---');
+			$('#<portlet:namespace/>selectedFile').attr('disabled', true);
+			<portlet:namespace/>sampleSelected = true;
 		default:
 			<portlet:namespace/>selectedFile.type( OSP.Enumeration.PathType.FOLDER );
 			<portlet:namespace/>selectedFile.parent( '' );
@@ -427,10 +415,9 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 	}
 	
 	$('#<portlet:namespace/>selectedFile').val(
-													OSP.Util.mergePath(<portlet:namespace/>selectedFile.parent(), 
-																					 <portlet:namespace/>selectedFile.name()) );
+												OSP.Util.mergePath(<portlet:namespace/>selectedFile.parent(), 
+																				 <portlet:namespace/>selectedFile.name()) );
 	
-	var basePath = <portlet:namespace/>basePath;
 	var parentPath;
 	var fileName = "";
 	if(<portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.FOLDER){
@@ -444,7 +431,6 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 	<portlet:namespace/>lookupPath(
 			'GET_FILE_INFO',
 			pathType,
-			basePath, 
 			parentPath,
 			fileName
 	);
@@ -456,7 +442,6 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 				<portlet:namespace/>command: 'GET_FILE_INFO',
 				<portlet:namespace/>action: <portlet:namespace/>action,
 				<portlet:namespace/>pathType: 'folder',
-				<portlet:namespace/>basePath: <portlet:namespace/>basePath,
 				<portlet:namespace/>parentPath: parentPath,
 				<portlet:namespace/>fileName: folderName
 	};
@@ -470,10 +455,9 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 		dataType : 'json',
 		success: function(data) {
 			//console.log(JSON.stringify(data, null, 4));
-			console.log( 'Parent Path: '+parentPath );
+			console.log( 'Parent Path: '+OSP.Util.mergePath( parentPath, folderName ) );
 			<portlet:namespace/>loadFileExplorer( 
-											<portlet:namespace/>basePath, 
-											parentPath,
+											OSP.Util.mergePath( parentPath, folderName ),
 			                               data.fileInfos );
 		},
 		error:function(data,e){
@@ -486,14 +470,12 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 function <portlet:namespace/>lookupPath( 
 		command, 
 		pathType, 
-		basePath, 
 		parentPath, 
 		fileName){
 	var data = {
 					<portlet:namespace/>command: command,
 					<portlet:namespace/>action: <portlet:namespace/>action,
 					<portlet:namespace/>pathType: pathType,
-					<portlet:namespace/>basePath: basePath,
 					<portlet:namespace/>parentPath: parentPath,
 					<portlet:namespace/>fileName: fileName
 			};
@@ -509,7 +491,6 @@ function <portlet:namespace/>lookupPath(
 			fileInfos = data;
 			//console.log(JSON.stringify(fileInfos, null, 4));
 			<portlet:namespace/>loadFileExplorer( 
-			                               basePath, 
 			                               parentPath,
 			                               fileInfos.fileInfos );
 		},
@@ -521,15 +502,14 @@ function <portlet:namespace/>lookupPath(
 	
 	return fileInfos;
 }
-function <portlet:namespace/>loadFileExplorer( basePath, parentPath, fileList ){
+function <portlet:namespace/>loadFileExplorer( parentPath, fileList ){
+	console.log('loadFileExplorer parentPath: ', parentPath);
     setTimeout(
 	    function(){
 	        var iframe = document.getElementById('<portlet:namespace/>canvas');
 	        
-	        console.log('loadFileExplorer: ');
 	        if( <portlet:namespace/>iframeReady() && iframe.contentWindow.loadFileExplorer){
 	    		iframe.contentWindow.loadFileExplorer(
-	    				basePath,
 	    				parentPath,
 	    				fileList,
 	    				$('#<portlet:namespace/>canvas').width(),
@@ -537,7 +517,7 @@ function <portlet:namespace/>loadFileExplorer( basePath, parentPath, fileList ){
 	    		);
 	    	}
 	    	else{
-	    	    <portlet:namespace/>loadFileExplorer( basePath, parentPath, fileList );
+	    	    <portlet:namespace/>loadFileExplorer(parentPath, fileList );
 	    	}
 	    }, 
 	    10
@@ -545,9 +525,6 @@ function <portlet:namespace/>loadFileExplorer( basePath, parentPath, fileList ){
 }
 
 function <portlet:namespace/>setSelectedFile( folderPath, fileName, type ){
-    console.log( 'folder name: '+folderPath);
-    console.log( 'file name: '+fileName);
-    console.log( 'type: '+type);
 	$('#<portlet:namespace/>selectedFile').val( OSP.Util.mergePath( folderPath, fileName ) );
 	<portlet:namespace/>selectedFile.type( type );
 	<portlet:namespace/>selectedFile.parent( folderPath );
@@ -563,8 +540,6 @@ function <portlet:namespace/>setSelectedFile( folderPath, fileName, type ){
 }
 
 function <portlet:namespace/>submitUpload( uploadFile, targetFolder, fileName ){
-	//var uploadFolder = OSP.Util.mergePath( <portlet:namespace/>basePath, <portlet:namespace/>selectedFile.parent());
-		
 	var formData = new FormData();
 	formData.append('<portlet:namespace/>uploadFile', uploadFile);
 	formData.append('<portlet:namespace/>command', 'UPLOAD');

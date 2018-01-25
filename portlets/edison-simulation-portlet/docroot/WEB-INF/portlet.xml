@@ -473,4 +473,37 @@
 	    <role-name>user</role-name>
 	  </security-role-ref>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>SimulationDashboard</portlet-name>
+		<display-name>SimulationDashboard</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+      <name>contextConfigLocation</name>
+      <value>classpath:org/kisti/edison/bestsimulation/portlet/workbench/dashboard/edison-workbench-dashboard.xml</value>
+    </init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<resource-bundle>content.Language</resource-bundle>
+		<portlet-info>
+			<title>Simulation workbench Dashboard</title>
+			<short-title>Simulation workbench Dashboard</short-title>
+			<keywords>Simulation workbench Dashboard</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 </portlet-app>

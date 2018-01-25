@@ -204,7 +204,10 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				<portlet:namespace/>action = e.action;
+				if( e.action )
+					<portlet:namespace/>action = e.action;
+				else
+					<portlet:namespace/>action = 'input';
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
@@ -334,7 +337,9 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
-			$('#<portlet:namespace/>canvas').val('');
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+				$('#<portlet:namespace/>canvas').val('');
+			}
 		}
 );
 

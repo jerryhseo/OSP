@@ -288,9 +288,9 @@ function <portlet:namespace/>actionCall(mode){
 		Layout.templateId(templateId);
 		
 		//System Default Portlet Set
-		Layout.addPortlet('column-1','Simulation',true);
-		Layout.addPortlet('column-2','SimulationJob',true);
-		
+		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
+		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
+		Layout.addPortlet('column-3','ScienceAppPort_WAR_edisonappstore2016portlet',true);
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
 			var columnId = $(this).attr("id");

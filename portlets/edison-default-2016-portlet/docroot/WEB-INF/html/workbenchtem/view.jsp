@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 <link rel="stylesheet" href="${contextPath}/css/workbench.css">
 
 <style type="text/css">
@@ -75,10 +78,29 @@
 /* 		border-radius: 50%; */
 /* 		border: 1px solid #dedede; */
 	}
+	
+	/*aui css error*/
+	.edison-workbench-template .collapse {
+		display: none;
+	}
+	
+	#port-remote {
+	    position: absolute;
+	    z-index: 9;
+	}
+	
+	#mydivheader {
+	    cursor: move;
+	    z-index: 10;
+	}
 </style>
 <script type="text/javascript">
 $(function() {
-	
+	$( "#port-remote" ).draggable({
+		containment: "parent",
+		cursor: "move"
+	}
+	);
 	/**
 	* Layout Scroll
 	* vertical Left 기준 Width check -> data-equal-id="LEFT DIV" data-remainder-id="RIGHT DIV"
@@ -119,10 +141,11 @@ $(function() {
 				$(equalDiv).css("width",objectLeftPositon+"%");
 				$(RemainderDiv).css("width",objectRightPositon+"%");
 			}else{
-				var offsetTop = container.height() - (e.clientY - container.offset().top) - 100;
-// 				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY-15)+"__container.offset().top-->"+container.offset().top);
-				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY)+"__container.offset().top-->"+(container.offset().top+15)+"__offsetTop--->"+offsetTop);
-				var offsetBottom = container.height() - offsetTop;
+// 				var offsetTop = container.height() - (e.clientY - container.offset().top);
+				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY)+"__container.offset().top-->"+container.offset().top);
+// 				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY-15)+"__container.offset().top-->"+(container.offset().top)+"__offsetTop--->"+offsetTop);
+// 				var offsetBottom = container.height() - offsetTop;
+				var offsetBottom = e.clientY;
 // 				var moveTop = Math.round(offsetTop / container.height() * 100);
 				
 // 				var objectTopPositon = 100-moveTop;
@@ -134,9 +157,9 @@ $(function() {
 // 				}
 				
 // 				var objectBottomPositon = 100-objectTopPositon;
-				$(object).css("top",offsetBottom+13+"px");
-				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
-				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
+				$(object).css("top",offsetBottom+"px");
+// 				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
+// 				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
 			}
 			
 		}
@@ -146,7 +169,7 @@ $(function() {
     $.Mustache.addFromDom();
     var panelTemplateData = {
       "search-job-info": {
-          "col": 6,
+          "col": 4,
           "body": "tpl-menu-panel-setting"
       }
     };
@@ -202,22 +225,32 @@ $(function() {
       <label for="title">Title</label>
       <input type="email" class="form-control" id="title" placeholder="Title" value="{{form.title}}">
     </div>
-    <div class="form-group">
-      <label for="description" >Description</label>
-      <textarea class="form-control" rows="5" id="description">{{form.description}}</textarea>
-    </div>
-    <div class="form-group"></div>
-    <div class="form-group">
-      <label for="description">Export as App</label>
-      <button type="button" class="btn btn-info btn-flat pull-right">Export</button>
-    </div>
+	<table id="example2" class="table table-bordered table-hover">
+		<tr>
+			<th>생성시간</th>
+			<td>2017-12-10 15:30:20</td>
+		</tr>
+		<tr>
+			<th>제출 시간</th>
+			<td>2017-12-10 15:31:20</td>
+		</tr>
+		<tr>
+			<th>실행시간</th>
+			<td>2017-12-10 15:32:30</td>
+		</tr>
+		<tr>
+			<th>작업상태</th>
+			<td>SUCCESS</td>
+		</tr>
+	</table>
   </div>
   <div class="box-footer">
-    <button type="submit" class="btn btn-primary btn-flat ">Save</button>
+    <button type="submit" class="btn btn-primary btn-flat ">save</button>
     <button type="submit" class="btn btn-danger btn-flat pull-right">Delete</button>
   </div>
 </form>
 </script>
+
 <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
 <div class="wrapper">
 	<aside class="main-sidebar">
@@ -245,8 +278,8 @@ $(function() {
 					<ul class="treeview-menu" style="display: block;">
 						<li>
 							<span class="btn-group" style="margin-left: 120px;margin-top: 5px;">
-								<button class="btn btn-default btn-sm" type="button"><i class="fa fa-plus-circle"></i></button>
-								<button class="btn btn-default btn-sm" type="button"><i class="fa fa-edit"></i></button>
+								<button class="btn btn-default btn-sm" type="button" title="Job Create"><i class="fa fa-plus-circle"></i></button>
+								<button class="btn btn-default btn-sm" type="button" title="Edit Simulation"><i class="fa fa-edit"></i></button>
 							</span>
 						</li>
 						<li>
@@ -301,7 +334,7 @@ $(function() {
 		</div>
 		<section class="content-header">
 			<div class="btn-group btn-breadcrumb">
-				<a href="#" class="btn btn-default"><i class="fa fa-history fa-lg"></i></a>
+				<a href="#" class="btn btn-default"><span class="fa fa-history">  App Manager</span></a>
 				<span class="btn btn-primary">Bowling</span>
 				<a href="#" class="btn btn-primary"><span class="fa fa-folder">  Simulation-1</span></a>
 				<a href="#" class="btn btn-primary"><span class="fa fa-desktop">  Simulation-JOB-2</span></a>
@@ -335,6 +368,64 @@ $(function() {
 				</div>
 			</div>
 		</section>
+		<div class="panel panel-primary" id="port-remote" style="left: 1300px;top: 0px">
+				<div class="panel-heading" id="mydivheader">Port Selector</div>
+				<div class="panel-body">
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_1">
+						입력
+					</a>
+					<div id="collapse_1" class="collapse">
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-default">
+								-inp1
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-inp2
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-inp3
+							</li>
+						</ul>
+					</div>
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_2">
+						로그
+					</a>
+					<div id="collapse_2" class="collapse">
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-default">
+								-log1
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-log2
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-log3
+							</li>
+						</ul>
+					</div>
+					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_3">
+						출력
+					</a>
+					<div id="collapse_3" class=" collapse">
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-default">
+								-out1
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-out2
+							</li>
+							<li class="list-group-item list-group-item-default">
+								-out3
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="panel-footer">
+					프로비넌스 엔진 <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
+					<input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled">
+					<button type="submit" class="btn btn-primary btn-flat ">제출</button>
+				</div>
+			</div>
 	</div>
 </div>
 </div>

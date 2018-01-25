@@ -7,5 +7,7 @@
 		<portlet id="Workbench"></portlet>
 		<portlet id="Dashboard"></portlet>
 		<portlet id="Information"></portlet>
+		<portlet id="SimulationWorkbench"></portlet>
+		<portlet id="SimulationBreadcrumb"></portlet>
 	</category>
 </display>

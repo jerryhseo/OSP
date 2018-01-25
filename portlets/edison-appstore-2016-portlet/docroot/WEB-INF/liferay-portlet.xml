@@ -243,6 +243,13 @@
 		<css-class-wrapper>edison-science-app-pro-link-portlet</css-class-wrapper>
 	</portlet>
 	
+	<portlet>
+		<portlet-name>ScienceAppPort</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>science-app-port</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

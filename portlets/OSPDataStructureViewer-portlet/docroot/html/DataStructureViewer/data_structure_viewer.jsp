@@ -92,7 +92,7 @@ Liferay.on(OSP.Event.OSP_LOAD_DATA, function(eventData){
   var myId = '<%=portletDisplay.getId()%>';
   if( eventData.targetPortlet === myId ){
     if( eventData.data){
-      <portlet:namespace/>loadStructure(eventData.data);
+      <portlet:namespace/>loadStructure(new OSP.InputData(eventData.data));
     }
   }
 });

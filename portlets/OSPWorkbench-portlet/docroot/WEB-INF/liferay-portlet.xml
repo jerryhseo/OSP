@@ -34,6 +34,18 @@
 		<css-class-wrapper>information-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+	<portlet>
+		<portlet-name>SimulationWorkbench</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>simulation-workbench container-fluid</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	<portlet>
+		<portlet-name>SimulationBreadcrumb</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>simulation-breadcrumb</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

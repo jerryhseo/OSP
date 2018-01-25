@@ -68,13 +68,11 @@ public class FileExplorerPortlet extends MVCPortlet {
 
 		if( command.equalsIgnoreCase("GET_FILE_INFO") ){
 			String pathType = ParamUtil.getString(resourceRequest, "pathType", "file");
-			Path basePath = Paths.get(ParamUtil.getString(resourceRequest, "basePath"));
 			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 			String fileName = ParamUtil.getString(resourceRequest, "fileName");
 			
-			Path targetPath = basePath.resolve(parentPath).resolve(fileName); 
+			Path targetPath = parentPath.resolve(fileName); 
 
-			System.out.println("basePath: "+basePath.toString());
 			System.out.println("Parent Folder: "+parentPath.toString());
 			System.out.println("File Name: "+fileName);
 

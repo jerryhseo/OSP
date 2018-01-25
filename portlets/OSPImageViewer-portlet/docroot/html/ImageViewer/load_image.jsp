@@ -19,25 +19,40 @@
 		    loadImage( currentUrl, 'fit' );
 		});
 		 
-		function loadImage( urlToLoad, zomming ){
-		        //console.log( 'URL To Load: '+ urlToLoad );
-		        if( !urlToLoad )    return;
-		        currentUrl = urlToLoad;
-		        
-		        if($('#canvas').hasClass('iviewer_cursor')){
-			        $('#canvas').iviewer('loadImage', urlToLoad);
-			        $('#canvas').iviewer('update');
-		        }
-		        else{
-		        	var options = {
-		        	               src : currentUrl,
-		        	               zoom: zomming, 
-		   		                   update_on_resize:true
-		        	};
+		function loadImage( urlToLoad, zooming ){
+				if( !urlToLoad )    return;
+				currentUrl = urlToLoad;
+
+				if($('#canvas').hasClass('iviewer_cursor')){
+					$('#canvas').iviewer('loadImage', urlToLoad);
+				}
+				else{
+					var options = {
+								src : currentUrl,
+								update_on_resize:true
+					};
 					$('#canvas').iviewer( options );
-					$('#canvas').iviewer('update');
-		        }
+					// $('#canvas').iviewer('update');
+				}
+
+				console.log('Image zooming: '+zooming);
+				$('#canvas').iviewer('center');
+				if( zooming === 'fit' ){
+					console.log('Fit image to container');
+					$('#canvas').iviewer( 'fit' );
+				}
+				else{
+					console.log('Zooming image: '+zooming);
+					$('#canvas').iviewer( 'set_zoom', zooming );
+				}
+				$('#canvas').iviewer('update');
 		}
+		
+		function clearImage(){
+			$('#canvas').empty();
+			$('#canvas').removeClass();
+		}
+		
 	</script>
 </head>
 <body style="text-align: center; height:100%;">
