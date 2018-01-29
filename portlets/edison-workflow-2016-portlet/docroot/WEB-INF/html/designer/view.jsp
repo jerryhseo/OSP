@@ -2,11 +2,134 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
-  <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
-  <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
-  <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
-  <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
+<liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
+  copyCurrentRenderParameters="false" />
+<link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
+<link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
+<link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
+<link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
+<script>
+var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
+var var_create_first_message = "Create First.";
+var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
+var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
+var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
+var var_success_remove_workflow_message = Liferay.Language.get("edison-workflow-success-remove-message");
+var var_prepare_copy_workflow_message = Liferay.Language.get("edison-workflow-prepare-copy-message");
+var var_success_copy_workflow_message = Liferay.Language.get("edison-workflow-success-copy-message");
+var var_validation_required_message = Liferay.Language.get("edison-workflow-validation-required-message");
+var var_data_empty_message = Liferay.Language.get("edison-workflow-data-empty-message");
+var var_success_run_workflow_message = Liferay.Language.get("edison-workflow-success-run-message");
+var var_run_workflow_save_err_message = Liferay.Language.get("edison-workflow-run-save-err-message");
+var var_run_workflow_empty_err_message = Liferay.Language.get("edison-workflow-run-empty-err-message");
+var var_remove_app_confirm = Liferay.Language.get("edison-workflow-remove-app-confirm");
+var var_confirm_romove_workflow_instance_message = Liferay.Language.get("edison-workflow-remove-workflow-instance-confirm");
+var var_private_default_editor_message = Liferay.Language.get("edison-workflow-privat-default-editor-message");
+var var_conf_workflow_empty_err_message = Liferay.Language.get("edison-workflow-empty-workflow-conf-message");
+var var_cannot_load_analyzer_message = Liferay.Language.get("edison-workflow-cannot-load-analyzer-message");
+var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-workflow-cannot-intermediate-result-message");
+var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
+var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
+var contextPath = '${contextPath}';
+</script>
+<style>
+.menu-panel-box-app .box-body.jstree{
+  overflow-y: auto;
+}
+.menu-panel-box-app .box-body.jstree ul > li > a{
+  text-overflow: ellipsis; white-space: nowrap; word-wrap: normal; overflow: hidden; width: 85%;
+}
+
+#body-div .menu-panel-box-app .header-inner{
+  padding: 15px 5px 10px 10px;
+}
+
+.menu-panel-box-app .search-input {
+  border: none;
+  outline: 0;
+  margin-left: 5px !important;
+}
+
+.menu-panel-box-app .search-input:focus {
+  border: none;
+  outline: 0;
+}
+
+.menu-panel{
+  pointer-events:none;
+  background:none !important;
+}
+
+.menu-panel-box,
+.menu-panel-box-app > .app-column{
+  pointer-events: auto;
+}
+
+/* workflow science app box */
+.apparea{position: relative;}
+
+.waitingbox{border-radius:3px; border:solid 1px #00abe3; background-color:#b6e1f8;}
+.waitingbox span{font-size:18px; color:#114a69; font-weight:500;}
+
+.loopbox{background-color:#f7b036;}
+
+.runningbox{border-radius:3px; border:solid 1px #00abe3; background-color:#8db9e5;}
+.runningbox span{font-size:18px; color:#fff; font-weight:500;}
+
+.failbox{border-radius:3px; border:solid 1px #00abe3; background-color:#f8799b;}
+.failbox span{font-size:18px; color:#fff; font-weight:500;}
+
+.donebox{border-radius:3px; border:solid 1px #00abe3; background-color:#76d6cd;}
+.donebox span{font-size:18px; color:#fff; font-weight:500;}
+
+.wf-box {
+  box-sizing: content-box;
+  padding: 30px 5px 5px 15px;
+  width: 100px !important;
+  height: 110px !important;
+  position: absolute;
+  cursor: move;
+  border-radius: 3px;
+  border: solid 1px #00abe3;
+}
+.wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.wf-box .wf-app-title{font-size: 15px; font-weight: 500; color: #fff;}
+.wf-box .wf-app-status{position: relative; top: 25px;}
+.waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
+.pausebox{border-radius:3px; border:solid 1px #CA412B; background-color:#fb6e50;}
+.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px; 
+	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; 
+	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px; 
+	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
+.waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
+.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; padding-right: 25px !important; background-position: 60px; background-repeat:no-repeat; background-image: url(../images/Workflow/ajax-loader.gif);}
+.failbox .addIp{ background: #c84444; border-color: #b73535; }
+.pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
+.donebox .addIp{ background: #32a993; border-color: #2e9886; }
+.wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
+
+.wf-converter{}
+.wf-converter.wf-dynamic > .wf-app-title{overflow: visible; white-space: normal;}
+.waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
+.waitingbox.wf-converter.wf-static{background: #3181c6;}    
+
+.hidden{display: none;}
+.jsplumb-endpoint:hover{cursor: pointer; z-index: 9999;}
+
+.wftitlebox001 > input[type="text"]{width: 55%; margin-bottom: 2px;}
+.wftitlebox001 > span > input[type="button"]{margin-right: 5px;}
+.wftitlebox001 > h2 {float: left;}
+.apparea > div {z-index: 2;}
+
+.ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
+.ui-selected{border: solid 1px #555555; box-shadow: 3px 3px 7px #c6c6c6;}
+.ui-selecting{background-color: rgba( 30, 30, 30,0.4 ); box-shadow: 3px 3px 7px #c6c6c6; border: solid 1px #000;}
+
+.toast-designer-pos { top: 120px; right: 12px; }
+
+}
+</style>
 <div class="container-fluid">
   <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
     <div class="wrapper">
@@ -79,37 +202,7 @@
           </ul>
         </section>
       </aside>
-<style>
-.menu-panel-box-app .box-body.jstree{
-  overflow-y: auto;
-}
-.menu-panel-box-app .box-body.jstree ul > li > a{
-  text-overflow: ellipsis; white-space: nowrap; word-wrap: normal; overflow: hidden; width: 85%;
-}
-
-#body-div .menu-panel-box-app .header-inner{
-  padding: 15px 5px 10px 10px;
-}
-
-.menu-panel-box-app .search-input {
-  border: none;
-  background-color: none;
-  outline: 0;
-  margin-left: 5px !important;
-}
-
-.menu-panel-box-app .search-input:focus {
-  border: none;
-  background-color: none;
-  outline: 0;
-}
-
-</style>
   <div class="content-wrapper">
-    <div class="menu-panel">
-      <div class="row" id="<portlet:namespace/>menu-panel-box"></div>
-      <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
-    </div>
     <section class="content-header">
       <h1>
         <a id="mobile-toggle" href="#mobile-toggle" data-toggle="push-menu">
@@ -122,9 +215,12 @@
     </section>
     <!-- Main content -->
     <section class="content">
-      <div>
-      </div>
+      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select"></div>
     </section>
+    <div class="menu-panel" style="top: 0;">
+      <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
+      <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
+    </div>
   </div>
 
 </div>
@@ -173,7 +269,7 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 
 <script id="tpl-menu-panel-apps" type="text/html">
-  <div class="col-md-{{col}}">
+<div class="col-md-{{col}} app-column">
   <div class="box box-solid">
     <div class="box-header with-border header-inner">
       <h3 class="box-title">
@@ -234,7 +330,7 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 
 <script id="tpl-menu-panel-new" type="text/html">
-<form class="form-horizontal">
+<form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
       <label for="title" >Title</label>
@@ -254,7 +350,7 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 
 <script id="tpl-menu-panel-setting" type="text/html">
-<form class="form-horizontal">
+<form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
@@ -277,16 +373,32 @@ $.widget.bridge('uibutton', $.ui.button);
 </form>
 </script>
 
-<script src="${contextPath}/js/lib/jquery.actual.min.js"></script>
-<script src="${contextPath}/js/lib/jstree.js"></script>
-<script src="${contextPath}/js/lib/util.js"></script>
-<script src="${contextPath}/js/apptree.js"></script>
-<script src="${contextPath}/js/designer.js"></script>
 <script>
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
+  var jqPortletBoundaryId = "#p_p_id" + namespace;
   $.Mustache.addFromDom();
-  var designer = new Designer(namespace, $);
+  toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": false,
+      "positionClass": "toast-designer-pos",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "slideDown",
+      "hideMethod": "slideUp"
+  };
+  var designer = new Designer(namespace, $, OSP, toastr);
+  var uiPanel = new UIPanel(namespace, $, designer);
+  var appTree = new AppTree(namespace, $, designer);
+  var selectable = new Selectable(namespace, $, designer);
 
   aSyncAjaxHelper.post("/delegate/services/app/all", {
     companyGroupId: <portlet:namespace/>getCompanyGroupId(),
@@ -295,10 +407,14 @@ $(document).ready(function(){
     $("#" + namespace + "menu-panel-box-app").mustache(
       'tpl-menu-panel-apps', {"boxtitle": "Apps", "col": 4});
     $("#" + namespace + "menu-panel-box-app").addClass("loaded");
-    drawAppTree(
-      "#" + namespace + "menu-panel-box-app .box-body",
+    var apptreeSelector = "#" + namespace + "menu-panel-box-app .box-body";
+    appTree.drawAppTree(apptreeSelector,
       "#" + namespace + "menu-panel-box-app .search-input",
       appData);
+    appTree.bindDnd(document, apptreeSelector);
+    $("#wf-workflow-canvas").css("height", 
+      $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
+      - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
     $("#" + namespace + "menu-panel-box-app .box-body").css("height",
       $("#" + namespace + "menu-panel-box-app").actual("height") 
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
@@ -311,6 +427,12 @@ function <portlet:namespace/>getCompanyGroupId(){
 
 function <portlet:namespace/>getSiteGroupId(){
   return "${groupId}";
+}
+
+function <portlet:namespace/>getSpecificSiteGroupId(){
+  var url = "<%=getSpecificSiteGroupIdUrl%>";
+  var result = synchronousAjaxHelper.post(url, {});
+  return result["groupId"];
 }
 </script>
 </div>

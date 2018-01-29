@@ -182,7 +182,7 @@ public class WorkflowLocalServiceClpInvoker {
 		_methodName60 = "createWorkflow";
 
 		_methodParameterTypes60 = new String[] {
-				"java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
 				"javax.servlet.http.HttpServletRequest"
 			};
 
@@ -586,8 +586,8 @@ public class WorkflowLocalServiceClpInvoker {
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
 			return WorkflowLocalServiceUtil.createWorkflow((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1],
-				(javax.servlet.http.HttpServletRequest)arguments[2]);
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(javax.servlet.http.HttpServletRequest)arguments[3]);
 		}
 
 		if (_methodName61.equals(name) &&

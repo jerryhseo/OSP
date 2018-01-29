@@ -1364,7 +1364,7 @@ $(function() {
       $("#wf-new-button").click(function(e){
         e.preventDefault();
         if(confirm(var_new_workflow_confirm_message)){
-          resetModifyingWorkflow()
+          resetModifyingWorkflow();
         }
       });
       $("#wf-remove-button").click(function(e){

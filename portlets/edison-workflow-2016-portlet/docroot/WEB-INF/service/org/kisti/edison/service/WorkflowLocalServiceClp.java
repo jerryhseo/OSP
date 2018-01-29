@@ -182,7 +182,7 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 		_methodName35 = "createWorkflow";
 
 		_methodParameterTypes35 = new String[] {
-				"java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
 				"javax.servlet.http.HttpServletRequest"
 			};
 
@@ -1386,9 +1386,11 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 	@Override
 	public org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
+		java.lang.String descrption,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+			com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException {
 		Object returnObj = null;
 
 		try {
@@ -1398,6 +1400,8 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 						ClpSerializer.translateInput(screenLogic),
 						
 					ClpSerializer.translateInput(title),
+						
+					ClpSerializer.translateInput(descrption),
 						
 					ClpSerializer.translateInput(request)
 					});
@@ -1411,6 +1415,10 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException) {
+				throw (org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException)t;
 			}
 
 			if (t instanceof RuntimeException) {

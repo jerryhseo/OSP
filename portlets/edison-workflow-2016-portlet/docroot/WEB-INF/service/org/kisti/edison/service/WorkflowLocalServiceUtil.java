@@ -427,10 +427,13 @@ public class WorkflowLocalServiceUtil {
 
 	public static org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
+		java.lang.String descrption,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().createWorkflow(screenLogic, title, request);
+			com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException {
+		return getService()
+				   .createWorkflow(screenLogic, title, descrption, request);
 	}
 
 	public static org.kisti.edison.model.Workflow createWorkflow()

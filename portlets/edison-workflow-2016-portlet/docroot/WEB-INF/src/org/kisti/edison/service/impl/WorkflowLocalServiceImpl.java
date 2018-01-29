@@ -160,7 +160,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }
   };
   
-  public Workflow createWorkflow(String screenLogic, String title, HttpServletRequest request)
+  public Workflow createWorkflow(String screenLogic, String title, String descrption, HttpServletRequest request)
       throws SystemException, PortalException{
     Workflow workflow = WorkflowLocalServiceUtil.createWorkflow();
     User user = PortalUtil.getUser(request);

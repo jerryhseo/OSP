@@ -455,10 +455,13 @@ public class WorkflowLocalServiceWrapper implements WorkflowLocalService,
 	@Override
 	public org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
+		java.lang.String descrption,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _workflowLocalService.createWorkflow(screenLogic, title, request);
+			com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException {
+		return _workflowLocalService.createWorkflow(screenLogic, title,
+			descrption, request);
 	}
 
 	@Override

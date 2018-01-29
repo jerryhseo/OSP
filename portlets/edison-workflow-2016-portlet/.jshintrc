@@ -2,5 +2,6 @@
     "browser"       : true, 
     "jquery"        : true,
     "es5"           : true,
-    "strict"        : false
+    "strict"        : false,
+    "maxerr"        : 1000
 }

@@ -32,14 +32,14 @@ var aSyncAjaxHelper = {
       resultData = result;
       if(callback){ callback(result) };
       consoleLog.debug(requestUrl + " success");
-    }).fail(function () {
+    }).error(function () {
       consoleLog.debug(requestUrl + " error");
       if(errorCallback){ errorCallback(); }
     }).always(function () {
       consoleLog.debug(requestUrl + " complete");
     });
   },
-  "post": function (requestUrl, jsonData, callback) {
+  "post": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -51,8 +51,8 @@ var aSyncAjaxHelper = {
       resultData = result;
       if(callback){ callback(result) };
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
+    }).error(function (msg) {
+      consoleLog.debug(requestUrl + " error ");
       consoleLog.debug(msg);
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
@@ -71,10 +71,10 @@ var aSyncAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); };
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
+    }).error(function (msg) {
+      consoleLog.debug(requestUrl + " error ");
       consoleLog.debug(msg);
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
@@ -93,17 +93,17 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function () {
+    }).error(function (msg) {
       consoleLog.debug(requestUrl + " error");
-      if(errorCallback){ errorCallback(); }
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function () {
       consoleLog.debug(requestUrl + " complete");
     });
     return resultData;
   },
-  "post": function (requestUrl, jsonData, callback) {
+  "post": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -113,11 +113,12 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
-      consoleLog.debug(msg);
+    }).error(function (msg) {
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);
@@ -136,10 +137,10 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
+    }).error(function (msg) {
+      consoleLog.debug(requestUrl + " error ");
       consoleLog.debug(msg);
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
