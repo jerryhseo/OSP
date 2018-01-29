@@ -1,7 +1,7 @@
 <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
 	<div class="wrapper">
 		<aside class="main-sidebar">
-			<section class="sidebar" id="${namespace}column-1">
+			<section class="sidebar" id="${namespace}column-1" section-type="system">
 				
 				
 				
@@ -10,9 +10,9 @@
 		</aside>
 		<div class="content-wrapper">
 			<div class="menu-panel">
-				<div class="row" id="<portlet:namespace/>menu-panel-box"></div>
+				<div class="row" id="${namespace}menu-panel-box"></div>
 			</div>
-			<section class="content-header" id="${namespace}column-2">
+			<section class="content-header" id="${namespace}column-2" section-type="system">
 			
 			</section>
 			
@@ -33,13 +33,10 @@
 					</div>
 				</div>
 			</section>
-			<section class="port" id="${namespace}column-3">
+			<div class="port" id="${namespace}column-3" section-type="system">
 				
 				
-				
-				
-				
-			</section>
+			</div>
 		</div>
 	</div>
 </div>

@@ -18,11 +18,14 @@
 	
 	.edison-workbench-template .sidebar .pagination{
 		padding-left: 45px;
-		display: block;
+		display: inline-block;
 	}
 	
 	.edison-workbench-template .sidebar .treeview-menu i.success{
 		color: green;
+	}
+	.edison-workbench-template .sidebar .treeview-menu i.running{
+		color: blue;
 	}
 	.edison-workbench-template .sidebar .treeview-menu i.fail{
 		color: red;
@@ -267,7 +270,7 @@ $(function() {
 					 <a href="#"> <i class="fa fa-lg fa-file"></i> <span>New Simulation</span> </a>
 				</li>
 				<li class="treeview menu-open">
-					<a href="#">
+					<a href="#" onclick="">
 						<i class="fa fa-lg fa-folder"></i> 
 						<span>Simulation-1</span>
 						<span class="pull-right-container">
@@ -299,6 +302,13 @@ $(function() {
 						</li>
 						<li>
 							<a href="">
+								<i class="fa fa-circle running"></i>
+								<span>Simulation-JOB-3</span>
+								<span class="label label-primary pull-right"><i class="icon-arrow-right sidebar-btn" data-btn-type="search-job-info"></i></span>
+							</a>
+						</li>
+						<li>
+							<a href="">
 								<i class="fa fa-circle"></i>
 								<span>Simulation-JOB-3</span>
 								<span class="label label-primary pull-right"><i class="icon-arrow-right sidebar-btn" data-btn-type="search-job-info"></i></span>
@@ -307,13 +317,13 @@ $(function() {
 					</ul>
 				</li>
 			</ul>
-			
-			<ul class="pagination">
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">»</a></li>
-			</ul>
+			<section id="<portlet:namespace/>pagin" class="text-center">
+				<ul class="pagination">
+					<li class="active"><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">»</a></li>
+				</ul>
+			</section>
 			
 			<ul class="sidebar-menu bottom" data-widget="tree">
 				<li>
@@ -371,53 +381,79 @@ $(function() {
 		<div class="panel panel-primary" id="port-remote" style="left: 1300px;top: 0px">
 				<div class="panel-heading" id="mydivheader">Port Selector</div>
 				<div class="panel-body">
-					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_1">
-						입력
-					</a>
-					<div id="collapse_1" class="collapse">
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-default">
-								-inp1
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-inp2
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-inp3
-							</li>
-						</ul>
-					</div>
-					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_2">
-						로그
-					</a>
-					<div id="collapse_2" class="collapse">
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-default">
-								-log1
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-log2
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-log3
-							</li>
-						</ul>
-					</div>
-					<a data-toggle="collapse" data-parent="#accordion" href="#collapse_3">
-						출력
-					</a>
-					<div id="collapse_3" class=" collapse">
-						<ul class="list-group">
-							<li class="list-group-item list-group-item-default">
-								-out1
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-out2
-							</li>
-							<li class="list-group-item list-group-item-default">
-								-out3
-							</li>
-						</ul>
+					<div class="panel-group" id="accordion">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_1">
+											입력
+										</a>
+								</h4>
+							</div>
+							<div id="collapse_1" class="collapse">
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item list-group-item-default">
+											-inp1
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp2
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp3
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_2">
+											로그
+										</a>
+								</h4>
+							</div>
+							<div id="collapse_2" class="collapse">
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item list-group-item-default">
+											-inp1
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp2
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp3
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_3">
+											출력
+										</a>
+								</h4>
+							</div>
+							<div id="collapse_3" class="collapse">
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item list-group-item-default">
+											-inp1
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp2
+										</li>
+										<li class="list-group-item list-group-item-default">
+											-inp3
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="panel-footer">

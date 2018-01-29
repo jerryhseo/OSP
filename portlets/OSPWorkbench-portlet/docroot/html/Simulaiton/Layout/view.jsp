@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="./init.jsp"%>
+<%@ include file="/common/init-simulation-workbench.jsp"%>
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -51,7 +51,9 @@
 
 	String templateFile = workbenchLayout.getString("templateId_") + ".ftl";
 	
-	
+	String inputPorts = (String) renderRequest.getAttribute("inputPorts");
+	String logPorts = (String) renderRequest.getAttribute("logPorts");
+	String outputPorts = (String) renderRequest.getAttribute("outputPorts");
 %>
 <div class="row" id="<portlet:namespace/>canvas">
 	
@@ -69,6 +71,25 @@ var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 $(function(e) {
 	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
 	<portlet:namespace/>workbench.type ('${workbenchType}');
+	<portlet:namespace/>workbench.classId('${classId}');
+	<portlet:namespace/>workbench.customId('${customId}');
+	
+	var scienceApp = new OSP.ScienceApp();
+	scienceApp.id('${scienceApp.getScienceAppId()}');
+	scienceApp.name('${scienceApp.getName()}');
+	scienceApp.version('${scienceApp.getVersion()}');
+	scienceApp.runType('${scienceApp.getRunType()}');
+	scienceApp.currentManualId('${scienceApp.getManualIdCurrentValue()}');
+	
+	if( '<%=inputPorts%>' ) 
+		scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );
+	if( '<%=logPorts%>' )
+		scienceApp.deserializeLogPorts( JSON.parse('<%=logPorts%>') );
+	if( '<%=outputPorts%>' )
+		scienceApp.deserializeOutputPorts( JSON.parse('<%=outputPorts%>') );
+	
+	<portlet:namespace/>workbench.scienceApp(scienceApp);
+	
 	// Resolving workbench layout
 	$.ajax({
 		url: '<%=serveResourceURL.toString()%>',
@@ -87,12 +108,114 @@ $(function(e) {
 			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
 		}
 	});
+	
+	
+	
+	/**
+	* Layout Scroll
+	* vertical Left 기준 Width check -> data-equal-id="LEFT DIV" data-remainder-id="RIGHT DIV"
+	* horizontal top 기준 Width check -> data-equal-id="BOTTOM DIV" data-remainder-id="TOP DIV"
+	*
+	**/
+	var isDevider = false;
+	var object,container,equalDiv,RemainderDiv,moveType;
+	$(".devider").mousedown(function(e) {
+		isDevider = true;
+		object = e.currentTarget;
+		container = $(this).parent();
+		equalDiv = $("#"+$(this).attr("data-equal-id"));
+		RemainderDiv = $("#"+$(this).attr("data-remainder-id"));
+		moveType = $(this).hasClass("vertical") ? "vertical" : "horizontal"
+	});
+	
+	$("body").mouseup(function(a) {
+		if(isDevider){
+			isDevider = false;
+		}
+	});
+	$("body").mousemove(function(e) {
+		if(isDevider){
+			if(moveType =="vertical"){
+				var offsetRight = container.width() - (e.clientX - container.offset().left);
+				var moveLeft = Math.round(offsetRight / container.width() * 100);
+				
+				var objectLeftPositon = 100-moveLeft;
+				if(objectLeftPositon<20){
+					objectLeftPositon = 20;
+				}else if(objectLeftPositon>80){
+					objectLeftPositon = 80;
+				}
+				var objectRightPositon = 100-objectLeftPositon;
+				
+				$(object).css("left",objectLeftPositon+"%");
+				$(equalDiv).css("width",objectLeftPositon+"%");
+				$(RemainderDiv).css("width",objectRightPositon+"%");
+			}else{
+// 				var offsetTop = container.height() - (e.clientY - container.offset().top);
+				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY)+"__container.offset().top-->"+container.offset().top);
+// 				console.log("container.height()-->"+container.height()+"__e.clientY-->"+(e.clientY-15)+"__container.offset().top-->"+(container.offset().top)+"__offsetTop--->"+offsetTop);
+// 				var offsetBottom = container.height() - offsetTop;
+				var offsetBottom = e.clientY;
+// 				var moveTop = Math.round(offsetTop / container.height() * 100);
+				
+// 				var objectTopPositon = 100-moveTop;
+				
+// 				if(objectTopPositon<20){
+// 					objectTopPositon = 20;
+// 				}else if(objectTopPositon>80){
+// 					objectTopPositon = 80;
+// 				}
+				
+// 				var objectBottomPositon = 100-objectTopPositon;
+				$(object).css("top",offsetBottom+"px");
+// 				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
+// 				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
+			}
+			
+		}
+	});
 });
+
+/***********************************************************************
+ * Handling OSP Events
+ ***********************************************************************/
+Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
+		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_APP_INFO,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_APP_INFO: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleRequestAppInfo(e.portletId);
+	}
+});
+Liferay.on(OSP.Event.OSP_REQUEST_PORT_INFO,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_PORT_INFO: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleRequestPortInfo(e.portletId);
+	}
+});
+Liferay.on(OSP.Event.OSP_JOB_SELECTED,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_JOB_SELECTED: ['+e.portletId+', '+new Date()+']');
+		//System portlet Loading check
+		<portlet:namespace/>workbench.handleJobSelected(e.data.simulationUuid,e.data.jobUuid,'<%=serveResourceURL.toString()%>');
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_DATA_STRUCTURE,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_DATA_STRUCTURE: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleRequestDataStructure( e.portletId, '<%=serveResourceURL.toString()%>' );
+	}
+});
+
 </script>
 
 <script src="${contextPath}/js/jquery-knob/jquery.knob.min.js"></script>
 <script src="${contextPath}/js/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${contextPath}/js/fastclick/fastclick.js"></script>
 <script src="${contextPath}/js/adminlte/adminlte.js"></script>
-<script src="${contextPath}/js/lib/jquery.mustache.js"></script>
-<script src="${contextPath}/js/lib/mustache.min.js"></script>

@@ -1,4 +1,4 @@
-package org.kisti.edison.science.portlet.workbench.port;
+package com.kisti.osp.workbench.portlet.simulation.port;
 
 import java.text.ParseException;
 

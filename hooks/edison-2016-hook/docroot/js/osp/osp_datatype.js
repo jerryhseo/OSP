@@ -202,13 +202,13 @@
 					if( !operand )	return false;
 
 					if( whichEnd === OSP.Constants.LOWER_BOUNDARY && flag == true )
-						operand = '=' + operand.substring(1);
+						operand = '=' + operand[1];
 					else if( whichEnd === OSP.Constants.LOWER_BOUNDARY && flag == false )
-						operand = '<' + operand.substring(1);
+						operand = '<' + operand[1];
 					else if( whichEnd === OSP.Constants.UPPER_BOUNDARY && flag == true )
-						operand = operand.substring(0, 1) + '=';
+						operand = operand[0] + '=';
 					else if( whichEnd === OSP.Constants.UPPER_BOUNDARY && flag == false )
-						operand = operand.substring(0, 1) + '>';
+						operand = operand[0] + '>';
 					else
 						return false;
 
@@ -3095,7 +3095,7 @@
 				var div = $('<div>');
 				div.attr('style', Style.ValueRangeOperandDiv);
 				var operand;
-				if( place === OSP.Constants.LOWER_BOUNDARY ){
+				if( place === OSP.Constants.LOWER_OPERAND ){
 					if( parameter.rangeCheckLowerBoundary() )
 						operand = '&le;';
 					else

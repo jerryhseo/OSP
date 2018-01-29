@@ -125,17 +125,31 @@
 }
 
 /** Workbench portlet Custom CSS **/
+.simulation-workbench .table > tbody > tr > th{
+	vertical-align: middle;
+}
+
 .simulation-workbench .sidebar-collapse .sidebar .pagination{
 	display: none;
 }
 
+.simulation-workbench .sidebar-mini.sidebar-collapse .edit-btn-group{
+	margin-left: 0px;
+}
+
+.simulation-workbench .sidebar-mini .edit-btn-group{
+	margin-left: 120px;
+	margin-top: 5px;
+}
 .simulation-workbench .sidebar .pagination{
-	padding-left: 45px;
-	display: block;
+	display: inline-block;
 }
 
 .simulation-workbench .sidebar .treeview-menu i.success{
 	color: green;
+}
+.simulation-workbench .sidebar .treeview-menu i.running{
+	color: blue;
 }
 .simulation-workbench .sidebar .treeview-menu i.fail{
 	color: red;
@@ -174,16 +188,6 @@
 /*aui css error*/
 .simulation-workbench .collapse {
 	display: none;
-}
-
-#port-remote {
-    position: absolute;
-    z-index: 9;
-}
-
-#mydivheader {
-    cursor: move;
-    z-index: 10;
 }
 
 

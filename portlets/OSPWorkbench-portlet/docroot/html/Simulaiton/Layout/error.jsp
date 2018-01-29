@@ -18,4 +18,9 @@
 <%-- 			<liferay-ui:message key="edison-app-no-access-exception-msg" /> --%>
 		bbbbbbbbbbbbbbbbbbbbbbb
 	</c:if>
+	
+	<c:if test="<%= sae.getType() == SimulationWorkbenchException.SCIENCEAPP_PORT_SEARCH_EXCEPTION%>">
+<%-- 			<liferay-ui:message key="edison-app-no-access-exception-msg" /> --%>
+		bbbbbbbbbbbbbbbbbbbbbbb
+	</c:if>
 </div>

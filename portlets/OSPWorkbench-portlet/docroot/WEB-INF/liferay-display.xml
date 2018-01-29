@@ -9,5 +9,6 @@
 		<portlet id="Information"></portlet>
 		<portlet id="SimulationWorkbench"></portlet>
 		<portlet id="SimulationBreadcrumb"></portlet>
+		<portlet id="ScienceAppPort" />
 	</category>
 </display>

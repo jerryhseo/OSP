@@ -47,6 +47,21 @@
 				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.INPUTS, arguments));
 			};
 			
+			J.copyInputs = function(){
+				var inputs = J.inputs();
+				if( !inputs ){
+					return false;
+				}
+				
+				var clone = [];
+				for( var index in inputs ){
+					var input = inputs[index];
+					clone[index] = input.clone();
+				}
+				
+				return clone;
+			};
+			
 			J.inputData = function( portName, inputData ){
 				switch( arguments.length ){
 				case 1:
@@ -378,19 +393,8 @@
 			var jobs = Simulation.jobs();
 			if( !jobs )		return false;
 			
-			for( var uuid in jobs ){
-				var job = jobs[uuid];
-				if( job.uuid() === uuid ){
-					var workingJob = Simulation.workingJob();
-					if( workingJob && workingJob.uuid() === uuid ){
-						Simulation.removeProperty( OSP.Constants.WORKING_JOB );
-					}
-					OSP.Util.removeArrayElement(jobs, uuid);
-					return jobs;
-				}
-			}
-			
-			return false;
+			delete jobs[uuid];
+			return true;
 		};
 		
 		Simulation.getJob = function( uuid ){
@@ -398,6 +402,10 @@
 			if( !jobs )		return false;
 			
 			return jobs[uuid];
+		};
+		
+		Simulation.cleanJobs = function(){
+			Simulation.removeProperty(OSP.Constants.JOBS);
 		};
 		
 		Simulation.getJobOutputFolder = function( job ){
@@ -409,7 +417,8 @@
 		Simulation.countJobs = function(){
 			var jobs = Simulation.jobs();
 			if( !jobs )		return 0;
-			else		return jobs.length;
+			
+			return jobs.length;
 		};
 		
 		Simulation.workingJob = function( job ){

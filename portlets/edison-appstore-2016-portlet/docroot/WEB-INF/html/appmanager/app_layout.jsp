@@ -290,7 +290,7 @@ function <portlet:namespace/>actionCall(mode){
 		//System Default Portlet Set
 		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
 		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
-		Layout.addPortlet('column-3','ScienceAppPort_WAR_edisonappstore2016portlet',true);
+		Layout.addPortlet('column-3','ScienceAppPort_WAR_OSPWorkbenchportlet',true);
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
 			var columnId = $(this).attr("id");

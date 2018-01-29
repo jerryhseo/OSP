@@ -25,6 +25,8 @@ public class SimulationWorkbenchException extends PortalException {
 	
 	public static final int NO_SCIENCEAPP_LAYOUT_EXIST = 2;
 	
+	public static final int SCIENCEAPP_PORT_SEARCH_EXCEPTION = 3;
+	
 	public SimulationWorkbenchException() {
 		super();
 	}

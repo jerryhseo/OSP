@@ -27,7 +27,4 @@
 		<portlet id="science-app-text-editor"></portlet>
 		<portlet id="science-app-jmol-viewer"></portlet>
 	</category>
-	<category name="OSP Workbench">
-		<portlet id="ScienceAppPort" />
-	</category>
 </display>
