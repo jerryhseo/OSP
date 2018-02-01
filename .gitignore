@@ -83,4 +83,6 @@ _sass_cache_*.css
 **/docroot/META-INF
 **/docroot/WEB-INF/sql/
 **/docroot/WEB-INF/tld/*
+**/docroot/WEB-INF/service-classes
+**/docroot/WEB-INF/service-classes/*
 !**/docroot/WEB-INF/tld/edison-ui.tld

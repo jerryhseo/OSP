@@ -10,11 +10,11 @@
     <header-portlet-css>/css/workflow-dev.css</header-portlet-css>
     <header-portlet-css>/css/jstree.css</header-portlet-css>
     <header-portlet-css>/css/jquery.contextMenu.css</header-portlet-css>
-    <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
-    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery-dateFormat.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     <css-class-wrapper>edison-workflow-2016-portlet container</css-class-wrapper>
   </portlet>
@@ -22,7 +22,21 @@
   	<portlet-name>workflow-designer</portlet-name>
   	<icon>/icon.png</icon>
   	<header-portlet-css>/css/main.css</header-portlet-css>
-  	<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+    <header-portlet-css>/css/jquery.contextMenu.css</header-portlet-css>
+  	<header-portlet-css>/css/jstree/jstreestyle.css</header-portlet-css>
+    <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
+    <header-portlet-css>/css/toastr.min.css</header-portlet-css>
+    <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jquery-dateFormat.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/toastr.min.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
+    <footer-portlet-javascript>/js/apptree.js</footer-portlet-javascript>
+    <footer-portlet-javascript>/js/ui-panel.js</footer-portlet-javascript>
+    <footer-portlet-javascript>/js/designer.js</footer-portlet-javascript>
+    <footer-portlet-javascript>/js/selectable.js</footer-portlet-javascript>
   	<css-class-wrapper>workflow-designer-portlet</css-class-wrapper>
   </portlet>
   <role-mapper>

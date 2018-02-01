@@ -160,7 +160,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }
   };
   
-  public Workflow createWorkflow(String screenLogic, String title, HttpServletRequest request)
+  public Workflow createWorkflow(String screenLogic, String title, String descrption, HttpServletRequest request)
       throws SystemException, PortalException{
     Workflow workflow = WorkflowLocalServiceUtil.createWorkflow();
     User user = PortalUtil.getUser(request);
@@ -177,6 +177,23 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
   public Workflow createWorkflow() throws SystemException{
     long workflowId = super.counterLocalService.increment();
     return super.workflowLocalService.createWorkflow(workflowId);
+  }
+  
+    public Workflow copyWorkflow(
+        long sourceWorkflowId, String newTitle, String descrption, HttpServletRequest request)
+        throws SystemException, PortalException{
+      User user = PortalUtil.getUser(request);
+      //Locale locale = PortalUtil.getLocale(request);
+      Workflow targetWorkflow = super.workflowLocalService.getWorkflow(sourceWorkflowId);
+      targetWorkflow.setParentWorkflowId(sourceWorkflowId);
+      targetWorkflow.setTitle(newTitle);
+      targetWorkflow.setDescription(descrption);
+      targetWorkflow.setWorkflowId(super.counterLocalService.increment());
+      targetWorkflow.setCreateDate(new Date());
+      targetWorkflow.setUserId(user.getUserId());
+      targetWorkflow.setIsPublic(false);
+      targetWorkflow.setCompanyId(PortalUtil.getCompany(request).getCompanyId());
+      return super.workflowLocalService.addWorkflow(targetWorkflow);
   }
   
   public Workflow copyWorkflow(long sourceWorkflowId, HttpServletRequest request) throws SystemException, PortalException{

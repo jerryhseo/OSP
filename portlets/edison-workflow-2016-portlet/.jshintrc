@@ -1,0 +1,7 @@
+{ 
+    "browser"       : true, 
+    "jquery"        : true,
+    "es5"           : true,
+    "strict"        : false,
+    "maxerr"        : 1000
+}
