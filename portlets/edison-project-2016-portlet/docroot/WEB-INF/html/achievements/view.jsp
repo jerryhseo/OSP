@@ -8,7 +8,7 @@
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
 <h1 class="perfoh1">EDISON <liferay-ui:message key="edison-project-achievemnet-title"/></h1>
-
+	
 <div>
 	<img src="${contextPath }/images/output/intro_01.jpg" width="1221"
 		height="744">

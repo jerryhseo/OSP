@@ -75,274 +75,282 @@
 	}
 %>
 
-<div class="visualtxt3">
-	<h3>
-		<c:choose>
-			<c:when test="${empty simulationProjectId && empty redirectName }">
-				<liferay-ui:message key='edison-simulation-project-create-project' />
-			</c:when>
-			<c:when test="${empty simulationProjectId && not empty redirectName }">
-				<a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-create-project' />
-			</c:when>
-			<c:when test="${not empty simulationProjectId && empty redirectName }">
-				<liferay-ui:message key='edison-simulation-project-management' />
-			</c:when>
-			<c:when test="${not empty simulationProjectId && not empty redirectName }">
-			   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-management' />
-			</c:when>
-		</c:choose>
-	</h3>
-</div>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
-	</div>
-	<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-		<c:if test="${empty simulationProjectId}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('create'); return false;" value="<liferay-ui:message key='edison-button-register' />" type="button">
-		</c:if>
-		<c:if test="${not empty simulationProjectId}">
-			<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail' />" type="button">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('update'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" type="button">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>deleteSimulationProject(); return false;" value="<liferay-ui:message key='delete'/>" type="button">
-		</c:if>
-	</div>
-</div>
-<div class="h10"></div>
-<div class="table1_list">
-	<aui:form name="frm" method="POST">
-		<aui:input type="hidden" name="simulationProjectId" value="${simulationProjectId}"></aui:input>
-		<aui:input type="hidden" name="redirectName" value="${redirectName}"></aui:input>
-		<aui:input type="hidden" name="redirectURL" value="${redirectURL}"></aui:input>
-		<aui:input type="hidden" name="isRedirect" value="${isRedirect}"></aui:input>
-		<aui:input type="hidden" name="searchText" value="${searchText}"></aui:input>
-		<aui:input type="hidden" name="currentPage" value="${currentPage}"></aui:input>
-		<aui:input type="hidden" name="listSize" value="${listSize}"></aui:input>
-		<aui:input type="hidden" name="methodName" value="${methodName}"></aui:input>
+<div class="table-responsive panel edison-panel">
+	<div class="table1_list">
+		<h3>
+			<c:choose>
+				<c:when test="${empty simulationProjectId && empty redirectName }">
+					<liferay-ui:message key='edison-simulation-project-create-project' />
+				</c:when>
+				<c:when test="${empty simulationProjectId && not empty redirectName }">
+					<a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-create-project' />
+				</c:when>
+				<c:when test="${not empty simulationProjectId && empty redirectName }">
+					<liferay-ui:message key='edison-simulation-project-management' />
+				</c:when>
+				<c:when test="${not empty simulationProjectId && not empty redirectName }">
+				   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-management' />
+				</c:when>
+			</c:choose>
+		</h3>
 		
-		<table id="<portlet:namespace/>basicInfo" width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-			<colgroup>
-				<col width="20%">
-				<col width="40%">
-				<col width="40%">
-			</colgroup>
-			<tr>
-				<th>
-					<liferay-ui:message key='edison-table-list-header-title' /><span class="requiredField"> *</span>
-				</th>
-				<td colspan="2">
-					<liferay-ui:input-localized name="title" xml="${data.title}" scssClass="too_long_field" type="input" style="width: 50%" maxLength="70"/>
-				</td>
-			</tr>
-			<c:if test="${not empty simulationProjectId}">
-				<tr>
-					<th><liferay-ui:message key='edison-simulation-project-public-status' /><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<aui:select name="projectOpenYn" label="" onChange="changeProjectOpenYnState();">
-							<option value="false"><liferay-ui:message key='edison-simulation-project-private' /></option>
-							<option value="true"><liferay-ui:message key='edison-simulation-project-public' /></option>
-						</aui:select>
-					</td>
-				</tr>
-				<tr class="simproStateOpen" style="display: none;">
-					<th><liferay-ui:message key='edison-content-service-language' /><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<aui:select name="targetLanguage" label="">
-							<option value=""><liferay-ui:message key='full' /></option>
-							<%
-							String siteDefaultLanuageId = LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale());
-							
-							for(Locale aLocale : locales){
-								String languageId = LocaleUtil.toLanguageId(aLocale);
-								if(localesStr.equals("")){
-									localesStr += languageId;
-								}else{
-									localesStr += ","+languageId;
-								}
-								
-								String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
-							%>
-								<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
-							<%} %>
-						</aui:select>
-					</td>
-				</tr>
-				<tr class="simproStateOpen" style="display: none;">
-					<th><liferay-ui:message key='edison-simulation-project-representative-image' /><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<div id="<portlet:namespace/>fileTDArea">
-							<div id="<portlet:namespace/>fileDivDefault">
-								<input type="file" name="<portlet:namespace/>project_image" />
-								<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="<portlet:namespace/>moreFileTag()" style="cursor:pointer;"/>
-							</div>
-						</div>
-						<div id="<portlet:namespace/>fileListDiv">
-							<c:if test="${data.projectImageList ne null}">
-								<c:forEach var="projectImage" items="${data.projectImageList}">
-									<div class="projectImageList">
-										<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${projectImage.imageId }')" style="cursor: pointer;display: inline-block;">
-											${projectImage.imageTitle}
-										</div>
-										<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" 
-											onClick="<portlet:namespace/>deleteImageFile('${projectImage.imageId}');" />
-									</div>	
-								</c:forEach>
-							</c:if>
-						</div>
-						<div id="clear"></div>
-					</td>
-				</tr>
-				<tr class="simproStateOpen" style="display: none;">
-					<th><liferay-ui:message key='icon' /><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<input type="file" id="<portlet:namespace/>project_icon" name="<portlet:namespace/>project_icon" />
-						<c:if test="${data.iconId ne null}">
-							<div class="down_date simProIconClass" id="<portlet:namespace/>simProIcon" onclick="<portlet:namespace/>fileDownload('${data.iconId }')" style="cursor: pointer;display: inline-block;">
-								${data.iconTitle}
-							</div>
-							<img src='${contextPath}/images/icon_dustbin.png' class="simProIconClass" width='13' height='14' style="cursor:pointer" 
-									onClick="<portlet:namespace/>deleteIconFile('${data.iconId}','simProIconClass');" />
+		<aui:form name="frm" method="POST">
+			<aui:input type="hidden" name="simulationProjectId" value="${simulationProjectId}"></aui:input>
+			<aui:input type="hidden" name="redirectName" value="${redirectName}"></aui:input>
+			<aui:input type="hidden" name="redirectURL" value="${redirectURL}"></aui:input>
+			<aui:input type="hidden" name="isRedirect" value="${isRedirect}"></aui:input>
+			<aui:input type="hidden" name="searchText" value="${searchText}"></aui:input>
+			<aui:input type="hidden" name="currentPage" value="${currentPage}"></aui:input>
+			<aui:input type="hidden" name="listSize" value="${listSize}"></aui:input>
+			<aui:input type="hidden" name="methodName" value="${methodName}"></aui:input>
+			
+			
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+					<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
+				</h3>
+				
+				<div class="input-group">
+					<div class="input-group-btn" align="right">
+						<c:if test="${empty simulationProjectId}">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('create'); return false;" value="<liferay-ui:message key='edison-button-register' />" type="button" style="cursor: pointer;">
 						</c:if>
-						<div id="clear"></div>
-					</td>
-				</tr>
-				<tr class="simproStateOpen" style="display: none;">
-					<th><liferay-ui:message key='edison-workflow-conf-description-input' /><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<liferay-ui:input-localized name="explain" xml="${data.explain}" type="textarea" cssClass="text_field" style="width: 60%; resize: none;" cols="80" rows="5"/>
-					</td>
-				</tr>
-			</c:if>				
-			<tr>
-				<th rowspan="${fn:length(parentCategoryList)+1}">
-					<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
-				</th>
-			</tr>
-			<c:forEach items="${parentCategoryList}" var="parentCategory">
+						<c:if test="${not empty simulationProjectId}">
+							<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail' />" type="button" style="cursor: pointer; width: 100px;">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('update'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" type="button" style="cursor: pointer; margin: 0px 5px;">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>deleteSimulationProject(); return false;" value="<liferay-ui:message key='delete'/>" type="button" style="cursor: pointer;">
+						</c:if>
+					</div>
+				</div>
+			</div>
+			
+			<table id="<portlet:namespace/>basicInfo" width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+				<colgroup>
+					<col width="20%">
+					<col width="40%">
+					<col width="40%">
+				</colgroup>
 				<tr>
-					<td id="<portlet:namespace/>${parentCategory.value}_parentTd" colspan="2">
-						<span id="<portlet:namespace/>${parentCategory.value}_parent_open" style="cursor: pointer;" onclick="<portlet:namespace/>openRootCategory('OPEN','${parentCategory.value}');">${parentCategory.name}(OPEN)</span>
-						<span id="<portlet:namespace/>${parentCategory.value}_parent_close" style="cursor: pointer;display: none;" onclick="<portlet:namespace/>openRootCategory('CLOSE','${parentCategory.value}');">${parentCategory.name}(CLOSE)</span>
-					</td>
-					<td id="<portlet:namespace/>${parentCategory.value}_childrenTd" style="display: none;" colspan="1">
-						<c:set value="${parentCategory.value}" var="parentCategoryValue"/>
-						<c:forEach items="${childrenCategoryGroupMap[parentCategoryValue]}" var="childrenCategory">
-							<c:set value="${parentCategory.value}_${childrenCategory.value}_Children_Category" var="childrenCategoryName"/>
-							<aui:input name="childrenCategory" id="${childrenCategoryName}" label="${childrenCategory.name}" value="${parentCategory.value}_${childrenCategory.value}" type="checkbox"/>
-						</c:forEach>
+					<th>
+						<liferay-ui:message key='edison-table-list-header-title' /><span class="requiredField"> *</span>
+					</th>
+					<td colspan="2">
+						<liferay-ui:input-localized name="title" xml="${data.title}" cssClass="" scssClass="too_long_field" type="input" style="width: 50%" maxLength="70"/>
 					</td>
 				</tr>
-			</c:forEach>
-			<c:if test="${not empty simulationProjectId}">
-				<c:choose>
-					<c:when test="${fn:length(data.scienceAppList) eq 0 || fn:length(data.scienceAppList) eq 1}">
-						<tr id="useApp">
-							<th>
-								<liferay-ui:message key='edison-simulation-project-use-app' /><br>
-								<input type="button" value="<liferay-ui:message key='edison-simulation-project-app-management' />" class="button06" onClick="<portlet:namespace/>scienceAppManagementOpen();" style="cursor:pointer;"/>
-							</th>
-							<c:if test="${fn:length(data.scienceAppList) eq 0}">
-								<td colspan="2"></td>
+				<c:if test="${not empty simulationProjectId}">
+					<tr>
+						<th><liferay-ui:message key='edison-simulation-project-public-status' /><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<aui:select name="projectOpenYn" label="" onChange="changeProjectOpenYnState();">
+								<option value="false"><liferay-ui:message key='edison-simulation-project-private' /></option>
+								<option value="true"><liferay-ui:message key='edison-simulation-project-public' /></option>
+							</aui:select>
+						</td>
+					</tr>
+					<tr class="simproStateOpen" style="display: none;">
+						<th><liferay-ui:message key='edison-content-service-language' /><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<aui:select name="targetLanguage" label="">
+								<option value=""><liferay-ui:message key='full' /></option>
+								<%
+								String siteDefaultLanuageId = LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale());
+								
+								for(Locale aLocale : locales){
+									String languageId = LocaleUtil.toLanguageId(aLocale);
+									if(localesStr.equals("")){
+										localesStr += languageId;
+									}else{
+										localesStr += ","+languageId;
+									}
+									
+									String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
+								%>
+									<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
+								<%} %>
+							</aui:select>
+						</td>
+					</tr>
+					<tr class="simproStateOpen" style="display: none;">
+						<th><liferay-ui:message key='edison-simulation-project-representative-image' /><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<div id="<portlet:namespace/>fileTDArea">
+								<div id="<portlet:namespace/>fileDivDefault">
+									<input type="file" name="<portlet:namespace/>project_image" />
+									<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="<portlet:namespace/>moreFileTag()" style="cursor:pointer;"/>
+								</div>
+							</div>
+							<div id="<portlet:namespace/>fileListDiv">
+								<c:if test="${data.projectImageList ne null}">
+									<c:forEach var="projectImage" items="${data.projectImageList}">
+										<div class="projectImageList">
+											<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${projectImage.imageId }')" style="cursor: pointer;display: inline-block;">
+												${projectImage.imageTitle}
+											</div>
+											<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" 
+												onClick="<portlet:namespace/>deleteImageFile('${projectImage.imageId}');" />
+										</div>	
+									</c:forEach>
+								</c:if>
+							</div>
+							<div id="clear"></div>
+						</td>
+					</tr>
+					<tr class="simproStateOpen" style="display: none;">
+						<th><liferay-ui:message key='icon' /><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<input type="file" id="<portlet:namespace/>project_icon" name="<portlet:namespace/>project_icon" />
+							<c:if test="${data.iconId ne null}">
+								<div class="down_date simProIconClass" id="<portlet:namespace/>simProIcon" onclick="<portlet:namespace/>fileDownload('${data.iconId }')" style="cursor: pointer;display: inline-block;">
+									${data.iconTitle}
+								</div>
+								<img src='${contextPath}/images/icon_dustbin.png' class="simProIconClass" width='13' height='14' style="cursor:pointer" 
+										onClick="<portlet:namespace/>deleteIconFile('${data.iconId}','simProIconClass');" />
 							</c:if>
-							<c:if test="${fn:length(data.scienceAppList) eq 1}">
-								<c:forEach var="scienceApp" items="${data.scienceAppList}" varStatus="status">
+							<div id="clear"></div>
+						</td>
+					</tr>
+					<tr class="simproStateOpen" style="display: none;">
+						<th><liferay-ui:message key='edison-workflow-conf-description-input' /><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<liferay-ui:input-localized name="explain" xml="${data.explain}" type="textarea" cssClass="text_field" style="width: 60%; resize: none;" cols="80" rows="5"/>
+						</td>
+					</tr>
+				</c:if>				
+				<tr>
+					<th rowspan="${fn:length(parentCategoryList)+1}">
+						<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
+					</th>
+				</tr>
+				<c:forEach items="${parentCategoryList}" var="parentCategory">
+					<tr>
+						<td id="<portlet:namespace/>${parentCategory.value}_parentTd" colspan="2">
+							<span id="<portlet:namespace/>${parentCategory.value}_parent_open" style="cursor: pointer;" onclick="<portlet:namespace/>openRootCategory('OPEN','${parentCategory.value}');">${parentCategory.name}(OPEN)</span>
+							<span id="<portlet:namespace/>${parentCategory.value}_parent_close" style="cursor: pointer;display: none;" onclick="<portlet:namespace/>openRootCategory('CLOSE','${parentCategory.value}');">${parentCategory.name}(CLOSE)</span>
+						</td>
+						<td id="<portlet:namespace/>${parentCategory.value}_childrenTd" style="display: none;" colspan="1">
+							<c:set value="${parentCategory.value}" var="parentCategoryValue"/>
+							<c:forEach items="${childrenCategoryGroupMap[parentCategoryValue]}" var="childrenCategory">
+								<c:set value="${parentCategory.value}_${childrenCategory.value}_Children_Category" var="childrenCategoryName"/>
+								<aui:input name="childrenCategory" id="${childrenCategoryName}" label="${childrenCategory.name}" value="${parentCategory.value}_${childrenCategory.value}" type="checkbox"/>
+							</c:forEach>
+						</td>
+					</tr>
+				</c:forEach>
+				<c:if test="${not empty simulationProjectId}">
+					<c:choose>
+						<c:when test="${fn:length(data.scienceAppList) eq 0 || fn:length(data.scienceAppList) eq 1}">
+							<tr id="useApp">
+								<th>
+									<liferay-ui:message key='edison-simulation-project-use-app' /><br>
+									<input type="button" value="<liferay-ui:message key='edison-simulation-project-app-management' />" class="btn btn-default" onClick="<portlet:namespace/>scienceAppManagementOpen();" style="cursor:pointer;"/>
+								</th>
+								<c:if test="${fn:length(data.scienceAppList) eq 0}">
+									<td colspan="2"></td>
+								</c:if>
+								<c:if test="${fn:length(data.scienceAppList) eq 1}">
+									<c:forEach var="scienceApp" items="${data.scienceAppList}" varStatus="status">
+										<td colspan="2">
+											<div style="float:left;  width: 50%;">${scienceApp.scienceAppName}</div>
+											<div style="float:left;  width: 25%;">${scienceApp.scienceAppVersion}</div>
+											<div style="float:left;  width: 25%;">${scienceApp.userFirstName}</div>
+											<input type="hidden" name="<portlet:namespace/>scienceAppId" value="${scienceApp.scienceAppId}" />
+										</td>
+									</c:forEach>
+								</c:if>
+							</tr>						
+						</c:when>					
+						<c:otherwise>
+							<tr id="useApp">
+								<th rowspan="${fn:length(data.scienceAppList)+1}" >
+									<liferay-ui:message key='edison-simulation-project-use-app' /><br>
+									<input type="button" value="<liferay-ui:message key='edison-simulation-project-app-management' />" class="btn btn-default" onClick="<portlet:namespace/>scienceAppManagementOpen();" style="cursor:pointer;"/>
+								</th>
+							</tr>
+							<c:forEach var="scienceApp" items="${data.scienceAppList}" varStatus="status">
+								<tr class="useAppList">
 									<td colspan="2">
 										<div style="float:left;  width: 50%;">${scienceApp.scienceAppName}</div>
 										<div style="float:left;  width: 25%;">${scienceApp.scienceAppVersion}</div>
 										<div style="float:left;  width: 25%;">${scienceApp.userFirstName}</div>
 										<input type="hidden" name="<portlet:namespace/>scienceAppId" value="${scienceApp.scienceAppId}" />
 									</td>
-								</c:forEach>
-							</c:if>
-						</tr>						
-					</c:when>					
-					<c:otherwise>
-						<tr id="useApp">
-							<th rowspan="${fn:length(data.scienceAppList)+1}" >
-								<liferay-ui:message key='edison-simulation-project-use-app' /><br>
-								<input type="button" value="<liferay-ui:message key='edison-simulation-project-app-management' />" class="button06" onClick="<portlet:namespace/>scienceAppManagementOpen();" style="cursor:pointer;"/>
-							</th>
-						</tr>
-						<c:forEach var="scienceApp" items="${data.scienceAppList}" varStatus="status">
-							<tr class="useAppList">
-								<td colspan="2">
-									<div style="float:left;  width: 50%;">${scienceApp.scienceAppName}</div>
-									<div style="float:left;  width: 25%;">${scienceApp.scienceAppVersion}</div>
-									<div style="float:left;  width: 25%;">${scienceApp.userFirstName}</div>
-									<input type="hidden" name="<portlet:namespace/>scienceAppId" value="${scienceApp.scienceAppId}" />
-								</td>
-							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</c:if>
-		</table>      	
-    </aui:form>  	
-</div>
-
-<c:if test="${not empty simulationProjectId}">
-	<div class="h10"></div>
-	<div>
-		<liferay-portlet:runtime portletName="edisonrelateasset_WAR_edisondefault2016portlet" defaultPreferences="" queryString="&entryId=${data.entryId}&isMgrBtn=true&isVirTitle=true"/>
-	</div>
-
-	<div class="h10"></div>
-	<div style="margin-bottom: 60px;">
-		<div class="virtitlebox">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-			<div class="virtitle">
-				<liferay-ui:message key='edison-simulation-project-member-management' />
-			</div>
-		</div>
-	</div>		
-	<div class="tabletopbox01">
-		<div class="search">
-			<div class="searchbox">
-				<input type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" 
-					value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
-				<input type="button" onClick="<portlet:namespace/>getRequestMemberList(1);" class="btnsearch" />
-			</div>
-			<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>searchAllClick();" class="button03">
-		</div>	
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>searchRequestState" name="<portlet:namespace/>searchRequestState" onchange="<portlet:namespace/>getRequestMemberList(1);" class="selectview">
-				<option value=""><liferay-ui:message key='full' /></option>
-				<option value="2003001" <c:if test="${searchRequestState == '2003001' }"> selected="selected"</c:if>><liferay-ui:message key='edison-simulation-project-join-request' /></option>
-				<option value="2003002" <c:if test="${searchRequestState == '2003002' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-approve' /></option>				
-			</select>
-		</div>
-	</div>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</c:if>
+			</table>      	
+	    </aui:form>  	
 		
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-			<colgroup id="boardColgroup">
-				<col width="8%" />
-				<col/>
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-			</colgroup>
-			<thead>
-			<tr>
-				<th><liferay-ui:message key='edison-table-list-header-index' /></th>
-				<th><liferay-ui:message key='edison-table-list-header-name' /></th>
-				<th><liferay-ui:message key='edison-table-list-header-userid' /></th>
-				<th><liferay-ui:message key='edison-table-list-header-orgNm' /></th>
-				<th><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th>
-				<th><liferay-ui:message key='edison-simulation-project-change-date' /></th>
-				<th><liferay-ui:message key='edison-simulation-project-step' /></th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>requestMemberListBody">
-			</tbody>
-		</table>
+		<c:if test="${not empty simulationProjectId}">
+			<div class="h10"></div>
+			<div>
+				<liferay-portlet:runtime portletName="edisonrelateasset_WAR_edisondefault2016portlet" defaultPreferences="" queryString="&entryId=${data.entryId}&isMgrBtn=true&isVirTitle=true"/>
+			</div>
+		
+			<div class="h30"></div>
+			
+			<!-- 멤버관리 -->
+			<div class="table-responsive panel edison-panel">
+				<h3 class="panel-title">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+					<liferay-ui:message key='edison-simulation-project-member-management' />
+				</h3>
+			</div>		
+			<div class="table1_list table-responsive panel edison-panel">
+				<div class="panel-heading clearfix">
+					<div class="input-group">
+						<input type="text" id="<portlet:namespace/>searchText" class="form-control" name="<portlet:namespace/>searchText" style="width: 250px;" 
+							value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
+						<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getRequestMemberList(1);">
+							<i class="icon-search"></i>
+						</button>
+						<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>searchAllClick();" class="btn btn-default">
+						
+						<div class="input-group-btn">
+							<select id="<portlet:namespace/>searchRequestState" name="<portlet:namespace/>searchRequestState" onchange="<portlet:namespace/>getRequestMemberList(1);" class="btn btn-default">
+								<option value=""><liferay-ui:message key='full' /></option>
+								<option value="2003001" <c:if test="${searchRequestState == '2003001' }"> selected="selected"</c:if>><liferay-ui:message key='edison-simulation-project-join-request' /></option>
+								<option value="2003002" <c:if test="${searchRequestState == '2003002' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-approve' /></option>				
+							</select>
+						</div>
+					</div>
+				</div>	
+				
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+					<colgroup id="boardColgroup">
+						<col width="8%" />
+						<col/>
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+						<col width="12%" />
+					</colgroup>
+					<thead>
+					<tr>
+						<th><liferay-ui:message key='edison-table-list-header-index' /></th>
+						<th><liferay-ui:message key='edison-table-list-header-name' /></th>
+						<th><liferay-ui:message key='edison-table-list-header-userid' /></th>
+						<th><liferay-ui:message key='edison-table-list-header-orgNm' /></th>
+						<th><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th>
+						<th><liferay-ui:message key='edison-simulation-project-change-date' /></th>
+						<th><liferay-ui:message key='edison-simulation-project-step' /></th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody id="<portlet:namespace/>requestMemberListBody">
+					</tbody>
+				</table>
+				
+				<div id="<portlet:namespace/>paging" class="paging"></div>
+			</div>
+				
+		</c:if>	
 	</div>
-	<div id="<portlet:namespace/>paging" class="paging"></div>
-</c:if>	
+</div>
 
 <script type="text/javascript">
 var selectEntryArr = [];
@@ -681,7 +689,7 @@ function <portlet:namespace/>drawSimulationProjectScienceAppLink(scienceAppIdLis
 						.append("<br>")
 						.append($("<input/>").attr("type","button")
 											 .attr("onclick", "<portlet:namespace/>scienceAppManagementOpen();")
-											 .addClass("button06")
+											 .addClass("btn btn-default")
 											 .css("cursor", "pointer")
 											 .val("<liferay-ui:message key='edison-simulation-project-app-management' />")
 											 );
@@ -716,7 +724,7 @@ function <portlet:namespace/>drawSimulationProjectScienceAppLink(scienceAppIdLis
 						.append("<br>")
 						.append($("<input/>").attr("type","button")
 											 .attr("onclick", "<portlet:namespace/>scienceAppManagementOpen();")
-											 .addClass("button06")
+											 .addClass("btn btn-default")
 											 .css("cursor", "pointer")
 											 .val("<liferay-ui:message key='edison-simulation-project-app-management' />")
 								);
@@ -749,7 +757,7 @@ function <portlet:namespace/>drawSimulationProjectScienceAppLink(scienceAppIdLis
 		.append("<br>")
 		.append($("<input/>").attr("type","button")
 							 .attr("onclick", "<portlet:namespace/>scienceAppManagementOpen();")
-							 .addClass("button06")
+							 .addClass("btn btn-default")
 							 .css("cursor", "pointer")
 							 .val("<liferay-ui:message key='edison-simulation-project-app-management' />")
 				);
@@ -860,7 +868,7 @@ function <portlet:namespace/>moreFileTag()
 	fileIndex++;
 	var frmTag = "<div id=\"<portlet:namespace/>fileDiv"+fileIndex+"\">";
 	frmTag += "<input type=\"file\" name=\"<portlet:namespace/>project_image\" />&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button06\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv"+fileIndex+"\')\" />";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv"+fileIndex+"\')\" />";
 	frmTag += "</div>";
 	
 	$("#<portlet:namespace/>fileTDArea").append(frmTag);
@@ -931,14 +939,14 @@ function <portlet:namespace/>getRequestMemberList(p_currentPage){
 					if(requestMemberList[i].requestState == "2003001"){
 						$vtd = $("<td/>").addClass("TC");
 						$("<input></input>").attr("type", "button")
-											.addClass("btn_blueg")
+											.addClass("btn btn-default")
 											.val("<liferay-ui:message key='edison-virtuallab-approve'/>")
 											.attr("onclick", "<portlet:namespace/>changeRequestState('"+requestMemberList[i].requestSeq+"', '2003002', '"+
 													requestMemberList[i].userId+"', '"+p_currentPage+"');")
 											.appendTo($vtd);
 						$vtd.append("&nbsp;");
 						$("<input></input>").attr("type", "button")
-											.addClass("btn_blueg")
+											.addClass("btn btn-default")
 											.val("<liferay-ui:message key='edison-button-board-delete'/>")
 											.attr("onclick", "<portlet:namespace/>deleteRequestMember('"+requestMemberList[i].requestSeq+"');")
 											.appendTo($vtd);
@@ -946,7 +954,7 @@ function <portlet:namespace/>getRequestMemberList(p_currentPage){
 					}else if(requestMemberList[i].requestState == "2003002"){
 						$vtd = $("<td/>").addClass("TC");
 						$("<input></input>").attr("type", "button")
-											.addClass("btn_blueg")
+											.addClass("btn btn-default")
 											.val("<liferay-ui:message key='edison-default-site-join-leave'/>")
 											.attr("onclick", "<portlet:namespace/>changeRequestState('"+requestMemberList[i].requestSeq+"', '2003001', '"+
 													requestMemberList[i].userId+"', '"+p_currentPage+"');")

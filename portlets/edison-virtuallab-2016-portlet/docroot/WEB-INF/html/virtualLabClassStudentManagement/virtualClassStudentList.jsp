@@ -830,7 +830,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 </script>
 <div class="h10"></div>
 <div class="table-responsive panel edison-panel">
-	<div class="virtitlebox panel-heading clearfix">
+	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left">
 			<img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-student-infomation' />
@@ -899,7 +899,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
 		<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
 	
-		<div class="newWcont01">
+		<div class="table1_list">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<colgroup>
 					<col width="20%" />
@@ -947,7 +947,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='edison-virtuallab-student-registration' />" class="button06" onclick="studentCreate()"/>
+			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='edison-virtuallab-student-registration' />" class="btn btn-default" onclick="studentCreate()"/>
 		</div>
 	</form>
 </div>
@@ -1003,7 +1003,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 						</td>
 						<td class="puptitle"><liferay-ui:message key='password' /></td>
 						<td class="puptxt">
-							<input id="init_password_button" name="init_password_button" type="button" value="<liferay-ui:message key='edison-virtuallab-password-reset' />" class="button06" onclick="initPassword()"/>
+							<input id="init_password_button" name="init_password_button" type="button" value="<liferay-ui:message key='edison-virtuallab-password-reset' />" class="btn btn-default" onclick="initPassword()"/>
 						</td>
 					</tr>
 					<tr class="puptrline">
@@ -1013,7 +1013,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="virtualLab_update_button" name="virtualLab_update_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="graybtn" onclick="studentUpdate()"/>
+			<input id="virtualLab_update_button" name="virtualLab_update_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="btn btn-default" onclick="studentUpdate()"/>
 		</div>
 	</form>
 </div>
@@ -1043,7 +1043,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</c:if>
 	</div>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="<portlet:namespace/>file_check" name="<portlet:namespace/>file_check" type="button"  class="button06" value="<liferay-ui:message key='edison-simulation-execute-pre-processor-form-create-attachments-upload' />" onClick="fileCheck();" />
+		<input id="<portlet:namespace/>file_check" name="<portlet:namespace/>file_check" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-simulation-execute-pre-processor-form-create-attachments-upload' />" onClick="fileCheck();" />
 	</div>
 </div>
 
@@ -1090,7 +1090,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</div>
 	</form>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="<portlet:namespace/>register" name="<portlet:namespace/>register" type="button"  class="button06" value="<liferay-ui:message key='edison-button-register' />" onClick="excelListAdd();" />
+		<input id="<portlet:namespace/>register" name="<portlet:namespace/>register" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-button-register' />" onClick="excelListAdd();" />
 	</div>
 </div> 
 
@@ -1127,7 +1127,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="<portlet:namespace/>registerDenied_button" name="<portlet:namespace/>registerDenied_button" type="button"  class="button06" value="<liferay-ui:message key='edison-virtuallab-denial' />" onClick="<portlet:namespace/>checkValidation();" />
+			<input id="<portlet:namespace/>registerDenied_button" name="<portlet:namespace/>registerDenied_button" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-denial' />" onClick="<portlet:namespace/>checkValidation();" />
 		</div>
 	</form>
 </div>

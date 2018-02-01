@@ -309,15 +309,16 @@ function <portlet:namespace/>tabChange(value){
 	<div class="tabletopbox clear">
 		<div class="search">
 			<div class="input-group">
+				<div class="input-group-btn">
 				<input name="<portlet:namespace/>textfield" type="text" class="form-control"
 					id="<portlet:namespace/>textfield"
 					placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
 					size="40"
+					style="width: 250px;"
 					onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
 				<!-- <input  value=""
 					class="btnsearch"
 					> -->
-				<div class="input-group-btn">
 					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);">
 						<i class="icon-search"></i>
 					</button>
@@ -360,7 +361,7 @@ function <portlet:namespace/>tabChange(value){
 			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }">
 			<input id="<portlet:namespace/>classNoteSeq" name="<portlet:namespace/>classNoteSeq" type="hidden" value="0">
 			<div class="h20"></div>
-			<div class="table2_list">
+			<div class="table1_list">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
 					<colgroup>
 						<col width="20%" />

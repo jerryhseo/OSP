@@ -41,6 +41,28 @@
 .postlist:hover {
 	background: #e0e0e0;
 }
+
+.search, .searchbox{
+	float: left;
+	margin-bottom: 10px;
+}
+.tabletoptab01{
+	position: absolute;
+	left: 45%;
+    width: 450px;
+}
+.tabletoptab01 ul li{
+	list-style: none;
+    float: left;
+    margin-left: 3px;
+    width: 59px;
+    text-align: center;
+}
+.tabletopright{
+	position: absolute;
+	width: 120px;
+	right: 1%;
+}
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="stopSimulationAPI" escapeXml="false" id="stopAPICall" copyCurrentRenderParameters="false"/>
@@ -106,301 +128,300 @@
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
 
-<c:if test="${tabViewYn eq 'Y'}">
-	<div class="contabmenu">
-		<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
-	</div>
-</c:if>
 
-
-
-<div class="h1">
-	<liferay-ui:message key="edison-simulation-monitoring-title" />	
-</div>
-
-<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>">
-	<aui:input name="currentPage" type="hidden" value="1"/>
-	<aui:input name="userId" type="hidden" value="${userId}"/>
-	<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
-	<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
-	<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
-	<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
+	<c:if test="${tabViewYn eq 'Y'}">
+		<div class="contabmenu">
+			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+		</div>
+	</c:if>
 	
-	<div class="tabletopbox">
-		<div class="search">
-			<div class="searchbox">
-				<aui:input name="searchValue" class="textfieldcss" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
-			</div>
-			<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="button01"/>
-			<input name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01" onClick="<portlet:namespace/>allSearch();" />
-		</div>
-		<div class="tabletoptab01">
-<%-- 			<input type="image" style="margin-left:90px;" src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/search_ALL<c:if test="${param.jobStatus eq null||param.jobStatus eq ''}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('');"/> --%>
-			<ul>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
-				</li>
-			</ul>
-		</div>
-		<div class="tabletopright">
-			<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
-				<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
-			</aui:select>
-		</div>
+	<div class="h1">
+		<liferay-ui:message key="edison-simulation-monitoring-title" />	
 	</div>
-</aui:form>
-<div class="table5_list borderno">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="5%">
-			<col width="*">
-			<col width="8%">
-			<c:if test="${deleteMonitoring eq true }">
-				<col width="10%">
-			</c:if>
-			<col width="5%">
-			<col width="9%">
-			<col width="10%">
-			<col width="9%">
-			<col width="15%">
-			<col width="15%">
-		</colgroup>
-		<thead>
-			<tr>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-appstore-solver-name" />/<liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail"/></th>
+	
+	<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>">
+		<aui:input name="currentPage" type="hidden" value="1"/>
+		<aui:input name="userId" type="hidden" value="${userId}"/>
+		<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
+		<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
+		<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
+		<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
+		
+		<div class="tabletopbox">
+			<div class="search">
+				<div class="searchbox">
+					<aui:input name="searchValue" class="textfieldcss" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
+				</div>
+				<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default"/>
+				<input name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="btn btn-default" onClick="<portlet:namespace/>allSearch();" />
+			</div>
+			<div class="tabletoptab01">
+	<%-- 			<input type="image" style="margin-left:90px;" src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/search_ALL<c:if test="${param.jobStatus eq null||param.jobStatus eq ''}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('');"/> --%>
+				<ul>
+					<li style="cursor: pointer;">
+						<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
+						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
+					</li>
+					<li style="cursor: pointer;">
+						<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
+						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
+					</li>
+					<li style="cursor: pointer;">
+						<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
+						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
+					</li>
+					<li style="cursor: pointer;">
+						<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
+						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
+					</li>
+					<li style="cursor: pointer;">
+						<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
+						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
+					</li>
+				</ul>
+			</div>
+			<div class="tabletopright">
+				<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
+					<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
+					<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
+					<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
+					<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
+				</aui:select>
+			</div>
+		</div>
+	</aui:form>
+	<div class="table-responsive panel edison-panel" style="width: 100%">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="5%">
+				<col width="*">
+				<col width="8%">
 				<c:if test="${deleteMonitoring eq true }">
-					<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-userid" /></th>
+					<col width="10%">
 				</c:if>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
-				<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
-			</tr>
-			<tr>
-				<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
-				<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual"/></p></th>
-			</tr> 
-		</thead>
-		<tbody id="mtbody">
-			<c:choose>
-				<c:when test="${!empty dataList}">
-					<c:forEach items="${dataList}" var="model" varStatus="data">
-						<c:set value="" var="trClass"/>
-						<c:if test="${data.index%2==1}">
-							<c:set value="tablebgtr" var="trClass"/>
-						</c:if>
-						
-						<c:set value="<%= false %>" var="subJobState"/>
-						<c:if test="${model.jobCnt eq 'Y'}">
-							<c:set value="<%=true%>" var="subJobState"/>
-						</c:if>
-						
-						<c:choose>
-							<c:when test="${subJobState}">
-								<tr id="row_${model.jobUuid}" sub-job="${model.jobCnt}"class="${trClass}">
-							</c:when>
-							<c:otherwise>
-								<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
-							</c:otherwise>
-						</c:choose>
-							<td class="TC">
-								<c:if test="${subJobState}">
-									<img src="${contextPath}/images/monitoring/btn_plus.png" class="plusBtn" style="cursor: pointer;" id="${model.simulationUuid}" data-uuid="${model.jobUuid}"/>
-								</c:if>
-								${seq - data.index}
-							</td>
-							<td>
-								${model.scienceAppName}<br/>/${model.simulationTitle}
-							</td>
+				<col width="5%">
+				<col width="9%">
+				<col width="10%">
+				<col width="9%">
+				<col width="15%">
+				<col width="15%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-appstore-solver-name" />/<liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail"/></th>
+					<c:if test="${deleteMonitoring eq true }">
+						<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-userid" /></th>
+					</c:if>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
+					<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
+				</tr>
+				<tr>
+					<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
+					<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual"/></p></th>
+				</tr> 
+			</thead>
+			<tbody id="mtbody">
+				<c:choose>
+					<c:when test="${!empty dataList}">
+						<c:forEach items="${dataList}" var="model" varStatus="data">
+							<c:set value="" var="trClass"/>
+							<c:if test="${data.index%2==1}">
+								<c:set value="tablebgtr" var="trClass"/>
+							</c:if>
+							
+							<c:set value="<%= false %>" var="subJobState"/>
+							<c:if test="${model.jobCnt eq 'Y'}">
+								<c:set value="<%=true%>" var="subJobState"/>
+							</c:if>
+							
 							<c:choose>
 								<c:when test="${subJobState}">
-									<td></td>
-									<c:if test="${deleteMonitoring eq true }">
-										<td></td>
-									</c:if>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<tr id="row_${model.jobUuid}" sub-job="${model.jobCnt}"class="${trClass}">
 								</c:when>
 								<c:otherwise>
-									<td class="TC">
-										<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-											<img src="${contextPath}/images/monitoring/bnt_info.png" onclick="<portlet:namespace/>searchSimulationParam('${model.simulationUuid}','${model.jobSeqNo}','${model.jobUuid}');" style="cursor: pointer;" />
-										</c:if>
-									</td>
-									<c:if test="${deleteMonitoring eq true }">
-										<td>
-											<span style="text-decoration: underline;cursor: pointer;" onclick="<portlet:namespace/>searchUser('${model.userId}');">${model.userNm}</span>
-										</td>
-									</c:if>
-									<td class="TC">
-										<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
-									</td>
-									<td id="job_controll" class="TC">
-										
-									</td>
-									<td id="middle_check" class="TC" logFileProcess-state="${model.jobLogFileProcessorYn }">
-										
-									</td>
-									<td class="TC">
-										<c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
-										<c:if test="${deleteMonitoring || model.userId eq thisUser}">
-											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-												<img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${model.simulationUuid}','0');" alt="delete" title="delete">
-											</c:if>	
-										</c:if>
-										<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-											<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${model.scienceAppId}', '${model.jobUuid}');" alt="rerun" title="rerun">
-										</c:if>	
-									</td>
-									<td id="result_down" class="TC">
-										
-									</td>
-									<td id="result_view" class="TC" postprocess-state="${model.jobPostProcessorYn}" middleFileprocess-state="${model.jobMiddleFileProcessorYn}">
-										
-									</td>
+									<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
 								</c:otherwise>
 							</c:choose>
+								<td class="center">	<!-- index -->
+									<c:if test="${subJobState}">
+										<img src="${contextPath}/images/monitoring/btn_plus.png" class="plusBtn" style="cursor: pointer;" id="${model.simulationUuid}" data-uuid="${model.jobUuid}"/>
+									</c:if>
+									${seq - data.index}
+								</td>
+								<td>
+									${model.scienceAppName}<br/>/${model.simulationTitle}
+								</td>
+								<c:choose>
+									<c:when test="${subJobState}">
+										<td></td>
+										<c:if test="${deleteMonitoring eq true }">
+											<td></td>
+										</c:if>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</c:when>
+									<c:otherwise>
+										<td class="center">	<!-- 상세정보 -->
+											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
+												<img src="${contextPath}/images/monitoring/bnt_info.png" onclick="<portlet:namespace/>searchSimulationParam('${model.simulationUuid}','${model.jobSeqNo}','${model.jobUuid}');" style="cursor: pointer;" />
+											</c:if>
+										</td>
+										<c:if test="${deleteMonitoring eq true }">
+											<td>
+												<span style="text-decoration: underline;cursor: pointer;" onclick="<portlet:namespace/>searchUser('${model.userId}');">${model.userNm}</span>
+											</td>
+										</c:if>
+										<td class="center">	<!-- 상태 -->
+											<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
+										</td>
+										<td id="job_controll" class="center">
+											
+										</td>
+										<td id="middle_check" class="center" logFileProcess-state="${model.jobLogFileProcessorYn }">
+											
+										</td>
+										<td class="center">
+											<c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
+											<c:if test="${deleteMonitoring || model.userId eq thisUser}">
+												<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
+													<img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${model.simulationUuid}','0');" alt="delete" title="delete">
+												</c:if>	
+											</c:if>
+											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
+												<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${model.scienceAppId}', '${model.jobUuid}');" alt="rerun" title="rerun">
+											</c:if>	
+										</td>
+										<td id="result_down" class="center">
+											
+										</td>
+										<td id="result_view" class="center" postprocess-state="${model.jobPostProcessorYn}" middleFileprocess-state="${model.jobMiddleFileProcessorYn}">
+											
+										</td>
+									</c:otherwise>
+								</c:choose>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr>
+							<td colspan="11" class="center"><liferay-ui:message key='edison-there-are-no-data'/></td>
 						</tr>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<tr>
-						<td colspan="11" class="TC"><liferay-ui:message key='edison-there-are-no-data'/></td>
-					</tr>
-				</c:otherwise>
-			</c:choose>
-		</tbody>
-	</table>
-</div>
-<div class="paging">
-	<div style="width:100%;text-align: center;">
-		${paging}
+					</c:otherwise>
+				</c:choose>
+			</tbody>
+		</table>
 	</div>
-</div>
-
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
-
-<table id="hideJobTable" style="display: none">
-</table>
-
-<div id="<portlet:namespace/>result-down-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-</div>
-
-<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
+	<div class="paging">
+		<div style="width:100%;text-align: center;">
+			${paging}
+		</div>
+	</div>
+	
+	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+	
+	<table id="hideJobTable" style="display: none">
+	</table>
+	
+	<div id="<portlet:namespace/>result-down-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
+	</div>
+	
+	<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
+		<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
+				<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+					<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
+				</div>
+				<div class="newWclose" style="cursor: pointer;">
+					<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+				</div>
+		</div>
+		<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
+		</div>
+	</div>
+	
+	<%-- <div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
+		<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
 			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-				<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
+				<div class="newWtitle">Log</div>
 			</div>
 			<div class="newWclose" style="cursor: pointer;">
-				<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+				<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
 			</div>
-	</div>
-	<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
-	</div>
-</div>
-
-<%-- <div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle">Log</div>
 		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-		</div>
-	</div>
-	<div id="<portlet:namespace/>error-dialog-content" style="padding: 30px;" class="newWcont01">
-			
-	</div>
-</div> --%>
-
-
-<div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
-		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-		</div>
-	</div>
-	<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;table-layout: fixed;">
-			<colgroup>
-				<col width="300px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>error-dialog-content" style="font-size: 25px;">
+		<div id="<portlet:namespace/>error-dialog-content" style="padding: 30px;" class="newWcont01">
 				
-			</tbody>
-		</table>
-	</div>
-</div>
-
-
-<div id="<portlet:namespace/>post-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>post-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
 		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>post-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+	</div> --%>
+	
+	
+	<div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="table-responsive panel edison-panel">
+		<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
+			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+				<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
+			</div>
+			<div class="newWclose" style="cursor: pointer;">
+				<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+			</div>
+		</div>
+		<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table" style="word-break: break-all;table-layout: fixed;">
+				<colgroup>
+					<col width="300px" />
+					<col width="*" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>error-dialog-content" style="font-size: 25px;">
+					
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;table-layout: fixed;">
-			<colgroup>
-				<col width="300px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>post-dialog-content" style="font-size: 25px;">
-				
-			</tbody>
-		</table>
+	
+	
+	<div id="<portlet:namespace/>post-dialog" style="display:none; background-color:white; padding:0px;" class="table-responsive panel edison-panel">
+		<div class="newWheader" id="<portlet:namespace/>post-dialog-title" style="cursor: move;">
+			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+				<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
+			</div>
+			<div class="newWclose" style="cursor: pointer;">
+				<img id="<portlet:namespace/>post-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+			</div>
+		</div>
+		<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table" style="word-break: break-all;table-layout: fixed;">
+				<colgroup>
+					<col width="300px" />
+					<col width="*" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>post-dialog-content" style="font-size: 25px;">
+					
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
-
-<div id="<portlet:namespace/>show-analyzer-dialog">
-	<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
-</div>
+	
+	<div id="<portlet:namespace/>show-analyzer-dialog">
+		<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
+	</div>
 
 
 <script type="text/javascript">

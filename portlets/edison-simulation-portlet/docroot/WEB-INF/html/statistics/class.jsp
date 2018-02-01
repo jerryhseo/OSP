@@ -99,8 +99,8 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 						universityId = nowUniversityId;
 						lab=nowLab;
 						labId = nowLabId;
-						$("<td/>").attr("id","<portlet:namespace/>"+universityId).text(nowUniversity).css("text-align","center").appendTo($rowResult);
-						$("<td/>").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
+						$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId).text(nowUniversity).css("text-align","center").appendTo($rowResult);
+						$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
 						classCount = 0;
 						labCount = 0;
 					}else {//기관이 같음 
@@ -110,14 +110,14 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 							}
 							lab=nowLab;
 							labId = nowLabId;
-							$("<td/>").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
+							$("<td/>").addClass("center").attr("id","<portlet:namespace/>"+universityId+"_"+labId).text(nowLab).css("text-align","center").appendTo($rowResult);
 							
 							labCount = 0;
 						}						
 					} 
 					
-					$("<td/>").text(statisticsList[i].classTitle).css("text-align","center").appendTo($rowResult);
-					$("<td/>").text(statisticsList[i].virtualLabPersonName).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].classTitle).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].virtualLabPersonName).css("text-align","center").appendTo($rowResult);
 					
 					var scienceAppTitleList = statisticsList[i].scienceAppTitle;
 					var scienceAppTitle = "";
@@ -127,13 +127,13 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 						}
 					}
 					
-					$("<td/>").html(scienceAppTitle).appendTo($rowResult);
-					$("<td/>").text(statisticsList[i].executeStudentcount).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").html(scienceAppTitle).appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].executeStudentcount).css("text-align","center").appendTo($rowResult);
 					
 					
-					$("<td/>").text(statisticsList[i].classId).css("text-align","center").appendTo($rowResult);
-					$("<td/>").text(statisticsList[i].executeCount).css("text-align","center").appendTo($rowResult);
-					$("<td/>").text(statisticsList[i].avgerageRuntime).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].classId).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].executeCount).css("text-align","center").appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].avgerageRuntime).css("text-align","center").appendTo($rowResult);
 					
 
 					classCount++;
@@ -143,7 +143,7 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 				$("#<portlet:namespace/>"+universityId+"_"+labId).attr("rowspan", labCount);
 			}else if(statisticsList.length== 0){
 				$rowResult = $("<tr/>");
-				$("<td/>").text("<liferay-ui:message key='edison-class-statistics-no-status' />")
+				$("<td/>").addClass("center").text("<liferay-ui:message key='edison-class-statistics-no-status' />")
 				  .css("text-align","center")
 				  .attr("colSpan", "9")
 				  .appendTo($rowResult);
@@ -167,79 +167,86 @@ function excelDown(){
 <%
 	if((Boolean)request.getAttribute("isPortalMain")){
 %>
-<div class="contabmenu"> 
-	<edison-ui:tabs 
-		names="<%=tabNames%>" 
-		tabsValues="<%=tabsValues%>" 
-		value="<%=visitSite%>" 
-		refresh="<%=false%>" 
-		onClick="<%=portletNameSpace%>"
-		minwidth="195"
-	/>
-</div>
-<%
-	}
-%>
 
-<div class="table1_list" style="border-top: 0px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<tr>
-			<td style="text-align: right;">
-				<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="button02" onClick="excelDown()"/>
-			</td>
-		</tr>
-	</table>
-</div>
-<div class="tabletopbox clear">
-	<form name="<portlet:namespace/>statisticsForm" method="post">
-		<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-		<%-- <input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/> --%>
-		
-		<div id="data_wrap">
-			<div class="tabletoptab">
-		  		<input class="box01" type="text" id="<portlet:namespace/>jobStartDt" name="<portlet:namespace/>jobStartDt" readonly="readonly" value="${preDay}"/> 
-					~	<input class="box01" type="text" id="<portlet:namespace/>jobEndDt" name="<portlet:namespace/>jobEndDt" readonly="readonly" value="${toDay}"/>
-			</div>
-			
-			<div class="search03" style="padding: 11px 10px 9px 550px;">
-	<%-- 			<input type="button" name="<portlet:namespace />fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="button01" onclick="<portlet:namespace/>dataSearchList();"> --%>
-					<input type="button" name="<portlet:namespace />fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="button01" onclick="<portlet:namespace/>dataSearchList(0);" />
-			</div>
-		</div>
-	</form>
-</div>
-<div class="table1_list clear">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="10%" />
-			<col width="10%" />
-			<col width="10%" />
-			<col width="8%" />
-			<col width="25%" />
-			<col width="7%" />
-			<col width="7%" />
-			<col width="7%" />
-			<col width="8%" />
-		</colgroup>
-		<thead>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
+<style>
+#data_wrap{
+	margin: 10px 0px;
+}
+</style>
+
+	<div class="contabmenu"> 
+		<edison-ui:tabs 
+			names="<%=tabNames%>" 
+			tabsValues="<%=tabsValues%>" 
+			value="<%=visitSite%>" 
+			refresh="<%=false%>" 
+			onClick="<%=portletNameSpace%>"
+			minwidth="195"
+		/>
+	</div>
+	<%
+		}
+	%>
+	
+	<div class="table-responsive panel edison-panel" style="border-top: 0px;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<tr>
-				<th align="center" scope="col"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-sw-data' /></th><!-- 활용SW -->
-				<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-execute-student-count' /></th><!-- 실행학생수 -->
-				<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-class-code' /></th><!-- 수업코드 -->
-				<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-view-Execution-count' /></th> <!-- 실행수 -->
-				<th align="center" scope="col">CPU Time</th> <!-- CPU Time -->
+				<td style="text-align: right;">
+					<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
+				</td>
 			</tr>
-		</thead>
-		<tbody id="classStatisticsListBody">
-		</tbody>
-	</table>
-</div>
-
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+		</table>
+	</div>
+	<div class="tabletopbox clear">
+		<form name="<portlet:namespace/>statisticsForm" method="post">
+			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
+			<%-- <input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/> --%>
+			
+			<div id="data_wrap">
+				<div class="tabletoptab">
+			  		<input class="box01" type="text" id="<portlet:namespace/>jobStartDt" name="<portlet:namespace/>jobStartDt" readonly="readonly" value="${preDay}"/> 
+						~	<input class="box01" type="text" id="<portlet:namespace/>jobEndDt" name="<portlet:namespace/>jobEndDt" readonly="readonly" value="${toDay}"/>
+				</div>
+				
+				<div class="search03">
+						<input type="button" name="<portlet:namespace />fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0);" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="10%" />
+				<col width="10%" />
+				<col width="10%" />
+				<col width="8%" />
+				<col width="25%" />
+				<col width="7%" />
+				<col width="7%" />
+				<col width="7%" />
+				<col width="8%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th align="center" scope="col"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
+					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-sw-data' /></th><!-- 활용SW -->
+					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-execute-student-count' /></th><!-- 실행학생수 -->
+					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-class-code' /></th><!-- 수업코드 -->
+					<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-view-Execution-count' /></th> <!-- 실행수 -->
+					<th align="center" scope="col">CPU Time</th> <!-- CPU Time -->
+				</tr>
+			</thead>
+			<tbody id="classStatisticsListBody">
+			</tbody>
+		</table>
+	</div>
+	
+	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
 <script type="text/javascript">
 

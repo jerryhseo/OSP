@@ -16,7 +16,7 @@
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-    <css-class-wrapper>edison-workflow-2016-portlet</css-class-wrapper>
+    <css-class-wrapper>edison-workflow-2016-portlet container</css-class-wrapper>
   </portlet>
   <portlet>
   	<portlet-name>workflow-designer</portlet-name>

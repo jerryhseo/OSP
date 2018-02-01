@@ -134,7 +134,7 @@
 <c:if test="${isAdmin == true}"> 
 	<div class="topvisualbtnbox">  
 		<aui:form action="<%=manageDataCollectionURL%>" method="post" name="updateCollectionForm">
-			<input  type="submit" class="btn_blueb topbtn" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>"  />
+			<input  type="submit" class="btn btn-default topbtn" style="width: 100px;" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>"  />
 		</aui:form>
 	</div>
 </c:if>

@@ -2,4 +2,6 @@
 
 <portlet:defineObjects />
 
-This is the <b>Edison Statistics Batch</b> portlet in View mode.
+<div style="padding-bottom: 0px;">
+	This is the <b>Edison Statistics Batch</b> portlet in View mode.
+</div>

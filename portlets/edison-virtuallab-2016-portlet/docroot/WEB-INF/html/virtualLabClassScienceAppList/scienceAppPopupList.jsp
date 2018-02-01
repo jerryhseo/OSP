@@ -138,13 +138,13 @@ function <portlet:namespace/>onKeyDown(e){
 <div class="tabletopbox">
 	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" style="margin:0px;">
 		<div class="search">
-			<div class="searchbox input-group">
-				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-app-name' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
-				<div class="input-group-btn">
-					<button id="search_button" name="search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
-					<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList(0)" ><liferay-ui:message key='edison-button-all-search' /></button>
-					<button type="button" class="btn btn-default" style="float:right;margin-left: 10px" onclick="Liferay.Util.getOpener().<portlet:namespace />closePopup('scienceAppDialog');"><liferay-ui:message key='close' /></button>
-					<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" style="float:right;" onClick="<portlet:namespace/>insertClassScienceApp()" ><liferay-ui:message key='edison-virtuallab-save' /></button>
+			<div class="input-group" style="width: 100%">
+				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-app-name' />" onkeypress="<portlet:namespace/>onKeyDown(event);" style="width: 250px;" />
+				<button id="search_button" name="search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
+				<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList(0)" style="float: left;" ><liferay-ui:message key='edison-button-all-search' /></button>
+				<div class="input-group-btn" style="width: 110px;">
+					<button type="button" class="btn btn-default" style="float:right; margin-left: 5px" onclick="Liferay.Util.getOpener().<portlet:namespace />closePopup('scienceAppDialog');"><liferay-ui:message key='close' /></button>
+					<button id="total_search_button" name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>insertClassScienceApp()" ><liferay-ui:message key='edison-virtuallab-save' /></button>
 				</div>
 			</div>
 		</div>

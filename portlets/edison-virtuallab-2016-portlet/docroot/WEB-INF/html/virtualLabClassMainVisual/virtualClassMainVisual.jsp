@@ -182,13 +182,15 @@ function <portlet:namespace/>checkValidation() {
 }
 
 /* 공지사항 리스트 */
-<portlet:namespace/>getNoticeBoardList();
+/* <portlet:namespace/>getNoticeBoardList(); */
 function <portlet:namespace/>getNoticeBoardList(){
 	
 	AUI().use("liferay-portlet-url", function(a) {
 		var portletURL = Liferay.PortletURL.createResourceURL();
-		portletURL.setPortletId("edisonmultiboard_WAR_edisonboard2016portlet");
-		portletURL.setResourceId("getBoardListTest");
+		portletURL.setPortletId("edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r");
+		portletURL.setResourceId("getNoticeListForVirtualClass");
+		portletURL.setParameter("divCd","100");
+		portletURL.setParameter("listSize","4");
 		portletURL.setParameter("boardGroupId","${classInfo.groupId}");
 		portletURL.setParameter("customId","class_${classInfo.classId}");
 		
@@ -198,7 +200,28 @@ function <portlet:namespace/>getNoticeBoardList(){
 			async : false,
 			dataType: 'json',
 			success: function(result) {
-				console.log("success");
+				var divCd = result.divCd;
+				var boardList = result.boardList;
+				var pageCount = result.pageCount;
+				
+				var noticeList = $("#<portlet:namespace/>noticeContentsInVirtualClass");
+				noticeList.html("");
+				
+				if(boardList.length == 0){
+					
+					/* 조회 데이터 없는 경우 */
+					$("<li/>").text("<liferay-ui:message key='edison-there-are-no-data' />")
+							  .appendTo(noticeList);
+				}else{
+					for(var i = 0 ; i < boardList.length; i++ ){
+						
+						$("<li/>").addClass("noticeContent")
+								  .attr("onclick", "javascript:viewClick<portlet:namespace/>('" + boardList[i].boardSeq + "','${maxWindowStatus}')")
+								  .text(boardList[i].title)
+								  .appendTo(noticeList);
+					}
+				}
+				
 			},error:function(jqXHR, textStatus, errorThrown){
 				console.log("error");
 			}
@@ -360,19 +383,7 @@ function <portlet:namespace/>myClass(){
 		</div>
 		
 		<!--공지사항-->
-		<div class="classnotice">
-			<div class="noticemore">
-				<img src="${contextPath}/images/more_icon.png" width="17" height="17">
-			</div>
-			<ul>
-				<!-- boardController에서 공지사항 추출 -->
-				<li>공지사항</li>
-				<li><a href="#">강의자료 업데이트 알림</a></li>
-				<li>강의사이언스 앱 업데이트 알림</li>
-				<li>강의자료 업데이트 알림</li>
-				<li>강의 사이언스 업데이트 알림</li>
-			</ul>
-		</div>
+		<liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r"  queryString="&customId=class_${classInfo.classId}&boardGroupId=${classInfo.groupId}&redirectName=${redirectName}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }" />
 
 		<!--버튼-->
 		<div class="classtbtn" align="right">

@@ -106,7 +106,7 @@ function <portlet:namespace/>dataSearchList(p_currentPage) {
 					if(i%2 == 1){
  						$rowResult.addClass("tablebgtr");
  					}
-					$("<td></td>").addClass("TC").html(msg.seq-i).appendTo($rowResult);
+					$("<td></td>").addClass("center").html(msg.seq-i).appendTo($rowResult);
 					
 					
 					$("<td/>").append($("<a/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveScienceAppDetail('" + myAppList[i].groupId + "','" + myAppList[i].scienceAppId + "');")
@@ -116,11 +116,11 @@ function <portlet:namespace/>dataSearchList(p_currentPage) {
 							  .css("white-space","nowrap")
 							  .css("overflow","hidden")
 							  .css("text-overflow","ellipsis");
-					$("<td/>").addClass("TC").text("Ver " + myAppList[i].version).appendTo($rowResult);
-					$("<td/>").addClass("TC").text(myAppList[i].affiliation).appendTo($rowResult);
-					$("<td/>").addClass("TC").text(myAppList[i].userFirstName).appendTo($rowResult);
+					$("<td/>").addClass("center").text("Ver " + myAppList[i].version).appendTo($rowResult);
+					$("<td/>").addClass("center").text(myAppList[i].affiliation).appendTo($rowResult);
+					$("<td/>").addClass("center").text(myAppList[i].userFirstName).appendTo($rowResult);
 					
-					$("<td/>").addClass("TC").append($("<select/>").attr("id","categorySelect"+myAppList[i].scienceAppId).addClass("categorySelect").append($("<option/>").attr("value","0").attr("없음")).append(myAppList[i].categorySelectOption).attr("onChange", "<portlet:namespace/>updateApppProjectCategoryId('categorySelect"+myAppList[i].scienceAppId+"', '"+myAppList[i].scienceAppId+"')")).appendTo($rowResult);
+					$("<td/>").addClass("center").append($("<select/>").attr("id","categorySelect"+myAppList[i].scienceAppId).addClass("categorySelect btn btn-default").append($("<option/>").attr("value","0").attr("없음")).append(myAppList[i].categorySelectOption).attr("onChange", "<portlet:namespace/>updateApppProjectCategoryId('categorySelect"+myAppList[i].scienceAppId+"', '"+myAppList[i].scienceAppId+"')")).appendTo($rowResult);
 					
  					$("#<portlet:namespace/>myAppListBody").append($rowResult);
 				}
@@ -156,72 +156,85 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 	});
 }
 </aui:script>
-<div id="<portlet:namespace/>display"  >
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-project-management-app' />
-		</div>
-	</div>
-	
-	<div class="h10"></div>
 
+<style>
+	.managementTitle{
+		font-size: 18px;
+		color: #000;
+		padding-top: 22px;
+	}
+	.selectProject_menu{
+		float: left;
+		margin-right: 10px;
+		width: 160px;
+		padding: 5px;
+		border: solid 1px #ddd;
+	}
+</style>
+
+<div id="<portlet:namespace/>display" class="table-responsive panel edison-panel" >
 	<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId }">
 	<input type="hidden" id="<portlet:namespace/>solverId" name="<portlet:namespace/>solverId" value="0">
 	
-	<div class="tabletopbox">
-		<div class="search">
-			<div class="searchbox">
-				<input name="<portlet:namespace/>textfield" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" />
-				<input type="button" name="fullsize" id="fullsize" value="" class="btnsearch" onclick="<portlet:namespace/>dataSearchList(1);">
-			</div>
-			
-			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="button01" onclick="<portlet:namespace/>dataSearchListAll(1);">
+	<div class="panel-heading clearfix">
+		<div class="managementTitle">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-project-management-app' />
 		</div>
 		
-		<!--우편 셀렉트-->
-		<div class="selectProjectWrapper" style="right:150px">
-			<select id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectProject">
-				<option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
-				${categorySelectOption }
-			</select>
+		<div class="input-group" style="float: left;">
+			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px;" />
+			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
+				<i class="icon-search"></i>
+			</button>
+			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataSearchListAll(1);">
+			
 		</div>
-		<!--우편 셀렉트-->
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview">
-				<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
-				<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-				<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-				<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-			</select>
+		<div style="float: right; width: 290px;">
+			<!--우편 셀렉트-->
+			<div class="selectProject_menu" style="float: left; margin-right: 10px;">
+				<select id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectProject">
+					<option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
+					${categorySelectOption }
+				</select>
+			</div>
+			<!--우편 셀렉트-->
+			<div class="tabletopright">
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="btn btn-default">
+					<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
+			</div>
 		</div>
 	</div>
+
 	
 	
-	<div class="table7_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
-			<colgroup>
-				<col width="100" />
-				<col width="*" />
-				<col width="100" />
-				<col width="200" />
-				<col width="150" />
-				<col width="200" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-title"/></th>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-version"/></th>
-					<th scope="col"><liferay-ui:message key="edison-create-account-field-title-university"/></th>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
-					<th scope="col"><liferay-ui:message key="edison-content-project-affiliation-yn"/></th><!-- 소속프로젝트 -->
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>myAppListBody">
-			</tbody>
-		</table>
-	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
+		<colgroup>
+			<col width="100" />
+			<col width="*" />
+			<col width="100" />
+			<col width="200" />
+			<col width="150" />
+			<col width="200" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
+				<th scope="col"><liferay-ui:message key="edison-table-list-header-title"/></th>
+				<th scope="col"><liferay-ui:message key="edison-table-list-header-version"/></th>
+				<th scope="col"><liferay-ui:message key="edison-create-account-field-title-university"/></th>
+				<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
+				<th scope="col"><liferay-ui:message key="edison-content-project-affiliation-yn"/></th><!-- 소속프로젝트 -->
+			</tr>
+		</thead>
+		<tbody id="<portlet:namespace/>myAppListBody">
+		</tbody>
+	</table>
 	
 	<div class="paging">
 		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;"></div>

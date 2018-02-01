@@ -145,7 +145,7 @@
 		<input id="totalUserCount" name="totalUserCount" type="hidden" value="0">
 		<input id="<portlet:namespace/>registerVirtualUserId" name="<portlet:namespace/>registerVirtualUserId" type="hidden">
 		<input id="<portlet:namespace/>registerClassRequestNo" name="<portlet:namespace/>registerClassRequestNo" type="hidden">
-		<div class="table_popup_list">
+		<div class="table_popup_list table1_list">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="width:500px;">
 				<colgroup>
 					<col width="50%" />

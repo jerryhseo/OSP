@@ -124,3 +124,10 @@ span.requiredField {color: red;}
 	font-size: 15px;
 	text-shadow: 0px 0px 0px #777;
 }
+
+/* 통계 */
+.tabletoptab{
+	float: left;
+	padding-left: 10px;
+	margin-right: 10px;
+}
