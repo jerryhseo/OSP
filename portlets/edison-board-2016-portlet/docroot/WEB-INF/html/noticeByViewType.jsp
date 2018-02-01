@@ -63,6 +63,9 @@
 	.onFaqContent {
 		display:table-row;
 	}
+	.noticeContent{
+		margin: 0 0 5px;
+	}
 </style>
 <%--### Default Board List Start ######################################################################################################################  --%>	
 <% 	
@@ -172,7 +175,6 @@
 					
 				}else{
 					for(var i=0 ; i < boardList.length; i++){
-						
 						noticeDiv = $("<div/>").addClass("newslist col-md-3 col-sm-12")
 											   .css("padding-left", "7px")
 											   .css("padding-right", "7px");
@@ -184,10 +186,11 @@
 												.css("-webkit-line-clamp", "2")
 												.css("-webkit-box-orient", "vertical")
 												.css("word-wrap", "break-word")
-												.css("line-height", "2em")
-												.css("height", "4em")
+												.css("line-height", "1.5em")
+												.css("height", "3em")
 												.css("margin-bottom", "35px");
 						noticeContent = $("<li/>").html(boardList[i].content)
+												  .addClass("noticeContent")
 												  .css("text-overflow", "ellipsis")
 												  .css("overflow", "hidden")
 												  .css("white-space", "nowrap")

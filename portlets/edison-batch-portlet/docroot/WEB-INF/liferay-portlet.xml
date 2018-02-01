@@ -26,7 +26,7 @@
 		</scheduler-entry>		
 		<header-portlet-css>/css/main.css</header-portlet-css>		
 		<css-class-wrapper>
-			edison-batch-statistics-portlet
+			edison-batch-statistics-portlet container
 		</css-class-wrapper>
 	</portlet>
 	
@@ -35,7 +35,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>		
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>edison-batch-monitoring</css-class-wrapper>	
+		<css-class-wrapper>edison-batch-monitoring container</css-class-wrapper>	
 	</portlet>
 	
 	<role-mapper>

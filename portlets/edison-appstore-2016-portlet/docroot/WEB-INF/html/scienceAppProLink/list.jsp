@@ -13,45 +13,44 @@
 </liferay-portlet:renderURL>
 
 <c:if test="${fn:length(selectSimulationProjectList) > 0 || isMgrBtn == true}">
-<div style="margin-bottom: 60px;">
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-simulation-project-recommend-title' />			
+	<div class="table-responsive panel edison-panel" style="margin-top: 60px;">
+		<div style="margin-bottom: 60px;">
+			<h3 class="panel-title pull-left" style="font-weight: bold;">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-simulation-project-recommend-title' />			
+			</h3>
+			<div style="float:right; padding-top:22px;" class="input-group">
+				<c:if test="${isMgrBtn == true }">
+					<input type="button"
+						value="<liferay-ui:message key='edison-simulation-project-manage-btn'/>"
+						class="btn btn-default"
+						onclick="<portlet:namespace/>linkManagementPopup();" />
+				</c:if>	
+			</div>
 		</div>
-		<div style="float:right; padding-top:22px;">
-		<c:if test="${isMgrBtn == true }">
-			<input type="button"
-				value="<liferay-ui:message key='edison-simulation-project-manage-btn'/>"
-				class="topbtn btn_blueb"
-				onclick="<portlet:namespace/>linkManagementPopup();" />
-		</c:if>	
+		<div class="h10"></div>
+		
+		<input type="hidden" name="<portlet:namespace/>sourceEntryId" id="<portlet:namespace/>sourceEntryId" value="${sourceEntryId }"/>
+		<input type="hidden" name="<portlet:namespace/>sourceClassName" id="<portlet:namespace/>sourceClassName" value="${sourceClassName}"/>
+		<input type="hidden" name="<portlet:namespace/>sourceClassPK" id="<portlet:namespace/>sourceClassPK" value="${sourceClassPK}"/>
+		
+		<!--박스 나열-->
+		<div class="msbox" style="overflow: visible !important;">
+		    <ul>
+		    	<c:forEach var="selectSimulationProject" items="${selectSimulationProjectList}" varStatus="status">
+			        <li class="txtnum" style="cursor: pointer; margin-bottom: 10px; ${(status.index +1) % 5 eq 0 ? 'margin-right: 0px;' : ''}" 
+			        	onclick="<portlet:namespace/>moveSimulationProjectDetail('${selectSimulationProject.modelSeq}');">
+			        	<img src="/documents/${selectSimulationProject.iconRepositoryId}/${selectSimulationProject.iconId}/${selectSimulationProject.iconTitle}/${selectSimulationProject.iconUuid}?imageThumbnail=2" 
+			        		width="89" height="58" onerror="this.src='${contextPath}/images/comm_proj/img.gif'" />
+			        	<br>
+			        	<div class="ellipsis" style="line-height: 2.6em; height: 2.6em;">
+			        		${selectSimulationProject.title}
+			        	</div>	
+					</li>
+				</c:forEach>
+		    </ul>
 		</div>
 	</div>
-	
-</div>
-<div class="h10"></div>
-
-<input type="hidden" name="<portlet:namespace/>sourceEntryId" id="<portlet:namespace/>sourceEntryId" value="${sourceEntryId }"/>
-<input type="hidden" name="<portlet:namespace/>sourceClassName" id="<portlet:namespace/>sourceClassName" value="${sourceClassName}"/>
-<input type="hidden" name="<portlet:namespace/>sourceClassPK" id="<portlet:namespace/>sourceClassPK" value="${sourceClassPK}"/>
-
-<!--박스 나열-->
-<div class="msbox" style="overflow: visible !important;">
-    <ul>
-    	<c:forEach var="selectSimulationProject" items="${selectSimulationProjectList}" varStatus="status">
-	        <li class="txtnum" style="cursor: pointer; margin-bottom: 10px; ${(status.index +1) % 5 eq 0 ? 'margin-right: 0px;' : ''}" 
-	        	onclick="<portlet:namespace/>moveSimulationProjectDetail('${selectSimulationProject.modelSeq}');">
-	        	<img src="/documents/${selectSimulationProject.iconRepositoryId}/${selectSimulationProject.iconId}/${selectSimulationProject.iconTitle}/${selectSimulationProject.iconUuid}?imageThumbnail=2" 
-	        		width="89" height="58" onerror="this.src='${contextPath}/images/comm_proj/img.gif'" />
-	        	<br>
-	        	<div class="ellipsis" style="line-height: 2.6em; height: 2.6em;">
-	        		${selectSimulationProject.title}
-	        	</div>	
-			</li>
-		</c:forEach>
-    </ul>
-</div>
 </c:if>
 
 <script type="text/javascript">

@@ -9,9 +9,9 @@
 <p>LOG_PORT_COUNT : ${logTotalCnt}</p>
 <p>OUTPUT_PORT_COUNT : ${outputTotalCnt}</p>
 
-<input type="button" value="INPUTPORT_실행" onclick="<portlet:namespace/>execute('INPUT');"/>
-<input type="button" value="LOGPORT_실행" onclick="<portlet:namespace/>execute('LOG');"/>
-<input type="button" value="OUTPUTPORT_실행" onclick="<portlet:namespace/>execute('OUTPUT');"/>
+<input type="button" class="btn btn-default" value="INPUTPORT_실행" onclick="<portlet:namespace/>execute('INPUT');"/>
+<input type="button" class="btn btn-default" value="LOGPORT_실행" onclick="<portlet:namespace/>execute('LOG');"/>
+<input type="button" class="btn btn-default" value="OUTPUTPORT_실행" onclick="<portlet:namespace/>execute('OUTPUT');"/>
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 

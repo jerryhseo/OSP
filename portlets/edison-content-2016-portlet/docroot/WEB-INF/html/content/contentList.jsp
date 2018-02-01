@@ -110,6 +110,13 @@
 
 <liferay-portlet:renderURL var="contentTabSearchURL" portletMode='view'/>
 
+
+<style>
+	#<portlet:namespace/>textfield{
+		width: 220px;
+	}
+</style>
+
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
 <div class="h10"></div>
@@ -150,11 +157,12 @@
 		
 		<div class="panel-heading clearfix">
 		
-			<h3 class="panel-title pull-left">
+			<h3 class="panel-title">
 				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 				<liferay-ui:message key='edison-content' />
 			</h3>
 			
+			<br>
 			<div class="input-group">
 				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
 					   id="<portlet:namespace/>textfield"
@@ -163,11 +171,10 @@
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
 				/>
+				<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');"><i class="icon-search"></i></button>
+				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();">
 				
-				<div class="input-group-btn" style="width: 30%;">
-					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');"><i class="icon-search"></i></button>
-					<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();">
-					
+				<div class="input-group-btn">
 					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="line-height: 15px;">
 						<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 						<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
@@ -202,7 +209,7 @@
 			<c:choose>
 				<c:when test="${fn:length(dataList) == 0}">
 					<tr>
-						<td class="TC" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
+						<td class="center" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
 					</tr>
 				</c:when>
 				<c:otherwise>
@@ -215,12 +222,12 @@
 							<tr style="word-break: break-all; cursor: pointer;"
 								onClick="<portlet:namespace/>generalModify('<%=Constants.VIEW%>','${data.contentSeq }','${data.contentDiv}')">
 						</c:if>
-							<td class="TC center">${seq - status.index }</td>
-							<td class="TC center">${data.contentDivNm }</td>
+							<td class="center">${seq - status.index }</td>
+							<td class="center">${data.contentDivNm }</td>
 							<td >${data.title }</td>
-							<td class="TC center">${data.openYn }</td>
-							<td class="TC center">${data.screenName}</td>
-							<td class="TC center">${ data.insertDate }</td>
+							<td class="center">${data.openYn }</td>
+							<td class="center">${data.screenName}</td>
+							<td class="center">${ data.insertDate }</td>
 						</tr>
 					</c:forEach>
 				</c:otherwise>

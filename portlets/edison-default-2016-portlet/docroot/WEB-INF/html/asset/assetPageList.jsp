@@ -327,7 +327,7 @@ function <portlet:namespace/>shortcuts(seq, div) {
 					관련 자료
 				</h3>
 				<div class="btn-group pull-right">
-					<button class="btn btn-info" type="button" onclick="<portlet:namespace/>linkManagementPopup();"><span class="icon-cog"> 관련정보관리</span></button>
+					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>linkManagementPopup();"><span class="icon-cog"> 관련정보관리</span></button>
 				</div>
 			</div>
 		</div>
@@ -337,7 +337,7 @@ function <portlet:namespace/>shortcuts(seq, div) {
 			관련자료
 			<c:if test="${isMgrBtn == true }">
 				<span style="float: right;"> <input type="button"
-					value="관련정보관리" class="btn_blue"
+					value="관련정보관리" class="btn btn-default"
 					onClick="<portlet:namespace/>linkManagementPopup()" />
 				</span>
 			</c:if>

@@ -229,7 +229,7 @@
     
     <c:if test="${isMember eq true or authYn eq 'Y'}">
         <div class="<portlet:namespace/>buttonbox top" style="display: none;">
-            <input class="button02 <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
+            <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
         </div>
     </c:if>
     
@@ -246,7 +246,7 @@
         
     <c:if test="${isMember eq true or authYn eq 'Y'}">
         <div class="<portlet:namespace/>buttonbox bottom">
-            <input class="button02 <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
+            <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
         </div>
     </c:if>
     
@@ -721,7 +721,7 @@
                          .attr("onclick", "<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_"+boardSeq+"' ,'0')").appendTo(updateFileDiv);
         }
         
-        $(".button02.<portlet:namespace/>writeBtn").css("display","none");
+        $(".btn btn-default.<portlet:namespace/>writeBtn").css("display","none");
         
         if(boardSeq == 0){
             /* CKEDITOR에 입력(Set)된 내용을 화면에 출력 */
@@ -751,7 +751,7 @@
         $('#<portlet:namespace/>commentTextArea_'+location).val("");
         CKEDITOR.instances['<portlet:namespace/>commentTextArea_'+location].setData("");
         /* 글쓰기 버튼 출력 */
-        $(".button02.<portlet:namespace/>writeBtn").css("display","");
+        $(".btn btn-default.<portlet:namespace/>writeBtn").css("display","");
         /* 텍스트 엡력 form 숨기기 */
         $("#<portlet:namespace/>commentInput_"+location).hide();
     }

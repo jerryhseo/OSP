@@ -63,7 +63,7 @@ input[type="file"]{width:500px;border:1px solid #CCCCCC;margin-bottom:2px;}
 	</div>
 	<br>	
 	<div>
-		<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
+		<input type="button" class="btn btn-primary" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
 	</div>
 </aui:form>	
 <script type="text/javascript">

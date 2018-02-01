@@ -33,18 +33,16 @@
 		<input type="hidden" name="<portlet:namespace/>mode" value="">
 		
 		
-		<div id="data_warp_popup">
-			<div class="virtitlebox">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<div class="virtitle">
+		<div id="data_warp_popup table-responsive panel edison-panel">
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 					<liferay-ui:message key='edison-appstore-request-info' />
-				</div>
+				</h3>
 			</div>
 		
-			<div style="height: 10px;clear: both;"></div>
-			
 			<div class="table1_list" >
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 				<colgroup>
 					<col width="25%">
 					<col width="*">
@@ -96,17 +94,17 @@
 				</table>
 			</div>
 			
-			<div class="virtitlebox">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<div class="virtitle">
+			<div class="h30"></div>
+			
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 					<liferay-ui:message key='edison-science-appstore-toolkit-change-result-of-management' />
-				</div>
+				</h3>
 			</div>
-		
-			<div style="height: 10px;clear: both;"></div>
 			
 			<div class="table1_list" >
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >		
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >		
 				<colgroup>
 					<col width="25%">
 					<col width="25%">
@@ -168,15 +166,15 @@
 		</div>
 	</form>
 
-	<div class="buttonGroup" style="margin:0px;">
+	<div class="buttonGroup" style="margin:0px; float: right;">
 		<c:choose>	
 		<c:when test="${changeSeq == '' }">
-			<input type="button" class="button0801" onclick="<portlet:namespace/>saveSubmit('SAVE')" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+			<input type="button" class="btn btn-default" onclick="<portlet:namespace/>saveSubmit('SAVE')" value="<liferay-ui:message key='edison-virtuallab-save' />" style="width: 80px;" />
 		</c:when>
 		<c:otherwise>
 			<c:if test="${isAdministrator || isSiteAdministrator}">	
-				<input type="button" class="button0801" onclick="<portlet:namespace/>saveSubmit('UPDATE')" value="<liferay-ui:message key='edison-virtuallab-save' />" />
-				<input type="button" class="button0801" onclick="<portlet:namespace/>saveSubmit('DELETE')" value="<liferay-ui:message key='edison-button-board-delete' />" />
+				<input type="button" class="btn btn-default" onclick="<portlet:namespace/>saveSubmit('UPDATE')" value="<liferay-ui:message key='edison-virtuallab-save' />" style="width: 80px; float: left;" />
+				<input type="button" class="btn btn-default" onclick="<portlet:namespace/>saveSubmit('DELETE')" value="<liferay-ui:message key='edison-button-board-delete' />" style="width: 80px;" />
 			</c:if>
 		</c:otherwise>
 		</c:choose>

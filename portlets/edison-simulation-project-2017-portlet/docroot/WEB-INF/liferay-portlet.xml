@@ -5,7 +5,7 @@
 	<portlet>
 		<portlet-name>edison-simulation-project</portlet-name>
 		<icon>/icon.png</icon>		
-		<css-class-wrapper>edison-simulation-project</css-class-wrapper>
+		<css-class-wrapper>edison-simulation-project container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>	
 	</portlet>
 	

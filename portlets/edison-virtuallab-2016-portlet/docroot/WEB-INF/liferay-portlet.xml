@@ -16,7 +16,7 @@
 		<configuration-action-class>org.kisti.edison.virtuallaboratory.portlet.virtualLabRequestManagement.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-virtuallab-request-management</css-class-wrapper>
+		<css-class-wrapper>edison-virtuallab-request-management container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-virtuallab-mainvisual</portlet-name>
@@ -72,7 +72,7 @@
 		<configuration-action-class>org.kisti.edison.virtuallaboratory.portlet.surveyResultList.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-survey-result-list</css-class-wrapper>
+		<css-class-wrapper>edison-survey-result-list container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-virtuallab-survey-option</portlet-name>
@@ -94,7 +94,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-virtuallab-request-list</css-class-wrapper>
+		<css-class-wrapper>edison-virtuallab-request-list container</css-class-wrapper>
 	</portlet>
 	
 	

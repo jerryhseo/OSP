@@ -137,7 +137,7 @@ public class SimulationShareUtil {
 	* @return the new simulation share
 	*/
 	public static org.kisti.edison.bestsimulation.model.SimulationShare create(
-		SimulationSharePK simulationSharePK) {
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK) {
 		return getPersistence().create(simulationSharePK);
 	}
 
@@ -150,7 +150,7 @@ public class SimulationShareUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.bestsimulation.model.SimulationShare remove(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationShareException {
 		return getPersistence().remove(simulationSharePK);
@@ -171,7 +171,7 @@ public class SimulationShareUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.bestsimulation.model.SimulationShare findByPrimaryKey(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationShareException {
 		return getPersistence().findByPrimaryKey(simulationSharePK);
@@ -185,7 +185,7 @@ public class SimulationShareUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.bestsimulation.model.SimulationShare fetchByPrimaryKey(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByPrimaryKey(simulationSharePK);
 	}

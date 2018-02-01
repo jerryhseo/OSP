@@ -108,7 +108,7 @@
 /* main visual > right bottom > notice board */
 .classnotice {
 	position: absolute;
-	right: 150px;
+	right: 0px;
 	top: 188px;
 	padding-top: 20px;
 	padding-left: 30px;
@@ -151,7 +151,7 @@
 	text-decoration: underline;
 }
 
-.classnotice ul li:first-child {
+.classnotice ul.noticeTitleInVirtualClass li:first-child {
 	font-size: 18px;
 	color: #fff;
 	font-weight: 600;

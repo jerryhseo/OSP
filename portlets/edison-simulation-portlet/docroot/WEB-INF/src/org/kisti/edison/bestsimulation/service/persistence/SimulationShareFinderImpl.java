@@ -32,7 +32,6 @@ public class SimulationShareFinderImpl extends BasePersistenceImpl<SimulationSha
 			
 			session=openSession();
 			String gBatisQuery = GBatisUtil.getGBatis(params, sql.toString());
-			System.out.println("gBatisQuery : " + gBatisQuery);
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			
 			query.addScalar("maxShareSeqNo", Type.LONG);

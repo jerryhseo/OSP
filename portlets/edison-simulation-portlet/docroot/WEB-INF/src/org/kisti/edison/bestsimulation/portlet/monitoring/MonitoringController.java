@@ -244,6 +244,7 @@ public class MonitoringController {
 			model.addAttribute("userId", userId);
 			model.addAttribute("dataList", dataList);
 			model.addAttribute("paging", paging);
+			System.out.println("paging : " + paging);
 			model.addAttribute("seq", totalCount - ((currentPage - 1)*listSize));
 			model.addAttribute("selectedGroupId", selectedGroupId);
 			model.addAttribute("simulationClassId", classId);

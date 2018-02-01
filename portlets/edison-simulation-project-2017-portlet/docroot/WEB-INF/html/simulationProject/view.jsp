@@ -96,7 +96,7 @@
 	<c:if test="${isOwner eq true || isAdmin eq true}">
 		<input type="button"
 			value="<liferay-ui:message key='edison-simulation-project-manage-btn'/>"
-			class="topbtn btn_blueb"
+			class="btn btn-default"
 			onclick="<portlet:namespace/>goSimulationProjectManagement();" />
 	</c:if>
 
@@ -104,7 +104,7 @@
 		test="${isOwner eq false && isMember eq false && data.projectOpenYn eq true && isMemberRequest eq false && isTempUser eq false}">
 		<input type="button" id="<portlet:namespace/>requestMemberBtn"
 			value="<liferay-ui:message key='edison-simulation-project-join-btn'/>"
-			class="topbtn btn_blueb"
+			class="btn btn-default"
 			onclick="<portlet:namespace/>requestSimulationProjectMember();" />
 	</c:if>
 

@@ -1,30 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<div class="h30"></div>
-<div style="text-align: right; margin: 5px;">
-	<input id="<portlet:namespace/>virtualLabCalssCreateBtn" name="<portlet:namespace/>virtualLabCalssCreateBtn" type="button" class="button06" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-survey-registration" />" onClick="<portlet:namespace/>insertSurvey('SVY_03_002')"/>
-</div>
-<div class="table6_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="5%" />
-			<col width="55%" />
-			<col width="10%" />
-			<col width="20%" />
-			<col width="10%" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-index" /></th>
-				<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-title" /></th>
-				<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-date" /></th>
-				<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-period" /></th>
-				<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-result" /></th>
-			</tr>
-		</thead>
-		<tbody id="<portlet:namespace/>managementListBody">
-		</tbody>
-	</table>
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<div style="text-align: right; margin: 5px;">
+			<input id="<portlet:namespace/>virtualLabCalssCreateBtn" name="<portlet:namespace/>virtualLabCalssCreateBtn" type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-survey-registration" />" onClick="<portlet:namespace/>insertSurvey('SVY_03_002')"/>
+		</div>
+	</div>
+	
+	<div class="table1_list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="5%" />
+				<col width="55%" />
+				<col width="10%" />
+				<col width="20%" />
+				<col width="10%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-index" /></th>
+					<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-title" /></th>
+					<th align="center" scope="col"><liferay-ui:message key="edison-table-list-header-date" /></th>
+					<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-period" /></th>
+					<th align="center" scope="col"><liferay-ui:message key="edison-virtuallab-surveyResultList-survey-result" /></th>
+				</tr>
+			</thead>
+			<tbody id="<portlet:namespace/>managementListBody">
+			</tbody>
+		</table>
+	</div>
 	
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
 	<div id="<portlet:namespace/>pageListDiv" style="text-align: center;"></div>
@@ -87,7 +91,7 @@ function <portlet:namespace/>dataSearchList(curPage) {
 					$("<td/>").append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyList[i].surveySeqNo + "');")
 												   .attr("type", "button")
 												   .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />")
-												   .addClass("button01b")
+												   .addClass("btn btn-default")
 							  )
 							  .css("text-align","center")
 							  .css("cursor","pointer")

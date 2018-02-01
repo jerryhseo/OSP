@@ -8,7 +8,7 @@
 		<configuration-action-class>org.kisti.edison.content.portlet.content.ConfigurationController</configuration-action-class>
 		<use-default-template>true</use-default-template>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>edison-content</css-class-wrapper>	
+		<css-class-wrapper>edison-content container</css-class-wrapper>	
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	

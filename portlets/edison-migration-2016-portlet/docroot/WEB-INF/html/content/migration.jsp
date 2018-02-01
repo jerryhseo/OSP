@@ -7,7 +7,7 @@
 
 <h3>Content Migration</h3>
 <aui:form action="<%= contentMigrationURL %>" method="post" name="contentMigrationForm">
-	<input type="button" class="button06" value="migration"
+	<input type="button" class="btn btn-default" value="migration"
 		onclick="<portlet:namespace/>mirgationContent('migration');return false;" /> 
 </aui:form>
 

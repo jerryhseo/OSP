@@ -19,7 +19,7 @@
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
-<input type="button" value="Synce" onclick="<portlet:namespace/>syncProfessorList();" class="button06"/>
+<input type="button" value="Synce" onclick="<portlet:namespace/>syncProfessorList();" class="btn btn-default"/>
 
 <script>
 AUI().ready(function() {
@@ -72,7 +72,8 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			
 			if(professorList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "6")
+				$("<td/>").addClass("center)")
+						  .attr("colspan", "6")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-search-no-result' />")
 						  .appendTo($rowResult);
@@ -83,24 +84,30 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 					$rowResult = $("<tr/>").attr("onClick","<portlet:namespace/>moveProfessor('" + professorList[i].professorSeq + "','" + professorList[i].userId + "','" + redirectURL + "')")
 										   .addClass("onHover")  					   
 										   .css("cursor","pointer");
-					$("<td/>").text(professorCount--)
+					$("<td/>").addClass("center")
+							  .text(professorCount--)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].screenName)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].screenName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].firstName)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].firstName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].emailAddress)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].emailAddress)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].universityFieldNm)
-					  .css("text-align","center")
-					  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].major)
-					  .css("text-align","center")
-					  .appendTo($rowResult);
+					$("<td/>").addClass("center")
+							  .text(professorList[i].universityFieldNm)
+							  .css("text-align","center")
+							  .appendTo($rowResult);
+					$("<td/>").addClass("center")
+							  .text(professorList[i].major)
+							  .css("text-align","center")
+							  .appendTo($rowResult);
 					$("#<portlet:namespace/>professorListBody").append($rowResult);
 				}
 			}
@@ -131,12 +138,10 @@ function <portlet:namespace/>moveProfessor(professorSeq, userId, redirectURL) {
 				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 				
 				<div class="input-group">
+					<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-id' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
 					<div class="input-group-btn">
-						<div class="input-group-btn">
-							<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-id' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
-							<button id="search_button" name="<portlet:namespace />search_button" class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList(1)"><i class="icon-search"></i></button>
-							<button id="total_search_button" name="<portlet:namespace />total_search_button" type="button" class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0)" ><liferay-ui:message key='edison-button-all-search' /></button>
-						</div>
+						<button id="search_button" name="<portlet:namespace />search_button" class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList(1)"><i class="icon-search"></i></button>
+						<button id="total_search_button" name="<portlet:namespace />total_search_button" type="button" class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0)" ><liferay-ui:message key='edison-button-all-search' /></button>
 					</div>
 				</div>
 			</form>

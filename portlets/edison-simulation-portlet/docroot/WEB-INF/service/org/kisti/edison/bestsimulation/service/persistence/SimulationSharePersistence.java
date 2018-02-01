@@ -60,7 +60,7 @@ public interface SimulationSharePersistence extends BasePersistence<SimulationSh
 	* @return the new simulation share
 	*/
 	public org.kisti.edison.bestsimulation.model.SimulationShare create(
-		SimulationSharePK simulationSharePK);
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK);
 
 	/**
 	* Removes the simulation share with the primary key from the database. Also notifies the appropriate model listeners.
@@ -71,7 +71,7 @@ public interface SimulationSharePersistence extends BasePersistence<SimulationSh
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.bestsimulation.model.SimulationShare remove(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationShareException;
 
@@ -88,7 +88,7 @@ public interface SimulationSharePersistence extends BasePersistence<SimulationSh
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.bestsimulation.model.SimulationShare findByPrimaryKey(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationShareException;
 
@@ -100,7 +100,7 @@ public interface SimulationSharePersistence extends BasePersistence<SimulationSh
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.bestsimulation.model.SimulationShare fetchByPrimaryKey(
-		SimulationSharePK simulationSharePK)
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

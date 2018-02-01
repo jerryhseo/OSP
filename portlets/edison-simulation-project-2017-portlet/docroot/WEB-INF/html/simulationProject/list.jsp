@@ -144,7 +144,7 @@
 	<div id="<portlet:namespace/>paging" class="paging">${paging}</div>
 	
 	<c:if test="${portletWindowState ne 'pop_up' }">
-		<div class="buttonbox"style="width:auto; right:1%; bottom: 24px;">
+		<div class="buttonbox"style="width:auto; right:1%; bottom: 24px; float: right;">
 			<c:if test="${not empty userId || userId ne null }">
 				<input class="addIp btn btn-default" style="min-width:90px;" onclick="<portlet:namespace/>goCreateManagementPage();" 
 					value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create'/>" type="button">

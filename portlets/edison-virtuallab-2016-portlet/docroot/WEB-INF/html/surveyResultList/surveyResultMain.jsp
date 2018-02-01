@@ -49,9 +49,11 @@
 		portletURL.setParameter("tabs1", tabs1);
 	%>
 	
-	<div class="contabmenu">
-		<edison-ui:tabs names="<%=tabNames%>" url="<%=portletURL.toString()%>" tabsValues="<%=tabsValues%>" value="<%=tabs1%>" refresh="<%=true%>" minwidth="150">
-		</edison-ui:tabs>
+	<div style="padding-bottom: 0px;">
+		<div class="contabmenu">
+			<edison-ui:tabs names="<%=tabNames%>" url="<%=portletURL.toString()%>" tabsValues="<%=tabsValues%>" value="<%=tabs1%>" refresh="<%=true%>" minwidth="150">
+			</edison-ui:tabs>
+		</div>
 	</div>
 	<c:if test='<%= tabs1.equals("survey") %>'>
 		<%@ include file="./surveyManagement.jsp"%>

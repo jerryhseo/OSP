@@ -219,15 +219,15 @@
 			<c:choose>	
 				<c:when test="${isPortal == false && boardMap.groupId ne boardGroupId}"></c:when>
 				<c:otherwise>
-					<input type="button" class="button02" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
-					<input type="button" class="button02" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
 				</c:otherwise>
 			</c:choose>
 		</c:if>
 	</c:if>
-	<input type="button" class="button02" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
+	<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
 	<c:if test="${redirectURL ne '' }">
-		<input type="button" class="button02" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" />
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" />
 	</c:if>
 </div>
 
@@ -240,7 +240,7 @@
 	%>
 		<c:if test="${replyBoardSeq == null || replyBoardSeq == ''}">			
 		<div id="replyInputButton" style="float: right;">
-			<input type="button" onclick="replyInputFormSlideDown();" value="<liferay-ui:message key='edison-button-board-write' />" class="button04">
+			<input type="button" onclick="replyInputFormSlideDown();" value="<liferay-ui:message key='edison-button-board-write' />" class="btn btn-default">
 		</div>
 		</c:if>
 	<%
@@ -286,8 +286,8 @@
 									</c:choose>
 									<div class="boardbtnbox">
 										<div class="boardbtn1 boardbtnboxtoppd">
-											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-virtuallab-save' />" class="button04">
-											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyInputFormSlideUp();" value="<liferay-ui:message key='cancel' />" class="button04">											
+											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-virtuallab-save' />" class="btn btn-default">
+											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyInputFormSlideUp();" value="<liferay-ui:message key='cancel' />" class="btn btn-default">											
 										</div>
 									</div>
 								</div>	
@@ -338,8 +338,8 @@
 										</div>
 										<div class="boardbtnbox">
 											<div class="boardbtn1 boardbtnboxtoppd">
-												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-button-board-modify' />" class="button04">
-												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyWriteCancel('${maxWindowStatus}');" value="<liferay-ui:message key='cancel' />" class="button04">
+												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-button-board-modify' />" class="btn btn-default">
+												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyWriteCancel('${maxWindowStatus}');" value="<liferay-ui:message key='cancel' />" class="btn btn-default">
 											</div>
 										</div>
 									</td>
