@@ -55,18 +55,18 @@
 					String selectedY = value.equals("Y") ? "selected" : "";
 					String selectedN = value.equals("N") ? "selected" : "";
 					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
-					out.print("	<td>"+j+"</td>\n");
-					out.print("	<td>portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-					out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
+					out.print("	<td class=\"center\">"+j+"</td>\n");
+					out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
+					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
 					out.print("</tr>\n");
 				}
 				j=j+1;
 			}
 		 	if(tabViewCount == 0){
 		 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
-				out.print("	<td>1</td>\n");
-				out.print("	<td>portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
+				out.print("	<td class=\"center\">1</td>\n");
+				out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
+				out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
 				out.print("</tr>\n");
 		 	}
 		%>
@@ -75,7 +75,7 @@
 	</div>
 <h1 class="h40"></h1>
 <div>
-	<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
+	<input type="button" class="btn btn-primary" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
 </div>
 </aui:form>
 <script>

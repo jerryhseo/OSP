@@ -40,7 +40,8 @@ function <portlet:namespace/>dataSearchList() {
 			
 			if(typeof favoriteAppList == "undefined" || favoriteAppList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "4")
+				$("<td/>").addClass("center")
+						  .attr("colspan", "4")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-there-are-no-data' />")
 						  .appendTo($rowResult);
@@ -48,7 +49,8 @@ function <portlet:namespace/>dataSearchList() {
 			} else {
 				for(var i = 0; i < favoriteAppList.length; i++) {
 					$rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
-					$("<td/>").append($("<img/>").attr("src", "${pageContext.request.contextPath}/images/scienceappstoreview/favoriteiconon.png")
+					$("<td/>").addClass("center")
+							  .append($("<img/>").attr("src", "${pageContext.request.contextPath}/images/scienceappstoreview/favoriteiconon.png")
 							  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>deleteFavoriteApp('" + favoriteAppList[i].scienceAppId + "','"+ favoriteAppList[i].groupId +"');")
 							  .text(favoriteAppList[i].title)
 							  .css("cursor", "pointer")
@@ -60,21 +62,21 @@ function <portlet:namespace/>dataSearchList() {
 							  .css("overflow","hidden")
 							  .css("text-overflow","ellipsis")
 							  .appendTo($rowResult);
-					$("<td/>").css("text-align","center").text("Ver " + favoriteAppList[i].version)
+					$("<td/>").addClass("center")
+							  .css("text-align","center").text("Ver " + favoriteAppList[i].version)
 							  .appendTo($rowResult);
 					
 					if(favoriteAppManualList[i].fileEntryId != undefined) {
-						$("<td/>").css("text-align","center").append($("<a/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + favoriteAppManualList[i].fileEntryId + "');")
-													   .text("<liferay-ui:message key='edison-table-list-header-manual' />")
-													   .css("cursor", "pointer")
+						$("<td/>").addClass("center")
+								  .css("text-align","center")
+								  .append($("<a/>")
+								  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + favoriteAppManualList[i].fileEntryId + "');")
+								  .text("<liferay-ui:message key='edison-table-list-header-manual' />")
+								  .css("cursor", "pointer")
 								 ).appendTo($rowResult);
 					} else {
-						$("<td/>").css("text-align","center").html("<liferay-ui:message key='edison-table-list-header-manual' />").appendTo($rowResult);
+						$("<td/>").addClass("center").css("text-align","center").html("<liferay-ui:message key='edison-table-list-header-manual' />").appendTo($rowResult);
 					}
-					/* $("<td/>").css("text-align","center").append($("<a/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveSimulation('" + favoriteAppList[i].groupId + "','" + favoriteAppList[i].scienceAppId + "');")
-												   .text("<liferay-ui:message key='edison-table-list-header-run' />")
-												   .css("cursor", "pointer")
-							 ).appendTo($rowResult); */
 					$("#<portlet:namespace/>favoriteAppBody").append($rowResult);
 				}
 			}
@@ -141,16 +143,15 @@ function <portlet:namespace/>moveSimulation(groupId, solverId) {
 }
 </aui:script>
 
-<div class="virtitlebox">
-	<img src="<%=request.getContextPath() %>/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-appstore-favorite-app' />
-	</div>
-</div>
-
-<div class="h10"></div>
 
 <div class="table-responsive panel edison-panel" style="float: left;">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="<%=request.getContextPath() %>/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-appstore-favorite-app' />
+		</h3>
+	</div>
+	
 	<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
 		<colgroup>
 			<col width="40" />

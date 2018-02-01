@@ -92,9 +92,9 @@
 </div>
 
 <div style="width:45%; float:right; text-align:right;">
-	<input class="addIp button08_1" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
-	<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
-	<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
+	<input class="addIp btn btn-primary" style=" width: 100px;" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
+	<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
+	<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
 </div>
 <div style="clear:both"></div>
 <div id="fileDownloadIframe"> </div>

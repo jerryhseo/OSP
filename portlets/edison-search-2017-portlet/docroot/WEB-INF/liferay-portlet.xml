@@ -13,7 +13,7 @@
     <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-    <css-class-wrapper>edison-search-2017-portlet</css-class-wrapper>
+    <css-class-wrapper>edison-search-2017-portlet container</css-class-wrapper>
   </portlet>
   <role-mapper>
     <role-name>administrator</role-name>

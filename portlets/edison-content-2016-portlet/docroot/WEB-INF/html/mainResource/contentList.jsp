@@ -3,6 +3,8 @@
 <%@ include file="/common/init.jsp"%>
 
 <style type="text/css">
+	@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	
 	.edison-mainResource{
 		background-color: #adcbe3;
 	}
@@ -20,38 +22,51 @@
 		font-size: 30px;
 		margin: 40px 0px;
 	}
+	.staticswrap{
+		width:100%;
+		background-color:#abcde3;
+		padding-bottom:40px;
+	}
+	.h2title{
+		font-size:30px !important; 
+		color:#3b143d; 
+		text-align:center; 
+		padding-top:60px; 
+		font-weight:600 !important; 
+		font-family:'Nanum Gothic', sans-serif;
+	}
 </style>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12 title">
+<div class="staticswrap">
+	<div class="container">
+		<h2 class="h2title" style="color: #fff; padding-top: 33px;">
 			SYSTEM RESOURCE STATISTICS
-		</div>		
-	</div>
-	<div class="row">
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge1" class="fillgauge"></svg>
-			<div id="clusterName1" class="clusterName"></div>
-		</div>
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge2" class="fillgauge"></svg>
-			<div id="clusterName2" class="clusterName"></div>
-		</div>
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge3" class="fillgauge"></svg>
-			<div id="clusterName3" class="clusterName"></div>
-		</div>
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge4" class="fillgauge"></svg>
-			<div id="clusterName4" class="clusterName"></div>
-		</div>
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge5" class="fillgauge"></svg>
-			<div id="clusterName5" class="clusterName"></div>
-		</div>
-		<div class="col-xs-4 col-md-2">
-			<svg id="fillgauge6" class="fillgauge"></svg>
-			<div id="clusterName6" class="clusterName"></div>
+		</h2>
+		<div class="row">
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge1" class="fillgauge"></svg>
+				<div id="clusterName1" class="clusterName"></div>
+			</div>
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge2" class="fillgauge"></svg>
+				<div id="clusterName2" class="clusterName"></div>
+			</div>
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge3" class="fillgauge"></svg>
+				<div id="clusterName3" class="clusterName"></div>
+			</div>
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge4" class="fillgauge"></svg>
+				<div id="clusterName4" class="clusterName"></div>
+			</div>
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge5" class="fillgauge"></svg>
+				<div id="clusterName5" class="clusterName"></div>
+			</div>
+			<div class="col-xs-4 col-md-2">
+				<svg id="fillgauge6" class="fillgauge"></svg>
+				<div id="clusterName6" class="clusterName"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -60,7 +75,7 @@
 <script src="${contextPath}/js/liquidFillGauge.js" language="JavaScript"></script>
 <script type="text/javascript">
 	<c:forEach items="${clusterList}" var="item" varStatus="status">
-		var amountUsingResource = "${item.usage}";
+		var amountUsingResource = "${item.usage}" * 1;
 		var config = liquidFillGaugeDefaultSettings();
 		config.circleColor = "#F9F9F9";
 		config.waveColor = "#5BC8A0";
@@ -70,7 +85,7 @@
 			config.minValue = 10;
 		}
 		
-		var gauge = loadLiquidFillGauge("fillgauge${status.count}", amountUsingResource, config);
+		var gauge = loadLiquidFillGauge("fillgauge${status.count}", amountUsingResource.toFixed(1), config);
 		
 		$("#clusterName${status.count}").text("${item.clusterName}");
 	</c:forEach>

@@ -7,20 +7,16 @@
 </liferay-portlet:resourceURL>
 
 <style>
-.conwrap2left {
-	width: 100%;
-	float: left;
-}
 /* Virtual Lab Class QnA */
 .rightt {
 	background: url(${contextPath}/images/class_bl5.png) no-repeat 0 5px;
 	padding-left: 65px;
 }
 
-/* .conwrap2right {
+.conwrap2right {
 	width: 47%;
-	float: right;
-} */
+	float: left;
+}
 
 .qalist {
 	padding-bottom: 19px;
@@ -135,7 +131,7 @@
 		<!--질문과 답변-->
 		<div class="conwrap2right">
 			<div class="conwraptit01 rightt">
-				질문과 답변
+				<liferay-ui:message key='edison-virtuallab-qna' />
 				<div class="moreicon">
 					<a href="#" onclick="goList<portlet:namespace/>('${maxWindowStatus}');" style="cursor: pointer;">
 						MORE
@@ -159,6 +155,7 @@
 	<script type="text/javascript">
 	function goList<portlet:namespace/>(maxWindowStatus){
 		var customId = "${customId}";
+		
 		if(maxWindowStatus=='Y'&&customId!=""){
 			document.mainBoardForm<portlet:namespace/>.action = "<%=originalBoardListMaxURL%>";
 			document.mainBoardForm<portlet:namespace/>.submit()

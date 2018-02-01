@@ -34,7 +34,6 @@ import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HttpFileUtil;
 import org.kisti.edison.util.MyFileIcebreakerTokenUtil;
-import org.kisti.edison.util.MyFileIcebreakerUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.util.TokenProviderUtil;
 import org.kisti.edison.util.VCRegisterUtil;

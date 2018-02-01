@@ -64,7 +64,7 @@ function <portlet:namespace/>dataSearchList(curPage){
 			$("#<portlet:namespace/>workspaceList").empty();		
 			if(dataMap.dataList.length==0){
 				
-				$("#<portlet:namespace/>workspaceList").append('<tr><td colspan=7 style="text-align:center"><liferay-ui:message key="edison-there-are-no-data" /></td></tr>');
+				$("#<portlet:namespace/>workspaceList").append('<tr><td class="center" colspan=7 style="text-align:center"><liferay-ui:message key="edison-there-are-no-data" /></td></tr>');
 				
 			}else{
 				
@@ -73,13 +73,13 @@ function <portlet:namespace/>dataSearchList(curPage){
  					if(i%2 == 1){
  						$trNode.addClass("tablebgtr");
  					}
-					$("<td/>").addClass("TC").text(dataCount--).appendTo($trNode);					
-					$("<td/>").addClass("TC").append($("<a/>").attr("href","#").text(dataMap.dataList[i].screenName)).appendTo($trNode);
-					$("<td/>").addClass("TC").text(dataMap.dataList[i].firstName).appendTo($trNode);
-					$("<td/>").addClass("TC").text(dataMap.dataList[i].emailAddress).appendTo($trNode);
-					$("<td/>").addClass("TC").text(dataMap.dataList[i].requestStatusNm).appendTo($trNode);
-					$("<td/>").addClass("TC").text(dataMap.dataList[i].requestDate).appendTo($trNode);
-					$("<td/>").addClass("TC").text(dataMap.dataList[i].useStart+" ~ "+dataMap.dataList[i].useEnd).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataCount--).appendTo($trNode);					
+					$("<td/>").addClass("center").append($("<a/>").attr("href","#").text(dataMap.dataList[i].screenName)).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataMap.dataList[i].firstName).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataMap.dataList[i].emailAddress).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataMap.dataList[i].requestStatusNm).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataMap.dataList[i].requestDate).appendTo($trNode);
+					$("<td/>").addClass("center").text(dataMap.dataList[i].useStart+" ~ "+dataMap.dataList[i].useEnd).appendTo($trNode);
 					$("#<portlet:namespace/>workspaceList").append($trNode);
 				}
 			}
@@ -95,9 +95,11 @@ function <portlet:namespace/>dataSearchList(curPage){
 }
 </script>
 
-<!-- <div class="tabletopbox">
-	
-</div> -->
+<style>
+	#<portlet:namespace/>searchField{
+		width: 220px;
+	}
+</style>
 
 <div class="table-responsive panel edison-panel" style="min-height: 530px;">
 	
@@ -105,26 +107,19 @@ function <portlet:namespace/>dataSearchList(curPage){
 		<form method="post" name="searchParamForm" style="margin: 0px;" onsubmit="return false;">
 			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
 			
-			<%-- <div class="tabletopright">
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview" style="line-height: 15px;">
-					<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
-					<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
-					<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
-					<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
-				</select>
-			</div> --%>
-			
 			<!-- 페이지 타이틀 & 네비게이션 -->
-			<h3 class="panel-title pull-left">
-				<liferay-ui:message key='edison-appstore-workspace-request-list' />	
+			<h3 class="panel-title">
+				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key='edison-appstore-workspace-request-list' />
 			</h3>
 			
+			<br>
 			<div class="input-group">
 				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${params.searchField}"/>
+				<button class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList('1');"><i class="icon-search"></i></button>
+				<input class="btn btn-default dropdown-toggle" id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" onclick="<portlet:namespace/>dataSearchList(0)" />
 				
 				<div class="input-group-btn" style="width: 20%;">
-					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList('1');"><i class="icon-search"></i></button>
-					<input class="btn btn-default dropdown-toggle" id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" onclick="<portlet:namespace/>dataSearchList(0)" />
 					
 	 				<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="line-height: 15px;">
 						<option value="0">ALL</option>

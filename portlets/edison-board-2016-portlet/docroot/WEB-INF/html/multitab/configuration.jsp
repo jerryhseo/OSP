@@ -57,46 +57,46 @@ function <portlet:namespace/>preferenceDelete(trId){
 
 
 <div>
-	<input type="button" value="Add preferences" onclick="<portlet:namespace/>addPreferences()">
+	<input type="button" value="Add preferences" class="btn btn-default" onclick="<portlet:namespace/>addPreferences()">
 </div>
 <aui:form action="<%= configurationURL %>" method="post" name="fm">
-
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-		<colgroup>
-			<col width="10%" />	//순번
-			<col width="70%" />	//friendlyURL
-			<col width="20%" /> //삭제 버튼
-		</colgroup>
-		<thead>
-			<tr>
-				<th>Number</th>
-				<th>FriendlyURL</th>
-				<th>Delete</th>
-			</tr>
-	    </thead>
-		<tbody id="keySetBody">
-<%
-	int i=1;
-
-	String[] numberArray = portletPreferences.getValues("numberArray", new String[]{});
-	if(numberArray.length > 0 && numberArray != null) {
-		for(int num = 0; num < numberArray.length; num++) {
-			String number = numberArray[num];
-			String friendlyURL = portletPreferences.getValue(number + "_friendlyURL" , "");
-			
-			out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+number+"\">\n");
-			out.print("	<td><input type=\"text\" id=\"_"+PortalUtil.getPortletId(request)+"_numberArray\" name=\"_"+PortalUtil.getPortletId(request)+"_numberArray\" value=\""+number+"\" size=\"20\" readonly=\"true\"></td>\n");
-			out.print("	<td><input type=\"text\" id=\"_"+PortalUtil.getPortletId(request) + "_" + number + "_friendlyURL\" name=\"_"+PortalUtil.getPortletId(request)+ "_" + number + "_friendlyURL\" value=\""+friendlyURL+"\" size=\"20\"></td>\n");
-			out.print("	<td><input type=\"button\" value=\"Delete\" onclick=\"_"+PortalUtil.getPortletId(request)+"_preferenceDelete(\'"+number+"\')\"></td>\n");
-			out.print("</tr>\n");
-			i = Integer.parseInt(CustomUtil.strNull(number, "0")) + 1;
-		}
-	}
-
-%>
-		</tbody>
-	</table>
+	<div class="table-responsive panel edison-panel">
+		<div class="table1_list">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+				<colgroup>
+					<col width="10%" />	//순번
+					<col width="70%" />	//friendlyURL
+					<col width="20%" /> //삭제 버튼
+				</colgroup>
+				<thead>
+					<tr>
+						<th>Number</th>
+						<th>FriendlyURL</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody id="keySetBody">
+				<%
+					int i=1;
+				
+					String[] numberArray = portletPreferences.getValues("numberArray", new String[]{});
+					if(numberArray.length > 0 && numberArray != null) {
+						for(int num = 0; num < numberArray.length; num++) {
+							String number = numberArray[num];
+							String friendlyURL = portletPreferences.getValue(number + "_friendlyURL" , "");
+							
+							out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+number+"\">\n");
+							out.print("	<td class=\"center\"><input type=\"text\" class=\"form-control\" id=\"_"+PortalUtil.getPortletId(request)+"_numberArray\" name=\"_"+PortalUtil.getPortletId(request)+"_numberArray\" value=\""+number+"\" size=\"20\" readonly=\"true\"></td>\n");
+							out.print("	<td class=\"center\"><input type=\"text\" class=\"form-control\" id=\"_"+PortalUtil.getPortletId(request) + "_" + number + "_friendlyURL\" name=\"_"+PortalUtil.getPortletId(request)+ "_" + number + "_friendlyURL\" value=\""+friendlyURL+"\" size=\"20\"></td>\n");
+							out.print("	<td class=\"center\"><input type=\"button\" class=\"btn btn_default\" value=\"Delete\" onclick=\"_"+PortalUtil.getPortletId(request)+"_preferenceDelete(\'"+number+"\')\"></td>\n");
+							out.print("</tr>\n");
+							i = Integer.parseInt(CustomUtil.strNull(number, "0")) + 1;
+						}
+					}
+				%>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 <script type="text/javascript">
@@ -107,6 +107,6 @@ trIndex = "<%=i%>";
 <%-- 		<aui:button type="submit" /> --%>
 <%-- 	</aui:button-row> --%>
 
-<input type="submit" value="저장" />
+<input type="submit" class="btn btn-primary" value="저장" />
 
 </aui:form>

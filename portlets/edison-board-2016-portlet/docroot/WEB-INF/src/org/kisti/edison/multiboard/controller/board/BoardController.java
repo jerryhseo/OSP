@@ -96,6 +96,7 @@ public class BoardController {
 		String maxWindowStatus = GetterUtil.get(params.get("maxWindowStatus"), "N");
 		String viewStructure = request.getPreferences().getValue("viewStructure", "N");
 		Long divCd=0l;
+		String customId="";
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
 			long companyId = PortalUtil.getCompanyId(request);
@@ -104,7 +105,7 @@ public class BoardController {
 			long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
 			String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 			String redirectName = ParamUtil.getString(request, "redirectName");
-			String customId = ParamUtil.getString(request, "customId");
+			customId = ParamUtil.getString(request, "customId");
 			boolean isCustomAdmin = ParamUtil.getBoolean(request, "isCustomAdmin",false);
 			boolean isDefaultUserWrite = ParamUtil.getBoolean(request, "isDefaultUserWrite",false);
 			
@@ -224,11 +225,15 @@ public class BoardController {
 		
 		if(mainListYn.equals("Y") && maxWindowStatus.equals("N")){
 			if(divCd == 100 && viewStructure.equals("card")){
-				return "list_cardType";		//	card 형태의 공지사항 게시판
+				return "noticeByViewType";
 			} else if(divCd == 100 && viewStructure.equals("list")){
 				return "list";
-			} else if(divCd == 200){
-				return "listQnA";
+			} else if(customId.contains("class")){
+				if(divCd==100){
+					return "noticeInVirtualClass";
+				} else if(divCd==200){
+					return "qnaInVirtualClass";
+				}
 			}
 			return "listMain";
 		}else{
@@ -995,5 +1000,23 @@ public class BoardController {
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.write(obj.toString());
+	}
+	
+	@ResourceMapping(value="getNoticeListForVirtualClass")
+	public void getNoticeListForVirtualClass(ResourceRequest request, ResourceResponse response){
+		
+		try {
+			
+			getBoardDivBoards(request, response);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

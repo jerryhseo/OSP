@@ -675,46 +675,46 @@ function <portlet:namespace/>onKeyDown() {
 	<form id="createVirtualLabForm" name="createVirtualLabForm" method="post" action="<%= virtualLabCreateURL %>" onsubmit="return <portlet:namespace/>checkValidation(this);" style="margin:0px;">
 		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="0">
 		<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="1501005">
-		<div class="newWcont01">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="width:715px; table-layout: fixed;">
-			<colgroup>
-				<col width="20%" />
-				<col width="30%" />
-				<col width="20%" />
-				<col width="30%" />
-			</colgroup>
-			<tbody>
-				<tr class="puptrline">
-					<td class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-id' /></td>
-					<td class="puptxt">${userInfomation.screenName}</td>
-					<td class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-name' /></td>
-					<td class="puptxt">${userInfomation.fullName}</td>
-				</tr>
-				<tr class="puptrline">
-					<td class="puptitle"><liferay-ui:message key='edison-table-list-header-tutor' /></td>
-					<td class="puptxt" colspan="3">
-						<liferay-ui:input-localized id="virtualLabPersonName" name="virtualLabPersonName" xml="" style="display: inline-block; margin:4px; width:150px;" type="input"/>
-					</td>
-				</tr>
-				<tr class="puptrline">
-					<td class="puptitle"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></td>
-					<td class="puptxt">
-						<liferay-ui:input-localized id="virtualLabTitle" name="virtualLabTitle" xml="" style="display: inline-block; margin:4px; width:150px;" type="input"/>
-					</td>
-					<td class="puptitle" style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /></td>
-					<td class="puptxt">
-						<input id="<portlet:namespace/>virtualLabUniversityField" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="10" readonly="readonly" style="width:120px; margin-bottom:0px; "/>
-						<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="button06" />
-					</td>
-				</tr>
-				<tr class="puptrline">
-					<td class="puptitle"><liferay-ui:message key='edison-table-list-header-resume' /></td>
-					<td class="puptxt" colspan="3">
-						<liferay-ui:input-localized id="virtualLabDescription" name="virtualLabDescription" xml=""  rows="5" spellcheck="false" style="width: 85%; resize:none; margin:5px;" type="textarea"/>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="table1_list">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="width:715px; table-layout: fixed;">
+				<colgroup>
+					<col width="20%" />
+					<col width="30%" />
+					<col width="20%" />
+					<col width="30%" />
+				</colgroup>
+				<tbody>
+					<tr class="puptrline">
+						<td class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-id' /></td>
+						<td class="puptxt">${userInfomation.screenName}</td>
+						<td class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-name' /></td>
+						<td class="puptxt">${userInfomation.fullName}</td>
+					</tr>
+					<tr class="puptrline">
+						<td class="puptitle"><liferay-ui:message key='edison-table-list-header-tutor' /></td>
+						<td class="puptxt" colspan="3">
+							<liferay-ui:input-localized id="virtualLabPersonName" name="virtualLabPersonName" xml="" style="display: inline-block; margin:4px; width:150px;" type="input"/>
+						</td>
+					</tr>
+					<tr class="puptrline">
+						<td class="puptitle"><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></td>
+						<td class="puptxt">
+							<liferay-ui:input-localized id="virtualLabTitle" name="virtualLabTitle" xml="" style="display: inline-block; margin:4px; width:150px;" type="input"/>
+						</td>
+						<td class="puptitle" style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /></td>
+						<td class="puptxt">
+							<input id="<portlet:namespace/>virtualLabUniversityField" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="10" readonly="readonly" style="width:120px; margin-bottom:0px; "/>
+							<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="button06" />
+						</td>
+					</tr>
+					<tr class="puptrline">
+						<td class="puptitle"><liferay-ui:message key='edison-table-list-header-resume' /></td>
+						<td class="puptxt" colspan="3">
+							<liferay-ui:input-localized id="virtualLabDescription" name="virtualLabDescription" xml=""  rows="5" spellcheck="false" style="width: 85%; resize:none; margin:5px;" type="textarea"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
 			<c:choose>

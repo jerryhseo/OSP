@@ -1,52 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div class="h30"></div>
-<div class="tabletopbox">
-	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="<%= tabs1 %>"/>
-		<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
-		<div class="search">
-			<div class="searchbox">
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" />
-				<input id="search_button" name="search_button" type="button" class="btnsearch"  onClick="<portlet:namespace/>dataSearchList()"/>
+
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="<%= tabs1 %>"/>
+			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
+			<div class="input-group">
+				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 160px;" />
+				<%-- <input id="search_button" name="search_button" type="button" class="btnsearch"  onClick="<portlet:namespace/>dataSearchList()"/> --%>
+				<button class="btn btn-default" type="button" id="search_button" name="search_button" onClick="<portlet:namespace/>dataSearchList()">
+					<i class="icon-search"></i>
+				</button>
+				<input id="total_search_button" name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="btn btn-default"  onClick="<portlet:namespace/>dataSearchList(0)" />
+				
+				<div class="input-group-btn">
+					<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
+						<c:if test="${null eq surveySelectList}">
+							<option value="0"><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data' /></option>
+						</c:if>
+						<c:if test="${null ne surveySelectList}">
+							<c:forEach items="${surveySelectList}" var="survey">
+								<c:choose>
+									<c:when test="${survey.surveySeqNo eq surveySeqNo}">
+										<option value=${survey.surveySeqNo} selected>${survey.surveyTitle}</option>
+									</c:when>
+									<c:otherwise>
+										<option value=${survey.surveySeqNo}>${survey.surveyTitle}</option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach> 
+						</c:if>
+					</select>
+				
+					<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
+						<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+						<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+						<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+						<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+					</select>
+				</div>
+				
 			</div>
-			<input id="total_search_button" name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01"  onClick="<portlet:namespace/>dataSearchList(0)" />
-		</div>
-		<div class="tabletopright" style="right: 150px;">
-			<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview">
-				<c:if test="${null eq surveySelectList}">
-					<option value="0"><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data' /></option>
-				</c:if>
-				<c:if test="${null ne surveySelectList}">
-					<c:forEach items="${surveySelectList}" var="survey">
-						<c:choose>
-							<c:when test="${survey.surveySeqNo eq surveySeqNo}">
-								<option value=${survey.surveySeqNo} selected>${survey.surveyTitle}</option>
-							</c:when>
-							<c:otherwise>
-								<option value=${survey.surveySeqNo}>${survey.surveyTitle}</option>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach> 
-				</c:if>
-			</select>
-		</div>
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview">
-				<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-				<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-				<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-				<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-			</select>
-		</div>
-	</form>
-</div>
-
-<div style="text-align: right; margin: 5px;">
-	<input id="<portlet:namespace/>surveyResultGroupBtn" name="<portlet:namespace/>surveyResultGroupBtn" type="button" class="button06" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-group" />" onClick="<portlet:namespace/>searchGroupSurveyResult();"/>
-</div>
-
-<div class="table1_list borderno">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<div class="tabletopright" style="right: 150px;">
+			</div>
+			
+			<br>
+			<div style="text-align: right; margin: 5px;">
+				<input id="<portlet:namespace/>surveyResultGroupBtn" name="<portlet:namespace/>surveyResultGroupBtn" type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-group" />" onClick="<portlet:namespace/>searchGroupSurveyResult();"/>
+			</div>
+		</form>
+	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="7%" />
 			<col width="18%" />
@@ -112,7 +117,8 @@ function <portlet:namespace/>dataSearchList(curPage) {
 			$("#<portlet:namespace/>surveyResultListBody tr:not(:has(#1))").remove();
 			if(surveyResultList === undefined || surveyResultList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "8")
+				$("<td/>").addClass("center")
+						  .attr("colspan", "8")
 						  .css("height", "40px")
 						  .css("text-align","center")
 						  .html("<p><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data-result' /></p>")
@@ -123,13 +129,15 @@ function <portlet:namespace/>dataSearchList(curPage) {
 					if((tempVirtualLabId != surveyResultList[i].virtualLabId) && i != 0) {
 						labStatistics++;
 						$rowResult = $("<tr/>");
-						$("<td/>").attr("colspan", "7")
+						$("<td/>").addClass("center")
+								  .attr("colspan", "7")
 								  .css("text-align","right")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-total' />" + " : ")
 										  		   .css("margin-bottom", "20px")
 										  		   .css("font-size", "16px"))
 								  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center")
+								  .css("text-align","center")
 								  .append($("<p/>").text("(" + labAnswerCount + "/" +labStudentCount + ")")
 										  		   .css("margin-bottom", "20px")
 										  		   .css("font-size", "16px"))
@@ -147,36 +155,45 @@ function <portlet:namespace/>dataSearchList(curPage) {
  						$rowResult.addClass("tablebgtr");
  					}
  					if(tempVirtualLabId != surveyResultList[i].virtualLabId) {
-						$("<td/>").text(totalCnt--)
+						$("<td/>").addClass("center")
+								  .text(totalCnt--)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
-						$("<td/>").text(surveyResultList[i].virtualLabTitle)
+						$("<td/>").addClass("center")
+								  .text(surveyResultList[i].virtualLabTitle)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
-						$("<td/>").text(surveyResultList[i].virtualLabUniversityFieldNm)
+						$("<td/>").addClass("center")
+								  .text(surveyResultList[i].virtualLabUniversityFieldNm)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
-						$("<td/>").text(surveyResultList[i].virtualLabPersonName)
+						$("<td/>").addClass("center")
+								  .text(surveyResultList[i].virtualLabPersonName)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						if(surveyResultList[i].surveyCheck > 0) {
-							$("<td/>").text("O")
+							$("<td/>").addClass("center")
+									  .text("O")
 									  .css("text-align","center")
 									  .appendTo($rowResult);
 						} else {
-							$("<td/>").text("X")
+							$("<td/>").addClass("center")
+									  .text("X")
 									  .css("text-align","center")
 									  .appendTo($rowResult);
 						}
-						$("<td/>").text(surveyResultList[i].classTitle)
+						$("<td/>").addClass("center")
+								  .text(surveyResultList[i].classTitle)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						if(surveyResultList[i].answerCount > 0) {
-							$("<td/>").text(surveyResultList[i].voteStartDate + " ~ " + surveyResultList[i].voteEndDate)
+							$("<td/>").addClass("center")
+									  .text(surveyResultList[i].voteStartDate + " ~ " + surveyResultList[i].voteEndDate)
 									  .css("text-align","center")
 									  .appendTo($rowResult);
 														   <!-- (" + surveyResultList[i].answerCount + "/" + surveyResultList[i].userTotalCount + ") -->
-							$("<td/>").append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyResultList[i].surveySeqNo + "','" + surveyResultList[i].classId + "');")
+							$("<td/>").addClass("center")
+									  .append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyResultList[i].surveySeqNo + "','" + surveyResultList[i].classId + "');")
 														   .attr("type", "button")
 														   .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />")
 														   .addClass("button01b")
@@ -188,10 +205,12 @@ function <portlet:namespace/>dataSearchList(curPage) {
 									  .css("cursor","pointer")
 								  	  .appendTo($rowResult);
 						} else {
-							$("<td/>").text("")
+							$("<td/>").addClass("center")
+									  .text("")
 									  .css("text-align","center")
 									  .appendTo($rowResult);
-							$("<td/>").append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-no-result' />")
+							$("<td/>").addClass("center")
+									  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-no-result' />")
 									  )
 									  .append($("<p/>").text("(" + surveyResultList[i].answerCount + "/" + surveyResultList[i].userTotalCount + ")")
 									  )
@@ -199,14 +218,17 @@ function <portlet:namespace/>dataSearchList(curPage) {
 									  .appendTo($rowResult);
 						}
 					} else {
-						$("<td/>").text(surveyResultList[i].classTitle)
+						$("<td/>").addClass("center")
+								  .text(surveyResultList[i].classTitle)
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						if(surveyResultList[i].answerCount > 0) {
-							$("<td/>").text(surveyResultList[i].voteStartDate + " ~ " + surveyResultList[i].voteEndDate)
+							$("<td/>").addClass("center")
+									  .text(surveyResultList[i].voteStartDate + " ~ " + surveyResultList[i].voteEndDate)
 									  .css("text-align","center")
 									  .appendTo($rowResult);
-							$("<td/>").append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyResultList[i].surveySeqNo + "','" + surveyResultList[i].classId + "');")
+							$("<td/>").addClass("center")
+									  .append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyResultList[i].surveySeqNo + "','" + surveyResultList[i].classId + "');")
 														   .attr("type", "button")
 														   .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />")
 														   .addClass("button01b")
@@ -218,10 +240,12 @@ function <portlet:namespace/>dataSearchList(curPage) {
 									  .css("cursor","pointer")
 								  	  .appendTo($rowResult);
 						} else {
-							$("<td/>").text("")
+							$("<td/>").addClass("center")
+									  .text("")
 									  .css("text-align","center")
 									  .appendTo($rowResult);
-							$("<td/>").append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-no-result' />")
+							$("<td/>").addClass("center")
+									  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-no-result' />")
 									  )
 									  .append($("<p/>").text("(" + surveyResultList[i].answerCount + "/" + surveyResultList[i].userTotalCount + ")")
 									  )
@@ -261,7 +285,8 @@ function <portlet:namespace/>dataSearchList(curPage) {
 								  		   .css("margin-bottom", "20px")
 								  		   .css("font-size", "16px"))
 						  .appendTo($rowResult);
-				$("<td/>").css("text-align","center")
+				$("<td/>").addClass("center")
+						  .css("text-align","center")
 						  .append($("<p/>").text("(" + labAnswerCount + "/" + labStudentCount + ")")
 								  		   .css("margin-bottom", "20px")
 								  		   .css("font-size", "16px"))

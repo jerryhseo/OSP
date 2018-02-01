@@ -20,22 +20,23 @@
 <liferay-portlet:resourceURL var="deleteAppManagerIdURL" id="deleteAppManagerId" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteAuthManagerIdURL" id="deleteAuthManagerId" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<div class="virtitlebox">
-	<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-default-site-join-title' />
+
+
+<div class="table-responsive panel edison-panel">
+
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-default-site-join-title' />
+		</h3>
 	</div>
-</div>
-
-<div class="h10" style="clear:both"></div>
-
-<div class="table7_list">
+	
 	<aui:form name="siteJoinForm">
 		<aui:input type="hidden" name="groupId"  ></aui:input>
 		<aui:input type="hidden" name="removeUserIds"></aui:input>
 		<aui:input type="hidden" name="addUserIds"></aui:input>
 		<aui:input type="hidden" name="siteVisibleStatus"></aui:input>
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="30%" />
 				<col width="20%" />
@@ -55,9 +56,9 @@
 			<tbody>
 				<c:forEach items="${userSiteGroupList }" var="site">
 				<tr id="tr_${site.groupId }" >
-					<td class="TC"><a href="${site.friendlyUrl }" target="_blank">${site.groupNm }</a></td>
-					<td class="TC">${site.groupMemberCount }</td>
-					<td class="TC" >
+					<td class="center"><a href="${site.friendlyUrl }" target="_blank">${site.groupNm }</a></td>
+					<td class="center">${site.groupMemberCount }</td>
+					<td class="center" >
 					<c:choose>
 						<c:when test="${site.memberStatus eq 'join'}">
 							<a href="#" onClick="siteLeave('siteJoin', '${site.groupId}', '<%=user.getUserId()%>');">
@@ -77,7 +78,7 @@
 					</c:choose>
 					</td>
 					<c:if test="${isAdmin }">
-						<td class="TC">
+						<td class="center">
 							<c:choose>
 								<c:when test="${site.groupAssetEntry.visible}">
 									<a href="#" onClick="updateSiteAssetEntryVisibleStatus('${site.groupId }','false')" ><liferay-ui:message key="edison-default-site-asset-entry-visible-active"/></a>

@@ -90,7 +90,8 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			
 			if(virtualLabClassRegisterList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "8")
+				$("<td/>").addClass("center")
+						  .attr("colspan", "8")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-search-no-result' />")
 						  .appendTo($rowResult);
@@ -104,72 +105,79 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
  						$rowResult.addClass("tablebgtr");
  					}
 					
-					$("<td/>").text(virtualLabClassRegisterList[i].groupName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].groupName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabTitle)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabTitle)
 							  .css("text-align","left")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabUniversityField)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabUniversityField)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabPersonName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabPersonName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].classTitle)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].classTitle)
 							  .css("text-align","left")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].createDt)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].createDt)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					if(virtualLabClassRegisterList[i].requestSort == "CONFIRM" || virtualLabClassRegisterList[i].requestSort == "TEMP") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' />")
 												   .css("font-weight", "600")
 												   .css("color", "blue")
 												   .css("margin","0")
 									)
 						  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-move' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>registerCheck('" + virtualLabClassRegisterList[i].virtualLabId + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId + "')")
 								  )
 						  .appendTo($rowResult);
 					} else if (virtualLabClassRegisterList[i].requestSort == "REQUEST") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-during-registration' />")
 												   .css("font-weight", "600")
 												   .css("margin","0")
 									)
 								  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-button-cancel' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>registerCheck('" + virtualLabClassRegisterList[i].virtualLabId + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId + "')")
 								  )
 								  .appendTo($rowResult);
 					} else if (virtualLabClassRegisterList[i].requestSort == "DENIED") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-registration-denial' />")
 												   .css("font-weight", "600")
 												   .css("color", "red")
 												   .css("margin","0")
 								  )
 								  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .attr("onClick","<portlet:namespace/>openDeniedDialog('" + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" + virtualLabClassRegisterList[i].processNote + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId +"')")
 								  )
 								  .appendTo($rowResult);
 					} else {
-						$("<td/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
+						$("<td/>").addClass("center")
+								  .text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					}
@@ -297,12 +305,10 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 
 <div class="table-responsive panel edison-panel" style="float: left;">
 	<div class="panel-heading clearfix">
-		<div class="virtitlebox">
-			<h3 class="panel-title pull-left">
-				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
-				<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
-			</h3>
-		</div>
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
+		</h3>
 	</div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>

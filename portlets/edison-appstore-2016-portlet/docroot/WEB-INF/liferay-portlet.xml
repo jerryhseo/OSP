@@ -24,7 +24,7 @@
 		<configuration-action-class>org.kisti.edison.science.portlet.workspace.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-workspace</css-class-wrapper>
+		<css-class-wrapper>edison-workspace container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -34,7 +34,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-developer-request-list</css-class-wrapper>
+		<css-class-wrapper>edison-developer-request-list container</css-class-wrapper>
 	</portlet>	
 	
 	
@@ -59,7 +59,7 @@
 		<configuration-action-class>org.kisti.edison.science.portlet.scienceAppstore.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-scienceAppstore</css-class-wrapper>
+		<css-class-wrapper>edison-scienceAppstore container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -106,7 +106,7 @@
 		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
 		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>edison-myapp-qna</css-class-wrapper>
+		<css-class-wrapper>edison-myapp-qna container</css-class-wrapper>
 	</portlet>
 	
 	

@@ -193,10 +193,7 @@ function <portlet:namespace/>historyback(){
 }
 
 </script>
-<!-- 페이지 타이틀 & 네비게이션 -->
-<h1 style="padding-bottom:0px;">
-	<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
-</h1>
+
 <% 
 	if(SessionErrors.contains(renderRequest, SystemException.class.getName())) {
 %>
@@ -204,94 +201,108 @@ function <portlet:namespace/>historyback(){
 <% 
 	}
 %>
-<form name="surveyForm" action="<%=insertURL %>" method="post">		
-<input type="hidden" name="<portlet:namespace/>surveyDivCd" value="${param.surveyDivCd}"/>
 
-<div id="data_text_wrap" class="surveyMain">
+<!-- 페이지 타이틀 & 네비게이션 -->
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-registration' />
-		<input type="button" class="button06" onclick="<portlet:namespace/>surveyAdd()" id="<portlet:namespace/>surveyAddBtn" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-add-question' />">
-	</div>
-	<div style="padding: 10px; float:right; border: 2px dashed #6a8ec6; border-radius: 10px;">
-		<%
-		Locale[] availLocales = LanguageUtil.getAvailableLocales();
-		for(int i=0;i<availLocales.length;i++){
-		%>
-		<label style="display:inline;">
-		<input type="radio" id="<portlet:namespace/>select_languageId" name="<portlet:namespace/>select_languageId" value="<%=availLocales[i]%>" <%if(CustomUtil.strNull(request.getAttribute("select_languageId")).equals(availLocales[i].toString())) out.print("checked"); %> style="margin-left:10px;"/>
-		<img width="17px" height="12px" src="${contextPath}/images/toplink_<%=availLocales[i]%>.gif" style="float:none; padding:0px;" />
-		<liferay-ui:message key='<%="edison-board-radiobutton-" + availLocales[i].toString()%>' />
-		</label>
-		<%
-		}
-		%>
-	</div>
-</div>
-
-<div class="h10"></div>
-
-<table class="table6_list" width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout:fixed;">
-	<colgroup>
-		<col width="20%" />
-		<col width="35%" />
-		<col width="20%" />
-		<col width="25%" />
-	</colgroup>
-	<tr>
-		<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
-		<td width="759px;">
-			<input type="text" name="<portlet:namespace/>surveyTitle" size="50" maxlength="100" value="${surveyTitle}" style="width: auto;"/>
-		</td>
-		<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-period' /></th>
-		<td>
-			<input name="<portlet:namespace/>surveyStartDate" id="<portlet:namespace/>surveyStartDate" readonly="readonly" style="width:105px; text-align:center;"/>
-			 ~ <input name="<portlet:namespace/>surveyEndDate" id="<portlet:namespace/>surveyEndDate" readonly="readonly" style="width:105px; text-align:center;"/>
-		</td>
-	</tr>
-</table>
-<div id="<portlet:namespace/>survey_1" class="table1_list" style="border-top: 0px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data survey" style="table-layout:fixed; margin-top:20px; border-top: 1px solid gray;">
-		<colgroup>
-			<col width="12%" />
-			<col width="8%" />
-			<col width="35%" />
-			<col width="20%" />
-			<col width="25%" />
-		</colgroup>
-		<tr class="question_title" data-questionSeq="1">
-			<th rowspan="2"><liferay-ui:message key='edison-virtuallab-surveyResultList-survey' /> 1</th>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-question-title' /></th>
-			<td>
-				<input type="text" name="<portlet:namespace/>questionTitle" size="50" maxlength="100" value="${questionTitle}" style="width: auto;"/>
-			</td>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-answer-type' /></th>
-			<td>
-				<div style="display: block;">
-					<liferay-ui:message key='edison-virtuallab-surveyResultList-multiple-choice' />: <input type="radio" name="<portlet:namespace/>questionDivCd1" value="SVY_02_001" class="radio_div" checked="checked" />
+<div id="data_text_wrap">	
+	<form name="surveyForm" action="<%=insertURL %>" method="post" class="surveyMain">		
+		<input type="hidden" name="<portlet:namespace/>surveyDivCd" value="${param.surveyDivCd}"/>
+		
+		<h1 style="padding-bottom:0px;">
+			<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
+		</h1>
+		
+		<div id="data_text_wrap" class="table-responsive panel edison-panel">
+			
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+					<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-registration' />
+					<input type="button" class="btn btn-default" onclick="<portlet:namespace/>surveyAdd()" id="<portlet:namespace/>surveyAddBtn" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-add-question' />">
+				</h3>
+				<div style="padding: 10px; float:right; border: 2px dashed #6a8ec6; border-radius: 10px;">
+					<%
+					Locale[] availLocales = LanguageUtil.getAvailableLocales();
+					for(int i=0;i<availLocales.length;i++){
+					%>
+					<label style="display:inline;">
+					<input type="radio" id="<portlet:namespace/>select_languageId" name="<portlet:namespace/>select_languageId" value="<%=availLocales[i]%>" <%if(CustomUtil.strNull(request.getAttribute("select_languageId")).equals(availLocales[i].toString())) out.print("checked"); %> style="margin-left:10px;"/>
+					<img width="17px" height="12px" src="${contextPath}/images/toplink_<%=availLocales[i]%>.gif" style="float:none; padding:0px;" />
+					<liferay-ui:message key='<%="edison-board-radiobutton-" + availLocales[i].toString()%>' />
+					</label>
+					<%
+					}
+					%>
 				</div>
-				<div style="display: block;">
-					<liferay-ui:message key='edison-virtuallab-surveyResultList-short-answer' />: <input type="radio" name="<portlet:namespace/>questionDivCd1" value="SVY_02_002" class="radio_div"/>
+			</div>
+			
+			<div class="table1_list">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout:fixed;">
+					<colgroup>
+						<col width="20%" />
+						<col width="35%" />
+						<col width="20%" />
+						<col width="25%" />
+					</colgroup>
+					<tr>
+						<th ><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
+						<td width="759px;">
+							<input type="text" class="form-control" name="<portlet:namespace/>surveyTitle" size="50" maxlength="100" value="${surveyTitle}" style="width: auto;"/>
+						</td>
+						<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-period' /></th>
+						<td>
+							<input name="<portlet:namespace/>surveyStartDate" id="<portlet:namespace/>surveyStartDate" readonly="readonly" style="width:105px; text-align:center;"/>
+							 ~ <input name="<portlet:namespace/>surveyEndDate" id="<portlet:namespace/>surveyEndDate" readonly="readonly" style="width:105px; text-align:center;"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div id="<portlet:namespace/>survey_1" class="table-responsive panel edison-panel" style="border-top: 0px;">
+				<div class="table1_list">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout:fixed; margin-top:20px; border-top: 1px solid gray;">
+						<colgroup>
+							<col width="12%" />
+							<col width="8%" />
+							<col width="35%" />
+							<col width="20%" />
+							<col width="25%" />
+						</colgroup>
+						<tr class="question_title" data-questionSeq="1">
+							<th rowspan="2"><liferay-ui:message key='edison-virtuallab-surveyResultList-survey' /> 1</th>
+							<th><liferay-ui:message key='edison-virtuallab-surveyResultList-question-title' /></th>
+							<td>
+								<input type="text" class="form-control" name="<portlet:namespace/>questionTitle" size="50" maxlength="100" value="${questionTitle}" style="width: auto;"/>
+							</td>
+							<th><liferay-ui:message key='edison-virtuallab-surveyResultList-answer-type' /></th>
+							<td>
+								<div style="display: block;">
+									<liferay-ui:message key='edison-virtuallab-surveyResultList-multiple-choice' />: <input type="radio" name="<portlet:namespace/>questionDivCd1" value="SVY_02_001" class="radio_div" checked="checked" />
+								</div>
+								<div style="display: block;">
+									<liferay-ui:message key='edison-virtuallab-surveyResultList-short-answer' />: <input type="radio" name="<portlet:namespace/>questionDivCd1" value="SVY_02_002" class="radio_div"/>
+								</div>
+								
+							</td>
+						</tr>
+						<tr class="question">
+							<th><liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />1</th>
+							<td colspan="2" style="border-right: none;">
+								<input type="text" class="form-control" name="<portlet:namespace/>question1" maxlength="100" value="${question1}" style="width: 600px;"/>
+							</td>
+							<td style="border-left: none;">
+								<img class="plusBtn" src="${contextPath}/images/btn_plus.png" style="cursor: pointer;"/>			
+							</td>
+						</tr>			
+					</table>
 				</div>
-				
-			</td>
-		</tr>
-		<tr class="question">
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />1</th>
-			<td colspan="2">
-				<input type="text" name="<portlet:namespace/>question1" maxlength="100" value="${question1}" style="width: 600px;"/>
-			</td>
-			<td>
-			<img class="plusBtn" src="${contextPath}/images/btn_plus.png" style="cursor: pointer;"/>			
-			</td>
-		</tr>			
-	</table>
-</div>	
+			</div>
+		</div>
+	</form>
+	
+	<div style="text-align: right; margin-top: 10px;">
+		<input class="btn btn-default" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-button-cancel' />" style="cursor:pointer;"/>
+		<input class="btn btn-default" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-button-register' />" style="cursor:pointer;"/>
+	</div>
 </div>
-<div style="text-align: right; margin-top: 10px;">
-	<input class="button06" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-button-cancel' />" style="cursor:pointer;"/>
-	<input class="button06" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-button-register' />" style="cursor:pointer;"/>
-</div>
-</form>
+

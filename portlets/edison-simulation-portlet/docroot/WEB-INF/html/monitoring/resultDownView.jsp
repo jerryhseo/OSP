@@ -29,14 +29,14 @@
 		<img id="<portlet:namespace/>result-down-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer;"/>
 	</div>
 </div>
-<div class="newWcont01">
+<div class="table-responsive panel edison-panel">
 	<div style="margin-bottom: 5px;float: right;">
 		<c:if test="${!empty zipFileId}">
-			<input type="button" onclick="<portlet:namespace/>allDown();return false;" class="button03" value='<liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/>' />
+			<input type="button" onclick="<portlet:namespace/>allDown();return false;" class="btn btn-default" value='<liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/>' />
 		</c:if>
 	</div>
 	
-	<table width="470" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;">
+	<table width="470" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table" style="word-break: break-all;">
 		<colgroup>
 			<col width="200px" />
 			<col width="100px" />
@@ -58,8 +58,8 @@
 								${model.fileName}
 							</td>
 							<td  style="cursor: pointer;" onclick="<portlet:namespace/>fileDown('${model.fileId}');">${model.fileSize}</td>
-							<td class="TC">
-								<input type="button" value="<liferay-ui:message key='edison-button-register'/>" class="btn_blue"  onclick="<portlet:namespace/>createDataEntry('${model.fileName}', '${model.fileId}', '${model.jobUuid }');"/>
+							<td class="center">
+								<input type="button" value="<liferay-ui:message key='edison-button-register'/>" class="btn btn-default"  onclick="<portlet:namespace/>createDataEntry('${model.fileName}', '${model.fileId}', '${model.jobUuid }');"/>
 							</td>
 						</tr>
 					</c:forEach>

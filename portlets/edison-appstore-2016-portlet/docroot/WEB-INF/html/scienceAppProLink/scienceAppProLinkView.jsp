@@ -45,14 +45,15 @@
 <div class="tabletopbox clear">
 	<div class="search">
 		<div class="searchbox">
-			<input name="<portlet:namespace/>textfield" type="text"
+			<input name="<portlet:namespace/>textfield" type="text" class="form-control"
 				id="<portlet:namespace/>textfield"
 				placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
 				size="40"
+				style="width: 250px; float: left;"
 				onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
-			<input type="button" name="fullsize" id="fullsize" value=""
-				class="btnsearch"
-				onclick="<portlet:namespace/>searchListEntry(1);">
+			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);" >
+				<i class="icon-search"></i>
+			</button>
 		</div>
 	</div>
 </div>
@@ -61,8 +62,8 @@
 <input type="hidden" name="<portlet:namespace/>sourceClassName" id="<portlet:namespace/>sourceClassName" value="${sourceClassName}"/>
 <input type="hidden" name="<portlet:namespace/>sourceClassPK" id="<portlet:namespace/>sourceClassPK" value="${sourceClassPK}"/>
 
-<div class="table1_list borderno">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블">
+<div class="table1_list table-responsive panel edison-panel">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table table-bordered table-hover edison-table">
 		<thead id="<portlet:namespace/>scienceAppTableHeader">
 			<tr>
 				<th width="35%"><liferay-ui:message key="edison-appstore-solver-name" /></th>

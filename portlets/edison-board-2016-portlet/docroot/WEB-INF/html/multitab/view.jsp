@@ -7,7 +7,7 @@
 <div class="contabmenuZ">
 	<div class="contabbrd">
 		<div class="contabbrdL"><img src="${contextPath}/images/subtab_brdL.jpg" width="11" height="56" /></div>
-		<div class="contabbrdC">
+		<div class="contabbrdC" style="float: left;">
 			<div class="table4">
 				<table width="1198" height="56" border="0" cellpadding="0" cellspacing="0" >
 					<tr>
