@@ -390,7 +390,7 @@ $(function() {
 										</a>
 								</h4>
 							</div>
-							<div id="collapse_1" class="collapse">
+							<div id="collapse_1" class="collapse in">
 								<div class="panel-body">
 									<ul class="list-group">
 										<li class="list-group-item list-group-item-default">

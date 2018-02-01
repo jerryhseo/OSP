@@ -333,6 +333,7 @@
 				currentPortlet.display( 'none' );
 
 				var $targetDiv = $('#'+C.getPortletSectionId(connector));
+				$targetDiv.effect("highlight", {color:"#F5F6CE"}, 2000);
 				C.loadPortlet( targetPortlet, connector, eventEnable, windowState, callback);
 				
 				C.currentPortletId(targetPortlet.instanceId());
@@ -1898,119 +1899,76 @@
 			);
 		};
 		
-		Workbench.handleDataChanged = function( portletId, data, $confirmDialog ){
+		Workbench.handleDataChanged = function( portletId, data){
 			console.log( 'handleDataChanged(): ',portletId, data);
-			if( Workbench.countSimulations() === 0 ){
-				return false;
-			}
 			
 			setTimeout(
-						function(){
-							var simulation = Workbench.workingSimulation();
-							if( !simulation ){
-								Workbench.handleDataChanged(  portletId, data, $confirmDialog );
-							}
-							else{
-								if( simulation.countJobs() === 0 )	return false;
-								
-								var job = simulation.workingJob();
-								if( !job ){
-									Workbench.handleDataChanged(  portletId, data, $confirmDialog );
-								}
-								else{
-									var portlet = Workbench.getPortlet( portletId );
-									var portName = portlet.portName();
-									if( !portName ){
-										console.log( "[Warning] Received OSP.Event.OSP_DATA_CHANGED from a portlet without port name: "+e.portletId);
-										return;
+				function(){
+					var simulation = Workbench.workingSimulation();
+					var job = simulation.workingJob();
+					
+					var portlet = Workbench.getPortlet( portletId );
+					var portName = portlet.portName();
+					if( !portName ){
+						console.log( "[Warning] Received OSP.Event.OSP_DATA_CHANGED from a portlet without port name: "+e.portletId);
+						return;
+					}
+					
+					// Check the event coming from input ports
+					var scienceApp = Workbench.scienceApp();
+					var port = scienceApp.inputPort( portName );
+					if( !port ){
+						console.log('[Warning] Not an input port: '+portName);
+						return;
+					}
+					
+					console.log('Data Changed data: ', data);
+					var changedData = new OSP.InputData( data );
+					changedData.portName( port.name() );
+					changedData.order(port.order() );
+					changedData.relative( true );
+					changedData.dirty( true );
+						
+					if( job.isSubmit() ){
+						$.confirm({
+							boxWidth: '30%',
+							useBootstrap: false,
+							title: 'Confirm!',
+							content: '<p>Submitted job data changed.<br>Would you like to copy the job with changed data?</p>',
+							buttons: {
+								confirm: function () {
+									var inputs = job.copyInputs();
+									for( var index in inputs ){
+										var input = inputs[index];
+										if( input.portName() === changedData.portName() ){
+											inputs[index] = changedData;
+											break;
+										}
 									}
 									
-									// Check the event coming from input ports
-									var scienceApp = Workbench.scienceApp();
-									var port = scienceApp.inputPort( portName );
-									if( !port ){
-										console.log('[Warning] Not an input port: '+portName);
-										return;
-									}
+									console.log("Copy inputs: ", inputs);
+									console.log("Passed InputData: ", changedData);
+//									fireCreateJob( JSON.stringify( inputs ) );
+								},
+								cancel: function () {
 									
-									console.log('Data Changed data: ', data);
-									var changedData = new OSP.InputData( data );
-									changedData.portName( port.name() );
-									changedData.order(port.order() );
-									changedData.relative( true );
-									changedData.dirty( true );
-
-									if( job.isSubmit() ){
-										$confirmDialog.dialog({
-											resizable: false,
-											height: "auto",
-											title:'Make sure',
-											width: 400,
-											modal: true,
-											buttons: {
-												'YES': function() {
-														$( this ).dialog( "destroy" );
-														var inputs = job.copyInputs();
-														for( var index in inputs ){
-															var input = inputs[index];
-															if( input.portName() === changedData.portName() ){
-																inputs[index] = changedData;
-																break;
-															}
-														}
-														
-														console.log("Copy inputs: ", inputs);
-														console.log("Passed InputData: ", changedData);
-														fireCreateJob( JSON.stringify( inputs ) );
-												},
-												'NO': function() {
-													$( this ).dialog( "destroy" );
-												}
-											}
-										});
-									}
-									else{
-										job.inputData( portName, changedData );
-										
-										firePortStatusChanged( portName, OSP.Enumeration.PortStatus.READY );
-									}
 								}
 							}
-						},
-			           10
+						});
+					}
+					else{
+						job.inputData( portName, changedData );
+						firePortStatusChanged( portName, OSP.Enumeration.PortStatus.READY );
+					}
+				},
+	           10
 			);
 		};
 
-		Workbench.handleCreateSimulation = function($title, $confirmDialog, $titleDialog,  resourceURL ){
-			var workingSimulation = Workbench.workingSimulation();
-			if( !workingSimulation ){
-				Workbench.createSimulation( $title, $titleDialog, resourceURL );
-			}
-			else{
-				if( workingSimulation.checkDirty() === OSP.Enumeration.DataStatus.DIRTY ){
-					$confirmDialog.dialog({
-						resizable: false,
-						height: "auto",
-						title:'Make sure',
-						width: 400,
-						modal: true,
-						buttons: {
-							'YES': function() {
-									$( this ).dialog( "destroy" );
-									Workbench.saveWorkingSimulation( resourceURL );
-									Workbench.createSimulation( $title, $titleDialog, resourceURL );
-							},
-							'NO': function() {
-								$( this ).dialog( "destroy" );
-							}
-						}
-					});
-				}
-				else{
-					Workbench.createSimulation( $title, $titleDialog, resourceURL );
-				}
-			}
+		Workbench.handleCreateSimulation = function(title, resourceURL ){
+			Workbench.createSimulation( title, resourceURL );
 		};
+		
 		
 		Workbench.handleSaveSimulation = function( resourceURL ){
 			var simulation = Workbench.workingSimulation();
@@ -2135,8 +2093,14 @@
 								jobStatus: job.status()
 						};
 						
+						var statusData = {
+								simulationUuid: simulation.uuid(),
+								jobUuid: job.uuid(),
+								jobStatus: job.status()
+						};
+						
 						fireRefreshBreadcrumb(breadcrumbData);
-//						fireRefreshJobStatus(data);
+						fireRefreshJobStatus(statusData);
 					},error:function(jqXHR, textStatus, errorThrown){
 						if(jqXHR.responseText !== ''){
 							alert(textStatus+": "+jqXHR.responseText);
@@ -2343,12 +2307,12 @@
 			var port = scienceApp.getPort( portlet.portName() );
 			var dataType = port.dataType();
 			var ajaxParam = Liferay.Util.ns(
-			                                Workbench.namespace(),
-			                                {
-			                                	command: 'GET_DATA_STRUCTURE',
-			                                	dataTypeName: dataType.name,
-			                                	dataTypeVersion: dataType.version
-			                                });
+                                Workbench.namespace(),
+                                {
+                                	command: 'GET_DATA_STRUCTURE',
+                                	dataTypeName: dataType.name,
+                                	dataTypeVersion: dataType.version
+                                });
 			
 			$.ajax({
 				type: 'POST',
@@ -2409,36 +2373,6 @@
 				Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData);
 			}
 
-		};
-		
-		Workbench.createSimulation = function( $title, $titleDialog, resourceURL ){
-			var now = new Date();
-			var scienceApp = Workbench.scienceApp();
-			var defaultTitle = scienceApp.name()+'-'+scienceApp.version();
-			
-			$title.val( defaultTitle );
-			$titleDialog.dialog({
-				resizable: false,
-				height: "auto",
-				title:'Enter new simulation title...',
-				width: 400,
-				modal: true,
-				buttons: {
-					'OK': function() {
-						var newTitle = $title.val();
-						if( newTitle.trim() ){
-							$( this ).dialog( "close" );
-							createSimulation(newTitle, resourceURL );
-						}
-						else{
-							alert('New simulation title should not be empty.');
-						}
-					},
-					Cancel: function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});
 		};
 		
 		Workbench.handleCreateJob = function( resourceURL, initData ){

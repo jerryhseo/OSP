@@ -266,7 +266,48 @@ public class LayoutController {
 			json.put("endTime_", job.getJobEndDt());
 		json.put("submit_", job.getJobSubmit());
 		
-		json.put("status_", job.getJobStatus());
+		int jobStatus = (int) job.getJobStatus();
+		switch ( jobStatus ){
+		case 0:
+			json.put("status_", "INITIALIZED");
+		  break;
+		case 1701001:
+			json.put("status_", "Unknown");
+			break;
+		case 1701002:
+			json.put("status_", "INITIALIZE_FAILED");
+			break;
+		case 1701003:
+			json.put("status_", "INITIALIZED");
+			break;
+		case 1701004:
+			json.put("status_", "SUBMISSION_FAILED");
+			break;
+		case 1701005:
+			json.put("status_", "QUEUED");
+			break;
+		case 1701006:
+			json.put("status_", "RUNNING");
+			break;
+		case 1701007:
+			json.put("status_", "SUSPEND_REQUESTED");
+			break;
+		case 1701008:
+			json.put("status_", "SUSPENDED");
+			break;
+		case 1701009:
+			json.put("status_", "CANCEL_REQUESTED");
+			break;
+		case 1701010:
+			json.put("status_", "CANCELED");
+			break;
+		case 1701011:
+			json.put("status_", "SUCCESS");
+			break;
+		case 1701012:
+			json.put("status_", "FAILED");
+			break;
+		}
 		
 		return json;
 	}

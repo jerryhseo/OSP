@@ -167,14 +167,12 @@
 	position: relative;
 	padding-left: 30px;
 	padding-right: 30px;
+	padding: 0px;
 }
 .simulation-workbench .workbench-layout-area .row{
 	position: relative;
 }
 
-.simulation-workbench .content-header{
-/* 		padding-bottom: 15px; */
-}
 .simulation-workbench .devider {
 	position: absolute;
 	z-index: 3;
@@ -192,7 +190,9 @@
 
 
 
-
+.simulation-workbench .content-wrapper .content-header{
+	padding : 15px;
+}
 
 
 
