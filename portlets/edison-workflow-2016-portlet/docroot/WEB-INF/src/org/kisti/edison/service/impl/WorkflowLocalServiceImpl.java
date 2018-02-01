@@ -179,6 +179,23 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     return super.workflowLocalService.createWorkflow(workflowId);
   }
   
+    public Workflow copyWorkflow(
+        long sourceWorkflowId, String newTitle, String descrption, HttpServletRequest request)
+        throws SystemException, PortalException{
+      User user = PortalUtil.getUser(request);
+      //Locale locale = PortalUtil.getLocale(request);
+      Workflow targetWorkflow = super.workflowLocalService.getWorkflow(sourceWorkflowId);
+      targetWorkflow.setParentWorkflowId(sourceWorkflowId);
+      targetWorkflow.setTitle(newTitle);
+      targetWorkflow.setDescription(descrption);
+      targetWorkflow.setWorkflowId(super.counterLocalService.increment());
+      targetWorkflow.setCreateDate(new Date());
+      targetWorkflow.setUserId(user.getUserId());
+      targetWorkflow.setIsPublic(false);
+      targetWorkflow.setCompanyId(PortalUtil.getCompany(request).getCompanyId());
+      return super.workflowLocalService.addWorkflow(targetWorkflow);
+  }
+  
   public Workflow copyWorkflow(long sourceWorkflowId, HttpServletRequest request) throws SystemException, PortalException{
     User user = PortalUtil.getUser(request);
     Locale locale = PortalUtil.getLocale(request);

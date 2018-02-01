@@ -21,6 +21,7 @@ import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +96,8 @@ public class WorkflowController{
             listAndPagingMap.put("pagingHtml", pagingHtml);
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
+            listAndPagingMap.put("pagination",
+                WorkflowPagingUtil.getPaginationMap(totalCnt, curPage, linePerPage, pagePerBlock));
 
             return listAndPagingMap;
         }catch (Exception e){
@@ -160,6 +163,32 @@ public class WorkflowController{
             String errorMessage = e.getMessage();
             log.error(errorMessage, e);
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @RequestMapping(value = "/{workflowId}/saveas", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> saveas(
+        @PathVariable("workflowId") long workflowId,
+        @RequestParam(required = false, value="title") String newTitle,
+        @RequestParam(required = false, value="description") String newDescription,
+        HttpServletRequest request) throws Exception{
+        try{
+            Workflow workflow = null;
+            if(StringUtils.hasLength(newTitle)){
+                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, request);
+            }else{
+                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, request);
+            }
+            Locale locale = PortalUtil.getLocale(request);
+            Map<String, Object> workflowMap = workflow.getModelAttributes();
+            workflowMap.put("title", workflow.getTitle(locale));
+            workflowMap.put("titleMap", workflow.getTitle());
+            workflowMap.put("description", workflow.getDescription(locale));
+            workflowMap.put("descriptionMap", workflow.getDescription());
+            return workflowMap;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
         }
     }
 

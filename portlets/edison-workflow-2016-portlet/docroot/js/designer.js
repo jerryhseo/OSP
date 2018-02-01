@@ -412,6 +412,21 @@ var Designer = (function (namespace, $, OSP, toastr) {
         }
     }
 
+    function loadScienceAppPort(wfId, portJson, isInputPort) {
+        var addEndPoint = prepareEndpoint(wfId, portJson, isInputPort);
+        addEndPoint(currentJsPlumbInstance);
+    }
+
+    function loadScienceApp(id, offset, data) {
+        var target = $(currentJsPlumbInstance.getContainer());
+        var diff = offset.referencePoint - target.offset().left;
+        var wfId = drawScienceAppDiv(target, offset.left - diff, offset.top, data, id);
+        var conainerId = $(currentJsPlumbInstance.getContainer()).attr("id");
+        loadScienceAppPort(wfId, data.inputports, true);
+        loadScienceAppPort(wfId, data.outputports, false);
+        $("#" + conainerId + " #" + wfId).data(data);
+    }
+
      /** context menu **/
     $.contextMenu({
         selector: '#wf-workflow-canvas',
@@ -622,25 +637,26 @@ var Designer = (function (namespace, $, OSP, toastr) {
             localWorkflow["title"] = title;
             localWorkflow["description"] = workflowMetaData.description;
             localWorkflow["screenLogic"] = wfDataJsonString;
-            modifyingWorkflow = synchronousAjaxHelper.jsonPost("/delegate/services/workflows/"
-                + localWorkflow["workflowId"] + "/update", JSON.stringify(localWorkflow), function (_) {
+            aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + 
+                localWorkflow["workflowId"] + "/update", JSON.stringify(localWorkflow), function (workflowData) {
                     // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
                     // TODO : drawMyWorkflows(loadMyWorkflows(""));
+                    modifyingWorkflow = workflowData;
                     if (!backgroudSave) {
                         toastr["success"]("", var_save_success_message);
                     }
                 });
         } else {
-            modifyingWorkflow = synchronousAjaxHelper
+            aSyncAjaxHelper
                 .post("/delegate/services/workflows/add", {
                     title: title,
                     description: workflowMetaData.description,
                     screenLogic: wfDataJsonString
-                }, function (_) {
-                    console.log(_);
+                }, function (workflowData) {
+                    console.log(workflowData);
                     // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
                     // TODO : drawMyWorkflows(loadMyWorkflows(""));
-                    /*alert-error*/
+                    modifyingWorkflow = workflowData;
                     if (!backgroudSave) {
                         toastr["success"]("", var_save_success_message);
                     }
@@ -648,11 +664,54 @@ var Designer = (function (namespace, $, OSP, toastr) {
                     toastr["error"]("", errorMessage);
                 });
         }
-        if (modifyingWorkflow) {
-            return true;
-        } else {
+    }
+
+    function saveAsWorkflowDefinition(workflowMetaData) {
+        if (!modifyingWorkflow) {
+            saveOrUpdateWorkflowDefinition(workflowMetaData, false);
             return false;
+        }else{
+            var currentWorkflowId = modifyingWorkflow["workflowId"];
+            aSyncAjaxHelper
+                .post("/delegate/services/workflows/" + currentWorkflowId + "/saveas", {
+                    title: workflowMetaData.title,
+                    description: workflowMetaData.description
+                }, function (workflowData) {
+                    // TODO : drawPublicWorkflows(loadPublicWorkflows());
+                    // TODO : drawMyWorkflows(loadMyWorkflows());
+                    toastr["success"]("", var_save_success_message);
+                    modifyingWorkflow = workflowData;
+                }, function (msg) {
+                    toastr["error"]("", msg);
+                });
         }
+    }
+
+    function copyWorkflowDefinition(workflowId, currentJsPlumbInstance) {
+        resetCurrentJsPlumbInstance();
+        var workflow = synchronousAjaxHelper
+            .jsonPost("/delegate/services/workflows/" + workflowId + "/copy", {}, function (_) {
+                // TODO : drawPublicWorkflows(loadPublicWorkflows());
+                // TODO : drawMyWorkflows(loadMyWorkflows());
+            });
+        var wfData = $.parseJSON(workflow["screenLogic"]);
+        if ($(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas") {
+            $("#worfklow-definition-name").val(workflow["title"]);
+            currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
+            currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
+            currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
+        }
+
+        $.each(wfData.elements, function (i) {
+            loadScienceApp(this["id"], this["offset"], this["data"]);
+        });
+
+        $.each(wfData.connections, function (i) {
+            var sourceEndpointUuid = this["sourceUuid"];
+            var targetEndpointUuid = this["targetUuid"];
+            currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
+        });
+        return workflow;
     }
 
     function resetCurrentJsPlumbInstance() {
@@ -673,7 +732,11 @@ var Designer = (function (namespace, $, OSP, toastr) {
         "addScienceApp": addScienceApp,
         "removeSicenceApps": removeSicenceApps,
         "saveOrUpdateWorkflowDefinition": saveOrUpdateWorkflowDefinition,
+        "saveAsWorkflowDefinition": saveAsWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
+        "getCurrentJsPlumbContainerId": function(){
+            return $(currentJsPlumbInstance.getContainer()).attr("id");
+        },
         "getCurrentJsPlumbInstance": function(){
             return currentJsPlumbInstance;
         }

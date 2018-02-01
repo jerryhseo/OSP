@@ -49,17 +49,18 @@ var aSyncAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function (msg) {
-      consoleLog.debug(requestUrl + " error ");
-      consoleLog.debug(msg);
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);
     });
   },
-  "jsonPost": function (requestUrl, jsonData, callback) {
+  "jsonPost": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -71,11 +72,12 @@ var aSyncAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result); };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function (msg) {
-      consoleLog.debug(requestUrl + " error ");
-      consoleLog.debug(msg);
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);
@@ -125,7 +127,7 @@ var synchronousAjaxHelper = {
     });
     return resultData;
   },
-  "jsonPost": function (requestUrl, jsonData, callback) {
+  "jsonPost": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -140,8 +142,9 @@ var synchronousAjaxHelper = {
       if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function (msg) {
-      consoleLog.debug(requestUrl + " error ");
-      consoleLog.debug(msg);
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);

@@ -371,11 +371,16 @@ public interface WorkflowLocalService extends BaseLocalService,
 		java.lang.String descrption,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			org.kisti.edison.wfapi.custom.exception.EdisonWorkflowAuthException;
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.model.Workflow createWorkflow()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.Workflow copyWorkflow(long sourceWorkflowId,
+		java.lang.String newTitle, java.lang.String descrption,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.model.Workflow copyWorkflow(long sourceWorkflowId,
 		javax.servlet.http.HttpServletRequest request)

@@ -12,6 +12,7 @@
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
+var var_create_success_message = "Workflow successfully created.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
@@ -41,17 +42,18 @@ var contextPath = '${contextPath}';
   text-overflow: ellipsis; white-space: nowrap; word-wrap: normal; overflow: hidden; width: 85%;
 }
 
-#body-div .menu-panel-box-app .header-inner{
+#body-div .menu-panel-box-app .header-inner,
+ #body-div .menu-panel-box .header-inner{
   padding: 15px 5px 10px 10px;
 }
 
-.menu-panel-box-app .search-input {
+.search-input {
   border: none;
   outline: 0;
   margin-left: 5px !important;
 }
 
-.menu-panel-box-app .search-input:focus {
+.search-input:focus {
   border: none;
   outline: 0;
 }
@@ -65,6 +67,8 @@ var contextPath = '${contextPath}';
 .menu-panel-box-app > .app-column{
   pointer-events: auto;
 }
+
+.default-title{line-height: 1.3 !important;}
 
 /* workflow science app box */
 .apparea{position: relative;}
@@ -209,8 +213,8 @@ var contextPath = '${contextPath}';
           <i class="fa fa-lg fa-compress"></i>
           <span class="sr-only">Toggle navigation</span>
         </a>
-        <span id="<portlet:namespace/>workflow-title">Title</span>
-        <small>sub title</small>
+        <span id="<portlet:namespace/>workflow-title"></span>
+        <small></small>
       </h1>
     </section>
     <!-- Main content -->
@@ -237,12 +241,11 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
-
 <script id="tpl-menu-panel-box" type="text/html">
-<div class="col-md-{{col}}">
+<div class="{{panel-type}} col-md-{{col}}">
   <div class="box box-solid">
     <div class="box-header with-border header-inner">
-      <h3 class="box-title">{{boxtitle}}</h3>
+      <h3 class="box-title default-title">{{boxtitle}}</h3>
       <div class="box-tools pull-right">
         <button type="button" class="btn btn-box-tool menu-panel-close"><i class="fa fa-times"></i></button>
       </div>
@@ -254,7 +257,7 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 
 <script id="tpl-menu-panel-table-box" type="text/html">
-<div class="col-md-{{col}}">
+<div class="{{panel-type}} col-md-{{col}}">
   <div class="box box-solid">
     <div class="box-header with-border header-inner">
       <h3 class="box-title">{{boxtitle}}</h3>
@@ -268,8 +271,15 @@ $.widget.bridge('uibutton', $.ui.button);
 </div>
 </script>
 
+<script id="tpl-menu-panel-search-header" type="text/html">
+  <h3 class="box-title">
+    <i class="fa fa-search"/>
+    <input type="text" name="{{header.search-input-name}}" class="search-input" placeholder="{{boxtitle}}" />
+  </h3>
+</script>
+
 <script id="tpl-menu-panel-apps" type="text/html">
-<div class="col-md-{{col}} app-column">
+<div class="{{panel-type}} col-md-{{col}} app-column">
   <div class="box box-solid">
     <div class="box-header with-border header-inner">
       <h3 class="box-title">
@@ -286,36 +296,33 @@ $.widget.bridge('uibutton', $.ui.button);
 </div>
 </script>
 <script id="tpl-menu-panel-load" type="text/html">
-<table id="example2" class="table table-bordered table-hover">
+<table class="table table-bordered table-hover">
     <thead>
-    <tr>
-      <th>Rendering engine</th>
-      <th>Browser</th>
-      <th>Platform(s)</th>
-      <th>Engine version</th>
-      <th>CSS grade</th>
-    </tr>
+        <tr>
+            {{#header.theads}}
+            <th>{{.}}</th>
+            {{/header.theads}}
+        </tr>
     </thead>
-    <tbody>
-    <tr>
-      <td>Trident</td>
-      <td>Internet
-        Explorer 4.0
-      </td>
-      <td>Win 95+</td>
-      <td> 4</td>
-      <td>X</td>
-    </tr>
-    <tr>
-      <td>Gecko</td>
-      <td>Netscape Navigator 9</td>
-      <td>Win 98+ / OSX.2+</td>
-      <td>1.8</td>
-      <td>A</td>
-    </tr>
-    </tfoot>
-  </table>
+    <tbody class="panel-tbody">
+      <tr>
+        <td colspan="{{header.theads.length}}">No Data</td>
+      </tr>
+    </tbody>
+</table>
 </script>
+
+<script id="tpl-menu-panel-open-tbody" type="text/html">
+  {{#rows}}
+    <tr>
+        <td>{{title}}</td>
+        <td>{{version}}</td>
+        <td>{{screenName}}</td>
+        <td>{{descrption}}</td>
+    </tr>
+  {{/rows}}
+</script>
+
 
 <script id="tpl-menu-panel-pagination" type="text/html">
 <div class="box-footer clearfix">
@@ -344,7 +351,27 @@ $.widget.bridge('uibutton', $.ui.button);
     </div>
   </div>
   <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat pull-right func" name="create">{{form.submitname}}</button>
+    <button type="button" class="btn btn-primary btn-flat pull-right func" name="create">Create</button>
+  </div>
+</form>
+</script>
+
+<script id="tpl-menu-panel-save" type="text/html">
+<form class="form-horizontal" onsubmit="return false;">
+  <div class="box-body">
+    <div class="form-group">
+      <label for="title" >Title</label>
+      <input type="text" class="form-control data-binded" id="title" name="title" 
+        placeholder="Title" value="{{form.title}}" required>
+      <div class="help-block with-errors"></div>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control data-binded" rows="5" id="description" name="description">{{form.description}}</textarea>
+    </div>
+  </div>
+  <div class="box-footer">
+    <button type="button" class="btn btn-primary btn-flat pull-right func" name="save">Save</button>
   </div>
 </form>
 </script>
@@ -367,7 +394,7 @@ $.widget.bridge('uibutton', $.ui.button);
     </div>
   </div>
   <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat ">Save</button>
+    <button type="button" class="btn btn-primary btn-flat" name="update">Save</button>
     <button type="button" class="btn btn-danger btn-flat pull-right">Delete</button>
   </div>
 </form>
@@ -384,7 +411,7 @@ $(document).ready(function(){
       "newestOnTop": true,
       "progressBar": false,
       "positionClass": "toast-designer-pos",
-      "preventDuplicates": true,
+      "preventDuplicates": false,
       "onclick": null,
       "showDuration": "300",
       "hideDuration": "1000",
@@ -396,7 +423,7 @@ $(document).ready(function(){
       "hideMethod": "slideUp"
   };
   var designer = new Designer(namespace, $, OSP, toastr);
-  var uiPanel = new UIPanel(namespace, $, designer);
+  var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
 
