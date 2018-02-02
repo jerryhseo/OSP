@@ -423,7 +423,7 @@ function <portlet:namespace/>historyBack(){
 											<input name="<portlet:namespace/>ip2" type="text" maxlength="3" value="${data.ip2}"/> .
 											<input name="<portlet:namespace/>ip3" type="text" maxlength="3" value="${data.ip3}"/> .
 											<input name="<portlet:namespace/>ip4" type="text" maxlength="3" value="${data.ip4}"/>
-											<input type="button" class="deleteIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
+											<input type="button" class="deleteIp btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
 										</td>
 									</tr>
 							</c:otherwise>
@@ -438,7 +438,7 @@ function <portlet:namespace/>historyBack(){
 							<input name="<portlet:namespace/>ip2" type="text"/>.
 							<input name="<portlet:namespace/>ip3" type="text"/>.
 							<input name="<portlet:namespace/>ip4" type="text"/>
-							<input type="button" class="addIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
+							<input type="button" class="addIp btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
 						</td>
 					</tr>
 				</c:otherwise>

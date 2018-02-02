@@ -108,37 +108,6 @@ function <portlet:namespace/>dataSearchList() {
 					
 					scienceappUl.appendTo(scienceApp);
 					$("#<portlet:namespace/>scienceappContent").append(scienceApp);
-					
-					/* $rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
-					
-					$("<td/>").append($("<a/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveScienceAppDetail('" + virtualLabScienceAppList[i].scienceAppId +"', '"+ groupId + "');")
-											   .text(virtualLabScienceAppList[i].scienceAppName)
-											   .css("cursor", "pointer")
-							 ).appendTo($rowResult)
-							  .css("white-space","nowrap")
-							  .css("overflow","hidden")
-							  .css("text-overflow","ellipsis")
-					$("<td/>").text("Ver " + virtualLabScienceAppList[i].scienceAppVersion)
-							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabScienceAppList[i].scienceAppUniversityNm)
-							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabScienceAppList[i].userFirstName)
-							  .appendTo($rowResult);
-					if(virtualScienceAppManualList[i].fileEntryId != undefined) {
-						$("<td/>").append($("<img/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualScienceAppManualList[i].fileEntryId + "');")
-												   .attr("src","${contextPath}/images/btn_manual.jpg").attr("width","84").attr("height","28")
-												   .css("cursor", "pointer")
-								 ).appendTo($rowResult);
-					} else {
-						$("<td/>").append($("<img/>").attr("src","${contextPath}/images/btn_manual_none.jpg").attr("width","84").attr("height","28")
-										).appendTo($rowResult);
-					}
-					
-					$("<td/>").append($("<img/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('" + virtualLabScienceAppList[i].scienceAppId + "');")
-												 .attr("src","${contextPath}/images/btn_run.jpg").attr("width","84").attr("height","28")
-												 .css("cursor", "pointer")
-							 ).appendTo($rowResult); 
-					$("#<portlet:namespace/>virtualLabClassScienceAppBody").append($rowResult); */
 				}
 			}
 		},error:function(msg,e){ 
@@ -265,13 +234,15 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 						<div class="adminbtn">
 							<img src="${contextPath}/images/class_admin_btn.png" width="81" height="36" onClick="<portlet:namespace/>openScienceAppListPopup()">
 						</div>
-						<%-- <div class="buttonbox0801 ">
-							<input id="<portlet:namespace/>scienceAppManagementButton" name="<portlet:namespace/>scienceAppManagementButton" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" />
-						</div> --%>
 					</div>
 				</c:when>
 				<c:otherwise>
-					<h3><liferay-ui:message key='edison-course-using-science-apps' /></h3>
+					<div class="classtitle">
+						<h3>
+							<%-- <liferay-ui:message key='edison-course-using-science-apps' /> --%>
+							<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
+						</h3>
+					</div>
 				</c:otherwise>
 		</c:choose>
 		
