@@ -161,18 +161,18 @@
 	</div>
 	
 	<!--커멘트 -->
-    <!--
-        customId="project_"${simulationProjectId}
-        &isMember=${isMember}   -> true or false
-        &authYn=${authYn}   -> Y or N
-        &modelId=${simulationProjectId}     -> 현재 프로젝트 모델의 ID(Long 데이터)
-    -->
-    <div>
-      <liferay-portlet:runtime
-            portletName="edisoncomment_WAR_edisonboard2016portlet"
-            defaultPreferences=""
-            queryString="&customId=project_1&isMember=${isMember}&authYn=${authYn}&modelId=${simulationProjectId}" />
-    </div>
+	<!--
+		customId="project_"${simulationProjectId}
+		&isMember=${isMember}   -> true or false
+		&authYn=${authYn}   -> Y or N
+		&modelId=${simulationProjectId}     -> 현재 프로젝트 모델의 ID(Long 데이터)
+	-->
+	<div class="mprightcont">
+		<liferay-portlet:runtime
+			portletName="edisoncomment_WAR_edisonboard2016portlet"
+			defaultPreferences=""
+			queryString="&customId=project_1&isMember=${isMember}&authYn=${authYn}&modelId=${simulationProjectId}" />
+	</div>
 	
 	<!--관련자료 -->
 	<div>

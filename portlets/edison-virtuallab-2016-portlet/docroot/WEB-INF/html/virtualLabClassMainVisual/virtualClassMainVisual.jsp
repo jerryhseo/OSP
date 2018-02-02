@@ -14,43 +14,6 @@
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
 
-<!-- <style type="text/css">
-input[type="password"]{
-	margin-bottom: 0px;
-}
-.classvisual {
-	width: 1220px;
-	height: 206px;
-	background: url(${contextPath}/images/virtualvisualclass.jpg)
-		no-repeat
-}
-
-.cvtxt01 {
-	margin-top: 160px;
-	font-size: 14px;
-	font-weight: 600;
-	color: #fff;
-	padding-left: 25px;
-	float: left;
-}
-
-.cvtxt02 {
-	margin-top: 160px;
-	font-size: 14px;
-	font-weight: 600;
-	color: #fff;
-	padding-left: 25px;
-	float: left;
-}
-
-.cvtxt02 span {
-	font-size: 17px;
-	font-weight: 600;
-	color: #ffeab8;
-}
-
-</style> -->
-
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualClassMainVisual.css" media="screen"/>
 
 <script type="text/javascript">
@@ -181,53 +144,6 @@ function <portlet:namespace/>checkValidation() {
 	});
 }
 
-/* 공지사항 리스트 */
-/* <portlet:namespace/>getNoticeBoardList(); */
-function <portlet:namespace/>getNoticeBoardList(){
-	
-	AUI().use("liferay-portlet-url", function(a) {
-		var portletURL = Liferay.PortletURL.createResourceURL();
-		portletURL.setPortletId("edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r");
-		portletURL.setResourceId("getNoticeListForVirtualClass");
-		portletURL.setParameter("divCd","100");
-		portletURL.setParameter("listSize","4");
-		portletURL.setParameter("boardGroupId","${classInfo.groupId}");
-		portletURL.setParameter("customId","class_${classInfo.classId}");
-		
-		jQuery.ajax({
-			type: "POST",
-			url: portletURL,		// simulationController로 요청하는 URL
-			async : false,
-			dataType: 'json',
-			success: function(result) {
-				var divCd = result.divCd;
-				var boardList = result.boardList;
-				var pageCount = result.pageCount;
-				
-				var noticeList = $("#<portlet:namespace/>noticeContentsInVirtualClass");
-				noticeList.html("");
-				
-				if(boardList.length == 0){
-					
-					/* 조회 데이터 없는 경우 */
-					$("<li/>").text("<liferay-ui:message key='edison-there-are-no-data' />")
-							  .appendTo(noticeList);
-				}else{
-					for(var i = 0 ; i < boardList.length; i++ ){
-						
-						$("<li/>").addClass("noticeContent")
-								  .attr("onclick", "javascript:viewClick<portlet:namespace/>('" + boardList[i].boardSeq + "','${maxWindowStatus}')")
-								  .text(boardList[i].title)
-								  .appendTo(noticeList);
-					}
-				}
-				
-			},error:function(jqXHR, textStatus, errorThrown){
-				console.log("error");
-			}
-		});
-	});
-}
 
 /* 설문조사 */
 function <portlet:namespace/>openSurvey(){

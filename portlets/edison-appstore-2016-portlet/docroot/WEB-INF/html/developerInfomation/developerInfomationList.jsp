@@ -106,18 +106,16 @@ function <portlet:namespace/>goRequestWorkspace(){
 
 </script>
 
-<div id="<portlet:namespace/>display" style="display:none;" >
-	<div class="virtitlebox">
-		<img src="<%=request.getContextPath() %>/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+<div id="<portlet:namespace/>display" style="display:none;" class="table-responsive panel edison-panel" >
+	<div class="panel-heading clearfix">
+		<div class="panel-title">
+			<img src="<%=request.getContextPath() %>/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-appstore-developer-request-info' />
 		</div>
 	</div>
 	
-	<div class="h10"></div>
-	
-	<div class="table7_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<div class="table1_list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="12%" />
 				<col width="12%" />
@@ -145,5 +143,5 @@ function <portlet:namespace/>goRequestWorkspace(){
 	</div>
 </div>
 <div id="requestBtn" class="buttonbox"style="width:auto; position:absolute; right:1%; display:none;">
-	<input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>goRequestWorkspace();" value="<liferay-ui:message key='edison-appstore-workspace-request' />" type="button">
+	<input class="addIp btn btn-default" style="min-width:90px;" onclick="<portlet:namespace/>goRequestWorkspace();" value="<liferay-ui:message key='edison-appstore-workspace-request' />" type="button">
 </div>

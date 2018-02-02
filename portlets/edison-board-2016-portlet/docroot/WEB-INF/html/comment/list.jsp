@@ -228,10 +228,10 @@
     </c:choose>
     
     <c:if test="${isMember eq true or authYn eq 'Y'}">
+    </c:if>
         <div class="<portlet:namespace/>buttonbox top" style="display: none;">
             <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
         </div>
-    </c:if>
     
     <div class="clear" style="padding-bottom: 20px;"></div>
     
@@ -242,13 +242,13 @@
     <div class="<portlet:namespace/>comment_list">
     </div>
     
-    <div class="clear"></div>
+    <div class="h10"></div>
         
     <c:if test="${isMember eq true or authYn eq 'Y'}">
+    </c:if>
         <div class="<portlet:namespace/>buttonbox bottom">
             <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
         </div>
-    </c:if>
     
     <div style="height: 10px;"></div>
     
@@ -259,22 +259,22 @@
         <!-- 파일 첨부 기능  -->
         <form id="<portlet:namespace/>fileUploadForm_main" method="POST" action="" enctype="multipart/form-data">
 	        
-	            <div class="<portlet:namespace/>fileAddBtn" style="width: 10%; float: left;" align="center">
-	                <input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="<portlet:namespace/>moreFileTag('main')" style="cursor:pointer;"/>
+	            <div class="<portlet:namespace/>fileAddBtn" style="width: 80px; float: left; margin: 0% 2%;" align="center">
+	                <input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="<portlet:namespace/>moreFileTag('main')" style="cursor:pointer;"/>
 	            </div>
 	            <!-- 파일 추가 시 생성 -->
-	            <div class="<portlet:namespace/>fileAddArea" style="width: 90%; float: left;">
+	            <div class="<portlet:namespace/>fileAddArea" style="width: 80%; float: left;">
 	                <div id="<portlet:namespace/>fileDiv_main_0" class="<portlet:namespace/>fileDiv_main">
 	                    <input type="file" name="addfile" class="<portlet:namespace/>addFile" id="<portlet:namespace/>file_0" style ="width:500px;border:1px solid #CCCCCC;margin-bottom:2px;">&nbsp;
-	                    <input type="button" value="<liferay-ui:message key='edison-workflow-delete' />" style="cursor:pointer;" class="button06 fileDelete_0" onClick="<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_main', '0')"/>
+	                    <input type="button" value="<liferay-ui:message key='edison-workflow-delete' />" style="cursor:pointer;" class="btn btn-default" onClick="<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_main', '0')"/>
 	                </div>
 	            </div>
 	            <div></div>
 	            
-	            <div id="<portlet:namespace/>fileListDiv_main" style="padding-left: 2%;">
+	            <div id="<portlet:namespace/>fileListDiv_main" style="padding-left: 2%; float: left;">
 	                <table>
-	                    <colgroup width="10%" />
-	                    <colgroup width="90%" />
+	                    <colgroup width="15%" />
+	                    <colgroup width="85%" />
 	                    <tr>
 	                        <td><img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;</td>
 	                        <td id="<portlet:namespace/>fileListTd_main" style="padding-top: 10px;"></td>
@@ -288,9 +288,9 @@
 	    <div class="<portlet:namespace/>boardbtnbox">
 	        <div class="<portlet:namespace/>boardbtn1 boardbtnboxtoppd">
 	            <!-- 글쓰기 클릭 시 저장버튼 / 수정 클릭시 수정버튼 출력 -->
-	            <input type="button" name="saveBtn" onclick="<portlet:namespace/>commentSave('add', 'main'); <portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='edison-virtuallab-save' />" class="button04 <portlet:namespace/>saveBtn" />
-	            <input type="button" name="updateBtn" onclick="<portlet:namespace/>commentSave('update', 'main'); <portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='edison-button-update' />" class="button04 <portlet:namespace/>updateBtn" />
-	            <input type="button" name="cancelBtn" onclick="<portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='cancel' />" class="button04 <portlet:namespace/>cancelBtn" />
+	            <input type="button" name="saveBtn" onclick="<portlet:namespace/>commentSave('add', 'main'); <portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='edison-virtuallab-save' />" class="btn btn-default <portlet:namespace/>saveBtn" />
+	            <input type="button" name="updateBtn" onclick="<portlet:namespace/>commentSave('update', 'main'); <portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='edison-button-update' />" class="btn btn-default <portlet:namespace/>updateBtn" />
+	            <input type="button" name="cancelBtn" onclick="<portlet:namespace/>closeCommentInput('main');" value="<liferay-ui:message key='cancel' />" class="btn btn-default <portlet:namespace/>cancelBtn" />
 	        </div>
 	    </div>
     </div>
@@ -314,8 +314,8 @@
             이메일 주소&emsp;: <input type="email" id="<portlet:namespace/>sendEmail" class="<portlet:namespace/>mailData" size="20%" value="" />
         </p>
         <div class="<portlet:namespace/>boardbtnbox">
-            <input type="button" name="sendDialogBtn" id="fullsize" onclick="<portlet:namespace/>sendMailComment();" value="전송" class="button04" />
-            <input type="button" name="cancelDialogBtn" id="fullsize" onclick="<portlet:namespace/>closeDialog('mail');" value="취소" class="button04" />
+            <input type="button" name="sendDialogBtn" id="fullsize" onclick="<portlet:namespace/>sendMailComment();" value="전송" class="btn btn-default" />
+            <input type="button" name="cancelDialogBtn" id="fullsize" onclick="<portlet:namespace/>closeDialog('mail');" value="취소" class="btn btn-default" />
         </div>
     </div>
     
@@ -480,11 +480,11 @@
             /* 접속 중인 유저가 Comment/Reply를 작성한 유저인지 */
             var commentWriteYn = (boardList[i].writerId == userId);
             
-            var intervalDiv = $('<div/>').attr("class", "clear");
-            var commentItem = $('<div/>').attr("class", "<portlet:namespace/>comment_item")    // 하나의 코멘트 정보가 출력
+            var intervalDiv = $('<div/>').addClass("h10");
+            var commentItem = $('<div/>').addClass("<portlet:namespace/>comment_item")    // 하나의 코멘트 정보가 출력
                                          .attr("style", "padding-bottom:20px;");
-            var titleRightSns = $('<div/>').attr("class", "titlerightsns");                     // title 우측 Btn 출력 DIV
-            var fileListDiv = $('<div/>').attr("class", "<portlet:namespace/>boardFileListDiv") // 첨부 파일 출력 DIV
+            var titleRightSns = $('<div/>').addClass("titlerightsns");                     // title 우측 Btn 출력 DIV
+            var fileListDiv = $('<div/>').addClass("<portlet:namespace/>boardFileListDiv") // 첨부 파일 출력 DIV
                                          .attr("id", "<portlet:namespace/>fileList_"+boardSeq);
             
             var commentTitleDiv = null      // title이 출력되는 DIV
@@ -493,31 +493,32 @@
             var imgClass = "";
             
             if(cmd === "comment"){
-                commentTitleDiv = $('<div/>').attr("class", "titlearea");
-                comment = $('<div/>').attr("class", "comment_div");
-                commentTextArea = $('<div/>').attr("class","commenttxtarea comment");
+                commentTitleDiv = $('<div/>').addClass("titlearea");
+                comment = $('<div/>').addClass("comment_div");
+                commentTextArea = $('<div/>').addClass("commenttxtarea comment");
                 replyListBtnDiv = $('<div/>');
                 imgClass = "leftinfoimg";
             } else if(cmd === "reply"){
-                commentItem.attr("style", "width:975px;")
-                           .attr("style", "padding-top:20px;");
+                commentItem.css("width","100%")
+                           .css("padding-top","20px");
                 commentTitleDiv = $('<div/>').attr("class", "titlearea titlea01");
-                comment = $('<div/>').attr("class", "rightboxcomm");
-                commentTextArea = $('<div/>').attr("class","commenttxtarea reply");
-                replyListBtnDiv = $('<div/>').attr("style", "width:90%");
+                comment = $('<div/>').addClass("rightboxcomm");
+                commentTextArea = $('<div/>').addClass("commenttxtarea reply");
+                replyListBtnDiv = $('<div/>').css("width","90%");
                 imgClass = "leftinfoimg2";
             }
             
             /* 작성자 Image 영역 */
-            $('<div/>').attr("class", imgClass)
-                       .attr("style", "padding-top: 15px; background-image:url("+writerImg+"); background-size:contain;")
+            $('<div/>').addClass(imgClass)
+                       .css("padding-top","15px")
+                       .css("background-image","url("+writerImg+")")
                        .appendTo(commentItem);
             
-            $('<div/>').attr("class", "clear")
+            $('<div/>').addClass("h10")
             .appendTo(commentList);
             
             /* title 영역 */
-            $('<div/>').attr("class", "titletxt")
+            $('<div/>').addClass("titletxt")
                        .text(boardSeq)
                        .appendTo(commentTitleDiv);
              
@@ -545,7 +546,7 @@
             
             /* comment 영역 */
             $('<div/>').attr("id","<portlet:namespace/>comment_"+boardSeq)
-                       .html(boardList[i].content)
+                       .html("<br>" + boardList[i].content)
                        .appendTo(commentTextArea);
             
             // commentFIleMap의 key 값 중에 boardSeq가 있는 경우 해당 fileList 추출
@@ -561,15 +562,15 @@
                     
                     var fileItem = $('<div/>');
                     
-                    $('<span/>').attr("style", "cursor: pointer; display:inline;")
+                    $('<span/>').addClass("<portlet:namespace/>onMouseHover")
                                 .attr("onclick", "<portlet:namespace/>fileDownload('"+ fileEntryId +"')")
-                                .attr("class", "<portlet:namespace/>onMouseHover")
+                                .css("cursor","pointer").css("display","inline")
                                 .html(fileTitle+"&nbsp;")
                                 .append(' <img src="${contextPath}/images/fileicon2.png" />')
                                 .appendTo(fileItem);
                     
                     if(commentWriteYn){
-                        $('<span/>').attr("style", "cursor: pointer; display:inline;")
+                        $('<span/>').css("cursor","pointer").css("display","inline")
                                     .attr("onclick", "<portlet:namespace/>deleteSingleEdisonFile('"+ fileEntryId +"', '"+ fileUserId +"','" + boardSeq + "')")
                                     .html("&nbsp;&nbsp;")
                                     .append(' <img src="${contextPath}/images/icon_dustbin.png"/>')
@@ -593,8 +594,8 @@
             commentTextArea.appendTo(comment);
             comment.appendTo(commentItem);
             
-            var commentInput = $("<div/>").attr("id", "<portlet:namespace/>commentInput_"+boardSeq).attr("class", "<portlet:namespace/>comment_input");
-            $("<textarea/>").attr("id","<portlet:namespace/>commentTextArea_"+boardSeq).attr("class", "<portlet:namespace/>commentTextArea")
+            var commentInput = $("<div/>").attr("id", "<portlet:namespace/>commentInput_"+boardSeq).addClass("<portlet:namespace/>comment_input");
+            $("<textarea/>").attr("id","<portlet:namespace/>commentTextArea_"+boardSeq).addClass("<portlet:namespace/>commentTextArea")
                             .attr("name", "<portlet:namespace/>commentTextArea").appendTo(commentInput);
             $("<div/>").attr("id", "<portlet:namespace/>fileFormDiv_"+boardSeq).appendTo(commentInput);
             
@@ -604,27 +605,27 @@
             var fileForm = $("<form/>").attr("id", "<portlet:namespace/>fileUploadForm_"+boardSeq).attr("method", "OST").attr("enctype", "multipart/form-data")
             
             // file Add Btn
-            var fileAddBtn = $("<div/>").attr("class", "<portlet:namespace/>fileAddBtn").attr("style", "width: 10%; float: left;").attr("align", "center");
-            $("<input type=\"button\" value=\"<liferay-ui:message key='edison-button-file-add' />\" class=\"button06\" onClick=\"<portlet:namespace/>moreFileTag('"+boardSeq+"')\" style=\"cursor:pointer;\"/>").appendTo(fileAddBtn);
+            var fileAddBtn = $("<div/>").addClass("<portlet:namespace/>fileAddBtn").css("width","80px").css("float","left").css("margin","0% 2%").attr("align", "center");
+            $("<input type=\"button\" value=\"<liferay-ui:message key='edison-button-file-add' />\" class=\"btn btn-default\" onClick=\"<portlet:namespace/>moreFileTag('"+boardSeq+"')\" style=\"cursor:pointer;\"/>").appendTo(fileAddBtn);
             fileAddBtn.appendTo(fileForm);
             
             // file Add Area
-            var fileAddArea = $("<div/>").attr("class", "<portlet:namespace/>fileAddArea").attr("style", "width: 70%; float: left;");
-            var fileDiv = $("<div/>").attr("id", "<portlet:namespace/>fileDiv_"+boardSeq+"_0").attr("class", "<portlet:namespace/>fileDiv_"+boardSeq);
+            var fileAddArea = $("<div/>").addClass("<portlet:namespace/>fileAddArea").attr("style", "width: 70%; float: left;");
+            var fileDiv = $("<div/>").attr("id", "<portlet:namespace/>fileDiv_"+boardSeq+"_0").addClass("<portlet:namespace/>fileDiv_"+boardSeq);
             $("<input type=\"file\" name=\"addfile\" class=\"<portlet:namespace/>addFile\" id=\"<portlet:namespace/>file_0\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;").appendTo(fileDiv);
-            $("<input type=\"button\" value=\"<liferay-ui:message key='edison-workflow-delete' />\" style=\"cursor:pointer;\" class=\"button06 fileDelete_0\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv_"+boardSeq+"\', \'0\')\" />").appendTo(fileDiv);
+            $("<input type=\"button\" value=\"<liferay-ui:message key='edison-workflow-delete' />\" style=\"cursor:pointer;\" class=\"btn btn-default fileDelete_0\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv_"+boardSeq+"\', \'0\')\" />").appendTo(fileDiv);
             fileDiv.appendTo(fileAddArea);
             fileAddArea.appendTo(fileForm);
             $("<div/>").appendTo(fileForm);
             
             // file List
-            var fileListDiv = $("<div/>").attr("id", "<portlet:namespace/>fileListDiv_"+boardSeq).attr("style", "float:left; padding-left: 2%;");
+            var fileListDiv = $("<div/>").attr("id", "<portlet:namespace/>fileListDiv_"+boardSeq).css("float","left").css("padding","2%");
             var table = $("<table/>");
-            $("<colgroup width=\"10%\" />").appendTo(table);
-            $("<colgroup width=\"90%\" />").appendTo(table);
+            $("<colgroup width=\"15%\" />").appendTo(table);
+            $("<colgroup width=\"85%\" />").appendTo(table);
             var tr = $("<tr/>");
             $("<td/>").append("<img src=\"${contextPath}/images/fileicon.png\" width=\"19\" height=\"21\" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;").appendTo(tr);
-            $("<td/>").attr("id", "<portlet:namespace/>fileListTd_"+boardSeq).attr("style", "padding-top: 10px;").appendTo(tr);
+            $("<td/>").attr("id", "<portlet:namespace/>fileListTd_"+boardSeq).css("padding-top","10px").appendTo(tr);
             tr.appendTo(table);
             table.appendTo(fileListDiv);
             fileListDiv.appendTo(fileForm);
@@ -632,11 +633,11 @@
             // 글 수정, 취소 버튼
             var btnBox = $("<div class='<portlet:namespace/>boardbtnbox'>");
             var boardBtn = $("<div class='<portlet:namespace/>boardbtn1 boardbtnboxtoppd'>");
-            $("<input type=\"button\" name=\"saveBtn\" onclick=\"<portlet:namespace/>commentSave('add', '"+boardSeq+"'); <portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='edison-virtuallab-save' />\" class=\"button04 <portlet:namespace/>saveBtn\" />&nbsp;&nbsp;")
+            $("<input type=\"button\" name=\"saveBtn\" onclick=\"<portlet:namespace/>commentSave('add', '"+boardSeq+"'); <portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='edison-virtuallab-save' />\" class=\"btn btn-default <portlet:namespace/>saveBtn\" />&nbsp;&nbsp;")
                 .appendTo(boardBtn);
-            $("<input type=\"button\" name=\"updateBtn\" onclick=\"<portlet:namespace/>commentSave('update', '"+boardSeq+"'); <portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='edison-button-update' />\" class=\"button04 <portlet:namespace/>updateBtn\" />&nbsp;&nbsp;")
+            $("<input type=\"button\" name=\"updateBtn\" onclick=\"<portlet:namespace/>commentSave('update', '"+boardSeq+"'); <portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='edison-button-update' />\" class=\"btn btn-default <portlet:namespace/>updateBtn\" />&nbsp;&nbsp;")
                 .appendTo(boardBtn);
-            $("<input type=\"button\" name=\"cancelBtn\" onclick=\"<portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='cancel' />\" class=\"button04 <portlet:namespace/>cancelBtn\" />")
+            $("<input type=\"button\" name=\"cancelBtn\" onclick=\"<portlet:namespace/>closeCommentInput('"+boardSeq+"');\" value=\"<liferay-ui:message key='cancel' />\" class=\"btn btn-default <portlet:namespace/>cancelBtn\" />")
                 .appendTo(boardBtn);
             boardBtn.appendTo(btnBox);
             btnBox.appendTo(fileForm);
@@ -645,7 +646,7 @@
             
             /* 댓글이 출력될 DIV */
             $('<div/>').attr("id", "<portlet:namespace/>reply_"+boardSeq)
-                       .attr("class", "<portlet:namespace/>replyDiv")
+                       .addClass("<portlet:namespace/>replyDiv")
                        .appendTo(commentItem);
             intervalDiv.appendTo(commentItem);
             fileForm.appendTo(commentInput);
@@ -666,7 +667,7 @@
     function <portlet:namespace/>openCommentInput(cmd, boardSeq) {
         
         /* 기존에 Open 되어있는 DIV 숨기기  */
-        $(".<portlet:namespace/>comment_input").attr("style", "display:none;");
+        $(".<portlet:namespace/>comment_input").css("display","none;");
         
         if(cmd == "commentWrite"){
             /* 글쓰기 Button Click */
@@ -717,11 +718,11 @@
             var updateFileDiv = $(".<portlet:namespace/>fileDiv_"+boardSeq);  
             $("<input/>").attr("type", "file").attr("name", "addfile").attr("class", "<portlet:namespace/>addFile").attr("id", "<portlet:namespace/>file_0")
                          .attr("style", "width:500px;border:1px solid #CCCCCC;margin-bottom:2px;").appendTo(updateFileDiv);
-            $("<input/>").attr("type", "button").attr("value", "Delete").attr("style", "cursor:pointer;").attr("class", "button06 fileDelete_0")
+            $("<input/>").attr("type", "button").attr("value", "Delete").attr("style", "cursor:pointer;").attr("class", "btn btn-default fileDelete_0")
                          .attr("onclick", "<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_"+boardSeq+"' ,'0')").appendTo(updateFileDiv);
         }
         
-        $(".btn btn-default.<portlet:namespace/>writeBtn").css("display","none");
+        $(".<portlet:namespace/>writeBtn").css("display","none");
         
         if(boardSeq == 0){
             /* CKEDITOR에 입력(Set)된 내용을 화면에 출력 */
@@ -751,7 +752,7 @@
         $('#<portlet:namespace/>commentTextArea_'+location).val("");
         CKEDITOR.instances['<portlet:namespace/>commentTextArea_'+location].setData("");
         /* 글쓰기 버튼 출력 */
-        $(".btn btn-default.<portlet:namespace/>writeBtn").css("display","");
+        $(".<portlet:namespace/>writeBtn").css("display","");
         /* 텍스트 엡력 form 숨기기 */
         $("#<portlet:namespace/>commentInput_"+location).hide();
     }
@@ -819,6 +820,8 @@
         삭제 시 boardSeq 필요
     */
     function <portlet:namespace/>commentDelete(boardSeq) {
+    	$(".<portlet:namespace/>writeBtn").css("display","");
+    	
         if(!confirm(Liferay.Language.get('data-delete-confirm'))){return;}
         
         var sendData = {"<portlet:namespace/>sendData" : boardSeq};
@@ -942,7 +945,7 @@
         var frmTag = $('.<portlet:namespace/>fileDiv_'+location); // "<div id=\"<portlet:namespace/>fileDiv_"+location+"_"+fileIndex+"\" class=\"<portlet:namespace/>fileDiv_"+location+"\">";
         var fileIndex = $('.<portlet:namespace/>fileDiv_' + location + ' :input[name*=addfile]').length;
         $("<input type=\"file\" name=\"addfile\" class=\"<portlet:namespace/>addFile\" id=\"<portlet:namespace/>file_"+fileIndex+"\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;").appendTo(frmTag);
-        $("<input type=\"button\" value=\"<liferay-ui:message key='edison-workflow-delete' />\" style=\"cursor:pointer;\" class=\"button06 fileDelete_"+fileIndex+"\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv_"+location+"\', \'"+fileIndex+"\')\"/>").appendTo(frmTag)
+        $("<input type=\"button\" value=\"<liferay-ui:message key='edison-workflow-delete' />\" style=\"cursor:pointer;\" class=\"btn btn-default fileDelete_"+fileIndex+"\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv_"+location+"\', \'"+fileIndex+"\')\"/>").appendTo(frmTag)
         
     }
 
