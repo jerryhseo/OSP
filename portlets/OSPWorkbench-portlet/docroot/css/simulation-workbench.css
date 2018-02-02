@@ -128,6 +128,15 @@
 .simulation-workbench .table > tbody > tr > th{
 	vertical-align: middle;
 }
+.simulation-workbench .sidebar > .sidebar-menu li.view >a{
+	color: #6b1ad2;
+}
+.simulation-workbench .sidebar-menu > li span.label{
+	margin-top: 5px;
+}
+.simulation-workbench .skin-black-light .sidebar-menu .treeview-menu > li > a{
+	width: 190px;
+}
 
 .simulation-workbench .sidebar-collapse .sidebar .pagination{
 	display: none;

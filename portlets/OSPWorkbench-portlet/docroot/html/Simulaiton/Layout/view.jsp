@@ -116,8 +116,6 @@ $(function(e) {
 		}
 	});
 	
-	
-	
 	/**
 	* Layout Scroll
 	* vertical Left 기준 Width check -> data-equal-id="LEFT DIV" data-remainder-id="RIGHT DIV"
@@ -251,10 +249,36 @@ Liferay.on(OSP.Event.OSP_REQUEST_OUTPUT_PATH,function( e ){
 Liferay.on(OSP.Event.OSP_CREATE_SIMULATION,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_CREATE_SIMULATION: ['+e.portletId+', '+new Date()+']');
-		alert(e.data.title);
-<%-- 		<portlet:namespace/>workbench.handleCreateSimulation('','<%=serveResourceURL.toString()%>'); --%>
+		<portlet:namespace/>workbench.handleCreateSimulation(e.portletId,e.data.title,'<%=serveResourceURL.toString()%>');
 	}
 });
+Liferay.on(OSP.Event.OSP_DELETE_SIMULATION,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_DELETE_SIMULATION: ['+e.portletId+', '+new Date()+']', e.data);
+		<portlet:namespace/>workbench.handleDeleteSimulation(e.portletId, e.data.simulationUuid, '<%=serveResourceURL.toString()%>');
+	}
+});
+
+Liferay.on(OSP.Event.OSP_CREATE_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() == e.targetPortlet ){
+			console.log('OSP_CREATE_JOB: ['+e.portletId+', '+new Date()+']', e );
+			<portlet:namespace/>workbench.handleCreateJob( e.portletId, e.simulationUuid, e.title, e.data, '<%=serveResourceURL.toString()%>' );
+	}
+});
+Liferay.on(OSP.Event.OSP_DELETE_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_DELETE_JOB: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleDeleteJob(e.portletId, e.data.simulationUuid, e.data.jobUuid, '<%=serveResourceURL.toString()%>' );
+	}
+});
+/***********************************************************************
+ * Global Function section
+ ***********************************************************************/
+function errlog(eventData, msg){
+	if(console){
+		console.log("Unknown event data: " + (msg ? msg : "") + "\n", eventData);
+	}
+}
 
 </script>
 

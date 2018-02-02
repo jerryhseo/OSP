@@ -849,6 +849,42 @@
 			Liferay.fire( OSP.Event.OSP_PORT_STATUS_CHANGED, eventData );
 		};
 		
+		var fireCreateSimulationResult = function( targetPortId,data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: targetPortId,
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_RESULT, eventData );
+		};
+		
+		var fireDeleteSimulationResult = function( targetPortId,data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: targetPortId,
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, eventData );
+		};
+		
+		var fireCreateSimulationJobResult = function( targetPortId,data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: targetPortId,
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, eventData );
+		};
+		
+		var fireDeleteSimulationJobResult = function( targetPortId,data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: targetPortId,
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, eventData );
+		};
+		
 		var fireRefreshJobs = function( data ){
 			var eventData = {
 								portletId: Workbench.id(),
@@ -883,8 +919,6 @@
 			                 data: data
 			};
 			Liferay.fire( OSP.Event.OSP_REFRESH_SIMULATIONS, eventData );
-			
-			fireRefreshJobs( data );
 		};
 		
 		var fireShowJobStatus = function( data ){
@@ -926,6 +960,7 @@
 			
 			Liferay.fire(OSP.Event.OSP_REQUEST_WORKING_JOB_INFO, eventData );
 		};
+		
 		
 		var initializeAllLogPortlets = function(){
 			var scienceApp = Workbench.scienceApp();
@@ -1024,8 +1059,7 @@
 			console.log( 'evaluatePortletType: ', columns);
 		};
 		
-		var createSimulation = function( title, resourceURL ){
-			var now = new Date();
+		var createSimulation = function(portleId, title, resourceURL ){
 			var scienceApp = Workbench.scienceApp();
 			
 			var ajaxData = Liferay.Util.ns(
@@ -1046,20 +1080,18 @@
 				data  : ajaxData,
 				dataType : 'json',
 				success: function(jsonSimulation) {
-					var simulation = new OSP.Simulation(jsonSimulation);
-					simulation.runType( scienceApp.runType() );
-					Workbench.addSimulation( simulation );
-					Workbench.workingSimulation( simulation );
-					Workbench.print( 'After creating simulation');
 					
+					fireCreateSimulationResult(portleId,true);
+					var simulation = new OSP.Simulation(jsonSimulation);
 					var data = {
-								simulationUuid: simulation.uuid()
+						simulationUuid: simulation.uuid()
 					};
 					fireRefreshSimulations(data);
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
+					fireCreateSimulationResult(portleId,false);
 				}
 			});
 		};
@@ -1124,7 +1156,7 @@
 			});
 		};
 		
-		var deleteSimulation = function( simulationUuid, resourceURL ){
+		var deleteSimulation = function(portletId, simulationUuid, resourceURL ){
 			var data = Liferay.Util.ns(
 			                           Workbench.namespace(),
 			                           {
@@ -1136,14 +1168,14 @@
 				url: resourceURL, 
 				async : false,
 				data  : data,
-				dataType : 'json',
-				success: function(result ) {
-					Workbench.cleanSimulations();
-					fireRefreshSimulations( {} );
+				success: function(result) {
+					fireDeleteSimulationResult(portletId,true);
+					fireRefreshSimulations({});
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
+					fireDeleteSimulationResult(portletId,false);
 				}
 			});
 		};
@@ -1393,7 +1425,7 @@
 			return fileInfo;
 		};
 
-		var deleteJob = function( simulationUuid, jobUuid, resourceURL ){
+		var deleteJob = function( portletId, simulationUuid, jobUuid, resourceURL ){
 			var data = Liferay.Util.ns(
 			                           Workbench.namespace(),
 			                           {
@@ -1407,13 +1439,22 @@
 				url: resourceURL, 
 				async : false,
 				data  : data,
-				dataType : 'json',
 				success: function(result ) {
-					fireRefreshJobs();
+					var data = {
+							jobUuid: jobUuid,
+							status:true
+					};
+					fireDeleteSimulationJobResult(portletId,data);
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
+					var data = {
+							jobUuid: jobUuid,
+							status:false
+					};
+					
+					fireDeleteSimulationJobResult(portletId,data);
 				}
 			});
 		};
@@ -1965,8 +2006,8 @@
 			);
 		};
 
-		Workbench.handleCreateSimulation = function(title, resourceURL ){
-			Workbench.createSimulation( title, resourceURL );
+		Workbench.handleCreateSimulation = function(portletId, title, resourceURL ){
+			createSimulation(portletId, title, resourceURL );
 		};
 		
 		
@@ -1978,8 +2019,8 @@
 				alert('No changes to be saved: '+simulation.title() );
 		};
 		
-		Workbench.handleDeleteSimulation = function( simulationUuid, resourceURL ){
-			deleteSimulation( simulationUuid(), resourceURL );
+		Workbench.handleDeleteSimulation = function( portletId, simulationUuid, resourceURL ){
+			deleteSimulation( portletId, simulationUuid, resourceURL );
 		};
 		
 		Workbench.handleSimulationSelected = function( simulationUuid, $confirmDialog, resourceURL ){
@@ -2142,8 +2183,8 @@
 			Workbench.switchPortlet(Workbench.jobStatusPortlet());
 		};
 		
-		Workbench.handleDeleteJob = function( simulationUuid, jobUuid, resourceURL){
-			deleteJob( simulationUuid, jobUuid, resourceURL );
+		Workbench.handleDeleteJob = function( portletId, simulationUuid, jobUuid, resourceURL){
+			deleteJob( portletId, simulationUuid, jobUuid, resourceURL );
 		};
 
 		Workbench.handleJobStatusChanged = function( jobUuid, status ){
@@ -2375,21 +2416,17 @@
 
 		};
 		
-		Workbench.handleCreateJob = function( resourceURL, initData ){
+		Workbench.handleCreateJob = function(portletId, simulationUuid, title, initData, resourceURL){
 			console.log('handleCreateJob: ', initData );
 			
-			var simulation = Workbench.workingSimulation();
 			var scienceApp = Workbench.scienceApp();
-			if( !simulation || !scienceApp){
-				console.log('[ERROR] Cannot create job: working simulation or science app is invalid.');
-				return;
-			}
 			
 			var ajaxData = Liferay.Util.ns(
 			                           Workbench.namespace(),
 			                           {
 			                        	   command: 'CREATE_JOB',
-			                        	   simulationUuid: simulation.uuid(),
+			                        	   simulationUuid: simulationUuid,
+			                        	   title: title,
 			                        	   scienceAppName: scienceApp.name(),
 			                        	   scienceAppVersion: scienceApp.version(),
 			                        	   initData: initData ? initData : '' 
@@ -2403,16 +2440,20 @@
 				data  : ajaxData,
 				dataType : 'json',
 				success: function(jsonJob ) {
-					fireRefreshJobs( 
-					                 {
-					                	 simulationUuid: simulation.uuid(),
-					                	 jobUuid: jsonJob.uuid_
-					                 });
-					
+					var data = {
+							simulationUuid: simulationUuid,
+							jobUuid: jsonJob.uuid_,
+			                status:true
+					};
+					fireCreateSimulationJobResult(portletId,data);
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
+					var data = {
+			                 status:false
+					};
+					fireCreateSimulationJobResult(portletId,data);
 				}
 			});
 		};
