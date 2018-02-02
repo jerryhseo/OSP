@@ -74,9 +74,9 @@
 	<div class="table-responsive panel edison-panel">
 		<div class="panel-heading clearfix">
 			<h3><liferay-ui:message key='edison-course-class-list' /></h3>
-			<div style="float: left;">	
+			<div class="input-group" style="float: left;">	
 				<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-					<input type="text" id="<portlet:namespace/>search_parameter" class="form-control" name="<portlet:namespace/>search_parameter" style="height:28px; margin-top: 10px" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+					<input type="text" id="<portlet:namespace/>search_parameter" class="form-control" name="<portlet:namespace/>search_parameter" style="width:250px; margin-right: 5px;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' />" onkeypress="<portlet:namespace/>onKeyDown(event);" />
 					<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 					<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}"/>
 					<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}"/>
@@ -84,14 +84,15 @@
 					<input type="button" onClick="<portlet:namespace/>dataSearchList(0)" class="btn btn-default" value="<liferay-ui:message key='edison-button-all-search' />" />
 					
 				</form>
-			</div>
-			<div class="topright">
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview dropdown-menu">	<!-- selectview -->
-					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-					<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-				</select>
+				
+				<div class="input-group-btn">
+					<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">	<!-- selectview -->
+						<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+						<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+						<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+						<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+					</select>
+				</div>
 			</div>
 		</div>
 		<div class="h10"></div>

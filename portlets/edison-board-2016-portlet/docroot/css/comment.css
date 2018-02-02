@@ -4,21 +4,21 @@
 .leftinfoimg img{width:70%; height:auto; text-align:center; vertical-align:middle; }
 
 /* .comment_div{width:910px; float:left;} */
-.comment_div{width:909px; float:right;}
+.comment_div{width:93%; float:right;}
 
 
-.leftinfoimg2{width:60px; float: right; background-color:#b9d9ec; border-radius:50px; height:45px; text-align:center; color:#fff; font-size:35px; font-weight:600; line-height:1.8em;}
+.leftinfoimg2{width:60px; float: right; background-color:#b9d9ec; border-radius:50px; height:45px; text-align:center; color:#fff; font-size:35px; font-weight:600; line-height:1.8em; background-size: cover;}
 
 .leftinfoimg2 img{width:70%; height:auto; text-align:center; vertical-align:middle;}
 
 /* .rightboxcomm2{width:75%; float:right;} */
-.rightboxcomm2{width:909px;; float:left;}
+.rightboxcomm{width:93%; float:left;}
 
 
 
 
-.titlearea{background-image:url(../images/comment/cbox_top.gif); background-position:top left; height:49px;}
-.titlea01{background-image:url(../images/comment/cbox_top2.gif); width: 93%;}
+.titlearea{background-image:url(../images/comment/cbox_top.gif); background-position:top left; height:40px; background-size: 100%; background-repeat: no-repeat;}
+.titlea01{background-image:url(../images/comment/cbox_top2.gif); background-size: cover;}
 
 .titletxt{float:left; font-size:16px; color:#2e638a; font-weight:600; line-height:3.0em; padding-left:30px;}
 
@@ -26,7 +26,7 @@
 .titlerightsns ul{list-style:none; margin-top:12px; padding-right:12px;}
 .titlerightsns ul li{float:right; margin-right:8px;}
 
-.commenttxtarea{background-image:url(../images/comment/cbox_bottom.gif); background-repeat:repeat-y; background-position:bottom left; min-height:50px; font-size:13px; color:#666; line-height:1.5em; padding:0 20px 15px 30px;}
+.commenttxtarea{background-image:url(../images/comment/cbox_bottom.gif); background-repeat:repeat-y; background-position:bottom left; min-height:50px; font-size:13px; color:#666; line-height:1.5em; padding:0 20px 15px 30px; background-size: cover;}
 .reply{background-image:url(../images/comment/cbox_bottom2.gif);}
 
 

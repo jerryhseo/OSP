@@ -235,14 +235,16 @@
 			</tbody>
 		</table>
 		
+		<div class="h10"></div>
+		<div class="buttonbox" align="right" id="<portlet:namespace/>addGeneralContentDiv">
+			<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
+		</div>
+		
 		<div class="paging">
 			<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
 		</div>
 	</div>
 
-	<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>addGeneralContentDiv">
-		<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
-	</div>
 </aui:form>	
 
 <script type="text/javascript">
