@@ -3,6 +3,7 @@ package com.kisti.osp.workbench.portlet.simulation.layout;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +36,7 @@ import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.kisti.osp.workbench.Exception.SimulationWorkbenchException;
+import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -44,9 +46,15 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
@@ -103,6 +111,14 @@ public class LayoutController {
 				response.setContentType("application/json; charset=UTF-8");
 				PrintWriter out = response.getWriter();
 				out.write(data.toString());
+			}else if ( command.equalsIgnoreCase("CREATE_SIMULATION") ){
+				this.createSimulation(request, response);
+			}else if( command.equalsIgnoreCase("DELETE_SIMULATION") ){
+				this.deleteSimulation(request, response);
+			}else if( command.equalsIgnoreCase("DELETE_JOB") ){
+				this.deleteJob(request, response);
+			}else if( command.equalsIgnoreCase("CREATE_JOB") ){
+				this.createJob(request, response);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -110,13 +126,13 @@ public class LayoutController {
 		}
 	}
 	
-	public static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {
+	private static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		response.getWriter().write(message);
 		response.flushBuffer();
 	}
 	
-	protected void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
+	private void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
 		String templateDir = ParamUtil.getString(resourceRequest, "templateDir");
 		String templateFile = ParamUtil.getString(resourceRequest, "templateFile");
 		String namespace = ParamUtil.getString(resourceRequest, "namespace");
@@ -158,7 +174,7 @@ public class LayoutController {
 		
 	}
 	
-	protected SimpleSequence layoutJSONObject2Map( JSONArray jsonColumns ) throws JSONException{
+	private SimpleSequence layoutJSONObject2Map( JSONArray jsonColumns ) throws JSONException{
 		SimpleSequence columns = new SimpleSequence();
 		
 		for( int i=0; i<jsonColumns.length(); i++){
@@ -173,7 +189,7 @@ public class LayoutController {
 		return columns;
 	}
 
-	protected ModelMap evaluateScienceAppLayout(ModelMap model,long scienceAppId) throws SimulationWorkbenchException{
+	private ModelMap evaluateScienceAppLayout(ModelMap model,long scienceAppId) throws SimulationWorkbenchException{
 		ScienceApp scienceApp = null;
 		try{
 			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
@@ -221,7 +237,7 @@ public class LayoutController {
 	}
 	
 	
-	protected JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws JSONException, SystemException, NoSuchSimulationException, NoSuchSimulationJobException{
+	private JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws JSONException, SystemException, NoSuchSimulationException, NoSuchSimulationJobException{
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
 		
@@ -241,7 +257,7 @@ public class LayoutController {
 		return jsonObj;
 	}
 	
-	protected JSONObject convertSimulationToJSON( Simulation simulation ){
+	private JSONObject convertSimulationToJSON( Simulation simulation ){
 		JSONObject json = JSONFactoryUtil.createJSONObject();
 		
 		json.put("uuid_", simulation.getSimulationUuid());
@@ -255,7 +271,7 @@ public class LayoutController {
 		return json;
 	}
 	
-	protected JSONObject convertJobToJSON( SimulationJob job ) throws SystemException, JSONException{
+	private JSONObject convertJobToJSON( SimulationJob job ) throws SystemException, JSONException{
 		JSONObject json = JSONFactoryUtil.createJSONObject();
 		
 		json.put("uuid_", job.getJobUuid());
@@ -313,7 +329,7 @@ public class LayoutController {
 	}
 	
 	
-	protected JSONObject getDataStructure( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException, JSONException{
+	private JSONObject getDataStructure( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException, JSONException{
 		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
 		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
 		
@@ -338,4 +354,142 @@ public class LayoutController {
 		return result;
 	}
 	
+	
+	private void createSimulation( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		Long scienceAppId = ParamUtil.getLong(resourceRequest, "scienceAppId");
+		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
+		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
+		long srcClassCode = ParamUtil.getLong(resourceRequest, "srcClassCode");
+		long srcClassId = ParamUtil.getLong(resourceRequest, "srcClassId");
+		String title = ParamUtil.getString(resourceRequest, "title");
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = themeDisplay.getUser();
+		Group group = themeDisplay.getScopeGroup();
+		
+		ServiceContext sc = null;
+		try {
+			sc = ServiceContextFactory.getInstance(resourceRequest);
+			//sc.setUserId( user.getUserId() );
+			sc.setCreateDate( new Date() );
+			sc.setModifiedDate( new Date() );
+		} catch (PortalException | SystemException e) {
+			_log.error("Creating ServiceContext Failed: "+Simulation.class.getName());
+			throw new PortletException();
+		}
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		IBAgent agent = new IBAgent(group, user);
+		String simulationUuid = "";
+		try {
+			simulationUuid = agent.getSimulationUuid();
+		} catch (SystemException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		Simulation simulation = null;
+		try {
+			simulation = SimulationLocalServiceUtil.addSimulation(simulationUuid, title, scienceAppId, scienceAppName, scienceAppVersion, srcClassCode, srcClassId, sc);
+		} catch (SystemException e) {
+			_log.error("Adding new Simulation Failed: "+title);
+			throw new PortletException();
+		} 
+		
+		JSONObject jsonSimulation = this.convertSimulationToJSON(simulation);
+		
+		try {
+			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc);
+		} catch (JSONException | SystemException e1) {
+			_log.error("Creating job : "+simulation.getSimulationUuid());
+			throw new PortletException();
+		}
+		ServletResponseUtil.write(httpResponse, jsonSimulation.toString());
+	}
+	
+	private void deleteSimulation( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		try {
+			SimulationLocalServiceUtil.deleteSimulation(simulationUuid);
+		} catch (NoSuchSimulationException | SystemException e) {
+			_log.error("Deleting simulation: "+simulationUuid);
+			throw new PortletException();
+		}
+	}
+	
+	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc ) throws PortletException, JSONException, SystemException{
+		SimulationJob job = null;
+		
+		try {
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+		} catch (SystemException e) {
+			_log.error("Adding New Job Failed For:  "+ simulationUuid);
+			throw new PortletException();
+		}
+		return this.convertJobToJSON(job);
+	}
+	
+	private void deleteJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
+		try {
+			SimulationJobLocalServiceUtil.deleteJob(jobUuid);
+		} catch (SystemException e) {
+			_log.error("Deleting job: "+jobUuid );
+			throw new PortletException();
+		} catch (NoSuchSimulationJobException e) {
+			_log.warn("Deleting job with invalid uuid: "+jobUuid );
+		}
+	}
+	
+	private void createJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		String title = ParamUtil.getString(resourceRequest, "title");
+		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
+		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
+		String initData = ParamUtil.getString(resourceRequest, "initData", "");
+		
+		ServiceContext sc = null;
+		try {
+			sc = ServiceContextFactory.getInstance(SimulationJob.class.getName(), resourceRequest);
+			//sc.setUserId( user.getUserId() );
+			sc.setCreateDate( new Date() );
+			sc.setModifiedDate( new Date() );
+		} catch (PortalException | SystemException e) {
+			_log.error("Creating ServiceContext Failed: "+Simulation.class.getName());
+			throw new PortletException();
+		}
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		SimulationJob job = null;
+		try {
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			job.setJobTitle(title);
+			SimulationJobLocalServiceUtil.updateSimulationJob(job);
+		} catch ( SystemException e) {
+			_log.error("Adding job: "+e.getMessage());
+			throw new PortletException();
+		}
+		
+		if( Validator.isNotNull(initData) ){
+			System.out.println("+++++++++Job Init Data: \n "+initData);
+			try {
+				SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), initData);
+			} catch (SystemException e) {
+				_log.error("Adding job data: "+e.getMessage());
+				throw new PortletException();
+			}
+		}
+		
+		JSONObject jsonJob = null;
+		try {
+			jsonJob = this.convertJobToJSON(job);
+		} catch (JSONException | SystemException e) {
+			_log.error("Converting job to JSON: "+e.getMessage());
+			throw new PortletException();
+		}
+		
+		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
+	}
 }

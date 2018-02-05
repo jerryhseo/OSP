@@ -59,6 +59,7 @@ public class DashboardController {
 	@ResourceMapping(value="searchSimulation")
 	public void searchSimulation(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
+			@RequestParam(value = "simulationUuid", required = false) String simulationUuid,
 			@RequestParam(value = "jobUuid", required = false) String jobUuid,
 			@RequestParam(value = "classId", required = false) String strClassId,
 			@RequestParam(value = "customId", required = false) String strCustomId,
@@ -86,6 +87,16 @@ public class DashboardController {
 			if(StringUtils.hasText(jobUuid)){
 				simulations = SimulationLocalServiceUtil.getSimulationsWithJobUuid(scienceAppId, user.getUserId(), jobUuid, classId, customId, begin, searchLine);
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithJobUuid(scienceAppId, user.getUserId(), jobUuid, classId, customId);
+			}else if(StringUtils.hasText(simulationUuid)){
+				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
+				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
+				
+				while(!this.containSimulationListFromUuid(simulations,simulationUuid)){
+					currentPage +=1;
+					begin = ((currentPage - 1) * searchLine);
+					simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
+					totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
+				}
 			}else{
 				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
@@ -104,6 +115,44 @@ public class DashboardController {
 			e.printStackTrace();
 		}
 	}
+	
+	@ResourceMapping(value="updateSimulation")
+	public void updateSimulation(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+			@RequestParam(value = "title", required = true) String title
+			) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		try{
+			Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+			simulation.setSimulationTitle(title);
+			SimulationLocalServiceUtil.updateSimulation(simulation);
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="updateSimulationJob")
+	public void updateSimulationJob(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "jobUuid", required = true) String jobUuid,
+			@RequestParam(value = "title", required = true) String title
+			) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		try{
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+			if(!simulationJob.getJobTitle().equals(title)){
+				simulationJob.setJobTitle(title);
+				SimulationJobLocalServiceUtil.updateSimulationJob(simulationJob);
+			}
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	@ResourceMapping(value="searchSimulationJob")
 	public void searchSimulationJob(ResourceRequest request, ResourceResponse response,
@@ -137,7 +186,10 @@ public class DashboardController {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			JsonObject obj = new JsonObject();
 			obj.add("simulation", new Gson().toJsonTree(simulationJob));
-			String jobStatusImg = EdisonExpndoUtil.getCommonCdSearchFieldValue(CustomUtil.strNull(simulationJob.getJobStatus()),EdisonExpando.OPTION1);
+			String jobStatusImg = "";
+			if(!CustomUtil.strNull(simulationJob.getJobStatus()).equals("0")){
+				jobStatusImg = EdisonExpndoUtil.getCommonCdSearchFieldValue(simulationJob.getJobStatus(),EdisonExpando.OPTION1);
+			}
 			obj.addProperty("jobStatusImg",jobStatusImg);
 			obj.addProperty("jobStatusNm",convertJobStatusToString((int)simulationJob.getJobStatus()));
 			
@@ -266,6 +318,22 @@ public class DashboardController {
 			break;
 		}
 		return returnStr;
+	}
+	
+	private boolean containSimulationListFromUuid(List<Simulation> simulations, String simulationUuid) throws SystemException{
+		boolean returnResult = false;
+		if(simulations.size()==0){
+			throw new SystemException("no simulation uuid--->"+simulationUuid);
+		}else{
+			for1:for(Simulation simulation : simulations){
+				if(simulation.getSimulationUuid().equals(simulationUuid)){
+					
+					returnResult = true;
+					break for1;
+				}
+			}
+		}
+		return returnResult;
 	}
 }
 

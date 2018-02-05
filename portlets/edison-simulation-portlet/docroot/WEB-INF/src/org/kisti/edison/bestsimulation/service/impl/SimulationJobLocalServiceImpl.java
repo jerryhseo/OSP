@@ -1494,7 +1494,8 @@ public class SimulationJobLocalServiceImpl
 			try {
 				super.simulationJobDataPersistence.remove(job.getJobUuid());
 			} catch (NoSuchSimulationJobDataException e) {
-				throw new SystemException( e.getMessage());
+				//no throw SystmeException 20180202
+				//throw new SystemException( e.getMessage());
 			}
 		}
 		
