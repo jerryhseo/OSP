@@ -174,3 +174,8 @@ ul.target {
 .dialogSelectGroupLeft h4, .dialogAllgroupRight h4 {
 	text-align: center;
 }
+
+/* MY PAGE 내 class='container'인 포틀릿의 크기 */
+.mprightcont .container{
+	width: 100%;
+}

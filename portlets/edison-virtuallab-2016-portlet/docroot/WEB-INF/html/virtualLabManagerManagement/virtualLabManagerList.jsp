@@ -272,7 +272,7 @@ function <portlet:namespace/>onKeyDown() {
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 30px 25px 0px;">
-			<input id="register_request_button" name="register_request_button" type="submit" class="button06" value="<liferay-ui:message key='edison-button-register' />" />
+			<input id="register_request_button" name="register_request_button" type="submit" class="btn btn-default" value="<liferay-ui:message key='edison-button-register' />" />
 		</div>
 	</form>
 </div>

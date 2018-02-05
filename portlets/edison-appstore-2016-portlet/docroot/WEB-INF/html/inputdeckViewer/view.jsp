@@ -114,6 +114,6 @@ $( document ).tooltip();
 	</form>
 </div>
 <div class="buttonbox">
-	<input type="button" id="<portlet:namespace/>confirmBtn" value="Confirm"  class="button04" style="margin-right:15px;"/>
-	<input type="button" id="<portlet:namespace/>cancelBtn" value="Cancel" class="button04" style="margin-right:15px;"/>
+	<input type="button" id="<portlet:namespace/>confirmBtn" value="Confirm"  class="btn btn-default" style="margin-right:15px;"/>
+	<input type="button" id="<portlet:namespace/>cancelBtn" value="Cancel" class="btn btn-default" style="margin-right:15px;"/>
 </div>

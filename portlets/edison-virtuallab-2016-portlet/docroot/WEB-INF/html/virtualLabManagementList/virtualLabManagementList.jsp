@@ -58,6 +58,7 @@
 </style>
 
 <body>
+	<div class="container">
 		<c:choose>
 			<c:when test="${not empty tabsValues}">
 				<div class="course_warp">
@@ -140,7 +141,7 @@
 			<div class="h20"></div>
 			<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
 		</div>
-	
+	</div>
 </body>
 
 <script type="text/javascript">

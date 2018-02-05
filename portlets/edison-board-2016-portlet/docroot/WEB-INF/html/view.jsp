@@ -226,8 +226,11 @@
 		</c:if>
 	</c:if>
 	<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
-	<c:if test="${redirectURL ne '' }">
+	<c:if test="${redirectURL ne '' and redirectName ne ''}">
 		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" />
+	</c:if>
+	<c:if test="${redirectURL ne '' and redirectName eq ''}">
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />" />
 	</c:if>
 </div>
 
@@ -279,7 +282,7 @@
 									<c:choose>
 										<c:when test="${boardDiv.fileUpLoadUseYn == true}">
 											<div>
-												<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
+												<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
 												<div id="fileTDArea" style="float: left;"/>	
 											</div>
 										</c:when>
@@ -333,7 +336,7 @@
 										}//if(replyFileList != null && replyFileList.size() > 0){										
 %>
 										<div>
-											<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button02" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
+											<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
 											<div id="fileTDArea" style="float: left;"/>	
 										</div>
 										<div class="boardbtnbox">
@@ -485,7 +488,7 @@ function moreFileTag()
 	fileIndex++;
 	var frmTag = "<div id=\"fileDiv"+fileIndex+"\">";
 	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button06\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
 	frmTag += "</div>";
 
 	$("#fileTDArea").append(frmTag);

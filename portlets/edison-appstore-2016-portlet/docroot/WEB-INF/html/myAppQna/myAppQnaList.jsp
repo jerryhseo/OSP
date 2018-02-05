@@ -135,7 +135,7 @@ function moreFileTag(boardSeq)
 	fileIndex++;
 	var frmTag = "<div id=\"fileDiv" + boardSeq + fileIndex + "\" class=\"filetag\">";
 	frmTag += "<input type=\"file\" name=\"addfile" + boardSeq + "\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button03\" onClick=\"deleteFileTag(\'fileDiv" + boardSeq + fileIndex + "\', '" + boardSeq +"')\"/>";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv" + boardSeq + fileIndex + "\', '" + boardSeq +"')\"/>";
 	frmTag += "</div>";
 
 	$("#fileTDArea" + boardSeq).append(frmTag);

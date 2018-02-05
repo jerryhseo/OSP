@@ -322,12 +322,12 @@ function <portlet:namespace/>myClass(){
 				<span><liferay-ui:message key="edison-table-list-header-usernm"/> : </span><%=themeDisplay.getUser().getFirstName()%>
 			</div>
 			<div class="vlbtn">
-				<input id="<portlet:namespace/>tempUserPasswordUpdate" name="<portlet:namespace/>tempUserPasswordUpdate" type="button" value="<liferay-ui:message key='update-password' />" class="button06" onclick="<portlet:namespace/>dialogOpen()"/>
+				<input id="<portlet:namespace/>tempUserPasswordUpdate" name="<portlet:namespace/>tempUserPasswordUpdate" type="button" value="<liferay-ui:message key='update-password' />" class="btn btn-default" onclick="<portlet:namespace/>dialogOpen()"/>
 			</div>
 		</c:if>
 		<div class="vlbtn" style="float:right; margin-right:10px;">
-			<input type="button" value="<liferay-ui:message key='edison-button-board-list' />" class="button06" onclick="<portlet:namespace/>moveClassList()" />	<!-- 목록 > 강좌로 이동-->
-			<input type="button" value="<liferay-ui:message key='edison-course-class-myclass-list' />" class="button06" onclick="<portlet:namespace/>myClass()"  />	<!-- 나의 강의 목록 : myEdison > 수강현황 -->
+			<input type="button" value="<liferay-ui:message key='edison-button-board-list' />" class="btn btn-default" onclick="<portlet:namespace/>moveClassList()" />	<!-- 목록 > 강좌로 이동-->
+			<input type="button" value="<liferay-ui:message key='edison-course-class-myclass-list' />" class="btn btn-default" onclick="<portlet:namespace/>myClass()"  />	<!-- 나의 강의 목록 : myEdison > 수강현황 -->
 		</div>
 	</div>
 </div> --%>
@@ -374,7 +374,7 @@ function <portlet:namespace/>myClass(){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="<portlet:namespace/>tempUserPasswordUpdate_button" name="<portlet:namespace/>tempUserPasswordUpdate_button" type="button"  class="button06" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>checkValidation();" />
+			<input id="<portlet:namespace/>tempUserPasswordUpdate_button" name="<portlet:namespace/>tempUserPasswordUpdate_button" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>checkValidation();" />
 		</div>
 	</form>
 </div>

@@ -118,8 +118,6 @@
 <script>
 	$(function(){
 		$("#<portlet:namespace/>select_line").val('${searchLine}');
-		/* $('#<portlet:namespace/>selectLine').val('${searchLine}');
-		console.log("searchLine --> ${searchLine}"); */
 	})
 	
 	/* function changeListSize<portlet:namespace/>(value){

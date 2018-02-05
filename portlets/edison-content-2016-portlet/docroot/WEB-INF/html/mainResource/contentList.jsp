@@ -14,7 +14,6 @@
 	.edison-mainResource .clusterName {
 		text-align: center;
 		color: #000000;
-		margin-bottom: 40px;
 	}
 	.edison-mainResource .title {
 		text-align: center;
@@ -27,14 +26,6 @@
 		background-color:#abcde3;
 		padding-bottom:40px;
 	}
-	.h2title{
-		font-size:30px !important; 
-		color:#3b143d; 
-		text-align:center; 
-		padding-top:60px; 
-		font-weight:600 !important; 
-		font-family:'Nanum Gothic', sans-serif;
-	}
 </style>
 
 <div class="staticswrap">
@@ -42,6 +33,7 @@
 		<h2 class="h2title" style="color: #fff; padding-top: 33px;">
 			SYSTEM RESOURCE STATISTICS
 		</h2>
+		<div class="h30" ></div>
 		<div class="row">
 			<div class="col-xs-4 col-md-2">
 				<svg id="fillgauge1" class="fillgauge"></svg>

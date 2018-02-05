@@ -383,7 +383,7 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 30px 25px 0px;">
-			<input id="register_request_button" name="register_request_button" class="button06" type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />" />
+			<input id="register_request_button" name="register_request_button" class="btn btn-default" type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />" />
 		</div>
 	</form>
 </div>
@@ -412,6 +412,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 		</table>
 	</div>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="register_delete_button" name="register_delete_button" class="button06" type="button" onclick="deleteClassRequest()" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />" />
+		<input id="register_delete_button" name="register_delete_button" class="btn btn-default" type="button" onclick="deleteClassRequest()" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />" />
 	</div>
 </div>

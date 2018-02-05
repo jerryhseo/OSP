@@ -72,7 +72,6 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 		async : false,
 		data : searchForm,
 		success: function(msg) {
-		    console.log(msg);
 			var virtualLabRegisterList = msg.virtualLabRegisterList;
 			var groupId = msg.groupId;
 			var curPage = msg.curPage;
@@ -94,7 +93,6 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 				$("#<portlet:namespace/>registrationListBody").append($rowResult);
 			} else {
 				
-					console.log("virtualLabRegisterList ", virtualLabRegisterList);
 				for(var i = 0; i < virtualLabRegisterList.length; i++) {
 					$rowResult = $("<tr/>");
 					

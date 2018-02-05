@@ -193,6 +193,7 @@ public class BoardController {
 			model.addAttribute("searchValue", CustomUtil.strNull(params.get("searchValue")));
 			model.addAttribute("listSize", CustomUtil.strNull(params.get("listSize"),"10"));
 			model.addAttribute("popState", popState);
+			model.addAttribute("viewStructure", viewStructure);
 			
 			//redirectURL decode
 			model.addAttribute("redirectOrignURL", HttpUtil.decodeURL(redirectURL));

@@ -239,7 +239,7 @@ function preprocessorFormCreate(portMapList){
 				$inputPortTrNode.append($("<td/>").addClass("TC").append(Liferay.Language.get("edison-simulation-execute-port-false")));
 			}
 			
-			$inputPortTrNode.append($("<td/>").addClass("TC").append('<input type="button" id="<portlet:namespace/>' + portMap.portName + '_popup" value="' + Liferay.Language.get("edison-simulation-execute-port-label-insertdata") + '" class="button04" onClick=\'openEditorPopup(\"'+portMap.portName+'\")\' />'));
+			$inputPortTrNode.append($("<td/>").addClass("TC").append('<input type="button" id="<portlet:namespace/>' + portMap.portName + '_popup" value="' + Liferay.Language.get("edison-simulation-execute-port-label-insertdata") + '" class="btn btn-default" onClick=\'openEditorPopup(\"'+portMap.portName+'\")\' />'));
 			
 			if(portData == '""' || portData == '') {
 				$inputPortTrNode.append($("<td/>").addClass("TC").append('<span id="<portlet:namespace/>' + portMap.portName + '_info" style="margin:0px 10px;">None</span>'));

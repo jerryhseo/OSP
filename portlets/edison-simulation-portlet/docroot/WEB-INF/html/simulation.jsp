@@ -241,11 +241,6 @@ function simulationJobCreateInit(){
 						</div>
 					</div>
 					<div class="simulrighton">
-<!-- 						<div class="btn_simul"> -->
-<!-- 							<div class="buttonbox02"> -->
-<!-- 								<input type="button" value="Category" onclick="$('#dialog-message').dialog('open');" class="button04"> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
 						<div class="simul_search search_class">
 							<div class="searchbox">
 								<input type="text" label="" id="<portlet:namespace/>searchValue" name="<portlet:namespace/>searchValue" value="${searchValue }" placeholder="<%=searchAll%>" size="25" maxlength="100" onKeydown="if(event.keyCode ==13)dataSearchList();"/>
@@ -253,7 +248,7 @@ function simulationJobCreateInit(){
 							</div>
 						</div>
 						<div class="buttonbox02 search_class">
-							<input type="button" name="fullsize" id="fullsize" value="All" onclick="searchListAll(1); return false;" class="button04">
+							<input type="button" name="fullsize" id="fullsize" value="All" onclick="searchListAll(1); return false;" class="btn btn-default">
 						</div>
 						<div class="simul00_name">
 							<div id="workflowerButtonValue1" class="workflowerButtonValue" style="white-space:nowrap; text-overflow:ellipsis; -o-text-overflow: ellipsis; overflow:hidden; -moz-binding: url('ellipsis.xml#ellipsis');"></div>
@@ -350,8 +345,8 @@ function simulationJobCreateInit(){
 				</table>
 				<div class="tbcell070301"></div>
 				<div class="buttonbox" >
-					<input type="button" value="<liferay-ui:message key="edison-button-search" />"  onclick="filterSearch();" class="button06"/>
-					<input type="button" value="<liferay-ui:message key="edison-button-board-initialize" />"  onclick="filterInit();" class="button06"/>
+					<input type="button" value="<liferay-ui:message key="edison-button-search" />"  onclick="filterSearch();" class="btn btn-default"/>
+					<input type="button" value="<liferay-ui:message key="edison-button-board-initialize" />"  onclick="filterInit();" class="btn btn-default"/>
 				</div>
 			</div>
 			

@@ -473,7 +473,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
                         $('#myfileTree').jstree().delete_node(data.node.children);
                         for(var j=0; j<childFolderArr.length; j++){
                             var obj = childFolderArr[j];
-                            console.log(obj);
+							console.log(obj);
                             $('#myfileTree').jstree().create_node( data.node.id ,  obj , "last", false);
                             
                         } 
@@ -1061,7 +1061,6 @@ function <portlet:namespace/>checkfileDelete(){
                     selectNode = "HOME";
                 } else if(selectNodeType == 'file'){
                     selectNode = tree.get_node(selectFileNode[0]).parents[0];
-                    console.log("parent node : "+ selectNode);
                 }
 
                 bStart();

@@ -104,8 +104,6 @@
 		<liferay-portlet:param name="maxWindowStatus" value="${maxWindowStatus}" />
 	</liferay-portlet:renderURL>
 	
-	
-	
 	<liferay-portlet:renderURL plid="<%=originalBoardPlid %>" portletName="<%=originalBoardPortletName %>" portletMode="view" var="originalBoardViewURL" copyCurrentRenderParameters="false">
 		<liferay-portlet:param name="myRender" value="getBoardRender" />
 		<liferay-portlet:param name="maxWindowStatus" value="${maxWindowStatus}" />
@@ -117,6 +115,16 @@
 		<liferay-portlet:param name="redirectName" value="${redirectName}" />
 		<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
 		<liferay-portlet:param name="customId" value="${customId}" />
+		<liferay-portlet:param name="groupId" value="${groupId}" />
+		<liferay-portlet:param name="isCustomAdmin" value="${isCustomAdmin}" />
+		<liferay-portlet:param name="maxWindowStatus" value="${maxWindowStatus}" />
+		<liferay-portlet:param name="myRender" value="getBoardRender" />
+	</liferay-portlet:renderURL>
+	
+	<liferay-portlet:renderURL windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>" portletMode="view" var="originalBoardViewOfVirtualLabURL" copyCurrentRenderParameters="false">
+		<liferay-portlet:param name="boardGroupId" value="${boardGroupId}" />
+		<liferay-portlet:param name="redirectName" value="${redirectName}" />
+		<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
 		<liferay-portlet:param name="groupId" value="${groupId}" />
 		<liferay-portlet:param name="isCustomAdmin" value="${isCustomAdmin}" />
 		<liferay-portlet:param name="maxWindowStatus" value="${maxWindowStatus}" />
@@ -164,10 +172,14 @@
 		}
 	}
 	
-	function viewClick<portlet:namespace/>(p_boardSeq,maxWindowStatus){
+	function viewClick<portlet:namespace/>(p_boardSeq, maxWindowStatus, classId){
 		var customId = "${customId}";
 		
-		if(maxWindowStatus=='Y'&&customId!=""){
+		if(maxWindowStatus=='Y'&&customId=="class_0"){
+			/* 강좌에서 질문을 클릭한 경우 */
+			document.mainBoardForm<portlet:namespace/>.action = "<%=originalBoardViewOfVirtualLabURL%>"+"&<portlet:namespace/>boardSeq="+p_boardSeq+"&<portlet:namespace/>customId=class_"+classId;
+			document.mainBoardForm<portlet:namespace/>.submit()
+		} else if(maxWindowStatus=='Y'&&customId!=""){
 			document.mainBoardForm<portlet:namespace/>.action = "<%=originalBoardViewMaxURL%>"+"&<portlet:namespace/>boardSeq="+p_boardSeq;
 			document.mainBoardForm<portlet:namespace/>.submit()
 		} else {
@@ -206,8 +218,9 @@
 						var classId = boardList[i].classId;
 						var divVirtualLabClass = ""
 						
+						/* 강좌 내 질문답변 출력 시 어느 강의의 질문답변인치 구분  */
 						if(classTitle != undefined && classId != undefined){
-							divVirtualLabClass = "<span classId='" + classId + "'>[" + classTitle + "]</span>&emsp;";
+							divVirtualLabClass = "<span classId='" + classId + "'>[" + classTitle + "]</span>&nbsp;";
 						}
 						
 						var qnaList_ul = $("#<portlet:namespace/>qnaList_ul");
@@ -217,27 +230,31 @@
 														.attr("type", "button")
 														.attr("value", "<liferay-ui:message key='question' />")
 														.css("margin-right", "10px");
-						var guestionTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('" + boardList[i].boardSeq + "','${maxWindowStatus}')")
+						var guestionTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('" + boardList[i].boardSeq + "','${maxWindowStatus}', '"+classId+"')")
 													 .text(boardList[i].title);
 									 
 						$("<li/>").append(questionIcon)
+								  .append(divVirtualLabClass)
 								  .append(guestionTitle)
 								  .appendTo(qnaList_ul);
 						
 						/* 답변 */
-						var answerList = getBoardAnswerList<portlet:namespace/>(boardList[i].boardSeq);
-						if(answerList !== null){
-							for(var j=0; j < answerList.length; j++){
-								var answerIcon = $("<input/>").addClass("btn_s_a")
-															  .attr("type", "button")
-															  .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-answer' />")
-															  .css("margin-right", "10px");
-								var answerTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('"+boardList[i].boardSeq+"','${maxWindowStatus}')")
-														   .text(answerList[i].title);
-								
-								$("<li/>").append(answerIcon)
-										  .append(answerTitle)
-										  .appendTo(qnaList_ul);
+						if(divVirtualLabClass.length == 0){
+							var answerList = getBoardAnswerList<portlet:namespace/>(boardList[i].boardSeq);
+							if(answerList !== null){
+								for(var j=0; j < answerList.length; j++){
+									var answerIcon = $("<input/>").addClass("btn_s_a")
+																  .attr("type", "button")
+																  .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-answer' />")
+																  .css("margin-right", "10px");
+									var answerTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('"+boardList[j].boardSeq+"','${maxWindowStatus}', '"+classId+"')")
+															   .text("RE : " + boardList[i].title);
+									
+									$("<li/>").append(answerIcon)
+											  .append(divVirtualLabClass)
+											  .append(answerTitle)
+											  .appendTo(qnaList_ul);
+								}
 							}
 						}
 					}

@@ -112,17 +112,17 @@
 		<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%; display: none;">
 			<c:choose>
 				<c:when test="${isCustomAdmin}">
-					<input class="button02" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
+					<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
 				</c:when>
 				<c:otherwise>
 					<c:if test="${isDefaultUserWrite}">
-						<input class="button02" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
+						<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
 					</c:if>
 				</c:otherwise>
 			</c:choose>
 			
 			<c:if test="${redirectURL ne ''}">
-				<input class="button02" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
+				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
 			</c:if>
 		</div>
 	</div>
@@ -194,7 +194,8 @@
 												  .css("text-overflow", "ellipsis")
 												  .css("overflow", "hidden")
 												  .css("white-space", "nowrap")
-												  .css("max-height", "80px");
+												  .css("max-height", "80px")
+												  .css("line-height", "13px");
 						noticeDetailBtn = $("<a/>").addClass("btn_line")
 												   .text("더보기 > ")
 												   .attr("href", "#")

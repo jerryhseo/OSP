@@ -202,7 +202,7 @@ function changeLanguage(){
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-registration' />
 				<c:if test="${answerCnt == '0'}">
-					<input type="button" class="button06" onclick="<portlet:namespace/>surveyAdd()" id="<portlet:namespace/>surveyAddBtn" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-add-question' />">
+					<input type="button" class="btn btn-default" onclick="<portlet:namespace/>surveyAdd()" id="<portlet:namespace/>surveyAddBtn" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-add-question' />">
 				</c:if>
 			</h3>
 			

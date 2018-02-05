@@ -117,77 +117,81 @@
 					</ul>
 				</div>
 			</div>
+		</div>
 		
-			<!-- FAQ 게시판 체크 -->
+		<!-- FAQ 게시판 체크 -->
+		<c:choose>
+			<c:when test="${boardDiv.divNm=='FAQ'}">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+						<colgroup id="boardColgroup">
+							<col width="70" />
+							<col width="50" />
+							<col width="*" />
+							<col width="150" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-index' /></th>
+								<th></th>
+								<th><liferay-ui:message key='edison-table-list-header-title' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-date' /></th>
+							</tr>
+						</thead>
+						<tbody id="boardListBody<portlet:namespace/>">
+						</tbody>
+					</table>
+			</c:when>
+			<c:otherwise>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+						<colgroup id="boardColgroup">
+							<col width="8%" />
+							<col/>
+							<col width="12%" />
+							<col width="10%" />
+							<col width="8%" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-index' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-title' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-name' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-date' /></th>
+								<th><liferay-ui:message key='edison-table-list-header-views' /></th>
+							</tr>
+						</thead>
+						<tbody id="boardListBody<portlet:namespace/>">
+						</tbody>
+					</table>
+			</c:otherwise>
+		</c:choose>
+		
+		<!-- Button -->
+		<div class="buttonbox" align="right">
 			<c:choose>
-				<c:when test="${boardDiv.divNm=='FAQ'}">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
-							<colgroup id="boardColgroup">
-								<col width="70" />
-								<col width="50" />
-								<col width="*" />
-								<col width="150" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th><liferay-ui:message key='edison-table-list-header-index' /></th>
-									<th></th>
-									<th><liferay-ui:message key='edison-table-list-header-title' /></th>
-									<th><liferay-ui:message key='edison-table-list-header-date' /></th>
-								</tr>
-							</thead>
-							<tbody id="boardListBody<portlet:namespace/>">
-							</tbody>
-						</table>
+				<c:when test="${isCustomAdmin}">
+					<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
 				</c:when>
 				<c:otherwise>
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
-							<colgroup id="boardColgroup">
-								<col width="8%" />
-								<col/>
-								<col width="12%" />
-								<col width="10%" />
-								<col width="8%" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th><liferay-ui:message key='edison-table-list-header-index' /></th>
-									<th><liferay-ui:message key='edison-table-list-header-title' /></th>
-									<th><liferay-ui:message key='edison-table-list-header-name' /></th>
-									<th><liferay-ui:message key='edison-table-list-header-date' /></th>
-									<th><liferay-ui:message key='edison-table-list-header-views' /></th>
-								</tr>
-							</thead>
-							<tbody id="boardListBody<portlet:namespace/>">
-							</tbody>
-						</table>
+					<c:if test="${isDefaultUserWrite}">
+						<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 			
-			<!-- Button -->
-			<div class="buttonbox" align="right">
-				<c:choose>
-					<c:when test="${isCustomAdmin}">
-						<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
-					</c:when>
-					<c:otherwise>
-						<c:if test="${isDefaultUserWrite}">
-							<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />
-						</c:if>
-					</c:otherwise>
-				</c:choose>
-				
-				<c:if test="${redirectURL ne ''}">
-					<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
-				</c:if>
-			</div>
-		
-			<!-- pagination -->
-			<div class="text-center">
-				<ul id="pagination<portlet:namespace/>" class="pagination">
-				</ul>
-			</div>
+			<c:if test="${redirectURL ne '' and redirectName ne ''}">
+				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
+			</c:if>
+			<c:if test="${redirectURL ne '' and redirectName eq ''}">
+				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />"/>
+			</c:if>
 		</div>
+	
+		<!-- pagination -->
+		<div class="text-center">
+			<ul id="pagination<portlet:namespace/>" class="pagination">
+			</ul>
+		</div>
+		
 	
 	
 	</div>

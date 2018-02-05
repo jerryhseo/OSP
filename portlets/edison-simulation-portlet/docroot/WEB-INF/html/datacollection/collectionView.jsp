@@ -295,7 +295,7 @@
 								
 								<c:if test="${isAdmin == true}">
 									<td>
-										<input type="button" value="삭제 " class="button06" onclick="<portlet:namespace/>deleteDataEntryByCollection('${dataEntry.entryId}')">
+										<input type="button" value="삭제 " class="btn btn-default" onclick="<portlet:namespace/>deleteDataEntryByCollection('${dataEntry.entryId}')">
 									</td>
 								</c:if>
 							</tr>
