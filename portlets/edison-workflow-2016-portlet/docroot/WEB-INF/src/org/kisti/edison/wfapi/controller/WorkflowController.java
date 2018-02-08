@@ -128,10 +128,9 @@ public class WorkflowController{
     public ResponseEntity<?> add(
         @RequestParam("screenLogic") String screenLogic, 
         @RequestParam("title") String title,
-        @RequestParam(required = false, value = "descrption") String descrption, HttpServletRequest request){
+        @RequestParam(required = false, value = "description") String description, HttpServletRequest request){
         try{
-            log.info("screenLogic Json\n" + screenLogic);
-            Workflow workflow = WorkflowLocalServiceUtil.createWorkflow(screenLogic, title, descrption, request);
+            Workflow workflow = WorkflowLocalServiceUtil.createWorkflow(screenLogic, title, description, request);
             Locale locale = PortalUtil.getLocale(request);
             Map<String, Object> workflowMap = workflow.getModelAttributes();
             workflowMap.put("title", workflow.getTitle(locale));
@@ -150,7 +149,7 @@ public class WorkflowController{
     public ResponseEntity<?> update(@PathVariable("workflowId") long workflowId,
         @RequestBody Map<String, Object> workflowParam, HttpServletRequest request){
         try{
-            log.debug(workflowParam != null ? workflowParam.toString() : "workflowParam is null");
+            log.info(workflowParam != null ? workflowParam.toString() : "workflowParam is null");
             Locale locale = PortalUtil.getLocale(request);
             Workflow workflow = WorkflowLocalServiceUtil.updateWorkflow(workflowId, workflowParam, locale);
             Map<String, Object> workflowMap = workflow.getModelAttributes();
@@ -173,11 +172,13 @@ public class WorkflowController{
         @RequestParam(required = false, value="description") String newDescription,
         HttpServletRequest request) throws Exception{
         try{
+            System.out.println("newTitle : " + newTitle);
+            System.out.println("newDescription : " + newDescription);
             Workflow workflow = null;
             if(StringUtils.hasLength(newTitle)){
                 workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, request);
             }else{
-                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, request);
+                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, request);
             }
             Locale locale = PortalUtil.getLocale(request);
             Map<String, Object> workflowMap = workflow.getModelAttributes();
@@ -193,10 +194,13 @@ public class WorkflowController{
     }
 
     @RequestMapping(value = "/{workflowId}/copy", method = RequestMethod.POST)
-    public @ResponseBody Map<String, Object> copy(@PathVariable("workflowId") long workflowId,
+    public @ResponseBody Map<String, Object> copy(
+        @PathVariable("workflowId") long workflowId,
+        @RequestBody Map<String, Object> workflowParam,
         HttpServletRequest request) throws Exception{
         try{
-            Workflow workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, request);
+            String newTitle = GetterUtil.getString(workflowParam.get("title"));
+            Workflow workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, request);
             Locale locale = PortalUtil.getLocale(request);
             Map<String, Object> workflowMap = workflow.getModelAttributes();
             workflowMap.put("title", workflow.getTitle(locale));

@@ -427,12 +427,12 @@ public class WorkflowLocalServiceUtil {
 
 	public static org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
-		java.lang.String descrption,
+		java.lang.String description,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .createWorkflow(screenLogic, title, descrption, request);
+				   .createWorkflow(screenLogic, title, description, request);
 	}
 
 	public static org.kisti.edison.model.Workflow createWorkflow()
@@ -451,10 +451,11 @@ public class WorkflowLocalServiceUtil {
 	}
 
 	public static org.kisti.edison.model.Workflow copyWorkflow(
-		long sourceWorkflowId, javax.servlet.http.HttpServletRequest request)
+		long sourceWorkflowId, java.lang.String newTitle,
+		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().copyWorkflow(sourceWorkflowId, request);
+		return getService().copyWorkflow(sourceWorkflowId, newTitle, request);
 	}
 
 	public static org.kisti.edison.model.Workflow updateWorkflow(

@@ -200,7 +200,8 @@ public class WorkflowLocalServiceClpInvoker {
 		_methodName63 = "copyWorkflow";
 
 		_methodParameterTypes63 = new String[] {
-				"long", "javax.servlet.http.HttpServletRequest"
+				"long", "java.lang.String",
+				"javax.servlet.http.HttpServletRequest"
 			};
 
 		_methodName64 = "updateWorkflow";
@@ -612,7 +613,8 @@ public class WorkflowLocalServiceClpInvoker {
 		if (_methodName63.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
 			return WorkflowLocalServiceUtil.copyWorkflow(((Long)arguments[0]).longValue(),
-				(javax.servlet.http.HttpServletRequest)arguments[1]);
+				(java.lang.String)arguments[1],
+				(javax.servlet.http.HttpServletRequest)arguments[2]);
 		}
 
 		if (_methodName64.equals(name) &&
