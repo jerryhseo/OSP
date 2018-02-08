@@ -200,7 +200,8 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 		_methodName38 = "copyWorkflow";
 
 		_methodParameterTypes38 = new String[] {
-				"long", "javax.servlet.http.HttpServletRequest"
+				"long", "java.lang.String",
+				"javax.servlet.http.HttpServletRequest"
 			};
 
 		_methodName39 = "updateWorkflow";
@@ -1393,7 +1394,7 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 	@Override
 	public org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
-		java.lang.String descrption,
+		java.lang.String description,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -1407,7 +1408,7 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 						
 					ClpSerializer.translateInput(title),
 						
-					ClpSerializer.translateInput(descrption),
+					ClpSerializer.translateInput(description),
 						
 					ClpSerializer.translateInput(request)
 					});
@@ -1509,7 +1510,7 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 
 	@Override
 	public org.kisti.edison.model.Workflow copyWorkflow(long sourceWorkflowId,
-		javax.servlet.http.HttpServletRequest request)
+		java.lang.String newTitle, javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -1519,6 +1520,8 @@ public class WorkflowLocalServiceClp implements WorkflowLocalService {
 					_methodParameterTypes38,
 					new Object[] {
 						sourceWorkflowId,
+						
+					ClpSerializer.translateInput(newTitle),
 						
 					ClpSerializer.translateInput(request)
 					});

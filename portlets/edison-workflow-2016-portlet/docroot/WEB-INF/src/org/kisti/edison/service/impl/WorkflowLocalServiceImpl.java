@@ -160,7 +160,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }
   };
   
-  public Workflow createWorkflow(String screenLogic, String title, String descrption, HttpServletRequest request)
+  public Workflow createWorkflow(String screenLogic, String title, String description, HttpServletRequest request)
       throws SystemException, PortalException{
     Workflow workflow = WorkflowLocalServiceUtil.createWorkflow();
     User user = PortalUtil.getUser(request);
@@ -168,6 +168,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     workflow.setTargetLanguage(LanguageUtil.getLanguageId(PortalUtil.getLocale(request)));
     workflow.setScreenLogic(screenLogic);
     workflow.setUserId(user.getUserId());
+    workflow.setDescription(description);
     workflow.setCompanyId(PortalUtil.getCompany(request).getCompanyId());
     workflow.setCreateDate(new Date());
     workflow.setIsPublic(false);
@@ -196,12 +197,15 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
       return super.workflowLocalService.addWorkflow(targetWorkflow);
   }
   
-  public Workflow copyWorkflow(long sourceWorkflowId, HttpServletRequest request) throws SystemException, PortalException{
+  public Workflow copyWorkflow(long sourceWorkflowId, String newTitle, HttpServletRequest request) throws SystemException, PortalException{
     User user = PortalUtil.getUser(request);
     Locale locale = PortalUtil.getLocale(request);
     Workflow targetWorkflow = super.workflowLocalService.getWorkflow(sourceWorkflowId);
+    System.out.println(newTitle);
+    newTitle = StringUtils.hasText(newTitle) ? newTitle :  "copied from " + targetWorkflow.getTitle(locale);
+    System.out.println(newTitle);
     targetWorkflow.setParentWorkflowId(sourceWorkflowId);
-    targetWorkflow.setTitle("copied from " + targetWorkflow.getTitle(locale));
+    targetWorkflow.setTitle(newTitle);
     targetWorkflow.setWorkflowId(super.counterLocalService.increment());
     targetWorkflow.setCreateDate(new Date());
     targetWorkflow.setUserId(user.getUserId());

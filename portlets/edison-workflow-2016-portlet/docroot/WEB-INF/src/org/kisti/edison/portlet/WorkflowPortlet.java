@@ -39,6 +39,7 @@ import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.util.TokenProviderUtil;
 import org.kisti.edison.util.VCRegisterUtil;
 import org.kisti.edison.wfapi.custom.MyFileIcebreakerUtil;
+import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.kisti.edison.wfapi.custom.WorkflowPagingUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -235,21 +236,8 @@ public class WorkflowPortlet{
   @ResourceMapping(value="getSpecificSiteGroupId")
   public void getSpecificSiteGroupId(ResourceRequest request, ResourceResponse response) 
       throws IOException, PortalException, SystemException{
-    ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-    long companyId = themeDisplay.getCompanyId();
-    List<Group> parentGroupList = GroupLocalServiceUtil.getGroups(companyId, 0, true);
-    Group parentGroup = null;
-    for(Group group:parentGroupList){
-      if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
-        parentGroup = group;
-        break;
-      }
-    }
-    List<Group> groupList = CustomUtil.getGroupIdASC(GroupLocalServiceUtil.getGroups(companyId, parentGroup.getGroupId(), true));
     JSONObject obj = JSONFactoryUtil.createJSONObject();
-    if(groupList.size() > 0){
-      obj.put("groupId", groupList.get(0).getGroupId());
-    }
+    obj.put("groupId", WorkflowBeanUtil.specificSiteGroupId(request));
     response.setContentType("application/json; charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.write(obj.toString());
