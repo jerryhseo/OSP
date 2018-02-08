@@ -1,3 +1,4 @@
+var slice = Array.prototype.slice;
 var consoleLog = {
   loggingLevel: { info: true, debug: false, error: true },
   setLoggingLevel : function(loggingLevelJson){
@@ -163,3 +164,38 @@ var getGUID = function () {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 };
+
+function _enterkey(selector, runEventHandler){
+  $(selector).keypress(function(e){
+    if(e.which == 13){
+      runEventHandler(e);
+    }
+  });
+}
+
+function _instantDelay(wait) {
+  var timer = 0;
+  return function (func) {
+    clearTimeout(timer);
+    var args = slice.call(arguments, 1);
+    timer = setTimeout(function () { return func.apply(null, args); }, wait);
+  };
+}
+
+function _delay(func, wait) {
+  var args = slice.call(arguments, 2);
+  return setTimeout(function(){ return func.apply(null, args); }, wait);
+};
+
+function _confirm(msg, _of, _cf){
+  _of = _of || function(){};
+  _cf = _cf || function(){};
+  $.confirm({
+      "title": "",
+      "content": msg,
+      "buttons": {
+          "ok": _of,
+          "cancel": _cf
+      }
+  });
+}
