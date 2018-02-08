@@ -1,32 +1,40 @@
 var Selectable = (function (namespace, $, designer) {
     var currentJsPlumbInstance = designer.getCurrentJsPlumbInstance();
-    /** selectable **/
-    $("#wf-workflow-canvas").click(function (e) {
-        if ($(".ui-selected").length > 0) {
+    var containerId = "#" + designer.getCurrentJsPlumbContainerId();
+    var isDragging = false;
+    var startingPos = [];
+    
+    $(containerId).mousedown(function (evt) {
+        isDragging = false;
+        startingPos = [evt.pageX, evt.pageY];
+    }).mousemove(function (evt) {
+        if (!(evt.pageX === startingPos[0] && evt.pageY === startingPos[1])) {
+            isDragging = true;
+        }
+    }).mouseup(function () {
+        if (!isDragging) {
             currentJsPlumbInstance.removeFromPosse($(".wf-box"), "posse");
+            $(".wf-box").removeClass("ui-selected");
         }
-        if ($(e.target).hasClass("wf-box") && $(e.target).hasClass("ui-selectee")) {
-            /*currentJsPlumbInstance.addToPosse($(e.target), "posse");*/
-        } else {
-            /*$(".wf-box").removeClass("ui-selected");
-            $(e.target).addClass("ui-selected");
-            $(".wf-box").each(function(_){
-              currentJsPlumbInstance.removeFromPosse($(this), "posse");
-            });*/
-        }
+        isDragging = false;
+        startingPos = [];
     });
 
-    $("#wf-workflow-canvas").selectable({
+    $(containerId).selectable({
         filter: ".wf-box",
         selected: function (event, ui) {
+            var posses = [];
             $(ui.selected).each(function (_) {
-                currentJsPlumbInstance.addToPosse($(this), "posse");
+                posses.push(this);
             });
+            currentJsPlumbInstance.addToPosse(posses, "posse");
         },
         unselected: function (event, ui) {
+            var posses = [];
             $(ui.unselected).each(function (_) {
-                currentJsPlumbInstance.removeFromPosse($(this), "posse");
+                posses.push(this);
             });
+            currentJsPlumbInstance.removeFromPosse(posses, "posse");
         }
     });
 
