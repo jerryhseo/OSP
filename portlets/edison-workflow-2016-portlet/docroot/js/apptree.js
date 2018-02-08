@@ -16,6 +16,152 @@ var AppTree = (function(namespace, $, designer){
         }
     }
 
+    function controller(){
+        var cArr = [];
+        cArr.push({
+            "text": "Controller",
+            "parent": "#",
+            "type": "category",
+            "id": "controller_category"
+        });
+        cArr.push({
+            "text": "Controller",
+            "parent": "controller_category",
+            "type": "app",
+            "id": "controller",
+            "data": {
+                "appType": "Controller",
+                "name": "Controller",
+                "text": "Controller",
+                "parent": "controller_category",
+                "groupId": getSpecificSiteGroupId(),
+                "inputports": {
+                    "localfile0": {
+                        "inputData_": {
+                            "type_": "file"
+                        },
+                        "name_": "localfile0",
+                        "defaultEditor_": "none",
+                        "dataType_": {
+                            "name": "controller_input",
+                            "version": ""
+                        },
+                        "mandatory_": true
+                    }
+                },
+                "outputports": {
+                    "y.stdout.out": {
+                        "name_": "Y",
+                        "defaultAnalyzer_": "none",
+                        "dataType_": {
+                            "name": "controller_stdout",
+                            "version": ""
+                        },
+                        "mandatory_": false,
+                        "outputData_": {
+                            "id_": 0,
+                            "parent_": "result",
+                            "type_": "file",
+                            "name_": "stdout.out",
+                            "relative_": true
+                        }
+                    },
+                    "n.stdout.out": {
+                        "name_": "N",
+                        "defaultAnalyzer_": "none",
+                        "dataType_": {
+                            "name": "controller_stdout",
+                            "version": ""
+                        },
+                        "mandatory_": false,
+                        "outputData_": {
+                            "id_": 0,
+                            "parent_": "result",
+                            "type_": "file",
+                            "name_": "stdout.out",
+                            "relative_": true
+                        }
+                    }
+
+                }
+            }
+        });
+        return cArr;
+    }
+
+    function addController(appTreeSelector){
+        var nodes = controller();
+        $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
+        $(appTreeSelector).jstree().create_node("controller_category", nodes[1], "first");
+    }
+
+    function getSpecificSiteGroupId(){
+        var fn = window[namespace + "getSpecificSiteGroupId"];
+        return fn.apply();
+    }
+
+    function dynamicConverter(){
+        var dArr = [];
+        dArr.push({
+            "text": "Converter",
+            "parent": "#",
+            "type": "category",
+            "id": "converter_category"
+        });
+        dArr.push({
+            "text": "Dynamic Converter",
+            "parent": "converter_category",
+            "type": "app",
+            "id": "dynamic_converter",
+            "data": {
+                "appType": "DynamicConverter",
+                "name": "Dynamic Converter",
+                "text": "Dynamic Converter",
+                "parent": "converter_category",
+                "groupId": getSpecificSiteGroupId(),
+                "inputports": {
+                    "localfile0": {
+                        "inputData_": {
+                            "type_": "file"
+                        },
+                        "name_": "localfile0",
+                        "defaultEditor_": "none",
+                        "dataType_": {
+                            "name": "converter_input",
+                            "version": ""
+                        },
+                        "mandatory_": true
+                    }
+                },
+                "outputports": {
+                    "stdout.out": {
+                        "name_": "stdout.out",
+                        "defaultAnalyzer_": "none",
+                        "dataType_": {
+                            "name": "converter_stdout",
+                            "version": ""
+                        },
+                        "mandatory_": false,
+                        "outputData_": {
+                            "id_": 0,
+                            "parent_": "result",
+                            "type_": "file",
+                            "name_": "stdout.out",
+                            "relative_": true
+                        }
+                    }
+                }
+            }
+        });
+        return dArr;
+    }
+
+    function addDynamicConverter(appTreeSelector){
+        var nodes = dynamicConverter();
+        $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
+        $(appTreeSelector).jstree().create_node("converter_category", nodes[1], "first");
+    }
+
     function drawAppTree(appTreeSelector, searchSelector, initData) {
         $(appTreeSelector).jstree({
             "core": {
@@ -45,10 +191,14 @@ var AppTree = (function(namespace, $, designer){
             },
             "plugins": ["types", "dnd", "search"]
         }).bind("loaded.jstree", function (event, data) {
+            addDynamicConverter(appTreeSelector);
+            addController(appTreeSelector);
             $(searchSelector).keyup(function (e) {
                 var searchString = $(this).val();
                 $(appTreeSelector).jstree(true).search(searchString);
             });
+            
+
         }).bind("select_node.jstree", function (event, data) {
             var nodeId = data.node.id;
             var node = data.node;
