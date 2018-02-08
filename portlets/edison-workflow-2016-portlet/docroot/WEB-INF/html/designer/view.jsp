@@ -9,9 +9,11 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
+var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
@@ -68,6 +70,10 @@ var contextPath = '${contextPath}';
   pointer-events: auto;
 }
 
+.menu-panel tbody.panel-tbody > tr {
+  cursor: pointer;
+}
+
 .default-title{line-height: 1.3 !important;}
 
 /* workflow science app box */
@@ -97,6 +103,7 @@ var contextPath = '${contextPath}';
   border-radius: 3px;
   border: solid 1px #00abe3;
 }
+
 .wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .wf-box .wf-app-title{font-size: 15px; font-weight: 500; color: #fff;}
 .wf-box .wf-app-status{position: relative; top: 25px;}
@@ -118,6 +125,26 @@ var contextPath = '${contextPath}';
 .waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
 .waitingbox.wf-converter.wf-static{background: #3181c6;}    
 
+.wf-box.wf-controller{
+    width: 150px !important;
+    height: 120px !important;
+    padding: 0px !important;
+    border: none !important;
+}
+.wf-box > svg {
+    width: 180px;
+    height: 140px;
+}
+.wf-box g.fc-decision > text{
+    font-size: 15px;
+    font-weight: bold;
+    fill:  #114a69;
+}
+.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #44b4c5;
+}
+
 .hidden{display: none;}
 .jsplumb-endpoint:hover{cursor: pointer; z-index: 9999;}
 
@@ -128,11 +155,30 @@ var contextPath = '${contextPath}';
 
 .ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
 .ui-selected{border: solid 1px #555555; box-shadow: 3px 3px 7px #c6c6c6;}
-.ui-selecting{background-color: rgba( 30, 30, 30,0.4 ); box-shadow: 3px 3px 7px #c6c6c6; border: solid 1px #000;}
+.ui-selected.wf-controller g.fc-decision > .fc-rhombus {stroke: #555555; filter: drop-shadow( 3px 3px 7px #c6c6c6 );}
+.ui-selected.wf-controller{border: none; box-shadow: none;}
+
+.ui-selecting.wf-controller g.fc-decision > .fc-rhombus{fill:rgba( 30, 30, 30,0.4 ); stroke: #555555; filter: drop-shadow( 3px 3px 7px #c6c6c6 );}
+.ui-selecting.wf-converter,
+.ui-selecting.wf-app{background-color: rgba( 30, 30, 30,0.4 ) !important; box-shadow: 3px 3px 7px #c6c6c6; border: solid 1px #000;}
 
 .toast-designer-pos { top: 120px; right: 12px; }
 
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
 }
+.vertical-align-center {
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-content {
+    width:inherit;
+    height:inherit;
+    margin: 0 auto;
+}
+
 </style>
 <div class="container-fluid">
   <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
@@ -181,6 +227,9 @@ var contextPath = '${contextPath}';
                 <span>Apps</span>
               </a>
             </li>
+            <%-- <li>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-keyboard="false" data-backdrop="static" data-whatever="@mdo">Open modal for @mdo</button>
+            </li> --%>
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
@@ -227,6 +276,23 @@ var contextPath = '${contextPath}';
     </div>
   </div>
 
+</div>
+</div>
+<div class="modal fade" id="<portlet:namespace/>wf-modal" tabindex="-1" role="dialog"
+  aria-labelledby="<portlet:namespace/>wf-modal-label" style="display: none;">
+<div class="vertical-alignment-helper">
+  <div class="modal-dialog vertical-align-center" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="<portlet:namespace/>wf-modal-label"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -312,26 +378,11 @@ $.widget.bridge('uibutton', $.ui.button);
 </table>
 </script>
 
-<script id="tpl-menu-panel-open-tbody" type="text/html">
-  {{#rows}}
-    <tr>
-        <td>{{title}}</td>
-        <td>{{version}}</td>
-        <td>{{screenName}}</td>
-        <td>{{descrption}}</td>
-    </tr>
-  {{/rows}}
-</script>
-
-
 <script id="tpl-menu-panel-pagination" type="text/html">
 <div class="box-footer clearfix">
+  <div class="btn-group" role="group">
+  </div>
   <ul class="pagination pagination-sm no-margin pull-right">
-    <li><a href="#">&laquo;</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">&raquo;</a></li>
   </ul>
 </div>
 </script>
@@ -381,25 +432,38 @@ $.widget.bridge('uibutton', $.ui.button);
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="email" class="form-control" id="title" placeholder="Title" value="{{form.title}}">
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}">
     </div>
     <div class="form-group">
       <label for="description" >Description</label>
-      <textarea class="form-control" rows="5" id="description">{{form.description}}</textarea>
+      <textarea class="form-control data-binded" rows="5" name="description" id="description">{{form.description}}</textarea>
     </div>
     <div class="form-group"></div>
     <div class="form-group">
       <label for="description">Export as App</label>
-      <button type="button" class="btn btn-info btn-flat pull-right">Export</button>
+      <button type="button" class="btn btn-info btn-flat pull-right func" name="exportWorkflow">Export</button>
     </div>
   </div>
   <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat" name="update">Save</button>
-    <button type="button" class="btn btn-danger btn-flat pull-right">Delete</button>
+    <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
+    <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
 </form>
 </script>
 
+<script id="tpl-modal-body" type="text/html">
+{{#inputs}}
+  <div class="form-group">
+    <label for="{{name}}" class="control-label">{{name}}</label>
+    <input type="text" class="form-control" name="{{name}}" value="{{value}}"/>
+  </div>
+{{/inputs}}
+</script>
+<script id="tpl-modal-footer" type="text/html">
+    <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
+    <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 <script>
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
@@ -445,6 +509,10 @@ $(document).ready(function(){
     $("#" + namespace + "menu-panel-box-app .box-body").css("height",
       $("#" + namespace + "menu-panel-box-app").actual("height") 
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
+  });
+
+  $("#exampleModal .modal-dialog").draggable({
+      handle: ".modal-header"
   });
 });
 

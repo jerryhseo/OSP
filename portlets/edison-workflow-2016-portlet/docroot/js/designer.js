@@ -45,9 +45,18 @@ var Designer = (function (namespace, $, OSP, toastr) {
             OUTPUT_DATA_TYPE: "converter_stdout",
             INPUT_SCOPE: "converter_stdout_",
             OUTPUT_SCOPE: "converter_input_",
+        },CONTROLLER: {
+            NAME: "Controller",
+            INPUT_DATA_TYPE: "controller_input",
+            OUTPUT_DATA_TYPE: "controller_stdout",
+            INPUT_SCOPE: "controller_stdout_",
+            OUTPUT_SCOPE: "controller_input_",
         },
         STATIC_CONVERTER: {
             NAME: "Converter"
+        },
+        APP: {
+            NAME: "Solver"
         }
     };
 
@@ -83,16 +92,18 @@ var Designer = (function (namespace, $, OSP, toastr) {
             }
             var sourceEndpoint = params.connection.endpoints[0].getParameter("data");
             var targetEndpoint = params.dropEndpoint.getParameter("data");
-            if (targetEndpoint.dataType().name === WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
+            if (targetEndpoint.dataType().name === WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE ||
+                targetEndpoint.dataType().name === WF_APP_TYPES.CONTROLLER.INPUT_DATA_TYPE) {
                 return true;
             }
-            if (sourceEndpoint.dataType().name === WF_APP_TYPES.DYNAMIC_CONVERTER.OUTPUT_DATA_TYPE) {
+            if (sourceEndpoint.dataType().name === WF_APP_TYPES.DYNAMIC_CONVERTER.OUTPUT_DATA_TYPE ||
+                sourceEndpoint.dataType().name === WF_APP_TYPES.CONTROLLER.OUTPUT_DATA_TYPE) {
                 return true;
             }
-            return targetEndpoint.dataType().name === sourceEndpoint.dataType().name
-                && targetEndpoint.dataType().version === sourceEndpoint.dataType().version
-                && !(params.sourceId === params.targetId)
-                && sourceEndpoint.outputData().type() === "file";
+            return targetEndpoint.dataType().name === sourceEndpoint.dataType().name &&
+                targetEndpoint.dataType().version === sourceEndpoint.dataType().version &&
+                !(params.sourceId === params.targetId) &&
+                sourceEndpoint.outputData().type() === "file";
         },
         dropOptions: portDropOption
     };
@@ -132,11 +143,12 @@ var Designer = (function (namespace, $, OSP, toastr) {
             targetApp["parentNodes"].splice($.inArray(sourceClientId, targetApp["parentNodes"]), 1);
         }
         if (targetApp["inputports"] && targetApp["inputports"][inputPortData["name"]] ||
+            targetApp["appType"] === WF_APP_TYPES.CONTROLLER.NAME ||
             targetApp["appType"] === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME ||
             targetApp["appType"] === WF_APP_TYPES.STATIC_CONVERTER.NAME) {
-            delete targetApp["inputports"][inputPortData["name"]]["expectedSource"];
-            delete targetApp["inputports"][inputPortData["name"]]["expectedValue"];
-            delete targetApp["inputports"][inputPortData["name"]]["hasParent"];
+            delete targetApp["inputports"][inputPortData["name_"]]["expectedSource"];
+            delete targetApp["inputports"][inputPortData["name_"]]["expectedValue"];
+            delete targetApp["inputports"][inputPortData["name_"]]["hasParent"];
         }
     }
 
@@ -164,6 +176,8 @@ var Designer = (function (namespace, $, OSP, toastr) {
             targetApp["parentNodes"].push(sourceClientId);
         }
         if (targetApp["inputports"] && targetApp["inputports"][inputPortData["name"]] ||
+            targetApp["appType"] === WF_APP_TYPES.CONTROLLER.NAME ||
+            sourceApp["appType"] === WF_APP_TYPES.CONTROLLER.NAME ||
             targetApp["appType"] === WF_APP_TYPES.STATIC_CONVERTER.NAME ||
             sourceApp["appType"] === WF_APP_TYPES.STATIC_CONVERTER.NAME ||
             targetApp["appType"] === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME ||
@@ -190,7 +204,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
                 },
                 function (result) {
                     var jsPlumbWindowId = element.elementId;
-                    console.log(result);
                     // TODO : popEditorWindow(result, port, jsPlumbWindowId);
                 });
         }
@@ -202,53 +215,14 @@ var Designer = (function (namespace, $, OSP, toastr) {
     currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
     currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
 
-    function addDynamicConverter(e) {
-        var fn = window[namespace + "getSpecificSiteGroupId"];
-        var specificSiteGroupId = fn.apply();
-        addScienceApp($("#wf-workflow-canvas"), e.pageX, e.pageY, {
-            appType: "DynamicConverter",
-            name: "Dynamic Converter",
-            groupId: specificSiteGroupId,
-            inputports: {
-                "localfile0": {
-                    "inputData_": {
-                        "type_": "file"
-                    },
-                    "name_": "localfile0",
-                    "defaultEditor_": "none",
-                    "dataType_": {
-                        "name": "converter_input",
-                        "version": ""
-                    },
-                    "mandatory_": true
-                }
-            },
-            outputports: {
-                "stdout.out": {
-                    "name_": "stdout.out",
-                    "defaultAnalyzer_": "none",
-                    "dataType_": {
-                        "name": "converter_stdout",
-                        "version": ""
-                    },
-                    "mandatory_": false,
-                    "outputData_": {
-                        "id_": 0,
-                        "parent_": "result",
-                        "type_": "file",
-                        "name_": "stdout.out",
-                        "relative_": true
-                    }
-                }
-            }
-        });
-    }
-
     function addScienceApp(target, pageX, pageY, data){
         var wfId = drawScienceAppDiv(target, pageX, pageY, data);
         if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
             addEndPointToScienceApp(wfId, data["inputports"], true);
             addEndPointToScienceApp(wfId, data["outputports"], false);
+        }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
+            addEndPointToController(wfId, data["inputports"], true);
+            addEndPointToController(wfId, data["outputports"], false);
         }else{
             var inputports = addScienceAppInputPort(wfId, data.scienceAppId);
             var outputports = addScienceAppOutputPort(wfId, data.scienceAppId);
@@ -259,16 +233,39 @@ var Designer = (function (namespace, $, OSP, toastr) {
         $("#" + wfId).data(data);
     }
 
+    function drawController(target, pageX, pageY, data, wfId){
+        var html = '<div id="{{id}}" class="wf-box wf-controller ui-selectee">'+
+        '  <svg xmlns="http://www.w3.org/2000/svg">'+
+        '    <g class="fc-decision">'+
+        '      <polygon points="0,60 75,0 150,60 75,120" class="fc-rhombus"></polygon>'+
+        '      <text x="42" y="65">{{name}}</text>'+
+        '    </g>'+
+        '  </svg>'+
+        '</div>';
+        return $(Mustache.render(html, { 
+            "id": wfId,
+            "name": data.name
+        })).appendTo(target);
+    }
+
     function drawScienceAppDiv(target, pageX, pageY, data, savedId){
         var wfId = savedId ? savedId : getGUID();
-        var $wfDiv = $("<div class='waitingbox wf-box ui-selectee' id='" + wfId + 
-                "'><div class='wf-app-title' alt='"+data.text+"'>" + 
-                data.name + "</div><div class='addIp buttonwait wf-app-status'>Waiting</div></div>")
-                    .appendTo(target);
+        var $wfDiv;
+        if(data.appType && data.appType == WF_APP_TYPES.CONTROLLER.NAME){
+            $wfDiv = drawController(target, pageX, pageY, data, wfId);
+        }else{
+            $wfDiv = $("<div class='waitingbox wf-box ui-selectee' id='" + wfId + 
+            "'><div class='wf-app-title' alt='"+data.text+"'>" + 
+            data.name + "</div><div class='addIp buttonwait wf-app-status'>Waiting</div></div>")
+                .appendTo(target);
+        }
+        
         if(data.appType && data.appType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
             $wfDiv.addClass("wf-converter").addClass("wf-dynamic");
         }else if(data.appType && data.appType == WF_APP_TYPES.STATIC_CONVERTER.NAME){
             $wfDiv.addClass("wf-converter").addClass("wf-static");
+        }else if(data.appType && data.appType == WF_APP_TYPES.APP.NAME){
+            $wfDiv.addClass("wf-app");
         }
 
         $wfDiv.offset({top : pageY, left : pageX});
@@ -298,6 +295,48 @@ var Designer = (function (namespace, $, OSP, toastr) {
         }
     }
 
+    function addEndPointToController(wfId, portJson, isInputPort){
+        if(!$.isEmptyObject(portJson)){
+            var ports = getPortsArrayFromPortJson(portJson, isInputPort);
+            
+            var endPointType = isInputPort ? inputPortPoint : outputPortPoint;
+            var anchors = isInputPort ? ["Top"] : ["Bottom", "Left"];
+            var isModifiable = $(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas";
+            $.each(ports, function(_, port){
+                var connectionScope = port.dataType().name + "_" + port.dataType().version;
+                if(isInputPort){
+                    connectionScope += " " + WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_SCOPE;
+                    connectionScope += " " + WF_APP_TYPES.CONTROLLER.INPUT_SCOPE;
+                }else{
+                    connectionScope += " " + WF_APP_TYPES.DYNAMIC_CONVERTER.OUTPUT_SCOPE;
+                    connectionScope += " " + WF_APP_TYPES.CONTROLLER.OUTPUT_SCOPE;
+                    if(isModifiable){
+                        endPointType["isSource"] = true;
+                    }else{
+                        endPointType["isSource"] = false;
+                    }
+                }
+                endPointType["scope"] = connectionScope;
+
+                var labelLocation = isInputPort ? 
+                    [-1 * ((port.name()+"").length/5.7), 0.5] : 
+                    [-0.6, 0.6];
+                var endPointGuid = wfId + port.name() + isInputPort;
+                currentJsPlumbInstance.addEndpoint(
+                    wfId,
+                    {
+                        anchor: anchors[_],
+                        uuid: endPointGuid,
+                        overlays: [["Label", {
+                            label: port.name(),
+                            location:labelLocation
+                        }]]
+                    },
+                    endPointType).setParameter("data", port);
+            });
+        }
+    }
+
     function addScienceAppOutputPort(wfId, scienceAppId){
         var outputports = synchronousAjaxHelper.get("/delegate/services/app/"+scienceAppId+"/outputports");
         var outputportsJson = $.parseJSON(outputports);
@@ -322,14 +361,13 @@ var Designer = (function (namespace, $, OSP, toastr) {
 
     function prepareEndpoint(appDivId, portJson, isInputPort){
         var ports = getPortsArrayFromPortJson(portJson, isInputPort);
-        var anchorUnit = getAnchorUnit(ports);
-        function getAnchorUnit(ports){
+        var anchorUnit = (function(ports){
             var anchorUnit = 0.7;
             if(ports && ports.length > 1){
                 anchorUnit = anchorUnit / (ports.length-1);
             }
             return anchorUnit;
-        }
+        })(ports);
         return function traversePortsAndAddEndPoint(jsPlumbInstance){
             var endPointType = isInputPort ? inputPortPoint : outputPortPoint;
             var defaultAnchor = isInputPort ? [0, 0.15, -1, 0]: [1, 0.15, 1, 0];
@@ -337,8 +375,10 @@ var Designer = (function (namespace, $, OSP, toastr) {
             $.each(ports, function(_, port){
                 var connectionScope = port.dataType().name + "_" + port.dataType().version;
                 if(isInputPort){
+                    connectionScope += " " + WF_APP_TYPES.CONTROLLER.INPUT_SCOPE;
                     connectionScope += " " + WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_SCOPE;
                 }else{
+                    connectionScope += " " + WF_APP_TYPES.CONTROLLER.OUTPUT_SCOPE;
                     connectionScope += " " + WF_APP_TYPES.DYNAMIC_CONVERTER.OUTPUT_SCOPE;
                     if(isModifiable){
                         endPointType["isSource"] = true;
@@ -393,7 +433,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
     }
 
     function removeSicenceApps($el) {
-        if (confirm(var_remove_app_confirm)) {
+        _confirm(var_remove_app_confirm, function(){
             $el.each(function (_) {
                 var elId = $(this).attr("id");
                 if (wfPortletGlobalData
@@ -406,10 +446,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
                 currentJsPlumbInstance.detach(elId);
             });
             $el.remove();
-            return true;
-        } else {
-            return false;
-        }
+        });
     }
 
     function loadScienceAppPort(wfId, portJson, isInputPort) {
@@ -422,29 +459,17 @@ var Designer = (function (namespace, $, OSP, toastr) {
         var diff = offset.referencePoint - target.offset().left;
         var wfId = drawScienceAppDiv(target, offset.left - diff, offset.top, data, id);
         var conainerId = $(currentJsPlumbInstance.getContainer()).attr("id");
-        loadScienceAppPort(wfId, data.inputports, true);
-        loadScienceAppPort(wfId, data.outputports, false);
+        if(data.appType === WF_APP_TYPES.CONTROLLER.NAME){
+            addEndPointToController(wfId, data.inputports, true);
+            addEndPointToController(wfId, data.outputports, false);
+        }else{
+            loadScienceAppPort(wfId, data.inputports, true);
+            loadScienceAppPort(wfId, data.outputports, false);
+        }
         $("#" + conainerId + " #" + wfId).data(data);
     }
 
      /** context menu **/
-    $.contextMenu({
-        selector: '#wf-workflow-canvas',
-        build: function ($trigger, e) {
-            return {
-                items: {
-                    "add-dynamic-converter": {
-                        name: "Add DynamicConverter",
-                        icon: "edit",
-                        callback: function (key, options) {
-                            addDynamicConverter(e);
-                        }
-                    }
-                }
-            };
-        }
-    });
-
     $.contextMenu({
         selector: '.jsplumb-endpoint.input-port',
         build: function ($trigger, e) {
@@ -496,7 +521,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
             var appData = $trigger.data();
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
-            if (appData["appType"] != WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+            if (appData["appType"] == WF_APP_TYPES.APP.NAME) {
                 items["items"]["open-info"] = {
                     name: "App Information",
                     icon: "info",
@@ -509,6 +534,15 @@ var Designer = (function (namespace, $, OSP, toastr) {
             if (appData["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Script",
+                    icon: "edit",
+                    callback: function (key, options) {
+                        // TODO : popScriptEditorWindow(appData, wfWindowId);
+                    }
+                };
+            }
+            if (appData["appType"] == WF_APP_TYPES.CONTROLLER.NAME) {
+                items["items"]["open-texteditor"] = {
+                    name: "Edit Condition",
                     icon: "edit",
                     callback: function (key, options) {
                         // TODO : popScriptEditorWindow(appData, wfWindowId);
@@ -621,8 +655,32 @@ var Designer = (function (namespace, $, OSP, toastr) {
         return wfData;
     }
 
-    function saveOrUpdateWorkflowDefinition(workflowMetaData, backgroudSave) {
-        var result;
+    function afterSave(workflowData, callback, backgroudSave) {
+        modifyingWorkflow = workflowData;
+        if (callback) {
+            callback(workflowData.workflowId);
+        }
+        if (!backgroudSave) {
+            toastr["success"]("", var_save_success_message);
+        }
+    }
+
+    function renameWorkflowDefinition(workflowData, callback, backgroudSave) {
+        aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + 
+                workflowData.workflowId + "/update", 
+                JSON.stringify(workflowData), 
+                function (workflowData) {
+                    // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
+                    // TODO : drawMyWorkflows(loadMyWorkflows(""));
+                    console.log(workflowData);
+                    toastr["success"]("", var_save_success_message);
+                    if(callback){
+                        callback(workflowData);
+                    }
+                });
+    }
+
+    function saveOrUpdateWorkflowDefinition(workflowMetaData, callback, backgroudSave) {
         var localWorkflow = modifyingWorkflow;
         var title = workflowMetaData.title;
         var wfData = saveWorkflowDefinition(currentJsPlumbInstance);
@@ -634,17 +692,21 @@ var Designer = (function (namespace, $, OSP, toastr) {
         }
         var wfDataJsonString = JSON.stringify(wfData);
         if (localWorkflow) {
-            localWorkflow["title"] = title;
-            localWorkflow["description"] = workflowMetaData.description;
-            localWorkflow["screenLogic"] = wfDataJsonString;
+            localWorkflow.title = title;
+            localWorkflow.description = workflowMetaData.description;
+            localWorkflow.screenLogic = wfDataJsonString;
+            console.clear();
+            console.log(workflowMetaData.isPublic);
+            if(workflowMetaData.isPublic){
+                localWorkflow.isPublic = workflowMetaData.isPublic;
+            }
             aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + 
-                localWorkflow["workflowId"] + "/update", JSON.stringify(localWorkflow), function (workflowData) {
+                localWorkflow.workflowId + "/update", 
+                JSON.stringify(localWorkflow), 
+                function (workflowData) {
                     // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
                     // TODO : drawMyWorkflows(loadMyWorkflows(""));
-                    modifyingWorkflow = workflowData;
-                    if (!backgroudSave) {
-                        toastr["success"]("", var_save_success_message);
-                    }
+                    afterSave(workflowData, callback, backgroudSave);
                 });
         } else {
             aSyncAjaxHelper
@@ -653,13 +715,9 @@ var Designer = (function (namespace, $, OSP, toastr) {
                     description: workflowMetaData.description,
                     screenLogic: wfDataJsonString
                 }, function (workflowData) {
-                    console.log(workflowData);
                     // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
                     // TODO : drawMyWorkflows(loadMyWorkflows(""));
-                    modifyingWorkflow = workflowData;
-                    if (!backgroudSave) {
-                        toastr["success"]("", var_save_success_message);
-                    }
+                    afterSave(workflowData, callback, backgroudSave);
                 }, function(errorMessage){
                     toastr["error"]("", errorMessage);
                 });
@@ -687,32 +745,67 @@ var Designer = (function (namespace, $, OSP, toastr) {
         }
     }
 
-    function copyWorkflowDefinition(workflowId, currentJsPlumbInstance) {
-        resetCurrentJsPlumbInstance();
-        var workflow = synchronousAjaxHelper
-            .jsonPost("/delegate/services/workflows/" + workflowId + "/copy", {}, function (_) {
-                // TODO : drawPublicWorkflows(loadPublicWorkflows());
-                // TODO : drawMyWorkflows(loadMyWorkflows());
+    function deleteWorkflowDefinition(workflowId, callback){
+        aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId + "/delete",
+            {}, function (_) {
+                if(callback){
+                    callback();
+                }
             });
-        var wfData = $.parseJSON(workflow["screenLogic"]);
-        if ($(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas") {
-            $("#worfklow-definition-name").val(workflow["title"]);
-            currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
-            currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
-            currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
-        }
-
-        $.each(wfData.elements, function (i) {
-            loadScienceApp(this["id"], this["offset"], this["data"]);
-        });
-
-        $.each(wfData.connections, function (i) {
-            var sourceEndpointUuid = this["sourceUuid"];
-            var targetEndpointUuid = this["targetUuid"];
-            currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
-        });
-        return workflow;
     }
+    function duplicateWorkflowDefinition(workflowId, workflowTitle, callback){
+        var param = workflowTitle ? {"title": workflowTitle} : {};
+        aSyncAjaxHelper
+            .jsonPost("/delegate/services/workflows/" + workflowId + "/copy",
+            JSON.stringify(param),
+            function (_) {
+                if (callback) {
+                    callback(_);
+                }
+            });
+    }
+
+    function copyWorkflowDefinition(workflowId) {
+        resetCurrentJsPlumbInstance();
+        duplicateWorkflowDefinition(workflowId, function(workflow){
+            var wfData = $.parseJSON(workflow["screenLogic"]);
+            if ($(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas") {
+                $("#worfklow-definition-name").val(workflow["title"]);
+                currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
+                currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
+                currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
+            }
+    
+            $.each(wfData.elements, function (i) {
+                loadScienceApp(this["id"], this["offset"], this["data"]);
+            });
+    
+            $.each(wfData.connections, function (i) {
+                var sourceEndpointUuid = this["sourceUuid"];
+                var targetEndpointUuid = this["targetUuid"];
+                currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
+            });
+        });
+    }
+
+    function loadWorkflowDefinition(workflow){
+        resetWorkflow();
+        var wfData = $.parseJSON(workflow.screenLogic);
+        $.each(wfData.elements, function(i){
+          loadScienceApp(this.id, this.offset, this.data);
+        });
+
+        $.each(wfData.connections, function(i){
+          var sourceEndpointUuid = this.sourceUuid;
+          var targetEndpointUuid = this.targetUuid;
+          currentJsPlumbInstance.connect({uuids:[sourceEndpointUuid, targetEndpointUuid]});
+        });
+        if(workflow.hasOwnProperty("createDate")){
+            delete workflow.createDate;
+        }
+        modifyingWorkflow = workflow;
+        // TODO : check - wfPortletGlobalData = wfData.wfPortletGlobalData;
+      }
 
     function resetCurrentJsPlumbInstance() {
         currentJsPlumbInstance.reset();
@@ -733,6 +826,10 @@ var Designer = (function (namespace, $, OSP, toastr) {
         "removeSicenceApps": removeSicenceApps,
         "saveOrUpdateWorkflowDefinition": saveOrUpdateWorkflowDefinition,
         "saveAsWorkflowDefinition": saveAsWorkflowDefinition,
+        "renameWorkflowDefinition": renameWorkflowDefinition,
+        "duplicateWorkflowDefinition": duplicateWorkflowDefinition,
+        "deleteWorkflowDefinition": deleteWorkflowDefinition,
+        "loadWorkflowDefinition": loadWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
         "getCurrentJsPlumbContainerId": function(){
             return $(currentJsPlumbInstance.getContainer()).attr("id");
@@ -742,4 +839,3 @@ var Designer = (function (namespace, $, OSP, toastr) {
         }
     };
 });
-
