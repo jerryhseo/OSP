@@ -17,7 +17,7 @@
 			프로비넌스 엔진 <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
 			<input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled">
 			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobSave"><span class="icon-save">  저장</span></button>
-			<button class="btn btn-success btn-flat" id="<portlet:namespace/>jobSubmit"><span class="icon-fb-file-upload">  제출</span></button>
+			<button class="btn btn-success btn-flat" id="<portlet:namespace/>jobSubmit"><span class="icon-cloud-upload">  제출</span></button>
 		</div>
 		<div id="<portlet:namespace/>port-view-btn-group">
 			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobRerun"><span class="icon-repeat">  Re-Run</span></button>
@@ -114,6 +114,17 @@ Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
 				break;
 		}
 // 	}
+});
+
+Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		if(e.data){
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+	}
 });
 
 /***********************************************************************
@@ -232,7 +243,7 @@ function <portlet:namespace/>updateJobPortStatus(data){
 	if(statusOrignCode==0){
 		$("#<portlet:namespace/>port-edit-btn-group").css("display","block");
 		$("#<portlet:namespace/>jobSave").click(function(){
-			alert("JOB_SAVE");
+			<portlet:namespace/>saveSimulationJob();
 		});
 		
 		$("#<portlet:namespace/>jobSubmit").click(function(){
@@ -245,7 +256,16 @@ function <portlet:namespace/>updateJobPortStatus(data){
 			alert("JOB_Rerun");
 		});
 	}
-	
-	
 }
+
+function <portlet:namespace/>saveSimulationJob(){
+	var myId = '<%=portletDisplay.getId()%>';
+	var eventData = {
+			portletId : myId,
+			targetPortlet : <portlet:namespace/>connector
+	};
+				
+	Liferay.fire(OSP.Event.OSP_SAVE_SIMULATION, eventData);
+}
+
 </script>

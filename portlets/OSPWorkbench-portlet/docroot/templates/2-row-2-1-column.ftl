@@ -15,8 +15,13 @@
 			<section class="content-header" id="${namespace}column-2" section-type="system">
 			
 			</section>
+			<section class="content text-center" id="no-job-layout-area">
+				<span>
+					select simulation job..!
+				</span>
+			</section>
 			
-			<section class="content workbench-layout-area">
+			<section class="content" id="workbench-layout-area" style="display:none;">
 				<div class="row" id="${namespace}row-1">
 					<div class="col-md-6 sub-col" id="${namespace}column-4">
 						

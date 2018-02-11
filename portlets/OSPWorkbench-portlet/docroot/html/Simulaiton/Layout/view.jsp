@@ -44,6 +44,8 @@
 	
 	JSONArray jsonColumns = workbenchLayout.getJSONArray("columns_");
 	JSONArray columns = JSONFactoryUtil.createJSONArray();
+	
+	JSONObject lodingPortlets = JSONFactoryUtil.createJSONObject();
 	for (int i = 0; i < jsonColumns.length(); i++) {
 		JSONObject column = JSONFactoryUtil.createJSONObject();
 		JSONObject jsonColumn = jsonColumns.getJSONObject(i);
@@ -53,6 +55,14 @@
 		column.put("height", jsonColumn.getDouble("height_"));
 		column.put("portletId", currentPortlet);
 		columns.put(column);
+		
+		JSONArray portlets = JSONFactoryUtil.createJSONArray(jsonColumn.getString("portlets_"));
+		for (int j = 0; j < portlets.length(); j++) {
+			JSONObject portlet = portlets.getJSONObject(j);
+			System.out.println(portlet.getString("instanceId_"));
+			lodingPortlets.put(portlet.getString("instanceId_"), "view");
+		}
+		
 	}
 
 	String templateFile = workbenchLayout.getString("templateId_") + ".ftl";
@@ -65,6 +75,49 @@
 	
 </div>
 
+<div class="modal fade" id="<portlet:namespace/>job-log-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-log-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Job System Log</h4>
+				</div>
+				<div class="modal-body">
+					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 80%;height: 350px;resize:none;" autofocus="autofocus" readonly="readonly" >
+					
+					</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="<portlet:namespace/>job-result-file-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-result-file-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Job Result File</h4>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered table-hover"> <thead> <tr> <th>Name</th> <th>City</th> <th>Pincode</th> </tr> </thead> <tbody> <tr> <td class="center">TanmayTanmayTanmayTanmayTanmayTanmay</td> <td>Bangalore</td> <td>560001</td> </tr> <tr> <td class="center">Tanmay</td> <td>Bangalore</td> <td>560001</td> </tr> <tr> <td class="center">Tanmay</td> <td>Bangalore</td> <td>560001</td> </tr> </tbody> </table>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group pull-right">
+						<button class="btn btn-primary" id="<portlet:namespace/>all-down-btn"><span class="icon-download-alt">  <liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></span></button>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<img id="loadingBox" src="${contextPath}/images/processing.gif" width="300px" style="display: none;"/>
+
 <script type="text/javascript">
 /***********************************************************************
  * Global variables section
@@ -72,10 +125,15 @@
 var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 var toastr;
 <portlet:namespace/>workbench.id('<%=portletDisplay.getId()%>');
+
+var <portlet:namespace/>lodingPortlets = JSON.parse('<%=lodingPortlets.toString()%>');
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
 $(function(e) {
+	//page block
+	bStart();
+	
 	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
 	<portlet:namespace/>workbench.type ('${workbenchType}');
 	<portlet:namespace/>workbench.classId('${classId}');
@@ -184,6 +242,12 @@ $(function(e) {
 			"showMethod": "slideDown",
 			"hideMethod": "slideUp"
 		};
+	
+	
+	
+	
+	//time out - 5 sec
+	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
 });
 
 /***********************************************************************
@@ -192,6 +256,11 @@ $(function(e) {
 Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
+		delete <portlet:namespace/>lodingPortlets[e.portletId];
+		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0){
+			//portlet all loding check
+			<portlet:namespace/>displayInit();
+		}
 		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
 	}
 });
@@ -213,6 +282,7 @@ Liferay.on(OSP.Event.OSP_JOB_SELECTED,function( e ){
 		console.log('OSP_JOB_SELECTED: ['+e.portletId+', '+new Date()+']');
 		//System portlet Loading check
 		<portlet:namespace/>workbench.handleJobSelected(e.data.simulationUuid,e.data.jobUuid,'<%=serveResourceURL.toString()%>');
+		<portlet:namespace/>activeBlockLayout(false);
 	}
 });
 
@@ -245,7 +315,12 @@ Liferay.on(OSP.Event.OSP_REQUEST_OUTPUT_PATH,function( e ){
 // 	    <portlet:namespace/>workbench.handleRequestOutputPath( e.portletId );
 	}
 });
-
+Liferay.on(OSP.Event.OSP_SAVE_SIMULATION,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_SAVE_SIMULATION: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleSaveSimulation(e.portletId,'<%=serveResourceURL.toString()%>');
+	}
+});
 Liferay.on(OSP.Event.OSP_CREATE_SIMULATION,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_CREATE_SIMULATION: ['+e.portletId+', '+new Date()+']');
@@ -256,6 +331,11 @@ Liferay.on(OSP.Event.OSP_DELETE_SIMULATION,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_DELETE_SIMULATION: ['+e.portletId+', '+new Date()+']', e.data);
 		<portlet:namespace/>workbench.handleDeleteSimulation(e.portletId, e.data.simulationUuid, '<%=serveResourceURL.toString()%>');
+		
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		if(simulation.uuid()===e.data.simulationUuid){
+			<portlet:namespace/>activeBlockLayout(true);
+		}
 	}
 });
 
@@ -269,6 +349,13 @@ Liferay.on(OSP.Event.OSP_DELETE_JOB,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_DELETE_JOB: ['+e.portletId+', '+new Date()+']');
 		<portlet:namespace/>workbench.handleDeleteJob(e.portletId, e.data.simulationUuid, e.data.jobUuid, '<%=serveResourceURL.toString()%>' );
+		
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		if(job.uuid()===e.data.jobUuid){
+			<portlet:namespace/>activeBlockLayout(true);
+		}
 	}
 });
 /***********************************************************************
@@ -278,6 +365,33 @@ function errlog(eventData, msg){
 	if(console){
 		console.log("Unknown event data: " + (msg ? msg : "") + "\n", eventData);
 	}
+}
+
+function <portlet:namespace/>activeBlockLayout(status){
+	$blockSection = $("section#no-job-layout-area");
+	$layoutSection = $("section#workbench-layout-area");
+	
+	if(status){
+		$blockSection.css("display","block");
+		$layoutSection.css("display","none");
+	}else{
+		$blockSection.css("display","none");
+		$layoutSection.css("display","block");
+	}
+	
+}
+function <portlet:namespace/>displayInit(){
+	if($("#loadingBox").css("display") != "none"){
+		var eventData = {
+				targetPortlet: 'BROADCAST',
+				data : {
+					simulationUuid : ''
+				}
+			};
+			
+			Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
+	}
+	bEnd();
 }
 
 </script>

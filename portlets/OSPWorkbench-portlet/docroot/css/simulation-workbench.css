@@ -172,13 +172,13 @@
 		outline: 3px solid #dddddd;
 }
 
-.simulation-workbench .workbench-layout-area{
+.simulation-workbench #workbench-layout-area{
 	position: relative;
 	padding-left: 30px;
 	padding-right: 30px;
 	padding: 0px;
 }
-.simulation-workbench .workbench-layout-area .row{
+.simulation-workbench #workbench-layout-area .row{
 	position: relative;
 }
 
@@ -204,5 +204,33 @@
 }
 
 
+#no-job-layout-area{
+	background-color:rgba(33, 45, 57, 0.95); height: 100%;position: relative;z-index: 90;
+}
 
+#no-job-layout-area span{
+	color:#b38348; font-size:40px; font-weight:600;position: absolute;top: 40%;
+}
+
+
+.simulation-workbench .vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+.simulation-workbench .vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+.simulation-workbench .modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    max-width:inherit; /* For Bootstrap 4 - to avoid the modal window stretching full width */
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
 

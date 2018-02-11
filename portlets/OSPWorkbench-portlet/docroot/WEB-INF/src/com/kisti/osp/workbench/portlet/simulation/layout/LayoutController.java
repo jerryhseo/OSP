@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -26,6 +27,8 @@ import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.EdisonHttpUtil;
+import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,6 +122,10 @@ public class LayoutController {
 				this.deleteJob(request, response);
 			}else if( command.equalsIgnoreCase("CREATE_JOB") ){
 				this.createJob(request, response);
+			}else if( command.equalsIgnoreCase("LOAD_SIMULATION") ){
+				this.loadSimulation(request, response);
+			}else if( command.equalsIgnoreCase("SAVE_SIMULATION")){
+				this.saveSimulation(request, response);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -236,20 +243,80 @@ public class LayoutController {
 		return model;
 	}
 	
+	private void saveSimulation( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		long classId = ParamUtil.getLong(resourceRequest, "srcClassCode");
+		long customId = ParamUtil.getLong(resourceRequest, "srcClassId");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		RequestUtil.getParameterMap(resourceRequest);
+		JSONObject simulationDTO = null;
+		try {
+			simulationDTO = JSONFactoryUtil.createJSONObject(ParamUtil.getString(resourceRequest, "simulation"));
+		} catch (JSONException e) {
+			_log.error("JSONFactoryUtil: "+ParamUtil.getString(resourceRequest, "simulation"));
+			throw new PortletException();
+		}
+		
+		System.out.println("=== SimulationDTO=====================");
+		this.jsonObjectPrint(simulationDTO);
+		System.out.println("=== SimulationDTO=====================");
+		
+		JSONObject jobsDTO = simulationDTO.getJSONObject("jobs_");
+		System.out.println(jobsDTO);
+		Iterator<String> keys = jobsDTO.keys();
+		while( keys.hasNext() ) {
+			String key = (String)keys.next();
+			System.out.println(key);
+			if ( jobsDTO.getJSONObject(key) instanceof JSONObject ) {
+				JSONObject jobDTO = jobsDTO.getJSONObject(key);
+				SimulationJob job = null;
+				try {
+					job = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobDTO.getString("uuid_"));
+				} catch (SystemException e) {
+					_log.error("Getting job: "+jobDTO.getString("uuid_"));
+					throw new PortletException();
+				}
+				
+				job.setJobTitle(jobDTO.getString("title_"));
+				job.setJobSubmit(false);
+
+				try {
+					SimulationJobLocalServiceUtil.updateSimulationJob(job);
+				} catch (SystemException e) {
+					_log.error("Updating job: "+job.getJobUuid());
+					throw new PortletException();
+				}
+			}
+		}
+		
+		
+		ServletResponseUtil.write(httpResponse, String.valueOf(true));
+	}
+	
+	private void loadSimulation(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		Simulation simulation = null;
+		try {
+			simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+		} catch (NoSuchSimulationException | SystemException e) {
+			_log.error("Getting simulation: "+e.getMessage());
+			throw new PortletException();
+		}
+		
+		JSONObject jsonSimulation = this.convertSimulationToJSON(simulation);
+		ServletResponseUtil.write(httpResponse, jsonSimulation.toString() );
+
+	}
 	
 	private JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws JSONException, SystemException, NoSuchSimulationException, NoSuchSimulationJobException{
-		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
-		
-		
-		Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
 		
 		SimulationJob job = SimulationJobLocalServiceUtil.getJob(jobUuid);
 		
 		SimulationJobData jobData = SimulationJobDataLocalServiceUtil.fetchSimulationJobData(job.getJobUuid());
 		
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-		jsonObj.put("simulation_", this.convertSimulationToJSON(simulation));
 		jsonObj.put("job_", this.convertJobToJSON(job));
 		if( jobData != null ){
 			jsonObj.put("inputs_", jobData.getJobData());
@@ -492,4 +559,15 @@ public class LayoutController {
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
+	
+	protected void jsonObjectPrint( JSONObject jsonObject ){
+		try {
+			System.out.println(jsonObject.toString(4));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
+
+

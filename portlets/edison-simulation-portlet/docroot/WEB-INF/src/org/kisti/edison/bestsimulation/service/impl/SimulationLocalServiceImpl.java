@@ -158,9 +158,14 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
   private DynamicQuery makeSimulationsQuery(long scienceAppId, long userId, boolean isTest){
     DynamicQuery query = DynamicQueryFactoryUtil.forClass(
         Simulation.class, "sim", PortletClassLoaderUtil.getClassLoader());
-    return query.add(RestrictionsFactoryUtil.eq("sim.testYn", isTest))
-        .add(RestrictionsFactoryUtil.eq("sim.scienceAppId", String.valueOf(scienceAppId)))
-        .add(RestrictionsFactoryUtil.eq("sim.userId", userId));
+    query.add(RestrictionsFactoryUtil.eq("sim.testYn", isTest))
+        .add(RestrictionsFactoryUtil.eq("sim.scienceAppId", String.valueOf(scienceAppId)));
+    
+    if(userId!=0){
+    	query.add(RestrictionsFactoryUtil.eq("sim.userId", userId));
+    }
+        
+    return query;
   }
 
   private DynamicQuery makeSimulationsQuery(long scienceAppId, long userId){
