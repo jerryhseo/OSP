@@ -219,6 +219,9 @@ $(function(e) {
 				$(object).css("top",offsetTop+"px");
 				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
 				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
+				
+				$(equalDiv).find("div.sub-col iframe").css("height",offsetTop - 74);
+				$(RemainderDiv).find("div.sub-col iframe").css("height",offsetBottom - 74);
 			}
 			
 		}
@@ -389,11 +392,15 @@ function <portlet:namespace/>displayInit(){
 				}
 			};
 			
-			Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
+		// Dashboard Portlet
+		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
+		//iframe resize
+		$("section#workbench-layout-area .sub-col").each(function(i){
+			$(this).find("iframe").css("height",$(this).outerHeight() - 74);
+		});
 	}
 	bEnd();
 }
-
 </script>
 
 <script src="${contextPath}/js/jquery-knob/jquery.knob.min.js"></script>
