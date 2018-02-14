@@ -79,6 +79,8 @@ public class DashboardController {
 	@ResourceMapping(value="searchSimulation")
 	public void searchSimulation(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
+			@RequestParam(value = "paginFunction", required = true) String paginFunction,
+			@RequestParam(value = "searchLine", required = true) int searchLine,
 			@RequestParam(value = "simulationUuid", required = false) String simulationUuid,
 			@RequestParam(value = "jobUuid", required = false) String jobUuid,
 			@RequestParam(value = "classId", required = false) String strClassId,
@@ -98,7 +100,6 @@ public class DashboardController {
 		}
 		
 		int currentPage = ParamUtil.get(request, "currentPage", 1);
-		int searchLine = ParamUtil.get(request, "searchLine", 3);
 		int blockSize = 3;
 		int begin = ((currentPage - 1) * searchLine);
 		int totalCount = 0;
@@ -122,7 +123,7 @@ public class DashboardController {
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
 			}
 			
-			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"loadSimulations", totalCount, currentPage, searchLine, blockSize);
+			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
 			
 			JsonObject obj = new JsonObject();
 			obj.addProperty("pagingStr", pagingStr);

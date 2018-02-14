@@ -631,7 +631,7 @@ throw new Error('AdminLTE requires jQuery')
     }
     
     //WorkBench Height Setting - GPLUS
-    var rowCnt = $('#workbench-layout-area > .row').length;
+    var rowCnt = $('#workbench-layout-area  .layout-grid').length;
     var contentWrapperHeight = $(Selector.contentWrapper).height();
     var contentHeaderHeight = $('.content-header').height();
     

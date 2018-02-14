@@ -32,6 +32,7 @@
 /** The Spacing **/
 .simulation-workbench .btn-breadcrumb .btn {
   padding:6px 12px 6px 24px;
+  outline: 0;
 }
 .simulation-workbench .btn-breadcrumb .btn:first-child {
   padding:6px 6px 6px 10px;
@@ -205,7 +206,7 @@
 
 
 #no-job-layout-area{
-	background-color:rgba(33, 45, 57, 0.95); height: 100%;position: relative;z-index: 90;
+	background-color:rgba(33, 45, 57, 0.95); height: 100%;position: relative; z-index: 9;
 }
 
 #no-job-layout-area span{

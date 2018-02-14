@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -27,7 +26,6 @@ import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.util.EdisonHttpUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -201,6 +199,12 @@ public class LayoutController {
 		try{
 			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 			model.addAttribute("scienceApp", scienceApp);
+			
+			if(scienceApp.getTempletId().indexOf("flow")>-1){
+				model.addAttribute("isFlowLayout", true);
+			}else{
+				model.addAttribute("isFlowLayout", false);
+			}
 		}catch (Exception e) {
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_ID);
 		}
@@ -467,7 +471,10 @@ public class LayoutController {
 		JSONObject jsonSimulation = this.convertSimulationToJSON(simulation);
 		
 		try {
-			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc);
+			String jobTitle = ParamUtil.getString(resourceRequest, "jobTitle");
+			String jobInitData = ParamUtil.getString(resourceRequest, "jobInitData");
+			
+			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
 		} catch (JSONException | SystemException e1) {
 			_log.error("Creating job : "+simulation.getSimulationUuid());
 			throw new PortletException();
@@ -485,11 +492,26 @@ public class LayoutController {
 		}
 	}
 	
-	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc ) throws PortletException, JSONException, SystemException{
+	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
 		SimulationJob job = null;
 		
 		try {
 			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			
+			if(!jobTitle.equals("")){
+				job.setJobTitle(jobTitle);
+				SimulationJobLocalServiceUtil.updateSimulationJob(job);
+				
+				if( Validator.isNotNull(jobInitData) ){
+					System.out.println("+++++++++Job Init Data: \n "+jobInitData);
+					try {
+						SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), jobInitData);
+					} catch (SystemException e) {
+						_log.error("Adding job data: "+e.getMessage());
+						throw new PortletException();
+					}
+				}
+			}
 		} catch (SystemException e) {
 			_log.error("Adding New Job Failed For:  "+ simulationUuid);
 			throw new PortletException();

@@ -22,7 +22,7 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
-				<div class="row" id="${namespace}row-1">
+				<div class="row layout-grid" id="${namespace}row-1">
 					<div class="col-md-6 sub-col" id="${namespace}column-4">
 						
 					</div>
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<div class="devider horizontal" data-equal-id="${namespace}row-1" data-remainder-id="${namespace}row-2"></div>
-				<div class="row" id="${namespace}row-2">
+				<div class="row layout-grid" id="${namespace}row-2">
 					<div class="col-md-12 sub-col" id="${namespace}column-6">
 						
 					</div>

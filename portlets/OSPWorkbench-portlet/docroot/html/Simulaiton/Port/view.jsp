@@ -4,7 +4,7 @@
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-<div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 60px;position: absolute;z-index: 9;">
+<div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 60px;position: absolute;z-index: 8;">
 	<div class="panel-heading" style="z-index: 10;cursor: move;">Port Selector</div>
 	<div class="panel-body">
 		<div class="panel-group" id="<portlet:namespace/>port-accordion">
@@ -31,7 +31,7 @@
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var <portlet:namespace/>scienceApp = new OSP.ScienceApp();
-
+var <portlet:namespace/>isFlow;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -62,8 +62,28 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e){
 			portletId: myId,
 			targetPortlet: e.portletId
 		}
-		<portlet:namespace/>init();
-		Liferay.fire( OSP.Event.OSP_REQUEST_PORT_INFO, eventData );
+		Liferay.fire( OSP.Event.OSP_REQUEST_APP_INFO, eventData );
+	}
+});
+
+Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		if(e.data.scienceApp.templateId().indexOf("flow")>-1){
+			<portlet:namespace/>isFlow = true;
+		}else{
+			<portlet:namespace/>isFlow = false;
+		}
+		
+		var myId = '<%=portletDisplay.getId()%>';
+		if(e.targetPortlet === myId){
+			var eventData = {
+				portletId: myId,
+				targetPortlet: e.portletId
+			}
+			<portlet:namespace/>init();
+			Liferay.fire( OSP.Event.OSP_REQUEST_PORT_INFO, eventData );
+		}
 	}
 });
 
@@ -127,6 +147,13 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
+		console.log('OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE: ['+e.portletId+', '+new Date()+']', e.data);
+		<portlet:namespace/>flowPortChange(e.data.flowLayoutCode);
+	}
+});
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
@@ -148,7 +175,12 @@ function <portlet:namespace/>displayPorts( ports, portType ){
 		css.PanelClass = 'panel panel-info';
 		css.LiClass = 'list-group-item <portlet:namespace/>port-input';
 		css.Title = '입력';
-		css.collapse=' in';
+		if(<portlet:namespace/>isFlow){
+			css.collapse='';
+		}else{
+			css.collapse=' in';
+		}
+		
 		break;
 	case OSP.Enumeration.PortType.LOG:
 		css.PanelClass = 'panel panel-info';
@@ -164,7 +196,7 @@ function <portlet:namespace/>displayPorts( ports, portType ){
 	default:
 	}
 	
-	var accordionId = "<portlet:namespace/>collapse_"+portType;
+	var accordionId = "<portlet:namespace/>collapse_"+portType.toUpperCase();
 	$targetDiv = $("#<portlet:namespace/>port-accordion");
 	$panelDiv = $("<div/>").addClass(css.PanelClass).appendTo($targetDiv);
 	
@@ -201,6 +233,10 @@ function <portlet:namespace/>selectPort(object){
 			$(object).addClass("active");
 			$(object).siblings().removeClass("active");
 			
+			if(<portlet:namespace/>isFlow){
+				<portlet:namespace/>flowLayoutUpdate($(object).attr("data-port-type"));
+			}
+			
 			var eventData = {
 					portletId: '<%=portletDisplay.getId()%>',
 					targetPortlet:<portlet:namespace/>connector,
@@ -210,7 +246,15 @@ function <portlet:namespace/>selectPort(object){
 			Liferay.fire( OSP.Event.OSP_PORT_SELECTED, eventData);
 		}
 	}
+}
 
+function <portlet:namespace/>flowLayoutUpdate(portType){
+	var eventData = {
+			portletId: '<%=portletDisplay.getId()%>',
+			targetPortlet:<portlet:namespace/>connector,
+			flowLayoutCode :portType.toUpperCase()
+	};
+	Liferay.fire( OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE, eventData);
 }
 
 
@@ -253,8 +297,31 @@ function <portlet:namespace/>updateJobPortStatus(data){
 	}else{
 		$("#<portlet:namespace/>port-view-btn-group").css("display","block");
 		$("#<portlet:namespace/>jobRerun").click(function(){
-			alert("JOB_Rerun");
+			var myId = '<%=portletDisplay.getId()%>';
+			var eventData = {
+					portletId : myId,
+					targetPortlet : <portlet:namespace/>connector
+			};
+			Liferay.fire(OSP.Event.OSP_REQUEST_SIMULATION_MODAL, eventData);
 		});
+	}
+	
+	if(<portlet:namespace/>isFlow){
+		<portlet:namespace/>flowPortChange(nullToStr(data.flowLayoutCode))
+	}
+}
+
+
+function <portlet:namespace/>flowPortChange(flowLayoutCode){
+	if(flowLayoutCode!=""){
+		/*$('.collapse.in').collapse('hide');*/
+		if(flowLayoutCode==="LOG"&&<portlet:namespace/>scienceApp.logPortsArray().length ==0){
+			flowLayoutCode = "OUTPUT";
+		}
+		var collapseObject = $("#<portlet:namespace/>collapse_"+flowLayoutCode);
+ 		if(collapseObject.is('.collapse:not(.show)')){
+			collapseObject.collapse('show');
+ 		}
 	}
 }
 
@@ -267,5 +334,6 @@ function <portlet:namespace/>saveSimulationJob(){
 				
 	Liferay.fire(OSP.Event.OSP_SAVE_SIMULATION, eventData);
 }
+
 
 </script>

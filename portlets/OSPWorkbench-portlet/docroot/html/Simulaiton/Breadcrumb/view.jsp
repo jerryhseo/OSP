@@ -16,6 +16,7 @@
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var <portlet:namespace/>backURL;
+var <portlet:namespace/>isFlow;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -53,40 +54,58 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e){
 Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		<portlet:namespace/>breadcrumbChange(e.data);
+		<portlet:namespace/>displayInit(e.data);
 	}
 });
 
-Liferay.on(OSP.Event.OSP_RESPONSE_BREADCRUMB_CHANGE,function(e){
+Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
 		<portlet:namespace/>breadcrumbChange(e.data);
 	}
 });
+
+Liferay.on(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
+		console.log('OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE: ['+e.portletId+', '+new Date()+']', e.data);
+// 		<portlet:namespace/>flowBreadcrumbChange(e.data.flowLayoutCode);
+	}
+});
 /***********************************************************************
  * Golbal functions
 ************************************************************************/
-function <portlet:namespace/>breadcrumbChange(data){
+function <portlet:namespace/>displayInit(data){
 	if(nullToStr(data.workbenchId)!=""){
-		if(data.workbenchId.indexOf("flow")>-1){
+// 		console.log(data.scienceApp);
+		if(data.scienceApp.templateId().indexOf("flow")>-1){
 			$targetDiv = $("#<portlet:namespace/>breadcrumb");
 			
-			$("<button/>").addClass("btn btn-primary").attr("type","button").append(
+			$("<button/>").addClass("btn btn-primary").attr("type","button").css("cursor","pointer").append(
 					$("<span/>").addClass("fa fa-folder").html("  입력")
-			).appendTo($targetDiv);
+			).attr("onclick","<portlet:namespace/>flowLayoutUpdate('INPUT')").appendTo($targetDiv);
 			
-			$("<button/>").addClass("btn btn-primary").attr("type","button").append(
-					$("<span/>").addClass("fa fa-folder").html("  모니터링")
-			).appendTo($targetDiv);
 			
-			$("<button/>").addClass("btn btn-primary").attr("type","button").append(
-					$("<span/>").addClass("fa fa-folder").html("  분석")
-			).appendTo($targetDiv);
+			if(data.scienceApp.logPortsArray().length > 0){
+				$("<button/>").addClass("btn btn-default").attr("type","button").append(
+						$("<span/>").addClass("fa fa-folder").html("  로그")
+				).css("cursor","not-allowed").attr("id","<portlet:namespace/>logBreadcrumb").appendTo($targetDiv);
+			}
+			
+			if(data.scienceApp.outputPortsArray().length > 0){
+				$("<button/>").addClass("btn btn-default").attr("type","button").append(
+						$("<span/>").addClass("fa fa-folder").html("  분석")
+				).css("cursor","not-allowed").attr("id","<portlet:namespace/>outBreadcrumb").appendTo($targetDiv);
+			}
+			
+			<portlet:namespace/>isFlow = true;
 		}else{
 			$targetDiv = $("#<portlet:namespace/>breadcrumb");
 			$("<button/>").addClass("btn btn-primary").attr("type","button").css("cursor","not-allowed").append(
 					$("<span/>").addClass("icon-columns").html("  Layout")
 				).appendTo($targetDiv);
+			
+			<portlet:namespace/>isFlow = false;
 		}
 	}
 	if(nullToStr(data.backURL)!=""){
@@ -98,16 +117,59 @@ function <portlet:namespace/>breadcrumbChange(data){
 	if(nullToStr(data.backTitle)!=""){
 		$("#<portlet:namespace/>backTitle").html("  "+data.backTitle);
 	}
+}
+
+
+function <portlet:namespace/>breadcrumbChange(data){
 	if(nullToStr(data.simulationTitle)!=""){
 		$("#<portlet:namespace/>simulationTitle").html("  "+data.simulationTitle);
 	}
 	if(nullToStr(data.jobTitle)!=""){
 		$("#<portlet:namespace/>jobTitle").html("  "+data.jobTitle);
 	}
-// 	if(nullToStr(data.jobStatus)!=""){
-// 		if(!$(".<portlet:namespace/>layout").is(":visible")){
-			
-// 		}
-// 	}
+	if(<portlet:namespace/>isFlow){
+		<portlet:namespace/>flowBreadcrumbChange(nullToStr(data.flowLayoutCode));
+	}
+}
+
+function <portlet:namespace/>flowBreadcrumbChange(flowLayoutCode){
+	if(flowLayoutCode!=""){
+		
+		var logBreadcrumbActive = false;
+		var outBreadcrumbActive = false;
+		
+		var logBreadcrumb = $("button#<portlet:namespace/>logBreadcrumb");
+		var outBreadcrumb = $("button#<portlet:namespace/>outBreadcrumb");
+		
+		logBreadcrumb.css("cursor","not-allowed").removeAttr("onclick").removeClass("btn-primary").addClass("btn-default");
+		outBreadcrumb.css("cursor","not-allowed").removeAttr("onclick").removeClass("btn-primary").addClass("btn-default");
+		
+		
+		if(flowLayoutCode!=""){
+			if(flowLayoutCode ==="LOG"){
+				logBreadcrumbActive = true;
+			}else if(flowLayoutCode ==="OUTPUT"){
+				logBreadcrumbActive = true;
+				outBreadcrumbActive = true;
+			}
+		}
+		
+		if(logBreadcrumbActive){
+			logBreadcrumb.css("cursor","pointer").addClass("btn-primary").attr("onclick","<portlet:namespace/>flowLayoutUpdate('LOG')");
+		}
+		
+		if(outBreadcrumbActive){
+			outBreadcrumb.css("cursor","pointer").addClass("btn-primary").attr("onclick","<portlet:namespace/>flowLayoutUpdate('OUTPUT')");
+		}
+	}
+}
+
+function <portlet:namespace/>flowLayoutUpdate(flowLayoutCode){
+	var eventData = {
+			portletId: '<%=portletDisplay.getId()%>',
+			targetPortlet:<portlet:namespace/>connector,
+			flowLayoutCode :flowLayoutCode
+	};
+	Liferay.fire( OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE, eventData);
 }
 </script>

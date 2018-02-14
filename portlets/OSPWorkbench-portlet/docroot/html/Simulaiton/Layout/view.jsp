@@ -115,6 +115,50 @@
 	</div>
 </div>
 
+<div class="modal fade" id="<portlet:namespace/>simulation-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>simulation-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Simulation</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row" id="<portlet:namespace/>simulation-area">
+							<div class="col-md-12" style="min-height: 300px;">
+								<table class ="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="text-center"><liferay-ui:message key="edison-simulation-execute-simulation-name" /></th>
+											<th class="text-center"><liferay-ui:message key="edison-virtuallab-tablerow-confirm-date" /></th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
+								
+								<div class="text-center" id="<portlet:namespace/>pagin">${pagingStr}</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
+									<div class="form-group">
+										<label for="New Simulation">New Simulation</label>
+										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+									</div>
+									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <img id="loadingBox" src="${contextPath}/images/processing.gif" width="300px" style="display: none;"/>
 
@@ -138,6 +182,8 @@ $(function(e) {
 	<portlet:namespace/>workbench.type ('${workbenchType}');
 	<portlet:namespace/>workbench.classId('${classId}');
 	<portlet:namespace/>workbench.customId('${customId}');
+	<portlet:namespace/>workbench.isFlowLayout('${isFlowLayout}');
+	
 	
 	var scienceApp = new OSP.ScienceApp();
 	scienceApp.id('${scienceApp.getScienceAppId()}');
@@ -145,6 +191,7 @@ $(function(e) {
 	scienceApp.version('${scienceApp.getVersion()}');
 	scienceApp.runType('${scienceApp.getRunType()}');
 	scienceApp.currentManualId('${scienceApp.getManualIdCurrentValue()}');
+	scienceApp.templateId('${scienceApp.templetId}');
 	
 	if( '<%=inputPorts%>' ) 
 		scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );
@@ -249,8 +296,8 @@ $(function(e) {
 	
 	
 	
-	//time out - 5 sec
-	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
+	//time out - 3 sec
+	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*3);
 });
 
 /***********************************************************************
@@ -327,7 +374,7 @@ Liferay.on(OSP.Event.OSP_SAVE_SIMULATION,function( e ){
 Liferay.on(OSP.Event.OSP_CREATE_SIMULATION,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_CREATE_SIMULATION: ['+e.portletId+', '+new Date()+']');
-		<portlet:namespace/>workbench.handleCreateSimulation(e.portletId,e.data.title,'<%=serveResourceURL.toString()%>');
+		<portlet:namespace/>workbench.handleCreateSimulation(e.portletId,e.data.title,e.data.jobTitle,e.data.jobInitData,'<%=serveResourceURL.toString()%>');
 	}
 });
 Liferay.on(OSP.Event.OSP_DELETE_SIMULATION,function( e ){
@@ -359,6 +406,43 @@ Liferay.on(OSP.Event.OSP_DELETE_JOB,function( e ){
 		if(job.uuid()===e.data.jobUuid){
 			<portlet:namespace/>activeBlockLayout(true);
 		}
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_SIMULATION_MODAL,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_SIMULATION_MODAL: ['+e.portletId+', '+new Date()+']');
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				data : e.data
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE: ['+e.portletId+', '+new Date()+']');
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				flowLayoutCode : e.flowLayoutCode
+			}
+		};
+		<portlet:namespace/>flowDisplayChange(nullToStr(e.flowLayoutCode));
+		Liferay.fire(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
+		<portlet:namespace/>flowDisplayChange(nullToStr(e.data.flowLayoutCode));
 	}
 });
 /***********************************************************************
@@ -395,11 +479,41 @@ function <portlet:namespace/>displayInit(){
 		// Dashboard Portlet
 		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
 		//iframe resize
-		$("section#workbench-layout-area .sub-col").each(function(i){
-			$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-		});
+		if(<portlet:namespace/>workbench.isFlowLayout()){
+			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;
+			
+			$("section#workbench-layout-area div[id*=<portlet:namespace/>]").each(function(i){
+				if($(this).hasClass("sub-col")){
+					$(this).find("iframe").css("height",$(this).outerHeight() - 74);
+				}else{
+					$(this).find("iframe").css("height",contentHeight);
+				}
+			});
+		}else{
+			$("section#workbench-layout-area .sub-col").each(function(i){
+				$(this).find("iframe").css("height",$(this).outerHeight() - 74);
+			});
+		}
 	}
 	bEnd();
+}
+
+function <portlet:namespace/>flowDisplayChange(flowLayoutCode){
+	if(flowLayoutCode!=""){
+		$flowGrid = $("section#workbench-layout-area   div.flow-grid");
+		
+		if($flowGrid.filter("div#"+flowLayoutCode).css("display")!="block"){
+			$flowGrid.siblings().css("display","none");
+			
+			if(flowLayoutCode ==="INPUT"){
+				$flowGrid.filter("div#INPUT").css("display","block");
+			}else if(flowLayoutCode ==="LOG"){
+				$flowGrid.filter("div#LOG").css("display","block");
+			}else if(flowLayoutCode ==="OUTPUT"){
+				$flowGrid.filter("div#OUTPUT").css("display","block");
+			}
+		}
+	}
 }
 </script>
 

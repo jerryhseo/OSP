@@ -820,6 +820,16 @@
 			Liferay.fire( OSP.Event.OSP_CREATE_JOB, eventData );
 		};
 		
+		var fireSimulationModal= function( inputs ){
+			var eventData = {
+			     portletId: Workbench.id(),
+	             targetPortlet: Workbench.id(),
+	             data: inputs
+		};
+	
+			Liferay.fire( OSP.Event.OSP_REQUEST_SIMULATION_MODAL, eventData );
+		};
+		
 		var fireRefreshPortsStatus = function( targetPortlet ){
 			var dashboard = Workbench.dashboardPortlet();
 			if( !dashboard )	return;
@@ -902,21 +912,29 @@
 		};
 		
 		var fireRefreshJobStatus = function( data ){
+			
+			if(Workbench.isFlowLayout()){
+				var jobStatusCode = jobCodeConvertorFromStatus(data.jobStatus);
+				var logPortLength = Workbench.scienceApp().logPortsArray().length
+				var flowLayoutCode;
+				if(jobStatusCode <=1701005){
+					flowLayoutCode = "INPUT";
+				}else if(1701005 < jobStatusCode&&jobStatusCode <= 1701010 &&logPortLength > 0){
+					flowLayoutCode = "LOG";
+				}else if(jobStatusCode >= 1701011){
+					flowLayoutCode = "OUTPUT";
+				}else{
+					flowLayoutCode = "INPUT";
+				}
+				data.flowLayoutCode = flowLayoutCode;
+			}
+			
 			var eventData = {
 								portletId: Workbench.id(),
 								targetPortlet: 'BROADCAST',
 								data: data
 						};
 			Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
-		};
-		
-		var fireRefreshBreadcrumb = function( data ){
-			var eventData = {
-								portletId: Workbench.id(),
-								targetPortlet: 'BROADCAST',
-								data: data
-						};
-			Liferay.fire( OSP.Event.OSP_RESPONSE_BREADCRUMB_CHANGE, eventData );
 		};
 		
 		var fireRefreshSimulations = function( data ){
@@ -1066,7 +1084,7 @@
 			console.log( 'evaluatePortletType: ', columns);
 		};
 		
-		var createSimulation = function(portleId, title, resourceURL ){
+		var createSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL){
 			var scienceApp = Workbench.scienceApp();
 			
 			var ajaxData = Liferay.Util.ns(
@@ -1078,7 +1096,9 @@
 			                        	   scienceAppVersion: scienceApp.version(),
 			                        	   srcClassCode: Workbench.classId(),
 			                        	   srcClassId: Workbench.customId(),
-			                        	   title: Liferay.Util.escapeHTML(title)
+			                        	   title: Liferay.Util.escapeHTML(title),
+			                        	   jobTitle: Liferay.Util.escapeHTML(jobTitle),
+			                        	   jobInitData: jobInitData ? jobInitData : '' 
 			                           });
 			
 			$.ajax({
@@ -1088,7 +1108,7 @@
 				dataType : 'json',
 				success: function(jsonSimulation) {
 					
-					fireCreateSimulationResult(portleId,true);
+					fireCreateSimulationResult(portletId,true);
 					var simulation = new OSP.Simulation(jsonSimulation);
 					var data = {
 						simulationUuid: simulation.uuid()
@@ -1098,7 +1118,7 @@
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
-					fireCreateSimulationResult(portleId,false);
+					fireCreateSimulationResult(portletId,false);
 				}
 			});
 		};
@@ -1581,6 +1601,10 @@
 			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CLASS_ID, arguments));
 		};
 		
+		Workbench.isFlowLayout = function( isFlowLayout ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.IS_FLOW_LAYOUT, arguments));
+		};
+		
 		Workbench.customId = function( customId ){
 			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CUSTOM_ID, arguments));
 		};
@@ -1998,7 +2022,8 @@
 									
 									console.log("Copy inputs: ", inputs);
 									console.log("Passed InputData: ", changedData);
-//									fireCreateJob( JSON.stringify( inputs ) );
+									
+									fireSimulationModal( JSON.stringify( inputs ) );
 								},
 								cancel: function () {
 									
@@ -2015,8 +2040,8 @@
 			);
 		};
 
-		Workbench.handleCreateSimulation = function(portletId, title, resourceURL ){
-			createSimulation(portletId, title, resourceURL );
+		Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
+			createSimulation(portletId, title, jobTitle, jobInitData, resourceURL );
 		};
 		
 		
@@ -2139,8 +2164,17 @@
 			var simulation = Workbench.workingSimulation();
 			var job = simulation.getJob( jobUuid );
 			
-			/*기존 simuatlion과 job uuid가 같이 경우만 제외 하고 simuatlion 조회*/
+			var jobSearch = false;
 			if(!job){
+				jobSearch = true;
+			}else{
+				if(job.isSubmit()){
+					jobSearch = true;
+				}
+			}
+			
+			
+			if(jobSearch){
 				$.ajax({
 					url : resourceURL,
 					type : 'POST',
@@ -2180,19 +2214,14 @@
 			
 			loadJobData( job );
 			
-			var breadcrumbData = {
+			var statusData = {
 					simulationTitle: simulation.title(),
 					jobTitle: job.title(),
-					jobStatus: job.status()
-			};
-			
-			var statusData = {
 					simulationUuid: simulation.uuid(),
 					jobUuid: job.uuid(),
 					jobStatus: job.status()
 			};
 			
-			fireRefreshBreadcrumb(breadcrumbData);
 			fireRefreshJobStatus(statusData);
 		};
 		
