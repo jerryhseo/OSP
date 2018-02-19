@@ -1158,13 +1158,17 @@
 		};
 		
 		var saveSimulation = function( portletId, simulation, resourceURL ){
+			
+			var dirtyJobs = jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), false,resourceURL);
+			
 			var data = Liferay.Util.ns(
 			                           Workbench.namespace(),
 			                           {
 			                        	   command: 'SAVE_SIMULATION',
+			                        	   simulationUuid: simulation.uuid(),
 			                        	   srcClassCode: Workbench.classId(),
 			                        	   srcClassId: Workbench.customId(),
-			                        	   simulation: JSON.stringify(simulation.toDTO())
+			                        	   jobs: JSON.stringify(dirtyJobs)
 			                           });
 				
 			$.ajax({
@@ -1267,65 +1271,132 @@
 			});
 		};
 		
-		var submitMPJobs = function( $inputHandler, $getCoresDialog, resourceURL, job ){
-			$getCoresDialog.dialog({
-				resizable: false,
-				height: "auto",
-				title:'Enter number of cores',
-				width: 400,
-				modal: true,
+		var submitMPJobs = function(job,resourceURL){
+			$.confirm({
+				title: 'CPU Cores',
+				content: '' +
+				'<form action="" class="formName">' +
+				'<div class="form-group">' +
+				'<label>Enter number of cores</label>' +
+				'<input type="text" placeholder="cores" class="cores form-control" required />' +
+				'</div>' +
+				'</form>',
 				buttons: {
-					OK: function() {
-						var numberOfCores = Number($inputHandler.val());
-						if( ! isNaN( numberOfCores ) ){
-							$( this ).dialog( 'destroy' );
-							var simulation = Workbench.workingSimulation();
+					formSubmit: {
+						text: 'Submit',
+						btnClass: 'btn-blue',
+						action: function () {
+							var cores = this.$content.find('.cores').val();
+							if(!cores){
+								$.alert('provide a valid cores');
+								return false;
+							}else{
+								var pattern = /^\d+$/;
+								if(!pattern.test(cores)){
+									$.alert('only number');
+									return false;
+								}
+							}
 							
+							var simulation = Workbench.workingSimulation();
 							if( !job ){
-								simulation.ncores( numberOfCores );
-								submitSimulation( simulation, resourceURL );
+								simulation.ncores( cores );
+								jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), true,resourceURL );
+							}else{
+								job.ncores( cores );
+								jobsToSubmitGetParameters(simulation,job, true, resourceURL );
 							}
-							else{
-								job.ncores( numberOfCores );
-								submitJob( job, resourceURL );
-							}
-						}
-						else{
-							alert('Number of cores should not be empty.');
 						}
 					},
-					Cancel: function() {
-						$( this ).dialog( 'destroy' );
+					cancel: function () {
+						
 					}
+				},
+				onContentReady: function () {
+					// bind to events
+					var jc = this;
+					this.$content.find('form').on('submit', function (e) {
+						e.preventDefault();
+						jc.$$formSubmit.trigger('click'); // reference the button and click it
+			        });
 				}
 			});
 		};
 		
-		var submitJob = function( job, resourceURL ){
+		var jobsToSubmitGetParameters = function(simulation, jobs, isSubmit, resourceURL ){
+			var scienceApp = Workbench.scienceApp();
+			
+			var jobsToSubmit = [];
+			var inputPortNames = scienceApp.getInputPortNames();
+			
+			var ncores = 0;
+			 var dirtyJobs = [];
+			if(Array.isArray(jobs)){
+				dirtyJobs = jobs;
+				ncores = simulation.ncores();
+			}else{
+				dirtyJobs.push(jobs);
+				ncores = jobs.ncores();
+			}
+			
+			for( var index in dirtyJobs ){
+				var job = dirtyJobs[index];
+				console.log( 'dirtyJob: '+index, job);
+				console.log( 'inputPortNames: ', inputPortNames );
+				
+				var proliferatedJobs = job.proliferate( inputPortNames );
+				for( var jobIndex in proliferatedJobs ){
+					var proliferatedJob = proliferatedJobs[jobIndex];
+					
+					if( jobIndex > 0 ){
+						proliferatedJob.uuid('');
+					}
+					jobsToSubmit.push( proliferatedJob );
+				}
+			}
+			if(isSubmit){
+				submitJobs(simulation,jobsToSubmit,ncores,resourceURL);
+			}else{
+				return jobsToSubmit;
+			}
+			
+		}
+		
+		var submitJobs = function(simulation,jobsToSubmit,ncores,resourceURL ){
+			/*프로비넌스 체크*/
+			
+			
+			var scienceApp = Workbench.scienceApp();
+			var simulationCreateTime = simulation.createTime();
+			
 			var ajaxData = Liferay.Util.ns(
-			                               Workbench.namespace(),
-			                               {
-			                            	   command: 'SUBMIT_JOB',
-			                            	   jobUuid: job.uuid(),
-			                            	   inputs: JSON.stringify( job.inputs() )
-			                               });
+                           Workbench.namespace(),
+                           {
+                        	   command: 'SUBMIT_JOBS',
+                        	   simulationUuid: simulation.uuid(),
+                        	   simulationTime: simulationCreateTime,
+                        	   scienceAppName: scienceApp.name(),
+                        	   scienceAppVersion: scienceApp.version(),
+                        	   ncores: simulation.ncores(),
+                        	   jobs: JSON.stringify( jobsToSubmit )
+                           });
 			
 			$.ajax({
 				url : resourceURL,
 				type: 'post',
 				dataType: 'text',
 				data : ajaxData,
-				success : function(status){
-					job.status( status );
-					job.dirty(false);
-					job.isSubmit( true );
+				success : function(submittedJobs){
+//					job.status( status );
+//					job.dirty(false);
+//					job.isSubmit( true );
 					
-					var simulation = Workbench.workingSimulation();
-					var data = {
-			            simulationUuid: simulation.uuid(),
-			            jobUuid: job.uuid()
-					};
-					fireRefreshJobs(data);
+//					var simulation = Workbench.workingSimulation();
+//					var data = {
+//			            simulationUuid: simulation.uuid(),
+//			            jobUuid: job.uuid()
+//					};
+//					fireRefreshJobs(data);
 				},
 				error : function( data, e ){
 					console.log('[ERROR] submit job failed: ', data);
@@ -2098,19 +2169,15 @@
 			}
 		};
 		
-		Workbench.handleSubmitJob = function( jobUuid, $inputHandler, $getCoresDialog, $resourceURL ){
+		Workbench.handleSubmitJob = function(resourceURL){
 			var scienceApp = Workbench.scienceApp();
 			var simulation = Workbench.workingSimulation();
-			var job = simulation.getJob( jobUuid );
-			if( !job || !job.dirty() ){
-				return;
-			}
+			var job = simulation.workingJob();
 			
 			if( scienceApp.runType() === 'Sequential' ){
-				submitJob( job, resourceURL );
-			}
-			else{
-				submitMPJobs( $inputHandler, $getCoresDialog, $resourceURL, job );
+				jobsToSubmitGetParameters(simulation,job, true, resourceURL );
+			}else{
+				submitMPJobs(job,resourceURL);
 			}
 		};
 		
@@ -2538,7 +2605,7 @@
 				console.log("No dirty jobs....");
 				return;
 			}
-
+			
 			if( simulation.runType() === 'Sequential' ){
 				submitSimulation( simulation, resourceURL );
 			}

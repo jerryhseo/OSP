@@ -331,7 +331,7 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 					$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
 								.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
-					$("<span/>").attr("id","jobTitle").html(job._jobTitle).appendTo($aWrapper);
+					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
 					
 				}
 			}
@@ -512,7 +512,7 @@ function <portlet:namespace/>updateSimulationJob(panelDataType, that, event){
 			async : false,
 			data  : updateForm,
 			success: function(result) {
-				$("#<portlet:namespace/>job-"+jobUuid).find("span#jobTitle").html(title);
+				$("#<portlet:namespace/>job-"+jobUuid).find("span#jobTitle").html(cutStr(title,15));
 				toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
 			},error:function(jqXHR, textStatus, errorThrown){
 				if(jqXHR.responseText !== ''){
@@ -953,7 +953,7 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Job Title</label>
-      <input type="text" name="title" class="form-control data-binded" id="title" placeholder="{{form.simulation._jobTitle}}" value="{{form.simulation._jobTitle}}">
+      <input type="text" name="title" class="form-control data-binded" id="title" placeholder="{{form.simulation._jobTitle}}" value="{{form.simulation._jobTitle}}" maxlength="25">
       <div class="help-block with-errors"></div>
     </div>
 	<table id="example2" class="table table-bordered table-hover">
@@ -1013,7 +1013,7 @@ function <portlet:namespace/>closePanel() {
 <div class="box-body">
 	<div class="form-group">
 		<label for="title">Title</label>
-		<input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+		<input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="20"/>
 		<div class="help-block with-errors"></div>
 	</div>
 </div>
@@ -1027,7 +1027,7 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="20"/>
       <div class="help-block with-errors"></div>
     </div>
   </div>
@@ -1042,7 +1042,7 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="25"/>
       <div class="help-block with-errors"></div>
     </div>
   </div>

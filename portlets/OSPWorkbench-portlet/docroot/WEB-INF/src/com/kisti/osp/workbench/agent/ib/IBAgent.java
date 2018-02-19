@@ -1,6 +1,7 @@
 package com.kisti.osp.workbench.agent.ib;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -8,18 +9,32 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.portlet.PortletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteStreamHandler;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
@@ -39,6 +54,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
@@ -47,6 +63,8 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
@@ -77,12 +95,11 @@ public class IBAgent {
 		}
 	}
 
-	private HttpURLConnection connect( String apiUrl, String method, String accept, String type ) throws IOException{
+	private HttpURLConnection connect( String apiUrl, String method, String accept, String contentType ) throws IOException{
 		URL url = new URL(apiUrl);
 		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
-		String contentType = type;
 		connection.setDoOutput(true);
 		connection.setRequestMethod(method);
 		connection.setRequestProperty("Accept", accept);
@@ -271,10 +288,81 @@ public class IBAgent {
 		return jsonResult.getString("uuid");
 	}
 	
-	public String uploadFile( String fileName, String content, String cluster ) throws IOException, JSONException, SystemException{
+	public String uploadFile( 
+			Path source, 
+			Path parentPath,
+			Path filePath,
+			String cluster
+			) throws IOException, SystemException, PortalException{
+		
+		Path targetDir = this.getUserHome(false).resolve(parentPath);
+		String userScreenName = this.user.getScreenName();
+		if( userScreenName.equalsIgnoreCase("edison")){
+			userScreenName = _IB_ADMIN_ID;
+		}
+		
+		String owner = userScreenName+":edisonuser";
+		
+		if( !Files.exists( targetDir ) ){
+			Files.createDirectories(targetDir);
+			
+			this.changeOwner(targetDir, owner);
+			this.changeMode(targetDir, "775");
+		}
+
+		Path target =targetDir.resolve(filePath);
+		/*
+		String strBaseCmd = "sshpass ";
+		strBaseCmd += "-pedison2016!!";
+		strBaseCmd += " ssh -p 22002 -o StrictHostKeyChecking=no ";
+		strBaseCmd += "root@150.183.247.151 ";
+		*/
+		
+		//String strMvCmd = new String(strBaseCmd);
+		this.moveFile(source, target, owner);
+        
+        String fileId = this.getFileId(target.toString());
+        System.out.println("File: "+target.toString());
+        System.out.println("File ID: "+fileId);
+        
+		return fileId;
+	}
+	
+	public String linkFile( 
+			Path source, 
+			Path targetPath,
+			Path targetFile,
+			String cluster
+			) throws IOException, SystemException, PortalException{
+		
+		Path userHome = this.getUserHome(false);
+		String userScreenName = this.user.getScreenName();
+		if( userScreenName.equalsIgnoreCase("edison")){
+			userScreenName = _IB_ADMIN_ID;
+		}
+		
+		String owner = userScreenName+":edisonuser";
+		
+		if( !Files.exists( targetPath ) ){
+			Files.createDirectories(userHome.resolve(targetPath));
+			
+			this.changeOwner(targetPath, owner);
+		}
+
+		Path target =userHome.resolve(targetPath).resolve(targetFile);
+		
+		this.linkFile(userHome.resolve(source), target);
+        
+        String fileId = this.getFileId(target.toString());
+        System.out.println("Linked File: "+target.toString());
+        System.out.println("Linked File ID: "+fileId);
+        
+		return fileId;
+	}
+
+	public String uploadContent( String fileName, byte[] content, String cluster ) throws IOException, JSONException, SystemException{
 		String fileId = "";
 		String apiUrl = URL+"/api/file/write";
-		//String apiUrl = URL+"/api/file/upload";
 		apiUrl = HttpUtil.addParameter(apiUrl, "cluster", cluster);
 		apiUrl = HttpUtil.addParameter(apiUrl, "name", fileName);
 		System.out.println("Upload URL: "+apiUrl);
@@ -282,11 +370,11 @@ public class IBAgent {
 		HttpURLConnection connection = this.connect( apiUrl, "POST", "application/json", "plain/text" );
 		
 		OutputStream outStream = connection.getOutputStream();
-		System.out.println("IB.Uploading **************************************");
-		System.out.println("Content Size: "+content.length());
+		System.out.println("IB.Upload Content **********************************");
+		System.out.println("Content Size: "+content.length);
 		System.out.println("************************************** IB.Uploading");
 		
-		outStream.write(content.getBytes(), 0, content.length());
+		outStream.write(content, 0, content.length);
 		outStream.flush();
 		outStream.close();
 		
@@ -312,32 +400,184 @@ public class IBAgent {
 		connection.disconnect();
 		return fileId;
 	}
+
+	public void copyFile( 
+			Path source, 
+			Path target ) throws IOException, PortalException, SystemException{
+		
+		String strCmd = "";
+		strCmd += "cp -f ";
+		strCmd += source.toString();
+		strCmd += " ";
+		strCmd += target.toString();
+		
+		CommandLine cmdLine = CommandLine.parse( strCmd );
+		
+		System.out.println("Copy Command: "+cmdLine.toString());
+		
+		final OutputStream outStream = new ByteArrayOutputStream();
+        final OutputStream errorStream = new ByteArrayOutputStream();
+        
+        DefaultExecuteResultHandler resultHandler;
+        try {
+            resultHandler = execute(cmdLine, null, outStream, errorStream);
+            resultHandler.waitFor(_DEFAULT_TIMEOUT);
+        } catch (ExecuteException e) {
+        	throw new PortalException("Fail to copy exec");
+        } catch (IOException e) {
+            throw new PortalException("Copy IOException: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new PortalException("Copy InterruptedException: " + e.getMessage(), e);
+        }
+
+        int exitValue = resultHandler.getExitValue();
+
+        if (exitValue != 0)
+            throw new PortalException("Failed to copy : " + errorStream.toString());
+	}
 	
-	public String getFileId( String path, boolean isJobResult ) throws IOException, SystemException, JSONException{
+	public void moveFile( Path source, Path target, String owner ) throws IOException, PortalException{
+		String strCmd = "";
+		strCmd += "mv -f ";
+		strCmd += source.toString();
+		strCmd += " ";
+		strCmd += target.toString();
+		
+		CommandLine cmdLine = CommandLine.parse( strCmd );
+		
+		System.out.println("Move Command: "+cmdLine.toString());
+		
+		final OutputStream outStream = new ByteArrayOutputStream();
+        final OutputStream errorStream = new ByteArrayOutputStream();
+        
+        DefaultExecuteResultHandler resultHandler;
+        try {
+            resultHandler = execute(cmdLine, null, outStream, errorStream);
+            resultHandler.waitFor(_DEFAULT_TIMEOUT);
+        } catch (ExecuteException e) {
+        	throw new PortalException("Fail to move exec");
+        } catch (IOException e) {
+            throw new PortalException("Move IOException: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new PortalException("Move InterruptedException: " + e.getMessage(), e);
+        }
+
+        int exitValue = resultHandler.getExitValue();
+
+        if (exitValue != 0)
+            throw new PortalException("Failed to move : " + errorStream.toString());
+        
+        this.changeOwner(target, owner);
+        this.changeMode(target, "775");
+	}
+	
+	public void linkFile( Path source, Path target ) throws PortalException{
+		String strCmd = "";
+		strCmd += "ln -sf ";
+		strCmd += source.toString();
+		strCmd += " ";
+		strCmd += target.toString();
+		
+		CommandLine cmdLine = CommandLine.parse( strCmd );
+		
+		System.out.println("Link Command: "+cmdLine.toString());
+		
+		final OutputStream outStream = new ByteArrayOutputStream();
+        final OutputStream errorStream = new ByteArrayOutputStream();
+        
+        DefaultExecuteResultHandler resultHandler;
+        try {
+            resultHandler = execute(cmdLine, null, outStream, errorStream);
+            resultHandler.waitFor(_DEFAULT_TIMEOUT);
+        } catch (ExecuteException e) {
+        	throw new PortalException("Fail to link exec");
+        } catch (IOException e) {
+            throw new PortalException("Link IOException: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new PortalException("Link InterruptedException: " + e.getMessage(), e);
+        }
+
+        int exitValue = resultHandler.getExitValue();
+
+        if (exitValue != 0)
+            throw new PortalException("Failed to link : " + errorStream.toString());
+	}
+	
+	public void changeOwner( Path target, String owner ) throws PortalException{
+		String strCmd = "";
+		strCmd += "sudo chown -R ";
+		strCmd += owner;
+		strCmd += " ";
+		strCmd += target.toString();
+		
+		CommandLine cmdLine = CommandLine.parse( strCmd );
+		
+		System.out.println("chown Command: "+cmdLine.toString());
+		
+		final OutputStream outStream = new ByteArrayOutputStream();
+        final OutputStream errorStream = new ByteArrayOutputStream();
+        
+        DefaultExecuteResultHandler resultHandler;
+        try {
+            resultHandler = execute(cmdLine, null, outStream, errorStream);
+            resultHandler.waitFor(_DEFAULT_TIMEOUT);
+        } catch (ExecuteException e) {
+        	throw new PortalException("Fail to chown exec");
+        } catch (IOException e) {
+            throw new PortalException("chown IOException: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new PortalException("chown InterruptedException: " + e.getMessage(), e);
+        }
+
+        int exitValue = resultHandler.getExitValue();
+
+        if (exitValue != 0)
+            throw new PortalException("Failed to chown : " + errorStream.toString());
+	}
+	
+	public void changeMode( Path target, String mode) throws PortalException{
+		String strCmd = "";
+		strCmd += "sudo chmod ";
+		strCmd += mode;
+		strCmd += " ";
+		strCmd += target.toString();
+		
+		CommandLine cmdLine = CommandLine.parse( strCmd );
+		
+		System.out.println("chmod Command: "+cmdLine.toString());
+		
+		final OutputStream outStream = new ByteArrayOutputStream();
+        final OutputStream errorStream = new ByteArrayOutputStream();
+        
+        DefaultExecuteResultHandler resultHandler;
+        try {
+            resultHandler = execute(cmdLine, null, outStream, errorStream);
+            resultHandler.waitFor(_DEFAULT_TIMEOUT);
+        } catch (ExecuteException e) {
+        	throw new PortalException("Fail to chmod exec");
+        } catch (IOException e) {
+            throw new PortalException("chmod IOException: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new PortalException("chmod InterruptedException: " + e.getMessage(), e);
+        }
+
+        int exitValue = resultHandler.getExitValue();
+
+        if (exitValue != 0)
+            throw new PortalException("Failed to chmod : " + errorStream.toString());
+	}
+	
+	public String getFileId( String path ) throws IOException, SystemException, PortalException{
 		String fileId = "";
 		
-		String userScreenName;
-		if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
-			userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
-		}else{
-			userScreenName = String.valueOf(user.getScreenName());
-		}
-		
-		Path filePath = Paths.get("/EDISON/LDAP/DATA").resolve(userScreenName);
-		if( isJobResult ){
-			filePath = filePath.resolve("jobs").resolve(path);
-		}
-		else{
-			filePath = filePath.resolve("repository").resolve(path);
-		}
-			
+		System.out.println("Get File ID: "+path);
 		
 		String apiUrl = URL+"/api/file/encode";
 		
 		HttpURLConnection connection = connect( apiUrl, "POST", "application/json", "application/json" );
 		
 		JSONObject jsonPath = JSONFactoryUtil.createJSONObject();
-		jsonPath.put("path", filePath.toString() );
+		jsonPath.put("path", path.toString() );
 		
 		OutputStream outStream = connection.getOutputStream();
 		outStream.write(jsonPath.toString().getBytes() );
@@ -367,6 +607,12 @@ public class IBAgent {
 		return fileId;
 	}
 	
+	public String getFileId( String path, boolean isJobResult ) throws IOException, SystemException, PortalException{
+		Path userHomePath = this.getUserHome(isJobResult);
+		System.out.println("GetFileID: "+userHomePath.resolve(path).toString() );
+		return this.getFileId(userHomePath.resolve(path).toString());
+	}
+	
 	public JSONObject submit(
 			String simulationUuid,
 			String runType, 
@@ -379,7 +625,7 @@ public class IBAgent {
 			String classId,
 			String executable,
 			String[] dependencies,
-			Map<String, String> files,
+			Map<String, JSONObject> progArgs,
 			String cluster,
 			Map<String, String> mpiAttributes,
 			String callbackUrl ) throws IOException{
@@ -393,7 +639,7 @@ public class IBAgent {
 				executable, 
 				dependencies, 
 				cluster, 
-				files, 
+				progArgs, 
 				category, 
 				mpiAttributes, 
 				simulationUuid, 
@@ -475,6 +721,49 @@ public class IBAgent {
 		return jsonResult;
 	}
 	
+	public Path getUserHome( boolean isJobResult)
+			throws PortalException, SystemException{
+		String userScreenName;
+		if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
+			userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+		}else{
+			userScreenName = String.valueOf(user.getScreenName());
+		}
+		
+		Path userHomePath = Paths.get(_SYSTEM_BASE_DIR ).resolve(userScreenName);
+
+		if(!isJobResult){
+			return userHomePath.resolve("repository");
+		}else{
+			return userHomePath.resolve("jobs");
+		}
+	}
+	
+	DefaultExecuteResultHandler execute(CommandLine cmdLine, OutputStream outStream, OutputStream errorStream)
+            throws ExecuteException, IOException {
+        return execute(cmdLine, Collections.<String, String> emptyMap(), outStream, errorStream);
+    }
+
+    DefaultExecuteResultHandler execute(CommandLine cmdLine, Map<String, String> environment, OutputStream outStream,
+            OutputStream errorStream) throws ExecuteException, IOException {
+        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+        ExecuteStreamHandler streamHandler = new PumpStreamHandler(outStream, errorStream);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setExitValue(0);
+        executor.setStreamHandler(streamHandler);
+        if (environment != null) {
+            executor.execute(cmdLine, environment, resultHandler);
+        } else {
+            executor.execute(cmdLine, resultHandler);
+        }
+        return resultHandler;
+    }
+
+	
 	private static Log _log = LogFactoryUtil.getLog(IBAgent.class);
 	private static final String _simulationAPI = "/api/simulation";
+	private static String _SYSTEM_BASE_DIR = "/EDISON/LDAP/DATA";
+	private static String _IB_ADMIN_ID = "edisonadm";
+	private static String _IB_ADMIN_PASSWORD = "edison2016!!";
+	private static long _DEFAULT_TIMEOUT = 60000;
 }
