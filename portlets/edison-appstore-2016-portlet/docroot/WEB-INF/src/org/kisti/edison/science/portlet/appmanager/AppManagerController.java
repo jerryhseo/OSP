@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletMode;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -108,6 +109,7 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.PortletUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.NoSuchEntryException;
@@ -483,28 +485,30 @@ public class AppManagerController{
 				String currunt_folder = "/" +portalGroupId+" - " +CompanyLocalServiceUtil.getCompany(PortalUtil.getCompanyId(request)).getName() + "/"+portalGroupId+"_EDISON_FILE"+"/"
 										+EdisonFileConstants.USER_IMAGE+"/"+themeDisplay.getUserId()+ "/";
 				model.addAttribute("currentFolder", currunt_folder);
-				
-				
-				//SCIENCEAPP_WORK_BENCH
-				long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
-//				long plid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/workbench").getPlid();
-				model.addAttribute("workBenchPlid", plid);
 			}
 			
 			if(scienceAppId!=0){
 				model.addAttribute("scienceAppId", scienceAppId);
 			}
 			
+			if(isPort){
+				//SCIENCEAPP_WORK_BENCH
+				long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
+				model.addAttribute("workBenchPlid", plid);
+			}
+			
 			Map<String,Object> tabAndButtonMap = tabCreateAndStatusButtonView(scienceAppId, isPort, clickTab, locale, data);
 			
 			String tabStr = GetterUtil.getString(tabAndButtonMap.get("tabString"),"");
 			boolean appStatusButtonView = GetterUtil.getBoolean(tabAndButtonMap.get("appStatusButtonView"),false);
+			boolean appTestButtonView = GetterUtil.getBoolean(tabAndButtonMap.get("appTestButtonView"),false);
 
 			model.addAttribute("data", data);
 			model.addAttribute("mode", mode);
 			model.addAttribute("clickTab", clickTab);
 			model.addAttribute("tabStr", tabStr);
 			model.addAttribute("appStatusButtonView", appStatusButtonView);
+			model.addAttribute("appTestButtonView", appTestButtonView);
 			model.addAttribute("isPort", isPort);
 			model.addAttribute("ownerThan", ownerThan);
 			model.addAttribute("isAdmin", isAdmin);
@@ -727,7 +731,8 @@ public class AppManagerController{
 		int activateTab = 1;
 		//작성 값에 따른 상태 변화 버튼 확인
 		boolean appStatusButtonView = true;
-		
+		//Layout 에 따른 Workbench 이동
+		boolean appTestButtonView = false;
 		if(scienceAppId == 0){
 			if(isPort){
 				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail", "m05fail"};
@@ -782,6 +787,8 @@ public class AppManagerController{
 						tabsStr +=",m04out";
 					}
 					activateTab++;
+					
+					appTestButtonView = true;
 				}else{
 					tabsStr +=",m04fail";
 					appStatusButtonView = false;
@@ -877,6 +884,8 @@ public class AppManagerController{
 		
 		returnMap.put("tabString", tabString.toString());
 		returnMap.put("appStatusButtonView", appStatusButtonView);
+		returnMap.put("appTestButtonView", appTestButtonView);
+		
 		return returnMap;
 	}
 	

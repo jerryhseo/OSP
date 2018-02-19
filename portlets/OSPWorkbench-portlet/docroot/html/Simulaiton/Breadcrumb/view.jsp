@@ -4,7 +4,7 @@
 <c:set var="contextPath" value="<%=request.getContextPath() %>" scope="page" />
 
 <div class="btn-group btn-breadcrumb" id="<portlet:namespace/>breadcrumb">
-	<button class="btn btn-default" type="button" onClick="<portlet:namespace/>historyBack();"><span class="fa fa-history" id="<portlet:namespace/>backTitle"></span></button>
+	<button class="btn btn-default" type="button" onclick="<portlet:namespace/>historyBack();"><span class="fa fa-history" id="<portlet:namespace/>backTitle"></span></button>
 	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="icon-desktop" id="<portlet:namespace/>appName"></span></button>
 	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>simulationTitle"></span></button>
 	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>jobTitle"></span></button>
@@ -75,6 +75,12 @@ Liferay.on(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, function( e ){
 /***********************************************************************
  * Golbal functions
 ************************************************************************/
+function <portlet:namespace/>historyBack(){
+	if(<portlet:namespace/>backURL!=""){
+		location.href = <portlet:namespace/>backURL;
+	}
+}
+
 function <portlet:namespace/>displayInit(data){
 	if(nullToStr(data.workbenchId)!=""){
 // 		console.log(data.scienceApp);
@@ -108,14 +114,14 @@ function <portlet:namespace/>displayInit(data){
 			<portlet:namespace/>isFlow = false;
 		}
 	}
-	if(nullToStr(data.backURL)!=""){
-		<portlet:namespace/>backURL = data.backURL;
+	if(nullToStr(data.workbenchRedirectURL)!=""){
+		<portlet:namespace/>backURL = data.workbenchRedirectURL;
+	}
+	if(nullToStr(data.workbenchRedirectName)!=""){
+		$("#<portlet:namespace/>backTitle").html("  "+data.workbenchRedirectName);
 	}
 	if(nullToStr(data.scienceApp)!=""){
 		$("#<portlet:namespace/>appName").html("  "+data.scienceApp.name());
-	}
-	if(nullToStr(data.backTitle)!=""){
-		$("#<portlet:namespace/>backTitle").html("  "+data.backTitle);
 	}
 }
 

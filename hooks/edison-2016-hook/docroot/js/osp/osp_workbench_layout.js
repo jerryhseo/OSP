@@ -1354,6 +1354,9 @@
 					jobsToSubmit.push( proliferatedJob );
 				}
 			}
+			
+			console.log( 'Jobs To Submit: ', jobsToSubmit);
+			
 			if(isSubmit){
 				submitJobs(simulation,jobsToSubmit,ncores,resourceURL);
 			}else{
@@ -1680,6 +1683,14 @@
 			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CUSTOM_ID, arguments));
 		};
 		
+		Workbench.redirectName = function( redirectName ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_NAME, arguments));
+		};
+		
+		Workbench.redirectURL = function( redirectURL ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_URL, arguments));
+		};
+		
 		Workbench.loadPortlets = function( windowState ){
 			var layout = Workbench.layout();
 			if( !layout )		return false;
@@ -1994,7 +2005,9 @@
 		Workbench.handleRequestAppInfo = function( portletId ){
 			var data = {
 						scienceApp: Workbench.scienceApp(),
-						workbenchId: Workbench.id()
+						workbenchId: Workbench.id(),
+						workbenchRedirectURL: Workbench.redirectURL(),
+						workbenchRedirectName: Workbench.redirectName()
 					};
 				
 			fire( OSP.Event.OSP_RESPONSE_APP_INFO, portletId, data);

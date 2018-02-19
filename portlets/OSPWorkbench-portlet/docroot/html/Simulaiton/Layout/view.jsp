@@ -189,7 +189,6 @@
 </div>
 
 <img id="loadingBox" src="${contextPath}/images/processing.gif" width="300px" style="display: none;"/>
-
 <script type="text/javascript">
 /***********************************************************************
  * Global variables section
@@ -211,6 +210,8 @@ $(function(e) {
 	<portlet:namespace/>workbench.classId('${classId}');
 	<portlet:namespace/>workbench.customId('${customId}');
 	<portlet:namespace/>workbench.isFlowLayout('${isFlowLayout}');
+	<portlet:namespace/>workbench.redirectURL('${redirectURL}');
+	<portlet:namespace/>workbench.redirectName('${redirectName}');
 	
 	
 	var scienceApp = new OSP.ScienceApp();

@@ -23,6 +23,8 @@
 			CONTEXT:'context_',
 			CURRENT_PORTLET:'currentPortlet_',
 			CUSTOM_ID:'customId_',
+			REDIRECT_URL:'redirectURL_',
+			REDIRECT_NAME:'redirectName_',
 			DASHBOARD_PORTLET: 'dashboardId_',
 			DATA:'data_',
 			DATA_TYPE:'dataType_',

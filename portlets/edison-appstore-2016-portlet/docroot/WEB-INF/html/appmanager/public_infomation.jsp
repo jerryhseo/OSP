@@ -1,5 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 <%@ page import="com.liferay.portal.kernel.util.LocaleUtil" %>
@@ -16,12 +14,6 @@
 <%@ page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ page import="com.liferay.portal.service.GroupLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.model.Group"%>
-
-<liferay-portlet:renderURL var="appTestURL" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-	<liferay-portlet:param name="scienceAppId" value="${scienceAppId}"/>
-<%-- 	<liferay-portlet:param name="testYn" value="true"/> --%>
-</liferay-portlet:renderURL>
 
 <portlet:actionURL var="submitURL" copyCurrentRenderParameters="false" name="appAction" >
 	<portlet:param name="clickTab" value="${clickTab}"/>
@@ -181,7 +173,7 @@ public String marshallParams(Map<String, String> params) {
 			<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
 			<c:if test="${!empty scienceAppId && ownerThan }">
 				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
-				<c:if test="${workBenchPlid ne 0}">
+				<c:if test="${workBenchPlid ne 0 && appTestButtonView}">
 					<input class=" button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
 				</c:if>
 			</c:if>
@@ -299,10 +291,6 @@ public String marshallParams(Map<String, String> params) {
 		<portlet:namespace/>setCKeditor();
 		
 	});
-	
-	function <portlet:namespace/>appTest(){
-		window.location.href = "<%=appTestURL%>";
-	}
 	
 	function <portlet:namespace/>actionCall(mode){
 		if(mode=='<%=Constants.ADD%>'){

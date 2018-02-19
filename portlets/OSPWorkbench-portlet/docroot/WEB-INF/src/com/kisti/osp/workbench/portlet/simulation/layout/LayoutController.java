@@ -11,7 +11,6 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -97,12 +96,18 @@ public class LayoutController {
 		String workbenchType = ParamUtil.getString(request, "workbenchType", "SIMULATION_WITH_APP");
 		long customId =  ParamUtil.getLong(request, "customId", 0);
 		long classId =  ParamUtil.getLong(request, "classId", 0);
+		long scienceAppId =  ParamUtil.getLong(request, "scienceAppId", 0);
+		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
+		String redirectName = ParamUtil.getString(request, "redirectName", "");
+		
 		try{
-			model = this.evaluateScienceAppLayout(model, 27701);
+			model = this.evaluateScienceAppLayout(model, scienceAppId);
 			
 			model.addAttribute("workbenchType", workbenchType);
 			model.addAttribute("customId", customId);
 			model.addAttribute("classId", classId);
+			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
+			model.addAttribute("redirectName", redirectName);
 			return "view";
 		}catch(Exception e){
 			if(e instanceof SimulationWorkbenchException){
@@ -147,6 +152,7 @@ public class LayoutController {
 			}else if( command.equalsIgnoreCase("SAVE_SIMULATION")){
 				this.saveSimulation(request, response);
 			}else if( command.equalsIgnoreCase("SUBMIT_JOBS")){
+				RequestUtil.getParameterMap(request);
 				this.submitJobs(request, response);
 			}
 		}catch (Exception e) {
@@ -592,6 +598,7 @@ public class LayoutController {
 	
 	protected void submitJobs( PortletRequest portletRequest, PortletResponse portletResponse ) throws PortletException, IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		User user = themeDisplay.getUser();
 		Group group = themeDisplay.getScopeGroup();
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
@@ -660,6 +667,7 @@ public class LayoutController {
 		Map<String, JSONObject> progArgs = new LinkedHashMap<>();
 		
 		JSONArray submitedJobs = JSONFactoryUtil.createJSONArray();
+		System.out.println("jobs.length()-->"+jobs.length());
 		int jobCount = jobs.length();
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
