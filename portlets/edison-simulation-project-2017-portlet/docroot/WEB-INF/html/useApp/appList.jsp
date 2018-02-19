@@ -10,10 +10,12 @@
 </liferay-portlet:renderURL>
 
 <c:if test="${fn:length(data.scienceAppList) > 0 }">
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key="edison-simulation-project-science-app"/>
+	<div class="panel edison-panel">
+		<div class="panel-heading clearfix" style="border-bottom: 0px;">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key="edison-simulation-project-science-app"/>
+			</h3>
 		</div>
 	</div>
 	<div class="h10"></div>

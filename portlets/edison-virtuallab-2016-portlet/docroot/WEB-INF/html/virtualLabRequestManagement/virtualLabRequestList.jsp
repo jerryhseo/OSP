@@ -58,9 +58,11 @@ label.checkbox-label input[type=checkbox]{
 	
 		<h1>
 			<c:if test="${groupName ne null}">
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
 				<liferay-ui:message key='edison-virtuallab-request-list' />(${groupName})
 			</c:if>
 			<c:if test="${groupName eq null }">
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
 				<liferay-ui:message key='edison-virtuallab-request-list' />
 			</c:if>
 		</h1>
@@ -69,26 +71,25 @@ label.checkbox-label input[type=checkbox]{
 			<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" class="panel-heading clearfix">
 				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 				<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
-				<div class="input-group">
-					<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown();" style="width: 300px; margin-top: 0px;"/>
+				
+				<div class="btn-group pull-right">
+					<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown();" style="width: 300px; margin-top: 0px; float: left;"/>
 					<button class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList()">
 						<i class="icon-search"></i>
 					</button>
 					<input type="button" onClick="<portlet:namespace/>dataSearchList(0)" class="btn btn-default" value="<liferay-ui:message key='edison-button-all-search' />" />
 					
-					<div class="input-group-btn">
-						<select id="<portlet:namespace/>select_virtualLab_status" name="<portlet:namespace/>select_virtualLab_status" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
-							<option value="0">All</option>
-							${selectOptionStr}
-						</select>
-						
-						<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
-							<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-							<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-							<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-							<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-						</select>
-					</div>
+					<select id="<portlet:namespace/>select_virtualLab_status" name="<portlet:namespace/>select_virtualLab_status" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
+						<option value="0">All</option>
+						${selectOptionStr}
+					</select>
+					
+					<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
+						<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+						<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+						<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+						<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+					</select>
 				</div>
 				
 			</form>

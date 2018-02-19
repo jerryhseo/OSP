@@ -378,7 +378,10 @@ function <portlet:namespace/>searchListEntry(p_currentPage){
 </div>
 
 <br />
-<h4><liferay-ui:message key="edison-asset-select-related-information"/></h4>
+<h4>
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+	<liferay-ui:message key="edison-asset-select-related-information"/>
+</h4>
 <div id="selectInfo">
 </div>
 

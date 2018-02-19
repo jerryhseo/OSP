@@ -37,7 +37,10 @@
 	-webkit-box-orient: vertical; word-wrap:break-word; line-height: 1.3em; height: 1.3em;}	
 </style>
 
-<h4 style="padding: 0px 0px 12px 0px;"><liferay-ui:message key="edison-asset-select-related-information"/></h4>
+<h4 style="padding: 0px 0px 12px 0px;">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+	<liferay-ui:message key="edison-asset-select-related-information"/>
+</h4>
 <div id="selectInfo">
 </div>
 

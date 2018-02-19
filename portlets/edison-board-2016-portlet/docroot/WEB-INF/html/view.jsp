@@ -157,7 +157,10 @@
 <script type="text/javascript" src="${contextPath}/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <c:choose>
 	<c:when test="${empty redirectName }">
-		<h1>${boardDivTitle}</h1>
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+			${boardDivTitle}
+		</h1>
 	</c:when>
 	<c:otherwise>
 	   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
@@ -219,18 +222,18 @@
 			<c:choose>	
 				<c:when test="${isPortal == false && boardMap.groupId ne boardGroupId}"></c:when>
 				<c:otherwise>
-					<input type="button" class="btn btn-default" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
-					<input type="button" class="btn btn-default" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;  width: 70px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;  width: 70px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
 				</c:otherwise>
 			</c:choose>
 		</c:if>
 	</c:if>
-	<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
+	<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" style=" width: 70px;" />
 	<c:if test="${redirectURL ne '' and redirectName ne ''}">
-		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" />
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" style=" width: 70px;" />
 	</c:if>
 	<c:if test="${redirectURL ne '' and redirectName eq ''}">
-		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />" />
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />"  style=" width: 70px;" />
 	</c:if>
 </div>
 

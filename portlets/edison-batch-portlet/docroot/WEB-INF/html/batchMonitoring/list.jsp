@@ -79,7 +79,10 @@
 	</div>
 	
 	<div class="panel-heading clearfix">
-		<h1><liferay-ui:message key='edison-batch-execute-history' /></h1>
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+			<liferay-ui:message key='edison-batch-execute-history' />
+		</h1>
 	</div>
 	
 	<div class="table1_list">

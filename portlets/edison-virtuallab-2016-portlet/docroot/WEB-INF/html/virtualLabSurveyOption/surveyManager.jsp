@@ -9,7 +9,7 @@
 </liferay-portlet:actionURL>
 
 <div class="table-responsive panel edison-panel">
-	<div class="virtitlebox panel-heading clearfix">
+	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-survey' />

@@ -38,7 +38,8 @@
 <liferay-portlet:resourceURL var="createFolderURL" id="createFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="renameFolderURL" id="renameFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteFolderURL" id="deleteFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
-<liferay-portlet:resourceURL var="moveFolderURL"   id="moveFolder"	 copyCurrentRenderParameters="false" escapeXml="false"/>
+<%-- <liferay-portlet:resourceURL var="moveFolderURL"   id="moveFolder"	 copyCurrentRenderParameters="false" escapeXml="false"/> --%>
+<liferay-portlet:resourceURL var="moveNodeURL"   id="moveNode"   copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="copyFileURL"   id="copyFile"   copyCurrentRenderParameters="false" escapeXml="false"/>
 
 <liferay-portlet:resourceURL var="deleteFileURL" id="deleteFile" copyCurrentRenderParameters="false" escapeXml="false"/>
@@ -50,22 +51,16 @@
 	width:13px;
 }
 </style>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-myfile-title' />
+<div class="table-responsive panel filterable edison-panel">
+	<div class="panel-heading clearfix" style="border-bottom: 0px;">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" /> 
+			<liferay-ui:message key='edison-myfile-title' />
+		</h3>
 	</div>
 </div>
 
 
-<!-- 삭제 -->
-<%-- <input name="<portlet:namespace/>option_8601_logical_file_value" id="<portlet:namespace/>option_8601_logical_file_value" type="text" class="preValueGroup"  readonly="readonly" style="width: 480px; margin-bottom: 0px;">
-<input name="<portlet:namespace/>option_8601" id="<portlet:namespace/>option_8601" type="text"  class="preValueGroup"  readonly="readonly" style="width: 480px; margin-bottom: 0px;">
-<input class="button01b" type="button" value="My File" onclick="myFilePopup('<portlet:namespace/>option_8601', '<portlet:namespace/>option_8601_logical_file_value','inputport')"> 
-<input class="button01b" type="button" value="My File" onclick="myFilePopup('<portlet:namespace/>option_8601', '<portlet:namespace/>option_8601_logical_file_value','parameter')"> --%> 
-
-<div class="h10"></div>
-	
 <!--박스-->
 <aui:form name="form">
 <aui:input type="hidden" name="groupId" id="groupId" value="${groupId }"></aui:input>
@@ -87,21 +82,23 @@
 </aui:form>
 
 <!--버튼-->
-<div style="width:50%; float:left;">
-	<input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button">
+<div style="margin-bottom: 20px;">
+	<div style="width:50%; float:left;">
+		<input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button">
+	</div>
+	
+	<div style="width:45%; float:right; text-align:right;">
+		<input class="addIp btn btn-primary" style=" width: 100px;" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
+		<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
+		<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
+	</div>
+	<div style="clear:both"></div>
+	<div id="fileDownloadIframe"> </div>
+	
+	<div id="icebreaker-file-upload-dialog" title="파일업로드" class="bigpopupbox" style="display:none;">
+	</div>
+	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 </div>
-
-<div style="width:45%; float:right; text-align:right;">
-	<input class="addIp btn btn-primary" style=" width: 100px;" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
-	<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
-	<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
-</div>
-<div style="clear:both"></div>
-<div id="fileDownloadIframe"> </div>
-
-<div id="icebreaker-file-upload-dialog" title="파일업로드" class="bigpopupbox" style="display:none;">
-</div>
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
 
 <script type="text/javascript">
@@ -191,6 +188,7 @@ function <portlet:namespace/>getRepositoryFolder(){
 					var obj = {
 						"id": dataMap[i].fileId,
 						"text": dataMap[i].fileName,
+						"title": dataMap[i].fileName,
 						"type":"close",
 						"li_attr": {
 							"childLength":dataMap[i].childCnt
@@ -235,6 +233,7 @@ function <portlet:namespace/>getChildFolder(folderId){
 						"id": dataMap[i].fileId,
 						"parent": selectFolder,
 						"text": dataMap[i].fileName,
+						"title": dataMap[i].fileName,
 						"type":"close",
 						"li_attr": {
 							"childLength":dataMap[i].childCnt
@@ -294,7 +293,7 @@ function <portlet:namespace/>getChildFile(folderId){
                     
                     var fileName = dataMap[i].fileName;
                     
-                    $li = $("<li/>").attr("class", "<portlet:namespace/>file").attr("file-name", fileName).appendTo($fileTableBody);
+                    $li = $("<li/>").addClass("<portlet:namespace/>file").attr("file-name", fileName).attr("title", fileName).appendTo($fileTableBody);
                     if(i%2 == 1){ $li.addClass("tablebgtr"); }
                     
                     
@@ -428,7 +427,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 		$("#myfileTree").jstree("open_all");
 		
 		//아이콘변경
-		<portlet:namespace/>iconChange();
+		//<portlet:namespace/>iconChange();
 	}).bind("select_node.jstree",function(evt, data){//노드 선택 이벤트
 		/* var length = data.node.children.length;
 		
@@ -473,7 +472,6 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
                         $('#myfileTree').jstree().delete_node(data.node.children);
                         for(var j=0; j<childFolderArr.length; j++){
                             var obj = childFolderArr[j];
-							console.log(obj);
                             $('#myfileTree').jstree().create_node( data.node.id ,  obj , "last", false);
                             
                         } 
@@ -483,7 +481,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
             }
             
             //아이콘변경
-            <portlet:namespace/>iconChange();
+            //<portlet:namespace/>iconChange();
         }
 	}).bind("click.jstree", function (e, datap) { //아이콘 클릭 이벤트
 		//클릭해서 노드가 없는거는 붙이기
@@ -506,14 +504,17 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			} */
 		}
 	}).bind("open_node.jstree", function(event, data) { //노드를 open
-		<portlet:namespace/>iconChange();
+		// <portlet:namespace/>iconChange();
 	}).bind("close_node.jstree", function(event, data) {//노드를 closed
 	}).bind("move_node.jstree", function(e, data) { // 폴더 move 이벤트
 			var sourceId = data.node.id;
-			var targetId = data.parent;
-			
+			var sourceNodeName = data.node.text;
 			var targetId = data.parent;
             var nodeType = data.node.type;      // node type : default, file
+            console.log("sourceId : " + sourceId);
+            console.log("sourceNodeName : " + sourceNodeName);
+            console.log("targetId : " + targetId);
+            console.log("nodeType : " + nodeType);
 			
 			var tree = $('#myfileTree').jstree(true);
 			var node = tree.get_node(targetId);				 
@@ -527,7 +528,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			   bStart();
 			   jQuery.ajax({
 			 		type: "POST",
-			 		url: "<%=moveFolderURL%>",
+			 		url: "<%=moveNodeURL%>",
 			 		data: {
 			 			"<portlet:namespace/>nodeType" : nodeType,
 			 			"<portlet:namespace/>destPath" : destPath,
@@ -548,7 +549,6 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 						<portlet:namespace/>initJstree(folderArr, targetId, nodeParents);
 						
 			 	    	if(data.status == 200 || data.status == 201){
-			 	    		/* alert(Liferay.Language.get('edison-simulation-myfile-move-alert')); */
 			 	    		if(nodeType == "file"){
                                 alert(Liferay.Language.get('edison-simulation-myfile-move-file-alert'));
                             } else {
@@ -569,7 +569,7 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 	});;
 }
 
-function <portlet:namespace/>iconChange(){ //아이콘변경 : child가 있는지 없는지 임시로 아이콘 변경
+/* function <portlet:namespace/>iconChange(){ //아이콘변경 : child가 있는지 없는지 임시로 아이콘 변경
 	$(".jstree-node").each(function(index){
   		 var childLength = $(this).attr("childlength");
 		 if(childLength > 0){
@@ -579,7 +579,7 @@ function <portlet:namespace/>iconChange(){ //아이콘변경 : child가 있는�
 			 }
 		 }
   	});
-}
+} */
 
 //jstree context menu customizing
 function contextMenu(node){
@@ -671,12 +671,6 @@ function contextMenu(node){
                 "label": Liferay.Language.get('edison-simulation-myfile-copy-file'),
                 "action": function (data) {
                     <portlet:namespace/>copyFile();
-                }
-            },
-            "Cut": {
-                "label": "Cut",
-                "action": function (data) {
-                    <portlet:namespace/>cutFile();
                 }
             },
             "Delete": {
@@ -1032,6 +1026,8 @@ function <portlet:namespace/>checkfileDelete(){
     var tree = $('#myfileTree').jstree(true);
     var selectFileNode = $("#myfileTree").jstree("get_selected");
     selectNodeType = tree.get_node(selectFileNode[0]).type;
+    console.log("selectFileNode : " + selectFileNode);
+    console.log("select Node Type : " + selectNodeType);
     
     var deleteFile = [];
     if(selectNodeType != 'file' && $("input[name=<portlet:namespace/>fileChk]:checked").length == 0 ){
@@ -1074,7 +1070,8 @@ function <portlet:namespace/>checkfileDelete(){
                     },
                     async : true,
                     success: function(data) {
-                        
+                        console.log("success... data : " + data.status);
+                    	
                         if(data.status == 200){
                             $("#myfileTree").jstree("refresh");
                             <portlet:namespace/>getChildFile(selectNode);
@@ -1085,6 +1082,7 @@ function <portlet:namespace/>checkfileDelete(){
                         }
                     },error: function(){
                         bEnd();
+                        console.log("error...");
                         alert(Liferay.Language.get('edison-data-delete-error'));
                     },complete: function(){
                         bEnd();
@@ -1254,10 +1252,10 @@ function <portlet:namespace/>fileChoice(fileId, fileNm, filePath){
 var selectCopyNode = null;
 var fileCut = false;
 
-function <portlet:namespace/>cutFile(){
+/* function <portlet:namespace/>cutFile(){
 	fileCut = true;
 	<portlet:namespace/>copyFile();
-}
+} */
 
 /* 파일 복사 */
 function <portlet:namespace/>copyFile(){

@@ -136,6 +136,7 @@
 	</c:if>
 	
 	<div class="h1">
+		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
 		<liferay-ui:message key="edison-simulation-monitoring-title" />	
 	</div>
 	

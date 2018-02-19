@@ -5,7 +5,10 @@
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <!-- <div class="h40"></div> -->
 
-<h1 class="h1" style="display: inline;">EDISON <liferay-ui:message key="edison-project-statistics-title"/></h1>
+<h1 class="h1" style="display: inline;">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+	EDISON <liferay-ui:message key="edison-project-statistics-title"/>
+</h1>
 
 <div class="EDbuttonbox"><input class="addIp button04per" onclick="<portlet:namespace/>excelDown();" value="Excel Download" type="button"> </div>
 

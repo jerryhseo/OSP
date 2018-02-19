@@ -10,17 +10,27 @@
 	<liferay-portlet:param name="myRender" value="professorManagement" />
 </liferay-portlet:renderURL>
 
+
 <c:choose>
 	<c:when test="${admin eq 'Y' }">
-		<div class="virtitlebox">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-			<div class="virtitle">
-				<liferay-ui:message key='edison-professor-infomation' />
+		<div class="table-responsive panel filterable edison-panel">
+			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+					<liferay-ui:message key='edison-professor-infomation' />
+				</h3>
 			</div>
 		</div>
 	</c:when>
 	<c:otherwise>
-		<div><h3><liferay-ui:message key='edison-course-meet-the-instructors' /></h3></div>
+		<div class="table-responsive panel filterable edison-panel">
+			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+				<h3 class="panel-title pull-left">
+					<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+					<liferay-ui:message key='edison-course-meet-the-instructors' />
+				</h3>
+			</div>
+		</div>
 	</c:otherwise>
 </c:choose>
 

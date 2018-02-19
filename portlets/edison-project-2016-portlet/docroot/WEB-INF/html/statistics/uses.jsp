@@ -4,7 +4,10 @@
 <script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
-<h1 class="h1">EDISON <liferay-ui:message key="edison-project-statistics-title"/></h1>
+<h1 class="h1">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+	EDISON <liferay-ui:message key="edison-project-statistics-title"/>
+</h1>
 
 <!--table-->
 <liferay-portlet:runtime portletName="edisonmultitab_WAR_edisonboard2016portlet_INSTANCE_multitab" />

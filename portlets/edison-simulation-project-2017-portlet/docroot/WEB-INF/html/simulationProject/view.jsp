@@ -69,6 +69,10 @@
 .wbba {
 	word-break: break-all;
 }
+
+.<portlet:namespace/>mprightcont .edison-comment{
+	width: 100%;
+}
 </style>
 
 <!--상단 비쥬얼 및 타이틀-->
@@ -167,7 +171,7 @@
 		&authYn=${authYn}   -> Y or N
 		&modelId=${simulationProjectId}     -> 현재 프로젝트 모델의 ID(Long 데이터)
 	-->
-	<div class="mprightcont">
+	<div class="<portlet:namespace/>mprightcont">
 		<liferay-portlet:runtime
 			portletName="edisoncomment_WAR_edisonboard2016portlet"
 			defaultPreferences=""

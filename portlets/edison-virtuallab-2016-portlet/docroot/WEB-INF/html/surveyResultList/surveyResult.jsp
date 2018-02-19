@@ -237,6 +237,7 @@ function <portlet:namespace/>historyback(){
 	
 	<div class="panel-heading clearfix">
 		<h1>
+			<img src="${contextPath}/images/title_virtual.png"/>
 			<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />
 		</h1>
 	</div>

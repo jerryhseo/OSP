@@ -177,22 +177,20 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 	<input type="hidden" id="<portlet:namespace/>solverId" name="<portlet:namespace/>solverId" value="0">
 	
 	<div class="panel-heading clearfix">
-		<div class="managementTitle">
+		<h3 class="panel-title pull-left" style="width: 40%;">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-project-management-app' />
-		</div>
+		</h3>
 		
-		<div class="input-group" style="float: left;">
-			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px;" />
+		<div class="btn-group pull-right" style="width: 60%">
+			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px; float: left;" />
 			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
 				<i class="icon-search"></i>
 			</button>
 			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataSearchListAll(1);">
 			
-		</div>
-		<div style="float: right; width: 290px;">
 			<!--우편 셀렉트-->
-			<div class="selectProject_menu" style="float: left; margin-right: 10px;">
+			<div class="selectProject_menu" style="float: left; margin: 0px 10px;">
 				<select id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectProject">
 					<option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
 					${categorySelectOption }
@@ -209,9 +207,6 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 			</div>
 		</div>
 	</div>
-
-	
-	
 	
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
 		<colgroup>
