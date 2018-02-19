@@ -147,7 +147,35 @@
 								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
 									<div class="form-group">
 										<label for="New Simulation">New Simulation</label>
-										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required maxlength="20">
+									</div>
+									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="<portlet:namespace/>core-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>core-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Simulation</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
+									<div class="form-group">
+										<input type="text" class="form-control" id="numberOfCore" name="numberOfCore" placeholder="Title" required>
 									</div>
 									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
 								</form>
@@ -445,6 +473,15 @@ Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 		<portlet:namespace/>flowDisplayChange(nullToStr(e.data.flowLayoutCode));
 	}
 });
+
+Liferay.on(OSP.Event.OSP_SUBMIT_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_SUBMIT_JOB: ['+e.portletId+', '+new Date()+']', e.data);
+		<portlet:namespace/>workbench.handleSubmitJob(
+			'<%=serveResourceURL.toString()%>');
+			}
+		}
+);
 /***********************************************************************
  * Global Function section
  ***********************************************************************/

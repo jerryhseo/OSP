@@ -291,7 +291,12 @@ function <portlet:namespace/>updateJobPortStatus(data){
 		});
 		
 		$("#<portlet:namespace/>jobSubmit").click(function(){
-			alert("JOB_Submit");
+			var myId = '<%=portletDisplay.getId()%>';
+			var eventData = {
+					portletId : myId,
+					targetPortlet : <portlet:namespace/>connector
+			};
+			Liferay.fire(OSP.Event.OSP_SUBMIT_JOB, eventData);
 		});
 		
 	}else{
