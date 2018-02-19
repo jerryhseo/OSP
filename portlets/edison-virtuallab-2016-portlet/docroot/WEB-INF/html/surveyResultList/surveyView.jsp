@@ -190,6 +190,7 @@ function changeLanguage(){
 	<input type="hidden" name="<portlet:namespace/>current_languageId" value="${select_languageId}"/>
 	
 	<h1>
+		<img src="${contextPath}/images/title_virtual.png"/>
 		<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
 	</h1>
 	

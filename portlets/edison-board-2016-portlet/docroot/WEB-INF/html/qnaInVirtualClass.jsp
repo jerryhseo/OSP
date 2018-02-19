@@ -38,7 +38,14 @@
 
 .qalist ul li:nth-child(even) {
 	line-height: 1.2em;
-	margin-bottom: 15px;
+}
+
+.virtualClassQuestion{
+	margin-top: 15px;
+}
+
+.virtualClassQuestion:first-child{
+	margin-top: 0px;
 }
 
 .qalist ul li a:link {
@@ -59,7 +66,7 @@
 	padding: 0 10px;
 	line-height: 1.2em !important;
 	height: 22px;
-	margin: 0px 2px 0 2px;
+	margin: 15px 2px 0 2px;
 	border: solid 1px #ddd;
 	cursor: pointer !important;
 }
@@ -83,7 +90,7 @@
 <%--### Main Board List Start ######################################################################################################################  --%>
 
 <%
-	long originalBoardPlid = Long.parseLong(CustomUtil.strNull((portletPreferences.getValue("originalBoardPlid", "0"))));
+	long originalBoardPlid = Long.parseLong(CustomUtil.strNull((portletPreferences.getValue("originalBoardPlid", "0")),"0"));
 	String originalBoardPortletName = CustomUtil.strNull((portletPreferences.getValue("originalBoardPortletName", "")));
 	String divCd = CustomUtil.strNull((portletPreferences.getValue("divCd", "100")));
 	
@@ -214,6 +221,11 @@
 							  .appendTo(qnaList_ul);
 				}else{
 					for(var i = 0 ; i < boardList.length; i++ ){
+						
+						if(3<=i){
+							break;
+						}
+						
 						var classTitle = boardList[i].classTitle;
 						var classId = boardList[i].classId;
 						var divVirtualLabClass = ""
@@ -233,7 +245,8 @@
 						var guestionTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('" + boardList[i].boardSeq + "','${maxWindowStatus}', '"+classId+"')")
 													 .text(boardList[i].title);
 									 
-						$("<li/>").append(questionIcon)
+						$("<li/>").addClass("virtualClassQuestion")
+								  .append(questionIcon)
 								  .append(divVirtualLabClass)
 								  .append(guestionTitle)
 								  .appendTo(qnaList_ul);
@@ -250,7 +263,8 @@
 									var answerTitle = $("<a/>").attr("href", "javascript:viewClick<portlet:namespace/>('"+boardList[j].boardSeq+"','${maxWindowStatus}', '"+classId+"')")
 															   .text("RE : " + boardList[i].title);
 									
-									$("<li/>").append(answerIcon)
+									$("<li/>").addClass("virtualClassAnswer")
+											  .append(answerIcon)
 											  .append(divVirtualLabClass)
 											  .append(answerTitle)
 											  .appendTo(qnaList_ul);

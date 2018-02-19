@@ -57,7 +57,7 @@
 					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
 					out.print("	<td class=\"center\">"+j+"</td>\n");
 					out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
+					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
 					out.print("</tr>\n");
 				}
 				j=j+1;
@@ -66,7 +66,7 @@
 		 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
 				out.print("	<td class=\"center\">1</td>\n");
 				out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-				out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
+				out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
 				out.print("</tr>\n");
 		 	}
 		%>

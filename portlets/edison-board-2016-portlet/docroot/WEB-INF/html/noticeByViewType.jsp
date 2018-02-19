@@ -91,8 +91,19 @@
 	<div class="table-responsive panel edison-panel">
 	
 		
-		<!-- NEWS & EVENT -->
-		<h2 class="h2title">NEWS & EVENT</h2>
+		<!-- Title -->
+		<c:choose>
+			<c:when test="${siteName eq 'EDISON'}">
+				<h2 class="h2title" style="padding-top: 12px; font-family: 'Nanum Gothic', sans-serif;">
+					NEWS & EVENT
+				</h2>
+			</c:when>
+			<c:otherwise>
+				<h2 class="h2title" style="padding-top: 15px; font-family: 'Nanum Gothic', sans-serif;">
+					<c:out value="${siteName}" /> NEWS
+				</h2>
+			</c:otherwise>
+		</c:choose>
 		
 		<div class="newswrap">
 			<div class="container" >
@@ -132,6 +143,10 @@
 
 	$(document).ready(function(){
 		getBoardList<portlet:namespace/>('${currentPage}');
+		
+		if('${siteName}' != 'EDISON'){
+			$(".newsbtnicon").css("padding-top","16px").css("padding-bottom","20px");
+		}
 	});
 	
 	function getBoardList<portlet:namespace/>(p_currentPage){

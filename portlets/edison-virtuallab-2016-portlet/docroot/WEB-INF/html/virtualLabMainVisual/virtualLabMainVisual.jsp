@@ -90,7 +90,7 @@
 			<form id="createVirtualLabForm" name="createVirtualLabForm"  method="post" action="<%= updateVirtualLabInfomationURL %>" onsubmit="return <portlet:namespace/>checkValidation(this);" enctype="multipart/form-data">
 				<aui:input name="<portlet:namespace/>groupId" id="<portlet:namespace/>sgroupId" type="hidden" value="${groupId}" label=""/>
 				<div class="panel edison-panel">
-					<div class="virtitlebox panel-heading clearfix">
+					<div class="panel-heading clearfix">
 						<h3 class="panel-title pull-left">
 							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 							<liferay-ui:message key='edison-virtuallab-infomation-management' />
@@ -105,8 +105,6 @@
 						</div>
 					</div>
 		
-					<div class="h20"></div>
-				
 					<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${labInfo.virtualLabId}">
 					<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${labInfo.virtualLabUniversityField}">
 					<input id="<portlet:namespace/>professorSeq" name="<portlet:namespace/>professorSeq" type="hidden" value="${labInfo.virtualLabProfessorSeq}">
@@ -178,7 +176,14 @@
 			</form>
 	</c:when>
 	<c:otherwise>
-		<div><h3><liferay-ui:message key='edison-course-about-this-course' /></h3></div>
+		<div class="table-responsive panel filterable edison-panel">
+			<div class="panel-heading clearfix"  style="border-bottom: 0px;">
+				<h3 class="panel-title pull-left">
+					<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+					<liferay-ui:message key='edison-course-about-this-course' />
+				</h3>
+			</div>
+		</div>
 		<div class="mainDescription">${labInfo.virtualLabDescription}</div>
 		<div class="concustomHr">.</div>
 	</c:otherwise>	

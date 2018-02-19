@@ -39,13 +39,12 @@
 	
 	<div class="table-responsive panel edison-panel">
 		<div class="panel-heading clearfix">
-			<h3 class="panel-title">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+			<h1>
+				<img src="${contextPath}/images/title_virtual.png" />
 				Data Collection
-			</h3>
+			</h1>
 			
-			<br>
-			<div class="input-group">
+			<div class="btn-group pull-right">
 				<input name="<portlet:namespace/>textfield" type="text"
 					id="<portlet:namespace/>textfield"
 					class="form-control"
@@ -53,21 +52,19 @@
 					size="40"
 					onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataCollectionList('');" 
 					value="${searchText }"
-					style="width: 220px;"
+					style="width: 220px; float: left;"
 				/>
 				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataCollectionList('');">
 					<i class="icon-search"></i>
 				</button>
 				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataCollectionListAllSearch();">
 				
-				<div class="input-group-btn">
-					<!--우편 셀렉트-->
-					<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="btn btn-default" style="line-height: 15px;">
-						<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-						<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-						<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-					</select>
-				</div>
+				<!--우편 셀렉트-->
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="btn btn-default" style="line-height: 15px;">
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
 				
 			</div>
 			

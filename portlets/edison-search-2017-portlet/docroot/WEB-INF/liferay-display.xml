@@ -4,5 +4,6 @@
 <display>
   <category name="EDISON">
     <portlet id="edison-search"></portlet>
+    <portlet id="edison-search-box"></portlet>
   </category>
 </display>

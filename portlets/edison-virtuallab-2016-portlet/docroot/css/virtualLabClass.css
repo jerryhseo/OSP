@@ -37,7 +37,7 @@
 	border-bottom: solid 40px #161616;
 	position: relative;
 	font-family: 'nanumgothic';
-	margin: 0 9px;
+	margin: 0 8px;
 	float: left;
 }
 
@@ -215,75 +215,3 @@
 	background-color: #000 !important;
 	text-decoration: none !important;
 }
-
-/* Virtual Lab Class QnA */
-/* .rightt {
-	background: url(../images/class_bl5.png) no-repeat 0 5px;
-	padding-left: 65px;
-}
-
-.conwrap2right {
-	width: 47%;
-	float: right;
-}
-
-.qalist {
-	padding-bottom: 19px;
-	border-bottom: solid 1px #bcbcbc;
-	font-family:'Nanum Gothic', sans-serif;
-}
-
-.qalist ul {
-	margin: 0;
-	padding: 0;
-}
-
-.qalist ul li {
-	list-style: none;
-	font-size: 15px;
-	color: #666;
-	line-height: 2.5em;
-}
-
-.qalist ul li:nth-child(even) {
-	line-height: 1.2em;
-	margin-bottom: 15px;
-}
-
-.qalist ul li a:link {
-	color: #666;
-}
-
-.qalist ul li a:hover {
-	text-decoration: underline;
-}
-
-.btn_s_q {
-	background-color: #d4e961;
-	font-size: 11px;
-	color: #474f58 !important;
-	font-weight: 600;
-	border-radius: 2px;
-	text-align: center;
-	padding: 0 10px;
-	line-height: 1.2em !important;
-	height: 22px;
-	margin: 0px 2px 0 2px;
-	border: solid 1px #ddd;
-	cursor: pointer !important;
-}
-
-.btn_s_a {
-	background-color: #01dee9;
-	font-size: 11px;
-	color: #474f58 !important;
-	font-weight: 600;
-	border-radius: 2px;
-	text-align: center;
-	padding: 0 10px;
-	line-height: 1.2em !important;
-	height: 22px;
-	margin: 0px 2px 0 2px;
-	border: solid 1px #ddd;
-	cursor: pointer !important;
-} */

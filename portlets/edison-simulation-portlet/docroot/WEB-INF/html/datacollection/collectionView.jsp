@@ -142,7 +142,7 @@
 <div class="h10"></div>
 	
 <!--좌측-->
-<div class="commleft">
+<div class="commleft panel edison-panel">
 	<c:if test="${!empty dcMainImg}">
 		<div class="commleftbox">
 			<div id="collectionImageArea" class="owl-carousel owl-theme" style="display:table-cell;">
@@ -166,21 +166,18 @@
 				<div class="cright"><a id="rollingNext" href="#rollingNext" title="nextview"><img src="${contextPath}/images/sciencedata/arrow_right.png" width="28" height="49"></a></div>
 			</c:if>
 		</div>
-		<%-- <div  style="text-align: center"> <!-- class="commleftbox" -->
-			<img src="/documents/${dcMainImg.fileRepositoryId }/${dcMainImg.fileEntryId }/${dcMainImg.fileTitle }/${dcMainImg.fileUuid }" width="250">
-		</div> --%>
 	</c:if>
+	
 	<!-- data type list -->
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<div class="h4 pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key="edison-data-collection-select-data-type-list"/>
 		</div>
 	</div>
-	<div class="h10"></div>
 	
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 			
 				<c:if test="${dataTypeEditorMap.columnCnt == 1}">
@@ -233,16 +230,15 @@
 	</div>
 	
 	<!-- data entry list -->
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<div class="h4 pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			Data Entry 
 		</div>
 	</div>
-	<div class="h10"></div>
 	
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<c:choose>
 					<c:when test="${isAdmin == true}">

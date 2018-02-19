@@ -42,7 +42,6 @@
 
 .qalist ul li:nth-child(even) {
 	line-height: 1.2em;
-	margin-bottom: 15px;
 }
 
 .qalist ul li a:link {

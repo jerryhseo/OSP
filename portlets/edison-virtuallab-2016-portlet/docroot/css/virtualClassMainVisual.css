@@ -110,8 +110,7 @@
 	position: absolute;
 	right: 0px;
 	top: 188px;
-	padding-top: 20px;
-	padding-left: 30px;
+	padding: 20px 30px;
 	min-width: 345px;
 	min-height: 187px;
 	border: solid 1px #757e82;

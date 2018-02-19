@@ -146,16 +146,16 @@ function <portlet:namespace/>closeDialog ( data ){
 		</c:if>
 	
 	
-		<div class="commleft">
+		<div class="commleft panel edison-panel">
 			
 			<!-- 파일 목록 -->
 			<c:choose>
 				<c:when test="${content.contentDiv eq 2001004 && content.advancedStartFileNm ne ''}">
-					<div class="virtitlebox">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
+				<div class="panel-heading clearfix" style="border-bottom: 0px;">
+					<h3 class="panel-title pull-left">
+						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-file"/>
-					</div>
+					</h3>
 				</div>
 				<div class="h10"></div>
 					<c:if test="${content.advancedContentFolderPath != ''}">
@@ -169,11 +169,11 @@ function <portlet:namespace/>closeDialog ( data ){
 				<c:otherwise>
 					<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
 						<div>
-							<div class="virtitlebox">
-								<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-								<div class="virtitle">
+							<div class="panel-heading clearfix" style="border-bottom: 0px;">
+								<h3 class="panel-title pull-left">
+									<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 									<liferay-ui:message key="edison-content-file"/>
-								</div>
+								</h3>
 							</div>
 							<div class="h10"></div>
 				
@@ -214,17 +214,16 @@ function <portlet:namespace/>closeDialog ( data ){
 			
 			<c:if test="${isOwner == true || isManager == true}"> 
 			<div>
-				<div class="virtitlebox">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
+				<div class="panel-heading clearfix">
+					<div class="h4 pull-left">
+						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-manager"/>
 					</div>
 				</div>
-				<div class="h10"></div>
 				<!-- 관리자 -->
 				<div class="table1_list">
 						
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 						<colgroup>
 							<col width="30%" />
 							<col width="30%" />

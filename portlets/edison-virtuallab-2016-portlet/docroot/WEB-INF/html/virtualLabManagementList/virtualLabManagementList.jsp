@@ -97,7 +97,10 @@
 		
 		<div id="courselist" class="courselist">
 		
-		<h1><liferay-ui:message key='edison-course-list' /></h1>
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+			<liferay-ui:message key='edison-course-list' />
+		</h1>
 		
 		<div class="portlet-borderless-container">
 			<div class="portlet-body">
@@ -139,7 +142,7 @@
 			</table>
 			
 			<div class="h20"></div>
-			<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+			<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
 		</div>
 	</div>
 </body>
@@ -249,28 +252,30 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
    					}
 					if(virtualLabCount % 2 != 0){
 						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')");
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 								if(virtualLabManagementList[i].iconId != 0){
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" ).attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}else{														
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}
 								$("<div/>").addClass("infoDiv").append($("<li/>").addClass(groupClass).text(groupField).css("margin-top","6px"))
-															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px"))
+															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
 															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
 															   .appendTo($rowUl);
 						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}else{
 						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')");
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 								if(virtualLabManagementList[i].iconId != 0){
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" ).attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}else{
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}
 								$("<div/>").addClass("infoDiv").append($("<li/>").addClass(groupClass).text(groupField).css("margin-top","6px"))
-															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px"))
+															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
 															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
 															   .appendTo($rowUl);
 						$rowUl.appendTo($rowResult);

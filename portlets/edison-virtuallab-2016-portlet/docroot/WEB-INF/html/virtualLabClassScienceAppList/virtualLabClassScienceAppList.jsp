@@ -24,6 +24,7 @@
 
 <style type="text/css">
 	.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;} 
+	.apparrow{cursor: pointer;}
 </style>
 
 <aui:script>
@@ -70,7 +71,19 @@ function <portlet:namespace/>dataSearchList() {
 													.text("<liferay-ui:message key='edison-there-are-no-data' />");
 			} else {
 				
+				scienceAppList = null;
+				scienceappListSeq = 0;
 				for(var i = 0; i < virtualLabScienceAppList.length; i++) {
+					
+					if(i%4 == 0){
+						classActive = "";
+						if(i==0){
+							classActive = "active"
+						}
+						scienceappListSeq = $(".scienceappList").length;
+						scienceAppList = $("<div/>").addClass("scienceappList item "+classActive)
+													.attr("id", "scienceappList_"+scienceappListSeq);
+					}
 					
 					scienceApp = $("<div/>").addClass("scienceapp");
 					scienceappUl = $("<ul/>");
@@ -107,7 +120,11 @@ function <portlet:namespace/>dataSearchList() {
 					}
 					
 					scienceappUl.appendTo(scienceApp);
-					$("#<portlet:namespace/>scienceappContent").append(scienceApp);
+					scienceApp.appendTo(scienceAppList);
+					
+					if(i%3 == 0 || i == virtualLabScienceAppList.length-1){
+						$("#<portlet:namespace/>scienceappContent").append(scienceAppList);
+					}
 				}
 			}
 		},error:function(msg,e){ 
@@ -168,6 +185,10 @@ function <portlet:namespace/>openScienceAppListPopup() {
 
 function <portlet:namespace/>fileDownload(p_fileEntryId){
 	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
+}
+
+function <portlet:namespace/>moveScienceAppList(btnType){
+	$("#<portlet:namespace/>"+btnType+"Btn").click();
 }
 
 </script>
@@ -247,18 +268,29 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 		</c:choose>
 		
 		<!--박스리스트-->
-		<div class="scienceappwrap" id="<portlet:namespace/>scienceapp">
+		<div class="scienceappwrap carousel slide" id="<portlet:namespace/>scienceapp">
 		
-			<div class="apparrow">
+			<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('prev')">
 				<img src="${contextPath}/images/class_l_arrow.png" width="28" height="49">
 			</div>
 			
 			<!-- Science App List -->
-			<div id="<portlet:namespace/>scienceappContent">
+			<div id="<portlet:namespace/>scienceappContent" class="carousel-inner" style="width: 95%; float: left;">
 			</div>
 			
-			<div class="apparrow">
+			<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('next')">
 				<img src="${contextPath}/images/class_r_arrow.png" width="28" height="49">
+			</div>
+			
+			<div style="display: none;">
+				<a class="left carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="prev" id="<portlet:namespace/>prevBtn">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="next" id="<portlet:namespace/>nextBtn">
+					<span class="glyphicon glyphicon-chevron-right"></span>
+					<span class="sr-only">Next</span>
+				</a>
 			</div>
 
 		</div>

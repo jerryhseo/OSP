@@ -15,6 +15,7 @@
 
 <div class="table-responsive panel edison-panel">
 	<h1>
+		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
 		<liferay-ui:message key='edison-appstore-developer-request-list' />
 	</h1>
 	<div class="table1_list">

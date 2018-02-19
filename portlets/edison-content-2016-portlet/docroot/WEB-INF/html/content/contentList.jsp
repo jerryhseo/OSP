@@ -125,54 +125,33 @@
 </div>
 </c:if>
 
-<%-- <div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-			<liferay-ui:message key='edison-content' />
-	</div>
-</div>
- --%><div class="h10"></div>
-
-
-	
-<%-- <div class="tabletopbox clear">
-	<!--우편 셀렉트-->
-	<div class="tabletopright">
-		<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="selectview" style="line-height: 15px;">
-			<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
-			<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-			<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-			<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-		</select>
-	</div>
-</div>  --%>
+<div class="h10"></div>
 	
 <aui:form name="contentListForm" method="post">
 	<aui:input type="hidden" name="groupId" value="${groupId }"/>
 	<aui:input type="hidden" name="isAdmin" value="${isAdmin }"/>
-<%-- 	<aui:input type="hidden" name="mode" value=""/> --%>
 	<aui:input type="hidden" name="contentSeq" value=""/>
 	<aui:input type="hidden" name="contentDiv" value=""/>
 	<div class="table-responsive panel edison-panel">
 		
 		<div class="panel-heading clearfix">
 		
-			<h3 class="panel-title">
+			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 				<liferay-ui:message key='edison-content' />
 			</h3>
 			
-			<br>
-			<div class="input-group">
+			<div class="btn-group pull-right" style="width: 50%;">
 				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
 					   id="<portlet:namespace/>textfield"
 					   placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
 					   size="40"
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
+					   style="float: left;"
 				/>
 				<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');"><i class="icon-search"></i></button>
-				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();">
+				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();" style="width: 80px;">
 				
 				<div class="input-group-btn">
 					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="line-height: 15px;">

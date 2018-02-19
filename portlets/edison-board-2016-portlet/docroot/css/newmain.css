@@ -19,7 +19,7 @@
 	.newslist ul li:last-child{padding-top:20px; text-align:center;}
 	
 	.newsbtnicon{ margin:0 auto;
-		background-color: #fff; text-align:center; padding-bottom:100px;}
+		background-color: #fff; text-align:center; padding-bottom:75px; padding-top: 5px;}
 	.newsbtnicon ul{background-color: #fff;}
 	.newsbtnicon ul li{ list-style:none; display:inline-block; margin-right:7px;}
 	

@@ -82,10 +82,15 @@
 		<!-- Board Title -->
 		<c:choose>
 			<c:when test="${empty redirectName }">
-				<h1>${boardDivTitle}</h1>
+				<h1>
+					<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+					${boardDivTitle}
+				</h1>
 			</c:when>
 			<c:otherwise>
-			   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
+				<h1>
+					<a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}
+				</h1>
 			</c:otherwise>
 		</c:choose>
 		
@@ -206,6 +211,9 @@
 		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>searchValue.value=$("#<portlet:namespace/>searchText").val();
 		document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>listSize.value=$('input[id=<portlet:namespace/>listSize]').val();
 		
+		if(document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>searchValue.value == "undefined"){
+			document.<portlet:namespace/>boardModifyForm.<portlet:namespace/>searchValue.value = "";
+		}
 		
 		var boardInputForm = {
 						"<portlet:namespace/>methodName" : "getBoardList<portlet:namespace/>",
