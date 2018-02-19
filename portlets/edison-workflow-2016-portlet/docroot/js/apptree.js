@@ -36,11 +36,23 @@ var AppTree = (function(namespace, $, designer){
                 "parent": "controller_category",
                 "groupId": getSpecificSiteGroupId(),
                 "inputports": {
-                    "localfile0": {
+                    "criteria": {
                         "inputData_": {
                             "type_": "file"
                         },
-                        "name_": "localfile0",
+                        "name_": "criteria",
+                        "defaultEditor_": "none",
+                        "dataType_": {
+                            "name": "controller_input",
+                            "version": ""
+                        },
+                        "mandatory_": true
+                    },
+                    "transfer": {
+                        "inputData_": {
+                            "type_": "file"
+                        },
+                        "name_": "transfer",
                         "defaultEditor_": "none",
                         "dataType_": {
                             "name": "controller_input",

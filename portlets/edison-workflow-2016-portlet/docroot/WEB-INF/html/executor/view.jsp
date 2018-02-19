@@ -189,7 +189,7 @@ var contextPath = '${contextPath}';
           <ul class="sidebar-menu top" data-widget="tree">
             <li class="header">
               <div class="header-inner">
-                Workflow Designer
+                Simulation Executor
               </div>
             </li>
             <li class="treeview">
@@ -205,38 +205,30 @@ var contextPath = '${contextPath}';
               </a>
             </li>
             <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="import">
-                <i class="fa fa-lg fa-download"></i>
-                <span>Import</span>
-              </a>
-            </li>
-            <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="save">
                 <i class="fa fa-lg fa-floppy-o"></i>
                 <span>Save</span>
               </a>
             </li>
             <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="save-as">
-                <i class="fa fa-lg fa-floppy-o"></i>
-                <span>Save As</span>
+              <a href="#" class="sidebar-btn" data-btn-type="execute">
+                <i class="fa fa-lg fa-play-circle"></i>
+                <span>Run</span>
               </a>
+              <ul class="treeview-menu">
+                <li><a href="#"><i></i><span>Run Simulation</span></a></li>
+                <li><a href="#"><i></i><span>Rerun Simulation</span></a></li>
+                <li><a href="#"><i></i><span>Pause</span></a></li>
+                <li><a href="#"><i></i><span>Restart</span></a></li>
+                <li><a href="#"><i></i><span>Status</span></a></li>
+              </ul>
             </li>
-            <li>
-              <a href="#" class="sidebar-btn" data-btn-type="apps">
-                <i class="fa fa-lg fa-th"></i>
-                <span>Apps</span>
-              </a>
-            </li>
-            <%-- <li>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-keyboard="false" data-backdrop="static" data-whatever="@mdo">Open modal for @mdo</button>
-            </li> --%>
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="execute">
-                <i class="fa fa-lg fa-play-circle"></i>
-                <span>Execute</span>
+                <i class="fa fa-lg fa-pencil-square-o"></i>
+                <span>Edit</span>
               </a>
             </li>
             <li>
@@ -469,6 +461,7 @@ $.widget.bridge('uibutton', $.ui.button);
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
   var jqPortletBoundaryId = "#p_p_id" + namespace;
+  var workflowId = "${workflowId}";
   $.Mustache.addFromDom();
   toastr.options = {
       "closeButton": true,
@@ -487,35 +480,22 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr);
+  var designer = new Designer(namespace, $, OSP, toastr, true);
+  /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
-  console.log(designer);
+ */
 
-  aSyncAjaxHelper.post("/delegate/services/app/all", {
-    companyGroupId: <portlet:namespace/>getCompanyGroupId(),
-    groupId: <portlet:namespace/>getSiteGroupId()
-  }, function(appData){
-    $("#" + namespace + "menu-panel-box-app").mustache(
-      'tpl-menu-panel-apps', {"boxtitle": "Apps", "col": 4});
-    $("#" + namespace + "menu-panel-box-app").addClass("loaded");
-    var apptreeSelector = "#" + namespace + "menu-panel-box-app .box-body";
-    appTree.drawAppTree(apptreeSelector,
-      "#" + namespace + "menu-panel-box-app .search-input",
-      appData);
-    appTree.bindDnd(document, apptreeSelector);
-    $("#wf-workflow-canvas").css("height", 
-      $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
-      - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
-    $("#" + namespace + "menu-panel-box-app .box-body").css("height",
-      $("#" + namespace + "menu-panel-box-app").actual("height") 
-        - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
-  });
-
+  designer.loadWorkflowDefinition(workflowId);
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
+  _delay(function(){
+      $("#wf-workflow-canvas").css("height", 
+        $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
+        - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
+  }, 3000);
 });
 
 function <portlet:namespace/>getCompanyGroupId(){

@@ -63,4 +63,35 @@
   		<role-name>user</role-name>
   	</security-role-ref>
   </portlet>
+  <portlet>
+  	<portlet-name>workflow-simulation-executor</portlet-name>
+  	<display-name>Workflow Simulation Executor</display-name>
+  	<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+    <init-param>
+      <name>contextConfigLocation</name>
+      <value>classpath:org/kisti/edison/portlet/edison-workflow-executor-portlet.xml</value>
+    </init-param>
+    <expiration-cache>0</expiration-cache>
+    <supports>
+        <mime-type>text/html</mime-type>
+        <portlet-mode>view</portlet-mode>
+    </supports>
+  	<portlet-info>
+  		<title>Workflow Simulation Executor</title>
+  		<short-title>Workflow Simulation Executor</short-title>
+  		<keywords></keywords>
+  	</portlet-info>
+  	<security-role-ref>
+  		<role-name>administrator</role-name>
+  	</security-role-ref>
+  	<security-role-ref>
+  		<role-name>guest</role-name>
+  	</security-role-ref>
+  	<security-role-ref>
+  		<role-name>power-user</role-name>
+  	</security-role-ref>
+  	<security-role-ref>
+  		<role-name>user</role-name>
+  	</security-role-ref>
+  </portlet>
 </portlet-app>
