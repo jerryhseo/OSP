@@ -306,7 +306,7 @@ function <portlet:namespace/>dataSearch(){
 					
 					/*head*/
 					$boxInTable = $("<div/>").addClass("boxintable")
-							.append($("<table/>").attr("id","<portlet:namespace/>siteTable_"+$site).attr("width","100%").attr("border", "0").attr("cellspacing", "0").css("margin-top", "30px")
+							.append($("<table/>").attr("id","<portlet:namespace/>siteTable_"+$site).attr("width","100%").attr("border", "0").attr("cellspacing", "0").css("margin-top", "45px").css("margin-left", "10px")
 							.append($("<tr/>").css("height", "43px")
 // 								.append($("<td/>").attr("width", "25%").append("&nbsp;"))
 								.append($("<td/>").attr("width", "29%").addClass("TC").append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APP"))
