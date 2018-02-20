@@ -483,6 +483,13 @@ Liferay.on(OSP.Event.OSP_SUBMIT_JOB,function( e ){
 			}
 		}
 );
+
+Liferay.on(OSP.Event.OSP_JOB_STATUS_CHANGED,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )	return;
+		console.log('OSP_JOB_STATUS_CHANGED: ['+e.portletId+', '+new Date()+']', e.data);
+		<portlet:namespace/>workbench.handleJobStatusChanged( e.data.jobUuid, e.data.jobStatus );
+	}
+);
 /***********************************************************************
  * Global Function section
  ***********************************************************************/

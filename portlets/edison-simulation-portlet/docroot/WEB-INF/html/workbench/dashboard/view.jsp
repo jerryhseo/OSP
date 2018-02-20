@@ -77,6 +77,9 @@ var <portlet:namespace/>prevStatus = (function(){
 			jobStatus[jobUuid] = status;
 			thisCheck.push(jobUuid);
 		},
+		getJobStatus: function(jobUuid){
+			return jobStatus[jobUuid];
+		},
 		clearStatusCache: function(){
 			if(thisCheck.length > 0){
 				for(var key in jobStatus){
@@ -345,13 +348,6 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 							  .appendTo($editSpan);
 			}
 			
-			//<portlet:namespace/>prevStatus init
-			<portlet:namespace/>prevStatus.clearStatusCache();
-			
-			if(<portlet:namespace/>refreshTimer){
-				clearInterval(<portlet:namespace/>refreshTimer);
-			}
-			
 			if(length>0){
 				var isUncompletedJobExist = false;
 				for(var i = 0; i < length; i++) {
@@ -377,9 +373,6 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 						jobStatusCss = "fa fa-circle fail";
 					}
 					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid).appendTo(topUl);
-					if(job._jobUuid===selectJobId){
-						$topLi.addClass("active");
-					}
 					$("<span/>").addClass("label label-primary pull-right  sidebar-btn").attr("data-btn-type","search-job-info").css("cursor","pointer")
 								.append(
 										$("<i/>").addClass("icon-arrow-right")
@@ -388,6 +381,30 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 								.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
+					
+					
+					if(typeof selectJobId != 'undefined'){
+						if(job._jobUuid===nullToStr(selectJobId)){
+							$topLi.addClass("active");
+							
+							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
+								var eventData = {
+										portletId: '<%=portletDisplay.getId()%>',
+										targetPortlet:<portlet:namespace/>connector,
+										data: {
+											jobUuid:selectJobId,
+											jobStatus:jobStatus
+										}
+								};
+								
+								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
+							}
+						}
+					}
+				}
+				
+				if(<portlet:namespace/>refreshTimer){
+					clearInterval(<portlet:namespace/>refreshTimer);
 				}
 				
 				//setInterval Setting
@@ -405,9 +422,17 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 	});
 }
 
+var <portlet:namespace/>syncPreSimulationUuid = ''; 
 function <portlet:namespace/>syncJobStatusList(simulationUuid){
+	<portlet:namespace/>syncPreSimulationUuid = simulationUuid;
+	
 	if(<portlet:namespace/>prevStatus.isCheckExist()){
 		<portlet:namespace/>searchSimulationJob(simulationUuid,<portlet:namespace/>workSimulationJobId);
+	}
+	
+	if(<portlet:namespace/>syncPreSimulationUuid!=''&&<portlet:namespace/>syncPreSimulationUuid != simulationUuid){
+		//<portlet:namespace/>prevStatus init
+		<portlet:namespace/>prevStatus.clearStatusCache();
 	}
 }
 

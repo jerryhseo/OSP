@@ -2349,13 +2349,16 @@
 				return;
 			}
 
-			fireRefreshJobStatus( 
-			                     {
-			                    	 simulationUuid: simulation.uuid(),
-                                	  jobUuid: jobUuid
-			                     } 
-			);
-            
+			var statusData = {
+					simulationTitle: simulation.title(),
+					jobTitle: job.title(),
+					simulationUuid: simulation.uuid(),
+					jobUuid: job.uuid(),
+					jobStatus: job.status()
+			};
+			
+			fireRefreshJobStatus(statusData);
+			
             var scienceApp = Workbench.scienceApp();
             var logPorts = scienceApp.logPorts();
             var outputPorts = scienceApp.outputPorts();
@@ -2376,7 +2379,7 @@
                     	fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
-                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
                 }
             }
             
@@ -2391,7 +2394,7 @@
                     	fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
-                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
                 }
             }
 		};
