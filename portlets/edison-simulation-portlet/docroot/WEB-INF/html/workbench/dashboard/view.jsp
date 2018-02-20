@@ -53,6 +53,43 @@ var <portlet:namespace/>connector;
 var <portlet:namespace/>jqPortletBoundaryId;
 var <portlet:namespace/>scienceAppId;
 var <portlet:namespace/>refreshJobLogTimer;
+var <portlet:namespace/>workSimulationJobId;
+
+var <portlet:namespace/>prevStatus = (function(){
+	var jobStatus = {};
+	var thisCheck = [];
+	return {
+		log: function(){
+			console.log("jobStatus", jobStatus);
+			console.log("thisCheck", thisCheck);
+		},
+		isExist: function(jobUuid){
+			return jobStatus.hasOwnProperty(jobUuid);
+		},
+		isCheckExist: function(){
+			return thisCheck.length>0?true:false;
+		},
+		isThisTimeSuccess: function(jobUuid, status){
+			// 1701011 : success
+			return jobStatus[jobUuid] != 1701011 && status == 1701011;
+		},
+		setJobStatus: function(jobUuid, status){
+			jobStatus[jobUuid] = status;
+			thisCheck.push(jobUuid);
+		},
+		clearStatusCache: function(){
+			if(thisCheck.length > 0){
+				for(var key in jobStatus){
+					if($.inArray(key, thisCheck) === -1){
+						delete jobStatus[key];
+					}
+				}
+				thisCheck = [];
+			}
+		}
+	};
+})();
+var <portlet:namespace/>refreshTimer;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -124,8 +161,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, function( e ){
 	if(e.targetPortlet === myId){
 		if(e.data.status){
 			toastr["success"]("", Liferay.Language.get('edison-data-insert-success'));
-			$topLi = $("li#<portlet:namespace/>simulation-"+e.data.simulationUuid);
-			<portlet:namespace/>searchSimulationJob('',e.data.simulationUuid,$topLi,true);
+			<portlet:namespace/>searchSimulationJob(e.data.simulationUuid);
 			<portlet:namespace/>selectRow(e.data.simulationUuid,e.data.jobUuid);
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-insert-error'));
@@ -213,7 +249,8 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 					var simulation = result.simulaitons[i];
 // 					console.log(simulation);
 					$topLi = $("<li/>").addClass("treeview <portlet:namespace/>simulation-section").attr("id","<portlet:namespace/>simulation-"+simulation._simulationUuid).appendTo($targetUL);
-					$aWrapper = $("<a/>").attr("href","#").appendTo($topLi);
+					$aWrapper = $("<a/>").attr("href","#")
+								.attr("onclick","<portlet:namespace/>searchSimulationJob('"+simulation._simulationUuid+"')").appendTo($topLi);
 					$("<i/>").addClass("fa fa-lg fa-folder").appendTo($aWrapper);
 					$("<span/>").attr("id","simulationTitle").html(simulation._simulationTitle).appendTo($aWrapper);
 					$("<span/>").addClass("pull-right-container")
@@ -221,13 +258,6 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 										$("<i/>").addClass("fa fa-angle-left pull-right")
 										)
 								.appendTo($aWrapper);
-					
-					var isEdit = true;
-					if(simulation._userId !='${nowUserId}'){
-						isEdit = false;
-					}
-					
-					<portlet:namespace/>searchSimulationJob(scienceAppId,simulation._simulationUuid,$topLi,isEdit);
 				}
 				
 				$("#<portlet:namespace/>pagin").html(result.pagingStr);
@@ -257,20 +287,22 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 			topSimultionSection.children("a").trigger('click');
 		}
 		
+		var length = topSimultionSection.find("li[id*=<portlet:namespace/>job-]").length;
+		if(length==0){
+			<portlet:namespace/>selectRow(simulationUuid, jobUuid);
+		}
 		if(nullToStr(jobUuid)===''){
 			topSimultionSection.find("li[id*=<portlet:namespace/>job-]:first > a").trigger('click');
 		}else{
 			topSimultionSection.find("li#<portlet:namespace/>job-"+jobUuid+" > a").trigger('click');
 		}
 		
-	}, 800);
+	}, 500);
 }
 
 
-function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUuid,targetObject,isEdit){
-	var scienceAppId = paramScienceAppId==''?<portlet:namespace/>scienceAppId:paramScienceAppId;
+function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 	var searchForm = {
-			"<portlet:namespace/>scienceAppId": scienceAppId,
 			"<portlet:namespace/>simulationUuid": simulationUuid
 		};
 	
@@ -281,18 +313,22 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 		data  : searchForm,
 		dataType: 'json',
 		success: function(result) {
-			var length = result.length;
-			$topUl = $("<ul/>").addClass("treeview-menu")
-			if(targetObject.find("ul.treeview-menu").length >0){
-				targetObject.find("ul.treeview-menu").remove();
-				$topUl.css("display","block");
+			var length = result.jobs.length;
+			$targetObject = $("li#<portlet:namespace/>simulation-"+simulationUuid);
+			var topUl;
+			if($targetObject.find("ul").length>0){
+				$targetObject.find("ul").empty();
+				topUl = $targetObject.find("ul");
+			}else{
+				topUl = $("<ul/>").addClass("treeview-menu");
+				topUl.appendTo($targetObject);
 			}
 			
-			$topUl.appendTo(targetObject);
 			
+			var isEdit = result.isEdit;
 			//권한이 있을 경우에만 수정 가능
 			if(isEdit){
-				$editLi = $("<li/>").appendTo($topUl);
+				$editLi = $("<li/>").appendTo(topUl);
 				$editSpan = $("<span/>").addClass("btn-group edit-btn-group").appendTo($editLi);
 				
 				
@@ -309,12 +345,29 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 							  .appendTo($editSpan);
 			}
 			
+			//<portlet:namespace/>prevStatus init
+			<portlet:namespace/>prevStatus.clearStatusCache();
+			
+			if(<portlet:namespace/>refreshTimer){
+				clearInterval(<portlet:namespace/>refreshTimer);
+			}
+			
 			if(length>0){
+				var isUncompletedJobExist = false;
 				for(var i = 0; i < length; i++) {
-					var job = result[i];
+					var job = result.jobs[i];
 // 					console.log(job);
-
+					
+					
 					var jobStatus = job._jobStatus;
+					var jobUuid = job._jobUuid;
+					
+					//Status Setting
+					if(jobStatus == 0 || jobStatus == 1701005 || jobStatus == 1701006){
+						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
+						isUncompletedJobExist = true;
+					}
+					
 					var jobStatusCss = "fa fa-circle";
 					if(jobStatus==1701005||jobStatus==1701006){
 						jobStatusCss = "fa fa-circle running";
@@ -323,7 +376,10 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 					}else if(jobStatus==1701012){
 						jobStatusCss = "fa fa-circle fail";
 					}
-					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid).appendTo($topUl);
+					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid).appendTo(topUl);
+					if(job._jobUuid===selectJobId){
+						$topLi.addClass("active");
+					}
 					$("<span/>").addClass("label label-primary pull-right  sidebar-btn").attr("data-btn-type","search-job-info").css("cursor","pointer")
 								.append(
 										$("<i/>").addClass("icon-arrow-right")
@@ -332,7 +388,11 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 								.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
-					
+				}
+				
+				//setInterval Setting
+				if(isUncompletedJobExist){
+					<portlet:namespace/>refreshTimer = setInterval(<portlet:namespace/>syncJobStatusList, 5000, simulationUuid);
 				}
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
@@ -343,6 +403,12 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 			}  
 		}
 	});
+}
+
+function <portlet:namespace/>syncJobStatusList(simulationUuid){
+	if(<portlet:namespace/>prevStatus.isCheckExist()){
+		<portlet:namespace/>searchSimulationJob(simulationUuid,<portlet:namespace/>workSimulationJobId);
+	}
 }
 
 function <portlet:namespace/>searchSimulationJobInfo(jobUuid){
@@ -389,6 +455,9 @@ function <portlet:namespace/>jobSelect(object){
 	};
 	
 	Liferay.fire(OSP.Event.OSP_JOB_SELECTED, eventData);
+	
+	//Global workSimulationJobId Setting
+	<portlet:namespace/>workSimulationJobId = jobUuid;
 }
 
 
@@ -767,9 +836,7 @@ function <portlet:namespace/>copyJobAndAddJob(simulationUuid,inputs) {
 				var job = simulation.workingJob();
 				
 				var myId = '<%=portletDisplay.getId()%>';
-				alert("inputs");
 				if(inputs===''){
-					alert("inputs!!");
 					inputs = JSON.stringify(job.copyInputs());
 				}
 				var eventData = {
