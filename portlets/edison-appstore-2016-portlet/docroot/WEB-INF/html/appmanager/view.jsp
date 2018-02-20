@@ -76,7 +76,7 @@
 	<liferay-portlet:param name="scienceAppId" value="${scienceAppId}"/>
 	
 	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
-	<portlet:param name="redirectName" 	value="APP Manager" />
+	<portlet:param name="redirectName" 	value="MY EDISON" />
 </liferay-portlet:renderURL>
 	
 <%
