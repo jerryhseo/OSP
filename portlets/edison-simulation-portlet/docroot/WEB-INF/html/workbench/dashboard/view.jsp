@@ -688,7 +688,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition)
 // 			}else{
 // 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
 // 			}
-			alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 		}
 	});
 	

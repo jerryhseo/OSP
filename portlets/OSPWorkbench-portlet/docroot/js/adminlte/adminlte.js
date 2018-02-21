@@ -636,7 +636,10 @@ throw new Error('AdminLTE requires jQuery')
     var contentHeaderHeight = $('.content-header').height();
     
     if(rowCnt!=0){
-    	$('#workbench-layout-area div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight-30) / rowCnt));
+    	var $subCols = $('#workbench-layout-area div.sub-col');
+    	if($subCols.css("height")=='0px'){
+    		$('#workbench-layout-area div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight-30) / rowCnt));
+    	}
     }
   };
 
