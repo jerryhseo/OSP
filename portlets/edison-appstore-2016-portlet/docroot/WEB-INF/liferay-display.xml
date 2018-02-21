@@ -4,7 +4,6 @@
 <display>
 	<category name="EDISON">
 		<portlet id="edison-workspace" />
-		<portlet id="edison-main-search-app" ></portlet>
 		<portlet id="edison-developer-request-list" ></portlet>
 		<portlet id="science-app-manager"></portlet>
 		<portlet id="edison-favoriteApp" />
