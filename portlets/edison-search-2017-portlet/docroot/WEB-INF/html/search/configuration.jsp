@@ -20,7 +20,7 @@ boolean areaScienceData = GetterUtil.getBoolean(portletPreferences.getValue(Sear
     <aui:input name="<%= \"preferences--\" + SearchConstants.AREA_SCIENCE_APP + \"--\"%>"  label="edison-search-science-app" type="checkbox" value="<%= areaScienceApp  %>"/>
     <aui:input name="<%= \"preferences--\" + SearchConstants.AREA_CONTENTS + \"--\"%>"  label="edison-search-contents" type="checkbox" value="<%= areaContents  %>"/>
     <aui:input name="<%= \"preferences--\" + SearchConstants.AREA_SIMULATION_PROJECT + \"--\"%>"  label="edison-search-simulation-project" type="checkbox" value="<%= areaSimulationProject  %>"/>
-    <aui:input name="<%= \"preferences--\" + SearchConstants.AREA_SCIENCE_DATA + \"--\"%>"  label="com.kisti.osp.icecap.model.DataCollection" type="checkbox" value="<%= areaScienceData  %>"/>
+    <aui:input name="<%= \"preferences--\" + SearchConstants.AREA_SCIENCE_DATA + \"--\"%>"  label="edison-search-science-data" type="checkbox" value="<%= areaScienceData  %>"/>
   </aui:fieldset>
   <br/>
   <aui:fieldset label="edison-search-category-image">

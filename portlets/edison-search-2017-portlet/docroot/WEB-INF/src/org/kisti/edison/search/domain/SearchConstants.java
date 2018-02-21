@@ -8,7 +8,7 @@ public interface SearchConstants{
   public static final String AREA_SCIENCE_APP_LABEL = "edison-search-science-app";
   public static final String AREA_CONTENTS_LABEL = "edison-search-contents";
   public static final String AREA_SIMULATION_PROJECT_LABEL = "edison-search-simulation-project";
-  public static final String AREA_SCIENCE_DATA_LABEL = "com.kisti.osp.icecap.model.DataCollection";
+  public static final String AREA_SCIENCE_DATA_LABEL = "edison-search-science-data";
   public static final String DIV_CONTENTS_CLASSNOTE = "classnote";
   public static final String DIV_CONTENTS_MANUAL = "manual";
   public static final String DIV_CONTENTS_REFERENCE = "reference";

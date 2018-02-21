@@ -411,6 +411,28 @@ public class SearchLocalServiceWrapper implements SearchLocalService,
 
 	@Override
 	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _searchLocalService.dataSearch(request, response, searchCondition);
+	}
+
+	@Override
+	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _searchLocalService.dataSearch(request, response,
+			searchCondition, searchResults);
+	}
+
+	@Override
+	public org.kisti.edison.search.service.model.Search dataSearch(
 		org.kisti.edison.search.service.model.SearchCondition searchCondition,
 		org.kisti.edison.search.service.model.Search searchResults)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -420,9 +442,12 @@ public class SearchLocalServiceWrapper implements SearchLocalService,
 
 	@Override
 	public org.kisti.edison.search.service.model.Search totalSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
 		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws java.lang.Exception {
-		return _searchLocalService.totalSearch(searchCondition);
+		return _searchLocalService.totalSearch(request, response,
+			searchCondition);
 	}
 
 	@Override

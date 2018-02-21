@@ -49,6 +49,7 @@ import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.sdr.metadata.service.CollectionLocalServiceUtil;
 
 @Controller
 @RequestMapping("VIEW")
@@ -80,7 +81,6 @@ public class SearchBoxController {
 			if(GroupLocalServiceUtil.getGroups(companyId, PortalUtil.getScopeGroupId(request), true).size()>0){
 				isChildrenSite = true;
 			}
-			
 			
 			//if(parentGroupId == 0 && isChildrenSite) {
 			if(portalYn.equals("Y")){//포탈이면
@@ -230,7 +230,7 @@ public class SearchBoxController {
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         try{
-            model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(searchCondition));
+            model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(request, response, searchCondition));
         }catch (Exception e){
             throw new SystemException(e);
         }

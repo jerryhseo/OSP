@@ -201,25 +201,44 @@ public class SearchLocalServiceClp implements SearchLocalService {
 		_methodName33 = "dataSearch";
 
 		_methodParameterTypes33 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
+				"org.kisti.edison.search.service.model.SearchCondition"
+			};
+
+		_methodName34 = "dataSearch";
+
+		_methodParameterTypes34 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
 				"org.kisti.edison.search.service.model.SearchCondition",
 				"org.kisti.edison.search.service.model.Search"
 			};
 
-		_methodName34 = "totalSearch";
-
-		_methodParameterTypes34 = new String[] {
-				"org.kisti.edison.search.service.model.SearchCondition"
-			};
-
-		_methodName35 = "getCategoryIdArrays";
+		_methodName35 = "dataSearch";
 
 		_methodParameterTypes35 = new String[] {
+				"org.kisti.edison.search.service.model.SearchCondition",
+				"org.kisti.edison.search.service.model.Search"
+			};
+
+		_methodName36 = "totalSearch";
+
+		_methodParameterTypes36 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
 				"org.kisti.edison.search.service.model.SearchCondition"
 			};
 
-		_methodName36 = "getCategoryIds";
+		_methodName37 = "getCategoryIdArrays";
 
-		_methodParameterTypes36 = new String[] {
+		_methodParameterTypes37 = new String[] {
+				"org.kisti.edison.search.service.model.SearchCondition"
+			};
+
+		_methodName38 = "getCategoryIds";
+
+		_methodParameterTypes38 = new String[] {
 				"org.kisti.edison.search.service.model.SearchCondition"
 			};
 	}
@@ -1305,8 +1324,9 @@ public class SearchLocalServiceClp implements SearchLocalService {
 
 	@Override
 	public org.kisti.edison.search.service.model.Search dataSearch(
-		org.kisti.edison.search.service.model.SearchCondition searchCondition,
-		org.kisti.edison.search.service.model.Search searchResults)
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -1314,6 +1334,94 @@ public class SearchLocalServiceClp implements SearchLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName33,
 					_methodParameterTypes33,
+					new Object[] {
+						ClpSerializer.translateInput(request),
+						
+					ClpSerializer.translateInput(response),
+						
+					ClpSerializer.translateInput(searchCondition)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.search.service.model.Search)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
+					new Object[] {
+						ClpSerializer.translateInput(request),
+						
+					ClpSerializer.translateInput(response),
+						
+					ClpSerializer.translateInput(searchCondition),
+						
+					ClpSerializer.translateInput(searchResults)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.search.service.model.Search)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public org.kisti.edison.search.service.model.Search dataSearch(
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35,
 					new Object[] {
 						ClpSerializer.translateInput(searchCondition),
 						
@@ -1345,14 +1453,22 @@ public class SearchLocalServiceClp implements SearchLocalService {
 
 	@Override
 	public org.kisti.edison.search.service.model.Search totalSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
 		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws java.lang.Exception {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34,
-					new Object[] { ClpSerializer.translateInput(searchCondition) });
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
+					new Object[] {
+						ClpSerializer.translateInput(request),
+						
+					ClpSerializer.translateInput(response),
+						
+					ClpSerializer.translateInput(searchCondition)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1380,8 +1496,8 @@ public class SearchLocalServiceClp implements SearchLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35,
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37,
 					new Object[] { ClpSerializer.translateInput(searchCondition) });
 		}
 		catch (Throwable t) {
@@ -1410,8 +1526,8 @@ public class SearchLocalServiceClp implements SearchLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36,
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38,
 					new Object[] { ClpSerializer.translateInput(searchCondition) });
 		}
 		catch (Throwable t) {
@@ -1506,4 +1622,8 @@ public class SearchLocalServiceClp implements SearchLocalService {
 	private String[] _methodParameterTypes35;
 	private String _methodName36;
 	private String[] _methodParameterTypes36;
+	private String _methodName37;
+	private String[] _methodParameterTypes37;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
 }
