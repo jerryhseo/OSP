@@ -214,10 +214,14 @@
     
     <c:choose>
         <c:when test="${empty redirectName }">
-            <div class="<portlet:namespace/>commentTitle">
-                <img src="/edison-default-2016-portlet/images/title_virtual.png" width="20" height="20" style="margin-right: 5px;"> 
-            	<liferay-ui:message key='edison-board-comment-title' />
-            </div>
+        	<div class="panel edison-panel">
+	            <div class="panel-heading clearfix <portlet:namespace/>commentTitle" style="border-bottom: 0px;">
+	            	<h3 class="panel-title pull-left">
+		                <img src="/edison-default-2016-portlet/images/title_virtual.png" width="20" height="20" style="margin-right: 5px;"> 
+		            	<liferay-ui:message key='edison-board-comment-title' />
+	            	</h3>
+	            </div>
+        	</div>
         </c:when>
         <c:otherwise>
            <div class="<portlet:namespace/>commentTitle">
@@ -228,12 +232,10 @@
     </c:choose>
     
     <c:if test="${isMember eq true or authYn eq 'Y'}">
+	    <div class="<portlet:namespace/>buttonbox top" style="display: none;">
+	        <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
+	    </div>
     </c:if>
-        <div class="<portlet:namespace/>buttonbox top" style="display: none;">
-            <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
-        </div>
-    
-    <div class="clear" style="padding-bottom: 20px;"></div>
     
     <input type="hidden" id="<portlet:namespace/>parentCotentSeq" name="ParentContentSeq" value="${modelId}" />  <!-- 코멘트를 등록할 경우 이용 -->
     <input type="hidden" id="<portlet:namespace/>selectBoardSeq" name="selectBoardSeq" value="" />    <!-- 코멘트 수정, 삭제 또는 댓글을 등록할 경우 이용 -->
@@ -245,10 +247,10 @@
     <div class="h10"></div>
         
     <c:if test="${isMember eq true or authYn eq 'Y'}">
-    </c:if>
         <div class="<portlet:namespace/>buttonbox bottom">
             <input class="btn btn-default <portlet:namespace/>writeBtn" type="button" onClick="<portlet:namespace/>openCommentInput('commentWrite','0');" value="<liferay-ui:message key='edison-button-board-write' />" />
         </div>
+    </c:if>
     
     <div style="height: 10px;"></div>
     

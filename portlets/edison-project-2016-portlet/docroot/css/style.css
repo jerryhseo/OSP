@@ -62,6 +62,7 @@ select.selectProject{
 	background: url(/edison-project-2016-portlet/images/output/cfdbg.png) no-repeat;
 	list-style: none;
 	margin-right: 40px;
+	margin-bottom: 10px;
 	float: left;
 }
 
@@ -78,7 +79,6 @@ select.selectProject{
 }
 
 .boxs ul li.designbg {
-	margin-right: 0;
 	background: url(/edison-project-2016-portlet/images/output/designbg.png) no-repeat;
 }
 

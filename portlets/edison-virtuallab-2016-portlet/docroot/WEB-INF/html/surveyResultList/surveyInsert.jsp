@@ -209,6 +209,7 @@ function <portlet:namespace/>historyback(){
 		<input type="hidden" name="<portlet:namespace/>surveyDivCd" value="${param.surveyDivCd}"/>
 		
 		<h1 style="padding-bottom:0px;">
+			<img src="${contextPath}/images/title_virtual.png"/>
 			<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
 		</h1>
 		

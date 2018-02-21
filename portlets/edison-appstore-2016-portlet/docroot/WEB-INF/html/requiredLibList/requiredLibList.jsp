@@ -7,28 +7,28 @@
 	<portlet:param name="myRender" value="libChangeRender"/>
 </liferay-portlet:renderURL>
 <div class="table-responsive panel edison-panel">
-	<h1>
-		<liferay-ui:message key='edison-science-appstore-library-request-list' />
-	</h1>
 	<div class="table1_list onhover">
 		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" class="panel-heading clearfix">
 			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1" />
 			
-			<div class="input-group">
-				<input type="button" value="<liferay-ui:message key="edison-button-all-search" />" class="btn btn-default" id="initB" onclick="<portlet:namespace/>dataALLSearchList();" style="float: left;" />
+			<h1>
+				<img src="${contextPath}/images/title_virtual.png"/>
+				<liferay-ui:message key='edison-science-appstore-library-request-list' />
+			</h1>
+			
+			<div class="btn-group pull-right">
 				<input name="<portlet:namespace/>searchAppName" class="form-control" type="text" id="<portlet:namespace/>searchAppName" 
-					style="margin: 0px 2px 2px 2px; width: 300px;" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" value ="${params.searchValue}" autocomplete="off" placeholder='<liferay-ui:message key="edison-appstore-solver-name"/>'/>
+					style="margin: 0px 2px 2px 2px; width: 300px; float: left;" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" value ="${params.searchValue}" autocomplete="off" placeholder='<liferay-ui:message key="edison-appstore-solver-name"/>'/>
 				<button class="btn btn-default" type="button" id="keyWordB" onclick="<portlet:namespace/>dataSearchList();">
 					<i class="icon-search"></i>
 				</button>
-				<div class="input-group-btn">
-					<select id="<portlet:namespace/>searchState" name="<portlet:namespace/>searchState" onchange="<portlet:namespace/>dataSearchList()" class="btn btn-default" style="margin-bottom: 15px;">
-						<option value="" <c:if test="${params.searchState == 'All' }"> selected="selected"</c:if> ><liferay-ui:message key='full' /></option>
-						<option value="Require" <c:if test="${params.searchState == 'Require' }"> selected="selected"</c:if> ><liferay-ui:message key='edison-science-appstore-library-require' /></option>
-						<option value="Complete" <c:if test="${params.searchState == 'Complete' }"> selected="selected"</c:if>><liferay-ui:message key='edison-science-appstore-library-complete' /></option>
-						<option value="Reject" <c:if test="${params.searchState == 'Reject' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-denial' /></option>
-					</select>
-				</div>
+				<input type="button" value="<liferay-ui:message key="edison-button-all-search" />" class="btn btn-default" id="initB" onclick="<portlet:namespace/>dataALLSearchList();" style="float: left;" />
+				<select id="<portlet:namespace/>searchState" name="<portlet:namespace/>searchState" onchange="<portlet:namespace/>dataSearchList()" class="btn btn-default" style="margin-bottom: 15px;">
+					<option value="" <c:if test="${params.searchState == 'All' }"> selected="selected"</c:if> ><liferay-ui:message key='full' /></option>
+					<option value="Require" <c:if test="${params.searchState == 'Require' }"> selected="selected"</c:if> ><liferay-ui:message key='edison-science-appstore-library-require' /></option>
+					<option value="Complete" <c:if test="${params.searchState == 'Complete' }"> selected="selected"</c:if>><liferay-ui:message key='edison-science-appstore-library-complete' /></option>
+					<option value="Reject" <c:if test="${params.searchState == 'Reject' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-denial' /></option>
+				</select>
 			</div>
 		</form>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">

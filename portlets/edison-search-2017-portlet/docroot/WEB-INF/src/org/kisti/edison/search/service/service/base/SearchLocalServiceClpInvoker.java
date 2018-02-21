@@ -201,25 +201,44 @@ public class SearchLocalServiceClpInvoker {
 		_methodName58 = "dataSearch";
 
 		_methodParameterTypes58 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
+				"org.kisti.edison.search.service.model.SearchCondition"
+			};
+
+		_methodName59 = "dataSearch";
+
+		_methodParameterTypes59 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
 				"org.kisti.edison.search.service.model.SearchCondition",
 				"org.kisti.edison.search.service.model.Search"
 			};
 
-		_methodName59 = "totalSearch";
-
-		_methodParameterTypes59 = new String[] {
-				"org.kisti.edison.search.service.model.SearchCondition"
-			};
-
-		_methodName60 = "getCategoryIdArrays";
+		_methodName60 = "dataSearch";
 
 		_methodParameterTypes60 = new String[] {
+				"org.kisti.edison.search.service.model.SearchCondition",
+				"org.kisti.edison.search.service.model.Search"
+			};
+
+		_methodName61 = "totalSearch";
+
+		_methodParameterTypes61 = new String[] {
+				"javax.portlet.ResourceRequest",
+				"javax.portlet.ResourceResponse",
 				"org.kisti.edison.search.service.model.SearchCondition"
 			};
 
-		_methodName61 = "getCategoryIds";
+		_methodName62 = "getCategoryIdArrays";
 
-		_methodParameterTypes61 = new String[] {
+		_methodParameterTypes62 = new String[] {
+				"org.kisti.edison.search.service.model.SearchCondition"
+			};
+
+		_methodName63 = "getCategoryIds";
+
+		_methodParameterTypes63 = new String[] {
 				"org.kisti.edison.search.service.model.SearchCondition"
 			};
 	}
@@ -408,22 +427,39 @@ public class SearchLocalServiceClpInvoker {
 
 		if (_methodName58.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
-			return SearchLocalServiceUtil.dataSearch((org.kisti.edison.search.service.model.SearchCondition)arguments[0],
-				(org.kisti.edison.search.service.model.Search)arguments[1]);
+			return SearchLocalServiceUtil.dataSearch((javax.portlet.ResourceRequest)arguments[0],
+				(javax.portlet.ResourceResponse)arguments[1],
+				(org.kisti.edison.search.service.model.SearchCondition)arguments[2]);
 		}
 
 		if (_methodName59.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
-			return SearchLocalServiceUtil.totalSearch((org.kisti.edison.search.service.model.SearchCondition)arguments[0]);
+			return SearchLocalServiceUtil.dataSearch((javax.portlet.ResourceRequest)arguments[0],
+				(javax.portlet.ResourceResponse)arguments[1],
+				(org.kisti.edison.search.service.model.SearchCondition)arguments[2],
+				(org.kisti.edison.search.service.model.Search)arguments[3]);
 		}
 
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
-			return SearchLocalServiceUtil.getCategoryIdArrays((org.kisti.edison.search.service.model.SearchCondition)arguments[0]);
+			return SearchLocalServiceUtil.dataSearch((org.kisti.edison.search.service.model.SearchCondition)arguments[0],
+				(org.kisti.edison.search.service.model.Search)arguments[1]);
 		}
 
 		if (_methodName61.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+			return SearchLocalServiceUtil.totalSearch((javax.portlet.ResourceRequest)arguments[0],
+				(javax.portlet.ResourceResponse)arguments[1],
+				(org.kisti.edison.search.service.model.SearchCondition)arguments[2]);
+		}
+
+		if (_methodName62.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
+			return SearchLocalServiceUtil.getCategoryIdArrays((org.kisti.edison.search.service.model.SearchCondition)arguments[0]);
+		}
+
+		if (_methodName63.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
 			return SearchLocalServiceUtil.getCategoryIds((org.kisti.edison.search.service.model.SearchCondition)arguments[0]);
 		}
 
@@ -502,4 +538,8 @@ public class SearchLocalServiceClpInvoker {
 	private String[] _methodParameterTypes60;
 	private String _methodName61;
 	private String[] _methodParameterTypes61;
+	private String _methodName62;
+	private String[] _methodParameterTypes62;
+	private String _methodName63;
+	private String[] _methodParameterTypes63;
 }

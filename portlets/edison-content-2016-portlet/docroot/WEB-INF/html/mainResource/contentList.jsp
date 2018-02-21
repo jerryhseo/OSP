@@ -25,37 +25,38 @@
 		width:100%;
 		background-color:#abcde3;
 		padding-bottom:40px;
+		margin-bottom: 50px;
 	}
 </style>
 
 <div class="staticswrap">
 	<div class="container">
-		<h2 class="h2title" style="color: #fff; padding-top: 33px;">
+		<h2 class="h2title" style="color: #fff; padding-top: 33px;  font-family: 'Nanum Gothic', sans-serif;">
 			SYSTEM RESOURCE STATISTICS
 		</h2>
 		<div class="h30" ></div>
 		<div class="row">
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge1" class="fillgauge"></svg>
 				<div id="clusterName1" class="clusterName"></div>
 			</div>
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge2" class="fillgauge"></svg>
 				<div id="clusterName2" class="clusterName"></div>
 			</div>
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge3" class="fillgauge"></svg>
 				<div id="clusterName3" class="clusterName"></div>
 			</div>
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge4" class="fillgauge"></svg>
 				<div id="clusterName4" class="clusterName"></div>
 			</div>
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge5" class="fillgauge"></svg>
 				<div id="clusterName5" class="clusterName"></div>
 			</div>
-			<div class="col-xs-4 col-md-2">
+			<div class="col-lg-2 col-md-3 col-sm-4">
 				<svg id="fillgauge6" class="fillgauge"></svg>
 				<div id="clusterName6" class="clusterName"></div>
 			</div>

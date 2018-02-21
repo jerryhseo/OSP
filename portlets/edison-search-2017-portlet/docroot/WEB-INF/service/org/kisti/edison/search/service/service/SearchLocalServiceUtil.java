@@ -387,6 +387,26 @@ public class SearchLocalServiceUtil {
 	}
 
 	public static org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().dataSearch(request, response, searchCondition);
+	}
+
+	public static org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .dataSearch(request, response, searchCondition, searchResults);
+	}
+
+	public static org.kisti.edison.search.service.model.Search dataSearch(
 		org.kisti.edison.search.service.model.SearchCondition searchCondition,
 		org.kisti.edison.search.service.model.Search searchResults)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -395,9 +415,11 @@ public class SearchLocalServiceUtil {
 	}
 
 	public static org.kisti.edison.search.service.model.Search totalSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
 		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws java.lang.Exception {
-		return getService().totalSearch(searchCondition);
+		return getService().totalSearch(request, response, searchCondition);
 	}
 
 	public static long[] getCategoryIdArrays(

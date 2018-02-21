@@ -820,6 +820,16 @@
 			Liferay.fire( OSP.Event.OSP_CREATE_JOB, eventData );
 		};
 		
+		var fireSimulationModal= function( inputs ){
+			var eventData = {
+			     portletId: Workbench.id(),
+	             targetPortlet: Workbench.id(),
+	             data: inputs
+		};
+	
+			Liferay.fire( OSP.Event.OSP_REQUEST_SIMULATION_MODAL, eventData );
+		};
+		
 		var fireRefreshPortsStatus = function( targetPortlet ){
 			var dashboard = Workbench.dashboardPortlet();
 			if( !dashboard )	return;
@@ -857,7 +867,14 @@
 			};
 			Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_RESULT, eventData );
 		};
-		
+		var fireSaveSimulationResult = function( targetPortId,data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: targetPortId,
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, eventData );
+		};
 		var fireDeleteSimulationResult = function( targetPortId,data ){
 			var eventData = {
 			                 portletId: Workbench.id(),
@@ -895,21 +912,29 @@
 		};
 		
 		var fireRefreshJobStatus = function( data ){
+			
+			if(Workbench.isFlowLayout()){
+				var jobStatusCode = jobCodeConvertorFromStatus(data.jobStatus);
+				var logPortLength = Workbench.scienceApp().logPortsArray().length
+				var flowLayoutCode;
+				if(jobStatusCode <=1701005){
+					flowLayoutCode = "INPUT";
+				}else if(1701005 < jobStatusCode&&jobStatusCode <= 1701010 &&logPortLength > 0){
+					flowLayoutCode = "LOG";
+				}else if(jobStatusCode >= 1701011){
+					flowLayoutCode = "OUTPUT";
+				}else{
+					flowLayoutCode = "INPUT";
+				}
+				data.flowLayoutCode = flowLayoutCode;
+			}
+			
 			var eventData = {
 								portletId: Workbench.id(),
 								targetPortlet: 'BROADCAST',
 								data: data
 						};
 			Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
-		};
-		
-		var fireRefreshBreadcrumb = function( data ){
-			var eventData = {
-								portletId: Workbench.id(),
-								targetPortlet: 'BROADCAST',
-								data: data
-						};
-			Liferay.fire( OSP.Event.OSP_RESPONSE_BREADCRUMB_CHANGE, eventData );
 		};
 		
 		var fireRefreshSimulations = function( data ){
@@ -1059,7 +1084,7 @@
 			console.log( 'evaluatePortletType: ', columns);
 		};
 		
-		var createSimulation = function(portleId, title, resourceURL ){
+		var createSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL){
 			var scienceApp = Workbench.scienceApp();
 			
 			var ajaxData = Liferay.Util.ns(
@@ -1071,7 +1096,9 @@
 			                        	   scienceAppVersion: scienceApp.version(),
 			                        	   srcClassCode: Workbench.classId(),
 			                        	   srcClassId: Workbench.customId(),
-			                        	   title: Liferay.Util.escapeHTML(title)
+			                        	   title: Liferay.Util.escapeHTML(title),
+			                        	   jobTitle: Liferay.Util.escapeHTML(jobTitle),
+			                        	   jobInitData: jobInitData ? jobInitData : '' 
 			                           });
 			
 			$.ajax({
@@ -1081,7 +1108,7 @@
 				dataType : 'json',
 				success: function(jsonSimulation) {
 					
-					fireCreateSimulationResult(portleId,true);
+					fireCreateSimulationResult(portletId,true);
 					var simulation = new OSP.Simulation(jsonSimulation);
 					var data = {
 						simulationUuid: simulation.uuid()
@@ -1091,7 +1118,7 @@
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
-					fireCreateSimulationResult(portleId,false);
+					fireCreateSimulationResult(portletId,false);
 				}
 			});
 		};
@@ -1130,14 +1157,18 @@
 			});
 		};
 		
-		var saveSimulation = function( simulation, resourceURL ){
+		var saveSimulation = function( portletId, simulation, resourceURL ){
+			
+			var dirtyJobs = jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), false,resourceURL);
+			
 			var data = Liferay.Util.ns(
 			                           Workbench.namespace(),
 			                           {
 			                        	   command: 'SAVE_SIMULATION',
+			                        	   simulationUuid: simulation.uuid(),
 			                        	   srcClassCode: Workbench.classId(),
 			                        	   srcClassId: Workbench.customId(),
-			                        	   simulation: JSON.stringify(simulation.toDTO())
+			                        	   jobs: JSON.stringify(dirtyJobs)
 			                           });
 				
 			$.ajax({
@@ -1147,11 +1178,12 @@
 				data  : data,
 				dataType : 'text',
 				success: function(result) {
-					console.log( 'saveSimulation: '+result );
+					fireSaveSimulationResult(portletId,true);
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
+					fireSaveSimulationResult(portletId,false);
 				}
 			});
 		};
@@ -1239,65 +1271,135 @@
 			});
 		};
 		
-		var submitMPJobs = function( $inputHandler, $getCoresDialog, resourceURL, job ){
-			$getCoresDialog.dialog({
-				resizable: false,
-				height: "auto",
-				title:'Enter number of cores',
-				width: 400,
-				modal: true,
+		var submitMPJobs = function(job,resourceURL){
+			$.confirm({
+				title: 'CPU Cores',
+				content: '' +
+				'<form action="" class="formName">' +
+				'<div class="form-group">' +
+				'<label>Enter number of cores</label>' +
+				'<input type="text" placeholder="cores" class="cores form-control" required />' +
+				'</div>' +
+				'</form>',
 				buttons: {
-					OK: function() {
-						var numberOfCores = Number($inputHandler.val());
-						if( ! isNaN( numberOfCores ) ){
-							$( this ).dialog( 'destroy' );
-							var simulation = Workbench.workingSimulation();
+					formSubmit: {
+						text: 'Submit',
+						btnClass: 'btn-blue',
+						action: function () {
+							var cores = this.$content.find('.cores').val();
+							if(!cores){
+								$.alert('provide a valid cores');
+								return false;
+							}else{
+								var pattern = /^\d+$/;
+								if(!pattern.test(cores)){
+									$.alert('only number');
+									return false;
+								}
+							}
 							
+							var simulation = Workbench.workingSimulation();
 							if( !job ){
-								simulation.ncores( numberOfCores );
-								submitSimulation( simulation, resourceURL );
+								simulation.ncores( cores );
+								jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), true,resourceURL );
+							}else{
+								job.ncores( cores );
+								jobsToSubmitGetParameters(simulation,job, true, resourceURL );
 							}
-							else{
-								job.ncores( numberOfCores );
-								submitJob( job, resourceURL );
-							}
-						}
-						else{
-							alert('Number of cores should not be empty.');
 						}
 					},
-					Cancel: function() {
-						$( this ).dialog( 'destroy' );
+					cancel: function () {
+						
 					}
+				},
+				onContentReady: function () {
+					// bind to events
+					var jc = this;
+					this.$content.find('form').on('submit', function (e) {
+						e.preventDefault();
+						jc.$$formSubmit.trigger('click'); // reference the button and click it
+			        });
 				}
 			});
 		};
 		
-		var submitJob = function( job, resourceURL ){
+		var jobsToSubmitGetParameters = function(simulation, jobs, isSubmit, resourceURL ){
+			var scienceApp = Workbench.scienceApp();
+			
+			var jobsToSubmit = [];
+			var inputPortNames = scienceApp.getInputPortNames();
+			
+			var ncores = 0;
+			 var dirtyJobs = [];
+			if(Array.isArray(jobs)){
+				dirtyJobs = jobs;
+				ncores = simulation.ncores();
+			}else{
+				dirtyJobs.push(jobs);
+				ncores = jobs.ncores();
+			}
+			
+			for( var index in dirtyJobs ){
+				var job = dirtyJobs[index];
+				console.log( 'dirtyJob: '+index, job);
+				console.log( 'inputPortNames: ', inputPortNames );
+				
+				var proliferatedJobs = job.proliferate( inputPortNames );
+				for( var jobIndex in proliferatedJobs ){
+					var proliferatedJob = proliferatedJobs[jobIndex];
+					
+					if( jobIndex > 0 ){
+						proliferatedJob.uuid('');
+					}
+					jobsToSubmit.push( proliferatedJob );
+				}
+			}
+			
+			console.log( 'Jobs To Submit: ', jobsToSubmit);
+			
+			if(isSubmit){
+				submitJobs(simulation,jobsToSubmit,ncores,resourceURL);
+			}else{
+				return jobsToSubmit;
+			}
+			
+		}
+		
+		var submitJobs = function(simulation,jobsToSubmit,ncores,resourceURL ){
+			/*프로비넌스 체크*/
+			
+			
+			var scienceApp = Workbench.scienceApp();
+			var simulationCreateTime = simulation.createTime();
+			
 			var ajaxData = Liferay.Util.ns(
-			                               Workbench.namespace(),
-			                               {
-			                            	   command: 'SUBMIT_JOB',
-			                            	   jobUuid: job.uuid(),
-			                            	   inputs: JSON.stringify( job.inputs() )
-			                               });
+                           Workbench.namespace(),
+                           {
+                        	   command: 'SUBMIT_JOBS',
+                        	   simulationUuid: simulation.uuid(),
+                        	   simulationTime: simulationCreateTime,
+                        	   scienceAppName: scienceApp.name(),
+                        	   scienceAppVersion: scienceApp.version(),
+                        	   ncores: simulation.ncores(),
+                        	   jobs: JSON.stringify( jobsToSubmit )
+                           });
 			
 			$.ajax({
 				url : resourceURL,
 				type: 'post',
 				dataType: 'text',
 				data : ajaxData,
-				success : function(status){
-					job.status( status );
-					job.dirty(false);
-					job.isSubmit( true );
+				success : function(submittedJobs){
+//					job.status( status );
+//					job.dirty(false);
+//					job.isSubmit( true );
 					
-					var simulation = Workbench.workingSimulation();
-					var data = {
-			            simulationUuid: simulation.uuid(),
-			            jobUuid: job.uuid()
-					};
-					fireRefreshJobs(data);
+//					var simulation = Workbench.workingSimulation();
+//					var data = {
+//			            simulationUuid: simulation.uuid(),
+//			            jobUuid: job.uuid()
+//					};
+//					fireRefreshJobs(data);
 				},
 				error : function( data, e ){
 					console.log('[ERROR] submit job failed: ', data);
@@ -1442,6 +1544,7 @@
 				success: function(result ) {
 					var data = {
 							jobUuid: jobUuid,
+							simulationUuid: simulationUuid,
 							status:true
 					};
 					fireDeleteSimulationJobResult(portletId,data);
@@ -1572,8 +1675,20 @@
 			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CLASS_ID, arguments));
 		};
 		
+		Workbench.isFlowLayout = function( isFlowLayout ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.IS_FLOW_LAYOUT, arguments));
+		};
+		
 		Workbench.customId = function( customId ){
 			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CUSTOM_ID, arguments));
+		};
+		
+		Workbench.redirectName = function( redirectName ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_NAME, arguments));
+		};
+		
+		Workbench.redirectURL = function( redirectURL ){
+			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_URL, arguments));
 		};
 		
 		Workbench.loadPortlets = function( windowState ){
@@ -1890,7 +2005,9 @@
 		Workbench.handleRequestAppInfo = function( portletId ){
 			var data = {
 						scienceApp: Workbench.scienceApp(),
-						workbenchId: Workbench.id()
+						workbenchId: Workbench.id(),
+						workbenchRedirectURL: Workbench.redirectURL(),
+						workbenchRedirectName: Workbench.redirectName()
 					};
 				
 			fire( OSP.Event.OSP_RESPONSE_APP_INFO, portletId, data);
@@ -1989,7 +2106,8 @@
 									
 									console.log("Copy inputs: ", inputs);
 									console.log("Passed InputData: ", changedData);
-//									fireCreateJob( JSON.stringify( inputs ) );
+									
+									fireSimulationModal( JSON.stringify( inputs ) );
 								},
 								cancel: function () {
 									
@@ -2006,17 +2124,20 @@
 			);
 		};
 
-		Workbench.handleCreateSimulation = function(portletId, title, resourceURL ){
-			createSimulation(portletId, title, resourceURL );
+		Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
+			createSimulation(portletId, title, jobTitle, jobInitData, resourceURL );
 		};
 		
 		
-		Workbench.handleSaveSimulation = function( resourceURL ){
+		Workbench.handleSaveSimulation = function( portletId, resourceURL ){
 			var simulation = Workbench.workingSimulation();
 			if( simulation.checkDirty() )
-				saveSimulation( simulation, resourceURL );
+				saveSimulation( portletId, Workbench.workingSimulation(), resourceURL );
 			else
-				alert('No changes to be saved: '+simulation.title() );
+			$.alert({
+				title: 'Alert!',
+			    content: 'No changes to be saved: '+simulation.title()
+			});
 		};
 		
 		Workbench.handleDeleteSimulation = function( portletId, simulationUuid, resourceURL ){
@@ -2061,44 +2182,117 @@
 			}
 		};
 		
-		Workbench.handleSubmitJob = function( jobUuid, $inputHandler, $getCoresDialog, $resourceURL ){
+		Workbench.handleCheckProvenance = function(resourceURL){
+			var simulation = Workbench.workingSimulation();
+			var job = simulation.workingJob();
+			
+			var jobParameter = jobsToSubmitGetParameters(simulation,job, false,'');
+			
+			var data = Liferay.Util.ns(
+			                           Workbench.namespace(),
+			                           {
+			                        	   command: 'CHECK_PROVENANCE',
+			                        	   jobParameter: JSON.stringify(jobParameter)
+			                           });
+
+					$.ajax({
+						type: 'POST',
+						url: resourceURL, 
+						async : false,
+						data  : data,
+						dataType : 'json',
+						success: function(aa) {
+							
+						},
+						error:function(data,e){
+							if(jqXHR.responseText !== ''){
+								alert("CHECK_PROVENANCE-->"+textStatus+": "+jqXHR.responseText);
+							}else{
+								alert("CHECK_PROVENANCE-->"+textStatus+": "+errorThrown);
+							}
+						}
+					});
+					
+					
+		};
+		
+		Workbench.handleSubmitJob = function(resourceURL){
 			var scienceApp = Workbench.scienceApp();
 			var simulation = Workbench.workingSimulation();
-			var job = simulation.getJob( jobUuid );
-			if( !job || !job.dirty() ){
-				return;
-			}
+			var job = simulation.workingJob();
 			
 			if( scienceApp.runType() === 'Sequential' ){
-				submitJob( job, resourceURL );
-			}
-			else{
-				submitMPJobs( $inputHandler, $getCoresDialog, $resourceURL, job );
+				jobsToSubmitGetParameters(simulation,job, true, resourceURL );
+			}else{
+				submitMPJobs(job,resourceURL);
 			}
 		};
 		
 		Workbench.handleJobSelected = function(simulationUuid, jobUuid, resourceURL ){
-			var simulation = Workbench.workingSimulation();
-			
 			var searchSimulation = false;
-			if(!simulation){
+			//init
+			if(!Workbench.workingSimulation()){
 				searchSimulation = true;
 			}else{
-				if( simulation.uuid() === simulationUuid ){
-					var workingJob = simulation.workingJob();
-					if( workingJob.uuid() !== jobUuid ){
-						searchSimulation = true;
-					}
+				//simulation exist check
+				if(Workbench.getSimulation(simulationUuid)){
+					Workbench.workingSimulation(Workbench.getSimulation(simulationUuid));
 				}else{
 					searchSimulation = true;
 				}
+					
 			}
 			
-			/*기존 simuatlion과 job uuid가 같이 경우만 제외 하고 simuatlion 조회*/
 			if(searchSimulation){
+				var data = Liferay.Util.ns(
+                    Workbench.namespace(),
+                    {
+                 	   command: 'LOAD_SIMULATION',
+                 	   simulationUuid: simulationUuid
+                    });
+
+					$.ajax({
+						type: 'POST',
+						url: resourceURL, 
+						async : false,
+						data  : data,
+						dataType : 'json',
+						success: function(jsonSimulation) {
+							var simulation = new OSP.Simulation( jsonSimulation );
+							var scienceApp = Workbench.scienceApp();
+							simulation.runType( scienceApp.runType() );
+							Workbench.addSimulation( simulation );
+							Workbench.workingSimulation( simulation );
+						},
+						error:function(data,e){
+							if(jqXHR.responseText !== ''){
+								alert("LOAD_SIMULATION-->"+textStatus+": "+jqXHR.responseText);
+							}else{
+								alert("LOAD_SIMULATION-->"+textStatus+": "+errorThrown);
+							}
+						}
+					});
+			}
+			
+			var searchSimulationJob = false;
+			var simulation = Workbench.workingSimulation();
+			var job = simulation.getJob( jobUuid );
+			
+			var jobSearch = false;
+			if(!job){
+				jobSearch = true;
+			}else{
+				if(job.isSubmit()){
+					jobSearch = true;
+				}
+			}
+			
+			
+			if(jobSearch){
 				$.ajax({
 					url : resourceURL,
 					type : 'POST',
+					async : false,
 					dataType: 'json',
 					data : Liferay.Util.ns(
 					                       Workbench.namespace(),
@@ -2108,40 +2302,17 @@
 					                    	   jobUuid: jobUuid
 					                       }),
 					success : function( result ) {
-						var scienceApp = Workbench.scienceApp();
-						
-						var simulation = new OSP.Simulation(result.simulation_);
-						simulation.runType( scienceApp.runType());
-						Workbench.workingSimulation(simulation);
-						
 						var jsonJob = result.job_;
 						if(result.inputs_){
 							jsonJob.inputs_ = JSON.parse(result.inputs_);
 						}
 						
-						var job = simulation.newJob( jsonJob );
+						job = simulation.newJob( jsonJob );
 						if( job.isSubmit() ){
 							job.dirty( false );
 						}
 						
-						simulation.workingJob( job );
-						
-						loadJobData( job );
-						
-						var breadcrumbData = {
-								simulationTitle: simulation.title(),
-								jobTitle: job.title(),
-								jobStatus: job.status()
-						};
-						
-						var statusData = {
-								simulationUuid: simulation.uuid(),
-								jobUuid: job.uuid(),
-								jobStatus: job.status()
-						};
-						
-						fireRefreshBreadcrumb(breadcrumbData);
-						fireRefreshJobStatus(statusData);
+						simulation.addJob( job );
 					},error:function(jqXHR, textStatus, errorThrown){
 						if(jqXHR.responseText !== ''){
 							alert(textStatus+": "+jqXHR.responseText);
@@ -2151,6 +2322,21 @@
 					}
 				});
 			}
+			
+			//default logic
+			simulation.workingJob( job );
+			
+			loadJobData( job );
+			
+			var statusData = {
+					simulationTitle: simulation.title(),
+					jobTitle: job.title(),
+					simulationUuid: simulation.uuid(),
+					jobUuid: job.uuid(),
+					jobStatus: job.status()
+			};
+			
+			fireRefreshJobStatus(statusData);
 		};
 		
 		Workbench.handleRequestJobUuid = function( targetPortlet ){
@@ -2197,13 +2383,17 @@
 				return;
 			}
 
-			fireRefreshJobStatus( 
-			                     {
-			                    	 simulationUuid: simulation.uuid(),
-                                	  jobUuid: jobUuid
-			                     } 
-			);
-            
+			var statusData = {
+					simulationTitle: simulation.title(),
+					jobTitle: job.title(),
+					simulationUuid: simulation.uuid(),
+					jobUuid: job.uuid(),
+					jobStatus: job.status()
+			};
+			
+			alert(job.status());
+			fireRefreshJobStatus(status);
+			
             var scienceApp = Workbench.scienceApp();
             var logPorts = scienceApp.logPorts();
             var outputPorts = scienceApp.outputPorts();
@@ -2224,7 +2414,7 @@
                     	fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
-                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
                 }
             }
             
@@ -2239,7 +2429,7 @@
                     	fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
-                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
                 }
             }
 		};
@@ -2466,7 +2656,7 @@
 				console.log("No dirty jobs....");
 				return;
 			}
-
+			
 			if( simulation.runType() === 'Sequential' ){
 				submitSimulation( simulation, resourceURL );
 			}

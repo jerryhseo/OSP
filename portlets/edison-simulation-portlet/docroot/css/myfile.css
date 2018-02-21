@@ -3,10 +3,6 @@ i.jstree-icon, i.jstree-ocl{
 /* 	margin-right: 10px; */
 }
 
-li.jstree-open > a .jstree-icon {background:url("/edison-simulation-portlet/images/myfile/myfile-icon01.png") 0px 0px no-repeat !important;}
-li.jstree-closed > a .jstree-icon {background:url("/edison-simulation-portlet/images/myfile/myfile-icon02.png") 0px 0px no-repeat !important;}
-
-
 /*jstree context menu*/
 .vakata-context,
 .jstree-contextmenu,

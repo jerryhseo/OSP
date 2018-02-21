@@ -190,10 +190,11 @@ public class BoardController {
 			model.addAttribute("boardGroupId", String.valueOf(boardGroupId));
 			
 			model.addAttribute("currentPage", CustomUtil.strNull(params.get("currentPage"), "1"));
-			model.addAttribute("searchValue", CustomUtil.strNull(params.get("searchValue")));
+			model.addAttribute("searchValue", CustomUtil.strNull(params.get("searchValue")).equals("undefined") ? "" :  CustomUtil.strNull(params.get("searchValue")));
 			model.addAttribute("listSize", CustomUtil.strNull(params.get("listSize"),"10"));
 			model.addAttribute("popState", popState);
 			model.addAttribute("viewStructure", viewStructure);
+			model.addAttribute("siteName", themeDisplay.getSiteGroupName());
 			
 			//redirectURL decode
 			model.addAttribute("redirectOrignURL", HttpUtil.decodeURL(redirectURL));
@@ -227,7 +228,7 @@ public class BoardController {
 		if(mainListYn.equals("Y") && maxWindowStatus.equals("N")){
 			if(divCd == 100 && viewStructure.equals("card")){
 				return "noticeByViewType";
-			} else if(divCd == 100 && viewStructure.equals("list")){
+			} else if(divCd == 100 && !customId.contains("class") && (viewStructure.equals("list") || viewStructure.equals("N"))){
 				return "list";
 			} else if(customId.contains("class")){
 				if(divCd==100){
@@ -238,6 +239,13 @@ public class BoardController {
 			}
 			return "listMain";
 		}else{
+			if(customId.contains("class")){
+				if(divCd==100){
+					return "noticeInVirtualClass";
+				} else if(divCd==200){
+					return "qnaInVirtualClass";
+				}
+			}
 			return "list";
 		}
 	}
@@ -472,7 +480,7 @@ public class BoardController {
 			model.addAttribute("RENDER_MSG",	CustomUtil.strNull(params.get("RENDER_MSG")));
 
 			model.addAttribute("currentPage",	CustomUtil.strNull(params.get("currentPage"), "1"));
-			model.addAttribute("searchValue",	CustomUtil.strNull(params.get("searchValue")));
+			model.addAttribute("searchValue",	CustomUtil.strNull(params.get("searchValue")).equals("undefined") ? "" :  CustomUtil.strNull(params.get("searchValue")));
 			model.addAttribute("listSize",	CustomUtil.strNull(params.get("listSize")));
 			
 			

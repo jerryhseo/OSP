@@ -351,6 +351,14 @@
 		ScienceApp.inputPorts = function( inputPorts ){
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.INPUT_PORTS, arguments));
 		};
+		
+		ScienceApp.templateId = function(templateId){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
+		};
+		
+		ScienceApp.isProvenance = function(isProvenance){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.IS_PROVENANCE, arguments));
+		};
 
 		ScienceApp.deserializeInputPorts = function( portsJson ){
 			if( !portsJson )	return;

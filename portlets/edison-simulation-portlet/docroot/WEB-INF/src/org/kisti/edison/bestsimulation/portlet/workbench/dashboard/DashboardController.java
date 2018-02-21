@@ -6,7 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -19,6 +24,7 @@ import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
+import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.PagingUtil;
@@ -32,18 +38,26 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 @Controller
 @RequestMapping("VIEW")
@@ -51,7 +65,11 @@ public class DashboardController {
 	private static Log log = LogFactoryUtil.getLog(DashboardController.class);
 	
 	@RequestMapping
-	public String view(RenderRequest request, RenderResponse response, ModelMap model){
+	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws PortalException, SystemException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		long groupId = themeDisplay.getScopeGroupId();
+		String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
+		model.addAttribute("icebreakerUrl", icebreakerUrl);
 		return "view";
 	}
 	
@@ -59,6 +77,8 @@ public class DashboardController {
 	@ResourceMapping(value="searchSimulation")
 	public void searchSimulation(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
+			@RequestParam(value = "paginFunction", required = true) String paginFunction,
+			@RequestParam(value = "searchLine", required = true) int searchLine,
 			@RequestParam(value = "simulationUuid", required = false) String simulationUuid,
 			@RequestParam(value = "jobUuid", required = false) String jobUuid,
 			@RequestParam(value = "classId", required = false) String strClassId,
@@ -78,15 +98,14 @@ public class DashboardController {
 		}
 		
 		int currentPage = ParamUtil.get(request, "currentPage", 1);
-		int searchLine = ParamUtil.get(request, "searchLine", 3);
 		int blockSize = 3;
 		int begin = ((currentPage - 1) * searchLine);
 		int totalCount = 0;
 		List<Simulation> simulations = null;
 		try{
 			if(StringUtils.hasText(jobUuid)){
-				simulations = SimulationLocalServiceUtil.getSimulationsWithJobUuid(scienceAppId, user.getUserId(), jobUuid, classId, customId, begin, searchLine);
-				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithJobUuid(scienceAppId, user.getUserId(), jobUuid, classId, customId);
+				simulations = SimulationLocalServiceUtil.getSimulationsWithJobUuid(scienceAppId, 0, jobUuid, classId, customId, begin, searchLine);
+				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithJobUuid(scienceAppId, 0, jobUuid, classId, customId);
 			}else if(StringUtils.hasText(simulationUuid)){
 				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
@@ -102,7 +121,7 @@ public class DashboardController {
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
 			}
 			
-			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"loadSimulations", totalCount, currentPage, searchLine, blockSize);
+			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
 			
 			JsonObject obj = new JsonObject();
 			obj.addProperty("pagingStr", pagingStr);
@@ -156,14 +175,23 @@ public class DashboardController {
 	
 	@ResourceMapping(value="searchSimulationJob")
 	public void searchSimulationJob(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid
 			) throws IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		try{
+			Simulation simulation  = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+			long nowUserID = themeDisplay.getUserId();
+			boolean isEdit = false;
+			if(simulation.getUserId()==nowUserID){
+				isEdit = true;
+			}
+			
 			List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsWithSimulationUuid(simulationUuid,-1,0);
-			String obj = new Gson().toJson(jobs);
+			JsonObject obj = new JsonObject();
+			obj.add("jobs", new Gson().toJsonTree(jobs));
+			obj.addProperty("isEdit",isEdit);
+//			String obj = new Gson().toJson(jobs);
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
@@ -207,6 +235,20 @@ public class DashboardController {
 				obj.addProperty("executeTime", executeTime);
 			}
 			
+			if(simulationJob.getJobStatus()>=1701006){
+				obj.addProperty("logView", true);
+			}
+			
+			if(simulationJob.getJobStatus()==1701011){
+				obj.addProperty("resultFile", true);
+			}
+			
+			Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationJob.getSimulationUuid());
+			if(simulation.getUserId()==themeDisplay.getUserId()){
+				obj.addProperty("isEdit", true);
+			}
+			
+			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
@@ -226,6 +268,97 @@ public class DashboardController {
 			e.printStackTrace();
 		}
 	}
+	@ResourceMapping(value="readOutLog")
+	public void readOutLog(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+		    @RequestParam(value = "jobUuid", required = true) String jobUuid ,
+		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion
+			) throws IOException{
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
+		
+		try{
+			response.setContentType("application/json; charset=UTF-8");
+			Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(request, simulationUuid, jobUuid, lastPosition);
+			
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+			outLog.put("jobStatus", simulationJob.getJobStatus());
+			response.getWriter().write(serializeJSON(outLog));
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@ResourceMapping(value="jobResultFile")
+	public void jobResultFile(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+		    @RequestParam(value = "jobUuid", required = true) String jobUuid
+			) throws IOException{
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			long groupId = themeDisplay.getScopeGroupId();
+			User user = themeDisplay.getUser();
+			
+		try{
+			IcebreakerVcToken vcToken = SimulationLocalServiceUtil.getOrCreateToken(groupId, user);
+			String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
+			String publicIceBreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL_PUBLIC);
+			
+			String result = SimulationLocalServiceUtil.retrievePostProcessor(icebreakerUrl, vcToken.getVcToken(), jobUuid);
+			
+			List<Map<String, Object>> resultList = new ArrayList<>();
+			
+			if(!CustomUtil.strNull(result).equals("")){
+				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(result));
+				JSONArray jsonArray = jsonObj.getJSONArray("files");
+				
+				Map<String, Object> resultMap = null;
+				for(int i = 0; i < jsonArray.size(); i++){
+					resultMap = new HashMap<String, Object>();
+					JSONObject comandObj = (JSONObject) jsonArray.get(i);
+					
+					resultMap.put("fileName", comandObj.getString("name"));
+					resultMap.put("fileId", comandObj.getString("id"));
+					
+					resultMap.put("filePureSize", comandObj.getDouble("size"));
+					resultMap.put("fileSize",CustomUtil.fileVolumeCalc(String.valueOf(comandObj.getDouble("size"))));
+					
+					resultMap.put("jobUuid", jobUuid);
+					
+					resultList.add(resultMap);
+				}
+				Collections.sort(resultList, sortComp);
+			}
+			
+			// 임시 : Result.zip File ID
+			String resultFileStr = SimulationLocalServiceUtil.retrieveRemoteDir(icebreakerUrl, vcToken.getVcToken(), jobUuid, "/");
+			String zipFileId = "";
+			if(!CustomUtil.strNull(resultFileStr).equals("")){
+				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(resultFileStr));
+				JSONArray jsonArray = jsonObj.getJSONArray("files");
+				
+				root1: for(int i = 0; i < jsonArray.size(); i++){
+					JSONObject comandObj = (JSONObject) jsonArray.get(i);
+					if(comandObj.getString("name").equals("result.zip")){
+						zipFileId =  comandObj.getString("id");
+						break root1;
+					}
+				}
+			}
+			
+			JsonObject obj = new JsonObject();
+			obj.addProperty("zipFileId", zipFileId);
+			obj.add("resultList", new Gson().toJsonTree(resultList, new TypeToken<List<Map<String, Object>>>() {}.getType()));
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 	private void fileDownload(ResourceResponse response, long fileEntryId) throws Exception{
@@ -272,7 +405,10 @@ public class DashboardController {
 		return rValue;
 	}
 	
-	
+	private static String serializeJSON(Map<String, Object> map){
+		JSONObject json = JSONObject.fromObject(map);
+		return json != null ? json.toString() : "{}";
+	  }
 	
 	private String convertJobStatusToString(int jobStatus) throws SystemException, JSONException{
 		String returnStr = "";
@@ -335,6 +471,32 @@ public class DashboardController {
 		}
 		return returnResult;
 	}
+	
+	private Comparator<Map<String, Object>> sortComp = new Comparator<Map<String, Object>>(){
+	    @Override
+	    public int compare(Map<String, Object> o1, Map<String, Object> o2){
+	      String s1 = o1.get("fileName").toString();
+	      String s2 = o2.get("fileName").toString();
+
+	      int n1 = s1.length(), n2 = s2.length();
+	      for(int i1 = 0, i2 = 0; i1 < n1 && i2 < n2; i1++, i2++){
+	        char c1 = s1.charAt(i1);
+	        char c2 = s2.charAt(i2);
+	        if(c1 != c2){
+	          c1 = Character.toUpperCase(c1);
+	          c2 = Character.toUpperCase(c2);
+	          if(c1 != c2){
+	            c1 = Character.toLowerCase(c1);
+	            c2 = Character.toLowerCase(c2);
+	            if(c1 != c2){
+	              return c1 - c2;
+	            }
+	          }
+	        }
+	      }
+	      return n1 - n2;
+	    }
+	  };
 }
 
 

@@ -155,22 +155,22 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 	<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId }">
 	
 	<div class="panel-heading clearfix">
-		<div class="managementTitle">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-			<liferay-ui:message key='edison-project-management-content' />
+		<div class="panel-title pull-left" style="width: 40%">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-project-management-content' />
+			</h3>
 		</div>
 		
-		<div class="input-group" style="float: left;">
-			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px;" />
+		<div class="btn-group pull-right" style="width: 60%;">
+			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px; float: left;" />
 			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
 				<i class="icon-search"></i>
 			</button>
 			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataSearchListAll(1);">
-		</div>
-		
-		<div style="float: right; width: 290px;">
+			
 			<!--우편 셀렉트-->
-			<div class="selectProject_menu" >
+			<div class="selectProject_menu" style="margin: 0px 10px;">
 				<select id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_project" onchange="<portlet:namespace/>dataSearchList(1)" class="selectProject">
 					<option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
 					${categorySelectOption }

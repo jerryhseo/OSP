@@ -281,7 +281,7 @@ function <portlet:namespace/>actionCall(mode){
 	
 	var templateId = $(":input:radio[name=templates]:checked").val();
 	if(typeof templateId =='undefined'){
-		alert("template을 선택 해 주세요");
+		alert(Liferay.Language.get('edison-this-field-is-required',['template']));
 		return false;
 	}else{
 		var Layout = new OSP.Layout();
@@ -317,7 +317,6 @@ function <portlet:namespace/>actionCall(mode){
 }
 
 function <portlet:namespace/>drawPortFromLayout(portType,data){
-	
 	if(data!=''){
 		var targetUL,array,dataPortPortlet;
 		if(portType=='INPUT'){
@@ -389,7 +388,7 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 
 				<input id="<portlet:namespace/>layoutAreaButton" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled"  onchange="<portlet:namespace/>layoutAreaViewEvent();" ${layoutChecked}>
 				<span style="font-weight: 600;"> Flow WorkBench</span>
-				<liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
+				<liferay-ui:icon-help message="edison-science-appstore-toolkit-flow-message"/>
 			</label>
 		</h3>
 		<div class="btn-group pull-right">
@@ -420,6 +419,9 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			
 			<c:if test="${ownerThan}">
 				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
+				<c:if test="${workBenchPlid ne 0 && appTestButtonView}">
+					<input class=" button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
+				</c:if>
 			</c:if>
 		</div>
 	</div>

@@ -15,6 +15,15 @@
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     <css-class-wrapper>edison-search-2017-portlet container</css-class-wrapper>
   </portlet>
+  
+  <portlet>
+    <portlet-name>edison-search-box</portlet-name>
+    <icon>/icon.png</icon>
+    <action-url-redirect>true</action-url-redirect>
+    <private-session-attributes>false</private-session-attributes>
+    <css-class-wrapper>edison-search-2017-portlet container</css-class-wrapper>
+  </portlet>
+  
   <role-mapper>
     <role-name>administrator</role-name>
     <role-link>Administrator</role-link>

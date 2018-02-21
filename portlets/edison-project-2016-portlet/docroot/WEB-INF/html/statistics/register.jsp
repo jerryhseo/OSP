@@ -2,7 +2,10 @@
 <%@ include file="/common/init.jsp" %>
 
 <liferay-portlet:resourceURL var="getStatisticsURL"		id="getStatistics"	escapeXml="false" copyCurrentRenderParameters="false"/>
-<h1 class="h1">EDISON <liferay-ui:message key="edison-project-statistics-title"/></h1>
+<h1 class="h1">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+	EDISON <liferay-ui:message key="edison-project-statistics-title"/>
+</h1>
 
 
 <script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>

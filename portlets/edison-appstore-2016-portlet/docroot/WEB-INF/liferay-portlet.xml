@@ -10,15 +10,6 @@
 	</portlet>
 	
 	<portlet>
-		<portlet-name>edison-main-search-app</portlet-name>
-		<icon>/icon.png</icon>
-		<configuration-action-class>org.kisti.edison.science.portlet.mainSearchApp.ConfigurationController</configuration-action-class>
-		<action-url-redirect>true</action-url-redirect>
-		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-main-search-app</css-class-wrapper>
-	</portlet>
-	
-	<portlet>
 		<portlet-name>edison-workspace</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.science.portlet.workspace.ConfigurationController</configuration-action-class>

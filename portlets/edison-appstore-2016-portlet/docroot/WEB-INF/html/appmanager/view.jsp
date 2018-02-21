@@ -1,5 +1,6 @@
-<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
 
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
@@ -68,6 +69,14 @@
 	<portlet:param name="p_curPage" 	value="${p_curPage}" />
 	
 	<portlet:param name="redirectURL" 	value="${redirectURL}" />
+</liferay-portlet:renderURL>
+
+<liferay-portlet:renderURL var="appTestURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
+	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
+	<liferay-portlet:param name="scienceAppId" value="${scienceAppId}"/>
+	
+	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
+	<portlet:param name="redirectName" 	value="MY EDISON" />
 </liferay-portlet:renderURL>
 	
 <%
@@ -206,5 +215,9 @@
 				}  
 			}
 		});
+	}
+	
+	function <portlet:namespace/>appTest(){
+		window.location.href = "<%=appTestURL%>";
 	}
 </script>

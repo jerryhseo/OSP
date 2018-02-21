@@ -337,12 +337,29 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.search.service.model.Search dataSearch(
 		org.kisti.edison.search.service.model.SearchCondition searchCondition,
 		org.kisti.edison.search.service.model.Search searchResults)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.search.service.model.Search totalSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
 		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws java.lang.Exception;
 

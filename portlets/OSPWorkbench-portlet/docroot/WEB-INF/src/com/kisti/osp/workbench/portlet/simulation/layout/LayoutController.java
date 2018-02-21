@@ -2,13 +2,21 @@ package com.kisti.osp.workbench.portlet.simulation.layout;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -24,8 +32,11 @@ import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
+import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,8 +57,10 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -57,6 +70,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
 import freemarker.template.Configuration;
 import freemarker.template.SimpleSequence;
@@ -69,17 +83,44 @@ import freemarker.template.TemplateExceptionHandler;
 public class LayoutController {
 	protected static Log  _log = LogFactoryUtil.getLog(LayoutController.class);
 	
+	private static final String _SOLVER_BASE_DIR = "/EDISON/SOLVERS";
+	private static final String _DEFAULT_CLUSTER = "EDISON-CFD";
+	private static final String _DEFAULT_CYBERLAP_ID = " ";
+	private static final String _DEFAULT_CLASS_ID = " ";
+	private static final String _DEFAULT_JOB_TITLE = "job";
+	private static final String _DEFAULT_JOB_DESCRIPTION = " ";
+	
+	private static final String _DEFAULT_TEMP_DIR="/EDISON/LDAP/TEMP";
+	
+	private static final HashMap<String,String> ProvenanceSupportApp = new HashMap<String,String>();
+	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model){
 		String workbenchType = ParamUtil.getString(request, "workbenchType", "SIMULATION_WITH_APP");
 		long customId =  ParamUtil.getLong(request, "customId", 0);
 		long classId =  ParamUtil.getLong(request, "classId", 0);
+		long scienceAppId =  ParamUtil.getLong(request, "scienceAppId", 0);
+		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
+		String redirectName = ParamUtil.getString(request, "redirectName", "");
+		
+		
+		ProvenanceSupportApp.put("uChem", "4.0.1");
+		ProvenanceSupportApp.put("pianostring", "1.0.0");
+		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
+		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
+		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
+		ProvenanceSupportApp.put("Bowling", "1.0.0");
+		ProvenanceSupportApp.put("acuteSTMtip", "1.0.0");
+		ProvenanceSupportApp.put("roundSTMtip", "1.0.0");
+		
 		try{
-			model = this.evaluateScienceAppLayout(model, 27701);
+			model = this.evaluateScienceAppLayout(model, scienceAppId);
 			
 			model.addAttribute("workbenchType", workbenchType);
 			model.addAttribute("customId", customId);
 			model.addAttribute("classId", classId);
+			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
+			model.addAttribute("redirectName", redirectName);
 			return "view";
 		}catch(Exception e){
 			if(e instanceof SimulationWorkbenchException){
@@ -119,7 +160,18 @@ public class LayoutController {
 				this.deleteJob(request, response);
 			}else if( command.equalsIgnoreCase("CREATE_JOB") ){
 				this.createJob(request, response);
+			}else if( command.equalsIgnoreCase("LOAD_SIMULATION") ){
+				this.loadSimulation(request, response);
+			}else if( command.equalsIgnoreCase("SAVE_SIMULATION")){
+				this.saveSimulation(request, response);
+			}else if( command.equalsIgnoreCase("SUBMIT_JOBS")){
+				RequestUtil.getParameterMap(request);
+				this.submitJobs(request, response);
+			}else if( command.equalsIgnoreCase("CHECK_PROVENANCE")){
+				this.provenanceCheckJob(request, response);
 			}
+			
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -194,6 +246,21 @@ public class LayoutController {
 		try{
 			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 			model.addAttribute("scienceApp", scienceApp);
+			
+			if(scienceApp.getTempletId().indexOf("flow")>-1){
+				model.addAttribute("isFlowLayout", true);
+			}else{
+				model.addAttribute("isFlowLayout", false);
+			}
+			
+			boolean isProvenance = false;
+			String isProvenanceSupportApp = CustomUtil.strNull(ProvenanceSupportApp.get(scienceApp.getName().trim()));
+			if(!isProvenanceSupportApp.equals("")&&isProvenanceSupportApp.equals(scienceApp.getVersion().trim())){
+				isProvenance = true;
+			}
+			model.addAttribute("isProvenance", isProvenance);
+			
+			
 		}catch (Exception e) {
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_ID);
 		}
@@ -236,20 +303,64 @@ public class LayoutController {
 		return model;
 	}
 	
+	private void saveSimulation( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
+		long classId = ParamUtil.getLong(resourceRequest, "srcClassCode");
+		long customId = ParamUtil.getLong(resourceRequest, "srcClassId");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		JSONArray jobs = null;
+		try {
+			jobs = JSONFactoryUtil.createJSONArray(ParamUtil.getString(resourceRequest, "jobs" ));
+		} catch (JSONException e) {
+			_log.error("JSONFactoryUtil: "+ParamUtil.getString(resourceRequest, "jobs"));
+			ServletResponseUtil.write(httpResponse, String.valueOf(false));
+			throw new PortletException();
+		}
+		
+		int jobCount = jobs.length();
+		for( int i=0; i<jobCount; i++){
+			JSONObject jsonJob = jobs.getJSONObject(i);
+			String jobUuid = jsonJob.getString("uuid_", "");
+			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
+//			this.jsonArrayPrint(jobData);
+			
+			try {
+				SimulationJobDataLocalServiceUtil.modifySimulationJobData(jobUuid, jobData.toString());
+			} catch (SystemException e) {
+				e.printStackTrace();
+				ServletResponseUtil.write(httpResponse, String.valueOf(false));
+				throw new PortletException();
+			}
+			
+		}
+		ServletResponseUtil.write(httpResponse, String.valueOf(true));
+	}
+	
+	private void loadSimulation(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		Simulation simulation = null;
+		try {
+			simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+		} catch (NoSuchSimulationException | SystemException e) {
+			_log.error("Getting simulation: "+e.getMessage());
+			throw new PortletException();
+		}
+		
+		JSONObject jsonSimulation = this.convertSimulationToJSON(simulation);
+		ServletResponseUtil.write(httpResponse, jsonSimulation.toString() );
+
+	}
 	
 	private JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws JSONException, SystemException, NoSuchSimulationException, NoSuchSimulationJobException{
-		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
-		
-		
-		Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
 		
 		SimulationJob job = SimulationJobLocalServiceUtil.getJob(jobUuid);
 		
 		SimulationJobData jobData = SimulationJobDataLocalServiceUtil.fetchSimulationJobData(job.getJobUuid());
 		
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-		jsonObj.put("simulation_", this.convertSimulationToJSON(simulation));
 		jsonObj.put("job_", this.convertJobToJSON(job));
 		if( jobData != null ){
 			jsonObj.put("inputs_", jobData.getJobData());
@@ -400,7 +511,10 @@ public class LayoutController {
 		JSONObject jsonSimulation = this.convertSimulationToJSON(simulation);
 		
 		try {
-			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc);
+			String jobTitle = ParamUtil.getString(resourceRequest, "jobTitle");
+			String jobInitData = ParamUtil.getString(resourceRequest, "jobInitData");
+			
+			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
 		} catch (JSONException | SystemException e1) {
 			_log.error("Creating job : "+simulation.getSimulationUuid());
 			throw new PortletException();
@@ -418,11 +532,26 @@ public class LayoutController {
 		}
 	}
 	
-	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc ) throws PortletException, JSONException, SystemException{
+	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
 		SimulationJob job = null;
 		
 		try {
 			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			
+			if(!jobTitle.equals("")){
+				job.setJobTitle(jobTitle);
+				SimulationJobLocalServiceUtil.updateSimulationJob(job);
+				
+				if( Validator.isNotNull(jobInitData) ){
+					System.out.println("+++++++++Job Init Data: \n "+jobInitData);
+					try {
+						SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), jobInitData);
+					} catch (SystemException e) {
+						_log.error("Adding job data: "+e.getMessage());
+						throw new PortletException();
+					}
+				}
+			}
 		} catch (SystemException e) {
 			_log.error("Adding New Job Failed For:  "+ simulationUuid);
 			throw new PortletException();
@@ -492,4 +621,399 @@ public class LayoutController {
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
+	
+	private void provenanceCheckJob( PortletRequest request, PortletResponse response) throws JSONException{
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+		JSONArray job = JSONFactoryUtil.createJSONArray(ParamUtil.getString(request, "jobParameter" ));
+		System.out.println(job.getJSONObject(0).getJSONArray("inputs_"));
+	}
+	
+	
+	protected void submitJobs( PortletRequest portletRequest, PortletResponse portletResponse ) throws PortletException, IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		User user = themeDisplay.getUser();
+		Group group = themeDisplay.getScopeGroup();
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+		
+		
+		String userScreenName = user.getScreenName();
+		if( userScreenName.equalsIgnoreCase("edison") )
+			userScreenName = "edisonadm";
+		
+		IBAgent ibAgent = new IBAgent(group, user);
+		
+		String simulationUuid = ParamUtil.getString(portletRequest, "simulationUuid");
+		String scienceAppName = ParamUtil.getString(portletRequest, "scienceAppName");
+		String scienceAppVersion = ParamUtil.getString(portletRequest, "scienceAppVersion");
+		
+		JSONArray jobs = null;
+		try {
+			jobs = JSONFactoryUtil.createJSONArray(ParamUtil.getString(portletRequest, "jobs" ));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		ScienceApp scienceApp = null;
+		try {
+			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
+		} catch (NoSuchScienceAppException | SystemException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		// Other common parameters for all jobs
+		String runType = scienceApp.getRunType();
+		Map<String, String> mpiAttributes = new HashMap<>();
+		if( !runType.equalsIgnoreCase("SEQUENTIAL") ){
+			String ncores = ParamUtil.getString(portletRequest, "ncores");
+			mpiAttributes.put("np", ncores);
+		}
+		
+		
+		ServiceContext sc = null;
+		try {
+			sc = ServiceContextFactory.getInstance(portletRequest);
+			//sc.setUserId( user.getUserId() );
+			sc.setCreateDate( new Date() );
+			sc.setModifiedDate( new Date() );
+		} catch (PortalException | SystemException e) {
+			_log.error("Creating ServiceContext Failed: "+Simulation.class.getName());
+			throw new PortletException();
+		}
+		
+		
+		//executable of IB
+		String exePath = Paths.get(_SOLVER_BASE_DIR).resolve(scienceApp.getBinPath()).toString();
+		
+		String mpiType = scienceApp.getParallelModule();
+		String[] dependencies = null;
+		String cluster = _DEFAULT_CLUSTER;
+		String cyberLabId = _DEFAULT_CYBERLAP_ID; // deprecated
+		String classId = _DEFAULT_CLASS_ID; // deprecated
+		
+		//Set execution and files
+		Map<String, String> files = new LinkedHashMap<>();
+		Map<String, JSONObject> progArgs = new LinkedHashMap<>();
+		
+		JSONArray submitedJobs = JSONFactoryUtil.createJSONArray();
+		System.out.println("jobs.length()-->"+jobs.length());
+		int jobCount = jobs.length();
+		for( int i=0; i<jobCount; i++){
+			JSONObject jsonJob = jobs.getJSONObject(i);
+			SimulationJob job = null;
+			String jobUuid = jsonJob.getString("uuid_", "");
+			boolean isJobSubmitted = jsonJob.getBoolean("submit_");
+			System.out.println("Job UUID to be submitted: "+jobUuid);
+			if( jobUuid.isEmpty() || isJobSubmitted ){
+				try {
+					job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+				} catch (SystemException e) {
+					_log.error("Job creation failed: "+jobUuid);
+					throw new IOException();
+				}
+			}
+			else{
+				try {
+					System.out.println("SimulationJobLocalServiceUtil.getJob(): "+jobUuid);
+					job = SimulationJobLocalServiceUtil.getJob(jobUuid);
+				} catch (NoSuchSimulationJobException | SystemException e2) {
+					_log.error("Getting job failed: "+jobUuid);
+					throw new IOException();
+				}
+			}
+			
+			jobUuid = job.getJobUuid();
+			String jobSeqNo = String.valueOf(job.getJobSeqNo());
+			System.out.println("Job Sequence No.: "+jobSeqNo);
+			
+			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
+			this.jsonArrayPrint(jobData);
+			
+			Date date = new Date();
+			for( int dataIndex = 0; dataIndex<jobData.length(); dataIndex++){
+				JSONObject inputData = jobData.getJSONObject(dataIndex);
+				this.jsonObjectPrint(inputData);
+				String portName = inputData.getString("portName_");
+				String pathType = inputData.getString("type_");
+				
+				if( pathType.equalsIgnoreCase("fileContent") ){
+					String inputParent = inputData.getString("parent_", "");
+					String inputFileName = inputData.getString("name_", "");
+					Path parentPath = null;
+					if( Validator.isNull(parentPath) ){
+						SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+						parentPath = Paths.get(dateForm.format(date));
+					}
+					else{
+						parentPath = Paths.get(inputParent);
+					}
+					
+					if( Validator.isNull(inputFileName) ){
+						inputFileName = portName.replaceAll("-", "");
+					}
+					
+					String tempFileName = "";
+					tempFileName = portName.replaceAll("-", "" )+"_"+date.getTime();
+					
+					Path tempTarget = Paths.get(_DEFAULT_TEMP_DIR).resolve(tempFileName);
+					String content = inputData.getString("context_");
+					Files.createFile( tempTarget );
+					Files.write(tempTarget, content.getBytes());
+					
+					
+					try {
+						String fileId = ibAgent.uploadFile(tempTarget, parentPath, Paths.get(inputFileName), _DEFAULT_CLUSTER);
+						System.out.println("File Id After IB Upload: "+fileId);
+						
+						JSONObject argVal = JSONFactoryUtil.createJSONObject();
+						argVal.put("type", "FILE_ID");
+						argVal.put("value", fileId);
+						progArgs.put(portName, argVal);
+						
+						files.put(portName, fileId);
+						inputData.put("type_", "file");
+						inputData.put("parent_", parentPath.toString());
+						inputData.put("name_", inputFileName);
+						inputData.remove("context_");
+					} catch (JSONException | SystemException e) {
+						e.printStackTrace();
+					} catch (PortalException e) {
+						e.printStackTrace();
+					}
+				}else if( pathType.equalsIgnoreCase("dlEntryId")){
+					long fileEntryId = inputData.getLong("id_");
+					String inputParent = inputData.getString("parent_", "");
+					String inputFileName = inputData.getString("name_", "");
+					Path parentPath = null;
+					if( Validator.isNull(parentPath) ){
+						SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+						parentPath = Paths.get(dateForm.format(date));
+					}
+					else{
+						parentPath = Paths.get(inputParent);
+					}
+					
+					if( Validator.isNull(inputFileName) ){
+						try {
+							FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+							inputFileName = fileEntry.getTitle();
+						} catch (PortalException | SystemException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					String fileId = "";
+					try {
+						fileId = this.uploadDLFile(portletRequest, fileEntryId, parentPath.toString(), inputFileName);
+					} catch (PortalException | SystemException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "FILE_ID");
+					argVal.put("value", fileId);
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, fileId);
+					
+					inputData.put("type_", "file");
+					inputData.put("parent_", parentPath.toString());
+					inputData.put("name_", inputFileName);
+					inputData.remove("id_");
+				}else if( pathType.equalsIgnoreCase("file")){
+					Path target = Paths.get(inputData.getString("parent_")).resolve(inputData.getString("name_"));
+					
+					System.out.println("Port Data get IB File ID: "+target.toString());
+					try {
+						String fileId =  ibAgent.getFileId(target.toString(), false);
+						
+						JSONObject argVal = JSONFactoryUtil.createJSONObject();
+						argVal.put("type", "FILE_ID");
+						argVal.put("value", fileId);
+						progArgs.put(portName, argVal);
+						
+						files.put(portName, fileId);
+					} catch (JSONException | SystemException e) {
+						e.printStackTrace();
+					} catch (PortalException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}else if ( pathType.equalsIgnoreCase("folder")){
+					
+				}else if ( pathType.equalsIgnoreCase("ext")){
+					
+				}else if ( pathType.equalsIgnoreCase("uri")){
+					
+				}else if( pathType.equalsIgnoreCase("context") ){
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "STRING");
+					argVal.put("value", inputData.getString("context_"));
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, inputData.getString("context_"));
+				}else{
+					_log.error("Un-defined path type: " + pathType);
+					throw new PortletException();
+				}
+				
+				inputData.put( "dirty_", false);
+			}
+			
+			/*
+			JSONObject result = ibAgent.submit(
+					simulationUuid, 
+					runType, 
+					mpiType, 
+					_DEFAULT_JOB_TITLE, 
+					_DEFAULT_JOB_DESCRIPTION, 
+					String.valueOf(scienceApp.getScienceAppId() ), 
+					scienceAppName, 
+					_DEFAULT_CYBERLAP_ID, 
+					_DEFAULT_CLASS_ID, 
+					exePath, 
+					dependencies, 
+					progArgs,
+					cluster, 
+					mpiAttributes, 
+					this.getJobStatusCallbackURL( portletRequest, simulationUuid, job.getJobSeqNo())
+			);
+			
+			this.jsonObjectPrint(result);
+			
+			if( result.getInt("error") > 0 ){
+				_log.error("Job submission failed: "+ result.getInt("error"));
+			}else{
+				JSONObject submittedJob = JSONFactoryUtil.createJSONObject();
+				submittedJob.put("tempUuid", job.getJobUuid());
+				submittedJob.put("uuid", result.getString("uuid"));
+				
+				job.setJobUuid(result.getString("uuid"));
+				job.setJobStartDt( new Date(result.getLong("submitTime")) );
+				job.setJobStatus(Integer.valueOf(result.getString("status")));
+				job.setJobSubmit(true);
+				
+				try {
+					SimulationJobLocalServiceUtil.updateSimulationJob(job);
+					SimulationJobDataLocalServiceUtil.replaceJobData(jobUuid, job.getJobUuid(), jobData.toString());
+					System.out.println("+++++Replaced Job Data ");
+					System.out.println(jobData.toString());
+				} catch (SystemException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				submitedJobs.put( submittedJob );
+			}
+			*/
+		} //END jobCount FOR
+		
+		ServletResponseUtil.write(httpResponse, submitedJobs.toString());
+	}
+	
+	protected void jsonObjectPrint( JSONObject jsonObject ){
+		try {
+			System.out.println(jsonObject.toString(4));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected void jsonArrayPrint( JSONArray jsonArray ){
+		try {
+			System.out.println(jsonArray.toString(4));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private String uploadDLFile( PortletRequest resourceRequest, long dlEntryId, String parent, String fileName ) throws PortletException, IOException, PortalException, SystemException{
+		if( dlEntryId <= 0){
+			System.out.println("uploadDLFile: dlEntryId should be lager than 0.");
+			return "";
+		}
+		
+		Path tempPath = Paths.get(_DEFAULT_TEMP_DIR).resolve( String.valueOf(dlEntryId) );// Data should be inserted by SystemPropertyService.
+		FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
+		if( !Files.exists(tempPath) ){
+			InputStream stream = null;
+			try {
+				stream = fileEntry.getContentStream();
+				if( Validator.isNotNull(stream) )
+					Files.copy(stream, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (PortalException | SystemException e1) {
+				_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
+				throw new PortletException();
+			} finally{
+				if( Validator.isNotNull(stream) ){
+					stream.close();
+				}
+			}
+		}
+		
+		if( Validator.isNull(fileName)){
+			fileName = fileEntry.getTitle(); 
+		}
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
+		String fileId = ibAgent.uploadFile( tempPath, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
+		
+		return fileId;
+	}
+	
+	
+	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo ){
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String portalUrl = "";
+		
+		if(themeDisplay.isSecure()){ 
+			portalUrl += "https://"; 
+		}else{ 
+			portalUrl += "http://"; 
+		} 
+		
+		String serverName = themeDisplay.getServerName(); 
+		String virtualHostName = themeDisplay.getCompany().getVirtualHostname(); 
+
+		if(serverName.equals(virtualHostName)){ 
+			portalUrl += virtualHostName; 
+		}else{ 
+			portalUrl += serverName+":"+themeDisplay.getServerPort();
+		}
+		
+		Simulation simulation = null;
+        try{
+            simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+        }catch (NoSuchSimulationException | SystemException e){
+            _log.error("no simulation", e);
+        }
+		
+		//portalUrl = "http://150.183.247.221:8080";
+		
+		String url = portalUrl +_callbackAPI;
+		if(simulation == null){
+		    url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
+		}else{
+		    url = HttpUtil.addParameter(url, "gid", simulation.getGroupId());
+		}
+		url = HttpUtil.addParameter(url, "simulationUuid", simulationUuid); 
+		url = HttpUtil.addParameter(url, "jobSeqNo", jobSeqNo); 
+		
+		System.out.println("Callback: "+url);
+		return url;
+	}
+	
+	private static final String _callbackAPI = "/api/jsonws/edison-simulation-portlet.simulationjob/update-simulation-job";
 }
+
+

@@ -14,8 +14,8 @@
 
 <c:if test="${fn:length(selectSimulationProjectList) > 0 || isMgrBtn == true}">
 	<div class="table-responsive panel edison-panel" style="margin-top: 60px;">
-		<div style="margin-bottom: 60px;">
-			<h3 class="panel-title pull-left" style="font-weight: bold;">
+		<div class="panel-heading clearfix" style="border-bottom: 0px;">
+			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-simulation-project-recommend-title' />			
 			</h3>

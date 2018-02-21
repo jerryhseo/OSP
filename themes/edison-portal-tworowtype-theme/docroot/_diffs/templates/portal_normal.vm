@@ -76,6 +76,12 @@
 	#parse ("$full_templates_path/sitemap.vm")
 	
 	<div class="container-fluid" id="wrapper">
+		#if ($isBreadcrumb)
+			#parse ("$full_templates_path/breadcrumb.vm")
+		#end
+		
+		
+		
 		<div id="content">
 		
 			#if ($selectable)

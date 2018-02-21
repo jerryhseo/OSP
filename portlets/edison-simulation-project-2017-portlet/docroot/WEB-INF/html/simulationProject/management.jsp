@@ -293,23 +293,22 @@
 			<div class="h30"></div>
 			
 			<!-- 멤버관리 -->
-			<div class="table-responsive panel edison-panel">
-				<h3 class="panel-title">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<liferay-ui:message key='edison-simulation-project-member-management' />
-				</h3>
-			</div>		
 			<div class="table1_list table-responsive panel edison-panel">
 				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+						<liferay-ui:message key='edison-simulation-project-member-management' />
+					</h3>
+					
 					<div class="input-group">
-						<input type="text" id="<portlet:namespace/>searchText" class="form-control" name="<portlet:namespace/>searchText" style="width: 250px;" 
-							value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
-						<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getRequestMemberList(1);">
-							<i class="icon-search"></i>
-						</button>
-						<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>searchAllClick();" class="btn btn-default">
 						
-						<div class="input-group-btn">
+						<div class="input-group-btn" style="width: 15%" align="right">
+							<input type="text" id="<portlet:namespace/>searchText" class="form-control" name="<portlet:namespace/>searchText" style="width: 250px; left: 19%;" 
+								value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
+							<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getRequestMemberList(1);">
+								<i class="icon-search"></i>
+							</button>
+							<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>searchAllClick();" class="btn btn-default" style="margin-right: 5px;">
 							<select id="<portlet:namespace/>searchRequestState" name="<portlet:namespace/>searchRequestState" onchange="<portlet:namespace/>getRequestMemberList(1);" class="btn btn-default">
 								<option value=""><liferay-ui:message key='full' /></option>
 								<option value="2003001" <c:if test="${searchRequestState == '2003001' }"> selected="selected"</c:if>><liferay-ui:message key='edison-simulation-project-join-request' /></option>

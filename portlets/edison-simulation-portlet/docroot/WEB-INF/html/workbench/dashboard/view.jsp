@@ -6,6 +6,8 @@
 <liferay-portlet:resourceURL var="searchSimulationJobInfoURL" id="searchSimulationJobInfo" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="updateSimulationURL" id="updateSimulation" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="updateSimulationJobURL" id="updateSimulationJob" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="jobResultFileURL" id="jobResultFile" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 
 <portlet:resourceURL var='downManualFileURL' id='downManualFile' escapeXml="false"></portlet:resourceURL>
@@ -42,16 +44,55 @@
 	</li>
 </ul>
 	
-	
-	
 <script type="text/javascript">
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
- var <portlet:namespace/>parentNamespace;
- var <portlet:namespace/>connector;
- var <portlet:namespace/>jqPortletBoundaryId;
- var <portlet:namespace/>scienceAppId;
+var <portlet:namespace/>parentNamespace;
+var <portlet:namespace/>connector;
+var <portlet:namespace/>jqPortletBoundaryId;
+var <portlet:namespace/>scienceAppId;
+var <portlet:namespace/>refreshJobLogTimer;
+var <portlet:namespace/>workSimulationJobId;
+
+var <portlet:namespace/>prevStatus = (function(){
+	var jobStatus = {};
+	var thisCheck = [];
+	return {
+		log: function(){
+			console.log("jobStatus", jobStatus);
+			console.log("thisCheck", thisCheck);
+		},
+		isExist: function(jobUuid){
+			return jobStatus.hasOwnProperty(jobUuid);
+		},
+		isCheckExist: function(){
+			return thisCheck.length>0?true:false;
+		},
+		isThisTimeSuccess: function(jobUuid, status){
+			// 1701011 : success
+			return jobStatus[jobUuid] != 1701011 && status == 1701011;
+		},
+		setJobStatus: function(jobUuid, status){
+			jobStatus[jobUuid] = status;
+			thisCheck.push(jobUuid);
+		},
+		getJobStatus: function(jobUuid){
+			return jobStatus[jobUuid];
+		},
+		clearStatusCache: function(){
+			if(thisCheck.length > 0){
+				for(var key in jobStatus){
+					if($.inArray(key, thisCheck) === -1){
+						delete jobStatus[key];
+					}
+				}
+				thisCheck = [];
+			}
+		}
+	};
+})();
+var <portlet:namespace/>refreshTimer;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -94,7 +135,6 @@ Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>scienceAppId = e.data.scienceApp.id();
 		<portlet:namespace/>drawAppInfomation(e.data.scienceApp);
-		<portlet:namespace/>searchSimulation('','',1);
 	}
 });
 
@@ -124,8 +164,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, function( e ){
 	if(e.targetPortlet === myId){
 		if(e.data.status){
 			toastr["success"]("", Liferay.Language.get('edison-data-insert-success'));
-			$topLi = $("li#<portlet:namespace/>simulation-"+e.data.simulationUuid);
-			<portlet:namespace/>searchSimulationJob('',e.data.simulationUuid,$topLi);
+			<portlet:namespace/>searchSimulationJob(e.data.simulationUuid);
 			<portlet:namespace/>selectRow(e.data.simulationUuid,e.data.jobUuid);
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-insert-error'));
@@ -139,6 +178,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 		if(e.data.status){
 			toastr["success"]("", Liferay.Language.get('edison-data-delete-success'));
 			$("li#<portlet:namespace/>job-"+e.data.jobUuid).remove();
+			<portlet:namespace/>selectRow(e.data.simulationUuid,'');
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
 		}
@@ -154,11 +194,18 @@ Liferay.on(OSP.Event.OSP_REFRESH_SIMULATIONS, function( e ){
 });
 
 
+Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
+		<portlet:namespace/>searchSimulationModalOpen(1,e.data);
+	}
+});
+
 /***********************************************************************
  * Portlet AJAX Function
  ***********************************************************************/
 function <portlet:namespace/>drawAppInfomation(data){
-	$("#<portlet:namespace/>appName").html(cutStr(data.name(),14));
+	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12));
 	$("#<portlet:namespace/>appVersion").html(data.version());
 	
 	if(data.currentManualId()!=0){
@@ -182,7 +229,9 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 	var searchForm = {
 		"<portlet:namespace/>scienceAppId": scienceAppId,
 		"<portlet:namespace/>simulationUuid": simulationUuid,
-		"<portlet:namespace/>currentPage": currentPage
+		"<portlet:namespace/>currentPage": currentPage,
+		"<portlet:namespace/>paginFunction": "loadSimulations",
+		"<portlet:namespace/>searchLine": "3"
 		
 	};
 	
@@ -203,26 +252,27 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 					var simulation = result.simulaitons[i];
 // 					console.log(simulation);
 					$topLi = $("<li/>").addClass("treeview <portlet:namespace/>simulation-section").attr("id","<portlet:namespace/>simulation-"+simulation._simulationUuid).appendTo($targetUL);
-					$aWrapper = $("<a/>").attr("href","#").appendTo($topLi);
+					$aWrapper = $("<a/>").attr("href","#")
+								.attr("onclick","<portlet:namespace/>searchSimulationJob('"+simulation._simulationUuid+"')").appendTo($topLi);
 					$("<i/>").addClass("fa fa-lg fa-folder").appendTo($aWrapper);
-					$("<span/>").attr("id","simulationTitle").html(simulation._simulationTitle).appendTo($aWrapper);
+					$("<span/>").attr("id","simulationTitle").html( cutStr(simulation._simulationTitle,20)).appendTo($aWrapper);
 					$("<span/>").addClass("pull-right-container")
 								.append(
 										$("<i/>").addClass("fa fa-angle-left pull-right")
 										)
 								.appendTo($aWrapper);
-					
-					<portlet:namespace/>searchSimulationJob(scienceAppId,simulation._simulationUuid,$topLi);
 				}
 				
 				$("#<portlet:namespace/>pagin").html(result.pagingStr);
 				<portlet:namespace/>selectRow(simulationUuid,'');
+			}else{
+				<portlet:namespace/>searchSimulationModalOpen(1,'');
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
-				alert(textStatus+": "+jqXHR.responseText);
+				alert("<portlet:namespace/>searchSimulation-->"+textStatus+": "+jqXHR.responseText);
 			}else{
-				alert(textStatus+": "+errorThrown);
+				alert("<portlet:namespace/>searchSimulation-->"+textStatus+": "+errorThrown);
 			}  
 		}
 	});
@@ -236,21 +286,26 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 		}else{
 			topSimultionSection = $("li#<portlet:namespace/>simulation-"+simulationUuid);
 		}
-		if(nullToStr(jobUuid)===''){
+		if(!topSimultionSection.hasClass("menu-open")){
 			topSimultionSection.children("a").trigger('click');
-			topSimultionSection.find("li[id*=job]:nth-child(2) > a").trigger('click');
+		}
+		
+		var length = topSimultionSection.find("li[id*=<portlet:namespace/>job-]").length;
+		if(length==0){
+			<portlet:namespace/>selectRow(simulationUuid, jobUuid);
+		}
+		if(nullToStr(jobUuid)===''){
+			topSimultionSection.find("li[id*=<portlet:namespace/>job-]:first > a").trigger('click');
 		}else{
 			topSimultionSection.find("li#<portlet:namespace/>job-"+jobUuid+" > a").trigger('click');
 		}
 		
-	}, 800);
+	}, 500);
 }
 
 
-function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUuid,targetObject){
-	var scienceAppId = paramScienceAppId==''?<portlet:namespace/>scienceAppId:paramScienceAppId;
+function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 	var searchForm = {
-			"<portlet:namespace/>scienceAppId": scienceAppId,
 			"<portlet:namespace/>simulationUuid": simulationUuid
 		};
 	
@@ -261,37 +316,54 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 		data  : searchForm,
 		dataType: 'json',
 		success: function(result) {
-			var length = result.length;
-			$topUl = $("<ul/>").addClass("treeview-menu")
-			if(targetObject.find("ul.treeview-menu").length >0){
-				targetObject.find("ul.treeview-menu").remove();
-				$topUl.css("display","block");
+			var length = result.jobs.length;
+			$targetObject = $("li#<portlet:namespace/>simulation-"+simulationUuid);
+			var topUl;
+			if($targetObject.find("ul").length>0){
+				$targetObject.find("ul").empty();
+				topUl = $targetObject.find("ul");
+			}else{
+				topUl = $("<ul/>").addClass("treeview-menu");
+				topUl.appendTo($targetObject);
 			}
 			
-			$topUl.appendTo(targetObject);
 			
-			$editLi = $("<li/>").appendTo($topUl);
-			$editSpan = $("<span/>").addClass("btn-group edit-btn-group").appendTo($editLi);
-			
-			
-			$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Job Create")
-						  .attr("data-simulation-uuid",simulationUuid)
-						  .attr("data-btn-type","new-simulation-job")
-						  .html("<i class=\"fa fa-plus-circle\"></i>")
-						  .appendTo($editSpan);
-						  
-			$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Edit Simulation")
-						  .attr("data-simulation-uuid",simulationUuid)
-						  .attr("data-btn-type","edit-simulation")
-						  .html("<i class=\"fa fa-edit\"></i>")
-						  .appendTo($editSpan);
+			var isEdit = result.isEdit;
+			/*권한이 있을 경우에만 수정 가능*/
+			if(isEdit){
+				$editLi = $("<li/>").appendTo(topUl);
+				$editSpan = $("<span/>").addClass("btn-group edit-btn-group").appendTo($editLi);
+				
+				
+				$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Job Create")
+							  .attr("data-simulation-uuid",simulationUuid)
+							  .attr("data-btn-type","new-simulation-job")
+							  .html("<i class=\"fa fa-plus-circle\"></i>")
+							  .appendTo($editSpan);
+							  
+				$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Edit Simulation")
+							  .attr("data-simulation-uuid",simulationUuid)
+							  .attr("data-btn-type","edit-simulation")
+							  .html("<i class=\"fa fa-edit\"></i>")
+							  .appendTo($editSpan);
+			}
 			
 			if(length>0){
+				var isUncompletedJobExist = false;
 				for(var i = 0; i < length; i++) {
-					var job = result[i];
+					var job = result.jobs[i];
 // 					console.log(job);
-
+					
+					
 					var jobStatus = job._jobStatus;
+					var jobUuid = job._jobUuid;
+					
+					//Status Setting
+					if(jobStatus == 0 || jobStatus == 1701005 || jobStatus == 1701006){
+						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
+						isUncompletedJobExist = true;
+					}
+					
 					var jobStatusCss = "fa fa-circle";
 					if(jobStatus==1701005||jobStatus==1701006){
 						jobStatusCss = "fa fa-circle running";
@@ -300,7 +372,7 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 					}else if(jobStatus==1701012){
 						jobStatusCss = "fa fa-circle fail";
 					}
-					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid).appendTo($topUl);
+					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid).appendTo(topUl);
 					$("<span/>").addClass("label label-primary pull-right  sidebar-btn").attr("data-btn-type","search-job-info").css("cursor","pointer")
 								.append(
 										$("<i/>").addClass("icon-arrow-right")
@@ -308,8 +380,38 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 					$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
 								.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
-					$("<span/>").attr("id","jobTitle").html(job._jobTitle).appendTo($aWrapper);
+					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
 					
+					
+					if(typeof selectJobId != 'undefined'){
+						if(job._jobUuid===nullToStr(selectJobId)){
+							$topLi.addClass("active");
+							
+							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
+								var eventData = {
+										portletId: '<%=portletDisplay.getId()%>',
+										targetPortlet:<portlet:namespace/>connector,
+										data: {
+											jobUuid:selectJobId,
+											jobStatus:jobStatus
+										}
+								};
+								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
+							}else if(jobUuid === selectJobId){
+								/*submit 후 JOB ID가 변경되었을때 - 처리중*/
+// 								<portlet:namespace/>jobSelect($aWrapper);
+							}
+						}
+					}
+				}
+				
+				if(<portlet:namespace/>refreshTimer){
+					clearInterval(<portlet:namespace/>refreshTimer);
+				}
+				
+				//setInterval Setting
+				if(isUncompletedJobExist){
+					<portlet:namespace/>refreshTimer = setInterval(<portlet:namespace/>syncJobStatusList, 5000, simulationUuid);
 				}
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
@@ -320,6 +422,20 @@ function <portlet:namespace/>searchSimulationJob(paramScienceAppId,simulationUui
 			}  
 		}
 	});
+}
+
+var <portlet:namespace/>syncPreSimulationUuid = ''; 
+function <portlet:namespace/>syncJobStatusList(simulationUuid){
+	<portlet:namespace/>syncPreSimulationUuid = simulationUuid;
+	
+	if(<portlet:namespace/>prevStatus.isCheckExist()){
+		<portlet:namespace/>searchSimulationJob(simulationUuid,<portlet:namespace/>workSimulationJobId);
+	}
+	
+	if(<portlet:namespace/>syncPreSimulationUuid!=''&&<portlet:namespace/>syncPreSimulationUuid != simulationUuid){
+		//<portlet:namespace/>prevStatus init
+		<portlet:namespace/>prevStatus.clearStatusCache();
+	}
 }
 
 function <portlet:namespace/>searchSimulationJobInfo(jobUuid){
@@ -366,6 +482,9 @@ function <portlet:namespace/>jobSelect(object){
 	};
 	
 	Liferay.fire(OSP.Event.OSP_JOB_SELECTED, eventData);
+	
+	//Global workSimulationJobId Setting
+	<portlet:namespace/>workSimulationJobId = jobUuid;
 }
 
 
@@ -373,7 +492,9 @@ function <portlet:namespace/>addSimulation(panelDataType, that, event){
 	if (<portlet:namespace/>isValidate()) {
 		var myId = '<%=portletDisplay.getId()%>';
 		var data = {
-				title : <portlet:namespace/>PANEL_DATA[panelDataType].form.title
+				title : <portlet:namespace/>PANEL_DATA[panelDataType].form.title,
+				jobTitle : '',
+				jobInitData : ''
 			};
 		var eventData = {
 			portletId : myId,
@@ -453,10 +574,7 @@ function <portlet:namespace/>addSimulationJob(panelDataType, that, event){
 		var title  = <portlet:namespace/>PANEL_DATA[panelDataType].form.title;
 		
 		var myId = '<%=portletDisplay.getId()%>';
-		var data = {
-				title : title,
-				simulationUuid : simulationUuid
-			};
+		
 		var eventData = {
 			portletId : myId,
 			targetPortlet : <portlet:namespace/>connector,
@@ -490,7 +608,7 @@ function <portlet:namespace/>updateSimulationJob(panelDataType, that, event){
 			async : false,
 			data  : updateForm,
 			success: function(result) {
-				$("#<portlet:namespace/>job-"+jobUuid).find("span#jobTitle").html(title);
+				$("#<portlet:namespace/>job-"+jobUuid).find("span#jobTitle").html(cutStr(title,15));
 				toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
 			},error:function(jqXHR, textStatus, errorThrown){
 				if(jqXHR.responseText !== ''){
@@ -532,6 +650,244 @@ function <portlet:namespace/>deleteSimulationJob(panelDataType, that, event){
 			}
 		}
 	});
+}
+
+
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition) {
+	<portlet:namespace/>clearReadOutLogTimer();
+	
+	jQuery.ajax({
+		url: '<%=readOutLogURL.toString()%>',
+		type:'POST',
+		dataType:'json',
+		data:{
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>jobUuid": jobUuid,
+			"<portlet:namespace/>lastPosition": lastPosition
+		},
+		success:function(outLog){
+			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
+			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			var preTextareVal = textarea.text();
+			
+			textarea.empty();
+			if(lastPosition === 0){
+				textarea.text(outLog.outLog);
+			}else{
+				textarea.text(textarea+outLog.outLog);
+			}
+			
+			if(outLog.jobStatus === 1701006){
+				<portlet:namespace/>refreshJobLogTimer = setTimeout(<portlet:namespace/>readOutLog, 1000, simulationUuid,jobUuid,outLog.lastPosition);
+			}
+			
+			modal.modal({ "backdrop": "static", "keyboard": false });
+		},error:function(jqXHR, textStatus, errorThrown){
+// 			if(jqXHR.responseText !== ''){
+// 				alert("jobSystemLog-->"+textStatus+": "+jqXHR.responseText);
+// 			}else{
+// 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
+// 			}
+			alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+		}
+	});
+	
+}
+
+function <portlet:namespace/>clearReadOutLogTimer(){
+	if(<portlet:namespace/>refreshJobLogTimer){
+		clearTimeout(<portlet:namespace/>refreshJobLogTimer);
+	}
+}
+
+
+function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
+	jQuery.ajax({
+		url: '<%=jobResultFileURL.toString()%>',
+		type:'POST',
+		dataType:'json',
+		data:{
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>jobUuid": jobUuid
+		},
+		success:function(result){
+			console.log(result);
+			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-result-file-modal");
+			$modalBody = modal.find(".modal-body");
+			$modalBody.empty();
+			var length = result.resultList.length;
+			if(length>0){
+				$table = $("<table></table>").addClass("table table-bordered table-hover").appendTo($modalBody);
+				$thead = $("<thead></thead>").appendTo($table);
+				$tr = $("<tr></tr>").appendTo($thead);
+				$("<th></th>").addClass("text-center").html(Liferay.Language.get('edison-table-list-header-file-nm')).appendTo($tr);
+				$("<th></th>").addClass("text-center").html(Liferay.Language.get('edison-table-list-header-file-size')).appendTo($tr);
+				$tbody = $("<tbody></tbody>").appendTo($table);
+				
+				
+				for(var i = 0; i < length; i++) {
+					var data = result.resultList[i];
+					$dataTr = $("<tr></tr>").css("cursor","pointer")
+											.attr("onclick","<portlet:namespace/>iceBreakerFileDown('"+data.fileId+"')")
+											.appendTo($tbody);
+					
+					$("<td></td>").html(data.fileName).appendTo($dataTr);
+					$("<td></td>").addClass("text-center").html(data.fileSize).appendTo($dataTr);
+				}
+			}
+			
+			if(result.zipFileId!=""){
+				modal.find(".modal-footer").css("display","block");
+				modal.find(".modal-footer > "+<portlet:namespace/>parentNamespace+"all-down-btn")
+					 .attr("onclick","<portlet:namespace/>iceBreakerFileDow('"+result.zipFileId+"')");
+			}else{
+				modal.find(".modal-footer").css("display","none");
+			}
+			
+			
+			modal.modal({ "backdrop": "static", "keyboard": false });
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert("jobSystemLog-->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
+			}
+		}
+	});
+}
+
+
+function <portlet:namespace/>loadSimulationModal(currentPage) {
+	<portlet:namespace/>searchSimulationModalOpen(currentPage,'');
+}
+
+function <portlet:namespace/>searchSimulationModalOpen(currentPage,inputs) {
+	var scienceAppId = <portlet:namespace/>scienceAppId;
+	var searchForm = {
+		"<portlet:namespace/>scienceAppId": scienceAppId,
+		"<portlet:namespace/>currentPage": currentPage,
+		"<portlet:namespace/>searchLine": 10,
+		"<portlet:namespace/>paginFunction": "loadSimulationModal"
+	};
+	
+	var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
+	var simulatinArea = modal.find("#"+<portlet:namespace/>parentNamespace+"simulation-area");
+	$simulationTbody = simulatinArea.find("tbody");
+	$simulationTbody.empty();
+	
+	modal.find("button#"+<portlet:namespace/>parentNamespace+"create").attr("onclick","<portlet:namespace/>copyJobAndAddSimulation()");
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=searchSimulationURL%>",
+		async : false,
+		data  : searchForm,
+		dataType: 'json',
+		success: function(result) {
+			var length = result.simulaitons.length;
+			if(length != 0) {
+				for(var i = 0; i < length; i++) {
+					var simulation = result.simulaitons[i];
+// 					console.log(simulation);
+					$tr = $("<tr></tr>").css("cursor","pointer")
+						  .attr("onclick","<portlet:namespace/>copyJobAndAddJob('"+simulation._simulationUuid+"','');")
+						  .appendTo($simulationTbody);
+					$("<td></td>").html(simulation._simulationTitle).appendTo($tr)
+					$("<td></td>").addClass("text-center").html(simulation._simulationCreateDt).appendTo($tr)
+				}
+				simulatinArea.find("#"+<portlet:namespace/>parentNamespace+"pagin").html(result.pagingStr);
+				simulatinArea.css("display","block");
+			}else{
+				simulatinArea.find("#"+<portlet:namespace/>parentNamespace+"pagin").html("");
+				simulatinArea.css("display","none");
+			}
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}  
+		}
+	});
+	
+	modal.modal({ "backdrop": "static", "keyboard": false });
+}
+
+function <portlet:namespace/>copyJobAndAddSimulation() {
+	var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
+	
+	if (<portlet:namespace/>isModalValidate(modal)) {
+		var workbench = window[<portlet:namespace/>parentNamespace+"workbench"];
+		var simulation = workbench.workingSimulation();
+		
+		var jobTitle = '';
+		var jobInitData = '';
+		
+		if(simulation){
+			var job = simulation.workingJob();
+			jobTitle= "copy  "+job.title_;
+			jobInitData = JSON.stringify(job.copyInputs())
+		}
+		
+		
+		var myId = '<%=portletDisplay.getId()%>';
+		var data = {
+				title : modal.find("form #title").val(),
+				jobTitle : jobTitle,
+				jobInitData : jobInitData
+			};
+		
+		var eventData = {
+			portletId : myId,
+			targetPortlet : <portlet:namespace/>connector,
+			data : data
+		};
+		
+		Liferay.fire(OSP.Event.OSP_CREATE_SIMULATION, eventData);
+		
+		var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
+		modal.modal('hide');
+	}
+}
+
+function <portlet:namespace/>copyJobAndAddJob(simulationUuid,inputs) {
+	$.confirm({
+		boxWidth: '30%',
+		useBootstrap: false,
+		title: 'Confirm!',
+		content: '<p>'+Liferay.Language.get('edison-simulation-copy-job-message')+'</p>',
+		buttons: {
+			confirm: function () {
+				var workbench = window[<portlet:namespace/>parentNamespace+"workbench"];
+				var simulation = workbench.workingSimulation();
+				var job = simulation.workingJob();
+				
+				var myId = '<%=portletDisplay.getId()%>';
+				if(inputs===''){
+					inputs = JSON.stringify(job.copyInputs());
+				}
+				var eventData = {
+					portletId : myId,
+					targetPortlet : <portlet:namespace/>connector,
+					title : "copy  "+job.title_,
+					simulationUuid : simulationUuid,
+					data:inputs
+				};
+				
+				Liferay.fire(OSP.Event.OSP_CREATE_JOB, eventData);
+				
+				var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
+				modal.modal('hide');
+			},
+			cancel: function () {
+				
+			}
+		}
+	});
+}
+function <portlet:namespace/>iceBreakerFileDown(fileId){
+	var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
+	window.location.href = url;
 }
 /***********************************************************************
  * Portlet Side btn event
@@ -578,6 +934,12 @@ function <portlet:namespace/>deleteSimulationJob(panelDataType, that, event){
 	   }
 	};
 function <portlet:namespace/>init(){
+	
+	//Job System Log modal close event
+	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
+		<portlet:namespace/>clearReadOutLogTimer();
+	})
+	
 	<portlet:namespace/>jqPortletBoundaryId = "#p_p_id" + <portlet:namespace/>parentNamespace;
 	$.Mustache.addFromDom();
 	
@@ -633,7 +995,7 @@ function <portlet:namespace/>init(){
 			$("#" + <portlet:namespace/>parentNamespace + "menu-panel-box .menu-panel-close").click(function(e){
 				e.preventDefault();
 				$(".menu-panel").hide('slide', {direction:'left'}, 500);
-				$(<portlet:namespace/>jqPortletBoundaryId + " .sidebar > .sidebar-menu > li.active").removeClass("active");
+				$(<portlet:namespace/>jqPortletBoundaryId + " .sidebar > .sidebar-menu li.view").removeClass("view");
 			});
 			$(".menu-panel").show('slide', {direction:'left'}, 500);
 		}
@@ -652,6 +1014,11 @@ function <portlet:namespace/>manualDownLoad(manualId){
 function <portlet:namespace/>isValidate() {
 	$("#" + <portlet:namespace/>parentNamespace +"menu-panel-box form").validator('validate');
 	return $("#" + <portlet:namespace/>parentNamespace +"menu-panel-box form").find(".has-error").length === 0;
+}
+
+function <portlet:namespace/>isModalValidate(modal) {
+	modal.find("form").validator('validate');
+	return modal.find(".has-error").length === 0;
 }
 
 function <portlet:namespace/>closePanel() {
@@ -678,47 +1045,59 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Job Title</label>
-      <input type="text" name="title" class="form-control data-binded" id="title" placeholder="{{form.simulation._jobTitle}}" value="{{form.simulation._jobTitle}}">
+      <input type="text" name="title" class="form-control data-binded" id="title" placeholder="{{form.simulation._jobTitle}}" value="{{form.simulation._jobTitle}}" maxlength="25">
       <div class="help-block with-errors"></div>
     </div>
 	<table id="example2" class="table table-bordered table-hover">
 		<tr>
-			<th>실행 시간</th>
-			<td>{{form.startDt}}</td>
-		</tr>
-		<tr>
-			<th>종료 시간</th>
-			<td>{{form.endDt}}</td>
-		</tr>
-		<tr>
-			<th>수행 시간</th>
-			<td>{{form.executeTime}} minute</td>
-		</tr>
-		<tr>
-			<th>작업상태</th>
+			<th><liferay-ui:message key='status'/></th>
 			<td>
 				<img src="${contextPath}/images/monitoring/ko_KR/{{form.jobStatusImg}}" onerror='this.src="${contextPath}/images/monitoring/ko_KR/monitor_QUEUED.png"'/>
 				{{form.jobStatusNm}}
 			</td>
 		</tr>
+		{{#form.startDt}}
 		<tr>
-			<th>시스템 로그</th>
+			<th><liferay-ui:message key='edison-simulation-execute-job-create-list-submit-time'/></th>
+			<td>{{form.startDt}}</td>
+		</tr>
+		{{/form.startDt}}
+		{{#form.endDt}}
+		<tr>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-complete-time'/></th>
+			<td>{{form.endDt}}</td>
+		</tr>
+		{{/form.endDt}}
+		{{#form.executeTime}}
+		<tr>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-running-time'/></th>
+			<td>{{form.executeTime}} minute</td>
+		</tr>
+		{{/form.executeTime}}
+		{{#form.logView}}
+		<tr>
+			<th>System Log</th>
 			<td>
-				<button class="btn btn-default icon-bar-chart"></button>
+				<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}',0);"></button>
 			</td>
 		</tr>
+		{{/form.logView}}
+		{{#form.resultFile}}
 		<tr>
-			<th>결과 파일</th>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-result-down'/></th>
 			<td>
-				<button class="btn btn-default icon-save"></button>
+				<button class="btn btn-default icon-save" onclick="<portlet:namespace/>jobResultFileView('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}');"></button>
 			</td>
 		</tr>
+		{{/form.resultFile}}
 	</table>
   </div>
+  {{#form.isEdit}}
   <div class="box-footer">
     <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
     <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
+  {{/form.isEdit}}
 </form>
 </script>
 <script id="tpl-new-simulation-panel-setting" type="text/html">
@@ -726,7 +1105,7 @@ function <portlet:namespace/>closePanel() {
 <div class="box-body">
 	<div class="form-group">
 		<label for="title">Title</label>
-		<input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+		<input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="20"/>
 		<div class="help-block with-errors"></div>
 	</div>
 </div>
@@ -740,7 +1119,7 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="20"/>
       <div class="help-block with-errors"></div>
     </div>
   </div>
@@ -755,7 +1134,7 @@ function <portlet:namespace/>closePanel() {
   <div class="box-body">
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required/>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" autofocus required maxlength="25"/>
       <div class="help-block with-errors"></div>
     </div>
   </div>

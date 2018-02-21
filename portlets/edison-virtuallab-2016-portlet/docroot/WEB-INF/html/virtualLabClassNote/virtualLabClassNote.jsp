@@ -49,70 +49,13 @@ function <portlet:namespace/>dataSearchList() {
 				$("#<portlet:namespace/>classNoteFileList").html("<liferay-ui:message key='edison-there-are-no-data' />")
 				 										   .css("text-align", "center");
 				
-				/* $rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
-				
-				$("<td/>").text("This is Test Text").css("word-break","break-all")
-						  .appendTo($rowResult);
-				if(admin == 'admin'){
-					flag = true;
-					if(flag) {
-						$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + 0 + "');")
-												   .css("cursor", "pointer")
-								 ).appendTo($rowResult);
-					} else {
-						$("<td/>").css("height","20px").appendTo($rowResult);
-					}
-				
-					$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='delete' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>classNoteDelete('" + 0 + "');")
-												.css("cursor", "pointer")
-					 ).appendTo($rowResult);	
-				}else{
-					$("<td/>").css("height","20px").appendTo($rowResult);
-					flag = true;
-					if(flag) {
-						
-						$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + 0 + "');")
-												   .css("cursor", "pointer")
-								 ).appendTo($rowResult); 
-					} else {
-						$("<td/>").css("height","20px").appendTo($rowResult);
-					}
-				}
-				
-				$("#<portlet:namespace/>virtualLabClassNoteBody").append($rowResult); */
 				
 			} else {
 				for(var i = 0; i < getVirtualLabClassNoteList.length; i++) {
-					$rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
 					
-					$("<td/>").text(getVirtualLabClassNoteList[i].description).css("word-break","break-all")
-							  .appendTo($rowResult);
-					if(admin == 'admin'){
-						if(getVirtualLabClassNoteList[i].fileEntryId != 0) {
-							$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + getVirtualLabClassNoteList[i].fileEntryId + "');")
-													   .css("cursor", "pointer")
-									 ).appendTo($rowResult);
-						} else {
-							$("<td/>").css("height","20px").appendTo($rowResult);
-						}
-					
-						$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='delete' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>classNoteDelete('" + getVirtualLabClassNoteList[i].classNoteSeq + "');")
-													.css("cursor", "pointer")
-						 ).appendTo($rowResult);	
-					}else{
-						$("<td/>").css("height","20px").appendTo($rowResult);
-						if(getVirtualLabClassNoteList[i].fileEntryId != 0) {
-							
-							$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + getVirtualLabClassNoteList[i].fileEntryId + "');")
-													   .css("cursor", "pointer")
-									 ).appendTo($rowResult); 
-						} else {
-							$("<td/>").css("height","20px").appendTo($rowResult);
-						}
+					if(3<=i){
+						break;
 					}
-					
-					//$("#<portlet:namespace/>virtualLabClassNoteBody").append($rowResult);
-					
 					
 					var classNoteFileList = $("#<portlet:namespace/>classNoteFileList");
 					
@@ -244,41 +187,6 @@ function(popupIdToClose) {
 </form>
 
 <div class="panel edison-panel">
-	<%-- <c:choose>
-		<c:when test="${getVirtualLabClassNoteList == 0 && role eq 'member' }">
-		</c:when>
-		<c:otherwise>
-			<c:choose>
-				<c:when test="${role eq 'admin' }">
-					<div class="virtitlebox panel-heading clearfix">
-						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-						<div class="virtitle">
-							<liferay-ui:message key='edison-course-class-material' />
-						</div>
-						<div class="buttonbox0801">
-							<input id="<portlet:namespace/>classNoteManagementButton" name="<portlet:namespace/>classNoteManagementButton" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openClassNotePopup()"/>
-						</div>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<h3><liferay-ui:message key='edison-course-class-material-member' /></h3>
-				</c:otherwise>
-			</c:choose>
-			<!-- <div class="h10"></div> -->
-			<div class="table6_list">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
-					<colgroup>
-						<col width="*" />
-						<col width="120" />
-						<col width="120" />
-					</colgroup>
-					<tbody id="<portlet:namespace/>virtualLabClassNoteBody">
-					</tbody>
-				</table>
-			</div>
-		</c:otherwise>
-	</c:choose> --%>
-	
 	<!--강의자료 다운로드-->
 	<div class="conwrap2">
 		<div class="conwrap2left">

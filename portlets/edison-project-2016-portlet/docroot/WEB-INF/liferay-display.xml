@@ -11,5 +11,6 @@
 		<portlet id="edison-project-content" />
 		<portlet id="edison-project-management-app" />
 		<portlet id="edison-project-management-content" />
+		<portlet id="edison-project-achievements-data" />
 	</category>
 </display>

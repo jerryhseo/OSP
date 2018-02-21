@@ -7,14 +7,20 @@
 <script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
-<h1 class="perfoh1">EDISON <liferay-ui:message key="edison-project-achievemnet-title"/></h1>
+<h1 class="perfoh1">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+	EDISON <liferay-ui:message key="edison-project-achievemnet-title"/>
+</h1>
 	
 <div>
 	<img src="${contextPath }/images/output/intro_01.jpg" width="1221"
 		height="744">
 </div>
 
-<h1 class="perfoh1">EDISON 프로젝트 주요 성과</h1>
+<h1 class="perfoh1">
+	<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
+	EDISON 프로젝트 주요 성과
+</h1>
 
 <!--챠트영역-->
 <div class="perfochartbox">
@@ -300,7 +306,7 @@ function <portlet:namespace/>dataSearch(){
 					
 					/*head*/
 					$boxInTable = $("<div/>").addClass("boxintable")
-							.append($("<table/>").attr("id","<portlet:namespace/>siteTable_"+$site).attr("width","100%").attr("border", "0").attr("cellspacing", "0").css("margin-top", "30px")
+							.append($("<table/>").attr("id","<portlet:namespace/>siteTable_"+$site).attr("width","100%").attr("border", "0").attr("cellspacing", "0").css("margin-top", "45px").css("margin-left", "10px")
 							.append($("<tr/>").css("height", "43px")
 // 								.append($("<td/>").attr("width", "25%").append("&nbsp;"))
 								.append($("<td/>").attr("width", "29%").addClass("TC").append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APP"))

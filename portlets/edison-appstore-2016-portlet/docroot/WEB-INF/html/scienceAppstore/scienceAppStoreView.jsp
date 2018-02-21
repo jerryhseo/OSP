@@ -180,21 +180,24 @@
 		</div>
 	</div>
 	<!-- 좌측	 -->
-	<div class="commleft" style="padding: 0px 18px 0px 0px;">
+	<div class="commleft panel edison-panel" style="padding: 0px 18px 0px 0px;">
 		<form id="<portlet:namespace/>solverInfoForm" name="<portlet:namespace/>solverInfoForm" method="POST"  action="${actionUrl}" onsubmit="return <portlet:namespace/>solverInfoFormCheck()">
 			<input type="hidden" id="<portlet:namespace/>selectLocaleId" name="<portlet:namespace/>selectLocaleId" value="${solver.selectLocaleId}"/>
-			<div class="h4" style="float: left;">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
+			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+					<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
+				</h3>
+				
+				<div class="btn-group pull-right">
+					<c:if test="${contentCheckAuth eq 'TRUE' }">
+						<input type="button" id="tabs-1" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>detailInfoModify(); return false;"/>
+					</c:if>
+						<input type="button" id="tabs-1" class="btn btn-default" 
+							value="<liferay-ui:message key='edison-science-appstore-view-tab-sw-statistics' />" onClick="<portlet:namespace/>moveScienceAppExecStatistice('${solver.name}','${solverGroupId}');"/>	
+				</div>
 			</div>
 				
-			<div class="infoBtnbox" style="float: right; padding-top: 15px;">
-			<c:if test="${contentCheckAuth eq 'TRUE' }">
-				<input type="button" id="tabs-1" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>detailInfoModify(); return false;"/>
-			</c:if>
-				<input type="button" id="tabs-1" class="btn btn-default" 
-					value="<liferay-ui:message key='edison-science-appstore-view-tab-sw-statistics' />" onClick="<portlet:namespace/>moveScienceAppExecStatistice('${solver.name}','${solverGroupId}');"/>	
-			</div>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<c:if test="${contentCheckAuth eq 'FALSE' }">
 					<tr>
