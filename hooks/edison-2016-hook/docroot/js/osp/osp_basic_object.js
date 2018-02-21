@@ -98,6 +98,7 @@
 			TASKS:'tasks_',
 			TASK_UUID:'taskUuid_',
 			TEMPLATE_ID:'templateId_',
+			IS_PROVENANCE:'isProvenance_',
 			TITLE:'title_',
 			TWO:'two_',
 			TYPE:'type_',

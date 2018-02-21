@@ -37,6 +37,51 @@ ul, ol {list-style:none;}
 		.portlet-column{
 			padding : 0px;
 		}
+		
+		/*theme breadcrumbs*/
+		#nsubtopwrap{
+			background-position: center;
+			background-repeat: no-repeat;
+			height: 138px;
+			overflow: hidden;
+			background-color: #070300;
+			margin-bottom: 5px;
+			
+			#nsubtoplefttxt{
+				font-size: 35px;
+				font-weight: 400 !important;
+				color: #fff;
+				line-height: 1.0em;
+				font-family: 'Gudea';
+				text-shadow: 0 0 10px #555;
+				span{
+					font-size: 12px;
+					color: #fff;
+					line-height: 2.0em;
+				}
+			}
+			#nsubtoprighttxt{
+				div#txtabout{
+					font-size: 35px;
+					font-weight: 400;
+					color: #fff;
+				}
+				
+				ul{
+					margin: 0;
+					padding: 0;
+					color: #ededed;
+					float: right;
+					li{
+						float: left;
+						list-style: none;
+						a{
+							color: #ededed;
+						}
+					}
+				}
+			}
+		}
 	}
 	.navbar{
 		margin-bottom:0px;

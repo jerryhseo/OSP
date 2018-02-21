@@ -23,40 +23,37 @@
 			
 		</ul>
 	<%}else{ %>
-		<div class="subnaviwrap">
-			<div class="subnavi">
-				<%
-					String ppid = GetterUtil.getString(request.getParameter("p_p_id"));
-					boolean showBreadCrumbString = true;
-					if(ppid.equals("58") || ppid.equals("1001") || ppid.equals("1004")){
+		<%
+			String ppid = GetterUtil.getString(request.getParameter("p_p_id"));
+			boolean showBreadCrumbString = true;
+			if(ppid.equals("58") || ppid.equals("1001") || ppid.equals("1004")){
+				showBreadCrumbString = false;
+			}else{
+				boolean isLogin = themeDisplay.isSignedIn();
+				if(isLogin){
+					if(!themeDisplay.getUser().isEmailAddressVerificationComplete()){
 						showBreadCrumbString = false;
-					}else{
-						boolean isLogin = themeDisplay.isSignedIn();
-						if(isLogin){
-							if(!themeDisplay.getUser().isEmailAddressVerificationComplete()){
-								showBreadCrumbString = false;
-							}
-							
-							if(themeDisplay.getUser().isPasswordReset()){
-								showBreadCrumbString = false;
-							}
-						}
 					}
-				%>
-				<ul>
-					<%if(showBreadCrumbString){ %>
-						<%if(GetterUtil.getBoolean(request.getAttribute("liferay-ui:breadcrumb:showParentGroups"))){ %>
-							<li class="home">
-								<a href="<%=PortalUtil.getHomeURL(request)%>">
-									<i class="icon-home icon-large"></i>
-								</a>
-							</li>
-						<% }%>
-						<%= breadcrumbString %>
-					<% }%>
-				</ul>
-			</div>
-		</div>
+					
+					if(themeDisplay.getUser().isPasswordReset()){
+						showBreadCrumbString = false;
+					}
+				}
+			}
+		%>
+		<ul>
+			<%if(showBreadCrumbString){ %>
+				<%if(GetterUtil.getBoolean(request.getAttribute("liferay-ui:breadcrumb:showParentGroups"))){ %>
+					<li>
+						<a href="<%=PortalUtil.getHomeURL(request)%>">
+							<i class="icon-home icon-large"></i>
+						</a>
+						<span class="divider">/</span>
+					</li>
+				<% }%>
+				<%= breadcrumbString %>
+			<% }%>
+		</ul>
 	<%} %>
 	
 	

@@ -96,7 +96,7 @@
 							</th>
 							<th width="13%"> 
 								<select name="<portlet:namespace/>searchStatus" id="<portlet:namespace/>searchStatus" onChange="<portlet:namespace/>dataSearchList();" class="form-control filter" disabled>
-									<option value=""><liferay-ui:message key='edison-virtuallab-confirm-status' /></option>
+									<option value=""><liferay-ui:message key='status' /></option>
 									<option value="1901001" <c:if test="${searchStatus == '1901001' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-write' /></option>
 									<option value="1901002" <c:if test="${searchStatus == '1901002' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-request' /></option>
 									<option value="1901003" <c:if test="${searchStatus == '1901003' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-private' /></option>
@@ -152,8 +152,8 @@
 					</tbody>
 				</table>
 				<div class="row" style="margin: 0px;">
-					<div class="col-md-7 text-center">${pagingStr}</div>
-					<div class="col-md-5" style="margin: 18px 0px;">
+					<div class="col-md-6 text-center">${pagingStr}</div>
+					<div class="col-md-6" style="margin: 18px 0px;">
 						<div class="btn-group pull-right">
 							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('true');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-register' /></span></button>
 							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-editor-register' /></span></button>

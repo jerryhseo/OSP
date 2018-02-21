@@ -221,6 +221,7 @@ $(function(e) {
 	scienceApp.runType('${scienceApp.getRunType()}');
 	scienceApp.currentManualId('${scienceApp.getManualIdCurrentValue()}');
 	scienceApp.templateId('${scienceApp.templetId}');
+	scienceApp.isProvenance('${isProvenance}');
 	
 	if( '<%=inputPorts%>' ) 
 		scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );
@@ -478,11 +479,14 @@ Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 Liferay.on(OSP.Event.OSP_SUBMIT_JOB,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_SUBMIT_JOB: ['+e.portletId+', '+new Date()+']', e.data);
-		<portlet:namespace/>workbench.handleSubmitJob(
-			'<%=serveResourceURL.toString()%>');
-			}
+		var isProvenanceJob = e.data.isProvenanceJob;
+		if(isProvenanceJob){
+			<portlet:namespace/>workbench.handleCheckProvenance('<%=serveResourceURL.toString()%>');
+		}else{
+			<portlet:namespace/>workbench.handleSubmitJob('<%=serveResourceURL.toString()%>');
 		}
-);
+	}
+});
 
 Liferay.on(OSP.Event.OSP_JOB_STATUS_CHANGED,function( e ){
 	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )	return;

@@ -88,19 +88,19 @@ function <portlet:namespace/>displayInit(data){
 			$targetDiv = $("#<portlet:namespace/>breadcrumb");
 			
 			$("<button/>").addClass("btn btn-primary").attr("type","button").css("cursor","pointer").append(
-					$("<span/>").addClass("fa fa-folder").html("  입력")
+					$("<span/>").addClass("fa fa-folder").html("  "+Liferay.Language.get('edison-simulation-input'))
 			).attr("onclick","<portlet:namespace/>flowLayoutUpdate('INPUT')").appendTo($targetDiv);
 			
 			
 			if(data.scienceApp.logPortsArray().length > 0){
 				$("<button/>").addClass("btn btn-default").attr("type","button").append(
-						$("<span/>").addClass("fa fa-folder").html("  로그")
+						$("<span/>").addClass("fa fa-folder").html("  "+Liferay.Language.get('edison-simulation-log'))
 				).css("cursor","not-allowed").attr("id","<portlet:namespace/>logBreadcrumb").appendTo($targetDiv);
 			}
 			
 			if(data.scienceApp.outputPortsArray().length > 0){
 				$("<button/>").addClass("btn btn-default").attr("type","button").append(
-						$("<span/>").addClass("fa fa-folder").html("  분석")
+						$("<span/>").addClass("fa fa-folder").html("  "+Liferay.Language.get('edison-simulation-analysis'))
 				).css("cursor","not-allowed").attr("id","<portlet:namespace/>outBreadcrumb").appendTo($targetDiv);
 			}
 			
