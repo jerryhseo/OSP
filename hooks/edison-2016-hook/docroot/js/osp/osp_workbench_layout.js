@@ -2182,6 +2182,40 @@
 			}
 		};
 		
+		Workbench.handleCheckProvenance = function(resourceURL){
+			var simulation = Workbench.workingSimulation();
+			var job = simulation.workingJob();
+			
+			var jobParameter = jobsToSubmitGetParameters(simulation,job, false,'');
+			
+			var data = Liferay.Util.ns(
+			                           Workbench.namespace(),
+			                           {
+			                        	   command: 'CHECK_PROVENANCE',
+			                        	   jobParameter: JSON.stringify(jobParameter)
+			                           });
+
+					$.ajax({
+						type: 'POST',
+						url: resourceURL, 
+						async : false,
+						data  : data,
+						dataType : 'json',
+						success: function(aa) {
+							
+						},
+						error:function(data,e){
+							if(jqXHR.responseText !== ''){
+								alert("CHECK_PROVENANCE-->"+textStatus+": "+jqXHR.responseText);
+							}else{
+								alert("CHECK_PROVENANCE-->"+textStatus+": "+errorThrown);
+							}
+						}
+					});
+					
+					
+		};
+		
 		Workbench.handleSubmitJob = function(resourceURL){
 			var scienceApp = Workbench.scienceApp();
 			var simulation = Workbench.workingSimulation();
@@ -2357,7 +2391,8 @@
 					jobStatus: job.status()
 			};
 			
-			fireRefreshJobStatus(statusData);
+			alert(job.status());
+			fireRefreshJobStatus(status);
 			
             var scienceApp = Workbench.scienceApp();
             var logPorts = scienceApp.logPorts();

@@ -5,7 +5,7 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 60px;position: absolute;z-index: 8;">
-	<div class="panel-heading" style="z-index: 10;cursor: move;">Port Selector</div>
+	<div class="panel-heading" style="z-index: 10;cursor: move;"><h4>Port Selector</h4></div>
 	<div class="panel-body">
 		<div class="panel-group" id="<portlet:namespace/>port-accordion">
 		
@@ -14,10 +14,13 @@
 	</div>
 	<div class="panel-footer" style="min-width: 385px;">
 		<div id="<portlet:namespace/>port-edit-btn-group">
-			프로비넌스 엔진 <liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
-			<input type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled">
-			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobSave"><span class="icon-save">  저장</span></button>
-			<button class="btn btn-success btn-flat" id="<portlet:namespace/>jobSubmit"><span class="icon-cloud-upload">  제출</span></button>
+			<span class="<portlet:namespace/>provenance">
+				<liferay-ui:message key='edison-provenance-engin'/>
+				<liferay-ui:icon-help message="edison-science-appstore-provenance-connect-message"/>
+			</span>
+			<input type="checkbox" id="<portlet:namespace/>isProvenance" class="<portlet:namespace/>provenance" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled" id="<portlet:namespace/>provenance">
+			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobSave"><span class="icon-save">  <liferay-ui:message key='save'/></span></button>
+			<button class="btn btn-success btn-flat" id="<portlet:namespace/>jobSubmit"><span class="icon-cloud-upload">  Submit</span></button>
 		</div>
 		<div id="<portlet:namespace/>port-view-btn-group">
 			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobRerun"><span class="icon-repeat">  Re-Run</span></button>
@@ -81,7 +84,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 				portletId: myId,
 				targetPortlet: e.portletId
 			}
-			<portlet:namespace/>init();
+			<portlet:namespace/>init(e.data.scienceApp.isProvenance());
 			Liferay.fire( OSP.Event.OSP_REQUEST_PORT_INFO, eventData );
 		}
 	}
@@ -126,11 +129,11 @@ Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
 				break;
 			case OSP.Enumeration.PortStatus.LOG_VALID:
 			case OSP.Enumeration.PortStatus.OUTPUT_VALID:
-				$item.removeClass( 'portInvalid' );
+				$item.addClass('list-group-item-success');
 				break;
 			case OSP.Enumeration.PortStatus.LOG_INVALID:
 			case OSP.Enumeration.PortStatus.OUTPUT_INVALID:
-				$item.addClass( 'portInvalid' );
+				$item.addClass('list-group-item-success');
 				break;
 		}
 // 	}
@@ -157,11 +160,17 @@ Liferay.on(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, function( e ){
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-function <portlet:namespace/>init(){
+function <portlet:namespace/>init(isProvenance){
 	$( "#<portlet:namespace/>port-remote" ).draggable({
 		containment: $( "#<portlet:namespace/>port-remote" ).parent().parent(),
-		cursor: "move"
+		cursor: "move",
+		opacity: 0.35
 	});
+	
+	var isTrueSet = (isProvenance == 'true');
+	if(!isTrueSet){
+		$(".<portlet:namespace/>provenance").remove();
+	}
 }
 
 function <portlet:namespace/>displayPorts( ports, portType ){
@@ -174,7 +183,8 @@ function <portlet:namespace/>displayPorts( ports, portType ){
 	case OSP.Enumeration.PortType.INPUT:
 		css.PanelClass = 'panel panel-info';
 		css.LiClass = 'list-group-item <portlet:namespace/>port-input';
-		css.Title = '입력';
+		css.Title = Liferay.Language.get('edison-science-appstore-toolkit-input-port');
+		
 		if(<portlet:namespace/>isFlow){
 			css.collapse='';
 		}else{
@@ -185,13 +195,13 @@ function <portlet:namespace/>displayPorts( ports, portType ){
 	case OSP.Enumeration.PortType.LOG:
 		css.PanelClass = 'panel panel-info';
 		css.LiClass = 'list-group-item <portlet:namespace/>port-log';
-		css.Title = '로그';
+		css.Title = Liferay.Language.get('edison-science-appstore-toolkit-log-port');
 		css.collapse='';
 		break;
 	case OSP.Enumeration.PortType.OUTPUT:
 		css.PanelClass = 'panel panel-info';
 		css.LiClass = 'list-group-item <portlet:namespace/>port-output';
-		css.Title = '출력';
+		css.Title = Liferay.Language.get('edison-science-appstore-toolkit-out-port');
 		css.collapse='';
 	default:
 	}
@@ -232,19 +242,19 @@ function <portlet:namespace/>selectPort(object){
 		if(!$(object).hasClass("active")){
 			$(object).addClass("active");
 			$(object).siblings().removeClass("active");
-			
-			if(<portlet:namespace/>isFlow){
-				<portlet:namespace/>flowLayoutUpdate($(object).attr("data-port-type"));
-			}
-			
-			var eventData = {
-					portletId: '<%=portletDisplay.getId()%>',
-					targetPortlet:<portlet:namespace/>connector,
-					portName: $(object).text(),
-					portType: $(object).attr("data-port-type")
-			};
-			Liferay.fire( OSP.Event.OSP_PORT_SELECTED, eventData);
 		}
+		
+		if(<portlet:namespace/>isFlow){
+			<portlet:namespace/>flowLayoutUpdate($(object).attr("data-port-type"));
+		}
+		
+		var eventData = {
+				portletId: '<%=portletDisplay.getId()%>',
+				targetPortlet:<portlet:namespace/>connector,
+				portName: $(object).text(),
+				portType: $(object).attr("data-port-type")
+		};
+		Liferay.fire( OSP.Event.OSP_PORT_SELECTED, eventData);
 	}
 }
 
@@ -291,10 +301,15 @@ function <portlet:namespace/>updateJobPortStatus(data){
 		});
 		
 		$("#<portlet:namespace/>jobSubmit").click(function(){
+			var isProCheck = $("#<portlet:namespace/>isProvenance");
 			var myId = '<%=portletDisplay.getId()%>';
 			var eventData = {
 					portletId : myId,
-					targetPortlet : <portlet:namespace/>connector
+					targetPortlet : <portlet:namespace/>connector,
+					data:{
+						isProvenanceJob : isProCheck.is(":checked")
+					}
+					
 			};
 			Liferay.fire(OSP.Event.OSP_SUBMIT_JOB, eventData);
 		});
@@ -323,9 +338,10 @@ function <portlet:namespace/>flowPortChange(flowLayoutCode){
 		if(flowLayoutCode==="LOG"&&<portlet:namespace/>scienceApp.logPortsArray().length ==0){
 			flowLayoutCode = "OUTPUT";
 		}
+		
 		var collapseObject = $("#<portlet:namespace/>collapse_"+flowLayoutCode);
- 		if(collapseObject.is('.collapse:not(.show)')){
-			collapseObject.collapse('show');
+ 		if(collapseObject.is('.collapse:not(.in)')){
+			collapseObject.collapse({parent:$("#<portlet:namespace/>port-accordion")});
  		}
 	}
 }

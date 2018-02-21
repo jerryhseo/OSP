@@ -35,6 +35,7 @@ import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -91,6 +92,8 @@ public class LayoutController {
 	
 	private static final String _DEFAULT_TEMP_DIR="/EDISON/LDAP/TEMP";
 	
+	private static final HashMap<String,String> ProvenanceSupportApp = new HashMap<String,String>();
+	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model){
 		String workbenchType = ParamUtil.getString(request, "workbenchType", "SIMULATION_WITH_APP");
@@ -99,6 +102,16 @@ public class LayoutController {
 		long scienceAppId =  ParamUtil.getLong(request, "scienceAppId", 0);
 		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 		String redirectName = ParamUtil.getString(request, "redirectName", "");
+		
+		
+		ProvenanceSupportApp.put("uChem", "4.0.1");
+		ProvenanceSupportApp.put("pianostring", "1.0.0");
+		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
+		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
+		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
+		ProvenanceSupportApp.put("Bowling", "1.0.0");
+		ProvenanceSupportApp.put("acuteSTMtip", "1.0.0");
+		ProvenanceSupportApp.put("roundSTMtip", "1.0.0");
 		
 		try{
 			model = this.evaluateScienceAppLayout(model, scienceAppId);
@@ -154,7 +167,11 @@ public class LayoutController {
 			}else if( command.equalsIgnoreCase("SUBMIT_JOBS")){
 				RequestUtil.getParameterMap(request);
 				this.submitJobs(request, response);
+			}else if( command.equalsIgnoreCase("CHECK_PROVENANCE")){
+				this.provenanceCheckJob(request, response);
 			}
+			
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -235,6 +252,15 @@ public class LayoutController {
 			}else{
 				model.addAttribute("isFlowLayout", false);
 			}
+			
+			boolean isProvenance = false;
+			String isProvenanceSupportApp = CustomUtil.strNull(ProvenanceSupportApp.get(scienceApp.getName().trim()));
+			if(!isProvenanceSupportApp.equals("")&&isProvenanceSupportApp.equals(scienceApp.getVersion().trim())){
+				isProvenance = true;
+			}
+			model.addAttribute("isProvenance", isProvenance);
+			
+			
 		}catch (Exception e) {
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_ID);
 		}
@@ -596,6 +622,13 @@ public class LayoutController {
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
 	
+	private void provenanceCheckJob( PortletRequest request, PortletResponse response) throws JSONException{
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+		JSONArray job = JSONFactoryUtil.createJSONArray(ParamUtil.getString(request, "jobParameter" ));
+		System.out.println(job.getJSONObject(0).getJSONArray("inputs_"));
+	}
+	
+	
 	protected void submitJobs( PortletRequest portletRequest, PortletResponse portletResponse ) throws PortletException, IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
@@ -884,7 +917,6 @@ public class LayoutController {
 		
 		ServletResponseUtil.write(httpResponse, submitedJobs.toString());
 	}
-	
 	
 	protected void jsonObjectPrint( JSONObject jsonObject ){
 		try {
