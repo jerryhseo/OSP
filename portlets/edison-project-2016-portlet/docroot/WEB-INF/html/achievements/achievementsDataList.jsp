@@ -36,7 +36,6 @@
 
 </style>
 
-<script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
 <h2 class="h2title" style="font-family: 'nanumgothic', sans-serif; padding-top: 12px;">성과데이터 조회</h2>

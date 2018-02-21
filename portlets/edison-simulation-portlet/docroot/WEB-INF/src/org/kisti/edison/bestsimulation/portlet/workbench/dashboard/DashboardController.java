@@ -67,8 +67,6 @@ public class DashboardController {
 	@RequestMapping
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws PortalException, SystemException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		model.addAttribute("nowUserId", themeDisplay.getUserId());
-		
 		long groupId = themeDisplay.getScopeGroupId();
 		String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
 		model.addAttribute("icebreakerUrl", icebreakerUrl);
@@ -177,14 +175,23 @@ public class DashboardController {
 	
 	@ResourceMapping(value="searchSimulationJob")
 	public void searchSimulationJob(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid
 			) throws IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		try{
+			Simulation simulation  = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+			long nowUserID = themeDisplay.getUserId();
+			boolean isEdit = false;
+			if(simulation.getUserId()==nowUserID){
+				isEdit = true;
+			}
+			
 			List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsWithSimulationUuid(simulationUuid,-1,0);
-			String obj = new Gson().toJson(jobs);
+			JsonObject obj = new JsonObject();
+			obj.add("jobs", new Gson().toJsonTree(jobs));
+			obj.addProperty("isEdit",isEdit);
+//			String obj = new Gson().toJson(jobs);
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());

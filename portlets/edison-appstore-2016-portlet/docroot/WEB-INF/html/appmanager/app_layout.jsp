@@ -317,7 +317,6 @@ function <portlet:namespace/>actionCall(mode){
 }
 
 function <portlet:namespace/>drawPortFromLayout(portType,data){
-	
 	if(data!=''){
 		var targetUL,array,dataPortPortlet;
 		if(portType=='INPUT'){
@@ -420,6 +419,9 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			
 			<c:if test="${ownerThan}">
 				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
+				<c:if test="${workBenchPlid ne 0 && appTestButtonView}">
+					<input class=" button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
+				</c:if>
 			</c:if>
 		</div>
 	</div>
