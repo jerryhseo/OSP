@@ -1072,7 +1072,7 @@ public class AppManagerController{
 			scienceApp.setStatus(status);
 			scienceApp.setStatusDate(new Date());
 			scienceApp.setRecentModifierId(themeDisplay.getUserId());
-			ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
+			ScienceAppLocalServiceUtil.updateScienceApp(scienceApp, status);
 			
 			PrintWriter writer = response.getWriter();
 			writer.write("SUCCESS");
