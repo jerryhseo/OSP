@@ -23,6 +23,7 @@ import org.kisti.edison.bestsimulation.service.ScienceAppExecuteLocalServiceUtil
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.search.service.service.SearchLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.ExcelUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -85,7 +86,8 @@ public class EdisonStatisticsAppExecController {
 			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
 			
 			String visitSite ="";		
-			Group thisGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getSiteGroupId());			
+			Group thisGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getSiteGroupId());
+			long thisGoupId = PortalUtil.getScopeGroupId(request);
 			String groupId = "";
 			boolean isPortalMain = true;		
 			
@@ -239,8 +241,10 @@ public class EdisonStatisticsAppExecController {
 				}
 			}
 			
-			model.addAttribute("parentCategoryList", parentCategoryList);
+			String categoriesJsonString = SearchLocalServiceUtil.getCategoriesJsonString(companyGroupId, thisGoupId, locale);
+			
 			model.addAttribute("categoryList", categoryList);
+			model.addAttribute("categoriesJsonString", categoriesJsonString);
 			
 		}catch(Exception e){
 			e.printStackTrace();

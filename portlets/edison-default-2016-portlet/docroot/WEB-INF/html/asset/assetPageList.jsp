@@ -53,7 +53,7 @@
 }
 
 #<portlet:namespace />titleArea, #<portlet:namespace />detailArea {
-	width: 34%;
+	width: 39%;
 	padding: 12px 15px 10px 20px;
 	margin :0;
 }
@@ -68,6 +68,12 @@
 	right: 2%;
 	bottom: 5%;
 }
+
+.sub-title{
+	font-weight: 100 !important;
+	font-size: 18px !important;
+}
+
 </style>
 <script>
 var categoryAreaValue = "<%=SCIENCE_APP%>";
@@ -322,7 +328,7 @@ function <portlet:namespace/>shortcuts(seq, div) {
 	<c:when test="${isVirTitle == true }">
 		<div class="edison-panel">
 			<div class="panel-heading clearfix">
-				<h3 class="panel-title pull-left">
+				<h3 class="panel-title sub-title pull-left">
 					<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 					관련 자료
 				</h3>

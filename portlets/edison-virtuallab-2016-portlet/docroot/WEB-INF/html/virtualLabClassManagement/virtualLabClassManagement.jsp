@@ -48,9 +48,13 @@
 }
 
 .onHover:hover {
-		background:#e0e0e0;
-	}
+	background:#e0e0e0;
+}
 
+.sub-title{
+	font-weight: 100 !important;
+	font-size: 18px !important;
+}
 </style>
 
 <script type="text/javascript">
@@ -530,7 +534,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title pull-left">
+		<h3 class="panel-title sub-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />
 		</h3>

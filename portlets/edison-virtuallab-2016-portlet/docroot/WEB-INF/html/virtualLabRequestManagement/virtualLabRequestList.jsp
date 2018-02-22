@@ -201,9 +201,13 @@ label.checkbox-label input[type=checkbox]{
 						</tr>
 					</tbody>
 				</table>
-				<h4>
-					<liferay-ui:message key='edison-virtuallab-confirm-info' />
-				</h4>
+				
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-virtuallab-confirm-info' />
+					</h3>
+				</div>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<colgroup>
 						<col width="20%" />

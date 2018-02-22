@@ -57,10 +57,10 @@ public class SearchController{
         List<Map<String, Object>> lv1Categories = SearchLocalServiceUtil.assetCategoryToJstreeModel(
             SearchLocalServiceUtil.getLv1Categories(companyGroupId, groupId, locale), locale);
         for(Map<String, Object> assetCategory : lv1Categories){
-        String imageName = prefs.getValue(String.valueOf(assetCategory.get("categoryId")), "");
-        if(StringUtils.hasText(imageName)){
-            assetCategory.put("image", imageName);
-        }
+	        String imageName = prefs.getValue(String.valueOf(assetCategory.get("categoryId")), "");
+	        if(StringUtils.hasText(imageName)){
+	            assetCategory.put("image", imageName);
+	        }
         }
         if(themeDisplay.getURLCurrent().indexOf("?") > 0){
         model.addAttribute("redirectURL",

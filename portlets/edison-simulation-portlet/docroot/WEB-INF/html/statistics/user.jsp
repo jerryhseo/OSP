@@ -27,7 +27,7 @@
 			value="<%=visitSite%>" 
 			refresh="<%=false%>" 
 			onClick="<%=portletNameSpace%>"
-			minwidth="195"
+			minwidth="150"
 		/>
 	</div>
 	<div style="clear: both;height:20px;"></div> 
@@ -142,7 +142,7 @@ function setTable(dataList){
 	}else{
 		$("#totalSpan").html("<b>0 <liferay-ui:message key='edison-search-article'/></b>");
 		$("<tr/>").append(
-							$("<td/>").addClass("TC").attr("colspan","3").html('<liferay-ui:message key="edison-there-are-no-data" />')
+							$("<td/>").addClass("center").attr("colspan","3").html('<liferay-ui:message key="edison-there-are-no-data" />')
 						).appendTo("#<portlet:namespace/>userTableBody");
 	}
 }

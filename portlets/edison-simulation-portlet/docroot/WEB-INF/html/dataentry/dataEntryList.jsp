@@ -46,7 +46,7 @@
 				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dataEntryListAllSearch();" style="width: 80px;">
 				
 				<div class="input-group-btn">
-					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);">
+					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" style="height: 32px;">
 						<option value="10" <c:if test="${searchLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key="edison-search-views"/></option>
 						<option value="15" <c:if test="${searchLine == '20' }"> selected="selected" </c:if>>15<liferay-ui:message key="edison-search-views"/></option>
 						<option value="20" <c:if test="${searchLine == '30' }"> selected="selected" </c:if>>20<liferay-ui:message key="edison-search-views"/></option>

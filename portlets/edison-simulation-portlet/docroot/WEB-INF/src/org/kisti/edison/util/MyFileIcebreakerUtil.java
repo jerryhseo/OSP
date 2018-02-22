@@ -243,7 +243,7 @@ public class MyFileIcebreakerUtil {
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept", "text/plain");
                 conn.setRequestProperty("Content-Type", "application/xml");
-	            
+             
                 System.out.println(conn.getResponseCode());
 	            if (conn.getResponseCode() == 200) {
 	                inputStream = conn.getInputStream();

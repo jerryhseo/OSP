@@ -96,12 +96,12 @@
 		</c:choose>
 	</div>
 </div>
-<div class="topvisualbtnbox">
+<div class="topvisualbtnbox" align="right" style="padding-right: 10px;">
 	<c:if test="${isOwner eq true || isAdmin eq true}">
 		<input type="button"
 			value="<liferay-ui:message key='edison-simulation-project-manage-btn'/>"
 			class="btn btn-default"
-			onclick="<portlet:namespace/>goSimulationProjectManagement();" />
+			onclick="<portlet:namespace/>goSimulationProjectManagement();" style="width: 100px;" />
 	</c:if>
 
 	<c:if

@@ -177,12 +177,12 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 	<input type="hidden" id="<portlet:namespace/>solverId" name="<portlet:namespace/>solverId" value="0">
 	
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title pull-left" style="width: 40%;">
+		<h1 class="pull-left" style="width: 40%;">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-project-management-app' />
-		</h3>
+		</h1>
 		
-		<div class="btn-group pull-right" style="width: 60%">
+		<div class="btn-group pull-right" style="width: 60%; top: 30px;">
 			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px; float: left;" />
 			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
 				<i class="icon-search"></i>

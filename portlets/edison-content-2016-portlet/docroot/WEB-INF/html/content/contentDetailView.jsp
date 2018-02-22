@@ -43,7 +43,13 @@
 	text-align: right;
 }
 
+.sub-title{
+	font-weight: 100 !important;
+	font-size: 18px !important;
+}
+
 </style>
+
 <script>
 
 $(function(){
@@ -142,7 +148,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			</div>
 		</div>
 		<c:if test="${isOwner == true || isManager == true}"> 
-			<div class="topvisualbtnbox">&nbsp;<input type="button" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>" class="btn btn-default topbtn" onclick="<portlet:namespace/>updateContent('<%=Constants.UPDATE%>');" style="width: 100px;" /></div>
+			<div class="topvisualbtnbox" style="padding-right: 10px;">&nbsp;<input type="button" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>" class="btn btn-default topbtn" onclick="<portlet:namespace/>updateContent('<%=Constants.UPDATE%>');" style="width: 100px;" /></div>
 		</c:if>
 	
 	
@@ -151,13 +157,13 @@ function <portlet:namespace/>closeDialog ( data ){
 			<!-- 파일 목록 -->
 			<c:choose>
 				<c:when test="${content.contentDiv eq 2001004 && content.advancedStartFileNm ne ''}">
-				<div class="panel-heading clearfix" style="border-bottom: 0px;">
-					<h3 class="panel-title pull-left">
-						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-						<liferay-ui:message key="edison-content-file"/>
-					</h3>
-				</div>
-				<div class="h10"></div>
+					<div class="panel-heading clearfix" style="border-bottom: 0px;">
+						<h3 class="panel-title sub-title pull-left">
+							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+							<liferay-ui:message key="edison-content-file"/>
+						</h3>
+					</div>
+					<div class="h10"></div>
 					<c:if test="${content.advancedContentFolderPath != ''}">
 						<div class="msbox">
 							<ul>
@@ -170,7 +176,7 @@ function <portlet:namespace/>closeDialog ( data ){
 					<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
 						<div>
 							<div class="panel-heading clearfix" style="border-bottom: 0px;">
-								<h3 class="panel-title pull-left">
+								<h3 class="panel-title sub-title pull-left">
 									<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 									<liferay-ui:message key="edison-content-file"/>
 								</h3>
@@ -215,7 +221,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			<c:if test="${isOwner == true || isManager == true}"> 
 			<div>
 				<div class="panel-heading clearfix">
-					<div class="h4 pull-left">
+					<div class="panel-title sub-title pull-left">
 						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-manager"/>
 					</div>

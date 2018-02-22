@@ -37,48 +37,54 @@
 	
 </style>
 
-<h4 style="padding: 0px 0px 12px 0px;"><liferay-ui:message key="edison-asset-select-related-information"/></h4>
-<div id="selectInfo">
-</div>
-
-<!--table view -->
-<div class="tabletopbox clear">
-	<div class="search">
-		<div class="searchbox">
-			<input name="<portlet:namespace/>textfield" type="text"
-				id="<portlet:namespace/>textfield"
+<div class="table-responsive panel edison-panel row">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key="edison-asset-select-related-information"/>
+		</h3>
+		
+		<div class="h20"></div>
+		
+		<div id="selectInfo">
+		</div>
+		
+		<!--table view -->
+		<div class="input-group">
+			<input name="<portlet:namespace/>textfield" type="text" class="form-control" id="<portlet:namespace/>textfield"
 				placeholder="<liferay-ui:message key='edison-virtuallab-app-name' />"
-				size="40"
-				onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry();" />
-			<input type="button" name="fullsize" id="fullsize" value=""
-				class="btnsearch"
-				onclick="<portlet:namespace/>searchListEntry();">
+				size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry();" />
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry();">
+					<i class="icon-search"></i>
+				</button>
+			</div>
 		</div>
 	</div>
-</div>
-
-<div class="table1_list borderno">
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블">
-		<thead id="<portlet:namespace/>scienceAppTableHeader">
-			<tr>
-				<th width="35%"><liferay-ui:message key="edison-appstore-solver-name" /></th>
-				<th width="10%"><liferay-ui:message key="edison-table-list-header-version" /></th>
-				<th width="55%"><liferay-ui:message key="edison-table-list-header-app-title" /></th>
-			</tr>
-		</thead>
-
-		<tbody id="<portlet:namespace/>entryTableBody">
-			<tr >
-				<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
-					<liferay-ui:message key='edison-asset-related-information' />
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="paging">
-	<div id="<portlet:namespace/>paging"
-		style="width: 100%; text-align: center;"></div>
+	
+	<div class="table1_list borderno">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table table-bordered table-hover edison-table">
+			<thead id="<portlet:namespace/>scienceAppTableHeader">
+				<tr>
+					<th width="35%"><liferay-ui:message key="edison-appstore-solver-name" /></th>
+					<th width="10%"><liferay-ui:message key="edison-table-list-header-version" /></th>
+					<th width="55%"><liferay-ui:message key="edison-table-list-header-app-title" /></th>
+				</tr>
+			</thead>
+	
+			<tbody id="<portlet:namespace/>entryTableBody">
+				<tr >
+					<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
+						<liferay-ui:message key='edison-asset-related-information' />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="paging">
+		<div id="<portlet:namespace/>paging"
+			style="width: 100%; text-align: center;"></div>
+	</div>
 </div>
 
 <script type="text/javascript">

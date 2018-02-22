@@ -79,7 +79,7 @@
 	</table>
 	
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+	<div id="<portlet:namespace/>pageListDiv" class="text-center paging"></div>
 </div>
 
 <script type="text/javascript">

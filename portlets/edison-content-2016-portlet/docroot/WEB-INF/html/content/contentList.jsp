@@ -154,7 +154,7 @@
 				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();" style="width: 80px;">
 				
 				<div class="input-group-btn">
-					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="line-height: 15px;">
+					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="line-height: 15px; height: 32px;">
 						<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 						<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
 						<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
