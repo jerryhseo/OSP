@@ -40,6 +40,7 @@ ul, ol {list-style:none;}
 		
 		/*theme breadcrumbs*/
 		#nsubtopwrap{
+			background-image: url(@theme_image_path@/custom/breadcrumb/default_subtopvisual.jpg);
 			background-position: center;
 			background-repeat: no-repeat;
 			overflow: hidden;
