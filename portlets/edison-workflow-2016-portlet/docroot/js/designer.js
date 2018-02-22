@@ -1,4 +1,8 @@
-var Designer = (function (namespace, $, OSP, toastr) {
+var Designer = (function (namespace, $, OSP, toastr, isFixed) {
+    /*jshint -W018 */
+    /*jshint -W069 */
+    /*jshint -W014 */
+    isFixed = isFixed === true ? true : false;
     var currentJsPlumbInstance;
     var wfPortletGlobalData = wfPortletGlobalData ? wfPortletGlobalData : {wfElements : {}};
     var modifyingWorkflow;
@@ -68,13 +72,13 @@ var Designer = (function (namespace, $, OSP, toastr) {
         endpoint: ["Rectangle", {cssClass: "output-port"}],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,
         paintStyle: {width: 18, height: 18, fillStyle: outputPortColor},
-        isSource: true,
+        isSource: !isFixed,
         maxConnections: -1,
         connectorStyle: {
             lineWidth: 5,
             strokeStyle: connectionColor
         },
-        ConnectionsDetachable: true,
+        ConnectionsDetachable: !isFixed,
         isTarget: false,
         dropOptions: portDropOption
     };
@@ -84,8 +88,8 @@ var Designer = (function (namespace, $, OSP, toastr) {
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.INPUT,
         paintStyle: {width: 18, height: 18, fillStyle: inputPortColor},
         isSource: false,
-        isTarget: true,
-        ConnectionsDetachable: true,
+        isTarget: !isFixed,
+        ConnectionsDetachable: !isFixed,
         beforeDrop: function (params) {
             if ($(currentJsPlumbInstance.getContainer()).attr("id") != "wf-workflow-canvas") {
                 return false;
@@ -108,18 +112,11 @@ var Designer = (function (namespace, $, OSP, toastr) {
         dropOptions: portDropOption
     };
 
-    var loopPoint = {
-        endpoint: "Blank",
-        isSource: true,
-        isTarget: true,
-        ConnectionsDetachable: false
-    };
-
     var wfWorkflowJsPlumbInstance = jsPlumb.getInstance({
         Container: "wf-workflow-canvas",
         DragOptions: {containment: true, cursor: 'pointer'},
         Endpoint: "Rectangle",
-        ConnectionsDetachable: true,
+        ConnectionsDetachable: !isFixed,
         Anchors: ["TopCenter", "TopCenter"],
         Overlays: [["Arrow", {location: 1, id: "arrow", length: 14, foldback: 1}]]
     });
@@ -211,6 +208,8 @@ var Designer = (function (namespace, $, OSP, toastr) {
 
     currentJsPlumbInstance = wfWorkflowJsPlumbInstance;
 
+    var decision = new Decision(namespace, $, currentJsPlumbInstance);
+
     currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
     currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
     currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
@@ -300,7 +299,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
             var ports = getPortsArrayFromPortJson(portJson, isInputPort);
             
             var endPointType = isInputPort ? inputPortPoint : outputPortPoint;
-            var anchors = isInputPort ? ["Top"] : ["Bottom", "Left"];
+            var anchors = isInputPort ? ["Top", [0.25, 0.25, 0, 0]] : ["Bottom", "Left"];
             var isModifiable = $(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas";
             $.each(ports, function(_, port){
                 var connectionScope = port.dataType().name + "_" + port.dataType().version;
@@ -400,7 +399,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
                         uuid: endPointGuid,
                         overlays: [["Label", {
                             label: isInputPort ? port.name() : "<p style=\"width:300px;margin-top:8px;\">"+labelAddSpace(port.outputData())+"<p>",
-                            location:labelLocation
+                            location: labelLocation
                         }]]
                     },
                     endPointType);
@@ -546,6 +545,7 @@ var Designer = (function (namespace, $, OSP, toastr) {
                     icon: "edit",
                     callback: function (key, options) {
                         // TODO : popScriptEditorWindow(appData, wfWindowId);
+                        decision.condtions(wfWindowId);
                     }
                 };
             }
@@ -670,9 +670,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
                 workflowData.workflowId + "/update", 
                 JSON.stringify(workflowData), 
                 function (workflowData) {
-                    // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
-                    // TODO : drawMyWorkflows(loadMyWorkflows(""));
-                    console.log(workflowData);
                     toastr["success"]("", var_save_success_message);
                     if(callback){
                         callback(workflowData);
@@ -695,8 +692,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
             localWorkflow.title = title;
             localWorkflow.description = workflowMetaData.description;
             localWorkflow.screenLogic = wfDataJsonString;
-            console.clear();
-            console.log(workflowMetaData.isPublic);
             if(workflowMetaData.isPublic){
                 localWorkflow.isPublic = workflowMetaData.isPublic;
             }
@@ -704,8 +699,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
                 localWorkflow.workflowId + "/update", 
                 JSON.stringify(localWorkflow), 
                 function (workflowData) {
-                    // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
-                    // TODO : drawMyWorkflows(loadMyWorkflows(""));
                     afterSave(workflowData, callback, backgroudSave);
                 });
         } else {
@@ -715,8 +708,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
                     description: workflowMetaData.description,
                     screenLogic: wfDataJsonString
                 }, function (workflowData) {
-                    // TODO : drawPublicWorkflows(loadPublicWorkflows(""));
-                    // TODO : drawMyWorkflows(loadMyWorkflows(""));
                     afterSave(workflowData, callback, backgroudSave);
                 }, function(errorMessage){
                     toastr["error"]("", errorMessage);
@@ -735,8 +726,6 @@ var Designer = (function (namespace, $, OSP, toastr) {
                     title: workflowMetaData.title,
                     description: workflowMetaData.description
                 }, function (workflowData) {
-                    // TODO : drawPublicWorkflows(loadPublicWorkflows());
-                    // TODO : drawMyWorkflows(loadMyWorkflows());
                     toastr["success"]("", var_save_success_message);
                     modifyingWorkflow = workflowData;
                 }, function (msg) {
@@ -788,24 +777,31 @@ var Designer = (function (namespace, $, OSP, toastr) {
         });
     }
 
-    function loadWorkflowDefinition(workflow){
+    function loadWorkflowDefinition(workflowId){
+        aSyncAjaxHelper.get("/delegate/services/workflows/"+ workflowId, drawWorkflowDefinition, 
+        function(){
+            toastr["error"]("","load Workflow Definition fail.");
+        });
+    }
+
+    function drawWorkflowDefinition(workflow) {
         resetWorkflow();
         var wfData = $.parseJSON(workflow.screenLogic);
-        $.each(wfData.elements, function(i){
-          loadScienceApp(this.id, this.offset, this.data);
+        $.each(wfData.elements, function (i) {
+            loadScienceApp(this.id, this.offset, this.data);
         });
 
-        $.each(wfData.connections, function(i){
-          var sourceEndpointUuid = this.sourceUuid;
-          var targetEndpointUuid = this.targetUuid;
-          currentJsPlumbInstance.connect({uuids:[sourceEndpointUuid, targetEndpointUuid]});
+        $.each(wfData.connections, function (i) {
+            var sourceEndpointUuid = this.sourceUuid;
+            var targetEndpointUuid = this.targetUuid;
+            currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
         });
-        if(workflow.hasOwnProperty("createDate")){
+        if (workflow.hasOwnProperty("createDate")) {
             delete workflow.createDate;
         }
         modifyingWorkflow = workflow;
         // TODO : check - wfPortletGlobalData = wfData.wfPortletGlobalData;
-      }
+    }
 
     function resetCurrentJsPlumbInstance() {
         currentJsPlumbInstance.reset();
@@ -824,12 +820,13 @@ var Designer = (function (namespace, $, OSP, toastr) {
     return {
         "addScienceApp": addScienceApp,
         "removeSicenceApps": removeSicenceApps,
+        "loadWorkflowDefinition": loadWorkflowDefinition,
         "saveOrUpdateWorkflowDefinition": saveOrUpdateWorkflowDefinition,
         "saveAsWorkflowDefinition": saveAsWorkflowDefinition,
         "renameWorkflowDefinition": renameWorkflowDefinition,
         "duplicateWorkflowDefinition": duplicateWorkflowDefinition,
         "deleteWorkflowDefinition": deleteWorkflowDefinition,
-        "loadWorkflowDefinition": loadWorkflowDefinition,
+        "drawWorkflowDefinition": drawWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
         "getCurrentJsPlumbContainerId": function(){
             return $(currentJsPlumbInstance.getContainer()).attr("id");

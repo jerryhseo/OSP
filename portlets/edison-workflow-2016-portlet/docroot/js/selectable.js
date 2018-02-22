@@ -3,6 +3,17 @@ var Selectable = (function (namespace, $, designer) {
     var containerId = "#" + designer.getCurrentJsPlumbContainerId();
     var isDragging = false;
     var startingPos = [];
+
+    /* $(document).bind('keydown.selectable',function (event) {
+        if (event.which == 65 && (event.ctrlKey || event.metaKey) ) {
+            event.preventDefault();
+            $(".wf-box").addClass("ui-selected");
+            currentJsPlumbInstance.removeFromAllPosses("posse");
+            currentJsPlumbInstance.addToPosse($(".wf-box"), "posse");
+            return false;
+        }
+        return true;
+    }); */
     
     $(containerId).mousedown(function (evt) {
         isDragging = false;
@@ -13,8 +24,10 @@ var Selectable = (function (namespace, $, designer) {
         }
     }).mouseup(function () {
         if (!isDragging) {
-            currentJsPlumbInstance.removeFromPosse($(".wf-box"), "posse");
-            $(".wf-box").removeClass("ui-selected");
+            if($(".ui-selected").length > 0){
+                currentJsPlumbInstance.removeFromPosse($(".wf-box"), "posse");
+                $(".wf-box").removeClass("ui-selected");
+            }
         }
         isDragging = false;
         startingPos = [];

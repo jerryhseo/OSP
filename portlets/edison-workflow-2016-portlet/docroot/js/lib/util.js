@@ -23,15 +23,13 @@ var consoleLog = {
 
 var aSyncAjaxHelper = {
   "get": function (requestUrl, callback, errorCallback) {
-    var resultData;
     $.ajax({
       url: requestUrl,
       async: true,
       method: 'GET',
       timeout: 10000,
     }).done(function (result) {
-      resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function () {
       consoleLog.debug(requestUrl + " error");
@@ -41,7 +39,6 @@ var aSyncAjaxHelper = {
     });
   },
   "post": function (requestUrl, jsonData, callback, errorCallback) {
-    var resultData;
     $.ajax({
       url: requestUrl,
       async: true,
@@ -49,7 +46,6 @@ var aSyncAjaxHelper = {
       method: 'POST',
       timeout: 10000,
     }).done(function (result) {
-      resultData = result;
       if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function (msg) {
@@ -62,7 +58,6 @@ var aSyncAjaxHelper = {
     });
   },
   "jsonPost": function (requestUrl, jsonData, callback, errorCallback) {
-    var resultData;
     $.ajax({
       url: requestUrl,
       async: true,
@@ -72,7 +67,6 @@ var aSyncAjaxHelper = {
       dataType: "json",
       timeout: 10000,
     }).done(function (result) {
-      resultData = result;
       if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
     }).error(function (msg) {
@@ -185,7 +179,7 @@ function _instantDelay(wait) {
 function _delay(func, wait) {
   var args = slice.call(arguments, 2);
   return setTimeout(function(){ return func.apply(null, args); }, wait);
-};
+}
 
 function _confirm(msg, _of, _cf){
   _of = _of || function(){};

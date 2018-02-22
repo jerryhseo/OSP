@@ -1,4 +1,5 @@
 var UIPanel = (function (namespace, $, designer, toastr) {
+    /*jshint -W069 */
     'use strict';
     var currWorkflows = (function () {
         var currWorkflows;
@@ -164,7 +165,7 @@ var UIPanel = (function (namespace, $, designer, toastr) {
         }
     });
 
-    $(document).keypress(function (event) {
+    $(document).bind('keydown.uiPanel',function (event) {
         if ((event.which == 115 || event.which == 83) && 
             (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
@@ -362,7 +363,7 @@ var UIPanel = (function (namespace, $, designer, toastr) {
                     "description": workflow.description,
                     "workflowId": workflowId
                 });
-                designer.loadWorkflowDefinition(workflow);
+                designer.drawWorkflowDefinition(workflow);
                 closePanel();
             }
         };
@@ -471,7 +472,7 @@ var UIPanel = (function (namespace, $, designer, toastr) {
                     "description": workflow.description,
                     "workflowId": workflowId
                 });
-                designer.loadWorkflowDefinition(workflow);
+                designer.drawWorkflowDefinition(workflow);
                 saveAsDesigner("setting");
                 closePanel();
             }

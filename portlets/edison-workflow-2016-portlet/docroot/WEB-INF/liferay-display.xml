@@ -4,5 +4,6 @@
   <category name="EDISON">
   	<portlet id="edison-workflow" />
   	<portlet id="workflow-designer"></portlet>
+  	<portlet id="workflow-simulation-executor"></portlet>
   </category>
 </display>
