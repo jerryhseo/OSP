@@ -39,6 +39,8 @@ if(areaScienceData){
 	#category-list > ul{
 		padding: 0px;
 	}
+  .search-btn-height{height: 36px !important;}
+  .top_category{margin-right: 5px !important;}
 </style>
 
 <h2 class="search-main-title">
@@ -85,11 +87,15 @@ if(areaScienceData){
       </ul>
     </aui:field-wrapper>
   </div>
-  <aui:field-wrapper name="search-btn" label="" inlineLabel="true" inlineField="true" cssClass="rightsearch" >
-    <aui:input name="searchKeyword" type="text" label="" cssClass="form-control"/>
-    <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn-default"/>
-    <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn btn-primary"/>
-  </aui:field-wrapper>
+
+  <div class="input-group">
+    <aui:input name="searchKeyword" type="text" label="" cssClass="form-control search-btn-height" />
+    <div class="input-group-btn search-btn-height">
+      <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn-default search-btn-height" />
+      <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn btn-primary search-btn-height" />
+    </div>
+  </div>
+
   <div class="category02wrap">
     <div id="<portlet:namespace/>content-expand-div">
       <div class="category02arrow"><img src="${contextPath}/images/search/arrow02.png" width="13" height="8"></div>
