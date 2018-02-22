@@ -132,14 +132,14 @@ public class ScienceAppExecuteLocalServiceClp
 
 		_methodParameterTypes20 = new String[] {
 				"long", "long", "java.util.Locale", "long", "java.lang.String",
-				"java.lang.String", "java.util.List", "boolean"
+				"java.lang.String", "java.util.List", "boolean", "long"
 			};
 
 		_methodName21 = "getStatisticsSwExeBarChartDate";
 
 		_methodParameterTypes21 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
-				"java.util.List", "boolean"
+				"java.util.List", "boolean", "long"
 			};
 
 		_methodName22 = "insertCustomScienceAppExecute";
@@ -754,7 +754,7 @@ public class ScienceAppExecuteLocalServiceClp
 		long companyGroupId, long groupId, java.util.Locale locale,
 		long columnId, java.lang.String startDt, java.lang.String endDt,
 		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> scienceAppList,
-		boolean categorySearch)
+		boolean categorySearch, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.text.ParseException {
@@ -778,7 +778,9 @@ public class ScienceAppExecuteLocalServiceClp
 						
 					ClpSerializer.translateInput(scienceAppList),
 						
-					categorySearch
+					categorySearch,
+						
+					categoryId
 					});
 		}
 		catch (Throwable t) {
@@ -813,7 +815,7 @@ public class ScienceAppExecuteLocalServiceClp
 		long companyGroupId, long groupId, long columnId,
 		java.lang.String startDt, java.lang.String endDt,
 		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> scienceAppList,
-		boolean categorySearch)
+		boolean categorySearch, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.text.ParseException {
@@ -835,7 +837,9 @@ public class ScienceAppExecuteLocalServiceClp
 						
 					ClpSerializer.translateInput(scienceAppList),
 						
-					categorySearch
+					categorySearch,
+						
+					categoryId
 					});
 		}
 		catch (Throwable t) {

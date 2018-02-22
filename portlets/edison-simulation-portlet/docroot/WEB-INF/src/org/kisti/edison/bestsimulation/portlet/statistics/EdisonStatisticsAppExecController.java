@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletRequest;
@@ -19,6 +20,7 @@ import javax.portlet.WindowStateException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.kisti.edison.bestsimulation.service.ScienceAppExecuteLocalServiceUtil;
+import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -35,6 +37,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -47,6 +50,12 @@ import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.model.AssetVocabulary;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoTable;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
@@ -66,6 +75,7 @@ public class EdisonStatisticsAppExecController {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
 			long companyId = themeDisplay.getCompanyId();
+			long companyGroupId = themeDisplay.getCompany().getGroupId();
 
 			String toDay = CustomUtil.dateToStringFormat(new Date(), "yyyy-MM-dd");
 			int preYear = Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyy"));
@@ -76,7 +86,10 @@ public class EdisonStatisticsAppExecController {
 			
 			String visitSite ="";		
 			Group thisGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getSiteGroupId());			
+			String groupId = "";
 			boolean isPortalMain = true;		
+			
+			Locale locale = themeDisplay.getLocale();
 			
 			//사이언스앱 상세보기 -> SW통계
 			String appExecGroupId = CustomUtil.strNull(params.get("appExecGroupId"));
@@ -142,8 +155,6 @@ public class EdisonStatisticsAppExecController {
 						
 						String groupName = "";
 						int groupCnt = 0;
-						String groupId = "";
-						
 						
 						Map<String,Long> GroupMap = new HashMap<String,Long>();
 						if(!tabUseStr.equals("")){
@@ -164,7 +175,6 @@ public class EdisonStatisticsAppExecController {
 									}
 									
 									if(!visitSite.equals("")&&visitSite.equals(group.getName())){
-//										model.addAttribute("visitSite", Long.toString(group.getGroupId()));
 										visitSite = Long.toString(group.getGroupId());
 									}
 							}
@@ -198,9 +208,43 @@ public class EdisonStatisticsAppExecController {
 				model.addAttribute("scienceAppName", scienceAppName);
 			}
 			
+			AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+			
+			/* default thisGroupId = 23212(=CFD) */
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), ParamUtil.getLong(request, "thisGroupId",23212));
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			String categoryStr = "";
+			List<Map<String, Object>> parentCategoryList = new ArrayList<Map<String, Object>>() ;
+			List<Map<String, Object>> categoryList = new ArrayList<Map<String, Object>>() ;
+			
+			//parentCategory 찾기
+			for(AssetCategory aCategory : aCategoryList){
+				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&& aCategory.getParentCategoryId() == 0){
+					Map<String, Object> aCategoryMap = new HashMap<String, Object>();
+					aCategoryMap.put("categoryId", aCategory.getCategoryId());
+					aCategoryMap.put("categoryTitle", aCategory.getTitle(themeDisplay.getLocale()));
+					aCategoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
+					parentCategoryList.add(aCategoryMap);
+				}
+			}
+				
+			for(AssetCategory aCategory : aCategoryList){
+				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&& aCategory.getParentCategoryId() != 0){
+					Map<String, Object> aCategoryMap = new HashMap<String, Object>();
+					aCategoryMap.put("categoryId", aCategory.getCategoryId());
+					aCategoryMap.put("categoryTitle", aCategory.getTitle(themeDisplay.getLocale()));
+					aCategoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
+					categoryList.add(aCategoryMap);
+				}
+			}
+			
+			model.addAttribute("parentCategoryList", parentCategoryList);
+			model.addAttribute("categoryList", categoryList);
+			
 		}catch(Exception e){
 			e.printStackTrace();
-		}		
+		}
 		
 		return "statistics/swExe"; 
 	}
@@ -213,13 +257,26 @@ public class EdisonStatisticsAppExecController {
 	
 			String startDt = CustomUtil.strNull(params.get("startDt"));
 			String endDt = CustomUtil.strNull(params.get("endDt"));
-			long visitSite = Long.parseLong(CustomUtil.strNull(params.get("visitSite"), "0"));
+			String visiteSiteStr = CustomUtil.strNull(params.get("visitSite"), "0");
+			if(StringUtil.toUpperCase(visiteSiteStr).equals("GUEST")){
+				// Defailt visiteSite is CFD
+				visiteSiteStr = "23212";
+			}
+			long visitSite = Long.parseLong(visiteSiteStr);
 			long groupId = themeDisplay.getScopeGroupId();
 			Group group = GroupLocalServiceUtil.getGroup(visitSite);
 			ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
 			long columnId = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY).getColumnId();
 			long companyGroupId = themeDisplay.getCompany().getGroupId();
-			long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
+			//long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
+			long parentGroupId = 0l;
+			String parentGroupIdStr = CustomUtil.strNull(params.get("parentGroupId"));
+			if(parentGroupIdStr.equals("") || parentGroupIdStr == null){
+				parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
+			} else {
+				parentGroupId = Long.parseLong(parentGroupIdStr);
+			}
+			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId"), "0"));
 			
 			//모든 버전 App 
 			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
@@ -237,11 +294,15 @@ public class EdisonStatisticsAppExecController {
 			List barChartDateList = new ArrayList();
 			
 			if(parentGroupId == 0){//포탈
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true);
-				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, visitSite, columnId, startDt, endDt, scienceAppList, true);
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
+				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, visitSite, columnId, startDt, endDt, scienceAppList, true, 0);
+			}else if(parentGroupId != 0 && !"".equals(scienceAppName)){
+				/* 카테고리 선택 시 해당  카테고리의 통계 정보 출력 */
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, categoryId);
+				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, categoryId);
 			}else{
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true);
-				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true);
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
+				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
 			}
 			
 			JSONObject obj = new JSONObject();
@@ -286,9 +347,9 @@ public class EdisonStatisticsAppExecController {
 			List tableOrganigationList = new ArrayList();
 			
 			if(parentGroupId == 0){//포탈
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true);
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
 			}else{
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true);
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
 			}
 			
 			String appName = LanguageUtil.get(themeDisplay.getLocale(), "edison-appstore-solver-name");

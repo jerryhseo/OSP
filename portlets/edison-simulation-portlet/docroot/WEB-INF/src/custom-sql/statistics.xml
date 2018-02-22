@@ -179,39 +179,58 @@
 
 	<sql id="org.kisti.edison.statistics.getStatisticsSwExeTableOrganigation">
 	<![CDATA[	
-		SELECT
-			B.name AS scienceApp_name,
-		    A.scienceAppId,
-		    SUM(A.userCnt) AS user_count,
-		    SUM(A.avgExeTime) AS averageRuntime,
-		    SUM(A.exeCnt) AS exe_count,
-		    F.data_ AS scienceApp_affiliation_name,
-			USERS.firstName AS mgtName,
-			DATE_FORMAT(B.createDate, '%Y-%m-%d') mgtDate,
-			B.version AS scienceApp_version
+		SELECT 
+			scienceApp.scienceApp_name AS scienceApp_name,
+			scienceApp.scienceAppId AS scienceAppId,
+			ifnull(exe.user_count, 0) AS user_count, 
+			ifnull(exe.averageRuntime, 0) AS averageRuntime, 
+			ifnull(exe.exe_count, 0) AS exe_count, 
+			scienceApp.scienceApp_affiliation_name AS scienceApp_affiliation_name,
+			scienceApp.mgtName AS mgtName, 
+			DATE_FORMAT(scienceApp.mgtDate, '%Y-%m-%d') AS mgtDate,
+			scienceApp.scienceApp_version AS scienceApp_version
 		FROM
-			EDSIM_ScienceAppExecute A,
-			EDAPP_ScienceApp B
-            INNER JOIN (SELECT F.data_, F.classPK FROM ExpandoValue F WHERE F.columnId = #columnId#) AS F ON B.authorId = F.classPK
-            LEFT OUTER JOIN User_ USERS on B.authorId = USERS.userId,
-            AssetEntry AE, 
-            AssetEntries_AssetCategories AE_AC
-        WHERE
-        	A.scienceAppId IS NOT NULL
-        	AND A.scienceAppId = B.scienceAppId
-        	AND A.scienceAppId = AE.classPK
-        	AND AE.entryId = AE_AC.entryId
-            AND AE.classNameId = #classNameId#
-        <isNotEmpty property="categoryIds">    
-            AND AE_AC.categoryId IN(@@categoryIds@@)
-        </isNotEmpty>
-        	AND STR_TO_DATE(A.executeDate, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d')AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
-        <isNotEmpty property="scienceAppIds">
-        	AND A.scienceAppId IN (@@scienceAppIds@@)
-        </isNotEmpty>
-       	GROUP BY A.scienceAppId
-       	ORDER BY SUM(A.exeCnt) DESC
-    ]]>   	         
+			(
+				SELECT 
+					B.scienceAppId, B.name AS scienceApp_name, 
+					F.data_ AS scienceApp_affiliation_name, 
+					USERS.firstName AS mgtName, 
+					DATE_FORMAT(B.createDate, '%Y-%m-%d') mgtDate, 
+					B.version AS scienceApp_version 
+				FROM EDAPP_ScienceApp B INNER JOIN (SELECT F.data_, F.classPK 
+													FROM ExpandoValue F 
+													WHERE F.columnId = #columnId#) AS F 
+													ON B.authorId = F.classPK 
+					LEFT OUTER JOIN User_ USERS 
+					on B.authorId = USERS.userId, 
+					AssetEntry AE, 
+					AssetEntries_AssetCategories AE_AC 
+				WHERE B.scienceAppId = AE.classPK
+					AND AE.entryId = AE_AC.entryId 
+					AND AE.classNameId = #classNameId#
+					<isNotEmpty property="categoryIds">
+						AND AE_AC.categoryId IN(@@categoryIds@@)
+					</isNotEmpty>
+					<isNotEmpty property="scienceAppIds">
+						AND B.scienceAppId IN (@@scienceAppIds@@)
+					</isNotEmpty>
+					AND B.appType = 'Solver'
+				GROUP BY B.scienceAppId
+			) AS scienceApp LEFT JOIN
+			(
+				SELECT 
+					A.scienceAppId,
+					SUM(A.userCnt) AS user_count, 
+					SUM(A.avgExeTime) AS averageRuntime, 
+					SUM(A.exeCnt) AS exe_count
+				FROM EDSIM_ScienceAppExecute A
+				WHERE A.scienceAppId IS NOT NULL 
+					  AND STR_TO_DATE(A.executeDate, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d')
+					  AND STR_TO_DATE(#endDt#, '%Y-%m-%d')  
+				GROUP BY A.scienceAppId
+			) AS exe
+		ON scienceApp.scienceAppId = exe.scienceAppId;
+	]]>
 	</sql>
 
 	<sql id="org.kisti.edison.statistics.getStatisticsSwNoneExeTableOrganigation">

@@ -118,12 +118,15 @@ public class ScienceAppExecuteLocalServiceImpl
 	
 	/*앱실행 통계*/
 	public List<Map<String, Object>> getStatisticsSwExeTableOrganigation(long companyGroupId, long groupId, Locale locale, 
-			long columnId, String startDt, String endDt, List<Map<String, Object>> scienceAppList, boolean categorySearch) 
+			long columnId, String startDt, String endDt, List<Map<String, Object>> scienceAppList, boolean categorySearch, long categoryId) 
 					throws SystemException, PortalException, ParseException{		
 		
 		Map<String,Object> searchParam = settingStatisticsParameter(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, categorySearch);
 		long classNameId = ClassNameLocalServiceUtil.getClassNameId(ScienceApp.class.getName());
         searchParam.put("classNameId", classNameId);
+        if(categoryId != 0){
+        	searchParam.put("categoryIds", categoryId);
+        }
         
 		List<Object[]> tempList = scienceAppExecuteFinder.getStatisticsSwExeTableOrganigation(searchParam);
 		
@@ -193,11 +196,14 @@ public class ScienceAppExecuteLocalServiceImpl
 	
 	/*월별 앱실행 통계*/
 	public List<Map<String, Object>> getStatisticsSwExeBarChartDate(long companyGroupId, long groupId, 
-			long columnId, String startDt, String endDt, List<Map<String, Object>> scienceAppList, boolean categorySearch) 
+			long columnId, String startDt, String endDt, List<Map<String, Object>> scienceAppList, boolean categorySearch, long categoryId) 
 					throws SystemException, PortalException, ParseException{
 		Map<String,Object> searchParam = settingStatisticsParameter(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, categorySearch);
 		long classNameId = ClassNameLocalServiceUtil.getClassNameId(ScienceApp.class.getName());
         searchParam.put("classNameId", classNameId);
+        if(categoryId != 0){
+        	searchParam.put("categoryIds", categoryId);
+        }
         
 		List<Object[]> tempList = scienceAppExecuteFinder.getStatisticsSwExeBarChartDate(searchParam);
 		
