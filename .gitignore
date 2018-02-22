@@ -8,6 +8,7 @@
 **/.tern-project
 **/.eslintrc.js
 **/target/
+ivy.xml.MD5
 
 /*.xml
 /*.properties
