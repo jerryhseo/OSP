@@ -140,58 +140,62 @@
 		<liferay-ui:message key="edison-simulation-monitoring-title" />	
 	</div>
 	
-	<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>">
-		<aui:input name="currentPage" type="hidden" value="1"/>
-		<aui:input name="userId" type="hidden" value="${userId}"/>
-		<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
-		<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
-		<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
-		<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
-		
-		<div class="tabletopbox">
-			<div class="search">
-				<div class="searchbox">
-					<aui:input name="searchValue" class="textfieldcss" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
-				</div>
-				<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default"/>
-				<input name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="btn btn-default" onClick="<portlet:namespace/>allSearch();" />
-			</div>
-			<div class="tabletoptab01">
-	<%-- 			<input type="image" style="margin-left:90px;" src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/search_ALL<c:if test="${param.jobStatus eq null||param.jobStatus eq ''}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('');"/> --%>
-				<ul>
-					<li style="cursor: pointer;">
-						<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
-						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
-					</li>
-					<li style="cursor: pointer;">
-						<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
-						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
-					</li>
-					<li style="cursor: pointer;">
-						<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
-						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
-					</li>
-					<li style="cursor: pointer;">
-						<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
-						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
-					</li>
-					<li style="cursor: pointer;">
-						<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
-						<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
-					</li>
-				</ul>
-			</div>
-			<div class="tabletopright">
-				<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
-					<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
-					<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
-					<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
-					<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
-				</aui:select>
-			</div>
-		</div>
-	</aui:form>
 	<div class="table-responsive panel edison-panel" style="width: 100%">
+	
+		<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>" cssClass="panel-heading clearfix">
+			<aui:input name="currentPage" type="hidden" value="1"/>
+			<aui:input name="userId" type="hidden" value="${userId}"/>
+			<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
+			<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
+			<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
+			<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
+			
+			<div class="tabletopbox">
+				<div class="search" style="width: 34%;">
+					<div class="input-group">
+						<aui:input name="searchValue" class="textfieldcss" cssClass="form-control" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
+						<div class="input-group-btn">
+							<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default"/>
+							<button name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>allSearch();">
+								Clear
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="tabletoptab01">
+					<ul>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
+						</li>
+					</ul>
+				</div>
+				<div class="tabletopright">
+					<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
+						<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
+					</aui:select>
+				</div>
+			</div>
+		</aui:form>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="5%">

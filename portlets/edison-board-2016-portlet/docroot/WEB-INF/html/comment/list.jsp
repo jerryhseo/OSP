@@ -160,52 +160,57 @@
 </liferay-portlet:resourceURL>
 
 <style>
-    .<portlet:namespace/>comment_list{
-        height: auto;
-    }
-    
-    .<portlet:namespace/>comment_reply_item{
-        width: 80%;
-    }
-    
-    .<portlet:namespace/>comment_input{
-        /* 코멘트 작성 form */
-        padding-top : 45px;
-        display: none;
-    }
-    
-    .<portlet:namespace/>boardbtnbox, .<portlet:namespace/>commentTextArea {
-        /* 저장, 수정, 취소 Btn DIV */
-        padding : 10px 5px 5px 5px;
-        float: right;
-    }
-    
-    .<portlet:namespace/>buttonbox{
-        /* 글쓰기 Btn DIV */
-        position: inherit;
-        padding-top: 1%;
-        float: right;
-    }
-    
-    .<portlet:namespace/>sub_button{
-        /* 수정, 삭제 Text */
-        float: right;
-        padding-right: 10px;
-    }
-    
-    .<portlet:namespace/>sub_button.delete, .<portlet:namespace/>sub_button.update, .<portlet:namespace/>sub_button.reply{
-        /* 수정, 삭제 Text */
-        cursor: pointer;
-    }
-    
-    .<portlet:namespace/>sns_btn{
-        cursor: pointer;
-    }
-    
-    .<portlet:namespace/>commentTitle{
-        font-size: 18px;
-        color: #000;
-    }
+	.<portlet:namespace/>comment_list{
+		height: auto;
+	}
+	
+	.<portlet:namespace/>comment_reply_item{
+		width: 80%;
+	}
+	
+	.<portlet:namespace/>comment_input{
+		/* 코멘트 작성 form */
+		padding-top : 45px;
+		display: none;
+	}
+	
+	.<portlet:namespace/>boardbtnbox, .<portlet:namespace/>commentTextArea {
+		/* 저장, 수정, 취소 Btn DIV */
+		padding : 10px 5px 5px 5px;
+		float: right;
+	}
+	
+	.<portlet:namespace/>buttonbox{
+		/* 글쓰기 Btn DIV */
+		position: inherit;
+		padding-top: 1%;
+		float: right;
+	}
+	
+	.<portlet:namespace/>sub_button{
+		/* 수정, 삭제 Text */
+		float: right;
+		padding-right: 10px;
+	}
+	
+	.<portlet:namespace/>sub_button.delete, .<portlet:namespace/>sub_button.update, .<portlet:namespace/>sub_button.reply{
+		/* 수정, 삭제 Text */
+		cursor: pointer;
+	}
+	
+	.<portlet:namespace/>sns_btn{
+		cursor: pointer;
+	}
+	
+	.<portlet:namespace/>commentTitle{
+		font-size: 18px;
+		color: #000;
+	}
+	
+	.sub-title{
+		font-weight: 100 !important;
+		font-size: 18px !important;
+	}
 </style>
 
     <%
@@ -216,7 +221,7 @@
         <c:when test="${empty redirectName }">
         	<div class="panel edison-panel">
 	            <div class="panel-heading clearfix <portlet:namespace/>commentTitle" style="border-bottom: 0px;">
-	            	<h3 class="panel-title pull-left">
+	            	<h3 class="panel-title sub-title pull-left">
 		                <img src="/edison-default-2016-portlet/images/title_virtual.png" width="20" height="20" style="margin-right: 5px;"> 
 		            	<liferay-ui:message key='edison-board-comment-title' />
 	            	</h3>

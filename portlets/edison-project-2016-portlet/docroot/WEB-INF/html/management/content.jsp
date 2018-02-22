@@ -156,13 +156,13 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 	
 	<div class="panel-heading clearfix">
 		<div class="panel-title pull-left" style="width: 40%">
-			<h3 class="panel-title pull-left">
+			<h1 class="pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-project-management-content' />
-			</h3>
+			</h1>
 		</div>
 		
-		<div class="btn-group pull-right" style="width: 60%;">
+		<div class="btn-group pull-right" style="width: 60%; top: 30px;">
 			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px; float: left;" />
 			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
 				<i class="icon-search"></i>

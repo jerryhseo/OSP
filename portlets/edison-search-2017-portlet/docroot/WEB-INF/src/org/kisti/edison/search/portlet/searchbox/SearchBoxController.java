@@ -156,7 +156,6 @@ public class SearchBoxController {
 			long searchPlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/search").getPlid();
 			PortletURL searchUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", searchPlid, PortletRequest.RENDER_PHASE);
 			model.addAttribute("searchURL", searchUrl);
-			System.out.println("searchUrl : " + model.get("searchURL"));
 			
 			long appStorePlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/scienceappstore").getPlid();
 			PortletURL appStoreUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", appStorePlid, PortletRequest.RENDER_PHASE);

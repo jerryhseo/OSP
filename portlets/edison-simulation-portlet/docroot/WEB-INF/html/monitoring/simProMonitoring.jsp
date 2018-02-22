@@ -12,7 +12,7 @@
 	<liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
-<div class="commrighttxt">
+<div class="commrighttxt" style="width: 145px; margin: 0px; padding-left: 10px;">
 	<ul id="<portlet:namespace/>monitoringList">
 	</ul>
 </div>

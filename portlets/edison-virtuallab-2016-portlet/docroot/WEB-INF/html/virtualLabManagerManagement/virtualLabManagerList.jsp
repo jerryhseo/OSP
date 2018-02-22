@@ -9,13 +9,16 @@
 	<liferay-portlet:param name="myaction" value="virtualLabManagerAdd" />
 </liferay-portlet:actionURL>
 <style type="text/css">
-.h5{
-    height: 5px;
-    clear: both;
-}
-
-
+	.h5{
+		height: 5px;
+		clear: both;
+	}
+	.sub-title{
+		font-weight: 100 !important;
+		font-size: 18px !important;
+	}
 </style>
+
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList();
@@ -188,7 +191,7 @@ function <portlet:namespace/>onKeyDown() {
 
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title pull-left">
+		<h3 class="panel-title sub-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-admin' />
 		</h3>

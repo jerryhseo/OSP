@@ -19,6 +19,13 @@
 	if((Boolean)request.getAttribute("isPortalMain")){
 %>
 
+<style>
+	.<portlet:namespace/>category{
+		cursor: pointer;
+		text-align: center;
+	}
+</style>
+
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 
 	<div class="contabmenu"> 
@@ -28,10 +35,54 @@
 			value="<%=visitSite%>" 
 			refresh="<%=false%>" 
 			onClick="<%=portletNameSpace%>"
-			minwidth="195"
+			minwidth="150"
 		/>
 	</div>
-	<div style="clear: both;height:20px;"></div> 
+	<div style="clear: both;height:20px;"></div>
+	
+	<div class="tabletoptab">
+		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
+			~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
+	</div>
+	
+	<div class="search03">
+		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="btn btn-default" onclick="<portlet:namespace/>dataSearch();"/>
+	</div>
+	
+	<div style="clear: both;height:20px;"></div>
+	
+	<h3>Science App</h3>
+	<div style="clear: both;height:20px;"></div>
+	
+	<div id="<portlet:namespace/>categoryList">
+		<!-- 카테고리 출력 -->
+		<c:if test="${categoryList ne '' and categoryList ne null}">
+			<table id="<portlet:namespace/>categoryTable" style="width: 100%;">
+				<tr style="border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
+					<c:forEach var="category" items="${categoryList}" varStatus="status">
+						<c:if test="${0 < status.index}">
+							<td style="width: 1px; padding: 20px 0px; border: none;">
+								<div>
+									<img src="${contextPath}/images/categ_divline01.gif" />
+								</div>
+							</td>
+						</c:if>
+						<td category_id="${category.categoryId}" category_name="${category.categoryTitle}" parentCategory_id="${category.parentCategoryId}" class="<portlet:namespace/>category" width="<fmt:formatNumber value='${100/fn:length(categoryList)}' pattern='.0' />%">
+							<div>
+								<img id="<portlet:namespace/>categoryImage_${category.categoryId}" src="" style="margin: 15px 0px 0px; height: 76px; max-width: 100px;" />
+							</div>
+							<div style="height: 55px; margin: 0px auto;">
+								${category.categoryTitle}
+							</div>
+						</td>
+					</c:forEach>
+				</tr>
+			</table>
+		</c:if>
+	</div>
+	
+	<div style="clear: both;height:20px;"></div>
+	
 	<%
 		}
 	%>
@@ -40,15 +91,17 @@
 			<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
 			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
 			<input type="hidden" name="<portlet:namespace/>scienceAppName" id="<portlet:namespace/>scienceAppName" value="${scienceAppName}">
+			<input type="hidden" name="<portlet:namespace/>parentGroupId" id="<portlet:namespace/>parentGroupId" value="">
+			<input type="hidden" name="<portlet:namespace/>categoryId" id="<portlet:namespace/>categoryId" value="">
 			
-			<div class="tabletoptab">
+			<%-- <div class="tabletoptab">
 		  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
 					~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
 			</div>
 			
 			<div class="search03">
 				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="btn btn-default" onclick="<portlet:namespace/>dataSearch();"/>
-			</div>
+			</div> --%>
 		</form>
 	</div>
 	
@@ -59,8 +112,8 @@
 	</div>
 	
 	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
+		<br>
 		<div class="boardbtn2" style="float:right;">
-	<!-- 		<div class="boardbtnNormal" style="width:140px;"><a href="#" onClick="excelDown()">Excel Download</a></div>&nbsp;&nbsp; -->
 			<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
 		</div>
 	</div>
@@ -162,11 +215,15 @@ function setTable(dataList){
 				$("#<portlet:namespace/>userTableBody").append($userTableTr);
 				++rownum
 			}//for 
-		}//if(dataList.length > 0){
+		} else {
+			$("<tr/>").append(
+					$("<td/>").addClass("center").attr("colspan","9").html('<liferay-ui:message key="edison-there-are-no-data" />')
+				).appendTo("#<portlet:namespace/>userTableBody");
+		}
 	}else{
 
 		$("<tr/>").append(
-							$("<td/>").addClass("TC").attr("colspan","9").html('<liferay-ui:message key="edison-there-are-no-data" />')
+							$("<td/>").addClass("center").attr("colspan","9").html('<liferay-ui:message key="edison-there-are-no-data" />')
 						).appendTo("#<portlet:namespace/>userTableBody");
 	}
 		
@@ -351,8 +408,34 @@ function excelDown(){
 	
 			<portlet:namespace/>dataSearch();
 	});
-
-
-</script>  
-  
-  
+	
+	$(".<portlet:namespace/>category").on("click", <portlet:namespace/>categoryClickHandler);
+	
+	function <portlet:namespace/>categoryClickHandler(e){
+		var parentGroupId = $(this).attr("parentCategory_id");
+		var categoryId = $(this).attr("category_id");
+		var categoryName = $(this).attr("category_name");
+		
+		$("#<portlet:namespace/>scienceAppName").val(categoryName);
+		$("#<portlet:namespace/>categoryId").val(categoryId);
+		$("#<portlet:namespace/>parentGroupId").val(parentGroupId);
+		
+		<portlet:namespace/>dataSearch();
+		
+		$("#<portlet:namespace/>scienceAppName").val("");
+		$("#<portlet:namespace/>categoryId").val("");
+		$("#<portlet:namespace/>parentGroupId").val("");
+	}
+	
+	var <portlet:namespace/>categoriesInitData = ${categoriesJsonString};
+	$(document).ready(function(){
+		
+		$.each(<portlet:namespace/>categoriesInitData, function(i) {
+			var that = this;
+			$("#<portlet:namespace/>categoryImage_"+that.categoryId).attr("src","${contextPath}/images/solverType/"+that.image+".png");
+		});
+		
+	});
+	
+	
+</script>

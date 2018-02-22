@@ -229,7 +229,7 @@
 .msbox ul li:last-child{ margin-right:0;}
 .msbox ul li img{text-align:center; width:100%; height:75%;}
 
-.commright{width:180px; border-radius:5px; float:right; border:solid 1px #e6e6e6; padding:20px 15px; min-height:635px;} 
+.commright{width:210px; border-radius:5px; float:right; border:solid 1px #e6e6e6; padding:20px 15px; min-height:635px;} 
 
 .commrighttxt{ width:95%; margin:0 auto;}
 .commrighttxt ul{ margin:0; padding:0;}

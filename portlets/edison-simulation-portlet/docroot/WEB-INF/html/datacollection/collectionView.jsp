@@ -66,6 +66,12 @@
 .edison .table1_list a{
 	color : #00aaff;
 }
+
+.sub-title{
+	font-weight: 100 !important;
+	font-size: 18px !important;
+}
+
 </style>
 
 
@@ -132,7 +138,7 @@
 
 
 <c:if test="${isAdmin == true}"> 
-	<div class="topvisualbtnbox">  
+	<div class="topvisualbtnbox" style="padding-right: 10px;">  
 		<aui:form action="<%=manageDataCollectionURL%>" method="post" name="updateCollectionForm">
 			<input  type="submit" class="btn btn-default topbtn" style="width: 100px;" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>"  />
 		</aui:form>
@@ -170,7 +176,7 @@
 	
 	<!-- data type list -->
 	<div class="panel-heading clearfix">
-		<div class="h4 pull-left">
+		<div class="panel-title sub-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key="edison-data-collection-select-data-type-list"/>
 		</div>
@@ -231,7 +237,7 @@
 	
 	<!-- data entry list -->
 	<div class="panel-heading clearfix">
-		<div class="h4 pull-left">
+		<div class="panel-title sub-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			Data Entry 
 		</div>

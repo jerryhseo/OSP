@@ -27,18 +27,6 @@
 
 <div id="<portlet:namespace/>display" style="display:none; margin-bottom: 30px;" >
 	
-	<%-- <div class="h10"></div>
-	<div class="tabletopbox clear">
-		<!--Paging 셀렉트-->
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>searchSimulationProjectList('${currentPage}');" class="selectview" style="line-height: 15px;">
-				<option value="5" <c:if test="${listSize eq 5}">selected="selected"</c:if>>5<liferay-ui:message key="edison-search-views"/></option>
-				<option value="10" <c:if test="${listSize eq 10}">selected="selected"</c:if>>10<liferay-ui:message key="edison-search-views"/></option>
-				<option value="15" <c:if test="${listSize eq 15}">selected="selected"</c:if>>15<liferay-ui:message key="edison-search-views"/></option>
-				<option value="20" <c:if test="${listSize eq 20}">selected="selected"</c:if>>20<liferay-ui:message key="edison-search-views"/></option>
-			</select>
-		</div>
-	</div>	 --%>
 	<div class="table-responsive panel edison-panel">
 		
 		<div class="panel-heading clearfix">
@@ -54,7 +42,7 @@
 					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>searchSimulationProjectList('1');"><i class="icon-search"></i></button>
 					<button class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>initSimulationProjectList();"><liferay-ui:message key="edison-button-all-search"/></button>
 					
-					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>searchSimulationProjectList('${currentPage}');" style="line-height: 15px;">
+					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>searchSimulationProjectList('${currentPage}');" style="line-height: 15px; height: 32px;">
 						<option value="5" <c:if test="${listSize eq 5}">selected="selected"</c:if>>5<liferay-ui:message key="edison-search-views"/></option>
 						<option value="10" <c:if test="${listSize eq 10}">selected="selected"</c:if>>10<liferay-ui:message key="edison-search-views"/></option>
 						<option value="15" <c:if test="${listSize eq 15}">selected="selected"</c:if>>15<liferay-ui:message key="edison-search-views"/></option>

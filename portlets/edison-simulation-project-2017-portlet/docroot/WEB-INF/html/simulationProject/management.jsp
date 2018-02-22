@@ -117,9 +117,9 @@
 							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('create'); return false;" value="<liferay-ui:message key='edison-button-register' />" type="button" style="cursor: pointer;">
 						</c:if>
 						<c:if test="${not empty simulationProjectId}">
-							<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail' />" type="button" style="cursor: pointer; width: 100px;">
-							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('update'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" type="button" style="cursor: pointer; margin: 0px 5px;">
-							<input class="addIp button02_1" onclick="<portlet:namespace/>deleteSimulationProject(); return false;" value="<liferay-ui:message key='delete'/>" type="button" style="cursor: pointer;">
+							<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail' />" type="button" style="cursor: pointer; width: 14%;">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('update'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" type="button" style="cursor: pointer; margin: 0px 5px; width: 12%;">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>deleteSimulationProject(); return false;" value="<liferay-ui:message key='delete'/>" type="button" style="cursor: pointer; width: 12%;">
 						</c:if>
 					</div>
 				</div>
@@ -136,7 +136,7 @@
 						<liferay-ui:message key='edison-table-list-header-title' /><span class="requiredField"> *</span>
 					</th>
 					<td colspan="2">
-						<liferay-ui:input-localized name="title" xml="${data.title}" cssClass="" scssClass="too_long_field" type="input" style="width: 50%" maxLength="70"/>
+						<liferay-ui:input-localized name="title" xml="${data.title}" cssClass="form-control" scssClass="too_long_field" type="input" style="width: 50%" maxLength="70"/>
 					</td>
 				</tr>
 				<c:if test="${not empty simulationProjectId}">

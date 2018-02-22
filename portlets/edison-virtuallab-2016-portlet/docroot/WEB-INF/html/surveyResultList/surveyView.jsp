@@ -201,7 +201,7 @@ function changeLanguage(){
 		<div class="panel-heading clearfix">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-registration' />
+				<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-registration' />1
 				<c:if test="${answerCnt == '0'}">
 					<input type="button" class="btn btn-default" onclick="<portlet:namespace/>surveyAdd()" id="<portlet:namespace/>surveyAddBtn" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-add-question' />">
 				</c:if>

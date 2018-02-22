@@ -36,6 +36,9 @@ if(areaScienceData){
 	.searchViewForm{
 		width: 1200px;
 	}
+	#category-list > ul{
+		padding: 0px;
+	}
 </style>
 
 <h2 class="search-main-title">
@@ -84,7 +87,7 @@ if(areaScienceData){
   </div>
   <aui:field-wrapper name="search-btn" label="" inlineLabel="true" inlineField="true" cssClass="rightsearch" >
     <aui:input name="searchKeyword" type="text" label="" cssClass="form-control"/>
-    <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn btn-primary"/>
+    <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn-default"/>
     <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn btn-primary"/>
   </aui:field-wrapper>
   <div class="category02wrap">

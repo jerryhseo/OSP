@@ -300,63 +300,38 @@ function <portlet:namespace/>onKeyDown() {
 </style>
 
 </body>
-<%-- <div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-	</div>
-	<div class="buttonbox0801" style="padding-top: 25px;  float: right;">
-		<c:choose>
-			<c:when test="${role eq 'LABOWNER' }">
-				<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="button0801" value="<liferay-ui:message key='edison-virtuallab-creation' />" />
-			</c:when>
-			<c:otherwise>
-				<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="button0801" value="<liferay-ui:message key='edison-virtuallab-creation-request' />" />
-			</c:otherwise>
-		</c:choose>
-	</div>
-</div> --%>
 
 <div class="table-responsive panel edison-panel">
 	
 	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-virtuallab-virtualLabRegistrationList-registration-status' />
+		</h3>
+			
 		<form method="post" name="searchForm" style="margin: 0px;" onsubmit="return false;">
 			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-			<h3 class="panel-title pull-left" style="width: 40%;">
-				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
-				<liferay-ui:message key='edison-virtuallab-virtualLabRegistrationList-registration-status' />
-			</h3>
-			
-			<%-- <div class="btn-group pull-right" style="width: 50%;">
-				<div class="input-group-btn" align="right">
-					<c:choose>
-						<c:when test="${role eq 'LABOWNER' }">
-							<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-creation' />" />
-						</c:when>
-						<c:otherwise>
-							<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-creation-request' />" />
-						</c:otherwise>
-					</c:choose>
-				</div>
-			</div> --%>
-			
-			<div class="btn-group pull-right" style="width: 60%;">
-			
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${searchField}" style="float: left;" />
-				<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataSearchList('1');"></i></button>
-				<input class="btn btn-default dropdown-toggle" id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" onclick="<portlet:namespace/>dataSearchList(0)" style="width: 80px;" />				
-				
-				<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="line-height: 15px;">
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 20%;">
 					<option value="0">ALL</option>
 					<option value="1401001"><liferay-ui:message key='edison-virtuallab-lab-creation-request' /></option>
 					<option value="1401002"><liferay-ui:message key='edison-simulation-job-create-success' /></option>
 					<option value="1401003"><liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' /></option>
 				</select>
 				
-				<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);" style="line-height: 15px;">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);"style="width: 20%;">
 					<option value="10" <c:if test="${selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20" <c:if test="${selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30" <c:if test="${selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
 					<option value="40" <c:if test="${selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
 				</select>
+				
+				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${searchField}" style="width: 60%;" />
+				
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataSearchList('1');"></i></button>
+					<button class="btn btn-default" id="total_search_button" name="<portlet:namespace />total_search_button" onclick="<portlet:namespace/>dataSearchList(0);"><liferay-ui:message key='edison-button-all-search' /></button>
+				</div>
 			</div>
 		</form>
 	</div>
