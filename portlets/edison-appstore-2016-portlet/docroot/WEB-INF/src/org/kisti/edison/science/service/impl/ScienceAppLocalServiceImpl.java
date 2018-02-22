@@ -72,6 +72,7 @@ import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -1006,7 +1007,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			newApp.setProjectCategoryId(0);
 			
 			// asset 등록
-			long entryId = scienceAppAddAssetEntry(sc.getCompanyId(), sc.getScopeGroupId(), newApp);
+			long entryId = scienceAppAddAssetEntry(sc, sc.getCompanyId(), sc.getScopeGroupId(), newApp);
 			
 			// 카테고리 등록
 			List<String[]> categoryList = new ArrayList<String[]>();
@@ -1867,7 +1868,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			}
 			
 			//ASSET Entry 등록
-			scienceAppAddAssetEntry(sc.getCompanyId(), scienceApp.getGroupId(), newScienceApp);
+			scienceAppAddAssetEntry(sc, sc.getCompanyId(), scienceApp.getGroupId(), newScienceApp);
 
 			// New App 정보 등록
 			super.addScienceApp(newScienceApp);
@@ -2126,14 +2127,19 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	private long scienceAppAddAssetEntry(long companyId, long groupId, ScienceApp scienceApp) throws PortalException,
+	private long scienceAppAddAssetEntry(ServiceContext sc, long companyId, long groupId, ScienceApp scienceApp) throws PortalException,
 		SystemException{
 		try{
 			// entry 등록
-			AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, scienceApp
-				.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), scienceApp
-					.getUuid(), 0, null, null, true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
+		    super.resourceLocalService.addResources(scienceApp.getCompanyId(), groupId, scienceApp.getUserId(), 
+                ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
+		    
+			AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, 
+			    scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), 
+			    scienceApp.getScienceAppId(), scienceApp.getUuid(), 0, sc.getAssetCategoryIds(), sc.getAssetTagNames(),
+			    true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
 				null, null, null, null, 0, 0, null, false);
+			
 			return assetEntry.getEntryId();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -2142,6 +2148,18 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		return 0;
 	}
 	
+	public ScienceApp updateScienceApp(ScienceApp scienceApp, int status) throws SystemException, PortalException{
+        // status :{ public : 1901004 , private : less than 1901004}
+	    if(status == 1901004){
+	        reIndexScienceApp(scienceApp);
+	    }
+	    return updateScienceApp(scienceApp);
+	}
+
+	private void reIndexScienceApp(ScienceApp scienceApp) throws SearchException{
+		Indexer indexer = IndexerRegistryUtil.getIndexer(ScienceApp.class);
+		indexer.reindex(scienceApp);
+	}
 	
 	/**
 	 * ScienceApp Mirgation = 2017-03-23 HKD

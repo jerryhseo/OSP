@@ -352,7 +352,7 @@ public class ScienceAppLocalServiceUtil {
 	database, returns null. If appVersion is not follows versioning
 	rules, returns null. Otherwise returns a ScienceApp instance with
 	initialized data.
-	
+
 	Some attributes of the returned instance are set initial value as
 	followings: -stage: ScienceAppConstants.EMPTY -authorId: current
 	user id of service context instance -createDate: date created of
@@ -1151,6 +1151,13 @@ public class ScienceAppLocalServiceUtil {
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> relatedAssetLinkedEntryScienceAPP(
 		java.util.Map params) {
 		return getService().relatedAssetLinkedEntryScienceAPP(params);
+	}
+
+	public static org.kisti.edison.science.model.ScienceApp updateScienceApp(
+		org.kisti.edison.science.model.ScienceApp scienceApp, int status)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().updateScienceApp(scienceApp, status);
 	}
 
 	/**

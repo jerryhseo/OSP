@@ -48,6 +48,7 @@
 		<portlet-name>edison-scienceAppstore</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.science.portlet.scienceAppstore.ConfigurationController</configuration-action-class>
+        <indexer-class>org.kisti.edison.science.search.ScienceAppIndexer</indexer-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
 		<css-class-wrapper>edison-scienceAppstore container</css-class-wrapper>

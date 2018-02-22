@@ -548,27 +548,33 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 
 		_methodParameterTypes107 = new String[] { "java.util.Map" };
 
-		_methodName108 = "migrationScienceApp";
+		_methodName108 = "updateScienceApp";
 
 		_methodParameterTypes108 = new String[] {
+				"org.kisti.edison.science.model.ScienceApp", "int"
+			};
+
+		_methodName109 = "migrationScienceApp";
+
+		_methodParameterTypes109 = new String[] {
 				"org.kisti.edison.science.model.ScienceApp"
 			};
 
-		_methodName109 = "getMyAppListForProject";
-
-		_methodParameterTypes109 = new String[] {
-				"java.util.Map", "java.util.Locale"
-			};
-
-		_methodName110 = "getMyAppListForProjectCount";
+		_methodName110 = "getMyAppListForProject";
 
 		_methodParameterTypes110 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName111 = "getScienceApp";
+		_methodName111 = "getMyAppListForProjectCount";
 
 		_methodParameterTypes111 = new String[] {
+				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName112 = "getScienceApp";
+
+		_methodParameterTypes112 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 	}
@@ -4196,8 +4202,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	}
 
 	@Override
-	public boolean migrationScienceApp(
-		org.kisti.edison.science.model.ScienceApp scienceApp)
+	public org.kisti.edison.science.model.ScienceApp updateScienceApp(
+		org.kisti.edison.science.model.ScienceApp scienceApp, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -4205,6 +4211,45 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName108,
 					_methodParameterTypes108,
+					new Object[] {
+						ClpSerializer.translateInput(scienceApp),
+						
+					status
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceApp)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public boolean migrationScienceApp(
+		org.kisti.edison.science.model.ScienceApp scienceApp)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName109,
+					_methodParameterTypes109,
 					new Object[] { ClpSerializer.translateInput(scienceApp) });
 		}
 		catch (Throwable t) {
@@ -4238,8 +4283,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName109,
-					_methodParameterTypes109,
+			returnObj = _invokableLocalService.invokeMethod(_methodName110,
+					_methodParameterTypes110,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -4275,8 +4320,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName110,
-					_methodParameterTypes110,
+			returnObj = _invokableLocalService.invokeMethod(_methodName111,
+					_methodParameterTypes111,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -4306,8 +4351,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName111,
-					_methodParameterTypes111,
+			returnObj = _invokableLocalService.invokeMethod(_methodName112,
+					_methodParameterTypes112,
 					new Object[] {
 						ClpSerializer.translateInput(scienceAppName),
 						
@@ -4560,4 +4605,6 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes110;
 	private String _methodName111;
 	private String[] _methodParameterTypes111;
+	private String _methodName112;
+	private String[] _methodParameterTypes112;
 }

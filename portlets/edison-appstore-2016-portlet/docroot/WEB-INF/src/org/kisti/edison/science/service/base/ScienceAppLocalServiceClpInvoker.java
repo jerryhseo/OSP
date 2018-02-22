@@ -557,27 +557,33 @@ public class ScienceAppLocalServiceClpInvoker {
 
 		_methodParameterTypes277 = new String[] { "java.util.Map" };
 
-		_methodName279 = "migrationScienceApp";
+		_methodName279 = "updateScienceApp";
 
 		_methodParameterTypes279 = new String[] {
+				"org.kisti.edison.science.model.ScienceApp", "int"
+			};
+
+		_methodName281 = "migrationScienceApp";
+
+		_methodParameterTypes281 = new String[] {
 				"org.kisti.edison.science.model.ScienceApp"
 			};
 
-		_methodName280 = "getMyAppListForProject";
-
-		_methodParameterTypes280 = new String[] {
-				"java.util.Map", "java.util.Locale"
-			};
-
-		_methodName281 = "getMyAppListForProjectCount";
-
-		_methodParameterTypes281 = new String[] {
-				"java.util.Map", "java.util.Locale"
-			};
-
-		_methodName282 = "getScienceApp";
+		_methodName282 = "getMyAppListForProject";
 
 		_methodParameterTypes282 = new String[] {
+				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName283 = "getMyAppListForProjectCount";
+
+		_methodParameterTypes283 = new String[] {
+				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName284 = "getScienceApp";
+
+		_methodParameterTypes284 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 	}
@@ -1296,23 +1302,29 @@ public class ScienceAppLocalServiceClpInvoker {
 
 		if (_methodName279.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes279, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.migrationScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0]);
-		}
-
-		if (_methodName280.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes280, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getMyAppListForProject((java.util.Map)arguments[0],
-				(java.util.Locale)arguments[1]);
+			return ScienceAppLocalServiceUtil.updateScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0],
+				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName281.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes281, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getMyAppListForProjectCount((java.util.Map)arguments[0],
-				(java.util.Locale)arguments[1]);
+			return ScienceAppLocalServiceUtil.migrationScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0]);
 		}
 
 		if (_methodName282.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes282, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getMyAppListForProject((java.util.Map)arguments[0],
+				(java.util.Locale)arguments[1]);
+		}
+
+		if (_methodName283.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes283, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getMyAppListForProjectCount((java.util.Map)arguments[0],
+				(java.util.Locale)arguments[1]);
+		}
+
+		if (_methodName284.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes284, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.getScienceApp((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1]);
 		}
@@ -1540,10 +1552,12 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes277;
 	private String _methodName279;
 	private String[] _methodParameterTypes279;
-	private String _methodName280;
-	private String[] _methodParameterTypes280;
 	private String _methodName281;
 	private String[] _methodParameterTypes281;
 	private String _methodName282;
 	private String[] _methodParameterTypes282;
+	private String _methodName283;
+	private String[] _methodParameterTypes283;
+	private String _methodName284;
+	private String[] _methodParameterTypes284;
 }

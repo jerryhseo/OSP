@@ -1068,6 +1068,7 @@ public class AppManagerController{
 			if(status==0){throw new Exception("@ResourceMapping(value=updateAppStatus) status IS NULL");}
 			
 			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			// status :{ public : 1901004 , private : less than 1901004}  
 			scienceApp.setStatus(status);
 			scienceApp.setStatusDate(new Date());
 			scienceApp.setRecentModifierId(themeDisplay.getUserId());
