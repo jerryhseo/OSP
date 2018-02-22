@@ -118,6 +118,10 @@ public class MonitoringController {
 						Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
 						GroupMap.put(group.getName(), group.getGroupId());
 						
+						if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+							group.setName("EDISON");
+						}
+						
 						if(groupCnt==0){
 							groupName += group.getName();
 							groupId += group.getGroupId();
@@ -244,7 +248,6 @@ public class MonitoringController {
 			model.addAttribute("userId", userId);
 			model.addAttribute("dataList", dataList);
 			model.addAttribute("paging", paging);
-			System.out.println("paging : " + paging);
 			model.addAttribute("seq", totalCount - ((currentPage - 1)*listSize));
 			model.addAttribute("selectedGroupId", selectedGroupId);
 			model.addAttribute("simulationClassId", classId);
