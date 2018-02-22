@@ -20,6 +20,7 @@ import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
@@ -29,6 +30,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
@@ -55,7 +57,11 @@ public class WorkflowDesignerPortlet{
             ScienceApp textEditor = ScienceAppLocalServiceUtil.getTextEditorScienceApp();
             ScienceApp fileEditor = ScienceAppLocalServiceUtil.getFileEditorScienceApp();
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
-
+            String workflowId = ParamUtil.get(request, "workflowId", "");
+            
+            if(StringUtils.hasText(workflowId)){
+                model.addAttribute("workflowId", workflowId);
+            }
             model.addAttribute("textEditor", textEditor);
             model.addAttribute("fileEditor", fileEditor);
             model.addAttribute("structuredEditor", structuredEditor);

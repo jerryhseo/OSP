@@ -39,6 +39,7 @@
     <footer-portlet-javascript>/js/designer.js</footer-portlet-javascript>
     <footer-portlet-javascript>/js/selectable.js</footer-portlet-javascript>
   	<css-class-wrapper>workflow-designer-portlet</css-class-wrapper>
+    <add-default-resource>true</add-default-resource>
   </portlet>
   <portlet>
   	<portlet-name>workflow-simulation-executor</portlet-name>
@@ -58,11 +59,12 @@
     <footer-portlet-javascript>/js/designer.js</footer-portlet-javascript>
     <footer-portlet-javascript>/js/decision.js</footer-portlet-javascript>
     <footer-portlet-javascript>/js/apptree.js</footer-portlet-javascript>
-    <footer-portlet-javascript>/js/ui-panel.js</footer-portlet-javascript>
+    <footer-portlet-javascript>/js/ui-panel-executor.js</footer-portlet-javascript>
     <footer-portlet-javascript>/js/selectable.js</footer-portlet-javascript>
   	<css-class-wrapper>
   		workflow-simulation-executor-portlet
   	</css-class-wrapper>
+    <add-default-resource>true</add-default-resource>
   </portlet>
   <role-mapper>
     <role-name>administrator</role-name>
