@@ -15,6 +15,7 @@ import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -38,7 +39,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
     public String view(RenderRequest request, RenderResponse response, ModelMap model)
         throws SystemException, IOException, PortalException, SQLException, ParseException{
         try{
-            String workflowId = ParamUtil.get(request, "workflowId", "7608414");
+            
             ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
             long appstorePlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
                 "edisonscienceAppstore_WAR_edisonappstore2016portlet");
@@ -47,7 +48,11 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             ScienceApp textEditor = ScienceAppLocalServiceUtil.getTextEditorScienceApp();
             ScienceApp fileEditor = ScienceAppLocalServiceUtil.getFileEditorScienceApp();
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
-
+            String workflowId = ParamUtil.get(request, "workflowId", "7608414");
+            
+            if(StringUtils.hasText(workflowId)){
+                model.addAttribute("workflowId", workflowId);
+            }
             model.addAttribute("workflowId", workflowId);
             model.addAttribute("textEditor", textEditor);
             model.addAttribute("fileEditor", fileEditor);

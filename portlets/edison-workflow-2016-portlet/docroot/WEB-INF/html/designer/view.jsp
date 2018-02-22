@@ -4,6 +4,10 @@
 <%@ include file="/common/init.jsp"%>
 <liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
   copyCurrentRenderParameters="false" />
+<liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+</liferay-portlet:renderURL>  
+
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -234,7 +238,7 @@ var contextPath = '${contextPath}';
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="execute">
+              <a href="#" class="sidebar-btn" id="<portlet:namespace/>executor" data-btn-type="execute">
                 <i class="fa fa-lg fa-play-circle"></i>
                 <span>Execute</span>
               </a>
@@ -468,7 +472,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <script>
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
-  var jqPortletBoundaryId = "#p_p_id" + namespace;
+  var loadedWorkflowId = '${workflowId}';
+  
+  var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
   $.Mustache.addFromDom();
   toastr.options = {
       "closeButton": true,
@@ -491,7 +497,6 @@ $(document).ready(function(){
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
-  console.log(designer);
 
   aSyncAjaxHelper.post("/delegate/services/app/all", {
     companyGroupId: <portlet:namespace/>getCompanyGroupId(),
@@ -506,8 +511,8 @@ $(document).ready(function(){
       appData);
     appTree.bindDnd(document, apptreeSelector);
     $("#wf-workflow-canvas").css("height", 
-      $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
-      - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
+      $(JQ_PORTLET_BOUNDARY_ID + " div.content-wrapper").actual("height")
+      - $(JQ_PORTLET_BOUNDARY_ID + " section.content-header").actual("outerHeight"));
     $("#" + namespace + "menu-panel-box-app .box-body").css("height",
       $("#" + namespace + "menu-panel-box-app").actual("height") 
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
@@ -516,7 +521,16 @@ $(document).ready(function(){
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
+  if(loadedWorkflowId && loadedWorkflowId !== 'null'){
+      uiPanel.openWorkflow(loadedWorkflowId);
+  }
 });
+
+function <portlet:namespace/>moveToExecutor(workflowId){
+    var thisPortletNamespace = "_workflowsimulationexecutor_WAR_edisonworkflow2016portlet_";
+    var params = "&" + thisPortletNamespace + "workflowId=" + workflowId;
+    location.href = "<%=executorUrl%>" + params;
+}
 
 function <portlet:namespace/>getCompanyGroupId(){
   return "${companyGroupId}";

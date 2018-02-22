@@ -777,8 +777,14 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         });
     }
 
-    function loadWorkflowDefinition(workflowId){
-        aSyncAjaxHelper.get("/delegate/services/workflows/"+ workflowId, drawWorkflowDefinition, 
+    function loadWorkflowDefinition(workflowId, fnCallback){
+        aSyncAjaxHelper.get("/delegate/services/workflows/"+ workflowId, 
+        function(workflow){
+            if(fnCallback){
+                fnCallback(workflow);
+            }
+            drawWorkflowDefinition(workflow);
+        }, 
         function(){
             toastr["error"]("","load Workflow Definition fail.");
         });

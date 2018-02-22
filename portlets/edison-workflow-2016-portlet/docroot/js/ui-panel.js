@@ -163,6 +163,13 @@ var UIPanel = (function (namespace, $, designer, toastr) {
                 $(".menu-panel").show('slide', { direction: 'left' }, 500);
             }
         }
+        if(btnType === "execute"){
+            if(!_isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")){
+                var fn = window[namespace + "moveToExecutor"];
+                var workflowId = PANEL_DATA.setting.form.workflowId;
+                fn.apply(null, [workflowId]);
+            }
+        }
     });
 
     $(document).bind('keydown.uiPanel',function (event) {
@@ -374,6 +381,17 @@ var UIPanel = (function (namespace, $, designer, toastr) {
         }
     }
 
+    function openWorkflowByWorkflowId(workflowId){
+        designer.loadWorkflowDefinition(workflowId, function(workflow){
+            setMetaData({
+                "title": workflow.title,
+                "description": workflow.description,
+                "workflowId": workflowId
+            });
+            closePanel();
+        });
+    }
+
     function createOpenModal(title, inputs, btns, saveHandler) {
         var modal = $("#" + namespace + "wf-modal");
         modal.find(".modal-title").text(title);
@@ -562,5 +580,8 @@ var UIPanel = (function (namespace, $, designer, toastr) {
         $(that).siblings().removeClass("active");
         $(that).addClass("active");
     }
-});
 
+    return {
+        "openWorkflow": openWorkflowByWorkflowId
+    };
+});

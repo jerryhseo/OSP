@@ -4,6 +4,9 @@
 <%@ include file="/common/init.jsp"%>
 <liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
   copyCurrentRenderParameters="false" />
+<liferay-portlet:renderURL var="designerUrl" portletName="workflowdesigner_WAR_edisonworkflow2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+</liferay-portlet:renderURL>
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -226,7 +229,7 @@ var contextPath = '${contextPath}';
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="execute">
+              <a href="#" class="sidebar-btn" data-btn-type="designer">
                 <i class="fa fa-lg fa-pencil-square-o"></i>
                 <span>Edit</span>
               </a>
@@ -481,11 +484,12 @@ $(document).ready(function(){
       "hideMethod": "slideUp"
   };
   var designer = new Designer(namespace, $, OSP, toastr, true);
+  var uiPanel = new UIPanelExecutor(namespace, $, designer, toastr);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
- */
+  */
 
   designer.loadWorkflowDefinition(workflowId);
   $("#exampleModal .modal-dialog").draggable({
@@ -497,6 +501,12 @@ $(document).ready(function(){
         - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
   }, 3000);
 });
+
+function <portlet:namespace/>moveToDesigner(){
+    var thisPortletNamespace = "_workflowdesigner_WAR_edisonworkflow2016portlet_";
+    var params = "&" + thisPortletNamespace + "workflowId=${workflowId}";
+    location.href = "<%=designerUrl%>" + params;
+}
 
 function <portlet:namespace/>getCompanyGroupId(){
   return "${companyGroupId}";
