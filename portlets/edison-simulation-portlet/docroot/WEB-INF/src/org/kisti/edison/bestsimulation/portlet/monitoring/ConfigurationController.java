@@ -51,12 +51,14 @@ public class ConfigurationController implements ConfigurationAction{
 		Group parentGroup = null;
 		for(Group group:parentGroupList){
 			if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+				group.setName("EDISON");
 				parentGroup = group;
 				break;
 			}
 		}
 		
 		List<Group> groupList = CustomUtil.getGroupIdASC(GroupLocalServiceUtil.getGroups(companyId, parentGroup.getGroupId(), true));
+		groupList.add(0, parentGroup);
 		renderRequest.setAttribute("groupList", groupList);
 		
 		String tabUseStr = renderRequest.getPreferences().getValue("tabUseList", "");
@@ -68,6 +70,9 @@ public class ConfigurationController implements ConfigurationAction{
 				Long selectGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
 				
 				Group group = GroupLocalServiceUtil.getGroup(selectGroupId);
+				if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+					group.setName("EDISON");
+				}
 				tabGroup.add(group);
 			}
 		}
@@ -114,7 +119,6 @@ public class ConfigurationController implements ConfigurationAction{
 		if(keyTextBox != null){
 			for(int i=0;i<keyTextBox.length;i++){
 				if(CustomUtil.strNull(keyTextBox[i]).equals("")) continue;
-												
 				prefs.setValue(keyTextBox[i], String.valueOf(valueTextBox[i]));
 			}
 		}		

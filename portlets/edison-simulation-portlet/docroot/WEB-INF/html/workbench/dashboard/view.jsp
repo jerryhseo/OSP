@@ -205,7 +205,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
  * Portlet AJAX Function
  ***********************************************************************/
 function <portlet:namespace/>drawAppInfomation(data){
-	$("#<portlet:namespace/>appName").html(cutStr(data.name(),14));
+	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12));
 	$("#<portlet:namespace/>appVersion").html(data.version());
 	
 	if(data.currentManualId()!=0){
@@ -255,7 +255,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 					$aWrapper = $("<a/>").attr("href","#")
 								.attr("onclick","<portlet:namespace/>searchSimulationJob('"+simulation._simulationUuid+"')").appendTo($topLi);
 					$("<i/>").addClass("fa fa-lg fa-folder").appendTo($aWrapper);
-					$("<span/>").attr("id","simulationTitle").html(simulation._simulationTitle).appendTo($aWrapper);
+					$("<span/>").attr("id","simulationTitle").html( cutStr(simulation._simulationTitle,20)).appendTo($aWrapper);
 					$("<span/>").addClass("pull-right-container")
 								.append(
 										$("<i/>").addClass("fa fa-angle-left pull-right")
@@ -329,7 +329,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 			
 			
 			var isEdit = result.isEdit;
-			//권한이 있을 경우에만 수정 가능
+			/*권한이 있을 경우에만 수정 가능*/
 			if(isEdit){
 				$editLi = $("<li/>").appendTo(topUl);
 				$editSpan = $("<span/>").addClass("btn-group edit-btn-group").appendTo($editLi);
@@ -396,8 +396,10 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 											jobStatus:jobStatus
 										}
 								};
-								
 								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
+							}else if(jobUuid === selectJobId){
+								/*submit 후 JOB ID가 변경되었을때 - 처리중*/
+// 								<portlet:namespace/>jobSelect($aWrapper);
 							}
 						}
 					}
@@ -686,7 +688,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition)
 // 			}else{
 // 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
 // 			}
-			alert("Log 파일이 존재 하지 않습니다.");
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
 		}
 	});
 	
@@ -853,7 +855,7 @@ function <portlet:namespace/>copyJobAndAddJob(simulationUuid,inputs) {
 		boxWidth: '30%',
 		useBootstrap: false,
 		title: 'Confirm!',
-		content: '<p>해당 시뮬레이션에 현재 JOB을 복사 하시겠습니까?</p>',
+		content: '<p>'+Liferay.Language.get('edison-simulation-copy-job-message')+'</p>',
 		buttons: {
 			confirm: function () {
 				var workbench = window[<portlet:namespace/>parentNamespace+"workbench"];
@@ -882,8 +884,6 @@ function <portlet:namespace/>copyJobAndAddJob(simulationUuid,inputs) {
 			}
 		}
 	});
-	//working job이 무조건 존재
-// 	e.portletId, e.simulationUuid, e.title, e.data
 }
 function <portlet:namespace/>iceBreakerFileDown(fileId){
 	var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
@@ -1050,7 +1050,7 @@ function <portlet:namespace/>closePanel() {
     </div>
 	<table id="example2" class="table table-bordered table-hover">
 		<tr>
-			<th>작업상태</th>
+			<th><liferay-ui:message key='status'/></th>
 			<td>
 				<img src="${contextPath}/images/monitoring/ko_KR/{{form.jobStatusImg}}" onerror='this.src="${contextPath}/images/monitoring/ko_KR/monitor_QUEUED.png"'/>
 				{{form.jobStatusNm}}
@@ -1058,25 +1058,25 @@ function <portlet:namespace/>closePanel() {
 		</tr>
 		{{#form.startDt}}
 		<tr>
-			<th>실행 시간</th>
+			<th><liferay-ui:message key='edison-simulation-execute-job-create-list-submit-time'/></th>
 			<td>{{form.startDt}}</td>
 		</tr>
 		{{/form.startDt}}
 		{{#form.endDt}}
 		<tr>
-			<th>종료 시간</th>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-complete-time'/></th>
 			<td>{{form.endDt}}</td>
 		</tr>
 		{{/form.endDt}}
 		{{#form.executeTime}}
 		<tr>
-			<th>수행 시간</th>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-running-time'/></th>
 			<td>{{form.executeTime}} minute</td>
 		</tr>
 		{{/form.executeTime}}
 		{{#form.logView}}
 		<tr>
-			<th>시스템 로그</th>
+			<th>System Log</th>
 			<td>
 				<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}',0);"></button>
 			</td>
@@ -1084,7 +1084,7 @@ function <portlet:namespace/>closePanel() {
 		{{/form.logView}}
 		{{#form.resultFile}}
 		<tr>
-			<th>결과 파일</th>
+			<th><liferay-ui:message key='edison-simulation-monitoring-table-header-result-down'/></th>
 			<td>
 				<button class="btn btn-default icon-save" onclick="<portlet:namespace/>jobResultFileView('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}');"></button>
 			</td>

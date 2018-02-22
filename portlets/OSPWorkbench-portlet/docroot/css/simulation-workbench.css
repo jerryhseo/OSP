@@ -206,7 +206,7 @@
 
 
 #no-job-layout-area{
-	background-color:rgba(33, 45, 57, 0.95); height: 100%;position: relative; z-index: 9;
+	background-color:#000000; height: 100%;position: relative; z-index: 9;
 }
 
 #no-job-layout-area span{

@@ -130,14 +130,14 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 
 		_methodParameterTypes92 = new String[] {
 				"long", "long", "java.util.Locale", "long", "java.lang.String",
-				"java.lang.String", "java.util.List", "boolean"
+				"java.lang.String", "java.util.List", "boolean", "long"
 			};
 
 		_methodName93 = "getStatisticsSwExeBarChartDate";
 
 		_methodParameterTypes93 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
-				"java.util.List", "boolean"
+				"java.util.List", "boolean", "long"
 			};
 
 		_methodName94 = "insertCustomScienceAppExecute";
@@ -262,7 +262,8 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 				((Long)arguments[3]).longValue(),
 				(java.lang.String)arguments[4], (java.lang.String)arguments[5],
 				(java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)arguments[6],
-				((Boolean)arguments[7]).booleanValue());
+				((Boolean)arguments[7]).booleanValue(),
+				((Long)arguments[8]).longValue());
 		}
 
 		if (_methodName93.equals(name) &&
@@ -272,7 +273,8 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 				((Long)arguments[2]).longValue(),
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
 				(java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)arguments[5],
-				((Boolean)arguments[6]).booleanValue());
+				((Boolean)arguments[6]).booleanValue(),
+				((Long)arguments[7]).longValue());
 		}
 
 		if (_methodName94.equals(name) &&

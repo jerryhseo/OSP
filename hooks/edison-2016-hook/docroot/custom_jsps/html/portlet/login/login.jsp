@@ -21,132 +21,57 @@
 %>
 
 <style type="text/css">
-
-	div.h20 {
-	    height: 20px;
-	    clear: both;
-	}
-	
-	.loginbox {
-		margin: 0 auto;
-		width: 99%;
-		height:350px;
-		border: solid 6px #e5e5e5;
-		padding-top: 40px;
-		padding-bottom: 25px;
-		text-align: center;
-	}
-	
-	.logintitlebox {
-		margin: 0 auto;
-		width: 100%;
-	}
-	
-	.logintitle {
-		font-size: 27px;
-		color: #000;
-		padding: 0px 20px 12px 0px;
-		font-family: Arial, Nanum Barun Gothic,NanumGothic;
-		float: left;
-	}
-	
-	.loginintro {
-		vertical-align: bottom;
-		font-size: 13px;
-		color: #777777;
-		padding: 15px 0px 12px 0px;
-		float: left;
-	}
-	
-	.loginboxin {
-		float: left;
-		position: absolute;
-		border: none;
-	}
-	
-	.loginboxin ul {
-		margin: 0 auto;
-		padding: 0 0 5px 17px;
-		width: 730px;
-		float: left;
-	}
-	
-	.loginboxin ul li {
-		margin: 0 auto;
-		float: left;
-		position: relative;
-	}
-	
-	.loginboxin label {
-		font-weight: 600;
-		font-size: 16px;
-		color: #000;
-		width: 90px;
-		height: 45px;
-		display: inline-block;
-		text-align: left;
-		cursor: default;
-		margin-left: 290px;
-	}
-	
-	.buttonbox09 {
-		padding-right: 310px;
-		float: right;
-	}
-	
-	.loginboxin01{
-		float: left;
-		width: 100%;
-		height: 130px;
-		border: none;
-		padding-top: 145px;
-	}
-	
-	
-	.aui .control-group{
-		display: inline-block;
-	}
-	
-	.aui .portlet-borderless-bar{
-		display: none;
-	}
-	
-	.aui .control-group .help-inline{
-		display: none;
-	}
-
 	.aui .control-group.error .help-inline{
-		display: block;
-		position: absolute;
-		top: 15px;
+		color: #a94442;
 	}
 	
-	.aui input[type="text"],
-	.aui input[type="password"]{
-		margin-bottom: 0px;
+	.portlet-login .logo{
+		text-align: center;
+		width: 100%;
+		margin-bottom: 5px;
 	}
 	
-	.table7{margin:0 auto;}
-	.table7 a{color:#777; text-decoration:none; } 
-	.table7 a:hover{color:#777; text-decoration:none;}
-	.table7 td{color:#777;  font-size:15px;}
-	.table7 td a{color:#777; text-decoration:none; } 
-	.table7 td a:hover{color:#000; text-decoration:none;}
-	.table7 td.loginbtn{text-align:right;}
-	.table7 td.bold{font-weight:600; font-size:16px; color:#000;}
-	.table7 td.bold01{font-weight:600; font-size:19px; color:#000; text-align:center; font-family:Arial, Nanum Barun Gothic, NanumGothic;}
-	.table7 td.idsave{padding-bottom:30px; padding-bottom:30px; font-size:14px;}
-	.table7 td.span{padding-left:5px;}
-	.table7 td.textbox{padding:0px 10px 10px 0px;}
-	.table7 td.do{padding-bottom:25px; line-height:22px;}
-	.table7 td.do p{color:#000;}
-	.table7 td.loginline{height:26px; border-top:1px solid #e6e6e6;}
-	.table7 td.loginlinevt{width:1px; background-color:#d6d6d6;}
-	.table7 td.loginimg{padding-left:50px; padding-right:15px; width:91px;}
+	.portlet-login .login-btn{
+		width : 100%;
+	}
 	
-	.edison .button07:hover{background: #5479c1;border: solid 1px #3860af;color: #fff;}
-	.edison .button07{padding:0px 10px 0px 10px; height:103px; width:150px; background:#5479c1; color:#fff; border:solid 1px #3860af; font-weight:600; font-size:17px;}
-	.edison .button07 a:hover{color:#c3dfff;  text-decoration:none;}
+	.portlet-login .portlet-body{
+		width : 600px;
+		margin: 10px auto;
+		border: solid 6px #e5e5e5; 
+ 		padding: 40px 0px; 
+	}
+	
+	.portlet-login .loginbox{
+		width : 450px;
+		padding: 10px 0px;
+		margin: 0 auto;
+		border-bottom: 2px solid #e5e5e5;
+	}
+	
+	.portlet-login .navi{
+		width : 450px;
+		margin: 10px auto;
+	}
+	
+	.portlet-login .alert-error{
+		width : 450px;
+		margin: 0 auto;
+	}
+	
+	
+	
+	.portlet-login div.h20 {
+		height: 20px;
+		clear: both;
+	}
+	
+	.aui .portlet-login .loginbox input[type=text].field,
+	.aui .portlet-login .loginbox input[type=password].field{
+		height: 40px;
+		margin-bottom: 5px;
+	}
+	
 </style>
 
 
@@ -184,6 +109,7 @@
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
+		
 		%>
 
 		<portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
@@ -198,140 +124,97 @@
 			<portlet:param name="struts_action" value="/login/forgot_password" />
 		</portlet:renderURL>
 		
-		<div class="container" style="margin-top: 20px;">
-			<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="fm" onSubmit="event.preventDefault();">
-				<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
-				<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-				<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
-	
-				<c:choose>
-					<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
-	
-						<%
-						String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
-						String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
-						%>
-	
-						<div class="alert alert-success">
-							<c:choose>
-								<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
-									<%= LanguageUtil.get(pageContext, "thank-you-for-creating-an-account") %>
-	
-									<c:if test="<%= company.isStrangersVerify() %>">
-										<%= LanguageUtil.format(pageContext, "your-email-verification-code-has-been-sent-to-x", userEmailAddress) %>
-									</c:if>
-								</c:when>
-								<c:otherwise>
-									<%= LanguageUtil.format(pageContext, "thank-you-for-creating-an-account.-your-password-is-x", userPassword, false) %>
-								</c:otherwise>
-							</c:choose>
-	
-							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
-								<%= LanguageUtil.format(pageContext, "your-password-has-been-sent-to-x", userEmailAddress) %>
-							</c:if>
-						</div>
-					</c:when>
-					<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
-	
-						<%
-						String userEmailAddress = (String)SessionMessages.get(request, "userPending");
-						%>
-	
-						<div class="alert alert-success">
-							<%= LanguageUtil.format(pageContext, "thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved", userEmailAddress) %>
-						</div>
-					</c:when>
-					
-					<c:when test='<%= SessionMessages.contains(renderRequest, "userEmailSender") %>'>
-						<div class="alert alert-success">
-							<liferay-ui:message key="your-request-completed-successfully" />
-						</div>
-					</c:when>
-				</c:choose>
-				
-				<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-login-because-the-maximum-number-of-users-has-been-reached" />
-				<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
-				<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
-				<liferay-ui:error exception="<%= UserEmailAddressException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
-				<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
-				<liferay-ui:error exception="<%= UserScreenNameException.class %>" message="authentication-failed" />
-	
-				<aui:fieldset>
-	
+		<div class="logo">
+			<img alt="EDISON" src="<%=themeDisplay.getLayoutSetLogo()%>">
+		</div>
+		
+		<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="fm" onSubmit="event.preventDefault();">
+			<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
+			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+			<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
+
+			<c:choose>
+				<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
+
 					<%
-					String loginLabel = null;
-	
-					if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-						loginLabel = "email-address";
-					}
-					else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-						//loginLabel = "screen-name";
-						loginLabel = "";
-					}
-					else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-						loginLabel = "id";
-					}
+					String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
+					String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
 					%>
-					
-					<div class="logintitlebox">
-						<div class="logintitle"><liferay-ui:message key="Sign-in"/></div>
-						<div class="loginintro"><liferay-ui:message key="Sign-in-message"/></div>
+
+					<div class="alert alert-success">
+						<c:choose>
+							<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
+								<%= LanguageUtil.get(pageContext, "thank-you-for-creating-an-account") %>
+
+								<c:if test="<%= company.isStrangersVerify() %>">
+									<%= LanguageUtil.format(pageContext, "your-email-verification-code-has-been-sent-to-x", userEmailAddress) %>
+								</c:if>
+							</c:when>
+							<c:otherwise>
+								<%= LanguageUtil.format(pageContext, "thank-you-for-creating-an-account.-your-password-is-x", userPassword, false) %>
+							</c:otherwise>
+						</c:choose>
+
+						<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
+							<%= LanguageUtil.format(pageContext, "your-password-has-been-sent-to-x", userEmailAddress) %>
+						</c:if>
 					</div>
-					<div class="h20"></div>
+				</c:when>
+				<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
+
+					<%
+					String userEmailAddress = (String)SessionMessages.get(request, "userPending");
+					%>
+
+					<div class="alert alert-success">
+						<%= LanguageUtil.format(pageContext, "thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved", userEmailAddress) %>
+					</div>
+				</c:when>
+				
+				<c:when test='<%= SessionMessages.contains(renderRequest, "userEmailSender") %>'>
+					<div class="alert alert-success">
+						<liferay-ui:message key="your-request-completed-successfully" />
+					</div>
+				</c:when>
+			</c:choose>
+			
+			<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
+			<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-login-because-the-maximum-number-of-users-has-been-reached" />
+			<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
+			<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
+			<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
+			<liferay-ui:error exception="<%= UserEmailAddressException.class %>" message="authentication-failed" />
+			<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
+			<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
+			<liferay-ui:error exception="<%= UserScreenNameException.class %>" message="authentication-failed" />
+			
+			<div class="loginbox">
+				<aui:fieldset>
+					<aui:input label="" cssClass="clearable" type="text" name="login" value="<%= login %>" style="font-size: 13px;" autoFocus="<%= true %>" showRequiredLabel="<%= false %>" maxLength="32" placeholder="Enter Your ID">
+						<aui:validator name="required"/>
+					</aui:input>
 					
+					<aui:input label="" cssClass="clearable" type="password" value="<%= password %>" style="font-size: 13px;" name="password" showRequiredLabel="<%= false %>" placeholder="Enter Your Password">
+						<aui:validator name="required"/>
+					</aui:input>
 					<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
-					
-					<div class="loginbox">
-						<div class="loginboxin">
-							<ul>
-								<li>
-									<label><liferay-ui:message key="edison-id"/></label>
-									<aui:input label="" size="37" cssClass="clearable" type="text" name="login" value="<%= login %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;height: 41px;" autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" showRequiredLabel="<%= false %>" maxLength="32">
-										<aui:validator name="required"/>
-									</aui:input>
-								</li>
-								<li>
-									<label><liferay-ui:message key="edison-password"/></label>
-									<aui:input label="" size="37" cssClass="clearable" type="password" value="<%= password %>" style="background-color: transparent;padding-top: .7em;padding-bottom: .7em;width: 320px;font-size: 17px;height: 41px;" name="password" showRequiredLabel="<%= false %>">
-										<aui:validator name="required"/>
-									</aui:input>
-								</li>
-							</ul>
-							<div class="buttonbox09">
-								<aui:button type="submit" value="<%=loginMsg%>" cssClass="button07"/>
-							</div>
-						</div>
-						
-						<div class="loginboxin01">
-							<table class="table7" width="860px">
-								<tbody>
-									<tr>
-										<td colspan="8" class="loginline"></td>
-									</tr>
-									<tr>
-										<td class="loginimg"><img src="/edison-2016-hook/images/login/join_findicon.png" width="81" height="80"></td>
-										<td width="150"><a href="<%=forgotIdURL%>&saveLastPath=false" target="_self"><liferay-ui:message key="forgot-id"/></a></td>
-										<td class="loginlinevt"></td>
-										<td class="loginimg"><img src="/edison-2016-hook/images/login/join_findicon.png" width="81" height="80"></td>
-										<td width="150"><a href="<%=forgotPasswordURL%>&saveLastPath=false" target="_self"><liferay-ui:message key="edison-forgot-password"/></a></td>
-										<td class="loginlinevt"></td>
-										<td class="loginimg"><img src="/edison-2016-hook/images/login/join_icon.png" width="81" height="80"></td>
-										<td>
-											<a href="<%=termsOfUseURL%>" target="_self">
-												<liferay-ui:message key="Register-edison"/>
-											</a>
-											
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
 				</aui:fieldset>
-			</aui:form>
+				
+				<aui:button-row>
+					<aui:button type="submit" value="<%=loginMsg%>" cssClass="login-btn"/>
+					<div class="h20"></div>
+					<aui:button type="button" value="KAFE" cssClass="btn-success login-btn"/>
+				</aui:button-row>
+			</div>
+		</aui:form>
+		<div class="navi">
+			<div style="float:left;">
+				<a href="<%=forgotIdURL%>&saveLastPath=false" target="_self"><span class="icon-user-md">  <liferay-ui:message key="forgot-id"/></span></a>
+				<a href="<%=forgotPasswordURL%>&saveLastPath=false" target="_self"><span class="icon-user-md">  <liferay-ui:message key="edison-forgot-password"/></span></a>
+			</div>
+			<div style="float:right;">
+				<a href="<%=termsOfUseURL%>" target="_self"><span class="icon-user">  <liferay-ui:message key="Register-edison"/></span></a>
+			</div>
 		</div>
 		
 		<aui:script use="aui-base">

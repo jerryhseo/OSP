@@ -281,7 +281,7 @@ function <portlet:namespace/>actionCall(mode){
 	
 	var templateId = $(":input:radio[name=templates]:checked").val();
 	if(typeof templateId =='undefined'){
-		alert("template을 선택 해 주세요");
+		alert(Liferay.Language.get('edison-this-field-is-required',['template']));
 		return false;
 	}else{
 		var Layout = new OSP.Layout();
@@ -388,7 +388,7 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 
 				<input id="<portlet:namespace/>layoutAreaButton" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled"  onchange="<portlet:namespace/>layoutAreaViewEvent();" ${layoutChecked}>
 				<span style="font-weight: 600;"> Flow WorkBench</span>
-				<liferay-ui:icon-help message="edison-science-appstore-toolkit-descriptive-message"/>
+				<liferay-ui:icon-help message="edison-science-appstore-toolkit-flow-message"/>
 			</label>
 		</h3>
 		<div class="btn-group pull-right">

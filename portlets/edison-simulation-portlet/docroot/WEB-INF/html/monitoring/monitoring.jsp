@@ -131,7 +131,7 @@
 
 	<c:if test="${tabViewYn eq 'Y'}">
 		<div class="contabmenu">
-			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
 		</div>
 	</c:if>
 	
