@@ -183,28 +183,38 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 		</h1>
 		
 		<div class="btn-group pull-right" style="width: 60%; top: 30px;">
-			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);" style="width:290px; float: left;" />
-			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList(1);">
-				<i class="icon-search"></i>
-			</button>
-			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataSearchListAll(1);">
+            <div class="input-group">
+              <select style="width: 29%" id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="form-control">
+                  <option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
+                  ${categorySelectOption }
+              </select>
+              <select style="width: 20%" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="form-control">
+                  <option value="5">5<liferay-ui:message key="edison-search-views"/></option>
+                  <option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+                  <option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+                  <option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+              </select>
+              <input style="width: 50%; float: right;"  name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield"
+                placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>"
+                onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList(1);"
+                style="" />
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="button" name="fullsize" id="fullsize"
+                  onclick="<portlet:namespace/>dataSearchList(1);">
+                  <i class="icon-search"></i>
+                </button>
+                <input type="button" name="fullsize" id="fullsize"
+                  value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default"
+                  onclick="<portlet:namespace/>dataSearchListAll(1);">
+              </div>
+            </div>
 			
-			<!--우편 셀렉트-->
-			<div class="selectProject_menu" style="float: left; margin: 0px 10px;">
-				<select id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="selectProject">
-					<option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
-					${categorySelectOption }
-				</select>
+<!-- 			<div class="selectProject_menu" style="float: left; margin: 0px 10px;">
+				
 			</div>
-			<!--우편 셀렉트-->
 			<div class="tabletopright">
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="btn btn-default">
-					<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
-					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-				</select>
-			</div>
+				
+			</div> -->
 		</div>
 	</div>
 	
