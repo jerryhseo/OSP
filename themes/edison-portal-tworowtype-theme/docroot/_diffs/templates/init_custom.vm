@@ -53,8 +53,5 @@ This file allows you to override and define new Velocity variables.
 #set($privateInfoURL=$company_url+"/-/privateinfopolicy/view")
 #set($termOfUseURL=$company_url+"/-/termsofuse/view")
 
-#if($themeDisplay.getLayout().getExpandoBridge().getAttribute("IS_SHOW_BREADCRUMB"))
-	#set($isBreadcrumb=true)
-#else
-	#set($isBreadcrumb=false)
-#end
+
+#set($isBreadcrumb = $getterUtil.getBoolean($themeDisplay.getLayout().getExpandoBridge().getAttribute("IS_SHOW_BREADCRUMB"),false))
