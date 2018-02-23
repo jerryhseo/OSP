@@ -102,14 +102,14 @@ function <portlet:namespace/>selectProfessor(professorSeq, professorName){
 	<form method="post" name="<portlet:namespace/>searchForm" class="panel-heading clearfix" id="<portlet:namespace/>searchForm" style="margin: 0px;" onsubmit="return false">
 		<div class="input-group">
 		
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataSearchList('1');" class="form-control" style="line-height: 15px; width: 20%;">
+			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataSearchList('1');" class="form-control" style="line-height: 15px; height:33px; width: 20%;">
 				<option value="5" <c:if test="${listSize eq 5}">selected="selected"</c:if>>5<liferay-ui:message key="edison-search-views"/></option>
 				<option value="10" <c:if test="${listSize eq 10}">selected="selected"</c:if>>10<liferay-ui:message key="edison-search-views"/></option>
 				<option value="15" <c:if test="${listSize eq 15}">selected="selected"</c:if>>15<liferay-ui:message key="edison-search-views"/></option>
 				<option value="20" <c:if test="${listSize eq 20}">selected="selected"</c:if>>20<liferay-ui:message key="edison-search-views"/></option>
 			</select>
 			
-			<input name="<portlet:namespace/>searchField" type="text" class="form-control" id="<portlet:namespace/>searchField" placeholder="<liferay-ui:message key="edison-simulation-project-member-placeholder"/>" size="40" value="${searchText}" style="width: 80%;" 
+			<input name="<portlet:namespace/>searchField" type="text" class="form-control" id="<portlet:namespace/>searchField" placeholder="<liferay-ui:message key="edison-simulation-project-member-placeholder"/>" size="40" value="${searchText}" style="height:33px; width: 80%;" 
 				onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
 				
 			<div class="input-group-btn">
