@@ -296,9 +296,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 
 </script>
 
-
-<div class="h30"></div>
-
 <form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 	<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 </form>

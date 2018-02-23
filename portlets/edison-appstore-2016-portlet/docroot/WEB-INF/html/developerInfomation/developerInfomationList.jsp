@@ -114,33 +114,31 @@ function <portlet:namespace/>goRequestWorkspace(){
 		</div>
 	</div>
 	
-	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
-			<colgroup>
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="12%" />
-				<col width="11%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-appstore-developer-request-purpose' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-appstore-workspace-temporary-password' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-req-date' /></th>
-					<th align="center" scope="col" colspan="2"><liferay-ui:message key='edison-appstore-developer-preferred-date' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-processing-status' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-result-of-management' /></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>developerInfomationBody">
-			</tbody>
-		</table>
-	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+		<colgroup>
+			<col width="12%" />
+			<col width="12%" />
+			<col width="12%" />
+			<col width="12%" />
+			<col width="12%" />
+			<col width="12%" />
+			<col width="12%" />
+			<col width="11%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th align="center" scope="col"><liferay-ui:message key='edison-appstore-developer-request-purpose' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-appstore-workspace-temporary-password' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-req-date' /></th>
+				<th align="center" scope="col" colspan="2"><liferay-ui:message key='edison-appstore-developer-preferred-date' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-processing-status' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-result-of-management' /></th>
+			</tr>
+		</thead>
+		<tbody id="<portlet:namespace/>developerInfomationBody">
+		</tbody>
+	</table>
 </div>
 <div id="requestBtn" class="buttonbox"style="width:auto; position:absolute; right:1%; display:none;">
 	<input class="addIp btn btn-default" style="min-width:90px;" onclick="<portlet:namespace/>goRequestWorkspace();" value="<liferay-ui:message key='edison-appstore-workspace-request' />" type="button">

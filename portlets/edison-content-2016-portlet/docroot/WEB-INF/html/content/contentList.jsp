@@ -116,7 +116,6 @@
 		width: 220px;
 	}
 </style>
-
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
 <div class="h10"></div>
@@ -154,7 +153,7 @@
 					   size="40"
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
-					   style="width:74%; float: right; margin-left: 1%;"
+					   style="width:75%;"
 				/>
 				
 				<div class="input-group-btn">

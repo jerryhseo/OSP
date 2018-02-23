@@ -511,8 +511,6 @@ public class WorkspaceController {
 		int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("select_line"), "5"));
 		int pagePerBlock = Integer.parseInt(CustomUtil.strNull(params.get("pagePerBlock"), "5"));		
 
-		JSONArray json = new JSONArray();
-
 		int totalCnt = (Integer) DeveloperInfoLocalServiceUtil.getCountCustomDeveloperInfo(params);
 		params.put("curPage", curPage);
 		params.put("linePerPage", linePerPage);
@@ -520,20 +518,30 @@ public class WorkspaceController {
 		String pagingStr = PagingUtil.getPaging(request.getContextPath(), portletNameSpace+"dataSearchList", totalCnt, curPage, linePerPage, pagePerBlock);
 		
 		List jobList = (List) DeveloperInfoLocalServiceUtil.getListCustomDeveloperInfo(params, themeDisplay.getLocale());
-		json = JSONArray.fromObject(JSONSerializer.toJSON(jobList));
+		JSONArray json = JSONArray.fromObject(JSONSerializer.toJSON(jobList));
 		
-		StringBuffer responseBuffer = new StringBuffer();
-		responseBuffer.append("{");
-		responseBuffer.append("		\"dataList\":	");
-		responseBuffer.append(					CustomUtil.strNull(json.toString()));	
-		responseBuffer.append("		,\"pageList\":\""+pagingStr+"\"");
-		responseBuffer.append("		,\"select_line\":\""+linePerPage+"\"");
-		responseBuffer.append("		,\"totalCnt\":\""+totalCnt+"\"");		
-		responseBuffer.append("}");
+		JSONObject obj = new JSONObject();
+		obj.put("dataList", json);
+		obj.put("pageList", pagingStr);
+		obj.put("select_line", linePerPage);
+		obj.put("totalCnt", totalCnt);
 		
-		writer.write(responseBuffer.toString());
 		
-		writer.close();
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+//		StringBuffer responseBuffer = new StringBuffer();
+//		responseBuffer.append("{");
+//		responseBuffer.append("		\"dataList\":	");
+//		responseBuffer.append(					CustomUtil.strNull(json.toString()));	
+//		responseBuffer.append("		,\"pageList\":\""+pagingStr+"\"");
+//		responseBuffer.append("		,\"select_line\":\""+linePerPage+"\"");
+//		responseBuffer.append("		,\"totalCnt\":\""+totalCnt+"\"");		
+//		responseBuffer.append("}");
+//		
+//		writer.write(responseBuffer.toString());
+//		
+//		writer.close();
 	}
 	
 	@RenderMapping(params = "myaction=workspaceView")

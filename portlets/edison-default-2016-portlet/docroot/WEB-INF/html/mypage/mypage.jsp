@@ -32,9 +32,11 @@
 		jspFile = "edisonmyfile_WAR_edisonsimulationportlet";
 	}else if(clickTab.equals("myApp")){
 		jspFile = "scienceappmanager_WAR_edisonappstore2016portlet";
-	}else if(clickTab.equals("myScienceData")){
-		jspFile = "edisondataentry_WAR_edisonsimulationportlet";
-	}else if(clickTab.equals("myContent")){
+	}
+// 	else if(clickTab.equals("myScienceData")){
+// 		jspFile = "edisondataentry_WAR_edisonsimulationportlet";
+// 	}
+	else if(clickTab.equals("myContent")){
 		jspFile = "edisoncontent_WAR_edisoncontent2016portlet";
 	}else if(clickTab.equals("myProject")){
 		jspFile = "edisonsimulationproject_WAR_edisonsimulationproject2017portlet";

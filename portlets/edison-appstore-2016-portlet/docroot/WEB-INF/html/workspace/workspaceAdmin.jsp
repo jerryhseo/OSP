@@ -10,7 +10,6 @@
 	<liferay-portlet:param name="workspacePopup" value="${workspacePopup}" />
 </liferay-portlet:renderURL>
 
-
 <script type="text/javascript">
 /************** ready   ***************/
 $(document).ready(function() {
@@ -57,8 +56,9 @@ function <portlet:namespace/>dataSearchList(curPage){
 		url: "<%=workspaceListURL%>",
 		async : false,
 		data  : paramData,
+		dataType: 'json',
 		success: function(data) {	    			
-			var dataMap = eval('(' + data + ')');
+			var dataMap = data;
 			var dataCount = dataMap.totalCnt - ((curPage -1) * dataMap.select_line);
 			
 			$("#<portlet:namespace/>workspaceList").empty();		
@@ -101,32 +101,32 @@ function <portlet:namespace/>dataSearchList(curPage){
 	}
 </style>
 
-<div class="table-responsive panel edison-panel" style="min-height: 530px;">
+<div class="table-responsive panel edison-panel">
 	
 	<div class="panel-heading clearfix">
 		<form method="post" name="searchParamForm" style="margin: 0px;" onsubmit="return false;">
 			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
 			
 			<!-- 페이지 타이틀 & 네비게이션 -->
-			<h3 class="panel-title pull-left" style="width: 40%;">
+			<h3 class="panel-title pull-left" >
 				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 				<liferay-ui:message key='edison-appstore-workspace-request-list' />
 			</h3>
 			
-			<div class="input-group pull-right" style="width: 60%">
-				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 27%">
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 25%">
 					<option value="0">ALL</option>
 					${statusOptionStr}
 				</select>
 				
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 27%">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 25%">
 					<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
 					<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
 				</select>
 				
-				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${params.searchField}" style="width: 45%; float: right; margin-left: 1%"/>
+				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" value="${params.searchField}" style="width: 50%;"/>
 				
 				<div class="input-group-btn">
 					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList('1');"><i class="icon-search"></i></button>
@@ -158,6 +158,6 @@ function <portlet:namespace/>dataSearchList(curPage){
 </div>
 
  <!-- 페이지 네비게이션 ---->
-<div class="paging">
-	<div id="<portlet:namespace/>page_navi"></div>
+<div class="text-center" id="<portlet:namespace/>page_navi">
+
 </div>
