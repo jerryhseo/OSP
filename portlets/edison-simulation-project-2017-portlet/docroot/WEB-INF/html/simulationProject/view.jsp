@@ -109,7 +109,7 @@
 		<input type="button" id="<portlet:namespace/>requestMemberBtn"
 			value="<liferay-ui:message key='edison-simulation-project-join-btn'/>"
 			class="btn btn-default"
-			onclick="<portlet:namespace/>requestSimulationProjectMember();" />
+			onclick="<portlet:namespace/>requestSimulationProjectMember();" style="width: 100px;" />
 	</c:if>
 
 </div>
