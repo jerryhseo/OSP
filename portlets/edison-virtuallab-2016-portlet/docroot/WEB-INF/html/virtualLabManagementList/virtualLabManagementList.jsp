@@ -104,28 +104,33 @@
 		
 		<div class="portlet-borderless-container">
 			<div class="portlet-body">
-				<div style="float: left; width: 100%" class="input-group">
+				<div style="float: left; width: 100%" class="table-responsive panel edison-panel">
 					<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 						<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 						<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
 						<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" />
-						<div class="tabletopright" style="float: right;">
-							<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="height:33px; width: 180px;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
-							<input type="button" onClick="<portlet:namespace/>dataAndTabSearchList('1','');" class="btn btn-primary" value="<liferay-ui:message key='edison-button-search' />" />
-							<input type="button" onClick="<portlet:namespace/>initDataSearchList();" class="btn btn-primary" value="<liferay-ui:message key='edison-button-all-search' />" />
-							<c:if test="${isLogin == 'Y' }">
-								<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" class="btn btn-default" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:150px; height: 33px">
-									<option value="ALL" ><liferay-ui:message key='full' /></option>
-									<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
-									<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
-								</select>
-							</c:if>
-							<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" class="btn btn-default" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" class="selectview" style="line-height: 15px; height: 33px;">
+						
+						<div class="input-group">
+							<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="width: 50%; float: right; margin-left: 1%;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+							
+							<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" class="form-control" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" style="line-height: 15px; width: 15%; float: right;">
 								<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
 								<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
 								<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
 								<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
 							</select>
+							<c:if test="${isLogin == 'Y' }">
+								<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" class="form-control" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:15%; float: right;">
+									<option value="ALL" ><liferay-ui:message key='full' /></option>
+									<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
+									<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
+								</select>
+							</c:if>
+							
+							<div class="input-group-btn">
+								<button class="btn btn-default" onClick="<portlet:namespace/>dataAndTabSearchList('1','');"><liferay-ui:message key='edison-button-search' /></button>
+								<button class="btn btn-default" onClick="<portlet:namespace/>initDataSearchList();">Clear</button>
+							</div>
 						</div>
 					</form>
 				</div>
