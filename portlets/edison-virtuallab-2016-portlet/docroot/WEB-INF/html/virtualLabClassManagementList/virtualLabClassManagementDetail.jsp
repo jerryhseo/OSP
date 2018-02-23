@@ -31,13 +31,13 @@
 	</div>
 	
 	<!-- 관리자 또는 강의 수강생만 코멘트 기능 사용 -->
-	<c:if test="${authYn == 'Y'}">
+	<%-- <c:if test="${authYn == 'Y'}">
 	    <div class="portlet-layout row">
 	        <div class="portlet-column portlet-column-only span12" id="column-7">
 	            <liferay-portlet:runtime portletName="edisoncomment_WAR_edisonboard2016portlet" queryString="&customId=class_${classId}&authYn=${authYn}&modelId=${classId}" />
 	        </div>
 	    </div>
-    </c:if>
+    </c:if> --%>
     
     <div>
       

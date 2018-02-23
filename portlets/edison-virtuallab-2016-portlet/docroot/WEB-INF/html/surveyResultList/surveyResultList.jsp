@@ -5,39 +5,42 @@
 		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="<%= tabs1 %>"/>
 			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
-			<div class="input-group">
-				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 160px;" />
-				<%-- <input id="search_button" name="search_button" type="button" class="btnsearch"  onClick="<portlet:namespace/>dataSearchList()"/> --%>
-				<button class="btn btn-default" type="button" id="search_button" name="search_button" onClick="<portlet:namespace/>dataSearchList()">
-					<i class="icon-search"></i>
-				</button>
-				<input id="total_search_button" name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="btn btn-default"  onClick="<portlet:namespace/>dataSearchList(0)" />
+			<div class="input-group" align="right">
+				
+				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 30%; float: right; margin-left: 1%;" />
+			
+				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 11%; float: right;">
+					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+					<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+				</select>
+				
+				<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 21%; float: right;">
+					<c:if test="${null eq surveySelectList}">
+						<option value="0"><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data' /></option>
+					</c:if>
+					<c:if test="${null ne surveySelectList}">
+						<c:forEach items="${surveySelectList}" var="survey">
+							<c:choose>
+								<c:when test="${survey.surveySeqNo eq surveySeqNo}">
+									<option value=${survey.surveySeqNo} selected>${survey.surveyTitle}</option>
+								</c:when>
+								<c:otherwise>
+									<option value=${survey.surveySeqNo}>${survey.surveyTitle}</option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach> 
+					</c:if>
+				</select>
 				
 				<div class="input-group-btn">
-					<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
-						<c:if test="${null eq surveySelectList}">
-							<option value="0"><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data' /></option>
-						</c:if>
-						<c:if test="${null ne surveySelectList}">
-							<c:forEach items="${surveySelectList}" var="survey">
-								<c:choose>
-									<c:when test="${survey.surveySeqNo eq surveySeqNo}">
-										<option value=${survey.surveySeqNo} selected>${survey.surveyTitle}</option>
-									</c:when>
-									<c:otherwise>
-										<option value=${survey.surveySeqNo}>${survey.surveyTitle}</option>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach> 
-						</c:if>
-					</select>
-				
-					<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="btn btn-default">
-						<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-						<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-						<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-						<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-					</select>
+					<button class="btn btn-default" type="button" id="search_button" name="search_button" onClick="<portlet:namespace/>dataSearchList()">
+						<i class="icon-search"></i>
+					</button>
+					<button id="total_search_button" name="total_search_button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList(0)">
+						Clear
+					</button>
 				</div>
 				
 			</div>

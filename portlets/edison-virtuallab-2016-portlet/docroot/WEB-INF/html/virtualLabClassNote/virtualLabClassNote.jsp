@@ -191,7 +191,7 @@ function(popupIdToClose) {
 	<div class="conwrap2">
 		<div class="conwrap2left">
 			<div class="conwraptit01">
-				강의자료 다운로드
+				<liferay-ui:message key='edison-virtuallab-class-file-download' />
 				<div class="moreicon">
 					<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
 						<liferay-ui:message key='edison-virtuallab-scienceapp-management' />

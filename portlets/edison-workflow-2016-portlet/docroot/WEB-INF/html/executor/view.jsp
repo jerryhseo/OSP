@@ -4,6 +4,9 @@
 <%@ include file="/common/init.jsp"%>
 <liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
   copyCurrentRenderParameters="false" />
+<liferay-portlet:renderURL var="designerUrl" portletName="workflowdesigner_WAR_edisonworkflow2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+</liferay-portlet:renderURL>
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -226,7 +229,7 @@ var contextPath = '${contextPath}';
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="execute">
+              <a href="#" class="sidebar-btn" data-btn-type="designer">
                 <i class="fa fa-lg fa-pencil-square-o"></i>
                 <span>Edit</span>
               </a>
@@ -384,14 +387,10 @@ $.widget.bridge('uibutton', $.ui.button);
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
-        placeholder="Title" value="{{form.title}}" required>
+      <label for="subtitle" >Simulation Title</label>
+      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" 
+        placeholder="Simulation Title" value="{{form.subtitle}}" required>
       <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea class="form-control data-binded" rows="5" id="description" name="description">{{form.description}}</textarea>
     </div>
   </div>
   <div class="box-footer">
@@ -400,41 +399,20 @@ $.widget.bridge('uibutton', $.ui.button);
 </form>
 </script>
 
-<script id="tpl-menu-panel-save" type="text/html">
-<form class="form-horizontal" onsubmit="return false;">
-  <div class="box-body">
-    <div class="form-group">
-      <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
-        placeholder="Title" value="{{form.title}}" required>
-      <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea class="form-control data-binded" rows="5" id="description" name="description">{{form.description}}</textarea>
-    </div>
-  </div>
-  <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat pull-right func" name="save">Save</button>
-  </div>
-</form>
-</script>
-
 <script id="tpl-menu-panel-setting" type="text/html">
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}">
+      <label for="title">Simulation Title</label>
+      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" placeholder="Simulation Title" value="{{form.subtitle}}">
+    </div>
+    <div class="form-group">
+      <label for="title">Workflow Title</label>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" readonly>
     </div>
     <div class="form-group">
       <label for="description" >Description</label>
-      <textarea class="form-control data-binded" rows="5" name="description" id="description">{{form.description}}</textarea>
-    </div>
-    <div class="form-group"></div>
-    <div class="form-group">
-      <label for="description">Export as App</label>
-      <button type="button" class="btn btn-info btn-flat pull-right func" name="exportWorkflow">Export</button>
+      <textarea class="form-control data-binded" rows="5" name="description" id="description" readonly>{{form.description}}</textarea>
     </div>
   </div>
   <div class="box-footer">
@@ -481,13 +459,14 @@ $(document).ready(function(){
       "hideMethod": "slideUp"
   };
   var designer = new Designer(namespace, $, OSP, toastr, true);
+  var uiPanel = new UIPanelExecutor(namespace, $, designer, toastr);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
- */
+  */
 
-  designer.loadWorkflowDefinition(workflowId);
+  uiPanel.openWorkflow(workflowId);
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
@@ -497,6 +476,12 @@ $(document).ready(function(){
         - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
   }, 3000);
 });
+
+function <portlet:namespace/>moveToDesigner(){
+    var thisPortletNamespace = "_workflowdesigner_WAR_edisonworkflow2016portlet_";
+    var params = "&" + thisPortletNamespace + "workflowId=${workflowId}";
+    location.href = "<%=designerUrl%>" + params;
+}
 
 function <portlet:namespace/>getCompanyGroupId(){
   return "${companyGroupId}";

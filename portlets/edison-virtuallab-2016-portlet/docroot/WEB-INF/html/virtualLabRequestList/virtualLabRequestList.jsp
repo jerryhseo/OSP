@@ -154,14 +154,16 @@ function <portlet:namespace/>goRequestManagementURL(groupId, groupName) {
 </aui:script>
 
 <div class="table-responsive panel edison-panel">
-	<h1>
-		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-		<liferay-ui:message key='edison-virtuallab-request-list' />
-	</h1>
 	<div class="table1_list">
-		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" class="panel-heading clearfix"">
+		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1" />
 		</form>
+		<div class="panel-heading clearfix">
+			<h1>
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+				<liferay-ui:message key='edison-virtuallab-request-list' />
+			</h1>
+		</div>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="10%" />

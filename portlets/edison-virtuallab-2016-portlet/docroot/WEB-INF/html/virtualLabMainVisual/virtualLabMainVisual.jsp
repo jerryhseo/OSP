@@ -120,9 +120,11 @@
 							<tbody>
 								<tr>
 									<th><liferay-ui:message key='edison-table-list-header-tutor' /></th>
-									<td class="puptxt">
-										<input id="<portlet:namespace/>virtualLabProfessor" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width:190px; margin: 4px;" value="${labInfo.professorFirstName}"/>
-										<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+									<td class="puptxt input-group" style="display: table-cell;">
+										<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width: 190px;" value="${labInfo.professorFirstName}"/>
+										<div class="input-group-btn">
+											<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+										</div>
 									</td>
 									<c:if test="${role eq 'MANAGER' }">
 										<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
@@ -132,21 +134,25 @@
 									</c:if>
 									<c:if test="${role eq 'ADMIN' }">
 										<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
-										<td class="puptxt">
-											<input id="<portlet:namespace/>virtualLabOwnerName" name="<portlet:namespace/>virtualLabOwnerName" type="text"  style="width:190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
-											<input id="virtualLab_owner_transfer_button" name="virtualLab_owner_transfer_button" onclick="<portlet:namespace/>virtualLabOwnerTransfer();" type="button" value="<liferay-ui:message key='edison-virtuallab-transfer' />" class="btn btn-default" />
+										<td class="puptxt input-group" style="display: table-cell;">
+											<input id="<portlet:namespace/>virtualLabOwnerName" class="form-control" name="<portlet:namespace/>virtualLabOwnerName" type="text"  style="width: 190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
+											<div class="input-group-btn">
+												<input id="virtualLab_owner_transfer_button" name="virtualLab_owner_transfer_button" onclick="<portlet:namespace/>virtualLabOwnerTransfer();" type="button" value="<liferay-ui:message key='edison-virtuallab-transfer' />" class="btn btn-default" />
+											</div>
 										</td>
 									</c:if>
 								</tr>
 								<tr>
 									<th><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
 									<td class="puptxt">
-										<liferay-ui:input-localized id="virtualLabTitle" name="virtualLabTitle" xml="${labInfo.virtualLabTitleMap}"  style="display: inline-block; margin:4px; width:255px;" type="input" />
+										<liferay-ui:input-localized id="virtualLabTitle" cssClass="form-control" name="virtualLabTitle" xml="${labInfo.virtualLabTitleMap}"  style="display: inline-block; margin:4px; width:255px;" type="input" />
 									</td>
 									<th style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
-									<td class="puptxt">
-										<input id="<portlet:namespace/>virtualLabUniversityField" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="20" readonly="readonly" style="width:190px; margin-bottom:0px;" value="${labInfo.virtualLabUniversityFieldNm}"/>
-										<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+									<td class="puptxt input-group" style="display: table-cell;">
+										<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="20" readonly="readonly" style="width: 190px; margin-bottom:0px;" value="${labInfo.virtualLabUniversityFieldNm}"/>
+										<div class="input-group-btn">
+											<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+										</div>
 									</td>
 								</tr>
 								<tr>

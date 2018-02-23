@@ -51,10 +51,6 @@
 	background:#e0e0e0;
 }
 
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
 </style>
 
 <script type="text/javascript">
@@ -534,7 +530,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title sub-title pull-left">
+		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />
 		</h3>
@@ -580,7 +576,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
 	<div class="h30"></div>
 	
-	<div id="<portlet:namespace/>virtualClass-add-dialog" title="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />" class="newWindow" style="background-color:#fff; display:none;">
+	<div id="<portlet:namespace/>virtualClass-add-dialog" title="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />" class="table-responsive panel edison-panel" style="background-color:#fff; display:none;">
 		<div class="newWheader">
 			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
 				<div class="newWtitle">
@@ -596,8 +592,8 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			<input type="hidden" id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" value="${virtualLabClassInfo.classId}" />
 			<input type="hidden" id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" value="${virtualLabId}" />
 			<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId}" />
-			<div class="table3_list" style="padding: 5px;">
-				<table width="98%" border="0" cellspacing="0" cellpadding="0" >
+			<div class="table1_list">
+				<table width="98%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 					<colgroup>
 						<col width="18%" />
 						<col width="82%" />
@@ -633,9 +629,13 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 						</tr>
 						<tr>
 							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-manager' /><br><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-id-search' /></th>
-							<td>
-								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; margin-right: 5px; float: left;"/>
-								<input id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" class="btn btn-default"  type="button" onClick="<portlet:namespace/>getUserInfo()" value="<liferay-ui:message key='edison-button-search' />"/>
+							<td class="input-group" style="display: table-cell;">
+								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; float: left;"/>
+								<div class="input-group-btn">
+									<button class="btn btn-default" id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" onClick="<portlet:namespace/>getUserInfo()">
+										<liferay-ui:message key='edison-button-search' />
+									</button>
+								</div>
 								<div id="<portlet:namespace/>classManagerList"></div>
 							</td>
 						</tr>
@@ -645,18 +645,16 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 								<input id="<portlet:namespace/>classCurriculumUrl" name="<portlet:namespace/>classCurriculumUrl" type="text" class="form-control" style="width:150px;  margin-bottom:0px;" value="${virtualLabClassInfo.classCurriculumUrl}"/>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="2" style="text-align: right;border-bottom: 0px;">
-								<c:if test="${empty virtualLabClassInfo}">
-									<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
-								</c:if>
-								<c:if test="${!empty virtualLabClassInfo}">
-									<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
-								</c:if>
-							</td>
-						</tr>
 					</tbody>
 				</table>
+				<div align="right" style="margin-bottom: 10px; padding-right: 20px;">
+					<c:if test="${empty virtualLabClassInfo}">
+						<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
+					</c:if>
+					<c:if test="${!empty virtualLabClassInfo}">
+						<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					</c:if>
+				</div>
 			</div>
 			
 		</form>

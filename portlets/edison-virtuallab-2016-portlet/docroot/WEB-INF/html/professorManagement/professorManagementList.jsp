@@ -141,7 +141,9 @@ function <portlet:namespace/>moveProfessor(professorSeq, userId, redirectURL) {
 					<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-id' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
 					<div class="input-group-btn">
 						<button id="search_button" name="<portlet:namespace />search_button" class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList(1)"><i class="icon-search"></i></button>
-						<button id="total_search_button" name="<portlet:namespace />total_search_button" type="button" class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0)" ><liferay-ui:message key='edison-button-all-search' /></button>
+						<button id="total_search_button" name="<portlet:namespace />total_search_button" type="button" class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0)" >
+							Clear
+						</button>
 					</div>
 				</div>
 			</form>

@@ -39,6 +39,7 @@ import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
 import org.springframework.util.StringUtils;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -313,11 +314,17 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
         if(searchResults == null){
             searchResults = this.createSearch(0);
         }
+        List<Long> categoryIds = getCategoryIds(searchCondition);
 
         DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
         newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
         newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
         newRequest.setParameter("searchSelect", COLLECTION_SEARCH_SELECT);
+        if(categoryIds != null){
+            newRequest.setParameterValues("categoryIds",
+                Iterables.toArray(
+                    Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
+        }
         
         Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
         int count = GetterUtil.getInteger(result.get("total"));
