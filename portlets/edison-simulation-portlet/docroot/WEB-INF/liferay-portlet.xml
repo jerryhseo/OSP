@@ -26,7 +26,7 @@
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.monitoring.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>		
-		<css-class-wrapper>edison-monitoring container</css-class-wrapper>		
+		<css-class-wrapper>edison-monitoring</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	

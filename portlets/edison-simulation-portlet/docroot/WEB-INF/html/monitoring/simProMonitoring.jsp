@@ -12,7 +12,7 @@
 	<liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
-<div class="commrighttxt" style="width: 145px; margin: 0px; padding-left: 10px;">
+<div class="commrighttxt" style="margin: 0px; padding-left: 10px;">
 	<ul id="<portlet:namespace/>monitoringList">
 	</ul>
 </div>
@@ -70,13 +70,6 @@ function <portlet:namespace/>getSimulationMonitoringJobList(p_curPage){
 			$("#<portlet:namespace/>monitoringList").empty();
 			$("<li/>").html("<liferay-ui:message key='edison-simulation-monitoring-title' />")
 			  		  .appendTo("#<portlet:namespace/>monitoringList");
-			$("<li/>").css("text-align", "center")
-					  .append($("<input/>").attr("type","button")
-				    		  			   .attr("onclick", "<portlet:namespace/>goMonitoring('${simulationClassId}', '${simulationCustomId}');")
-				    		  			   .addClass("btn_wline")
-				    		  			   .val("View All")
-				    	)
-	          		  .appendTo("#<portlet:namespace/>monitoringList");
 			if(dataList.length != 0){
 				for(var i = 0; i < dataList.length; i++) {
 					var liClass = "";
@@ -118,6 +111,13 @@ function <portlet:namespace/>getSimulationMonitoringJobList(p_curPage){
 				$("#<portlet:namespace/>preNextBtn").css("display", "none");
 			}
 			
+			$("<li/>").css("text-align", "center")
+			  .append($("<input/>").attr("type","button")
+		    		  			   .attr("onclick", "<portlet:namespace/>goMonitoring('${simulationClassId}', '${simulationCustomId}');")
+		    		  			   .addClass("btn_wline")
+		    		  			   .val("View All")
+		    	)
+    		  .appendTo("#<portlet:namespace/>monitoringList");
 		},error:function(data,e){
 			alert("getSimulationMonitoringJobList ERROR-->"+e);
 		}

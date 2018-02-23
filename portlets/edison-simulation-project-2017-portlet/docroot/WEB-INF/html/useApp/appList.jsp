@@ -11,25 +11,23 @@
 
 <c:if test="${fn:length(data.scienceAppList) > 0 }">
 	<div class="panel edison-panel">
-		<div class="panel-heading clearfix" style="border-bottom: 0px;">
+		<div class="panel-heading clearfix">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key="edison-simulation-project-science-app"/>
 			</h3>
 		</div>
 	</div>
-	<div class="h10"></div>
 	<!--박스 나열-->
 	<div class="msbox">
 	    <ul>
 	    	<c:forEach var="scienceApp" items="${data.scienceAppList}" varStatus="status">
 	    		<c:choose>
 	    			<c:when test="${authYn eq 'Y' }">
-	    				<li class="txtnum" style="cursor: pointer; margin-bottom: 10px; ${(status.index +1) % 5 eq 0 ? 'margin-right: 0px;' : ''}" 
-	    				onclick="<portlet:namespace/>goWorkbench('${scienceApp.scienceAppId}');">
+	    				<li class="txtnum" style="cursor: pointer;" onclick="<portlet:namespace/>goWorkbench('${scienceApp.scienceAppId}');">
 	    			</c:when>
 	    			<c:otherwise>
-	    				<li class="txtnum" style="margin-bottom: 10px; ${(status.index +1) % 5 eq 0 ? 'margin-right: 0px;' : ''}">
+	    				<li class="txtnum">
 	    			</c:otherwise>
 	    		</c:choose>			        
 		        	<img src="/documents/${scienceApp.iconRepositoryId}/${scienceApp.iconId}/${scienceApp.iconTitle}/${scienceApp.iconUuid}?imageThumbnail=2" 

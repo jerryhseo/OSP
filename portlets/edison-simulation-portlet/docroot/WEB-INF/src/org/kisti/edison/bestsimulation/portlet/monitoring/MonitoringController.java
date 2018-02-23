@@ -1416,8 +1416,7 @@ public class MonitoringController {
 		try{
 			long simulationClassId = GetterUtil.getLong(param.get("simulationClassId"),0L);
 			long simulationCustomId = GetterUtil.getLong(param.get("simulationCustomId"),0L);
-			long monitoringPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-			        "edisonmonitoring_WAR_edisonsimulationportlet");
+			long monitoringPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,"edisonmonitoring_WAR_edisonsimulationportlet");
 			long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
 			model.addAttribute("simulationClassId", simulationClassId);
 			model.addAttribute("simulationCustomId", simulationCustomId);
