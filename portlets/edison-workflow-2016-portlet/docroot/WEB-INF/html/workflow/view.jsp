@@ -65,19 +65,17 @@ var contextPath = '${contextPath}';
 </h1>
 <div id="science-app" class="wf-container">
   <div class="wftitlebox001">
-    <input type="text" name="worfklow-definition-name" id="worfklow-definition-name" /> <span> <input
-      class="addIp button03" id="wf-new-button" value="<liferay-ui:message key='edison-workflow-create-new'/>"
-      type="button"> <input class="addIp button03" id="wf-save-button"
-      value="<liferay-ui:message key='edison-workflow-save'/>" type="button"> <input class="addIp button03"
-      id="wf-copy-button" value="<liferay-ui:message key='edison-workflow-copy'/>" type="button"> <input
-      class="addIp button03" id="wf-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>"
-      type="button"> <input class="addIp button03" id="wf-run-button"
-      value="<liferay-ui:message key='edison-workflow-run'/>" type="button"> <input
-      class="addIp button03" id="wf-conf-button" value="<liferay-ui:message key='edison-wf-conf-button'/>" type="button">
-      <input class="addIp button03" id="wf-list-refresh-button" value="refresh" type="button"
-      style="display: none !important;">
-    </span>
-  </div>
+    <input type="text" name="worfklow-definition-name" id="worfklow-definition-name" /> 
+   	<span style="margin-top: 0px;"> 
+   		<input class="btn btn-default" id="wf-new-button" value="<liferay-ui:message key='edison-workflow-create-new'/>" type="button"> 
+   		<input class="btn btn-default" id="wf-save-button" value="<liferay-ui:message key='edison-workflow-save'/>" type="button"> 
+		<input class="btn btn-default" id="wf-copy-button" value="<liferay-ui:message key='edison-workflow-copy'/>" type="button"> 
+		<input class="btn btn-default" id="wf-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>" type="button"> 
+		<input class="btn btn-default" id="wf-run-button" value="<liferay-ui:message key='edison-workflow-run'/>" type="button">
+		<input class="btn btn-default" id="wf-conf-button" value="<liferay-ui:message key='edison-wf-conf-button'/>" type="button"> 
+		<input class="btn btn-default" id="wf-list-refresh-button" value="refresh" type="button" style="display: none !important;">
+		</span>
+	</div>
   <div class="lefttabm">
     <ul>
       <li class="on science-app"><liferay-ui:message key="edison-workflow-science-app" /></li>
@@ -88,10 +86,14 @@ var contextPath = '${contextPath}';
   </div>
   <div class="leftwrap wrap">
     <div class="lefttreemenu science-app">
-      <div class="searchbox">
-        <input id="science-app-search" name="science-app-search" type="text" size="40" value="" autocomplete="off"
-          placeholder="<liferay-ui:message key='edison-workflow-science-app-filter'/>" /> <input type="button"
-          id="keyWordB">
+      <div class="input-group">
+		<input id="science-app-search" class="form-control" name="science-app-search" type="text" size="40" value="" autocomplete="off"
+				placeholder="<liferay-ui:message key='edison-workflow-science-app-filter'/>" /> 
+		<div class="input-group-btn">
+			<button id="keyWordB" class="btn btn-default" type="button">
+				<i class="icon-search"></i>
+			</button>
+		</div>
       </div>
       <div class="lefttreemenu1 wf-jstree" id="app-list"></div>
     </div>
