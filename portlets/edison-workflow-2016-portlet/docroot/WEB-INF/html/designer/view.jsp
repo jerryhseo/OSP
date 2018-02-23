@@ -232,9 +232,6 @@ var contextPath = '${contextPath}';
                 <span>Apps</span>
               </a>
             </li>
-            <%-- <li>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-keyboard="false" data-backdrop="static" data-whatever="@mdo">Open modal for @mdo</button>
-            </li> --%>
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
