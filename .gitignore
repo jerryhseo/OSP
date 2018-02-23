@@ -87,3 +87,5 @@ _sass_cache_*.css
 **/docroot/WEB-INF/service-classes
 **/docroot/WEB-INF/service-classes/*
 !**/docroot/WEB-INF/tld/edison-ui.tld
+
+.project
