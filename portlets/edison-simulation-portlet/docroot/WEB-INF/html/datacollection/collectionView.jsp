@@ -67,11 +67,6 @@
 	color : #00aaff;
 }
 
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
-
 </style>
 
 
@@ -176,7 +171,7 @@
 	
 	<!-- data type list -->
 	<div class="panel-heading clearfix">
-		<div class="panel-title sub-title pull-left">
+		<div class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key="edison-data-collection-select-data-type-list"/>
 		</div>
@@ -237,7 +232,7 @@
 	
 	<!-- data entry list -->
 	<div class="panel-heading clearfix">
-		<div class="panel-title sub-title pull-left">
+		<div class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			Data Entry 
 		</div>
