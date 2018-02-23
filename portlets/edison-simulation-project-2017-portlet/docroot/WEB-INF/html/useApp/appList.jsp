@@ -9,17 +9,10 @@
 	<liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
-<style>
-	.sub-title{
-		font-weight: 100 !important;
-		font-size: 18px !important;
-	}
-</style>
-
 <c:if test="${fn:length(data.scienceAppList) > 0 }">
 	<div class="panel edison-panel">
 		<div class="panel-heading clearfix" style="border-bottom: 0px;">
-			<h3 class="panel-title sub-title pull-left">
+			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key="edison-simulation-project-science-app"/>
 			</h3>

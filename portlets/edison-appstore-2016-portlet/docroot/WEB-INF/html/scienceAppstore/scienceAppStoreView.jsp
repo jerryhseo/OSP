@@ -131,11 +131,6 @@
 
 .wbba {word-break: break-all;}
 
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
-
 </style>
 
 <link href="${contextPath}/css/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
@@ -190,7 +185,7 @@
 		<form id="<portlet:namespace/>solverInfoForm" name="<portlet:namespace/>solverInfoForm" method="POST"  action="${actionUrl}" onsubmit="return <portlet:namespace/>solverInfoFormCheck()">
 			<input type="hidden" id="<portlet:namespace/>selectLocaleId" name="<portlet:namespace/>selectLocaleId" value="${solver.selectLocaleId}"/>
 			<div class="panel-heading clearfix" style="border-bottom: 0px;">
-				<h3 class="panel-title sub-title pull-left">
+				<h3 class="panel-title pull-left">
 					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
 					<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
 				</h3>

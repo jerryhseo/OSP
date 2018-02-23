@@ -291,11 +291,7 @@ function <portlet:namespace/>onKeyDown() {
 
 <style>
 	#<portlet:namespace/>virtualLab-request-button{
-		width: 100px;
-	}
-	
-	#<portlet:namespace/>searchField{
-		width: 220px;
+		width: 13%;
 	}
 </style>
 
@@ -312,14 +308,14 @@ function <portlet:namespace/>onKeyDown() {
 		<form method="post" name="searchForm" style="margin: 0px;" onsubmit="return false;">
 			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 			<div class="input-group">
-				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 20%;">
+				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 19%;">
 					<option value="0">ALL</option>
 					<option value="1401001"><liferay-ui:message key='edison-virtuallab-lab-creation-request' /></option>
 					<option value="1401002"><liferay-ui:message key='edison-simulation-job-create-success' /></option>
 					<option value="1401003"><liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' /></option>
 				</select>
 				
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);"style="width: 20%;">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);"style="width: 21%;">
 					<option value="10" <c:if test="${selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20" <c:if test="${selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30" <c:if test="${selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
@@ -330,7 +326,9 @@ function <portlet:namespace/>onKeyDown() {
 				
 				<div class="input-group-btn">
 					<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataSearchList('1');"></i></button>
-					<button class="btn btn-default" id="total_search_button" name="<portlet:namespace />total_search_button" onclick="<portlet:namespace/>dataSearchList(0);"><liferay-ui:message key='edison-button-all-search' /></button>
+					<button class="btn btn-default" id="total_search_button" name="<portlet:namespace />total_search_button" onclick="<portlet:namespace/>dataSearchList(0);">
+						Clear
+					</button>
 				</div>
 			</div>
 		</form>

@@ -12,18 +12,10 @@
   <liferay-portlet:param name="myRender" value="detailView" />
 </liferay-portlet:renderURL>
 
-<style>
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-	width: 35% !important;
-}
-</style>
-
 <c:if test="${fn:length(selectSimulationProjectList) > 0 || isMgrBtn == true}">
 	<div class="table-responsive panel edison-panel" style="margin-top: 60px;">
 		<div class="panel-heading clearfix" style="border-bottom: 0px;">
-			<h3 class="panel-title sub-title pull-left">
+			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-simulation-project-recommend-title' />			
 			</h3>

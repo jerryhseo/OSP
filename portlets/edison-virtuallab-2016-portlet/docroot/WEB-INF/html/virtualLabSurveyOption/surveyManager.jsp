@@ -8,16 +8,9 @@
 	<liferay-portlet:param name="myaction" value="updateSurveyStatus" />
 </liferay-portlet:actionURL>
 
-<style>
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
-</style>
-
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title sub-title pull-left">
+		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-survey' />
 		</h3>
