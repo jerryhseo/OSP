@@ -147,7 +147,7 @@
 						</c:when>
 						<c:otherwise>
 							<div class="contentbtnGroup">
-								<input class="addIp btn button02_2" style="width: 100px;" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button">
+								<input class="addIp btn button02_2" style="width: 115px;" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button">
 						
 								<button class="btn button02_1" style="margin: 0px 5px;" type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.UPDATE%>');">
 									<liferay-ui:message key='edison-button-board-modify'/>
@@ -263,7 +263,6 @@
 									<div class="control-group">
 										<input type="file" name="<portlet:namespace/>contentFile" id="<portlet:namespace/>contentFile"  style ="border:1px solid #CCCCCC;" />
 									</div>
-	<%-- 									<aui:input type="file" name="contentFile" cssClass="edison_file" label=""></aui:input> --%>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
@@ -377,32 +376,40 @@
 					<tr>
 						<th><liferay-ui:message key="edison-virtuallab-owner"/></th>
 						<td colspan="3">
-							<input id="<portlet:namespace/>nowOwnerName" name="<portlet:namespace/>nowOwnerName" 
-								type="text" value="${content.insertNm}" style="width: 120px;margin-bottom:0px;" readOnly/>
-							<input id="<portlet:namespace/>newOwnerName" name="<portlet:namespace/>newOwnerName" 
-								type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" 
-								style="margin-bottom:0px;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('owner', '<%=contentSeq %>'); return false;}" />
-							<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-owner-transfer' />" onClick="<portlet:namespace/>getUserInfo('owner' , '<%=contentSeq %>')"/>
+							<div class="input-group">
+								<input id="<portlet:namespace/>nowOwnerName" class="form-control" name="<portlet:namespace/>nowOwnerName" 
+									type="text" value="${content.insertNm}" style="width: 120px;margin-bottom:0px; float: " readOnly/>
+								<input id="<portlet:namespace/>newOwnerName" class="form-control" name="<portlet:namespace/>newOwnerName" 
+									type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" 
+									style="margin-bottom:0px; width: 60%; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('owner', '<%=contentSeq %>'); return false;}" />
+								<div class="input-group-btn">
+									<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-owner-transfer' />" onClick="<portlet:namespace/>getUserInfo('owner' , '<%=contentSeq %>')"/ style="width: 110px;">
+								</div>
+							</div>
 						</td>
 					</tr>	
 					<tr>
 						<th><liferay-ui:message key="edison-content-manager"/></th>
 						<td  colspan="3">
-							<%-- <div class="searchbox03">
-								<input id="<portlet:namespace/>now_MgrUserScreenName" name="<portlet:namespace/>now_MgrUserScreenName" type="hidden"/>
-								<input type="button" class="btnsearch" value="" onclick="<portlet:namespace/>getUserInfo('manager');">
-							</div> --%>
-							
-							<c:forEach var="manager" items="${contentManagerList }">
-								<input id="<portlet:namespace/>nowMgrId" name="<portlet:namespace/>nowMgrId" type="hidden" value="${manager.userId}" readonly/>
-								<input id="<portlet:namespace/>nowMgrName" name="<portlet:namespace/>nowMgrName" type="text" value="${manager.userScreenName}" style="width: 120px;margin-bottom: 0px;"  readonly />
-							</c:forEach>
-							<input id="<portlet:namespace/>newMgrName" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
-							<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-manager-transfer' />" onClick="<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>')"/>
-							
-							<c:if test="${contentManagerList!=null && fn:length(contentManagerList) > 0 }">
-								<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-delete' />" onClick="<portlet:namespace/>deleteContentMgr('<%=contentSeq%>')"/>
-							</c:if>
+							<div class="input-group">
+								<c:forEach var="manager" items="${contentManagerList }">
+									<input id="<portlet:namespace/>nowMgrId" name="<portlet:namespace/>nowMgrId" type="hidden" value="${manager.userId}" readonly/>
+									<input id="<portlet:namespace/>nowMgrName" name="<portlet:namespace/>nowMgrName" type="text" value="${manager.userScreenName}" style="width: 120px;margin-bottom: 0px;" class="form-control"  readonly />
+								</c:forEach>
+								<c:if test="${fn:length(contentManagerList) > 0}">
+									<input id="<portlet:namespace/>newMgrName"  class="form-control" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px; width: 60%; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
+								</c:if>
+								<c:if test="${fn:length(contentManagerList) <=0}">
+									<input id="<portlet:namespace/>newMgrName"  class="form-control" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
+								</c:if>
+								<div class="input-group-btn">
+									<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-manager-transfer' />" onClick="<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>')" style="width: 130px;"/>
+									
+									<c:if test="${contentManagerList!=null && fn:length(contentManagerList) > 0 }">
+										<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-delete' />" onClick="<portlet:namespace/>deleteContentMgr('<%=contentSeq%>')" style="width: 96px;"/>
+									</c:if>
+								</div>
+							</div>
 						</td>
 					</tr>	
 				</c:if>

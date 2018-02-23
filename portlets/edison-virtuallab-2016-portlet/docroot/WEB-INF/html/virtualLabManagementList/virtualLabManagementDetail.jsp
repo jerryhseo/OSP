@@ -3,6 +3,16 @@
 <%@ include file="/common/init.jsp"%>
 
 <head>
+
+<style>
+	.virtual-lab-qna{
+		width: 100%;
+	}
+	.virtual-lab-qna .conwrap2right{
+		width: 100%;
+	}
+</style>
+
 </head>
 <body>
 	<div class="columns-1-2-1" id="main-content" role="main" style="width: 1200px; margin: 0 auto;">
@@ -44,7 +54,7 @@
 			    </div>
 			    <!-- 강좌 내 강의들의 질문답변 전체 출력 -->
 			    <div class="portlet-layout row-fluid">
-			        <div class="portlet-column portlet-column-last span6" id="column-5">
+			        <div class="portlet-column portlet-column-last span6 virtual-lab-qna" id="column-5">
 			            <liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_HRmNo2UFaZ1Z"  queryString="&customId=class_${classId}&boardGroupId=${groupId}&redirectName=${classTitle}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }&virtualLabId=${virtualLabId}&isVirtualClass=true" />
 			        </div>
 			    </div>

@@ -636,7 +636,6 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 							<td class="input-group" style="display: table-cell;">
 								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; float: left;"/>
 								<div class="input-group-btn">
-									<%-- <input id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" class="btn btn-default"  type="button" onClick="<portlet:namespace/>getUserInfo()" value="<liferay-ui:message key='edison-button-search' />"/> --%>
 									<button class="btn btn-default" id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" onClick="<portlet:namespace/>getUserInfo()">
 										<liferay-ui:message key='edison-button-search' />
 									</button>
