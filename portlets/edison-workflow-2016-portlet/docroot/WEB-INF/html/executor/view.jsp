@@ -387,14 +387,10 @@ $.widget.bridge('uibutton', $.ui.button);
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
-        placeholder="Title" value="{{form.title}}" required>
+      <label for="subtitle" >Simulation Title</label>
+      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" 
+        placeholder="Simulation Title" value="{{form.subtitle}}" required>
       <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea class="form-control data-binded" rows="5" id="description" name="description">{{form.description}}</textarea>
     </div>
   </div>
   <div class="box-footer">
@@ -403,41 +399,20 @@ $.widget.bridge('uibutton', $.ui.button);
 </form>
 </script>
 
-<script id="tpl-menu-panel-save" type="text/html">
-<form class="form-horizontal" onsubmit="return false;">
-  <div class="box-body">
-    <div class="form-group">
-      <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
-        placeholder="Title" value="{{form.title}}" required>
-      <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea class="form-control data-binded" rows="5" id="description" name="description">{{form.description}}</textarea>
-    </div>
-  </div>
-  <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat pull-right func" name="save">Save</button>
-  </div>
-</form>
-</script>
-
 <script id="tpl-menu-panel-setting" type="text/html">
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="title">Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}">
+      <label for="title">Simulation Title</label>
+      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" placeholder="Simulation Title" value="{{form.subtitle}}">
+    </div>
+    <div class="form-group">
+      <label for="title">Workflow Title</label>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" readonly>
     </div>
     <div class="form-group">
       <label for="description" >Description</label>
-      <textarea class="form-control data-binded" rows="5" name="description" id="description">{{form.description}}</textarea>
-    </div>
-    <div class="form-group"></div>
-    <div class="form-group">
-      <label for="description">Export as App</label>
-      <button type="button" class="btn btn-info btn-flat pull-right func" name="exportWorkflow">Export</button>
+      <textarea class="form-control data-binded" rows="5" name="description" id="description" readonly>{{form.description}}</textarea>
     </div>
   </div>
   <div class="box-footer">
@@ -491,7 +466,7 @@ $(document).ready(function(){
   var selectable = new Selectable(namespace, $, designer);
   */
 
-  designer.loadWorkflowDefinition(workflowId);
+  uiPanel.openWorkflow(workflowId);
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
