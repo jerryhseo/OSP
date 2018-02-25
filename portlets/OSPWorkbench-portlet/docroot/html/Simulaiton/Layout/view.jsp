@@ -521,12 +521,15 @@ function <portlet:namespace/>displayInit(){
 		var eventData = {
 				targetPortlet: 'BROADCAST',
 				data : {
-					simulationUuid : ''
+					simulationUuid : '',
+					searchJobUuid : '${jobUuid}'
 				}
 			};
 			
 		// Dashboard Portlet
 		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
+		
+		
 		//iframe resize
 		if(<portlet:namespace/>workbench.isFlowLayout()){
 			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;

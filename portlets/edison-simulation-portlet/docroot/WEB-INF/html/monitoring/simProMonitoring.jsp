@@ -5,13 +5,6 @@
 
 <liferay-portlet:resourceURL var="getSimulationMonitoringJobListURL" id="getSimulationMonitoringJobList" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
-	<liferay-portlet:param name="workbenchType" value="APPRERUN"/>
-	<liferay-portlet:param name="classId" value="${simulationClassId}"/>
-	<liferay-portlet:param name="customId" value="${simulationCustomId}"/>	
-	<liferay-portlet:param name="testYn" value="false"/>
-</liferay-portlet:renderURL>
-
 <div class="commrighttxt" style="margin: 0px; padding-left: 10px;">
 	<ul id="<portlet:namespace/>monitoringList">
 	</ul>
@@ -111,6 +104,7 @@ function <portlet:namespace/>getSimulationMonitoringJobList(p_curPage){
 				$("#<portlet:namespace/>preNextBtn").css("display", "none");
 			}
 			
+			/*
 			$("<li/>").css("text-align", "center")
 			  .append($("<input/>").attr("type","button")
 		    		  			   .attr("onclick", "<portlet:namespace/>goMonitoring('${simulationClassId}', '${simulationCustomId}');")
@@ -118,6 +112,7 @@ function <portlet:namespace/>getSimulationMonitoringJobList(p_curPage){
 		    		  			   .val("View All")
 		    	)
     		  .appendTo("#<portlet:namespace/>monitoringList");
+		    */
 		},error:function(data,e){
 			alert("getSimulationMonitoringJobList ERROR-->"+e);
 		}
@@ -125,11 +120,22 @@ function <portlet:namespace/>getSimulationMonitoringJobList(p_curPage){
 }
 
 function <portlet:namespace/>goWorkbench(targetScienceAppId, jobUuid){
-	var URL = "<%=workbenchURL%>";
-	var workbenchNameSpace = "_Workbench_WAR_OSPWorkbenchportlet_";
-	URL += "&"+workbenchNameSpace+"scienceAppId="+targetScienceAppId+"&"+workbenchNameSpace+"jobUuid="+jobUuid;
-	
- 	location.href= URL;
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
+		portletURL.setPlid("${workBenchPlid}");
+		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
+// 		portletURL.setParameter("classId", "${simulationClassId}");
+// 		portletURL.setParameter("customId", "${simulationCustomId}");
+		portletURL.setParameter("scienceAppId", targetScienceAppId);
+		portletURL.setParameter("jobUuid", jobUuid);
+		
+		portletURL.setParameter("redirectName", "My Project");
+		portletURL.setParameter("redirectURL", "${redirectURL}");
+		window.location.href = portletURL;
+	});
 }
 
 </script>
