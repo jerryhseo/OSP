@@ -1,14 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
-	<liferay-portlet:param name="workbenchType" value="APPSTORE"/>
-	<liferay-portlet:param name="classId" value="${classId}"/>
-	<liferay-portlet:param name="customId" value="${simulationProjectId}"/>
-	<liferay-portlet:param name="jobUuid" value="0"/>
-	<liferay-portlet:param name="testYn" value="false"/>
-</liferay-portlet:renderURL>
-
 <c:if test="${fn:length(data.scienceAppList) > 0 }">
 	<div class="panel edison-panel">
 		<div class="panel-heading clearfix">
@@ -45,10 +37,21 @@
 <script type="text/javascript">
 
 function <portlet:namespace/>goWorkbench(targetScienceAppId){
-	var URL = "<%=workbenchURL%>";
-	URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-	
- 	location.href= URL;
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
+		portletURL.setPlid("${workBenchPlid}");
+		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
+		portletURL.setParameter("classId", "${classId}");
+		portletURL.setParameter("customId", "${simulationProjectId}");
+		portletURL.setParameter("scienceAppId", targetScienceAppId);
+		
+		portletURL.setParameter("redirectName", "My Project");
+		portletURL.setParameter("redirectURL", "${redirectURL}");
+		window.location.href = portletURL;
+	});
 }
 
 </script>

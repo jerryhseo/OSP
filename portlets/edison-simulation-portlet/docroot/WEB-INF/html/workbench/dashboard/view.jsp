@@ -252,12 +252,17 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 			console.log(searchData);
 			if(searchData!=null){
 				$targetUL = $("#<portlet:namespace/>sidebar-menu");
-				$topLi = $("<li/>").addClass("treeview ").appendTo($targetUL);
+				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).appendTo($targetUL);
 				$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",searchData._simulationUuid)
 							.attr("data-job-uuid",searchData._jobUuid)
-							.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
+							.attr("onclick","<portlet:namespace/>jobSelect(this)")
+							.appendTo($topLi);
 				$("<i/>").addClass("fa fa-lg icon-search").appendTo($aWrapper);
 				$("<span/>").attr("id","jobTitle").html("  "+cutStr(searchData._jobTitle,15)).appendTo($aWrapper);
+				$("<i/>").addClass("fa fa-lg pull-right icon-info-sign sidebar-btn").css("cursor","pointer")
+				 .attr("data-btn-type","search-job-info")
+				 .attr("data-job-uuid",searchData._jobUuid)
+				 .appendTo($aWrapper);
 			}
 			
 			var length = result.simulaitons.length;
@@ -971,7 +976,13 @@ function <portlet:namespace/>init(){
 			
 			if(templateData["script-search"]){
 				if(btnType=="search-job-info"){
-					var jobUuid = $(this).siblings("a").attr("data-job-uuid");
+					var jobUuid = 0;
+					if(typeof $(this).attr("data-job-uuid")=="undefined"){
+						jobUuid = $(this).siblings("a").attr("data-job-uuid");
+					}else{
+						jobUuid = $(this).attr("data-job-uuid")
+					}
+					
 					templateData.form = templateData["script-search"](jobUuid);
 				}
 				$("#" + <portlet:namespace/>parentNamespace + "menu-panel-box .box-body").mustache(templateData["body"], templateData);

@@ -23,6 +23,7 @@ import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
@@ -253,7 +254,6 @@ public class DashboardController {
 			if(simulation.getUserId()==themeDisplay.getUserId()){
 				obj.addProperty("isEdit", true);
 			}
-			
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
