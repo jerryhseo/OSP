@@ -149,7 +149,7 @@
 			<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
 			<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
 			
-			<div class="tabletopbox">
+			<div class="tabletopbox" style="width: inherit;">
 				<div class="search" style="width: 34%;">
 					<div class="input-group">
 						<aui:input name="searchValue" class="textfieldcss" cssClass="form-control" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
@@ -185,7 +185,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="tabletopright">
+				<div style="float: right;">
 					<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
 						<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
 						<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
