@@ -374,7 +374,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			}
 			
 			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
-			System.out.println("TEST-->"+gBatisQuery);
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			query.addScalar("totalCnt", Type.INTEGER);
 			
