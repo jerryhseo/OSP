@@ -171,9 +171,16 @@ function <portlet:namespace/>openSurvey(){
 						}
 					}
 				},
-			id: "surveyDialog",
-			uri: portletURL.toString(),
-			title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+				id: "surveyDialog",
+				uri: portletURL.toString(),
+				title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+				dialogIframe: {
+					on: {
+						load : function(evt) {
+							$(".modal-body").css('overflow-y','hidden');
+						}
+					}
+				}
 			}
 		);
 		
