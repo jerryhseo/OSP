@@ -25,6 +25,32 @@ This file allows you to override and define new Velocity variables.
 		
 #end
 
+#set ($site_home_url = $themeDisplay.getPortalURL()+"/web"+$page_group.getFriendlyURL())
+#if($themeDisplay.getSiteGroup().getPublicLayoutSet().getVirtualHostname()==$request.getServerName())
+	#if($themeDisplay.isSecure())
+		#set ($site_main_url ="https://"+$themeDisplay.getSiteGroup().getPublicLayoutSet().getVirtualHostname())
+	#else
+		#set ($site_main_url ="http://"+$themeDisplay.getSiteGroup().getPublicLayoutSet().getVirtualHostname())
+	#end
+	
+	#if($request.getServerPort()!="")
+		#set ($site_main_url =$site_main_url+":"+$request.getServerPort())
+	#end
+	
+	#if (!$is_signed_in)
+		#set($edisonLoginURL=$themeDisplay.getURLSignIn())
+		#set($edisonLoginURL=$httpUtil.addParameter($edisonLoginURL,"redirect",$layout.getFriendlyURL()))
+	#end
+#else
+	#if (!$is_signed_in)
+		#set($edisonLoginURL=$themeDisplay.getURLSignIn())
+		#set($edisonLoginParameter="/web"+$layout.getGroup().getFriendlyURL().concat($layout.getFriendlyURL()))
+		#set($edisonLoginURL=$httpUtil.addParameter($edisonLoginURL,"redirect",$edisonLoginParameter))
+	#end
+
+	#set ($site_main_url=$site_home_url)
+#end
+
 
 #set($groupLocalService= $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
 #set($parentGroupId = $themeDisplay.getScopeGroup().getParentGroupId())
@@ -52,3 +78,9 @@ This file allows you to override and define new Velocity variables.
 
 #set($privateInfoURL=$company_url+"/-/privateinfopolicy/view")
 #set($termOfUseURL=$company_url+"/-/termsofuse/view")
+
+#set($isBreadcrumb = $getterUtil.getBoolean($themeDisplay.getLayout().getExpandoBridge().getAttribute("IS_SHOW_BREADCRUMB"),false))
+
+#set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
+#set($searchPlid = $layoutService.getFriendlyURLLayout($themeDisplay.getScopeGroupId(), false, "/search").getPlid())
+#set($searchURL = $portletURLFactory.create($request,"edisonsearch_WAR_edisonsearch2017portlet",$searchPlid,"RENDER_PHASE"))

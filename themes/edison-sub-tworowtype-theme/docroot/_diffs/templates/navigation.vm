@@ -18,10 +18,10 @@
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-			<img alt="$logo_description" height="62px" src="$site_logo" width="$site_logo_width" usemap="#Map"/>
+			<img alt="$logo_description" width="267px" height="49px" src="$site_logo" width="$site_logo_width" usemap="#Map"/>
 			<map name="Map" id="Map">
-				<area shape="rect" coords="0,0,140,80" href="$company_url" onfocus="blur();" alt="#language("go-to") EDISON" title="#language("go-to") EDISON"/>
-				<area shape="rect" coords="141,0,210,80" href="$site_main_url" onfocus="blur();" alt="#language("go-to") #language($theme.getSetting("content-title"))" title="#language("go-to") #language($theme.getSetting("content-title"))"/>
+				<area shape="rect" coords="0,0,130,80" href="$company_url" onfocus="blur();" alt="#language("go-to") EDISON" title="#language("go-to") EDISON"/>
+				<area shape="rect" coords="131,0,267,80" href="$site_main_url" onfocus="blur();" alt="#language("go-to") #language($theme.getSetting("content-title"))" title="#language("go-to") #language($theme.getSetting("content-title"))"/>
 			</map>
 		</a>
 	</div>
