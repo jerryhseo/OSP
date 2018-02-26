@@ -251,11 +251,12 @@ public interface FileManagementLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	/**
-	* Public APIs Section
-	*
-	* @throws SystemException
-	* @throws PortalException
+	* Deprecated.
+	*  Link a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
 	*/
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getLinkedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest, java.lang.String target,
@@ -265,6 +266,31 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Link a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getLinkedTemporaryFilePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String prefix, java.lang.String suffix, boolean deleteOnExit,
+		java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	/**
+	* Deprecated.
+	*
+	* Copy a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*/
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getCopiedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest, java.lang.String target,
@@ -273,6 +299,21 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Copy a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getCopiedTemporaryFilePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String prefix, java.lang.String suffix,
+		java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.kernel.json.JSONArray getFolderInformation(
 		javax.portlet.PortletRequest portletRequest,
@@ -282,6 +323,27 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* List file information in a folder and return JSONArray.
+	*  [
+	*      {
+	*          name:String [file name],
+	*         size: String [file size],
+	*         isFile:boolean [ file or not ]
+	*      },
+	*      ......
+	*  ]
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.kernel.json.JSONArray getFolderInformation(
+		javax.portlet.PortletRequest portletRequest,
+		java.lang.String folderPath, java.lang.String filter,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.kernel.json.JSONObject getFileInformation(
 		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
@@ -290,28 +352,91 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
-	public java.nio.file.Path createFile(java.lang.String target)
-		throws java.io.IOException;
+	/**
+	* Returns information of a specified file and return JSONObject.
+	*  {
+	*      name:String [file name],
+	*     size: String [file size],
+	*     isFile:boolean [ file or not ]
+	*  }
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.kernel.json.JSONObject getFileInformation(
+		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public java.nio.file.Path createFile(java.lang.String target,
-		boolean overwrite) throws java.io.IOException;
+	public java.nio.file.Path createFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public void deleteFile(java.lang.String fileName)
-		throws java.io.IOException;
+	public void deleteFile(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public java.nio.file.Path moveFile(java.lang.String srcPath,
-		java.lang.String targetPath) throws java.io.IOException;
+	public java.lang.String moveFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public java.nio.file.Path moveFile(java.lang.String srcPath,
-		java.lang.String targetPath, boolean overwrite)
-		throws java.io.IOException;
+	public java.lang.String copyFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public java.nio.file.Path copyFile(java.lang.String srcPath,
-		java.lang.String targetPath) throws java.io.IOException;
+	/**
+	* Copy an dlentry to the target file
+	*
+	* @throws IOException
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public java.lang.String copyDLEntryFile(
+		javax.portlet.PortletRequest portletRequest, long srcDLEntryId,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
-	public java.nio.file.Path copyFile(java.lang.String source,
-		java.lang.String target, boolean overwrite) throws java.io.IOException;
+	/**
+	* Change owner of a file
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public void changeFileOwner(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String owner,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* Change mode of a file
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public void changeFileMode(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String mode,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@java.lang.Deprecated
 	public void duplicated(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String filePath, boolean isJobResult)
@@ -319,6 +444,25 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Check a file is exist or not.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param filePath
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void duplicated(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String filePath, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void upload(javax.portlet.PortletRequest portletRequest,
 		java.lang.String target, java.lang.String uploadFileName,
 		boolean isJobResult)
@@ -326,16 +470,64 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Upload a file from session request as the target.
+	*
+	* @param portletRequest
+	* @param target
+	* @param uploadFileName
+	* @param repositoryType
+	* @throws SystemException
+	* @throws PortalException
+	* @throws IOException
+	*/
+	public void upload(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String uploadFileName,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Download a DLEntry file.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param dlFileEntryId
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void downloadDLEntry(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String targetFolder, java.lang.String[] files,
 		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	/**
+	* Download a file or files.
+	* If count of the files is larger than 1, the files zipped as an file.
+	*/
+	public void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String targetFolder, java.lang.String[] files,
+		java.lang.String repositoryType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
@@ -347,6 +539,7 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	@java.lang.Deprecated
 	public void checkValidFile(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String filePath, boolean isJobResult)
@@ -354,6 +547,25 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Check a file is regular file or not.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void checkValidFile(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void readFileContent(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String filePath, boolean isJobResult)
@@ -361,6 +573,25 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Read a file content as a character stream.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void readFileContent(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public void getFile(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -369,6 +600,25 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Download a file.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void downloadFile(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void readFileContent(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String contentType, java.lang.String filePath,
@@ -377,6 +627,27 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Read a file content with the specified content type.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param contentType
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void readFileContent(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String contentType, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void readFirstFileContent(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -386,6 +657,51 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Read file content or the first file in a folder.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param filter
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void readFirstFileContent(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String filter, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
+	public byte[] readFileContent(javax.portlet.PortletRequest portletRequest,
+		java.lang.String filePath, boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	/**
+	* Read a file content
+	*
+	* @param portletRequest
+	* @param target
+	* @param repositoryType
+	* @return byte[] file content
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public byte[] readFileContent(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public void getFirstFileName(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -395,17 +711,47 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	/**
+	* Gets the file name of a path or the first file name of a folder.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param filter
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public void getFirstFileName(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String filter, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public void saveFileContent(javax.portlet.PortletRequest portletRequest,
 		java.lang.String filePath, java.lang.String content, boolean isJobResult)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
-	public com.liferay.portal.kernel.json.JSONObject saveInputFile(
-		javax.portlet.PortletRequest portletRequest,
-		java.lang.String scienceAppName, java.lang.String scienceAppVersion,
-		java.lang.String simulationTime, java.lang.String jobNumber,
-		java.lang.String fileName, java.lang.String content)
+	/**
+	* Save the specified content to a file.
+	*
+	* @param portletRequest
+	* @param target
+	* @param content
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public void saveFileContent(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String content,
+		java.lang.String repositoryType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
@@ -423,6 +769,7 @@ public interface FileManagementLocalService extends BaseLocalService,
 		com.liferay.portal.kernel.json.JSONObject data)
 		throws java.io.IOException;
 
+	@java.lang.Deprecated
 	public java.util.Map<java.lang.String, java.lang.Object> readOutLogFile(
 		javax.portlet.PortletRequest portletRequest,
 		java.lang.String simulationUuid, java.lang.String jobUuid,
@@ -431,13 +778,26 @@ public interface FileManagementLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	public com.liferay.portal.kernel.json.JSONObject readFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		long startPosition, long size, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@java.lang.Deprecated
 	public java.lang.String readTextFile(java.nio.file.Path path)
 		throws java.io.IOException;
 
+	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getAbolutePath(
 		javax.portlet.PortletRequest portletRequest, java.lang.String path,
 		boolean isJobResult)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getJobResultPath(java.lang.String simulationUuid,
+		java.lang.String jobUuid, java.lang.String path);
 }

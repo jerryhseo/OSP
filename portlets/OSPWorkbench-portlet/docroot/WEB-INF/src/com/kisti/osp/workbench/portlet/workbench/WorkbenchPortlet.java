@@ -3,7 +3,6 @@ package com.kisti.osp.workbench.portlet.workbench;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,11 +24,6 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.exec.DefaultExecuteResultHandler;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
-import org.apache.commons.exec.ExecuteStreamHandler;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.kisti.edison.bestsimulation.NoSuchSimulationException;
 import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 import org.kisti.edison.bestsimulation.model.Simulation;
@@ -73,7 +67,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-import freemarker.core.CommandLine;
 import freemarker.template.Configuration;
 import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
@@ -84,24 +77,13 @@ import freemarker.template.TemplateExceptionHandler;
  * Portlet implementation class WorkbenchPortlet
  */
 public class WorkbenchPortlet extends MVCPortlet {
-	private static final String _templateDir = "/html/Workbench/templates/";
-	private static final String DEFAULT_WORKBENCH_LAYOUT_TEMPLATE="DefaultWorkbenchTemplate";
 	private static Log _log = LogFactoryUtil.getLog(WorkbenchPortlet.class);
 
-	private static Pattern _columnIdPattern = Pattern.compile(
-		"([<].*?id=[\"'])([^ ]*?)([\"'].*?[>])", Pattern.DOTALL);
-	private static Pattern _processColumnPattern = Pattern.compile(
-		"(processColumn[(]\")(.*?)(\"(?:, *\"(?:.*?)\")?[)])", Pattern.DOTALL);
-	
-	private static final String _SYSTEM_BASE_DIR = "/EDISON/LDAP/DATA";
-	private static final String _SOLVER_BASE_DIR = "/EDISON/SOLVERS";
 	private static final String _DEFAULT_CLUSTER = "EDISON-CFD";
 	private static final String _DEFAULT_CYBERLAP_ID = " ";
 	private static final String _DEFAULT_CLASS_ID = " ";
 	private static final String _DEFAULT_JOB_TITLE = "job";
 	private static final String _DEFAULT_JOB_DESCRIPTION = " ";
-	
-	private static final String _DEFAULT_TEMP_DIR="/EDISON/LDAP/TEMP";
 	
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
@@ -185,6 +167,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		System.out.println("ServeResource Command: "+command);
 		String action = ParamUtil.getString(resourceRequest, "action", "input");
 		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType");
 		
 		if( command.equalsIgnoreCase("RESOLVE_TEMPLATE")){
 			this.resolveLayoutTemplate(resourceRequest, resourceResponse);
@@ -232,7 +215,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 			String target = ParamUtil.getString(resourceRequest, "target");
 
 			try {
-				FileManagementLocalServiceUtil.duplicated( resourceRequest, resourceResponse, target, isJobResult);
+				//FileManagementLocalServiceUtil.duplicated( resourceRequest, resourceResponse, target, isJobResult);
+				FileManagementLocalServiceUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
 				_log.error("Duplicated check error: "+ target);
 				throw new PortletException();
@@ -304,31 +288,9 @@ public class WorkbenchPortlet extends MVCPortlet {
 			return "";
 		}
 		
-		Path tempPath = Paths.get(_DEFAULT_TEMP_DIR).resolve( String.valueOf(dlEntryId) );// Data should be inserted by SystemPropertyService.
-		FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
-		if( !Files.exists(tempPath) ){
-			InputStream stream = null;
-			try {
-				stream = fileEntry.getContentStream();
-				if( Validator.isNotNull(stream) )
-					Files.copy(stream, tempPath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (PortalException | SystemException e1) {
-				_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
-				throw new PortletException();
-			} finally{
-				if( Validator.isNotNull(stream) ){
-					stream.close();
-				}
-			}
-		}
-		
-		if( Validator.isNull(fileName)){
-			fileName = fileEntry.getTitle(); 
-		}
-		
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
-		String fileId = ibAgent.uploadFile( tempPath, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
+		String fileId = ibAgent.uploadFile( dlEntryId, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
 		
 		return fileId;
 	}
@@ -1595,21 +1557,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		System.out.println("Callback: "+url);
 		return url;
 	}
-	
-	private DefaultExecuteResultHandler execute(CommandLine cmdLine, Map<String, String> environment, OutputStream outStream,
-            OutputStream errorStream) throws ExecuteException, IOException {
-        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
-        ExecuteStreamHandler streamHandler = new PumpStreamHandler(outStream, errorStream);
-        DefaultExecutor executor = new DefaultExecutor();
-        executor.setExitValue(0);
-        executor.setStreamHandler(streamHandler);
-        if (environment != null) {
-            executor.execute(cmdLine, environment, resultHandler);
-        } else {
-            executor.execute(cmdLine, resultHandler);
-        }
-        return resultHandler;
-    }
 	
 	private void upload( 
 			PortletRequest portletRequest, 

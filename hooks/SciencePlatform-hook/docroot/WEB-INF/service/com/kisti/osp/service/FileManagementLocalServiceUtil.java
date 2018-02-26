@@ -275,10 +275,10 @@ public class FileManagementLocalServiceUtil {
 	}
 
 	/**
-	* Public APIs Section
-	*
-	* @throws SystemException
-	* @throws PortalException
+	* Deprecated.
+	*  Link a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
 	*/
 	public static java.lang.String getLinkedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest, java.lang.String target,
@@ -292,6 +292,33 @@ public class FileManagementLocalServiceUtil {
 			suffix, deleteOnExit, isJobResult);
 	}
 
+	/**
+	* Link a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static java.lang.String getLinkedTemporaryFilePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String prefix, java.lang.String suffix, boolean deleteOnExit,
+		java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .getLinkedTemporaryFilePath(portletRequest, source, prefix,
+			suffix, deleteOnExit, repoType);
+	}
+
+	/**
+	* Deprecated.
+	*
+	* Copy a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*/
 	public static java.lang.String getCopiedTemporaryFilePath(
 		javax.portlet.PortletRequest portletRequest, java.lang.String target,
 		java.lang.String prefix, java.lang.String suffix, boolean isJobResult)
@@ -301,6 +328,23 @@ public class FileManagementLocalServiceUtil {
 		return getService()
 				   .getCopiedTemporaryFilePath(portletRequest, target, prefix,
 			suffix, isJobResult);
+	}
+
+	/**
+	* Copy a file or a folder to servlet container template folder based on
+	*  of the servlet context path.
+	*  Returns the template path based on of the servlet context path.
+	*/
+	public static java.lang.String getCopiedTemporaryFilePath(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String prefix, java.lang.String suffix,
+		java.lang.String repoType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .getCopiedTemporaryFilePath(portletRequest, source, prefix,
+			suffix, repoType);
 	}
 
 	public static com.liferay.portal.kernel.json.JSONArray getFolderInformation(
@@ -315,6 +359,29 @@ public class FileManagementLocalServiceUtil {
 			isJobResult);
 	}
 
+	/**
+	* List file information in a folder and return JSONArray.
+	*  [
+	*      {
+	*          name:String [file name],
+	*         size: String [file size],
+	*         isFile:boolean [ file or not ]
+	*      },
+	*      ......
+	*  ]
+	*/
+	public static com.liferay.portal.kernel.json.JSONArray getFolderInformation(
+		javax.portlet.PortletRequest portletRequest,
+		java.lang.String folderPath, java.lang.String filter,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .getFolderInformation(portletRequest, folderPath, filter,
+			repositoryType);
+	}
+
 	public static com.liferay.portal.kernel.json.JSONObject getFileInformation(
 		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
 		boolean isJobResult)
@@ -325,40 +392,111 @@ public class FileManagementLocalServiceUtil {
 				   .getFileInformation(portletRequest, filePath, isJobResult);
 	}
 
-	public static java.nio.file.Path createFile(java.lang.String target)
-		throws java.io.IOException {
-		return getService().createFile(target);
+	/**
+	* Returns information of a specified file and return JSONObject.
+	*  {
+	*      name:String [file name],
+	*     size: String [file size],
+	*     isFile:boolean [ file or not ]
+	*  }
+	*/
+	public static com.liferay.portal.kernel.json.JSONObject getFileInformation(
+		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .getFileInformation(portletRequest, filePath, repositoryType);
 	}
 
-	public static java.nio.file.Path createFile(java.lang.String target,
-		boolean overwrite) throws java.io.IOException {
-		return getService().createFile(target, overwrite);
+	public static java.nio.file.Path createFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService().createFile(portletRequest, target, repositoryType);
 	}
 
-	public static void deleteFile(java.lang.String fileName)
-		throws java.io.IOException {
-		getService().deleteFile(fileName);
+	public static void deleteFile(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService().deleteFile(portletRequest, target, repositoryType);
 	}
 
-	public static java.nio.file.Path moveFile(java.lang.String srcPath,
-		java.lang.String targetPath) throws java.io.IOException {
-		return getService().moveFile(srcPath, targetPath);
+	public static java.lang.String moveFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .moveFile(portletRequest, source, target, overwrite,
+			repositoryType);
 	}
 
-	public static java.nio.file.Path moveFile(java.lang.String srcPath,
-		java.lang.String targetPath, boolean overwrite)
-		throws java.io.IOException {
-		return getService().moveFile(srcPath, targetPath, overwrite);
+	public static java.lang.String copyFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String source,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .copyFile(portletRequest, source, target, overwrite,
+			repositoryType);
 	}
 
-	public static java.nio.file.Path copyFile(java.lang.String srcPath,
-		java.lang.String targetPath) throws java.io.IOException {
-		return getService().copyFile(srcPath, targetPath);
+	/**
+	* Copy an dlentry to the target file
+	*
+	* @throws IOException
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static java.lang.String copyDLEntryFile(
+		javax.portlet.PortletRequest portletRequest, long srcDLEntryId,
+		java.lang.String target, boolean overwrite,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .copyDLEntryFile(portletRequest, srcDLEntryId, target,
+			overwrite, repositoryType);
 	}
 
-	public static java.nio.file.Path copyFile(java.lang.String source,
-		java.lang.String target, boolean overwrite) throws java.io.IOException {
-		return getService().copyFile(source, target, overwrite);
+	/**
+	* Change owner of a file
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static void changeFileOwner(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String owner, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.changeFileOwner(portletRequest, target, owner, repositoryType);
+	}
+
+	/**
+	* Change mode of a file
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static void changeFileMode(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String mode, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().changeFileMode(portletRequest, target, mode, repositoryType);
 	}
 
 	public static void duplicated(javax.portlet.PortletRequest portletRequest,
@@ -371,6 +509,28 @@ public class FileManagementLocalServiceUtil {
 			.duplicated(portletRequest, portletResponse, filePath, isJobResult);
 	}
 
+	/**
+	* Check a file is exist or not.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param filePath
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void duplicated(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String filePath, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.duplicated(portletRequest, portletResponse, filePath,
+			repositoryType);
+	}
+
 	public static void upload(javax.portlet.PortletRequest portletRequest,
 		java.lang.String target, java.lang.String uploadFileName,
 		boolean isJobResult)
@@ -380,12 +540,53 @@ public class FileManagementLocalServiceUtil {
 		getService().upload(portletRequest, target, uploadFileName, isJobResult);
 	}
 
+	/**
+	* Upload a file from session request as the target.
+	*
+	* @param portletRequest
+	* @param target
+	* @param uploadFileName
+	* @param repositoryType
+	* @throws SystemException
+	* @throws PortalException
+	* @throws IOException
+	*/
+	public static void upload(javax.portlet.PortletRequest portletRequest,
+		java.lang.String target, java.lang.String uploadFileName,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.upload(portletRequest, target, uploadFileName, repositoryType);
+	}
+
 	public static void download(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		getService().download(portletRequest, portletResponse, dlFileEntryId);
+	}
+
+	/**
+	* Download a DLEntry file.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param dlFileEntryId
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void downloadDLEntry(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, long dlFileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.downloadDLEntry(portletRequest, portletResponse, dlFileEntryId);
 	}
 
 	public static void download(javax.portlet.PortletRequest portletRequest,
@@ -398,6 +599,22 @@ public class FileManagementLocalServiceUtil {
 		getService()
 			.download(portletRequest, portletResponse, targetFolder, files,
 			isJobResult);
+	}
+
+	/**
+	* Download a file or files.
+	* If count of the files is larger than 1, the files zipped as an file.
+	*/
+	public static void download(javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String targetFolder, java.lang.String[] files,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.download(portletRequest, portletResponse, targetFolder, files,
+			repositoryType);
 	}
 
 	public static void downloadFromText(
@@ -424,6 +641,29 @@ public class FileManagementLocalServiceUtil {
 			isJobResult);
 	}
 
+	/**
+	* Check a file is regular file or not.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void checkValidFile(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.checkValidFile(portletRequest, portletResponse, target,
+			repositoryType);
+	}
+
 	public static void readFileContent(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -436,6 +676,29 @@ public class FileManagementLocalServiceUtil {
 			isJobResult);
 	}
 
+	/**
+	* Read a file content as a character stream.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void readFileContent(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.readFileContent(portletRequest, portletResponse, target,
+			repositoryType);
+	}
+
 	public static void getFile(javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
 		java.lang.String filePath, boolean isJobResult)
@@ -444,6 +707,29 @@ public class FileManagementLocalServiceUtil {
 			java.io.IOException {
 		getService()
 			.getFile(portletRequest, portletResponse, filePath, isJobResult);
+	}
+
+	/**
+	* Download a file.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void downloadFile(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.downloadFile(portletRequest, portletResponse, target,
+			repositoryType);
 	}
 
 	public static void readFileContent(
@@ -459,6 +745,31 @@ public class FileManagementLocalServiceUtil {
 			filePath, isJobResult);
 	}
 
+	/**
+	* Read a file content with the specified content type.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param contentType
+	* @param target
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void readFileContent(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse,
+		java.lang.String contentType, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.readFileContent(portletRequest, portletResponse, contentType,
+			target, repositoryType);
+	}
+
 	public static void readFirstFileContent(
 		javax.portlet.PortletRequest portletRequest,
 		javax.portlet.PortletResponse portletResponse,
@@ -470,6 +781,61 @@ public class FileManagementLocalServiceUtil {
 		getService()
 			.readFirstFileContent(portletRequest, portletResponse, parentPath,
 			filter, isJobResult);
+	}
+
+	/**
+	* Read file content or the first file in a folder.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param filter
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void readFirstFileContent(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String filter, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.readFirstFileContent(portletRequest, portletResponse, target,
+			filter, repositoryType);
+	}
+
+	public static byte[] readFileContent(
+		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
+		boolean isJobResult)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .readFileContent(portletRequest, filePath, isJobResult);
+	}
+
+	/**
+	* Read a file content
+	*
+	* @param portletRequest
+	* @param target
+	* @param repositoryType
+	* @return byte[] file content
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static byte[] readFileContent(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .readFileContent(portletRequest, target, repositoryType);
 	}
 
 	public static void getFirstFileName(
@@ -485,6 +851,30 @@ public class FileManagementLocalServiceUtil {
 			filter, isJobResult);
 	}
 
+	/**
+	* Gets the file name of a path or the first file name of a folder.
+	*
+	* @param portletRequest
+	* @param portletResponse
+	* @param target
+	* @param filter
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void getFirstFileName(
+		javax.portlet.PortletRequest portletRequest,
+		javax.portlet.PortletResponse portletResponse, java.lang.String target,
+		java.lang.String filter, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		getService()
+			.getFirstFileName(portletRequest, portletResponse, target, filter,
+			repositoryType);
+	}
+
 	public static void saveFileContent(
 		javax.portlet.PortletRequest portletRequest, java.lang.String filePath,
 		java.lang.String content, boolean isJobResult)
@@ -495,17 +885,25 @@ public class FileManagementLocalServiceUtil {
 			.saveFileContent(portletRequest, filePath, content, isJobResult);
 	}
 
-	public static com.liferay.portal.kernel.json.JSONObject saveInputFile(
-		javax.portlet.PortletRequest portletRequest,
-		java.lang.String scienceAppName, java.lang.String scienceAppVersion,
-		java.lang.String simulationTime, java.lang.String jobNumber,
-		java.lang.String fileName, java.lang.String content)
+	/**
+	* Save the specified content to a file.
+	*
+	* @param portletRequest
+	* @param target
+	* @param content
+	* @param repositoryType
+	* @throws PortalException
+	* @throws SystemException
+	* @throws IOException
+	*/
+	public static void saveFileContent(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		java.lang.String content, java.lang.String repositoryType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
-		return getService()
-				   .saveInputFile(portletRequest, scienceAppName,
-			scienceAppVersion, simulationTime, jobNumber, fileName, content);
+		getService()
+			.saveFileContent(portletRequest, target, content, repositoryType);
 	}
 
 	public static void writeTextFile(java.lang.String content,
@@ -540,6 +938,17 @@ public class FileManagementLocalServiceUtil {
 			lastPosition);
 	}
 
+	public static com.liferay.portal.kernel.json.JSONObject readFile(
+		javax.portlet.PortletRequest portletRequest, java.lang.String target,
+		long startPosition, long size, java.lang.String repositoryType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .readFile(portletRequest, target, startPosition, size,
+			repositoryType);
+	}
+
 	public static java.lang.String readTextFile(java.nio.file.Path path)
 		throws java.io.IOException {
 		return getService().readTextFile(path);
@@ -551,6 +960,12 @@ public class FileManagementLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getAbolutePath(portletRequest, path, isJobResult);
+	}
+
+	public static java.lang.String getJobResultPath(
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String path) {
+		return getService().getJobResultPath(simulationUuid, jobUuid, path);
 	}
 
 	public static void clearService() {

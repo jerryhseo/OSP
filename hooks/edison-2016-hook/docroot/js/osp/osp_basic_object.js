@@ -81,6 +81,7 @@
 			PREFERENCES:'preferences_',
 			PROCEED_CONDITIONS:'proceedConditions_',
 			RELATIVE:'relative_',
+			REPOSITORY_TYPE:'repositoryType_',
 			SAMPLE_UUID:'sampleUuid_',
 			SCIENCE_APP:'scienceApp_',
 			SCIENCE_APP_ID:'scienceAppId_',
@@ -449,7 +450,16 @@
 				RESTRICT: 'rs',
 				PRIVATE: 'pr'
 			},
-
+			RepositoryTypes:{
+				USER_HOME:'USER_HOME',
+				USER_JOBS:'USER_JOBS',
+				PROVENANCE:'PROVENANCE',
+				SPYGLASS:'SPYGLASS',
+				ICECAP:'ICECAP',
+				ICEBUG:'ICEBUG',
+				MERIDIAN:'MERIDIAN',
+				ICEBREAKER:'ICEBREAKER'
+			};
 			ProcessStatus: {
 				SUCCESS: 0,
 				FAIL:-1
