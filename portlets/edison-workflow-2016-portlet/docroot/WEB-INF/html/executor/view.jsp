@@ -18,6 +18,7 @@ var var_save_success_message =  Liferay.Language.get("edison-workflow-save-succe
 var var_create_first_message = "Create First.";
 var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
+var var_no_workflow_instance_msg = "Select workflowInstance first.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
@@ -259,7 +260,7 @@ var contextPath = '${contextPath}';
           <span class="sr-only">Toggle navigation</span>
         </a>
         <span id="<portlet:namespace/>workflow-title"></span>
-        <small></small>
+        <small id="<portlet:namespace/>workflow-sub-title"></small>
       </h1>
     </section>
     <!-- Main content -->
@@ -318,21 +319,6 @@ $.widget.bridge('uibutton', $.ui.button);
 </div>
 </script>
 
-<script id="tpl-menu-panel-table-box" type="text/html">
-<div class="{{panel-type}} col-md-{{col}}">
-  <div class="box box-solid">
-    <div class="box-header with-border header-inner">
-      <h3 class="box-title">{{boxtitle}}</h3>
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool menu-panel-close"><i class="fa fa-times"></i></button>
-      </div>
-    </div>
-    <div class="box-body">
-    </div>
-  </div>
-</div>
-</script>
-
 <script id="tpl-menu-panel-search-header" type="text/html">
   <h3 class="box-title">
     <i class="fa fa-search"/>
@@ -340,56 +326,13 @@ $.widget.bridge('uibutton', $.ui.button);
   </h3>
 </script>
 
-<script id="tpl-menu-panel-apps" type="text/html">
-<div class="{{panel-type}} col-md-{{col}} app-column">
-  <div class="box box-solid">
-    <div class="box-header with-border header-inner">
-      <h3 class="box-title">
-        <i class="fa fa-search"/>
-        <input type="text" name="search" class="search-input" placeholder="{{boxtitle}}" />
-      </h3>
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool menu-panel-close"><i class="fa fa-times"></i></button>
-      </div>
-    </div>
-    <div class="box-body">
-    </div>
-  </div>
-</div>
-</script>
-<script id="tpl-menu-panel-load" type="text/html">
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            {{#header.theads}}
-            <th>{{.}}</th>
-            {{/header.theads}}
-        </tr>
-    </thead>
-    <tbody class="panel-tbody">
-      <tr>
-        <td colspan="{{header.theads.length}}">No Data</td>
-      </tr>
-    </tbody>
-</table>
-</script>
-
-<script id="tpl-menu-panel-pagination" type="text/html">
-<div class="box-footer clearfix">
-  <div class="btn-group" role="group">
-  </div>
-  <ul class="pagination pagination-sm no-margin pull-right">
-  </ul>
-</div>
-</script>
-
 <script id="tpl-menu-panel-new" type="text/html">
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="subtitle" >Simulation Title</label>
-      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" 
-        placeholder="Simulation Title" value="{{form.subtitle}}" required>
+      <label for="workflowInstanceTitle" >Simulation Title</label>
+      <input type="text" class="form-control data-binded" id="workflowInstanceTitle" name="workflowInstanceTitle" 
+        placeholder="Simulation Title" value="{{form.workflowInstanceTitle}}" required>
       <div class="help-block with-errors"></div>
     </div>
   </div>
@@ -404,7 +347,9 @@ $.widget.bridge('uibutton', $.ui.button);
   <div class="box-body">
     <div class="form-group">
       <label for="title">Simulation Title</label>
-      <input type="text" class="form-control data-binded" id="subtitle" name="subtitle" placeholder="Simulation Title" value="{{form.subtitle}}">
+      <input type="text" class="form-control data-binded" id="workflowInstanceTitle"
+        name="workflowInstanceTitle" placeholder="Simulation Title" value="{{form.workflowInstanceTitle}}" required>
+      <div class="help-block with-errors"></div>
     </div>
     <div class="form-group">
       <label for="title">Workflow Title</label>
@@ -459,7 +404,8 @@ $(document).ready(function(){
       "hideMethod": "slideUp"
   };
   var designer = new Designer(namespace, $, OSP, toastr, true);
-  var uiPanel = new UIPanelExecutor(namespace, $, designer, toastr);
+  var executor = new SimulationExecutor(namespace, $, designer, toastr);
+  var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);

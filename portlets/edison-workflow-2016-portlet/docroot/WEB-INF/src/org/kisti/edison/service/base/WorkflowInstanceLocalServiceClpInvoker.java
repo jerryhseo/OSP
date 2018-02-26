@@ -189,9 +189,19 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 
 		_methodParameterTypes60 = new String[] {  };
 
-		_methodName61 = "getWorkflowWorkflowInstancesByWorkflowId";
+		_methodName61 = "updateWorkflowInstance";
 
-		_methodParameterTypes61 = new String[] { "long" };
+		_methodParameterTypes61 = new String[] { "long", "java.util.Map" };
+
+		_methodName62 = "createWorkflowInstance";
+
+		_methodParameterTypes62 = new String[] {
+				"java.util.Map", "javax.servlet.http.HttpServletRequest"
+			};
+
+		_methodName63 = "getWorkflowWorkflowInstancesByWorkflowId";
+
+		_methodParameterTypes63 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -417,6 +427,18 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 
 		if (_methodName61.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+			return WorkflowInstanceLocalServiceUtil.updateWorkflowInstance(((Long)arguments[0]).longValue(),
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
+		}
+
+		if (_methodName62.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
+			return WorkflowInstanceLocalServiceUtil.createWorkflowInstance((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
+				(javax.servlet.http.HttpServletRequest)arguments[1]);
+		}
+
+		if (_methodName63.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.getWorkflowWorkflowInstancesByWorkflowId(((Long)arguments[0]).longValue());
 		}
 
@@ -495,4 +517,8 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes60;
 	private String _methodName61;
 	private String[] _methodParameterTypes61;
+	private String _methodName62;
+	private String[] _methodParameterTypes62;
+	private String _methodName63;
+	private String[] _methodParameterTypes63;
 }
