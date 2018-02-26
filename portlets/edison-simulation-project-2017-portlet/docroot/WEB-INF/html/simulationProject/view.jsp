@@ -70,7 +70,7 @@
 <c:if test="${isOwner eq true || isAdmin eq true || isMember eq true}">
 	<c:set var="authYn" value="Y" />
 </c:if>
-
+<div class="container">
 <div class="row" style="margin-bottom: 10px;">
 	<div class="col-md-12 topvisual">
 		<div class="visualimg">
@@ -235,6 +235,7 @@
 			</c:if>
 		</div>
 	</div>
+</div>
 </div>
 
 <!--우측-->
