@@ -131,9 +131,11 @@ function <portlet:namespace/>cancelButton(){
 					<th class="puptitle"><liferay-ui:message key='edison-table-list-header-tutor' /><span class="requiredField"> *</span></th>
 					<c:choose>
 						<c:when test="${isPortal}">
-							<td class="puptxt">
-								<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width:150px; margin-bottom:0px; margin-right: 10px; float: left; "/>
-								<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+							<td class="puptxt input-group" style="display: table-cell;">
+								<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="margin-bottom:0px; width: 70%; "/>
+								<div class="input-group-btn">
+									<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+								</div>
 							</td>
 							<th class="puptitle" style="word-wrap: break-word;"><liferay-ui:message key='edison-table-list-header-group' /></th>
 							<td class="puptxt">
@@ -146,8 +148,8 @@ function <portlet:namespace/>cancelButton(){
 							</td>
 						</c:when>
 						<c:otherwise>
-							<td class="puptxt" colspan="3">
-								<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width:150px; margin-bottom:0px; margin-right: 10px; float: left; "/>
+							<td class="puptxt input-group" colspan="3" style="display: table-cell;">
+								<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="margin-bottom:0px; width: 70%;"/>
 								<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
 							</td>
 							<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}"/>
@@ -160,9 +162,11 @@ function <portlet:namespace/>cancelButton(){
 						<liferay-ui:input-localized id="virtualLabTitle" name="virtualLabTitle" xml="" style="display: inline-block; margin:4px; width:230px;" type="input" cssClass="form-control"/>
 					</td>
 					<th class="puptitle" style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /><span class="requiredField"> *</span></th>
-					<td class="puptxt">
-						<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="10" readonly="readonly" style="width:150px; margin-bottom:0px; margin-right:10px; float: left; "/>
-						<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+					<td class="puptxt input-group" style="display: table-cell;">
+						<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="10" readonly="readonly" style="margin-bottom:0px; width: 70%;"/>
+						<div class="input-group-btn">
+							<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+						</div>
 					</td>
 				</tr>
 				<tr class="puptrline">

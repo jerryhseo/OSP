@@ -79,47 +79,45 @@
 	
 	<div class="table-responsive panel edison-panel">
 	
-		<!-- Board Title -->
-		<c:choose>
-			<c:when test="${empty redirectName }">
-				<h1>
-					<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-					${boardDivTitle}
-				</h1>
-			</c:when>
-			<c:otherwise>
-				<h1>
-					<a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}
-				</h1>
-			</c:otherwise>
-		</c:choose>
 		
 		<!-- Board Contents -->
 		<div class="panel-heading clearfix">
-			<h3 class="panel-title pull-left"></h3>
+			<!-- Board Title -->
+			<c:choose>
+				<c:when test="${empty redirectName }">
+					<h1 class="pull-left" style="width: 50%;">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+						${boardDivTitle}
+					</h1>
+				</c:when>
+				<c:otherwise>
+					<h1 class="pull-left" style="width: 50%;">
+						<a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}
+					</h1>
+				</c:otherwise>
+			</c:choose>
 			
-			<div class="input-group">
+			<div class="input-group" style="top: 32px;">
+				
+				<select id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" onchange="getBoardList<portlet:namespace/>(1)" class="form-control" style="width: 25%;">
+					<option value="10" <c:if test="${listSize == '10' }"> selected="selected"</c:if> >10<liferay-ui:message key='edison-search-views' /></option>
+					<option value="20" <c:if test="${listSize == '20' }"> selected="selected"</c:if>>20<liferay-ui:message key='edison-search-views' /></option>
+					<option value="30" <c:if test="${listSize == '30' }"> selected="selected"</c:if>>30<liferay-ui:message key='edison-search-views' /></option>
+					<option value="40" <c:if test="${listSize == '40' }"> selected="selected"</c:if>>40<liferay-ui:message key='edison-search-views' /></option>
+				</select>
+				
 				<c:if test="${boardDiv.divNm=='FAQ'}">
-					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder-faq' />">
+					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder-faq' />" style="width: 74%; float: right; margin-left: 1%;">
 				</c:if>
 				<c:if test="${boardDiv.divNm!='FAQ'}">
-					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder' />">
+					<input class="form-control" type="text" id="<portlet:namespace/>searchText"  name="<portlet:namespace/>searchText" value="${searchValue}" onkeypress="if(event.keyCode==13)getBoardList<portlet:namespace/>(1); " placeholder="<liferay-ui:message key='edison-board-placeholder' />" style="width: 74%; float: right; margin-left: 1%;">
 				</c:if>
 				
 				<div class="input-group-btn">
-					<button class="btn btn-default" type="button"><i class="icon-search"></i></button>
-					
-					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						Paging  <span class="caret"></span>
-	 				</button>
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						<li value="10" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">10<liferay-ui:message key='edison-search-views' /></a></li>
-						<li value="20" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">20<liferay-ui:message key='edison-search-views' /></a></li>
-						<li value="30" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">30<liferay-ui:message key='edison-search-views' /></a></li>
-						<li value="40" onclick="changeListSize<portlet:namespace/>(this.value);getBoardList<portlet:namespace/>(1);"><a href="#">40<liferay-ui:message key='edison-search-views' /></a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="#">Separated link</a></li>
-					</ul>
+					<button class="btn btn-default" type="button" onClick="getBoardList<portlet:namespace/>(1)"><i class="icon-search"></i></button>
+					<button class="btn btn-default" onClick="searchAllClick<portlet:namespace/>()">
+						Clear
+					</button>
 				</div>
 			</div>
 		</div>
@@ -171,7 +169,7 @@
 		</c:choose>
 		
 		<!-- Button -->
-		<div class="buttonbox" align="right">
+		<div class="buttonbox" align="right" style="margin-top: 10px;">
 			<c:choose>
 				<c:when test="${isCustomAdmin}">
 					<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />

@@ -34,23 +34,24 @@
 				<liferay-ui:message key='edison-default-mysciencedata'/>
 			</h3>
 			
-			<div class="btn-group pull-right" style="width: 50%;">
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" style="width: 25%;">
+					<option value="10" <c:if test="${searchLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15" <c:if test="${searchLine == '20' }"> selected="selected" </c:if>>15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20" <c:if test="${searchLine == '30' }"> selected="selected" </c:if>>20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
 				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
 					   id="<portlet:namespace/>textfield"
 					   placeholder="Data Collection <liferay-ui:message key="edison-table-list-header-name"/>"
 					   size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataEntryList('');" value="${searchText }"
-					   style="float: left;"
+					   style="float: right; margin-left: 1%; width: 74%;"
 				/>
-				<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataEntryList('');"></i></button>
-				
-				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dataEntryListAllSearch();" style="width: 80px;">
 				
 				<div class="input-group-btn">
-					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataEntryList(1);" style="height: 32px;">
-						<option value="10" <c:if test="${searchLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key="edison-search-views"/></option>
-						<option value="15" <c:if test="${searchLine == '20' }"> selected="selected" </c:if>>15<liferay-ui:message key="edison-search-views"/></option>
-						<option value="20" <c:if test="${searchLine == '30' }"> selected="selected" </c:if>>20<liferay-ui:message key="edison-search-views"/></option>
-					</select>
+					<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataEntryList('');"></i></button>
+					<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataEntryListAllSearch();">
+						Clear
+					</button>
 				</div>
 			</div>
 		</div>

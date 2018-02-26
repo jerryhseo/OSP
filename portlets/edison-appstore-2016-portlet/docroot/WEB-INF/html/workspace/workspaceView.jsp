@@ -235,7 +235,10 @@ function <portlet:namespace/>historyBack(){
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-confirm-info' />
 			<c:if test="${delevoperMap.requestStatus !='1202001'}">
-				<input type="button" onclick="addRequest();return false;" class="btnA_4 btn btn-default" style="width: 100px;" value="<liferay-ui:message key='edison-appstore-workspace-add-request' />" />
+				<!-- <input type="button"  value="" /> -->
+				<button class="btn btn-default" onclick="addRequest();return false;" class="btn btn-default">
+					<liferay-ui:message key='edison-appstore-workspace-add-request' />
+				</button>
 			</c:if>
 		</h3>
 	</div>

@@ -239,7 +239,7 @@ public class BoardController {
 			}
 			return "listMain";
 		}else{
-			if(customId.contains("class")){
+			if(customId.contains("class") && maxWindowStatus.equals("N")){
 				if(divCd==100){
 					return "noticeInVirtualClass";
 				} else if(divCd==200){
