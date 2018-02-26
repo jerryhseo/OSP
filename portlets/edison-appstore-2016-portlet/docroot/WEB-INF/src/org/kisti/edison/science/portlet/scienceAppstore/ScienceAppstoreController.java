@@ -184,7 +184,8 @@ public class ScienceAppstoreController {
 			model.addAttribute("contentCheckAuth" , contentCheckAuth);
 			String responseNamespace = response.getNamespace();
 			responseNamespace = responseNamespace.substring(1, responseNamespace.length()-1);
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			//long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			
 			model.addAttribute("workBenchPlid", plid);
 			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
