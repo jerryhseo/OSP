@@ -128,80 +128,82 @@ ul.target {
 <aui:form action="<%= configurationURL %>" method="post" name="tabSetting">
 	<input name="<portlet:namespace/>myaction" type="hidden" value="tab"/>
 	<input name="<portlet:namespace/>tabUseValue" id="<portlet:namespace/>tabUseValue"  type="hidden" />
-
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
-		<colgroup>
-			<col width="25%" />
-			<col width="25%" />
-			<col width="25%" />
-			<col width="25%" />
-		</colgroup>
-       	<thead>
-			<tr>
-				<th>Number</th>
-				<th>Key</th>
-				<th>Value</th>
-			</tr>       	
-	    </thead>
-		<tbody id="keySetBody">
-		<%
-			String key = "";
-			String value = "";
-			int tabViewCount = 0;
-		 	while (entries.hasNext()) {
-
-				Map.Entry<String, String[]> thisEntry = (Map.Entry) entries.next();
-				key = CustomUtil.strNull(thisEntry.getKey());
-				value = CustomUtil.strNull(thisEntry.getValue()[0]);
-				
-				if(key.equals("tabViewYn")){
-					tabViewCount++;
-					String selectedY = value.equals("Y") ? "selected" : "";
-					String selectedN = value.equals("N") ? "selected" : "";
-					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
-					out.print("	<td>"+j+"</td>\n");
-					out.print("	<td>tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
-					out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'"+value+"');\"><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
-					out.print("</tr>\n");
+	<div class="table-responsive panel edison-panel">
+		<div class="table1_list ">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
+			</colgroup>
+	       	<thead>
+				<tr>
+					<th>Number</th>
+					<th>Key</th>
+					<th>Value</th>
+				</tr>       	
+		    </thead>
+			<tbody id="keySetBody">
+			<%
+				String key = "";
+				String value = "";
+				int tabViewCount = 0;
+			 	while (entries.hasNext()) {
+	
+					Map.Entry<String, String[]> thisEntry = (Map.Entry) entries.next();
+					key = CustomUtil.strNull(thisEntry.getKey());
+					value = CustomUtil.strNull(thisEntry.getValue()[0]);
+					
+					if(key.equals("tabViewYn")){
+						tabViewCount++;
+						String selectedY = value.equals("Y") ? "selected" : "";
+						String selectedN = value.equals("N") ? "selected" : "";
+						out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
+						out.print("	<td class=\"center\">"+j+"</td>\n");
+						out.print("	<td class=\"center\">tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
+						out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"form-control\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'"+value+"');\"><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
+						out.print("</tr>\n");
+					}
+					j=j+1;
 				}
-				j=j+1;
-			}
-		 	if(tabViewCount == 0){
-		 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
-				out.print("	<td>1</td>\n");
-				out.print("	<td>tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
-				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'');\"><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
-				out.print("</tr>\n");
-		 	}
-		%>
-		</tbody>
-		</table>
+			 	if(tabViewCount == 0){
+			 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
+					out.print("	<td class=\"center\">1</td>\n");
+					out.print("	<td class=\"center\">tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
+					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"form-control\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'');\"><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
+					out.print("</tr>\n");
+			 	}
+			%>
+			</tbody>
+			</table>
+		</div>
+		
+		<h1 class="h40"></h1>
+		<div class="sideBySide">
+			<div class="left">
+				<h4><liferay-ui:message key='edison-content-config-select-group'/></h4>
+					<ul class="target connected">
+						<c:forEach var="tab" items="${tabGroup }">
+							<li value="${tab.groupId }">${tab.name }<a href='#' class='dismiss'>x</a></li>	
+						</c:forEach>
+					</ul>
+			</div>
+			<div class="right">
+				<h4><liferay-ui:message key='edison-content-config-all-group'/></h4>
+				<ul class="source connected">
+					<c:forEach var="group" items="${groupList }">
+						<li value="${group.groupId }">${group.name }</li>	
+					</c:forEach>
+				</ul>
+			</div>
+			<div style="clear:both"></div>
+			<h1 class="h40"></h1>
+		</div>
+		<div>
+			<input type="button" value="<liferay-ui:message key='edison-button-save'/>" class="btn btn-primary" onclick="<portlet:namespace/>doSubmit()"/>
+		</div>
 	</div>
-<h1 class="h40"></h1>
-<div class="sideBySide">
-	<div class="left">
-		<h4><liferay-ui:message key='edison-content-config-select-group'/></h4>
-			<ul class="target connected">
-				<c:forEach var="tab" items="${tabGroup }">
-					<li value="${tab.groupId }">${tab.name }<a href='#' class='dismiss'>x</a></li>	
-				</c:forEach>
-			</ul>
-	</div>
-	<div class="right">
-		<h4><liferay-ui:message key='edison-content-config-all-group'/></h4>
-		<ul class="source connected">
-			<c:forEach var="group" items="${groupList }">
-				<li value="${group.groupId }">${group.name }</li>	
-			</c:forEach>
-		</ul>
-	</div>
-	<div style="clear:both"></div>
-	<h1 class="h40"></h1>
-</div>
-<div>
-	<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
-</div>
 </aui:form>
 
 <script type="text/javascript">

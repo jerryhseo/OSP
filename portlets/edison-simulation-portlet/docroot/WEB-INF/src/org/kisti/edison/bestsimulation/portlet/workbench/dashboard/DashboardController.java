@@ -23,6 +23,7 @@ import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
@@ -101,12 +102,10 @@ public class DashboardController {
 		int blockSize = 3;
 		int begin = ((currentPage - 1) * searchLine);
 		int totalCount = 0;
-		List<Simulation> simulations = null;
+		List<Simulation> simulations = new ArrayList<Simulation>();
+		SimulationJob searchJob = null;
 		try{
-			if(StringUtils.hasText(jobUuid)){
-				simulations = SimulationLocalServiceUtil.getSimulationsWithJobUuid(scienceAppId, 0, jobUuid, classId, customId, begin, searchLine);
-				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithJobUuid(scienceAppId, 0, jobUuid, classId, customId);
-			}else if(StringUtils.hasText(simulationUuid)){
+			 if(StringUtils.hasText(simulationUuid)){
 				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
 				
@@ -121,13 +120,21 @@ public class DashboardController {
 				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
 			}
 			
+			 
+			if(StringUtils.hasText(jobUuid)){
+				searchJob = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
+			}			
+			
 			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
 			
 			JsonObject obj = new JsonObject();
 			obj.addProperty("pagingStr", pagingStr);
+			obj.add("searchJob", new Gson().toJsonTree(searchJob));
 			obj.add("simulaitons", new Gson().toJsonTree(simulations, new TypeToken<List<Simulation>>() {}.getType()));
+			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
+			System.out.println("OBJ->"+obj.toString());
 			out.write(obj.toString());
 		}catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -247,7 +254,6 @@ public class DashboardController {
 			if(simulation.getUserId()==themeDisplay.getUserId()){
 				obj.addProperty("isEdit", true);
 			}
-			
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();

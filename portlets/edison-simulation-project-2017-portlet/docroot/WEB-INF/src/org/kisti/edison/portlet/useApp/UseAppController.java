@@ -10,6 +10,7 @@ import org.kisti.edison.constants.SimulationProjectConstants;
 import org.kisti.edison.model.SimulationProject;
 import org.kisti.edison.service.SimProScienceAppLinkLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonHttpUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -52,7 +53,7 @@ public class UseAppController {
 			data = SimProScienceAppLinkLocalServiceUtil.getScienceAppList(modelId, themeDisplay.getLocale());
 		}
 		
-		long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+		long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 		long classId = ClassNameLocalServiceUtil.getClassNameId(SimulationProject.class);
 		String authYn = CustomUtil.strNull(params.get("authYn"), "N");
 		
@@ -61,6 +62,7 @@ public class UseAppController {
 		model.addAttribute("simulationProjectId", modelId);
 		model.addAttribute("workBenchPlid", plid);
 		model.addAttribute("authYn", authYn);
+		model.addAttribute("redirectURL", EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
 		
 		return "useApp/appList"; 
 	}

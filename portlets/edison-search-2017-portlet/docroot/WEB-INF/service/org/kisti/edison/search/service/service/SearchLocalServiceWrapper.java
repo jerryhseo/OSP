@@ -299,8 +299,7 @@ public class SearchLocalServiceWrapper implements SearchLocalService,
 	}
 
 	/**
-	* 사이트 분야 카테고리 조회
-	*/
+	* 占싼딆뵠占쏙옙�브쑴鍮�燁삳똾�믤�醫듼봺 鈺곌퀬��     */
 	@Override
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getLv1Categories(
 		long companyGroupId, long groupId, java.util.Locale locale)
@@ -311,7 +310,7 @@ public class SearchLocalServiceWrapper implements SearchLocalService,
 	}
 
 	/**
-	* 카테고리 JSTree 데이터 조회
+	* 燁삳똾�믤�醫듼봺 JSTree 占쎄퀣�좑옙占썼�怨좎돳
 	*/
 	@Override
 	public java.lang.String getCategoriesJsonString(long companyGroupId,

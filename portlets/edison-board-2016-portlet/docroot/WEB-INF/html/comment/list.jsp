@@ -207,10 +207,6 @@
 		color: #000;
 	}
 	
-	.sub-title{
-		font-weight: 100 !important;
-		font-size: 18px !important;
-	}
 </style>
 
     <%
@@ -221,7 +217,7 @@
         <c:when test="${empty redirectName }">
         	<div class="panel edison-panel">
 	            <div class="panel-heading clearfix <portlet:namespace/>commentTitle" style="border-bottom: 0px;">
-	            	<h3 class="panel-title sub-title pull-left">
+	            	<h3 class="panel-title pull-left">
 		                <img src="/edison-default-2016-portlet/images/title_virtual.png" width="20" height="20" style="margin-right: 5px;"> 
 		            	<liferay-ui:message key='edison-board-comment-title' />
 	            	</h3>

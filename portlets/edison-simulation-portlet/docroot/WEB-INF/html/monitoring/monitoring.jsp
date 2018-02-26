@@ -127,8 +127,7 @@
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
-
-
+<div class="container">
 	<c:if test="${tabViewYn eq 'Y'}">
 		<div class="contabmenu">
 			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
@@ -428,7 +427,7 @@
 		<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
 	</div>
 
-
+</div>
 <script type="text/javascript">
 function searchLine(){
 	$("#<portlet:namespace/>monitoringSearch").submit();

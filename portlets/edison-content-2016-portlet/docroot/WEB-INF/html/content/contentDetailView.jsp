@@ -43,11 +43,6 @@
 	text-align: right;
 }
 
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
-
 </style>
 
 <script>
@@ -158,7 +153,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			<c:choose>
 				<c:when test="${content.contentDiv eq 2001004 && content.advancedStartFileNm ne ''}">
 					<div class="panel-heading clearfix" style="border-bottom: 0px;">
-						<h3 class="panel-title sub-title pull-left">
+						<h3 class="panel-title pull-left">
 							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 							<liferay-ui:message key="edison-content-file"/>
 						</h3>
@@ -176,7 +171,7 @@ function <portlet:namespace/>closeDialog ( data ){
 					<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
 						<div>
 							<div class="panel-heading clearfix" style="border-bottom: 0px;">
-								<h3 class="panel-title sub-title pull-left">
+								<h3 class="panel-title pull-left">
 									<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 									<liferay-ui:message key="edison-content-file"/>
 								</h3>
@@ -221,7 +216,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			<c:if test="${isOwner == true || isManager == true}"> 
 			<div>
 				<div class="panel-heading clearfix">
-					<div class="panel-title sub-title pull-left">
+					<div class="panel-title pull-left">
 						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-manager"/>
 					</div>

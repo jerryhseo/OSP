@@ -51,10 +51,6 @@
 	background:#e0e0e0;
 }
 
-.sub-title{
-	font-weight: 100 !important;
-	font-size: 18px !important;
-}
 </style>
 
 <script type="text/javascript">
@@ -534,7 +530,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
-		<h3 class="panel-title sub-title pull-left">
+		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />
 		</h3>
@@ -636,7 +632,6 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 							<td class="input-group" style="display: table-cell;">
 								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; float: left;"/>
 								<div class="input-group-btn">
-									<%-- <input id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" class="btn btn-default"  type="button" onClick="<portlet:namespace/>getUserInfo()" value="<liferay-ui:message key='edison-button-search' />"/> --%>
 									<button class="btn btn-default" id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" onClick="<portlet:namespace/>getUserInfo()">
 										<liferay-ui:message key='edison-button-search' />
 									</button>

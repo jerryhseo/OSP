@@ -30,13 +30,12 @@
 			<liferay-ui:message key='edison-default-site-join-title' />
 		</h3>
 	</div>
-	
 	<aui:form name="siteJoinForm">
 		<aui:input type="hidden" name="groupId"  ></aui:input>
 		<aui:input type="hidden" name="removeUserIds"></aui:input>
 		<aui:input type="hidden" name="addUserIds"></aui:input>
 		<aui:input type="hidden" name="siteVisibleStatus"></aui:input>
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+		<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
 			<colgroup>
 				<col width="30%" />
 				<col width="20%" />

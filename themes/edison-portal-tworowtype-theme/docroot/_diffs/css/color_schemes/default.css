@@ -2,11 +2,4 @@
 	.edison-table thead{
 		background-color: #f9f9f9;
 	}
-	
-	#wrapper{
-		#nsubtopwrap{
-			background-image: url(@theme_image_path@/custom/breadcrumb/default_subtopvisual.jpg);
-		}
-	}
-	
 }

@@ -102,16 +102,16 @@ public class LayoutController {
 		long scienceAppId =  ParamUtil.getLong(request, "scienceAppId", 0);
 		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 		String redirectName = ParamUtil.getString(request, "redirectName", "");
+		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
 		
-		
-		ProvenanceSupportApp.put("uChem", "4.0.1");
-		ProvenanceSupportApp.put("pianostring", "1.0.0");
-		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
-		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
-		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
-		ProvenanceSupportApp.put("Bowling", "1.0.0");
-		ProvenanceSupportApp.put("acuteSTMtip", "1.0.0");
-		ProvenanceSupportApp.put("roundSTMtip", "1.0.0");
+//		ProvenanceSupportApp.put("uChem", "4.0.1");
+//		ProvenanceSupportApp.put("pianostring", "1.0.0");
+//		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
+//		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
+//		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
+//		ProvenanceSupportApp.put("Bowling", "1.0.0");
+//		ProvenanceSupportApp.put("acuteSTMtip", "1.0.0");
+//		ProvenanceSupportApp.put("roundSTMtip", "1.0.0");
 		
 		try{
 			model = this.evaluateScienceAppLayout(model, scienceAppId);
@@ -121,6 +121,7 @@ public class LayoutController {
 			model.addAttribute("classId", classId);
 			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
 			model.addAttribute("redirectName", redirectName);
+			model.addAttribute("jobUuid", jobUuid);
 			return "view";
 		}catch(Exception e){
 			if(e instanceof SimulationWorkbenchException){

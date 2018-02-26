@@ -116,7 +116,6 @@
 		width: 220px;
 	}
 </style>
-
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
 <div class="h10"></div>
@@ -141,24 +140,29 @@
 				<liferay-ui:message key='edison-content' />
 			</h3>
 			
-			<div class="btn-group pull-right" style="width: 50%;">
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 25%;">
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
+					
 				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
 					   id="<portlet:namespace/>textfield"
 					   placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
 					   size="40"
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
-					   style="float: left;"
+					   style="width:75%;"
 				/>
-				<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');"><i class="icon-search"></i></button>
-				<input class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" onclick="<portlet:namespace/>dafaultContentAllSearch();" style="width: 80px;">
 				
 				<div class="input-group-btn">
-					<select class="btn btn-default dropdown-toggle" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="line-height: 15px; height: 32px;">
-						<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-						<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-						<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-					</select>
+					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');">
+						<i class="icon-search"></i>
+					</button>
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" value="Clear" onclick="<portlet:namespace/>dafaultContentAllSearch();">
+						Clear
+					</button>
 				</div>
 				
 				

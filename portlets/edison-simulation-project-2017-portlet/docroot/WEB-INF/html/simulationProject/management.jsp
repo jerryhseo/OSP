@@ -114,7 +114,7 @@
 				<div class="input-group">
 					<div class="input-group-btn" align="right">
 						<c:if test="${empty simulationProjectId}">
-							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('create'); return false;" value="<liferay-ui:message key='edison-button-register' />" type="button" style="cursor: pointer;">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>submitSimulationProject('create'); return false;" value="<liferay-ui:message key='edison-button-register' />" type="button" style="cursor: pointer; width: 13%;">
 						</c:if>
 						<c:if test="${not empty simulationProjectId}">
 							<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail' />" type="button" style="cursor: pointer; width: 14%;">
@@ -302,18 +302,22 @@
 					
 					<div class="input-group">
 						
-						<div class="input-group-btn" style="width: 15%" align="right">
-							<input type="text" id="<portlet:namespace/>searchText" class="form-control" name="<portlet:namespace/>searchText" style="width: 250px; left: 19%;" 
-								value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
+						<input type="text" id="<portlet:namespace/>searchText" class="form-control" name="<portlet:namespace/>searchText" style="width: 50%; float: right; margin-left: 1%;" 
+							value="${searchText}" onkeypress="if(event.keyCode==13)<portlet:namespace/>getRequestMemberList(1);" placeholder="<liferay-ui:message key='edison-simulation-project-member-placeholder'/>" />
+							
+						<select id="<portlet:namespace/>searchRequestState" name="<portlet:namespace/>searchRequestState" onchange="<portlet:namespace/>getRequestMemberList(1);" class="form-control" style="width: 15%; float: right;">
+							<option value=""><liferay-ui:message key='full' /></option>
+							<option value="2003001" <c:if test="${searchRequestState == '2003001' }"> selected="selected"</c:if>><liferay-ui:message key='edison-simulation-project-join-request' /></option>
+							<option value="2003002" <c:if test="${searchRequestState == '2003002' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-approve' /></option>				
+						</select>
+							
+						<div class="input-group-btn">
 							<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getRequestMemberList(1);">
 								<i class="icon-search"></i>
 							</button>
-							<input type="button" value="<liferay-ui:message key='edison-button-all-search' />" onClick="<portlet:namespace/>searchAllClick();" class="btn btn-default" style="margin-right: 5px;">
-							<select id="<portlet:namespace/>searchRequestState" name="<portlet:namespace/>searchRequestState" onchange="<portlet:namespace/>getRequestMemberList(1);" class="btn btn-default">
-								<option value=""><liferay-ui:message key='full' /></option>
-								<option value="2003001" <c:if test="${searchRequestState == '2003001' }"> selected="selected"</c:if>><liferay-ui:message key='edison-simulation-project-join-request' /></option>
-								<option value="2003002" <c:if test="${searchRequestState == '2003002' }"> selected="selected"</c:if>><liferay-ui:message key='edison-virtuallab-approve' /></option>				
-							</select>
+							<button class="btn btn-default" onClick="<portlet:namespace/>searchAllClick();">
+								Clear
+							</button>
 						</div>
 					</div>
 				</div>	

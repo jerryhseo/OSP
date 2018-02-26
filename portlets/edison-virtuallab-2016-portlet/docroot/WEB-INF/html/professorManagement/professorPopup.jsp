@@ -110,7 +110,7 @@ function <portlet:namespace/>selectProfessor(professorSeq, professorName){
 			</select>
 			
 			<input name="<portlet:namespace/>searchField" type="text" class="form-control" id="<portlet:namespace/>searchField" placeholder="<liferay-ui:message key="edison-simulation-project-member-placeholder"/>" size="40" value="${searchText}" style="height:33px; width: 80%;" 
-				onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
+				onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" />
 				
 			<div class="input-group-btn">
 				<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchList('1');">

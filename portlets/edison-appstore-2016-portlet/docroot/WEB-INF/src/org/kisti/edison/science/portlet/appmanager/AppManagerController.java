@@ -74,7 +74,6 @@ import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
-/*import com.kisti.osp.workbench.service.WorkbenchLayoutLocalServiceUtil;*/
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
