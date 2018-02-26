@@ -36,14 +36,14 @@
 			</h3>
 			
 			<div class="input-group">
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>searchSimulationProjectList('${currentPage}');" style="width: 25%;">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>searchSimulationProjectList('${currentPage}');" style="width: 24%;">
 					<option value="5" <c:if test="${listSize eq 5}">selected="selected"</c:if>>5<liferay-ui:message key="edison-search-views"/></option>
 					<option value="10" <c:if test="${listSize eq 10}">selected="selected"</c:if>>10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15" <c:if test="${listSize eq 15}">selected="selected"</c:if>>15<liferay-ui:message key="edison-search-views"/></option>
 					<option value="20" <c:if test="${listSize eq 20}">selected="selected"</c:if>>20<liferay-ui:message key="edison-search-views"/></option>
 				</select>
 				<input name="<portlet:namespace/>textfield" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/>" size="40" value="${searchText}" 
-						class="form-control" style="width: 75%;" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchSimulationProjectList('1');" />
+						class="form-control" style="width: 75%; margin-left: 1%;" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchSimulationProjectList('1');" />
 				<div class="input-group-btn">
 					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>searchSimulationProjectList('1');"><i class="icon-search"></i></button>
 					<button class="btn btn-default dropdown-toggle" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>initSimulationProjectList();">

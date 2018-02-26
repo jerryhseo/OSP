@@ -141,7 +141,7 @@
 			</h3>
 			
 			<div class="input-group">
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 25%;">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 24%;">
 					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
 					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
@@ -153,7 +153,7 @@
 					   size="40"
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
-					   style="width:75%;"
+					   style="width:75%; margin-left: 1%;"
 				/>
 				
 				<div class="input-group-btn">

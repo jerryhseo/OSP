@@ -25,12 +25,6 @@ select.categorySelect {
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList();
 	
-	/* var display = "${display}";
-	if(display == "VIEW") {
-		$("#<portlet:namespace/>display").css("display", "block");
-	} else {
-		$(".portlet-borderless-container").css("min-height", "0");
-	} */
 });
 
 
@@ -139,13 +133,6 @@ function <portlet:namespace/>dataSearchList(p_currentPage) {
 <aui:script>
 function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 	AUI().use("liferay-portlet-url", function(a) {
-		/* var portletURL = Liferay.PortletURL.createRenderURL();
-		portletURL.setPlid(appManagerPlid);
-		portletURL.setPortletId("scienceappmanager_WAR_edisonappstore2016portlet");
-		portletURL.setParameter("groupId", <%= themeDisplay.getScopeGroupId()%>); 
-		portletURL.setParameter("scienceAppId", scienceAppId);
-		portletURL.setParameter("myRender", "solverRender");
-		window.location.href = portletURL.toString(); */
 		
 		var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
     	var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
@@ -203,18 +190,11 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
                   onclick="<portlet:namespace/>dataSearchList(1);">
                   <i class="icon-search"></i>
                 </button>
-                <input type="button" name="fullsize" id="fullsize"
-                  value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default"
-                  onclick="<portlet:namespace/>dataSearchListAll(1);">
+                <button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchListAll(1);">
+                	Clear
+                </button>
               </div>
             </div>
-			
-<!-- 			<div class="selectProject_menu" style="float: left; margin: 0px 10px;">
-				
-			</div>
-			<div class="tabletopright">
-				
-			</div> -->
 		</div>
 	</div>
 	
