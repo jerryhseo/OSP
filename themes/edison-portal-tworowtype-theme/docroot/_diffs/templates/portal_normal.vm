@@ -59,6 +59,13 @@
 		            $(this).removeClass('open');
 		        }
 		    });
+		    
+		    $('#themesearch > form').submit(function(event) {
+		    	var url = $(this).attr("action")+"&_edisonsearch_WAR_edisonsearch2017portlet_searchKeyword="+$(this).find("input[type='search']").val();
+		    	window.location.href = url;
+		    	event.preventDefault();
+				return false;
+		    });
 		});
 	</script>
 </head>

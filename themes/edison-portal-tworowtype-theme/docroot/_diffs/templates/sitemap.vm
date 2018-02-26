@@ -52,7 +52,7 @@
 
 <div id="themesearch" class="fullscreen">
 	<button type="button" class="close">×</button>
-	<form>
+	<form action="$searchURL" method="post" onsubmit="return false;">
 		<input type="search" value="" placeholder="$search_keyword" />
 		<button type="submit" class="btn btn-primary">Search</button>
 	</form>
