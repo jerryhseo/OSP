@@ -9,6 +9,9 @@
 <liferay-portlet:resourceURL var="updateSimulationJobURL" id="updateSimulationJob" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="jobResultFileURL" id="jobResultFile" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="searchProjectURL" id="searchProject" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="addProjectShareJobURL" id="addProjectShareJob" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="removeProjectShareURL" id="addProjectShareJob" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 
 <portlet:resourceURL var='downManualFileURL' id='downManualFile' escapeXml="false"></portlet:resourceURL>
@@ -153,8 +156,11 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_RESULT, function( e ){
 Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		if(e.data){
+		var status = e.data.status;
+		var simulationUuid = e.data.simulationUuid;
+		if(status){
 			toastr["success"]("", Liferay.Language.get('edison-data-delete-success'));
+			<portlet:namespace/>removeProjectShare(simulationUuid,'SIMULATION');
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
 		}
@@ -180,6 +186,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 			toastr["success"]("", Liferay.Language.get('edison-data-delete-success'));
 			$("li#<portlet:namespace/>job-"+e.data.jobUuid).remove();
 			<portlet:namespace/>selectRow(e.data.simulationUuid,'');
+			<portlet:namespace/>removeProjectShare(e.data.jobUuid,'JOB');
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
 		}
@@ -310,10 +317,6 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 			topSimultionSection.children("a").trigger('click');
 		}
 		
-		var length = topSimultionSection.find("li[id*=<portlet:namespace/>job-]").length;
-		if(length==0){
-			<portlet:namespace/>selectRow(simulationUuid, jobUuid);
-		}
 		if(nullToStr(jobUuid)===''){
 			topSimultionSection.find("li[id*=<portlet:namespace/>job-]:first > a").trigger('click');
 		}else{
@@ -672,6 +675,126 @@ function <portlet:namespace/>deleteSimulationJob(panelDataType, that, event){
 	});
 }
 
+function <portlet:namespace/>shareSimulationJob(panelDataType, that, event){
+	var modal = $("#"+<portlet:namespace/>parentNamespace+"share-modal");
+	var shareArea = modal.find("#"+<portlet:namespace/>parentNamespace+"share-select-info");
+	$shareAreaTbody = shareArea.find("tbody");
+	$shareAreaTbody.empty();
+	$saveButton = modal.find("button#"+<portlet:namespace/>parentNamespace+"save");
+	$saveButton.attr("onclick","");
+	
+	var jobUuid = <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._jobUuid;
+	var searchForm = {
+		<portlet:namespace/>simulationUuid : <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._simulationUuid,
+		<portlet:namespace/>jobUuid : jobUuid
+	};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=searchProjectURL%>",
+		async : false,
+		data  : searchForm,
+		dataType: 'json',
+		success: function(result) {
+			console.log(result);
+			var length = result.projectList.length;
+			if(length!=0){
+				for(var i=0;i<length;i++){
+					var project = result.projectList[i];
+					$tr = $("<tr></tr>").appendTo($shareAreaTbody);
+					$td = $("<td></td>").appendTo($tr);
+					
+					$div = $("<div></div>").addClass("checkbox").css("margin-bottom","0px").appendTo($td);
+					$label =$("<label></label>").appendTo($div);
+					
+					$("<input>").attr("type","checkbox").val(project.simulationProjectId).appendTo($label);
+					$("<p></p>").text(project.title).appendTo($label);
+				}
+				
+				var shareLength = result.shareList.length;
+				if(shareLength!=0){
+					for(var i=0;i<shareLength;i++){
+						var share = result.shareList[i];
+						$shareAreaTbody.find(":checkbox[value='"+share._customId+"']").attr("checked",true);
+					}
+				}
+				
+				$saveButton.attr("onclick","<portlet:namespace/>shareProjectByjobUuid('"+jobUuid+"')");
+				$saveButton.css("display","block");
+			}else{
+				$tr = $("<tr></tr>").appendTo($shareAreaTbody);
+				$("<td></td>").addClass("text-center").html(Liferay.Language.get('edison-search-no-result')).appendTo($tr)
+				$saveButton.css("display","none");
+			}
+			modal.modal({ "backdrop": "static", "keyboard": false });
+			
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert("shareSimulationJob-->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				alert("shareSimulationJob-->"+textStatus+": "+errorThrown);
+			}  
+		}
+	});
+}
+
+function <portlet:namespace/>shareProjectByjobUuid(jobUuid){
+	var modal = $("#"+<portlet:namespace/>parentNamespace+"share-modal");
+	var shareArea = modal.find("#"+<portlet:namespace/>parentNamespace+"share-select-info");
+	
+	<portlet:namespace/>closePanel();
+	
+	modal.modal('hide');
+	
+	var customIds = new Array();
+	shareArea.find(":checkbox:checked").each(function(pi,po){
+		customIds.push(po.value);
+	});
+	
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=addProjectShareJobURL%>",
+		async : false,
+		data:{
+			"<portlet:namespace/>jobUuid": jobUuid,
+			"<portlet:namespace/>customIds": customIds
+		},
+		success: function(result) {
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+		},error:function(jqXHR, textStatus, errorThrown){
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+	});
+}
+
+function <portlet:namespace/>removeProjectShare(uuid,removeShareType){
+	var simulationUuid = 0;
+	var jobUuid = 0;
+	if(removeShareType==="SIMULATION"){
+		simulationUuid = uuid;
+	}else{
+		jobUuid = uuid;
+	}
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=removeProjectShareURL%>",
+		async : false,
+		data:{
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>jobUuid": jobUuid
+		},
+		success: function(result) {
+			
+		},error:function(jqXHR, textStatus, errorThrown){
+			
+		}
+	});
+}
+
+
+
 
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition) {
 	<portlet:namespace/>clearReadOutLogTimer();
@@ -866,7 +989,6 @@ function <portlet:namespace/>copyJobAndAddSimulation() {
 		
 		Liferay.fire(OSP.Event.OSP_CREATE_SIMULATION, eventData);
 		
-		var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
 		modal.modal('hide');
 	}
 }
@@ -949,7 +1071,8 @@ function <portlet:namespace/>iceBreakerFileDown(fileId){
 			"form": {},
 			"btn": {
 				"update": <portlet:namespace/>updateSimulationJob,
-				"delete": <portlet:namespace/>deleteSimulationJob
+				"delete": <portlet:namespace/>deleteSimulationJob,
+				"share": <portlet:namespace/>shareSimulationJob
 			},
 			"script-search":<portlet:namespace/>searchSimulationJobInfo
 	   }
@@ -1117,11 +1240,23 @@ function <portlet:namespace/>closePanel() {
 			</td>
 		</tr>
 		{{/form.resultFile}}
+		<tr>
+			<th><liferay-ui:message key='edison-table-list-header-is-project-share'/></th>
+			<td>
+				{{#form.isShare}}
+					<button class="btn btn-success btn-sm">{{form.isShare}}</button>
+				{{/form.isShare}}
+				{{^form.isShare}}
+					<button class="btn btn-danger btn-sm">{{form.isShare}}</button>
+				{{/form.isShare}}
+			</td>
+		</tr>
 	</table>
   </div>
   {{#form.isEdit}}
   <div class="box-footer">
     <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
+	<button type="button" class="btn btn-info btn-flat func" name="share">Share</button>
     <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
   {{/form.isEdit}}

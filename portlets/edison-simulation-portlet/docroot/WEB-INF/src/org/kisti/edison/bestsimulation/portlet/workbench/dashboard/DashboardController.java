@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.RenderRequest;
@@ -21,14 +22,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
+import org.kisti.edison.bestsimulation.model.SimulationShare;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
+import org.kisti.edison.model.SimulationProject;
+import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
+import org.kisti.edison.util.EdisonHttpUtil;
+import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
+import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -48,8 +55,11 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -134,7 +144,6 @@ public class DashboardController {
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			System.out.println("OBJ->"+obj.toString());
 			out.write(obj.toString());
 		}catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -198,7 +207,6 @@ public class DashboardController {
 			JsonObject obj = new JsonObject();
 			obj.add("jobs", new Gson().toJsonTree(jobs));
 			obj.addProperty("isEdit",isEdit);
-//			String obj = new Gson().toJson(jobs);
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
@@ -254,6 +262,10 @@ public class DashboardController {
 			if(simulation.getUserId()==themeDisplay.getUserId()){
 				obj.addProperty("isEdit", true);
 			}
+			
+			//공유 여부 확인
+			obj.addProperty("isShare", SimulationShareLocalServiceUtil.isExitByJobUUid(jobUuid));
+			
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
@@ -364,6 +376,104 @@ public class DashboardController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@ResourceMapping(value="searchProject")
+	public void searchProject(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+			@RequestParam(value = "jobUuid", required = true) String jobUuid) throws IOException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		long parentGroupId = themeDisplay.getScopeGroup().getParentGroupId();
+		long groupId = themeDisplay.getScopeGroupId();
+		User user = themeDisplay.getUser();
+		Locale locale = themeDisplay.getLocale();
+		
+		int begin = 0;
+		int end = 0;
+		String searchValue = "";
+		long ownerId = user.getUserId();
+		
+		List<Map<String,Object>> projectList = new ArrayList<Map<String,Object>>();
+		
+		try{
+			if(parentGroupId == 0){
+				if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)) {
+					projectList = SimulationProjectLocalServiceUtil.getCustomMySimulationProjectList(begin, end, searchValue, locale);
+				}else{
+					projectList = SimulationProjectLocalServiceUtil.getCustomMySimulationProjectList(ownerId, begin, end, searchValue, locale);
+				}
+			}else{
+				long globalGroupId = themeDisplay.getCompany().getGroupId();
+				List<Long> siteCategoryIdList = SimulationProjectLocalServiceUtil.getSiteCategoryIdList(globalGroupId, groupId);
+				
+				if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)) {
+					projectList = SimulationProjectLocalServiceUtil.getCustomMySimulationProjectList(begin, end, searchValue, locale, siteCategoryIdList);
+				}else{
+					projectList = SimulationProjectLocalServiceUtil.getCustomMySimulationProjectList(ownerId, begin, end, searchValue, locale, siteCategoryIdList);
+				}
+			}
+			
+			List<SimulationShare> shareList = SimulationShareLocalServiceUtil.findListByJobUuid(jobUuid);
+			
+			JsonObject obj = new JsonObject();
+			obj.add("projectList", new Gson().toJsonTree(projectList, new TypeToken<List<Map<String, Object>>>() {}.getType()));
+			obj.add("shareList", new Gson().toJsonTree(shareList, new TypeToken<List<SimulationShare>>() {}.getType()));
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+			out.close();
+			
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@ResourceMapping(value="addProjectShareJob")
+	public void addProjectShareJob(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "jobUuid", required = true) String jobUuid) throws IOException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		Map param = RequestUtil.getParameterMap(request);
+		
+		String customIds = "";
+		if(param.get("customIds[]") instanceof String[]){
+			customIds = StringUtil.merge((String[]) param.get("customIds[]"), ",");
+		}else{
+			customIds = param.get("customIds[]").toString();
+		}
+
+		try{
+			long classId = ClassNameLocalServiceUtil.getClassNameId(SimulationProject.class);
+			SimulationShareLocalServiceUtil.removeAndCreateByJobUUids(jobUuid, classId, customIds);
+		}catch(Exception e){
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="removeProjectShare")
+	public void removeProjectShare(ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		Map param = RequestUtil.getParameterMap(request);
+		
+		String simulationUuid = CustomUtil.strNull(param.get("simulationUuid"),"0");
+		String jobUuid = CustomUtil.strNull(param.get("jobUuid"),"0");
+		try{
+			if(!simulationUuid.equals("0")){
+				SimulationShareLocalServiceUtil.removeBySimulationUuid(simulationUuid);
+			}else{
+				SimulationShareLocalServiceUtil.removeByJobUuid(jobUuid);
+			}
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			e.printStackTrace();
+		}
+	}
+			
 	
 	
 	
