@@ -111,6 +111,168 @@ public class SimulationShareUtil {
 	}
 
 	/**
+	* Returns all the simulation shares where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @return the matching simulation shares
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findByjobUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByjobUuid(jobUuid);
+	}
+
+	/**
+	* Returns a range of all the simulation shares where jobUuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationShareModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobUuid the job uuid
+	* @param start the lower bound of the range of simulation shares
+	* @param end the upper bound of the range of simulation shares (not inclusive)
+	* @return the range of matching simulation shares
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findByjobUuid(
+		java.lang.String jobUuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByjobUuid(jobUuid, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the simulation shares where jobUuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.bestsimulation.model.impl.SimulationShareModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param jobUuid the job uuid
+	* @param start the lower bound of the range of simulation shares
+	* @param end the upper bound of the range of simulation shares (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching simulation shares
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findByjobUuid(
+		java.lang.String jobUuid, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByjobUuid(jobUuid, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation share in the ordered set where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation share
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationShareException if a matching simulation share could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationShare findByjobUuid_First(
+		java.lang.String jobUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationShareException {
+		return getPersistence().findByjobUuid_First(jobUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the first simulation share in the ordered set where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching simulation share, or <code>null</code> if a matching simulation share could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationShare fetchByjobUuid_First(
+		java.lang.String jobUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByjobUuid_First(jobUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation share in the ordered set where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation share
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationShareException if a matching simulation share could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationShare findByjobUuid_Last(
+		java.lang.String jobUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationShareException {
+		return getPersistence().findByjobUuid_Last(jobUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last simulation share in the ordered set where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching simulation share, or <code>null</code> if a matching simulation share could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationShare fetchByjobUuid_Last(
+		java.lang.String jobUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByjobUuid_Last(jobUuid, orderByComparator);
+	}
+
+	/**
+	* Returns the simulation shares before and after the current simulation share in the ordered set where jobUuid = &#63;.
+	*
+	* @param simulationSharePK the primary key of the current simulation share
+	* @param jobUuid the job uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next simulation share
+	* @throws org.kisti.edison.bestsimulation.NoSuchSimulationShareException if a simulation share with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationShare[] findByjobUuid_PrevAndNext(
+		org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK simulationSharePK,
+		java.lang.String jobUuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationShareException {
+		return getPersistence()
+				   .findByjobUuid_PrevAndNext(simulationSharePK, jobUuid,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the simulation shares where jobUuid = &#63; from the database.
+	*
+	* @param jobUuid the job uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByjobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByjobUuid(jobUuid);
+	}
+
+	/**
+	* Returns the number of simulation shares where jobUuid = &#63;.
+	*
+	* @param jobUuid the job uuid
+	* @return the number of matching simulation shares
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByjobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByjobUuid(jobUuid);
+	}
+
+	/**
 	* Caches the simulation share in the entity cache if it is enabled.
 	*
 	* @param simulationShare the simulation share

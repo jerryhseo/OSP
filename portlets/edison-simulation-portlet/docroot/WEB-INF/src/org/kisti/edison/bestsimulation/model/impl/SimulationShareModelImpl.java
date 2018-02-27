@@ -82,7 +82,13 @@ public class SimulationShareModelImpl extends BaseModelImpl<SimulationShare>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.kisti.edison.bestsimulation.model.SimulationShare"),
 			false);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.kisti.edison.bestsimulation.model.SimulationShare"),
+			true);
+	public static long JOBUUID_COLUMN_BITMASK = 1L;
+	public static long SHARESEQNO_COLUMN_BITMASK = 2L;
+	public static long JOBSEQNO_COLUMN_BITMASK = 4L;
+	public static long SIMULATIONUUID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -265,7 +271,17 @@ public class SimulationShareModelImpl extends BaseModelImpl<SimulationShare>
 
 	@Override
 	public void setJobUuid(String jobUuid) {
+		_columnBitmask |= JOBUUID_COLUMN_BITMASK;
+
+		if (_originalJobUuid == null) {
+			_originalJobUuid = _jobUuid;
+		}
+
 		_jobUuid = jobUuid;
+	}
+
+	public String getOriginalJobUuid() {
+		return GetterUtil.getString(_originalJobUuid);
 	}
 
 	@JSON
@@ -315,6 +331,10 @@ public class SimulationShareModelImpl extends BaseModelImpl<SimulationShare>
 	@Override
 	public void setSimulationShareDt(Date simulationShareDt) {
 		_simulationShareDt = simulationShareDt;
+	}
+
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -380,6 +400,11 @@ public class SimulationShareModelImpl extends BaseModelImpl<SimulationShare>
 
 	@Override
 	public void resetOriginalValues() {
+		SimulationShareModelImpl simulationShareModelImpl = this;
+
+		simulationShareModelImpl._originalJobUuid = simulationShareModelImpl._jobUuid;
+
+		simulationShareModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -494,9 +519,11 @@ public class SimulationShareModelImpl extends BaseModelImpl<SimulationShare>
 	private long _shareSeqno;
 	private long _jobSeqNo;
 	private String _jobUuid;
+	private String _originalJobUuid;
 	private String _simulationUuid;
 	private long _classId;
 	private long _customId;
 	private Date _simulationShareDt;
+	private long _columnBitmask;
 	private SimulationShare _escapedModel;
 }

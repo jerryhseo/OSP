@@ -310,6 +310,55 @@ public class SimulationShareLocalServiceWrapper
 			jobSeqNo, jobUuid, simulationUuid);
 	}
 
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findListByJobUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationShareLocalService.findListByJobUuid(jobUuid);
+	}
+
+	@Override
+	public boolean isExitByJobUUid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationShareLocalService.isExitByJobUUid(jobUuid);
+	}
+
+	@Override
+	public void removeBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationShareLocalService.removeBySimulationUuid(simulationUuid);
+	}
+
+	@Override
+	public void removeByJobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationShareLocalService.removeByJobUuid(jobUuid);
+	}
+
+	@Override
+	public org.kisti.edison.bestsimulation.model.SimulationShare createByJobUuid(
+		java.lang.String jobUuid, long classId, long customId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationShareLocalService.createByJobUuid(jobUuid, classId,
+			customId);
+	}
+
+	/**
+	* JobUUid�쒙옙占쎈벏釉��⑤벊��占쏙옙��占쏙옙��占쏙옙占싼딆젟占쏙옙     *
+	*
+	* @param jobUuid
+	* @param classId
+	* @param customIds - 占썬끉��占쎌눊瑗랃옙占폻elimeter占쏙옙,
+	* @throws SystemException
+	*/
+	@Override
+	public void removeAndCreateByJobUUids(java.lang.String jobUuid,
+		long classId, java.lang.String customIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationShareLocalService.removeAndCreateByJobUUids(jobUuid,
+			classId, customIds);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

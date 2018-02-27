@@ -59,7 +59,6 @@
 		JSONArray portlets = JSONFactoryUtil.createJSONArray(jsonColumn.getString("portlets_"));
 		for (int j = 0; j < portlets.length(); j++) {
 			JSONObject portlet = portlets.getJSONObject(j);
-			System.out.println(portlet.getString("instanceId_"));
 			lodingPortlets.put(portlet.getString("instanceId_"), "view");
 		}
 		
@@ -102,13 +101,14 @@
 					<h4 class="modal-title">Job Result File</h4>
 				</div>
 				<div class="modal-body">
-					<table class="table table-bordered table-hover"> <thead> <tr> <th>Name</th> <th>City</th> <th>Pincode</th> </tr> </thead> <tbody> <tr> <td class="center">TanmayTanmayTanmayTanmayTanmayTanmay</td> <td>Bangalore</td> <td>560001</td> </tr> <tr> <td class="center">Tanmay</td> <td>Bangalore</td> <td>560001</td> </tr> <tr> <td class="center">Tanmay</td> <td>Bangalore</td> <td>560001</td> </tr> </tbody> </table>
+					<table class="table table-bordered table-hover">
+					
+					</table>
 				</div>
 				<div class="modal-footer">
 					<div class="btn-group pull-right">
 						<button class="btn btn-primary" id="<portlet:namespace/>all-down-btn"><span class="icon-download-alt">  <liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></span></button>
 					</div>
-				
 				</div>
 			</div>
 		</div>
@@ -161,26 +161,35 @@
 </div>
 
 
-<div class="modal fade" id="<portlet:namespace/>core-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>core-modal" style="display: none;">
+<div class="modal fade" id="<portlet:namespace/>share-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>share-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Simulation</h4>
+					<h4 class="modal-title">Simulation Job Share</h4>
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="col-md-12">
-								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
-									<div class="form-group">
-										<input type="text" class="form-control" id="numberOfCore" name="numberOfCore" placeholder="Title" required>
-									</div>
-									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
-								</form>
+							<div class="col-md-12" id="<portlet:namespace/>share-select-info">
+								<table class ="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="text-center"><liferay-ui:message key="edison-table-list-header-name" /></th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-primary" id="<portlet:namespace/>save">Save</button>
 					</div>
 				</div>
 			</div>

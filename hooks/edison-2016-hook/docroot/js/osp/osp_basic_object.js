@@ -81,6 +81,7 @@
 			PREFERENCES:'preferences_',
 			PROCEED_CONDITIONS:'proceedConditions_',
 			RELATIVE:'relative_',
+			REPOSITORY_TYPE:'repositoryType_',
 			SAMPLE_UUID:'sampleUuid_',
 			SCIENCE_APP:'scienceApp_',
 			SCIENCE_APP_ID:'scienceAppId_',

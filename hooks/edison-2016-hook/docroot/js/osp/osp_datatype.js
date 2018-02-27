@@ -59,6 +59,10 @@
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.RELATIVE, arguments) );
 		};
 		
+		Path.repositoryType = function(repositoryType){
+			return Path.property.apply(Path, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments));
+		}
+		
 		Path.dlEntryId = function( entryId ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments) );
 		};
