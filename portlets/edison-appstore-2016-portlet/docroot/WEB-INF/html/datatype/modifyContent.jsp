@@ -41,6 +41,13 @@
 </liferay-portlet:resourceURL>
 
 <style type="text/css">
+	.edison-data-type-editor .portlet-body{
+		width: 1200px;
+		padding-left: unset;
+		padding-right: unset;
+		margin: 0 auto;
+	}
+	
 	.edison-data-type-editor #progress_bar_wrap2 {
 		width:500px;  
 		padding: 10px 30px 30px 30px; 
@@ -67,122 +74,121 @@
 		font-size:11px; color:#000000;
 	}
 </style>
-<div class="container">
-	<div class="edison-panel">
-		<div class="panel-heading clearfix">
-			<h3 class="panel-title pull-left">
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
-				<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;"> ${redirectName} </a> >
-				<c:choose>
-					<c:when test="${mode eq 'update'}">
-						DataType
-						<liferay-ui:message key='action.UPDATE' />
-					</c:when>
-					<c:otherwise>
-						DataType
-						<liferay-ui:message key='registration' />
-					</c:otherwise>
-				</c:choose>
-			</h3>
-		</div>
+
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;"> ${redirectName} </a> >
+			<c:choose>
+				<c:when test="${mode eq 'update'}">
+					DataType
+					<liferay-ui:message key='action.UPDATE' />
+				</c:when>
+				<c:otherwise>
+					DataType
+					<liferay-ui:message key='registration' />
+				</c:otherwise>
+			</c:choose>
+		</h3>
 	</div>
-	<aui:form name="modifyStructure" method="POST" action="<%=submitURL%>">
-		<aui:input name="structure" type="hidden" />
-	</aui:form>
-	<aui:form name="frmPre" method="POST" action="<%=dataTypePreURL%>">
-		
-	</aui:form>
-	<form name="<portlet:namespace/>frm" id="<portlet:namespace/>frm" method="POST" action="<%=dataTypeFileURL%>" enctype="multipart/form-data" >
-		<div class="table1_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-				<colgroup>
-					<col width="20%">
-					<col width="40%">
-					<col width="15%">
-					<col width="25%">
-				</colgroup>
-				<tr>
-					<th><liferay-ui:message key='name' /></th>
-					<td>
-						${dataTypeMap.name}
-					</td>
-					<th><liferay-ui:message key='version' /></th>
-					<td>
-						${dataTypeMap.version}
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='description' /></th>
-					<td colspan="3">
-						${dataTypeMap.description}
-					</td>
-				</tr>
-				<c:if test="${!empty editorStr}">
-					<tr>
-						<th><liferay-ui:message key='edison-science-appstore-toolkit-editor-list' /></th>
-						<td>
-							${editorName}
-						</td>
-						<th>Default Editor</th>
-						<td>
-							${defaultEditorName}
-						</td>
-					</tr>
-				</c:if>
-				<c:if test="${!empty analyzerStr}">
-					<tr>
-						<th><liferay-ui:message key='edison-science-appstore-toolkit-analyzer-list' /></th>
-						<td>
-							${analyzerName}
-						</td>
-						<th>Default Analyzer</th>
-						<td>
-							${defaultAnalyzerName}
-						</td>
-					</tr>
-				</c:if>
-				<tr>
-					<th><liferay-ui:message key='add-sample-data'/><span class="requiredField"> *</span></th>
-					<td>
-						<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile"/>
-					</td>
-					<td>
-						<button class="btn btn-default" type="submit"><span class="icon-file"> file save</span></button>
-					</td>
-					<td id="status">
-						<c:if test="${!empty dataTypeMap.sampleTitle}">
-							<div class="down_date dataTypeFileClass"  onclick="<portlet:namespace/>fileDownload('${dataTypeMap.samplePath}')" style="cursor: pointer;display: inline-block;">
-								${dataTypeMap.sampleTitle}
-							</div>
-							<img src='${contextPath}/images/icon_dustbin.png' class="dataTypeFileClass noUpdateHidden" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${dataTypeMap.samplePath}','dataTypeFileClass');"/>
-						</c:if>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</form>
-	<div class="pull-right" style="margin: 18px 0px;">
-		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>preBack();"><span class="icon-arrow-left">  <liferay-ui:message key='previous'/></span></button>
-		<c:if test="${inputdeckExist}">
-			<button type="button" class="btn btn-default" onclick="<portlet:namespace/>modify();"><span class="icon-edit">  <liferay-ui:message key='save'/></span></button>
-		</c:if>
-		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack();"><span class="icon-list-ul">  <liferay-ui:message key='edison-virtuallab-surveyResultList-list'/></span></button>
-	</div>
-	
-	<div class="h15"/>
-	
-	<c:if test="${inputdeckExist}">
-		<liferay-portlet:runtime portletName="edisoninputDeck_WAR_edisonappstore2016portlet"/>
-	</c:if>
-	
-	
-	<div id="progress_bar_wrap2" style="display: none;">
-	    <div id="progress_bar_line">
-	        <div id="progress_bar2"><span id="percent">0%</span></div>    
-	    </div>
-	</div>
-	
 </div>
+<aui:form name="modifyStructure" method="POST" action="<%=submitURL%>">
+	<aui:input name="structure" type="hidden" />
+</aui:form>
+<aui:form name="frmPre" method="POST" action="<%=dataTypePreURL%>">
+	
+</aui:form>
+<form name="<portlet:namespace/>frm" id="<portlet:namespace/>frm" method="POST" action="<%=dataTypeFileURL%>" enctype="multipart/form-data" >
+	<div class="table1_list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+			<colgroup>
+				<col width="20%">
+				<col width="40%">
+				<col width="15%">
+				<col width="25%">
+			</colgroup>
+			<tr>
+				<th><liferay-ui:message key='name' /></th>
+				<td>
+					${dataTypeMap.name}
+				</td>
+				<th><liferay-ui:message key='version' /></th>
+				<td>
+					${dataTypeMap.version}
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='description' /></th>
+				<td colspan="3">
+					${dataTypeMap.description}
+				</td>
+			</tr>
+			<c:if test="${!empty editorStr}">
+				<tr>
+					<th><liferay-ui:message key='edison-science-appstore-toolkit-editor-list' /></th>
+					<td>
+						${editorName}
+					</td>
+					<th>Default Editor</th>
+					<td>
+						${defaultEditorName}
+					</td>
+				</tr>
+			</c:if>
+			<c:if test="${!empty analyzerStr}">
+				<tr>
+					<th><liferay-ui:message key='edison-science-appstore-toolkit-analyzer-list' /></th>
+					<td>
+						${analyzerName}
+					</td>
+					<th>Default Analyzer</th>
+					<td>
+						${defaultAnalyzerName}
+					</td>
+				</tr>
+			</c:if>
+			<tr>
+				<th><liferay-ui:message key='add-sample-data'/><span class="requiredField"> *</span></th>
+				<td>
+					<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile"/>
+				</td>
+				<td>
+					<button class="btn btn-default" type="submit"><span class="icon-file"> file save</span></button>
+				</td>
+				<td id="status">
+					<c:if test="${!empty dataTypeMap.sampleTitle}">
+						<div class="down_date dataTypeFileClass"  onclick="<portlet:namespace/>fileDownload('${dataTypeMap.samplePath}')" style="cursor: pointer;display: inline-block;">
+							${dataTypeMap.sampleTitle}
+						</div>
+						<img src='${contextPath}/images/icon_dustbin.png' class="dataTypeFileClass noUpdateHidden" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${dataTypeMap.samplePath}','dataTypeFileClass');"/>
+					</c:if>
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+<div class="pull-right" style="margin: 18px 0px;">
+	<button type="button" class="btn btn-default" onclick="<portlet:namespace/>preBack();"><span class="icon-arrow-left">  <liferay-ui:message key='previous'/></span></button>
+	<c:if test="${inputdeckExist}">
+		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>modify();"><span class="icon-edit">  <liferay-ui:message key='save'/></span></button>
+	</c:if>
+	<button type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack();"><span class="icon-list-ul">  <liferay-ui:message key='edison-virtuallab-surveyResultList-list'/></span></button>
+</div>
+
+<div class="h15"></div>
+
+<c:if test="${inputdeckExist}">
+	<liferay-portlet:runtime portletName="edisoninputDeck_WAR_edisonappstore2016portlet"/>
+</c:if>
+
+
+<div id="progress_bar_wrap2" style="display: none;">
+    <div id="progress_bar_line">
+        <div id="progress_bar2"><span id="percent">0%</span></div>    
+    </div>
+</div>
+	
 
 
 <script type="text/javascript">

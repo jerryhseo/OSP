@@ -12,9 +12,9 @@
 		<portlet id="edison-myapp-qna" />
 		<portlet id="edison-library-required-list" />
 		<portlet id="edison-data-type-editor" />
+		<portlet id="edison-inputDeck"/>
 	</category>
 	<category name="ScienceApp Portlet">
-		<portlet id="science-app-image-viewer"></portlet>
 		<portlet id="science-app-founder"></portlet>
 	</category>
 </display>
