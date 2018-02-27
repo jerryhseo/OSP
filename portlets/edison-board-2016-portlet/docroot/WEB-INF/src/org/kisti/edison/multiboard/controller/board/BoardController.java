@@ -329,9 +329,9 @@ public class BoardController {
 		try {
 		    
 		    String boardSeq = ParamUtil.getString(request, "boardSeq", "");
-            if(!StringUtils.hasText(boardSeq) 
+            if( ( !StringUtils.hasText(boardSeq) && !mode.equals("WRITE") )
                 || ( NumberUtils.isNumber(boardSeq) 
-                    && NumberUtils.toLong(boardSeq) <= 0)){
+                    && NumberUtils.toLong(boardSeq) <= 0 && mode.equals("VIEW"))){
                 log.error("BoardSeq is not valid.");
                 SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
                 return null;
