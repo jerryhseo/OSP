@@ -188,9 +188,6 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 				tabName=LanguageUtil.get(locale,"edison-appstore-myapp-list");
 				tabValue = "myApp";
 			}
-			if(tab.contains("myScienceData")){
-				continue;
-			}
 			if(tab.contains("myContent")){
 				tabName=LanguageUtil.get(locale,"edison-default-mycontent");
 				tabValue = "myContent";
