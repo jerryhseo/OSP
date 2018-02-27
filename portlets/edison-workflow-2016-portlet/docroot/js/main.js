@@ -1190,7 +1190,9 @@ $(function() {
             $("#workflow-instance-list .jstree-node#"+workflowInstanceId).addClass("selected-jstree");
           });
           $('#workflow-instance-list').jstree(true).open_all();
-          $("#workflow-instance-list > ul").scrollTop($("#workflow-instance-list .jstree-node#"+workflowInstanceId).offset().top - $("#workflow-instance-list > ul").offset().top);
+          $("#workflow-instance-list > ul").scrollTop(
+            $("#workflow-instance-list .jstree-node#"+workflowInstanceId).offset().top - 
+              $("#workflow-instance-list > ul").offset().top);
           if($("#search-running-workflow-name-small").val()){
             $('#workflow-instance-list').jstree(true).search($("#search-running-workflow-name-small").val());
           }
