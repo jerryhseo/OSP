@@ -155,9 +155,9 @@ function <portlet:namespace/>dataSearchList(curPage){
 	    <tbody id="<portlet:namespace/>workspaceList">
 	    </tbody>
 	</table>
+	
+	 <!-- 페이지 네비게이션 ---->
+	<div class="text-center" id="<portlet:namespace/>page_navi">
+	</div>
 </div>
 
- <!-- 페이지 네비게이션 ---->
-<div class="text-center" id="<portlet:namespace/>page_navi">
-
-</div>
