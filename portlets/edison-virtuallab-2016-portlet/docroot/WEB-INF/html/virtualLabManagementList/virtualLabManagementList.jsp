@@ -97,55 +97,55 @@
 		
 		<div id="courselist" class="courselist">
 		
-		<h1>
-			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-			<liferay-ui:message key='edison-course-list' />
-		</h1>
+			<h1>
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+				<liferay-ui:message key='edison-course-list' />
+			</h1>
 		
-		<div class="portlet-borderless-container">
-			<div class="portlet-body">
-				<div style="float: left; width: 100%" class="table-responsive panel edison-panel">
-					<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-						<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-						<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
-						<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" />
-						
-						<div class="input-group">
-							<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="width: 50%; float: right; margin-left: 1%;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+			<div class="portlet-borderless-container">
+				<div class="portlet-body">
+					<div style="float: left; width: 100%" class="table-responsive panel edison-panel">
+						<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+							<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+							<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
+							<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" />
 							
-							<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" class="form-control" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" style="line-height: 15px; width: 15%; float: right;">
-								<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-								<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-								<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-								<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-							</select>
-							<c:if test="${isLogin == 'Y' }">
-								<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" class="form-control" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:15%; float: right;">
-									<option value="ALL" ><liferay-ui:message key='full' /></option>
-									<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
-									<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
+							<div class="input-group">
+								<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="width: 50%; float: right; margin-left: 1%;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+								
+								<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" class="form-control" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" style="line-height: 15px; width: 15%; float: right;">
+									<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+									<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+									<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+									<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
 								</select>
-							</c:if>
-							
-							<div class="input-group-btn">
-								<button class="btn btn-default" onClick="<portlet:namespace/>dataAndTabSearchList('1','');"><liferay-ui:message key='edison-button-search' /></button>
-								<button class="btn btn-default" onClick="<portlet:namespace/>initDataSearchList();">Clear</button>
+								<c:if test="${isLogin == 'Y' }">
+									<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" class="form-control" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:15%; float: right;">
+										<option value="ALL" ><liferay-ui:message key='full' /></option>
+										<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
+										<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
+									</select>
+								</c:if>
+								
+								<div class="input-group-btn">
+									<button class="btn btn-default" onClick="<portlet:namespace/>dataAndTabSearchList('1','');"><liferay-ui:message key='edison-button-search' /></button>
+									<button class="btn btn-default" onClick="<portlet:namespace/>initDataSearchList();">Clear</button>
+								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		
-		<div class="table1_list borderno">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tbody id="<portlet:namespace/>virtualLabListBody">
-				</tbody>
-			</table>
 			
-			<div class="h20"></div>
-			<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
+			<div class="table1_list">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tbody id="<portlet:namespace/>virtualLabListBody">
+					</tbody>
+				</table>
+				
+				<div class="h20"></div>
+				<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
+			</div>
 		</div>
 	</div>
 </body>
