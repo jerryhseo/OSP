@@ -169,7 +169,7 @@
 		</c:choose>
 		
 		<!-- Button -->
-		<div class="buttonbox" align="right" style="margin-top: 10px;">
+		<div class="buttonbox" style="position: absolute; right: 1%; bottom: 5%;">
 			<c:choose>
 				<c:when test="${isCustomAdmin}">
 					<input class="btn btn-default" type="button" onClick="writeBoard<portlet:namespace/>()" value="<liferay-ui:message key='edison-button-board-write' />" />

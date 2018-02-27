@@ -4,7 +4,7 @@
 <liferay-portlet:resourceURL var="getSurveyOptionURL" id="getSurveyOption" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="getSurveyListURL" id="getSurveyList" copyCurrentRenderParameters="false" />
 
-<liferay-portlet:actionURL var="updateSurveyStatusURL" portletMode="view" copyCurrentRenderParameters="false" >
+<liferay-portlet:actionURL var="updateSurveyStatusURL" portletMode="view" copyCurrentRenderParameters="true" >
 	<liferay-portlet:param name="myaction" value="updateSurveyStatus" />
 </liferay-portlet:actionURL>
 
