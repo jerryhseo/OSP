@@ -214,51 +214,47 @@ function <portlet:namespace/>closeDialog ( data ){
 			</c:choose>
 			
 			<c:if test="${isOwner == true || isManager == true}"> 
-			<div>
 				<div class="panel-heading clearfix">
-					<div class="panel-title pull-left">
+					<h3 class="panel-title pull-left">
 						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-manager"/>
-					</div>
+					</h3>
 				</div>
+				
 				<!-- 관리자 -->
-				<div class="table1_list">
-						
-					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
-						<colgroup>
-							<col width="30%" />
-							<col width="30%" />
-							<col width="30%" />
-						</colgroup>
-						
-						<thead>
-							<tr>
-								<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
-								<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-usernm' /></th>
-								<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-email' /></th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:choose>
-								<c:when test="${fn:length(contentManagerList) == 0 }">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
+					<colgroup>
+						<col width="30%" />
+						<col width="30%" />
+						<col width="30%" />
+					</colgroup>
+					
+					<thead>
+						<tr>
+							<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+							<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-usernm' /></th>
+							<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-email' /></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:choose>
+							<c:when test="${fn:length(contentManagerList) == 0 }">
+								<tr>
+									<td class="TC" colspan="3"><liferay-ui:message key="edison-there-are-no-data"/></td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+								<c:forEach var="manager" items="${contentManagerList }">
 									<tr>
-										<td class="TC" colspan="3"><liferay-ui:message key="edison-there-are-no-data"/></td>
+										<td class="TC">${manager.userScreenName}</td>
+										<td class="TC">${manager.userFullName}</td>
+										<td class="TC">${manager.userEmailAddress}</td>
 									</tr>
-								</c:when>
-								<c:otherwise>
-									<c:forEach var="manager" items="${contentManagerList }">
-										<tr>
-											<td class="TC">${manager.userScreenName}</td>
-											<td class="TC">${manager.userFullName}</td>
-											<td class="TC">${manager.userEmailAddress}</td>
-										</tr>
-									</c:forEach>
-								</c:otherwise>
-							</c:choose>
-						</tbody>
-					</table>
-				</div>
-			</div>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</tbody>
+				</table>
 			</c:if>
 			<div class="relatedAssetPortlet">
 				<liferay-portlet:runtime portletName="edisonrelateasset_WAR_edisondefault2016portlet" 
