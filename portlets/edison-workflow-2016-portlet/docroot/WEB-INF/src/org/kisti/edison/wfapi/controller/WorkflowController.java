@@ -77,7 +77,6 @@ public class WorkflowController{
                 }
             }
 
-            String pagingClassName = GetterUtil.getString(searchParam.get("pagingClassName"));
             int curPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("p_curPage"), "1"));
             int linePerPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("linePerPage"), "10"));
             int pagePerBlock = 5;
@@ -89,11 +88,7 @@ public class WorkflowController{
             searchParam.put("begin", begin);
             searchParam.put("end", end);
 
-            String pagingHtml = WorkflowPagingUtil.getPaging(request.getContextPath(), pagingClassName, totalCnt,
-                curPage, linePerPage, pagePerBlock);
-
             listAndPagingMap.put("workflows", WorkflowLocalServiceUtil.retrieveWorkflows(searchParam, locale));
-            listAndPagingMap.put("pagingHtml", pagingHtml);
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",
@@ -247,6 +242,33 @@ public class WorkflowController{
             throw e;
         }
     }
+    
+    @RequestMapping(value = "/instance/create", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> createWorkflowInstance(
+        @RequestParam Map<String, Object> params,
+        HttpServletRequest request) throws Exception{
+        try{
+            return WorkflowInstanceLocalServiceUtil.createWorkflowInstance(params, request).getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = "/instance/{workflowInstanceId}/update", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> updateWorkflowInstance(
+        @RequestParam Map<String, Object> params,
+        @PathVariable("workflowInstanceId") long workflowInstanceId, 
+        HttpServletRequest request) throws Exception{
+        try{
+            return WorkflowInstanceLocalServiceUtil.updateWorkflowInstance(workflowInstanceId, params)
+                .getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+
 
     @RequestMapping(value = "/instance/{workflowInstanceId}/status", method = RequestMethod.GET)
     public @ResponseBody JsonNode workflowStatus(@RequestParam Map<String, Object> params,
@@ -328,7 +350,7 @@ public class WorkflowController{
     }
 
     @RequestMapping(value = "/instance/{workflowInstanceId}/delete", method = RequestMethod.POST)
-    public @ResponseBody JsonNode removeWorkflowInstance(@RequestParam Map<String, Object> params,
+    public @ResponseBody JsonNode removeWorkflowInstance(
         @PathVariable("workflowInstanceId") long workflowInstanceId, HttpServletRequest request) throws Exception{
         try{
             JsonNode status = Transformer
@@ -369,6 +391,25 @@ public class WorkflowController{
         }
     }
 
+    @RequestMapping(value = "/{workflowId}/instances", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String, Object>> workflowInstances(
+        @PathVariable("workflowId") long workflowId,
+        HttpServletRequest request) throws Exception{
+        try{
+            Locale locale = PortalUtil.getLocale(request);
+            Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+            List<WorkflowInstance> workflowInstances = WorkflowInstanceLocalServiceUtil
+                .getWorkflowWorkflowInstancesByWorkflowId(workflowId);
+            List<Map<String, Object>> jstreeIntances = WorkflowBeanUtil
+                .workflowInstanceToJstreeModel(workflowInstances, locale);
+            jstreeIntances.add(WorkflowBeanUtil.workflowToJstreeModel(workflow, "#", locale));
+            return jstreeIntances;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/instance", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> workflowInstanceListByUser(@RequestParam Map<String, Object> searchParam,
         HttpServletRequest request) throws Exception{
