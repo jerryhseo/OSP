@@ -259,6 +259,8 @@
     <div id="<portlet:namespace/>commentInput_main" class="<portlet:namespace/>comment_input">
         <textarea id="<portlet:namespace/>commentTextArea_main" class="<portlet:namespace/>commentTextArea" name="<portlet:namespace/>commentTextArea" style="height:100px;"></textarea>
         
+        <div class="h10"></div>
+        
         <!-- 파일 첨부 기능  -->
         <form id="<portlet:namespace/>fileUploadForm_main" method="POST" action="" enctype="multipart/form-data">
 	        
@@ -268,8 +270,12 @@
 	            <!-- 파일 추가 시 생성 -->
 	            <div class="<portlet:namespace/>fileAddArea" style="width: 80%; float: left;">
 	                <div id="<portlet:namespace/>fileDiv_main_0" class="<portlet:namespace/>fileDiv_main">
-	                    <input type="file" name="addfile" class="<portlet:namespace/>addFile" id="<portlet:namespace/>file_0" style ="width:500px;border:1px solid #CCCCCC;margin-bottom:2px;">&nbsp;
-	                    <input type="button" value="<liferay-ui:message key='edison-workflow-delete' />" style="cursor:pointer;" class="btn btn-default" onClick="<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_main', '0')"/>
+	                	<div>
+		                    <input type="file" name="addfile" class="<portlet:namespace/>addFile" id="<portlet:namespace/>file_0" style ="width:500px; border:1px solid #CCCCCC; margin:0% 1% 2% 0%; float: left;">
+		                    <button style="cursor:pointer;" class="btn btn-default" onClick="<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_main', '0')">
+		                    	Clear
+		                    </button>
+	                	</div>
 	                </div>
 	            </div>
 	            <div></div>
@@ -478,6 +484,7 @@
             
             var userId = ${userId}; // Login 중인 User ID
             var boardSeq = ""+boardList[i].boardSeq;
+            var writerName = boardList[i].writerName;
             var writerImg = commentWriterImgMap[boardSeq];
             
             /* 접속 중인 유저가 Comment/Reply를 작성한 유저인지 */
@@ -522,7 +529,7 @@
             
             /* title 영역 */
             $('<div/>').addClass("titletxt")
-                       .text(boardSeq)
+                       .text(writerName)
                        .appendTo(commentTitleDiv);
              
             /* title 오른쪽 버튼 */
@@ -945,10 +952,21 @@
     // 첨부파일 입력 Form 추가
     function <portlet:namespace/>moreFileTag(location){
         /* 첨부파일 선택 form 추가 */
-        var frmTag = $('.<portlet:namespace/>fileDiv_'+location); // "<div id=\"<portlet:namespace/>fileDiv_"+location+"_"+fileIndex+"\" class=\"<portlet:namespace/>fileDiv_"+location+"\">";
+        console.log("location : " + location);
+        var frmTag = $('.<portlet:namespace/>fileDiv_'+location);
         var fileIndex = $('.<portlet:namespace/>fileDiv_' + location + ' :input[name*=addfile]').length;
-        $("<input type=\"file\" name=\"addfile\" class=\"<portlet:namespace/>addFile\" id=\"<portlet:namespace/>file_"+fileIndex+"\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;").appendTo(frmTag);
-        $("<input type=\"button\" value=\"<liferay-ui:message key='edison-workflow-delete' />\" style=\"cursor:pointer;\" class=\"btn btn-default fileDelete_"+fileIndex+"\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv_"+location+"\', \'"+fileIndex+"\')\"/>").appendTo(frmTag)
+        var $div =$("<div/>");
+        $("<input/>").addClass("<portlet:namespace/>addFile")
+        			.attr("id", "<portlet:namespace/>file_"+fileIndex)
+        			.attr("type", "file").attr("name","addfile")
+        			.css("width","500px").css("border", "1px solid #CCCCCC").css("margin","0% 1% 2% 0%").css("float", "left")
+        			.appendTo($div);
+        $("<button/>").addClass("btn btn-default fileDelete_"+fileIndex)
+        			  .attr("onClick", "<portlet:namespace/>deleteFileTag('<portlet:namespace/>fileDiv_"+location+"', '"+fileIndex+"')")
+        			  .css("cursor","pointer").css("margin-top", "1%")
+        			  .text("<liferay-ui:message key='edison-workflow-delete' />")
+        			  .appendTo($div);
+        $div.appendTo(frmTag);
         
     }
 
