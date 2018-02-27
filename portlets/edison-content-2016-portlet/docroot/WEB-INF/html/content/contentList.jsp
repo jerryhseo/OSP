@@ -219,7 +219,7 @@
 		</table>
 		
 		<div class="h10"></div>
-		<div class="buttonbox" align="right" id="<portlet:namespace/>addGeneralContentDiv">
+		<div class="buttonbox" align="right" id="<portlet:namespace/>addGeneralContentDiv" style="position: absolute; right: 1%; bottom: 4%;">
 			<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
 		</div>
 		
