@@ -20,12 +20,12 @@ public class StringEditorPortlet extends MVCPortlet {
 		String inputData = ParamUtil.getString(renderRequest, "inputData");
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
 		String connector = ParamUtil.getString(renderRequest, "connector", "broadcast");
-		String action = ParamUtil.getString(renderRequest, "action", "input");
+		String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
 		renderRequest.setAttribute("inputData", inputData);
 		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("connector", connector);
-		renderRequest.setAttribute("action", action);
+		renderRequest.setAttribute("mode", mode);
 		
 		super.doView(renderRequest, renderResponse);
 	}

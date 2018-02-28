@@ -10,7 +10,9 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -31,12 +33,12 @@ public class TextEditorPortlet extends MVCPortlet {
 		String inputData = ParamUtil.getString(renderRequest, "inputData");
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
 		String connector = ParamUtil.getString(renderRequest, "connector", "broadcast");
-		String action = ParamUtil.getString(renderRequest, "action", "input");
+		String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
 		renderRequest.setAttribute("inputData", inputData);
 		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("connector", connector);
-		renderRequest.setAttribute("action", action);
+		renderRequest.setAttribute("mode", mode);
 		
 		super.doView(renderRequest, renderResponse);
 	}
@@ -48,52 +50,51 @@ public class TextEditorPortlet extends MVCPortlet {
 
 		Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
-		Path filePath = parentPath.resolve(fileName);
+		String target = parentPath.resolve(fileName).toString();
 		
 		String command = ParamUtil.getString(resourceRequest, "command");
-		String action = ParamUtil.getString(resourceRequest, "action", "input");
-		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
 		
 		if( command.equalsIgnoreCase("READ_FILE")){
 			try {
-				FileManagementLocalServiceUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), false);
+				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("readFileContent(): "+filePath.toString());
+				_log.error("readFileContent(): "+target);
 				throw new PortletException();
 			}
 		}
 		else if( command.equalsIgnoreCase("SAVE_AS")){
 			String context = ParamUtil.getString(resourceRequest, "context");
 			try {
-				FileManagementLocalServiceUtil.saveFileContent(resourceRequest, filePath.toString(), context, isJobResult);
+				OSPFileUtil.saveFileContent(resourceRequest, target, context, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("saveFileContent(): "+filePath.toString());
+				_log.error("saveFileContent(): "+target);
 				throw new PortletException();
 			}
 		}
 		else if( command.equalsIgnoreCase("CHECK_VALID_FILE")){
 			try {
-				FileManagementLocalServiceUtil.checkValidFile(resourceRequest, resourceResponse, filePath.toString(), isJobResult);
+				OSPFileUtil.checkValidFile(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("checkValidFile(): "+filePath.toString());
+				_log.error("checkValidFile(): "+target);
 				throw new PortletException();
 			}
 		}
 		else if( command.equalsIgnoreCase("CHECK_DUPLICATED") ){
 			try {
-				FileManagementLocalServiceUtil.duplicated(resourceRequest, resourceResponse, filePath.toString(), isJobResult);
+				OSPFileUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("duplicated(): "+filePath.toString());
+				_log.error("duplicated(): "+target);
 				throw new PortletException();
 			}
 		}
-		else if( command.equalsIgnoreCase("READ_SAMPLE") ){
+		else if( command.equalsIgnoreCase("READ_DLENTRY") ){
 			long entryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
 			
 			try {
-				FileManagementLocalServiceUtil.readDLAppEntry(resourceResponse, entryId);
+				OSPFileUtil.readDLAppEntry(resourceResponse, entryId);
 			} catch (SystemException e) {
-				_log.error("Read sample: "+entryId);
+				_log.error("Read dlentry: "+entryId);
 				throw new PortletException();
 			}
 		}

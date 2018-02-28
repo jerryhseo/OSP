@@ -18,9 +18,7 @@ preferences.store();
 String inputData = (String)renderRequest.getAttribute("inputData");
 String connector = (String)renderRequest.getAttribute("connector");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String action = (String)renderRequest.getAttribute("action");
-
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String mode = (String)renderRequest.getAttribute("mode");
 %>
 
 <div class="row-fluid structured-data-editor-portlet editor-portlet">
@@ -52,7 +50,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>dataType;
 var <portlet:namespace/>initData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 
 /***********************************************************************
@@ -102,10 +100,10 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( myId === e.targetPortlet ){
 				<portlet:namespace/>connector = e.portletId;
-				if( e.action )
-					<portlet:namespace/>action = e.action;
+				if( e.mode )
+					<portlet:namespace/>mode = e.mode;
 				else
-					<portlet:namespace/>action = 'input';
+					<portlet:namespace/>mode = 'input';
 				
 				var events = [
 					OSP.Event.OSP_LOAD_DATA,
@@ -128,12 +126,7 @@ Liferay.on(
 		function(e){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-				var eventData = {
-						portletId: myId,
-						targetPortlet: <portlet:namespace/>connector
-				};
-				
-				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
+				console.log(e.portletId+' activated at '+new Date()+']');
 			}
 		}
 );
@@ -185,69 +178,118 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_REFRESH,
+   		function( e ){
+   			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+   				console.log('OSP_REFRESH: ['+e.portletId+', '+new Date()+']');
+   				
+   				<portlet:namespace/>refreshEditor();
+   			}
+   		}
+   );
+
 
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadStructure( inputData ){
+	
 	if( !<portlet:namespace/>dataType ){
 		<portlet:namespace/>dataType = new OSP.DataType();
 	}
 	var dataType = <portlet:namespace/>dataType;
+	$('#<portlet:namespace/>canvas').empty();
 	
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.STRUCTURED_DATA:
-	  dataType.deserializeStructure(inputData.context());
-		//console.log( dataType.structure() );
+		dataType.deserializeStructure(inputData.context());
+		<portlet:namespace/>refreshEditor()
 		break;
 	case OSP.Enumeration.PathType.FILE_CONTENT:
-		dataType.loadStructure( inputData.context() ); 
+		dataType.loadStructure( inputData.context() );
+		<portlet:namespace/>refreshEditor()
 		break;
 	case OSP.Enumeration.PathType.DLENTRY_ID:
-		$.ajax({
-			url: '<%=serveResourceURL.toString()%>',
-			type:'POST',
-			async: false,
-			dataType:'json',
-			data:{
-				<portlet:namespace/>command: 'READ_SAMPLE',
-				<portlet:namespace/>action: <portlet:namespace/>action,
-				<portlet:namespace/>dlEntryId: inputData.dlEntryId()
-			},
-			success:function(result){
-			    if( result.error ){
-                    console.log( '[ERROR] read sample: ' + inputData.dlEntryId());
-                    alert( '[ERROR] read sample: ' + inputData.dlEntryId() + '\nPlease contact site manager.');
-                }
-                else{
-                    var inputData = new OSP.InputData( result.success);
-                    dataType.loadStructure( result.success );
-                }
-			},
-			error: function(){
-			    alert( '[ERROR] Site invalid. \nPlease contact site manager.');
-			}
-		});
-		break;
+		<portlet:namespace/>readDLEntry( inputData.dlEntryId() );
 	case OSP.Enumeration.PathType.FILE:
-		var eventData = {
-		                 portletId: '<%=portletDisplay.getId()%>',
-		                 targetPortlet: <portlet:namespace/>connector,
-		                 data: JSON.parse( JSON.stringify(inputData) )
-		}
-		
-		Liferay.fire( OSP.Event.OSP_READ_STRUCTURED_DATA_FILE, eventData );
-		return;
+	case OSP.Enumeration.PathType.EXT:
+	case OSP.Enumeration.PathType.FOLDER:
+		<portlet:namespace/>readFile( inputData );
+		break;
 	default:
 		alert( 'Un-known dataType: '+inputData.type());
 		return;
 	}
 		
-	$('#<portlet:namespace/>canvas').empty();
-	dataType.showStructuredDataEditor(
+}
+
+function <portlet:namespace/>refreshEditor(){
+	<portlet:namespace/>dataType.showStructuredDataEditor(
 					'<portlet:namespace/>', 
 					$('#<portlet:namespace/>canvas'),
 					'<%=request.getContextPath()%>',
 					'<%=themeDisplay.getLanguageId()%>');
+};
+
+function <portlet:namespace/>readDLEntry( dlEntryId ){
+	var ajaxData = Liferay.Util.ns(
+	                               '<portlet:namespace/>',
+	                               {
+	                            		command: 'READ_DLENTRY',
+	                            		dlEntryId: dlEntryId,
+	               						repositoryType: inputData.repositoryType()
+	                               });
+	$.ajax({
+		url: resourceURL,
+		type: 'post',
+		dataType: 'json',
+		data: ajaxData,
+		success: function( result ){
+			<portlet:namespace/>dataType.loadStructure( result );
+			<portlet:namespace/>refreshEditor();
+		},
+		error: function( data, e ){
+			console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
+		}
+	});
+}
+
+function <portlet:namespace/>readFile( inputData ){
+	var command;
+	switch( inputData.type() ){
+		case OSP.Enumeration.PathType.FILE:
+			command = 'GET_FILE';
+			break;
+		case OSP.Enumeration.PathType.EXT:
+		case OSP.Enumeration.PathType.FOLDER:
+			command = 'READ_FIRST_FILE';
+			break;
+		default:
+			console.log('Only a file can be read: '+inputData.type());
+			return;
+	}
+	
+	var ajaxData = Liferay.Util.ns(
+	                               '<portlet:namespace/>',
+	                               {
+	                            		command: command,
+	               						parentPath: inputData.parent(),
+	               						fileName: inputData.name(),
+	               						repositoryType: inputData.repositoryType()
+	                               });
+	$.ajax({
+		url: resourceURL,
+		type: 'post',
+		dataType: 'json',
+		data: ajaxData,
+		success: function( result ){
+			<portlet:namespace/>dataType.loadStructure( result );
+			<portlet:namespace/>refreshEditor();
+		},
+		error: function( data, e ){
+			console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
+		}
+	});
 }
 </script>

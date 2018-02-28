@@ -1,3 +1,5 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
@@ -23,11 +25,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-String action = (String)renderRequest.getAttribute("action");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <div class="row-fluid text-viewer-portlet common-analyzer-portlet">
@@ -78,7 +79,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
 
 /***********************************************************************
@@ -124,6 +125,7 @@ $('#<portlet:namespace/>openServer').click(function(){
     }else{
         inputData = new OSP.InputData();
         inputData.type( OSP.Enumeration.PathType.FOLDER );
+        inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
         inputData.parent('');
         inputData.name('');
     }
@@ -172,7 +174,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
         var initData = <portlet:namespace/>initData;
         dialogURL.setParameter('inputData', JSON.stringify(inputData));
         dialogURL.setParameter('mode', mode);
-        dialogURL.setParameter('action', <portlet:namespace/>action);
         dialogURL.setParameter('eventEnable', false);
         dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
         dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
@@ -196,9 +197,9 @@ Liferay.on(
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
 			if( e.action )
-				<portlet:namespace/>action = e.action;
+				<portlet:namespace/>mode = e.mode;
 			else
-				<portlet:namespace/>action = 'output';
+				<portlet:namespace/>mode = 'VIEW';
 				
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
@@ -219,12 +220,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
-		  var eventData = {
-	         portletId: myId,
-	         targetPortlet: <portlet:namespace/>connector
-	      };
-	      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
-		}
+			console.log(e.portletId+' activated at '+new Date()+']');
 	}
 );
 
@@ -265,7 +261,6 @@ Liferay.on(
                         <portlet:namespace/>loadText( inputData );
                         $<portlet:namespace/>fileExplorerDialogSection.dialog('close');
                     }
-                    //<portlet:namespace/>checkPath( inputData, 'CHECK_VALID_FILE');
                 }
             }
         }
@@ -321,6 +316,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
@@ -349,6 +345,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 	var data = {
 			<portlet:namespace/>command: command,
 			<portlet:namespace/>pathType: inputData.type(),
+			<portlet:namespace/>repositoryType: inputData.repositoryType(),
 			<portlet:namespace/>parentPath: inputData.parent(),
 			<portlet:namespace/>fileName: inputData.name(),
 			<portlet:namespace/>relative: inputData.relative()
@@ -378,6 +375,7 @@ function <portlet:namespace/>downloadCurrentFile(){
         var data = {
             <portlet:namespace/>command: "DOWNLOAD_FILE",
             <portlet:namespace/>pathType: filePath.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
             <portlet:namespace/>fileName: filePath.name(),
             <portlet:namespace/>relative: filePath.relative()
@@ -389,34 +387,6 @@ function <portlet:namespace/>downloadCurrentFile(){
         ($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
     }
 }
-
-function <portlet:namespace/>checkPath( filePath, command ){
-    var data = {
-            <portlet:namespace/>command: command,
-            <portlet:namespace/>pathType: filePath.type(),
-            <portlet:namespace/>parentPath: filePath.parent(),
-            <portlet:namespace/>fileName: filePath.name(),
-            <portlet:namespace/>relative: filePath.relative()
-    };
-    
-    $.ajax({
-        url: '<%= serveResourceURL.toString()%>', 
-        type: 'POST',
-        data  : data,
-        dataType : 'json',
-        success: function(result) {
-            if( result.valid === true){
-                $<portlet:namespace/>fileExplorerDialogSection.dialog('close');
-                <portlet:namespace/>loadText( filePath );
-            }
-            else
-             alert('Selected file is invalid or not a file.: '+filePath.fullPath() );
-        },
-        error:function(d, e){
-        	console.log('[TextViewer] checkPath() Ajax ERROR: '+JSON.stringify(data));
-        }
-    });
-};
 
 function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');

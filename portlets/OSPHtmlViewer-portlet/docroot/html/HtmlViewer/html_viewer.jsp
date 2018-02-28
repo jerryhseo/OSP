@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -26,10 +27,10 @@
  preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
  preferences.store();
  
- boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
- String inputData = (String)renderRequest.getAttribute("inputData");
- String connector = (String)renderRequest.getAttribute("connector");
- String action = (String)renderRequest.getAttribute("action");
+ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
+ String inputData = GetterUtil.getString( renderRequest.getAttribute("inputData"), "{}");
+ String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
  %>
  
 <div class="row-fluid common-analyzer-portlet">
@@ -44,7 +45,7 @@
  ***********************************************************************/
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 /***********************************************************************
  * Initailization section using parameters
@@ -82,7 +83,7 @@ Liferay.on(
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
       <portlet:namespace/>connector = e.portletId;
-      <portlet:namespace/>action = e.action;
+      <portlet:namespace/>mode = e.mode;
       var events = [ 
           OSP.Event.OSP_EVENTS_REGISTERED, 
           OSP.Event.OSP_LOAD_DATA
@@ -97,18 +98,14 @@ Liferay.on(
   });
 
 Liferay.on(
-  OSP.Event.OSP_EVENTS_REGISTERED, 
-  function(e) {
-    
-    var myId = '<%=portletDisplay.getId()%>';
-    if(e.targetPortlet === myId){
-      var eventData = {
-         portletId: myId,
-         targetPortlet: <portlet:namespace/>connector
-      };
-      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
-    }
-  });
+	OSP.Event.OSP_EVENTS_REGISTERED, 
+	function(e) {
+		var myId = '<%=portletDisplay.getId()%>';
+		if(e.targetPortlet === myId){
+			console.log(myId + ' activated by OSP_EVENTS_REGISTERED.');
+		}
+	}
+);
  
 Liferay.on(OSP.Event.OSP_LOAD_DATA, function(e){
   var myId = '<%=portletDisplay.getId()%>';
@@ -142,7 +139,7 @@ function <portlet:namespace/>loadHtml(indexPath){
 				type:'POST',
 				data:{
 	    				<portlet:namespace/>command: 'GET_COPIED_TEMP_FILE_PATH',
-						<portlet:namespace/>action: <portlet:namespace/>action,
+						<portlet:namespace/>repositoryType: indexPath.repositoryType(),
 				        <portlet:namespace/>parentPath: indexPath.parent(),
 	    				<portlet:namespace/>pathType: indexPath.type(),
 	    				<portlet:namespace/>fileName: indexPath.name(),

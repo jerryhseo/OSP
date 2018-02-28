@@ -1,3 +1,5 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -19,11 +21,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-String action = (String)renderRequest.getAttribute("action");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
@@ -71,9 +72,8 @@ if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
 else
 	<portlet:namespace/>fileExplorerId += '001';
 	
-var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
 
 /***********************************************************************
@@ -85,16 +85,16 @@ var <portlet:namespace/>eventEnable = <%=eventEnable%>;
  if( <portlet:namespace/>eventEnable === false ){
      var inputData = '<%=inputData%>';
      if(!inputData){
-         <portlet:namespace/>initData = new OSP.InputData();
+         <portlet:namespace/>currentData = new OSP.InputData();
      }else{
-         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
+         <portlet:namespace/>currentData = new OSP.InputData(JSON.parse(inputData));
      }
      <portlet:namespace/>connector = '<%=connector%>';
      
-//     <portlet:namespace/>initData.type('file');
-//     <portlet:namespace/>initData.parent('');
-//     <portlet:namespace/>initData.name('test_image.jpg')
-     <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
+//     <portlet:namespace/>currentData.type('file');
+//     <portlet:namespace/>currentData.parent('');
+//     <portlet:namespace/>currentData.name('test_image.jpg')
+     <portlet:namespace/>loadImage(<portlet:namespace/>currentData, 'fit');
    }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -114,16 +114,18 @@ $('#<portlet:namespace/>openLocal').click(function(){
 
 $('#<portlet:namespace/>openServer').click(function(){
     var inputData;
-    if(<portlet:namespace/>initData && 
-        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
-        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
-        inputData = <portlet:namespace/>initData;
+    if(<portlet:namespace/>currentData && 
+        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
+        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.CONTEXT ){
+        inputData = <portlet:namespace/>currentData;
     }else{
         inputData = new OSP.InputData();
         inputData.type( OSP.Enumeration.PathType.FOLDER );
         inputData.parent('');
         inputData.name('');
+        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     }
+   
     <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
 });
 
@@ -135,8 +137,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
   var eventData = {
       portletId : '<%=portletDisplay.getId()%>',
-      targetPortlet : <portlet:namespace/>fileExplorerId,
-      action: "READ"
+      targetPortlet : <portlet:namespace/>fileExplorerId
   };
   Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
   $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
@@ -167,7 +168,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
 		// dialogURL.setParameter('action', <portlet:namespace/>action ? <portlet:namespace/>action : 'output' );
-		dialogURL.setParameter('action', <portlet:namespace/>action );
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
@@ -194,7 +194,6 @@ Liferay.on(
 		if( e.targetPortlet === myId ){
 			console.log('[ImageViewer]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
 			<portlet:namespace/>connector = e.portletId;
-			<portlet:namespace/>action = e.action;
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
 				OSP.Event.OSP_LOAD_DATA
@@ -214,12 +213,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
-			console.log('[ImageViewer]OSP_EVENTS_REGISTERED: ['+e.portletId+', '+new Date()+']');
-		  var eventData = {
-	         portletId: myId,
-	         targetPortlet: <portlet:namespace/>connector
-	      };
-	      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
+			console.log(e.portletId+' activated at '+new Date()+']');
 		}
 	}
 );
@@ -230,13 +224,13 @@ Liferay.on(
     var myId = '<%=portletDisplay.getId()%>';
 	if( e.targetPortlet === myId ){
 		console.log('[ImageViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
-	  <portlet:namespace/>initData = new OSP.InputData( e.data );
-	  if( <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ){
-	      <portlet:namespace/>initData.parent(
-              OSP.Util.mergePath(<portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name()));
-	      <portlet:namespace/>initData.name("");
+	  <portlet:namespace/>currentData = new OSP.InputData( e.data );
+	  if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
+	      <portlet:namespace/>currentData.parent(
+              OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
+	      <portlet:namespace/>currentData.name("");
 	  }
-	  <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
+	  <portlet:namespace/>loadImage(<portlet:namespace/>currentData, 'fit');
 	}
   }
 );
@@ -316,6 +310,7 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('parentPath', inputData.parent());
         serveResourceURL.setParameter('pathType', inputData.type());
         serveResourceURL.setParameter('fileName', inputData.name());
+        serveResourceURL.setParameter('repositoryType', inputData.repositoryType());
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
@@ -370,6 +365,7 @@ function <portlet:namespace/>getFirstFileName( argData, zooming ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
@@ -399,6 +395,7 @@ function <portlet:namespace/>downloadCurrentFile(){
     	var data = {
   			<portlet:namespace/>command: "DOWNLOAD_FILE",
   			<portlet:namespace/>pathType: filePath.type(),
+  			<portlet:namespace/>repositoryType: filePath.repositoryType(),
   			<portlet:namespace/>parentPath: filePath.parent(),
   			<portlet:namespace/>fileName: filePath.name(),
   			<portlet:namespace/>relative: filePath.relative()
@@ -409,36 +406,6 @@ function <portlet:namespace/>downloadCurrentFile(){
         var url = base + sep + $.param(data);
         location.href = url;
     }
-}
-
-function <portlet:namespace/>checkPath( filePath, command ){
-	var data = {
-			<portlet:namespace/>command: command,
-			<portlet:namespace/>pathType: filePath.type(),
-			<portlet:namespace/>parentPath: filePath.parent(),
-			<portlet:namespace/>fileName: filePath.name(),
-			<portlet:namespace/>relative: filePath.relative()
-	};
-	
-	$.ajax({
-		type: 'POST',
-		url: '<%= serveResourceURL.toString()%>', 
-		async : false,
-		data  : data,
-		dataType : 'json',
-		success: function(result) {
-		    if( result.valid === true ){
-				$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
-				<portlet:namespace/>loadImage( filePath, 'fit' );
-			}
-			else{
-				alert('Selected file is invalid or not a file.: '+filePath.fullPath() );
-			}
-		},
-		error:function(data,e){
-			console.log('AJAX ERROR-->', data, e);
-		}
-	});
 }
 
 function <portlet:namespace/>setTitle( title ){

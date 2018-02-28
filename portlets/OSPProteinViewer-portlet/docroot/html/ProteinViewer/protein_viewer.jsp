@@ -1,3 +1,4 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -27,8 +28,7 @@ preferences.store();
 String inputData = ParamUtil.getString(request, "inputData", "");
 String connector = ParamUtil.getString(request, "connector", "BROADCAST");
 boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "output");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String mode = ParamUtil.getString(request, "mode", "VIEW");
 %>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -74,7 +74,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
 
@@ -125,6 +125,7 @@ $('#<portlet:namespace/>openServer').click(function(){
 	}else{
 		inputData = {};
 		inputData.type_ = 'folder';
+		inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_HOME.toString()%>';
 		inputData.parent_ = '';
 		inputData.name_ = '';
 	}
@@ -178,7 +179,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
-		dialogURL.setParameter('action', <portlet:namespace/>action);
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
@@ -203,9 +203,9 @@ Liferay.on(
 		if( e.targetPortlet === myId ){
 			<portlet:namespace/>connector = e.portletId;
 			if( e.action )
-				<portlet:namespace/>action = e.action;
+				<portlet:namespace/>mode = e.mode;
 			else
-				<portlet:namespace/>action = 'output';
+				<portlet:namespace/>mode = 'VIEW';
 				
 			var events = [
 				'OSP_EVENTS_REGISTERED',
@@ -228,12 +228,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
-			var eventData = {
-						portletId: myId,
-						targetPortlet: <portlet:namespace/>connector,
-						action: 'DEFAULT'
-			};
-			Liferay.fire('OSP_REQUEST_OUTPUT_PATH', eventData);
+			console.log(e.portletId+' activated at '+new Date()+']');
 		}
 	}
 );
@@ -327,6 +322,7 @@ function <portlet:namespace/>loadData( inputData ){
 		serveResourceURL.setPortletId('<%=portletDisplay.getId()%>');
 		serveResourceURL.setParameter('parentPath', inputData.parent_);
 		serveResourceURL.setParameter('pathType', inputData.type_);
+		serveResourceURL.setParameter('repositoryType', inputData.repositoryType_);
 		serveResourceURL.setParameter('fileName', inputData.name_);
 		serveResourceURL.setParameter('relative', inputData.relative_);
 		serveResourceURL.setParameter('command', 'GET_FILE');
@@ -357,6 +353,7 @@ function <portlet:namespace/>getFirstFileName( inputData ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type_,
+            <portlet:namespace/>repositoryType: inputData.repositoryType_,
             <portlet:namespace/>parentPath: inputData.parent_,
             <portlet:namespace/>fileName: inputData.name_,
             <portlet:namespace/>relative: inputData.relative_
@@ -386,6 +383,7 @@ function <portlet:namespace/>downloadCurrentFile(){
     	var data = {
   			<portlet:namespace/>command: "DOWNLOAD_FILE",
   			<portlet:namespace/>pathType: filePath.type_,
+  			<portlet:namespace/>repositoryType: inputData.repositoryType_,
   			<portlet:namespace/>parentPath: filePath.parent_,
   			<portlet:namespace/>fileName: filePath.name_,
   			<portlet:namespace/>relative: filePath.relative_

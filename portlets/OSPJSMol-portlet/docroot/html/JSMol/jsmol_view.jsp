@@ -1,3 +1,5 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
@@ -9,11 +11,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
 String connector = (String)renderRequest.getAttribute("connector");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String action = (String)renderRequest.getAttribute("action");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String mode = (String)renderRequest.getAttribute("mode");
 %>
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -61,7 +62,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
 
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
 /***********************************************************************
@@ -115,6 +116,7 @@ $('#<portlet:namespace/>openServer').click(function(){
   }else{
     inputData = new OSP.InputData();
     inputData.type( OSP.Enumeration.PathType.FOLDER );
+    inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     inputData.parent('');
     inputData.name('');
   }
@@ -149,7 +151,6 @@ $('#<portlet:namespace/>selectFile').bind(
             
             reader.onload = function (e) {
                 $('#<portlet:namespace/>canvas').each(function(){
-	                    console.log( 'ID: '+$(this).attr('id'));
 	                    $(this).one("load", function(){
 	                                    $(this).prop('contentWindow').loadJSMolFile(
 	                                                                                e.target.result, 
@@ -173,7 +174,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
         //dialogURL.setParameter('loadNow', true);
         dialogURL.setParameter('mode', mode);
         dialogURL.setParameter('eventEnable', false);
-        dialogURL.setParameter('action', <portlet:namespace/>action);
         dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
         dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 
@@ -195,10 +195,10 @@ Liferay.on(
   		var myId = '<%=portletDisplay.getId()%>';
   		if( e.targetPortlet === myId ){
   			<portlet:namespace/>connector = e.portletId;
-  			if( e.action )
-  				<portlet:namespace/>action = e.action;
+  			if( e.mode )
+  				<portlet:namespace/>action = e.mode;
   			else
-  				<portlet:namespace/>action = 'output';	
+  				<portlet:namespace/>action = 'VIEW';	
   			var events = [
   				OSP.Event.OSP_EVENTS_REGISTERED,
   				OSP.Event.OSP_LOAD_DATA
@@ -219,11 +219,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
-		  var eventData = {
-	         portletId: myId,
-	         targetPortlet: <portlet:namespace/>connector
-	      };
-	      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
+			console.log(e.portletId+' activated. '+new Date()+']');
 		}
 	}
 );
@@ -311,11 +307,13 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadJSMolFile ) {
 	    	    AUI().use('liferay-portlet-url', function(a) {
+	                <portlet:namespace/>currentData = inputData.clone();
+
 	    	        var serveResourceUrl = Liferay.PortletURL.createResourceURL();
 	    	        
 	    	        serveResourceUrl.setPortletId('<%=portletDisplay.getId()%>');
 	    	        serveResourceUrl.setParameter('command', 'READ_FILE');
-	    	        serveResourceUrl.setParameter('action', <portlet:namespace/>action);
+	    	        serveResourceUrl.setParameter('repositoryType', inputData.repositoryType());
 	    	        serveResourceUrl.setParameter('pathType', inputData.type());
 	    	        serveResourceUrl.setParameter('parentPath', inputData.parent());
 	    	        serveResourceUrl.setParameter('fileName', inputData.name());
@@ -340,6 +338,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
@@ -353,7 +352,6 @@ function <portlet:namespace/>getFirstFileName( argData ){
         success: function(data) {
             inputData.type( OSP.Enumeration.PathType.FILE );
             inputData.name( data.fileName );
-            <portlet:namespace/>currentData = inputData.clone();
             <portlet:namespace/>drawJSMol( inputData );
         },
         error:function(data,e){
@@ -371,6 +369,7 @@ function <portlet:namespace/>downloadCurrentFile(){
         var data = {
             <portlet:namespace/>command: "DOWNLOAD_FILE",
             <portlet:namespace/>pathType: filePath.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
             <portlet:namespace/>fileName: filePath.name(),
             <portlet:namespace/>relative: filePath.relative()

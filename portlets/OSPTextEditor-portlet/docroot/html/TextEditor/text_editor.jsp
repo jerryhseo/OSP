@@ -1,3 +1,5 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
@@ -10,11 +12,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String action = (String)renderRequest.getAttribute("action");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
+String mode = (String)renderRequest.getAttribute("mode");
 %>
 
 <div class="row-fluid texteditor-portlet editor-portlet" >
@@ -62,7 +63,7 @@ var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fil
 var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_te'+
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 
 /***********************************************************************
@@ -99,6 +100,7 @@ $('#<portlet:namespace/>saveAs').click(function(e){
 	alert( 'SaveAs ');
 	var inputData = new OSP.InputData();
 	inputData.type( OSP.Enumeration.PathType.FOLDER);
+	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
 	inputData.parent( '' );
 	inputData.name( '' );
 	inputData.relative( true );
@@ -120,11 +122,12 @@ $('#<portlet:namespace/>openServer').click(function(){
 	}
 	else{
 		inputData = new OSP.InputData();
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
 		inputData.type( OSP.Enumeration.PathType.FOLDER );
 		inputData.parent('');
 		inputData.name('');
 	}
-	<portlet:namespace/>fileExplorerDialog( 'VIEW', 'READ_REPOSITORY', inputData );
+	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
 });
 
 $('#<portlet:namespace/>canvas').on('change', function(){
@@ -142,7 +145,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 });
 
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
 	    $<portlet:namespace/>fileExplorerDialogSection.remove();
 		
@@ -166,7 +169,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 					var eventData = {
 							portletId : '<%=portletDisplay.getId()%>',
 							targetPortlet : <portlet:namespace/>fileExplorerId,
-							action: action
+							mode: mode
 					};
 					Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
 				},
@@ -204,10 +207,10 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				if( e.action )
-					<portlet:namespace/>action = e.action;
+				if( e.mode )
+					<portlet:namespace/>mode = e.mode;
 				else
-					<portlet:namespace/>action = 'input';
+					<portlet:namespace/>mode = 'VIEW';
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
@@ -277,7 +280,6 @@ Liferay.on(
                var myId = '<%=portletDisplay.getId()%>';
                if( e.targetPortlet === myId ){
                    console.log('Text Editor OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
-                       //alert( e.sourceData.action );
                    console.log( e.action  );
                    var data = new OSP.InputData( e.data );
                    if( data.type() !== OSP.Enumeration.PathType.FILE ){

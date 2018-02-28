@@ -10,7 +10,9 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -30,12 +32,12 @@ public class OSPDataStructureViewerPortlet extends MVCPortlet {
         boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
         String inputData = ParamUtil.getString(renderRequest, "inputData");
         String connector = ParamUtil.getString(renderRequest, "connector", "connector");
-        String action = ParamUtil.getString(renderRequest, "action", "output");
+        String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
         renderRequest.setAttribute("eventEnable", eventEnable);
         renderRequest.setAttribute("inputData", inputData);
         renderRequest.setAttribute("connector", connector);
-        renderRequest.setAttribute("action", action);
+        renderRequest.setAttribute("mode", mode);
 
         super.doView(renderRequest, renderResponse);
     }
@@ -50,36 +52,32 @@ public class OSPDataStructureViewerPortlet extends MVCPortlet {
         String command = ParamUtil.getString(resourceRequest, "command");
         _log.info(command);
         String action = ParamUtil.getString(resourceRequest, "action", "output");
-        boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
+        String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
 
         if(command.equalsIgnoreCase("READ_FILE")){
             try{
-                FileManagementLocalServiceUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(),
-                    isJobResult);
+                OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_IMAGE")){
             try{
-                FileManagementLocalServiceUtil.getFile(
-                    resourceRequest, resourceResponse, filePath.toString(), isJobResult);
+            	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_FIRST_FILE")){
             try{
-                FileManagementLocalServiceUtil.readFirstFileContent(resourceRequest, resourceResponse, parentPath,
-                    fileName, isJobResult);
+            	OSPFileUtil.readFirstFileContent(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try{
-                FileManagementLocalServiceUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName,
-                    isJobResult);
+            	OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("getFirstFileName(): " + filePath.toString());
                 throw new PortletException();
@@ -87,24 +85,21 @@ public class OSPDataStructureViewerPortlet extends MVCPortlet {
         }else if(command.equalsIgnoreCase("SAVE_AS")){
             String context = ParamUtil.getString(resourceRequest, "context");
             try{
-                FileManagementLocalServiceUtil.saveFileContent(resourceRequest, filePath.toString(), context,
-                    isJobResult);
+            	OSPFileUtil.saveFileContent(resourceRequest, filePath.toString(), context, repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("saveFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("CHECK_VALID_FILE")){
             try{
-                FileManagementLocalServiceUtil.checkValidFile(resourceRequest, resourceResponse, filePath.toString(),
-                    isJobResult);
+            	OSPFileUtil.checkValidFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("checkValidFile(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("CHECK_DUPLICATED")){
             try{
-                FileManagementLocalServiceUtil.duplicated(resourceRequest, resourceResponse, filePath.toString(),
-                    isJobResult);
+            	OSPFileUtil.duplicated(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("duplicated(): " + filePath.toString());
                 throw new PortletException();
@@ -112,15 +107,14 @@ public class OSPDataStructureViewerPortlet extends MVCPortlet {
         }else if(command.equalsIgnoreCase("READ_SAMPLE")){
             long entryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
             try{
-                FileManagementLocalServiceUtil.readDLAppEntry(resourceResponse, entryId);
+            	OSPFileUtil.readDLAppEntry(resourceResponse, entryId);
             }catch (SystemException e){
                 _log.error("Read sample: " + entryId);
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("DOWNLOAD_FILE")){
             try{
-                FileManagementLocalServiceUtil.download(resourceRequest, resourceResponse, parentPath,
-                    new String[]{fileName}, isJobResult);
+            	OSPFileUtil.downloadFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("checkValidFile(): " + filePath.toString());
                 throw new PortletException();

@@ -784,6 +784,21 @@ public class OSPFileUtil {
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
 		ServletResponseUtil.write(httpResponse, targetPath.toFile() );
 	}
+	
+	public static void getFile(
+		    PortletRequest portletRequest,
+	        PortletResponse portletResponse,
+	        String target,
+	        String repositoryType) throws PortalException, SystemException, IOException{
+			Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
+			
+		    HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(portletRequest);
+	        HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+		
+	        InputStream inputStream = new FileInputStream(targetPath.toFile());
+		    ServletResponseUtil.sendFile(
+		        httpRequest, httpResponse, targetPath.getFileName().toString(), inputStream);
+	}
 
 	/**
 	 * Download a file.
@@ -1063,6 +1078,26 @@ public class OSPFileUtil {
     	}
     	
     	return targetPath;
+    }
+    
+    public static void getFileURL( 
+    		PortletRequest portletRequest, 
+    		PortletResponse portletResponse, 
+    		String path, 
+    		String repoType ) throws PortalException, SystemException, IOException{
+    	Path targetPath = getRepositoryPath(portletRequest, path, repoType);
+    	
+    	writeResult( portletResponse, targetPath );
+    }
+    
+    private static void writeResult( PortletResponse portletResponse, String result ) throws PortalException, IOException{
+    	HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+    	ServletResponseUtil.write( httpResponse, result );
+    }
+    
+    private static void writeResult( PortletResponse portletResponse, Path path ) throws PortalException, IOException{
+    	HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
+    	ServletResponseUtil.write( httpResponse, path.toString() );
     }
     
     public static String getJobResultPath( String simulationUuid, String jobUuid, String path ){

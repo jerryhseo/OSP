@@ -11,7 +11,7 @@ preferences.store();
 String inputData = ParamUtil.getString(request, "inputData", "");
 String connector = ParamUtil.getString(request, "connector", "BROADCAST");
 boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "output");
+String mode = ParamUtil.getString(request, "mode", "VIEW");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 
 String launcherURL = (String)renderRequest.getAttribute("launcherURL");
@@ -30,7 +30,7 @@ String launcherURL = (String)renderRequest.getAttribute("launcherURL");
  ***********************************************************************/
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>launcherURL = '<%=launcherURL%>';
 
 
@@ -71,7 +71,7 @@ Liferay.on(
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
       <portlet:namespace/>connector = e.portletId;
-      <portlet:namespace/>action = e.action;
+      <portlet:namespace/>mode = e.mode;
       var events = [ 
           'OSP_EVENTS_REGISTERED', 
           'OSP_LOAD_DATA'
@@ -91,11 +91,7 @@ Liferay.on(
     
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
-      var eventData = {
-         portletId: myId,
-         targetPortlet: <portlet:namespace/>connector
-      };
-      Liferay.fire('OSP_REQUEST_OUTPUT_PATH', eventData);
+    	console.log(e.portletId+' activated. '+new Date()+']');
     }
   });
  
@@ -142,7 +138,7 @@ function <portlet:namespace/>loadParaView( inputData ){
 			data:{
 			    <portlet:namespace/>command: 'GET_ABSOLUTE_PATH',
 			    <portlet:namespace/>targetPath: dataDirectory,
-			    <portlet:namespace/>action: <portlet:namespace/>action
+			    <portlet:namespace/>repositoryType: inputData.repositoryType_
 			},
 			success: function( result ){
 			    dataDirectory = result;

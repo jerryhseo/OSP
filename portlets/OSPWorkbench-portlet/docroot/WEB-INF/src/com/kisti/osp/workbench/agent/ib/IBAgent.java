@@ -303,12 +303,25 @@ public class IBAgent {
 				true, 
 				repositoryType);
 		
-		Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, target, repositoryType);
-		String ibFileId = this.getFileId(targetPath.toString());
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
         
         System.out.println("File: "+filePath);
         System.out.println("File ID: "+ibFileId );
         
+		return ibFileId;
+	}
+	
+	public String uploadFileContent(
+			PortletRequest portletRequest,
+			String content, 
+			String target,
+			String cluster ) throws PortalException, SystemException, IOException{
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+		
+		OSPFileUtil.saveFileContent(portletRequest, target, content, repositoryType);
+
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+		
 		return ibFileId;
 	}
 	
