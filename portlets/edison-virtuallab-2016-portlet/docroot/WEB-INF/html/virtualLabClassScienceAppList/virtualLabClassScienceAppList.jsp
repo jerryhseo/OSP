@@ -64,6 +64,12 @@ function <portlet:namespace/>dataSearchList() {
 			var rowResult;
 			$("#<portlet:namespace/>virtualLabClassScienceAppBody tr:not(:has(#1))").remove();
 			
+			if(virtualLabScienceAppList.length<=4){
+				$("#<portlet:namespace/>scienceapp .apparrow").hide();
+			} else{
+				$("#<portlet:namespace/>scienceapp .apparrow").show();
+			}
+			
 			/* 수정해야 할 코드 */
 			$("#<portlet:namespace/>scienceappContent").html("");
 			if(virtualLabScienceAppList.length == 0) {
@@ -191,6 +197,8 @@ function <portlet:namespace/>moveScienceAppList(btnType){
 	$("#<portlet:namespace/>"+btnType+"Btn").click();
 }
 
+$("#<portlet:namespace/>scienceapp .carousel").carousel("pause");
+
 </script>
 
 <aui:script>
@@ -235,65 +243,64 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 }
 
 </aui:script>
-<div class="">
-<c:choose>
-	<c:when test="${virtualLabScienceAppList == 0 && role eq 'member' }">
-	</c:when>
-	<c:otherwise>
-		<c:choose>
-				<c:when test="${role eq 'admin' }">
-					<%-- <img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> --%> 
-					<div class="classtitle">
-						<c:choose>
-							<c:when test="${empty classId || classId == 0}">
-								<liferay-ui:message key='edison-virtuallab-scienceapp' />
-							</c:when>
-							<c:otherwise>
-								<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
-							</c:otherwise>
-						</c:choose>
-						<div class="adminbtn">
-							<img src="${contextPath}/images/class_admin_btn.png" width="81" height="36" onClick="<portlet:namespace/>openScienceAppListPopup()">
+<div>
+	<c:choose>
+		<c:when test="${virtualLabScienceAppList == 0 && role eq 'member' }">
+		</c:when>
+		<c:otherwise>
+			<c:choose>
+					<c:when test="${role eq 'admin' }">
+						<%-- <img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> --%> 
+						<div class="classtitle">
+							<c:choose>
+								<c:when test="${empty classId || classId == 0}">
+									<liferay-ui:message key='edison-virtuallab-scienceapp' />
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
+								</c:otherwise>
+							</c:choose>
+							<div class="adminbtn">
+								<img src="${contextPath}/images/class_admin_btn.png" width="81" height="36" onClick="<portlet:namespace/>openScienceAppListPopup()">
+							</div>
 						</div>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="classtitle">
-						<h3>
-							<%-- <liferay-ui:message key='edison-course-using-science-apps' /> --%>
-							<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
-						</h3>
-					</div>
-				</c:otherwise>
-		</c:choose>
-		
-		<!--박스리스트-->
-		<div class="scienceappwrap carousel slide" id="<portlet:namespace/>scienceapp">
-		
-			<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('prev')">
-				<img src="${contextPath}/images/class_l_arrow.png" width="28" height="49">
-			</div>
+					</c:when>
+					<c:otherwise>
+						<div class="classtitle">
+							<h3>
+								<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
+							</h3>
+						</div>
+					</c:otherwise>
+			</c:choose>
 			
-			<!-- Science App List -->
-			<div id="<portlet:namespace/>scienceappContent" class="carousel-inner" style="width: 95%; float: left;">
-			</div>
+			<!--박스리스트-->
+			<div class="scienceappwrap carousel slide" id="<portlet:namespace/>scienceapp" data-ride="false" >
 			
-			<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('next')">
-				<img src="${contextPath}/images/class_r_arrow.png" width="28" height="49">
+				<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('prev')">
+					<img src="${contextPath}/images/class_l_arrow.png" width="28" height="49">
+				</div>
+				
+				<!-- Science App List -->
+				<div id="<portlet:namespace/>scienceappContent" class="carousel-inner" style="width: 95%; float: left;">
+				</div>
+				
+				<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('next')">
+					<img src="${contextPath}/images/class_r_arrow.png" width="28" height="49">
+				</div>
+				
+				<div style="display: none;">
+					<a class="left carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="prev" id="<portlet:namespace/>prevBtn">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="next" id="<portlet:namespace/>nextBtn">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+	
 			</div>
-			
-			<div style="display: none;">
-				<a class="left carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="prev" id="<portlet:namespace/>prevBtn">
-					<span class="glyphicon glyphicon-chevron-left"></span>
-					<span class="sr-only">Previous</span>
-				</a>
-				<a class="right carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="next" id="<portlet:namespace/>nextBtn">
-					<span class="glyphicon glyphicon-chevron-right"></span>
-					<span class="sr-only">Next</span>
-				</a>
-			</div>
-
-		</div>
-	</c:otherwise>
-</c:choose>
+		</c:otherwise>
+	</c:choose>
 </div>
