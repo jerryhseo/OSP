@@ -219,12 +219,16 @@
 		</table>
 		
 		<div class="h10"></div>
-		<div class="buttonbox" align="right" id="<portlet:namespace/>addGeneralContentDiv" style="position: absolute; right: 1%; bottom: 4%;">
-			<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
-		</div>
 		
-		<div class="paging">
-			<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+		<div class="row" style="margin: 0px;">
+			<div class="col-md-10 paging">
+				<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+			</div>
+			
+			<div class="col-md-2 buttonbox" id="<portlet:namespace/>addGeneralContentDiv" style="margin: 18px 0px;">
+				<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;" style="width: 100%;" />
+			</div>
+			
 		</div>
 	</div>
 
