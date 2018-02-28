@@ -235,12 +235,14 @@ public class VirtualLabClassLocalServiceImpl
 		virtualLabClass = virtualLabClassPersistence.update(virtualLabClass);
 		virtualLabPersistence.addVirtualLabClass(virtualLabId, virtualLabClass);
 		
-		List<VirtualLabScienceAppLink> scienceAppLink = virtualLabScienceAppLinkPersistence.findByVirtualLabId(virtualLabId);
-		for(VirtualLabScienceAppLink scienceAppLinkClass : scienceAppLink){
-			VirtualLabScienceAppLinkClass virtualLabClassScienceAppTarget = virtualLabScienceAppLinkClassPersistence.create(counterLocalService.increment("scienceAppClassSeqNo"));
-			virtualLabClassScienceAppTarget.setScienceAppSeqNo(scienceAppLinkClass.getScienceAppSeqNo());		
-			virtualLabClassScienceAppTarget.setClassId(virtualLabClass.getClassId());
-			VirtualLabScienceAppLinkClassLocalServiceUtil.addVirtualLabScienceAppLinkClass(virtualLabClassScienceAppTarget);
+		if(classId == 0){
+			List<VirtualLabScienceAppLink> scienceAppLink = virtualLabScienceAppLinkPersistence.findByVirtualLabId(virtualLabId);
+			for(VirtualLabScienceAppLink scienceAppLinkClass : scienceAppLink){
+				VirtualLabScienceAppLinkClass virtualLabClassScienceAppTarget = virtualLabScienceAppLinkClassPersistence.create(counterLocalService.increment("scienceAppClassSeqNo"));
+				virtualLabClassScienceAppTarget.setScienceAppSeqNo(scienceAppLinkClass.getScienceAppSeqNo());		
+				virtualLabClassScienceAppTarget.setClassId(virtualLabClass.getClassId());
+				VirtualLabScienceAppLinkClassLocalServiceUtil.addVirtualLabScienceAppLinkClass(virtualLabClassScienceAppTarget);
+			}
 		}
 		
 		return virtualLabClass;
