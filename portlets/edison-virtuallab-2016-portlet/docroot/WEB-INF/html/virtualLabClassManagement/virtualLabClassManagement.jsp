@@ -542,37 +542,35 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 		</div>
 	</div>
 
-	<!-- <div class="table7_list"> -->
-	<div>
-		<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="5%" />
-				<col width="25%" />
-				<col width="20%" />
-				<col width="10%" />
-				<col width="13%" />
-				<col width="10%" />
-				<col width="10%" />
-				<col width="10%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-					<th align="left" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-period' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-creation-date' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-total-number4' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-delete' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-update' /></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>virtualLabClassListBody">
-			</tbody>
-		</table>
-		
-		<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
-	</div>
+	<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<colgroup>
+			<col width="5%" />
+			<col width="25%" />
+			<col width="20%" />
+			<col width="10%" />
+			<col width="13%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
+				<th align="left" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-period' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-creation-date' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-total-number4' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-delete' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-update' /></th>
+			</tr>
+		</thead>
+		<tbody id="<portlet:namespace/>virtualLabClassListBody">
+		</tbody>
+	</table>
+	
+	<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
+	
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
 	<div class="h30"></div>
 	
@@ -592,69 +590,67 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 			<input type="hidden" id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" value="${virtualLabClassInfo.classId}" />
 			<input type="hidden" id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" value="${virtualLabId}" />
 			<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId}" />
-			<div class="table1_list">
-				<table width="98%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
-					<colgroup>
-						<col width="18%" />
-						<col width="82%" />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-							<td>
-								<div class="localDiv">
-									<liferay-ui:input-localized id="classTitle" name="classTitle" xml="${virtualLabClassInfo.classTitleMap}" style="width:206px;" cssClass="form-control" type="input"/>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-period' /></th>
-							<td>
-								<input name="<portlet:namespace/>classStartDt" id="<portlet:namespace/>classStartDt" readonly="readonly" value="${virtualLabClassInfo.classStartDt}" required style="width: 140px;"/>
-								&nbsp;~&nbsp;
-								<input name="<portlet:namespace/>classEndDt" id="<portlet:namespace/>classEndDt" readonly="readonly" value="${virtualLabClassInfo.classEndDt}"  style="width: 140px;"/>
-							</td>
-						</tr>
-						<tr>
-							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-number' /></th>
-							<td>
-								<input id="<portlet:namespace/>classPersonnel" name="<portlet:namespace/>classPersonnel" type="number" class="form-control" style="width: 90px;" min="1" max="999" value="${virtualLabClassInfo.classPersonnel}"/>
-							</td>
-						</tr>
-						<tr>
-							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-external-student-number' /></th>
-							<td>
-								<input id="<portlet:namespace/>classExternalPersonnel" name="<portlet:namespace/>classExternalPersonnel" type="number" class="form-control" style="width: 90px;" min="0" max="999" value="${virtualLabClassInfo.classExternalPersonnel}"/>
-							</td>
-						</tr>
-						<tr>
-							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-manager' /><br><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-id-search' /></th>
-							<td class="input-group" style="display: table-cell;">
-								<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; float: left;"/>
-								<div class="input-group-btn">
-									<button class="btn btn-default" id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" onClick="<portlet:namespace/>getUserInfo()">
-										<liferay-ui:message key='edison-button-search' />
-									</button>
-								</div>
-								<div id="<portlet:namespace/>classManagerList"></div>
-							</td>
-						</tr>
-						<tr>
-							<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-curriculum-url' /></th>
-							<td>
-								<input id="<portlet:namespace/>classCurriculumUrl" name="<portlet:namespace/>classCurriculumUrl" type="text" class="form-control" style="width:150px;  margin-bottom:0px;" value="${virtualLabClassInfo.classCurriculumUrl}"/>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div align="right" style="margin-bottom: 10px; padding-right: 20px;">
-					<c:if test="${empty virtualLabClassInfo}">
-						<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
-					</c:if>
-					<c:if test="${!empty virtualLabClassInfo}">
-						<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
-					</c:if>
-				</div>
+			<table width="98%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
+				<colgroup>
+					<col width="18%" />
+					<col width="82%" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
+						<td>
+							<div class="localDiv">
+								<liferay-ui:input-localized id="classTitle" name="classTitle" xml="${virtualLabClassInfo.classTitleMap}" style="width:206px;" cssClass="form-control" type="input"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-period' /></th>
+						<td>
+							<input name="<portlet:namespace/>classStartDt" id="<portlet:namespace/>classStartDt" readonly="readonly" value="${virtualLabClassInfo.classStartDt}" required style="width: 140px;"/>
+							&nbsp;~&nbsp;
+							<input name="<portlet:namespace/>classEndDt" id="<portlet:namespace/>classEndDt" readonly="readonly" value="${virtualLabClassInfo.classEndDt}"  style="width: 140px;"/>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-number' /></th>
+						<td>
+							<input id="<portlet:namespace/>classPersonnel" name="<portlet:namespace/>classPersonnel" type="number" class="form-control" style="width: 90px;" min="1" max="999" value="${virtualLabClassInfo.classPersonnel}"/>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-external-student-number' /></th>
+						<td>
+							<input id="<portlet:namespace/>classExternalPersonnel" name="<portlet:namespace/>classExternalPersonnel" type="number" class="form-control" style="width: 90px;" min="0" max="999" value="${virtualLabClassInfo.classExternalPersonnel}"/>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-manager' /><br><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-id-search' /></th>
+						<td class="input-group" style="display: table-cell;">
+							<input id="<portlet:namespace/>idSearchField" name="<portlet:namespace/>idSearchField" type="text" class="form-control" onkeypress="if(event.keyCode == 13) { <portlet:namespace/>getUserInfo(); return false;}" style="width:150px; margin-bottom:0px; float: left;"/>
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="<portlet:namespace/>virtualLabClassManagerSearchButton" name="<portlet:namespace/>virtualLabClassManagerSearchButton" onClick="<portlet:namespace/>getUserInfo()">
+									<liferay-ui:message key='edison-button-search' />
+								</button>
+							</div>
+							<div id="<portlet:namespace/>classManagerList"></div>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-curriculum-url' /></th>
+						<td>
+							<input id="<portlet:namespace/>classCurriculumUrl" name="<portlet:namespace/>classCurriculumUrl" type="text" class="form-control" style="width:150px;  margin-bottom:0px;" value="${virtualLabClassInfo.classCurriculumUrl}"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div align="right" style="margin-bottom: 10px; padding-right: 20px;">
+				<c:if test="${empty virtualLabClassInfo}">
+					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-create' />" />
+				</c:if>
+				<c:if test="${!empty virtualLabClassInfo}">
+					<input id="<portlet:namespace/>virtualLabCalssSaveButton" name="<portlet:namespace/>virtualLabCalssSaveButton" class="btn btn-default"  type="submit" value="<liferay-ui:message key='edison-button-board-modify' />" />
+				</c:if>
 			</div>
 			
 		</form>

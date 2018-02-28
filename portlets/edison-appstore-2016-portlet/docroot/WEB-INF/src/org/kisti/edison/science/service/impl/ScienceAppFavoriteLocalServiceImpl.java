@@ -136,7 +136,9 @@ public class ScienceAppFavoriteLocalServiceImpl
 				}
 			}
 		} catch (NoSuchFileEntryException e) {
-			// TODO Auto-generated catch block
+			
+			returnList.clear();		//	중복데이터 방지
+			
 			List<Object[]> resultList = scienceAppFavoriteFinder.getFavoriteAppList(categoryIds, userId, locale);
 			if(resultList != null) {
 				Map<String, Object> resultRow = null;

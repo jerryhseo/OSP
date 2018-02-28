@@ -100,7 +100,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					} else {
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-button-board-delete' />' onClick='<portlet:namespace/>deleteVirtualLabManager("+ virtualLabId + ","+ virtualLabManagerList[i].userId + ","+ groupId + ")' class='button01b' />")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-button-board-delete' />' onClick='<portlet:namespace/>deleteVirtualLabManager("+ virtualLabId + ","+ virtualLabManagerList[i].userId + ","+ groupId + ")' class='btn btn-default' />")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					}
