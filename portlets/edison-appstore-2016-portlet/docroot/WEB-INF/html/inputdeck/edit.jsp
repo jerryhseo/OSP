@@ -2,6 +2,13 @@
 <%@ page import="org.kisti.edison.science.service.constants.InputdeckConstants"%>
 <%@ include file="/common/init.jsp"%>
 <style type="text/css">
+	.inputdeck-portlet #inputDeckParameterLeft #inputDeckHeader{
+		background-color: #f7f7f7;
+		border-bottom: 1px solid #b4b4b4;
+		font-weight: 600;
+		padding: 15px 0px;
+	}
+	
 	.inputdeck-portlet div.content{
 		width: 100%;
 		margin: auto;
@@ -71,9 +78,6 @@
 		padding:0px;
 	}
 	
-	.parameter-row div{
-		display: inline-block;
-	}
 	@media (min-width: 1200px) {
 	.aui .row {
 		margin-left: 0px;
@@ -82,16 +86,16 @@
 		margin-left:0px;
 	}
 </style>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-inputdeck-title' />
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-inputdeck-title' />
+		</h3>
 	</div>
 </div>
-<div class="h10" style="display: inline-block;"></div>
-
 <div class="table1_list" >
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<colgroup>
 			<col width="10%">
 			<col width="20%">
@@ -105,7 +109,7 @@
 		<tr>
 			<th>value delimiter</th>
 			<td align="center">
-				<select onChange="<portlet:namespace/>lineFormat();" id="valueDelimiter">
+				<select onChange="<portlet:namespace/>lineFormat();" id="valueDelimiter" class="aui-field-select">
 					<option value=" = ">EQUAL</option>
 					<option value=" ">SPACE</option>
 				</select>
@@ -113,7 +117,7 @@
 			
 			<th>Line delimiter</th>
 			<td align="center">
-				<select onChange="<portlet:namespace/>lineFormat();" id="lineDelimiter">
+				<select onChange="<portlet:namespace/>lineFormat();" id="lineDelimiter" class="aui-field-select">
 					<option value=" ;">SEMICOLON</option>
 					<option value=" :">COLON</option>
 					<option value="">NULL</option>
@@ -122,18 +126,18 @@
 			
 			<th>Comment Char</th>
 			<td align="center">
-				<input type="text" size="5" maxlength="1" id="commentChar" onkeyup="<portlet:namespace/>lineFormat();"/>
+				<input type="text" size="5" maxlength="1" id="commentChar" class="field" onkeyup="<portlet:namespace/>lineFormat();"/>
 			</td>
 			
 			<th><liferay-ui:message key='preview' /></th>
 			<td align="center">
-				<input type="text" id="linePreview" size="20" style="font-size: 13px;font-weight: bold;" readonly="readonly"/>
+				<input type="text" id="linePreview" class="field" style="font-size: 13px;font-weight: bold;width: 120px;" readonly="readonly" disabled="disabled"/>
 			</td>
 		</tr>
 		<tr>
 			<th>Vector bracket</th>
 			<td align="center">
-				<select onChange="<portlet:namespace/>vectorFormat();" id="vectorBracket">
+				<select onChange="<portlet:namespace/>vectorFormat();" id="vectorBracket" class="aui-field-select">
 					<option value="SQUARE">SQUARE</option>
 					<option value="SQUARE_SPACE">SQUARE_SPACE</option>
 					<option value="ROUND">ROUND</option>
@@ -143,7 +147,7 @@
 			
 			<th>Vector Delimiter</th>
 			<td align="center">
-				<select onChange="<portlet:namespace/>vectorFormat();" id="vectorDelimiter">
+				<select onChange="<portlet:namespace/>vectorFormat();" id="vectorDelimiter" class="aui-field-select">
 					<option value=" ">SPACE</option>
 					<option value=",">COMMA</option>
 				</select>
@@ -151,31 +155,23 @@
 			
 			<th><liferay-ui:message key='preview' /></th>
 			<td colspan="3">
-				<input type="text" id="vectorPreview" size="20" style="font-size: 13px;font-weight: bold;" readonly="readonly"/>
+				<input type="text" id="vectorPreview" class="field" style="font-size: 13px;font-weight: bold;" readonly="readonly" disabled="disabled"/>
 			</td>
 		</tr>
 	</table>
 </div>
 
-<div class="h10"></div>
+<div class="h15"></div>
 
 <div class="content">
-	<div class="shortleft table2_list activate" id="activateDiv" style="display: none;">
-		<table id="<portlet:namespace/>activateTable" style="width: 100%;">
-			<colgroup>
-				<col width="10%">
-				<col width="23%">
-				<col width="16%">
-				<col width="20%">
-				<col width="16%">
-				<col width="13%">
-			</colgroup>
+	<div class="shortleft table2_list activate edison-panel" id="activateDiv" style="display: none;">
+		<table id="<portlet:namespace/>activateTable" class = "table table-bordered table-hover edison-table">
 			<thead>
 				<tr>
-					<th></th>
-					<th>Name</th>
-					<th colspan="3"><liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></th>
-					<th>value</th>
+					<th width="10%"></th>
+					<th width="23%">Name</th>
+					<th width="*" colspan="3"><liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></th>
+					<th width="13%">value</th>
 				</tr>
 			</thead>
 			<tbody id="inputDeckActivateBody">
@@ -211,22 +207,15 @@
 	
 	
 	
-	<div class="left table2_list" id="inputDeckParameterLeft">
-		<table id="<portlet:namespace/>variableTable" style="width: 100%;">
-			<thead>
-				<tr>
-					<th width="20%">Variable Name</th>
-					<th width="*">Value</th>
-					<th width="10%">Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td colspan="3" id="<portlet:namespace/>variableTableTd" style="padding:0px;">
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="left" id="inputDeckParameterLeft">
+		<div class="row" style="margin: 0px;" id="inputDeckHeader">
+			<div class="col-md-3 text-center">Variable Name</div>
+			<div class="col-md-7 text-center">Value</div>
+			<div class="col-md-2 text-center">Description</div>
+		</div>
+		<div class="row" id="<portlet:namespace/>variableTableTd" style="margin: 0px 30px;">
+		
+		</div>
 	</div>
 	<aui:form name="frm">
 	<div class="right">
@@ -245,7 +234,7 @@
 							<liferay-ui:message key='edison-table-list-header-type' /> <span class="requiredField">*</span>
 						</th>
 						<td colspan="3">
-							<select id="inputDeckType" onChange="<portlet:namespace/>changeType(this.value,'add');">
+							<select id="inputDeckType" onChange="<portlet:namespace/>changeType(this.value,'add');" class="aui-field-select">
 								<option value=""><liferay-ui:message key='choice'/></option>
 								<option value="<%=InputdeckConstants.TYPE_NUMERIC%>"><%=InputdeckConstants.TYPE_NUMERIC%></option>
 								<option value="<%=InputdeckConstants.TYPE_STRING%>"><%=InputdeckConstants.TYPE_STRING%></option>
@@ -263,7 +252,7 @@
 							<liferay-ui:message key='edison-table-list-header-variable-name' /> <span class="requiredField">*</span>
 						</th>
 						<td colspan="3">
-							<input type="text" class="long_field" id="inputDeckName"/>
+							<input type="text" class="long_field field" id="inputDeckName"/>
 						</td>
 					</tr>
 					<!--InputDeck 활성화-->
@@ -272,7 +261,7 @@
 							Active <liferay-ui:icon-help message="edison-science-appstore-inputdeck-help-active-message"/>
 						</th>
 						<td colspan="3">
-							<select style="width: 100px;" id="activeValue">
+							<select id="activeValue" class="aui-field-select">
 								<option value="true">true</option>
 								<option value="false">false</option>
 							</select>
@@ -284,7 +273,7 @@
 							<liferay-ui:message key='edison-science-appstore-inputdeck-variable-clone' />
 						</th>
 						<td colspan="3">
-							<select style="width: 100px;" id="inputDeckVarClone">
+							<select id="inputDeckVarClone" class="aui-field-select">
 								<option value=""><liferay-ui:message key='--empty--' /></option>
 								<option value="1">1</option>
 								<option value="2">2</option>
@@ -306,7 +295,7 @@
 							<liferay-ui:message key='edison-table-list-header-nick-name' /><span class="requiredField">*</span>
 						</th>
 						<td colspan="3">
-							<liferay-ui:input-localized name="inputDeckNickName" xml=" " cssClass="long_field"  type="input"/>
+							<liferay-ui:input-localized name="inputDeckNickName" xml=" " cssClass="long_field field"  type="input"/>
 						</td>
 					</tr>
 					
@@ -316,7 +305,7 @@
 							<liferay-ui:message key='edison-simulation-execute-simulation-description' />
 						</th>
 						<td colspan="3">
-							<liferay-ui:input-localized name="inputDeckDescription" xml=" " cssClass="long_field"  type="input"/>
+							<liferay-ui:input-localized name="inputDeckDescription" xml=" " cssClass="long_field field"  type="input"/>
 						</td>
 					</tr>
 					
@@ -326,7 +315,7 @@
 							Unit <liferay-ui:icon-help message="edison-science-appstore-inputdeck-help-unit-message"/>
 						</th>
 						<td colspan="3">
-							<input type="text" id="inputDeckUnit" class="short_field" maxlength="15"/>
+							<input type="text" id="inputDeckUnit" class="short_field field" maxlength="15"/>
 						</td>
 					</tr>
 					
@@ -336,13 +325,13 @@
 							<liferay-ui:message key='edison-appstore-min' />
 						</th>
 						<td class="TC">
-							<select style="width: 60px;" id="inputDeckMinSelect">
+							<select id="inputDeckMinSelect" class="aui-field-select">
 								<option value="=">>=</option>
 								<option value="<">></option>
 							</select>
 						</td>
 						<td colspan="2">
-							<input type="text" id="inputDeckMinValue" class="to_short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);"/>
+							<input type="text" id="inputDeckMinValue" class="to_short_field numberCheck field" onkeydown="return checkNumberExp(event,this.value);"/>
 						</td>
 					</tr>
 					
@@ -352,13 +341,13 @@
 							<liferay-ui:message key='edison-appstore-max' />
 						</th>
 						<td class="TC">
-							<select style="width: 60px;" id="inputDeckMaxSelect">
+							<select id="inputDeckMaxSelect" class="aui-field-select">
 								<option value="="><=</option>
 								<option value=">"><</option>
 							</select>
 						</td>
 						<td colspan="2">
-							<input type="text" id="inputDeckMaxValue" class="to_short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);"/>
+							<input type="text" id="inputDeckMaxValue" class="to_short_field numberCheck field" onkeydown="return checkNumberExp(event,this.value);"/>
 						</td>
 					</tr>
 					
@@ -368,7 +357,7 @@
 							<liferay-ui:message key='edison-table-list-header-default-data' /> <span class="requiredField">*</span>
 						</th>
 						<td colspan="3">
-							<input type="text" id="inputDeckNumericValue" class="short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);"/>
+							<input type="text" id="inputDeckNumericValue" class="short_field numberCheck field" onkeydown="return checkNumberExp(event,this.value);"/>
 						</td>
 					</tr>
 					
@@ -378,7 +367,7 @@
 							<liferay-ui:message key='edison-table-list-header-default-data' /> <span class="requiredField">*</span>
 						</th>
 						<td colspan="3">
-							<input type="text" class="long_field" id="inputDeckStringValue" />
+							<input type="text" class="long_field field" id="inputDeckStringValue" />
 						</td>
 					</tr>
 					
@@ -392,13 +381,13 @@
 							<liferay-ui:message key='edison-appstore-min' />
 						</th>
 						<td class="TC">
-							<select style="width: 60px;" id="inputDeckSweepMinSelect">
+							<select style="width: 60px;" id="inputDeckSweepMinSelect" class="aui-field-select">
 								<option value="=">>=</option>
 								<option value="<">></option>
 							</select>
 						</td>
 						<td>
-							<input type="text" class="short_field sweepInput" class="short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepMinValue" />
+							<input type="text" class="short_field sweepInput numberCheck field" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepMinValue" />
 						</td>
 					</tr>
 					<tr id="sweep" class="parameter">
@@ -406,24 +395,24 @@
 							<liferay-ui:message key='edison-appstore-max' />
 						</th>
 						<td class="TC">
-							<select style="width: 60px;" id="inputDeckSweepMaxSelect">
+							<select id="inputDeckSweepMaxSelect" class="aui-field-select">
 								<option value="="><=</option>
 								<option value=">"><</option>
 							</select>
 						</td>
 						<td>
-							<input type="text" class="short_field sweepInput" class="short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepMaxValue"/>
+							<input type="text" class="short_field sweepInput numberCheck field" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepMaxValue"/>
 						</td>
 					</tr>
 					<tr id="sweep" class="parameter">
 						<td class="TC">
-							<select style="width: 110px;" id="inputDeckSweepType">
+							<select style="width: 110px;" id="inputDeckSweepType" class="aui-field-select">
 								<option value="value">By Value</option>
 								<option value="slice">By Slice</option>
 							</select>
 						</td>
 						<td colspan="2">
-							<input type="text" class="short_field sweepInput" class="short_field numberCheck" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepTypeValue"/>
+							<input type="text" class="short_field sweepInput numberCheck field" onkeydown="return checkNumberExp(event,this.value);" id="inputDeckSweepTypeValue"/>
 						</td>
 					</tr>
 					
@@ -434,7 +423,7 @@
 							Dimension
 						</th>
 						<td colspan="3">
-							<select onChange="<portlet:namespace/>changeDimension(this.value);" id="inputDeckDemensionSelect">
+							<select onChange="<portlet:namespace/>changeDimension(this.value);" id="inputDeckDemensionSelect" class="aui-field-select">
 								<option value ="2"><liferay-ui:message key='edison-science-appstore-inputdeck-dimension-2'/></option>
 								<option value ="3"><liferay-ui:message key='edison-science-appstore-inputdeck-dimension-3'/></option>
 								<option value ="4"><liferay-ui:message key='edison-science-appstore-inputdeck-dimension-4'/></option>
@@ -465,14 +454,14 @@
 							Name
 						</th>
 						<td>
-							<liferay-ui:input-localized name="inputDeckListName" xml=" " cssClass="short_field"  type="input"/>
+							<liferay-ui:input-localized name="inputDeckListName" xml=" " cssClass="short_field field"  type="input"/>
 						</td>
 						<td rowspan="2" class="TC">
-							<input type="button" value="<liferay-ui:message key='update'/>" onClick="<portlet:namespace/>listBtnEvent('add');"><br/>
-							<input type="button" value="<liferay-ui:message key='delete'/>" onClick="<portlet:namespace/>listBtnEvent('delete');">
+							<button class="btn btn-default btn-sm" type="button" onClick="<portlet:namespace/>listBtnEvent('add');"><span class="icon-edit"> <liferay-ui:message key='update' /></span></button>
+							<button class="btn btn-default btn-sm" type="button" onClick="<portlet:namespace/>listBtnEvent('delete');"><span class="icon-trash"> <liferay-ui:message key='delete' /></span></button>
 						</td>
 						<td rowspan="2">
-							<select id="inputDeckListParemter" style="width: 120px;" onchange="listItemSearch(this.value);">
+							<select id="inputDeckListParemter" onchange="listItemSearch(this.value);" class="aui-field-select">
 								
 							</select>
 						</td>
@@ -482,7 +471,7 @@
 							Value
 						</th>
 						<td>
-							<input type="text" id="para_listValue" class="short_field noupdate"/>
+							<input type="text" id="para_listValue" class="short_field noupdate field"/>
 						</td>
 					</tr>
 					
@@ -492,7 +481,7 @@
 							<liferay-ui:message key='edison-table-list-header-content' /> <liferay-ui:icon-help message="edison-science-appstore-inputdeck-help-comment-message"/>
 						</th>
 						<td colspan="3">
-							<input type="text" class="long_field" id="inputDeckComment"/>
+							<input type="text" class="long_field field" id="inputDeckComment"/>
 						</td>
 					</tr>
 					
@@ -518,15 +507,15 @@
 			</table>
 		</div>
 		<div id="btnGroupBottom" class="addBtnGroup">
-			<input type="button" class="button0801 parameter" id="variableActivationBtn" onclick="<portlet:namespace/>addActivateOpen(true);" value="<liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' />" />
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>changeType('','add');" value="<liferay-ui:message key='cancel' />" />
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>paraSave(true,false);" value="<liferay-ui:message key='add' />" />
+			<button class="btn btn-default parameter" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>addActivateOpen(true);"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
+			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
+			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraSave(true,false);"><span class="icon-search">   <liferay-ui:message key='add' /></span></button>
 		</div>
 		<div id="btnGroupBottom" class="updateBtnGroup">
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>activateSearchOpen();" value="<liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' />" />
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>changeType('','add');" value="<liferay-ui:message key='cancel' />" />
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>paraSave(true,true);" value="<liferay-ui:message key='update' />" />
-			<input type="button" class="button0801 actieveBtn" onclick="<portlet:namespace/>paraDelete();" value="<liferay-ui:message key='edison-button-board-delete' />" />
+			<button class="btn btn-default parameter" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>activateSearchOpen();"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
+			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
+			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraSave(true,true);"><span class="icon-edit">   <liferay-ui:message key='update' /></span></button>
+			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraDelete();"><span class="icon-trash">   <liferay-ui:message key='edison-button-board-delete' /></span></button>
 		</div>
 	</div>
 	</aui:form>
@@ -582,6 +571,9 @@
 		for(var i=0;i<availableLanguageIds.length;i++){
 			dataType.structure().addLanuageId(availableLanguageIds[i]);
 		}
+		
+// 		$(document).tooltip();
+// 		$("img[width='20']").tooltip();
 		
 		if(isDataExist){
 			$("#valueDelimiter").val(dataType.structure().parameterFormValueDelimiter()).prop("selected",true);
@@ -841,7 +833,7 @@
 							$td.empty();
 							
 							if(variableGroupArray[0]!=""){
-								$select = $("<select/>").attr("id","inputDeckGroupChoiceSelect");
+								$select = $("<select/>").attr("id","inputDeckGroupChoiceSelect").addClass("aui-field-select");
 								
 								$("<option/>").val("").html(Liferay.Language.get('--empty--')).appendTo($select);
 								for(var i=0;i<variableGroupArray.length;i++){
@@ -1293,13 +1285,13 @@
 		
 		$("<td/>").append(
 				$("<input/>").attr("type","checkbox").css("margin","0px").attr("id",name+"_active_checkbox")
-				).addClass("TC").appendTo($tr);
+				).addClass("center").appendTo($tr);
 		
 		$("<td/>").append(
 				$("<label>").attr("for",name+"_active_checkbox").css("display","inline").html(name)
 				).appendTo($tr);
 		
-		$numericTd = $("<td/>").attr("colspan","3").addClass("TC");
+		$numericTd = $("<td/>").attr("colspan","3").addClass("center");
 		
 		$("<input/>").attr("type","text").addClass("to_short_field")
 					 .attr("onkeydown","return onlyNumber(event)")
@@ -1336,7 +1328,7 @@
 		$("<td/>").append(
 				$("<input/>").attr("type","text").addClass("to_short_field")
 				.attr("id","assignValue")
-				).addClass("TC").appendTo($tr);
+				).addClass("center").appendTo($tr);
 		
 		$tr.appendTo($tbody);
 	}
@@ -1350,7 +1342,7 @@
 		$tr = $("<tr/>").attr("activateType",OSP.Constants.LIST).attr("activateName",name);
 		$("<td/>").append(
 				$("<input/>").attr("type","checkbox").css("margin","0px").attr("id",name+"_active_checkbox")
-				).addClass("TC").appendTo($tr);
+				).addClass("center").appendTo($tr);
 		
 		$("<td/>").append(
 				$("<label>").attr("for",name+"_active_checkbox").css("display","inline").html(name)
@@ -1364,7 +1356,7 @@
 			$("<option/>").val(key).html(listMap[key]).appendTo($select);
 		}
 		
-		$("<td/>").append($select).addClass("TC").appendTo($tr);
+		$("<td/>").append($select).addClass("center").appendTo($tr);
 		
 		$("<td/>").append(
 					$("<input/>").val(Liferay.Language.get('add')).attr("type","button")
@@ -1374,9 +1366,9 @@
 				).append(
 					$("<input/>").val(Liferay.Language.get('delete')).attr("type","button")
 					.attr("onClick","<portlet:namespace/>activateListMove('remove','"+name+"')")
-				).addClass("TC").appendTo($tr);
+				).addClass("center").appendTo($tr);
 		
-		$("<td/>").addClass("TC").append(
+		$("<td/>").addClass("center").append(
 							$("<select/>").attr("id","inputDeckActivateListTarget_"+name).css("width","120px")
 							              .attr("onChange","<portlet:namespace/>addActivateListValue('"+name+"',this.value)")
 				  ).appendTo($tr);
@@ -1391,7 +1383,7 @@
 						$(this).attr("inputDeckActivateListTarget_"+selectedVal+"_aValue",$(this).val());
 					}
 				})
-		).addClass("TC").appendTo($tr);
+		).addClass("center").appendTo($tr);
 		
 		$tr.appendTo($tbody);
 	}
