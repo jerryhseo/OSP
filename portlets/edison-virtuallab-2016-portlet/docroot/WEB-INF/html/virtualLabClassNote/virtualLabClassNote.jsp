@@ -17,8 +17,13 @@
 	<liferay-portlet:param name="myaction" value="popupClassNote" />
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="contentDetailUrl" portletName="edisoncontent_WAR_edisoncontent2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="generalModifyView" />
+</liferay-portlet:renderURL>
+
 <style type="text/css">
-	.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;} 
+	.btn_dn, .btn_view{cursor: pointer;}
 </style>
 
 <script type="text/javascript">
@@ -58,20 +63,27 @@ function <portlet:namespace/>dataSearchList() {
 					}
 					
 					var classNoteFileList = $("#<portlet:namespace/>classNoteFileList");
+					var isContent = getVirtualLabClassNoteList[i].isContent;
 					
 					$("<div/>").addClass("filetitbox")
 							   .text(getVirtualLabClassNoteList[i].description)
 							   .appendTo(classNoteFileList);
 					
 					var fileBtnBox = $("<div/>").addClass("btnbox");
-					$("<a/>").addClass("btn_dn")
-							 .attr("href", "#")
-							 .text("DOWNLOAD")
-							 .appendTo(fileBtnBox);
-					$("<a/>").addClass("btn_view")
-							 .attr("href", "#")
-							 .text("VIEW")
-							 .appendTo(fileBtnBox);
+					if(isContent == "true"){
+						$("<span/>").addClass("btn_dn")
+								 .attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
+								 .css("height", "80px").css("padding-top", "15%")
+								 .text("DOWNLOAD")
+								 .appendTo(fileBtnBox);
+					}
+					if(isContent == "false"){
+						$("<span/>").addClass("btn_view")
+									.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
+									.css("height", "80px").css("padding-top", "15%")
+									.text("VIEW")
+									.appendTo(fileBtnBox);
+					}
 					
 					fileBtnBox.appendTo(classNoteFileList);
 					
@@ -159,10 +171,18 @@ function <portlet:namespace/>openClassNotePopup() //Relate AssetEntry 팝업 띄
 	});  
 }
 
-
-
 function <portlet:namespace/>fileDownload(p_fileEntryId){
 	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
+}
+
+function <portlet:namespace/>moveContentDetail(contentSeq, contentDiv) {
+	AUI().use("liferay-portlet-url", function(a) {
+		var thisPortletNamespace = "_edisoncontent_WAR_edisoncontent2016portlet_";
+		var params = "&" + thisPortletNamespace + "contentDiv=" + contentDiv;
+		params += "&" + thisPortletNamespace + "contentSeq=" + contentSeq;
+		params += "&" + thisPortletNamespace + "redirectName=" + "<liferay-ui:message key='edison-search-total'/>";
+		location.href = "<%=contentDetailUrl%>" + params;
+	});
 }
 
 </script>
