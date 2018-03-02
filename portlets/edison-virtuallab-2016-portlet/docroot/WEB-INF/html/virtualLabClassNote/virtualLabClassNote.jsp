@@ -70,14 +70,14 @@ function <portlet:namespace/>dataSearchList() {
 							   .appendTo(classNoteFileList);
 					
 					var fileBtnBox = $("<div/>").addClass("btnbox");
-					if(isContent == "true"){
+					if(isContent == "false"){
 						$("<span/>").addClass("btn_dn")
 								 .attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
 								 .css("height", "80px").css("padding-top", "15%")
 								 .text("DOWNLOAD")
 								 .appendTo(fileBtnBox);
 					}
-					if(isContent == "false"){
+					if(isContent == "true"){
 						$("<span/>").addClass("btn_view")
 									.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
 									.css("height", "80px").css("padding-top", "15%")
