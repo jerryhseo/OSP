@@ -146,11 +146,25 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 $(instanceTreeSelector).jstree("close_node", node);
               }
             }else if(node.type === "instance"){
+                var workflowInstanceId = node.data.workflowInstanceId;
+                loadInstance(workflowInstanceId);
                 //displayJob(nodeId);
             }
         }).bind("hover_node.jstree", function(event, data){
         });
+    }
 
+    function loadInstance(workflowInstanceId) {
+        executor.loadWorkflowInstance(workflowInstanceId,
+            function (workflowInstance) {
+                designer.resetWorkflow();
+                designer.drawScreenLogic(workflowInstance.screenLogic);
+                console.log(workflowInstance);
+            }, function (err) {
+                if(console){
+                    console.log(err);
+                }
+            });
     }
 
     function openJstreeNode(instanceTreeSelector, nodeId, node){
@@ -221,7 +235,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             } else {
                 var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
                 var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
-                executor.updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle, null,
+                executor.updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle, 
+                    designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()),
                     function (workflowInstance) {
                         setMetaData({
                             "title": PANEL_DATA.setting.form.title,
@@ -257,14 +272,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         setTitle();
     }
 
-    function openWorkflowByWorkflowId(workflowId){
+    function openWorkflowByWorkflowId(workflowId, notClose){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
             setMetaData({
                 "title": workflow.title,
                 "description": workflow.description,
                 "workflowId": workflowId
             });
-            closePanel();
+            if(!notClose){
+                closePanel();
+            }
         });
     }
 

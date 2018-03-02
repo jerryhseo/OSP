@@ -20,7 +20,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowInstance;
+import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.base.WorkflowInstanceLocalServiceBaseImpl;
 import org.springframework.util.StringUtils;
 
@@ -80,9 +82,12 @@ public class WorkflowInstanceLocalServiceImpl
         WorkflowInstance workflowInstance = createWorkflowInstance();
         User user = PortalUtil.getUser(request);
         long companyId = PortalUtil.getCompanyId(request);
+        long workflowId = GetterUtil.getLong(params.get("workflowId"));
+        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
         String title = GetterUtil.getString(params.get("workflowInstanceTitle"));
         workflowInstance.setTitle(title);
-        workflowInstance.setWorkflowId(GetterUtil.getLong(params.get("workflowId")));
+        workflowInstance.setWorkflowId(workflowId);
+        workflowInstance.setScreenLogic(workflow.getScreenLogic());
         workflowInstance.setStatus("CREATED");
         workflowInstance.setUserId(user.getUserId());
         workflowInstance.setCompanyId(companyId);

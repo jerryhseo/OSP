@@ -2,6 +2,10 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     'use strict';
     var currentJsPlumbInstance = designer.getCurrentJsPlumbInstance();
 
+    function loadWorkflowInstance(workflowInstanceId, callback, errorCallback){
+        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId, callback, errorCallback);
+    }
+
     function createWorkfowInstance(workflowId, workflowInstanceTitle, callback){
         aSyncAjaxHelper.post("/delegate/services/workflows/instance/create", {
             workflowId: workflowId,
@@ -82,6 +86,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     return {
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
-        "deleteWorkflowInstance": deleteWorkflowInstance
+        "deleteWorkflowInstance": deleteWorkflowInstance,
+        "loadWorkflowInstance": loadWorkflowInstance
     };
 });
