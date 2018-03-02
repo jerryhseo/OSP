@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="kisti.edison.challenge.model.Challenge">
+		<field name="uuid" type="String" />
+		<field name="challengeId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="name" type="String" localized="true" />
+		<field name="field" type="String" localized="true" />
+		<field name="description" type="String" localized="true" />
+	</model>
+	<model name="kisti.edison.challenge.model.ChallengeEvaluationManagement">
+		<field name="uuid" type="String" />
+		<field name="challengeEvaluationManagementId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="assessmentItem" type="String" localized="true" />
+		<field name="distribution" type="double" />
+		<field name="childChallengeId" type="long" />
+	</model>
+	<model name="kisti.edison.challenge.model.ChallengeEvaluationScore">
+		<field name="uuid" type="String" />
+		<field name="challengeEvaluationScoreId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="score" type="double" />
+		<field name="challengeTeamId" type="long" />
+		<field name="challengeEvaluationManagementId" type="long" />
+	</model>
+	<model name="kisti.edison.challenge.model.ChallengeTeam">
+		<field name="uuid" type="String" />
+		<field name="challengeTeamId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="teamName" type="String" />
+		<field name="subject" type="String" localized="true" />
+		<field name="paperName" type="String" localized="true">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="paperAbstract" type="String" localized="true">
+			<hint name="max-length">4000</hint>
+		</field>
+		<field name="paperFileName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="paperSubmissionDay" type="Date" />
+		<field name="paperModifyDay" type="Date" />
+		<field name="paperStatusDOC" type="boolean" />
+		<field name="paperPDFFileName" type="String" />
+		<field name="paperPDFSubmissionDay" type="Date" />
+		<field name="paperPDFModifyDay" type="Date" />
+		<field name="paperStatusPDF" type="boolean" />
+		<field name="presentationName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="presentationFileName" type="String">
+			<hint name="max-length">2000</hint>
+		</field>
+		<field name="presentationSubmissionDay" type="Date" />
+		<field name="presentationModifyDay" type="Date" />
+		<field name="presentationStatus" type="boolean" />
+		<field name="filepath" type="String">
+			<hint name="max-length">6000</hint>
+		</field>
+		<field name="aggrement" type="boolean" />
+		<field name="childChallengeId" type="long" />
+	</model>
+	<model name="kisti.edison.challenge.model.ChallengeTeamMember">
+		<field name="uuid" type="String" />
+		<field name="challengeTeamMemberId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="applyUserId" type="long" />
+		<field name="applyUserName" type="String" />
+		<field name="email" type="String" />
+		<field name="institute" type="String" localized="true" />
+		<field name="major" type="String" localized="true" />
+		<field name="grade" type="String" />
+		<field name="phone" type="String" />
+		<field name="leader" type="boolean" />
+		<field name="challengeTeamId" type="long" />
+	</model>
+	<model name="kisti.edison.challenge.model.ChildChallenge">
+		<field name="uuid" type="String" />
+		<field name="childChallengeId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+		<field name="number" type="int" />
+		<field name="presentationDay" type="Date" />
+		<field name="paperStartDay" type="Date" />
+		<field name="paperEndDay" type="Date" />
+		<field name="evaluationDay" type="Date" />
+		<field name="challengeStartDay" type="Date" />
+		<field name="challengeEndDay" type="Date" />
+		<field name="challengeStatus" type="String" />
+		<field name="challengeId" type="long" />
+	</model>
+</model-hints>
