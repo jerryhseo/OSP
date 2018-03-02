@@ -284,10 +284,11 @@ public interface SimulationShareLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* JobUUid瑜��듯븳 怨듭쑀 ��ぉ ��젣 ���ъ젙��     *
+	* JobUUid를 통한 공유 항목 삭제 후 재정의
+	*
 	* @param jobUuid
 	* @param classId
-	* @param customIds - �ㅼ닔 �쇨꼍��delimeter��,
+	* @param customIds - 다수 일경우 delimeter는 ,
 	* @throws SystemException
 	*/
 	public void removeAndCreateByJobUUids(java.lang.String jobUuid,

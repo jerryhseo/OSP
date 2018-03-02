@@ -5,7 +5,7 @@
 <liferay-portlet:resourceURL var="jobInfoUrl" id="jobInfo" copyCurrentRenderParameters="false"/>
 <style>
 .mflefttree{padding-top: 15px; width: 300px;}
-.rightcontent{width: 840px;}
+.rightcontent{width: 640px;}
 .simulation-tree{overflow-y: auto; height: 570px;}
 .tree-view-monitoring-portlet .jstree-clicked {color: white !important;}
 .tree-view-monitoring-portlet .searchbox{
@@ -98,7 +98,6 @@
         }).bind("select_node.jstree", function(event, data){
             var nodeId = data.node.id;
             var node = data.node;
-            console.log(node);
             if(node.type === SIMULATION_TYPE){
               if(!$("#" + nodeId).hasClass("jstree-open")){
                   <portlet:namespace/>openJstreeNode(nodeId, node);
@@ -161,9 +160,9 @@
             success : function(jobs){
                 callback(jobs, simulationUuid);
             },
-            error : function(){
+            error : function(err){
                 if(console){
-                    console.log('[ERROR] AJAX FAILED during loadJobs');
+                    console.log('[ERROR] AJAX FAILED during loadJobs', err);
                 }
             }
         });
@@ -193,8 +192,7 @@
             },
             error : function(err){
                 if(console){
-                    console.log(err);
-                    console.log('[ERROR] AJAX FAILED during addSimulations');
+                    console.log('[ERROR] AJAX FAILED during addSimulations', err);
                 }
             }
         });
@@ -213,9 +211,9 @@
                 $("#<portlet:namespace/>simulation-tree").jstree(true).settings.core.data = simulations;
                 $("#<portlet:namespace/>simulation-tree").jstree(true).refresh();
             },
-            error : function(){
+            error : function(err){
                 if(console){
-                    console.log('[ERROR] AJAX FAILED during loadSimulations');
+                    console.log('[ERROR] AJAX FAILED during loadSimulations', err);
                 }
             }
         });
