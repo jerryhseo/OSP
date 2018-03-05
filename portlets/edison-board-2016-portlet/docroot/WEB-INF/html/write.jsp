@@ -356,9 +356,13 @@ var fileIndex = 0;
 function moreFileTag()
 {	
 	fileIndex++;
+	var marginTop = "";
+	if(1<fileIndex){
+		marginTop = "1%";
+	}
 	var frmTag = "<div id=\"fileDiv"+fileIndex+"\">";
-	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
+	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin:0% 1% 2% 0%; float:left;\">";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer; margin:0% 1% 2% 0%;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
 	frmTag += "</div>";
 	
 	$("#fileTDArea").append(frmTag);

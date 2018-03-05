@@ -121,8 +121,10 @@ public class SimulationProjectLocalServiceImpl
 	 */
 	public List<Map<String,Object>> getCustomMySimulationProjectList(int begin, int end, String searchValue, Locale locale) throws SystemException, PortalException, ParseException{
 		Map<String,Object> searchParam = new HashMap<String,Object>();
-        searchParam.put("begin", begin);
-        searchParam.put("end", end);
+		if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
+        
+        
         if(!"".equals(CustomUtil.strNull(searchValue))){
         	searchParam.put("searchValue", searchValue);
         }
@@ -172,8 +174,8 @@ public class SimulationProjectLocalServiceImpl
 	public List<Map<String,Object>> getCustomMySimulationProjectList(long ownerId, int begin, int end, String searchValue, Locale locale) throws SystemException, PortalException, ParseException{
 		 Map<String,Object> searchParam = new HashMap<String,Object>();
 		 searchParam.put("ownerId", ownerId);
-         searchParam.put("begin", begin);
-         searchParam.put("end", end);
+		 if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
          if(!"".equals(CustomUtil.strNull(searchValue))){
          	searchParam.put("searchValue", searchValue);
          }
@@ -221,8 +223,8 @@ public class SimulationProjectLocalServiceImpl
 	 */
 	public List<Map<String,Object>> getCustomMySimulationProjectList(int begin, int end, String searchValue, Locale locale, List<Long> siteCategoryIdList) throws SystemException, PortalException, ParseException{
 		Map<String,Object> searchParam = new HashMap<String,Object>();
-        searchParam.put("begin", begin);
-        searchParam.put("end", end);
+		if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
         if(!"".equals(CustomUtil.strNull(searchValue))){
         	searchParam.put("searchValue", searchValue);
         }
@@ -282,8 +284,8 @@ public class SimulationProjectLocalServiceImpl
 	public List<Map<String,Object>> getCustomMySimulationProjectList(long ownerId, int begin, int end, String searchValue, Locale locale, List<Long> siteCategoryIdList) throws SystemException, PortalException, ParseException{
 		 Map<String,Object> searchParam = new HashMap<String,Object>();
 		 searchParam.put("ownerId", ownerId);
-         searchParam.put("begin", begin);
-         searchParam.put("end", end);
+		 if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
          if(!"".equals(CustomUtil.strNull(searchValue))){
          	searchParam.put("searchValue", searchValue);
          }
@@ -471,9 +473,9 @@ public class SimulationProjectLocalServiceImpl
 	 * @throws ParseException
 	 */
 	public List<Map<String,Object>> getCustomIntegratedSearchSimulationProjectList(int begin, int end, String searchValue, Locale locale, List<Long> siteCategoryIdList) throws SystemException, PortalException, ParseException{
-		 Map<String,Object> searchParam = new HashMap<String,Object>();
-         searchParam.put("begin", begin);
-         searchParam.put("end", end);
+		Map<String,Object> searchParam = new HashMap<String,Object>();
+		if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
          if(!"".equals(CustomUtil.strNull(searchValue))){
          	searchParam.put("searchValue", searchValue);
          }
@@ -585,8 +587,8 @@ public class SimulationProjectLocalServiceImpl
 	 */
 	public List<Map<String,Object>> getCustomLinkSimulationProjectList(int begin, int end, String searchValue, List<Long> simProIdList, Locale locale) throws SystemException, PortalException, ParseException{
 		 Map<String,Object> searchParam = new HashMap<String,Object>();
-         searchParam.put("begin", begin);
-         searchParam.put("end", end);
+		 if(begin!=0){searchParam.put("begin", begin);}
+		if(end!=0){searchParam.put("end", end);}
          
          String simProIds = "";
          for(Long simProId : simProIdList){

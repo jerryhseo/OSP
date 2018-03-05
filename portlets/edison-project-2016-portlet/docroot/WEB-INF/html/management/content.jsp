@@ -18,12 +18,6 @@
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList(1);
 	
-	/* var display = "${display}";
-	if(display == "VIEW") {
-		$("#<portlet:namespace/>display").css("display", "block");
-	} else {
-		$(".portlet-borderless-container").css("min-height", "0");
-	} */
 });
 
 function <portlet:namespace/>updateContentProjectCategoryId(selectId, contentSeq){
@@ -189,9 +183,9 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
             onclick="<portlet:namespace/>dataSearchList(1);">
             <i class="icon-search"></i>
           </button>
-          <input type="button" name="fullsize" id="fullsize"
-            value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default"
-            onclick="<portlet:namespace/>dataSearchListAll(1);">
+          <button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataSearchListAll(1);">
+          	Clear
+          </button>
         </div>
       </div>
     </div>

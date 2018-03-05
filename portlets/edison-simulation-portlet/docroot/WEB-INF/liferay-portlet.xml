@@ -138,6 +138,29 @@
 		<css-class-wrapper>dashboard-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+    
+    <portlet>
+        <portlet-name>edison-tab</portlet-name>
+        <icon>/icon.png</icon>
+        <css-class-wrapper>edison-tab</css-class-wrapper>
+        <add-default-resource>true</add-default-resource>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>edison-tree-view-monitoring</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <header-portlet-css>/css/treeview-monitoring.css</header-portlet-css>
+        <header-portlet-css>/css/jstreestyle.css</header-portlet-css>
+        <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
+        <header-portlet-css>/css/jquery.contextMenu.css</header-portlet-css>
+        <header-portlet-javascript>/js/jquery.contextMenu.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
+        <css-class-wrapper>
+            tree-view-monitoring-portlet
+        </css-class-wrapper>
+    </portlet>
+    
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

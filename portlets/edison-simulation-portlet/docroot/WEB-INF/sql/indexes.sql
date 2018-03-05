@@ -16,3 +16,5 @@ create index IX_19D08725 on EDSIM_SimulationJob (simulationUuid, jobSubmit, jobS
 create index IX_2BCAD57D on EDSIM_SimulationJob (simulationUuid, jobUuid);
 
 create index IX_101568AF on EDSIM_SimulationJobStatus (groupId, simulationUuid, jobUuid);
+
+create index IX_3EBE1D31 on EDSIM_SimulationShare (jobUuid);

@@ -55,3 +55,7 @@ This file allows you to override and define new Velocity variables.
 
 
 #set($isBreadcrumb = $getterUtil.getBoolean($themeDisplay.getLayout().getExpandoBridge().getAttribute("IS_SHOW_BREADCRUMB"),false))
+
+#set ($layoutService = $serviceLocator.findService('com.liferay.portal.service.LayoutLocalService'))
+#set($searchPlid = $layoutService.getFriendlyURLLayout($themeDisplay.getScopeGroupId(), false, "/search").getPlid())
+#set($searchURL = $portletURLFactory.create($request,"edisonsearch_WAR_edisonsearch2017portlet",$searchPlid,"RENDER_PHASE"))

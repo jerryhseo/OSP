@@ -264,4 +264,33 @@ public interface SimulationShareLocalService extends BaseLocalService,
 	public org.kisti.edison.bestsimulation.model.SimulationShare getSimulationShare(
 		int shareSeqNo, int jobSeqNo, java.lang.String jobUuid,
 		java.lang.String simulationUuid);
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findListByJobUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public boolean isExitByJobUUid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void removeBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void removeByJobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.bestsimulation.model.SimulationShare createByJobUuid(
+		java.lang.String jobUuid, long classId, long customId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* JobUUid瑜��듯븳 怨듭쑀 ��ぉ ��젣 ���ъ젙��     *
+	* @param jobUuid
+	* @param classId
+	* @param customIds - �ㅼ닔 �쇨꼍��delimeter��,
+	* @throws SystemException
+	*/
+	public void removeAndCreateByJobUUids(java.lang.String jobUuid,
+		long classId, java.lang.String customIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

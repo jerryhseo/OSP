@@ -347,8 +347,10 @@
 					<c:if test="${empty solver.current_manualId}">
 						<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 					</c:if>
+					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${params.solverId}');"/>
+						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
+						<%-- <img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${params.solverId}');"/> --%>
 					</c:if>
 					<c:if test="${solver.appType eq 'Editor' and isSignedIn}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor();"/>
@@ -690,6 +692,24 @@ function <portlet:namespace/>deleteFavoriteApp(solverId,groupId) {
 function <portlet:namespace/>historyBack(){
 	location.href = "${redirectOrignURL}";
 }
+
+
+function <portlet:namespace/>goWorkbench(targetScienceAppId){
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
+		portletURL.setPlid("${workBenchPlid}");
+		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
+		portletURL.setParameter("scienceAppId", targetScienceAppId);
+		
+		portletURL.setParameter("redirectName", "My Project");
+		portletURL.setParameter("redirectURL", "${redirectURL}");
+		window.location.href = portletURL;
+	});
+}
+
 </script>
 
 <aui:script>

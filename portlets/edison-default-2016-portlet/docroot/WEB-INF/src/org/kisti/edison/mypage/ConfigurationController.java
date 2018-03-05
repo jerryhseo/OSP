@@ -52,12 +52,11 @@ public class ConfigurationController implements ConfigurationAction{
 		PortletConfig selPortletConfig = getSelPortletConfig(renderRequest);
 
 		String tabArray[] = {
-			"favoriteApp", "myApp", "myDataType", "myHistory", "myScienceData", "myCourse",
+			"favoriteApp", "myApp", "myDataType", "myHistory", "myCourse",
 			"myClass", "myFile", "myWorkspace", "myContent", "myProject", "siteJoin" ,"eturbMyFile"
 		};
 		renderRequest.setAttribute("tabArray", tabArray);
 
-		
 		String selectedTab = renderRequest.getPreferences().getValue("mypageTab", "");
 		
 		if(!selectedTab.equals("")){

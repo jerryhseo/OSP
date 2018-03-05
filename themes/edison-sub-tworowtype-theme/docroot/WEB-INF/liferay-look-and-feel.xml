@@ -12,6 +12,7 @@
 		<javascript-path>${root-path}/js</javascript-path>
 		<settings>
 			<setting key="content-title" value="Edison" configurable="true" type="text"></setting>
+			<setting key="breadcrumb-title" value="Edison" configurable="true" type="text"></setting>
 			<setting key="portlet-setup-show-borders-default" value="false"></setting>
 		</settings>
 		

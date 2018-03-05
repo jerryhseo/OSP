@@ -119,14 +119,14 @@ function <portlet:namespace/>dataSearchList(curPage){
 					${statusOptionStr}
 				</select>
 				
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 25%">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 22%">
 					<option value="10" <c:if test="${params.selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20" <c:if test="${params.selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30" <c:if test="${params.selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
 					<option value="40" <c:if test="${params.selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
 				</select>
 				
-				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" value="${params.searchField}" style="width: 50%;"/>
+				<input class="form-control" id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-appstore-workspace-placeholder' />" onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" value="${params.searchField}" style="width: 52%; margin-left: 1%;"/>
 				
 				<div class="input-group-btn">
 					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList('1');"><i class="icon-search"></i></button>
@@ -155,9 +155,9 @@ function <portlet:namespace/>dataSearchList(curPage){
 	    <tbody id="<portlet:namespace/>workspaceList">
 	    </tbody>
 	</table>
+	
+	 <!-- 페이지 네비게이션 ---->
+	<div class="text-center" id="<portlet:namespace/>page_navi">
+	</div>
 </div>
 
- <!-- 페이지 네비게이션 ---->
-<div class="text-center" id="<portlet:namespace/>page_navi">
-
-</div>

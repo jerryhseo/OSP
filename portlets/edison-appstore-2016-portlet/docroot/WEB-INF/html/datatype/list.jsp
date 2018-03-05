@@ -37,6 +37,8 @@
 <style type="text/css">
 	.edison-data-type-editor .swtabtitle{width:35%; float:left; background:url(${contextPath}/images/appmanager/swarrow02.png) no-repeat 20px 13px; padding-left:40px; border:solid 1px #d1d1d1; color:#ee843e; font-size:15px; line-height:2.4em; border-bottom: solid 1px #fff;z-index:90;position:relative;}
 	.edison-data-type-editor .swrightcon{width:100%; padding:20px; font-size:15px; font-weight:500; color:#555; outline:solid 1px #d1d1d1; margin-top:33px; line-height:1.6em;overflow-x: hidden;overflow-y: auto;margin: 1px;}
+	
+	.edison-data-type-editor .canvasPanel{border: 0px; padding-left: 40px;}
 </style>
 
 
@@ -123,8 +125,8 @@
 							STRUCTURE
 						</div>
 						<div id="<portlet:namespace/>inputPreview" class="inputPreview">
-							<liferay-portlet:runtime portletName="StructuredDataViewer_WAR_OSPAnalyzersportlet_INSTANCE_datatype" queryString=""/>
-			<%-- 				<liferay-portlet:runtime portletName="structureddataviewer_WAR_OSPAnalyzersportlet" queryString=""/> --%>
+							<pre class="span12 canvasPanel" id="<portlet:namespace/>canvas" >
+							</pre>
 						</div>
 					</div>
 				</div>
@@ -248,16 +250,19 @@
 		});
 	}
 	
+	var <portlet:namespace/>dataType = new OSP.DataType();
 	function <portlet:namespace/>addInputDeckAnalyzer(structure){
-		var data={
-			targetPortlet: 'StructuredDataViewer_WAR_OSPAnalyzersportlet_INSTANCE_datatype',
-			portletId:'<%=portletDisplay.getId()%>',
-			data: {
-				type_: 'structuredData',
-				context_: structure
-			}
-		};
-		Liferay.fire('OSP_LOAD_DATA',data);
+		<portlet:namespace/>dataType.deserializeStructure(structure);
+		<portlet:namespace/>loadStructuredData( <portlet:namespace/>dataType );
+	}
+	
+	function <portlet:namespace/>loadStructuredData( dataType ){
+		dataType.showStructuredDataViewer(
+				'<portlet:namespace/>',
+				$('#<portlet:namespace/>canvas'),
+				'<%=renderRequest.getContextPath()%>',
+				'<%=themeDisplay.getLanguageId()%>'
+		);
 	}
 	
 	function <portlet:namespace/>dataTypeModify(mode){

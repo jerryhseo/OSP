@@ -209,11 +209,12 @@ function historyback(){
 
 </script>
 
-<div class="table-responsive panel edison-panel" style="width: 1200px; margin: 0 auto;">
+<div class="table-responsive panel edison-panel" style="margin: 0 auto;">
 	<form name="surveyForm" method="post">
 		<input type="hidden" name="<portlet:namespace/>surveySeqNo" value="${surveyMap.surveySeqNo}">
 		<div class="panel-heading clearfix">
 			<h1>
+				<img src="${contextPath}/images/title_virtual.png" />
 				<liferay-ui:message key='edison-virtuallab-survey' />
 			</h1>
 		</div>

@@ -96,7 +96,7 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 		if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.TEMP_USER)){
 			userViewPageTabStr = "favoriteApp,myFile,myClass,eturbMyFile";
 		}else{
-			userViewPageTabStr = "favoriteApp,myScienceData,myCourse,myClass,myFile,myContent,myProject,siteJoin,myWorkspace";
+			userViewPageTabStr = "favoriteApp,myCourse,myClass,myFile,myContent,myProject,siteJoin,myWorkspace";
 			
 			if(EdisonUserUtil.isDeveloperThan(user)){
 				userViewPageTabStr = StringUtil.add(userViewPageTabStr, "myApp",",");
@@ -187,10 +187,6 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 			if(tab.contains("myApp")){
 				tabName=LanguageUtil.get(locale,"edison-appstore-myapp-list");
 				tabValue = "myApp";
-			}
-			if(tab.contains("myScienceData")){
-				tabName=LanguageUtil.get(locale,"edison-default-mysciencedata");
-				tabValue = "myScienceData";
 			}
 			if(tab.contains("myContent")){
 				tabName=LanguageUtil.get(locale,"edison-default-mycontent");

@@ -295,6 +295,47 @@ public class SimulationShareLocalServiceUtil {
 			simulationUuid);
 	}
 
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationShare> findListByJobUuid(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findListByJobUuid(jobUuid);
+	}
+
+	public static boolean isExitByJobUUid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().isExitByJobUUid(jobUuid);
+	}
+
+	public static void removeBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().removeBySimulationUuid(simulationUuid);
+	}
+
+	public static void removeByJobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().removeByJobUuid(jobUuid);
+	}
+
+	public static org.kisti.edison.bestsimulation.model.SimulationShare createByJobUuid(
+		java.lang.String jobUuid, long classId, long customId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().createByJobUuid(jobUuid, classId, customId);
+	}
+
+	/**
+	* JobUUid�쒙옙占쎈벏釉��⑤벊��占쏙옙��占쏙옙��占쏙옙占싼딆젟占쏙옙     *
+	*
+	* @param jobUuid
+	* @param classId
+	* @param customIds - 占썬끉��占쎌눊瑗랃옙占폻elimeter占쏙옙,
+	* @throws SystemException
+	*/
+	public static void removeAndCreateByJobUUids(java.lang.String jobUuid,
+		long classId, java.lang.String customIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().removeAndCreateByJobUUids(jobUuid, classId, customIds);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

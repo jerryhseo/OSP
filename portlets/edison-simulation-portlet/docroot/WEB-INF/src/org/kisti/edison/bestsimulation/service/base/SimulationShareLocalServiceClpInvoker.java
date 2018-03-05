@@ -139,6 +139,34 @@ public class SimulationShareLocalServiceClpInvoker {
 		_methodParameterTypes92 = new String[] {
 				"int", "int", "java.lang.String", "java.lang.String"
 			};
+
+		_methodName93 = "findListByJobUuid";
+
+		_methodParameterTypes93 = new String[] { "java.lang.String" };
+
+		_methodName94 = "isExitByJobUUid";
+
+		_methodParameterTypes94 = new String[] { "java.lang.String" };
+
+		_methodName95 = "removeBySimulationUuid";
+
+		_methodParameterTypes95 = new String[] { "java.lang.String" };
+
+		_methodName96 = "removeByJobUuid";
+
+		_methodParameterTypes96 = new String[] { "java.lang.String" };
+
+		_methodName97 = "createByJobUuid";
+
+		_methodParameterTypes97 = new String[] {
+				"java.lang.String", "long", "long"
+			};
+
+		_methodName98 = "removeAndCreateByJobUUids";
+
+		_methodParameterTypes98 = new String[] {
+				"java.lang.String", "long", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -262,6 +290,45 @@ public class SimulationShareLocalServiceClpInvoker {
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
 		}
 
+		if (_methodName93.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes93, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.findListByJobUuid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName94.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes94, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.isExitByJobUUid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName95.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes95, parameterTypes)) {
+			SimulationShareLocalServiceUtil.removeBySimulationUuid((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName96.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes96, parameterTypes)) {
+			SimulationShareLocalServiceUtil.removeByJobUuid((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName97.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes97, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.createByJobUuid((java.lang.String)arguments[0],
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
+		}
+
+		if (_methodName98.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
+			SimulationShareLocalServiceUtil.removeAndCreateByJobUUids((java.lang.String)arguments[0],
+				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -307,4 +374,16 @@ public class SimulationShareLocalServiceClpInvoker {
 	private String[] _methodParameterTypes91;
 	private String _methodName92;
 	private String[] _methodParameterTypes92;
+	private String _methodName93;
+	private String[] _methodParameterTypes93;
+	private String _methodName94;
+	private String[] _methodParameterTypes94;
+	private String _methodName95;
+	private String[] _methodParameterTypes95;
+	private String _methodName96;
+	private String[] _methodParameterTypes96;
+	private String _methodName97;
+	private String[] _methodParameterTypes97;
+	private String _methodName98;
+	private String[] _methodParameterTypes98;
 }

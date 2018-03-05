@@ -2,4 +2,9 @@
 	.edison-table thead{
 		background-color: #f1ecf8;
 	}
+	
+	/*theme breadcrumbs*/
+	#nsubtopwrap #barcolor{
+		background-color: #662e91;
+	}
 }

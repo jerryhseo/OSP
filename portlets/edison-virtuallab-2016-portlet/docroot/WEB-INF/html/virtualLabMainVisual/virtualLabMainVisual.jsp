@@ -109,75 +109,73 @@
 					<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${labInfo.virtualLabUniversityField}">
 					<input id="<portlet:namespace/>professorSeq" name="<portlet:namespace/>professorSeq" type="hidden" value="${labInfo.virtualLabProfessorSeq}">
 					<input id="<portlet:namespace/>status" name="<portlet:namespace/>status" type="hidden" value="UPDATE">
-					<div class="table1_list">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" style=" table-layout: fixed;" class="table table-bordered table-hover edison-table">
-							<colgroup>
-								<col width="20%" />
-								<col width="30%" />
-								<col width="20%" />
-								<col width="30%" />
-							</colgroup>
-							<tbody>
-								<tr>
-									<th><liferay-ui:message key='edison-table-list-header-tutor' /></th>
-									<td class="puptxt input-group" style="display: table-cell;">
-										<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width: 190px;" value="${labInfo.professorFirstName}"/>
-										<div class="input-group-btn">
-											<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
-										</div>
-									</td>
-									<c:if test="${role eq 'MANAGER' }">
-										<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
-										<td class="puptxt">
-											<input id="<portlet:namespace/>virtualLabOwnerName" name="<portlet:namespace/>virtualLabOwnerName" type="text" readonly="readonly" style="width:190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
-										</td>
-									</c:if>
-									<c:if test="${role eq 'ADMIN' }">
-										<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
-										<td class="puptxt input-group" style="display: table-cell;">
-											<input id="<portlet:namespace/>virtualLabOwnerName" class="form-control" name="<portlet:namespace/>virtualLabOwnerName" type="text"  style="width: 190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
-											<div class="input-group-btn">
-												<input id="virtualLab_owner_transfer_button" name="virtualLab_owner_transfer_button" onclick="<portlet:namespace/>virtualLabOwnerTransfer();" type="button" value="<liferay-ui:message key='edison-virtuallab-transfer' />" class="btn btn-default" />
-											</div>
-										</td>
-									</c:if>
-								</tr>
-								<tr>
-									<th><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style=" table-layout: fixed;" class="table1_list table table-bordered table-hover edison-table">
+						<colgroup>
+							<col width="20%" />
+							<col width="30%" />
+							<col width="20%" />
+							<col width="30%" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-tutor' /></th>
+								<td class="puptxt input-group" style="display: table-cell;">
+									<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="width: 190px;" value="${labInfo.professorFirstName}"/>
+									<div class="input-group-btn">
+										<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+									</div>
+								</td>
+								<c:if test="${role eq 'MANAGER' }">
+									<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
 									<td class="puptxt">
-										<liferay-ui:input-localized id="virtualLabTitle" cssClass="form-control" name="virtualLabTitle" xml="${labInfo.virtualLabTitleMap}"  style="display: inline-block; margin:4px; width:255px;" type="input" />
+										<input id="<portlet:namespace/>virtualLabOwnerName" name="<portlet:namespace/>virtualLabOwnerName" type="text" readonly="readonly" style="width:190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
 									</td>
-									<th style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+								</c:if>
+								<c:if test="${role eq 'ADMIN' }">
+									<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
 									<td class="puptxt input-group" style="display: table-cell;">
-										<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="20" readonly="readonly" style="width: 190px; margin-bottom:0px;" value="${labInfo.virtualLabUniversityFieldNm}"/>
+										<input id="<portlet:namespace/>virtualLabOwnerName" class="form-control" name="<portlet:namespace/>virtualLabOwnerName" type="text"  style="width: 190px; margin-bottom:0px;" value="${labInfo.userScreenName}"/>
 										<div class="input-group-btn">
-											<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+											<input id="virtualLab_owner_transfer_button" name="virtualLab_owner_transfer_button" onclick="<portlet:namespace/>virtualLabOwnerTransfer();" type="button" value="<liferay-ui:message key='edison-virtuallab-transfer' />" class="btn btn-default" />
 										</div>
 									</td>
-								</tr>
-								<tr>
-									<th><liferay-ui:message key='edison-table-list-header-resume' /></th>
-									<td class="puptxt" colspan="3">
-									<liferay-ui:input-localized id="virtualLabDescription" name="virtualLabDescription" xml="${labInfo.virtualLabDescriptionMap}"  rows="5" spellcheck="false" style="width: 95%; resize:none; margin:5px;" type="textarea"/>
-								</tr>
-								
-								<tr>
-									<th><liferay-ui:message key='icon' /></th>
-									<td class="puptxt" colspan="3">
-										<input type="file" id="<portlet:namespace/>course_icon" name="<portlet:namespace/>course_icon">
-										<c:if test="${labInfo.iconTitle ne null }">
-											<div class="down_date courseIconClass"  onclick="<portlet:namespace/>fileDownload('${labInfo.iconId }')" style="cursor: pointer;display: inline-block;">
-												${labInfo.iconTitle}
-											</div>
-											<img src='${contextPath}/images/icon_dustbin.png' class="courseIconClass" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${labInfo.iconId}','courseIcon','courseIconClass');" />
-										</c:if>
-										<div id="clear"></div>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
-					</div>
+								</c:if>
+							</tr>
+							<tr>
+								<th><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
+								<td class="puptxt">
+									<liferay-ui:input-localized id="virtualLabTitle" cssClass="form-control" name="virtualLabTitle" xml="${labInfo.virtualLabTitleMap}"  style="display: inline-block; margin:4px; width:255px;" type="input" />
+								</td>
+								<th style="word-wrap: break-word;"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+								<td class="puptxt input-group" style="display: table-cell;">
+									<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="20" readonly="readonly" style="width: 190px; margin-bottom:0px;" value="${labInfo.virtualLabUniversityFieldNm}"/>
+									<div class="input-group-btn">
+										<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><liferay-ui:message key='edison-table-list-header-resume' /></th>
+								<td class="puptxt" colspan="3">
+								<liferay-ui:input-localized id="virtualLabDescription" name="virtualLabDescription" xml="${labInfo.virtualLabDescriptionMap}"  rows="5" spellcheck="false" style="width: 95%; resize:none; margin:5px;" type="textarea"/>
+							</tr>
+							
+							<tr>
+								<th><liferay-ui:message key='icon' /></th>
+								<td class="puptxt" colspan="3">
+									<input type="file" id="<portlet:namespace/>course_icon" name="<portlet:namespace/>course_icon">
+									<c:if test="${labInfo.iconTitle ne null }">
+										<div class="down_date courseIconClass"  onclick="<portlet:namespace/>fileDownload('${labInfo.iconId }')" style="cursor: pointer;display: inline-block;">
+											${labInfo.iconTitle}
+										</div>
+										<img src='${contextPath}/images/icon_dustbin.png' class="courseIconClass" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${labInfo.iconId}','courseIcon','courseIconClass');" />
+									</c:if>
+									<div id="clear"></div>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
 				</div>
 			</form>
 	</c:when>

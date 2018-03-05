@@ -1,6 +1,7 @@
 package org.kisti.edison.virtuallaboratory.portlet.virtualLabClassMainVisual;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.virtuallaboratory.model.VirtualLabUser;
+import org.kisti.edison.virtuallaboratory.service.SurveyLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabClassLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabUserLocalServiceUtil;
 import org.springframework.stereotype.Controller;
@@ -82,6 +84,22 @@ public class VirtualClassMainController {
 				}
 				return classExcpetionJSP;
 			}
+			
+			String role;
+			List<Map<String, Object>> surveyAttend = null;
+			
+			if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) ||	// 포털 Admin Check
+					EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR) ||	// 사이트 Admin Check
+					EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER) ||
+					UserGroupRoleCustomLocalServiceUtil.checkRoleVirtualLabClass(companyId, groupId, user.getUserId(), GetterUtil.get(classInfo.get("virtualLabId"), 0L), classId_) != null){
+				role = "ADMIN";
+				surveyAttend = SurveyLocalServiceUtil.getSurveyMappingList(GetterUtil.get(classInfo.get("virtualLabId"), 0L), true, locale);
+			} else {
+				role = "STUDENT";
+				surveyAttend = SurveyLocalServiceUtil.getSurveyMappingVoteList(GetterUtil.get(classInfo.get("virtualLabId"), 0L), classId_, user.getUserId(), true, locale);
+			}
+			// 등록된 설문조사 수
+			model.addAttribute("surveyCnt", surveyAttend.size());
 			
 			if (classInfo == null || classInfo.size() == 0) {
 				// 클래스 정보가 없을때 가상실험실 목록 화면으로 이동

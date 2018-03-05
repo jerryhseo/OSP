@@ -113,13 +113,26 @@
 					return false;
 			};
 			
+			P.repositoryType = function(repositoryType){
+				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments));
+			}
+			
 			P.load = function( $targetDiv, connector, eventEnable, windowState, callback ){
 				AUI().use('liferay-portlet-url', function(A){
 					var portletURL = Liferay.PortletURL.createRenderURL();
 					portletURL.setPortletId( P.instanceId() );
 					portletURL.setParameter( 'eventEnable', eventEnable);
 					portletURL.setParameter( 'connector', connector);
+					
+					/*repositoryType (var)*/
+					/*portletURL.setParameter( 'repositoryType', P.portType());*/
+					/*
+					 * P.portType() = INPUT -> P.repositoryType()
+					 * ELSE
+					 * P.portType() =  P.portType()
+					 * */
 					portletURL.setParameter( 'action', P.portType());
+					portletURL.setParameter( 'repositoryType', P.repositoryType());
 					portletURL.setWindowState(windowState);
 
 					$.ajax({
@@ -176,6 +189,7 @@
 					case OSP.Constants.INSTANCE_ID:
 					case OSP.Constants.PREFERENCES:
 					case OSP.Constants.PORT_NAME:
+					case OSP.Constants.REPOSITORY_TYPE:
 						P.property( key, jsonPortlet[key] );
 						break;
 					default:
@@ -875,11 +889,14 @@
 			};
 			Liferay.fire(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, eventData );
 		};
-		var fireDeleteSimulationResult = function( targetPortId,data ){
+		var fireDeleteSimulationResult = function( targetPortId,simulationUuid, status ){
 			var eventData = {
 			                 portletId: Workbench.id(),
 			                 targetPortlet: targetPortId,
-			                 data: data
+			                 data: {
+			                	simulationUuid:simulationUuid,
+			                	status : status
+			                 }
 			};
 			Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, eventData );
 		};
@@ -1201,13 +1218,13 @@
 				async : false,
 				data  : data,
 				success: function(result) {
-					fireDeleteSimulationResult(portletId,true);
+					fireDeleteSimulationResult(portletId,simulationUuid,true);
 					fireRefreshSimulations({});
 				},
 				error:function(data,e){
 					console.log(data);
 					console.log('AJAX ERROR-->'+e);
-					fireDeleteSimulationResult(portletId,false);
+					fireDeleteSimulationResult(portletId,simulationUuid,false);
 				}
 			});
 		};

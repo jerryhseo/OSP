@@ -144,7 +144,6 @@ function <portlet:namespace/>checkValidation() {
 	});
 }
 
-
 /* 설문조사 */
 function <portlet:namespace/>openSurvey(){
 	AUI().use("liferay-portlet-url", function(a) {
@@ -172,9 +171,16 @@ function <portlet:namespace/>openSurvey(){
 						}
 					}
 				},
-			id: "surveyDialog",
-			uri: portletURL.toString(),
-			title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+				id: "surveyDialog",
+				uri: portletURL.toString(),
+				title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+				dialogIframe: {
+					on: {
+						load : function(evt) {
+							$(".modal-body").css('overflow-y','hidden');
+						}
+					}
+				}
 			}
 		);
 		
@@ -296,7 +302,9 @@ function <portlet:namespace/>myClass(){
 			<c:if test="${role eq 'MANAGER' || role eq 'ADMIN' }">
 				<div class="btn_linec" onclick="<portlet:namespace/>openStudentManagement();"><liferay-ui:message key="edison-virtuallab-student-management"/></div>&nbsp; 		<!-- 학생 관리 	-->
 			</c:if>
-			<div class="btn_linec" onclick="<portlet:namespace/>openSurvey();"><liferay-ui:message key="edison-virtuallab-survey"/></div>							<!-- 설문조사	-->
+			<c:if test="${surveyCnt > 0}">
+				<div class="btn_linec" onclick="<portlet:namespace/>openSurvey();"><liferay-ui:message key="edison-virtuallab-survey"/></div>							<!-- 설문조사	-->
+			</c:if>
 		</div>
 
 	</div>
@@ -322,7 +330,6 @@ function <portlet:namespace/>myClass(){
 					<col width="60%" />
 				</colgroup>
 				<tbody>
-					<!-- <tr class="puptrline input-group" style="display: table-cell;"> -->
 					<tr class="puptrline">
 						<td class="puptitle"><liferay-ui:message key='current-password' /></td>
 						<td class="puptitle">

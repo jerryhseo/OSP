@@ -141,7 +141,7 @@
 			</h3>
 			
 			<div class="input-group">
-				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 25%;">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 24%;">
 					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
 					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
@@ -153,7 +153,7 @@
 					   size="40"
 					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
 					   value="${searchText }" 
-					   style="width:75%;"
+					   style="width:75%; margin-left: 1%;"
 				/>
 				
 				<div class="input-group-btn">
@@ -219,12 +219,16 @@
 		</table>
 		
 		<div class="h10"></div>
-		<div class="buttonbox" align="right" id="<portlet:namespace/>addGeneralContentDiv">
-			<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
-		</div>
 		
-		<div class="paging">
-			<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+		<div class="row" style="margin: 0px;">
+			<div class="col-md-10 paging">
+				<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+			</div>
+			
+			<div class="col-md-2 buttonbox" id="<portlet:namespace/>addGeneralContentDiv" style="margin: 18px 0px;">
+				<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;" style="width: 100%;" />
+			</div>
+			
 		</div>
 	</div>
 

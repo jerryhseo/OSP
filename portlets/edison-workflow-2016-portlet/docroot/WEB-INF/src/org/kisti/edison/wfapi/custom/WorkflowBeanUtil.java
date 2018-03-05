@@ -137,8 +137,8 @@ public class WorkflowBeanUtil{
     Map<String, Object> modelMap = workflowInstance.getModelAttributes(); 
     modelMap.put("data", new HashMap<>(modelMap));
     modelMap.put("id", workflowInstance.getWorkflowInstanceId());
-    modelMap.put("text", workflowInstance.getTitle(locale)/* + " | " 
-        + StringUtil.upperCaseFirstLetter(workflowInstance.getStatus().toLowerCase())*/);
+    modelMap.put("text", workflowInstance.getTitle(locale) + " - " 
+        + StringUtil.upperCaseFirstLetter(workflowInstance.getStatus().toLowerCase()));
     modelMap.put("parent", workflowInstance.getWorkflowId());
     modelMap.put("type", "instance");
     
@@ -154,13 +154,35 @@ public class WorkflowBeanUtil{
     return result;
   }
   
+  public static Map<String, Object> workflowToJstreeModel(Workflow workflow, String root, Locale locale){
+      Map<String, Object> modelMap = workflow.getModelAttributes(); 
+      modelMap.put("data", new HashMap<>(modelMap));
+      modelMap.put("id", workflow.getWorkflowId());
+      modelMap.put("text", workflow.getTitle(locale));
+      modelMap.put("parent", root);
+      modelMap.put("type", "workflow");
+      return modelMap;
+  }
+  
   public static Map<String, Object> workflowToJstreeModel(Workflow workflow, Locale locale){
-    Map<String, Object> modelMap = workflow.getModelAttributes(); 
-    modelMap.put("data", new HashMap<>(modelMap));
-    modelMap.put("id", workflow.getWorkflowId());
-    modelMap.put("text", workflow.getTitle(locale));
-    modelMap.put("parent", "currentWorkflowTop");
-    modelMap.put("type", "workflow");
-    return modelMap;
+      return workflowToJstreeModel(workflow, "currentWorkflowTop", locale);
+  }
+  
+  public static List<Map<String, Object>> workflowMapToJstreeModel(
+      List<Map<String, Object>> workflows, Locale locale) {
+      List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+      for(Map<String, Object> workflow : workflows){
+          result.add(workflowMapToJstreeModel(workflow, locale));
+      }
+      return result;
+  }
+  
+  public static Map<String, Object> workflowMapToJstreeModel(Map<String, Object> workflow, Locale locale){
+      workflow.put("data", new HashMap<>(workflow));
+      workflow.put("id", workflow.get("workflowId"));
+      workflow.put("text", workflow.get("title"));
+      workflow.put("parent", "currentWorkflowTop");
+      workflow.put("type", "workflow");
+      return workflow;
   }
 }

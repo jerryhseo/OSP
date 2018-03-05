@@ -75,6 +75,7 @@
 	}
 %>
 
+<div class="container">
 <div class="table-responsive panel edison-panel">
 	<div class="table1_list">
 		<h3>
@@ -176,12 +177,12 @@
 						<th><liferay-ui:message key='edison-simulation-project-representative-image' /><span class="requiredField"> *</span></th>
 						<td colspan="2">
 							<div id="<portlet:namespace/>fileTDArea">
-								<div id="<portlet:namespace/>fileDivDefault">
-									<input type="file" name="<portlet:namespace/>project_image" />
+								<div id="<portlet:namespace/>fileDivDefault" style="margin-bottom: 5px;">
+									<input type="file" name="<portlet:namespace/>project_image" style="float: left;" />
 									<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="<portlet:namespace/>moreFileTag()" style="cursor:pointer;"/>
 								</div>
 							</div>
-							<div id="<portlet:namespace/>fileListDiv">
+							<div id="<portlet:namespace/>fileListDiv" style="margin-top: 5px;">
 								<c:if test="${data.projectImageList ne null}">
 									<c:forEach var="projectImage" items="${data.projectImageList}">
 										<div class="projectImageList">
@@ -354,6 +355,7 @@
 		</c:if>	
 	</div>
 </div>
+</div>
 
 <script type="text/javascript">
 var selectEntryArr = [];
@@ -392,7 +394,7 @@ function <portlet:namespace/>scienceAppManagementOpen() //Relate AssetEntry ÌåùÏ
 	Liferay.Util.openWindow({
 		dialog: {
 			cache: false,
-          	destroyOnClose: true,
+			destroyOnClose: true,
 			after: {
 				render: function(event) {
 					$("button.btn.close").on("click", function(e){
@@ -413,12 +415,14 @@ function <portlet:namespace/>scienceAppManagementOpen() //Relate AssetEntry ÌåùÏ
 			width:1000, 
 			height:720
 		},
+		id: "<portlet:namespace/>scienceAppManagementPopup",
 		title: Liferay.Language.get("edison-workflow-science-app"),
 		uri : URL,
 		dialogIframe: {
 			on: {
 				load : function(evt) {
 					$("body").css('overflow','hidden');
+					$(".modal-body").css('overflow-y','hidden');
 				}
 			}
 		}
@@ -870,7 +874,7 @@ function <portlet:namespace/>moreFileTag()
 {	
 	fileIndex++;
 	var frmTag = "<div id=\"<portlet:namespace/>fileDiv"+fileIndex+"\">";
-	frmTag += "<input type=\"file\" name=\"<portlet:namespace/>project_image\" />&nbsp;";
+	frmTag += "<input type=\"file\" name=\"<portlet:namespace/>project_image\" style=\"float:left; margin-bottom=5px;\" />&nbsp;";
 	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv"+fileIndex+"\')\" />";
 	frmTag += "</div>";
 	

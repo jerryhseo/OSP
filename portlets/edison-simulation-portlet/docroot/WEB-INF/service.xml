@@ -211,6 +211,11 @@
 		<column name="classId" type="long"></column>
 		<column name="customId" type="long"></column>
 		<column name="simulationShareDt" type="Date"></column>
+		
+		<!-- Finder -->
+		<finder name="jobUuid" return-type="Collection">
+			<finder-column name="jobUuid"/>
+		</finder>
 	</entity>
 
 </service-builder>

@@ -298,98 +298,93 @@ function <portlet:namespace/>tabChange(value){
 <br />
 
 <div id="<portlet:namespace/>contentDiv" class="table-responsive panel edison-panel">
-	<div class="virtitlebox">
-		<img src="/edison-virtuallab-2016-portlet/images/title_virtual.png" width="20" height="20"> 
-		<div class="virtitle" style="margin-bottom: 20px;"><liferay-ui:message key="edison-asset-select-related-information"/></div>
-	</div>
-	<div id="selectInfo">
-	</div>
 	
 	<!--table view -->
-	<div class="tabletopbox clear">
-		<div class="search">
-			<div class="input-group">
-				<div class="input-group-btn">
-				<input name="<portlet:namespace/>textfield" type="text" class="form-control"
-					id="<portlet:namespace/>textfield"
-					placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
-					size="40"
-					style="width: 250px;"
-					onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
-				<!-- <input  value=""
-					class="btnsearch"
-					> -->
-					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);">
-						<i class="icon-search"></i>
-					</button>
-				</div>
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title">
+			<img src="/edison-virtuallab-2016-portlet/images/title_virtual.png" width="20" height="20"> 
+			<liferay-ui:message key="edison-asset-select-related-information"/>
+		</h3>
+		
+		<div class="h10"></div>
+		
+		<div id="selectInfo">
+		</div>
+		
+		<div class="input-group">
+			<input name="<portlet:namespace/>textfield" type="text" class="form-control"
+				id="<portlet:namespace/>textfield"
+				placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
+				size="40"
+				style="width: 30%; float: right;"
+				onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);">
+					<i class="icon-search"></i>
+				</button>
 			</div>
 		</div>
 	</div>
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table table-bordered table-hover edison-table">
-			<thead id="<portlet:namespace/>otherTableHeader">
-				<tr>
-					<th width="40%"><liferay-ui:message key="edison-table-list-header-title"/></th>
-					<th width="60%"><liferay-ui:message key="edison-table-list-header-content"/></th>
-				</tr>
-			</thead>
-	
-			<tbody id="<portlet:namespace/>entryTableBody">
-				<tr >
-					<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
-						<liferay-ui:message key='edison-asset-related-information' />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table1_list table table-bordered table-hover edison-table">
+		<thead id="<portlet:namespace/>otherTableHeader">
+			<tr>
+				<th width="40%"><liferay-ui:message key="edison-table-list-header-title"/></th>
+				<th width="60%"><liferay-ui:message key="edison-table-list-header-content"/></th>
+			</tr>
+		</thead>
+
+		<tbody id="<portlet:namespace/>entryTableBody">
+			<tr >
+				<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
+					<liferay-ui:message key='edison-asset-related-information' />
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<div class="paging">
 		<div id="<portlet:namespace/>paging" style="width: 100%; text-align: center;"></div>
 	</div>
 </div>
 
-<div id="<portlet:namespace/>fileDiv">
-	<div class="virtitlebox">
-		<img src="/edison-virtuallab-2016-portlet/images/title_virtual.png" width="20" height="20"> 
-		<div class="virtitle" ><liferay-ui:message key="edison-course-class-note-file"/></div>
+<div id="<portlet:namespace/>fileDiv" class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title">
+			<img src="/edison-virtuallab-2016-portlet/images/title_virtual.png" width="20" height="20"> 
+			<liferay-ui:message key="edison-course-class-note-file"/>
+		</h3>
 	</div>
-	<div class="fileContainer">
-		<form id="<portlet:namespace/>createFileForm" name="<portlet:namespace/>createFileForm"  enctype="multipart/form-data" method="post" action="<%= fileCreateURL %>" onsubmit="return <portlet:namespace/>checkValidation(this);" style="padding-top : 70px; margin:0px;">
-			<input id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" type="hidden" value="${classId }">
-			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }">
-			<input id="<portlet:namespace/>classNoteSeq" name="<portlet:namespace/>classNoteSeq" type="hidden" value="0">
-			<div class="h20"></div>
-			<div class="table1_list">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="table table-bordered table-hover edison-table">
-					<colgroup>
-						<col width="20%" />
-						<col width="80%" />
-					</colgroup>
-					<tbody>
-						<tr class="puptrline">
-							<th class="puptitle"><liferay-ui:message key='description' /></th>
-							<td class="puptxt">
-								<liferay-ui:input-localized id="fileDescription" name="fileDescription" xml=""  rows="5" spellcheck="false" style="width: 85%; resize:none; margin:5px;" type="textarea"/>
-							</td>
-						</tr>
-						
-						<tr class="puptrline">
-							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-file' /></th>
-							<td class="puptxt" >
-								<input type="file" id="<portlet:namespace/>my_local_file" name="<portlet:namespace/>my_local_file">
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="h20"></div>
-			<div style="text-align: right; margin:20px 25px 30px 0px;">
-				<input id="<portlet:namespace/>file_creation_button" name="<portlet:namespace/>file_creation_button" type="submit" value="<liferay-ui:message key='registration' />" class="btn btn-default" />
-			</div>
-		</form>
-	</div>
+	<form id="<portlet:namespace/>createFileForm" name="<portlet:namespace/>createFileForm"  enctype="multipart/form-data" method="post" action="<%= fileCreateURL %>" onsubmit="return <portlet:namespace/>checkValidation(this);">
+		<input id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" type="hidden" value="${classId }">
+		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }">
+		<input id="<portlet:namespace/>classNoteSeq" name="<portlet:namespace/>classNoteSeq" type="hidden" value="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;" class="panel table1_list table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="20%" />
+				<col width="80%" />
+			</colgroup>
+			<tbody>
+				<tr class="puptrline">
+					<th class="puptitle"><liferay-ui:message key='description' /></th>
+					<td class="puptxt">
+						<liferay-ui:input-localized id="fileDescription" name="fileDescription" xml=""  rows="5" spellcheck="false" style="width: 85%; resize:none; margin:5px;" type="textarea"/>
+					</td>
+				</tr>
+				
+				<tr class="puptrline">
+					<th class="puptitle"><liferay-ui:message key='edison-table-list-header-file' /></th>
+					<td class="puptxt" >
+						<input type="file" id="<portlet:namespace/>my_local_file" name="<portlet:namespace/>my_local_file">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="h20"></div>
+		<div style="text-align: right; margin:20px 25px 30px 0px;">
+			<input id="<portlet:namespace/>file_creation_button" name="<portlet:namespace/>file_creation_button" type="submit" value="<liferay-ui:message key='registration' />" class="btn btn-default" />
+		</div>
+	</form>
 </div>
 
 
