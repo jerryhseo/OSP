@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.util.PortalUtil;
@@ -42,7 +42,7 @@ public class EturbXYChartController{
             log.info("loadFile path : " + targetFilePath);
             
             Path filePath = Paths.get(targetFilePath);
-            String result = FileManagementLocalServiceUtil.readTextFile(filePath);
+            String result = OSPFileUtil.readTextFile(filePath);
             response.setContentType("text/plain; charset=UTF-8");
             response.getWriter().write(result);
             response.getWriter().flush();
