@@ -46,13 +46,15 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -297,6 +299,17 @@ public class DashboardController {
 		
 		try{
 			response.setContentType("application/json; charset=UTF-8");
+			/*
+			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
+			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
+			log.outLog
+			log.lastPosition
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+			log.put( "jobStatus", simulationJob.getJobStatus() );
+			
+			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+			ServletResponseUtil.write(httpResponse, log.toString());
+			*/
 			Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(request, simulationUuid, jobUuid, lastPosition);
 			
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
@@ -482,7 +495,7 @@ public class DashboardController {
 		String fileName = dfe.getTitle();
 		
 		InputStream inputStream = null;
-		inputStream = DLFileEntryLocalServiceUtil.getFileAsStream(dfe.getUserId(), dfe.getFileEntryId(), dfe.getVersion());
+		inputStream = DLFileEntryLocalServiceUtil.getFileAsStream(dfe.getFileEntryId(), dfe.getVersion());
 		
 		BufferedInputStream bis = new BufferedInputStream(inputStream);
 		response.setContentType("application/octet-stream");

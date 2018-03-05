@@ -13,7 +13,7 @@ preferences.store();
 String inputData = (String)renderRequest.getAttribute("inputData");
 String connector = (String)renderRequest.getAttribute("connector");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String action = (String)renderRequest.getAttribute("action");
+String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
@@ -31,7 +31,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
  * Global variables section
  ***********************************************************************/
 var <portlet:namespace/>connector = 'broadcast';
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 /***********************************************************************
  * Initailization section using parameters
@@ -69,10 +69,10 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( eventData.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				if( e.action )
-					<portlet:namespace/>action = e.action;
+				if( e.mode )
+					<portlet:namespace/>mode = e.mode;
 				else
-					<portlet:namespace/>action = 'input';
+					<portlet:namespace/>mode = 'VIEW';
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,

@@ -42,10 +42,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.kisti.osp.workbench.Exception.SimulationWorkbenchException;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -495,7 +497,7 @@ public class LayoutController {
 		IBAgent agent = new IBAgent(group, user);
 		String simulationUuid = "";
 		try {
-			simulationUuid = agent.getSimulationUuid();
+			simulationUuid = agent.createSimulation();
 		} catch (SystemException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -757,17 +759,14 @@ public class LayoutController {
 						inputFileName = portName.replaceAll("-", "");
 					}
 					
-					String tempFileName = "";
-					tempFileName = portName.replaceAll("-", "" )+"_"+date.getTime();
-					
-					Path tempTarget = Paths.get(_DEFAULT_TEMP_DIR).resolve(tempFileName);
 					String content = inputData.getString("context_");
-					Files.createFile( tempTarget );
-					Files.write(tempTarget, content.getBytes());
-					
 					
 					try {
-						String fileId = ibAgent.uploadFile(tempTarget, parentPath, Paths.get(inputFileName), _DEFAULT_CLUSTER);
+						String fileId = ibAgent.uploadFileContent( 
+								portletRequest, 
+								content, 
+								Paths.get(parentPath.toString(), 
+										inputFileName).toString(), _DEFAULT_CLUSTER);
 						System.out.println("File Id After IB Upload: "+fileId);
 						
 						JSONObject argVal = JSONFactoryUtil.createJSONObject();
@@ -810,7 +809,11 @@ public class LayoutController {
 					
 					String fileId = "";
 					try {
-						fileId = this.uploadDLFile(portletRequest, fileEntryId, parentPath.toString(), inputFileName);
+						fileId = ibAgent.uploadDLEntryFile(
+								portletRequest, 
+								fileEntryId, 
+								parentPath.resolve(inputFileName).toString(), 
+								_DEFAULT_CLUSTER);
 					} catch (PortalException | SystemException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -832,7 +835,7 @@ public class LayoutController {
 					
 					System.out.println("Port Data get IB File ID: "+target.toString());
 					try {
-						String fileId =  ibAgent.getFileId(target.toString(), false);
+						String fileId =  ibAgent.getFileId( portletRequest, target.toString(), OSPRepositoryTypes.USER_HOME.toString());
 						
 						JSONObject argVal = JSONFactoryUtil.createJSONObject();
 						argVal.put("type", "FILE_ID");
@@ -936,42 +939,6 @@ public class LayoutController {
 			e.printStackTrace();
 		}
 	}
-	
-	private String uploadDLFile( PortletRequest resourceRequest, long dlEntryId, String parent, String fileName ) throws PortletException, IOException, PortalException, SystemException{
-		if( dlEntryId <= 0){
-			System.out.println("uploadDLFile: dlEntryId should be lager than 0.");
-			return "";
-		}
-		
-		Path tempPath = Paths.get(_DEFAULT_TEMP_DIR).resolve( String.valueOf(dlEntryId) );// Data should be inserted by SystemPropertyService.
-		FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
-		if( !Files.exists(tempPath) ){
-			InputStream stream = null;
-			try {
-				stream = fileEntry.getContentStream();
-				if( Validator.isNotNull(stream) )
-					Files.copy(stream, tempPath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (PortalException | SystemException e1) {
-				_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
-				throw new PortletException();
-			} finally{
-				if( Validator.isNotNull(stream) ){
-					stream.close();
-				}
-			}
-		}
-		
-		if( Validator.isNull(fileName)){
-			fileName = fileEntry.getTitle(); 
-		}
-		
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
-		String fileId = ibAgent.uploadFile( tempPath, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
-		
-		return fileId;
-	}
-	
 	
 	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo ){
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);

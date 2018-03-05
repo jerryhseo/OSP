@@ -1943,9 +1943,7 @@
 			var inputPort = scienceApp.inputPort( portlet.portName() );
 			var portDataType = inputPort.dataType();
 			
-			var isJobResult = scienceApp.inputPort( portlet.portName() );
-			if( isJobResult )	isJobResult = false;
-			else	isJobResult = true;
+			var repositoryType = inputData.repositoryType();
 			
 			var ajaxData = Liferay.Util.ns(
 			                               Workbench.namespace(),
@@ -1955,7 +1953,7 @@
 			               						dataTypeVersion: portDataType.version,
 			               						parentPath: inputData.parent(),
 			               						fileName: inputData.name(),
-			               						isJobResult: isJobResult
+			               						repositoryType: repositoryType
 			                               });
 			$.ajax({
 				url: resourceURL,

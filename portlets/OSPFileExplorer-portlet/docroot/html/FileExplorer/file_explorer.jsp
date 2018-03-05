@@ -23,7 +23,6 @@ String inputData = (String)renderRequest.getAttribute("inputData");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 String connector = (String)renderRequest.getAttribute("connector");
 String mode = (String)renderRequest.getAttribute("mode");
-String action = (String)renderRequest.getAttribute("action");
 
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
@@ -80,7 +79,6 @@ var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>downloadMode = false;
 var <portlet:namespace/>eventEnable = <%=eventEnable %>;
 var <portlet:namespace/>mode = '<%=mode %>';
-var <portlet:namespace/>action = '<%=action %>';
 
 var <portlet:namespace/>extension;
 var <portlet:namespace/>sampleSelected = false;
@@ -190,7 +188,8 @@ $('#<portlet:namespace/>download').click(function(){
 	data = {
 		<portlet:namespace/>command: 'DOWNLOAD',
 		<portlet:namespace/>fileNames: JSON.stringify(selectedFiles),
-		<portlet:namespace/>folderPath: <portlet:namespace/>selectedFile.parent()
+		<portlet:namespace/>folderPath: <portlet:namespace/>selectedFile.parent(),
+		<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_
 	};
 	
 	var base = '<%=serveResourceURL.toString()%>';
@@ -230,7 +229,7 @@ $('#<portlet:namespace/>selectFile').bind(
 				dataType: 'json',
 				data:{
 					<portlet:namespace/>command: "CHECK_DUPLICATED",
-					<portlet:namespace/>action: <portlet:namespace/>action,
+					<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_,
 					<portlet:namespace/>target: target
 				},
 				success:function(result){
@@ -286,10 +285,6 @@ $('#<portlet:namespace/>selectFile').bind(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				<portlet:namespace/>connector = e.portletId;
-				if( e.action )
-					<portlet:namespace/>action = e.action;
-				else
-					<portlet:namespace/>action = 'input';
 				
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
@@ -349,7 +344,6 @@ Liferay.on(
 					portletId: myId,
 					targetPortlet:e.portletId,
 					data: OSP.Util.toJSON(<portlet:namespace/>selectedFile),
-					action: e.action
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
@@ -361,6 +355,7 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				var inputData = new OSP.InputData();
+				inputData.repositoryType( <portlet:namspace/>selectedFile.repositoryType_ );
 				inputData.type( OSP.Enumeration.PathType.FOLDER);
 				inputData.parent( '' );
 				inputData.name('');
@@ -387,9 +382,6 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 	//console.log("inputData, init ", inputData, init);
 	<portlet:namespace/>selectedFile = inputData.clone();
 
-	<portlet:namespace/>selectedFile.type(inputData.type());
-	<portlet:namespace/>selectedFile.relative(inputData.relative());
-		
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
 		case OSP.Enumeration.PathType.FOLDER:
@@ -440,7 +432,7 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
     console.log( 'Parent Path in lookupFolder: '+parentPath );
 	var data = {
 				<portlet:namespace/>command: 'GET_FILE_INFO',
-				<portlet:namespace/>action: <portlet:namespace/>action,
+				<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_,
 				<portlet:namespace/>pathType: 'folder',
 				<portlet:namespace/>parentPath: parentPath,
 				<portlet:namespace/>fileName: folderName
@@ -474,7 +466,7 @@ function <portlet:namespace/>lookupPath(
 		fileName){
 	var data = {
 					<portlet:namespace/>command: command,
-					<portlet:namespace/>action: <portlet:namespace/>action,
+					<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_,
 					<portlet:namespace/>pathType: pathType,
 					<portlet:namespace/>parentPath: parentPath,
 					<portlet:namespace/>fileName: fileName
@@ -543,7 +535,7 @@ function <portlet:namespace/>submitUpload( uploadFile, targetFolder, fileName ){
 	var formData = new FormData();
 	formData.append('<portlet:namespace/>uploadFile', uploadFile);
 	formData.append('<portlet:namespace/>command', 'UPLOAD');
-	formData.append('<portlet:namespace/>action', <portlet:namespace/>action);
+	formData.append('<portlet:namespace/>repositoryType', <portlet:namespace/>selectedFile.repositoryType_);
 	formData.append('<portlet:namespace/>targetFolder', targetFolder);
 	formData.append('<portlet:namespace/>fileName', fileName);
 
