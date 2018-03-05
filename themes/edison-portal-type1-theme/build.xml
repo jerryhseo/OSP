@@ -6,4 +6,5 @@
 
 	<import file="../build-common-theme.xml" />
 	<property name="theme.type" value="vm" />
+	<property name="theme.type" value="vm" />
 </project>

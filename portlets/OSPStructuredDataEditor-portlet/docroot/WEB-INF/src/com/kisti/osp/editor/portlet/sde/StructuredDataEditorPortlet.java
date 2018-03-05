@@ -10,7 +10,8 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -31,13 +32,13 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 		String inputData = ParamUtil.getString(renderRequest, "inputData", "");
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
 		String connector = ParamUtil.getString(renderRequest, "connector", "broadcast");
-		String action = ParamUtil.getString(renderRequest, "action", "input");
+		String mode = ParamUtil.getString(renderRequest, "mode", "input");
 
 
 		renderRequest.setAttribute("inputData", inputData);
 		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("connector", connector);
-		renderRequest.setAttribute("action", action);
+		renderRequest.setAttribute("mode", mode);
 		
 		super.doView(renderRequest, renderResponse);
 	}
@@ -47,18 +48,17 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			ResourceResponse resourceResponse) throws IOException,
 			PortletException {
 		String command = ParamUtil.getString(resourceRequest, "command");
-		String action = ParamUtil.getString(resourceRequest, "action", "input");
-		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
 		
 		if( command.equalsIgnoreCase("READ_FILE")){
 			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 			String fileName = ParamUtil.getString(resourceRequest, "fileName");
-			Path filePath = parentPath.resolve(fileName);
+			String targetPath = parentPath.resolve(fileName).toString();
 			
 			try {
-				FileManagementLocalServiceUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), isJobResult);
+				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, targetPath, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("Read file: "+filePath.toString());
+				_log.error("Read file: "+e.getMessage());
 				throw new PortletException();
 			}
 		}
@@ -66,22 +66,22 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 			String fileName = ParamUtil.getString(resourceRequest, "fileName");
 			String content = ParamUtil.getString(resourceRequest, "content");
-			Path filePath = parentPath.resolve(fileName);
+			String targetPath = parentPath.resolve(fileName).toString();
 			
 			try {
-				FileManagementLocalServiceUtil.saveFileContent(resourceRequest, filePath.toString(), content, isJobResult);
+				OSPFileUtil.saveFileContent(resourceRequest, targetPath, content, repositoryType);
 			} catch (PortalException | SystemException e) {
-				_log.error("Save file: "+filePath.toString());
+				_log.error("Save file: "+e.getMessage());
 				throw new PortletException();
 			}
 		}
-		else if( command.equalsIgnoreCase("READ_SAMPLE") ){
+		else if( command.equalsIgnoreCase("READ_DLENTRY") ){
 			long entryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
 			
 			try {
-				FileManagementLocalServiceUtil.readDLAppEntry(resourceResponse, entryId);
+				OSPFileUtil.readDLAppEntry(resourceResponse, entryId);
 			} catch (SystemException e) {
-				_log.error("Read sample: "+entryId);
+				_log.error("Read dlentry: "+e.getMessage());
 				throw new PortletException();
 			}
 		}

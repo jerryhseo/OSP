@@ -12,7 +12,9 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -40,15 +42,13 @@ public class FileExplorerPortlet extends MVCPortlet {
 		
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
 		String connector = ParamUtil.getString(renderRequest, "connector", "BROADCAST");
-		
+		String action = ParamUtil.getString(renderRequest, "action", "READ");
 		String mode = ParamUtil.getString(renderRequest, "mode", "EDIT");
-		String action = ParamUtil.getString(renderRequest, "action", "input");
 		
 		renderRequest.setAttribute("inputData", inputData);
 		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("connector", connector);
 		renderRequest.setAttribute("mode", mode);
-		renderRequest.setAttribute("action", action);
 		 
 		super.doView(renderRequest, renderResponse);
 	}
@@ -60,12 +60,10 @@ public class FileExplorerPortlet extends MVCPortlet {
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 
 		String command = ParamUtil.getString(resourceRequest, "command");
-		String action = ParamUtil.getString(resourceRequest, "action", "input");
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
 		System.out.println("command: "+command);
-		System.out.println("action: "+action);
+		System.out.println("RepositoryType: "+repositoryType);
 		
-		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
-
 		if( command.equalsIgnoreCase("GET_FILE_INFO") ){
 			String pathType = ParamUtil.getString(resourceRequest, "pathType", "file");
 			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
@@ -81,7 +79,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			if( pathType.equalsIgnoreCase("file") ){
 				JSONObject fileInfo = null;
 				try {
-					fileInfo = FileManagementLocalServiceUtil.getFileInformation( resourceRequest, targetPath.toString(), isJobResult );
+					fileInfo = OSPFileUtil.getFileInformation(resourceRequest, targetPath.toString(), repositoryType);
 					if(targetPath.getParent() != null){
 					    resultJSON.put("parentPath", targetPath.getParent().toString());
 					}else{
@@ -96,7 +94,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			}
 			else if( pathType.equalsIgnoreCase("ext") ){
 				try {
-					fileInfos  = FileManagementLocalServiceUtil.getFolderInformation( resourceRequest, targetPath.getParent().toString(), fileName, isJobResult );
+					fileInfos = OSPFileUtil.getFolderInformation(resourceRequest, parentPath.toString(), fileName, repositoryType);
 					resultJSON.put("parentPath", targetPath.getParent().toString());
 				} catch (PortalException | SystemException e) {
 					System.out.println("[ERROR]FileManagementLocalServiceUtil.getFolderInformation("+targetPath.toString()+")");
@@ -105,7 +103,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			}
 			else if( pathType.equalsIgnoreCase("folder") ){
 				try {
-					fileInfos = FileManagementLocalServiceUtil.getFolderInformation( resourceRequest, targetPath.toString(), "", isJobResult );
+					fileInfos = OSPFileUtil.getFolderInformation(resourceRequest, parentPath.toString(), "", repositoryType);
 					resultJSON.put("parentPath", targetPath.toString());
 				} catch (PortalException | SystemException e) {
 					System.out.println("[ERROR]FileManagementLocalServiceUtil.getFolderInformation("+targetPath.toString()+ ")");
@@ -187,7 +185,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			String target = ParamUtil.getString(resourceRequest, "target");
 
 			try {
-				FileManagementLocalServiceUtil.duplicated( resourceRequest, resourceResponse, target, isJobResult);
+				OSPFileUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
 				_log.error("duplicated: "+ target);
 				throw new PortletException();
@@ -223,7 +221,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			Path target = Paths.get(targetFolder).resolve(fileName);
 
 			try {
-				FileManagementLocalServiceUtil.upload(resourceRequest, target.toString(), uploadFileParam, isJobResult);
+				OSPFileUtil.upload(resourceRequest, target.toString(), uploadFileParam, repositoryType);
 			} catch (PortalException | SystemException e) {
 				System.out.println("Upload Failed: "+target);
 				throw new IOException();
@@ -250,7 +248,7 @@ public class FileExplorerPortlet extends MVCPortlet {
 			}
 			
 			try {
-				FileManagementLocalServiceUtil.download( resourceRequest, resourceResponse, folderPath, sources, isJobResult);
+				OSPFileUtil.download(resourceRequest, resourceResponse, folderPath, sources, repositoryType);
 			} catch (PortalException | SystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

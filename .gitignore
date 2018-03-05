@@ -1,13 +1,23 @@
 **/.settings
+.settings
 **/.classpath
+.classpath
 **/.project
+.project
 **/.idea
+.idea
 **/ivy.xml.MD5
+ivy.xml.MD5
 **/.svn
+.svn
 **/.sass-cache
+.sass-cache
 **/.tern-project
+.tern-project
 **/.eslintrc.js
+.eslintrc.js
 **/target/
+target/
 ivy.xml.MD5
 
 /*.xml
