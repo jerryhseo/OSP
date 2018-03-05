@@ -8,6 +8,7 @@
 		<!-- PK fields -->
 		<column name="projectId" type="long" primary="true"></column>
 		<column name="userId" type="long" primary="true"></column>
+		<column name="groupId" type="long" primary="true"></column>
 		
 		<!-- Fields -->
 		<column name="name" type="String"></column>
@@ -24,6 +25,7 @@
 		<!-- Finders -->
 		<finder name="UserId" return-type="Collection" unique="false">
 			<finder-column name="userId"></finder-column>
+			<finder-column name="groupId"></finder-column>
 		</finder>
 		
 	</entity>

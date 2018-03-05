@@ -57,14 +57,14 @@ public class ProjectLocalServiceImpl extends ProjectLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link org.kisti.eturb.dbservice.service.ProjectLocalServiceUtil} to access the project local service.
 	 */
 	
-	public int countProjectByUserId(long userId) throws SystemException{
-		return super.projectPersistence.countByUserId(userId);
+	public int countProjectByUserId(long userId, long groupId) throws SystemException{
+		return super.projectPersistence.countByUserId(userId,groupId);
 	}
 	
 	
-	public List<Map<String,Object>> retrieveListProjectByUserId(long userId,int start, int end) throws SystemException{
+	public List<Map<String,Object>> retrieveListProjectByUserId(long userId,long groupId, int start, int end) throws SystemException{
 		List<Map<String,Object>>  returnList = new ArrayList<Map<String,Object>> ();
-		List<Project> dataList = super.projectPersistence.findByUserId(userId,start,end);
+		List<Project> dataList = super.projectPersistence.findByUserId(userId,groupId,start,end);
 		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		df.setTimeZone(TimeZoneUtil.getDefault());
@@ -78,10 +78,10 @@ public class ProjectLocalServiceImpl extends ProjectLocalServiceBaseImpl {
 		return returnList;
 	}
 	
-	public Project modifyProject(long projectId, long userId, String name, String projectStructure, String analyzerStructure, String mode) throws NoSuchProjectException, SystemException{
+	public Project modifyProject(long projectId, long userId, long groupId, String name, String projectStructure, String analyzerStructure, String mode) throws NoSuchProjectException, SystemException{
 		Project project = null;
 		if(mode.equals(Constants.UPDATE)){
-			ProjectPK projectPK = new ProjectPK(projectId, userId);
+			ProjectPK projectPK = new ProjectPK(projectId, userId, groupId);
 			project = super.projectPersistence.findByPrimaryKey(projectPK);
 			project.setModifiedDate(new Date());
 //			project.setProjectStructure(updateJSON(projectStructure));
@@ -91,7 +91,7 @@ public class ProjectLocalServiceImpl extends ProjectLocalServiceBaseImpl {
 			}
 		}else{
 			projectId = CounterLocalServiceUtil.increment(Project.class.getName());
-			ProjectPK projectPK = new ProjectPK(projectId, userId);
+			ProjectPK projectPK = new ProjectPK(projectId, userId, groupId);
 			project = super.projectPersistence.create(projectPK);
 			project.setCreateDate(new Date());
 			project.setName(name);
@@ -104,11 +104,11 @@ public class ProjectLocalServiceImpl extends ProjectLocalServiceBaseImpl {
 		return super.projectPersistence.update(project);
 	}
 	
-	public void removeProject(long projectId, long userId) throws NoSuchProjectException, SystemException{
+	public void removeProject(long projectId, long userId, long groupId) throws NoSuchProjectException, SystemException{
 		//remove simulation
 		SimulationLocalServiceUtil.removeSimulationByProjectId(projectId);
 		
-		ProjectPK projectPK = new ProjectPK(projectId, userId);
+		ProjectPK projectPK = new ProjectPK(projectId, userId, groupId);
 		super.projectPersistence.remove(projectPK);
 	}
 	

@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.eturb.dbservice.model.AnalyzerJob;
 import org.kisti.eturb.dbservice.model.MeshData;
@@ -38,6 +39,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -94,7 +96,6 @@ public class CreateMeshController{
 		    MeshData data = new GsonBuilder().create().fromJson(meshData, MeshData.class);
 		    AnalyzerJob analyzerJob = eturbAppHelper.prepareAnalyzer(appName, appVersion, analyzerUuid,user.getScreenName());
 		    analyzerJob.setMeshFileContent(data);
-		    
 		    boolean isComplete = eturbAppHelper.exeSymbolicAnalyzer(GetterUtil.getLong(projectId), meshDataFileName, "", meshData, themeDisplay, analyzerJob, user);
 		    
 		    String fileId = "";
@@ -102,16 +103,22 @@ public class CreateMeshController{
 		    Date today = new Date();
             SimpleDateFormat fileNameForm = new SimpleDateFormat("yyyyMMddHHmmss");
             String zipFileName = fileNameForm.format(today)+"."+analyzerJob.getOutputData().getName_();
-            
 		    if(isComplete){
-		    	Thread.sleep(4000);
+		    	long sleepTime = data.getAirfoilsCount()*3000;
+		    	Thread.sleep(sleepTime);
 		    	String vcToken = IBUserTokenUtil.getOrCreateToken(group.getGroupId(), user).getVcToken();
 	            String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
 	            
 	            File resultPath = new File(analyzerJob.getResultPath());
 	            if(resultPath.isDirectory()){
 	            	File[] fileList = resultPath.listFiles();
-	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, fileList, false);
+	            	String userScreenName = "";
+	                if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
+	                    userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+	                }else{
+	                    userScreenName = String.valueOf(user.getScreenName());
+	                }
+	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, fileList, false,userScreenName);
 	            }else{
 	            	isComplete = false;
 	            }

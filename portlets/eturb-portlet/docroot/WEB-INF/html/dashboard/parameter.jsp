@@ -17,7 +17,7 @@
 </style>
 
 
-<div class="dashboard-content span12" style="margin-left: 0px !important;">
+<div class="dashboard-content span12" style="margin-left: 0px !important;height: 304px; overflow-y:auto;">
 	<div id="<portlet:namespace/>inputdeck-editor" style="display: none;">
 		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group">
 	        <button type="button" class="btn btn-primary" id="saveBtn" onclick="<portlet:namespace/>parameterDraw();" title="DRAW">
@@ -241,7 +241,7 @@ function <portlet:namespace/>getReadFile(analyzerJob){
 
 function <portlet:namespace/>parameterDraw(){
 	var eventData = {
-		targetPortlet: 'StructuredDataEditor_WAR_OSPEditorsportlet_INSTANCE_parametric'
+		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric'
 	};
 	bStart();
 	setTimeout(function(){

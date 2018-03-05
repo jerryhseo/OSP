@@ -54,18 +54,19 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public ProjectPK getPrimaryKey() {
-		return new ProjectPK(_projectId, _userId);
+		return new ProjectPK(_projectId, _userId, _groupId);
 	}
 
 	@Override
 	public void setPrimaryKey(ProjectPK primaryKey) {
 		setProjectId(primaryKey.projectId);
 		setUserId(primaryKey.userId);
+		setGroupId(primaryKey.groupId);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new ProjectPK(_projectId, _userId);
+		return new ProjectPK(_projectId, _userId, _groupId);
 	}
 
 	@Override
@@ -79,6 +80,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 		attributes.put("projectId", getProjectId());
 		attributes.put("userId", getUserId());
+		attributes.put("groupId", getGroupId());
 		attributes.put("name", getName());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
@@ -100,6 +102,12 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
 		}
 
 		String name = (String)attributes.get("name");
@@ -187,6 +195,29 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 	@Override
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
+	}
+
+	@Override
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	@Override
+	public void setGroupId(long groupId) {
+		_groupId = groupId;
+
+		if (_projectRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setGroupId", long.class);
+
+				method.invoke(_projectRemoteModel, groupId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
 	@Override
@@ -377,6 +408,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 		clone.setProjectId(getProjectId());
 		clone.setUserId(getUserId());
+		clone.setGroupId(getGroupId());
 		clone.setName(getName());
 		clone.setProjectStructure(getProjectStructure());
 		clone.setAnalyzerStructure(getAnalyzerStructure());
@@ -450,12 +482,14 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{projectId=");
 		sb.append(getProjectId());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", groupId=");
+		sb.append(getGroupId());
 		sb.append(", name=");
 		sb.append(getName());
 		sb.append(", projectStructure=");
@@ -473,7 +507,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.eturb.dbservice.model.Project");
@@ -486,6 +520,10 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		sb.append(
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>groupId</column-name><column-value><![CDATA[");
+		sb.append(getGroupId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>name</column-name><column-value><![CDATA[");
@@ -516,6 +554,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 	private long _projectId;
 	private long _userId;
 	private String _userUuid;
+	private long _groupId;
 	private String _name;
 	private String _projectStructure;
 	private String _analyzerStructure;

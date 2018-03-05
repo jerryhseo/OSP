@@ -124,22 +124,22 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 
 		_methodName19 = "countProjectByUserId";
 
-		_methodParameterTypes19 = new String[] { "long" };
+		_methodParameterTypes19 = new String[] { "long", "long" };
 
 		_methodName20 = "retrieveListProjectByUserId";
 
-		_methodParameterTypes20 = new String[] { "long", "int", "int" };
+		_methodParameterTypes20 = new String[] { "long", "long", "int", "int" };
 
 		_methodName21 = "modifyProject";
 
 		_methodParameterTypes21 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName22 = "removeProject";
 
-		_methodParameterTypes22 = new String[] { "long", "long" };
+		_methodParameterTypes22 = new String[] { "long", "long", "long" };
 	}
 
 	@Override
@@ -697,13 +697,13 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 	}
 
 	@Override
-	public int countProjectByUserId(long userId)
+	public int countProjectByUserId(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName19,
-					_methodParameterTypes19, new Object[] { userId });
+					_methodParameterTypes19, new Object[] { userId, groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -726,13 +726,14 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListProjectByUserId(
-		long userId, int start, int end)
+		long userId, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20, new Object[] { userId, start, end });
+					_methodParameterTypes20,
+					new Object[] { userId, groupId, start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -755,7 +756,7 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 
 	@Override
 	public org.kisti.eturb.dbservice.model.Project modifyProject(
-		long projectId, long userId, java.lang.String name,
+		long projectId, long userId, long groupId, java.lang.String name,
 		java.lang.String projectStructure, java.lang.String analyzerStructure,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException,
@@ -769,6 +770,8 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 						projectId,
 						
 					userId,
+						
+					groupId,
 						
 					ClpSerializer.translateInput(name),
 						
@@ -803,12 +806,13 @@ public class ProjectLocalServiceClp implements ProjectLocalService {
 	}
 
 	@Override
-	public void removeProject(long projectId, long userId)
+	public void removeProject(long projectId, long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName22,
-				_methodParameterTypes22, new Object[] { projectId, userId });
+				_methodParameterTypes22,
+				new Object[] { projectId, userId, groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);

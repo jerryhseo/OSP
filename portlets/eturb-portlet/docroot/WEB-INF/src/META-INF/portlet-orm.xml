@@ -12,6 +12,7 @@
 		<attributes>
 			<id name="projectId" />
 			<id name="userId" />
+			<id name="groupId" />
 			<basic name="name" />
 			<basic name="projectStructure" />
 			<basic name="analyzerStructure" />

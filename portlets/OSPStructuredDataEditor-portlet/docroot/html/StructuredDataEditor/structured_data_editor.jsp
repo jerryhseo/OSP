@@ -22,7 +22,6 @@ String action = (String)renderRequest.getAttribute("action");
 
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
-
 <div class="row-fluid structured-data-editor-portlet editor-portlet">
 	<div class="span12">
 		<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">

@@ -51,6 +51,7 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 
 		attributes.put("projectId", getProjectId());
 		attributes.put("userId", getUserId());
+		attributes.put("groupId", getGroupId());
 		attributes.put("name", getName());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
@@ -72,6 +73,12 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
 		}
 
 		String name = (String)attributes.get("name");
@@ -186,6 +193,26 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 	@Override
 	public void setUserUuid(java.lang.String userUuid) {
 		_project.setUserUuid(userUuid);
+	}
+
+	/**
+	* Returns the group ID of this project.
+	*
+	* @return the group ID of this project
+	*/
+	@Override
+	public long getGroupId() {
+		return _project.getGroupId();
+	}
+
+	/**
+	* Sets the group ID of this project.
+	*
+	* @param groupId the group ID of this project
+	*/
+	@Override
+	public void setGroupId(long groupId) {
+		_project.setGroupId(groupId);
 	}
 
 	/**
