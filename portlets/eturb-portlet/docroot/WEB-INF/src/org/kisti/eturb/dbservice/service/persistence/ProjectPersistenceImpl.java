@@ -86,7 +86,7 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 			ProjectModelImpl.FINDER_CACHE_ENABLED, ProjectImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",
 			new String[] {
-				Long.class.getName(),
+				Long.class.getName(), Long.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
@@ -95,53 +95,59 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 		new FinderPath(ProjectModelImpl.ENTITY_CACHE_ENABLED,
 			ProjectModelImpl.FINDER_CACHE_ENABLED, ProjectImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUserId",
-			new String[] { Long.class.getName() },
+			new String[] { Long.class.getName(), Long.class.getName() },
 			ProjectModelImpl.USERID_COLUMN_BITMASK |
+			ProjectModelImpl.GROUPID_COLUMN_BITMASK |
 			ProjectModelImpl.CREATEDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(ProjectModelImpl.ENTITY_CACHE_ENABLED,
 			ProjectModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUserId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Returns all the projects where userId = &#63;.
+	 * Returns all the projects where userId = &#63; and groupId = &#63;.
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @return the matching projects
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<Project> findByUserId(long userId) throws SystemException {
-		return findByUserId(userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<Project> findByUserId(long userId, long groupId)
+		throws SystemException {
+		return findByUserId(userId, groupId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the projects where userId = &#63;.
+	 * Returns a range of all the projects where userId = &#63; and groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.eturb.dbservice.model.impl.ProjectModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of projects
 	 * @param end the upper bound of the range of projects (not inclusive)
 	 * @return the range of matching projects
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<Project> findByUserId(long userId, int start, int end)
-		throws SystemException {
-		return findByUserId(userId, start, end, null);
+	public List<Project> findByUserId(long userId, long groupId, int start,
+		int end) throws SystemException {
+		return findByUserId(userId, groupId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the projects where userId = &#63;.
+	 * Returns an ordered range of all the projects where userId = &#63; and groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.eturb.dbservice.model.impl.ProjectModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of projects
 	 * @param end the upper bound of the range of projects (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -149,8 +155,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<Project> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
+	public List<Project> findByUserId(long userId, long groupId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -159,11 +165,15 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 				(orderByComparator == null)) {
 			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId };
+			finderArgs = new Object[] { userId, groupId };
 		}
 		else {
 			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID;
-			finderArgs = new Object[] { userId, start, end, orderByComparator };
+			finderArgs = new Object[] {
+					userId, groupId,
+					
+					start, end, orderByComparator
+				};
 		}
 
 		List<Project> list = (List<Project>)FinderCacheUtil.getResult(finderPath,
@@ -171,7 +181,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 
 		if ((list != null) && !list.isEmpty()) {
 			for (Project project : list) {
-				if ((userId != project.getUserId())) {
+				if ((userId != project.getUserId()) ||
+						(groupId != project.getGroupId())) {
 					list = null;
 
 					break;
@@ -183,16 +194,18 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
+				query = new StringBundler(4 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_PROJECT_WHERE);
 
 			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			query.append(_FINDER_COLUMN_USERID_GROUPID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -215,6 +228,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				qPos.add(userId);
+
+				qPos.add(groupId);
 
 				if (!pagination) {
 					list = (List<Project>)QueryUtil.list(q, getDialect(),
@@ -247,30 +262,34 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	}
 
 	/**
-	 * Returns the first project in the ordered set where userId = &#63;.
+	 * Returns the first project in the ordered set where userId = &#63; and groupId = &#63;.
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching project
 	 * @throws org.kisti.eturb.dbservice.NoSuchProjectException if a matching project could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public Project findByUserId_First(long userId,
+	public Project findByUserId_First(long userId, long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchProjectException, SystemException {
-		Project project = fetchByUserId_First(userId, orderByComparator);
+		Project project = fetchByUserId_First(userId, groupId, orderByComparator);
 
 		if (project != null) {
 			return project;
 		}
 
-		StringBundler msg = new StringBundler(4);
+		StringBundler msg = new StringBundler(6);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 		msg.append("userId=");
 		msg.append(userId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
 
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -278,74 +297,18 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	}
 
 	/**
-	 * Returns the first project in the ordered set where userId = &#63;.
+	 * Returns the first project in the ordered set where userId = &#63; and groupId = &#63;.
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching project, or <code>null</code> if a matching project could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public Project fetchByUserId_First(long userId,
+	public Project fetchByUserId_First(long userId, long groupId,
 		OrderByComparator orderByComparator) throws SystemException {
-		List<Project> list = findByUserId(userId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last project in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching project
-	 * @throws org.kisti.eturb.dbservice.NoSuchProjectException if a matching project could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Project findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
-		throws NoSuchProjectException, SystemException {
-		Project project = fetchByUserId_Last(userId, orderByComparator);
-
-		if (project != null) {
-			return project;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchProjectException(msg.toString());
-	}
-
-	/**
-	 * Returns the last project in the ordered set where userId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching project, or <code>null</code> if a matching project could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Project fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByUserId(userId);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<Project> list = findByUserId(userId, count - 1, count,
+		List<Project> list = findByUserId(userId, groupId, 0, 1,
 				orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -356,10 +319,74 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	}
 
 	/**
-	 * Returns the projects before and after the current project in the ordered set where userId = &#63;.
+	 * Returns the last project in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching project
+	 * @throws org.kisti.eturb.dbservice.NoSuchProjectException if a matching project could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Project findByUserId_Last(long userId, long groupId,
+		OrderByComparator orderByComparator)
+		throws NoSuchProjectException, SystemException {
+		Project project = fetchByUserId_Last(userId, groupId, orderByComparator);
+
+		if (project != null) {
+			return project;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchProjectException(msg.toString());
+	}
+
+	/**
+	 * Returns the last project in the ordered set where userId = &#63; and groupId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching project, or <code>null</code> if a matching project could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Project fetchByUserId_Last(long userId, long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUserId(userId, groupId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Project> list = findByUserId(userId, groupId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the projects before and after the current project in the ordered set where userId = &#63; and groupId = &#63;.
 	 *
 	 * @param projectPK the primary key of the current project
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next project
 	 * @throws org.kisti.eturb.dbservice.NoSuchProjectException if a project with the primary key could not be found
@@ -367,7 +394,7 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	 */
 	@Override
 	public Project[] findByUserId_PrevAndNext(ProjectPK projectPK, long userId,
-		OrderByComparator orderByComparator)
+		long groupId, OrderByComparator orderByComparator)
 		throws NoSuchProjectException, SystemException {
 		Project project = findByPrimaryKey(projectPK);
 
@@ -379,12 +406,12 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 			Project[] array = new ProjectImpl[3];
 
 			array[0] = getByUserId_PrevAndNext(session, project, userId,
-					orderByComparator, true);
+					groupId, orderByComparator, true);
 
 			array[1] = project;
 
 			array[2] = getByUserId_PrevAndNext(session, project, userId,
-					orderByComparator, false);
+					groupId, orderByComparator, false);
 
 			return array;
 		}
@@ -397,7 +424,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	}
 
 	protected Project getByUserId_PrevAndNext(Session session, Project project,
-		long userId, OrderByComparator orderByComparator, boolean previous) {
+		long userId, long groupId, OrderByComparator orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -411,6 +439,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 		query.append(_SQL_SELECT_PROJECT_WHERE);
 
 		query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+		query.append(_FINDER_COLUMN_USERID_GROUPID_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -482,6 +512,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 
 		qPos.add(userId);
 
+		qPos.add(groupId);
+
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(project);
 
@@ -501,41 +533,47 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 	}
 
 	/**
-	 * Removes all the projects where userId = &#63; from the database.
+	 * Removes all the projects where userId = &#63; and groupId = &#63; from the database.
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByUserId(long userId) throws SystemException {
-		for (Project project : findByUserId(userId, QueryUtil.ALL_POS,
+	public void removeByUserId(long userId, long groupId)
+		throws SystemException {
+		for (Project project : findByUserId(userId, groupId, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, null)) {
 			remove(project);
 		}
 	}
 
 	/**
-	 * Returns the number of projects where userId = &#63;.
+	 * Returns the number of projects where userId = &#63; and groupId = &#63;.
 	 *
 	 * @param userId the user ID
+	 * @param groupId the group ID
 	 * @return the number of matching projects
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByUserId(long userId) throws SystemException {
+	public int countByUserId(long userId, long groupId)
+		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_USERID;
 
-		Object[] finderArgs = new Object[] { userId };
+		Object[] finderArgs = new Object[] { userId, groupId };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_COUNT_PROJECT_WHERE);
 
 			query.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			query.append(_FINDER_COLUMN_USERID_GROUPID_2);
 
 			String sql = query.toString();
 
@@ -549,6 +587,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				qPos.add(userId);
+
+				qPos.add(groupId);
 
 				count = (Long)q.uniqueResult();
 
@@ -567,7 +607,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "project.id.userId = ?";
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "project.id.userId = ? AND ";
+	private static final String _FINDER_COLUMN_USERID_GROUPID_2 = "project.id.groupId = ?";
 
 	public ProjectPersistenceImpl() {
 		setModelClass(Project.class);
@@ -794,14 +835,18 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 			if ((projectModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						projectModelImpl.getOriginalUserId()
+						projectModelImpl.getOriginalUserId(),
+						projectModelImpl.getOriginalGroupId()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
 					args);
 
-				args = new Object[] { projectModelImpl.getUserId() };
+				args = new Object[] {
+						projectModelImpl.getUserId(),
+						projectModelImpl.getGroupId()
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
@@ -827,6 +872,7 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 
 		projectImpl.setProjectId(project.getProjectId());
 		projectImpl.setUserId(project.getUserId());
+		projectImpl.setGroupId(project.getGroupId());
 		projectImpl.setName(project.getName());
 		projectImpl.setProjectStructure(project.getProjectStructure());
 		projectImpl.setAnalyzerStructure(project.getAnalyzerStructure());

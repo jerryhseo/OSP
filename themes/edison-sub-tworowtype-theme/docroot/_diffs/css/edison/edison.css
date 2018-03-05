@@ -53,7 +53,7 @@ ul, ol {list-style:none;}
 				font-weight: 400 !important;
 				color: #fff;
 				line-height: 1.0em;
-				font-family: 'Gudea';
+				font-family: 'Gudea', sans-serif;
 				text-shadow: 0 0 10px #555;
 				span{
 					font-size: 12px;

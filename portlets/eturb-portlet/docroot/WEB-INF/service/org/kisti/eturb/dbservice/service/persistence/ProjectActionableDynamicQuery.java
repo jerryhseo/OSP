@@ -33,5 +33,7 @@ public abstract class ProjectActionableDynamicQuery
 		setClassLoader(org.kisti.eturb.dbservice.service.ClpSerializer.class.getClassLoader());
 
 		setPrimaryKeyPropertyName("primaryKey.projectId");
+
+		setGroupIdPropertyName("primaryKey.groupId");
 	}
 }

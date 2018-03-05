@@ -20,7 +20,6 @@ String connector = (String)renderRequest.getAttribute("connector");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 String mode = (String)renderRequest.getAttribute("mode");
 %>
-
 <div class="row-fluid structured-data-editor-portlet editor-portlet">
 	<div class="span12">
 		<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">

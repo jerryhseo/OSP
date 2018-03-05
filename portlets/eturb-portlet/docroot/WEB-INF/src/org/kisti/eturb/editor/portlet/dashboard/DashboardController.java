@@ -124,7 +124,7 @@ public class DashboardController{
             /*Project*/
             long projectId = GetterUtil.getLong(params.get("projectId"),0);
             if(projectId!=0){
-                ProjectPK projectPK = new ProjectPK(projectId, user.getUserId());
+                ProjectPK projectPK = new ProjectPK(projectId, user.getUserId(), groupId);
                 Project project = ProjectLocalServiceUtil.getProject(projectPK);
                 model.addAttribute("project", project);
                 model.addAttribute("openProjectModal", false);
@@ -135,8 +135,9 @@ public class DashboardController{
             }
             
             long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+            System.out.println("workBenchPlid--------------->"+plid);
 			model.addAttribute("workBenchPlid", plid);
-			
+			model.addAttribute("bcUse", GetterUtil.getBoolean(request.getPreferences().getValue("bcUse", "false"),false));
         }catch(Exception e){
             e.printStackTrace();
             SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
@@ -150,21 +151,22 @@ public class DashboardController{
         Map params = RequestUtil.getParameterMap(request);
         ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
         
+        
         String mode = CustomUtil.strNull(params.get("actionMode"));
         long userId = PortalUtil.getUserId(request);
-        
+        long groupId = themeDisplay.getScopeGroupId();
         
         try{
             if(mode.equals(Constants.DELETE)){
                 long projectId = GetterUtil.getLong(params.get("projectId"),0);
-                ProjectLocalServiceUtil.removeProject(projectId, userId);
+                ProjectLocalServiceUtil.removeProject(projectId, userId, groupId);
                 returnView(request, response, 0, mode);
             }else if(mode.equals(Constants.ADD)){
                 String name = CustomUtil.strNull(params.get("projectName"));
                 String projectStructure = CustomUtil.strNull(params.get("projectStructure"));
                 String analyzerStructure = CustomUtil.strNull(params.get("analyzerStructure"));
                 
-                Project project = ProjectLocalServiceUtil.modifyProject(0, userId, name, projectStructure, analyzerStructure, mode);
+                Project project = ProjectLocalServiceUtil.modifyProject(0, userId, groupId, name, projectStructure, analyzerStructure, mode);
                 returnView(request, response, project.getProjectId(), mode);
             }
         }catch(Exception e){
@@ -201,8 +203,9 @@ public class DashboardController{
         try{
             long projectId = GetterUtil.getLong(params.get("projectId"));
             long userId = PortalUtil.getUserId(request);
+            long groupId = themeDisplay.getScopeGroupId();
             
-            ProjectPK projectPK = new ProjectPK(projectId, userId);
+            ProjectPK projectPK = new ProjectPK(projectId, userId, groupId);
             Project project = ProjectLocalServiceUtil.getProject(projectPK);
             
             JSONObject obj = new JSONObject();
@@ -224,14 +227,15 @@ public class DashboardController{
         try{
             long projectId = GetterUtil.getLong(params.get("projectId"),0);
             long userId = PortalUtil.getUserId(request);
+            long groupId = themeDisplay.getScopeGroupId();
             
             int curPage = ParamUtil.get(request, "p_curPage", 1);
             int linePerPage = 10;
             
             int pagePerBlock = 10;
             int start = linePerPage * (curPage - 1);
-            int totalCnt = ProjectLocalServiceUtil.countProjectByUserId(userId);
-            List<Map<String,Object>> resultList = ProjectLocalServiceUtil.retrieveListProjectByUserId(userId, start, curPage*linePerPage);
+            int totalCnt = ProjectLocalServiceUtil.countProjectByUserId(userId,groupId);
+            List<Map<String,Object>> resultList = ProjectLocalServiceUtil.retrieveListProjectByUserId(userId, groupId, start, curPage*linePerPage);
             
             String portletNameSpace = response.getNamespace();
             String pageStr = PagingUtil.getPaging(request.getContextPath(), portletNameSpace+"searchProjectList", totalCnt, curPage, linePerPage, pagePerBlock);
@@ -258,10 +262,11 @@ public class DashboardController{
         try{
             long projectId = GetterUtil.getLong(params.get("projectId"));
             long userId = PortalUtil.getUserId(request);
+            long groupId = themeDisplay.getScopeGroupId();
             String projectStructure = GetterUtil.getString(params.get("projectStructure"));
             String analyzerStructure = GetterUtil.getString(params.get("analyzerStructure"));
             
-            Project project = ProjectLocalServiceUtil.modifyProject(projectId, userId, "", projectStructure, analyzerStructure,Constants.UPDATE);
+            Project project = ProjectLocalServiceUtil.modifyProject(projectId, userId, groupId, "", projectStructure, analyzerStructure,Constants.UPDATE);
             JSONObject obj = new JSONObject();
             obj.putAll(project.getModelAttributes());
             

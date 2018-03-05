@@ -6,11 +6,12 @@
 
 <liferay-portlet:resourceURL var="IBhandlerURL" id="handleIceBraker" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<%
-String DEV_IB_URL = "http://150.183.247.210:8080/ldap/";
-String REAL_IB_URL = "http://www.edison.re.kr/ldap";
-String Local_MAC_URL = "http://118.128.153.167:9090/fileDownload";
+<liferay-portlet:renderURL var="eturbanalyzerURL" copyCurrentRenderParameters="false" plid="${eturbanalyzerPlid}" portletName="eturbanalyzer_WAR_eturbportlet">
+    <liferay-portlet:param name="icebreakerUrl" value="${icebreakerUrl}"/>
+</liferay-portlet:renderURL>
 
+<%
+String Local_MAC_URL = "http://118.128.153.167:9090/fileDownload";
 String frameURL = "/eturb-portlet/public/viewer.html";
 
 HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
@@ -26,6 +27,13 @@ String portletId= portletDisplay.getId();
 .hideDivClass {
 	display:none;
 }
+.viewerStyle {
+	height:670px;
+	width: 98%;
+	margin-top: 13.2px;
+	border: 1px solid #d3d3d3;
+	margin-left:-30px;
+}
 </style>
 
 <input type="hidden" id="eventState" value="idle">
@@ -39,6 +47,8 @@ function <portlet:namespace/>setProjectState(param) {
 var EventProjectObj = { 'data': null };
 //var event = new Event('patchData');
 var vcToken = "";
+var IceBreakerUrl = "${icebreakerUrl}";
+//console.log("IceBreakerUrl : " + IceBreakerUrl);
 
 $(document).on('ready',function(){
 	var EventStack = [];
@@ -48,7 +58,6 @@ $(document).on('ready',function(){
 			param.url = <portlet:namespace/>makeRequestUrl(param.fileId, param.name, param.token);
 		}
 		if (param && param.token) {
-			console.log('[callViewerRequest] vcToken : ' + param.token);
 			vcToken = param.token;
 		}
 		
@@ -72,8 +81,8 @@ $(document).on('ready',function(){
 					for(var i = 0 ; i < EventStack.length && i < MAX_LOADING_FILE; i++) {
 						try {
 							obj = EventStack[i];
-							console.log('call viewerRequest using EventStack ...');
-							console.dir(obj);
+							//console.log('call viewerRequest using EventStack ...');
+							//console.dir(obj);
 							
 							this.contentWindow.viewerRequest(obj);	
 						} catch (Err) {
@@ -87,7 +96,7 @@ $(document).on('ready',function(){
 			$('#viewerFrame')[0].contentWindow.viewerRequest(param);
 			if (EventStack && EventStack.length > 0) {
 				console.err('EventStack is NOT Empty...');
-				console.dir(EventStack);
+				//console.dir(EventStack);
 				EventStack = [];
 			}
 		}
@@ -97,7 +106,7 @@ $(document).on('ready',function(){
 		if (!dataArr) return;
 		dataArr = JSON.parse(dataArr);
 		console.log('makeProjectGroupData');
-		console.dir(dataArr);
+		//console.dir(dataArr);
 		var url = null, obj = null, fileId = null;
 		for(var i = 0 ; i < dataArr.length ; i++) {
 			obj = dataArr[i];
@@ -123,7 +132,7 @@ $(document).on('ready',function(){
 		if (token) vcToken = token;
 		
 		console.log('-------------- start makeProjectJson ------------');
-		console.dir(param);
+		//console.dir(param);
 		<portlet:namespace/>makeProjectGroupData(geoNameArr, geoUrlArr, param.geometryGroup, token);
 		<portlet:namespace/>makeProjectGroupData(meshNameArr, meshUrlArr, param.meshGroup, token);
 		
@@ -148,56 +157,41 @@ $(document).on('ready',function(){
 		
 		console.log('----- result makeProjectJson');
 		result = JSON.stringify(result);
-		console.dir(result);
+		//console.dir(result);
 		
 		<portlet:namespace/>setProjectState(result);
-		$('<iframe id="viewerFrame" src="<%= url %>" allowfullscreen></iframe>')
+		$('<iframe id="viewerFrame" src="<%= url %>" class="viewerStyle" allowfullscreen></iframe>')
 	     .appendTo('#viewerDiv');
 	}
 	
 	function <portlet:namespace/>makeRequestUrl(fileId, fileName, token) {
 		var currentUrl = window.location.href, url = "";
 		
-		console.log('makeRequestUrl : ' + currentUrl);
 		if (currentUrl.indexOf('192.168.0.4') > -1 || currentUrl.indexOf('localhost') > -1) { // local
 			url = "<%= Local_MAC_URL %>" + '?id=' + fileId;
-			url += '&icebreakerUrl=' + "<%= DEV_IB_URL %>";
+			url += '&icebreakerUrl=' + IceBreakerUrl;
 			url += '&vcToken=' + token;
 			url += '&reqType=edison';
 			url += '&fileName=' + fileName;
-		} else if (currentUrl.indexOf('150.183.247.221') > -1) { // dev
-			url = "<%= DEV_IB_URL %>api/file/download?id=" + fileId;
-			url += '&vcToken=' + token;
-			url += '&reqType=edison';
-			url += '&fileName=' + fileName;
-		} else if (currentUrl.indexOf('www.edison.re.kr') > -1) { // real
-			url = "<%= REAL_IB_URL %>api/file/download?id=" + fileId;
+		} else { 
+			url = IceBreakerUrl + "/api/file/download?id=" + fileId;
 			url += '&vcToken=' + token;
 			url += '&reqType=edison';
 			url += '&fileName=' + fileName;
 		}
-		
-		/*
-		// ?�전방식(to server)
-		var url = "<%= IBhandlerURL %>" + '&<portlet:namespace/>fileId=' + fileId;
-		url += '&<portlet:namespace/>icebreakerUrl=' + "<%= DEV_IB_URL %>";
-		url += '&<portlet:namespace/>vcToken=' + token;
-		url += '&<portlet:namespace/>reqType=edison';
-		url += '&fileName=' + fileName;
-		*/
 		
 		return url;
 	}
 	
 	Liferay.on('eTurb_Analyzer_call',function(event) {
 		console.log('eTurb_Analyzer_call receive!!');
-		console.dir(event);
+		//console.dir(event);
 		
 		var cmd = event.cmd;
 		var param = event.param;
 		
-		console.log('call ' + cmd);
-		console.dir(param);
+		//console.log('call ' + cmd);
+		//console.dir(param);
 		
 		
 		if (cmd == 'showAnalyzer') {	// show graph portlet
@@ -208,8 +202,8 @@ $(document).on('ready',function(){
 			//callViewerRequestIframeLoading(param);
 			var dataArr = JSON.parse(param.data), data = null;
 			if (typeof(dataArr) == 'string') dataArr = JSON.parse(dataArr);
-			console.log('add params : ');
-			console.dir(dataArr);
+			//console.log('add params : ');
+			//console.dir(dataArr);
 			for(var i = 0 ; i < dataArr.length ; i++) {
 				data = dataArr[i];
 				if (data) {
@@ -217,7 +211,7 @@ $(document).on('ready',function(){
 					data.command = param.command;
 					data.url = <portlet:namespace/>makeRequestUrl(data.fileId, data.name, data.token);
 					if (data.url) {
-						console.dir(data);
+						//console.dir(data);
 						<portlet:namespace/>callViewerRequest(data);
 					}
 				}
@@ -230,8 +224,8 @@ $(document).on('ready',function(){
 		} else if (cmd == 'hide.geometry' || cmd == 'hide.mesh') {
 			<portlet:namespace/>callViewerRequest(param);
 		} else if (cmd == 'select.entity' || cmd == 'hide.entity' || cmd == 'show.entity') {
-			console.log('entity event : ' + cmd);
-			console.dir(param);
+			//console.log('entity event : ' + cmd);
+			//console.dir(param);
 			if (param) {
 				var entityObj = param;
 				var entityParam = JSON.parse(param.data);
@@ -244,9 +238,9 @@ $(document).on('ready',function(){
 			<portlet:namespace/>callViewerRequest(param);
 		} else if (cmd == 'add.entity') {
 			console.log('start add.entity!!');
-			console.dir(param);
+			//console.dir(param);
 			var paramId = param.data[0];
-			console.log('paramId : ' + paramId);
+			//console.log('paramId : ' + paramId);
 			$('#viewerFrame')[0].contentWindow.makeEntitySet(paramId);
 		} else if (cmd == 'remove.geometry' || cmd == 'remove.mesh') {
 			console.log('start remove.geometry...');
@@ -291,15 +285,8 @@ $(document).on('ready',function(){
 });
 
 function uploadBlob(paramObj) {
-	var currentUrl = window.location.href, ibUrl = "";
-	
-	if (currentUrl.indexOf('192.168.0.4') > -1 || currentUrl.indexOf('localhost') > -1) { // local
-		ibUrl = "<%= DEV_IB_URL %>api/file/upload?cluster=EDISON-CFD&name=";
-	} else if (currentUrl.indexOf('150.183.247.221') > -1) { // dev
-		ibUrl = "<%= DEV_IB_URL %>api/file/upload?cluster=EDISON-CFD&name=";
-	} else if (currentUrl.indexOf('www.edison.re.kr') > -1) { // real
-		ibUrl = "<%= REAL_IB_URL %>ldap/api/file/upload?cluster=EDISON-CFD&name=";
-	}
+	var currentUrl = window.location.href;
+	var ibUrl = IceBreakerUrl + "/api/file/upload?cluster=EDISON-CFD&name=";
 	
 	var fd = new FormData();
     fd.append('<portlet:namespace/>reqType', 'UPLOAD_IB');
@@ -315,16 +302,16 @@ function uploadBlob(paramObj) {
         processData: false,
         contentType: false
     }).done(function(result) {
-        console.log(result);
+        //console.log(result);
     });
 	return false;
 }
 
 function sendEditorPortlet(cmd, json) {
 	console.log('--- sendEditorPortlet');
-	console.dir(json);
-	console.log(cmd);
-	console.log(JSON.stringify(json));
+	//console.dir(json);
+	//console.log(cmd);
+	//console.log(JSON.stringify(json));
 	
 	if (cmd == 'makeEntitySet') {
 		if (json) {
@@ -353,10 +340,10 @@ function sendEditorPortlet(cmd, json) {
 			});	
 		}
 	} else if (cmd == 'loadProject') {
-		console.log('>>>> loadProject : eventState <<<<<< status : ' + $('#eventState').val());
+		//console.log('>>>> loadProject : eventState <<<<<< status : ' + $('#eventState').val());
 		return EventProjectObj.data;
 	} else if (cmd == 'project-loaded') {
-		console.log('>>>> project-loaded');
+		//console.log('>>>> project-loaded');
 		Liferay.fire('eTurb_Dashboard_call', {
 			cmd: 'block.end',
 			param: '',

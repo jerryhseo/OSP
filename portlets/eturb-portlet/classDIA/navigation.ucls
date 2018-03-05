@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="org.kisti.eturb.editor.portlet.dashboard.DashboardController" 
+    project="eturb-portlet" 
+    file="/eturb-portlet/docroot/WEB-INF/src/org/kisti/eturb/editor/portlet/dashboard/DashboardController.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="431" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="org.kisti.eturb.editor.portlet.dashboard.CreateMeshController" 
+    project="eturb-portlet" 
+    file="/eturb-portlet/docroot/WEB-INF/src/org/kisti/eturb/editor/portlet/dashboard/CreateMeshController.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="448" x="512" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="org.kisti.eturb.editor.portlet.dashboard.FileExportController" 
+    project="eturb-portlet" 
+    file="/eturb-portlet/docroot/WEB-INF/src/org/kisti/eturb/editor/portlet/dashboard/FileExportController.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="357" x="1521" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="org.kisti.eturb.editor.portlet.dashboard.ParameterController" 
+    project="eturb-portlet" 
+    file="/eturb-portlet/docroot/WEB-INF/src/org/kisti/eturb/editor/portlet/dashboard/ParameterController.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="481" x="1000" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="org.kisti.eturb.editor.portlet.dashboard.helper.EturbAppHelper" 
+    project="eturb-portlet" 
+    file="/eturb-portlet/docroot/WEB-INF/src/org/kisti/eturb/editor/portlet/dashboard/helper/EturbAppHelper.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="549" width="452" x="512" y="536"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="org.kisti.eturb.dbservice.model.Airfoil" project="eturb-portlet" 
+    file="E:/LIFERAY/liferay-plugins-sdk-6.2/portlets/eturb-portlet/docroot/WEB-INF/lib/eturb-portlet-service.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="135" width="146" x="1728" y="1125"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="org.kisti.eturb.dbservice.model.AnalyzerJob" project="eturb-portlet" 
+    file="E:/LIFERAY/liferay-plugins-sdk-6.2/portlets/eturb-portlet/docroot/WEB-INF/lib/eturb-portlet-service.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="459" width="361" x="1918" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="org.kisti.eturb.dbservice.model.MeshData" project="eturb-portlet" 
+    file="E:/LIFERAY/liferay-plugins-sdk-6.2/portlets/eturb-portlet/docroot/WEB-INF/lib/eturb-portlet-service.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="171" width="150" x="1728" y="536"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="org.kisti.eturb.dbservice.model.OutputData" project="eturb-portlet" 
+    file="E:/LIFERAY/liferay-plugins-sdk-6.2/portlets/eturb-portlet/docroot/WEB-INF/lib/eturb-portlet-service.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="261" width="139" x="1918" y="536"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="10">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="11" name="eturbAppHelper"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="14" name="eturbAppHelper"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="17" name="logFile"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="20" name="meshFileContent"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="22">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="23" name="airfoils"/>      
+      <multiplicity id="24" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="25">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="26" name="outputData"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="28">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="29" name="eturbAppHelper"/>      
+      <multiplicity id="30" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="31">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="32" name="outputViewData"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

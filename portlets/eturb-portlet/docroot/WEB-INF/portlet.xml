@@ -40,6 +40,10 @@
             <name>contextConfigLocation</name>
             <value>classpath:org/kisti/eturb/editor/portlet/dashboard/editor-dashboard-portlet.xml</value>
         </init-param>
+        <init-param>
+			<name>config-template</name>
+			<value>/WEB-INF/html/dashboard/configuration.jsp</value>
+		</init-param>
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>

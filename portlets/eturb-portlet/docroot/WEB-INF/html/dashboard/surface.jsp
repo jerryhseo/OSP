@@ -76,7 +76,7 @@ function <portlet:namespace/>changeBc(node_id,sel){
 }
 </script>
 
-<div class="dashboard-content">
+<div class="dashboard-content" style="height: 304px; overflow-y:auto;">
 	<table class="table table-striped table-surface">
 		<tbody id="<portlet:namespace/>surfaceTbody" style="font-family: Malgun Gothic;font-size:12px">
 		</tbody>

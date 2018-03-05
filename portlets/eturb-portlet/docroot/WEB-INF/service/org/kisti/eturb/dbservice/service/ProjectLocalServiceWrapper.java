@@ -285,35 +285,35 @@ public class ProjectLocalServiceWrapper implements ProjectLocalService,
 	}
 
 	@Override
-	public int countProjectByUserId(long userId)
+	public int countProjectByUserId(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _projectLocalService.countProjectByUserId(userId);
+		return _projectLocalService.countProjectByUserId(userId, groupId);
 	}
 
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListProjectByUserId(
-		long userId, int start, int end)
+		long userId, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _projectLocalService.retrieveListProjectByUserId(userId, start,
-			end);
+		return _projectLocalService.retrieveListProjectByUserId(userId,
+			groupId, start, end);
 	}
 
 	@Override
 	public org.kisti.eturb.dbservice.model.Project modifyProject(
-		long projectId, long userId, java.lang.String name,
+		long projectId, long userId, long groupId, java.lang.String name,
 		java.lang.String projectStructure, java.lang.String analyzerStructure,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException {
-		return _projectLocalService.modifyProject(projectId, userId, name,
-			projectStructure, analyzerStructure, mode);
+		return _projectLocalService.modifyProject(projectId, userId, groupId,
+			name, projectStructure, analyzerStructure, mode);
 	}
 
 	@Override
-	public void removeProject(long projectId, long userId)
+	public void removeProject(long projectId, long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException {
-		_projectLocalService.removeProject(projectId, userId);
+		_projectLocalService.removeProject(projectId, userId, groupId);
 	}
 
 	/**

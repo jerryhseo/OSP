@@ -106,6 +106,20 @@ public interface ProjectModel extends BaseModel<Project> {
 	public void setUserUuid(String userUuid);
 
 	/**
+	 * Returns the group ID of this project.
+	 *
+	 * @return the group ID of this project
+	 */
+	public long getGroupId();
+
+	/**
+	 * Sets the group ID of this project.
+	 *
+	 * @param groupId the group ID of this project
+	 */
+	public void setGroupId(long groupId);
+
+	/**
 	 * Returns the name of this project.
 	 *
 	 * @return the name of this project
