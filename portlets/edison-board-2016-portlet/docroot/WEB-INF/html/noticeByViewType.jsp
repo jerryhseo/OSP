@@ -43,10 +43,6 @@
 
 <!-- Add CSS & JS -->
 <link href="${contextPath}/css/newmain.css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Exo:400,800' rel='stylesheet' type='text/css'>
-<link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Gudea|Noto+Sans:700" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Gudea" rel="stylesheet">
 
 <script src="${contextPath}/js/flowtype.js"></script>
 
