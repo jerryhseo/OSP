@@ -459,7 +459,7 @@
 				ICEBUG:'ICEBUG',
 				MERIDIAN:'MERIDIAN',
 				ICEBREAKER:'ICEBREAKER'
-			};
+			},
 			ProcessStatus: {
 				SUCCESS: 0,
 				FAIL:-1
