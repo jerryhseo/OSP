@@ -1,82 +1,12 @@
 package com.kisti.osp.workbench.portlet.workbench;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletResponse;
-
-import org.kisti.edison.bestsimulation.NoSuchSimulationException;
-import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
-import org.kisti.edison.bestsimulation.model.Simulation;
-import org.kisti.edison.bestsimulation.model.SimulationJob;
-import org.kisti.edison.bestsimulation.model.SimulationJobData;
-import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil;
-import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
-import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
-import org.kisti.edison.science.NoSuchScienceAppException;
-import org.kisti.edison.science.model.ScienceApp;
-import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-
-import com.kisti.osp.icecap.model.DataType;
-import com.kisti.osp.icecap.model.DataTypeStructure;
-import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
-import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
-import com.kisti.osp.workbench.agent.ib.IBAgent;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-
-import freemarker.template.Configuration;
-import freemarker.template.SimpleSequence;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 
 /**
  * Portlet implementation class WorkbenchPortlet
  */
 public class WorkbenchPortlet extends MVCPortlet {
+	/*
 	private static Log _log = LogFactoryUtil.getLog(WorkbenchPortlet.class);
 
 	private static final String _DEFAULT_CLUSTER = "EDISON-CFD";
@@ -150,11 +80,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		renderRequest.setAttribute("customId", customId );
 		renderRequest.setAttribute("classId", classId );
 		
-		/*
-		templateJSP += workbenchLayout.getString("templateId_")+".jsp";
-		
-		super.include(templateJSP, renderRequest, renderResponse);
-		*/
 		super.doView(renderRequest, renderResponse);
 	}
 	
@@ -557,21 +482,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 			break;
 		}
 		
-		/*
-		String strInputs = "";
-		try {
-			strInputs = SimulationJobLocalServiceUtil.getJobInputData(job.getJobUuid());
-		} catch (NoSuchSimulationJobDataException e) {
-			// Do nothing
-		}
-		
-		if( !strInputs.isEmpty() ){
-			System.out.println("strInputs: "+strInputs);
-			JSONArray jsonInputs = JSONFactoryUtil.createJSONArray(strInputs);
-			json.put("inputs_", jsonInputs);
-		}
-		*/
-		
 		return json;
 	}
 
@@ -853,23 +763,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 						e.printStackTrace();
 					}
 					
-					/* Make input data link
-					String fileId = null;
-					
-					Path source = parentPath.resolve(inputFileName);
-					Path targetParent =  Paths.get(String.valueOf(date.getTime()));
-					Path targetFile = Paths.get(inputFileName);
-					
-					try {
-						fileId = ibAgent.linkFile(source, targetParent, targetFile, _DEFAULT_CLUSTER);
-						files.put(portName, fileId);
-					} catch (SystemException | PortalException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					
-					inputData.put("parent_", targetParent.toString());
-					*/
 				}
 				else if ( pathType.equalsIgnoreCase("folder")){
 					
@@ -1482,39 +1375,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String filePath = ParamUtil.getString(resourceRequest, "filePath");
 		String content = ParamUtil.getString(resourceRequest, "content");
 		
-		/*
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		User user = themeDisplay.getUser();
-		Group group = themeDisplay.getScopeGroup();
-
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
-		
-		String userScreenName = user.getScreenName();
-		if( userScreenName.equalsIgnoreCase("edison") )
-			userScreenName = "edisonadm";
-
-		
-		IBAgent ibAgent = new IBAgent(group, user);
-		
-		String fileId = "";
-		try {
-			fileId = ibAgent.uploadFile(Paths.get(filePath), content.getBytes(), _DEFAULT_CLUSTER);
-		} catch (JSONException | SystemException | IOException e) {
-			_log.error("IB SaveAs File error "+ filePath);
-			throw new PortletException();
-		}
-		
-		JSONObject saveAsResult = JSONFactoryUtil.createJSONObject();
-		saveAsResult.put("fileId", fileId);
-		
-		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
-		try {
-			ServletResponseUtil.write(httpResponse, saveAsResult.toString());
-		} catch (IOException e) {
-			_log.error("Upload File response error: "+ fileId);
-			throw new PortletException();
-		}
-		*/
 	}
 	
 	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo ){
@@ -1579,5 +1439,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 	}
 	
 	private static final String _callbackAPI = "/api/jsonws/edison-simulation-portlet.simulationjob/update-simulation-job";
+	*/
 }
 
