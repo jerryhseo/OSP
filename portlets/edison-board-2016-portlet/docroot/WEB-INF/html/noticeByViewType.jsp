@@ -89,14 +89,14 @@
 		
 		<!-- Title -->
 		<c:choose>
-			<c:when test="${siteName eq 'EDISON'}">
+			<c:when test="${fn:toUpperCase(siteName) eq 'EDISON'}">
 				<h2 class="h2title" style="padding-top: 12px; font-family: 'Nanum Gothic', sans-serif;">
 					NEWS & EVENT
 				</h2>
 			</c:when>
 			<c:otherwise>
 				<h2 class="h2title" style="padding-top: 15px; font-family: 'Nanum Gothic', sans-serif;">
-					<c:out value="${siteName}" /> NEWS
+					<c:out value="${fn:toUpperCase(siteName)}" /> NEWS
 				</h2>
 			</c:otherwise>
 		</c:choose>
