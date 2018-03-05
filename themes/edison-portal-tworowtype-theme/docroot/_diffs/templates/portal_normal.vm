@@ -70,10 +70,6 @@
 	</script>
 </head>
 
-$themeDisplay.getLayout().getExpandoBridge().getAttribute($languageUtil.format($locale, "edison-menu-link-custom-field",""))
-<br/>
-$languageUtil.format($locale, "edison-menu-link-custom-field","")
-
 <body class="$css_class edison">
 	#if ($dock_show)
 		#dockbar()
