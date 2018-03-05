@@ -1034,7 +1034,7 @@ public class OSPFileUtil {
 		ServletResponseUtil.write(httpResponse, result.toString() );
 	}
 	
-    public String readTextFile(Path path) throws IOException{
+    public static String readTextFile(Path path) throws IOException{
         return readTextAndLastPosition(path, 0).getText();
     }
 	
