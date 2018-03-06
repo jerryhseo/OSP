@@ -27,37 +27,35 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
-	<div class="span12" style="height:inherit;">
-		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-			<div class="span8 offset1" id="<portlet:namespace/>title"></div>
-			<div class="dropdown-wrapper" >
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-						<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-					</div>
+<div class="container-fluid  image-viewer-portlet common-analyzer-portlet">
+	<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-8 offset1" id="<portlet:namespace/>title"></div>
+		<div class="dropdown-wrapper" >
+			<div class="dropdown">
+                 <i class="icon-reorder icon-menu"></i>
+				<!-- Link or button to toggle dropdown -->
+				<div class="dropdown-content">
+					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
 				</div>
-			</div>	
-		</div>
-		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
-			<iframe class ="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
-			</iframe>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-			<input type="file" id="<portlet:namespace/>selectFile"/>
-		</div>
+			</div>
+		</div>	
 	</div>
+	<div class="row-fluid"  style="height:inherit;">
+		<iframe class ="col-sm-12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		</iframe>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+          </div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
 <script>

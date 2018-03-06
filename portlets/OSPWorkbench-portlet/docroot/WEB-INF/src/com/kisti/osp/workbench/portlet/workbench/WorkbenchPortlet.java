@@ -36,11 +36,14 @@ import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 
+import com.kisti.osp.constants.OSPPropsUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -165,8 +168,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String command = ParamUtil.getString(resourceRequest, "command");
 		_log.debug("ServeResource Command: "+command);
 		System.out.println("ServeResource Command: "+command);
-		String action = ParamUtil.getString(resourceRequest, "action", "input");
-		boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
 		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType");
 		
 		if( command.equalsIgnoreCase("RESOLVE_TEMPLATE")){
@@ -215,8 +216,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 			String target = ParamUtil.getString(resourceRequest, "target");
 
 			try {
-				//FileManagementLocalServiceUtil.duplicated( resourceRequest, resourceResponse, target, isJobResult);
-				FileManagementLocalServiceUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
+				OSPFileUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
 			} catch (PortalException | SystemException e) {
 				_log.error("Duplicated check error: "+ target);
 				throw new PortletException();
@@ -290,7 +290,8 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
-		String fileId = ibAgent.uploadFile( dlEntryId, Paths.get(parent), Paths.get(fileName), _DEFAULT_CLUSTER );
+		Path target = Paths.get(parent, fileName);
+		String fileId = ibAgent.uploadDLEntryFile(resourceRequest, dlEntryId, target.toString(), _DEFAULT_CLUSTER );
 		
 		return fileId;
 	}
@@ -689,7 +690,11 @@ public class WorkbenchPortlet extends MVCPortlet {
 		}
 		
 		//executable of IB
-		String exePath = Paths.get(_SOLVER_BASE_DIR).resolve(scienceApp.getBinPath()).toString();
+		String exePath = Paths.get(
+				OSPPropsUtil.getSpyGlassAppsDirPath(), 
+				scienceApp.getName(), 
+				scienceApp.getVersion(), 
+				OSPPropsUtil.getSpyGlassAppsBinDir()).toString();
 		
 		String mpiType = scienceApp.getParallelModule();
 		String[] dependencies = null;
@@ -761,17 +766,11 @@ public class WorkbenchPortlet extends MVCPortlet {
 						inputFileName = portName.replaceAll("-", "");
 					}
 					
-					String tempFileName = "";
-					tempFileName = portName.replaceAll("-", "" )+"_"+date.getTime();
-					
-					Path tempTarget = Paths.get(_DEFAULT_TEMP_DIR).resolve(tempFileName);
 					String content = inputData.getString("context_");
-					Files.createFile( tempTarget );
-					Files.write(tempTarget, content.getBytes());
 				
 					
 					try {
-						String fileId = ibAgent.uploadFile(tempTarget, parentPath, Paths.get(inputFileName), _DEFAULT_CLUSTER);
+						String fileId = ibAgent.uploadFileContent(portletRequest, content, parentPath.resolve(inputFileName).toString(),  _DEFAULT_CLUSTER);
 						System.out.println("File Id After IB Upload: "+fileId);
 						
 						JSONObject argVal = JSONFactoryUtil.createJSONObject();
@@ -836,9 +835,10 @@ public class WorkbenchPortlet extends MVCPortlet {
 				else if( pathType.equalsIgnoreCase("file")){
 					Path target = Paths.get(inputData.getString("parent_"))
 												.resolve(inputData.getString("name_"));
+					String repositoryType = inputData.getString("repositoryType");
 					System.out.println("Port Data get IB File ID: "+target.toString());
 					try {
-						String fileId =  ibAgent.getFileId(target.toString(), false);
+						String fileId =  ibAgent.getFileId(portletRequest, target.toString(), repositoryType);
 						
 						JSONObject argVal = JSONFactoryUtil.createJSONObject();
 						argVal.put("type", "FILE_ID");
@@ -1117,7 +1117,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
 		String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
-		boolean isJobResult = ParamUtil.getBoolean(resourceRequest, "isJobResult", false);
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType");
 		
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		
@@ -1145,7 +1145,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		byte[] fileContent = null;
 		try {
-			fileContent = FileManagementLocalServiceUtil.readFileContent(resourceRequest, Paths.get(parentPath).resolve(fileName).toString(), isJobResult);
+			fileContent =OSPFileUtil.readFileContent(resourceRequest, Paths.get(parentPath, fileName).toString(), repositoryType) ;
 		} catch (PortalException | SystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1193,7 +1193,7 @@ public class WorkbenchPortlet extends MVCPortlet {
 		IBAgent agent = new IBAgent(group, user);
 		String simulationUuid = "";
 		try {
-			simulationUuid = agent.getSimulationUuid();
+			simulationUuid = agent.createSimulation();
 		} catch (SystemException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -1445,26 +1445,15 @@ public class WorkbenchPortlet extends MVCPortlet {
 	
 	protected void uploadIBFile(ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, SystemException, PortalException, IOException{
 		String targetFolder = ParamUtil.getString(resourceRequest, "targetFolder");
-		targetFolder = targetFolder.replaceAll(" ", "_");
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
-		fileName = fileName.replaceAll(" ", "_");
 		String uploadFileParam = "uploadFile";
 		
 		_log.debug("UPLOAD targetFolder: "+ targetFolder);
 		_log.debug("UPLOAD fileName: "+ fileName);
 
-		// copy to system temp directory
-		Path tempFile = Paths.get(_DEFAULT_TEMP_DIR).resolve(fileName);
-		this.upload(
-				resourceRequest, 
-				tempFile.toString(), 
-				uploadFileParam, 
-				false);
-
-		// copy to ib shared directory
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		IBAgent ibAgent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
-		String fileId = ibAgent.uploadFile( tempFile, Paths.get(targetFolder), Paths.get(fileName), _DEFAULT_CLUSTER );
+		String fileId = ibAgent.uploadIBFile(resourceRequest, uploadFileParam, Paths.get(targetFolder, fileName).toString(), _DEFAULT_CLUSTER);
 		
 		JSONObject uploadResult = JSONFactoryUtil.createJSONObject();
 		uploadResult.put("fileId", fileId);
@@ -1556,26 +1545,6 @@ public class WorkbenchPortlet extends MVCPortlet {
 		
 		System.out.println("Callback: "+url);
 		return url;
-	}
-	
-	private void upload( 
-			PortletRequest portletRequest, 
-			String target,
-			String uploadFileName,
-			boolean isJobResult) throws SystemException, PortalException, IOException{
-		
-		Path targetPath = Paths.get(_DEFAULT_TEMP_DIR).resolve(target);// Data should be inserted by SystemPropertyService.
-
-		System.out.println("Upload Target: "+targetPath.toString());
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(portletRequest);
-		
-		System.out.println(uploadRequest.getFileName(uploadFileName));
-		
-		// Get the uploaded file as a file.
-		File uploadedFile = uploadRequest.getFile(uploadFileName);
-		
-		// Move the existing temporary file to new location.
-		Files.copy(uploadedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 	}
 	
 	private static final String _callbackAPI = "/api/jsonws/edison-simulation-portlet.simulationjob/update-simulation-job";
