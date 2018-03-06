@@ -7,16 +7,14 @@
 }
 .common-analyzer-portlet > div{
    	border:none;
-   	width:100%;
    	height:100%;
    	margin:0;
 }
 
-.common-analyzer-portlet .canvas-wrapper{height:100%;}
+.common-analyzer-portlet .canvas{height:inherit;}
 .common-analyzer-portlet iframe {
    	border:none;
-   	width:100%;
-   	height:100%;
+   	height:inherit;
    	margin:0;
 }
 .common-analyzer-portlet .icon-menu {
