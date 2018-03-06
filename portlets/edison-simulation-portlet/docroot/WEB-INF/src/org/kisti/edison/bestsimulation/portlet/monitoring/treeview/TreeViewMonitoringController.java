@@ -419,9 +419,15 @@ public class TreeViewMonitoringController{
         log.info("jobUuid : " + jobUuid);
         log.info("scienceAppName : " + scienceAppName);
         log.info("jobTitle : " + jobTitle);
-        Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, 1, sc);
-        DatasetLocalServiceUtil.curate(ds, sc);
-        resultMap.put("isComplete", ds != null);
+        try{
+            Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, 1, sc);
+            DatasetLocalServiceUtil.curate(ds, sc);
+            resultMap.put("isComplete", ds != null);
+        }catch(Exception e){
+            resultMap.put("isComplete", false);
+            resultMap.put("msg", e.getMessage());
+            log.error("transferJobDataToSDR", e);
+        }
         
         out.write(result.toJson(resultMap));
         out.flush();
