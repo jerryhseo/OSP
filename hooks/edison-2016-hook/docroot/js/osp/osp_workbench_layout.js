@@ -139,6 +139,7 @@
 								var $portletDiv = $('<div>');
 								console.log(P.getNamespace());
 								$portletDiv.attr('id', P.getNamespace());
+								$portletDiv.css('height', "inherit");
 								$portletDiv.html( renderResult );
 								$targetDiv.append( $portletDiv );
 							}
