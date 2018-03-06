@@ -15,7 +15,6 @@
 			FROM 
 				EDVIR_ClassNote A
 			WHERE 
-				A.isContent = 'false'
 				<isNotEmpty property="classId">
 				AND 
 					classId = #classId#

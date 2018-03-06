@@ -583,13 +583,13 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         }
     });
 
-    function saveWorkflowDefinition(currentJsPlumbInstance) {
+    function getWorkflowDefinition(currentJsPlumbInstance) {
         var wfData = { elements: [], connections: [] };
         if (wfPortletGlobalData) {
             wfData["wfPortletGlobalData"] = wfPortletGlobalData;
         }
 
-        //Loop Start App Add
+        // TODO : remove Loop Start App Add 
         if ($(currentJsPlumbInstance.getContainer()).children(".loopbox").length > 0) {
             wfData["loopStartElementId"] = $(currentJsPlumbInstance.getContainer()).children(".loopbox").attr("id");
         } else {
@@ -680,7 +680,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
     function saveOrUpdateWorkflowDefinition(workflowMetaData, callback, backgroudSave) {
         var localWorkflow = modifyingWorkflow;
         var title = workflowMetaData.title;
-        var wfData = saveWorkflowDefinition(currentJsPlumbInstance);
+        var wfData = getWorkflowDefinition(currentJsPlumbInstance);
 
         /* validation */
         if (!title || title === "" || title.trim() === "") {
@@ -792,7 +792,16 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
 
     function drawWorkflowDefinition(workflow) {
         resetWorkflow();
-        var wfData = $.parseJSON(workflow.screenLogic);
+        drawScreenLogic(workflow.screenLogic);
+        if (workflow.hasOwnProperty("createDate")) {
+            delete workflow.createDate;
+        }
+        modifyingWorkflow = workflow;
+        // TODO : check - wfPortletGlobalData = wfData.wfPortletGlobalData;
+    }
+
+    function drawScreenLogic(screenLogic){
+        var wfData = $.parseJSON(screenLogic);
         $.each(wfData.elements, function (i) {
             loadScienceApp(this.id, this.offset, this.data);
         });
@@ -802,11 +811,6 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
             var targetEndpointUuid = this.targetUuid;
             currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
         });
-        if (workflow.hasOwnProperty("createDate")) {
-            delete workflow.createDate;
-        }
-        modifyingWorkflow = workflow;
-        // TODO : check - wfPortletGlobalData = wfData.wfPortletGlobalData;
     }
 
     function resetCurrentJsPlumbInstance() {
@@ -826,6 +830,8 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
     return {
         "addScienceApp": addScienceApp,
         "removeSicenceApps": removeSicenceApps,
+        "getWorkflowDefinition": getWorkflowDefinition,
+        "drawScreenLogic": drawScreenLogic,
         "loadWorkflowDefinition": loadWorkflowDefinition,
         "saveOrUpdateWorkflowDefinition": saveOrUpdateWorkflowDefinition,
         "saveAsWorkflowDefinition": saveAsWorkflowDefinition,

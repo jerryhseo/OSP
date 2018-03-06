@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="kisti.edison.challenge.model.Challenge" />
+	<import class="kisti.edison.challenge.model.ChallengeEvaluationManagement" />
+	<import class="kisti.edison.challenge.model.ChallengeEvaluationScore" />
+	<import class="kisti.edison.challenge.model.ChallengeTeam" />
+	<import class="kisti.edison.challenge.model.ChallengeTeamMember" />
+	<import class="kisti.edison.challenge.model.ChildChallenge" />
+	<class name="kisti.edison.challenge.model.impl.ChallengeImpl" table="challenge_Challenge">
+		<cache usage="read-write" />
+		<id name="challengeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="field" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="kisti.edison.challenge.model.impl.ChallengeEvaluationManagementImpl" table="challenge_ChallengeEvaluationManagement">
+		<cache usage="read-write" />
+		<id name="challengeEvaluationManagementId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="assessmentItem" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="distribution" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="childChallengeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="kisti.edison.challenge.model.impl.ChallengeEvaluationScoreImpl" table="challenge_ChallengeEvaluationScore">
+		<cache usage="read-write" />
+		<id name="challengeEvaluationScoreId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="score" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="challengeTeamId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="challengeEvaluationManagementId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="kisti.edison.challenge.model.impl.ChallengeTeamImpl" table="challenge_ChallengeTeam">
+		<cache usage="read-write" />
+		<id name="challengeTeamId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="teamName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="subject" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperAbstract" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperStatusDOC" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="paperPDFFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperPDFSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperPDFModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperStatusPDF" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="presentationName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="presentationFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="presentationSubmissionDay" type="org.hibernate.type.TimestampType" />
+		<property name="presentationModifyDay" type="org.hibernate.type.TimestampType" />
+		<property name="presentationStatus" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="filepath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="aggrement" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="childChallengeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="kisti.edison.challenge.model.impl.ChallengeTeamMemberImpl" table="challenge_ChallengeTeamMember">
+		<cache usage="read-write" />
+		<id name="challengeTeamMemberId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="applyUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="applyUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="institute" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="major" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="grade" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="phone" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="leader" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="challengeTeamId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="kisti.edison.challenge.model.impl.ChildChallengeImpl" table="challenge_ChildChallenge">
+		<cache usage="read-write" />
+		<id name="childChallengeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="uuid" type="com.liferay.portal.dao.orm.hibernate.StringType" column="uuid_" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="statusByUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="statusByUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="statusDate" type="org.hibernate.type.TimestampType" />
+		<property name="number" type="com.liferay.portal.dao.orm.hibernate.IntegerType" column="number_" />
+		<property name="presentationDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperStartDay" type="org.hibernate.type.TimestampType" />
+		<property name="paperEndDay" type="org.hibernate.type.TimestampType" />
+		<property name="evaluationDay" type="org.hibernate.type.TimestampType" />
+		<property name="challengeStartDay" type="org.hibernate.type.TimestampType" />
+		<property name="challengeEndDay" type="org.hibernate.type.TimestampType" />
+		<property name="challengeStatus" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="challengeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

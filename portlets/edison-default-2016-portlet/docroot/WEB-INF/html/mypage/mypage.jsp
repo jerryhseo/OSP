@@ -29,7 +29,7 @@
 	}else if(clickTab.equals("myWorkspace")){
 		jspFile = "edisonworkspace_WAR_edisonappstore2016portlet";
 	}else if(clickTab.equals("myFile")){
-		jspFile = "edisonmyfile_WAR_edisonsimulationportlet";
+		jspFile = "edisontab_WAR_edisonsimulationportlet";
 	}else if(clickTab.equals("myApp")){
 		jspFile = "scienceappmanager_WAR_edisonappstore2016portlet";
 	}

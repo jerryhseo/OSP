@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChallengeModelImpl">
+		<attributes>
+			<id name="challengeId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="name" />
+			<basic name="field" />
+			<basic name="description" />
+			<transient name="descriptionCurrentLanguageId" />
+			<transient name="descriptionMap" />
+			<transient name="fieldCurrentLanguageId" />
+			<transient name="fieldMap" />
+			<transient name="modelAttributes" />
+			<transient name="nameCurrentLanguageId" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChallengeEvaluationManagementModelImpl">
+		<attributes>
+			<id name="challengeEvaluationManagementId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="assessmentItem" />
+			<basic name="distribution" />
+			<basic name="childChallengeId" />
+			<transient name="assessmentItemCurrentLanguageId" />
+			<transient name="assessmentItemMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChallengeEvaluationScoreModelImpl">
+		<attributes>
+			<id name="challengeEvaluationScoreId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="score" />
+			<basic name="challengeTeamId" />
+			<basic name="challengeEvaluationManagementId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChallengeTeamModelImpl">
+		<attributes>
+			<id name="challengeTeamId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="teamName" />
+			<basic name="subject" />
+			<basic name="paperName" />
+			<basic name="paperAbstract" />
+			<basic name="paperFileName" />
+			<basic name="paperSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperStatusDOC" />
+			<basic name="paperPDFFileName" />
+			<basic name="paperPDFSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperPDFModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperStatusPDF" />
+			<basic name="presentationName" />
+			<basic name="presentationFileName" />
+			<basic name="presentationSubmissionDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="presentationModifyDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="presentationStatus" />
+			<basic name="filepath" />
+			<basic name="aggrement" />
+			<basic name="childChallengeId" />
+			<transient name="modelAttributes" />
+			<transient name="paperAbstractCurrentLanguageId" />
+			<transient name="paperAbstractMap" />
+			<transient name="paperNameCurrentLanguageId" />
+			<transient name="paperNameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="subjectCurrentLanguageId" />
+			<transient name="subjectMap" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChallengeTeamMemberModelImpl">
+		<attributes>
+			<id name="challengeTeamMemberId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="applyUserId" />
+			<basic name="applyUserName" />
+			<basic name="email" />
+			<basic name="institute" />
+			<basic name="major" />
+			<basic name="grade" />
+			<basic name="phone" />
+			<basic name="leader" />
+			<basic name="challengeTeamId" />
+			<transient name="applyUserUuid" />
+			<transient name="instituteCurrentLanguageId" />
+			<transient name="instituteMap" />
+			<transient name="majorCurrentLanguageId" />
+			<transient name="majorMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="kisti.edison.challenge.model.impl.ChildChallengeModelImpl">
+		<attributes>
+			<id name="childChallengeId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="status" />
+			<basic name="statusByUserId" />
+			<basic name="statusByUserName" />
+			<basic name="statusDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="number">
+				<column name="NUMBER_" />
+			</basic>
+			<basic name="presentationDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperStartDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="paperEndDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="evaluationDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="challengeStartDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="challengeEndDay">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="challengeStatus" />
+			<basic name="challengeId" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="statusByUserUuid" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="kisti.edison.challenge.model.impl.ChallengeImpl" name="Challenge">
+		<table name="challenge_Challenge" />
+		<attributes />
+	</entity>
+	<entity class="kisti.edison.challenge.model.impl.ChallengeEvaluationManagementImpl" name="ChallengeEvaluationManagement">
+		<table name="challenge_ChallengeEvaluationManagement" />
+		<attributes />
+	</entity>
+	<entity class="kisti.edison.challenge.model.impl.ChallengeEvaluationScoreImpl" name="ChallengeEvaluationScore">
+		<table name="challenge_ChallengeEvaluationScore" />
+		<attributes />
+	</entity>
+	<entity class="kisti.edison.challenge.model.impl.ChallengeTeamImpl" name="ChallengeTeam">
+		<table name="challenge_ChallengeTeam" />
+		<attributes />
+	</entity>
+	<entity class="kisti.edison.challenge.model.impl.ChallengeTeamMemberImpl" name="ChallengeTeamMember">
+		<table name="challenge_ChallengeTeamMember" />
+		<attributes />
+	</entity>
+	<entity class="kisti.edison.challenge.model.impl.ChildChallengeImpl" name="ChildChallenge">
+		<table name="challenge_ChildChallenge" />
+		<attributes />
+	</entity>
+</entity-mappings>

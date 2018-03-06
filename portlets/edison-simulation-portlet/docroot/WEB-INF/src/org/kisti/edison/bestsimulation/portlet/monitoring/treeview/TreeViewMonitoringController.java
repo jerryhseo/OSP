@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
@@ -58,10 +59,13 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
@@ -82,7 +86,7 @@ public class TreeViewMonitoringController{
     
 
     @RequestMapping
-    public String view(RenderRequest request, RenderResponse response, ModelMap model){
+    public String view(RenderRequest request, RenderResponse response, ModelMap model) throws SystemException{
         return "treeview/treeview";
     }
     
@@ -219,8 +223,15 @@ public class TreeViewMonitoringController{
         String publicIceBreakerUrl = (String) GroupLocalServiceUtil
             .getGroup(themeDisplay.getSiteGroupId()).getExpandoBridge()
             .getAttribute(EdisonExpando.SITE_ICEBREAKER_URL_PUBLIC);
-        log.info(job.toString());
-        log.info(simulationJobData.toString());
+        
+        List<Group> childGroups = GroupLocalServiceUtil.getGroups(themeDisplay.getCompanyId(),
+            themeDisplay.getScopeGroupId(), true);
+        for(Group group : childGroups){
+            if("sdr".equalsIgnoreCase(group.getName())){
+                request.setAttribute("sdrGroupId", group.getGroupId());
+            }
+        }
+
         request.setAttribute("job", SimulationJobLocalServiceUtil.getMonitoringJob(
             job.getGroupId(), job.getSimulationUuid(), job.getJobSeqNo()));
         request.setAttribute("jobData", simulationJobData);
@@ -383,6 +394,44 @@ public class TreeViewMonitoringController{
         out.write(jsonObj.toString());
     }
     
+    @ResourceMapping(value = "transferJobData")
+    public void transferJobDataToSDR(
+        @RequestParam(value = "collectionId", required=false) String collectionId,
+        @RequestParam(value = "jobUuid", required=false) String jobUuid,
+        @RequestParam(value = "scienceAppName", required=false) String scienceAppName,
+        @RequestParam(value = "jobTitle", required=false) String jobTitle,
+        ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
+        Gson result = new GsonBuilder().create();
+        Map<String, Object> resultMap  = new HashMap<String, Object>();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json; charset=UTF-8");
+        ServiceContext sc = ServiceContextFactory.getInstance(request);
+        boolean isComplete = true;
+        
+        log.info("collectionId : " + collectionId);
+        log.info("jobUuid : " + jobUuid);
+        log.info("scienceAppName : " + scienceAppName);
+        log.info("jobTitle : " + jobTitle);
+        
+        if(isComplete){
+            resultMap.put("isComplete", true);
+        }else{
+            resultMap.put("isComplete", false);
+        }
+        out.write(result.toJson(resultMap));
+        out.flush();
+        out.close();
+        
+        //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
+        //DatasetServiceUtil.curate(ds, sc);
+        //DatasetServiceUtil.s
+        // jobUuid
+        //        - solver(App) Name()
+        //        - collection ID
+        //        - simulation title - job title (optional)
+        //        - service context
+        
+    }
     // scienceApp 중간 파일 조회
     @ResourceMapping(value = "scienceAppMiddleFile")
     public void scienceAppMiddleFile(ResourceRequest request, ResourceResponse response)

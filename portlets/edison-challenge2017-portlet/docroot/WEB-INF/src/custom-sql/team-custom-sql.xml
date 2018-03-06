@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+<sql id="kisti.edison.challenge.service.persistence.getTeamAppList" >
+		<![CDATA[
+		SELECT DISTINCT A.scienceAppName
+		FROM
+			(SELECT EDSIM_Simulation.scienceAppName, EDSIM_Simulation.userId, EDSIM_Simulation.scienceAppId, EDSIM_Simulation.simulationUuid FROM	EDSIM_Simulation inner join 
+				(SELECT M.applyUserId FROM challenge_ChallengeTeamMember M WHERE M.challengeTeamId=#teamID#) AS userIDList
+			ON EDSIM_Simulation.userId = userIDList.applyUserId ) AS A,
+			EDSIM_SimulationJob B,
+			EDAPP_ScienceApp C
+		WHERE
+			B.jobSubmitDt IS NOT NULL AND 
+			A.scienceAppId IS NOT NULL AND
+			B.jobStartDt BETWEEN DATE_FORMAT(#startDate#, '%Y-%m-%d') AND DATE_FORMAT(#endDate#, '%Y-%m-%d') AND
+			C.appType = "Solver" AND	
+			A.simulationUuid = B.simulationUuid AND 
+			A.scienceAppId = C.scienceAppId
+		]]>
+</sql>
+<sql id="kisti.edison.challenge.service.persistence.getCPUUseage" >
+		<![CDATA[
+		SELECT                  
+			SUM(UNIX_TIMESTAMP(B.jobEndDt) - UNIX_TIMESTAMP(B.jobStartDt))/count(*) AS av
+		FROM
+			(SELECT EDSIM_Simulation.scienceAppName, EDSIM_Simulation.userId, EDSIM_Simulation.scienceAppId, EDSIM_Simulation.simulationUuid FROM	EDSIM_Simulation inner join 
+				(SELECT M.applyUserId FROM challenge_ChallengeTeamMember M WHERE M.challengeTeamId=#teamID#) AS userIDList
+			ON EDSIM_Simulation.userId = userIDList.applyUserId ) AS A,
+			EDSIM_SimulationJob B,
+			EDAPP_ScienceApp C,
+			User_ U
+		WHERE
+			B.jobStartDt BETWEEN DATE_FORMAT(#startDate#, '%Y-%m-%d') AND DATE_FORMAT(#endDate#, '%Y-%m-%d') AND
+			C.appType = "Solver" AND
+			A.scienceAppId IS NOT NULL AND
+			B.jobStartDt IS NOT NULL AND
+			A.simulationUuid = B.simulationUuid AND
+			A.scienceAppId = C.scienceAppId AND
+			A.userId = U.userId
+		]]>
+</sql>
+</custom-sql>

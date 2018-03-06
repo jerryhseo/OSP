@@ -2,7 +2,7 @@
 <%@ include file="/common/init.jsp"%>
 <%@page import="org.kisti.edison.util.EdisonHttpUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
-<%@page import="org.kisti.eturb.util.MonitoringStatusConstatns"%>
+<%@page import="org.kisti.edison.util.MonitoringStatusConstatns"%>
 <c:set var="jobStatusSuccess" value="<%=MonitoringStatusConstatns.SUCCESS%>" scope="page" />
 <liferay-portlet:resourceURL var="monitoringSearchParam"    escapeXml="false" id="searchJobParam" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="monitoringStatusUpdate"   escapeXml="false" id="updateJobStatus" copyCurrentRenderParameters="false"/>
@@ -13,6 +13,7 @@
 <liferay-portlet:resourceURL var="scienceAppMiddleFileURL"      escapeXml="false" id="scienceAppMiddleFile" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="fileDownloadUrl" escapeXml="false" id="fileDownload" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="getResultFilesUrl" escapeXml="false" id="getResultFiles" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="transferJobDataUrl" escapeXml="false" id="transferJobData" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false"
  plid="${workBenchPlid}" 
  portletName="Workbench_WAR_OSPWorkbenchportlet"
@@ -23,6 +24,10 @@
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}"
     portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
     <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
+</liferay-portlet:renderURL>
+<liferay-portlet:renderURL var="collectionPopupURL" portletName="sdrcommon_WAR_SDR_baseportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
+    <portlet:param name="action" value="collectionPopup" />
+    <portlet:param name="targetGroupId" value="${sdrGroupId}" />
 </liferay-portlet:renderURL>
 <style>
 .job-file-item {cursor: pointer;}
@@ -41,93 +46,100 @@
 .modal-body{height: 500px;}
 .name-word-wrap{text-overflow:ellipsis; white-space:nowrap; word-wrap:normal; width: 70px; overflow:hidden;}
 </style>
-<div class="virtitlebox">
-    <img src="${contextPath}/images/title_virtual.png" height="20" width="20">
-    <div class="virtitle">작업상태</div>
-</div>
-<div class="h10"></div>
-<div class="table5_list borderno">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <colgroup>
-            <col width="*">
-            <col width="15%">
-            <col width="15%">
-            <col width="15%">
-            <col width="15%">
-            <col width="20%">
-            <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
-            <col width="10%">
-            </c:if>
-        </colgroup>
-        <thead>
-            <tr>
-                <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
-                <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail"/></th>
-                <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-                <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
-                <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
-                <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
-                <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
-                <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual"/></th>
-                </c:if>
-            </tr>
-        </thead>
-        <tbody id="mtbody">
-            <tr id="<portlet:namespace/>monitoring-tr">
-                <td>
-                    ${job.jobTitle}
-                </td>
-                <td class="TC">
-                    <img src="${contextPath}/images/monitoring/bnt_info.png"
-                    onclick="<portlet:namespace/>searchSimulationParam('${job.simulationUuid}','${job.jobSeqNo}','${job.jobUuid}');"
-                    style="cursor: pointer;" />
-                </td>
-                <td class="TC">
-                    <img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${job.jobStatusImg}"/>
-                </td>
-                <td id="job_controll" class="TC">
-                </td>
-                <td id="middle_check" class="TC" logFileProcess-state="${job.jobLogFileProcessorYn }">
-                </td>
-                <td class="TC">
-                    <c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
-                    <c:if test="${deleteMonitoring || job.userId eq thisUser}">
-                        <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete" title="delete">
-                    </c:if>
-                    <img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun" title="rerun">
-                </td>
-                <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
-                    <td class="TC" id="result_view">view</td>
-                </c:if>
-            </tr>
-        </tbody>
-    </table>
+<%--
+
+{jobInputDeckName=, jobSeqNo=1, jobStatus=1701011, executeDt=00:02:21, jobLogFileProcessorYn=Y, stayDt=, jobUuid=fe6c6468-891c-43b2-bc2c-a375348f6c4d, userId=283154, jobEndDt=2017-11-09 15:43:31, jobUniversityField=0, jobStartDt=2017-11-09 15:41:10.0, jobTitle=#0001, scienceAppId=84702, scienceAppName=KSFDTD, simulationUuid=85aa2121-0f87-489a-a215-94cb2cb12acf, userNm=nicecamsi, jobMiddleFileProcessorYn=N, simulationTitle=KSFDTD-1.0.0, groupId=20181, simulationCreateDt=2017-11-09 15:39:59.0, jobSubmitDt=2018-03-02 05:25:21, jobExecPath=, jobPostProcessorYn=Y, jobInputDeckYn=false, cluster=, jobPhase=0, jobCnt=N, jobStatusImg=monitor_SUCCESS.png} 
+{jobUuid=fe6c6468-891c-43b2-bc2c-a375348f6c4d, jobData=[{"type_":"file","parent_":"","dirty_":true,"relative_":true,"portName_":"-i","name_":"5acd808_Material.txt","order_":1}]}
+
+--%>
+<div class="table-responsive panel edison-panel">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">
+      <img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img">
+      <liferay-ui:message key="edison-simulation-monitoring-job-info" />
+    </h3>
+    <c:if test="${job.jobStatus eq 1701011}">
+    <div class="btn-group pull-right">
+      <button class="btn btn-primary" onclick="<portlet:namespace/>fn_collectionPopup();"><liferay-ui:message key="edison-simulation-monitoring-export-job-info" /></button>
+    </div>
+    </c:if>
+  </div>
+  <table class="table table-bordered table-hover edison-table">
+    <colgroup>
+      <col width="*">
+      <!-- <col width="13%"> -->
+      <col width="10%">
+      <col width="14%">
+      <col width="14%">
+      <col width="20%">
+      <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+        <col width="20%">
+      </c:if>
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
+        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail" /></th> --%>
+        <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
+        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle" /></th>
+        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate" /></th>
+        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage" /></th>
+        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+          <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual" /></th>
+        </c:if>
+      </tr>
+    </thead>
+    <tbody id="mtbody">
+      <tr id="<portlet:namespace/>monitoring-tr">
+        <td>${job.jobTitle}</td>
+        <%-- <td class="center"><img src="${contextPath}/images/monitoring/bnt_info.png"
+          onclick="<portlet:namespace/>searchSimulationParam('${job.simulationUuid}','${job.jobSeqNo}','${job.jobUuid}');"
+          style="cursor: pointer;" /></td> --%>
+        <td class="center"><img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${job.jobStatusImg}" /></td>
+        <td id="job_controll" class="center"></td>
+        <td id="middle_check" class="center" logFileProcess-state="${job.jobLogFileProcessorYn }"></td>
+        <td class="center"><c:set value="<%=themeDisplay.getUserId()%>" var="thisUser" /> <c:if
+            test="${deleteMonitoring || job.userId eq thisUser}">
+            <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;"
+              onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete"
+              title="delete">
+          </c:if> <img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
+          onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
+          title="rerun"></td>
+        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+          <td class="center" id="result_view">view</td>
+        </c:if>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-</div>
-<div class="virtitlebox">
-    <img src="${contextPath}/images/title_virtual.png" height="20" width="20">
-    <div class="virtitle">입력파일</div>
-</div>
-<div class="h10"></div>
-
-<div class="filelist01">
+<div class="table-responsive panel edison-panel">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">
+      <img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img">
+      <liferay-ui:message key="edison-simulation-monitoring-job-input-file" />
+    </h3>
+  </div>
+  <div class="filelist01">
     <ul id="<portlet:namespace/>input-file-list">
     </ul>
+  </div>
 </div>
 
-<div id="<portlet:namespace/>result-file-wrapper">
-    <div class="virtitlebox">
-        <img src="${contextPath}/images/title_virtual.png" height="20" width="20">
-        <div class="virtitle">결과파일</div>
-    </div>
-    <div class="h10"></div>
-    
-    <div class="filelist01">
-        <ul id="<portlet:namespace/>result-file-list">
-        </ul>
-    </div>
+<div id="<portlet:namespace/>result-file-wrapper" class="table-responsive panel edison-panel">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">
+      <img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img">
+      <liferay-ui:message key="edison-simulation-monitoring-job-result-file" />
+    </h3>
+  </div>
+  <div class="filelist01">
+    <ul id="<portlet:namespace/>result-file-list">
+    </ul>
+  </div>
 </div>
+
 <div id="<portlet:namespace/>jobparameter-dialog"
     title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>"
     style="display: none; background-color: white; padding: 0px;" class="newWindow">
@@ -319,9 +331,9 @@ function <portlet:namespace/>getResultFiles(jobUuid){
         success : function(resultFiles){
             <portlet:namespace/>drawResultData(resultFiles);
         },
-        error : function(){
+        error : function(err){
             if(console){
-                console.log('[ERROR] AJAX FAILED during get ResultFiles');
+                console.log('[ERROR] AJAX FAILED during get ResultFiles', err);
             }
         }
     });
@@ -332,7 +344,7 @@ function <portlet:namespace/>drawResultData(result){
     var $li = $("<li/>", {
         "class": "job-file-item"
     }).append($("<img/>", {
-        "src": "${contextPath}/images/folderm/file03.png"
+        "src": "${contextPath}/images/myfile/file03.png"
     }));
     $.each(result.files, function(){
         var data = this;
@@ -358,7 +370,6 @@ function <portlet:namespace/>addContextMenuToResultData(){
         selector: "#<portlet:namespace/>result-file-list > .job-file-item",
         build: function ($trigger, e) {
             var fileData = $trigger.data();
-            console.log(fileData);
             return {
                 items: {
                     "download-file": {
@@ -426,7 +437,7 @@ function <portlet:namespace/>drawInputData(jobData){
     var $li = $("<li/>", {
         "class": "job-file-item"
     }).append($("<img/>", {
-        "src": "${contextPath}/images/folderm/file02.png"
+        "src": "${contextPath}/images/myfile/file02.png"
     }));
     $.each(jobData, function(){
         var data = new OSP.InputData(this);
@@ -447,7 +458,6 @@ function <portlet:namespace/>addContextMenuToInputData(){
     $.contextMenu({
         selector: "#<portlet:namespace/>input-file-list > .job-file-item",
         build: function ($trigger, e) {
-            console.log($trigger.data());
             return {
                 items: {
                     "download-file": {
@@ -768,7 +778,6 @@ function <portlet:namespace/>popOutputPorts(simulationUuid, jobUuid){
         var scienceApp = new OSP.ScienceApp();
         scienceApp.deserializeOutputPorts($.parseJSON(outputPortsJson));
         var outputPorts = scienceApp.outputPortsArray();
-        console.log(scienceApp.outputPortsArray());
         $("#<portlet:namespace/>post-dialog").dialog("open");
         
         $dialogBody = $("#<portlet:namespace/>post-dialog-content");
@@ -891,8 +900,6 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid, jobSeqNo, job
                         ).append("<liferay-ui:message key='edison-simulation-execute-job-pre' />").appendTo($content);
                 
                 
-                console.log(inputPorts);
-                console.log(simulationJobData);
                 for (var i = 0; i < simulationJobData.length; i++) {
                     <%-- TODO : simulation jobdata job 상세정보 기능 --%>
                     
@@ -920,5 +927,45 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid, jobSeqNo, job
             alert("System searchSimulationParam : " + msg);
         }
     });
+}
+
+function <portlet:namespace/>fn_collectionPopup(){
+    AUI().use('aui-base','liferay-portlet-url','aui-node', function(A) {
+        Liferay.Util.openWindow({
+            dialog : {
+                constrain : true,
+                modal : true,
+                cache: false,
+                destroyOnClose: true,
+                width : '980px'
+            },
+            id : 'sdrcommon_collectionPopup',
+            title : 'Collection Popup',
+            uri : '${collectionPopupURL}'
+        });
+    });
+}
+
+function sdrcommon_collectionPopup(result){
+    $.ajax({
+        url: "${transferJobDataUrl}",
+        async: false,
+        data : {
+            "<portlet:namespace/>collectionId": result.value,
+            "<portlet:namespace/>jobUuid": "${job.jobUuid}",
+            "<portlet:namespace/>scienceAppName": "${job.scienceAppName}",
+            "<portlet:namespace/>jobTitle": "${job.simulationTitle}" + " - " + "${job.jobTitle}"
+        },
+        method: 'POST',
+        timeout: 10000,
+      }).done(function (result) {
+          if(result.isComplete){
+              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg"));
+          }else{
+              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
+          }
+      }).error(function (msg) {
+          console.log(msg);
+      });
 }
 </script>
