@@ -1059,10 +1059,10 @@ public class OSPFileUtil {
     	switch( repositoryType ){
     		case USER_HOME:
     		case USER_JOBS:
-    			targetPath = Paths.get( OSPPropsUtil.getUserRootDirPath() )
-    													.resolve(getUserName(portletRequest))
-    													.resolve(repositoryType.value())
-    													.resolve(path);
+    			targetPath = Paths.get( OSPPropsUtil.getUserRootDirPath(),
+    													getUserName(portletRequest),
+    													repositoryType.value(),
+    													path );
     			break;
     		case PROVENANCE:
     			targetPath = Paths.get( OSPPropsUtil.getProvenanceRootDirPath() ).resolve(path);

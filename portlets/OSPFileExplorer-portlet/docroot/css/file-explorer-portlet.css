@@ -10,15 +10,12 @@
 	padding:0;
 	margin: 0;
 	overflow:auto;
-	width: inherit;
 	height:inherit;
 }
 
 .file-explorer-portlet .canvas{
 	margin: 0;
-	overflow:auto; 
 	height:100% !important;
-	width:100% !important;
 	border:none;
 	overflow:hidden;
 }
@@ -27,7 +24,6 @@
 	color: black;
 	margin: 0 0 10px 3px;
 	padding: 0;
-	width:100%;
 	height:100%;
 }
 .file-explorer-portlet .no_checkbox>i.jstree-checkbox

@@ -85,8 +85,8 @@ public class FileExplorerPortlet extends MVCPortlet {
 					}else{
 					    resultJSON.put("parentPath", "");
 					}
-				} catch (PortalException | SystemException e) {
-					System.out.println("[ERROR]FileManagementLocalServiceUtil.getFileInformation("+targetPath.toString()+")");
+				} catch (IOException | PortalException | SystemException e) {
+					System.out.println("[ERROR]OSPFileUtil.getFileInformation("+targetPath.toString()+")");
 					throw new PortletException();
 				}
 				fileInfos = JSONFactoryUtil.createJSONArray();
@@ -96,8 +96,8 @@ public class FileExplorerPortlet extends MVCPortlet {
 				try {
 					fileInfos = OSPFileUtil.getFolderInformation(resourceRequest, parentPath.toString(), fileName, repositoryType);
 					resultJSON.put("parentPath", targetPath.getParent().toString());
-				} catch (PortalException | SystemException e) {
-					System.out.println("[ERROR]FileManagementLocalServiceUtil.getFolderInformation("+targetPath.toString()+")");
+				} catch (IOException | PortalException | SystemException e) {
+					System.out.println("[ERROR]OSPFileUtil.getFolderInformation("+targetPath.toString()+")");
 					throw new PortletException();
 				}
 			}
@@ -105,8 +105,8 @@ public class FileExplorerPortlet extends MVCPortlet {
 				try {
 					fileInfos = OSPFileUtil.getFolderInformation(resourceRequest, parentPath.toString(), "", repositoryType);
 					resultJSON.put("parentPath", targetPath.toString());
-				} catch (PortalException | SystemException e) {
-					System.out.println("[ERROR]FileManagementLocalServiceUtil.getFolderInformation("+targetPath.toString()+ ")");
+				} catch (IOException | PortalException | SystemException e) {
+					System.out.println("[ERROR]OSPFileUtil.getFolderInformation("+targetPath.toString()+ ")");
 					throw new PortletException();
 				}
 			}

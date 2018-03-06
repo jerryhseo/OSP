@@ -1,3 +1,4 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.WindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -27,48 +28,47 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="row-fluid file-explorer-portlet editor-portlet" style="overflow: hidden;">
-	<div class="span12" style="height: inherit;">
-		<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">
-			<div class="span8">
-				<input class="choidPanelInput" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
-			</div>
-			<div class="offset2 span2 dropdown-wrapper" id="<portlet:namespace/>menuSection">
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-                        <div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></div>
-                        <div class="dropdown-item" id="<portlet:namespace/>upload"><i class="icon-upload"> Upload</i></div>
-                        <div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-					</div>
+<div class="container-fluid file-explorer-portlet editor-portlet">
+	<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">
+		<div class="col-sm-8">
+			<input class="choidPanelInput" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
+		</div>
+		<div class="offset-sm-2 col-sm-2 dropdown-wrapper" id="<portlet:namespace/>menuSection">
+			<div class="dropdown">
+                 <i class="icon-reorder icon-menu"></i>
+				<!-- Link or button to toggle dropdown -->
+				<div class="dropdown-content">
+                       <div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></div>
+                       <div class="dropdown-item" id="<portlet:namespace/>upload"><i class="icon-upload"> Upload</i></div>
+                       <div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
 				</div>
-			</div>	
-		</div>
-		<div class="row-fluid" id="<portlet:namespace/>canvasPanel" style="height: 90%;">
-			<iframe class="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
-		</div>
-		
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<form action="<%= serveResourceURL.toString() %>" enctype="multipart/form-data" method="post" id="<portlet:namespace/>uploadForm">
-				<input type="file" id="<portlet:namespace/>selectFile" name="<portlet:namespace/>uploadFile"/>
-				<input type="text" id="<portlet:namespace/>parentPath" name="<portlet:namespace/>parentPath"/>
-				<input type="text" id="<portlet:namespace/>fileName" name="<portlet:namespace/>fileName"/>
-				<input type="text" id="<portlet:namespace/>connector" name="<portlet:namespace/>connector"/>
-				<input type="text" id="<portlet:namespace/>command" name="<portlet:namespace/>command" />
-			</form>
-					
-			<div id="<portlet:namespace/>confirmDialog">
-				<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
-				<p id="<portlet:namespace/>confirmMessage">
-					File already exists. Change file name or just click 'OK' button to overlap. 
-				</p>
 			</div>
-			<a id="<portlet:namespace/>downloadAnchor" target="_blank" style="z-index:1000;">Download</a>
+		</div>	
+	</div>
+	<div class="row-fluid" style="overflow: hidden;">
+		<div class="col-sm-12" style="height: inherit;">
+			<iframe class="span12 canvas" style="height: 90%;" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
 		</div>
 	</div>
+			
 </div>
-
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<form action="<%= serveResourceURL.toString() %>" enctype="multipart/form-data" method="post" id="<portlet:namespace/>uploadForm">
+		<input type="file" id="<portlet:namespace/>selectFile" name="<portlet:namespace/>uploadFile"/>
+		<input type="text" id="<portlet:namespace/>parentPath" name="<portlet:namespace/>parentPath"/>
+		<input type="text" id="<portlet:namespace/>fileName" name="<portlet:namespace/>fileName"/>
+		<input type="text" id="<portlet:namespace/>connector" name="<portlet:namespace/>connector"/>
+		<input type="text" id="<portlet:namespace/>command" name="<portlet:namespace/>command" />
+	</form>
+			
+	<div id="<portlet:namespace/>confirmDialog">
+		<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
+		<p id="<portlet:namespace/>confirmMessage">
+			File already exists. Change file name or just click 'OK' button to overlap. 
+		</p>
+	</div>
+	<a id="<portlet:namespace/>downloadAnchor" target="_blank" style="z-index:1000;">Download</a>
+</div>
 
 <script>
 /***********************************************************************
@@ -355,7 +355,7 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				var inputData = new OSP.InputData();
-				inputData.repositoryType( <portlet:namspace/>selectedFile.repositoryType_ );
+				inputData.repositoryType( <portlet:namespace/>selectedFile.repositoryType_ );
 				inputData.type( OSP.Enumeration.PathType.FOLDER);
 				inputData.parent( '' );
 				inputData.name('');
@@ -381,6 +381,8 @@ Liferay.on(
 function <portlet:namespace/>initFileExplorer( inputData ){
 	//console.log("inputData, init ", inputData, init);
 	<portlet:namespace/>selectedFile = inputData.clone();
+	if( !<portlet:namespace/>selectedFile.repositoryType() )
+		<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
