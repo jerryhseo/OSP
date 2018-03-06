@@ -240,7 +240,7 @@ function <portlet:namespace/>readDLEntry( dlEntryId ){
 	               						repositoryType: inputData.repositoryType()
 	                               });
 	$.ajax({
-		url: resourceURL,
+		url: '<%=serveResourceURL%>',
 		type: 'post',
 		dataType: 'json',
 		data: ajaxData,
@@ -278,7 +278,7 @@ function <portlet:namespace/>readFile( inputData ){
 	               						repositoryType: inputData.repositoryType()
 	                               });
 	$.ajax({
-		url: resourceURL,
+		url: '<%=serveResourceURL%>',
 		type: 'post',
 		dataType: 'json',
 		data: ajaxData,
