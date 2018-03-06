@@ -28,12 +28,12 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="container-fluid file-explorer-portlet editor-portlet">
+<div class="container-fluid file-explorer-portlet editor-portlet" style="height:inherit;">
 	<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">
 		<div class="col-sm-8">
 			<input class="choidPanelInput" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
 		</div>
-		<div class="offset-sm-2 col-sm-2 dropdown-wrapper" id="<portlet:namespace/>menuSection">
+		<div class="offset-sm-11 col-sm-1 dropdown-wrapper" id="<portlet:namespace/>menuSection">
 			<div class="dropdown">
                  <i class="icon-reorder icon-menu"></i>
 				<!-- Link or button to toggle dropdown -->
@@ -45,10 +45,8 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid" style="overflow: hidden;">
-		<div class="col-sm-12" style="height: inherit;">
-			<iframe class="span12 canvas" style="height: 90%;" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
-		</div>
+	<div class="row-fluid" style="height: inherit; overflow: hidden;">
+		<iframe class="col-sm-12 canvas" style="height: 90%;" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
 	</div>
 			
 </div>

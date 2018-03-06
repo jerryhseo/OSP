@@ -302,13 +302,15 @@ function <portlet:namespace/>loadImage( inputData, zooming ){
 function <portlet:namespace/>loadData( inputData, zooming ){
     AUI().use('liferay-portlet-url', function(a) {
         <portlet:namespace/>currentData = inputData;
+        if( ! <portlet:namespace/>currentData.repositoryType() )
+        	<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
         var serveResourceURL;
         serveResourceURL = Liferay.PortletURL.createResourceURL();
         serveResourceURL.setPortletId('<%=portletDisplay.getId()%>');
         serveResourceURL.setParameter('parentPath', inputData.parent());
         serveResourceURL.setParameter('pathType', inputData.type());
         serveResourceURL.setParameter('fileName', inputData.name());
-        serveResourceURL.setParameter('repositoryType', inputData.repositoryType());
+        serveResourceURL.setParameter('repositoryType', <portlet:namespace/>currentData.repositoryType());
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
