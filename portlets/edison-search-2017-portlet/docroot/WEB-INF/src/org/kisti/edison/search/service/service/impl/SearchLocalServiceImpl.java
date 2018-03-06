@@ -321,7 +321,7 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
         newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
         newRequest.setParameter("searchSelect", COLLECTION_SEARCH_SELECT);
         if(categoryIds != null){
-            newRequest.setParameterValues("categoryIds",
+            newRequest.setParameterValues("categories",
                 Iterables.toArray(
                     Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
         }

@@ -70,6 +70,9 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.sdr.metadata.model.Dataset;
+import com.sdr.metadata.service.DatasetLocalServiceUtil;
+import com.sdr.metadata.service.DatasetServiceUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -411,18 +414,15 @@ public class TreeViewMonitoringController{
         PrintWriter out = response.getWriter();
         response.setContentType("application/json; charset=UTF-8");
         ServiceContext sc = ServiceContextFactory.getInstance(request);
-        boolean isComplete = true;
         
         log.info("collectionId : " + collectionId);
         log.info("jobUuid : " + jobUuid);
         log.info("scienceAppName : " + scienceAppName);
         log.info("jobTitle : " + jobTitle);
+        Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, 1, sc);
+        DatasetLocalServiceUtil.curate(ds, sc);
+        resultMap.put("isComplete", ds != null);
         
-        if(isComplete){
-            resultMap.put("isComplete", true);
-        }else{
-            resultMap.put("isComplete", false);
-        }
         out.write(result.toJson(resultMap));
         out.flush();
         out.close();
