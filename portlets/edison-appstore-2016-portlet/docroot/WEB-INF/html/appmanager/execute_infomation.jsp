@@ -195,12 +195,12 @@
 					<tr>
 						<th>App Type</th>
 						<td colspan="3">
-							<aui:select name="appType" label="" cssClass="noupdate">
+							<aui:select name="appType" label="" cssClass="noupdate" onChange="changeAppType(this.value);">
 								${appTypeOptions}
 							</aui:select>
 						</td>
 					</tr>
-					<tr>
+					<tr class="is-not-dwn-only">
 						<th>Run Type</th>
 						<td>
 							<aui:select name="runType" label="" onChange="changeRunType(this.value);" cssClass="noupdate">
@@ -215,7 +215,7 @@
 							</aui:select>
 						</td>
 					</tr>
-					<tr>
+					<tr class="is-not-dwn-only">
 						<th>Max CPU</th>
 						<td>
 							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.maxCpus}">
@@ -257,7 +257,7 @@
 
 	
 	
-	
+<div class="is-not-dwn-only">
 <c:if test="${data.isPort}">
 	<div class="edison-panel">
 		<div class="panel-heading clearfix">
@@ -403,7 +403,7 @@
 		<div class="text-center" id="pageListDiv"></div>
 	</div>
 </c:if>
-
+</div>
 <div id="request-lib-dialog" title="request-lib" style="display: none;">
 	
 </div>
@@ -728,6 +728,23 @@ function <portlet:namespace/>openCommonLibPopup(){
 
 function changeOpenLevel(val){
 	var file = $("#<portlet:namespace/>sourceFile");
+	if(val == "<%=ScienceAppConstants.OPENLEVEL_DWN%>"){
+        $(".is-not-dwn-only").hide();
+        $(".is-not-dwn-only input").prop("disabled", true);
+        $(".is-not-dwn-only textarea").prop("disabled", true);
+    }else{
+        $(".is-not-dwn-only").each(function(_){
+            $(this).find("input:hidden").prop("disabled", false);            
+            $(this).find("textarea:hidden").prop("disabled", false);
+            $(this).show();
+        });
+    }
+	if(val == "<%=ScienceAppConstants.OPENLEVEL_BIN%>" || val == "<%=ScienceAppConstants.OPENLEVEL_DWN%>" ){
+        $("#sourceFileTh").text("Binary File");
+    }else{
+        $("#sourceFileTh").text("Source File");         
+    }
+	
 	if(val!="<%=ScienceAppConstants.OPENLEVEL_RUN%>"){
 		if(val==''){
 			file.attr("disabled",true);
@@ -737,23 +754,20 @@ function changeOpenLevel(val){
 			}else{
 				file.attr("disabled",false);
 			}
-			
 		}
 	}else{
 		file.attr("disabled",true);
 	}
 }
 
-
 function changeAppType(val){
-	var select = $("#<portlet:namespace/>editorType");
-	if(val=="<%=ScienceAppConstants.APP_TYPE_EDITOR%>"){
-		select.attr("disabled",false);
-	}else{
-		select.attr("disabled",true);
-	}
+    var select = $("#<portlet:namespace/>editorType");
+    if(val=="<%=ScienceAppConstants.APP_TYPE_EDITOR%>"){
+        select.attr("disabled",false);
+    }else{
+        select.attr("disabled",true);
+    }
 }
-
 
 function changeRunType(val){
 	if(val=="<%=ScienceAppConstants.APP_RUNTYPE_PARALLEL%>"){

@@ -759,12 +759,11 @@ public class AppManagerController{
 					tabsStr +=",m02out";
 				}
 				activateTab++;
-				
 			}
 			
 			
 			//분석기, EDITOR 일 경우 입/출력 포트 정보 탭이 없음.
-			if(isPort){
+			if(isPort && !ScienceAppConstants.OPENLEVEL_DWN.equals(scienceApp.getOpenLevel())){
 				long scienceAppInputPortsCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
 				
 				if(scienceAppInputPortsCnt==0){

@@ -14,6 +14,7 @@ import javax.portlet.ResourceResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.search.service.model.Search;
 import org.kisti.edison.search.service.model.SearchCondition;
 import org.kisti.edison.search.service.model.impl.SearchConditionModelImpl;
@@ -140,6 +141,7 @@ public class SearchController{
         model.addAttribute("simulationProjectPlid", simulationProjectPlid);
         model.addAttribute("openDataPlid", openDataPlid);
         model.addAttribute("groupId", groupId);
+        model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
         return "search/total";
     }
     
@@ -165,6 +167,7 @@ public class SearchController{
         model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
         model.addAttribute("workBenchPlid", workBenchPlid);
         model.addAttribute("searchResults", searchResults);
+        model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
         model.addAttribute("paging", paging);
         return "search/type";
     }
