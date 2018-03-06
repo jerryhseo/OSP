@@ -34,6 +34,7 @@ public class ProjectSoap implements Serializable {
 
 		soapModel.setProjectId(model.getProjectId());
 		soapModel.setUserId(model.getUserId());
+		soapModel.setGroupId(model.getGroupId());
 		soapModel.setName(model.getName());
 		soapModel.setProjectStructure(model.getProjectStructure());
 		soapModel.setAnalyzerStructure(model.getAnalyzerStructure());
@@ -84,12 +85,13 @@ public class ProjectSoap implements Serializable {
 	}
 
 	public ProjectPK getPrimaryKey() {
-		return new ProjectPK(_projectId, _userId);
+		return new ProjectPK(_projectId, _userId, _groupId);
 	}
 
 	public void setPrimaryKey(ProjectPK pk) {
 		setProjectId(pk.projectId);
 		setUserId(pk.userId);
+		setGroupId(pk.groupId);
 	}
 
 	public long getProjectId() {
@@ -106,6 +108,14 @@ public class ProjectSoap implements Serializable {
 
 	public void setUserId(long userId) {
 		_userId = userId;
+	}
+
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	public void setGroupId(long groupId) {
+		_groupId = groupId;
 	}
 
 	public String getName() {
@@ -150,6 +160,7 @@ public class ProjectSoap implements Serializable {
 
 	private long _projectId;
 	private long _userId;
+	private long _groupId;
 	private String _name;
 	private String _projectStructure;
 	private String _analyzerStructure;

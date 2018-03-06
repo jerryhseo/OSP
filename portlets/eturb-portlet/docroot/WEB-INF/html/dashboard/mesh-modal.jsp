@@ -221,9 +221,20 @@ function <portlet:namespace/>showMesh(analyzerJob){
     
     $("#<portlet:namespace/>analyzerUuid").val(analyzerJob.analyzerUuid);
     $("#<portlet:namespace/>airfoilsCount").val(analyzerJob.meshFileContent.airfoilsCount);
-    $("#<portlet:namespace/>staggerAngle").val(analyzerJob.meshFileContent.staggerAngle);
-    $("#<portlet:namespace/>pitchGap").val(analyzerJob.meshFileContent.pitchGap);
-    $("#<portlet:namespace/>axialGap").val(analyzerJob.meshFileContent.axialGap);
+    
+    if(analyzerJob.meshFileContent.airfoils && analyzerJob.meshFileContent.airfoils.length > 1){
+        $.each(analyzerJob.meshFileContent.airfoils, function(i){
+            if(i > 0 ){
+                <portlet:namespace/>addParamInputForm(i + 1);
+                <portlet:namespace/>resizeParamInputWidth(i + 1);
+            }
+        });
+    }
+    
+    <portlet:namespace/>updateAirfoilForm(analyzerJob.meshFileContent, "staggerAngle");
+    <portlet:namespace/>updateAirfoilForm(analyzerJob.meshFileContent, "pitchGap");
+    <portlet:namespace/>updateAirfoilForm(analyzerJob.meshFileContent, "axialGap");
+    
     $.each(analyzerJob.meshFileContent.airfoils, function(){
        var airfoil = this;
        $.each($("#<portlet:namespace/>mesh-drag-source > li"), function(){
@@ -242,6 +253,17 @@ function <portlet:namespace/>showMesh(analyzerJob){
             return -($(this).width() / 2);
         }
     });
+}
+
+function <portlet:namespace/>updateAirfoilForm(meshFileContent, airfoilName){
+    if(meshFileContent[airfoilName]){
+        $.each(meshFileContent[airfoilName], function(i){
+            var thisValue = this;
+            $($("#<portlet:namespace/>" + airfoilName 
+                + "-wrapper input[name='<portlet:namespace/>" 
+                    + airfoilName + "']")[i]).val(thisValue);
+        }); 
+    }
 }
 
 function <portlet:namespace/>createMesh(){

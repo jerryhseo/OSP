@@ -35,6 +35,7 @@ import org.kisti.edison.science.service.ScienceAppDescriptionLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppFavoriteLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerLocalServiceUtil;
+import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.EdisonFileUtil;
@@ -343,6 +344,7 @@ public class ScienceAppstoreController {
 			/*asset 바로가기 상태 체크*/
 			String viewStatus = ParamUtil.getString(request, "viewStatus", "");
 			model.addAttribute("viewStatus", viewStatus);
+			model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
 
 		} catch (Exception e) {
 			log.error(e);

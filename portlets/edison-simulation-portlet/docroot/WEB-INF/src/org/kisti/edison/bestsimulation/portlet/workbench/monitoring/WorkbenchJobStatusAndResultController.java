@@ -27,11 +27,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
@@ -112,9 +114,19 @@ public class WorkbenchJobStatusAndResultController {
         try{
             response.setContentType("application/json; charset=UTF-8");
             long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
+            
+            String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
+            com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(
+                request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
+            
+            HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+            ServletResponseUtil.write(httpResponse, log.toString());
+            
+            /*
             Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(
                 request, simulationUuid, jobUuid, lastPosition);
             response.getWriter().write(serializeJSON(outLog));
+            */
         }catch (Exception e){
             log.error("readOutLog Error", e);
             handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), "readOutLog Error");

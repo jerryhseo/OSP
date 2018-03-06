@@ -43,18 +43,25 @@ import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils; 
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.dao.jdbc.OutputBlob;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
@@ -66,7 +73,16 @@ public class AnalyzerController {
 	private final String ICEBREAKER_TEMP_PATH = PropsUtil.get(PropsKeys.LIFERAY_HOME)+"/ICEBREAKER_TEMP";
 	
 	@RequestMapping//default
-	public String view(RenderRequest request, RenderResponse response, ModelMap model){
+	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws IOException, PortalException, SystemException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		Group group = themeDisplay.getScopeGroup();
+		String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+		
+		model.addAttribute("icebreakerUrl", icebreakerUrl);
+		
+		long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "eturbanalyzer_WAR_eturbportlet");
+		model.addAttribute("eturbanalyzerPlid", plid);
+		
 		return "viewer";
 	}
 	

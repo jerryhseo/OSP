@@ -213,6 +213,7 @@
 								<polygon points="40.451,27.468 60.855,47.183 51.773,47.347 56.546,58.634 51.773,60.708 46.869,49.551 40.419,55.969"></polygon> 
 							</svg>
 						</a>
+						
 						<a class="single-icon-btn" id="RulerSelectButton" title="Activate ruler selection&#10;Shortcut: 'r'">
 							<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px" x="0px" y="0px" viewBox="0 0 33 33" style="enable-background:new 0 0 33 33;" xml:space="preserve">
 								<g>
@@ -264,6 +265,7 @@
 									<li>
 										<a class="" name="showAll" id="UnhideAllNavLink">Show all</a>
 									</li>
+									
 								</ul>	
 							</div>
 						</div>
@@ -275,8 +277,10 @@
 	
 						<a class="single-icon-btn has-tooltip" name="showAll" id="UnhideAllButton" title="Show All">
 							<i class="fa fa-eye"></i>
-	
-	
+						</a>
+
+						<a class="single-icon-btn has-tooltip" name="search" id="SearchButton" title="Search">
+							<i class="fa fa-search"></i>
 						</a>
 	
 					</div>
@@ -287,6 +291,40 @@
 						</div>
 						
 					</div>-->
+					<div class="modal" id="element-search" role="dialog" data-backdrop="static" data-keyboard="false">
+						<div class="modal-dialog">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Find Elements</h4>
+								</div>
+								<div class="modal-body">
+									<div class="form-left-aligned form-horizontal singleInputDialog">
+										<fieldset>
+											<div class="form-group">
+												<div class="col-sm-6 controls">
+												<input type="checkbox" name="searchLabel">
+												<label for="searchLabel">Search element by text</label>
+												<label class="control-label search-by-index col-sm-6">input element index to find</label>
+												<label class="control-label search-by-text col-sm-6" style="display: none;">input element text to find</label>
+												</div>
+												
+												<div class="col-sm-6 controls">
+													<input type="text" class="form-control" id="rangeBox" placeholder="10 or 10 - 20">
+												</div>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary btn-sm" id="SelectButton">Select</button>
+									<button type="button" class="btn btn-primary btn-sm" id="UnSelectButton">UnSelect</button>
+									<button type="button" class="btn btn-default btn-sm" id="closeButton">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="modal" id="CreateSetModal" role="dialog" data-backdrop="static" data-keyboard="false">
 						<div class="modal-dialog">
 							<!-- Modal content-->
@@ -1089,7 +1127,14 @@
 						<div class="distInfo infoPanel distPanel">
 							<div class="distLabel">&nbsp;</div>
 						</div>
-						<div id="rubber" style="border:1px solid blue; z-index: 100; pointer-events:none; display:none; "></div>			
+						<div id="rubber" style="border:1px solid blue; z-index: 100; pointer-events:none; display:none; "></div>
+
+						<div class="scale-wrapper" style="display: block; margin-left: -68.5px;">
+			                <div class="scale-length" style=""></div>
+			                <div class="measurement-system" style="">
+			                    <span class="scale-max"></span>
+			                </div>
+			            </div>		
 					<!--  end of model-viewer-->
 	
 				</div>

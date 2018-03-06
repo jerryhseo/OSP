@@ -124,22 +124,22 @@ public class ProjectLocalServiceClpInvoker {
 
 		_methodName42 = "countProjectByUserId";
 
-		_methodParameterTypes42 = new String[] { "long" };
+		_methodParameterTypes42 = new String[] { "long", "long" };
 
 		_methodName43 = "retrieveListProjectByUserId";
 
-		_methodParameterTypes43 = new String[] { "long", "int", "int" };
+		_methodParameterTypes43 = new String[] { "long", "long", "int", "int" };
 
 		_methodName44 = "modifyProject";
 
 		_methodParameterTypes44 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName45 = "removeProject";
 
-		_methodParameterTypes45 = new String[] { "long", "long" };
+		_methodParameterTypes45 = new String[] { "long", "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -245,28 +245,32 @@ public class ProjectLocalServiceClpInvoker {
 
 		if (_methodName42.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
-			return ProjectLocalServiceUtil.countProjectByUserId(((Long)arguments[0]).longValue());
+			return ProjectLocalServiceUtil.countProjectByUserId(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName43.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
 			return ProjectLocalServiceUtil.retrieveListProjectByUserId(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue());
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
 		}
 
 		if (_methodName44.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
 			return ProjectLocalServiceUtil.modifyProject(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String)arguments[4], (java.lang.String)arguments[5]);
+				((Long)arguments[2]).longValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
 		}
 
 		if (_methodName45.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			ProjectLocalServiceUtil.removeProject(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
 
 			return null;
 		}

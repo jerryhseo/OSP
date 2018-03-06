@@ -124,14 +124,6 @@
 					portletURL.setParameter( 'eventEnable', eventEnable);
 					portletURL.setParameter( 'connector', connector);
 					
-					/*repositoryType (var)*/
-					/*portletURL.setParameter( 'repositoryType', P.portType());*/
-					/*
-					 * P.portType() = INPUT -> P.repositoryType()
-					 * ELSE
-					 * P.portType() =  P.portType()
-					 * */
-					portletURL.setParameter( 'action', P.portType());
 					portletURL.setParameter( 'repositoryType', P.repositoryType());
 					portletURL.setWindowState(windowState);
 
@@ -141,12 +133,13 @@
 						async: false,
 						dataType:'text',
 						success: function( renderResult ){
-							/*EDIT_GPLUS*/
 							if(typeof $targetDiv.attr("section-type")!="undefined"){
 								$targetDiv.html( renderResult );
 							}else{
 								var $portletDiv = $('<div>');
+								console.log(P.getNamespace());
 								$portletDiv.attr('id', P.getNamespace());
+								$portletDiv.css('height', "inherit");
 								$portletDiv.html( renderResult );
 								$targetDiv.append( $portletDiv );
 							}

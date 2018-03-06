@@ -315,7 +315,7 @@ public class IBFileUtil {
      * @param isFileDelete - 압축 수행 후 기존 파일 삭제 여부(true:삭제/false:미삭제)
      * @throws SystemException 
      */
-    public static String createZipFileWithIbUpload(String icebreakerUrl, String vcToken, String zipFileName, File[] fileList, boolean isFileDelete) throws SystemException{
+    public static String createZipFileWithIbUpload(String icebreakerUrl, String vcToken, String zipFileName, File[] fileList, boolean isFileDelete,String userScreenName) throws SystemException{
     	try{
             File zipFile = new File(SystemProperties.get(SystemProperties.TMP_DIR) + FileSystems.getDefault().getSeparator() + zipFileName);
             
@@ -346,14 +346,14 @@ public class IBFileUtil {
             zipFile.setExecutable(true);
             zipFile.setWritable(true);
 			
-            return ibFileUpload(icebreakerUrl, vcToken, zipFile);
+            return ibFileUpload(icebreakerUrl, vcToken, zipFile,"eTURB_Meshes",userScreenName);
         }catch (Exception e){
             throw new SystemException(e);
         }
     }
     
     
-    private static String ibFileUpload(String icebreakerUrl, String vcToken, File file) throws SystemException{
+    private static String ibFileUpload(String icebreakerUrl, String vcToken, File file, String parentFilePath, String userScreenName) throws SystemException{
 	    
     	HttpURLConnection conn = null;
     	String fileId = "";
@@ -367,22 +367,39 @@ public class IBFileUtil {
             String resultJson = httpFileUtil.sendMultipartPost();
             
             if(!"".equals(CustomUtil.strNull(resultJson))){
-                JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
+            	JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
                 fileId = json.getString("id");
-                
-                URL fileMoveUrl = new URL(icebreakerUrl+"/api/file/move/"+fileId+"/HOME");
-                
-                conn = (HttpURLConnection) fileMoveUrl.openConnection();
-                
-                conn.setDoOutput(true);
-                conn.setRequestMethod("PUT");
-                conn.setRequestProperty("Accept", "application/json");
-                conn.setRequestProperty("Authorization", "Basic " + vcToken);
-                
-                int responseStatus =  conn.getResponseCode();
-//                if(responseStatus != 200){
-//                	throw new Exception("IBFileUtil MOVE API ERROR ResponseCode==>"+responseStatus);
-//                }
+                String fileName = json.getString("name");
+            	
+            	int responseStatus = 0;
+            	System.out.println("FILE__ID-->"+fileId);
+            	System.out.println("FILENAME-->"+fileName);
+            	System.out.println("ICEBREAKERURL-->"+icebreakerUrl);
+            	System.out.println("PARENTFILEPATH-->"+parentFilePath);
+            	
+            	if(CustomUtil.strNull(parentFilePath).equals("")){
+            		URL fileMoveUrl = new URL(icebreakerUrl+"/api/file/move/"+fileId+"/HOME");
+                	conn = (HttpURLConnection) fileMoveUrl.openConnection();
+                    
+                    conn.setDoOutput(true);
+                    conn.setRequestMethod("PUT");
+                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setRequestProperty("Authorization", "Basic " + vcToken);
+                    
+                    responseStatus =  conn.getResponseCode();
+                    
+                    conn.disconnect();
+                }else{
+                	 //eTURB Meshes 폴더에 File 등록
+                    Map<String, Object> requestParamMap = new HashMap<String, Object>();
+                    requestParamMap.put("newFolderNm", parentFilePath);
+                    createFolder(icebreakerUrl, vcToken, requestParamMap);
+                    
+                    requestParamMap.clear();
+                    requestParamMap.put("sourceId", fileId);
+                    requestParamMap.put("destPath", parentFilePath+file.separator + fileName);
+                    fileId = moveFileReturnJsonObject(icebreakerUrl, vcToken, requestParamMap, userScreenName).get("id").getAsString();
+                }
             }
             
             FileUtil.delete(file);
@@ -415,11 +432,11 @@ public class IBFileUtil {
                     zos.write(buffer, 0, length);
                 }
                 
-                zos.closeEntry();
                 fis.close();
                 
                 FileUtil.delete(file);
             }
+            zos.closeEntry();
             zos.close();
             
             return zipFile;
@@ -429,7 +446,7 @@ public class IBFileUtil {
         }
     }
 	
-	public static void ibFileUpload(String icebreakerUrl, String vcToken, List<File> fileList, UploadPortletRequest upload) throws SystemException{
+	public static void ibFileUpload(String icebreakerUrl, String vcToken, List<File> fileList, UploadPortletRequest upload, String userScreenName, boolean bcUse) throws SystemException{
 	    
 	    String ICEBREAKER_TEMP_PATH = PropsUtil.get(PropsKeys.LIFERAY_HOME)+"/ICEBREAKER_TEMP";
 	    
@@ -474,21 +491,25 @@ public class IBFileUtil {
 	                
 	                JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
 	                String fileId = json.getString("id");
+	                String fileName = json.getString("name");
 	                
-	                URL fileMoveUrl = new URL(icebreakerUrl+"/api/file/move/"+fileId+"/HOME");
-	                System.out.println("fileMoveUrl : " + fileMoveUrl.toString());
+	                	URL fileMoveUrl = new URL(icebreakerUrl+"/api/file/move/"+fileId+ "/HOME");
+		                System.out.println("fileMoveUrl : " + fileMoveUrl.toString());
+		                
+		                HttpURLConnection conn = (HttpURLConnection) fileMoveUrl.openConnection();
+		                
+		                conn.setDoOutput(true);
+		                conn.setRequestMethod("PUT");
+		                conn.setRequestProperty("Accept", "application/json");
+		                conn.setRequestProperty("Authorization", "Basic " + vcToken);
+		                
+		                responseStatus =  conn.getResponseCode();
+	                    
+	                    conn.disconnect();
+                    /* Export 시 HOME 하위에 폴더 생성
+	                */
+                    
 	                
-	                HttpURLConnection conn = (HttpURLConnection) fileMoveUrl.openConnection();
-	                
-	                conn.setDoOutput(true);
-	                conn.setRequestMethod("PUT");
-	                conn.setRequestProperty("Accept", "application/json");
-	                conn.setRequestProperty("Authorization", "Basic " + vcToken);
-	                
-	                responseStatus =  conn.getResponseCode();
-	                System.out.println(responseStatus);
-	                
-	                conn.disconnect();
 	            }else{
 	            }
 	            
@@ -510,10 +531,10 @@ public class IBFileUtil {
 	    try{
             
 	        String parentFolderId = CustomUtil.strNull(requestParamMap.get("parentId[]"));
-            
+	        
             String parentpath = CustomUtil.strNull(requestParamMap.get("parentpath"));
             String newFolderName = CustomUtil.strNull(requestParamMap.get("newFolderNm"));
-	        
+            
 	        if(!"".equals(icebreakerUrl)){
                 String urlStr = icebreakerUrl;
                 if(parentFolderId.equals("HOME") || parentpath.equals("")){//최상위
@@ -609,6 +630,58 @@ public class IBFileUtil {
     }
 	
 	/* Move Folder or File */
+	public static JsonObject moveFileReturnJsonObject(String icebreakerUrl, String vcToken, Map<String, Object> requestParamMap, String userScreenName){
+		JsonObject element = new JsonObject();
+		HttpURLConnection conn = null;
+		try{
+			String sourceId = CustomUtil.strNull(requestParamMap.get("sourceId"));
+			String destPath = CustomUtil.strNull(requestParamMap.get("destPath"));
+			
+			if(!"".equals(icebreakerUrl)){
+				icebreakerUrl = icebreakerUrl + "/api/file/move";
+				
+				URL url = new URL(icebreakerUrl);
+	            
+	            conn = (HttpURLConnection) url.openConnection();
+	            
+	            conn.setDoOutput(true);
+	            conn.setRequestProperty("Authorization", "Basic " + vcToken);
+	            conn.setRequestProperty("Accept", "application/json");
+	            conn.setRequestProperty("Content-Type", "application/json");
+	            
+	            
+	            StringBuffer bodyStr = new StringBuffer();
+                destPath = FILE_MOVE_PATH + userScreenName + "/repository/"+destPath;
+                
+                conn.setRequestMethod("POST");
+                System.out.println("destPath--->"+destPath);
+                bodyStr.append("{");
+                bodyStr.append("   \"fileId\" : \"" + sourceId + "\", ");
+                bodyStr.append("   \"destPath\" : \""+destPath+"\" ");
+                bodyStr.append("}");
+                
+                System.out.println("bodyStr : " + bodyStr.toString());
+                
+                OutputStream os = conn.getOutputStream();
+                os.write(bodyStr.toString().getBytes());
+                os.flush();
+                
+                if (conn.getResponseCode() == 200) {
+	            	BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	            	String line;
+	                StringBuilder sb = new StringBuilder();
+	                while ((line = br.readLine()) != null) sb.append(line);
+	                element = new JsonParser().parse(sb.toString()).getAsJsonObject();
+	            }
+			}
+		}catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+        	if(conn!=null){conn.disconnect();}
+			return element;
+		}
+	}
+	
 	public static int moveNode(String icebreakerUrl, String vcToken, Map<String, Object> requestParamMap, String userScreenName) throws SystemException{
 	    
 	    int responseStatus = 0;
@@ -634,6 +707,8 @@ public class IBFileUtil {
 	                }
 	            }
 	            
+	            System.out.println("PRE_FILEID--->"+sourceId);
+	            System.out.println("MOVE_NODE_URL--->"+icebreakerUrl);
 	            URL url = new URL(icebreakerUrl);
 	            
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -649,7 +724,7 @@ public class IBFileUtil {
 	                destPath = FILE_MOVE_PATH + userScreenName + "/repository/"+destPath;
 	                
 	                conn.setRequestMethod("POST");
-	                
+	                System.out.println("destPath--->"+destPath);
 	                bodyStr.append("{");
 	                bodyStr.append("   \"fileId\" : \"" + sourceId + "\", ");
 	                bodyStr.append("   \"destPath\" : \""+destPath+"\" ");
@@ -662,7 +737,6 @@ public class IBFileUtil {
 	            } else {
 	                conn.setRequestMethod("PUT");
 	            }
-	            
 	            responseStatus =  conn.getResponseCode();
 	            conn.disconnect();
 	        }

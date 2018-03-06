@@ -254,21 +254,21 @@ public interface ProjectLocalService extends BaseLocalService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
 
-	public int countProjectByUserId(long userId)
+	public int countProjectByUserId(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListProjectByUserId(
-		long userId, int start, int end)
+		long userId, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.eturb.dbservice.model.Project modifyProject(
-		long projectId, long userId, java.lang.String name,
+		long projectId, long userId, long groupId, java.lang.String name,
 		java.lang.String projectStructure, java.lang.String analyzerStructure,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException;
 
-	public void removeProject(long projectId, long userId)
+	public void removeProject(long projectId, long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException;
 }

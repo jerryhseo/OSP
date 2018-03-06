@@ -3,6 +3,7 @@ package org.kisti.edison.bestsimulation.portlet.monitoring.treeview;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,10 +49,11 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -68,6 +70,9 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.sdr.metadata.model.Dataset;
+import com.sdr.metadata.service.DatasetLocalServiceUtil;
+import com.sdr.metadata.service.DatasetServiceUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -129,14 +134,17 @@ public class TreeViewMonitoringController{
             .fromJson(wrapJobDataArray(simulationJobData), JobDataList.class);
         JobData portData = jobData.getPortData(portName);
         if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE)){
-            FileManagementLocalServiceUtil.download(
-                request, response, portData.getParent_(), new String[]{portData.getName_()}, false);
+            OSPFileUtil.downloadFile(request, response, Paths.get(portData.getParent_(), portData.getName_()).toString(), OSPRepositoryTypes.USER_JOBS.toString());
+            /*FileManagementLocalServiceUtil.download(
+                request, response, portData.getParent_(), new String[]{portData.getName_()}, false);*/
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_DL_ENTRY_ID)){
-            FileManagementLocalServiceUtil.download(request, response, Long.valueOf(portData.getId_()));
+            OSPFileUtil.downloadDLEntry(request, response, Long.valueOf(portData.getId_()));
+            //FileManagementLocalServiceUtil.download(request, response, Long.valueOf(portData.getId_()));
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_CONTEXT)
             || ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE_CONTENT)){
-            FileManagementLocalServiceUtil.downloadFromText(
-                request, response, portName + ".txt", portData.getContext_());
+            OSPFileUtil.downloadFromText(request, response, portName + ".txt", portData.getContext_());
+            /*FileManagementLocalServiceUtil.downloadFromText(
+                request, response, portName + ".txt", portData.getContext_());*/
         }
     }
     
@@ -406,18 +414,21 @@ public class TreeViewMonitoringController{
         PrintWriter out = response.getWriter();
         response.setContentType("application/json; charset=UTF-8");
         ServiceContext sc = ServiceContextFactory.getInstance(request);
-        boolean isComplete = true;
         
         log.info("collectionId : " + collectionId);
         log.info("jobUuid : " + jobUuid);
         log.info("scienceAppName : " + scienceAppName);
         log.info("jobTitle : " + jobTitle);
-        
-        if(isComplete){
-            resultMap.put("isComplete", true);
-        }else{
+        try{
+            Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, 1, sc);
+            DatasetLocalServiceUtil.curate(ds, sc);
+            resultMap.put("isComplete", ds != null);
+        }catch(Exception e){
             resultMap.put("isComplete", false);
+            resultMap.put("msg", e.getMessage());
+            log.error("transferJobDataToSDR", e);
         }
+        
         out.write(result.toJson(resultMap));
         out.flush();
         out.close();

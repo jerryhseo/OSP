@@ -32,7 +32,6 @@ import org.kisti.edison.model.SimulationProject;
 import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
-import org.kisti.edison.util.EdisonHttpUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -46,13 +45,15 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -297,11 +298,18 @@ public class DashboardController {
 		
 		try{
 			response.setContentType("application/json; charset=UTF-8");
-			Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(request, simulationUuid, jobUuid, lastPosition);
+			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
+			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+			log.put( "jobStatus", simulationJob.getJobStatus() );
+			
+			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+			ServletResponseUtil.write(httpResponse, log.toString());
+			/*Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(request, simulationUuid, jobUuid, lastPosition);
 			
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
 			outLog.put("jobStatus", simulationJob.getJobStatus());
-			response.getWriter().write(serializeJSON(outLog));
+			response.getWriter().write(serializeJSON(outLog));*/
 		}catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 			e.printStackTrace();
@@ -321,7 +329,6 @@ public class DashboardController {
 		try{
 			IcebreakerVcToken vcToken = SimulationLocalServiceUtil.getOrCreateToken(groupId, user);
 			String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
-			String publicIceBreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL_PUBLIC);
 			
 			String result = SimulationLocalServiceUtil.retrievePostProcessor(icebreakerUrl, vcToken.getVcToken(), jobUuid);
 			
@@ -482,7 +489,7 @@ public class DashboardController {
 		String fileName = dfe.getTitle();
 		
 		InputStream inputStream = null;
-		inputStream = DLFileEntryLocalServiceUtil.getFileAsStream(dfe.getUserId(), dfe.getFileEntryId(), dfe.getVersion());
+		inputStream = DLFileEntryLocalServiceUtil.getFileAsStream(dfe.getFileEntryId(), dfe.getVersion());
 		
 		BufferedInputStream bis = new BufferedInputStream(inputStream);
 		response.setContentType("application/octet-stream");

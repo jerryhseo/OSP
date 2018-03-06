@@ -906,6 +906,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		query.add(RestrictionsFactoryUtil.in("scienceAppId", ArrayUtils.toObject(scienceAppIds)));
 		query.add(RestrictionsFactoryUtil.like("targetLanguage", "%" + LocaleUtil.toLanguageId(locale) + "%"));
 		query.add(RestrictionsFactoryUtil.eq("status", 1901004));
+		query.add(RestrictionsFactoryUtil.ne("openLevel", ScienceAppConstants.OPENLEVEL_DWN));
 		query.addOrder(OrderFactoryUtil.desc("createDate"));
 		query.addOrder(OrderFactoryUtil.desc("version"));
 		return (List<ScienceApp>) super.getScienceAppLocalService().dynamicQuery(query, start, end);

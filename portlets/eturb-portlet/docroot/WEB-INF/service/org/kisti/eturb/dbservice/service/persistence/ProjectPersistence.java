@@ -38,40 +38,44 @@ public interface ProjectPersistence extends BasePersistence<Project> {
 	 */
 
 	/**
-	* Returns all the projects where userId = &#63;.
+	* Returns all the projects where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @return the matching projects
 	* @throws SystemException if a system exception occurred
 	*/
 	public java.util.List<org.kisti.eturb.dbservice.model.Project> findByUserId(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+		long userId, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns a range of all the projects where userId = &#63;.
+	* Returns a range of all the projects where userId = &#63; and groupId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.eturb.dbservice.model.impl.ProjectModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param start the lower bound of the range of projects
 	* @param end the upper bound of the range of projects (not inclusive)
 	* @return the range of matching projects
 	* @throws SystemException if a system exception occurred
 	*/
 	public java.util.List<org.kisti.eturb.dbservice.model.Project> findByUserId(
-		long userId, int start, int end)
+		long userId, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the projects where userId = &#63;.
+	* Returns an ordered range of all the projects where userId = &#63; and groupId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.eturb.dbservice.model.impl.ProjectModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param start the lower bound of the range of projects
 	* @param end the upper bound of the range of projects (not inclusive)
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -79,71 +83,76 @@ public interface ProjectPersistence extends BasePersistence<Project> {
 	* @throws SystemException if a system exception occurred
 	*/
 	public java.util.List<org.kisti.eturb.dbservice.model.Project> findByUserId(
-		long userId, int start, int end,
+		long userId, long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the first project in the ordered set where userId = &#63;.
+	* Returns the first project in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching project
 	* @throws org.kisti.eturb.dbservice.NoSuchProjectException if a matching project could not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.eturb.dbservice.model.Project findByUserId_First(
-		long userId,
+		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException;
 
 	/**
-	* Returns the first project in the ordered set where userId = &#63;.
+	* Returns the first project in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching project, or <code>null</code> if a matching project could not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.eturb.dbservice.model.Project fetchByUserId_First(
-		long userId,
+		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the last project in the ordered set where userId = &#63;.
+	* Returns the last project in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching project
 	* @throws org.kisti.eturb.dbservice.NoSuchProjectException if a matching project could not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.eturb.dbservice.model.Project findByUserId_Last(
-		long userId,
+		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException;
 
 	/**
-	* Returns the last project in the ordered set where userId = &#63;.
+	* Returns the last project in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching project, or <code>null</code> if a matching project could not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.eturb.dbservice.model.Project fetchByUserId_Last(
-		long userId,
+		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the projects before and after the current project in the ordered set where userId = &#63;.
+	* Returns the projects before and after the current project in the ordered set where userId = &#63; and groupId = &#63;.
 	*
 	* @param projectPK the primary key of the current project
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next project
 	* @throws org.kisti.eturb.dbservice.NoSuchProjectException if a project with the primary key could not be found
@@ -151,28 +160,30 @@ public interface ProjectPersistence extends BasePersistence<Project> {
 	*/
 	public org.kisti.eturb.dbservice.model.Project[] findByUserId_PrevAndNext(
 		org.kisti.eturb.dbservice.service.persistence.ProjectPK projectPK,
-		long userId,
+		long userId, long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.eturb.dbservice.NoSuchProjectException;
 
 	/**
-	* Removes all the projects where userId = &#63; from the database.
+	* Removes all the projects where userId = &#63; and groupId = &#63; from the database.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @throws SystemException if a system exception occurred
 	*/
-	public void removeByUserId(long userId)
+	public void removeByUserId(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the number of projects where userId = &#63;.
+	* Returns the number of projects where userId = &#63; and groupId = &#63;.
 	*
 	* @param userId the user ID
+	* @param groupId the group ID
 	* @return the number of matching projects
 	* @throws SystemException if a system exception occurred
 	*/
-	public int countByUserId(long userId)
+	public int countByUserId(long userId, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

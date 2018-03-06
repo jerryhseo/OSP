@@ -1034,6 +1034,10 @@ public class OSPFileUtil {
 		ServletResponseUtil.write(httpResponse, result.toString() );
 	}
 	
+    public static String readTextFile(Path path) throws IOException{
+        return readTextAndLastPosition(path, 0).getText();
+    }
+	
 	public static JSONObject readFileAtPosition(
 			PortletRequest portletRequest,
 			String target,
