@@ -10,8 +10,6 @@
 <script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script> --%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/file-explorer-portlet.css"/>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dropdown.css"/>
 
  <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -28,16 +26,16 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="container-fluid file-explorer-portlet editor-portlet" style="height:inherit;">
-	<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">
+<div class="container-fluid common-editor-portlet file-explorer-portlet " style="height:inherit;">
+	<div class="row-fluid header" id="<portlet:namespace/>choicePanel">
 		<div class="col-sm-8">
-			<input class="choidPanelInput" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
+			<input class="form-control" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
 		</div>
-		<div class="offset-sm-11 col-sm-1 dropdown-wrapper" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-4 text-right" id="<portlet:namespace/>menuSection">
 			<div class="dropdown">
                  <i class="icon-reorder icon-menu"></i>
 				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content">
+				<div class="dropdown-content text-left">
                        <div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></div>
                        <div class="dropdown-item" id="<portlet:namespace/>upload"><i class="icon-upload"> Upload</i></div>
                        <div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
@@ -45,10 +43,9 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid" style="height: inherit; overflow: hidden;">
-		<iframe class="col-sm-12 canvas" style="height: 90%;" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
+	<div class="row-fluid canvas">
+		<iframe class="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
 	</div>
-			
 </div>
 <div id="<portlet:namespace/>hiddenSection" style="display:none;">
 	<form action="<%= serveResourceURL.toString() %>" enctype="multipart/form-data" method="post" id="<portlet:namespace/>uploadForm">

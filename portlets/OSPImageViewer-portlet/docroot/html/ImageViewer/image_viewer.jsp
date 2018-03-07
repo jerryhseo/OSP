@@ -6,7 +6,6 @@
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/image-viewer-portlet.css">
 <script src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
 <script src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
 <script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script>
@@ -27,14 +26,14 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="container-fluid  image-viewer-portlet common-analyzer-portlet">
-	<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-		<div class="col-sm-8 offset1" id="<portlet:namespace/>title"></div>
-		<div class="dropdown-wrapper" >
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-4 text-right" >
 			<div class="dropdown">
                  <i class="icon-reorder icon-menu"></i>
 				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content">
+				<div class="dropdown-content text-left">
 					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
 					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
 					<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
@@ -42,8 +41,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid"  style="height:inherit;">
-		<iframe class ="col-sm-12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
 		</iframe>
 	</div>
 </div>
@@ -171,7 +170,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
 		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 		
-		console.log( 'Open fileExplorer '+<portlet:namespace/>action);
 		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
 		    $<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}else{
