@@ -776,9 +776,8 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			org.kisti.edison.science.NoSuchScienceAppException;
 
 	/**
-	* 통합 검색 앱 조회 서비스
-	*
-	* @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
+	* �듯빀 寃�깋 ��議고쉶 �쒕퉬��     *
+	* @param categoryIds -> Category 議고쉶媛��꾨땺 寃쎌슦�먮뒗 null �낅젰
 	*/
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppFromExplore(
 		long companyGroupId, long groupId, java.util.Locale locale,
@@ -788,9 +787,8 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 통합 검색 앱 카운트 서비스
-	*
-	* @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
+	* �듯빀 寃�깋 ��移댁슫���쒕퉬��     *
+	* @param categoryIds -> Category 議고쉶媛��꾨땺 寃쎌슦�먮뒗 null �낅젰
 	*/
 	public int countScienceAppFromExplore(long companyGroupId, long groupId,
 		java.util.Locale locale, java.lang.String[] appTypes,
@@ -833,13 +831,13 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 앱 이름을 통한 앱 LIST 조회
+	* ���대쫫���듯븳 ��LIST 議고쉶
 	*
 	* @param companyGroupId - themeDisplay.getCompanyGroupId()
 	* @param groupId        - PortalUtil.getScopeGroupId(request)
 	* @param locale         - themeDisplay.getLocale()
-	* @param appName        - 앱 이름
-	* @param categorySearch - 카테고리 조회 여부(PORTAL->false,SITE->true)
+	* @param appName        - ���대쫫
+	* @param categorySearch - 移댄뀒怨좊━ 議고쉶 �щ�(PORTAL->false,SITE->true)
 	* @return List<Map<String, Object>>
 	* @throws SystemException
 	* @throws PortalException
@@ -851,19 +849,18 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 카테고리를 제외한 앱 조회
+	* 移댄뀒怨좊━瑜��쒖쇅����議고쉶
 	*
-	* @param groupId - 조회 하는 분야의 GROUP ID (PortalUtil.getScopeGroupId(request))
-	* @param locale  - 현재 EDISON 포털의 LOCALE (themeDisplay.getLocale())
-	* @param authorId - 소유자 ID
-	* @param appTypes - 앱 종류 (ScienceAppConstants 참조),null 허용
-	* @param editorTypes  - editor 종류 (ScienceAppConstants 참조),null 허용
-	* @param searchType   - 검색타입(APP_MANAGER_SEARCH_ALL,SWORGNM)
-	* @param searchText   - 검색어
-	* @param status       - 앱 상태
+	* @param groupId - 議고쉶 �섎뒗 遺꾩빞��GROUP ID (PortalUtil.getScopeGroupId(request))
+	* @param locale  - �꾩옱 EDISON �ы꽭��LOCALE (themeDisplay.getLocale())
+	* @param authorId - �뚯쑀��ID
+	* @param appTypes - ��醫낅쪟 (ScienceAppConstants 李몄“),null �덉슜
+	* @param editorTypes  - editor 醫낅쪟 (ScienceAppConstants 李몄“),null �덉슜
+	* @param searchType   - 寃�깋��엯(APP_MANAGER_SEARCH_ALL,SWORGNM)
+	* @param searchText   - 寃�깋��     * @param status       - ���곹깭
 	* @param begin
 	* @param end
-	* @param lanuageSearch - 앱의 서비스 언어별 조회 여부
+	* @param lanuageSearch - �깆쓽 �쒕퉬���몄뼱蹂�議고쉶 �щ�
 	*/
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
 		long groupId, java.util.Locale locale, long authorId,
@@ -925,9 +922,7 @@ public interface ScienceAppLocalService extends BaseLocalService,
 		java.util.Map params, java.util.Locale locale);
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스 - 리스트
-	* 입력된 검색어로 사이언스앱을 조회함
-	*
+	* 愿�젴�뺣낫(Asset) �ы�由우뿉���ъ슜�섎뒗 �쒕퉬��- 由ъ뒪��     * �낅젰��寃�깋�대줈 �ъ씠�몄뒪�깆쓣 議고쉶��     *
 	* @param params
 	* @return
 	*/
@@ -936,9 +931,7 @@ public interface ScienceAppLocalService extends BaseLocalService,
 		java.util.Map params);
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스  - 카운트
-	* 입력된 검색어로 사이언스앱을 조회함
-	*
+	* 愿�젴�뺣낫(Asset) �ы�由우뿉���ъ슜�섎뒗 �쒕퉬�� - 移댁슫��     * �낅젰��寃�깋�대줈 �ъ씠�몄뒪�깆쓣 議고쉶��     *
 	* @param params
 	* @return
 	*/
@@ -946,8 +939,7 @@ public interface ScienceAppLocalService extends BaseLocalService,
 	public int searchAssetEntryModelAPPCount(java.util.Map params);
 
 	/**
-	* 관련정보(Asset) 포틀릿에서 사용하는 서비스  - 리스트
-	* entryId(Asset) 와 관련된 모든 사이언스 앱 리스트를 조회함.
+	* 愿�젴�뺣낫(Asset) �ы�由우뿉���ъ슜�섎뒗 �쒕퉬�� - 由ъ뒪��     * entryId(Asset) ��愿�젴��紐⑤뱺 �ъ씠�몄뒪 ��由ъ뒪�몃� 議고쉶��
 	*
 	* @param params
 	* @return
@@ -962,7 +954,7 @@ public interface ScienceAppLocalService extends BaseLocalService,
 
 	/**
 	* ScienceApp Mirgation = 2017-03-23 HKD
-	* 기존 등록된 ScienceApp을 AssetEntry 등록 및 AssetCategory에 등록
+	* 湲곗〈 �깅줉��ScienceApp��AssetEntry �깅줉 諛�AssetCategory���깅줉
 	*
 	* @param scienceApp
 	* @return
@@ -975,7 +967,7 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 에디슨 프로젝트 에서 사용하는 Method
+	* �먮뵒���꾨줈�앺듃 �먯꽌 �ъ슜�섎뒗 Method
 	*
 	* @param params
 	* @param locale
@@ -1006,16 +998,16 @@ public interface ScienceAppLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* ScienceApp List 조회
+	* ScienceApp List 議고쉶
 	*
 	* @param companyGroupId
 	* @param groupId
-	* @param categoryId - 0일 경우 groupId를 통하여 전체 카테고리를 조회
+	* @param categoryId - 0��寃쎌슦 groupId瑜��듯븯���꾩껜 移댄뀒怨좊━瑜�議고쉶
 	* @param locale
-	* @param searchParam - 조회할 parameter Map
-	* @param begin - 시작 0 LIMIT를 사용
+	* @param searchParam - 議고쉶��parameter Map
+	* @param begin - �쒖옉 0 LIMIT瑜��ъ슜
 	* @param end
-	* @param widthFile - 목록에서 파일이 필요 할 경우 true
+	* @param widthFile - 紐⑸줉�먯꽌 �뚯씪���꾩슂 ��寃쎌슦 true
 	* @return
 	* @throws PortalException
 	* @throws SystemException

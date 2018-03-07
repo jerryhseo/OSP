@@ -448,6 +448,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				<div class="method layout-5"></div>
 				<input type="radio" name="templates" value="2-row-1-2-column"> 
 			</label>
+			<label class="btn layoutMethod">
+				<div class="method layout-7"></div>
+				<input type="radio" name="templates" value="1-1-row-2-1-column"> 
+			</label>
 		</div>
 		
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>flowLayoutArea" style="display: none;">
