@@ -11,6 +11,7 @@ import org.kisti.edison.util.CustomUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Role;
@@ -62,12 +63,12 @@ public class EdisonUserLocalService extends UserLocalServiceWrapper {
 		***************************************************************************/
 		UserLocalServiceUtil.updateAgreedToTermsOfUse(user.getUserId(), true);
 		
-		
-		
-		
 		user.getExpandoBridge().setAttribute(EdisonExpando.USER_TERMS_OF_USE_DATE, new Date());
-
 		
+		String eppn = CustomUtil.strNull(serviceContext.getAttribute("eppn"));
+		if(!Validator.isBlank(eppn)){
+		    user.getExpandoBridge().setAttribute("eppn", eppn);
+		}
 		
 		Group parentGroup = GroupLocalServiceUtil.getGroup(user.getCompanyId(), GroupConstants.GUEST);
 		List<Group> childGroups = GroupLocalServiceUtil.getGroups(user.getCompanyId(),parentGroup.getGroupId(),true);

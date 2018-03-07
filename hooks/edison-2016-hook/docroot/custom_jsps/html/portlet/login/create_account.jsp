@@ -25,6 +25,10 @@ String EdisonExpando_USER_UNIVERSITY = renderRequest.getAttribute("EdisonExpando
 String EdisonExpando_USER_MAJOR = renderRequest.getAttribute("EdisonExpando_USER_MAJOR")!=null?(String)renderRequest.getAttribute("EdisonExpando_USER_MAJOR"):"";
 String EdisonExpando_USER_PROJECT_CATEGORY_ID = renderRequest.getAttribute("EdisonExpando_USER_PROJECT_CATEGORY_ID")!=null?(String)renderRequest.getAttribute("EdisonExpando_USER_PROJECT_CATEGORY_ID"):"";
 
+String saml_email = (String) renderRequest.getAttribute("saml_email");
+String saml_eppn =  (String) renderRequest.getAttribute("saml_eppn");
+String saml_firstName =  (String) renderRequest.getAttribute("saml_firstName");
+
 List<AssetCategory> assetCategoryList = new ArrayList<AssetCategory>();
 if(renderRequest.getAttribute("assetCategoryList")!=""){
 	assetCategoryList = (List<AssetCategory>) renderRequest.getAttribute("assetCategoryList");
@@ -151,6 +155,7 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="openId" type="hidden" value="<%= openId %>" />
+	<aui:input name="eppn" type="hidden" value="<%= saml_eppn %>" />
 
 	<liferay-ui:error exception="<%= AddressCityException.class %>" message="please-enter-a-valid-city" />
 	<liferay-ui:error exception="<%= AddressStreetException.class %>" message="please-enter-a-valid-street" />
@@ -251,7 +256,7 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 				<tr>
 					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-name" />(<font color="red">*</font>)</td>
 					<td width="37%">
-						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" model="<%= User.class %>" name="firstName" label="" cssClass="long_field">
+						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" model="<%= User.class %>" name="firstName" label="" cssClass="long_field" value="<%=saml_firstName%>">
 							<aui:validator name="required"/>
 							<aui:validator name="maxLength">32</aui:validator>
 						</aui:input>
@@ -312,7 +317,7 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 				<tr>
 					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-email" />(<font color="red">*</font>)</td>
 					<td colspan="3">
-						<aui:input model="<%= User.class %>" name="emailAddress" label="" cssClass="long_field">
+						<aui:input model="<%= User.class %>" name="emailAddress" label="" cssClass="long_field" value="<%=saml_email%>">
 							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
 								<aui:validator name="required"/>
 							</c:if>

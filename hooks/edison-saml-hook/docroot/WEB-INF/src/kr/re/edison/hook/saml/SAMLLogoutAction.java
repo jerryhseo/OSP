@@ -13,8 +13,12 @@ public class SAMLLogoutAction extends BaseStrutsAction {
 		HttpSession session = request.getSession();
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		long companyId = themeDisplay.getCompanyId();
+		boolean isSAML = (Boolean) session.getAttribute("isSAMLLogin");
 		session.invalidate();
-		String logoutUrl = Util.getPropertyString(companyId, Constants.LOGOUT_URL);
+		String logoutUrl = "/";
+		if(isSAML){
+		    logoutUrl = Util.getPropertyString(companyId, Constants.LOGOUT_URL);
+		}else
 		response.sendRedirect(logoutUrl);
 		return null;
 	}

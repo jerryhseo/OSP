@@ -203,7 +203,7 @@
 				<aui:button-row>
 					<aui:button type="submit" value="<%=loginMsg%>" cssClass="login-btn"/>
 					<div class="h20"></div>
-					<aui:button type="button" value="KAFE" cssClass="btn-success login-btn"/>
+					<aui:button type="button" value="KAFE" cssClass="btn-success login-btn" onclick="location.href='/c/portal/login/shibboleth'; return false;"/>
 				</aui:button-row>
 			</div>
 		</aui:form>

@@ -48,7 +48,9 @@ public class SAMLAutoLogin implements AutoLogin {
 			credentials[1] = user.getPassword();
 			credentials[2] = Boolean.TRUE.toString();
 		} catch (Exception e) {
+		    _log.error(e);
 		}
+		
 
 		return credentials;
 	}
