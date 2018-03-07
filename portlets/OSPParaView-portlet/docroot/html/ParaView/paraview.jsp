@@ -1,3 +1,4 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -138,7 +139,7 @@ function <portlet:namespace/>loadParaView( inputData ){
 			data:{
 			    <portlet:namespace/>command: 'GET_ABSOLUTE_PATH',
 			    <portlet:namespace/>targetPath: dataDirectory,
-			    <portlet:namespace/>repositoryType: inputData.repositoryType_
+			    <portlet:namespace/>repositoryType: inputData.repositoryType_? inputData.repositoryType_: '<%=OSPRepositoryTypes.USER_JOBS.toString()%>'
 			},
 			success: function( result ){
 			    dataDirectory = result;

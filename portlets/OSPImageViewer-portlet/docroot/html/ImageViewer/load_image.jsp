@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height:89%;">
+<html style="height:100%;overflow:hidden;">
 <head>
     <script src="<%=request.getContextPath()%>/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jquery/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
@@ -7,7 +7,9 @@
 	<script src="<%=request.getContextPath() %>/js/iviewer-0.7.11/jquery.iviewer.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui-1.12.1.custom/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/iviewer-0.7.11/jquery.iviewer.css">
-    
+    <style>
+	.inner-canvas{position:relative; text-align: center; height:100%;overflow: hidden;}
+    </style>
     <script>
 
 		var currentUrl;
@@ -56,6 +58,6 @@
 	</script>
 </head>
 <body style="text-align: center; height:100%;">
-	<div id="canvas" style="position:relative; text-align: center; height:100%;overflow:auto !important"></div>
+	<div id="canvas" class="inner-canvas"></div>
 </body>
 </html>

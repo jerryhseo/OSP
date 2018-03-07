@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html style="height:100%;">
+<html style="">
 <head>
 	<script src="<%=request.getContextPath()%>/js/jquery/jquery-3.1.0.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
@@ -221,7 +221,7 @@
 		}
 	</script>
 </head>
-<body style="height:100%;">
+<body style="">
 	<div class="inner-canvas" id="panel"></div>
 </body>
 </html>

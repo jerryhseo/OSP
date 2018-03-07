@@ -279,7 +279,7 @@ public class IBAgent {
 		return jsonResult.getString("uuid");
 	}
 	
-	public String uploadFile(
+	public String copyIBFile(
 			PortletRequest portletRequest,
 			String source, 
 			String target,
@@ -306,6 +306,32 @@ public class IBAgent {
 		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
         
         System.out.println("File: "+filePath);
+        System.out.println("File ID: "+ibFileId );
+        
+		return ibFileId;
+	}
+	
+	public String uploadIBFile(
+			PortletRequest portletRequest,
+			String paramName,
+			String target,
+			String cluster
+			) throws IOException, SystemException, PortalException{
+		
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+
+		/*
+		String strBaseCmd = "sshpass ";
+		strBaseCmd += "-pedison2016!!";
+		strBaseCmd += " ssh -p 22002 -o StrictHostKeyChecking=no ";
+		strBaseCmd += "root@150.183.247.151 ";
+		*/
+		
+		//String strMvCmd = new String(strBaseCmd);
+		OSPFileUtil.upload(portletRequest, target, paramName, repositoryType);
+		
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+        
         System.out.println("File ID: "+ibFileId );
         
 		return ibFileId;

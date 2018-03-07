@@ -5,7 +5,6 @@
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/texteditor-portlet.css">
 
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
@@ -18,38 +17,38 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 String mode = (String)renderRequest.getAttribute("mode");
 %>
 
-<div class="row-fluid texteditor-portlet editor-portlet" >
-	<div class="span12">
-		<div class="row-fluid" id="<portlet:namespace/>menuSection" style="height: 6%; padding-top: 7px;">
-			<div class="offset10 span2 dropdown-wrapper" id="<portlet:namespace/>menuSection">
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-                        <div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></div>
-					</div>
+
+<div class="container-fluid common-editor-portlet">
+	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-4 text-right" >
+			<div class="dropdown">
+				<i class="icon-reorder icon-menu"></i>
+				<!-- Link or button to toggle dropdown -->
+				<div class="dropdown-content">
+					<div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></div>
 				</div>
-			</div>	
-		</div>
-		<div class="row-fluid canvasPanel" id="<portlet:namespace/>canvasPanel">
-			<textarea class="span12 canvas" id="<portlet:namespace/>canvas" ></textarea>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" ></div>
-			<div id="<portlet:namespace/>confirmDialog">
-				<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
-				<p>
-					File already exists. Change file name or just click 'OK' button to overlap. 
-				</p>
 			</div>
-			<input type="file" id="<portlet:namespace/>selectFile"/>
-			
-			<img id="<portlet:namespace/>processingMessage" src="<%=request.getContextPath()%>/images/processing_01.gif"/>
-		</div>
+		</div>	
 	</div>
+	<div class="row-fluid canvas" >
+		<textarea class="col-sm-12 iframe" id="<portlet:namespace/>canvas" ></textarea>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" ></div>
+	<div id="<portlet:namespace/>confirmDialog">
+		<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
+		<p>
+			File already exists. Change file name or just click 'OK' button to overlap. 
+		</p>
+	</div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
+	
+	<img id="<portlet:namespace/>processingMessage" src="<%=request.getContextPath()%>/images/processing_01.gif"/>
 </div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -63,6 +62,7 @@ var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fil
 var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_te'+
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
+var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 
 
@@ -74,6 +74,8 @@ if( '<%=eventEnable%>' == false ){
 	<portlet:namespace/>connector = '<%=connector%>';
 	
 	<portlet:namespace/>initData = new OSP.InputData(JSON.parse('<%=inputData%>'));
+	if( !<portlet:namespace/>initData.repositoryType() )
+		<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 	console.log('TextEditor Init Data', <portlet:namespace/>initData );
 	
 	<portlet:namespace/>loadText( <portlet:namespace/>initData );
@@ -97,7 +99,6 @@ $('#<portlet:namespace/>sample').click(function(){
 
 $('#<portlet:namespace/>saveAs').click(function(e){
 	e.preventDefault();
-	alert( 'SaveAs ');
 	var inputData = new OSP.InputData();
 	inputData.type( OSP.Enumeration.PathType.FOLDER);
 	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
@@ -133,6 +134,7 @@ $('#<portlet:namespace/>openServer').click(function(){
 $('#<portlet:namespace/>canvas').on('change', function(){
 	var inputData = new OSP.InputData();
 	inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+	inputData.repositoryType(<portlet:namespace/>currentData.repositoryType());
 	inputData.context( $(this).val() );
 	
 	var eventData = {
@@ -349,10 +351,15 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadText( inputData ){
+	<portlet:namespace/>currentData = inputData.clone();
+	if( !<portlet:namespace/>currentData.repositoryType() )
+		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		
 	if( inputData.type() === OSP.Enumeration.PathType.FILE){
 		var data = {
 				<portlet:namespace/>command: 'READ_FILE',
-				<portlet:namespace/>action: <portlet:namespace/>action,
+				<portlet:namespace/>mode: <portlet:namespace/>mode,
+				<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
 				<portlet:namespace/>pathType: inputData.type(),
 				<portlet:namespace/>parentPath: inputData.parent(),
 				<portlet:namespace/>fileName: inputData.fileName()
@@ -388,8 +395,8 @@ function <portlet:namespace/>loadText( inputData ){
 			async: false,
 			dataType:'json',
 			data:{
-				<portlet:namespace/>command: 'READ_SAMPLE',
-				<portlet:namespace/>action: <portlet:namespace/>action,
+				<portlet:namespace/>command: 'READ_DLENTRY',
+				<portlet:namespace/>mode: <portlet:namespace/>mode,
 				<portlet:namespace/>dlEntryId: inputData.dlEntryId()
 			},
 			success:function(result){
@@ -422,8 +429,9 @@ function <portlet:namespace/>loadText( inputData ){
 function <portlet:namespace/>checkPath( filePath, command ){
 	var data = {
 			<portlet:namespace/>command: command,
-			<portlet:namespace/>action: <portlet:namespace/>action,
+			<portlet:namespace/>mode: <portlet:namespace/>mode,
 			<portlet:namespace/>pathType: filePath.type(),
+			<portlet:namespace/>repositoryType: filePath.repositoryType(),
 			<portlet:namespace/>parentPath: filePath.parent(),
 			<portlet:namespace/>fileName: filePath.name(),
 			<portlet:namespace/>relative: filePath.relative()
@@ -451,8 +459,9 @@ function <portlet:namespace/>checkPath( filePath, command ){
 function <portlet:namespace/>saveAs( inputData ){
 	var data = {
 			<portlet:namespace/>command: 'SAVE_AS',
-			<portlet:namespace/>action: <portlet:namespace/>action,
+			<portlet:namespace/>mode: <portlet:namespace/>mode,
 			<portlet:namespace/>pathType: inputData.type(),
+			<portlet:namespace/>repositoryType: inputData.repositoryType(),
 			<portlet:namespace/>parentPath: inputData.parent(),
 			<portlet:namespace/>fileName: inputData.name(),
 			<portlet:namespace/>context: $('#<portlet:namespace/>canvas').val(),

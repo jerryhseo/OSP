@@ -6,7 +6,6 @@
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/image-viewer-portlet.css">
 <script src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
 <script src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
 <script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script>
@@ -27,37 +26,37 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
-	<div class="span12" style="height:inherit;">
-		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-			<div class="span8 offset1" id="<portlet:namespace/>title"></div>
-			<div class="dropdown-wrapper" >
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-						<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-					</div>
-				</div>
-			</div>	
-		</div>
-		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
-			<iframe class ="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
-			</iframe>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-			<input type="file" id="<portlet:namespace/>selectFile"/>
-		</div>
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-offset-3 col-sm-1" >
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<!-- Link or button to toggle dropdown -->
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
+			</div>
+		</div>	
 	</div>
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		</iframe>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+          </div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
 <script>
@@ -153,8 +152,11 @@ $('#<portlet:namespace/>selectFile').bind(
 			var input = document.getElementById('<portlet:namespace/>selectFile');
 			var reader = new FileReader();
 			reader.onload = function (e) {
-			    $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
-			    $("#<portlet:namespace/>selectFile").val("");
+			    // $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
+			    <portlet:namespace/>drawImage(
+                                              e.target.result, 
+                                              'fit');
+			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
             }
 			reader.readAsDataURL(input.files[0]);
@@ -173,7 +175,6 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
 		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 		
-		console.log( 'Open fileExplorer '+<portlet:namespace/>action);
 		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
 		    $<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}else{
@@ -304,13 +305,15 @@ function <portlet:namespace/>loadImage( inputData, zooming ){
 function <portlet:namespace/>loadData( inputData, zooming ){
     AUI().use('liferay-portlet-url', function(a) {
         <portlet:namespace/>currentData = inputData;
+        if( ! <portlet:namespace/>currentData.repositoryType() )
+        	<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
         var serveResourceURL;
         serveResourceURL = Liferay.PortletURL.createResourceURL();
         serveResourceURL.setPortletId('<%=portletDisplay.getId()%>');
         serveResourceURL.setParameter('parentPath', inputData.parent());
         serveResourceURL.setParameter('pathType', inputData.type());
         serveResourceURL.setParameter('fileName', inputData.name());
-        serveResourceURL.setParameter('repositoryType', inputData.repositoryType());
+        serveResourceURL.setParameter('repositoryType', <portlet:namespace/>currentData.repositoryType());
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
