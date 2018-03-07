@@ -358,12 +358,8 @@ public class ScienceAppstoreController {
 			/*asset 바로가기 상태 체크*/
 			String viewStatus = ParamUtil.getString(request, "viewStatus", "");
 			model.addAttribute("viewStatus", viewStatus);
-<<<<<<< HEAD
 			model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
-
-=======
 			
->>>>>>> work-local-imjeong
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
