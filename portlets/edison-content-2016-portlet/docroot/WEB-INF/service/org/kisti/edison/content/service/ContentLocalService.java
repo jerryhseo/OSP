@@ -251,7 +251,7 @@ public interface ContentLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	/**
-	* 肄섑뀗痢�議고쉶
+	* 콘텐츠 조회
 	*
 	* @param locale
 	* @param contentSeq
@@ -267,18 +267,19 @@ public interface ContentLocalService extends BaseLocalService,
 			java.lang.NumberFormatException;
 
 	/**
-	* 肄섑뀗痢�由ъ뒪��議고쉶 �ъ씠��移댄뀒怨좊━ �앹꽦�섏뿬 議고쉶
+	* 콘텐츠 리스트 조회 사이트 카테고리 생성하여 조회
 	*
 	* @param companyGroupId
 	* @param groupId
 	* @param searchText
-	肄섑뀗痢�寃�깋��     * @param contentDiv
-	肄섑뀗痢��좏삎寃�깋
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
 	* @param start
 	* @param end
 	* @param locale
 	* @param categoryJoin
-	移댄뀒怨좊━ �뚯씠釉붽낵 議곗씤 �щ�
+	카테고리 테이블과 조인 여부
 	* @return
 	* @throws Exception
 	*/
@@ -288,7 +289,7 @@ public interface ContentLocalService extends BaseLocalService,
 		boolean categoryJoin) throws java.lang.Exception;
 
 	/**
-	* 媛뺤쓽�명듃 議고쉶 �쒕퉬��- 媛뺤쓽�ㅼ뿉���ъ슜
+	* 강의노트 조회 서비스 - 강의실에서 사용
 	*
 	* @param categoryIds
 	* @param searchText
@@ -303,7 +304,7 @@ public interface ContentLocalService extends BaseLocalService,
 		java.util.Locale locale) throws java.lang.Exception;
 
 	/**
-	* 媛뺤쓽�명듃 移댁슫��議고쉶 �쒕퉬��- 媛뺤쓽�ㅼ뿉���ъ슜
+	* 강의노트 카운트 조회 서비스 - 강의실에서 사용
 	*
 	* @param categoryIds
 	* @param searchText
@@ -314,7 +315,7 @@ public interface ContentLocalService extends BaseLocalService,
 		java.lang.String searchText, java.util.Locale locale);
 
 	/**
-	* 媛뺤쓽�명듃��肄섑뀗痢�紐⑸줉 議고쉶 �쒕퉬��- 媛뺤쓽�ㅼ뿉���ъ슜
+	* 강의노트의 콘텐츠 목록 조회 서비스 - 강의실에서 사용
 	*
 	* @param contentIds
 	* @param locale
@@ -324,19 +325,20 @@ public interface ContentLocalService extends BaseLocalService,
 		java.util.List<java.lang.Long> contentIds, java.util.Locale locale);
 
 	/**
-	* 肄섑뀗痢�由ъ뒪��議고쉶 肄섑뀗痢�紐⑸줉 : �ы꽭 -> categoryIds null
+	* 콘텐츠 리스트 조회 콘텐츠 목록 : 포털 -> categoryIds null
 	*
 	* @param categoryIds
 	* @param searchText
-	肄섑뀗痢�寃�깋��     * @param contentDiv
-	肄섑뀗痢��좏삎寃�깋
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
 	* @param start
 	* @param end
 	* @param locale
 	* @param categoryJoin
-	移댄뀒怨좊━ �뚯씠釉붽낵 議곗씤 �щ�
+	카테고리 테이블과 조인 여부
 	* @param isTotalSearch
-	�듯빀寃�깋�먯꽌 議고쉶�섎㈃ true - openYn, serviceLanguage 異붽�
+	통합검색에서 조회하면 true - openYn, serviceLanguage 추가
 	* @return
 	* @throws Exception
 	*/
@@ -346,16 +348,17 @@ public interface ContentLocalService extends BaseLocalService,
 		boolean isTotalSearch) throws java.lang.Exception;
 
 	/**
-	* 肄섑뀗痢�移댁슫��議고쉶 移댄뀒怨좊━ 諛곗뿴 �앹꽦
+	* 콘텐츠 카운트 조회 카테고리 배열 생성
 	*
 	* @param companyGroupId
 	* @param groupId
 	* @param searchText
-	肄섑뀗痢�寃�깋��     * @param contentDiv
-	肄섑뀗痢��좏삎寃�깋
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
 	* @param languageId
 	* @param categoryJoin
-	移댄뀒怨좊━ �뚯씠釉붽낵 議곗씤 �щ�
+	카테고리 테이블과 조인 여부
 	* @return
 	* @throws PortalException
 	* @throws SystemException
@@ -367,17 +370,18 @@ public interface ContentLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 肄섑뀗痢�移댁슫��議고쉶 移댄뀒怨좊━ 諛곗뿴 �뚮씪誘명꽣濡�諛쏆쓬
+	* 콘텐츠 카운트 조회 카테고리 배열 파라미터로 받음
 	*
 	* @param categoryIds
 	* @param searchText
-	肄섑뀗痢�寃�깋��     * @param contentDiv
-	肄섑뀗痢��좏삎寃�깋
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
 	* @param languageId
 	* @param categoryJoin
-	移댄뀒怨좊━ �뚯씠釉붽낵 議곗씤 �щ�
+	카테고리 테이블과 조인 여부
 	* @param isTotalSearch
-	�듯빀寃�깋�먯꽌 議고쉶�섎㈃ true
+	통합검색에서 조회하면 true
 	* @return
 	*/
 	public int retrieveCountContent(long[] categoryIds,
@@ -385,7 +389,7 @@ public interface ContentLocalService extends BaseLocalService,
 		java.lang.String languageId, boolean categoryJoin, boolean isTotalSearch);
 
 	/**
-	* �좎���肄섑뀗痢�由ъ뒪��議고쉶 肄섑뀗痢�以��꾩옱 �ъ슜�먭� OWNER/MANAGER����ぉ議고쉶
+	* 유저의 콘텐츠 리스트 조회 콘텐츠 중 현재 사용자가 OWNER/MANAGER인 항목조회
 	*
 	* @param companyGroupId
 	* @param parentGroupId
@@ -408,7 +412,8 @@ public interface ContentLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* �좎���肄섑뀗痢�移댁슫��議고쉶 肄섑뀗痢�以��꾩옱 �ъ슜�먭� OWNER/MANAGER����ぉ 移댁슫��     *
+	* 유저의 콘텐츠 카운트 조회 콘텐츠 중 현재 사용자가 OWNER/MANAGER인 항목 카운트
+	*
 	* @param companyGroupId
 	* @param parentGroupId
 	* @param groupId
@@ -427,7 +432,7 @@ public interface ContentLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 肄섑뀗痢��깅줉
+	* 콘텐츠 등록
 	*
 	* @param upload
 	* @param request
@@ -445,7 +450,7 @@ public interface ContentLocalService extends BaseLocalService,
 		throws java.lang.Exception;
 
 	/**
-	* 肄섑뀗痢��낅뜲�댄듃
+	* 콘텐츠 업데이트
 	*
 	* @param upload
 	* @param request
@@ -462,7 +467,7 @@ public interface ContentLocalService extends BaseLocalService,
 		throws java.lang.Exception;
 
 	/**
-	* 肄섑뀗痢���젣
+	* 콘텐츠 삭제
 	*
 	* @param companyId
 	* @param groupId
@@ -473,7 +478,7 @@ public interface ContentLocalService extends BaseLocalService,
 		throws java.lang.Exception;
 
 	/**
-	* entryId��愿�젴��肄섑뀗痢�Entry 議고쉶
+	* entryId와 관련된 콘텐츠 Entry 조회
 	*
 	* @param params
 	* @return List<Map<String, Object>>
@@ -482,7 +487,8 @@ public interface ContentLocalService extends BaseLocalService,
 		java.util.Map params);
 
 	/**
-	* 愿�젴�뺣낫�먯꽌 寃�깋�대� �댁슜��寃�깋��肄섑뀗痢�由ъ뒪��     *
+	* 관련정보에서 검색어를 이용해 검색한 콘텐츠 리스트
+	*
 	* @param params
 	* @return List<Map<String, Object>>
 	*/
@@ -491,7 +497,8 @@ public interface ContentLocalService extends BaseLocalService,
 		java.util.Map params);
 
 	/**
-	* 愿�젴�뺣낫�먯꽌 寃�깋�대� �댁슜��寃�깋��肄섑뀗痢�移댁슫��     *
+	* 관련정보에서 검색어를 이용해 검색한 콘텐츠 카운트
+	*
 	* @param params
 	* @return int
 	*/
@@ -499,7 +506,7 @@ public interface ContentLocalService extends BaseLocalService,
 	public int searchAssetEntryModelContentCount(java.util.Map params);
 
 	/**
-	* 肄섑뀗痢좊� ENTRY���깅줉
+	* 콘텐츠를 ENTRY에 등록
 	*
 	* @param companyId
 	* @param groupId
@@ -514,7 +521,7 @@ public interface ContentLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 肄섑뀗痢�INSERTID �낅뜲�댄듃 (OWNER 蹂�꼍)
+	* 콘텐츠 INSERTID 업데이트 (OWNER 변경)
 	*
 	* @param groupId
 	* @param contentSeq
@@ -528,7 +535,8 @@ public interface ContentLocalService extends BaseLocalService,
 		throws java.lang.Exception;
 
 	/**
-	* 移댄뀒怨좊━ 諛곗뿴 �앹꽦 �듯빀寃�깋���ъ슜 �덊븿. 肄섑뀗痢좊뒗 �ы깉�먯꽌��移댄뀒怨좊━蹂꾨줈 議고쉶�섏� �딆쑝誘�줈 parentCategory 媛�0��     * �ъ씠���ы깉)����빐��null��諛섑솚��
+	* 카테고리 배열 생성 통합검색은 사용 안함. 콘텐츠는 포탈에서는 카테고리별로 조회하지 않으므로 parentCategory 가 0인
+	* 사이트(포탈)에 대해서 null을 반환함.
 	*
 	* @param companyGroupId
 	* @param groupId

@@ -55,7 +55,23 @@ public class ConfigurationController implements ConfigurationAction{
 				break;
 			}
 		}
-	
+		
+		List<Group> groupList = CustomUtil.getGroupIdASC(GroupLocalServiceUtil.getGroups(companyId, parentGroup.getGroupId(), true));
+		renderRequest.setAttribute("groupList", groupList);
+		
+		String tabUseStr = renderRequest.getPreferences().getValue("tabUseList", "");
+		List<Group> tabGroup = new ArrayList<Group>();
+		if(!tabUseStr.equals("")){
+			String[] tabUseArray = tabUseStr.split(",");
+			
+			for(int i=0; i<tabUseArray.length; i++){
+				Long selectGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
+				
+				Group group = GroupLocalServiceUtil.getGroup(selectGroupId);
+				tabGroup.add(group);
+			}
+		}
+		renderRequest.setAttribute("tabGroup", tabGroup);
 		
 		PortletConfig selPortletConfig = getSelPortletConfig(renderRequest);
 
@@ -92,6 +108,7 @@ public class ConfigurationController implements ConfigurationAction{
 		
 		String[] keyTextBox		= actionRequest.getParameterValues("keyTextBox");
 		String[] valueTextBox	= actionRequest.getParameterValues("valueTextBox");
+		String[] tabUseValue	= actionRequest.getParameterValues("tabUseValue");
 		String[] prefPortletId = null;
 		
 		if(keyTextBox != null){
@@ -101,6 +118,10 @@ public class ConfigurationController implements ConfigurationAction{
 				prefs.setValue(keyTextBox[i], String.valueOf(valueTextBox[i]));
 			}
 		}		
+		
+		if(tabUseValue != null){
+			prefs.setValues("tabUseList", tabUseValue);
+		}
 		prefs.store();
 	}
 	

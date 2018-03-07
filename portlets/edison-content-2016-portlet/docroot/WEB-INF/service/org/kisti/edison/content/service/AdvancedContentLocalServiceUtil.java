@@ -275,6 +275,22 @@ public class AdvancedContentLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getAdvancedContentListByGroupId(groupId, locale);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, com.liferay.portal.model.User user,
+		java.util.Locale locale,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws java.lang.Exception {
+		return getService()
+				   .getAdvancedContentListByGroupId(groupId, user, locale,
+			themeDisplay);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

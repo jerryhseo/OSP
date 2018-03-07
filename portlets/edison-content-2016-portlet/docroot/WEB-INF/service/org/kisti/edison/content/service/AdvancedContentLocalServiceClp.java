@@ -123,6 +123,17 @@ public class AdvancedContentLocalServiceClp
 		_methodName17 = "setBeanIdentifier";
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
+
+		_methodName19 = "getAdvancedContentListByGroupId";
+
+		_methodParameterTypes19 = new String[] { "long", "java.util.Locale" };
+
+		_methodName20 = "getAdvancedContentListByGroupId";
+
+		_methodParameterTypes20 = new String[] {
+				"long", "com.liferay.portal.model.User", "java.util.Locale",
+				"com.liferay.portal.theme.ThemeDisplay"
+			};
 	}
 
 	@Override
@@ -683,6 +694,76 @@ public class AdvancedContentLocalServiceClp
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
+					new Object[] { groupId, ClpSerializer.translateInput(locale) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, com.liferay.portal.model.User user,
+		java.util.Locale locale,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws java.lang.Exception {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] {
+						groupId,
+						
+					ClpSerializer.translateInput(user),
+						
+					ClpSerializer.translateInput(locale),
+						
+					ClpSerializer.translateInput(themeDisplay)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof java.lang.Exception) {
+				throw (java.lang.Exception)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -720,4 +801,8 @@ public class AdvancedContentLocalServiceClp
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
 }

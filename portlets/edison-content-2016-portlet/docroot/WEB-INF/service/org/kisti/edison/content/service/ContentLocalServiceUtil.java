@@ -276,7 +276,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占썼�怨좎돳
+	* 콘텐츠 조회
 	*
 	* @param locale
 	* @param contentSeq
@@ -294,16 +294,19 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占썹뵳��わ옙占썼�怨좎돳 占싼딆뵠占쏙옙燁삳똾�믤�醫듼봺 占쎌빘苑�옙�뤿연 鈺곌퀬��     *
+	* 콘텐츠 리스트 조회 사이트 카테고리 생성하여 조회
+	*
 	* @param companyGroupId
 	* @param groupId
 	* @param searchText
-	�꾩꼹�쀯㎘占썲칰占쎄퉳占쏙옙     * @param contentDiv
-	�꾩꼹�쀯㎘占쏙옙醫륁굨野껓옙源�     * @param start
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
+	* @param start
 	* @param end
 	* @param locale
 	* @param categoryJoin
-	燁삳똾�믤�醫듼봺 占쎈슣�좈뇡遺쎈궢 鈺곌퀣��占싼됵옙
+	카테고리 테이블과 조인 여부
 	* @return
 	* @throws Exception
 	*/
@@ -317,7 +320,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 揶쏅벡�쏙옙紐낅뱜 鈺곌퀬��占쎌뮆�э옙占� 揶쏅벡�쏙옙�쇰퓠占쏙옙占싼딆뒠
+	* 강의노트 조회 서비스 - 강의실에서 사용
 	*
 	* @param categoryIds
 	* @param searchText
@@ -336,7 +339,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 揶쏅벡�쏙옙紐낅뱜 燁삳똻�ワ옙占썼�怨좎돳 占쎌뮆�э옙占� 揶쏅벡�쏙옙�쇰퓠占쏙옙占싼딆뒠
+	* 강의노트 카운트 조회 서비스 - 강의실에서 사용
 	*
 	* @param categoryIds
 	* @param searchText
@@ -350,7 +353,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 揶쏅벡�쏙옙紐낅뱜占쏙옙�꾩꼹�쀯㎘占쏙쭗�몄쨯 鈺곌퀬��占쎌뮆�э옙占� 揶쏅벡�쏙옙�쇰퓠占쏙옙占싼딆뒠
+	* 강의노트의 콘텐츠 목록 조회 서비스 - 강의실에서 사용
 	*
 	* @param contentIds
 	* @param locale
@@ -362,18 +365,21 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占썹뵳��わ옙占썼�怨좎돳 �꾩꼹�쀯㎘占쏙쭗�몄쨯 : 占싼뗪쉭 -> categoryIds null
+	* 콘텐츠 리스트 조회 콘텐츠 목록 : 포털 -> categoryIds null
 	*
 	* @param categoryIds
 	* @param searchText
-	�꾩꼹�쀯㎘占썲칰占쎄퉳占쏙옙     * @param contentDiv
-	�꾩꼹�쀯㎘占쏙옙醫륁굨野껓옙源�     * @param start
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
+	* @param start
 	* @param end
 	* @param locale
 	* @param categoryJoin
-	燁삳똾�믤�醫듼봺 占쎈슣�좈뇡遺쎈궢 鈺곌퀣��占싼됵옙
+	카테고리 테이블과 조인 여부
 	* @param isTotalSearch
-	占쎈벏鍮�칰占쎄퉳占쎈Ŋ苑�鈺곌퀬�띰옙�롢늺 true - openYn, serviceLanguage �곕떽占�     * @return
+	통합검색에서 조회하면 true - openYn, serviceLanguage 추가
+	* @return
 	* @throws Exception
 	*/
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListContent(
@@ -386,14 +392,17 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占썹㎉�곸뒲占쏙옙鈺곌퀬��燁삳똾�믤�醫듼봺 獄쏄퀣肉�占쎌빘苑�     *
+	* 콘텐츠 카운트 조회 카테고리 배열 생성
+	*
 	* @param companyGroupId
 	* @param groupId
 	* @param searchText
-	�꾩꼹�쀯㎘占썲칰占쎄퉳占쏙옙     * @param contentDiv
-	�꾩꼹�쀯㎘占쏙옙醫륁굨野껓옙源�     * @param languageId
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
+	* @param languageId
 	* @param categoryJoin
-	燁삳똾�믤�醫듼봺 占쎈슣�좈뇡遺쎈궢 鈺곌퀣��占싼됵옙
+	카테고리 테이블과 조인 여부
 	* @return
 	* @throws PortalException
 	* @throws SystemException
@@ -409,15 +418,18 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占썹㎉�곸뒲占쏙옙鈺곌퀬��燁삳똾�믤�醫듼봺 獄쏄퀣肉�占쎈슢�よ첋紐낃숲嚥∽옙獄쏆룇��     *
+	* 콘텐츠 카운트 조회 카테고리 배열 파라미터로 받음
+	*
 	* @param categoryIds
 	* @param searchText
-	�꾩꼹�쀯㎘占썲칰占쎄퉳占쏙옙     * @param contentDiv
-	�꾩꼹�쀯㎘占쏙옙醫륁굨野껓옙源�     * @param languageId
+	콘텐츠 검색어
+	* @param contentDiv
+	콘텐츠 유형검색
+	* @param languageId
 	* @param categoryJoin
-	燁삳똾�믤�醫듼봺 占쎈슣�좈뇡遺쎈궢 鈺곌퀣��占싼됵옙
+	카테고리 테이블과 조인 여부
 	* @param isTotalSearch
-	占쎈벏鍮�칰占쎄퉳占쎈Ŋ苑�鈺곌퀬�띰옙�롢늺 true
+	통합검색에서 조회하면 true
 	* @return
 	*/
 	public static int retrieveCountContent(long[] categoryIds,
@@ -429,7 +441,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌쥙占쏙옙占썼굜�묐�筌ο옙�귐딅뮞占쏙옙鈺곌퀬���꾩꼹�쀯㎘占썰빳占쏙옙袁⑹삺 占싼딆뒠占쎈Þ占�OWNER/MANAGER占쏙옙占쏙옙�됭�怨좎돳
+	* 유저의 콘텐츠 리스트 조회 콘텐츠 중 현재 사용자가 OWNER/MANAGER인 항목조회
 	*
 	* @param companyGroupId
 	* @param parentGroupId
@@ -456,7 +468,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌쥙占쏙옙占썼굜�묐�筌ο옙燁삳똻�ワ옙占썼�怨좎돳 �꾩꼹�쀯㎘占썰빳占쏙옙袁⑹삺 占싼딆뒠占쎈Þ占�OWNER/MANAGER占쏙옙占쏙옙��燁삳똻�ワ옙占�    *
+	* 유저의 콘텐츠 카운트 조회 콘텐츠 중 현재 사용자가 OWNER/MANAGER인 항목 카운트
 	*
 	* @param companyGroupId
 	* @param parentGroupId
@@ -480,7 +492,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占쏙옙源낆쨯
+	* 콘텐츠 등록
 	*
 	* @param upload
 	* @param request
@@ -502,7 +514,8 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占쏙옙�낅쑓占쎈똾��     *
+	* 콘텐츠 업데이트
+	*
 	* @param upload
 	* @param request
 	* @param companyId
@@ -522,7 +535,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占쏙옙占쎌젫
+	* 콘텐츠 삭제
 	*
 	* @param companyId
 	* @param groupId
@@ -535,7 +548,8 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* entryId占쏙옙�울옙�댐옙占썼굜�묐�筌ο옙Entry 鈺곌퀬��     *
+	* entryId와 관련된 콘텐츠 Entry 조회
+	*
 	* @param params
 	* @return List<Map<String, Object>>
 	*/
@@ -545,7 +559,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �울옙�댐옙類ｋ궖占쎈Ŋ苑�野껓옙源뗰옙��옙 占쎈똻�쒙옙占썲칰占쎄퉳占쏙옙�꾩꼹�쀯㎘占썹뵳��わ옙占�    *
+	* 관련정보에서 검색어를 이용해 검색한 콘텐츠 리스트
 	*
 	* @param params
 	* @return List<Map<String, Object>>
@@ -556,7 +570,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �울옙�댐옙類ｋ궖占쎈Ŋ苑�野껓옙源뗰옙��옙 占쎈똻�쒙옙占썲칰占쎄퉳占쏙옙�꾩꼹�쀯㎘占썹㎉�곸뒲占쏙옙     *
+	* 관련정보에서 검색어를 이용해 검색한 콘텐츠 카운트
 	*
 	* @param params
 	* @return int
@@ -566,7 +580,8 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘醫딉옙 ENTRY占쏙옙占쎄퉭以�     *
+	* 콘텐츠를 ENTRY에 등록
+	*
 	* @param companyId
 	* @param groupId
 	* @param content
@@ -582,7 +597,7 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* �꾩꼹�쀯㎘占폠NSERTID 占쎈굝�뀐옙�꾨뱜 (OWNER 癰귨옙瑗�
+	* 콘텐츠 INSERTID 업데이트 (OWNER 변경)
 	*
 	* @param groupId
 	* @param contentSeq
@@ -600,7 +615,9 @@ public class ContentLocalServiceUtil {
 	}
 
 	/**
-	* 燁삳똾�믤�醫듼봺 獄쏄퀣肉�占쎌빘苑�占쎈벏鍮�칰占쎄퉳占쏙옙占싼딆뒠 占쎈뜇釉� �꾩꼹�쀯㎘醫딅뮉 占싼뗪퉱占쎈Ŋ苑뚳옙占썹㎉�꾨��⑥쥓�곮퉪袁⑥쨮 鈺곌퀬�띰옙�륅옙 占쎈봿�앲첋占쎌쨮 parentCategory 揶쏉옙0占쏙옙     * 占싼딆뵠占쏙옙占싼뗪퉱)占쏙옙占쏙옙鍮먲옙占퐊ull占쏙옙獄쏆꼹�싷옙占�     *
+	* 카테고리 배열 생성 통합검색은 사용 안함. 콘텐츠는 포탈에서는 카테고리별로 조회하지 않으므로 parentCategory 가 0인
+	* 사이트(포탈)에 대해서 null을 반환함.
+	*
 	* @param companyGroupId
 	* @param groupId
 	* @return long[]
