@@ -586,6 +586,19 @@ public class ScienceAppLocalServiceClpInvoker {
 		_methodParameterTypes284 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName285 = "countScienceApp";
+
+		_methodParameterTypes285 = new String[] {
+				"long", "long", "long", "java.util.Locale", "java.util.Map"
+			};
+
+		_methodName286 = "retrieveListScienceApp";
+
+		_methodParameterTypes286 = new String[] {
+				"long", "long", "long", "java.util.Locale", "java.util.Map",
+				"int", "int", "boolean"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1329,6 +1342,27 @@ public class ScienceAppLocalServiceClpInvoker {
 				(java.lang.String)arguments[1]);
 		}
 
+		if (_methodName285.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes285, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.countScienceApp(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.util.Locale)arguments[3],
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[4]);
+		}
+
+		if (_methodName286.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes286, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.retrieveListScienceApp(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(java.util.Locale)arguments[3],
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[4],
+				((Integer)arguments[5]).intValue(),
+				((Integer)arguments[6]).intValue(),
+				((Boolean)arguments[7]).booleanValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1560,4 +1594,8 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes283;
 	private String _methodName284;
 	private String[] _methodParameterTypes284;
+	private String _methodName285;
+	private String[] _methodParameterTypes285;
+	private String _methodName286;
+	private String[] _methodParameterTypes286;
 }

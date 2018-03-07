@@ -67,4 +67,12 @@ public interface ScienceAppFinder {
 
 	public int getMyAppListForProjectCount(java.util.Map params,
 		java.util.Locale locale);
+
+	public int countScienceApp(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> retrieveListScienceApp(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

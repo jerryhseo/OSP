@@ -2254,4 +2254,211 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	public ScienceApp getScienceApp( String scienceAppName, String scienceAppVersion ) throws NoSuchScienceAppException, SystemException{
 		return super.scienceAppPersistence.findByNameVersion(scienceAppName, scienceAppVersion);
 	}
+	
+	// ADD ScienceAppList source by imJeong at 2018.03.06
+	public int countScienceApp(long companyGroupId, long groupId,long categoryId,Locale locale, Map<String,Object> searchParam) throws SystemException, PortalException{
+		Map<String,Object> search = settingScienceAppParameter(companyGroupId, groupId, categoryId, locale, searchParam, 0, 0);
+		return scienceAppFinder.countScienceApp(search);
+	}
+	
+	/**
+	 * ScienceApp List 조회
+	 * @param companyGroupId
+	 * @param groupId
+	 * @param categoryId - 0일 경우 groupId를 통하여 전체 카테고리를 조회
+	 * @param locale
+	 * @param searchParam - 조회할 parameter Map
+	 * @param begin - 시작 0 LIMIT를 사용
+	 * @param end
+	 * @param widthFile - 목록에서 파일이 필요 할 경우 true
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<Map<String, Object>> retrieveListScienceApp(long companyGroupId, long groupId, long categoryId, Locale locale, Map<String,Object> searchParam, int begin, int end, boolean widthFile) throws PortalException, SystemException{
+		
+		Map<String,Object> search = settingScienceAppParameter(companyGroupId, groupId, categoryId, locale, searchParam, begin, end);
+		List<Object[]> scienceAppList = scienceAppFinder.retrieveListScienceApp(search);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		try{
+			for (int i = 0; i < scienceAppList.size(); i++) {
+				Object[] resultArray = scienceAppList.get(i);
+				ScienceAppCategoryLink sAppCategoryLink = (ScienceAppCategoryLink) resultArray[0];
+				ScienceApp scienceApp = (ScienceApp) resultArray[1];
+				User user = UserLocalServiceUtil.getUser(scienceApp.getAuthorId());
+				
+				//ScienceAppCategoryLink,ScienceApp 테이블에서 modifiedDate column 중복으로 인한 수정 - (20170202 HKD)
+				Date modifiedDate = (Date) resultArray[2];
+				scienceApp.setModifiedDate(CustomUtil.StringToDateFormat(CustomUtil.strNull(modifiedDate), "yyyy-MM-dd"));;
+				
+				Map<String, Object> resultRow = getScienceAppMap(locale, sAppCategoryLink, scienceApp, user);
+				
+
+				long classPK = GetterUtil.getLong(user.getExpandoBridge().getAttribute(EdisonExpando.USER_UNIVERSITY),0);
+				String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(classPK, EdisonExpando.CDNM, locale);
+				resultRow.put("affiliation", affiliation);
+				
+				if(widthFile){
+					//파일 - icon
+					if(scienceApp.getIconId()!=0){
+						resultRow.put("iconId", scienceApp.getIconId());
+						try{
+						DLFileEntry iconDl =  DLFileEntryLocalServiceUtil.getDLFileEntry(scienceApp.getIconId());
+						resultRow.put("iconRepositoryId", iconDl.getRepositoryId());
+						resultRow.put("iconUuid", iconDl.getUuid());
+						resultRow.put("iconTitle", iconDl.getTitle());
+						}catch(Exception e){
+							if(e instanceof NoSuchFileEntryException){
+							}else{
+								throw new PortalException(e);
+							}							
+						}
+					}
+					
+					//메뉴얼
+					long manualId = GetterUtil.getLong(scienceApp.getManualId(locale),0l);
+					if(manualId !=0){
+						try{
+							DLFileEntry manualDl =DLFileEntryLocalServiceUtil.getDLFileEntry(manualId);
+							resultRow.put("manualId", manualId);
+							resultRow.put("manualRepositoryId", manualDl.getRepositoryId());
+							resultRow.put("manualUuid", manualDl.getUuid());
+							resultRow.put("manualTitle", manualDl.getTitle());
+						}catch(Exception e){
+							if(e instanceof NoSuchFileEntryException){
+							}else{
+								throw new PortalException(e);
+							}							
+						}
+					}
+				}
+				
+				
+				returnList.add(resultRow);
+			}
+		}catch(Exception e){
+			if(e instanceof PortalException){
+				throw new PortalException(e);
+			}else{
+				throw new SystemException(e);
+			}
+		}
+		
+		return returnList;
+	}
+	
+	protected Map<String,Object> settingScienceAppParameter(long companyGroupId, long groupId,long categoryId, Locale locale,Map<String,Object> searchParam,int begin, int end) throws PortalException, SystemException {
+		//categoryId가 0일 경우 해당 groupId의 상위 카테고리를 조회 해서 parentCategoryId에 셋팅 한다.
+		if(categoryId==0){
+			//카테고리
+			AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+			
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			String categoryStr = "";
+			for(AssetCategory aCategory : aCategoryList){
+				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&&aCategory.getParentCategoryId()==0){
+					if(categoryStr.equals("")){
+						categoryStr += aCategory.getCategoryId();
+					}else{
+						categoryStr += ","+aCategory.getCategoryId();
+					}
+				}
+			}
+			
+			long[] parentCategoryId = StringUtil.split(categoryStr,0l);
+			searchParam.put("parentCategoryId", parentCategoryId);
+		}else{
+			searchParam.put("categoryId", categoryId);
+		}
+		
+		
+		String targetLanguage = LocaleUtil.toLanguageId(locale);
+		searchParam.put("targetLanguage", targetLanguage);
+		searchParam.put("companyId", GroupLocalServiceUtil.getGroup(companyGroupId).getCompanyId());
+		
+		
+		
+		//User 확장 필드 조회
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
+		ExpandoColumn column = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY);
+		searchParam.put("columnId", column.getColumnId());
+		
+		
+		
+		//전체 검색 및 기관 검색이 있을 경우
+		String searchOption = CustomUtil.strNull(searchParam.get("searchOption"));
+		if(!searchOption.equals("")){
+			searchParam.put(searchOption, "Y");
+				
+			if(StringUtil.equalsIgnoreCase(searchOption, "APP_MANAGER_SEARCH_ALL")||StringUtil.equalsIgnoreCase(searchOption, "SCIENCEAPPSTORE_SEARCH_ALL")||StringUtil.equalsIgnoreCase(searchOption, "SWORGNM")){
+				String searchValue = CustomUtil.strNull(searchParam.get("searchValue"));
+				String searchOrgCodeStr = "";
+				//공통코드에서 Like 조회
+				List<Map<String, String>> commonCodeList = EdisonExpndoUtil.getCodeListByUpCode(1501, locale);
+				for(Map<String,String> codeMap : commonCodeList){
+					String codeName = codeMap.get(EdisonExpando.CDNM);
+					if(codeName.indexOf(searchValue)>-1){
+						String codeValue = codeMap.get(EdisonExpando.CD);
+						
+						if(searchOrgCodeStr.equals("")){
+							searchOrgCodeStr += codeValue;
+						}else{
+							searchOrgCodeStr += ","+codeValue;
+						}
+					}
+				}
+				
+				if(searchOrgCodeStr.equals("")){
+					searchParam.put("searchOrgCode", searchValue);
+				}else{
+					long[] searchOrgCode = StringUtil.split(searchOrgCodeStr,0l);
+					searchParam.put("searchOrgCode", searchOrgCode);
+				}
+				
+				
+			}
+		}
+		
+		//페이징
+		if(end!=0){
+			searchParam.put("begin", begin);
+			searchParam.put("end", end);
+		}
+		
+		return searchParam;
+	}
+	
+	protected Map<String, Object> getScienceAppMap(
+		      Locale locale, ScienceAppCategoryLink sAppCategoryLink, ScienceApp scienceApp, User user
+		      ) 
+		      throws ParseException, PortalException, SystemException{
+		    
+		Map<String, Object> resultRow = new HashMap<String, Object>();
+	    resultRow.put("groupId", sAppCategoryLink.getGroupId());
+	    resultRow.put("companyId", sAppCategoryLink.getCompanyId());
+	    resultRow.put("categoryId", sAppCategoryLink.getCategoryId());
+	    resultRow.put("parentCategoryId", sAppCategoryLink.getParentCategoryId());
+	    
+	    resultRow.put("scienceAppId", scienceApp.getScienceAppId());
+	    resultRow.put("createDate", scienceApp.getCreateDate());
+	    resultRow.put("statusDate", scienceApp.getStatusDate());
+	    resultRow.put("name", scienceApp.getName());
+	    resultRow.put("version", scienceApp.getVersion());
+	    resultRow.put("title", scienceApp.getTitle(locale));
+	    resultRow.put("status", scienceApp.getStatus());
+	    resultRow.put("modifiedDate", scienceApp.getModifiedDate());
+	    resultRow.put("developers", StringUtil.split(scienceApp.getDevelopers(locale), StringPool.NEW_LINE));
+	    resultRow.put("appType", scienceApp.getAppType());
+	    
+	    resultRow.put("firstName", user.getFirstName());
+	    resultRow.put("screenName", user.getScreenName());
+	    resultRow.put("userId", user.getUserId());
+	    
+	    return resultRow;
+	}
 }
