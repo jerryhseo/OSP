@@ -63,6 +63,11 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 		</p>
 	</div>
 	<a id="<portlet:namespace/>downloadAnchor" target="_blank" style="z-index:1000;">Download</a>
+	<input
+			type="file"
+			id="<portlet:namespace/>selectLocalFile"
+			name="<portlet:namespace/>uploadFile"
+	/>
 </div>
 
 <script>
@@ -135,25 +140,7 @@ function <portlet:namespace/>iframeReady(){
  * Menu click events and binding functions 
  ***********************************************************************/
  $('#<portlet:namespace/>upload').click(function(){
-	 var targetFolder;
-	 if( <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.FOLDER ){
-		 targetFolder = OSP.Util.mergePath( <portlet:namespace/>selectedFile.parent(), <portlet:namespace/>selectedFile.name() );
-	 }
-	 else if ( <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.FILE || 
-			   <portlet:namespace/>selectedFile.type() === OSP.Enumeration.PathType.EXT){
-		 targetFolder = <portlet:namespace/>selectedFile.parent();
-	 }
-	 
-	 var eventData = {
-			portletId: '<%=portletDisplay.getId()%>',
-			targetPortlet: <portlet:namespace/>connector,
-			data:{
-				targetFolder: targetFolder
-			}
-	 };
-	
-	Liferay.fire( OSP.Event.OSP_UPLOAD_FILE, eventData );
-	//$('#<portlet:namespace/>selectFile').click();
+	 $('#<portlet:namespace/>selectFile').click();
 });
 
 $('#<portlet:namespace/>sample').click(function(){
@@ -216,7 +203,6 @@ $('#<portlet:namespace/>selectFile').bind(
 			// check that file name is duplicated using AJAX.
 			var duplicated;
 			var target = OSP.Util.mergePath( uploadFolder, uploadFileName );
-			
 			$.ajax({
 				url: '<%=serveResourceURL.toString()%>',
 				type: 'POST',
@@ -547,6 +533,7 @@ function <portlet:namespace/>submitUpload( uploadFile, targetFolder, fileName ){
 		}
 	});
 }
+
 </script>
 
 

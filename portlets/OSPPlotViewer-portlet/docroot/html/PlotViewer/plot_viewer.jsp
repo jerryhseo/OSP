@@ -23,40 +23,36 @@ boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="row-fluid onedplot-portlet common-analyzer-portlet" id="<portlet:namespace/>canvasPanel" style="width:100%;padding:0;">
-	<div class="span12">
-		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel" style="margin:0;">
-			<div class="span12 canvas-wrapper">
-                <div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-                  <div class="dropdown-wrapper" >
-                    <div class="dropdown">
-                      <i class="icon-reorder icon-menu"></i>
-                      <!-- Link or button to toggle dropdown -->
-                      <div class="dropdown-content">
-                        <div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-                        <div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open Server...</i></div>
-                        <div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-                      </div>
-                    </div>
-                  </div>  
-                </div>
-				<div class="row-fluid canvas-body-wrapper">
-					<iframe id="<portlet:namespace/>canvas" class="span12 canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp"></iframe>
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-4 text-right" >
+			<div class="dropdown">
+                 <i class="icon-reorder icon-menu"></i>
+				<!-- Link or button to toggle dropdown -->
+				<div class="dropdown-content text-left">
+					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
+					<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
 				</div>
 			</div>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			 <input type="file" id="<portlet:namespace/>selectFile" />
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-			<img id="<portlet:namespace/>loadingBox" src="<%=request.getContextPath()%>/images/processing.gif" width="200" style="display: none;"/>
-		</div>
+		</div>	
 	</div>
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		</iframe>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+          </div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
+	<img id="<portlet:namespace/>loadingBox" src="<%=request.getContextPath()%>/images/processing.gif" width="200" style="display: none;"/>
 </div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -293,15 +289,18 @@ function <portlet:namespace/>loadHighCharts( inputData ){
 }
 
 function <portlet:namespace/>loadData( inputData, command ){
+	<portlet:namespace/>currentData = inputData.clone();
+	if( !<portlet:namespace/>currentData.repositoryType() )
+		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+		
 	var data = {
 			<portlet:namespace/>command: command,
-			<portlet:namespace/>pathType: inputData.type(),
-			<portlet:namespace/>repositoryType: inputData.repositoryType(),
-			<portlet:namespace/>parentPath: inputData.parent(),
-			<portlet:namespace/>fileName: inputData.fileName(),
-			<portlet:namespace/>relative: inputData.relative()
+			<portlet:namespace/>pathType: <portlet:namespace/>currentData.type(),
+			<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
+			<portlet:namespace/>parentPath: <portlet:namespace/>currentData.parent(),
+			<portlet:namespace/>fileName: <portlet:namespace/>currentData.fileName(),
+			<portlet:namespace/>relative: <portlet:namespace/>currentData.relative()
 	};
-	<portlet:namespace/>currentData = inputData;
 	$.ajax({
 		type: 'POST',
 		url: '<%=serveResourceURL.toString()%>',
@@ -336,6 +335,9 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
+    if( !inputData.repositoryType() )
+    	inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
@@ -369,7 +371,7 @@ function <portlet:namespace/>downloadCurrentFile(){
         var data = {
             <portlet:namespace/>command: "DOWNLOAD_FILE",
             <portlet:namespace/>pathType: filePath.type(),
-            <portlet:namespace/>repositoryType: inputData.repositoryType(),
+            <portlet:namespace/>repositoryType: filePath.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
             <portlet:namespace/>fileName: filePath.name(),
             <portlet:namespace/>relative: filePath.relative()

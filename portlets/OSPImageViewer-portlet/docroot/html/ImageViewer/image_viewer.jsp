@@ -29,15 +29,16 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 <div class="container-fluid common-analyzer-portlet">
 	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-4 text-right" >
+		<div class="col-sm-offset-3 col-sm-1" >
 			<div class="dropdown">
-                 <i class="icon-reorder icon-menu"></i>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Menu
+    				<span class="caret"></span></button>
 				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content text-left">
-					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-				</div>
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
 			</div>
 		</div>	
 	</div>
@@ -150,8 +151,11 @@ $('#<portlet:namespace/>selectFile').bind(
 			var input = document.getElementById('<portlet:namespace/>selectFile');
 			var reader = new FileReader();
 			reader.onload = function (e) {
-			    $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
-			    $("#<portlet:namespace/>selectFile").val("");
+			    // $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
+			    <portlet:namespace/>drawImage(
+                                              e.target.result, 
+                                              'fit');
+			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
             }
 			reader.readAsDataURL(input.files[0]);

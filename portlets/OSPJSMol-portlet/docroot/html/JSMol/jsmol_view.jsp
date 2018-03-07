@@ -18,38 +18,35 @@ String mode = (String)renderRequest.getAttribute("mode");
 %>
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
-<div class="row-fluid jsmol-portlet common-analyzer-portlet">
-    <div class="span12" style="height:inherit;">
-        <div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-          <div class="span8 offset1" id="<portlet:namespace/>title"></div>
-          <div class="dropdown-wrapper" >
-            <div class="dropdown">
-                      <i class="icon-reorder icon-menu"></i>
-              <!-- Link or button to toggle dropdown -->
-              <div class="dropdown-content">
-                <div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-              </div>
-            </div>
-          </div>  
-        </div>
-
-        <div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel" >
-            <iframe class="span12 canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp"></iframe>
-        </div>
-
-        <div class="row-fluid" id="<portlet:namespace/>hiddenSection" style="display: none;">
-            <input type="file" id="<portlet:namespace/>selectFile"/>
-            <div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-4 text-right" >
+			<div class="dropdown">
+				<i class="icon-reorder icon-menu"></i>
+				<!-- Link or button to toggle dropdown -->
+				<div class="dropdown-content text-left">
+					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
+				</div>
+			</div>
+		</div>  
+	</div>
+	
+	<div class="row-fluid canvas" id="<portlet:namespace/>canvasPanel" >
+		<iframe class="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp"></iframe>
+	</div>
 </div>
 
+<div id="<portlet:namespace/>hiddenSection" style="display: none;">
+	<input type="file" id="<portlet:namespace/>selectFile"/>
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+		<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		<div>
+			<input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+			<input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+		</div>
+	</div>
+</div>
 <script>
 
 /***********************************************************************
@@ -280,12 +277,9 @@ Liferay.on(
 function <portlet:namespace/>loadJSMolFile( inputData ){
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
-	    <portlet:namespace/>currentData = inputData.clone();
 	    <portlet:namespace/>drawJSMol( inputData );
 		break;
 	case OSP.Enumeration.PathType.FOLDER:
-	    <portlet:namespace/>currentData = inputData.clone();
-	    break;
 	case OSP.Enumeration.PathType.EXT:
 	    <portlet:namespace/>getFirstFileName( inputData );
 	    // serveResourceUrl.setParameter('command', 'READ_FIRST_FILE');
@@ -308,12 +302,14 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadJSMolFile ) {
 	    	    AUI().use('liferay-portlet-url', function(a) {
 	                <portlet:namespace/>currentData = inputData.clone();
+	                if( !<portlet:namespace/>currentData.repositoryType() )
+	                	<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 
 	    	        var serveResourceUrl = Liferay.PortletURL.createResourceURL();
 	    	        
 	    	        serveResourceUrl.setPortletId('<%=portletDisplay.getId()%>');
 	    	        serveResourceUrl.setParameter('command', 'READ_FILE');
-	    	        serveResourceUrl.setParameter('repositoryType', inputData.repositoryType());
+	    	        serveResourceUrl.setParameter('repositoryType', <portlet:namespace/>currentData.repositoryType());
 	    	        serveResourceUrl.setParameter('pathType', inputData.type());
 	    	        serveResourceUrl.setParameter('parentPath', inputData.parent());
 	    	        serveResourceUrl.setParameter('fileName', inputData.name());
@@ -334,6 +330,8 @@ function <portlet:namespace/>drawJSMol( inputData ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
+    if( !inputData.repositoryType() )
+    	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
@@ -369,7 +367,7 @@ function <portlet:namespace/>downloadCurrentFile(){
         var data = {
             <portlet:namespace/>command: "DOWNLOAD_FILE",
             <portlet:namespace/>pathType: filePath.type(),
-            <portlet:namespace/>repositoryType: inputData.repositoryType(),
+            <portlet:namespace/>repositoryType: filePath.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
             <portlet:namespace/>fileName: filePath.name(),
             <portlet:namespace/>relative: filePath.relative()
