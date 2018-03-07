@@ -450,6 +450,150 @@
 			</isNotEmpty>
 		]]>
 	</sql>
-
+	
+	<!-- ADD ScienceAppList source by imJeong at 2018.03.06 -->
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.countMyManagerScienceApp.header" >
+		<![CDATA[
+		SELECT COUNT(distinct B.scienceAppId) AS totalCnt
+		FROM
+		EDAPP_ScienceAppCategoryLink A, EDAPP_ScienceApp B, EDAPP_ScienceAppManager C, User_ U, ExpandoValue E
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.retrieveListMyManagerScienceApp.header" >
+		<![CDATA[
+		SELECT A.*, B.*,B.modifiedDate AS appModifiedDate
+		FROM
+		EDAPP_ScienceAppCategoryLink A, EDAPP_ScienceApp B, EDAPP_ScienceAppManager C, User_ U, ExpandoValue E
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.retrieveListScienceApp.header.old" >
+		<![CDATA[
+		SELECT A.*, B.*,B.modifiedDate AS appModifiedDate
+		FROM
+		EDAPP_ScienceAppCategoryLink A , EDAPP_ScienceApp B, User_ U, ExpandoValue E
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.ScienceApp.where.old" >
+		<![CDATA[
+		WHERE
+		<isNotEmpty property="companyId">
+			A.companyId = #companyId#
+		</isNotEmpty>
+		<isNotEmpty property="appType">
+		AND
+			B.appType = #appType#
+		</isNotEmpty>
+		AND
+			A.scienceAppId = B.scienceAppId
+		<isNotEmpty property="myManagerAppSearch">
+		AND 
+			B.scienceAppId = C.scienceAppId	
+		</isNotEmpty>	
+		AND
+			B.authorId = U.userId
+		AND 
+			U.userId = E.classPK
+		<isNotEmpty property="myManagerAppUserId">
+		AND 
+			C.userId = #myManagerAppUserId#
+		</isNotEmpty>
+		
+		<isNotEmpty property="userId">
+		AND 
+			B.authorId = #userId#
+		</isNotEmpty>
+		
+		<isNotEmpty property="columnId">
+		AND 
+			E.columnId = #columnId#
+		</isNotEmpty>
+		
+		<isNotEmpty property="parentCategoryId">
+		AND
+			A.parentCategoryId IN (#parentCategoryId#)
+		</isNotEmpty>
+		
+		<isNotEmpty property="categoryId">
+		AND
+			A.categoryId = #categoryId#
+		</isNotEmpty>
+		
+		<isNotEmpty property="targetLanguage">
+		AND
+			B.targetLanguage LIKE '%@@targetLanguage@@%'
+		</isNotEmpty>
+		<isNotEmpty property="status">
+		AND
+			B.status = #status#
+		</isNotEmpty>
+		
+		<isNotEmpty property="APP_MANAGER_SEARCH_ALL">
+			AND	(
+					B.name LIKE '%@@searchValue@@%'
+				OR
+					EXTRACTVALUE(B.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@searchValue@@%'
+				OR
+					U.firstName LIKE '%@@searchValue@@%'
+				OR
+					E.data_ IN (#searchOrgCode#)
+			)
+		</isNotEmpty>
+		
+		<isNotEmpty property="SCIENCEAPPSTORE_SEARCH_ALL">
+			AND	(
+					EXTRACTVALUE(B.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@searchValue@@%'
+				 OR 
+				 	B.name LIKE '%@@searchValue@@%'
+				 OR 
+				 	E.data_ IN (#searchOrgCode#)
+				 OR 
+				 	EXTRACTVALUE(B.developers, 'root/Developers[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+				)
+		</isNotEmpty>
+		
+		<isNotEmpty property="SWNM">
+		AND
+			B.name LIKE '%@@searchValue@@%'
+		</isNotEmpty>
+		
+		<isNotEmpty property="SWTITLE">
+		AND
+			EXTRACTVALUE(B.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@searchValue@@%'
+		</isNotEmpty>
+		
+		<isNotEmpty property="SWUSERNM">
+		AND
+			U.firstName LIKE '%@@searchValue@@%'
+		</isNotEmpty>
+		
+		<isNotEmpty property="SWORGNM">
+		AND
+			E.data_ IN (#searchOrgCode#)
+		</isNotEmpty>
+		
+		<isNotEmpty property="SWDEV">
+		AND 
+			EXTRACTVALUE(B.developers, 'root/Developers[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
+		</isNotEmpty>
+		<isNotEmpty property="MAINSEARCHAPPLIST">
+		AND
+			B.scienceAppId in ( #MAINSEARCHAPPLIST# ) 
+		</isNotEmpty>
+		
+		<isNotEmpty property="listsearch">
+			GROUP BY B.scienceAppId
+		</isNotEmpty>
+		
+		ORDER BY B.createDate DESC
+		
+		<isNotEmpty property="begin">
+			LIMIT
+				#begin#, #end#
+		</isNotEmpty>
+		]]>
+	</sql>
 
 </custom-sql>
