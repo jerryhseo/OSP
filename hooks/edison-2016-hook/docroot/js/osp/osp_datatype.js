@@ -156,6 +156,7 @@
 				//console.log('value: ', jsonInputData[key]);
 				switch( key ){
 				case OSP.Constants.TYPE:
+				case OSP.Constants.REPOSITORY_TYPE:
 				case OSP.Constants.PARENT:
 				case OSP.Constants.NAME:
 				case OSP.Constants.URI:

@@ -27,12 +27,13 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 %>
 
 <div class="container-fluid common-analyzer-portlet">
-	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+	<div class="row-fluid header">
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-offset-3 col-sm-1" >
 			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Menu
-    				<span class="caret"></span></button>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
 				<!-- Link or button to toggle dropdown -->
 				<ul class="dropdown-menu cursor">
 					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>

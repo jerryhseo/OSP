@@ -42,7 +42,6 @@ public class FileExplorerPortlet extends MVCPortlet {
 		
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
 		String connector = ParamUtil.getString(renderRequest, "connector", "BROADCAST");
-		String action = ParamUtil.getString(renderRequest, "action", "READ");
 		String mode = ParamUtil.getString(renderRequest, "mode", "EDIT");
 		
 		renderRequest.setAttribute("inputData", inputData);
@@ -115,7 +114,6 @@ public class FileExplorerPortlet extends MVCPortlet {
 			
 			resultJSON.put( "fileInfos", fileInfos );
 			resultJSON.put("fileName", fileName);
-			resultJSON.put("fileInfos", fileInfos);
 			
 			//System.out.println(resultJSON.toString());
 
