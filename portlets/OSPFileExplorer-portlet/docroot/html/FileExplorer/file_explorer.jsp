@@ -432,8 +432,8 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 				<portlet:namespace/>command: 'GET_FILE_INFO',
 				<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_,
 				<portlet:namespace/>pathType: 'folder',
-				<portlet:namespace/>parentPath: parentPath,
-				<portlet:namespace/>fileName: folderName
+				<portlet:namespace/>parentPath: OSP.Util.mergePath( parentPath, folderName ),
+				<portlet:namespace/>fileName: ''
 	};
 
 	var fileInfos = null;
@@ -444,9 +444,11 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 		data  : data,
 		dataType : 'json',
 		success: function(data) {
+			/*
 			console.log(JSON.stringify(data, null, 4));
 			console.log( 'Parent Path: '+OSP.Util.mergePath( parentPath, folderName ) );
 			console.log(data);
+			*/
 			<portlet:namespace/>loadFileExplorer( 
 											OSP.Util.mergePath( parentPath, folderName ),
 			                               data.fileInfos );
