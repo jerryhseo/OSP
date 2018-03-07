@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hook PUBLIC "-//Liferay//DTD Hook 6.2.0//EN" "http://www.liferay.com/dtd/liferay-hook_6_2_0.dtd">
+
+<hook>
+    <portal-properties>resources/portal.properties</portal-properties>
+    <custom-jsp-dir>/custom_jsps</custom-jsp-dir>
+	<struts-action>
+		<struts-action-path>/portal/login/shibboleth</struts-action-path>
+		<struts-action-impl>kr.re.edison.hook.saml.SAMLAction</struts-action-impl>
+	</struts-action>
+    <struts-action>
+        <struts-action-path>/portal/logout</struts-action-path>
+        <struts-action-impl>kr.re.edison.hook.saml.SAMLLogoutAction</struts-action-impl>
+    </struts-action>
+</hook>
