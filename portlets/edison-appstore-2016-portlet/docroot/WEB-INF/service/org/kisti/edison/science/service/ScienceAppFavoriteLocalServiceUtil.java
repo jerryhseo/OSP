@@ -289,8 +289,7 @@ public class ScienceAppFavoriteLocalServiceUtil {
 	}
 
 	/**
-	* 즐겨찾기앱  리스트 조회 사이트 카테고리 생성하여 조회
-	*
+	* 筌앸Þ爰쇽㎕�섎┛占쏙옙 �귐딅뮞占쏙옙鈺곌퀬��占싼딆뵠占쏙옙燁삳똾�믤�醫듼봺 占쎌빘苑�옙�뤿연 鈺곌퀬��     *
 	* @param companyGroupId
 	* @param groupId
 	* @param locale
@@ -313,9 +312,7 @@ public class ScienceAppFavoriteLocalServiceUtil {
 	}
 
 	/**
-	* 카테고리 배열 생성 통합검색은 사용 안함. 콘텐츠는 포탈에서는 카테고리별로 조회하지 않으므로 parentCategory 가 0인
-	* 사이트(포탈)에 대해서 null을 반환함.
-	*
+	* 燁삳똾�믤�醫듼봺 獄쏄퀣肉�占쎌빘苑�占쎈벏鍮�칰占쎄퉳占쏙옙占싼딆뒠 占쎈뜇釉� �꾩꼹�쀯㎘醫딅뮉 占싼뗪퉱占쎈Ŋ苑뚳옙占썹㎉�꾨��⑥쥓�곮퉪袁⑥쨮 鈺곌퀬�띰옙�륅옙 占쎈봿�앲첋占쎌쨮 parentCategory 揶쏉옙0占쏙옙     * 占싼딆뵠占쏙옙占싼뗪퉱)占쏙옙占쏙옙鍮먲옙占퐊ull占쏙옙獄쏆꼹�싷옙占�     *
 	* @param companyGroupId
 	* @param groupId
 	* @return long[]

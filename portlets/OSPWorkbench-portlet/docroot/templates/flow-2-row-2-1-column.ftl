@@ -32,20 +32,23 @@
 						
 					</div>
 				</div>
-				<div class="flow-grid" style="display:none;" id="OUTPUT">
-					<div class="row layout-grid" style="display:none;">
-						
-					</div>
-					<div class="row layout-grid" id="${namespace}row-1">
-						<div class="col-md-4 sub-col">
-							<div class="col-md-12" id="${namespace}column-6">
+				<div class="flow-grid" style="display:none;height:100%;" id="OUTPUT">
+					<div class="row" style="height:100%">
+						<div class="col-md-6" style="height: 100%" id="2-row-column-6">
+							<div class="row layout-grid" style="height:50%" id="${namespace}row-1">
+								<div class="col-md-12 sub-col" id="${namespace}column-6">
 							
+								</div>
 							</div>
-							<div class="col-md-12" id="${namespace}column-7">
+							<div class="devider horizontal" data-equal-id="${namespace}row-1" data-remainder-id="${namespace}row-2"></div>
+							<div class="row layout-grid" style="height:50%" id="${namespace}row-2">
+								<div class="col-md-12 sub-col" id="${namespace}column-7">
 							
+								</div>
 							</div>
 						</div>
-						<div class="col-md-8 sub-col" id="${namespace}column-8">
+						<div class="devider vertical" data-equal-id="2-row-column-6" data-remainder-id="${namespace}column-8"></div>
+						<div class="col-md-6 sub-col" id="${namespace}column-8" style="height:100%">
 							
 						</div>
 					</div>

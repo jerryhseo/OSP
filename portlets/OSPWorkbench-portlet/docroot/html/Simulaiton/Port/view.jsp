@@ -13,7 +13,7 @@
 			
 		</div>
 	</div>
-	<div class="panel-footer" style="min-width: 385px;">
+	<div class="panel-footer" style="min-width: 290px;">
 		<div id="<portlet:namespace/>port-edit-btn-group">
 			<span class="<portlet:namespace/>provenance">
 				<liferay-ui:message key='edison-provenance-engin'/>
