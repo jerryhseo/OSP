@@ -372,7 +372,7 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	database, returns null. If appVersion is not follows versioning
 	rules, returns null. Otherwise returns a ScienceApp instance with
 	initialized data.
-
+	
 	Some attributes of the returned instance are set initial value as
 	followings: -stage: ScienceAppConstants.EMPTY -authorId: current
 	user id of service context instance -createDate: date created of
@@ -1311,6 +1311,43 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 			org.kisti.edison.science.NoSuchScienceAppException {
 		return _scienceAppLocalService.getScienceApp(scienceAppName,
 			scienceAppVersion);
+	}
+
+	@Override
+	public int countScienceApp(long companyGroupId, long groupId,
+		long categoryId, java.util.Locale locale,
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.countScienceApp(companyGroupId, groupId,
+			categoryId, locale, searchParam);
+	}
+
+	/**
+	* ScienceApp List 조회
+	*
+	* @param companyGroupId
+	* @param groupId
+	* @param categoryId - 0일 경우 groupId를 통하여 전체 카테고리를 조회
+	* @param locale
+	* @param searchParam - 조회할 parameter Map
+	* @param begin - 시작 0 LIMIT를 사용
+	* @param end
+	* @param widthFile - 목록에서 파일이 필요 할 경우 true
+	* @return
+	* @throws PortalException
+	* @throws SystemException
+	*/
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
+		long companyGroupId, long groupId, long categoryId,
+		java.util.Locale locale,
+		java.util.Map<java.lang.String, java.lang.Object> searchParam,
+		int begin, int end, boolean widthFile)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.retrieveListScienceApp(companyGroupId,
+			groupId, categoryId, locale, searchParam, begin, end, widthFile);
 	}
 
 	/**
