@@ -253,4 +253,16 @@ public interface AdvancedContentLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, com.liferay.portal.model.User user,
+		java.util.Locale locale,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws java.lang.Exception;
 }

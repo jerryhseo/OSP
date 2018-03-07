@@ -121,6 +121,17 @@ public class AdvancedContentLocalServiceClpInvoker {
 		_methodName49 = "setBeanIdentifier";
 
 		_methodParameterTypes49 = new String[] { "java.lang.String" };
+
+		_methodName54 = "getAdvancedContentListByGroupId";
+
+		_methodParameterTypes54 = new String[] { "long", "java.util.Locale" };
+
+		_methodName55 = "getAdvancedContentListByGroupId";
+
+		_methodParameterTypes55 = new String[] {
+				"long", "com.liferay.portal.model.User", "java.util.Locale",
+				"com.liferay.portal.theme.ThemeDisplay"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -224,6 +235,20 @@ public class AdvancedContentLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return AdvancedContentLocalServiceUtil.getAdvancedContentListByGroupId(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1]);
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return AdvancedContentLocalServiceUtil.getAdvancedContentListByGroupId(((Long)arguments[0]).longValue(),
+				(com.liferay.portal.model.User)arguments[1],
+				(java.util.Locale)arguments[2],
+				(com.liferay.portal.theme.ThemeDisplay)arguments[3]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -263,4 +288,8 @@ public class AdvancedContentLocalServiceClpInvoker {
 	private String[] _methodParameterTypes48;
 	private String _methodName49;
 	private String[] _methodParameterTypes49;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

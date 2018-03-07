@@ -81,31 +81,22 @@
 	}
 	
 </style>
-<%-- <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/> --%>
-<%-- <liferay-portlet:resourceURL var="retrieveAdvancedURL" id="retrieveListAdvanced" copyCurrentRenderParameters="false" escapeXml="false"/> --%>
 <liferay-portlet:resourceURL var="retrieveGeneralURL" id="retrieveListGeneral" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<%-- <liferay-portlet:renderURL var="advancedWriterURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>" copyCurrentRenderParameters="false">
-	<liferay-portlet:param name="myaction" value="advancedModifyView" />
-</liferay-portlet:renderURL> --%>
 
 <liferay-portlet:renderURL var="contentSearchURL" copyCurrentRenderParameters="false" >
-<%-- 	<liferay-portlet:param name="redirectName" value="${redirectName}" /> --%>
-<%-- 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="generalWriterURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>">
 	<liferay-portlet:param name="myaction" value="generalModifyView" />
 	<liferay-portlet:param name="redirectName" value="${redirectName}" />
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
-<%-- 	<liferay-portlet:param name="mode" value="<%=Constants.VIEW %>" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="contentManageViewURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>">
 	<liferay-portlet:param name="myaction" value="contentManageView" />
 	<liferay-portlet:param name="redirectName" value="${redirectName}" />
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
-<%-- 	<liferay-portlet:param name="mode" value="<%=Constants.ADD %>" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="contentTabSearchURL" portletMode='view'/>
@@ -118,10 +109,10 @@
 </style>
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
-<div class="h10"></div>
-<div class="contabmenu"> 
-	<edison-ui:tabs names="<%=tabNames%>" url="<%=contentTabSearchURL%>" tabsValues="owner_content,manager_content" value="<%=listTabValue%>" param="tabValue" minwidth="230"/>
-</div>
+	<div class="h10"></div>
+	<div class="contabmenu"> 
+		<edison-ui:tabs names="<%=tabNames%>" url="<%=contentTabSearchURL%>" tabsValues="owner_content,manager_content" value="<%=listTabValue%>" param="tabValue" minwidth="230"/>
+	</div>
 </c:if>
 
 <div class="h10"></div>

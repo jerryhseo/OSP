@@ -118,6 +118,7 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 
 			query.addEntity("EDMED_Content", ContentImpl.class);
 			query.addScalar("screenName", Type.STRING);
+			query.addScalar("viewCnt", Type.LONG);
 
 			return (List<Object[]>) query.list();
 		}catch (Exception e){
