@@ -894,6 +894,15 @@
 			Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, eventData );
 		};
 		
+		var fireSubmitJobResult = function(data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: 'BROADCAST',
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, eventData );
+		};
+		
 		var fireCreateSimulationJobResult = function( targetPortId,data ){
 			var eventData = {
 			                 portletId: Workbench.id(),
@@ -936,6 +945,7 @@
 				}else{
 					flowLayoutCode = "INPUT";
 				}
+				
 				data.flowLayoutCode = flowLayoutCode;
 			}
 			
@@ -1379,40 +1389,41 @@
 			var scienceApp = Workbench.scienceApp();
 			var simulationCreateTime = simulation.createTime();
 			
-			var ajaxData = Liferay.Util.ns(
-                           Workbench.namespace(),
-                           {
-                        	   command: 'SUBMIT_JOBS',
-                        	   simulationUuid: simulation.uuid(),
-                        	   simulationTime: simulationCreateTime,
-                        	   scienceAppName: scienceApp.name(),
-                        	   scienceAppVersion: scienceApp.version(),
-                        	   ncores: simulation.ncores(),
-                        	   jobs: JSON.stringify( jobsToSubmit )
-                           });
+			//block
+			bStart();
+			setTimeout(function(){
+				var ajaxData = Liferay.Util.ns(
+                        Workbench.namespace(),
+                        {
+                     	   command: 'SUBMIT_JOBS',
+                     	   simulationUuid: simulation.uuid(),
+                     	   simulationTime: simulationCreateTime,
+                     	   scienceAppName: scienceApp.name(),
+                     	   scienceAppVersion: scienceApp.version(),
+                     	   ncores: simulation.ncores(),
+                     	   jobs: JSON.stringify( jobsToSubmit )
+                        });
 			
-			$.ajax({
-				url : resourceURL,
-				type: 'post',
-				dataType: 'text',
-				data : ajaxData,
-				success : function(submittedJobs){
-					console.log('[SUCCESS] submit job : '+submittedJobs);
-//					job.status( status );
-//					job.dirty(false);
-//					job.isSubmit( true );
-					
-//					var simulation = Workbench.workingSimulation();
-//					var data = {
-//			            simulationUuid: simulation.uuid(),
-//			            jobUuid: job.uuid()
-//					};
-//					fireRefreshJobs(data);
-				},
-				error : function( data, e ){
-					console.log('[ERROR] submit job failed: ', data);
-				}
-			});
+				$.ajax({
+					url : resourceURL,
+					type: 'post',
+					dataType: 'json',
+					data : ajaxData,
+					success : function(submittedJobs){
+						console.log('[SUCCESS] submit job : '+submittedJobs);
+						var submittedJob = submittedJobs[0];
+						var data = {
+							simulationUuid: simulation.uuid(),
+				            jobUuid: submittedJob.uuid,
+				            status: false
+						};
+						fireSubmitJobResult(data);
+					},
+					error:function(jqXHR, textStatus, errorThrown){
+						fireSubmitJobResult({status:false});
+					}
+				});
+			},500);
 		};
 		
 		var loadJobData = function ( job ){
@@ -2142,7 +2153,7 @@
 			else
 			$.alert({
 				title: 'Alert!',
-			    content: 'No changes to be saved: '+simulation.title()
+				content: 'No changes to be saved: '+simulation.title()
 			});
 		};
 		
@@ -2397,8 +2408,7 @@
 					jobStatus: job.status()
 			};
 			
-			alert(job.status());
-			fireRefreshJobStatus(status);
+			fireRefreshJobStatus(statusData);
 			
             var scienceApp = Workbench.scienceApp();
             var logPorts = scienceApp.logPorts();

@@ -29,7 +29,6 @@ import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
-import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -626,7 +625,7 @@ public class LayoutController {
 	}
 	
 	
-	protected void submitJobs( PortletRequest portletRequest, PortletResponse portletResponse ) throws PortletException, IOException{
+	protected void submitJobs( PortletRequest portletRequest, PortletResponse portletResponse ) throws PortletException, IOException, SystemException, PortalException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		User user = themeDisplay.getUser();
@@ -644,23 +643,9 @@ public class LayoutController {
 		String scienceAppName = ParamUtil.getString(portletRequest, "scienceAppName");
 		String scienceAppVersion = ParamUtil.getString(portletRequest, "scienceAppVersion");
 		
-		JSONArray jobs = null;
-		try {
-			jobs = JSONFactoryUtil.createJSONArray(ParamUtil.getString(portletRequest, "jobs" ));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONArray jobs = JSONFactoryUtil.createJSONArray(ParamUtil.getString(portletRequest, "jobs"));
 		
-		
-		ScienceApp scienceApp = null;
-		try {
-			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
-		} catch (NoSuchScienceAppException | SystemException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
 		
 		// Other common parameters for all jobs
 		String runType = scienceApp.getRunType();
@@ -671,17 +656,9 @@ public class LayoutController {
 		}
 		
 		
-		ServiceContext sc = null;
-		try {
-			sc = ServiceContextFactory.getInstance(portletRequest);
-			//sc.setUserId( user.getUserId() );
-			sc.setCreateDate( new Date() );
-			sc.setModifiedDate( new Date() );
-		} catch (PortalException | SystemException e) {
-			_log.error("Creating ServiceContext Failed: "+Simulation.class.getName());
-			throw new PortletException();
-		}
-		
+		ServiceContext sc = ServiceContextFactory.getInstance(portletRequest);
+		sc.setCreateDate(new Date());
+		sc.setModifiedDate(new Date());
 		
 		//executable of IB
 		String exePath = Paths.get(_SOLVER_BASE_DIR).resolve(scienceApp.getBinPath()).toString();
@@ -689,15 +666,14 @@ public class LayoutController {
 		String mpiType = scienceApp.getParallelModule();
 		String[] dependencies = null;
 		String cluster = _DEFAULT_CLUSTER;
-		String cyberLabId = _DEFAULT_CYBERLAP_ID; // deprecated
-		String classId = _DEFAULT_CLASS_ID; // deprecated
 		
 		//Set execution and files
 		Map<String, String> files = new LinkedHashMap<>();
 		Map<String, JSONObject> progArgs = new LinkedHashMap<>();
 		
 		JSONArray submitedJobs = JSONFactoryUtil.createJSONArray();
-		System.out.println("jobs.length()-->"+jobs.length());
+		_log.info("jobs.length()-->"+jobs.length());
+		
 		int jobCount = jobs.length();
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
@@ -725,7 +701,7 @@ public class LayoutController {
 			
 			jobUuid = job.getJobUuid();
 			String jobSeqNo = String.valueOf(job.getJobSeqNo());
-			System.out.println("Job Sequence No.: "+jobSeqNo);
+			_log.info("Job Sequence No.: "+jobSeqNo);
 			
 			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
 			this.jsonArrayPrint(jobData);
@@ -737,7 +713,6 @@ public class LayoutController {
 				String portName = inputData.getString("portName_");
 				String pathType = inputData.getString("type_");
 				
-				_log.info("Job_Submit_PathType"+pathType);
 				if( pathType.equalsIgnoreCase("fileContent") ){
 					String inputParent = inputData.getString("parent_", "");
 					String inputFileName = inputData.getString("name_", "");
@@ -756,29 +731,24 @@ public class LayoutController {
 					
 					String content = inputData.getString("context_");
 					
-					try {
-						String fileId = ibAgent.uploadFileContent( 
-								portletRequest, 
-								content, 
-								Paths.get(parentPath.toString(), 
-										inputFileName).toString(), _DEFAULT_CLUSTER);
-						System.out.println("File Id After IB Upload: "+fileId);
-						
-						JSONObject argVal = JSONFactoryUtil.createJSONObject();
-						argVal.put("type", "FILE_ID");
-						argVal.put("value", fileId);
-						progArgs.put(portName, argVal);
-						
-						files.put(portName, fileId);
-						inputData.put("type_", "file");
-						inputData.put("parent_", parentPath.toString());
-						inputData.put("name_", inputFileName);
-						inputData.remove("context_");
-					} catch (JSONException | SystemException e) {
-						e.printStackTrace();
-					} catch (PortalException e) {
-						e.printStackTrace();
-					}
+					String fileId = ibAgent.uploadFileContent( 
+							portletRequest, 
+							content, 
+							Paths.get(parentPath.toString(), 
+									inputFileName).toString(), _DEFAULT_CLUSTER);
+					_log.info("File Id After IB Upload: "+fileId);
+					
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "FILE_ID");
+					argVal.put("value", fileId);
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, fileId);
+					inputData.put("type_", "file");
+					inputData.put("parent_", parentPath.toString());
+					inputData.put("name_", inputFileName);
+					inputData.remove("context_");
+					
 				}else if( pathType.equalsIgnoreCase("dlEntryId")){
 					long fileEntryId = inputData.getLong("id_");
 					String inputParent = inputData.getString("parent_", "");
@@ -802,17 +772,11 @@ public class LayoutController {
 						}
 					}
 					
-					String fileId = "";
-					try {
-						fileId = ibAgent.uploadDLEntryFile(
-								portletRequest, 
-								fileEntryId, 
-								parentPath.resolve(inputFileName).toString(), 
-								_DEFAULT_CLUSTER);
-					} catch (PortalException | SystemException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					String fileId = ibAgent.uploadDLEntryFile(
+							portletRequest, 
+							fileEntryId, 
+							parentPath.resolve(inputFileName).toString(), 
+							_DEFAULT_CLUSTER);
 					
 					JSONObject argVal = JSONFactoryUtil.createJSONObject();
 					argVal.put("type", "FILE_ID");
@@ -828,22 +792,16 @@ public class LayoutController {
 				}else if( pathType.equalsIgnoreCase("file")){
 					Path target = Paths.get(inputData.getString("parent_")).resolve(inputData.getString("name_"));
 					
-					System.out.println("Port Data get IB File ID: "+target.toString());
-					try {
-						String fileId =  ibAgent.getFileId( portletRequest, target.toString(), OSPRepositoryTypes.USER_HOME.toString());
-						
-						JSONObject argVal = JSONFactoryUtil.createJSONObject();
-						argVal.put("type", "FILE_ID");
-						argVal.put("value", fileId);
-						progArgs.put(portName, argVal);
-						
-						files.put(portName, fileId);
-					} catch (JSONException | SystemException e) {
-						e.printStackTrace();
-					} catch (PortalException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					_log.info("Port Data get IB File ID: "+target.toString());
+					
+					String fileId =  ibAgent.getFileId( portletRequest, target.toString(), OSPRepositoryTypes.USER_HOME.toString());
+					
+					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+					argVal.put("type", "FILE_ID");
+					argVal.put("value", fileId);
+					progArgs.put(portName, argVal);
+					
+					files.put(portName, fileId);
 					
 				}else if ( pathType.equalsIgnoreCase("folder")){
 					
@@ -901,8 +859,9 @@ public class LayoutController {
 				try {
 					SimulationJobLocalServiceUtil.updateSimulationJob(job);
 					SimulationJobDataLocalServiceUtil.replaceJobData(jobUuid, job.getJobUuid(), jobData.toString());
-					System.out.println("+++++Replaced Job Data ");
-					System.out.println(jobData.toString());
+					
+					_log.info("+++++Replaced Job Data ");
+					_log.info(jobData.toString());
 				} catch (SystemException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
