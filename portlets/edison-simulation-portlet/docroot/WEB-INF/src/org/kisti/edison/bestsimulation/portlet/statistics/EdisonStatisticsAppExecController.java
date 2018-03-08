@@ -255,7 +255,7 @@ public class EdisonStatisticsAppExecController {
 
 	@ResourceMapping(value="getStatisticsSwExe")
 	public void getStatisticsSwExe(ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, ParseException, IOException{
-		Map params = RequestUtil.getParameterMap(request);
+			Map params = RequestUtil.getParameterMap(request);
 
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 	
@@ -296,17 +296,18 @@ public class EdisonStatisticsAppExecController {
 			
 			List tableOrganigationList = new ArrayList();
 			List barChartDateList = new ArrayList();
-			
-			if(parentGroupId == 0){//포탈
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
-				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, visitSite, columnId, startDt, endDt, scienceAppList, true, 0);
-			}else if(parentGroupId != 0 && !"".equals(scienceAppName)){
-				/* 카테고리 선택 시 해당  카테고리의 통계 정보 출력 */
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, categoryId);
-				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, categoryId);
-			}else{
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
-				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
+			if(0 < scienceAppList.size()){
+				if(parentGroupId == 0){//포탈
+					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
+					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, visitSite, columnId, startDt, endDt, scienceAppList, true, 0);
+				}else if(parentGroupId != 0 && !"".equals(scienceAppName)){
+					/* 카테고리 선택 시 해당  카테고리의 통계 정보 출력 */
+					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, categoryId);
+					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, categoryId);
+				}else{
+					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
+					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
+				}
 			}
 			
 			JSONObject obj = new JSONObject();
