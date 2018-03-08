@@ -306,8 +306,8 @@ $(function(e) {
 				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
 				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
 				
-				$(equalDiv).find("div.sub-col iframe").css("height",offsetTop - 74);
-				$(RemainderDiv).find("div.sub-col iframe").css("height",offsetBottom - 74);
+// 				$(equalDiv).find("div.sub-col iframe").css("height",offsetTop - 74);
+// 				$(RemainderDiv).find("div.sub-col iframe").css("height",offsetBottom - 74);
 			}
 			
 		}
@@ -540,21 +540,21 @@ function <portlet:namespace/>displayInit(){
 		
 		
 		//iframe resize
-		if(<portlet:namespace/>workbench.isFlowLayout()){
-			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;
+// 		if(<portlet:namespace/>workbench.isFlowLayout()){
+// 			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;
 			
-			$("section#workbench-layout-area div[id*=<portlet:namespace/>]").each(function(i){
-				if($(this).hasClass("sub-col")){
-					$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-				}else{
-					$(this).find("iframe").css("height",contentHeight);
-				}
-			});
-		}else{
-			$("section#workbench-layout-area .sub-col").each(function(i){
-				$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-			});
-		}
+// 			$("section#workbench-layout-area div[id*=<portlet:namespace/>]").each(function(i){
+// 				if($(this).hasClass("sub-col")){
+// 					$(this).find("iframe").css("height",$(this).outerHeight() - 74);
+// 				}else{
+// 					$(this).find("iframe").css("height",contentHeight);
+// 				}
+// 			});
+// 		}else{
+// 			$("section#workbench-layout-area .sub-col").each(function(i){
+// 				$(this).find("iframe").css("height",$(this).outerHeight() - 74);
+// 			});
+// 		}
 	}
 	bEnd();
 }
