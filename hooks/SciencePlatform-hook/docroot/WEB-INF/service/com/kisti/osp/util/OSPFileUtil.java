@@ -975,6 +975,10 @@ public class OSPFileUtil {
 			String content,
 			String repositoryType) throws PortalException, SystemException, IOException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
+		Path parent = targetPath.getParent();
+		if( Files.notExists( parent ) ){
+			Files.createDirectories(parent);
+		}
 		OpenOption[] openOptions = new OpenOption[] { StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING};
 		Files.write(targetPath, content.getBytes(StandardCharsets.UTF_8), openOptions);
 	}
