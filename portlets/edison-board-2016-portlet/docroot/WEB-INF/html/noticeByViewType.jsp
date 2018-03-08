@@ -62,7 +62,137 @@
 	.noticeContent{
 		margin: 0 0 5px;
 	}
+	
+	/* Popup CSS */
+	.popuptitle{
+		padding-top:60px; 
+		padding-left:20px; 
+		font-weight:600; 
+		font-size:16px; 
+		color:#D35400;
+	}
+	
+	.popupcontxt{
+		height:350px;
+		padding:15px 25px 15px 25px; 
+		font-size:13px; 
+		line-height:1.5em;
+	}
+	.closetxt{
+		font-size:11px; 
+		color:#fff; 
+		margin-top:28px; 
+		padding-left:15px;
+	}
+	
+	.closetxt img{
+		vertical-align:middle;
+	}
+	
+	.ui-icon {
+		visibility: hidden;
+	}
+	 
+	.popupWrap {
+	    clear: left;
+	    margin-right: 10px;
+	    padding: 5px;
+	    float: left;
+	    border-width: 1px;
+	    border-color: #f9f9f9;
+	    border-radius: 5px;
+	    box-shadow: 0px 0px 33px 8px lightgray;
+	    background-color: #f9f9f9;
+	} 
+	.popupTitle {
+		width: 80%;
+		height:50px;
+		float: left;
+		padding: 10px 10px 0px 46px;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: normal;
+		background: url(/edison-board-2016-portlet/images/bcicon.png) no-repeat 10px 10px;
+	}
+	.popupClose {
+		width: 30px;
+		float: right;
+	 	padding: 10px 10px 0px 0px;
+		font-size: 24px;
+		font-weight: 600;
+	}
+	.popupTrLine {
+		width:95%;
+		padding-bottom:10px;
+		margin-top:10px;
+		border-bottom: solid 1px #ccc;
+	}
+	
+	.popupContent {
+		width:554px;
+		height:285px;
+		margin :0 auto;
+		padding: 5px 9px 10px 9px;
+		background-color: #FFFFFF;
+	}
+	
+	.smallpupboxBoard{
+				width:100%; border-radius:5px; -webkit-border-radius:5px; border:solid 3px #ddd;
+				font-family: Tahoma,Arial, Nanum Barun Gothic, NanumGothic;
+				}
+	.smallpuptitle{border-radius:3px 3px 0px 0px; -webkit-border-radius:3px 3px 0px 0px; padding:5px; color:#fff; 
+					font-size:15px; font-weight:600; background:url(/edison-board-2016-portlet/images/popbl.png) no-repeat 15px 12px; 
+					padding-left:55px; padding-right:17px; 
+					background-color:#3fabc7; position:relative;
+					height: 40px;
+					vertical-align: middle;
+					}
+	.smpupclosebtn{position:absolute; right:18px; top:16px;}
+	.smpuptable{width:80%; padding:20px; margin:0 auto;}
+	.notice-mtitle p {margin:0px; padding:0px;}
+	.notice-mtitle p a,.notice-mtitle p a:visited, .notice-mtitle p a:link{color:#666;}
+	.notice-mtitle p a:hover{color:#000;}
 </style>
+
+	<!-- Popup -->
+	<c:if test="${popState ne 'NO'}">
+			<c:forEach items="${popupList}" var="model"> 
+				<div id="POPUP_${model.boardSeq}" class="smallpupboxBoard" style="width:600px; height:405px; font-family: Arial,Nanum Barun Gothic,NanumGothic;">			
+					<div style="vertical-align: middle;">
+						<div class="smallpuptitle"> 
+							${model.title} 
+						</div>	  
+						<div class="smpupclosebtn">
+							<img src="${contextPath}/images/closeicon.png" width="21" height="21" onclick="closePopup('POPUP_${model.boardSeq}');return false;" style="cursor: pointer;"/>
+						</div>
+					</div><br>
+					
+					<div class="popupContent" style="overflow: auto;">
+						<c:out value="${model.content}" escapeXml="false"/>
+					</div>
+	
+					<div>
+						<c:forEach items="${model.fileList}" var="fileModel">
+							<div style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${fileModel.fileEntryId }')" class="onMouseHover">
+								${fileModel.fileTitle }
+								<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+							</div>
+						</c:forEach>
+					</div>
+					
+					<div style="padding-top: 7px;">
+						<div style="float:left">
+							<a href="#" onclick="closePopup('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-button-board-close' /> X</a>
+						</div>
+						<div style="float:right;padding-right:10px;">
+							<a href="#" onclick="closePopupAt('POPUP_${model.boardSeq}');return false;" class="onMouseHover"><liferay-ui:message key='edison-board-popup-close-alert' /> X</a> 
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+	</c:if>	
+
+
 <%--### Default Board List Start ######################################################################################################################  --%>	
 <% 	
 	String mainListYn = renderRequest.getPreferences().getValue("mainListYn", "N");
@@ -321,6 +451,46 @@
 			window.location.href = "${searchURL}&_edisonsearch_WAR_edisonsearch2017portlet_searchKeyword=" + searchField;
 		}
 	}
+	
+	
+	//####################################################################################
+	// popup
+	//####################################################################################
+	
+	function popupCreate(state){
+		if(state="YES"){
+			$(".smallpupboxBoard").each(function(index){
+				$(this).dialog({
+					resizable: false,
+					modal: false,
+					draggable: true,
+					width:606,
+					height:'auto',
+					position: [100*(index+1), 225 + (index*10)],
+				    show: {effect:'fade', speed: 800}, 
+			        hide: {effect:'fade', speed: 800}
+				}).dialog("widget").find(".ui-dialog-titlebar").remove();
+				
+			});
+		}
+	}
+	
+	function closePopup(id){
+		$("#"+id).dialog("close");
+	}
+	
+	function closePopupAt(id){
+		setCookie( id, "done");
+		$("#"+id).dialog("close");;
+	}
+	
+	function setCookie( name, value) {   
+		var todayDate = new Date();   
+		todayDate.setDate(todayDate.getDate() + 1 );
+		document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"   
+	}
+	
+	popupCreate("${popState}");
 </script>
 
 
