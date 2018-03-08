@@ -743,6 +743,7 @@ public class LayoutController {
 				String portName = inputData.getString("portName_");
 				String pathType = inputData.getString("type_");
 				
+				_log.info("Job_Submit_PathType"+pathType);
 				if( pathType.equalsIgnoreCase("fileContent") ){
 					String inputParent = inputData.getString("parent_", "");
 					String inputFileName = inputData.getString("name_", "");
