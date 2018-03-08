@@ -251,12 +251,16 @@
 									<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
 								</c:otherwise>
 							</c:choose>
-								<td class="center">	<!-- index -->
+							
+								<!-- index -->
+								<td class="center">	
 									<c:if test="${subJobState}">
 										<img src="${contextPath}/images/monitoring/btn_plus.png" class="plusBtn" style="cursor: pointer;" id="${model.simulationUuid}" data-uuid="${model.jobUuid}"/>
 									</c:if>
 									${seq - data.index}
 								</td>
+								
+								<!-- App Name -->
 								<td>
 									${model.scienceAppName}<br/>/${model.simulationTitle}
 								</td>
@@ -274,25 +278,33 @@
 										<td></td>
 									</c:when>
 									<c:otherwise>
-										<td class="center">	<!-- 상세정보 -->
+										<!-- 상세정보 -->
+										<td class="center">	
 											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
 												<img src="${contextPath}/images/monitoring/bnt_info.png" onclick="<portlet:namespace/>searchSimulationParam('${model.simulationUuid}','${model.jobSeqNo}','${model.jobUuid}');" style="cursor: pointer;" />
 											</c:if>
 										</td>
 										<c:if test="${deleteMonitoring eq true }">
-											<td>
+											<td class="center">
 												<span style="text-decoration: underline;cursor: pointer;" onclick="<portlet:namespace/>searchUser('${model.userId}');">${model.userNm}</span>
 											</td>
 										</c:if>
-										<td class="center">	<!-- 상태 -->
+										
+										<!-- 상태 -->
+										<td class="center">	
 											<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
 										</td>
+										<!-- 작업 취소-->
 										<td id="job_controll" class="center">
 											
 										</td>
+										
+										<!-- 중간 확인 -->
 										<td id="middle_check" class="center" logFileProcess-state="${model.jobLogFileProcessorYn }">
 											
 										</td>
+										
+										<!-- 작업 관리 -->
 										<td class="center">
 											<c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
 											<c:if test="${deleteMonitoring || model.userId eq thisUser}">
@@ -304,9 +316,13 @@
 												<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${model.scienceAppId}', '${model.jobUuid}');" alt="rerun" title="rerun">
 											</c:if>	
 										</td>
+										
+										<!-- 결과 다운로드 -->
 										<td id="result_down" class="center">
 											
 										</td>
+										
+										<!-- 결과 가시화 -->
 										<td id="result_view" class="center" postprocess-state="${model.jobPostProcessorYn}" middleFileprocess-state="${model.jobMiddleFileProcessorYn}">
 											
 										</td>
@@ -350,21 +366,6 @@
 		<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
 		</div>
 	</div>
-	
-	<%-- <div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-		<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
-			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-				<div class="newWtitle">Log</div>
-			</div>
-			<div class="newWclose" style="cursor: pointer;">
-				<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-			</div>
-		</div>
-		<div id="<portlet:namespace/>error-dialog-content" style="padding: 30px;" class="newWcont01">
-				
-		</div>
-	</div> --%>
-	
 	
 	<div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="table-responsive panel edison-panel">
 		<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
@@ -496,7 +497,6 @@ function <portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid
 			"<portlet:namespace/>groupId": "<%=selectedGroupId%>"
 			};
 	
-	//console.log('searchPostProcessor');
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=searchPostProcessorURL%>",
@@ -508,6 +508,15 @@ function <portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid
 				var dataSize = msg.length;
 				var dataMap = msg.portMapList;
 				//console.log( JSON.stringify( dataMap, null, 4) );
+				if(dataMap == null || dataMap == ""){
+					alert('<liferay-ui:message key="edison-there-are-no-data"/>');
+					return;
+				} else {
+					if(dataMap.length == 0){
+						alert('<liferay-ui:message key="edison-there-are-no-data"/>');
+						return;
+					}
+				}
 				$dialogBody = $("#<portlet:namespace/>post-dialog-content");
 				for(var i=0; i< dataMap.length; i++){
 					
@@ -618,8 +627,7 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 					   .attr("width","22px")
 					   .attr("height","22px")
 					   .css("cursor","pointer")
-// 					   .click(function(){<portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid);})
-						.click(function(){event.cancelBubble=true; <portlet:namespace/>restartSimulation(scienceAppId,jobUuid);})
+ 					   .click(function(){<portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid);})
 					   .appendTo($resultViewArea);
 // 		}
 	//실패
@@ -634,12 +642,6 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 			
 			$middleCheckArea.append("&nbsp;");
 		}
-/* 		$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_graph.png")
-				   .attr("width","22px")
-				   .attr("height","22px")
-				   .click(function(){<portlet:namespace/>graph_event(scienceAppId,jobUuid, simulationUuid);})
-				   .css("cursor","pointer")
-				   .appendTo($middleCheckArea); */
 		
 		$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_save.png")
 				   .attr("width","22px")
@@ -897,20 +899,26 @@ $(function(){
 					$hideJobTr.attr("data-status",data.jobStatus);
 					$hideJobTr.attr("seq-no",data.jobSeqNo);
 					
-					$("<td></td>").addClass("TC").text("-").appendTo($hideJobTr);
+					// sequence
+					$("<td></td>").addClass("center").text("-").appendTo($hideJobTr);
+					
+					// app name
 					$("<td></td>").html(data.jobTitle).appendTo($hideJobTr);
+					
+					// 상서정보
 					if(data.cluster != "EDISON-RESTORE"){
-						$("<td></td>").addClass("TC").append(
+						$("<td></td>").addClass("center").append(
 								$("<img/>").attr("src","${contextPath}/images/monitoring/bnt_info.png")
 										   .css("cursor","pointer")
 										   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>searchSimulationParam('"+data.simulationUuid+"','"+data.jobSeqNo+"','"+data.jobUuid+"');")
 						).appendTo($hideJobTr);
 					}else{
-						$("<td></td>").addClass("TC").append().appendTo($hideJobTr);
+						$("<td></td>").addClass("center").append().appendTo($hideJobTr);
 					}
 					
+					// 아이디
 					if(<%=deleteMonitoring%>){
-						$("<td></td>").append(
+						$("<td></td>").addClass("center").append(
 								$("<span></span>").css("text-decoration","underline")
 												  .css("cursor","pointer")
 												  .click(function(){
@@ -920,15 +928,19 @@ $(function(){
 						).appendTo($hideJobTr);
 					}
 					
-					$("<td></td>").addClass("TC").append(
+					// 상태
+					$("<td></td>").addClass("center").append(
 							$("<img/>").attr("src","${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/"+data.jobStatusImg)
 						).appendTo($hideJobTr);
 					
 					
-					$("<td></td>").addClass("TC").attr("id","job_controll").appendTo($hideJobTr);
-					$("<td></td>").addClass("TC").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
+					// 작업 취소
+					$("<td></td>").addClass("center").attr("id","job_controll").appendTo($hideJobTr);
+					// 중간 확인
+					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
 					
-					$jobManageTd = $("<td></td>").addClass("TC").appendTo($hideJobTr);
+					// 작업 관리
+					$jobManageTd = $("<td></td>").addClass("center").appendTo($hideJobTr);
 					if(<%=deleteMonitoring%>||data.userId==<%=themeDisplay.getUserId()%>){
 						if(data.cluster != "EDISON-RESTORE"){
 							$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_delete.png")
@@ -944,8 +956,11 @@ $(function(){
 								  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+data.scienceAppId+"', '"+data.jobUuid+"');")
 								  .appendTo($jobManageTd);
 					}
-					$("<td></td>").addClass("TC").attr("id","result_down").appendTo($hideJobTr);
-					$("<td></td>").addClass("TC").attr("postprocess-state",data.jobPostProcessorYn).attr("middleFileprocess-state",data.jobMiddleFileProcessorYn).attr("id","result_view").appendTo($hideJobTr);
+					
+					// 결과 다운로드
+					$("<td></td>").addClass("center").attr("id","result_down").appendTo($hideJobTr);
+					// 결과 가시화
+					$("<td></td>").addClass("center").attr("postprocess-state",data.jobPostProcessorYn).attr("middleFileprocess-state",data.jobMiddleFileProcessorYn).attr("id","result_view").appendTo($hideJobTr);
 					
 					$hideJobTr.appendTo($hideJobList);
 					if(data.cluster != "EDISON-RESTORE"){
@@ -1029,7 +1044,7 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid,jobSeqNo,jobUu
 				
 				
 				for (var i = 0; i < portNameList.length; i++) {
-					var portType = simulationJobData[portNameList[i]]["editor_type"];
+					var portType = simulationJobData[portNameList[i] + "_type"];
 					var portData = simulationJobData[portNameList[i]];
 					
 					var optionHtmlStr = "";
@@ -1053,39 +1068,6 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid,jobSeqNo,jobUu
 					
 				}
 			}
-			
-			/* if(optionSize>0){
-				$("<div>").addClass("tbcell070101").append(
-						$("<img/>").attr("src","${contextPath}/images/monitoring/contents_arr.png")
-						).append("<liferay-ui:message key='edison-simulation-execute-job-pre' />").appendTo($content);
-				var optionHtmlStr = "";
-				for(var i=0;i<optionSize;i++){
-					if(data.optionList[i].optionType == "1907003" || data.optionList[i].optionType == "1907004" || data.optionList[i].optionType == "1907005"){
-						optionHtmlStr+="<p>"+data.optionList[i].optionNm+" : "+data.optionList[i].optionLogicalFileValue+"</p>"
-					}else{
-						optionHtmlStr+="<p>"+data.optionList[i].optionNm+" : "+data.optionList[i].optionValue+"</p>"
-					}
-				}
-				
-				$("<div>").addClass("tbcell070201").html(optionHtmlStr).appendTo($content);;
-			}
-			
-			if(paramSize>0){
-				$("<div>").addClass("tbcell070101").append(
-						$("<img/>").attr("src","${contextPath}/images/monitoring/contents_arr.png")
-						).append("<liferay-ui:message key='edison-simulation-execute-job-detail'/>").appendTo($content);;
-				var paramHtmlStr = "";
-				for(var i=0;i<paramSize;i++){
-					var dataValue = data.parameterList[i];
-					if(dataValue.paraElement == "1909005"){
-						paramHtmlStr+="<p>"+dataValue.paraName + dataValue.paraDelimiterStr + dataValue.paraLogicalFileValue+dataValue.paraSeperatorStr+"</p>";
-					}else{
-						paramHtmlStr+="<p>"+dataValue.paraName + dataValue.paraDelimiterStr + dataValue.paraValue + dataValue.paraSeperatorStr+"</p>";
-					}
-				}
-				$("<div>").addClass("tbcell070301").css("border-bottom","none").html(paramHtmlStr).appendTo($content);;
-				
-			} */
 			
 			$("#<portlet:namespace/>jobparameter-dialog").dialog("open");
 		},
@@ -1317,17 +1299,17 @@ AUI().ready(function() {
 		show: {effect:'fade', speed: 800}, 
 		hide: {effect:'fade', speed: 800},
 		open: function(event, ui) {
-/* 			$('.ui-dialog-titlebar-close').bind('click',function(){
+ 			$('.ui-dialog-titlebar-close').bind('click',function(){
 				$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
 	    	});
 			$('.ui-widget-overlay').bind('click',function(){
 				$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
-	    	}); */
+	    	});
 	    },
 	    close: function() {
-// 	    	$("body").css('overflow','');
-// 			$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
-// 			$("#<portlet:namespace/>show-analyzer-dialog-content").empty();
+ 	    	$("body").css('overflow','');
+ 			$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
+ 			$("#<portlet:namespace/>show-analyzer-dialog-content").empty();
 			
 			location.reload();
 	    }
@@ -1362,7 +1344,7 @@ function openAnalyzerWindow(
 	  		$("#<portlet:namespace/>post-dialog").dialog("close");
 	  	}
 	  	
-  		<%-- var renderURL = Liferay.PortletURL.createRenderURL();
+  		var renderURL = Liferay.PortletURL.createRenderURL();
 		renderURL.setPortletId( 'Workbench_WAR_OSPWorkbenchportlet');
 		renderURL.setWindowState('<%=LiferayWindowState.POP_UP%>');
 	  	renderURL.setParameter("workbenchType", "MORANALYSIS");
@@ -1372,7 +1354,7 @@ function openAnalyzerWindow(
 		renderURL.setParameter("parentPath", lookUpPath + "/result/");
 		renderURL.setParameter("fileName", filePath);
 		renderURL.setParameter("relative", true);
-		renderURL.setParameter("loadNow", true);  --%>
+		renderURL.setParameter("loadNow", true);
 // 		renderURL.setParameter("pathType", "url");
 // 		renderURL.setParameter("url", lookUpPath + "/result/" + filePath);
 		
