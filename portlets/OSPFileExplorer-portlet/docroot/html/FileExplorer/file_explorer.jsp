@@ -302,16 +302,14 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 			    <portlet:namespace/>passNamespace();
-			    if( <portlet:namespace/>selectedFile ){
-				    <portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
+			    if( ! <portlet:namespace/>selectedFile ){
+					<portlet:namespace/>selectedFile = new OSP.InputData();
+					<portlet:namespace/>selectedFile.type(OSP.Enumeration.PathType.FOLDER);
+					<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+					<portlet:namespace/>selectedFile.parent('');
+					<portlet:namespace/>selectedFile.name('');
 				}
-				else{
-					var eventData = {
-						portletId: myId,
-						targetPortlet: <portlet:namespace/>connector
-					};
-					Liferay.fire( OSP.Event.OSP_REQUEST_PATH, eventData );
-				}
+				<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
 			}
 		}
 );
@@ -362,7 +360,14 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				var inputData = new OSP.InputData();
-				inputData.repositoryType( <portlet:namespace/>selectedFile.repositoryType_ );
+				var repositoryType;
+				if( <portlet:namespace/>selectedFile.repositoryType_ )
+					repositoryType = <portlet:namespace/>selectedFile.repositoryType_;
+				else{
+					'<%=OSPRepositoryTypes.USER_HOME.toString()%>';
+				}
+ 
+				inputData.repositoryType( repositoryType );
 				inputData.type( OSP.Enumeration.PathType.FOLDER);
 				inputData.parent( '' );
 				inputData.name('');
