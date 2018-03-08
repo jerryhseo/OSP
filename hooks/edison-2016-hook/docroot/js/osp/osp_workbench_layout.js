@@ -671,11 +671,12 @@
 		};
 		
 		Layout.switchPortlet = function( toPortletId, connector, eventEnable, windowState, callback ){
+			alert("switchPortlet____"+toPortletId);
 			var column = Layout.getAssignedColumn(toPortletId );
 			if( !column )	return false;
 			
 			column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
-			
+			console.log(Layout.getPortlet(toPortletId));
 			return true;
 		};
 		
