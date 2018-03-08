@@ -257,7 +257,7 @@ Liferay.on(
 			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
 				<portlet:namespace/>currentData.parent(
 					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
-					<portlet:namespace/>initData.name("");
+					//<portlet:namespace/>initData.name("");
 			}
 			<portlet:namespace/>loadJSMolFile( new OSP.InputData( e.data ) );
 		}
