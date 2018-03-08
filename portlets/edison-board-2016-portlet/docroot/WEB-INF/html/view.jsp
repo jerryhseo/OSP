@@ -179,14 +179,14 @@
 	<tr class="tablebgtr01">
 		<c:choose>
 			<c:when test="${boardDiv.divNm=='FAQ' || boardDiv.divNm=='QNA'}">
-				<td width="51%" class="title"><liferay-ui:message key='edison-appstore-myapp-question' /> : ${boardMap.title} </td>
+				<td width="75%" class="title"><liferay-ui:message key='edison-appstore-myapp-question' /> : ${boardMap.title} </td>
 			</c:when>
 			<c:otherwise>
-				<td width="51%" class="title"><liferay-ui:message key='edison-table-list-header-title' /> : ${boardMap.title} </td>
+				<td width="75%" class="title"><liferay-ui:message key='edison-table-list-header-title' /> : ${boardMap.title} </td>
 			</c:otherwise>
 		</c:choose>
 		
-		<td width="49%" class="bold TR">${boardMap.writerName} ｜ ${boardMap.writerDate} </td>
+		<td width="25%" class="bold TR">${boardMap.writerName} ｜ ${boardMap.writerDate} </td>
 	</tr>
 	<tbody>
 	<tr style="height: 230px;">
