@@ -8,8 +8,8 @@
 		<struts-action-path>/portal/login/shibboleth</struts-action-path>
 		<struts-action-impl>kr.re.edison.hook.saml.SAMLAction</struts-action-impl>
 	</struts-action>
-    <struts-action>
-        <struts-action-path>/portal/logout/shibboleth</struts-action-path>
+    <!-- <struts-action>
+        <struts-action-path>/portal/logout</struts-action-path>
         <struts-action-impl>kr.re.edison.hook.saml.SAMLLogoutAction</struts-action-impl>
-    </struts-action>
+    </struts-action> -->
 </hook>
