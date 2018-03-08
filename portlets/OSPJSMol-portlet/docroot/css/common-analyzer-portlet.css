@@ -26,12 +26,7 @@
    	margin:0;
    	padding:0;
 }
-.common-analyzer-portlet .icon-menu {
-  font-size: 15px;
-  color: #5cb2d7;
-  border: 2px solid;
-  border-radius: 3px;
-  padding-left: 2px;
-  padding-right: 3px;
-  vertical-align: middle;
+.common-analyzer-portlet .cursor {
+	cursor: pointer;
+	cursor:hand;
 }

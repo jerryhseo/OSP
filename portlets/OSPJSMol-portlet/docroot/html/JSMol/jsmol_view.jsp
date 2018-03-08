@@ -1,10 +1,16 @@
 <%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
- <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+
+<portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
+<portlet:renderURL var="renderURL">
+    <portlet:param name="jspPage" value="/html/JSMol/load_jsmol.jsp"/>
+</portlet:renderURL>
 
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
@@ -13,40 +19,48 @@ preferences.store();
 
 String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
 String connector = (String)renderRequest.getAttribute("connector");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String mode = (String)renderRequest.getAttribute("mode");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
-<portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
+
 
 <div class="container-fluid common-analyzer-portlet">
-	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+	<div class="row-fluid header">
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-4 text-right" >
+		<div class="col-sm-offset-3 col-sm-1" >
 			<div class="dropdown">
-				<i class="icon-reorder icon-menu"></i>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
 				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content text-left">
-					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-				</div>
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
 			</div>
-		</div>  
+		</div>	
 	</div>
-	
-	<div class="row-fluid canvas" id="<portlet:namespace/>canvasPanel" >
-		<iframe class="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp"></iframe>
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp">
+		</iframe>
 	</div>
 </div>
 
-<div id="<portlet:namespace/>hiddenSection" style="display: none;">
-	<input type="file" id="<portlet:namespace/>selectFile"/>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-		<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-		<div>
-			<input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-			<input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-		</div>
-	</div>
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+          </div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
+
+
+
+
 <script>
 
 /***********************************************************************
@@ -54,13 +68,22 @@ String mode = (String)renderRequest.getAttribute("mode");
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_jmol"
-    + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_jmol";
+if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
+	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+else
+	<portlet:namespace/>fileExplorerId += '001'; 
 
+var <portlet:namespace/>currentData;
+var <portlet:namespace/>mode = '<%=mode%>';
+var <portlet:namespace/>eventEnable = <%=eventEnable%>;
+	
+	
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
+
 
 /***********************************************************************
  * Initailization section using parameters
@@ -69,14 +92,15 @@ var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 // <portlet:namespace/>eventEnable = false;
 
 if( <portlet:namespace/>eventEnable === false ){
-  var inputData = '<%=inputData%>';
-  <portlet:namespace/>connector = '<%=connector%>';
-  if(!inputData){
-      <portlet:namespace/>initData = new OSP.InputData();
-  }else{
-      <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
-  }
+	var inputData = '<%=inputData%>';
+	<portlet:namespace/>connector = '<%=connector%>';
+	if(!inputData){
+		<portlet:namespace/>initData = new OSP.InputData();
+	}else{
+		<portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
+	}
 
+	<portlet:namespace/>connector = '<%=connector%>';
 	//for test
 //	<portlet:namespace/>initData.type_ = 'file';
 //	<portlet:namespace/>initData.parent_ = 'pdbs';
@@ -103,64 +127,63 @@ $('#<portlet:namespace/>openLocal').click(function(){
 });
 
 $('#<portlet:namespace/>openServer').click(function(){
-  var inputData;
-  if(<portlet:namespace/>initData && (
-      <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.URI ||
-      <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE ||
-      <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ||
-      <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.EXT )){
-	inputData = <portlet:namespace/>initData;
-  }else{
-    inputData = new OSP.InputData();
-    inputData.type( OSP.Enumeration.PathType.FOLDER );
-    inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-    inputData.parent('');
-    inputData.name('');
-  }
-  
-  <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+    var inputData;
+    if(<portlet:namespace/>currentData && 
+        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
+        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.CONTEXT ){
+        inputData = <portlet:namespace/>currentData;
+    }else{
+        inputData = new OSP.InputData();
+        inputData.type( OSP.Enumeration.PathType.FOLDER );
+        inputData.parent('');
+        inputData.name('');
+        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+    }
+   
+    <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
-    <portlet:namespace/>downloadCurrentFile();
+	<portlet:namespace/>downloadCurrentFile();
 });
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
-  e.preventDefault();
-  var eventData = {
-      portletId : '<%=portletDisplay.getId()%>',
-      targetPortlet : <portlet:namespace/>fileExplorerId,
-      action: "READ"
-  };
-  Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
-  $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+	e.preventDefault();
+	var eventData = {
+		portletId : '<%=portletDisplay.getId()%>',
+		targetPortlet : <portlet:namespace/>fileExplorerId,
+	};
+	Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
 $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
-    $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
 $('#<portlet:namespace/>selectFile').bind(
-        'change', 
-        function(event){
-            var input = document.getElementById('<portlet:namespace/>selectFile');
-            var reader = new FileReader();
+	'change', 
+	function(event){
+		var input = document.getElementById('<portlet:namespace/>selectFile');
+		var reader = new FileReader();
             
-            reader.onload = function (e) {
-                $('#<portlet:namespace/>canvas').each(function(){
-	                    $(this).one("load", function(){
-	                                    $(this).prop('contentWindow').loadJSMolFile(
-	                                                                                e.target.result, 
-	                                                                                $('#<portlet:namespace/>canvas').width(), 
-	                                                                                $('#<portlet:namespace/>canvas').height());
-	                    });
-                });
-                
-                delete <portlet:namespace/>currentData;
-            };
+		reader.onload = function (e) {
+			$('#<portlet:namespace/>canvas').each(function(){
+				$(this).one("load", function(){
+					$(this).prop('contentWindow').loadJSMolFile(
+							e.target.result, $('#<portlet:namespace/>canvas').width(), $('#<portlet:namespace/>canvas').height()
+					);
+					
+				});
+			});
+	                
+			<portlet:namespace/>setTitle(e.target.result);
+		    <portlet:namespace/>currentData = null;
+			delete <portlet:namespace/>currentData;
+		};
             
-            reader.readAsDataURL(input.files[0]);
-        }
+		reader.readAsDataURL(input.files[0]);
+	}
 );
 
 function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
@@ -174,14 +197,15 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
         dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
         dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 
-        if( $<portlet:namespace/>fileExplorerDialogSection.find('div').length === 0 ){
-              $<portlet:namespace/>fileExplorerDialogSection.load( dialogURL.toString());
-        }
+        if( $<portlet:namespace/>fileExplorerDialogSection.children().length > 0 ){
+        	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}
         else{
-            $<portlet:namespace/>fileExplorerDialogSection.dialog('open');
+			$("#<portlet:namespace/>file-explorer-content").load( dialogURL.toString());
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
         }
-    });
-} 
+	});
+}
 
 /***********************************************************************
  * Handling OSP Events
@@ -191,6 +215,7 @@ Liferay.on(
   	function(e){
   		var myId = '<%=portletDisplay.getId()%>';
   		if( e.targetPortlet === myId ){
+  			console.log('[JSMol]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
   			<portlet:namespace/>connector = e.portletId;
   			if( e.mode )
   				<portlet:namespace/>action = e.mode;
@@ -222,19 +247,21 @@ Liferay.on(
 );
 
 Liferay.on( 
-           OSP.Event.OSP_LOAD_DATA, 
-           function(e){
-             var myId = '<%=portletDisplay.getId()%>';
-             if( e.targetPortlet === myId ){
-                 <portlet:namespace/>initData = new OSP.InputData( e.data );
-                   if( <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ){
-                       <portlet:namespace/>initData.parent(
-                           OSP.Util.mergePath(<portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name()));
-                       <portlet:namespace/>initData.name("");
-                   }
-               <portlet:namespace/>loadJSMolFile( new OSP.InputData( e.data ) );
-             }
-           }
+	OSP.Event.OSP_LOAD_DATA, 
+	function(e){
+		var myId = '<%=portletDisplay.getId()%>';
+		if( e.targetPortlet === myId ){
+			console.log('[JSMol]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
+			//<portlet:namespace/>initData = new OSP.InputData( e.data );
+			<portlet:namespace/>currentData = new OSP.InputData( e.data );
+			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
+				<portlet:namespace/>currentData.parent(
+					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
+					<portlet:namespace/>initData.name("");
+			}
+			<portlet:namespace/>loadJSMolFile( new OSP.InputData( e.data ) );
+		}
+	}
 );
 
 Liferay.on(
@@ -262,6 +289,7 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_REFRESH_OUTPUT_VIEW,
 		function(e){
+			console.log('[JSMol]OSP_REFRESH_OUTPUT_VIEW: ['+e.portletId+', '+new Date()+']');
 			var eventData = {
 					portletId: '<%=portletDisplay.getId()%>',
 					targetPortlet: <portlet:namespace/>connector
@@ -332,7 +360,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
     if( !inputData.repositoryType() )
     	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
-   
+    console.log('[JSMol]get First File Name : ', inputData );
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
@@ -379,6 +407,11 @@ function <portlet:namespace/>downloadCurrentFile(){
         ($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
     }
 }
+
+function <portlet:namespace/>setTitle( title ){
+	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
+}
+
 
 </script>
  
