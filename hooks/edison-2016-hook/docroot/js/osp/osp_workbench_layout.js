@@ -321,6 +321,7 @@
 			};
 			
 			C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
+				alert(targetPortlet.status());
 				if( targetPortlet.status() ){
 					targetPortlet.display( 'block' );
 					return true;
@@ -2067,6 +2068,7 @@
 								Workbench.handlePortSelected( portName, portletInstanceId );
 							}
 							else{
+								console.log(Workbench.layout());
 								if( portletInstanceId )
 									Workbench.switchPortlet( portletInstanceId );
 								else
