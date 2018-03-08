@@ -101,130 +101,138 @@
 </liferay-portlet:actionURL>
 <liferay-portlet:resourceURL var="resorceSearchURL" 		escapeXml="false" id="searchList" 	 copyCurrentRenderParameters="false"/>
 
-<div class="table-responsive panel edison-panel">
-	<c:if test="${not empty tabsValues}">
-		<div class="contabmenu">
-			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
-		</div>
-	</c:if>
+<liferay-portlet:renderURL var="contentDetailUrl" portletName="edisoncontent_WAR_edisoncontent2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="generalModifyView" />
+</liferay-portlet:renderURL>
 
-	<h1>
-		<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
-		<liferay-ui:message key="edison-content"/>
-	</h1>
-	
-	<div class="h10"></div>
-	
-	<!-- category images -->
-	<div class="scAppmenu">
-		<div class="table5app" style="border:none;">
-			<table width="100%" height="146" border="0" cellpadding="0" cellspacing="0" >
-				<tr id="solverTypeBody" style="border-left:1px solid #e5e5e5; border-right:1px solid #e5e5e5;">
-				</tr>
-			</table>
-		</div>
-	</div>
-	
-	<div class="h40"></div>
-	
-	<div class="panel-heading clearfix">
-		<c:if test="${addAdvancedContentAuth}">
-			<div style="float: right;margin: 5px;" id="<portlet:namespace/>addAdvancedContentDiv">
-				<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-advanced-content-create"/>" onclick="<portlet:namespace/>advancedModify('<%=Constants.ADD%>','');return false;"/>
+<form method="post" name="searchParamForm" style="margin:0px;" onsubmit="return false;">
+	<div class="table-responsive panel edison-panel">
+		<c:if test="${not empty tabsValues}">
+			<div class="contabmenu">
+				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
 			</div>
 		</c:if>
+	
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
+			<liferay-ui:message key="edison-content"/>
+		</h1>
 		
-		<div class="clear"></div>
+		<div class="h10"></div>
+		
+		<!-- category images -->
+		<div class="scAppmenu">
+			<div class="table5app" style="border:none;">
+				<table width="100%" height="146" border="0" cellpadding="0" cellspacing="0" >
+					<tr id="solverTypeBody" style="border-left:1px solid #e5e5e5; border-right:1px solid #e5e5e5;">
+					</tr>
+				</table>
+			</div>
+		</div>
+		
 		<div class="h40"></div>
 		
-		<!--table view -->
-		<div class="input-group">
-			<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('','');" style="width: 50%; float: right; margin-left: 1%;" />
+		<div class="panel-heading clearfix">
+			<c:if test="${addAdvancedContentAuth}">
+				<div style="float: right;margin: 5px;" id="<portlet:namespace/>addAdvancedContentDiv">
+					<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-advanced-content-create"/>" onclick="<portlet:namespace/>advancedModify('<%=Constants.ADD%>','');return false;"/>
+				</div>
+			</c:if>
 			
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="form-control" style="width:20%; float: right;">
-				<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
-				<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-				<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-				<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-			</select>
+			<div class="clear"></div>
+			<div class="h40"></div>
 			
-			<div class="input-group-btn">
-				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>generalContentSearch('','');">
-					<i class="icon-search"></i>
-				</button>
+			<!--table view -->
+			<div class="input-group">
+				<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('','');" style="width: 50%; float: right; margin-left: 1%;" />
 				
-				<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dafaultContentAllSearch();">
-					Clear
-				</button>
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="form-control" style="width:20%; float: right;">
+					<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
 				
-				<button class="btn btn-default" name="fullsize" id="fullsize">
-					<a href="#boardicon01"><img src="${contextPath}/images/content/boardicon01off.png" style="width: 18px;" />&nbsp;<liferay-ui:message key="edison-content-classnote"/></a>
-				</button>
-				<button class="btn btn-default" name="fullsize" id="fullsize">
-					<a href="#boardicon02"><img src="${contextPath}/images/content/boardicon02off.png" style="width: 16px;" />&nbsp;<liferay-ui:message key="edison-content-manual"/></a>
-				</button>
-				<button class="btn btn-default" name="fullsize" id="fullsize">
-					<a href="#boardicon03"><img src="${contextPath}/images/content/boardicon03off.png" style="width: 16px;" />&nbsp;<liferay-ui:message key="edison-content-reference"/></a>
-				</button>
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button" name="fullsize" id="<portlet:namespace/>searchBtn" onclick="<portlet:namespace/>generalContentSearch('','');">
+						<i class="icon-search"></i>
+					</button>
+					
+					<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dafaultContentAllSearch();">
+						Clear
+					</button>
+					
+					<button class="btn btn-default" name="fullsize" id="fullsize">
+						<a href="#boardicon01"><img src="${contextPath}/images/content/boardicon01off.png" style="width: 18px;" />&nbsp;<liferay-ui:message key="edison-content-classnote"/></a>
+					</button>
+					<button class="btn btn-default" name="fullsize" id="fullsize">
+						<a href="#boardicon02"><img src="${contextPath}/images/content/boardicon02off.png" style="width: 16px;" />&nbsp;<liferay-ui:message key="edison-content-manual"/></a>
+					</button>
+					<button class="btn btn-default" name="fullsize" id="fullsize">
+						<a href="#boardicon03"><img src="${contextPath}/images/content/boardicon03off.png" style="width: 16px;" />&nbsp;<liferay-ui:message key="edison-content-reference"/></a>
+					</button>
+				</div>
+				
 			</div>
-			
 		</div>
-	</div>
-	
-	<input type="hidden" id="projectDetailViewValue" value="${projectDetailView.projectView}"/>
-	<input type="hidden" id="projectDetailViewSeqValue" value="${projectDetailView.contentSeq}"/>
-	<input type="hidden" id="projectDetailViewDivValue" value="${projectDetailView.contentDiv}"/>
-	<input type="hidden" id="projectDetailViewGroupIdValue" value="${projectDetailView.groupId}"/>
-	<input type="hidden" id="<portlet:namespace/>categoryId"	name="<portlet:namespace/>categoryId"	value=""/>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="일반콘텐츠 테이블" class="table1_list table table-bordered table-hover edison-table">
-		<colgroup>
-			<col width="70" />
-			<col width="70" />
-			<col width="*" />
-			<col width="100" />
-			<col width="100" />
-			<col width="100" />
-			<col width="110" />
-			<col width="100" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th scope="col"><liferay-ui:message key="edison-table-list-header-index" /></th>
-				<th scope="col" colspan="3"><liferay-ui:message key="edison-table-list-header-title"/></th>
-				<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
-				<th scope="col"><liferay-ui:message key="edison-table-list-header-date"/></th>
-				<th scope="col"><liferay-ui:message key="edison-table-list-header-file"/></th>
-				<th scope="col"><liferay-ui:message key="edison-table-list-header-views"/></th>
-			</tr>
-		</thead>
-		<tbody id="generalTableBody">
-		</tbody>
-	</table>
-	
-	<div class="text-center">
-		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">
-		</div>
-	</div>
-	
-	
-	<c:if test="${addGeneralContentAuth}">
-		<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>addGeneralContentDiv">
-			<input type="button" class="button06" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>generalModify('<%=Constants.ADD%>','');return false;"/>
-		</div>
-	</c:if>
 		
-	<div id="advanced-writer-dialog" title="고급 콘텐츠 등록" class="bigpopupbox" style="display: none;">
-	
+		<input type="hidden" id="projectDetailViewValue" value="${projectDetailView.projectView}"/>
+		<input type="hidden" id="projectDetailViewSeqValue" value="${projectDetailView.contentSeq}"/>
+		<input type="hidden" id="projectDetailViewDivValue" value="${projectDetailView.contentDiv}"/>
+		<input type="hidden" id="projectDetailViewGroupIdValue" value="${projectDetailView.groupId}"/>
+		<input type="hidden" id="<portlet:namespace/>categoryId"	name="<portlet:namespace/>categoryId"	value=""/>
+		<input type="hidden" id="<portlet:namespace/>currPage"	name="<portlet:namespace/>currPage"	value=""/>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="일반콘텐츠 테이블" class="table1_list table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="70" />
+				<col width="70" />
+				<col width="*" />
+				<col width="100" />
+				<col width="100" />
+				<col width="100" />
+				<col width="110" />
+				<col width="100" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col"><liferay-ui:message key="edison-table-list-header-index" /></th>
+					<th scope="col" colspan="3"><liferay-ui:message key="edison-table-list-header-title"/></th>
+					<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
+					<th scope="col"><liferay-ui:message key="edison-table-list-header-date"/></th>
+					<th scope="col"><liferay-ui:message key="edison-table-list-header-file"/></th>
+					<th scope="col"><liferay-ui:message key="edison-table-list-header-views"/></th>
+				</tr>
+			</thead>
+			<tbody id="generalTableBody">
+			</tbody>
+		</table>
+		
+		<div class="text-center">
+			<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">
+			</div>
+		</div>
+		
+		
+		<c:if test="${addGeneralContentAuth}">
+			<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>addGeneralContentDiv">
+				<input type="button" class="button06" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>generalModify('<%=Constants.ADD%>','');return false;"/>
+			</div>
+		</c:if>
+			
+		<div id="advanced-writer-dialog" title="고급 콘텐츠 등록" class="bigpopupbox" style="display: none;">
+		
+		</div>
+		
+		<div id="general-writer-dialog" title="일반 콘텐츠 등록" class="bigpopupbox" style="display:none;">
+		
+		</div>
+		
+		<div id="general-file-download-dialog" title="일반 콘텐츠 파일 다운로드" class="bigpopupbox" style="display:none;">
+		
+		</div>
 	</div>
-	
-	<div id="general-writer-dialog" title="일반 콘텐츠 등록" class="bigpopupbox" style="display:none;">
-	
-	</div>
-	
-	<div id="general-file-download-dialog" title="일반 콘텐츠 파일 다운로드" class="bigpopupbox" style="display:none;">
-	
-	</div>
-</div>
+</form>
 
 <script type="text/javascript">
 //선택한 Tab Id
@@ -564,7 +572,10 @@ function <portlet:namespace/>generalContentSearch(searchDiv,p_currentPage){
 										).appendTo($tr);
 					
 					// title
-					$titleTd = $("<td></td>").css("word-break","break-all").html(dataMap[i].title).appendTo($tr);
+					$titleTd = $("<td></td>").css("word-break","break-all")
+											 .html(dataMap[i].title)
+											 .attr("onclick", "<portlet:namespace/>moveContentDetail('"+dataMap[i].contentSeq+"', '"+dataMap[i].contentDiv+"')")
+											 .appendTo($tr);
 					
 					// modify button
 					if(dataMap[i].updateAuth=="true"  || dataMap[i].siteOwnerRole==true || dataMap[i].siteManagerRole==true){ 
@@ -1008,7 +1019,9 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 	var currentTabGroupId = <%=visitSite%>;
 	
 	var searchData = {
-			"<portlet:namespace/>categoryId":categoryIdValue
+			"<portlet:namespace/>categoryId":categoryIdValue,
+			"<portlet:namespace/>searchText": $("#<portlet:namespace/>textfield").val(),
+			"<portlet:namespace/>currentPage": p_curPage
 	};
 	
 	jQuery.ajax({
@@ -1085,34 +1098,6 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 
 					$("<td/>").addClass("TC").appendTo($vRow);
 					
-					//메뉴얼
-					/* if(typeof dataList[i].manualId == "undefined"){
-						$("<td/>").css("text-align","center").append(
-							$("<img/>").attr("align","center")
-									   .attr("id","manualLinkBtn")
-									   .attr("src","${contextPath}/images/btn_manual_none.jpg")
-									   .css("height", "28px")
-									   .css("cursor","default")
-						).appendTo($vRow);
-					}else{
-						$("<td/>").css("text-align","center").append(
-								$("<img/>").attr("align","center")
-										   .attr("id","manualLinkBtn")
-										   .attr("src","${contextPath}/images/btn_manual.jpg")
-										   .attr("onclick", "<portlet:namespace/>fileDownload('" + dataList[i].manualId + "')")
-										   .css("height", "28px")
-										   .css("cursor", "pointer")
-										   .hover(
-											  function(){
-											  	$(this).attr("src","${contextPath}/images/btn_manual.jpg");
-											  },
-											  function(){
-											  	$(this).attr("src","${contextPath}/images/btn_manual.jpg");
-											  }
-											)
-							).appendTo($vRow);
-					} */
-					
 					//실행
 					$("<td/>").css("text-align","center").text(dataList[i].viewCnt).appendTo($vRow);
 					
@@ -1134,11 +1119,21 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 				
 			}
 			//페이징 초기화pageListDiv
-			document.getElementById("pageListDiv").innerHTML = pageList;
+			$("#<portlet:namespace/>paging").html(pageList);
 		},
 		error:function(msg){
 			alert("System Exception : " + msg);
 		}
 	});
 }
+
+function <portlet:namespace/>moveContentDetail(contentSeq, contentDiv) {
+	AUI().use("liferay-portlet-url", function(a) {
+		var thisPortletNamespace = "_edisoncontent_WAR_edisoncontent2016portlet_";
+		var params = "&" + thisPortletNamespace + "contentDiv=" + contentDiv;
+		params += "&" + thisPortletNamespace + "contentSeq=" + contentSeq;
+		location.href = "<%=contentDetailUrl%>" + params;
+	});
+}
+
 </script>

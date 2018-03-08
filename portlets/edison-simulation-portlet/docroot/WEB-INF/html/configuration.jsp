@@ -73,6 +73,7 @@ ul.target {
   -moz-border-radius: 4px;
   border-radius: 4px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  cursor: pointer;
 }
 .source li {
   background-color: #fcf8e3;

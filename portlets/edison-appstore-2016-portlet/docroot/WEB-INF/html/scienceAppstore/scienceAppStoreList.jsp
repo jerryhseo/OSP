@@ -55,6 +55,10 @@
 <liferay-portlet:resourceURL var="addFavoriteAppURL" id="addFavoriteApp" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="deleteFavoriteAppURL" id="deleteFavoriteApp" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="scienceAppCategoryURL" id="scienceAppCategory" copyCurrentRenderParameters="false" />
+<liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="detailView" />
+</liferay-portlet:renderURL>
 
 <style type="text/css">
 .aui .tabletopbox .radio{
@@ -172,7 +176,6 @@
 							<button class="btn btn-default" id="keyWordB" type="button">
 								<i class="icon-search"></i>
 							</button>
-							<%-- <input type="button" value="<liferay-ui:message key="edison-button-all-search" />" class="btn btn-default" id="initB"> --%>
 							<button class="btn btn-default" id="initB">Clear</button>
 						</div>
 					</div>
@@ -269,6 +272,7 @@
 				var dataMap = evalDataMap.solverTypeList;
 				var solverTypeCount = dataMap.length;
 				var solverTypeWidth = 99 / solverTypeCount;
+				
 				if("${tabViewYn}" == "Y") {
 					for (var i = 0; i < solverTypeCount; i++) {
 						var imageValue = "";
@@ -411,11 +415,11 @@
 									   .css("height","27px")
 									   .attr("alt","Icon")
 						).appendTo($vRow);
-						
+
 						$tdRow = $("<td/>").css("word-break", "break-all")
 										   .css("text-align","left")
-										   .text(dataMap.dataList[i].title+"("+dataMap.dataList[i].name+")")
-										   .attr("onclick","javascript:detailView('goView','"+dataMap.dataList[i].scienceAppId+"', '"+currentTabGroupId+"')")
+										   .html(dataMap.dataList[i].name+"<br/>"+dataMap.dataList[i].title)
+										   .attr("onclick","<portlet:namespace/>moveScienceAppDetail('"+currentTabGroupId+"', '"+dataMap.dataList[i].scienceAppId+"')")
 										   .css("cursor", "pointer")
 						$tdRow.appendTo($vRow);
 						
@@ -513,26 +517,6 @@
 		var categoryIdValue = searchForm.<portlet:namespace/>categoryId;
 		categoryIdValue.value		=	categoryId;
 		<portlet:namespace/>dataSearchList();
-	}
-	
-	
-	function detailView(mode, solverId, groupId){
-		var searchForm = document.searchParamForm;
-		
-		var URL = "<%=renderViewURL%>&<portlet:namespace/>solverId="+solverId+"&<portlet:namespace/>groupId="+groupId;
-		var curPage = searchForm.<portlet:namespace/>p_curPage.value;
-		var categoryId = searchForm.<portlet:namespace/>categoryId.value;
-		var searchValue = searchForm.<portlet:namespace/>searchValue.value;
-		var linePerPage = searchForm.<portlet:namespace/>linePerPage.value;
-		var searchOption = searchForm.<portlet:namespace/>searchOption.value;
-		
-		
-		URL +="&<portlet:namespace/>p_curPage="+curPage;
-		URL +="&<portlet:namespace/>categoryId="+categoryId;
-		URL +="&<portlet:namespace/>searchValue="+searchValue;
-		URL +="&<portlet:namespace/>linePerPage="+linePerPage;
-		URL +="&<portlet:namespace/>searchOption="+searchOption;
-		location.href=URL;
 	}
 	
 	filter = function(){
@@ -653,6 +637,12 @@
 		}
 	}
 	
+	function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
+		var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
+		var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
+		params += "&" + thisPortletNamespace + "groupId=" + groupId;
+		location.href = "<%=scienceAppDetailUrl%>" + params;
+	}
 </script>
 
 <aui:script>

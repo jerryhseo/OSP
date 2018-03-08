@@ -9,7 +9,7 @@
 		<action-url-redirect>true</action-url-redirect>		
 		<instanceable>false</instanceable>
 		<private-session-attributes>false</private-session-attributes>
-		<css-class-wrapper>edison-bestsimulation</css-class-wrapper>		
+		<css-class-wrapper>edison-bestsimulation container</css-class-wrapper>		
 	</portlet>
 	
 	<portlet>

@@ -194,9 +194,10 @@ public class ContentListController{
 			String searchText = CustomUtil.strNull(param.get("searchText"));
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
-			int searchLine = ParamUtil.get(request, "searchLine", 10);
+			int searchLine = ParamUtil.get(request, "searchLine", 5);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
+			int end = searchLine;
 
 			Role ownerRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 				EdisonRoleConstants.CONTENT_OWNER);
@@ -241,7 +242,7 @@ public class ContentListController{
 				for(int i=0; i<aCategoryList.size(); i++){
 					categoryIds[i] = aCategoryList.get(i).getCategoryId();
 				}
-				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, "", null, 0, 5, themeDisplay.getLocale(), true, true);
+				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, "", null, start, end, themeDisplay.getLocale(), true, true);
 				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, "", null, themeDisplay.getLocale().toString(), true, true);
 			} else {
 				if(!isAdmin){
@@ -306,7 +307,7 @@ public class ContentListController{
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
 			long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId")));
-			String searchText = CustomUtil.strNull(param.get("searchText"));
+			String searchText = CustomUtil.strNull(param.get("searchText"), "");
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
 			int searchLine = ParamUtil.get(request, "searchLine", 5);
@@ -369,8 +370,8 @@ public class ContentListController{
 				for(int i=0; i<aCategoryList.size(); i++){
 					categoryIds[i] = aCategoryList.get(i).getCategoryId();
 				}
-				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, "", null, start, searchLine, themeDisplay.getLocale(), true, true);
-				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, "", null, themeDisplay.getLocale().toString(), true, true);
+				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, start, searchLine, themeDisplay.getLocale(), true, true);
+				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, themeDisplay.getLocale().toString(), true, true);
 			} else {
 				if(!isAdmin){
 					long roleId = 0;
@@ -400,7 +401,6 @@ public class ContentListController{
 			PrintWriter out = response.getWriter();
 			out.write(json.toString());
 		}catch (Exception e){
-			System.out.println("exception...");
 			log.error(e);
 			e.printStackTrace();
 		}
@@ -1442,25 +1442,27 @@ public class ContentListController{
 	}
 	
 	@ResourceMapping(value ="searchList" ) //하위사이트 groupId로 각 리스트 가져오기
-	public void searchList(ResourceRequest request, ResourceResponse response, @RequestParam(value="categoryId") String categoryIdParam) throws IOException{
+	public void searchList(ResourceRequest request, ResourceResponse response) throws IOException{
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
+			
 			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			long globalGroupId = themeDisplay.getCompany().getGroupId();
 			long companyId = themeDisplay.getCompanyId();
-			long categoryId = Long.parseLong(CustomUtil.strNull(categoryIdParam));
+			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId")));
 			long[] categoryIds =  new long[]{categoryId};
+			String searchText = CustomUtil.strNull(params.get("searchText"), "");
 			
-			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("p_curPage"), "1"));
+			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("currentPage"), "1"));
 			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "5"));
 			int pagePerBlock = 5;
 			
 			int begin = (curPage - 1) * linePerPage;
 			int end = linePerPage;
 			
-			List<Map<String, Object>> dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, "", null, 0, end, themeDisplay.getLocale(), true, true);
-			int count = ContentLocalServiceUtil.retrieveCountContent(categoryIds, "", null, themeDisplay.getLocale().toString(), true, true);
+			List<Map<String, Object>> dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, begin, end, themeDisplay.getLocale(), true, true);
+			int count = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, themeDisplay.getLocale().toString(), true, true);
 			
 			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", count, curPage, linePerPage, pagePerBlock);
 			
