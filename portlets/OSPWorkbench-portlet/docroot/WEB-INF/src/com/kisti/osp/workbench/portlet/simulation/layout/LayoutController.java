@@ -2,12 +2,9 @@ package com.kisti.osp.workbench.portlet.simulation.layout;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +44,6 @@ import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
-import com.kisti.osp.util.OSPFileUtil;
 import com.kisti.osp.workbench.Exception.SimulationWorkbenchException;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -91,8 +87,6 @@ public class LayoutController {
 	private static final String _DEFAULT_CLASS_ID = " ";
 	private static final String _DEFAULT_JOB_TITLE = "job";
 	private static final String _DEFAULT_JOB_DESCRIPTION = " ";
-	
-	private static final String _DEFAULT_TEMP_DIR="/EDISON/LDAP/TEMP";
 	
 	private static final HashMap<String,String> ProvenanceSupportApp = new HashMap<String,String>();
 	
@@ -872,7 +866,6 @@ public class LayoutController {
 				inputData.put( "dirty_", false);
 			}
 			
-			/*
 			JSONObject result = ibAgent.submit(
 					simulationUuid, 
 					runType, 
@@ -917,7 +910,7 @@ public class LayoutController {
 				
 				submitedJobs.put( submittedJob );
 			}
-			*/
+			
 		} //END jobCount FOR
 		
 		ServletResponseUtil.write(httpResponse, submitedJobs.toString());
