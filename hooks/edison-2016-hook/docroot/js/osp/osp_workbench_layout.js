@@ -1417,9 +1417,13 @@
 				            jobUuid: submittedJob.uuid,
 				            status: false
 						};
+						
+						bEnd();
+						
 						fireSubmitJobResult(data);
 					},
 					error:function(jqXHR, textStatus, errorThrown){
+						bEnd();
 						fireSubmitJobResult({status:false});
 					}
 				});
