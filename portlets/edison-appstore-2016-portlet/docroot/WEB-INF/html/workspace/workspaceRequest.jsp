@@ -311,7 +311,7 @@ function <portlet:namespace/>historyBack(){
 			</tr>
 			<tr>
 			  <th><liferay-ui:message key='edison-appstore-workspace-security-pledge' /><font color="red">*</font></th>
-			  <td colspan="2"><input type="file" name="<portlet:namespace/>addfile"/></td>
+			  <td colspan="2"><input type="file" name="<portlet:namespace/>addfile" style="float: left;"/></td>
 			  <td>
 			  	<c:if test="${!empty securityFileList}">
 					<c:forEach items="${securityFileList}" var="fileMap">
