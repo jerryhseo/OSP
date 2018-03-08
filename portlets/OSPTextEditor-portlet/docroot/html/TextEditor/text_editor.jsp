@@ -19,18 +19,19 @@ String mode = (String)renderRequest.getAttribute("mode");
 
 
 <div class="container-fluid common-editor-portlet">
-	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+	<div class="row-fluid header" >
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-4 text-right" >
+		<div class="col-sm-offset-3 col-sm-1" >
 			<div class="dropdown">
-				<i class="icon-reorder icon-menu"></i>
-				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content">
-					<div class="dropdown-item" id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></div>
-				</div>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></li>
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></li>
+				</ul>
 			</div>
 		</div>	
 	</div>
@@ -64,6 +65,7 @@ var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportle
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
+var <portlet:namespace/>saveAction = false;
 
 
 /***********************************************************************
@@ -105,8 +107,9 @@ $('#<portlet:namespace/>saveAs').click(function(e){
 	inputData.parent( '' );
 	inputData.name( '' );
 	inputData.relative( true );
+	<portlet:namespace/>saveAction = true;
 	
-	<portlet:namespace/>fileExplorerDialog( 'VIEW', 'SAVEAS', inputData );
+	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
 });
 
 $('#<portlet:namespace/>openLocal').click(function(e){
@@ -164,7 +167,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 			autoOpen: true,
 			resizable: false,
 			height: 600,
-			width: 400,
+			width: 600,
 			modal: true,
 			buttons:{
 				OK: function() {
@@ -277,65 +280,73 @@ Liferay.on(
 
 
 Liferay.on(
-           OSP.Event.OSP_RESPONSE_DATA,
-           function( e ){
-               var myId = '<%=portletDisplay.getId()%>';
-               if( e.targetPortlet === myId ){
-                   console.log('Text Editor OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
-                   console.log( e.action  );
-                   var data = new OSP.InputData( e.data );
-                   if( data.type() !== OSP.Enumeration.PathType.FILE ){
-                       alert('File Name is not available. Choose another one.');
-                       return;
-                   }
-                   
-                   switch( e.action ){
-                   case 'READ_REPOSITORY':
-                       <portlet:namespace/>loadText( data );
-                       $<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
-                       break;
-                   case 'SAVEAS':
-                       var filePath = data;
-                       $('#<portlet:namespace/>uploadFileName').val(filePath.name());
-                       var confirmDialog = $('#<portlet:namespace/>confirmDialog');
-                       confirmDialog.dialog(
-                           {
-                               resizable: false,
-                               height: "auto",
-                               width: 400,
-                               modal: true,
-                               buttons: {
-                                   'OK': function() {
-                                       $( this ).dialog( 'destroy' );
+		OSP.Event.OSP_RESPONSE_DATA,
+		function( e ){
+			var myId = '<%=portletDisplay.getId()%>';
+			if( e.targetPortlet !== myId )	return;
+			
+			console.log('Text Editor OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+			console.log( 'saveAction: '+<portlet:namespace/>saveAction );
 
-                                       filePath.name( $('#<portlet:namespace/>uploadFileName').val());
-                                       filePath.type( OSP.Enumeration.PathType.FILE_CONTENT );
-                                       filePath.context( $('#<portlet:namespace/>canvas').val() );
-                                       
-                                       var eventData = {
-                                               portletId: '<%=portletDisplay.getId()%>',
-                                               targetPortlet: <portlet:namespace/>connector,
-                                               data: OSP.Util.toJSON( filePath )
-                                       }
-                                       
-                                       Liferay.fire( OSP.Event.OSP_SAVEAS_FILE, eventData );
-
-                                       // <portlet:namespace/>saveAs ( filePath );
-
-                                       $<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
-                                   },
-                                   Cancel: function() {
-                                       $( this ).dialog( 'destroy' );
-                                   }
-                               }
-                           }
-                       );
-                       break;
-                   default:
-                       console.log('[ERROR] Unknown action.' );
-                   }
-               }
-           }
+			var filePath = new OSP.InputData( e.data );
+			if( filePath.type() !== OSP.Enumeration.PathType.FILE ){
+				alert('File Name is not available. Choose another one.');
+				return;
+			}
+			
+			if( !<portlet:namespace/>saveAction ){
+				<portlet:namespace/>loadText( filePath );
+				$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+			}
+			else{
+				$('#<portlet:namespace/>uploadFileName').val(filePath.name());
+				filePath.type( OSP.Enumeration.PathType.FILE_CONTENT );
+				filePath.context( $('#<portlet:namespace/>canvas').val() );
+				
+				$.ajax({
+					url: '<%=serveResourceURL.toString()%>',
+					type: 'POST',
+					dataType: 'json',
+					data:{
+						<portlet:namespace/>command: "CHECK_DUPLICATED",
+						<portlet:namespace/>repositoryType: filePath.repositoryType(),
+						<portlet:namespace/>parentPath: filePath.parent(),
+						<portlet:namespace/>fileName: filePath.name()
+					},
+					success: function(result){
+						var duplicated = result.duplicated;
+						if( duplicated ){
+							var confirmDialog = $('#<portlet:namespace/>confirmDialog');
+							confirmDialog.dialog(
+									{
+										resizable: false,
+										height: "auto",
+										width: 400,
+										modal: true,
+										buttons: {
+												'OK': function() {
+															$( this ).dialog( 'destroy' );
+															<portlet:namespace/>saveAs ( filePath );
+															$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+												},
+												Cancel: function() {
+															$( this ).dialog( 'destroy' );
+												}
+										}
+									}
+							);
+						}
+						else{
+							<portlet:namespace/>saveAs ( filePath );
+							$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+						}
+					},
+					error: function( e, d ){
+						console.log('OSPTextEditor: file save error');
+					}
+				});
+			}
+		}
 );
 
 Liferay.on(
@@ -457,6 +468,7 @@ function <portlet:namespace/>checkPath( filePath, command ){
 };
 
 function <portlet:namespace/>saveAs( inputData ){
+	<portlet:namespace/>saveAction = false;
 	var data = {
 			<portlet:namespace/>command: 'SAVE_AS',
 			<portlet:namespace/>mode: <portlet:namespace/>mode,

@@ -17,11 +17,13 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="row-fluid editor-portlet stringeditor-portlet " >
-    <div class="span12 canvasPanel">
-        <p>Enter string value: </p>
-        <input type="text" name="<portlet:namespace/>canvas" id="<portlet:namespace/>canvas" />
-    </div>
+<div class="container-fluid common-editor-portlet">
+	<div class="row-fluid" >
+	    <div class="col-sm-12 no-header-canvas">
+	        <p>Enter string value: </p>
+	        <input type="text" name="<portlet:namespace/>canvas" id="<portlet:namespace/>canvas" style="width:50%;"/>
+	    </div>
+	</div>
 </div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>

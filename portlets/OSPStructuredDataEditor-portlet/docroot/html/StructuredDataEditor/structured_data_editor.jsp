@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
@@ -8,37 +10,55 @@
 <script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script> --%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/structured-data-editor-portlet.css"/>
 
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String mode = (String)renderRequest.getAttribute("mode");
+String inputData =  GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);;
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "EDIT");;
 %>
-<div class="row-fluid structured-data-editor-portlet editor-portlet">
-	<div class="span12">
-		<div class="row-fluid" id="<portlet:namespace/>choicePanel" style="padding:10px 0 0 10px;">
-			<div class="offset2 span2 dropdown-wrapper" id="<portlet:namespace/>menuSection">
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-                        <div class="dropdown-item"  id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></div>
-					</div>
-				</div>
-			</div>	
+
+<div class="container-fluid common-editor-portlet">
+	<div class="row-fluid header">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-offset-3 col-sm-1" >
+			<!-- 
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></li>
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></li>
+				</ul>
+			</div>
+			 -->
+			<button id="<portlet:namespace/>sample" class="btn btn-primary" type="button">Sample</button>
 		</div>
-		
-		<div class="row-fluid" id="<portlet:namespace/>canvasPanel">
-			<div id="<portlet:namespace/>canvas" class="span12"></div>
-		</div>
+	</div>			
+	<div class="row-fluid canvas" >
+		<div class="col-sm-12 iframe" id="<portlet:namespace/>canvas" ></div>
 	</div>
 </div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" ></div>
+	<div id="<portlet:namespace/>confirmDialog">
+		<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
+		<p>
+			File already exists. Change file name or just click 'OK' button to overlap. 
+		</p>
+	</div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
+	
+	<img id="<portlet:namespace/>processingMessage" src="<%=request.getContextPath()%>/images/processing_01.gif"/>
+</div>
+
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -48,17 +68,22 @@ String mode = (String)renderRequest.getAttribute("mode");
  ***********************************************************************/
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>dataType;
-var <portlet:namespace/>initData;
+var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
+var <portlet:namespace/>saveAction = false;
+
+var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
+var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_sde'+
+    + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 
 
 /***********************************************************************
  * Initailization section using parameters
  ***********************************************************************/
 if( !<%=eventEnable%> ){
-	<portlet:namespace/>initData = new OSP.InputData(JSON.parse('<%=inputData%>'));
+	<portlet:namespace/>currentData = new OSP.InputData(JSON.parse('<%=inputData%>'));
 	
-	<portlet:namespace/>loadStructure( <portlet:namespace/>initData );
+	<portlet:namespace/>loadStructure( <portlet:namespace/>currentData );
 }
 
 
@@ -75,7 +100,42 @@ if( !<%=eventEnable%> ){
 		Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData);
 });
 
+/*
+ $('#<portlet:namespace/>saveAs').click(function(e){
+		e.preventDefault();
+		var inputData = new OSP.InputData();
+		inputData.type( OSP.Enumeration.PathType.FOLDER);
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+		inputData.parent( '' );
+		inputData.name( '' );
+		inputData.relative( true );
+		<portlet:namespace/>saveAction = true;
+		
+		<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
+	});
 
+	$('#<portlet:namespace/>openLocal').click(function(e){
+		$('#<portlet:namespace/>selectFile').click();
+	});
+
+	$('#<portlet:namespace/>openServer').click(function(){
+		var inputData;
+		if(	<portlet:namespace/>currentData && 
+				<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE &&
+				<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER &&
+				<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.EXT ){
+			inputData = <portlet:namespace/>currentData;
+		}
+		else{
+			inputData = new OSP.InputData();
+			inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+			inputData.type( OSP.Enumeration.PathType.FOLDER );
+			inputData.parent('');
+			inputData.name('');
+		}
+		<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
+	});
+*/
 $('#<portlet:namespace/>canvas').on('change', function(){
 		var inputData = new OSP.InputData();
 		inputData.type( OSP.Enumeration.PathType.STRUCTURED_DATA );
@@ -89,6 +149,60 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 		
 		Liferay.fire(OSP.Event.OSP_DATA_CHANGED, eventData );
 });
+
+/*
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
+	AUI().use('liferay-portlet-url', function(A){
+	    $<portlet:namespace/>fileExplorerDialogSection.remove();
+		
+		var dialogURL = Liferay.PortletURL.createRenderURL();
+		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
+		var initData = <portlet:namespace/>initData;
+		dialogURL.setParameter('inputData', JSON.stringify(inputData));
+		dialogURL.setParameter('mode', mode);
+		dialogURL.setParameter('eventEnable', false);
+		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
+		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
+		
+		$<portlet:namespace/>fileExplorerDialogSection.dialog({
+			autoOpen: true,
+			resizable: false,
+			height: 600,
+			width: 400,
+			modal: true,
+			buttons:{
+				OK: function() {
+					var eventData = {
+							portletId : '<%=portletDisplay.getId()%>',
+							targetPortlet : <portlet:namespace/>fileExplorerId,
+							mode: mode
+					};
+					Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
+				},
+				Cancel: function() {
+					$( this ).dialog( 'destroy' );
+				}
+			}
+		});
+
+		$<portlet:namespace/>fileExplorerDialogSection.load( dialogURL.toString());
+	});
+	
+} 
+
+$('#<portlet:namespace/>selectFile').bind(
+		'change', 
+		function(event){
+			var reader = new FileReader();
+			reader.onload = function (evt) {
+				var textContents = evt.target.result;
+				$('#<portlet:namespace/>canvas').val( textContents );
+			};
+			var inputFile = document.getElementById('<portlet:namespace/>selectFile');
+			reader.readAsText(inputFile.files[0]);
+		}
+);
+*/
 
 /***********************************************************************
 * Handling OSP Events
@@ -126,6 +240,12 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				console.log(e.portletId+' activated at '+new Date()+']');
+				var eventData = {
+									portletId: '<%=portletDisplay.getId()%>',
+									targetPortlet: <portlet:namespace/>connector
+							};
+							
+				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
 			}
 		}
 );
@@ -158,6 +278,76 @@ Liferay.on(
 						myId, 
 						data, 
 						eventData );
+			}
+		}
+);
+
+Liferay.on(
+		OSP.Event.OSP_RESPONSE_DATA,
+		function( e ){
+			var myId = '<%=portletDisplay.getId()%>';
+			if( e.targetPortlet !== myId )	return;
+			
+			console.log('OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+			console.log( 'saveAction: '+<portlet:namespace/>saveAction );
+
+			var filePath = new OSP.InputData( e.data );
+			if( filePath.type() !== OSP.Enumeration.PathType.FILE ){
+				alert('File Name is not available. Choose another one.');
+				return;
+			}
+			
+			if( !<portlet:namespace/>saveAction ){
+				<portlet:namespace/>loadText( filePath );
+				$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+			}
+			else{
+				$('#<portlet:namespace/>uploadFileName').val(filePath.name());
+				filePath.type( OSP.Enumeration.PathType.FILE_CONTENT );
+				filePath.context( $('#<portlet:namespace/>canvas').val() );
+				
+				$.ajax({
+					url: '<%=serveResourceURL.toString()%>',
+					type: 'POST',
+					dataType: 'json',
+					data:{
+						<portlet:namespace/>command: "CHECK_DUPLICATED",
+						<portlet:namespace/>repositoryType: filePath.repositoryType(),
+						<portlet:namespace/>parentPath: filePath.parent(),
+						<portlet:namespace/>fileName: filePath.name()
+					},
+					success: function(result){
+						var duplicated = result.duplicated;
+						if( duplicated ){
+							var confirmDialog = $('#<portlet:namespace/>confirmDialog');
+							confirmDialog.dialog(
+									{
+										resizable: false,
+										height: "auto",
+										width: 600,
+										modal: true,
+										buttons: {
+												'OK': function() {
+															$( this ).dialog( 'destroy' );
+															<portlet:namespace/>saveAs ( filePath );
+															$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+												},
+												Cancel: function() {
+															$( this ).dialog( 'destroy' );
+												}
+										}
+									}
+							);
+						}
+						else{
+							<portlet:namespace/>saveAs ( filePath );
+							$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+						}
+					},
+					error: function( e, d ){
+						console.log('OSPTextEditor: file save error');
+					}
+				});
 			}
 		}
 );
@@ -214,16 +404,20 @@ function <portlet:namespace/>loadStructure( inputData ){
 	case OSP.Enumeration.PathType.FILE:
 	case OSP.Enumeration.PathType.EXT:
 	case OSP.Enumeration.PathType.FOLDER:
+		if( !inputData.repositoryType() )
+			inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 		<portlet:namespace/>readFile( inputData );
 		break;
 	default:
 		alert( 'Un-known dataType: '+inputData.type());
 		return;
 	}
-		
+	
+	<portlet:namespace/>currentData = inputData;
 }
 
 function <portlet:namespace/>refreshEditor(){
+	console.log('***************', <portlet:namespace/>dataType);
 	<portlet:namespace/>dataType.showStructuredDataEditor(
 					'<portlet:namespace/>', 
 					$('#<portlet:namespace/>canvas'),
@@ -258,7 +452,7 @@ function <portlet:namespace/>readFile( inputData ){
 	var command;
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
-			command = 'GET_FILE';
+			command = 'READ_FILE';
 			break;
 		case OSP.Enumeration.PathType.EXT:
 		case OSP.Enumeration.PathType.FOLDER:
@@ -280,14 +474,15 @@ function <portlet:namespace/>readFile( inputData ){
 	$.ajax({
 		url: '<%=serveResourceURL%>',
 		type: 'post',
-		dataType: 'json',
+		dataType: 'text',
 		data: ajaxData,
 		success: function( result ){
 			<portlet:namespace/>dataType.loadStructure( result );
 			<portlet:namespace/>refreshEditor();
 		},
 		error: function( data, e ){
-			console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
+			console.log( '[ERROR] readFile: ', inputData );
+			console.log('command: '+command);
 		}
 	});
 }
