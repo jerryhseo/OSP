@@ -724,6 +724,7 @@ public class ScienceAppstoreController {
 			
 			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			long userId = PortalUtil.getUserId(request);
+			String searchValue = CustomUtil.strNull(params.get("searchValue"), "");
 			
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -745,12 +746,39 @@ public class ScienceAppstoreController {
 				categoryId = Long.valueOf(categoryValue);
 			}
 			
-			int solverCount = ScienceAppLocalServiceUtil.countScienceApp(companyGroupId, groupId, categoryId ,themeDisplay.getLocale(), params); //총 개수
+			long globalGroupId = themeDisplay.getCompany().getGroupId();
+			long companyId = themeDisplay.getCompanyId();
+			
+			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			int categoryIdsLength = 0;
+			long[] categoryIds = null;
+			if(categoryId == 0){
+				categoryIdsLength = aCategoryList.size();
+				categoryIds = new long[categoryIdsLength];
+				for(int i=0; i<aCategoryList.size(); i++){
+					categoryIds[i] = aCategoryList.get(i).getCategoryId();
+				}
+			} else {
+				categoryIdsLength = 1;
+				categoryIds = new long[categoryIdsLength];
+				categoryIds[0] = categoryId;
+			}
+			
+			String[] appTypes = null;
+			int solverCount = ScienceAppLocalServiceUtil.countScienceAppFromExplore(
+					companyGroupId, groupId,
+					themeDisplay.getLocale(),  appTypes, categoryIds, searchValue);
 			
 			int begin = (curPage - 1) * linePerPage;
 			int end = linePerPage;
 			
-			List<Map<String, Object>> writeDataList = ScienceAppLocalServiceUtil.retrieveListScienceApp(companyGroupId, groupId, categoryId ,themeDisplay.getLocale(), params, begin, end, true);
+			List<Map<String, Object>> writeDataList = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
+					companyGroupId, groupId,
+					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
+					begin, linePerPage);
 			
 			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", solverCount, curPage, linePerPage, pagePerBlock);
 			
