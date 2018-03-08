@@ -1364,6 +1364,8 @@
 				console.log( 'inputPortNames: ', inputPortNames );
 				
 				var proliferatedJobs = job.proliferate( inputPortNames );
+				if(!proliferatedJobs){return false;}
+				
 				for( var jobIndex in proliferatedJobs ){
 					var proliferatedJob = proliferatedJobs[jobIndex];
 					
@@ -1414,16 +1416,16 @@
 						var data = {
 							simulationUuid: simulation.uuid(),
 				            jobUuid: submittedJob.uuid,
-				            status: false
+				            status: true
 						};
-						
-						bEnd();
 						
 						fireSubmitJobResult(data);
 					},
 					error:function(jqXHR, textStatus, errorThrown){
-						bEnd();
 						fireSubmitJobResult({status:false});
+					},
+					complate:function(e){
+						bEnd();
 					}
 				});
 			},500);
