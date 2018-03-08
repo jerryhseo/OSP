@@ -321,7 +321,6 @@
 			};
 			
 			C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
-				alert(targetPortlet.status());
 				if( targetPortlet.status() ){
 					targetPortlet.display( 'block' );
 					return true;
@@ -671,12 +670,10 @@
 		};
 		
 		Layout.switchPortlet = function( toPortletId, connector, eventEnable, windowState, callback ){
-			alert("switchPortlet____"+toPortletId);
 			var column = Layout.getAssignedColumn(toPortletId );
 			if( !column )	return false;
 			
 			column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
-			console.log(Layout.getPortlet(toPortletId));
 			return true;
 		};
 		
