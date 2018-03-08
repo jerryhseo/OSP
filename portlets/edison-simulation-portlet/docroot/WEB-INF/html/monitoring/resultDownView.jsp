@@ -29,10 +29,11 @@
 		<img id="<portlet:namespace/>result-down-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer;"/>
 	</div>
 </div>
-<div class="table-responsive panel edison-panel">
-	<div style="margin-bottom: 5px;float: right;">
+<div class="table-responsive panel edison-panel" style="padding: 10px;">
+
+	<div class="panel-heading clearfix">
 		<c:if test="${!empty zipFileId}">
-			<input type="button" onclick="<portlet:namespace/>allDown();return false;" class="btn btn-default" value='<liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/>' />
+			<input type="button" onclick="<portlet:namespace/>allDown();return false;" class="btn btn-default" value='<liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/>' style="float: right;" />
 		</c:if>
 	</div>
 	
