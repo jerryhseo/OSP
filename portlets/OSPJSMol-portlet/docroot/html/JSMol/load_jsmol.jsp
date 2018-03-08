@@ -20,7 +20,7 @@ $(window).resize( function(e){
 });
  
 function loadJSMolFile( urlToLoad ){
-        console.log( 'URL To Load: '+ urlToLoad );
+        console.log( '[JSMOL]URL To Load: '+ urlToLoad );
         if( !urlToLoad )    return;
         currentUrl = urlToLoad;
         

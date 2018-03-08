@@ -68,7 +68,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_jmol";
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_jmol";
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
 	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 else
@@ -241,7 +241,7 @@ Liferay.on(
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
-			console.log(e.portletId+' activated. '+new Date()+']');
+			console.log('[JSMOL]Regestered'+e.portletId+' activated. '+new Date()+']');
 		}
 	}
 );
@@ -269,7 +269,7 @@ Liferay.on(
            OSP.Event.OSP_RESPONSE_DATA,
            function( e ){
                if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
-                   console.log('ImageViewer OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+                   console.log('[JSMOL] OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
                    if( e.portletId === <portlet:namespace/>fileExplorerId ){
                        var inputData = new OSP.InputData( e.data );
                        
@@ -329,7 +329,7 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
 	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
+	    	console.log( '[JSMol]iframeDoc.readyState : ', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadJSMolFile ) {
 	    	    AUI().use('liferay-portlet-url', function(a) {
 	                <portlet:namespace/>currentData = inputData.clone();
@@ -384,7 +384,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>drawJSMol( inputData );
         },
         error:function(data,e){
-            console.log('AJAX ERROR-->'+e);
+            console.log('[JSMOL]AJAX ERROR-->'+e);
         },
         complete: function( jqXHR, textStatus ){
         }
