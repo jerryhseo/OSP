@@ -4,7 +4,7 @@
 
 /* left menu*/
 .wf-container{width: 100%; height: 750px;}
-.wf-container .lefttabm{position: absolute; left: 10px;}
+.wf-container .lefttabm{position: absolute;}
 .lefttreemenu1.wf-jstree {padding-top:45px;}
 .lefttreemenu1.wf-jstree > ul{height: 700px; overflow-y: auto;}
 .lefttreemenu1.jstree > ul{height: 700px; overflow-y: auto;}
@@ -28,7 +28,7 @@
 .rightwrap{height:100%; overflow-x: hidden;}
 .wfconwrap{height:100%; margin-bottom: 30px; float: left;}
 .lefttreemenu{height: 99%;}
-.leftlistbox{height: 99%;}
+.leftlistbox{height: 99%; overflow: hidden;}
 .lefttablemenu{height: 99%; clear: both;}
 
 .wf-container > .alert{ width: 786px; left: 380px; position: absolute; display: none;}
@@ -120,7 +120,7 @@
 .listbox.navigation ul li a{text-decoration: none;}
 .listbox.navigation ul li a:hover{color:#fff !important;}
 
-.workflow-list-div{overflow-y: auto; height: 700px;}
+.workflow-list-div{overflow-y: auto; height: 650px;}
 
 /* form validation*/
 .form-validation-error{border-color: #b50303 !important; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important; -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;}
