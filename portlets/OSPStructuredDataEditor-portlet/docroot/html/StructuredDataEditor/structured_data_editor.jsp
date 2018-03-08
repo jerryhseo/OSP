@@ -100,6 +100,7 @@ if( !<%=eventEnable%> ){
 		Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData);
 });
 
+/*
  $('#<portlet:namespace/>saveAs').click(function(e){
 		e.preventDefault();
 		var inputData = new OSP.InputData();
@@ -134,7 +135,7 @@ if( !<%=eventEnable%> ){
 		}
 		<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
 	});
-
+*/
 $('#<portlet:namespace/>canvas').on('change', function(){
 		var inputData = new OSP.InputData();
 		inputData.type( OSP.Enumeration.PathType.STRUCTURED_DATA );
@@ -149,6 +150,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 		Liferay.fire(OSP.Event.OSP_DATA_CHANGED, eventData );
 });
 
+/*
 function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
 	    $<portlet:namespace/>fileExplorerDialogSection.remove();
@@ -200,7 +202,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			reader.readAsText(inputFile.files[0]);
 		}
 );
-
+*/
 
 /***********************************************************************
 * Handling OSP Events
@@ -238,6 +240,12 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				console.log(e.portletId+' activated at '+new Date()+']');
+				var eventData = {
+									portletId: '<%=portletDisplay.getId()%>',
+									targetPortlet: <portlet:namespace/>connector
+							};
+							
+				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
 			}
 		}
 );
@@ -466,7 +474,7 @@ function <portlet:namespace/>readFile( inputData ){
 	$.ajax({
 		url: '<%=serveResourceURL%>',
 		type: 'post',
-		dataType: 'json',
+		dataType: 'text',
 		data: ajaxData,
 		success: function( result ){
 			<portlet:namespace/>dataType.loadStructure( result );
@@ -474,6 +482,7 @@ function <portlet:namespace/>readFile( inputData ){
 		},
 		error: function( data, e ){
 			console.log( '[ERROR] readFile: ', inputData );
+			console.log('command: '+command);
 		}
 	});
 }
