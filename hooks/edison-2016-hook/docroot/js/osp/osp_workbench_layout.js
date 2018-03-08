@@ -1418,17 +1418,22 @@
 				            jobUuid: submittedJob.uuid,
 				            status: true
 						};
+
+						bEnd();
 						
 						fireSubmitJobResult(data);
 					},
 					error:function(jqXHR, textStatus, errorThrown){
-						fireSubmitJobResult({status:false});
-					},
-					complate:function(e){
 						bEnd();
+						
+						fireSubmitJobResult({status:false});
 					}
 				});
 			},500);
+			
+			setTimeout(function(){
+				bEnd()
+			},1000*5);
 		};
 		
 		var loadJobData = function ( job ){
