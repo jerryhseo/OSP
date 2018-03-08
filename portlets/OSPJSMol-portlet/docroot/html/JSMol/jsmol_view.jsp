@@ -258,6 +258,7 @@ Liferay.on(
 				<portlet:namespace/>currentData.parent(
 					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
 					//<portlet:namespace/>initData.name("");
+					<portlet:namespace/>currentData.name("");
 			}
 			<portlet:namespace/>loadJSMolFile( new OSP.InputData( e.data ) );
 		}
@@ -303,6 +304,8 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadJSMolFile( inputData ){
+	
+	console.log("[JSMol] Load Data : input Data ", inputData);
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
 	    <portlet:namespace/>drawJSMol( inputData );
