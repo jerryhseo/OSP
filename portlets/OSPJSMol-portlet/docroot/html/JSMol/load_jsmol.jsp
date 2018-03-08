@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html style="height:85%;">
 <head>
-    <script src="<%=request.getContextPath()%>/js/jsmol/jquery/jquery.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jsmol/JSmol.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 </head>
