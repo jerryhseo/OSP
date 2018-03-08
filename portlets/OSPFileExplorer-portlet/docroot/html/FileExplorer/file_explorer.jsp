@@ -216,7 +216,6 @@ $('#<portlet:namespace/>selectFile').bind(
 				$.ajax({
 					url: '<%=serveResourceURL.toString()%>',
 					type: 'POST',
-					async: false,
 					dataType: 'json',
 					data:{
 						<portlet:namespace/>command: "CHECK_DUPLICATED",
@@ -336,10 +335,22 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
+				var value = $('#<portlet:namespace/>selectedFile').val();
+				var path = OSP.Util.convertToPath( value );
+				console.log( 'Explor Path: ', path );
+				var currentData = <portlet:namespace/>selectedFile;
+				if( path.parent() !== currentData.parent() || 
+					 path.name() !== currentData.name() ){
+					currentData.parent( path.parent() );
+					currentData.name( path.name() );
+					currentData.type(OSP.Enumeration.PathType.FILE);
+				}
+				console.log(currentData);
+				
 				var eventData = {
 					portletId: myId,
 					targetPortlet:e.portletId,
-					data: OSP.Util.toJSON(<portlet:namespace/>selectedFile),
+					data: OSP.Util.toJSON(currentData),
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
