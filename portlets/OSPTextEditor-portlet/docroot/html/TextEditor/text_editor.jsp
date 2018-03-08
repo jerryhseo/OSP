@@ -167,7 +167,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 			autoOpen: true,
 			resizable: false,
 			height: 600,
-			width: 400,
+			width: 600,
 			modal: true,
 			buttons:{
 				OK: function() {
@@ -321,7 +321,7 @@ Liferay.on(
 									{
 										resizable: false,
 										height: "auto",
-										width: 600,
+										width: 400,
 										modal: true,
 										buttons: {
 												'OK': function() {
