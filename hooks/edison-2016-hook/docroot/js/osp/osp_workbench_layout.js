@@ -1376,9 +1376,6 @@
 		}
 		
 		var submitJobs = function(simulation,jobsToSubmit,ncores,resourceURL ){
-			/*프로비넌스 체크*/
-			
-			
 			var scienceApp = Workbench.scienceApp();
 			var simulationCreateTime = simulation.createTime();
 			
@@ -1400,6 +1397,7 @@
 				dataType: 'text',
 				data : ajaxData,
 				success : function(submittedJobs){
+					console.log('[SUCCESS] submit job : '+submittedJobs);
 //					job.status( status );
 //					job.dirty(false);
 //					job.isSubmit( true );
