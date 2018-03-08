@@ -216,7 +216,6 @@ $('#<portlet:namespace/>selectFile').bind(
 				$.ajax({
 					url: '<%=serveResourceURL.toString()%>',
 					type: 'POST',
-					async: false,
 					dataType: 'json',
 					data:{
 						<portlet:namespace/>command: "CHECK_DUPLICATED",
@@ -336,10 +335,22 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
+				var value = $('#<portlet:namespace/>selectedFile').val();
+				var path = OSP.Util.convertToPath( value );
+				console.log( 'Explor Path: ', path );
+				var currentData = <portlet:namespace/>selectedFile;
+				if( path.parent() !== currentData.parent() || 
+					 path.name() !== currentData.name() ){
+					currentData.parent( path.parent() );
+					currentData.name( path.name() );
+					currentData.type(OSP.Enumeration.PathType.FILE);
+				}
+				console.log(currentData);
+				
 				var eventData = {
 					portletId: myId,
 					targetPortlet:e.portletId,
-					data: OSP.Util.toJSON(<portlet:namespace/>selectedFile),
+					data: OSP.Util.toJSON(currentData),
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
@@ -432,8 +443,8 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 				<portlet:namespace/>command: 'GET_FILE_INFO',
 				<portlet:namespace/>repositoryType: <portlet:namespace/>selectedFile.repositoryType_,
 				<portlet:namespace/>pathType: 'folder',
-				<portlet:namespace/>parentPath: parentPath,
-				<portlet:namespace/>fileName: folderName
+				<portlet:namespace/>parentPath: OSP.Util.mergePath( parentPath, folderName ),
+				<portlet:namespace/>fileName: ''
 	};
 
 	var fileInfos = null;
@@ -444,9 +455,11 @@ function <portlet:namespace/>lookupFolder( parentPath, folderName ){
 		data  : data,
 		dataType : 'json',
 		success: function(data) {
+			/*
 			console.log(JSON.stringify(data, null, 4));
 			console.log( 'Parent Path: '+OSP.Util.mergePath( parentPath, folderName ) );
 			console.log(data);
+			*/
 			<portlet:namespace/>loadFileExplorer( 
 											OSP.Util.mergePath( parentPath, folderName ),
 			                               data.fileInfos );

@@ -49,11 +49,14 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			PortletException {
 		String command = ParamUtil.getString(resourceRequest, "command");
 		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
+		System.out.println("Command: "+command);
+		System.out.println("repositoryType: "+repositoryType);
 		
 		if( command.equalsIgnoreCase("READ_FILE")){
 			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 			String fileName = ParamUtil.getString(resourceRequest, "fileName");
 			String targetPath = parentPath.resolve(fileName).toString();
+			System.out.println("Target Path: "+targetPath);
 			
 			try {
 				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, targetPath, repositoryType);
