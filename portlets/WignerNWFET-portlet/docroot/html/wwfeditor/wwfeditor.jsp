@@ -3,8 +3,9 @@
 	<head>
 		<script src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
-var modelViewer;
 var namespace;
+
+var modelViewer;
 var IV_mod=0;
 
 function setNamespace( ns ){

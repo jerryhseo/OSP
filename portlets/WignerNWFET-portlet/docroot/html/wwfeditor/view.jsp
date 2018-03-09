@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -10,22 +11,22 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = ParamUtil.getString(request, "inputData", "{}");
-String connector = ParamUtil.getString(request, "connector", "");
-boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid wwfeditor-portlet canvas-wrapper" id="<portlet:namespace/>canvasPanel" >
-	<iframe class="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/wwfeditor/wwfeditor.jsp"></iframe>
-</div>
+<div class="container-fluid common-editor-portlet ">
+	<div class="row-fluid canvas">
+		<iframe id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/wwfeditor/wwfeditor.jsp"></iframe>
+	</div>
 
 <script>
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 
 
@@ -35,9 +36,9 @@ if( '<%=eventEnable%>' === 'false' ){
 	
 	if(inputData){
 		<portlet:namespace/>initData = JSON.parse( inputData );
+		<portlet:namespace/>loadProtein();
 	}
 	
-	<portlet:namespace/>loadProtein();
 }
 
 Liferay.on(	'OSP_HANDSHAKE', function( e ){
@@ -70,21 +71,7 @@ Liferay.on('OSP_EVENTS_REGISTERED', function( e ){
 	   console.log('[wwfeditor] OSP_EVENTS_REGISTERED: ['+e.portletId+', '+new Date()+']', e.data);
 	   
    		<portlet:namespace/>connector = e.portletId; 
-   		
    		<portlet:namespace/>passNamespace();
-
-	   		/*
-			var data = {
-						portletId: myId,
-     					targetPortlet: <portlet:namespace/>connector
-   					};   					
-   					
-   					
-   					Liferay.fire('LOCAL_WignerFET_Find_DeviceModel_ID', data);
-   					
-   					Liferay.fire( 'OSP_REQUEST_PATH', data);
-	   		*/
-   					
 	}
 });
 
@@ -115,6 +102,10 @@ Liferay.on( 'OSP_LOAD_DATA', function(e){
 		
 		// read data from file. Not implemented yet!
 		var inputData = e.data;
+		if( ! inputData.repositoryType_){
+			inputData.repositoryType_ = 'USER_HOME';
+		}
+		
 		switch( inputData.type_ ){
 		case 'file':
 			$.ajax({
@@ -123,8 +114,8 @@ Liferay.on( 'OSP_LOAD_DATA', function(e){
 				dataType: 'text',
 				data:{
 					<portlet:namespace/>command: 'READ_FILE',
-					<portlet:namespace/>action: 'input',
-					<portlet:namespace/>filePath: <portlet:namespace/>mergePath( e.data.parent_, e.data.name_ )
+					<portlet:namespace/>repositoryType: inputData.repositoryType_,
+					<portlet:namespace/>filePath: <portlet:namespace/>mergePath( inputData.parent_, inputData.name_ )
 				},
 				success: function( result ){
 					console.log( result );

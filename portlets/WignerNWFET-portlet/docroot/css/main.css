@@ -1,4 +1,5 @@
 @import url("./common-editor-portlet.css");
+@import url("./common-analyzer-portlet.css");
 
 input[type=range] {
 	-webkit-appearance: none;

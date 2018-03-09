@@ -229,7 +229,7 @@ function initialize() {
 </script>
 		
 	</head>
-	<body style="height:85%;">
+	<body style="height:100%;">
 		<div class="wrapper" >
 		<b>Device model</b>
 		</div>

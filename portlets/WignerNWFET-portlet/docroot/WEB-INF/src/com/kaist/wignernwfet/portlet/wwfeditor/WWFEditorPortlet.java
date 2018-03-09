@@ -8,7 +8,8 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -25,12 +26,12 @@ public class WWFEditorPortlet extends MVCPortlet {
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
         String inputData = ParamUtil.getString(renderRequest, "inputData");
         String connector = ParamUtil.getString(renderRequest, "connector", "connector");
-        String action = ParamUtil.getString(renderRequest, "action", "output");
+        String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
         renderRequest.setAttribute("eventEnable", eventEnable);
         renderRequest.setAttribute("inputData", inputData);
         renderRequest.setAttribute("connector", connector);
-        renderRequest.setAttribute("action", action);
+        renderRequest.setAttribute("mode", mode);
 		
 		super.doView(renderRequest, renderResponse);
 	}
@@ -41,16 +42,14 @@ public class WWFEditorPortlet extends MVCPortlet {
         String filePath = ParamUtil.getString(resourceRequest, "filePath");
 
         String command = ParamUtil.getString(resourceRequest, "command");
-        String action = ParamUtil.getString(resourceRequest, "action", "output");
-        boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
+        String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
         
         System.out.println("command: "+command);
-        System.out.println("action: "+action);
         System.out.println("filePath: "+filePath);
 
         if(command.equalsIgnoreCase("READ_FILE")){
-            try{
-                FileManagementLocalServiceUtil.readFileContent(resourceRequest, resourceResponse, filePath, isJobResult);
+        	try{
+            	OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 throw new PortletException();
             }

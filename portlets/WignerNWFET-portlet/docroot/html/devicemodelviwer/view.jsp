@@ -1,28 +1,8 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
-
-<style>
-.devicemodel-portlet{
-	padding:0;
-	margin: 0;
-}
-
-.devicemodel-portlet.canvas-wrapper{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-}
-
-.devicemodel-portlet .canvas{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-}
-</style>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -31,28 +11,23 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = ParamUtil.getString(request, "inputData", "{}");
-String connector = ParamUtil.getString(request, "connector", "");
-boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid devicemodel-portlet canvas-wrapper" id="<portlet:namespace/>canvasPanel" >
-	<iframe class="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/devicemodelviwer/DeviceModelViewer.jsp"></iframe>	
+<div class="container-fluid common-analyzer-portlet ">
+	<div class="row-fluid canvas">
+		<iframe id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/devicemodelviwer/DeviceModelViewer.jsp"></iframe>	
+	</div>
 </div>
 
 <script>
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
-var <portlet:namespace/>iframeReady = false;
-
-function <portlet:namespace/>setIFrameReady(){
-	<portlet:namespace/>iframeReady = true;
-}
-
+var <portlet:namespace/>mode = '<%=mode%>';
 
 if( '<%=eventEnable%>' === 'false' ){
 	<portlet:namespace/>connector = '<%=connector%>';
@@ -60,9 +35,8 @@ if( '<%=eventEnable%>' === 'false' ){
 	
 	if(inputData){
 		<portlet:namespace/>initData = JSON.parse( inputData );
+		<portlet:namespace/>drawDevice(<portlet:namespace/>initData.context_);
 	}
-	
-	<portlet:namespace/>loadProtein();
 }
 
 Liferay.on('OSP_HANDSHAKE', function( e ){
@@ -82,11 +56,7 @@ Liferay.on('OSP_HANDSHAKE', function( e ){
 							data: events
 			};			
 			
-			
 			Liferay.fire('OSP_REGISTER_EVENTS', eventData);
-			
-			
-			
 		}
 	}
 });
@@ -137,7 +107,8 @@ Liferay.on( 'OSP_LOAD_DATA', function(eventData){
 			console.log('DeviceModelViewer: Unsupport data type');
 	}
 });
-		 
+
+/*
 Liferay.on( 'LOCAL_WignerFET_Draw_Device', function(eventData){	
 	
 	var myId = '<%=portletDisplay.getId()%>';
@@ -148,6 +119,7 @@ Liferay.on( 'LOCAL_WignerFET_Draw_Device', function(eventData){
 			
 	<portlet:namespace/>drawDevice( data );
 });
+*/
 
 function <portlet:namespace/>drawDevice( data ){
     // Get a handle to the iframe element

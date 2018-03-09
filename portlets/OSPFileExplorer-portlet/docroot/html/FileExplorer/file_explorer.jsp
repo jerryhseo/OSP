@@ -77,6 +77,7 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
+<portlet:namespace/>passNamespace();
 var <portlet:namespace/>canvas = $('#<portlet:namespace/>canvas');
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>downloadMode = false;
@@ -107,7 +108,6 @@ if( !<portlet:namespace/>eventEnable ){
 	    if( !<portlet:namespace/>selectedFile.repositoryType() )
 	    	<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 	}
-	<portlet:namespace/>passNamespace();
 	<portlet:namespace/>initFileExplorer(<portlet:namespace/>selectedFile, true );
 }
 
@@ -319,7 +319,6 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-			    <portlet:namespace/>passNamespace();
 			    console.log('['+myId+'] OSP_LOAD_DATA: ', e );
 				
 				var inputData = new OSP.InputData( e.data );

@@ -1,31 +1,9 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
-
-<style>
-.csvplotter-portlet{
-	padding:0;
-	margin: 0;
-	overflow:hidden;
-}
-
-.csvplotter-portlet.canvas-wrapper{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-	overflow: inherit;
-}
-
-.csvplotter-portlet .canvas{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-	overflow: inherit;
-}
-</style>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common-analyzer-portlet.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/dropdown.css">
@@ -37,43 +15,43 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = ParamUtil.getString(request, "inputData", "");
-String connector = ParamUtil.getString(request, "connector", "broadcast");
-boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "output");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid common-analyzer-portlet csvplotter-portlet" id="<portlet:namespace/>ground" style="overflow:hidden;">
-	<div class="span12" style="height:inherit;">
-		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-			<div class="dropdown-wrapper" >
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-						<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-					</div>
-				</div>
-			</div>	
-		</div>
-		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
-			<iframe class ="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/csvplotter/csvplotter.jsp">
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header">
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<!-- Link or button to toggle dropdown -->
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
+			</div>
+		</div>	
+	</div>
+	<div class="row-fluid canvas">
+			<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/csvplotter/csvplotter.jsp">
 			</iframe>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-			<input type="file" id="<portlet:namespace/>selectFile"/>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+		<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		<div>
+			<input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+			<input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
 		</div>
 	</div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
 <script>
@@ -84,10 +62,10 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_csv2d"
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_cv2d"
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
     
 
@@ -100,16 +78,17 @@ if( '<%=eventEnable%>' === 'false' ){
 	
 	if(inputData){
 		<portlet:namespace/>initData = JSON.parse( inputData );
+		<portlet:namespace/>loadCSVPlotter( <portlet:namespace/>initData );
 	}
 	
-	<portlet:namespace/>loadCSVPlotter();
+	<portlet:namespace/>passNamespace();
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
 	autoOpen: false,
 	resizable: false,
 	height: 600,
-	width: 450,
+	width: 600,
 	modal: true
 });
 
@@ -130,10 +109,11 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
      }else{
          inputData = {};
          inputData.type_ = 'folder';
+         inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_HOME.toString()%>';
          inputData.parent_ = '';
          inputData.name_ = '';
      }
-     <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
  });
 
  $('#<portlet:namespace/>download').click(function(){
@@ -144,10 +124,9 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
    e.preventDefault();
    var eventData = {
        portletId : '<%=portletDisplay.getId()%>',
-       targetPortlet : <portlet:namespace/>fileExplorerId,
-       action: "READ"
+       targetPortlet : <portlet:namespace/>fileExplorerId
    };
-   Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
+   Liferay.fire( 'OSP_REQUEST_DATA', eventData);
    $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
  });
 
@@ -161,21 +140,20 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
  			var input = document.getElementById('<portlet:namespace/>selectFile');
  			var reader = new FileReader();
  			reader.onload = function (e) {
- 			    $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
- 			    $("#<portlet:namespace/>selectFile").val("");
- 			    <portlet:namespace/>currentData = null;
-             }
+ 				$(this).prop('contentWindow').drawGraph(e.target.result);
+ 				delete <portlet:namespace/>currentData;
+			}
+ 			
  			reader.readAsDataURL(input.files[0]);
  		}
  		
  );
 
- function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
  	AUI().use('liferay-portlet-url', function(A){
  		var dialogURL = Liferay.PortletURL.createRenderURL();
  		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
  		dialogURL.setParameter('inputData', JSON.stringify(inputData));
- 		dialogURL.setParameter('action', <portlet:namespace/>action);
  		dialogURL.setParameter('mode', mode);
  		dialogURL.setParameter('eventEnable', false);
  		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
@@ -194,7 +172,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
  /***********************************************************************
   * Handling OSP Events
   ***********************************************************************/
- 
+/*
 Liferay.on( 'LOCAL_WignerFET_Draw_Graph', function(eventData){	
 	var myId = '<%=portletDisplay.getId()%>';	
 	
@@ -205,16 +183,17 @@ Liferay.on( 'LOCAL_WignerFET_Draw_Graph', function(eventData){
 		// <portlet:namespace/>drawDevice( data );
 	});		
 });
+ */
 
 Liferay.on(	'OSP_HANDSHAKE', function( e ){
 	var myId = '<%=portletDisplay.getId()%>';	
 	if( e.targetPortlet === myId )
 	{
 		<portlet:namespace/>connector = e.portletId;
-		if( e.action )
-			<portlet:namespace/>action = e.action;
+		if( e.mode )
+			<portlet:namespace/>mode = e.mode;
 		else
-			<portlet:namespace/>action = 'output';
+			<portlet:namespace/>mode = 'VIEW';
 //		$('#<portlet:namespace/>canvas').css('height', eventData.height);
 
 		if( e.data )
@@ -241,29 +220,31 @@ Liferay.on('OSP_EVENTS_REGISTERED', function( e ){
 	   {
 		     console.log('[csvplotter] OSP_EVENTS_REGISTERED: ['+e.portletId+', '+new Date()+']');
 	   		<portlet:namespace/>passNamespace();
-	   		
-	   		var event;
-	   		if( <portlet:namespace/>action === 'output' ||
-	   				<portlet:namespace/>action === 'log' ){
-	   			var eventData = {
-	   			                 portletId: myId,
-	   			                 targetPortlet: <portlet:namespace/>connector
-	   			};
-	   			
-	   			Liferay.fire( 'OSP_REQUEST_OUTPUT_PATH', eventData );
-	   		}
-	   			
 		}
 });
 
 Liferay.on( 'OSP_LOAD_DATA', function(e){
 	var myId = '<%=portletDisplay.getId()%>';
 	if( e.targetPortlet === myId ){
-		var inputData = e.data;
 		console.log('[csvplotter] OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 		
-		<portlet:namespace/>initData = inputData;
-		<portlet:namespace/>loadCSVPlotter( inputData );
+		<portlet:namespace/>initData = e.data;
+		if( <portlet:namespace/>initData.type_ === 'folder' ){
+		      <portlet:namespace/>initData.parent_ = 
+	              <portlet:namespace/>mergePath(<portlet:namespace/>initData.parent_, <portlet:namespace/>initData.name_);
+		      <portlet:namespace/>initData.name_ = '';
+		}
+		if( !<portlet:namespace/>initData.repositoryType_ )
+			  <portlet:namespace/>initData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
+			  
+		<portlet:namespace/>loadCSVPlotter( <portlet:namespace/>initData );
+		
+		var eventData = {
+		                   portletId: myId,
+		                   targetPortlet: <portlet:namespace/>fileExplorerId,
+		                   data: <portlet:namespace/>initData
+		  };
+		  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	}
 });
 
@@ -429,6 +410,16 @@ function <portlet:namespace/>downloadCurrentFile(){
         var url = base + sep + $.param(data);
         location.href = url;
     }
+}
+
+function <portlet:namespace/>mergePath( parent, child ){
+	if( !parent && !child )	return '';
+	if( !parent )
+		return child;
+	if( !child )
+		return parent;
+	
+	return parent+'/'+child;
 }
 
 </script>
