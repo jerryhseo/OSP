@@ -189,7 +189,7 @@ $('#<portlet:namespace/>selectFile').bind(
 
 function <portlet:namespace/>fileExplorerDialog( mode, action, data ){
     AUI().use('liferay-portlet-url', function(A){
-    	var inputData = inputData.clone();
+    	var inputData = data.clone();
     	inputData.name('');
     	inputData.type('folder');
     
