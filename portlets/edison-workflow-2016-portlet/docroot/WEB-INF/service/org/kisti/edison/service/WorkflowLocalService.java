@@ -439,6 +439,14 @@ public interface WorkflowLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
 
+	public org.kisti.edison.model.WorkflowInstance runWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> workflowParams,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
 	public int startWorkflowInstance(long workflowInstanceId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
@@ -462,6 +470,9 @@ public interface WorkflowLocalService extends BaseLocalService,
 		org.codehaus.jackson.JsonNode workflowStatusJson,
 		org.kisti.edison.model.WorkflowInstance workflowInstance)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.codehaus.jackson.JsonNode askForWorkflowStart(
+		java.lang.String workflowUUID) throws java.io.IOException;
 
 	public org.codehaus.jackson.JsonNode askForWorkflowStatus(
 		java.lang.String workflowUUID) throws java.io.IOException;

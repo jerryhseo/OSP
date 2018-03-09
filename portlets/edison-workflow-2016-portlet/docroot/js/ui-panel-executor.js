@@ -31,12 +31,58 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     };
 
+    /*
+    function run(){}
+    function rerun(){}
+    function pause(){}
+    function restart(){}
+    function status(){}
+     */
+
+    $(JQ_PORTLET_BOUNDARY_ID + " .sidbar-run-btn").click(function (e) {
+        e.preventDefault();
+        var btnType = $(this).attr("data-btn-type");
+        if (btnType === "run") { run(); }
+        if (btnType === "rerun") { rerun(); }
+        if (btnType === "pause") { pause(); }
+        if (btnType === "restart") { restart(); }
+        if (btnType === "status") { status(); }
+    });
+
+    function run(){
+        console.log("run");
+        var ibToken = getIcebreakerAccessToken();
+        var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+        var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
+        saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
+            function (workflowInstance) {
+                console.log(ibToken);
+                executor.runWorkflowInstance(workflowInstanceId, ibToken);
+                toastr["success"]("", var_success_run_workflow_message);
+            });
+    }
+    function rerun(){
+        
+    }
+    function pause(){
+        
+    }
+    function restart(){
+        
+    }
+    function status(){
+        
+    }
+
+    function getIcebreakerAccessToken(){
+        var fn = window[namespace + "getIcebreakerAccessToken"];
+        return fn.apply();
+    }
+
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn").click(function (e) {
         e.preventDefault();
         var btnType = $(this).attr("data-btn-type");
         var templateData = PANEL_DATA[btnType];
-        console.log("btnType", btnType);
-        console.log("templateData", templateData);
         
         if(btnType === "designer"){
             var fn = window[namespace + "moveToDesigner"];
@@ -138,7 +184,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }).bind("select_node.jstree", function(event, data){
             var nodeId = data.node.id;
             var node = data.node;
-            console.log(node);
             if(node.type === "workflow"){
               if(!$("#" + nodeId).hasClass("jstree-open")){
                   openJstreeNode(instanceTreeSelector, nodeId, node);
@@ -159,7 +204,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function (workflowInstance) {
                 designer.resetWorkflow();
                 designer.drawScreenLogic(workflowInstance.screenLogic);
-                console.log(workflowInstance);
+                setMetaData({
+                    "title": PANEL_DATA.setting.form.title,
+                    "description": PANEL_DATA.setting.form.description,
+                    "workflowId": PANEL_DATA.setting.form.workflowId,
+                    "workflowInstanceTitle": workflowInstance.title,
+                    "workflowInstanceId": workflowInstance.workflowInstanceId
+                });
             }, function (err) {
                 if(console){
                     console.log(err);
@@ -170,8 +221,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function openJstreeNode(instanceTreeSelector, nodeId, node){
         if($("#" + nodeId).hasClass("is-loaded")){
             $(instanceTreeSelector).jstree("open_node", node);
-        }else{
-            //addJobs(nodeId);
         }
     }
 
@@ -188,7 +237,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         aSyncAjaxHelper.post("/delegate/services/workflows/" + workflowId + "/instances",
             params,
             function (workflowInstances) {
-                console.log(workflowInstances);
                 if($(instanceTreeSelector).hasClass("jstree")){
                     $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
                     $(instanceTreeSelector).jstree(true).refresh();
@@ -215,6 +263,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         });
                         if(panelDataType === "new"){
                             PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
+                            designer.resetWorkflow();
+                            openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
                         }
                         toastr["success"]("", var_create_success_message);
                     });
@@ -235,8 +285,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             } else {
                 var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
                 var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
-                executor.updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle, 
-                    designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()),
+                saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
                     function (workflowInstance) {
                         setMetaData({
                             "title": PANEL_DATA.setting.form.title,
@@ -251,6 +300,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             }
         }
     }
+
+    function saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle, callback) {
+        executor.updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
+            designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
+    }
+    
     
     function deleteWorkflowInstance(panelDataType){
         if (!_isEmpty(PANEL_DATA.setting.form.workflowInstanceId, var_no_workflow_instance_msg)) {
@@ -334,4 +389,5 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         "openWorkflow": openWorkflowByWorkflowId
     };
 });
+
 

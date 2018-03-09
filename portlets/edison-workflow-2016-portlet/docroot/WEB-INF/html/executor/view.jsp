@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
-<liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
+<liferay-portlet:resourceURL var="getIcebreakerAccessTokenUrl" escapeXml="false" id="getIcebreakerAccessToken"
   copyCurrentRenderParameters="false" />
 <liferay-portlet:renderURL var="designerUrl" portletName="workflowdesigner_WAR_edisonworkflow2016portlet" 
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
@@ -220,11 +220,11 @@ var contextPath = '${contextPath}';
                 <span>Run</span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="#"><i></i><span>Run Simulation</span></a></li>
-                <li><a href="#"><i></i><span>Rerun Simulation</span></a></li>
-                <li><a href="#"><i></i><span>Pause</span></a></li>
-                <li><a href="#"><i></i><span>Restart</span></a></li>
-                <li><a href="#"><i></i><span>Status</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
               </ul>
             </li>
           </ul>
@@ -382,6 +382,11 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 <script>
 $(document).ready(function(){
+  consoleLog.setLoggingLevel({
+    error : true,
+    info : true,
+    debug : false
+  });
   var namespace = "<portlet:namespace/>";
   var jqPortletBoundaryId = "#p_p_id" + namespace;
   var workflowId = "${workflowId}";
@@ -404,7 +409,7 @@ $(document).ready(function(){
       "hideMethod": "slideUp"
   };
   var designer = new Designer(namespace, $, OSP, toastr, true);
-  var executor = new SimulationExecutor(namespace, $, designer, toastr);
+  var executor = new SimulationExecutor(namespace, $, designer, toastr,'<%=LiferayWindowState.EXCLUSIVE%>');
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
@@ -437,10 +442,11 @@ function <portlet:namespace/>getSiteGroupId(){
   return "${groupId}";
 }
 
-function <portlet:namespace/>getSpecificSiteGroupId(){
-  var url = "<%=getSpecificSiteGroupIdUrl%>";
+function <portlet:namespace/>getIcebreakerAccessToken(){
+  var url = "<%=getIcebreakerAccessTokenUrl%>";
   var result = synchronousAjaxHelper.post(url, {});
-  return result["groupId"];
+  return result;
 }
+
 </script>
 </div>
