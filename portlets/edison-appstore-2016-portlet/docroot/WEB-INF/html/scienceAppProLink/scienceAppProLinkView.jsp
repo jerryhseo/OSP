@@ -89,11 +89,12 @@
 			</tr>
 		</tbody>
 	</table>
+	
+	<div class="text-center">
+		<div id="<portlet:namespace/>paging"
+			style="width: 100%; text-align: center;"></div>
+	</div>
 </div>
-<div class="paging">
-	<div id="<portlet:namespace/>paging"
-		style="width: 100%; text-align: center;"></div>
-</div>		
 
 <script>
 //선택한 Tab Id

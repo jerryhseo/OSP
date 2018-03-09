@@ -439,10 +439,12 @@ function <portlet:namespace/>searchListEntry(p_currentPage){
 			</tr>
 		</tbody>
 	</table>
+	
+	<div class="text-center">
+		<div id="<portlet:namespace/>paging" style="width: 100%; text-align: center;">
+		</div>
+	</div>
 </div>
-<div class="paging">
-	<div id="<portlet:namespace/>paging"
-		style="width: 100%; text-align: center;"></div>
 <%-- </div>
 	<div class="boardbtnbox" style="text-align: right; width: 99%;">
 	<input name="relateAssetBt" type="button" value="<liferay-ui:message key="edison-button-board-ok"/>" class="button01b" onclick=""/>
