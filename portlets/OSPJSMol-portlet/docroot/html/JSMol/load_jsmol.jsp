@@ -42,6 +42,9 @@ function loadJSMolFile( urlToLoad ){
         };
 
         Jmol.setDocument(0);
+        
+        
+        
         Jmol.getApplet('jmol_1', Info);
         $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
 }
