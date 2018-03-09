@@ -159,17 +159,11 @@ $('#<portlet:namespace/>selectFile').bind(
 			
 			var fr = new FileReader();
 			fr.onload = function (e) {
-				//console.log('[PlotlyViewer]test get jsom in plotly',e);
 				var result =JSON.parse(e.target.result);
 				var iframe = document.getElementById('<portlet:namespace/>canvas');
 				iframe.contentWindow.readJson (  result);
-			    //<portlet:namespace/>drawImagePlotly(e.target.result);
-			    //<portlet:namespace/>setTitle(e.target.result);
-			    //<portlet:n
-			    //amespace/>currentData = null;
-				//reader.readAsText(input.files[0]);
+			    
             }
-			//reader.readAsDataURL(input.files[0]);
 		}
 
 );
