@@ -204,7 +204,7 @@ function excelDown(){
 			<%-- <input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/> --%>
 			
 			<div id="data_wrap">
-				<div class="tabletoptab">
+				<div class="tabletoptab" style="float: left; margin-right: 10px;">
 			  		<input class="box01" type="text" id="<portlet:namespace/>jobStartDt" name="<portlet:namespace/>jobStartDt" readonly="readonly" value="${preDay}"/> 
 						~	<input class="box01" type="text" id="<portlet:namespace/>jobEndDt" name="<portlet:namespace/>jobEndDt" readonly="readonly" value="${toDay}"/>
 				</div>
@@ -215,7 +215,9 @@ function excelDown(){
 			</div>
 		</form>
 	</div>
+	
 	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix"></div>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
 				<col width="10%" />
