@@ -6,6 +6,8 @@
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 <portlet:renderURL var="renderURL">
@@ -47,20 +49,20 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 	</div>
 </div>
 
-
-	<div id="<portlet:namespace/>fileExplorer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" class="panel panel-praimary">
 		<!-- title -->
-		<div class="modal-header">
+		<div class="panel-heading">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			<h3>Select a File</h3>
 		</div>
 		
 		<!-- content -->
-		<div class="modal-body" id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
 
 		
 		<!-- bottom -->
-		<div class="modal-footer">
+		<div class="panel-footer">
 			<div class="ui-dialog-buttonset">
 				<input class="btn btn-primary" id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
 				<input class="btn" id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
@@ -69,7 +71,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		
 	</div>
 	
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+
 	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
