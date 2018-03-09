@@ -54,7 +54,8 @@ public class OSPJSMolPortlet extends MVCPortlet {
 
         if(command.equalsIgnoreCase("READ_FILE")){
             try{
-            	OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
+            	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
+            	//OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
