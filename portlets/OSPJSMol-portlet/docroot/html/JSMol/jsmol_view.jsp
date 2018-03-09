@@ -58,7 +58,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>
 		
 		<!-- content -->
-		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 80%"></div>
+		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 81%"></div>
 
 		
 		<!-- bottom -->
