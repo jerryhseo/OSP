@@ -124,6 +124,9 @@ Liferay.on(
 function <portlet:namespace/>loadParaView( inputData ){
     var dataDirectory;
     var fileToLoad = '';
+    
+    if( ! inputData.repositoryType_ )
+    	inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
 
     if( inputData.type_ === 'folder'){
 		dataDirectory = <portlet:namespace/>mergePath( inputData.parent_, inputData.name_ ); 
@@ -139,7 +142,7 @@ function <portlet:namespace/>loadParaView( inputData ){
 			data:{
 			    <portlet:namespace/>command: 'GET_ABSOLUTE_PATH',
 			    <portlet:namespace/>targetPath: dataDirectory,
-			    <portlet:namespace/>repositoryType: inputData.repositoryType_? inputData.repositoryType_: '<%=OSPRepositoryTypes.USER_JOBS.toString()%>'
+			    <portlet:namespace/>repositoryType: inputData.repositoryType_
 			},
 			success: function( result ){
 			    dataDirectory = result;

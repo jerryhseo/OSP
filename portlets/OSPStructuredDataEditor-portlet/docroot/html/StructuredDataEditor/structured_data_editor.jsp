@@ -24,8 +24,8 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "EDIT");;
 
 <div class="container-fluid common-editor-portlet">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-3 col-sm-1" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<!-- 
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
@@ -267,17 +267,20 @@ Liferay.on(
 
 Liferay.on( 
 		OSP.Event.OSP_REQUEST_DATA, 
-		function(eventData){
+		function(e){
 			var myId = '<%=portletDisplay.getId()%>';
-			if( eventData.targetPortlet === myId ){
-				var data = {
-								data: <portlet:namespace/>dataType.structure(),
+			if( e.targetPortlet === myId ){
+				var inputData = new OSP.InputData();
+				inputData.type(OSP.Enumeration.PathType.CONTEXT);
+				inputData.context(<portlet:namespace/>dataType.structure());
+				var eventData = {
+				                 portletId: myId,
+				                 targetPortlet: <portlet:namespace/>connector,
+				                 data: OSP.Util.toJSON(inputData),
+				                 params: e.params
 				};
-		
-				OSP.Event.responseDataToRequest(
-						myId, 
-						data, 
-						eventData );
+				
+				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
 		}
 );

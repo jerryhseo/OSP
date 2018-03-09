@@ -114,7 +114,8 @@ Liferay.on(
 				var eventData = {
 						portletId: myId,
 						targetPortlet: e.portletId,
-						data: data
+						data: data,
+						params: e.params
 				}
 				
 				Liferay.fire(

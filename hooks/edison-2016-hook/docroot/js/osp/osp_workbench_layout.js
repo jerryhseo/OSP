@@ -113,18 +113,12 @@
 					return false;
 			};
 			
-			P.repositoryType = function(repositoryType){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments));
-			}
-			
 			P.load = function( $targetDiv, connector, eventEnable, windowState, callback ){
 				AUI().use('liferay-portlet-url', function(A){
 					var portletURL = Liferay.PortletURL.createRenderURL();
 					portletURL.setPortletId( P.instanceId() );
 					portletURL.setParameter( 'eventEnable', eventEnable);
 					portletURL.setParameter( 'connector', connector);
-					
-					portletURL.setParameter( 'repositoryType', P.repositoryType());
 					portletURL.setWindowState(windowState);
 
 					$.ajax({
@@ -143,6 +137,8 @@
 								$portletDiv.html( renderResult );
 								$targetDiv.append( $portletDiv );
 							}
+							
+							P.status(true);
 							callback( connector, P.instanceId() );
 						},
 						error: function(){
@@ -2712,6 +2708,7 @@
 			var layout = Workbench.layout();
 			var scienceApp = Workbench.scienceApp();
 			
+			console.log( 'Switch Portlet to '+portletInstanceId );
 			layout.switchPortlet( 
 						portletInstanceId, 
 						Workbench.id(), 

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
+
+<liferay-portlet-app>
+	
+	<portlet>
+		<portlet-name>WWFEditor</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/style.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>wwfeditor-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	<portlet>
+		<portlet-name>DeviceModel</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-javascript>/js/three.js</header-portlet-javascript>
+		<header-portlet-javascript>	/js/ThreeBSP.js	</header-portlet-javascript>
+		<header-portlet-javascript>	/js/TrackballControls.js </header-portlet-javascript>	
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>devicemodel-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	<portlet>
+		<portlet-name>CSVPlotter</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<header-portlet-css>/css/c3.css</header-portlet-css>
+		<header-portlet-css>/css/style.css</header-portlet-css>
+		
+		<header-portlet-javascript>	/js/c3.min.js </header-portlet-javascript>
+		<header-portlet-javascript>	/js/d3.min.js </header-portlet-javascript>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>csvplotter-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	<portlet>
+		<portlet-name>fake_workbench</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>fake_workbench-portlet</css-class-wrapper>
+	</portlet>
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>

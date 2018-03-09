@@ -28,11 +28,11 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 
 <div class="container-fluid common-editor-portlet file-explorer-portlet " style="height:inherit;">
 	<div class="row-fluid header">
-		<div class="col-sm-8">
+		<div class="col-sm-10">
 			<input class="form-control" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
 		</div>
 		<c:if test="<%=isEditMode%>">
-			<div class="col-sm-offset-3 col-sm-1">
+			<div class="col-sm-2">
 				<div class="dropdown">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>
@@ -77,6 +77,7 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
+<portlet:namespace/>passNamespace();
 var <portlet:namespace/>canvas = $('#<portlet:namespace/>canvas');
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>downloadMode = false;
@@ -107,7 +108,6 @@ if( !<portlet:namespace/>eventEnable ){
 	    if( !<portlet:namespace/>selectedFile.repositoryType() )
 	    	<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 	}
-	<portlet:namespace/>passNamespace();
 	<portlet:namespace/>initFileExplorer(<portlet:namespace/>selectedFile, true );
 }
 
@@ -208,8 +208,8 @@ $('#<portlet:namespace/>selectFile').bind(
 			else{
 				uploadFolder = <portlet:namespace/>selectedFile.parent();
 			}
-			console.log('Upload Folder: '+ uploadFolder);
-			console.log('repositoryType: '+ <portlet:namespace/>selectedFile.repositoryType_);
+			//console.log('Upload Folder: '+ uploadFolder);
+			//console.log('repositoryType: '+ <portlet:namespace/>selectedFile.repositoryType_);
 			
 			// check that file name is duplicated using AJAX.
 			var checkDuplicated = function( target ){
@@ -302,16 +302,14 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 			    <portlet:namespace/>passNamespace();
-			    if( <portlet:namespace/>selectedFile ){
-				    <portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
+			    if( ! <portlet:namespace/>selectedFile ){
+					<portlet:namespace/>selectedFile = new OSP.InputData();
+					<portlet:namespace/>selectedFile.type(OSP.Enumeration.PathType.FOLDER);
+					<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+					<portlet:namespace/>selectedFile.parent('');
+					<portlet:namespace/>selectedFile.name('');
 				}
-				else{
-					var eventData = {
-						portletId: myId,
-						targetPortlet: <portlet:namespace/>connector
-					};
-					Liferay.fire( OSP.Event.OSP_REQUEST_PATH, eventData );
-				}
+				<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
 			}
 		}
 );
@@ -321,7 +319,7 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-				console.log('['+myId+'] OSP_LOAD_DATA: ', e );
+			    console.log('['+myId+'] OSP_LOAD_DATA: ', e );
 				
 				var inputData = new OSP.InputData( e.data );
 				
@@ -351,6 +349,7 @@ Liferay.on(
 					portletId: myId,
 					targetPortlet:e.portletId,
 					data: OSP.Util.toJSON(currentData),
+					params: e.params
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
@@ -362,7 +361,14 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				var inputData = new OSP.InputData();
-				inputData.repositoryType( <portlet:namespace/>selectedFile.repositoryType_ );
+				var repositoryType;
+				if( <portlet:namespace/>selectedFile.repositoryType_ )
+					repositoryType = <portlet:namespace/>selectedFile.repositoryType_;
+				else{
+					'<%=OSPRepositoryTypes.USER_HOME.toString()%>';
+				}
+ 
+				inputData.repositoryType( repositoryType );
 				inputData.type( OSP.Enumeration.PathType.FOLDER);
 				inputData.parent( '' );
 				inputData.name('');
