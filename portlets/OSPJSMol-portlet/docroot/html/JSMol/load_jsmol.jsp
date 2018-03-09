@@ -20,7 +20,7 @@ $(window).resize( function(e){
 	//$('#canvas').empty();
 	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
 	//parent.jsMolresize();
-	Jmol.resizeApplet(jmol_1, [$('body').width(), $('body').height()]);
+	Jmol.resizeApplet(myJmol, [$('body').width(), $('body').height()]);
 	
 	console.log("[JSMol] resize Applet end.");
 });
@@ -47,9 +47,16 @@ function loadJSMolFile( urlToLoad ){
                   disableInitialConsole: true
         };
 
-        Jmol.setDocument(0);
-       Jmol.getApplet('jmol_1', Info);
-        $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
+        if(myJmol){
+        	Jmol.setInfo(myJmol, Info);
+        }else{
+        	Jmol.setDocument(0);
+        	Jmol.getApplet('myJmol', Info);
+        	$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+        }
+        
+       
+        
 
 }
     
