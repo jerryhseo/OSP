@@ -18,6 +18,7 @@
 $(window).resize( function(e){
 	$('#canvas').empty();
 	loadJSMolFile( currentUrl );
+	location.reload();
 });
  
 function loadJSMolFile( urlToLoad ){
@@ -46,7 +47,8 @@ function loadJSMolFile( urlToLoad ){
         Jmol.getApplet('jmol_1', Info);
         $('#canvas').empty().html( Jmol.getAppletHtml(jmol_1) );
         console.log('[JSMol] test load jsmol');
-        console.log('[JSMol] test load jsmol2 : '+$('#canvas'));
+        console.log('[JSMol] test load jsmol2 : '+"$('#canvas')");
+
 }
     
 </script>
