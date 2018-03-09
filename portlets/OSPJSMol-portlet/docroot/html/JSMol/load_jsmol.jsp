@@ -44,10 +44,11 @@ function loadJSMolFile( urlToLoad ){
 
         Jmol.setDocument(0);
         
+        
+        Jmol.getApplet('jmol_1', Info);
         if(jmol_1)
         	return;
         
-        Jmol.getApplet('jmol_1', Info);
         $('#canvas').empty().html( Jmol.getAppletHtml(jmol_1) );
 }
     
