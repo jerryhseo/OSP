@@ -448,7 +448,8 @@ function <portlet:namespace/>setTitle( title ){
 $(window).resize( function(e){
 	<portlet:namespace/>currentData;
 	console.log('[JSMol] resize event change',<portlet:namespace/>currentData);
-	<portlet:namespace/>drawJSMol( inputData );
+	//<portlet:namespace/>drawJSMol( inputData );
+	<portlet:namespace/>loadJSMolFile(<portlet:namespace/>currentData);
 	//$('#canvas').empty();
 	//loadJSMolFile( currentUrl );
 	
