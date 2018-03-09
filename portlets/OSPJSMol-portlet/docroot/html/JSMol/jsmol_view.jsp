@@ -47,8 +47,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 	</div>
 </div>
 
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-	<div id="<portlet:namespace/>fileExplorer" class="modal hide fade">
+
+	<div id="<portlet:namespace/>fileExplorer" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<!-- title -->
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -68,6 +68,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>	
 		
 	</div>
+	
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
 	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
