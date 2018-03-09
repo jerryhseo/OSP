@@ -51,8 +51,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
               <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
               <div>
-                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+                  <input class="btn btn-primary" id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input class="btn" id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
               </div>
           </div>
 	<input type="file" id="<portlet:namespace/>selectFile"/>
@@ -68,7 +68,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_";
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_js";
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
 	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 else
