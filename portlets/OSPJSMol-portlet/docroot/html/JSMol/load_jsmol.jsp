@@ -15,11 +15,12 @@
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-//$(window).resize( function(e){
-//	$('#canvas').empty();
-//	loadJSMolFile( currentUrl );
-//	
-//});
+$(window).resize( function(e){
+	//$('#canvas').empty();
+	console.log("[JSMol] call parent method in iframe");
+	parent.jsMolresize();
+	
+});
  
 function loadJSMolFile( urlToLoad ){
         console.log( '[JSMOL]URL To Load: '+ urlToLoad );

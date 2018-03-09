@@ -445,15 +445,11 @@ function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
 }
 
-$('#<portlet:namespace/>canvas').contents().find('canvas').resize( function(e){
+function jsMolresize(){
 	<portlet:namespace/>currentData;
 	console.log('[JSMol] resize event change',<portlet:namespace/>currentData);
-	//<portlet:namespace/>drawJSMol( inputData );
 	<portlet:namespace/>loadJSMolFile(<portlet:namespace/>currentData);
-	//$('#canvas').empty();
-	//loadJSMolFile( currentUrl );
-	
-});
+}
 
 </script>
  
