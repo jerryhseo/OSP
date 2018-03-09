@@ -68,12 +68,13 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_jmol";
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_jm";
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
 	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 else
 	<portlet:namespace/>fileExplorerId += '001'; 
-
+console.log('[JSMol] file explorer id Check : '+<portlet:namespace/>fileExplorerId);
+	
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
