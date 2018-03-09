@@ -449,17 +449,5 @@ function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
 }
 
-function jsMolresize(){
-	<portlet:namespace/>currentData;
-	console.log('[JSMol] resize event change', <portlet:namespace/>currentData);
-	if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
-		<portlet:namespace/>currentData.parent(
-			OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
-			//<portlet:namespace/>initData.name("");
-			<portlet:namespace/>currentData.name("");
-	}
-	<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
-}
-
 </script>
  
