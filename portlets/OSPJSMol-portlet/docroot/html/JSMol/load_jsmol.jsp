@@ -11,7 +11,6 @@
     <script>
 
     var currentUrl;
-    var myJmol;
     
 /***********************************************************************
  * Golbal functions
@@ -47,7 +46,6 @@ function loadJSMolFile( urlToLoad ){
                   disableInitialConsole: true
         };
 
-        
         Jmol.setDocument(0);
         Jmol.getApplet('myJmol', Info);
         $('#canvas').html( Jmol.getAppletHtml(myJmol) );
