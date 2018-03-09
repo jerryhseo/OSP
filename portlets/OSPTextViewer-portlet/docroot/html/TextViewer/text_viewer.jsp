@@ -59,8 +59,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_tv"
-    + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_tv" + 
+			"<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
@@ -109,7 +109,7 @@ $('#<portlet:namespace/>openServer').click(function(){
         inputData.name('');
     }
 
-    <portlet:namespace/>fileExplorerDialog('VIEW' inputData);
+    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -200,6 +200,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
 			console.log(e.portletId+' activated at '+new Date()+']');
+		}
 	}
 );
 

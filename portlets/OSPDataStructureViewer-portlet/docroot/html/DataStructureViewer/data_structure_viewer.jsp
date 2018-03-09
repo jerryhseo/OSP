@@ -84,6 +84,13 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
 			console.log(myId + ' activated by OSP_EVENTS_REGISTERED.');
+			
+			var eventData = {
+								portletId: '<%=portletDisplay.getId()%>',
+								targetPortlet: <portlet:namespace/>connector
+						};
+						
+			Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
 		}
 	}
 );

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
@@ -6,29 +7,15 @@
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 
-<style>
-.protein-viewer-portlet{
-	padding:0;
-	margin: 0;
-	overflow:auto;
-}
-
-.protein-viewer-portlet .canvas{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-}
-</style>
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = ParamUtil.getString(request, "inputData", "");
-String connector = ParamUtil.getString(request, "connector", "BROADCAST");
-boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String mode = ParamUtil.getString(request, "mode", "VIEW");
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -36,32 +23,39 @@ String mode = ParamUtil.getString(request, "mode", "VIEW");
 	<portlet:param name="jspPage" value="/html/ProteinViewer/load_protein.jsp"/>
 </portlet:renderURL>
 
-<div class="row-fluid common-analyzer-portlet" id="<portlet:namespace/>canvasPanel" style="margin:0;">
-	<div class="dropdown-wrapper" >
-		<div class="dropdown">
-		<i class="icon-reorder icon-menu"></i>
-		<!-- Link or button to toggle dropdown -->
-		<div class="dropdown-content">
-			<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-			<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-			<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-		</div>
-	</div>
-
-	<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel" >
-		<iframe class="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ProteinViewer/load_protein.jsp"></iframe>
+<div class="container-fluid common-analyzer-portlet">
+	<div class="row-fluid header">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-offset-2 col-sm-2" >
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<!-- Link or button to toggle dropdown -->
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
+			</div>
+		</div>	
 	</div>
 	
-	<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-		<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-			<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-			<div>
-				<input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-				<input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-			</div>
-		</div>
-		<input type="file" id="<portlet:namespace/>selectFile"/>
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		</iframe>
 	</div>
+</div>
+		
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+		<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		<div>
+			<input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+			<input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+		</div>
+	</div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
 <script type="text/javascript">
@@ -90,6 +84,9 @@ if( <portlet:namespace/>eventEnable === false ){
 	
 	if(inputData){
 		<portlet:namespace/>initData = JSON.parse( inputData );
+	}
+	else{
+		<portlet:namespace/>initData = {};
 	}
 	
 	//for test
@@ -130,7 +127,7 @@ $('#<portlet:namespace/>openServer').click(function(){
 		inputData.name_ = '';
 	}
 	
-	<portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+	<portlet:namespace/>fileExplorerDialog('VIEW', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -174,7 +171,7 @@ $('#<portlet:namespace/>selectFile').bind(
 		}
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
@@ -248,8 +245,17 @@ Liferay.on(
 	              <portlet:namespace/>mergePath(<portlet:namespace/>initData.parent_, <portlet:namespace/>initData.name_);
 		      <portlet:namespace/>initData.name_ = '';
 		  }
+		 if( !<portlet:namespace/>initData.repositoryType() )
+			  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 
 		<portlet:namespace/>loadProtein( <portlet:namespace/>initData );
+		
+		var eventData = {
+		                   portletId: myId,
+		                   targetPortlet: <portlet:namespace/>fileExplorerId,
+		                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+		  };
+		  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	}
 );
 
@@ -299,6 +305,8 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadProtein( inputData ){
+	if( ! inputData.repositoryType_ )
+		inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
 	switch( inputData.type_ ){
 		case 'file':
 		    <portlet:namespace/>loadData( inputData );

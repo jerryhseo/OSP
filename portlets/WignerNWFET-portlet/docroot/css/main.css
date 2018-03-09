@@ -1,0 +1,12 @@
+input[type=range] {
+	-webkit-appearance: none;
+	background-color: silver;
+	width: 100px;
+}
+
+.WebGL-output {
+	width: 50px;
+	margin: 0px;
+	margin-left: auto;
+	margin-right: auto;
+}

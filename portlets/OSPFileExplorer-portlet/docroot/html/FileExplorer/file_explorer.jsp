@@ -28,11 +28,11 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 
 <div class="container-fluid common-editor-portlet file-explorer-portlet " style="height:inherit;">
 	<div class="row-fluid header">
-		<div class="col-sm-8">
+		<div class="col-sm-10">
 			<input class="form-control" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
 		</div>
 		<c:if test="<%=isEditMode%>">
-			<div class="col-sm-offset-3 col-sm-1">
+			<div class="col-sm-2">
 				<div class="dropdown">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>

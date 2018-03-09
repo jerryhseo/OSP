@@ -237,6 +237,8 @@ Liferay.on(
 	  if( !<portlet:namespace/>initData.repositoryType() )
 		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	  
+	  <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
+	  
 	  var eventData = {
 	                   portletId: myId,
 	                   targetPortlet: <portlet:namespace/>fileExplorerId,
@@ -244,7 +246,6 @@ Liferay.on(
 	  };
 	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	  
-	  <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
 	}
   }
 );
@@ -288,7 +289,7 @@ Liferay.on(
 		function(e){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
 				console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-		  		<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png', 100);
+		  		<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png', '100%');
 		  		<portlet:namespace/>setTitle('');
 			}
 		}
@@ -299,6 +300,9 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadImage( inputData, zooming ){
+	if( ! inputData.repositoryType() )
+		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+		
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
 	    <portlet:namespace/>loadData( inputData, zooming );
@@ -318,8 +322,7 @@ function <portlet:namespace/>loadImage( inputData, zooming ){
 function <portlet:namespace/>loadData( inputData, zooming ){
     AUI().use('liferay-portlet-url', function(a) {
         <portlet:namespace/>currentData = inputData;
-        if( ! <portlet:namespace/>currentData.repositoryType() )
-        	<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+        
         var serveResourceURL;
         serveResourceURL = Liferay.PortletURL.createResourceURL();
         serveResourceURL.setPortletId('<%=portletDisplay.getId()%>');

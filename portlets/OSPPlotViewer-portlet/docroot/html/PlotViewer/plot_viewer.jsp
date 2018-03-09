@@ -7,10 +7,6 @@
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 
-<style>
-.canvas-body-wrapper{height: 83%}
-</style>
-
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
@@ -24,16 +20,17 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
 <div class="container-fluid common-analyzer-portlet">
-	<div class="row-fluid header" id="<portlet:namespace/>menuSection">
+	<div class="row-fluid header">
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-4 text-right" >
+		<div class="col-sm-offset-2 col-sm-2" >
 			<div class="dropdown">
-                 <i class="icon-reorder icon-menu"></i>
-				<!-- Link or button to toggle dropdown -->
-				<div class="dropdown-content text-left">
-					<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-					<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu cursor">
+					<div id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
+					<div id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
+					<div id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
 				</div>
 			</div>
 		</div>	
@@ -227,7 +224,17 @@ Liferay.on(
                 OSP.Util.mergePath(<portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name()));
             <portlet:namespace/>initData.name("");
         }
+  	  if( !<portlet:namespace/>initData.repositoryType() )
+		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+  	    
         <portlet:namespace/>loadHighCharts( <portlet:namespace/>initData );
+        
+        var eventData = {
+  	                   portletId: myId,
+  	                   targetPortlet: <portlet:namespace/>fileExplorerId,
+  	                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+  	  };
+  	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
   	}
   }
 );
@@ -268,6 +275,8 @@ Liferay.on(
  * Golbal functions
 ***********************************************************************/
 function <portlet:namespace/>loadHighCharts( inputData ){
+	if( ! inputData.repositoryType() )
+		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
@@ -290,8 +299,6 @@ function <portlet:namespace/>loadHighCharts( inputData ){
 
 function <portlet:namespace/>loadData( inputData, command ){
 	<portlet:namespace/>currentData = inputData.clone();
-	if( !<portlet:namespace/>currentData.repositoryType() )
-		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 		
 	var data = {
 			<portlet:namespace/>command: command,
@@ -335,8 +342,6 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
-    if( !inputData.repositoryType() )
-    	inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
@@ -366,7 +371,9 @@ function <portlet:namespace/>getFirstFileName( argData ){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
-    if(<portlet:namespace/>currentData && <portlet:namespace/>currentData.name()){
+	if(<portlet:namespace/>currentData && 
+		<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE &&
+		<portlet:namespace/>currentData.name()){
         var filePath = <portlet:namespace/>currentData;
         var data = {
             <portlet:namespace/>command: "DOWNLOAD_FILE",
