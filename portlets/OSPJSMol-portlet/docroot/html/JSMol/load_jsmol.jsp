@@ -11,6 +11,7 @@
     <script>
 
     var currentUrl;
+    var myJmol;
     
 /***********************************************************************
  * Golbal functions
@@ -19,7 +20,7 @@ $(window).resize( function(e){
 	//$('#canvas').empty();
 	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
 	//parent.jsMolresize();
-	Jmol.resizeApplet(JSmol, [$('body').width(), $('body').height()]);
+	Jmol.resizeApplet(jmol_1, [$('body').width(), $('body').height()]);
 	
 	console.log("[JSMol] resize Applet end.");
 });
@@ -47,10 +48,8 @@ function loadJSMolFile( urlToLoad ){
         };
 
         Jmol.setDocument(0);
-        Jmol.getApplet('jmol_1', Info);
-        $('#canvas').empty().html( Jmol.getAppletHtml(jmol_1) );
-        console.log('[JSMol] test load jsmol');
-        console.log('[JSMol] test load jsmol2 : '+$('#canvas').toString());
+       Jmol.getApplet('jmol_1', Info);
+        $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
 
 }
     
