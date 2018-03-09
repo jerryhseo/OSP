@@ -31,7 +31,7 @@
     var w = $( window ).width();
 
     var update = {
-      width: w
+      width: w,
       height: h
     };
 
@@ -64,7 +64,7 @@
     })
   };
 
-loadImage('./result/data3.json');
+
 
 </script>
 </body>
