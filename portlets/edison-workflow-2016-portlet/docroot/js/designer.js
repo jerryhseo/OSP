@@ -3,6 +3,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
+
     var currentJsPlumbInstance;
     var wfPortletGlobalData = wfPortletGlobalData ? wfPortletGlobalData : {wfElements : {}};
     var modifyingWorkflow;
@@ -468,51 +469,6 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         $("#" + conainerId + " #" + wfId).data(data);
     }
 
-     /** context menu **/
-    $.contextMenu({
-        selector: '.jsplumb-endpoint.input-port',
-        build: function ($trigger, e) {
-            var items = {};
-            var sciApp = $($trigger[0]._jsPlumbRelatedElement).data();
-            var port = $trigger[0]._jsPlumb.getParameter("data");
-            var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
-            // appType: "DynamicConverter"
-            var editors;
-            if (sciApp.appType === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-                editors = [
-                    {
-                        appType: "Editor",
-                        editorType: "File",
-                        exeFileName: "FileExplorer_WAR_OSPEditorsportlet",
-                        name: "FILE_SELECTOR"
-                    }, {
-                        appType: "Editor",
-                        editorType: "Text",
-                        exeFileName: "TextEditor_WAR_OSPEditorsportlet",
-                        name: "TEXT_EDITOR"
-                    }
-                ];
-            } else {
-                editors = synchronousAjaxHelper.post("/delegate/services/app/inputports/editor",
-                    {
-                        "name": port.dataType().name,
-                        "version": port.dataType().version
-                    });
-            }
-            $.each(editors, function (_) {
-                var editor = this;
-                items[editor["name"]] = {
-                    name: editor["name"],
-                    icon: "edit",
-                    callback: function (key, options) {
-                        // TODO : popEditorWindow(editor, port, jsPlumbWindowId);
-                    }
-                };
-            });
-            return { items: items };
-        }
-    });
-
     $.contextMenu({
         selector: '.wf-box',
         build: function ($trigger, e) {
@@ -797,7 +753,6 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
             delete workflow.createDate;
         }
         modifyingWorkflow = workflow;
-        // TODO : check - wfPortletGlobalData = wfData.wfPortletGlobalData;
     }
 
     function drawScreenLogic(screenLogic){
@@ -811,6 +766,10 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
             var targetEndpointUuid = this.targetUuid;
             currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
         });
+
+        if(wfData.wfPortletGlobalData){
+            wfPortletGlobalData.wfElements = wfData.wfPortletGlobalData.wfElements;
+        }
     }
 
     function resetCurrentJsPlumbInstance() {
@@ -823,7 +782,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
         currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
         currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
-        wfPortletGlobalData = { wfElements: {} };
+        wfPortletGlobalData.wfElements = {};
         modifyingWorkflow = undefined;
     }
 
@@ -840,6 +799,9 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         "deleteWorkflowDefinition": deleteWorkflowDefinition,
         "drawWorkflowDefinition": drawWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
+        "getWfPortletGlobalData": function(){
+            return wfPortletGlobalData;
+        },
         "getCurrentJsPlumbContainerId": function(){
             return $(currentJsPlumbInstance.getContainer()).attr("id");
         },

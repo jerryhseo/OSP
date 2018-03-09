@@ -181,6 +181,12 @@ function _delay(func, wait) {
   return setTimeout(function(){ return func.apply(null, args); }, wait);
 }
 
+function _clearTimeout(timer){
+  if (timer) {
+    clearTimeout(timer);
+  }
+}
+
 function _confirm(msg, _of, _cf){
   _of = _of || function(){};
   _cf = _cf || function(){};

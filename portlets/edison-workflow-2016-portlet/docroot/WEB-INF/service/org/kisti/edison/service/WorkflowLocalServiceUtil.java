@@ -530,6 +530,18 @@ public class WorkflowLocalServiceUtil {
 		return getService().runWorkflow(workflowId, workflowParams, request);
 	}
 
+	public static org.kisti.edison.model.WorkflowInstance runWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> workflowParams,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .runWorkflowInstance(workflowInstanceId, workflowParams,
+			request);
+	}
+
 	public static int startWorkflowInstance(long workflowInstanceId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
@@ -561,6 +573,11 @@ public class WorkflowLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .updateWorkflowInstance(workflowStatusJson, workflowInstance);
+	}
+
+	public static org.codehaus.jackson.JsonNode askForWorkflowStart(
+		java.lang.String workflowUUID) throws java.io.IOException {
+		return getService().askForWorkflowStart(workflowUUID);
 	}
 
 	public static org.codehaus.jackson.JsonNode askForWorkflowStatus(

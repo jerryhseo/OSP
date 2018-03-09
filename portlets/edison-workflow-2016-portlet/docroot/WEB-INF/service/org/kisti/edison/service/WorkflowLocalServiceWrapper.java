@@ -571,6 +571,18 @@ public class WorkflowLocalServiceWrapper implements WorkflowLocalService,
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowInstance runWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> workflowParams,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowLocalService.runWorkflowInstance(workflowInstanceId,
+			workflowParams, request);
+	}
+
+	@Override
 	public int startWorkflowInstance(long workflowInstanceId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
@@ -605,6 +617,12 @@ public class WorkflowLocalServiceWrapper implements WorkflowLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _workflowLocalService.updateWorkflowInstance(workflowStatusJson,
 			workflowInstance);
+	}
+
+	@Override
+	public org.codehaus.jackson.JsonNode askForWorkflowStart(
+		java.lang.String workflowUUID) throws java.io.IOException {
+		return _workflowLocalService.askForWorkflowStart(workflowUUID);
 	}
 
 	@Override
