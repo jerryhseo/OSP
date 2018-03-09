@@ -44,11 +44,21 @@
 
 <liferay-portlet:resourceURL var="deleteFileURL" id="deleteFile" copyCurrentRenderParameters="false" escapeXml="false"/>
 
+<liferay-portlet:actionURL secure="<%= request.isSecure() %>" var="fileIBUploadURL">
+    <liferay-portlet:param name="myaction" value="fileIBUpload" />
+    <liferay-portlet:param name="returnId" value="<%=returnId%>" />
+    <liferay-portlet:param name="returnFileName" value="<%=returnFileName%>" />
+    <liferay-portlet:param name="cluster" value="<%=cluster%>" />
+    <liferay-portlet:param name="workflowType" value="<%=workflowType%>" />
+</liferay-portlet:actionURL>
+
+<link href="${contextPath}/css/treeview-monitoring.css" rel="stylesheet" type="text/css">
 <style>
 .ui-resizable-w, .ui-resizable-handle{ 
-	margin-left: 0px;
+	/* margin-left: 0px;
 	background: #dbdbdb;
-	width:13px;
+	width:13px; */
+	display: none;
 }
 </style>
 <div class="table-responsive panel filterable edison-panel">
@@ -63,49 +73,83 @@
 
 <!--박스-->
 <aui:form name="form">
-<aui:input type="hidden" name="groupId" id="groupId" value="${groupId }"></aui:input>
-<aui:input type="hidden" name="vcToken" id="vcToken" value="${icebreakerVcToken.vcToken }"></aui:input>
-<div class="myfilebox">
-	<div class="leftcontent">
-		<div id="myfileTree" class="mflefttree">
+	<aui:input type="hidden" name="groupId" id="groupId" value="${groupId }"></aui:input>
+	<aui:input type="hidden" name="vcToken" id="vcToken" value="${icebreakerVcToken.vcToken }"></aui:input>
+	<aui:input type="hidden" name="icebreakerUrl" id="icebreakerUrl" value="${icebreakerUrl}"></aui:input>
+</aui:form>
+
+<form method="post" name="<portlet:namespace/>fileUploadForm" enctype="multipart/form-data" action="<%=fileIBUploadURL %>" >
+        <input type="hidden" name="groupId" value="${groupId }" />
+        <input type="hidden" name="vcToken" value="${icebreakerVcToken.vcToken }" />
+        <input type="hidden" id="destFolderId" name="destFolderId" value="" />
+        <input type="hidden" id="destFolderParents" name="destFolderParents" value="" />
+        <input type="hidden" name="isPopUp" value="<%=popupState%>" />
+        <input id="<portlet:namespace/>uploadBtn" name="<portlet:namespace/>addFile" type="file" multiple style="display: none;" onchange="uploadFile(this);" />
+</form>
+
+	<div class="myfilebox">
+		<div class="leftcontent mflefttree" style="overflow-x: hidden; padding: 0px;">
+			<div id="myfileTree">
+			</div>
+		</div>
+		
+		<div>
+			
+			<!--right contents-->
+			<div class="rightcontent" style="overflow: auto;">
+				<!-- search -->
+				<div class="table-responsive panel filterable edison-panel">
+					<div class="panel-heading" style="border-bottom: 0px solid;">
+						<div class="input-group">
+							<input id="<portlet:namespace/>searchKeyword" class="form-control" name="searchKeyword" type="text" onkeyup="searchFile(this.value);" style="width: 50%; float: right; " />
+							<div class="input-group-btn">
+								<input type="button" value="<liferay-ui:message key='edison-button-board-initialize'/>" id="<portlet:namespace/>searchInit" name="searchInit" class="btn btn-default" cssClass="btn_blue" onclick="<portlet:namespace/>searchInit();" style="width: 65px;" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="myfilefolderlist">
+					<ul id ="fileTableBody" style="padding-left: 0px;">
+					</ul>
+				</div>
+			</div> <!-- //right contents-->
 		</div>
 	</div>
 	
-	<!--right contents-->
-	<div class="rightcontent" style="overflow: auto;">
-		<div class="myfilefolderlist">
-              <ul id ="fileTableBody">
-              </ul>
-            </div>
-	</div> <!-- //right contents-->
-</div>
-</aui:form>
-
-<!--버튼-->
-<div style="margin-bottom: 20px;">
-	<div style="width:50%; float:left;">
-		<input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button">
+	<div style="margin-bottom: 20px;">
+		<!-- 폴더 생성 Btn -->
+		<div style="width:50%; float:left;">
+			<input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button">
+		</div>
+		
+		<!-- 업로드, 다운로드, 파일삭제 Btn -->
+		<div style="width:45%; float:right; text-align:right;">
+			<input class="addIp btn btn-primary" style=" width: 100px;" onclick="$('#<portlet:namespace/>uploadBtn').click();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
+			<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
+			<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
+		    <div id="fileName">
+		       
+		    </div>
+		    
+		</div>
+		<div style="clear:both"></div>
+		<div id="fileDownloadIframe"> </div>
+		
+		<div id="icebreaker-file-upload-dialog" title="파일업로드" class="bigpopupbox" style="display:none;">
+		</div>
+		
+		<div id="file-popup-dialog" title="선택파일팝업" class="bigpopupbox" style="display:none; background-color: #fff;">
+		</div>
+		
+		<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 	</div>
-	
-	<div style="width:45%; float:right; text-align:right;">
-		<input class="addIp btn btn-primary" style=" width: 100px;" onclick="openPopUpFileUpload();" value="<liferay-ui:message key='edison-button-upload'/>" type="button"/> 
-		<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
-		<input class="addIp btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
-	</div>
-	<div style="clear:both"></div>
-	<div id="fileDownloadIframe"> </div>
-	
-	<div id="icebreaker-file-upload-dialog" title="파일업로드" class="bigpopupbox" style="display:none;">
-	</div>
-	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
-</div>
-
 
 <script type="text/javascript">
 $(function(){
 	
 	var folderArr = <portlet:namespace/>getRepositoryFolder();
-	<portlet:namespace/>fileDivWidthEvent2();
+	<portlet:namespace/>fileDivWidthEvent();
 	
 	var mode = "<%=mode%>";
 	if(mode == "fileUpload"){
@@ -168,6 +212,10 @@ $(function(){
         if(e.keyCode == 46) {
         	<portlet:namespace/>deleteFolder();
         }
+    });
+	
+    $("#<portlet:namespace/>searchInit").click(function(e){
+        <portlet:namespace/>searchInit();
     });
 	
 });
@@ -338,11 +386,11 @@ function <portlet:namespace/>getChildFile(folderId){
 		},complete:function(){
 			//helper 높이 변경
 	    	var fileTableHeight = $(".tablemf_list").height() + 50;
-			if(fileTableHeight > 582){
+			/* if(fileTableHeight > 582){
 	    		$("div.ui-resizable-handle.ui-resizable-w").css("height", fileTableHeight + "px");
 			}else{
 				$("div.ui-resizable-handle.ui-resizable-w").css("height", "605px");
-			}
+			} */
 		}
 	});
 	return returnFileList;
@@ -378,20 +426,12 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			  return true;  //allow all other operations
 		    }
 	   },
-	   /* "state" : "open", */
 	    "types" : {
-	        /* "open" : {
-	        	"icon" : "${contextPath}/images/myfile/myfile-icon01.png"
-	        },
-	        "close" : {
-	          	"icon" : "${contextPath}/images/myfile/myfile-icon02.png"
-	        } */
 	        "top" : {
-                
             },
             "file" : {
                 "icon" : "icon-file",
-                "a_attr" : { "onclick" : "<portlet:namespace/>viewerSubmit('"+this+"')"}
+                "a_attr" : { "onclick" : "<portlet:namespace/>viewerSubmit('"+this+"')"},
             }
 	    },
 	    "contextmenu":{
@@ -399,7 +439,6 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
         },
        "progressive_render" : true,
        "plugins" : ["types", "contextmenu",  "dnd", "progressive_render"]
-	   /* "plugins" : [ "contextmenu", "state", "dnd", "types","progressive_render" ] */
 	}).bind("loaded.jstree", function(event, data) { 
 		 //$(this).jstree("open_all");//현재 최상위폴더만 있으므로 open_all하면 열린 폴더 없음
 
@@ -511,10 +550,6 @@ function <portlet:namespace/>initJstree(dataArr,selectId, nodeParents){
 			var sourceNodeName = data.node.text;
 			var targetId = data.parent;
             var nodeType = data.node.type;      // node type : default, file
-            console.log("sourceId : " + sourceId);
-            console.log("sourceNodeName : " + sourceNodeName);
-            console.log("targetId : " + targetId);
-            console.log("nodeType : " + nodeType);
 			
 			var tree = $('#myfileTree').jstree(true);
 			var node = tree.get_node(targetId);				 
@@ -918,9 +953,7 @@ function <portlet:namespace/>deleteFolder(){
 	}
 }
 
-
-
-function <portlet:namespace/>fileDivWidthEvent2(){
+function <portlet:namespace/>fileDivWidthEvent(){
 	var maxWidth = 0;
 	
 	
@@ -936,7 +969,7 @@ function <portlet:namespace/>fileDivWidthEvent2(){
 	
 	var fileboxWidth = $(".myfilebox").width();
 	var leftWidth = $(".leftcontent").width();
-	var rightWidth = fileboxWidth - leftWidth - 51;
+	var rightWidth = fileboxWidth - leftWidth - 5;
 	
 	$(".myfilebox").css("width", fileboxWidth +"px");
 	$(".leftcontent").css("min-width", leftWidth +"px");
@@ -983,9 +1016,9 @@ function <portlet:namespace/>fileDivWidthEvent2(){
 	        
 			//helper 높이 변경
 	    	var fileTableHeight = $(".tablemf_list").height() + 50;
-			if(fileTableHeight > 584){
+			/* if(fileTableHeight > 584){
 	    		$("div.ui-resizable-handle.ui-resizable-w").css("height", fileTableHeight + "px");
-			} 
+			}  */
 	    }
 	});
 }
@@ -1026,8 +1059,6 @@ function <portlet:namespace/>checkfileDelete(){
     var tree = $('#myfileTree').jstree(true);
     var selectFileNode = $("#myfileTree").jstree("get_selected");
     selectNodeType = tree.get_node(selectFileNode[0]).type;
-    console.log("selectFileNode : " + selectFileNode);
-    console.log("select Node Type : " + selectNodeType);
     
     var deleteFile = [];
     if(selectNodeType != 'file' && $("input[name=<portlet:namespace/>fileChk]:checked").length == 0 ){
@@ -1070,7 +1101,6 @@ function <portlet:namespace/>checkfileDelete(){
                     },
                     async : true,
                     success: function(data) {
-                        console.log("success... data : " + data.status);
                     	
                         if(data.status == 200){
                             $("#myfileTree").jstree("refresh");
@@ -1082,7 +1112,6 @@ function <portlet:namespace/>checkfileDelete(){
                         }
                     },error: function(){
                         bEnd();
-                        console.log("error...");
                         alert(Liferay.Language.get('edison-data-delete-error'));
                     },complete: function(){
                         bEnd();
@@ -1093,7 +1122,22 @@ function <portlet:namespace/>checkfileDelete(){
     }
 }
 
-<%-- 
+function searchFile(input){
+    if(input === null || input === ""){
+        $(".<portlet:namespace/>file").show();
+    } else {
+        $(".<portlet:namespace/>file").hide();
+        //Search된 값에 해당하는 File만 display
+        $(".<portlet:namespace/>file[file-name*="+input+"]").show();
+    }
+}
+
+function <portlet:namespace/>searchInit(){
+    $("#<portlet:namespace/>searchKeyword").val("");
+    $(".<portlet:namespace/>file").show();
+}
+
+
 //check된 file 다운로드
 function <portlet:namespace/>checkfileDownload(){
 	$iframeDiv = $("#fileDownloadIframe");
@@ -1166,7 +1210,6 @@ function <portlet:namespace/>checkfileDelete(){
 		}
 	}
 }	
- --%>
 	
 //dialogue initial
 AUI().ready(function(){
@@ -1196,6 +1239,42 @@ AUI().ready(function(){
 	}).dialog("widget").find(".ui-dialog-titlebar").remove();
 });
 
+// file upload
+function uploadFile(input){
+    
+    var bool = false;
+    var filesLength = input.files.length;
+    
+    var selectNode = $("#myfileTree").jstree("get_selected");
+
+    if(selectNode == "HOME" || selectNode == ""){//선택한 노드가 없거나 루트선택
+         selectNode = "HOME";
+    }
+    
+    var tree = $('#myfileTree').jstree(true);
+    var node = tree.get_node(selectNode);
+    var nodeParents = node.parents;     //destFolderParents
+    $("#destFolderParents").val(nodeParents);
+     
+    selectNode = selectNode.valueOf();  //destFolderId
+    $("#destFolderId").val(selectNode);
+    
+    if(0 < filesLength){
+        bool = true;
+    } else {
+        bool = false;
+        alert(Liferay.Language.get("edison-simulation-execute-user-define-select-your-own-attachments"));
+        return false;
+    }
+    
+    if(bool){
+        bStart();
+        $("form[name = <portlet:namespace/>fileUploadForm]").submit();
+        bEnd();
+    }else{
+        bEnd();
+    }
+}
 
 //upload popup
 function openPopUpFileUpload(){
