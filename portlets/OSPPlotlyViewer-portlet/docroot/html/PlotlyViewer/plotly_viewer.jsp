@@ -94,7 +94,7 @@ var <portlet:namespace/>eventEnable = <%=eventEnable%>;
 //     <portlet:namespace/>currentData.type('file');
 //     <portlet:namespace/>currentData.parent('');
 //     <portlet:namespace/>currentData.name('test_image.jpg')
-     <portlet:namespace/>loadImage(<portlet:namespace/>currentData, 'fit');
+     <portlet:namespace/>loadImage(<portlet:namespace/>currentData);
    }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -153,7 +153,6 @@ $('#<portlet:namespace/>selectFile').bind(
 			var input = document.getElementById('<portlet:namespace/>selectFile');
 			var reader = new FileReader();
 			reader.onload = function (e) {
-			    // $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
 			    <portlet:namespace/>drawImage(e.target.result);
 			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
@@ -230,7 +229,7 @@ Liferay.on(
               OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
 	      <portlet:namespace/>currentData.name("");
 	  }
-	  <portlet:namespace/>loadImage(<portlet:namespace/>currentData, 'fit');
+	  <portlet:namespace/>loadImage(<portlet:namespace/>currentData);
 	}
   }
 );
@@ -248,7 +247,7 @@ Liferay.on(
                     return;
                 }
                 else{
-                    <portlet:namespace/>loadImage( inputData, 'fit' );
+                    <portlet:namespace/>loadImage( inputData );
                     $<portlet:namespace/>fileExplorerDialogSection.dialog('close');
                 }
 			}
@@ -284,14 +283,14 @@ Liferay.on(
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-function <portlet:namespace/>loadImage( inputData, zooming ){
+function <portlet:namespace/>loadImage( inputData ){
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
-	    <portlet:namespace/>loadData( inputData, zooming );
+	    <portlet:namespace/>loadData( inputData );
 		break;
 	case OSP.Enumeration.PathType.FOLDER:
 	case OSP.Enumeration.PathType.EXT:
-	    <portlet:namespace/>getFirstFileName( inputData, zooming );
+	    <portlet:namespace/>getFirstFileName( inputData );
 		break;
 	case OSP.Enumeration.PathType.URL:
 	    alert('Un supported yet.');
@@ -316,47 +315,31 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
-        <portlet:namespace/>drawImage( serveResourceURL.toString());
+        <portlet:namespace/>drawImagePlotly( serveResourceURL.toString());
 
         <portlet:namespace/>setTitle(inputData.name());
     });
 }
 
-function <portlet:namespace/>drawImage( url ){
+function <portlet:namespace/>drawImagePlotly( url ){
     setTimeout(
 	    function(){
 	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
-	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.loadImage;
+	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.loadImagePlotly;
 
 	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
-	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadImage) {
-	   	    	iframe.contentWindow.loadImage (  url );
+	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadImagePlotly) {
+	   	    	iframe.contentWindow.loadImagePlotly (  url );
 	    	}
 	    	else{
-	    		<portlet:namespace/>drawImage( url );
+	    		<portlet:namespace/>drawImagePlotly( url );
 	    	}
 	    },
 	    10
 	);
 }
 
-function <portlet:namespace/>clearImage(){
-    setTimeout(
-	    function(){
-	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
-	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
-	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.clearImage) {
-	   	    	iframe.contentWindow.clearImage ();
-	    	}
-	    	else{
-	    		<portlet:namespace/>clearImage();
-	    	}
-	    },
-	    10
-	);
-}
 
 
 function <portlet:namespace/>getFirstFileName( argData, zooming ){

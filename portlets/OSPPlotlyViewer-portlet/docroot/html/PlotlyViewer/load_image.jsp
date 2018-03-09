@@ -58,7 +58,7 @@
     Plotly.newPlot(gd, data);
   };
 
-  loadImage = function (url_path){
+  loadImagePlotly = function (url_path){
 	  console.log("[PlotyViewer] load data ");
     //$.ajax({
     //  url: url_path,
