@@ -20,7 +20,7 @@ $(window).resize( function(e){
 	console.log("[JSMol] call parent method in iframe");
 	//parent.jsMolresize();
 	
-	Jmol.resizeApplet("100%");
+	Jmol.resizeApplet([$('body').width(), $('body').height()]);
 });
  
 function loadJSMolFile( urlToLoad ){
