@@ -153,6 +153,8 @@ $('#<portlet:namespace/>selectFile').bind(
 			var input = document.getElementById('<portlet:namespace/>selectFile');
 			var reader = new FileReader();
 			reader.onload = function (e) {
+				console.log('test get jsom in plotly',e.target.result);
+			
 			    <portlet:namespace/>drawImagePlotly(e.target.result);
 			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
