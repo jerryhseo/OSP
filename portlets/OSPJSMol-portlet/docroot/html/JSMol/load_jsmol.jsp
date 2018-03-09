@@ -46,14 +46,21 @@ function loadJSMolFile( urlToLoad ){
                   serverURL: '<%=request.getContextPath()%>/js/jsmol/php/jsmol.php',
                   disableInitialConsole: true
         };
-		if(myJmol){
-			$('#canvas').html( Jmol.getAppletHtml(myJmol, Info) );
-		}
-		else{
-			Jmol.setDocument(0);
-			myJmol = Jmol.getApplet('myJmol', Info);
-			$('#canvas').html( Jmol.getAppletHtml(myJmol) );
-		}
+        
+        /**
+        if(myJmol){
+		$('#canvas').html( Jmol.getAppletHtml(myJmol, Info) );
+			}
+			else{
+				Jmol.setDocument(0);
+				myJmol = Jmol.getApplet('myJmol', Info);
+				$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+			}
+        
+        */
+        Jmol.setDocument(0);
+		myJmol = Jmol.getApplet('myJmol', Info);
+		$('#canvas').html( Jmol.getAppletHtml(myJmol) );
 
 }
     
