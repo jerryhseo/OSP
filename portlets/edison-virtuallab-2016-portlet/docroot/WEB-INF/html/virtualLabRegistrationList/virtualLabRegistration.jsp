@@ -134,7 +134,7 @@ function <portlet:namespace/>cancelButton(){
 							<td class="puptxt input-group" style="display: table-cell;">
 								<input id="<portlet:namespace/>virtualLabProfessor" class="form-control" name="<portlet:namespace/>virtualLabProfessor" type="text" maxlength="10" readonly="readonly" style="margin-bottom:0px; width: 70%; "/>
 								<div class="input-group-btn">
-									<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+									<input id="virtualLabSearchProfessorButton" name="virtualLabSearchProfessorButton" onclick="<portlet:namespace/>searchProfessorPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" style="width: 55px;" />
 								</div>
 							</td>
 							<th class="puptitle" style="word-wrap: break-word;"><liferay-ui:message key='edison-table-list-header-group' /></th>
@@ -165,7 +165,7 @@ function <portlet:namespace/>cancelButton(){
 					<td class="puptxt input-group" style="display: table-cell;">
 						<input id="<portlet:namespace/>virtualLabUniversityField" class="form-control" name="<portlet:namespace/>virtualLabUniversityField" type="text" maxlength="10" readonly="readonly" style="margin-bottom:0px; width: 70%;"/>
 						<div class="input-group-btn">
-							<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" />
+							<input id="virtualLab_search_university_button" name="virtualLab_search_university_button" onclick="<portlet:namespace/>syscommoncdPopup();" type="button" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default" style="width: 55px;" />
 						</div>
 					</td>
 				</tr>

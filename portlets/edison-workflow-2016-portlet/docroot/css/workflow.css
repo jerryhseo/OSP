@@ -10,7 +10,7 @@
 .lefttabm ul li a:hover{ font-weight:600; color:#000;}
 
 
-.lefttreemenu{width:356px; border:solid 1px #00c7e5; min-height:589px; clear:both; position:relative; top:-5px; padding:15px 10px 10px 10px;}
+.lefttreemenu{width:360px; border:solid 1px #00c7e5; min-height:589px; clear:both; position:relative; top:-5px; padding:15px 10px 10px 10px;}
 
 .lefttreemenu1{padding-top:45px;}
 .lefttreemenu1 ul{margin:0; padding:0;}
@@ -50,7 +50,7 @@
 .donebox span{font-size:18px; color:#fff; font-weight:500;}
 
 
-.leftlistbox{width:356px; border:solid 1px #00c7e5; min-height:589px; clear:both; position:relative; top:-5px; padding:15px 10px 10px 10px;}
+.leftlistbox{width:360px; border:solid 1px #00c7e5; min-height:589px; clear:both; position:relative; top:-5px; padding:15px 10px 10px 10px;}
 
 .wfconwrap{width:100%;}
 
@@ -214,10 +214,8 @@
     height: 17px;
     border-radius: 3px 3px 3px 3px;
     -webkit-border-radius: 3px 3px 3px 3px;
-    background-color: #fff;
-    padding: 5px;
-    border: solid 1px #ddd; }
+    background-color: #fff;}
 	
 	.wftitlebox001{width:1163px; margin: 0 auto; padding: 0;   border-radius: 3px 3px 0px 0px; -webkit-border-radius: 3px 3px 0px 0px; color: #fff; font-size: 18px; font-weight: 600; position: relative; height:53px; line-height:2.8em; padding-left:55px; margin-bottom:22px; background:url(../images/Workflow/title_icon.png) no-repeat 15px 12px; background-color:#67788a;}
 	
-	.wftitlebox001 span{float:right; margin-right:15px; margin-top:10px;}
+	.wftitlebox001 span{float:right; margin-right:15px;}

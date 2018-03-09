@@ -510,6 +510,11 @@ Liferay.on(OSP.Event.OSP_REQUEST_SAMPLE_CONTENT,function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_READ_STRUCTURED_DATA_FILE,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet ) return;
+	console.log('OSP_READ_STRUCTURED_DATA_FILE: ['+e.portletId+', '+new Date()+']', e);
+	<portlet:namespace/>workbench.handleReadStructuredDataFile(e.portletId,new OSP.InputData( e.data ),'<%=serveResourceURL%>');
+});
 
 /***********************************************************************
  * Global Function section

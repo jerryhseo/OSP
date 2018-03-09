@@ -100,6 +100,14 @@ document.addEventListener("DOMContentLoaded", function(){
 	//stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
 	
 });
+
+function drawNglViewer(url){
+	stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
+}
+
+$(window).resize(function(e){
+	console.log("[NGLViewer] resize view port : "+ $('body').width() +' : '+$('body').height());
+});
 </script>
 </body>
 </html>

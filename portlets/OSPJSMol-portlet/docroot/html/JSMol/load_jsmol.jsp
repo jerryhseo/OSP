@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html style="height:85%;">
 <head>
-    <script src="<%=request.getContextPath()%>/js/jsmol/jquery/jquery.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jsmol/JSmol.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 </head>
@@ -12,16 +11,22 @@
     <script>
 
     var currentUrl;
+    var myJmol;
     
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
 $(window).resize( function(e){
-    loadJSMolFile( currentUrl );
+	//$('#canvas').empty();
+	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
+	//parent.jsMolresize();
+	Jmol.resizeApplet(myJmol, [$('body').width(), $('body').height()]);
+	
+	console.log("[JSMol] resize Applet end.");
 });
  
 function loadJSMolFile( urlToLoad ){
-        console.log( 'URL To Load: '+ urlToLoad );
+        console.log( '[JSMOL]URL To Load: '+ urlToLoad );
         if( !urlToLoad )    return;
         currentUrl = urlToLoad;
         
@@ -41,10 +46,22 @@ function loadJSMolFile( urlToLoad ){
                   serverURL: '<%=request.getContextPath()%>/js/jsmol/php/jsmol.php',
                   disableInitialConsole: true
         };
-
+        
+        /**
+        if(myJmol){
+		$('#canvas').html( Jmol.getAppletHtml(myJmol, Info) );
+			}
+			else{
+				Jmol.setDocument(0);
+				myJmol = Jmol.getApplet('myJmol', Info);
+				$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+			}
+        
+        */
         Jmol.setDocument(0);
-        Jmol.getApplet('jmol_1', Info);
-        $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
+		myJmol = Jmol.getApplet('myJmol', Info);
+		$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+
 }
     
 </script>

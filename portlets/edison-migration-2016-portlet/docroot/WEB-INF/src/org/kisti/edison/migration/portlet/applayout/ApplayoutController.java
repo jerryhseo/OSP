@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.RenderRequest;
@@ -18,7 +17,6 @@ import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
-import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
@@ -31,8 +29,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
 import net.sf.json.JSONObject;
@@ -45,35 +41,19 @@ public class ApplayoutController {
 	
 	private static Log log = LogFactoryUtil.getLog(ApplayoutController.class);
 	
-	@SuppressWarnings("serial")
     @RequestMapping//default
 	public String view(RenderRequest request, ModelMap model) throws PortalException, SystemException{
-		long groupId = PortalUtil.getScopeGroupId(request);
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		Locale locale = themeDisplay.getLocale();
-		String[] appTypes = new String []{ScienceAppConstants.APP_TYPE_SOLVER,ScienceAppConstants.APP_TYPE_CONVERTER};
-		final String searchType = "";
-		final String searchText = "";
-		String status = "";
+        List<ScienceApp> appList = ScienceAppLocalServiceUtil.retrieveListByTemplateId("2-6-column-i");
+        int totalCnt = appList.size();
 		
-		int begin = 0;
-		int end = 0;
-
-		Map<String, Object> searchMap = new HashMap<String, Object>(){{
-            put("searchType", searchType);
-            put("searchText", searchText);
-        }};
-		
-		int totalCnt = ScienceAppLocalServiceUtil.countListScienceApp(
-            groupId, locale, 0, null, appTypes, searchMap, status, false);
-		List<Map<String,Object>> swList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
-		    groupId, locale, 0, appTypes, null, searchMap, status, begin, end, false);
 		List<String> swAppIds = new ArrayList<String>();
-		for(Map<String,Object>swData : swList){
-			swAppIds.add(CustomUtil.strNull(swData.get("scienceAppId"),"0"));
+		for(ScienceApp scienceApp : appList){
+			swAppIds.add(String.valueOf(scienceApp.getScienceAppId()));
 		}
+		
 		JSONObject sw = new JSONObject();
 		sw.put("sw", swAppIds);
+		
 		model.addAttribute("totalCnt", totalCnt);
 		model.addAttribute("swList", sw.toString());
 		

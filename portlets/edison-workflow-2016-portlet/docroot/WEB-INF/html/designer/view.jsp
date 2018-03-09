@@ -6,7 +6,7 @@
   copyCurrentRenderParameters="false" />
 <liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet" 
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
-</liferay-portlet:renderURL>  
+</liferay-portlet:renderURL> 
 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">

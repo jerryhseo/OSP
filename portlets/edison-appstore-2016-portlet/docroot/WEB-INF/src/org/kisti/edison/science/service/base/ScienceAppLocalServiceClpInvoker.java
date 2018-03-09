@@ -599,6 +599,10 @@ public class ScienceAppLocalServiceClpInvoker {
 				"long", "long", "long", "java.util.Locale", "java.util.Map",
 				"int", "int", "boolean"
 			};
+
+		_methodName288 = "retrieveListByTemplateId";
+
+		_methodParameterTypes288 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1363,6 +1367,11 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[7]).booleanValue());
 		}
 
+		if (_methodName288.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes288, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.retrieveListByTemplateId((java.lang.String)arguments[0]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1598,4 +1607,6 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes285;
 	private String _methodName286;
 	private String[] _methodParameterTypes286;
+	private String _methodName288;
+	private String[] _methodParameterTypes288;
 }

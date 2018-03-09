@@ -66,7 +66,7 @@ var contextPath = '${contextPath}';
 <div id="science-app" class="wf-container">
   <div class="wftitlebox001">
     <input type="text" name="worfklow-definition-name" id="worfklow-definition-name" /> 
-   	<span style="margin-top: 0px;"> 
+   	<span> 
    		<input class="btn btn-default" id="wf-new-button" value="<liferay-ui:message key='edison-workflow-create-new'/>" type="button"> 
    		<input class="btn btn-default" id="wf-save-button" value="<liferay-ui:message key='edison-workflow-save'/>" type="button"> 
 		<input class="btn btn-default" id="wf-copy-button" value="<liferay-ui:message key='edison-workflow-copy'/>" type="button"> 
@@ -106,11 +106,12 @@ var contextPath = '${contextPath}';
 <div id="running-workflow" class="wf-container hidden">
   <div class="wftitlebox001">
     <h2 class="workflow-name-h2"></h2>
-    <span> <input class="addIp button03" style="display: none;" id="wf-runing-pause-button"
-      value="<liferay-ui:message key='edison-workflow-runing-pause'/>" type="button"> <input
-      class="addIp button03" style="display: none;" id="wf-runing-resume-button"
+    <span> 
+    	<input class="btn btn-default button03" style="display: none;" id="wf-runing-pause-button"
+				value="<liferay-ui:message key='edison-workflow-runing-pause'/>" type="button"> <input
+      class="btn btn-default button03" style="display: none;" id="wf-runing-resume-button"
       value="<liferay-ui:message key='edison-workflow-runing-resume'/>" type="button"> <input
-      class="addIp button03" id="wf-runing-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>"
+      class="btn btn-default button03" id="wf-runing-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>"
       type="button">
     </span>
   </div>
@@ -124,13 +125,17 @@ var contextPath = '${contextPath}';
   </div>
   <div class="wfconwrap wrap">
     <div class="lefttablemenu">
-      <div class="searchbox">
-        <input id="search-running-workflow-name" name="search-running-workflow-name" type="text" size="40" value=""
-          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-instance-name-filter'/>" />
-        <input id="search-running-workflow-name-large-btn" type="button">
+      <div class="searchbox clearfix" style="padding: 0px;">
+      	<div class="input-group">
+        	<input id="search-running-workflow-name" class="form-control" name="search-running-workflow-name" type="text" size="40" value=""
+          		 style="width: 28%; float: right;"	autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-instance-name-filter'/>" />
+        	<div class="input-group-btn">
+	        	<button id="search-running-workflow-name-large-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+        	</div>
+       	</div>
       </div>
       <div class="tabletopwf line-per-page">
-        <select id="running-workflow-line-per-page" name="running-workflow-line-per-page" class="selectview">
+        <select id="running-workflow-line-per-page" name="running-workflow-line-per-page" class="form-control">
           <option value="10">10
             <liferay-ui:message key="edison-search-views" /></option>
           <option value="20">20
@@ -142,7 +147,7 @@ var contextPath = '${contextPath}';
         </select>
       </div>
       <div class="tabletopwf status">
-        <select id="running-workflow-search-status" name="running-workflow-search-status" class="selectview">
+        <select id="running-workflow-search-status" name="running-workflow-search-status" class="form-control">
           <option value="" selected="selected"><liferay-ui:message key="edison-workflow-running-status" /></option>
           <option value="RUNNING">Running</option>
           <option value="COMPLETED">Completed</option>
@@ -156,44 +161,49 @@ var contextPath = '${contextPath}';
           src="${contextPath}/images/Workflow/slideclose_arrow.png" width="30" height="48"></a>
       </div>
       <div style="height: 37px;"></div>
-      <div>
-        <div class="tablemf_list borderno">
-          <table>
-            <colgroup>
-              <col width="20%">
-              <col width="20%">
-              <col width="15%">
-              <col width="15%">
-              <col width="30%">
-              <!-- <col width="15%">
-              <col width="15%"> -->
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope="col"><liferay-ui:message key="edison-workflow-instance-name" /></th>
-                <th scope="col"><liferay-ui:message key="edison-workflow-definition" /></th>
-                <th scope="col"><liferay-ui:message key="edison-table-list-header-run" />ID</th>
-                <th scope="col"><liferay-ui:message key="edison-workflow-running-status" /></th>
-                <th scope="col"><liferay-ui:message key="edison-workflow-running-jobs" /></th>
-                <%-- <th scope="col"><liferay-ui:message key="edison-workflow-running-start-date" /></th>
-                <th scope="col"><liferay-ui:message key="edison-workflow-running-end-date" /></th> --%>
-              </tr>
-            </thead>
-            <tbody class="workflow-list-tbody">
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive panel edison-panel">
+      	<div class="panel-heading clearfix">
+      	</div>
+        <table class="table1_list table table-bordered table-hover edison-table">
+          <colgroup>
+            <col width="20%">
+            <col width="20%">
+            <col width="15%">
+            <col width="15%">
+            <col width="30%">
+            <!-- <col width="15%">
+            <col width="15%"> -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col"><liferay-ui:message key="edison-workflow-instance-name" /></th>
+              <th scope="col"><liferay-ui:message key="edison-workflow-definition" /></th>
+              <th scope="col"><liferay-ui:message key="edison-table-list-header-run" />ID</th>
+              <th scope="col"><liferay-ui:message key="edison-workflow-running-status" /></th>
+              <th scope="col"><liferay-ui:message key="edison-workflow-running-jobs" /></th>
+              <%-- <th scope="col"><liferay-ui:message key="edison-workflow-running-start-date" /></th>
+              <th scope="col"><liferay-ui:message key="edison-workflow-running-end-date" /></th> --%>
+            </tr>
+          </thead>
+          <tbody class="workflow-list-tbody">
+          </tbody>
+        </table>
+        
+		<div id="running-workflow-paging" class="text-center"></div>
       </div>
-      <div id="running-workflow-paging" class="paging"></div>
     </div>
   </div>
   <div class="leftwrap wrap" style="display: none;">
     <div class="lefttreemenu running-workflow">
       <div class="searchbox">
-        <input id="search-running-workflow-name-small" name="search-running-workflow-name" type="text" size="40"
-          value="" autocomplete="off"
-          placeholder="<liferay-ui:message key='edison-workflow-workflow-instance-name-filter'/>" /> <input
-          type="button" id="search-running-workflow-name-small-btn">
+			<div class="input-group">
+				<input id="search-running-workflow-name-small" class="form-control" name="search-running-workflow-name" type="text" size="40"
+						value="" autocomplete="off"
+						placeholder="<liferay-ui:message key='edison-workflow-workflow-instance-name-filter'/>" /> 
+				<div class="input-group-btn">
+						<button id="search-running-workflow-name-small-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+				</div>
+			</div>
       </div>
       <div class="openslidearrow">
         <a class="wf-slide-toggle" href="#slide-open"><img src="${contextPath}/images/Workflow/slideopen_arrow.png"
@@ -226,32 +236,30 @@ var contextPath = '${contextPath}';
  <!-- inputPorts Dialog 끝 -->
 
 
-  <div id="running-workflow-log" style="display: none;">
-    <div class="tablemf_list borderno">
-      <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <colgroup>
-          <col width="*%">
-          <col width="15%">
-          <col width="25%">
-          <col width="25%">
-          <!-- <col width="*"> -->
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col"><liferay-ui:message key="edison-virtuallab-app-name" /></th>
-            <th scope="col"><liferay-ui:message key="edison-table-list-header-status" /></th>
-            <th scope="col"><liferay-ui:message key="edison-workflow-running-start-date" /></th>
-            <th scope="col"><liferay-ui:message key="edison-workflow-running-end-date" /></th>
-            <!-- <th scope="col">실행결과</th> -->
-          </tr>
-        </thead>
-        <tbody id="running-workflow-log-tbody">
-          <tr class="bgcolor">
-            <td class="TC" colspan="4"><liferay-ui:message key="edison-workflow-data-empty-message" /></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div id="running-workflow-log" class="table-responsive panel edison-panel" style="display: none;">
+     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
+       <colgroup>
+         <col width="*%">
+         <col width="15%">
+         <col width="25%">
+         <col width="25%">
+         <!-- <col width="*"> -->
+       </colgroup>
+       <thead>
+         <tr>
+           <th scope="col"><liferay-ui:message key="edison-virtuallab-app-name" /></th>
+           <th scope="col"><liferay-ui:message key="edison-table-list-header-status" /></th>
+           <th scope="col"><liferay-ui:message key="edison-workflow-running-start-date" /></th>
+           <th scope="col"><liferay-ui:message key="edison-workflow-running-end-date" /></th>
+           <!-- <th scope="col">실행결과</th> -->
+         </tr>
+       </thead>
+       <tbody id="running-workflow-log-tbody">
+         <tr class="bgcolor">
+           <td class="center" colspan="4"><liferay-ui:message key="edison-workflow-data-empty-message" /></td>
+         </tr>
+       </tbody>
+     </table>
   </div>
 </div>
 
@@ -259,9 +267,9 @@ var contextPath = '${contextPath}';
   <div class="wftitlebox001">
     <h2 id="my-workflow-name" class="workflow-name-h2"></h2>
     <span>
-      <input class="addIp button03" id="wf-modify-button" value="<liferay-ui:message key='edison-workflow-edit'/>" type="button" />
-      <input class="addIp button03" id="wf-my-copy-button" value="<liferay-ui:message key='edison-workflow-import'/>" type="button">
-      <input class="addIp button03" id="wf-my-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>" type="button">
+      <input class="btn btn-default button03" id="wf-modify-button" value="<liferay-ui:message key='edison-workflow-edit'/>" type="button" />
+      <input class="btn btn-default button03" id="wf-my-copy-button" value="<liferay-ui:message key='edison-workflow-import'/>" type="button">
+      <input class="btn btn-default button03" id="wf-my-remove-button" value="<liferay-ui:message key='edison-workflow-delete'/>" type="button">
     </span>
   </div>
   <div class="lefttabm">
@@ -275,12 +283,16 @@ var contextPath = '${contextPath}';
   <div class="wfconwrap wrap" style="display: none;">
     <div class="lefttablemenu">
       <div class="searchbox">
-        <input id="search-my-workflow-name-large" name="search-my-workflow-name" type="text" size="40" value=""
-          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> <input
-          id="search-my-workflow-name-large-btn" type="button">
+      	<div class="input-group">
+	        <input id="search-my-workflow-name-large" class="form-control" name="search-my-workflow-name" type="text" size="40" value=""
+	          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> 
+	          <div class="input-group-btn">
+					<button id="search-my-workflow-name-large-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+	          </div>
+      	</div>
       </div>
       <div class="tabletopwf">
-        <select id="my-workflow-line-per-page" name="my-workflow-line-per-page" class="selectview">
+        <select id="my-workflow-line-per-page" name="my-workflow-line-per-page" class="form-control">
           <option value="10">10
             <liferay-ui:message key="edison-search-views" /></option>
           <option value="20">20
@@ -296,9 +308,10 @@ var contextPath = '${contextPath}';
           src="${contextPath}/images/Workflow/slideclose_arrow.png" width="30" height="48"></a>
       </div>
       <div style="height: 37px;"></div>
-      <div>
-        <div class="tablemf_list borderno">
-          <table>
+      <div class="table-responsive panel edison-panel">
+      	<div class="panel-heading clearfix">
+      	</div>
+          <table class="table1_list table table-bordered table-hover edison-table">
             <colgroup>
               <col width="20%">
               <col width="20%">
@@ -320,17 +333,22 @@ var contextPath = '${contextPath}';
             <tbody id="my-workflow-tbody" class="workflow-list-tbody">
             </tbody>
           </table>
-        </div>
+          
+	      <div id="my-workflow-paging" class="text-center"></div>
       </div>
-      <div id="my-workflow-paging" class="paging"></div>
     </div>
   </div>
   <div class="leftwrap wrap">
     <div class="leftlistbox my-workflow">
       <div class="searchbox">
-        <input id="search-my-workflow-name-small" name="search-my-workflow-name" type="text" size="40" value=""
-          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> <input
-          type="button" id="search-my-workflow-name-small-btn">
+          <div class="input-group">
+	        <input id="search-my-workflow-name-small" class="form-control" name="search-my-workflow-name" type="text" size="40" value=""
+	          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> 
+	          
+          	<div class="input-group-btn">
+          		<button id="search-my-workflow-name-small-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+          	</div>
+          </div>
       </div>
       <div class="openslidearrow">
         <a class="wf-slide-toggle" href="#"><img src="${contextPath}/images/Workflow/slideopen_arrow.png" width="32"
@@ -350,7 +368,7 @@ var contextPath = '${contextPath}';
 <div id="public-workflow" class="wf-container hidden">
   <div class="wftitlebox001">
     <h2 id="public-workflow-name" class="workflow-name-h2"></h2>
-    <span> <input class="addIp button03" id="wf-public-copy-button"
+    <span> <input class="btn btn-default button03" id="wf-public-copy-button"
       value="<liferay-ui:message key='edison-workflow-import'/>" type="button">
     </span>
   </div>
@@ -365,12 +383,16 @@ var contextPath = '${contextPath}';
   <div class="wfconwrap wrap" style="display: none;">
     <div class="lefttablemenu">
       <div class="searchbox">
-        <input id="search-public-workflow-name-large" name="search-public-workflow-name" type="text" size="40" value=""
-          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> <input
-          id="search-public-workflow-name-large-btn" type="button">
+      	<div class="input-group">
+	        <input id="search-public-workflow-name-large" class="form-control" name="search-public-workflow-name" type="text" size="40" value=""
+	          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> 
+			<div class="input-group-btn">
+				<button id="search-public-workflow-name-large-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+			</div>
+      	</div>
       </div>
       <div class="tabletopwf">
-        <select id="public-workflow-line-per-page" name="public-workflow-line-per-page" class="selectview">
+        <select id="public-workflow-line-per-page" name="public-workflow-line-per-page" class="form-control">
           <option value="10">10
             <liferay-ui:message key="edison-search-views" /></option>
           <option value="20">20
@@ -386,9 +408,10 @@ var contextPath = '${contextPath}';
           src="${contextPath}/images/Workflow/slideclose_arrow.png" width="30" height="48"></a>
       </div>
       <div style="height: 37px;"></div>
-      <div>
-        <div class="tablemf_list borderno">
-          <table>
+      <div class="table-responsive panel edison-panel">
+		  <div class="panel-heading clearfix">
+		  </div>
+          <table class="table1_list table table-bordered table-hover edison-table">
             <colgroup>
               <col width="20%">
               <col width="20%">
@@ -410,17 +433,20 @@ var contextPath = '${contextPath}';
             <tbody id="public-workflow-tbody" class="workflow-list-tbody">
             </tbody>
           </table>
-        </div>
+	      <div id="public-workflow-paging" class="text-center"></div>
       </div>
-      <div id="public-workflow-paging" class="paging"></div>
     </div>
   </div>
   <div class="leftwrap wrap">
     <div class="leftlistbox public-workflow">
       <div class="searchbox">
-        <input id="search-public-workflow-name-small" name="search-public-workflow-name" type="text" size="40" value=""
-          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> <input
-          type="button" id="search-public-workflow-name-small-btn">
+      	<div class="input-group">
+	        <input id="search-public-workflow-name-small" class="form-control" name="search-public-workflow-name" type="text" size="40" value=""
+	          autocomplete="off" placeholder="<liferay-ui:message key='edison-workflow-workflow-name-filter'/>" /> 
+      		<div class="input-group-btn">
+      			<button id="search-public-workflow-name-small-btn" class="btn btn-default" type="button"><i class="icon-search"></i></button>
+      		</div>
+      	</div>
       </div>
       <div class="openslidearrow">
         <a class="wf-slide-toggle" href="#"><img src="${contextPath}/images/Workflow/slideopen_arrow.png" width="32"
@@ -491,8 +517,10 @@ var contextPath = '${contextPath}';
       name="updateWorkflowConfForm" target="updateWorkflowConfFrame">
       <aui:input id="workflowId" name="workflowId" value="${mode}" type="hidden" />
       <aui:input id="tutorialFileEntryId" name="tutorialFileEntryId" type="hidden" />
-      <div class="table1_list" style="width: 85%; padding: 15px 0px 15px 0px; margin: 0 auto;">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <div class="table-responsive panel edison-panel" style="width: 85%; padding: 15px 0px 15px 0px; margin: 0 auto;">
+      	<div class="panel-heading clearfix">
+      	</div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
           <colgroup>
             <col width="25%" />
             <col width="75%" />
@@ -545,8 +573,10 @@ var contextPath = '${contextPath}';
         </aui:form>
         <aui:form name="workflowTutorialFileForm" method="POST" action="<%=uploadWorkflowTutorialURL%>"
           enctype="multipart/form-data" onSubmit="return false;">
-        <div class="table1_list" style="width: 85%; margin: 0 auto;">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="data">
+        <div class="table-responsive panel edison-panel" style="width: 85%; margin: 0 auto;">
+        	<div class="panel-heading clearfix">
+        	</div>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
             <colgroup>
               <col width="25%">
               <col width="*">

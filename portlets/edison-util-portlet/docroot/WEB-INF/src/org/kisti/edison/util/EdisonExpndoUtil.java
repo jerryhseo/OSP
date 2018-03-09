@@ -140,7 +140,12 @@ private static Log _log = LogFactoryUtil.getLog(EdisonExpndoUtil.class);
 				returnStr = value.getData();
 			}
 		}catch(Exception e){
-			_log.error(e);
+			if(e instanceof NullPointerException){
+				System.out.print("EDISON Expando Util(NullPointerException) IS classPK-->"+classPK);
+				System.out.println("    field-->"+field);
+			}else{
+				_log.error(e);
+			}
 		}
 		return returnStr;
 	}

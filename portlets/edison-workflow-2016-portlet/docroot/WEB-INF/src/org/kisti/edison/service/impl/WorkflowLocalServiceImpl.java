@@ -72,11 +72,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
@@ -323,7 +325,26 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }else{
       return runNormalWorkflow(workflowParams, request, workflow);
     }
-    
+  }
+  
+  public WorkflowInstance runWorkflowInstance(
+      long workflowInstanceId, 
+      Map<String, Object> workflowParams,
+      HttpServletRequest request) throws SystemException, PortalException, IOException{
+      WorkflowInstance workflowInstance = WorkflowInstanceLocalServiceUtil.getWorkflowInstance(workflowInstanceId);
+      return runWorkflowInstance(workflowParams, request, workflowInstance);
+  }
+  
+  private WorkflowInstance runWorkflowInstance(Map<String, Object> workflowParams,
+      HttpServletRequest request, WorkflowInstance workflowInstance) throws SystemException, PortalException, IOException {
+    JsonNode workflowJson = createWorkflowJson(workflowInstance, workflowParams, request);
+    String workflowUUID = askForCreateWorkflow(workflowJson);
+    if(StringUtils.hasText(workflowUUID)){
+        JsonNode statusJson = askForWorkflowStart(workflowUUID);
+        workflowInstance.setStatusResponse(statusJson.toString());
+        workflowInstance.setWorkflowUUID(workflowUUID);
+    }
+    return WorkflowInstanceLocalServiceUtil.updateWorkflowInstance(workflowInstance);
   }
 
   private WorkflowInstance runLoopWorkflow(Map<String, Object> workflowParams,
@@ -465,6 +486,46 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"), null));
     return workflowInstanceLocalService.updateWorkflowInstance(workflowInstance);
   }
+  
+  public JsonNode askForWorkflowStart(String workflowUUID) throws IOException{
+      HttpURLConnection conn = null;
+      try{
+        URL url = new URL(WORKFLOW_ENGINE_URL_PRIVATE+"/workflow/"+workflowUUID+"/start");
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+        if(conn.getResponseCode() == HttpStatus.OK.value()){
+          String  output = "";    
+          StringBuffer responseBuffer = new StringBuffer();
+          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+          while ((output = br.readLine()) != null) {
+            if(!GetterUtil.getString(output).equals("null")){
+              responseBuffer.append(GetterUtil.getString(output));
+            }
+          }
+          String wrappedResponse = wrapWorkflowRoot(responseBuffer.toString());
+          System.out.println(wrappedResponse);
+          return Transformer.string2Json(wrappedResponse);
+        }else if(conn.getResponseCode() == HttpStatus.NOT_FOUND.value()){
+          return Transformer.string2Json(
+              "{\"workflow\" : "
+              + "{"
+              + "\"status\": \"NOT_FOUND\", "
+              + "\"uuid\": \"" + workflowUUID 
+              + "\"}"
+              +"}"
+              );
+        }else{
+          throw new RuntimeException(
+              "Failed WorkflowEngineService [ getWorkflowStatus ] : HTTP error code : "
+                  + conn.getResponseCode() + ", workflow UUID : " + workflowUUID);
+        }
+      }finally{
+        if(conn != null) conn.disconnect();
+      }
+    }
   
   public JsonNode askForWorkflowStatus(String workflowUUID) throws IOException{
     HttpURLConnection conn = null;
@@ -627,6 +688,22 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     return workflow;
   }
   
+  private JsonNode createWorkflowJson(
+      WorkflowInstance workflowInstance, 
+      Map<String, Object> workflowParams,
+      HttpServletRequest request) throws SystemException, PortalException, IOException{
+    long companyId = PortalUtil.getCompanyId(request);
+    Locale locale = PortalUtil.getLocale(request);
+    String exec_path = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
+    JSONObject screenLogic = JSONFactoryUtil.createJSONObject(workflowInstance.getScreenLogic());
+    JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
+    User user = PortalUtil.getUser(request);
+    String icebreakerVcToken = GetterUtil.getString(workflowParams.get("icebreakerVcToken"));
+    MWorkflow mWorkflow = makeMWorkflow(workflowParams, user, icebreakerVcToken);
+    mWorkflow.setSimulations(getSimulations(user, exec_path, locale, simulationJsonArray, icebreakerVcToken));
+    return Transformer.pojo2Json(mWorkflow);
+  }
+  
   private JsonNode createWorkflow(
       Workflow workflow, 
       Map<String, Object> workflowParams,
@@ -760,10 +837,11 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
           item.setValue(fileId);
           files.add(item);
         }
-      }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){ // text editor 추가
+      }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){
         String parentPath = inputport.getString("parentPath");
         String fileName = inputport.getString("fileName");
-        Path uploadFilePath = Paths.get(WORKFLOW_INSTANCE_PATH, parentPath, fileName);
+        Path uploadFilePath = OSPFileUtil.getRepositoryPath(user.getScreenName(),
+            Paths.get(parentPath, fileName).toString(), OSPRepositoryTypes.USER_HOME.toString());
         String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken, uploadFilePath.toFile());
         if(fileId != null){
           if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){

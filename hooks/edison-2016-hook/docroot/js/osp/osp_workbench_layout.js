@@ -670,7 +670,6 @@
 			if( !column )	return false;
 			
 			column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
-			
 			return true;
 		};
 		
@@ -890,6 +889,15 @@
 			Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, eventData );
 		};
 		
+		var fireSubmitJobResult = function(data ){
+			var eventData = {
+			                 portletId: Workbench.id(),
+			                 targetPortlet: 'BROADCAST',
+			                 data: data
+			};
+			Liferay.fire(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, eventData );
+		};
+		
 		var fireCreateSimulationJobResult = function( targetPortId,data ){
 			var eventData = {
 			                 portletId: Workbench.id(),
@@ -932,6 +940,7 @@
 				}else{
 					flowLayoutCode = "INPUT";
 				}
+				
 				data.flowLayoutCode = flowLayoutCode;
 			}
 			
@@ -1351,6 +1360,8 @@
 				console.log( 'inputPortNames: ', inputPortNames );
 				
 				var proliferatedJobs = job.proliferate( inputPortNames );
+				if(!proliferatedJobs){return false;}
+				
 				for( var jobIndex in proliferatedJobs ){
 					var proliferatedJob = proliferatedJobs[jobIndex];
 					
@@ -1372,45 +1383,53 @@
 		}
 		
 		var submitJobs = function(simulation,jobsToSubmit,ncores,resourceURL ){
-			/*프로비넌스 체크*/
-			
-			
 			var scienceApp = Workbench.scienceApp();
 			var simulationCreateTime = simulation.createTime();
 			
-			var ajaxData = Liferay.Util.ns(
-                           Workbench.namespace(),
-                           {
-                        	   command: 'SUBMIT_JOBS',
-                        	   simulationUuid: simulation.uuid(),
-                        	   simulationTime: simulationCreateTime,
-                        	   scienceAppName: scienceApp.name(),
-                        	   scienceAppVersion: scienceApp.version(),
-                        	   ncores: simulation.ncores(),
-                        	   jobs: JSON.stringify( jobsToSubmit )
-                           });
+			//block
+			bStart();
+			setTimeout(function(){
+				var ajaxData = Liferay.Util.ns(
+                        Workbench.namespace(),
+                        {
+                     	   command: 'SUBMIT_JOBS',
+                     	   simulationUuid: simulation.uuid(),
+                     	   simulationTime: simulationCreateTime,
+                     	   scienceAppName: scienceApp.name(),
+                     	   scienceAppVersion: scienceApp.version(),
+                     	   ncores: simulation.ncores(),
+                     	   jobs: JSON.stringify( jobsToSubmit )
+                        });
 			
-			$.ajax({
-				url : resourceURL,
-				type: 'post',
-				dataType: 'text',
-				data : ajaxData,
-				success : function(submittedJobs){
-//					job.status( status );
-//					job.dirty(false);
-//					job.isSubmit( true );
-					
-//					var simulation = Workbench.workingSimulation();
-//					var data = {
-//			            simulationUuid: simulation.uuid(),
-//			            jobUuid: job.uuid()
-//					};
-//					fireRefreshJobs(data);
-				},
-				error : function( data, e ){
-					console.log('[ERROR] submit job failed: ', data);
-				}
-			});
+				$.ajax({
+					url : resourceURL,
+					type: 'post',
+					dataType: 'json',
+					data : ajaxData,
+					success : function(submittedJobs){
+						console.log('[SUCCESS] submit job : '+submittedJobs);
+						var submittedJob = submittedJobs[0];
+						var data = {
+							simulationUuid: simulation.uuid(),
+				            jobUuid: submittedJob.uuid,
+				            status: true
+						};
+
+						bEnd();
+						
+						fireSubmitJobResult(data);
+					},
+					error:function(jqXHR, textStatus, errorThrown){
+						bEnd();
+						
+						fireSubmitJobResult({status:false});
+					}
+				});
+			},500);
+			
+			setTimeout(function(){
+				bEnd()
+			},1000*5);
 		};
 		
 		var loadJobData = function ( job ){
@@ -2050,6 +2069,7 @@
 								Workbench.handlePortSelected( portName, portletInstanceId );
 							}
 							else{
+								console.log(Workbench.layout());
 								if( portletInstanceId )
 									Workbench.switchPortlet( portletInstanceId );
 								else
@@ -2140,7 +2160,7 @@
 			else
 			$.alert({
 				title: 'Alert!',
-			    content: 'No changes to be saved: '+simulation.title()
+				content: 'No changes to be saved: '+simulation.title()
 			});
 		};
 		
@@ -2395,7 +2415,7 @@
 					jobStatus: job.status()
 			};
 			
-			fireRefreshJobStatus(status);
+			fireRefreshJobStatus(statusData);
 			
             var scienceApp = Workbench.scienceApp();
             var logPorts = scienceApp.logPorts();

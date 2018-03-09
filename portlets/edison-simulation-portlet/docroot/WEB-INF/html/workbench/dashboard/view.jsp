@@ -194,6 +194,19 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 });
 
 
+Liferay.on(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
+		if(e.data.status){
+			toastr["success"]("", Liferay.Language.get('edison-job-submit-success'));
+			<portlet:namespace/>searchSimulationJob(e.data.simulationUuid,e.data.jobId);
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-job-submit-error'));
+		}
+	}
+});
+
+
 Liferay.on(OSP.Event.OSP_REFRESH_SIMULATIONS, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
@@ -313,6 +326,7 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 		}else{
 			topSimultionSection = $("li#<portlet:namespace/>simulation-"+simulationUuid);
 		}
+		
 		if(!topSimultionSection.hasClass("menu-open")){
 			topSimultionSection.children("a").trigger('click');
 		}

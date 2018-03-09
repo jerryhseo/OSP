@@ -1226,6 +1226,12 @@ public class ScienceAppLocalServiceUtil {
 			locale, searchParam, begin, end, widthFile);
 	}
 
+	public static java.util.List<org.kisti.edison.science.model.ScienceApp> retrieveListByTemplateId(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().retrieveListByTemplateId(templateId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

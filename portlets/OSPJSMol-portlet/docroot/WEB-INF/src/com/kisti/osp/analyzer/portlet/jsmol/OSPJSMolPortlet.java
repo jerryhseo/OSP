@@ -52,9 +52,10 @@ public class OSPJSMolPortlet extends MVCPortlet {
         String command = ParamUtil.getString(resourceRequest, "command");
         String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
 
-        if(command.equalsIgnoreCase("READ_FILE")){
+        if(command.equalsIgnoreCase("GET_FILE")){
             try{
-            	OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
+            	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
+            	//OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();

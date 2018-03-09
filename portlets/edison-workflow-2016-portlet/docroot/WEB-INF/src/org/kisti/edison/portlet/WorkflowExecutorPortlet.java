@@ -1,30 +1,51 @@
 package org.kisti.edison.portlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
+import org.kisti.edison.model.EdisonRoleConstants;
+import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonUserUtil;
+import org.kisti.edison.util.RequestUtil;
+import org.kisti.edison.util.TokenProviderUtil;
+import org.kisti.edison.util.VCRegisterUtil;
+import org.kisti.edison.wfapi.custom.MyFileIcebreakerUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -69,5 +90,122 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
         }
         return "executor/view";
+    }
+    
+    @SuppressWarnings("unchecked")
+    @ResourceMapping(value = "getIcebreakerAccessToken")
+    public void getIcebreakerAccessToken(ResourceRequest request, ResourceResponse response)
+        throws IOException, NumberFormatException, PortalException, SystemException, ParseException{
+        Map<String, Object> param = RequestUtil.getParameterMap(request);
+        long groupId = Long
+            .parseLong(CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        User user = themeDisplay.getUser();
+        Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+
+        if(thisGroup.getParentGroupId() == 0){ // 포탈
+            String visitSite = themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE)
+                .toString();
+            List<Group> groupList = GroupLocalServiceUtil.getGroups(themeDisplay.getCompanyId(), thisGroup.getGroupId(),
+                true);// 하위 그룹 리스트
+
+            for(Group group : groupList){
+                if(visitSite.equals(group.getName())){
+                    groupId = group.getGroupId();
+                    thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+                    break;
+                }
+            }
+        }
+        IcebreakerVcToken icebreakerVcToken = getOrCreateToken(user, groupId);
+
+        String icebreakerUrl = CustomUtil
+            .strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+        JSONObject obj = JSONFactoryUtil.createJSONObject();
+        obj.put("icebreakerUrl", icebreakerUrl);
+        obj.put("icebreakerVcToken", icebreakerVcToken.getVcToken());
+        obj.put("groupId", groupId);
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.write(obj.toString());
+    }
+
+    private IcebreakerVcToken getOrCreateToken(User user, long groupId) throws PortalException, SystemException,
+        NumberFormatException, MalformedURLException, IOException, ParseException{
+
+        IcebreakerVcToken icebreakerVcToken = new IcebreakerVcToken();
+
+        Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+        String userScreenName = "";
+        String userPassword = "";
+
+        String universityField = (String) user.getExpandoBridge().getAttribute(EdisonExpando.USER_UNIVERSITY);
+        String virtualLabId = (String) user.getExpandoBridge().getAttribute(EdisonExpando.USER_LAB_ID);
+        String classId = (String) user.getExpandoBridge().getAttribute(EdisonExpando.USER_CLASS_ID);
+        String majorField = (String) user.getExpandoBridge().getAttribute(EdisonExpando.USER_MAJOR);
+
+        if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.ADMINISTRATOR)
+            || EdisonUserUtil.isSiteRole(user, groupId, EdisonRoleConstants.SITE_ADMINISTRATOR)){
+            userScreenName = (String) thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+            userPassword = (String) thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_PWD);
+        }else{
+            userScreenName = String.valueOf(user.getScreenName());
+            userPassword = user.getPassword();
+        }
+
+        if(VCRegisterUtil.isVcInfo(groupId, userScreenName) == 200){
+            if(user.getExpandoBridge().hasAttribute(EdisonExpando.USER_VC_TOKEN + String.valueOf(groupId))){
+
+                icebreakerVcToken.setVcToken(CustomUtil.strNull(
+                    user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN + String.valueOf(groupId))));
+                icebreakerVcToken.setVcTokenExpired(CustomUtil.strNull(
+                    user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN_EXPIRED + String.valueOf(groupId)),
+                    "0"));
+
+                if(Integer.parseInt(icebreakerVcToken.getVcTokenExpired()) <= Integer
+                    .parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyyMMdd"))){
+                    // 시간이 지난 토큰인 경우 새로운 토큰 발행 및 커스텀 필드 저장
+                    icebreakerVcToken = TokenProviderUtil.getVcToken(groupId, userScreenName, userPassword);
+
+                    // Icebreaker에 회원정보는 있으나 로그인 되지 않는 경우 비밀번호 변경으로 인한것으로 판단하여
+                    // 비밀번호
+                    // update후에 다시 로그인하여 토큰을 요청 합니다.
+                    if(icebreakerVcToken.getResultCode() != 200){
+                        int updateResult = VCRegisterUtil.VCUpdate(groupId, userScreenName, userPassword,
+                            user.getEmailAddress());
+                        if(updateResult == 200){
+                            icebreakerVcToken = TokenProviderUtil.getVcToken(groupId, userScreenName, userPassword);
+                        }
+                    }
+
+                    if(icebreakerVcToken.getResultCode() == 200){
+                        icebreakerVcToken.setVcToken(icebreakerVcToken.getVcToken());
+                        icebreakerVcToken.setVcTokenExpired(icebreakerVcToken.getVcTokenExpired());
+
+                        user.getExpandoBridge().setAttribute(EdisonExpando.USER_VC_TOKEN + String.valueOf(groupId),
+                            icebreakerVcToken.getVcToken());
+                        user.getExpandoBridge().setAttribute(
+                            EdisonExpando.USER_VC_TOKEN_EXPIRED + String.valueOf(groupId),
+                            icebreakerVcToken.getVcTokenExpired());
+                    }else{
+                        log.debug("Icebreaker getOrCreateToken Error !!");
+                    }
+                }else{
+                    // icebreaker 계정은 있으나 포털에 expando가 없는 경우 expando 추가 생성
+                    icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName,
+                        userPassword);
+                }
+            }
+        }else{ // Icebreaker 계정이 없는경우
+            // icebreaker 계정도 없는 경우 생성
+            int resultRegist = VCRegisterUtil.VCRegist(groupId, userScreenName, userPassword, user.getEmailAddress(),
+                user.getFirstName(), universityField, virtualLabId, classId, majorField);
+            if(resultRegist == 201){
+                // icebreaker 가입이 성공한 경우 신규 토큰 발행 및 커스텀 필드 추가
+                icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName,
+                    userPassword);
+            }
+        }
+        return icebreakerVcToken;
     }
 }

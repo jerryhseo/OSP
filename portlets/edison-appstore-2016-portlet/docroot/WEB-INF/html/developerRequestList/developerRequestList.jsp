@@ -13,6 +13,14 @@
   <liferay-portlet:param name="workspacePopup" value="pop_up" />
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="workspaceViewURL" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>" portletName="edisonworkspace_WAR_edisonappstore2016portlet" >
+	<liferay-portlet:param name="myaction" value="workspaceView" />
+	<liferay-portlet:param name="edionCopyParam" value="true" />
+	<liferay-portlet:param name="redirectName" value="${redirectName}" />
+	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
+	<liferay-portlet:param name="workspacePopup" value="${workspacePopup}" />
+</liferay-portlet:renderURL>
+
 <div class="table-responsive panel edison-panel">
 	<h1>
 		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
@@ -94,7 +102,7 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
  					if(i%2 == 1){
  						$rowResult.addClass("tablebgtr");
  					}
-					$rowResult.attr("onClick","<portlet:namespace/>goRequestManagementURL('" + developerRequestList[i].requestStatusId + "') ")
+					$rowResult.attr("onClick","<portlet:namespace/>workspaceView('" + developerRequestList[i].userId + "','" + developerRequestList[i].requestStatusId + "') ")
 							  .css("cursor","pointer");
 					$("<td/>").text(developerRequestList[i].userScreenName)
 							  .css("text-align","center")
@@ -134,6 +142,14 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			return false;
 		}
 	});
+}
+
+function <portlet:namespace/>workspaceView(userId, selectStatus){
+	var searchForm = document.searchParamForm;
+	var URL = "<%=workspaceViewURL%>"
+			  + "&_edisonworkspace_WAR_edisonappstore2016portlet_userId=" + userId
+			  + "&_edisonworkspace_WAR_edisonappstore2016portlet_selectStatus=" + selectStatus;
+	window.location.href = URL;
 }
 
 </script>
