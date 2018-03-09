@@ -182,12 +182,9 @@ $('#<portlet:namespace/>selectFile').bind(
 	}
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, data ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
     AUI().use('liferay-portlet-url', function(A){
-    	var inputData = data.clone();
-    	inputData.name('');
-    	inputData.type('folder');
-    
+  
         var dialogURL = Liferay.PortletURL.createRenderURL();
         dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
         dialogURL.setParameter('inputData', JSON.stringify(inputData));
