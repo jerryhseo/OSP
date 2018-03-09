@@ -342,12 +342,14 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	        var serveResourceUrl = Liferay.PortletURL.createResourceURL();
 	    	        
 	    	        serveResourceUrl.setPortletId('<%=portletDisplay.getId()%>');
-	    	        serveResourceUrl.setParameter('command', 'READ_FILE');
+	    	        serveResourceUrl.setParameter('command', 'GET_FILE');
 	    	        serveResourceUrl.setParameter('repositoryType', <portlet:namespace/>currentData.repositoryType());
 	    	        serveResourceUrl.setParameter('pathType', inputData.type());
 	    	        serveResourceUrl.setParameter('parentPath', inputData.parent());
 	    	        serveResourceUrl.setParameter('fileName', inputData.name());
 	    	        serveResourceUrl.setParameter('relative', inputData.relative());
+	    	        
+	    	        console.log( '[JSMol]Draw JSMol: ', inputData);
 	    	        
 		    	    iframe.contentWindow.loadJSMolFile(serveResourceUrl.toString());
 		    	    
