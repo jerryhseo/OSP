@@ -150,16 +150,26 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 $('#<portlet:namespace/>selectFile').bind(
 		'change',
 		function(event){
-			var input = document.getElementById('<portlet:namespace/>selectFile');
-			var reader = new FileReader();
-			reader.onload = function (e) {
-				console.log('test get jsom in plotly',e);
+			var files = document.getElementById('<portlet:namespace/>selectFile');
+			var fileName = files[0].name;
 			
-			    <portlet:namespace/>drawImagePlotly(e.target.result);
-			    <portlet:namespace/>setTitle(e.target.result);
-			    <portlet:namespace/>currentData = null;
+			if(files.length <=0 ){
+				return false;
+			}
+			
+			var fr = new FileReader();
+			fr.onload = function (e) {
+				//console.log('[PlotlyViewer]test get jsom in plotly',e);
+				var result =JSON.parse(e.target.result);
+				var iframe = document.getElementById('<portlet:namespace/>canvas');
+				iframe.contentWindow.readJson (  result);
+			    //<portlet:namespace/>drawImagePlotly(e.target.result);
+			    //<portlet:namespace/>setTitle(e.target.result);
+			    //<portlet:n
+			    //amespace/>currentData = null;
+				//reader.readAsText(input.files[0]);
             }
-			reader.readAsDataURL(input.files[0]);
+			//reader.readAsDataURL(input.files[0]);
 		}
 
 );
