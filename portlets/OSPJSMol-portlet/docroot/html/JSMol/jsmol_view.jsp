@@ -126,7 +126,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog(
     {
 	    autoOpen: false,
 	    resizable: false,
-	    height: 600,
+	    height: 700,
 	    width: 450,
 	    modal: true
     }
