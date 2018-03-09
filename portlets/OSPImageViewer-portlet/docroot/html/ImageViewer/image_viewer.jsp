@@ -225,18 +225,18 @@ Liferay.on(
 		console.log('[ImageViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 	  <portlet:namespace/>initData = new OSP.InputData( e.data );
 	  if( <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ){
-	      <portlet:namespace/>init.parent(
+	      <portlet:namespace/>initData.parent(
               OSP.Util.mergePath(<portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name()));
 	      <portlet:namespace/>initData.name("");
 	  }
 	  
-	  if( !<portlet:namespace/>init.repositoryType() )
-		  <portlet:namespace/>init.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+	  if( !<portlet:namespace/>initData.repositoryType() )
+		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	  
 	  var eventData = {
 	                   portletId: myId,
 	                   targetPortlet: <portlet:namespace/>fileExplorerId,
-	                   data: OSP.Util.toJSON( <portlet:namespace/>init )
+	                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
 	  };
 	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	  
