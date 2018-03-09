@@ -130,7 +130,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog(
 	    width: 450,
 	    modal: true
     }
-);
+).find(".ui-dialog-titlebar").remove();
 
 /***********************************************************************
  * Menu click events and binding functions 
