@@ -273,7 +273,6 @@ Liferay.on(
 		function(e){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
 				console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-		  		//<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png');
 		  		<portlet:namespace/>setTitle('');
 			}
 		}
