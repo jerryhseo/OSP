@@ -197,6 +197,8 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
         dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
         dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 
+        console.log("[JSMol] file explorer call inputData  : ", inputData);
+        console.log("[JSMol] file explorer url : ", dialogURL);
         if( $<portlet:namespace/>fileExplorerDialogSection.children().length > 0 ){
         	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}
