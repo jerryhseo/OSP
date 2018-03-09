@@ -19,6 +19,8 @@ $(window).resize( function(e){
 	//$('#canvas').empty();
 	console.log("[JSMol] call parent method in iframe");
 	//parent.jsMolresize();
+	
+	Jmol.resizeApplet("100%");
 });
  
 function loadJSMolFile( urlToLoad ){
