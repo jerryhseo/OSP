@@ -154,9 +154,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			var reader = new FileReader();
 			reader.onload = function (e) {
 			    // $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
-			    <portlet:namespace/>drawImage(
-                                              e.target.result,
-                                              'fit');
+			    <portlet:namespace/>drawImage(e.target.result);
 			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
             }
@@ -276,7 +274,7 @@ Liferay.on(
 		function(e){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
 				console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-		  		<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png', 100);
+		  		//<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png');
 		  		<portlet:namespace/>setTitle('');
 			}
 		}
@@ -318,26 +316,24 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
-        <portlet:namespace/>drawImage(
-                                                   serveResourceURL.toString(),
-                                                   zooming);
+        <portlet:namespace/>drawImage( serveResourceURL.toString());
 
         <portlet:namespace/>setTitle(inputData.name());
     });
 }
 
-function <portlet:namespace/>drawImage( url, zooming ){
+function <portlet:namespace/>drawImage( url ){
     setTimeout(
 	    function(){
 	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
-	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.loadImage;
 
 	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadImage) {
-	   	    	iframe.contentWindow.loadImage (  url, zooming );
+	   	    	iframe.contentWindow.loadImage (  url );
 	    	}
 	    	else{
-	    		<portlet:namespace/>drawImage( url, zooming );
+	    		<portlet:namespace/>drawImage( url );
 	    	}
 	    },
 	    10
