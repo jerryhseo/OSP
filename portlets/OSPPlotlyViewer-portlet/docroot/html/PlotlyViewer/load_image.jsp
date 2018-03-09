@@ -39,7 +39,8 @@
   };
 
   readJson = function (inData){
-	 var data = JSON.parse(inData);
+	  console.log("[PlotyViewer] load data ", inData);
+	  var data = JSON.parse(JSON.stringify(inData));
 	 console.log("[PlotyViewer] load data ", data);
     var h = $( window ).height();
     var w = $( window ).width();
