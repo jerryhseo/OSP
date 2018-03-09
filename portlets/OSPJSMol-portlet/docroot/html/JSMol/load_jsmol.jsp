@@ -46,6 +46,7 @@ function loadJSMolFile( urlToLoad ){
         Jmol.getApplet('jmol_1', Info);
         $('#canvas').empty().html( Jmol.getAppletHtml(jmol_1) );
         console.log('[JSMol] test load jsmol'+$('#canvas').child().html());
+        
 }
     
 </script>
