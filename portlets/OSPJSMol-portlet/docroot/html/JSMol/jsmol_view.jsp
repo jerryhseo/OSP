@@ -413,7 +413,8 @@ function <portlet:namespace/>downloadCurrentFile(){
         var base = '<%=serveResourceURL.toString()%>';
         var sep = (base.indexOf('?') > -1) ? '&' : '?';
         var url = base + sep + $.param(data);
-        ($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
+        location.href = url;
+		//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
     }
 }
 
