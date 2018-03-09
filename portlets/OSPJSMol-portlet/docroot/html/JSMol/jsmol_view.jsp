@@ -445,7 +445,7 @@ function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
 }
 
-$(window).resize( function(e){
+$('#<portlet:namespace/>canvas').resize( function(e){
 	<portlet:namespace/>currentData;
 	console.log('[JSMol] resize event change',<portlet:namespace/>currentData);
 	//<portlet:namespace/>drawJSMol( inputData );
