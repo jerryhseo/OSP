@@ -57,8 +57,9 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>
 		
 		<!-- content -->
-		<div id="modal-button" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 163.8px;">
+		<div id="modal-button" class="ui-dialog-content ui-widget-content" style="width: 100%; min-height: 0px; max-height: none; height: 100%;">
         	<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+
 		</div>
 		<!-- bottom -->
 		<div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
