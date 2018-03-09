@@ -1019,4 +1019,8 @@ public interface ScienceAppLocalService extends BaseLocalService,
 		int begin, int end, boolean widthFile)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.science.model.ScienceApp> retrieveListByTemplateId(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

@@ -232,8 +232,8 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 */
 	public ScienceApp addScienceApp(ScienceApp scienceApp, ServiceContext sc) throws SystemException,
 		PortalException{
-		super.resourceLocalService.addResources(scienceApp.getCompanyId(), scienceApp.getGroupId(), scienceApp
-			.getUserId(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
+//		super.resourceLocalService.addResources(scienceApp.getCompanyId(), scienceApp.getGroupId(), scienceApp
+//			.getUserId(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
 
 		AssetEntry assetEntry = super.assetEntryLocalService.updateEntry(scienceApp.getUserId(), scienceApp
 			.getGroupId(), scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(),
@@ -2128,25 +2128,18 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	private long scienceAppAddAssetEntry(ServiceContext sc, long companyId, long groupId, ScienceApp scienceApp) throws PortalException,
-		SystemException{
-		try{
-			// entry 등록
-		    super.resourceLocalService.addResources(scienceApp.getCompanyId(), groupId, scienceApp.getUserId(), 
-                ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
-		    
-			AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, 
-			    scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), 
-			    scienceApp.getScienceAppId(), scienceApp.getUuid(), 0, sc.getAssetCategoryIds(), sc.getAssetTagNames(),
-			    true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
-				null, null, null, null, 0, 0, null, false);
-			
-			return assetEntry.getEntryId();
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-
-		return 0;
+	private long scienceAppAddAssetEntry(ServiceContext sc, long companyId, long groupId, ScienceApp scienceApp) throws PortalException, SystemException{
+		// entry 등록
+//	    super.resourceLocalService.addResources(scienceApp.getCompanyId(), groupId, scienceApp.getUserId(), 
+//            ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
+	    
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, 
+		    scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), 
+		    scienceApp.getScienceAppId(), scienceApp.getUuid(), 0, sc.getAssetCategoryIds(), sc.getAssetTagNames(),
+		    true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
+			null, null, null, null, 0, 0, null, false);
+		
+		return assetEntry.getEntryId();
 	}
 	
 	public ScienceApp updateScienceApp(ScienceApp scienceApp, int status) throws SystemException, PortalException{
@@ -2432,6 +2425,12 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		}
 		
 		return searchParam;
+	}
+	
+	public List<ScienceApp> retrieveListByTemplateId(String templateId) throws SystemException{
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(ScienceApp.class, PortletClassLoaderUtil.getClassLoader());
+		query.add(RestrictionsFactoryUtil.eq("templetId",templateId));
+		return ScienceAppLocalServiceUtil.dynamicQuery(query);
 	}
 	
 	protected Map<String, Object> getScienceAppMap(

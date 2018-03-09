@@ -73,8 +73,7 @@ public class PortAppIdController {
 				DynamicQuery query = DynamicQueryFactoryUtil.forClass(ScienceAppInputPorts.class);
 				List<ScienceAppInputPorts> dataList = ScienceAppInputPortsLocalServiceUtil.dynamicQuery(query);
 				for(ScienceAppInputPorts scienceAppInputPorts:dataList){
-//					updateJSON(portType,scienceAppInputPorts.getScienceAppId(),scienceAppInputPorts.getInputPorts());
-//					System.out.println("BEFORE--->"+scienceAppInputPorts.getInputPorts());
+					System.out.println("BEFORE--->"+scienceAppInputPorts.getInputPorts());
 					portScienceAppId = scienceAppInputPorts.getScienceAppId();
 					String updateJSON = updateJSON(portType,portScienceAppId,scienceAppInputPorts.getInputPorts());
 					
@@ -144,32 +143,31 @@ public class PortAppIdController {
 		}
 		
 		for (String portNameStr : set) {
-			if(!portNameStr.equals("code_mpi_number")){
-				JSONObject parameterData = portJson.getJSONObject(portNameStr);
-				long scienceAppId = 0;
-				try{
-					//sample_ type_ 변경 file->dlEntryId_
-					String sampleExist = CustomUtil.strNull(parameterData.get("sample_"));
-					if(!sampleExist.equals("")){
-						JSONObject sample = parameterData.getJSONObject("sample_");
-						sample.put("type_", "dlEntryId_");
-					}
-					
-					scienceAppId = Integer.parseInt(parameterData.get(defaultKey).toString());
-					ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
-					if(scienceApp.getAppType().equals(ScienceAppConstants.APP_TYPE_EDITOR)||scienceApp.getAppType().equals(ScienceAppConstants.APP_TYPE_ANALYZER)){
-						parameterData.put(defaultKey, ScienceAppLocalServiceUtil.getScienceApp(scienceAppId).getExeFileName());
-					}else{
-						throw new NoSuchScienceAppException();
-					}
-					
-				}catch(NumberFormatException e){
-					//UPGRADE PORT APPNAME
-					upgradeAppName(portType, parameterData, defaultKey, portAppId, portDataJSON);
-				}catch(NoSuchScienceAppException e1){
-					//UPGRADE PORT APPNAME
-					upgradeAppName(portType, parameterData, defaultKey, portAppId, portDataJSON);
+			JSONObject parameterData = portJson.getJSONObject(portNameStr);
+			long scienceAppId = 0;
+			try{
+				
+				//sample_ type_ 변경 file->dlEntryId_
+//				String sampleExist = CustomUtil.strNull(parameterData.get("sample_"));
+//				if(!sampleExist.equals("")){
+//					JSONObject sample = parameterData.getJSONObject("sample_");
+//					sample.put("type_", "dlEntryId_");
+//				}
+				
+				scienceAppId = Integer.parseInt(parameterData.get(defaultKey).toString());
+				ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+				if(scienceApp.getAppType().equals(ScienceAppConstants.APP_TYPE_EDITOR)||scienceApp.getAppType().equals(ScienceAppConstants.APP_TYPE_ANALYZER)){
+					parameterData.put(defaultKey, ScienceAppLocalServiceUtil.getScienceApp(scienceAppId).getExeFileName());
+				}else{
+					throw new NoSuchScienceAppException();
 				}
+				
+			}catch(NumberFormatException e){
+				//UPGRADE PORT APPNAME
+				upgradeAppName(portType, parameterData, defaultKey, portAppId, portDataJSON);
+			}catch(NoSuchScienceAppException e1){
+				//UPGRADE PORT APPNAME
+				upgradeAppName(portType, parameterData, defaultKey, portAppId, portDataJSON);
 			}
 		}
 		
