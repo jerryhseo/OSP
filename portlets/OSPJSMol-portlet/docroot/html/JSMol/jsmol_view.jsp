@@ -48,13 +48,27 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 </div>
 
 <div id="<portlet:namespace/>hiddenSection" style="display:none;">
-	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-              <div>
-                  <input class="btn btn-primary" id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                  <input class="btn" id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-              </div>
-          </div>
+	<div id="<portlet:namespace/>fileExplorer" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons">
+		<!-- title -->
+		<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+			<span id="ui-id-7" class="ui-dialog-title">Select a File</span>
+			<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span>
+			</button>
+		</div>
+		
+		<!-- content -->
+		<div id="modal-button" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: 163.8px;">
+        	<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		</div>
+		<!-- bottom -->
+		<div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+			<div class="ui-dialog-buttonset">
+				<input class="btn btn-primary" id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+				<input class="btn" id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+			</div>
+		</div>	
+		
+	</div>
 	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
