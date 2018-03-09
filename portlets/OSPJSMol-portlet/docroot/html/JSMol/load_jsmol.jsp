@@ -18,7 +18,7 @@
 $(window).resize( function(e){
 	$('#canvas').empty();
 	loadJSMolFile( currentUrl );
-	location.reload();
+	location.reload(currentUrl);
 });
  
 function loadJSMolFile( urlToLoad ){
