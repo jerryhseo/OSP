@@ -17,9 +17,9 @@
  ***********************************************************************/
 $(window).resize( function(e){
 	//$('#canvas').empty();
-	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').width());
+	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
 	//parent.jsMolresize();
-	Jmol.resizeApplet([$('body').width(), $('body').width()]);
+	Jmol.resizeApplet([$('body').width(), $('body').height()]);
 	
 	console.log("[JSMol] resize Applet end.");
 });
