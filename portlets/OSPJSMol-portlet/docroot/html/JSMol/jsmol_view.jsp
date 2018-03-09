@@ -200,6 +200,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
 
         console.log("[JSMol] file explorer call inputData  : ", inputData);
         console.log("[JSMol] file explorer url : ", dialogURL);
+        console.log("[JSMol] file explorer url2 : " + dialogURL);
         if( $<portlet:namespace/>fileExplorerDialogSection.children().length > 0 ){
         	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}
