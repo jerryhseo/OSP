@@ -1,3 +1,5 @@
+@import url("./common-editor-portlet.css");
+
 input[type=range] {
 	-webkit-appearance: none;
 	background-color: silver;

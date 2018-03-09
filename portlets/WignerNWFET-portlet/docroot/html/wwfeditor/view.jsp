@@ -3,27 +3,6 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
-<style>
-.wwfeditor-portlet{
-	padding:0;
-	margin: 0;
-}
-
-.wwfeditor-portlet.canvas-wrapper{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: inherit;
-}
-
-.wwfeditor-portlet .canvas{ 
-	vertical-align:middle; 
-	width:100%; 
-	border:none; 
-	height: 100%;
-}
-</style>
-
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
 <%
