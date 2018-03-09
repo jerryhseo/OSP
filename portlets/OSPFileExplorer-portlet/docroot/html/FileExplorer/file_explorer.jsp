@@ -319,7 +319,8 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-				console.log('['+myId+'] OSP_LOAD_DATA: ', e );
+			    <portlet:namespace/>passNamespace();
+			    console.log('['+myId+'] OSP_LOAD_DATA: ', e );
 				
 				var inputData = new OSP.InputData( e.data );
 				
