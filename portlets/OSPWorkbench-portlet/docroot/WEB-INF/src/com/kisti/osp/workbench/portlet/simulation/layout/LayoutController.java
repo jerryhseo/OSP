@@ -43,6 +43,7 @@ import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.kisti.osp.workbench.Exception.SimulationWorkbenchException;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -144,10 +145,9 @@ public class LayoutController {
 				PrintWriter out = response.getWriter();
 				out.write(loadJob.toString());
 			}else if( command.equalsIgnoreCase("GET_DATA_STRUCTURE")){
-				JSONObject data = this.getDataStructure(request, response);
-				response.setContentType("application/json; charset=UTF-8");
-				PrintWriter out = response.getWriter();
-				out.write(data.toString());
+				this.getDataStructure(request, response);
+			}else if ( command.equalsIgnoreCase("GET_DATA_STRUCTURE_WITH_DATA") ){
+				this.getDataStructureWithData(request, response);
 			}else if ( command.equalsIgnoreCase("CREATE_SIMULATION") ){
 				this.createSimulation(request, response);
 			}else if( command.equalsIgnoreCase("DELETE_SIMULATION") ){
@@ -436,12 +436,11 @@ public class LayoutController {
 	}
 	
 	
-	private JSONObject getDataStructure( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException, JSONException{
+	protected void getDataStructure( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
 		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
 		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
 		
 		DataType dataType = null;
-		
 		try {
 			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
 		} catch (SystemException e) {
@@ -457,8 +456,55 @@ public class LayoutController {
 			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
 			throw new IOException();
 		}
-		JSONObject result = JSONFactoryUtil.createJSONObject(dataTypeStructure.getStructure());
-		return result;
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		ServletResponseUtil.write(httpResponse, dataTypeStructure.getStructure());
+	}
+	
+	protected void getDataStructureWithData( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
+		String fileName = ParamUtil.getString(resourceRequest, "fileName");
+		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType",OSPRepositoryTypes.USER_HOME.toString());
+		
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		DataType dataType = null;
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			throw new PortletException("No Data Structure: "+dataTypeName);
+		}
+		
+		byte[] fileContent = null;
+		try {
+			fileContent = OSPFileUtil.readFileContent(resourceRequest, Paths.get(parentPath).resolve(fileName).toString(), repositoryType);
+		} catch (PortalException | SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		result.put("dataStructure", dataTypeStructure.getStructure());
+		result.put("structuredData", new String(fileContent) );
+		
+		this.jsonObjectPrint(result);
+		ServletResponseUtil.write(httpResponse, result.toString());
 	}
 	
 	

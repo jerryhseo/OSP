@@ -1335,6 +1335,13 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 			groupId, categoryId, locale, searchParam, begin, end, widthFile);
 	}
 
+	@Override
+	public java.util.List<org.kisti.edison.science.model.ScienceApp> retrieveListByTemplateId(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.retrieveListByTemplateId(templateId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
