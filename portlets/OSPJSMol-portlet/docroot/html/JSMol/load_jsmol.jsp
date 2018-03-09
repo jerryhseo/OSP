@@ -48,7 +48,9 @@ function loadJSMolFile( urlToLoad ){
         };
 
         if(myJmol){
+        	console.log("[JSMol] test set info start : ", Info);
         	Jmol.setInfo(myJmol, Info);
+        	console.log("[JSMol] test set info end : ", Info);
         }else{
         	Jmol.setDocument(0);
         	Jmol.getApplet('myJmol', Info);
