@@ -58,7 +58,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>
 		
 		<!-- content -->
-		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 90%"></div>
+		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 76%"></div>
 
 		
 		<!-- bottom -->
@@ -130,7 +130,8 @@ $("#<portlet:namespace/>fileExplorer").dialog({
 	modal: true,
 	show: {effect:'fade', speed: 800}, 
     hide: {effect:'fade', speed: 800}
-}).find(".ui-dialog-titlebar").remove();
+});
+$(".ui-dialog-titlebar").remove();
 
 
 $("#<portlet:namespace/>closeDialog").click(function() {
