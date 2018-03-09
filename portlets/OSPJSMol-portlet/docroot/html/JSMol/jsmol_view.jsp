@@ -50,7 +50,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 </div>
 
 <div id="<portlet:namespace/>hiddenSection" style="display:none;">
-	<div id="<portlet:namespace/>fileExplorer" class="panel panel-praimary">
+	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable">
 		<!-- title -->
 		<div class="panel-heading">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
