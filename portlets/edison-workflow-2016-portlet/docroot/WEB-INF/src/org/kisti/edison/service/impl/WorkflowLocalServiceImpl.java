@@ -72,11 +72,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
@@ -835,10 +837,11 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
           item.setValue(fileId);
           files.add(item);
         }
-      }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){ // text editor 추가
+      }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){
         String parentPath = inputport.getString("parentPath");
         String fileName = inputport.getString("fileName");
-        Path uploadFilePath = Paths.get(WORKFLOW_INSTANCE_PATH, parentPath, fileName);
+        Path uploadFilePath = OSPFileUtil.getRepositoryPath(user.getScreenName(),
+            Paths.get(parentPath, fileName).toString(), OSPRepositoryTypes.USER_HOME.toString());
         String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken, uploadFilePath.toFile());
         if(fileId != null){
           if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
