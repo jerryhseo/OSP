@@ -66,7 +66,6 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "EDIT");;
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-<portlet:namespace/>passNamespace();
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>dataType;
 var <portlet:namespace/>currentData;

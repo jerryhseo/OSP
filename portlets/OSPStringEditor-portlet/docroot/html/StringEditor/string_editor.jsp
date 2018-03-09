@@ -32,7 +32,6 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-<portlet:namespace/>passNamespace();
 var <portlet:namespace/>connector = 'broadcast';
 var <portlet:namespace/>mode = '<%=mode%>';
 

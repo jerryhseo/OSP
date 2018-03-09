@@ -58,7 +58,6 @@ String mode = (String)renderRequest.getAttribute("mode");
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-<portlet:namespace/>passNamespace();
 var <portlet:namespace/>connector = 'broadcast';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_te'+
