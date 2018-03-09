@@ -49,7 +49,7 @@ function loadJSMolFile( urlToLoad ){
 
         if(myJmol){
         	console.log("[JSMol] test set info start : ", Info);
-        	Jmol.setInfo(myJmol, Info, true);
+        	Jmol.setInfo(myJmol, Info, isShown);
         	console.log("[JSMol] test set info end : ", Info);
         }else{
         	Jmol.setDocument(0);
