@@ -6,9 +6,6 @@
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
-<script src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
-<script src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
-<script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 <portlet:renderURL var="renderURL">
@@ -28,8 +25,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 <div class="container-fluid common-analyzer-portlet">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-2 col-sm-2" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
@@ -102,7 +99,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 	autoOpen: false,
 	resizable: false,
 	height: 600,
-	width: 450,
+	width: 600,
 	modal: true
 });
 

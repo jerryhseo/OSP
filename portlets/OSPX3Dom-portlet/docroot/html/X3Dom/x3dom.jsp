@@ -19,10 +19,10 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
+<div class="container-fluid common-analyzer-portlet ">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-2 col-sm-2" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
@@ -183,10 +183,10 @@ Liferay.on(
 		if( e.targetPortlet === myId ){
 			console.log('[X3Dom]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
 			<portlet:namespace/>connector = e.portletId;
-			if( e.action )
-				<portlet:namespace/>action = e.action;
+			if( e.mode )
+				<portlet:namespace/>mode = e.mode;
 			else
-				<portlet:namespace/>action = 'output';
+				<portlet:namespace/>mode = 'view';
 				
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,

@@ -89,11 +89,6 @@ if( <portlet:namespace/>eventEnable === false ){
 		<portlet:namespace/>initData = {};
 	}
 	
-	//for test
-	//<portlet:namespace/>initData.type_ = 'file';
-	//<portlet:namespace/>initData.parent_ = 'pdbs';
-	//<portlet:namespace/>initData.name_ = '1nmr.pdb';
-	
 	<portlet:namespace/>loadProtein( <portlet:namespace/>initData );
 }
 

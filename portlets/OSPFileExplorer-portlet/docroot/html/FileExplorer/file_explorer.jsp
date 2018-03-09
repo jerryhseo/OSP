@@ -4,6 +4,11 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@ include file="../init.jsp" %>
 
+<%-- <script src="<%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
+<script src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
+<script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script> --%>
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 
  <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -344,6 +349,7 @@ Liferay.on(
 					portletId: myId,
 					targetPortlet:e.portletId,
 					data: OSP.Util.toJSON(currentData),
+					params: e.params
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}

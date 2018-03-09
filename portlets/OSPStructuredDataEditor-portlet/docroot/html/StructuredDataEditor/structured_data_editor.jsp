@@ -267,17 +267,20 @@ Liferay.on(
 
 Liferay.on( 
 		OSP.Event.OSP_REQUEST_DATA, 
-		function(eventData){
+		function(e){
 			var myId = '<%=portletDisplay.getId()%>';
-			if( eventData.targetPortlet === myId ){
-				var data = {
-								data: <portlet:namespace/>dataType.structure(),
+			if( e.targetPortlet === myId ){
+				var inputData = new OSP.InputData();
+				inputData.type(OSP.Enumeration.PathType.CONTEXT);
+				inputData.context(<portlet:namespace/>dataType.structure());
+				var eventData = {
+				                 portletId: myId,
+				                 targetPortlet: <portlet:namespace/>connector,
+				                 data: OSP.Util.toJSON(inputData),
+				                 params: e.params
 				};
-		
-				OSP.Event.responseDataToRequest(
-						myId, 
-						data, 
-						eventData );
+				
+				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
 			}
 		}
 );

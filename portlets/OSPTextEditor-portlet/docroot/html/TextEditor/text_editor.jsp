@@ -266,7 +266,8 @@ Liferay.on(
 						targetPortlet: e.portletId,
 						data: {
 							type_: OSP.Enumeration.PathType.FILE_CONTENT,
-							context_: $('#<portlet:namespace/>canvas').val()
+							context_: $('#<portlet:namespace/>canvas').val(),
+							params: e.params
 						}
 				}
 				
