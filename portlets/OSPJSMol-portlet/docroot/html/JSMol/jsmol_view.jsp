@@ -260,7 +260,7 @@ Liferay.on(
 					//<portlet:namespace/>initData.name("");
 					<portlet:namespace/>currentData.name("");
 			}
-			<portlet:namespace/>loadJSMolFile( new OSP.InputData( e.data ) );
+			<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
 		}
 	}
 );
@@ -362,10 +362,11 @@ function <portlet:namespace/>drawJSMol( inputData ){
 }
 
 function <portlet:namespace/>getFirstFileName( argData ){
+    console.log('[JSMol]get First File Name : ', argData );
     var inputData = argData.clone();
+    console.log('[JSMol]get First File Name2 : ', inputData );
     if( !inputData.repositoryType() )
     	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
-    console.log('[JSMol]get First File Name : ', inputData );
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
