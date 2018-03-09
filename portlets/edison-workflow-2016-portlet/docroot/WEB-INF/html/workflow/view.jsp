@@ -237,8 +237,6 @@ var contextPath = '${contextPath}';
 
 
   <div id="running-workflow-log" class="table-responsive panel edison-panel" style="display: none;">
-	<div class="panel-heading clearfix">
-	</div>
      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
        <colgroup>
          <col width="*%">
@@ -258,7 +256,7 @@ var contextPath = '${contextPath}';
        </thead>
        <tbody id="running-workflow-log-tbody">
          <tr class="bgcolor">
-           <td class="TC" colspan="4"><liferay-ui:message key="edison-workflow-data-empty-message" /></td>
+           <td class="center" colspan="4"><liferay-ui:message key="edison-workflow-data-empty-message" /></td>
          </tr>
        </tbody>
      </table>

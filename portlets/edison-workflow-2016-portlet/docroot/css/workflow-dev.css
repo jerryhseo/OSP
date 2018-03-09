@@ -133,7 +133,7 @@
 .context-menu-item.context-menu-input > label{font-size: 12px !important; color: #2f2f2f !important;}
 
 /* workflow run log */
-#running-workflow-log{position: absolute; top: 871px; left: 380px; width: 839px; height: 74px; overflow-y: scroll; padding-top: 10px;}
+#running-workflow-log{position: absolute; top: 156px; left: 380px; width: 817px; height: 84px; overflow-y: auto; padding-top: 10px;}
 #running-workflow-log .ui-resizable-n{ margin-left: 0px; background: #dbdbdb; height: 15px !important; }
 
 /* workflow result log*/
