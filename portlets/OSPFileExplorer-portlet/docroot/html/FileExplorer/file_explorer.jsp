@@ -208,8 +208,8 @@ $('#<portlet:namespace/>selectFile').bind(
 			else{
 				uploadFolder = <portlet:namespace/>selectedFile.parent();
 			}
-			console.log('Upload Folder: '+ uploadFolder);
-			console.log('repositoryType: '+ <portlet:namespace/>selectedFile.repositoryType_);
+			//console.log('Upload Folder: '+ uploadFolder);
+			//console.log('repositoryType: '+ <portlet:namespace/>selectedFile.repositoryType_);
 			
 			// check that file name is duplicated using AJAX.
 			var checkDuplicated = function( target ){

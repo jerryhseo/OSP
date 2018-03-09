@@ -21,7 +21,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 <div class="container-fluid common-editor-portlet">
 	<div class="row-fluid header" >
 		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-3 col-sm-1" >
+		<div class="col-sm-offset-2 col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
