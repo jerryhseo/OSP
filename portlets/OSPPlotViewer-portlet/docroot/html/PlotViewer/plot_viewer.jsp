@@ -27,16 +27,16 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
-				<div class="dropdown-menu cursor">
-					<div id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-					<div id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-					<div id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
+				<div class="dropdown-menu dropdown-menu-right">
+					<div id="<portlet:namespace/>openLocal"><a href="#" onclick="javascript:return false;"><i class="icon-folder-open"> Open local...</i></a></div>
+					<div id="<portlet:namespace/>openServer"><a href="#" onclick="javascript:return false;"><i class="icon-folder-open"> Open server...</i></a></div>
+					<div id="<portlet:namespace/>download"><a href="#" onclick="javascript:return false;"><i class="icon-download-alt"> Download</i></a></div>
 				</div>
 			</div>
 		</div>	
 	</div>
 	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp">
 		</iframe>
 	</div>
 </div>
@@ -117,7 +117,7 @@ $('#<portlet:namespace/>openServer').click(function(){
         inputData.parent('');
         inputData.name('');
     }
-    <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -156,7 +156,7 @@ $('#<portlet:namespace/>selectFile').bind(
         
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
     AUI().use('liferay-portlet-url', function(A){
         var dialogURL = Liferay.PortletURL.createRenderURL();
         dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);

@@ -26,7 +26,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu cursor">
+				<ul class="dropdown-menu cursor dropdown-menu-right">
 					<li id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></li>
 					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
 					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>

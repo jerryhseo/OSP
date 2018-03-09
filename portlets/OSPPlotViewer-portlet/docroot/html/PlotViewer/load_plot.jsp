@@ -30,10 +30,6 @@
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-$(window).resize( function(e){
-    loadPlot( currentData, currentTitle, currentSubtitle );
-});
- 
 function drawPlot( plotData, title, subtitle){
     currentData = plotData;
     currentTitle = title;

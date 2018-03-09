@@ -37,10 +37,10 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>
     				</button>
-					<ul class="dropdown-menu cursor">
-	                       <li id="<portlet:namespace/>sample"><i class="icon-file"> Take sample</i></li>
-	                       <li id="<portlet:namespace/>upload"><i class="icon-upload"> Upload</i></li>
-	                       <li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+					<ul class="dropdown-menu dropdown-menu-right">
+	                       <li id="<portlet:namespace/>sample"><a href="#" onclick="javascript:return false;"><i class="icon-file"></i> Take sample</a></li>
+	                       <li id="<portlet:namespace/>upload"><a href="#" onclick="javascript:return false;"><i class="icon-upload"></i> Upload</a></li>
+	                       <li id="<portlet:namespace/>download"><a href="#" onclick="javascript:return false;"><i class="icon-download-alt"></i> Download</a><./</li>
 					</ul>
 				</div>
 			</div>	
