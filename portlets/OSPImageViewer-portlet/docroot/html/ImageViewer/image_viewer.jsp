@@ -84,10 +84,14 @@ var <portlet:namespace/>eventEnable = <%=eventEnable%>;
  
  if( <portlet:namespace/>eventEnable === false ){
 	var inputData = '<%=inputData%>';
-	<portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
-     
+	 if(!inputData){
+		<portlet:namespace/>initData = new OSP.InputData();
+	}else{
+		<portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
+	}
+
 	<portlet:namespace/>connector = '<%=connector%>';
-     
+
 //     <portlet:namespace/>currentData.type('file');
 //     <portlet:namespace/>currentData.parent('');
 //     <portlet:namespace/>currentData.name('test_image.jpg')

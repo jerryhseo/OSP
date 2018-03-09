@@ -137,7 +137,7 @@ function <portlet:namespace/>loadHtml(indexPath){
 				dataType:'text',
 				success: function( tempPath ){
 				    var url = '<%=request.getContextPath()%>';
-				    url += '/' + tempPath + '/'+indexPath.name();
+				    url += '/' + tempPath;
 				    $('#<portlet:namespace/>canvas').attr('src', url);
 				}
 	    });

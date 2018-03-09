@@ -53,6 +53,7 @@ import org.apache.commons.exec.PumpStreamHandler;
 
 import com.kisti.osp.constants.OSPPropsUtil;
 import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil.OSPFileVisitor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -202,7 +203,6 @@ public class OSPFileUtil {
 	        String source, 
 	        String prefix, 
 	        String suffix,
-	        boolean deleteOnExit, 
 	        String repoType) throws PortalException, SystemException, IOException{
 			User user = PortalUtil.getUser(portletRequest);
 			Path sourcePath = getRepositoryPath(portletRequest, source, repoType);
@@ -210,17 +210,15 @@ public class OSPFileUtil {
 			if( Files.notExists(sourcePath, LinkOption.NOFOLLOW_LINKS) )	
 					throw new FileNotFoundException(sourcePath.toString());
 			
-			portletRequest.getPortletSession().getPortletContext().getRealPath(TEMP_DIR_NAME);
 			Path tempFolderPath = Paths.get(portletRequest.getPortletSession().getPortletContext().getRealPath(TEMP_DIR_NAME));
 			if( Files.notExists(tempFolderPath) )
 				Files.createDirectories(tempFolderPath);
 			
-			Path tempUuidPath = getUniqueUuidFilePath(tempFolderPath, "", "");
+			Path tempUuidPath = getUniqueUuidFilePath(tempFolderPath, "", "").resolve(sourcePath.getFileName());
+			System.out.println("tempUuidPath: "+tempUuidPath.toString());
 
 			Path symbolicLink = Files.createSymbolicLink(tempUuidPath, sourcePath );
-			if( deleteOnExit ){
-				symbolicLink.toFile().deleteOnExit();
-			}
+			symbolicLink.toFile().deleteOnExit();
 			
 			return symbolicLink.getParent().getFileName().resolve(symbolicLink.getFileName()).toString();
 	}
@@ -245,14 +243,17 @@ public class OSPFileUtil {
 			Files.createDirectory(tempRealPath);
 		}
 		
-		Path tempUuidPath = tempRealPath.resolve( getUniqueUuidFilePath(tempRealPath, "", "") );
+		Path tempUuidPath = getUniqueUuidFilePath(tempRealPath, "", "");
+		Files.createDirectory(tempUuidPath);
 		tempUuidPath.toFile().deleteOnExit();
 		
+		
 		if( Files.isRegularFile(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
+			tempUuidPath = tempUuidPath.resolve(sourcePath.getFileName());
 			Files.copy(sourcePath, tempUuidPath, StandardCopyOption.REPLACE_EXISTING);
 		}
 		else if ( Files.isDirectory(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
-			Files.createDirectory( tempUuidPath );
+			System.out.println("tempUuidPath: "+tempUuidPath.toString());
 			Files.walkFileTree(sourcePath,  new OSPFileVisitor( sourcePath, tempUuidPath) );
 		}
 		else
@@ -1177,8 +1178,8 @@ public class OSPFileUtil {
     	Path targetPath;
     	Path tempFilePath;
     	
-    	public OSPFileVisitor( Path targetPath, Path tempPath ){
-    		targetPath = targetPath;
+    	public OSPFileVisitor( Path target, Path tempPath ){
+    		targetPath = target;
     		tempFilePath = tempPath;
     	}
     	

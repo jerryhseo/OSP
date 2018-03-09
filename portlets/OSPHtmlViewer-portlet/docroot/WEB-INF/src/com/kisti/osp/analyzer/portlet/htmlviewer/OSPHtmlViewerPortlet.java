@@ -12,7 +12,6 @@ import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
 import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -64,7 +63,9 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
         }else if(command.equalsIgnoreCase("GET_COPIED_TEMP_FILE_PATH")){
             String result;
             try{
-            	result = OSPFileUtil.getCopiedTemporaryFilePath(resourceRequest, parentPath, "", "", repositoryType);
+            	result = OSPFileUtil.getCopiedTemporaryFilePath(resourceRequest, parentPath.toString(), "", "", repositoryType);
+            	result = Paths.get(result, fileName).toString();
+            	System.out.println("getCopiedTemporaryFilePath: "+result);
             }catch (PortalException | SystemException e){
                 _log.error("FileManagementLocalServiceUtil.getCopiedTemporaryFilePath()");
                 throw new PortletException();
@@ -72,7 +73,20 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
             
             HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
             ServletResponseUtil.write(httpResponse, result);
-        }else{
+        }else if(command.equalsIgnoreCase("GET_LINKED_TEMP_FILE_PATH")){
+            String result;
+            try{ 
+            	result = OSPFileUtil.getLinkedTemporaryFilePath(resourceRequest, parentPath.toString(), "", "", repositoryType);
+            	System.out.println("getCopiedTemporaryFilePath: "+result);
+            }catch (PortalException | SystemException e){
+                _log.error("FileManagementLocalServiceUtil.getCopiedTemporaryFilePath()");
+                throw new PortletException();
+            }
+            
+            HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+            ServletResponseUtil.write(httpResponse, result);
+        }
+        else{
             _log.info("There are no command option.");
         }
         
