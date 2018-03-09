@@ -144,7 +144,7 @@
 					font-size:15px; font-weight:600; background:url(/edison-board-2016-portlet/images/popbl.png) no-repeat 15px 12px; 
 					padding-left:55px; padding-right:17px; 
 					background-color:#3fabc7; position:relative;
-					height: 40px;
+					height: auto; min-height: 40px;
 					vertical-align: middle;
 					}
 	.smpupclosebtn{position:absolute; right:18px; top:16px;}
