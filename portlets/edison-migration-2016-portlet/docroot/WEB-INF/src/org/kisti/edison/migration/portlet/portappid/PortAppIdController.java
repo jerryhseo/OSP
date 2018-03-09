@@ -73,8 +73,9 @@ public class PortAppIdController {
 				DynamicQuery query = DynamicQueryFactoryUtil.forClass(ScienceAppInputPorts.class);
 				List<ScienceAppInputPorts> dataList = ScienceAppInputPortsLocalServiceUtil.dynamicQuery(query);
 				for(ScienceAppInputPorts scienceAppInputPorts:dataList){
-					System.out.println("BEFORE--->"+scienceAppInputPorts.getInputPorts());
+//					System.out.println("BEFORE--->"+scienceAppInputPorts.getInputPorts());
 					portScienceAppId = scienceAppInputPorts.getScienceAppId();
+					System.out.print(portScienceAppId+"*");
 					String updateJSON = updateJSON(portType,portScienceAppId,scienceAppInputPorts.getInputPorts());
 					
 					// INPUT PORT 에서 sample_ 제거
@@ -90,8 +91,8 @@ public class PortAppIdController {
 				for(ScienceAppOutputPorts scienceAppOutputPorts:dataList){
 //					System.out.println("BEFORE--->"+scienceAppOutputPorts.getOutputPorts());
 					portScienceAppId = scienceAppOutputPorts.getScienceAppId();
-					String updateJSON = updateJSON(portType,scienceAppOutputPorts.getScienceAppId(),scienceAppOutputPorts.getOutputPorts());
 					System.out.print(portScienceAppId+"*");
+					String updateJSON = updateJSON(portType,scienceAppOutputPorts.getScienceAppId(),scienceAppOutputPorts.getOutputPorts());
 					System.out.println("AFTER--->"+updateJSON);
 					scienceAppOutputPorts.setOutputPorts(updateJSON);
 					ScienceAppOutputPortsLocalServiceUtil.updateScienceAppOutputPorts(scienceAppOutputPorts);
@@ -102,8 +103,8 @@ public class PortAppIdController {
 				List<ScienceAppLogPorts> dataList = ScienceAppLogPortsLocalServiceUtil.dynamicQuery(query);
 				for(ScienceAppLogPorts scienceAppLogPorts:dataList){
 					portScienceAppId = scienceAppLogPorts.getScienceAppId();
-					String updateJSON = updateJSON(portType,scienceAppLogPorts.getScienceAppId(),scienceAppLogPorts.getLogPorts());
 					System.out.print(portScienceAppId+"*");
+					String updateJSON = updateJSON(portType,scienceAppLogPorts.getScienceAppId(),scienceAppLogPorts.getLogPorts());
 					System.out.println("AFTER--->"+updateJSON);
 					scienceAppLogPorts.setLogPorts(updateJSON);
 					ScienceAppLogPortsLocalServiceUtil.updateScienceAppLogPorts(scienceAppLogPorts);
