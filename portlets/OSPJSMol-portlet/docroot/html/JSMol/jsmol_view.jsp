@@ -33,10 +33,10 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 					Menu<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor">
-					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				<ul class="dropdown-menu cursor" style="margin-left:10px">
+					<li id="<portlet:namespace/>openLocal" style="margin-left:10px"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer" style="margin-left:10px"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download" style="margin-left:10px"><i class="icon-download-alt"> Download</i></li>
 				</ul>
 			</div>
 		</div>	
@@ -140,6 +140,7 @@ $('#<portlet:namespace/>openServer').click(function(){
 });
 
 $('#<portlet:namespace/>download').click(function(){
+	console.log("[JSMol] download Request.");
 	<portlet:namespace/>downloadCurrentFile();
 });
 
@@ -395,6 +396,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
+	console.log("[JSMol] Download current file");
+	console.log("[JSMol] Download current data", <portlet:namespace/>currentData);
     if(<portlet:namespace/>currentData &&
         <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE ){
         var filePath = <portlet:namespace/>currentData;
