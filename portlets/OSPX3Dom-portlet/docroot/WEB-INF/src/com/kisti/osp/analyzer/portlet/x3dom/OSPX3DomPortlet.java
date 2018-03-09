@@ -31,12 +31,12 @@ public class OSPX3DomPortlet extends MVCPortlet {
         boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
         String inputData = ParamUtil.getString(renderRequest, "inputData");
         String connector = ParamUtil.getString(renderRequest, "connector", "connector");
-        String action = ParamUtil.getString(renderRequest, "action", "output");
+        String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
         renderRequest.setAttribute("eventEnable", eventEnable);
         renderRequest.setAttribute("inputData", inputData);
         renderRequest.setAttribute("connector", connector);
-        renderRequest.setAttribute("action", action);
+        renderRequest.setAttribute("mode", mode);
 
         super.doView(renderRequest, renderResponse);
     }

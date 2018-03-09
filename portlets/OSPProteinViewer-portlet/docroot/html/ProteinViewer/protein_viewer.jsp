@@ -101,7 +101,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 	autoOpen: false,
 	resizable: false,
 	height: 600,
-	width: 450,
+	width: 600,
 	modal: true
 });
 
@@ -138,8 +138,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
 	var eventData = {
 			portletId : '<%=portletDisplay.getId()%>',
-			targetPortlet : <portlet:namespace/>fileExplorerId,
-			action: "READ"
+			targetPortlet : <portlet:namespace/>fileExplorerId
 	};
 	Liferay.fire( 'OSP_REQUEST_DATA', eventData);
 	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
@@ -245,15 +244,15 @@ Liferay.on(
 	              <portlet:namespace/>mergePath(<portlet:namespace/>initData.parent_, <portlet:namespace/>initData.name_);
 		      <portlet:namespace/>initData.name_ = '';
 		  }
-		 if( !<portlet:namespace/>initData.repositoryType() )
-			  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+		 if( !<portlet:namespace/>initData.repositoryType_ )
+			  <portlet:namespace/>initData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
 
 		<portlet:namespace/>loadProtein( <portlet:namespace/>initData );
 		
 		var eventData = {
 		                   portletId: myId,
 		                   targetPortlet: <portlet:namespace/>fileExplorerId,
-		                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+		                   data: <portlet:namespace/>initData
 		  };
 		  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	}
@@ -307,6 +306,7 @@ Liferay.on(
 function <portlet:namespace/>loadProtein( inputData ){
 	if( ! inputData.repositoryType_ )
 		inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
+		
 	switch( inputData.type_ ){
 		case 'file':
 		    <portlet:namespace/>loadData( inputData );
@@ -391,7 +391,7 @@ function <portlet:namespace/>downloadCurrentFile(){
     	var data = {
   			<portlet:namespace/>command: "DOWNLOAD_FILE",
   			<portlet:namespace/>pathType: filePath.type_,
-  			<portlet:namespace/>repositoryType: inputData.repositoryType_,
+  			<portlet:namespace/>repositoryType: filePath.repositoryType_,
   			<portlet:namespace/>parentPath: filePath.parent_,
   			<portlet:namespace/>fileName: filePath.name_,
   			<portlet:namespace/>relative: filePath.relative_

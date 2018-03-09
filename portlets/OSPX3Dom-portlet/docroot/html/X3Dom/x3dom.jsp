@@ -1,11 +1,10 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
-<script src="<%=request.getContextPath()%>/js/osp/osp_basic_object.js"></script>
-<script src="<%=request.getContextPath()%>/js/osp/osp_super_class.js"></script>
-<script src="<%=request.getContextPath()%>/js/osp/osp_datatype.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -14,43 +13,43 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-String action = (String)renderRequest.getAttribute("action");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <div class="row-fluid image-viewer-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
-	<div class="span12" style="height:inherit;">
-		<div class="row-fluid menu-section" id="<portlet:namespace/>menuSection">
-			<div class="dropdown-wrapper" >
-				<div class="dropdown">
-                  <i class="icon-reorder icon-menu"></i>
-					<!-- Link or button to toggle dropdown -->
-					<div class="dropdown-content">
-						<div class="dropdown-item" id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-						<div class="dropdown-item" id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-					</div>
-				</div>
-			</div>	
-		</div>
-		<div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
-			<iframe class ="span12 canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/X3Dom/load_x3dom.jsp">
-			</iframe>
-		</div>
-		<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-			<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-                <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
-                <div>
-                    <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
-                    <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
-                </div>
-            </div>
-			<input type="file" id="<portlet:namespace/>selectFile"/>
-		</div>
+	<div class="row-fluid header">
+		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-offset-2 col-sm-2" >
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+					Menu<span class="caret"></span>
+				</button>
+				<!-- Link or button to toggle dropdown -->
+				<ul class="dropdown-menu cursor">
+					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
+					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
+					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				</ul>
+			</div>
+		</div>	
 	</div>
+	<div class="row-fluid canvas">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/X3Dom/load_x3dom.jsp">
+		</iframe>
+	</div>
+</div>
+<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+          </div>
+	<input type="file" id="<portlet:namespace/>selectFile"/>
 </div>
 
 <script>
@@ -63,7 +62,7 @@ var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INS
     + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
 
 /***********************************************************************
@@ -113,10 +112,11 @@ $('#<portlet:namespace/>openServer').click(function(){
     }else{
         inputData = new OSP.InputData();
         inputData.type( OSP.Enumeration.PathType.FOLDER );
+        inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
         inputData.parent('');
         inputData.name('');
     }
-    <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -127,8 +127,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
   var eventData = {
       portletId : '<%=portletDisplay.getId()%>',
-      targetPortlet : <portlet:namespace/>fileExplorerId,
-      action: "READ"
+      targetPortlet : <portlet:namespace/>fileExplorerId
   };
   Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
   $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
@@ -144,21 +143,21 @@ $('#<portlet:namespace/>selectFile').bind(
 			var input = document.getElementById('<portlet:namespace/>selectFile');
 			var reader = new FileReader();
 			reader.onload = function (e) {
-			    $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
-			    $("#<portlet:namespace/>selectFile").val("");
-			    <portlet:namespace/>currentData = null;
+				$('#<portlet:namespace/>canvas').each(function(){
+					$(this).prop('contentWindow').loadX3Dom(e.target.result);
+					
+					delete <portlet:namespace/>currentData;
+				});
             }
 			reader.readAsDataURL(input.files[0]);
 		}
-		
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
-		dialogURL.setParameter('action', <portlet:namespace/>action);
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
@@ -209,11 +208,6 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if(e.targetPortlet === myId){
 			console.log('[X3Dom]OSP_EVENTS_REGISTERED: ['+e.portletId+', '+new Date()+']');
-		  var eventData = {
-	         portletId: myId,
-	         targetPortlet: <portlet:namespace/>connector
-	      };
-	      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
 		}
 	}
 );
@@ -230,7 +224,17 @@ Liferay.on(
               OSP.Util.mergePath(<portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name()));
 	      <portlet:namespace/>initData.name("");
 	  }
+	  if( !<portlet:namespace/>initData.repositoryType() )
+		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+		  
 	  <portlet:namespace/>loadX3Dom(<portlet:namespace/>initData );
+	  
+	  var eventData = {
+	                   portletId: myId,
+	                   targetPortlet: <portlet:namespace/>fileExplorerId,
+	                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+	  };
+	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 	}
   }
 );
@@ -282,6 +286,9 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadX3Dom( inputData ){
+	if( ! inputData.repositoryType() )
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>' );
+		
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
 	    <portlet:namespace/>drawX3Dom( inputData );
@@ -327,11 +334,11 @@ function <portlet:namespace/>drawX3Dom( inputData ){
 	);
 }
 
-function <portlet:namespace/>getFirstFileName( argData, zooming ){
-    var inputData = argData.clone();
+function <portlet:namespace/>getFirstFileName( inputData ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
+            <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name(),
             <portlet:namespace/>relative: inputData.relative()
@@ -348,7 +355,7 @@ function <portlet:namespace/>getFirstFileName( argData, zooming ){
             <portlet:namespace/>drawX3Dom( inputData );
         },
         error:function(data,e){
-            console.log('AJAX ERROR-->'+e);
+            console.log('AJAX ERROR-->'+data);
         },
         complete: function( jqXHR, textStatus ){
         }
@@ -361,6 +368,7 @@ function <portlet:namespace/>downloadCurrentFile(){
     	var data = {
   			<portlet:namespace/>command: "DOWNLOAD_FILE",
   			<portlet:namespace/>pathType: filePath.type(),
+  			<portlet:namespace/>repositoryType: filePath.repositoryType(),
   			<portlet:namespace/>parentPath: filePath.parent(),
   			<portlet:namespace/>fileName: filePath.name(),
   			<portlet:namespace/>relative: filePath.relative()
@@ -372,35 +380,4 @@ function <portlet:namespace/>downloadCurrentFile(){
         location.href = url;
     }
 }
-
-function <portlet:namespace/>checkPath( filePath, command ){
-	var data = {
-			<portlet:namespace/>command: command,
-			<portlet:namespace/>pathType: filePath.type(),
-			<portlet:namespace/>parentPath: filePath.parent(),
-			<portlet:namespace/>fileName: filePath.name(),
-			<portlet:namespace/>relative: filePath.relative()
-	};
-	
-	$.ajax({
-		type: 'POST',
-		url: '<%= serveResourceURL.toString()%>', 
-		async : false,
-		data  : data,
-		dataType : 'json',
-		success: function(result) {
-		    if( result.valid === true ){
-				$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
-				<portlet:namespace/>loadImage( filePath, 'fit' );
-			}
-			else{
-				alert('Selected file is invalid or not a file.: '+filePath.fullPath() );
-			}
-		},
-		error:function(data,e){
-			console.log('AJAX ERROR-->', data, e);
-		}
-	});
-}
-
 </script>
