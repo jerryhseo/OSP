@@ -40,7 +40,7 @@
 
   readJson = function (inData){
 	  console.log("[PlotyViewer] load data1 ");
-	  var data = JSON.parse(JSON.stringify(inData));
+	  var data = JSON.parse(inData);
 	 console.log("[PlotyViewer] load data2 ", data);
     var h = $( window ).height();
     var w = $( window ).width();
