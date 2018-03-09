@@ -56,6 +56,7 @@
   };
 
   loadImage = function (url_path){
+	  console.log("[PlotyViewer] load data ");
     $.ajax({
       url: url_path,
       success: function (data){

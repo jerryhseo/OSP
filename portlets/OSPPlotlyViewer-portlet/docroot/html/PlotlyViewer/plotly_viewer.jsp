@@ -45,7 +45,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>
 	</div>
 	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotlyViewer/load_image.jsp">
 		</iframe>
 	</div>
 </div>
