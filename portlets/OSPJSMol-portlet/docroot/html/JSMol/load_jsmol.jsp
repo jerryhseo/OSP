@@ -15,11 +15,11 @@
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
-$(window).resize( function(e){
-	$('#canvas').empty();
-	loadJSMolFile( currentUrl );
-	
-});
+//$(window).resize( function(e){
+//	$('#canvas').empty();
+//	loadJSMolFile( currentUrl );
+//	
+//});
  
 function loadJSMolFile( urlToLoad ){
         console.log( '[JSMOL]URL To Load: '+ urlToLoad );
