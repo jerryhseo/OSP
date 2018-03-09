@@ -38,7 +38,9 @@
     Plotly.relayout(gd, update);
   };
 
-  readJson = function (data){
+  readJson = function (inData){
+	 var data = JSON.parse(inData);
+	 console.log("[PlotyViewer] load data ", data);
     var h = $( window ).height();
     var w = $( window ).width();
 
