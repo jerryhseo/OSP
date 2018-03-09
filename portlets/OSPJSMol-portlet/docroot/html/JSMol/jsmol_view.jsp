@@ -355,6 +355,8 @@ function <portlet:namespace/>drawJSMol( inputData ){
 
 	    	console.log( '[JSMol]iframeDoc.readyState : ', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.loadJSMolFile ) {
+	    		
+	    		console.log("[JSMol] test 1 : load data in drawJSMol");
 	    	    AUI().use('liferay-portlet-url', function(a) {
 	                <portlet:namespace/>currentData = inputData.clone();
 	                if( !<portlet:namespace/>currentData.repositoryType() )
@@ -378,6 +380,8 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	    });
 	    	} 
 	    	else{
+	    		console.log("[JSMol] test esle : load data in drawJSMol");
+	    	
 	    		<portlet:namespace/>drawJSMol( inputData );
 	    	}
 	    }, 
