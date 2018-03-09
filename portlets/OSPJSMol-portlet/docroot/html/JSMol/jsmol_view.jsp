@@ -75,11 +75,6 @@ else
 	<portlet:namespace/>fileExplorerId += '001'; 
 console.log('[JSMol] file explorer id Check : '+<portlet:namespace/>fileExplorerId);
 	
-var <portlet:namespace/>currentData;
-var <portlet:namespace/>mode = '<%=mode%>';
-var <portlet:namespace/>eventEnable = <%=eventEnable%>;
-	
-	
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
@@ -141,7 +136,7 @@ $('#<portlet:namespace/>openServer').click(function(){
         inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     }
    
-    <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
+    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
 });
 
 $('#<portlet:namespace/>download').click(function(){
@@ -187,7 +182,7 @@ $('#<portlet:namespace/>selectFile').bind(
 	}
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, data ){
+function <portlet:namespace/>fileExplorerDialog( mode, data ){
     AUI().use('liferay-portlet-url', function(A){
     	var inputData = data.clone();
     	inputData.name('');
@@ -205,7 +200,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, action, data ){
         console.log("[JSMol] file explorer call inputData  : ", inputData);
         console.log("[JSMol] file explorer url : ", dialogURL);
         console.log("[JSMol] file explorer url2 : " + dialogURL);
-        if( $<portlet:namespace/>fileExplorerDialogSection.children().length > 0 ){
+        if( $('#<portlet:namespace/>file-explorer-content').children().length > 0 ){
         	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}
         else{
