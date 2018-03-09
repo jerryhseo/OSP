@@ -16,7 +16,7 @@
  * Golbal functions
  ***********************************************************************/
 $(window).resize( function(e){
-	$('#canvas').empty();
+	$('#canvas').child().empty();
 	loadJSMolFile( currentUrl );
 });
  
