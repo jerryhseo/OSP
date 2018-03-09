@@ -53,12 +53,12 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable">
 		<!-- title -->
 		<div class="panel-heading">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id='<portlet:namespace/>closeDialog'>&times;</button>
 			<h3>Select a File</h3>
 		</div>
 		
 		<!-- content -->
-		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 90%"></div>
 
 		
 		<!-- bottom -->
@@ -122,15 +122,20 @@ if( <portlet:namespace/>eventEnable === false ){
   <portlet:namespace/>loadJSMolFile( <portlet:namespace/>initData );
 }
 
-$<portlet:namespace/>fileExplorerDialogSection.dialog(
-    {
-	    autoOpen: false,
-	    resizable: false,
-	    height: 700,
-	    width: 450,
-	    modal: true
-    }
-).find(".ui-dialog-titlebar").remove();
+$("#<portlet:namespace/>fileExplorer").dialog({
+	autoOpen: false,
+	resizable: false,
+	height: 600,
+	width: 450,
+	modal: true,
+	show: {effect:'fade', speed: 800}, 
+    hide: {effect:'fade', speed: 800}
+}).find(".ui-dialog-titlebar").remove();
+
+
+$("#<portlet:namespace/>closeDialog").click(function() {
+	$("#<portlet:namespace/>fileExplorer").dialog("close");
+});
 
 /***********************************************************************
  * Menu click events and binding functions 
