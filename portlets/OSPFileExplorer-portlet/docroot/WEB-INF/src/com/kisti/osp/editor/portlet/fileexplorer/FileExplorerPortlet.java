@@ -70,8 +70,8 @@ public class FileExplorerPortlet extends MVCPortlet {
 			
 			Path targetPath = parentPath.resolve(fileName); 
 
-//			System.out.println("Parent Folder: "+parentPath.toString());
-//			System.out.println("File Name: "+fileName);
+			System.out.println("Parent Folder: "+parentPath.toString());
+			System.out.println("File Name: "+fileName);
 
 			JSONArray fileInfos = null;
 			JSONObject resultJSON = JSONFactoryUtil.createJSONObject();
@@ -94,7 +94,11 @@ public class FileExplorerPortlet extends MVCPortlet {
 			else if( pathType.equalsIgnoreCase("ext") ){
 				try {
 					fileInfos = OSPFileUtil.getFolderInformation(resourceRequest, parentPath.toString(), fileName, repositoryType);
-					resultJSON.put("parentPath", targetPath.getParent().toString());
+					if(targetPath.getParent() != null){
+					    resultJSON.put("parentPath", targetPath.getParent().toString());
+					}else{
+					    resultJSON.put("parentPath", "");
+					}
 				} catch (IOException | PortalException | SystemException e) {
 					System.out.println("[ERROR]OSPFileUtil.getFolderInformation("+targetPath.toString()+")");
 					throw new PortletException();
@@ -115,7 +119,14 @@ public class FileExplorerPortlet extends MVCPortlet {
 			resultJSON.put( "fileInfos", fileInfos );
 			resultJSON.put("fileName", fileName);
 			
-//			System.out.println(resultJSON.toString());
+			/*
+			try {
+				System.out.println(resultJSON.toString(4));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			*/
 
 			ServletResponseUtil.write(httpResponse, resultJSON.toString());
 		}

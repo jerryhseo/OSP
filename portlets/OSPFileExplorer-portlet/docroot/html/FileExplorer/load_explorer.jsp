@@ -164,7 +164,7 @@
 							'visible': inDownload
 						},
 						'progressive_render' : true,
-						'plugins' : ['state', 'dnd', 'sort', 'types', 'progressive_render' , 'hotkeys', 'changed', 'checkbox']
+						'plugins' : ['contextmenu', 'state', 'dnd', 'sort', 'types', 'progressive_render' , 'hotkeys', 'changed', 'checkbox']
 				}).bind('loaded.jstree', function(event, data) { 
 						$('#panel').jstree('open_all');
 						$('#panel').jstree('deselect_all');
@@ -176,11 +176,10 @@
 								passSelectedFile( parentPath, folderName, 'file' );
 							}
 						}else if( data.node.type == 'closed-folder'){
-							console.log( 'getParentPath: '+data.node.id);
 							var parentPath = getParentPath( data.node.id );
 							var folderName = getFileName( data.node.id );
 							if( !inDownload ){
-								passSelectedFile( parentPath, folderName, 'folder' );
+								passSelectedFile( parentPath, folderName );
 							}
 							lookupFolder( parentPath, folderName );
 						}
@@ -189,10 +188,11 @@
 							var nextRootPath = getParentPath( data.node.id );
 							var selectFolderName = getFileName( data.node.id );
 
+							console.log( 'prev-folder: '+nextRootPath+', '+selectFolderName);
 							if( !inDownload ){
-								passSelectedFile( nextRootPath, selectFolderName, 'folder' );
+								passSelectedFile( nextRootPath, '' );
 							}
-							lookupFolder( nextRootPath, selectFolderName );
+							lookupFolder( nextRootPath, '' );
 						}
 				});
 		}
@@ -200,7 +200,6 @@
 		function getParentPath( path ){
 		    var slashIndex = path.lastIndexOf('/');
 			var parentPath = slashIndex > 0 ? path.substring(0, slashIndex) : '';
-			
 			return parentPath;
 		}
 		

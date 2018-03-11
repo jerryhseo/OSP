@@ -3,6 +3,7 @@ package com.kisti.osp.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,7 +54,6 @@ import org.apache.commons.exec.PumpStreamHandler;
 
 import com.kisti.osp.constants.OSPPropsUtil;
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.util.OSPFileUtil.OSPFileVisitor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -64,6 +64,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -128,12 +129,24 @@ public class OSPFileUtil {
 	
 	static private JSONArray lookUpFolder( File folder, String filter ) throws IOException{
 		if( !folder.isDirectory() || !folder.exists() )		throw new FileNotFoundException(folder.getAbsolutePath());
-		
+
+//		System.out.println("Folder: "+folder.getName());
+//		System.out.println("Filter: "+filter);
 		File[] files;
 		if( filter == null || filter.isEmpty() )
 			files = folder.listFiles();
-		else
+		else{
 			files = folder.listFiles( new FileExtensionFilter(filter) );
+			File[] subFolders = folder.listFiles(new FileFilter() {
+				
+				@Override
+				public boolean accept(File pathname) {
+					return pathname.isDirectory();
+				}
+			});
+			
+			files = ArrayUtil.append(files, subFolders);
+		}
 		
 		JSONArray fileInfos = JSONFactoryUtil.createJSONArray();
 		for( File file : files ){
@@ -174,17 +187,17 @@ public class OSPFileUtil {
 	static private class FileExtensionFilter implements FilenameFilter {
 		private String extension = "";
 		public FileExtensionFilter ( String extension ){
-			extension = extension;
+			this.extension = "."+extension;
+//			System.out.println("Filter: "+extension);
 		}
 		
 		@Override
 		public boolean accept(File directory, String fileName){
-			if (fileName.endsWith(extension)) 
-				return true;
-			return false;
+//			System.out.println("accept: "+fileName+", "+extension+", "+fileName.endsWith(extension));
+			return fileName.endsWith(extension); 
 		}
 	}
-
+	
 	/*****************************************************************
 	 * Public APIs Section
 	 * @throws SystemException 
@@ -215,7 +228,7 @@ public class OSPFileUtil {
 				Files.createDirectories(tempFolderPath);
 			
 			Path tempUuidPath = getUniqueUuidFilePath(tempFolderPath, "", "").resolve(sourcePath.getFileName());
-			System.out.println("tempUuidPath: "+tempUuidPath.toString());
+//			System.out.println("tempUuidPath: "+tempUuidPath.toString());
 
 			Path symbolicLink = Files.createSymbolicLink(tempUuidPath, sourcePath );
 			symbolicLink.toFile().deleteOnExit();
@@ -253,7 +266,7 @@ public class OSPFileUtil {
 			Files.copy(sourcePath, tempUuidPath, StandardCopyOption.REPLACE_EXISTING);
 		}
 		else if ( Files.isDirectory(sourcePath, LinkOption.NOFOLLOW_LINKS) ){
-			System.out.println("tempUuidPath: "+tempUuidPath.toString());
+//			System.out.println("tempUuidPath: "+tempUuidPath.toString());
 			Files.walkFileTree(sourcePath,  new OSPFileVisitor( sourcePath, tempUuidPath) );
 		}
 		else
@@ -457,7 +470,7 @@ public class OSPFileUtil {
 		
 		CommandLine cmdLine = CommandLine.parse( strCmd );
 		
-		System.out.println("chown Command: "+cmdLine.toString());
+//		System.out.println("chown Command: "+cmdLine.toString());
 		
 		final OutputStream outStream = new ByteArrayOutputStream();
 		final OutputStream errorStream = new ByteArrayOutputStream();
@@ -500,7 +513,7 @@ public class OSPFileUtil {
 		
 		CommandLine cmdLine = CommandLine.parse( strCmd );
 		
-		System.out.println("chmod Command: "+cmdLine.toString());
+//		System.out.println("chmod Command: "+cmdLine.toString());
 		
 		final OutputStream outStream = new ByteArrayOutputStream();
         final OutputStream errorStream = new ByteArrayOutputStream();
@@ -1159,7 +1172,7 @@ public class OSPFileUtil {
         return new TextAndLastPosition(sb.toString(), lastPosition);
     }
     
-    static class TextAndLastPosition{
+    static private class TextAndLastPosition{
         private String text;
         private long lastPosition;
         public TextAndLastPosition(String text, long lastPosition){
@@ -1174,7 +1187,7 @@ public class OSPFileUtil {
         }
     }
     
-    static class OSPFileVisitor extends SimpleFileVisitor<Path>{
+    static private class OSPFileVisitor extends SimpleFileVisitor<Path>{
     	Path targetPath;
     	Path tempFilePath;
     	
