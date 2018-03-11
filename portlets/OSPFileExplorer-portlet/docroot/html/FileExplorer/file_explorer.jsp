@@ -349,19 +349,6 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-				/*
-				var value = $('#<portlet:namespace/>selectedFile').val();
-				var path = OSP.Util.convertToPath( value );
-				//console.log( 'Explor Path: ', path );
-				var currentData = <portlet:namespace/>selectedFile;
-				if( path.parent() !== currentData.parent() || 
-					 path.name() !== currentData.name() ){
-					currentData.parent( path.parent() );
-					currentData.name( path.name() );
-					currentData.type(OSP.Enumeration.PathType.FILE);
-				}
-				*/
-				//console.log(currentData);
 				
 				var eventData = {
 					portletId: myId,

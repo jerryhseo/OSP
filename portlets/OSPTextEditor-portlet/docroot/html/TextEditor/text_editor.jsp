@@ -18,7 +18,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 %>
 
 
-<div class="container-fluid common-editor-portlet">
+<div class="container-fluid osp-editor">
 	<div class="row-fluid header" >
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-2" >
@@ -26,21 +26,27 @@ String mode = (String)renderRequest.getAttribute("mode");
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu cursor dropdown-menu-right">
-					<li id="<portlet:namespace/>sample"><i class="icon-folder-open"> Take sample</i></li>
-					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>saveAs"><i class="icon-save"> Save as...</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li><a href="javascript:<portlet:namespace/>takeSample()"><i class="icon-file"> Sample</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>saveAs()"><i class="icon-save"> Save as...</i></a></li>
 				</ul>
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas" >
-		<textarea class="col-sm-12 iframe" id="<portlet:namespace/>canvas" ></textarea>
+	<div class="row-fluid frame" >
+		<textarea class="col-sm-12 canvas" id="<portlet:namespace/>canvas" ></textarea>
 	</div>
 </div>
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
-	<div id="<portlet:namespace/>fileExplorer" title="Select a file" ></div>
+<div id="<portlet:namespace/>hiddenSection" class="osp-editor hidden">
+	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
+              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div>
+                  <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+                  <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+              </div>
+	</div>
 	<div id="<portlet:namespace/>confirmDialog">
 		<input type="text" id="<portlet:namespace/>uploadFileName"/><br/>
 		<p>
@@ -60,8 +66,11 @@ String mode = (String)renderRequest.getAttribute("mode");
  ***********************************************************************/
 var <portlet:namespace/>connector = 'broadcast';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_te'+
-    + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_te';
+if( '<portlet:namespace/>'.lastIndexOf('_INSTANCE_') > 0)
+	<portlet:namespace/>fileExplorerId += '<portlet:namespace/>'.substring('<portlet:namespace/>'.lastIndexOf('_INSTANCE_')+10);
+else
+	<portlet:namespace/>fileExplorerId += '001';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
@@ -78,29 +87,31 @@ if( '<%=eventEnable%>' == false ){
 	<portlet:namespace/>initData = new OSP.InputData(JSON.parse('<%=inputData%>'));
 	if( !<portlet:namespace/>initData.repositoryType() )
 		<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-	console.log('TextEditor Init Data', <portlet:namespace/>initData );
 	
 	<portlet:namespace/>loadText( <portlet:namespace/>initData );
 }
-	
+
+$<portlet:namespace/>fileExplorerDialogSection.dialog({
+	autoOpen: false,
+	resizable: false,
+	height: 600,
+	width: 600,
+	modal: true
+});
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>sample').click(function(){
-	var myId = '<%=portletDisplay.getId()%>';
-	var eventData = {
-			portletId: myId,
-			targetPortlet: <portlet:namespace/>connector
-	};
-	
-	Liferay.fire( 
-			OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, 
-			eventData
-	);
-});
+ function <portlet:namespace/>takeSample(){
+		var myId = '<%=portletDisplay.getId()%>';
+		var eventData = {
+				portletId: myId,
+				targetPortlet: <portlet:namespace/>connector
+		};
+		
+		Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData);
+}
 
-$('#<portlet:namespace/>saveAs').click(function(e){
-	e.preventDefault();
+ function <portlet:namespace/>saveAs(){
 	var inputData = new OSP.InputData();
 	inputData.type( OSP.Enumeration.PathType.FOLDER);
 	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
@@ -110,19 +121,19 @@ $('#<portlet:namespace/>saveAs').click(function(e){
 	<portlet:namespace/>saveAction = true;
 	
 	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
-});
+ }
 
-$('#<portlet:namespace/>openLocal').click(function(e){
-	$('#<portlet:namespace/>selectFile').click();
-});
+ function <portlet:namespace/>openLocalFile(){
+	 $('#<portlet:namespace/>selectFile').click();
+ }
 
-$('#<portlet:namespace/>openServer').click(function(){
+ function <portlet:namespace/>openServerFile(){
 	var inputData;
 	if(	<portlet:namespace/>initData && 
 			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE &&
 			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER &&
 			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.EXT ){
-		inputData = <portlet:namespace/>initData;
+		inputData = <portlet:namespace/>initData.clone();
 	}
 	else{
 		inputData = new OSP.InputData();
@@ -132,7 +143,7 @@ $('#<portlet:namespace/>openServer').click(function(){
 		inputData.name('');
 	}
 	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
-});
+ }
 
 $('#<portlet:namespace/>canvas').on('change', function(){
 	var inputData = new OSP.InputData();
@@ -149,6 +160,20 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 	Liferay.fire(OSP.Event.OSP_DATA_CHANGED, eventData );
 });
 
+$("#<portlet:namespace/>file-explorer-ok").click(function(e){
+	  e.preventDefault();
+	  var eventData = {
+	      portletId : '<%=portletDisplay.getId()%>',
+	      targetPortlet : <portlet:namespace/>fileExplorerId
+	  };
+	  Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
+	  $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+	});
+
+$("#<portlet:namespace/>file-explorer-cancel").click(function(e){
+	e.preventDefault();
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+});
 
 function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
@@ -163,30 +188,13 @@ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
 		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
 		
-		$<portlet:namespace/>fileExplorerDialogSection.dialog({
-			autoOpen: true,
-			resizable: false,
-			height: 600,
-			width: 600,
-			modal: true,
-			buttons:{
-				OK: function() {
-					var eventData = {
-							portletId : '<%=portletDisplay.getId()%>',
-							targetPortlet : <portlet:namespace/>fileExplorerId,
-							mode: mode
-					};
-					Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
-				},
-				Cancel: function() {
-					$( this ).dialog( 'destroy' );
-				}
-			}
-		});
-
-		$<portlet:namespace/>fileExplorerDialogSection.load( dialogURL.toString());
+		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}else{
+			$("#<portlet:namespace/>file-explorer-content").load( dialogURL.toString());
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}
 	});
-	
 } 
 
 $('#<portlet:namespace/>selectFile').bind(
@@ -249,7 +257,10 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 				console.log('Text Editor OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']');
-				<portlet:namespace/>loadText( new OSP.InputData( e.data ) );
+				<portlet:namespace/>initData = new OSP.InputData( e.data );
+				if( ! <portlet:namespace/>initData.repositoryType() )
+					<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+				<portlet:namespace/>loadText( <portlet:namespace/>initData );
 			}
 		}
 );
@@ -297,7 +308,7 @@ Liferay.on(
 			
 			if( !<portlet:namespace/>saveAction ){
 				<portlet:namespace/>loadText( filePath );
-				$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+				$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
 			}
 			else{
 				$('#<portlet:namespace/>uploadFileName').val(filePath.name());
@@ -327,8 +338,8 @@ Liferay.on(
 										buttons: {
 												'OK': function() {
 															$( this ).dialog( 'destroy' );
-															<portlet:namespace/>saveAs ( filePath );
-															$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+															<portlet:namespace/>saveContentAs ( filePath );
+															$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
 												},
 												Cancel: function() {
 															$( this ).dialog( 'destroy' );
@@ -338,8 +349,8 @@ Liferay.on(
 							);
 						}
 						else{
-							<portlet:namespace/>saveAs ( filePath );
-							$<portlet:namespace/>fileExplorerDialogSection.dialog('destroy');
+							<portlet:namespace/>saveContentAs ( filePath );
+							$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
 						}
 					},
 					error: function( e, d ){
@@ -363,11 +374,11 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadText( inputData ){
-	<portlet:namespace/>currentData = inputData.clone();
 	if( !<portlet:namespace/>currentData.repositoryType() )
 		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 		
 	if( inputData.type() === OSP.Enumeration.PathType.FILE){
+		<portlet:namespace/>currentData = inputData.clone();
 		var data = {
 				<portlet:namespace/>command: 'READ_FILE',
 				<portlet:namespace/>mode: <portlet:namespace/>mode,
@@ -436,39 +447,7 @@ function <portlet:namespace/>loadText( inputData ){
 	}
 }
 
-
-
-function <portlet:namespace/>checkPath( filePath, command ){
-	var data = {
-			<portlet:namespace/>command: command,
-			<portlet:namespace/>mode: <portlet:namespace/>mode,
-			<portlet:namespace/>pathType: filePath.type(),
-			<portlet:namespace/>repositoryType: filePath.repositoryType(),
-			<portlet:namespace/>parentPath: filePath.parent(),
-			<portlet:namespace/>fileName: filePath.name(),
-			<portlet:namespace/>relative: filePath.relative()
-	};
-	
-	var check = false
-	$.ajax({
-		type: 'POST',
-		url: '<%= serveResourceURL.toString()%>', 
-		async : false,
-		data  : data,
-		dataType : 'text',
-		success: function(result) {
-			check = result === 'true' ? true : false; 
-		},
-		error:function(data,e){
-			console.log(data);
-			console.log('AJAX ERROR-->'+e);
-		}
-	});
-	
-	return check;
-};
-
-function <portlet:namespace/>saveAs( inputData ){
+function <portlet:namespace/>saveContentAs( inputData ){
 	<portlet:namespace/>saveAction = false;
 	var data = {
 			<portlet:namespace/>command: 'SAVE_AS',
@@ -477,8 +456,7 @@ function <portlet:namespace/>saveAs( inputData ){
 			<portlet:namespace/>repositoryType: inputData.repositoryType(),
 			<portlet:namespace/>parentPath: inputData.parent(),
 			<portlet:namespace/>fileName: inputData.name(),
-			<portlet:namespace/>context: $('#<portlet:namespace/>canvas').val(),
-			<portlet:namespace/>relative: inputData.relative()
+			<portlet:namespace/>context: inputData.context()
 	};
 	
 	$.ajax({

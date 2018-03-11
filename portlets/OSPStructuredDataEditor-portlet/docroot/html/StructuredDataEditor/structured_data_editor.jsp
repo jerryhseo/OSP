@@ -91,6 +91,7 @@ if( !<%=eventEnable%> ){
     }else{
         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
     }
+    <portlet:namespace/>currentData = <portlet:namespace/>initData; 
 	
 	<portlet:namespace/>loadStructure( <portlet:namespace/>currentData );
 }
@@ -133,19 +134,20 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
  
  function <portlet:namespace/>openServerFile(){
 	var inputData;
-	if(	<portlet:namespace/>currentData && 
-			<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE &&
-			<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER &&
-			<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.EXT ){
-		inputData = <portlet:namespace/>currentData;
+	if(	<portlet:namespace/>initData && 
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE &&
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER &&
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.EXT ){
+		inputData = <portlet:namespace/>initData.clone();
 	}
 	else{
 		inputData = new OSP.InputData();
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
-		inputData.type( OSP.Enumeration.PathType.EXT );
 		inputData.parent('');
-		inputData.name('sde');
 	}
+	
+	inputData.type( OSP.Enumeration.PathType.EXT );
+	inputData.name('sde');
 	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
  }
  
@@ -266,10 +268,11 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 			    console.log('SDE OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']');
-				var inputData = new OSP.InputData( e.data );
-				console.log( inputData );
-		
-				<portlet:namespace/>loadStructure(inputData);
+				<portlet:namespace/>initData = new OSP.InputData( e.data );
+				if( ! <portlet:namespace/>initData.repositoryType() )
+					<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+				
+				<portlet:namespace/>loadStructure(<portlet:namespace/>initData);
 			}
 		}
 );
@@ -310,13 +313,13 @@ Liferay.on(
 			}
 			
 			if( !<portlet:namespace/>saveAction ){
+				<portlet:namespace/>loadStructure( filePath );
 				$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
 			}
 			else{
 				$('#<portlet:namespace/>uploadFileName').val(filePath.name());
 				filePath.type( OSP.Enumeration.PathType.FILE_CONTENT );
 				filePath.context( JSON.stringify(<portlet:namespace/>dataType) );
-				console.log('------', filePath);
 				
 				$.ajax({
 					url: '<%=serveResourceURL.toString()%>',
@@ -330,7 +333,6 @@ Liferay.on(
 					},
 					success: function(result){
 						var duplicated = result.duplicated;
-						console.log('duplicated: '+duplicated);
 						if( duplicated ){
 							var confirmDialog = $('#<portlet:namespace/>confirmDialog');
 							confirmDialog.dialog(
@@ -370,12 +372,7 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				console.log('<portlet:namespace/> OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-				var eventData = {
-						portletId: '<%=portletDisplay.getId()%>',
-						targetPortlet: <portlet:namespace/>connector
-				};
-				
-				Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
+				<portlet:namespace/>loadStructure( <portlet:namespace/>initData );
 			}
 		}
 );
@@ -532,7 +529,7 @@ function <portlet:namespace/>saveContentAs( inputData ){
 			<portlet:namespace/>repositoryType: inputData.repositoryType(),
 			<portlet:namespace/>parentPath: inputData.parent(),
 			<portlet:namespace/>fileName: inputData.name(),
-			<portlet:namespace/>context: $('#<portlet:namespace/>canvas').val()
+			<portlet:namespace/>context: inputData.context()
 	};
 	
 	$.ajax({
