@@ -50,7 +50,8 @@ function loadJSMolFile( urlToLoad ){
         
         if(myJmol){
         	//Jmol.setInfo(myJmol, Info, true);
-        	Jmol.loadFile(myJmol, currentUrl, Info);
+        	//Jmol.loadFile(myJmol, currentUrl, Info);
+        	Jmol.loadFile(myJmol, currentUrl);
 		}
 		else{
 			Jmol.setDocument(0);
