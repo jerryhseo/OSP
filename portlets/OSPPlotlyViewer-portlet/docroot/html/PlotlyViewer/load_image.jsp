@@ -55,7 +55,17 @@
 
     gd = gd3.node();
     data.divClass = gd;
-    Plotly.newPlot(gd, data);
+    if (data.frames) {
+ 	   Plotly.newPlot(gd, data).then(function() {
+ 	     Plotly.animate(gd, data.frame,
+ 	       {
+ 	         frame: data.layout.updatemenus[0].buttons[0].args[1].frame
+ 	       }
+ 	     )
+ 	   })
+     } else {
+       Plotly.newPlot(gd, data);
+     }
   };
 
   loadImagePlotly = function (url_path){
