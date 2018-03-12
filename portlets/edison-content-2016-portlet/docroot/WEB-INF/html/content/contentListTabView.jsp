@@ -159,7 +159,7 @@
 						<i class="icon-search"></i>
 					</button>
 					
-					<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dafaultContentAllSearch();">
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dafaultContentAllSearch();">
 						Clear
 					</button>
 					

@@ -51,11 +51,24 @@
     data.layout.height = h;
     data.layout.margin = {t:20};
 
-    var gd3 = d3.select('.plotcontent').append('div');
+    var gd3 = d3.select('#myDiv');
 
     gd = gd3.node();
     data.divClass = gd;
-    Plotly.newPlot(gd, data);
+    if (data.frames) {
+ 	   Plotly.newPlot(gd, data).then(function() {
+ 	     Plotly.animate(gd, data.frames,
+ 	       {
+ 	         frame: {
+ 	        	duration : data.layout.updatemenus[0].buttons[0].args[1].frame.duration,
+ 	        	redraw : false
+ 	         }
+ 	       }
+ 	     )
+ 	   })a
+     } else {
+       Plotly.newPlot(gd, data);
+     }
   };
 
   loadImagePlotly = function (url_path){

@@ -324,6 +324,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
             srcData.repositoryType("USER_HOME");
             inputData = JSON.stringify(srcData);
         }
+        console.log("srcData ", srcData);
+        console.log("toJSON srcData ", OSP.Util.toJSON(srcData));
         showEditorWindow(editor, srcData, saveBtnHandler);
     }
 
@@ -406,9 +408,10 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
             }
 
             if (editorType == "Inputdeck") {
-                var editorDataStructure = eventData.data;
-                var inputs = editorDataStructure.activeParameterFormattedInputs();
-                fileContent = inputs[0].join("");
+                var inputData = new OSP.InputData(eventData.data);
+                var dataType = new OSP.DataType();
+                var dataStructure = dataType.deserializeStructure(inputData.context());
+                fileContent = dataType.structure().activeParameterFormattedInputs().join("");
             } else if (editorType == "Text") {
                 fileContent = editorData;
             } else if (editorType == "File") {

@@ -6,7 +6,6 @@
 
 <script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 <script src="${contextPath}/js/dashboard/dashboard.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>

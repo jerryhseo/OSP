@@ -538,11 +538,11 @@ function <portlet:namespace/>searchListAll(){
 				<input id="<portlet:namespace/>searchValue" name="<portlet:namespace/>searchValue" class="form-control" type="text" placeholder="<%=searchAll%>" size="25" maxlength="100" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" style="width: 50%; float: right; margin-left: 1%;" />
 				
 				<div class="input-group-btn">
-					<button class="btn btn-default" type="button" name="fullsize" id="keyWordB" onclick="<portlet:namespace/>dataSearchList(); return false;">
+					<button class="btn btn-default" type="button" name="fullsize" id="keyWordB" onclick="<portlet:namespace/>dataSearchList();">
 						<i class="icon-search"></i>
 					</button>
 					
-					<button class="btn btn-default" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListAll(); return false;">
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListAll(); return false;">
 						Clear
 					</button>
 				</div>

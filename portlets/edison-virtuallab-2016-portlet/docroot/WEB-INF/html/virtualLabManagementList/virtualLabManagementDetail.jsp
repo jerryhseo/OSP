@@ -4,6 +4,10 @@
 
 <head>
 
+<liferay-portlet:renderURL var="virtualLabManagementDetailURL">
+	<liferay-portlet:param name="myRender" value="virtualLabManagementDetail" />
+</liferay-portlet:renderURL>
+
 <style>
 	.virtual-lab-qna{
 		width: 100%;

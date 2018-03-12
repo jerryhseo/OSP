@@ -8,9 +8,35 @@
 	<liferay-portlet:param name="myaction" value="updateVirtualLabStatus" />
 </liferay-portlet:actionURL>
 
+<liferay-portlet:resourceURL var="virtualLabInfomationURL" id="virtualLabInfomation" copyCurrentRenderParameters="false" />
+
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList(1);
+	
+	$("#<portlet:namespace/>virtualLab-process-dialog").dialog({
+		autoOpen: false,
+		width: 914,
+		height: 'auto',
+		modal: true,
+		resizable: false,
+		show: {effect:'fade', speed: 800},
+		hide: {effect:'fade', speed: 800},
+		open: function(event, ui) {
+			$(this).css('overflow', 'hidden');
+			$(this).parent().removeClass("ui-widget-content");
+			$(this).parent().removeClass("ui-widget");
+			$(this).removeClass("ui-widget-content");
+	    	$(this).removeClass("ui-dialog-content");
+	    },
+	    close: function() {
+	    
+	    }
+	}).dialog("widget").find(".ui-dialog-titlebar").remove();
+	
+	$("#<portlet:namespace/>virtualLab-process-dialog-close-btn").click(function() {
+		$("#<portlet:namespace/>virtualLab-process-dialog").dialog("close");
+	});
 });
 
 function <portlet:namespace/>dataSearchList(pageNumber) {
@@ -52,7 +78,7 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
  					if(i%2 == 1){
  						$rowResult.addClass("tablebgtr");
  					}
-					$rowResult.attr("onClick","<portlet:namespace/>goRequestManagementURL('" + virtualLabRequestList[i].groupId + "','" + virtualLabRequestList[i].groupName + "')")
+					$rowResult.attr("onClick","<portlet:namespace/>virtualLabRequestConfirmDialog('" + virtualLabRequestList[i].virtualLabId + "')")
 							  .css("cursor","pointer");
 					$("<td/>").text(virtualLabRequestList[i].groupName)
 							  .addClass("TC left")
@@ -91,6 +117,73 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 	});
 }
 
+function <portlet:namespace/>virtualLabRequestConfirmDialog(virtualLabId) {
+	var checkForm = {
+		"<portlet:namespace/>virtualLabId" : virtualLabId,
+	};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=virtualLabInfomationURL%>",
+		async : false,
+		data : checkForm,
+		success: function(msg) {
+			var virtualLabInfo = msg.virtualLabInfo;
+			
+			$("#<portlet:namespace/>requestUserScreenName").text(virtualLabInfo.userScreenName);
+			$("#<portlet:namespace/>requestUserFullName").text(virtualLabInfo.userName);
+			$("#<portlet:namespace/>requestPersonName").text(virtualLabInfo.virtualLabPersonName);
+			$("#<portlet:namespace/>requestVirtualLabTitle").text(virtualLabInfo.virtualLabTitle);
+			$("#<portlet:namespace/>requestUniversityField").text(virtualLabInfo.virtualLabUniversityFieldNm);
+			$("#<portlet:namespace/>requestVirtualLabDescription").html("<textarea rows=\"2\" readonly=\"readonly\" style=\"width:95%; resize:none;\" spellcheck=\"false\" >" + virtualLabInfo.virtualLabDescription + "</textarea>");
+			$("#<portlet:namespace/>processVirtualLabId").val(virtualLabInfo.virtualLabId);
+			$("#<portlet:namespace/>requestUserId").val(virtualLabInfo.requestUserId);
+			$("#<portlet:namespace/>processDescription").val(virtualLabInfo.virtualLabConfirmDescription);
+			$("#<portlet:namespace/>processStatus").val(virtualLabInfo.virtualLabStatus);
+			$("#<portlet:namespace/>processRequestDt").text(virtualLabInfo.virtualLabRequestDt);
+			$("#<portlet:namespace/>processConfirmDt").text(virtualLabInfo.virtualLabConfirmDt);
+			
+			if(virtualLabInfo.virtualLabStatus==1401001){
+				$("#mailCheckBox").show();
+			} else if (virtualLabInfo.virtualLabStatus==1401004){
+				$("#<portlet:namespace/>delete_button").show();
+			}
+			
+			$("#<portlet:namespace/>virtualLab-process-dialog").dialog("open");
+		},error:function(msg,e){
+			alert(e);
+			return false;
+		}
+	});
+}
+
+function <portlet:namespace/>submitVirtualLabRequest(){
+	
+	var searchForm = $("form[name=searchForm]").serialize();
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createActionUrl();
+		portletURL.setPortletId("edisonvirtuallabrequestmanagement_WAR_edisonvirtuallab2016portlet");
+		portletURL.setParameter("myaction", "updateVirtualLabStatus");
+		
+		jQuery.ajax({
+			type: "POST",
+			url: portletURL,		// simulationController로 요청하는 URL
+			async : false,
+			dataType: 'json',
+			success: function(result) {
+				// Close Popup
+				if(result.shareResult){
+					<portlet:namespace/>writeTimeLineAboutSharing(customId);
+				}
+				<portlet:namespace/>closePopup('${dialogId}');
+			},error:function(jqXHR, textStatus, errorThrown){
+				alert("<liferay-ui:message key='edison-share-simulation-failed-message'/>");
+			}
+		});
+	});
+}
+
 </script>
 
 <aui:script>
@@ -107,8 +200,9 @@ function <portlet:namespace/>goRequestManagementURL(groupId, groupName) {
 		data : dataForm,
 		success: function(msg) {
 		var requestPlid = msg.requestPlid;
+		var isAdmin = msg.isAdmin;
 		
-		if(requestPlid > 0) {
+		if(requestPlid > 0 || isAdmin) {
 			AUI().use("liferay-portlet-url", function(a) {
 				var portletURL = Liferay.PortletURL.createRenderURL();
 				portletURL.setPlid(requestPlid); <!-- 가상실험실 생성 관리 페이지 Plid -->
@@ -194,3 +288,107 @@ function <portlet:namespace/>goRequestManagementURL(groupId, groupName) {
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
 	<div id="<portlet:namespace/>pageListDiv" class="paging text-center"></div>
 </div>
+
+
+<div id="<portlet:namespace/>virtualLab-process-dialog" title="<liferay-ui:message key='edison-virtuallab-request-infomation' />" class="newWindow" style="display:none; background-color:white; padding:0px;">
+		<form id="virtualLabManageForm" name="virtualLabManageForm" method="post" action="<%= updateVirtualLabStatusURL %>" class="table-responsive panel edison-panel">
+			<input id="<portlet:namespace/>processVirtualLabId" name="<portlet:namespace/>processVirtualLabId" type="hidden" value="0"/>
+			<input id="<portlet:namespace/>requestUserId" name="<portlet:namespace/>requestUserId" type="hidden" value="0"/>
+			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
+			<input id="<portlet:namespace/>isDelete" name="<portlet:namespace/>isDelete" type="hidden" value=""/>
+			
+			<c:if test="${groupName ne null}">
+				<input id="<portlet:namespace/>groupName" name="<portlet:namespace/>groupName" type="hidden" value="${groupName}"/>
+			</c:if>
+			<div class="newWheader">
+				<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+					<div class="newWtitle"><liferay-ui:message key='edison-virtuallab-request-infomation' /></div>
+				</div>
+				<div class="newWclose" style="cursor: pointer;">
+					<img id="<portlet:namespace/>virtualLab-process-dialog-close-btn" name="<portlet:namespace/>virtualLab-process-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer;">
+				</div>
+			</div>
+	
+			<div class="table1_list" style="padding: 20px 30px 25px 30px;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+					<tbody>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-id' /></th>
+							<td class="puptxt" id="<portlet:namespace/>requestUserScreenName" />
+							<th class="puptitle"><liferay-ui:message key='edison-virtuallab-request-user-name' /></th>
+							<td id="<portlet:namespace/>requestUserFullName" class="puptxt"></td>
+						</tr>
+						<tr class="puptrline">
+							<th class="puptitle" ><liferay-ui:message key='edison-table-list-header-tutor' /></th>
+							<td id="<portlet:namespace/>requestPersonName" colspan="3" class="puptxt"></td>
+						</tr>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-virtuallab' /></th>
+							<td id="<portlet:namespace/>requestVirtualLabTitle" class="puptxt"></td>
+							<th class="puptitle"><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+							<td id="<portlet:namespace/>requestUniversityField" class="puptxt"></td>
+						</tr>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-resume' /></th>
+							<td id="<portlet:namespace/>requestVirtualLabDescription" colspan="3" class="puptxt">
+						</tr>
+					</tbody>
+				</table>
+				
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-virtuallab-confirm-info' />
+					</h3>
+				</div>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<colgroup>
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="30%" />
+					</colgroup>
+					<tbody>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-virtuallab-confirm-status' /></th>
+							<td colspan="3">
+								<select id="<portlet:namespace/>processStatus" name="<portlet:namespace/>processStatus" title="option" class="btn btn-default" >
+									${selectOptionStr}
+								</select>
+							</td>
+						</tr>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-process-note' /></th>
+							<td colspan="3">
+								<input id="<portlet:namespace/>processDescription" class="form-control" name="<portlet:namespace/>processDescription" type="text" maxlength="100" style="width:90%;"/>
+							</td>
+						</tr>
+						<tr class="puptrline">
+							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-req-date' /></th>
+							<td id="<portlet:namespace/>processRequestDt" class="puptxt"></td>
+							<th class="puptitle"><liferay-ui:message key='edison-table-list-header-confirm-date' /></th>
+							<td id="<portlet:namespace/>processConfirmDt" class="puptxt"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div style="text-align: right; margin:0px 25px 30px 0px;">
+				<label class="checkbox-label" id="mailCheckBox" style="display: none;">
+					<input type="checkbox" name="<portlet:namespace/>mailSendYn" id="<portlet:namespace/>mailSendYn" value="Y"/>
+					<i class="icon-envelope">
+						<liferay-ui:message key='edison-appstore-workspace-send-email' />
+					</i>
+				</label>
+				<input id="<portlet:namespace/>register_request_button" name="register_request_button" type="submit" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-save' />" onclick="<portlet:namespace/>submitForm();" />
+				<input id="<portlet:namespace/>delete_button" name="delete_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-delete' />" style="display: none; margin-left: 10px;" onclick="<portlet:namespace/>deleteVirtualLab();" />
+			</div>
+			
+		</form>
+	</div>

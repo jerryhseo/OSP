@@ -47,23 +47,30 @@ function loadJSMolFile( urlToLoad ){
                   disableInitialConsole: true
         };
         
-        /**
-        if(myJmol){
-		$('#canvas').html( Jmol.getAppletHtml(myJmol, Info) );
-			}
-			else{
-				Jmol.setDocument(0);
-				myJmol = Jmol.getApplet('myJmol', Info);
-				$('#canvas').html( Jmol.getAppletHtml(myJmol) );
-			}
+      
+        if(myJmol && myJmol._applet){
+        	console.log("[JSMOL] test update 1 ", myJmol);
+        	  console.log("[JSMOL] test if : "+ myJmol._applet);
+        	//Jmol.setInfo(myJmol, Info, true);
+        	//Jmol.loadFile(myJmol, currentUrl, Info);
+        	//Jmol.script(myJmol,Info);
+        	console.log("[JSMOL] update file 1");
+        	Jmol.loadFile(myJmol, currentUrl);
+        	console.log("[JSMOL] update file 2");
+		}
+		else{
+			console.log("[JSMOL] test update 2 create ");
+			Jmol.setDocument(0);
+			myJmol = Jmol.getApplet('myJmol', Info);
+			console.log("[JSMOL] create jmol object", myJmol);
+			$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+		}
         
-        */
-        Jmol.setDocument(0);
-		myJmol = Jmol.getApplet('myJmol', Info);
-		$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+        //Jmol.setDocument(0);
+		//myJmol = Jmol.getApplet('myJmol', Info);
+		//$('#canvas').html( Jmol.getAppletHtml(myJmol) );
 
-}
-    
+}  
 </script>
 
 </body>
