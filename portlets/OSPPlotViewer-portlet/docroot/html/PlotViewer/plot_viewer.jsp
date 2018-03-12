@@ -302,7 +302,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 			<portlet:namespace/>pathType: <portlet:namespace/>currentData.type(),
 			<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
 			<portlet:namespace/>parentPath: <portlet:namespace/>currentData.parent(),
-			<portlet:namespace/>fileName: <portlet:namespace/>currentData.fileName(),
+			<portlet:namespace/>fileName: <portlet:namespace/>currentData.name(),
 			<portlet:namespace/>relative: <portlet:namespace/>currentData.relative()
 	};
 	$.ajax({
@@ -311,7 +311,8 @@ function <portlet:namespace/>loadData( inputData, command ){
 		data  : data,
 		dataType : 'text',
 		success: function(data) {
-		    var title = OSP.Util.convertToPath(inputData.name()).parent();
+		    var title = <portlet:namespace/>currentData.name();
+		    $('#<portlet:namespace/>title').html('<h4>'+title+'</h4>');
 			<portlet:namespace/>drawPlot( data, title, '' );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
