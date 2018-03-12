@@ -16,7 +16,6 @@
 				EDVIR_ClassNote A
 			WHERE 
 				<isNotEmpty property="classId">
-				AND 
 					classId = #classId#
 				</isNotEmpty>
 			UNION
