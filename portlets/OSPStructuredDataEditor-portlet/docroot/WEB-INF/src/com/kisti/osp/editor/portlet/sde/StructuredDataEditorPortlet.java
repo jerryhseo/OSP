@@ -49,15 +49,13 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			PortletException {
 		String command = ParamUtil.getString(resourceRequest, "command");
 		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
+		Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath", ""));
+		String fileName = ParamUtil.getString(resourceRequest, "fileName", "");
+		String targetPath = parentPath.resolve(fileName).toString();
 		System.out.println("Command: "+command);
 		System.out.println("repositoryType: "+repositoryType);
 		
 		if( command.equalsIgnoreCase("READ_FILE")){
-			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
-			String fileName = ParamUtil.getString(resourceRequest, "fileName");
-			String targetPath = parentPath.resolve(fileName).toString();
-			System.out.println("Target Path: "+targetPath);
-			
 			try {
 				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, targetPath, repositoryType);
 			} catch (PortalException | SystemException e) {
@@ -66,15 +64,20 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			}
 		}
 		else if( command.equalsIgnoreCase("SAVE_AS")){
-			Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
-			String fileName = ParamUtil.getString(resourceRequest, "fileName");
 			String content = ParamUtil.getString(resourceRequest, "content");
-			String targetPath = parentPath.resolve(fileName).toString();
 			
 			try {
 				OSPFileUtil.saveFileContent(resourceRequest, targetPath, content, repositoryType);
 			} catch (PortalException | SystemException e) {
 				_log.error("Save file: "+e.getMessage());
+				throw new PortletException();
+			}
+		}
+		else if( command.equalsIgnoreCase("CHECK_DUPLICATED") ){
+			try {
+				OSPFileUtil.duplicated(resourceRequest, resourceResponse, targetPath, repositoryType);
+			} catch (PortalException | SystemException e) {
+				_log.error("duplicated(): "+targetPath);
 				throw new PortletException();
 			}
 		}
