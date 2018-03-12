@@ -406,33 +406,9 @@ public class TreeViewMonitoringController{
     public void transferJobDataToSDR(
         @RequestParam(value = "collectionId", required=false) String collectionId,
         @RequestParam(value = "jobUuid", required=false) String jobUuid,
-        @RequestParam(value = "scienceAppName", required=false) String scienceAppName,
+        @RequestParam(value = "scienceAppId", required=false) String scienceAppId,
         @RequestParam(value = "jobTitle", required=false) String jobTitle,
         ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
-        Gson result = new GsonBuilder().create();
-        Map<String, Object> resultMap  = new HashMap<String, Object>();
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json; charset=UTF-8");
-        ServiceContext sc = ServiceContextFactory.getInstance(request);
-        
-        log.info("collectionId : " + collectionId);
-        log.info("jobUuid : " + jobUuid);
-        log.info("scienceAppName : " + scienceAppName);
-        log.info("jobTitle : " + jobTitle);
-        try{
-            Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, 1, sc);
-            DatasetLocalServiceUtil.curate(ds, sc);
-            resultMap.put("isComplete", ds != null);
-        }catch(Exception e){
-            resultMap.put("isComplete", false);
-            resultMap.put("msg", e.getMessage());
-            log.error("transferJobDataToSDR", e);
-        }
-        
-        out.write(result.toJson(resultMap));
-        out.flush();
-        out.close();
-        
         //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
         //DatasetServiceUtil.curate(ds, sc);
         //DatasetServiceUtil.s
@@ -441,8 +417,43 @@ public class TreeViewMonitoringController{
         //        - collection ID
         //        - simulation title - job title (optional)
         //        - service context
+
+        final int REPO_ID = 1;
+        Gson result = new GsonBuilder().create();
+        Map<String, Object> resultMap  = new HashMap<String, Object>();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json; charset=UTF-8");
+        ServiceContext sc = ServiceContextFactory.getInstance(request);
         
+        log.info("collectionId : " + collectionId);
+        log.info("jobUuid : " + jobUuid);
+        log.info("scienceAppId : " + scienceAppId);
+        log.info("jobTitle : " + jobTitle);
+        ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
+        if(scienceApp != null){
+            String scienceAppName = scienceApp.getName() + "_" + scienceApp.getVersion();
+            log.info("scienceAppName : " + scienceAppName);
+            try{
+                Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, REPO_ID, sc);
+                DatasetLocalServiceUtil.curate(ds, sc);
+                resultMap.put("isComplete", ds != null);
+            }catch(Exception e){
+                resultMap.put("isComplete", false);
+                resultMap.put("msg", e.getMessage());
+                log.error("transferJobDataToSDR", e);
+            }
+        }else{
+            String msg = "there are no scienceApp - scienceAppId : " + scienceAppId;
+            resultMap.put("isComplete", false);
+            resultMap.put("msg", msg);
+            log.info(msg);
+        }
+        
+        out.write(result.toJson(resultMap));
+        out.flush();
+        out.close();
     }
+    
     // scienceApp 중간 파일 조회
     @ResourceMapping(value = "scienceAppMiddleFile")
     public void scienceAppMiddleFile(ResourceRequest request, ResourceResponse response)
