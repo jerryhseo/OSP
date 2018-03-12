@@ -26,7 +26,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 %>
 
-<div class="container-fluid common-editor-portlet file-explorer-portlet " style="height:inherit;">
+<div class="container-fluid osp-editor file-explorer-portlet " style="height:inherit;">
 	<div class="row-fluid header">
 		<div class="col-sm-10">
 			<input class="form-control" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
@@ -40,22 +40,17 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 					<ul class="dropdown-menu dropdown-menu-right">
 	                       <li><a href="javascript:<portlet:namespace/>takeSample()"><i class="icon-file"></i>Sample</a></li>
 	                       <li><a href="javascript:<portlet:namespace/>upload()"><i class="icon-upload"></i> Upload</a></li>
-	                       <li><a href="javascript:<portlet:namespace/>download()"><i class="icon-download-alt"></i> Download</a><./</li>					
-					<!-- 
-	                       <li id="<portlet:namespace/>sample"><a href="#" onclick="javascript:return false;"><i class="icon-file"></i> Take sample</a></li>
-	                       <li id="<portlet:namespace/>upload"><a href="#" onclick="javascript:return false;"><i class="icon-upload"></i> Upload</a></li>
-	                       <li id="<portlet:namespace/>download"><a href="#" onclick="javascript:return false;"><i class="icon-download-alt"></i> Download</a><./</li>
-					 -->
+	                       <li><a href="javascript:<portlet:namespace/>download()"><i class="icon-download-alt"></i> Download</a></li>					
 					</ul>
 				</div>
 			</div>	
 		</c:if>
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
+	<div class="row-fluid frame">
+		<iframe class="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/FileExplorer/load_explorer.jsp"></iframe>
 	</div>
 </div>
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-editor hidden">
 	<form action="<%= serveResourceURL.toString() %>" enctype="multipart/form-data" method="post" id="<portlet:namespace/>uploadForm">
 		<input type="file" id="<portlet:namespace/>selectFile" name="<portlet:namespace/>uploadFile"/>
 		<input type="text" id="<portlet:namespace/>parentPath" name="<portlet:namespace/>parentPath"/>

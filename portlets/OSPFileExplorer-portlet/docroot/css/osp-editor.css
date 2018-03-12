@@ -1,0 +1,54 @@
+.osp-editor {
+	border:none;
+	height: 100%;
+   	min-height:400px;
+   	margin: 0;
+}
+.osp-editor .header{
+	height: 40px;
+	margin:10px 5px 10px 5px;
+}
+.osp-editor .header [class*="col-"]{
+	padding-left: 0;
+	padding-right: 0;
+}
+.common-analyzer-portlet .no-header-frame{ 
+	vertical-align:middle; 
+	border:none; 
+	height: 100%;
+}
+.osp-editor .frame{ 
+	vertical-align:middle; 
+	border:none; 
+	height: 90%;
+}
+.osp-editor .canvas {
+   	border:none;
+   	height:100%;
+   	margin:0;
+   	padding:0;
+   	
+   	overflow:auto;
+}
+.osp-editor .iframe-canvas {
+   	border:none;
+   	height:100%;
+   	margin:0;
+   	padding:0;
+   	
+   	overflow:hidden;
+}
+
+.osp-editor .icon-menu {
+  font-size: 15px;
+  color: #5cb2d7;
+  border: 2px solid;
+  border-radius: 3px;
+  padding-left: 2px;
+  padding-right: 3px;
+  vertical-align: middle;
+}
+
+.osp-editor .hidden {
+	display: none;
+}
