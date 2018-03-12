@@ -953,7 +953,7 @@ function sdrcommon_collectionPopup(result){
         data : {
             "<portlet:namespace/>collectionId": result.value,
             "<portlet:namespace/>jobUuid": "${job.jobUuid}",
-            "<portlet:namespace/>scienceAppName": "${job.scienceAppName}",
+            "<portlet:namespace/>scienceAppId": "${job.scienceAppId}",
             "<portlet:namespace/>jobTitle": "${job.simulationTitle}" + " - " + "${job.jobTitle}"
         },
         method: 'POST',
