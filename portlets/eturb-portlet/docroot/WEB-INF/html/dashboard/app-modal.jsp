@@ -112,24 +112,26 @@
     </div>
 </div>
 
-<div class="modal fade" id="<portlet:namespace/>appExportModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">App List</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="saveBtn" onclick="" title="NEW">
-                    <i class='icon-large icon-share'> <liferay-ui:message key='choice'/></i>
-                </button>
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="<portlet:namespace/>appExportModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>appExportModal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4 class="modal-title">App List</h4>
+	            </div>
+	            <div class="modal-body">
+	                
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-success" id="saveBtn" onclick="" title="NEW">
+	                    <i class='icon-large icon-share'> <liferay-ui:message key='choice'/></i>
+	                </button>
+	            </div>
+	        </div>
+		</div>
+	</div>
 </div>
         
 <script>
@@ -333,7 +335,7 @@ function <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId){
         }
     });
     
-    $("#<portlet:namespace/>appExportModal").modal("show");
+    $("#<portlet:namespace/>appExportModal").modal({ "backdrop": "static", "keyboard": false });
 }
 
 function <portlet:namespace/>selectMeshFileCheck(){
