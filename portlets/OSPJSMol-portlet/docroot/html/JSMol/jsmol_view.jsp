@@ -43,13 +43,13 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp">
+	<div class="row-fluid frame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp">
 		</iframe>
 	</div>
 </div>
 
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable" style="padding:0px;margin-bottom:0px;">
 		<!-- title -->
 		<div class="panel-heading">
