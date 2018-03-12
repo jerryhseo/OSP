@@ -306,7 +306,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
     }
     
-    
     function deleteWorkflowInstance(panelDataType){
         if (!_isEmpty(PANEL_DATA.setting.form.workflowInstanceId, var_no_workflow_instance_msg)) {
             _confirm(var_remove_workflow_confirm_message, function () {

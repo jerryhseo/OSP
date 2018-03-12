@@ -321,10 +321,10 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
         }
         console.log("srcData ", srcData);
         console.log("toJSON srcData ", OSP.Util.toJSON(srcData));
-        showEditorWindow(editor, srcData, saveBtnHandler);
+        showEditorWindow(editor, srcData, saveBtnHandler, sciApp);
     }
 
-    function showEditorWindow(editor, inputData, saveBtnHandler){
+    function showEditorWindow(editor, inputData, saveBtnHandler, sciApp){
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId(editor.exeFileName);
@@ -339,8 +339,13 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
                 type: 'POST',
                 dataType: 'text',
                 success: function (renderResult) {
+                    console.log(sciApp);
+                    var saveBtns = { "ok": "Save", "cancel": "Cancel" };
+                    if(sciApp.workflowStatus){
+                       saveBtns = null;
+                    }
                     drawModal(editor.name, renderResult, null,
-                        { "ok": "Save", "cancel": "Cancel" },
+                        saveBtns,
                         function () {
                             fire(OSP.Event.OSP_LOAD_DATA, editor.exeFileName, OSP.Util.toJSON(inputData));
                         }, saveBtnHandler);
@@ -429,36 +434,35 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
     $.contextMenu({
         selector: '.jsplumb-endpoint.output-port',
         build: function ($trigger, e) {
-            if ($($($trigger[0]._jsPlumbRelatedElement)[0]).hasClass("loop-child-box")) {
-                alert(var_no_available_analyzer_message);
+            var sciApp = $($trigger[0]._jsPlumbRelatedElement).data();
+            if (sciApp.appType === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+                toastr["error"]("", var_no_available_analyzer_message);
                 return false;
             }
-            var items = {};
-            var sciApp = $($trigger[0]._jsPlumbRelatedElement).data();
-            var port = $trigger[0]._jsPlumb.getParameter("data");
-            var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
-            var analyzers;
-            if (sciApp.appType === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-                alert(var_no_available_analyzer_message);
-                return false;
-            } else {
-                analyzers = synchronousAjaxHelper.post("/delegate/services/app/outputports/analyzer",
+            if(sciApp.workflowStatus && sciApp.workflowStatus.status === WF_STATUS_CODE.COMPLETED){
+                var items = {};
+                var port = $trigger[0]._jsPlumb.getParameter("data");
+                var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
+                var analyzers = synchronousAjaxHelper.post("/delegate/services/app/outputports/analyzer",
                     {
                         "name": port.dataType().name,
                         "version": port.dataType().version
                     });
+                $.each(analyzers, function (_) {
+                    var analyzer = this;
+                    items[analyzer["name"]] = {
+                        name: analyzer["name"],
+                        icon: "edit",
+                        callback: function (key, options) {
+                            popAnalyzerWindow(analyzer, port, jsPlumbWindowId, sciApp);
+                        }
+                    };
+                });
+                return { items: items };
+            }else{
+                toastr["error"]("", var_no_available_analyzer_message);
+                return false;
             }
-            $.each(analyzers, function (_) {
-                var analyzer = this;
-                items[analyzer["name"]] = {
-                    name: analyzer["name"],
-                    icon: "edit",
-                    callback: function (key, options) {
-                        popAnalyzerWindow(analyzer, port, jsPlumbWindowId, sciApp);
-                    }
-                };
-            });
-            return { items: items };
         }
     });
 
