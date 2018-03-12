@@ -254,6 +254,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var _f = function(){
                 executor.createWorkfowInstance(PANEL_DATA.setting.form.workflowId, 
                     PANEL_DATA[panelDataType].form.workflowInstanceTitle, function(workflowInstance){
+                        if(panelDataType === "new"){
+                            PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
+                            designer.resetWorkflow();
+                            openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
+                        }
                         setMetaData({
                             "title": PANEL_DATA.setting.form.title,
                             "description": PANEL_DATA.setting.form.description,
@@ -261,11 +266,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                             "workflowInstanceTitle": workflowInstance.title,
                             "workflowInstanceId": workflowInstance.workflowInstanceId
                         });
-                        if(panelDataType === "new"){
-                            PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
-                            designer.resetWorkflow();
-                            openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
-                        }
                         toastr["success"]("", var_create_success_message);
                     });
                 closePanel();
@@ -327,14 +327,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         setTitle();
     }
 
-    function openWorkflowByWorkflowId(workflowId, notClose){
+    function openWorkflowByWorkflowId(workflowId, isNotNew){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
-            setMetaData({
-                "title": workflow.title,
-                "description": workflow.description,
-                "workflowId": workflowId
-            });
-            if(!notClose){
+            if(!isNotNew){
+                setMetaData({
+                    "title": workflow.title,
+                    "description": workflow.description,
+                    "workflowId": workflowId
+                });
                 closePanel();
             }
         });
