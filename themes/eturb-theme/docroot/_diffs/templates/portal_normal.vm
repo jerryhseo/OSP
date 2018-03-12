@@ -34,7 +34,7 @@
 		
 		#if($show_breadcrumbs)
 			<nav id="breadcrumbs">
-				#breadcrumbs()
+			
 			</nav>
 		#end
 		<article>

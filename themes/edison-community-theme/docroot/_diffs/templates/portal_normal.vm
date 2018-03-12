@@ -38,16 +38,18 @@
 		#parse ("$full_templates_path/edison_side_menu.vm")
 		
 		#if($show_breadcrumbs)
-			<nav id="breadcrumbs">
-				<div class="subtopvisual">
-					<div class="subtopvisualtxt">
-						$themeDisplay.getLayout().getName($themeDisplay.getLocale())
-					</div>
-					<div class="nsublocation">
-						#breadcrumbs()
+			<div id="nsubtopwrap">
+				<div class="container">
+					<div class="row" style="padding: 30px 0;height:120px;">
+						<div class="col-md-8" id="nsubtoplefttxt">
+							$themeDisplay.getLayout().getName($themeDisplay.getLocale())
+						</div>
+						<div class="col-md-4 text-right" id="nsubtoprighttxt">
+							#breadcrumbs()
+						</div>
 					</div>
 				</div>
-			</nav>
+			</div>
 		#end
 		
 		<div class="$content_class">
