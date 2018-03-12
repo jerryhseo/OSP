@@ -290,7 +290,6 @@ label.checkbox-label input[type=checkbox]{
 	});
 	
 	function <portlet:namespace/>dataSearchList(pageNumber) {
-		console.log("pageNum : " + pageNumber);
 		if(pageNumber == 0) {
 			$("#<portlet:namespace/>cur_page").val(1);
 			$("#<portlet:namespace/>search_parameter").val("");
