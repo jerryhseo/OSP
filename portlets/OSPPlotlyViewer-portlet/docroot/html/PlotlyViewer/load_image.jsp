@@ -62,11 +62,10 @@
  	         frame: {
  	        	duration : data.layout.updatemenus[0].buttons[0].args[1].frame.duration,
  	        	redraw : data.layout.updatemenus[0].buttons[0].args[1].frame.redraw
- 	        	 
  	         }
  	       }
  	     )
- 	   })a
+ 	   })
      } else {
        Plotly.newPlot(gd, data);
      }
