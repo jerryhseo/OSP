@@ -57,7 +57,7 @@
     data.divClass = gd;
     if (data.frames) {
  	   Plotly.newPlot(gd, data).then(function() {
- 	     Plotly.animate(gd, data.frame,
+ 	     Plotly.animate(gd, data.frames,
  	       {
  	         frame: {
  	        	duration : data.layout.updatemenus[0].buttons[0].args[1].frame.duration,
