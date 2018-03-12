@@ -33,12 +33,12 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp">
+	<div class="row-fluid frame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp">
 		</iframe>
 	</div>
 </div>
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
               <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
               <div>

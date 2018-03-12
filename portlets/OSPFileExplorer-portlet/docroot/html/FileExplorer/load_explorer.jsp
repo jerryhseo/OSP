@@ -94,7 +94,7 @@
 			
 			if( folderPath !== '' && folderPath !== '/' ){
 				var parentPath = (getParentPath( folderPath)) === '' ? '/' : getParentPath( folderPath);
-				console.log('ParentPath: '+parentPath);
+				//console.log('ParentPath: '+parentPath);
 				var parentNode = {
 					'id': parentPath,
 					'text': '..',
@@ -173,20 +173,20 @@
 				}).bind('select_node.jstree',function(e, data){
 						if( data.node.type == 'file' ){
 							var parentPath = getParentPath( data.node.id );
-							console.log('file: '+data.node.id);
+							//console.log('file: '+data.node.id);
 							var fileName = getFileName( data.node.id );
 							if( !inDownload ){
 								passSelectedFile( parentPath, fileName, 'file' );
 							}
 						}else if( data.node.type == 'closed-folder'){
-							console.log('closed-folder: '+data.node.id);
+							//console.log('closed-folder: '+data.node.id);
 							if( !inDownload ){
 								passSelectedFile( data.node.id, '' );
 							}
 							lookupFolder( data.node.id, '' );
 						}
 						else if( data.node.type == 'prev-folder' ){
-							console.log( 'prev-folder: '+data.node.id);
+							//console.log( 'prev-folder: '+data.node.id);
 							var nextRootPath = data.node.id;
 
 							if( !inDownload ){

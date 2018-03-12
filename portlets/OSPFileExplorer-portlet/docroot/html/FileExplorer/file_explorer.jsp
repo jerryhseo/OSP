@@ -95,7 +95,7 @@ var <portlet:namespace/>runningMode = '_DEBUG_';
 if( !<portlet:namespace/>eventEnable ){
 	var inputData = '<%=inputData%>';
 	if( $.isEmptyObject( inputData ) ){
-		console.log('eventEnable false but inputData is empty......');
+		//console.log('eventEnable false but inputData is empty......');
 	    <portlet:namespace/>baseDir = new OSP.InputData();
 	    <portlet:namespace/>baseDir.parent( '');
 	    <portlet:namespace/>baseDir.name('');
@@ -104,7 +104,7 @@ if( !<portlet:namespace/>eventEnable ){
 	    <portlet:namespace/>baseDir.relative( true );
 	}
 	else{
-		console.log('eventEnable false with inputData......', inputData );
+		//console.log('eventEnable false with inputData......', inputData );
 	    <portlet:namespace/>baseDir = new OSP.InputData(JSON.parse(inputData));
 	    if( !<portlet:namespace/>baseDir.repositoryType() )
 	    	<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
@@ -112,7 +112,7 @@ if( !<portlet:namespace/>eventEnable ){
 	
 	<portlet:namespace/>selectedFile = <portlet:namespace/>baseDir.clone();
 	
-	console.log( 'FileExplorer: ', <portlet:namespace/>selectedFile );
+	//console.log( 'FileExplorer: ', <portlet:namespace/>selectedFile );
 	<portlet:namespace/>initFileExplorer(<portlet:namespace/>selectedFile );
 }
 
@@ -466,7 +466,7 @@ function <portlet:namespace/>lookupPath(
 					<portlet:namespace/>parentPath: parentPath,
 					<portlet:namespace/>fileName: fileName
 			};
-	console.log( 'lookupPath: ', data );
+	// console.log( 'lookupPath: ', data );
 	
 	var fileInfos = null;
 	
