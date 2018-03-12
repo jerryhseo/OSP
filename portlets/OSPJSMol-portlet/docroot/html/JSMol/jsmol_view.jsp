@@ -190,14 +190,16 @@ $('#<portlet:namespace/>selectFile').bind(
 		reader.onload = function (e) {
 			$('#<portlet:namespace/>canvas').each(function(){
 				$(this).one("load", function(){
-					$(this).prop('contentWindow').loadJSMolFile(
-							e.target.result, $('#<portlet:namespace/>canvas').width(), $('#<portlet:namespace/>canvas').height()
-					);
-					
+					$(this).prop('contentWindow').loadJSMolFile(e.target.result);
+					console.log("[JSMOL] local file load event 1 : ", e.target);
+					console.log("[JSMOL] local file load event 2 : ", e.target.result);
 				});
 			});
-	                
-			<portlet:namespace/>setTitle(e.target.result);
+	        console.log("[JSMOL] local file test : ", input);
+			console.log("[JSMOL] local file test2 : ", input.files[0]);
+			
+	        
+			<portlet:namespace/>setTitle(input.files[0].name);
 		    <portlet:namespace/>currentData = null;
 			delete <portlet:namespace/>currentData;
 		};
