@@ -477,9 +477,9 @@ function <portlet:namespace/>lookupPath(
 		dataType : 'json',
 		success: function(data) {
 			fileInfos = data;
-			console.log(JSON.stringify(fileInfos, null, 4));
+			//console.log(JSON.stringify(fileInfos, null, 4));
 			<portlet:namespace/>loadFileExplorer( 
-			                               parentPath,
+			                               fileInfos.parentPath,
 			                               fileInfos.fileInfos );
 		},
 		error:function(data,e){
@@ -490,7 +490,7 @@ function <portlet:namespace/>lookupPath(
 	
 	return fileInfos;
 }
-function <portlet:namespace/>loadFileExplorer( parentPath, fileList ){
+function <portlet:namespace/>loadFileExplorer( folderPath, fileList ){
 	//console.log('loadFileExplorer parentPath: ', parentPath);
     setTimeout(
 	    function(){
@@ -498,14 +498,14 @@ function <portlet:namespace/>loadFileExplorer( parentPath, fileList ){
 	        
 	        if( <portlet:namespace/>iframeReady() && iframe.contentWindow.loadFileExplorer){
 	    		iframe.contentWindow.loadFileExplorer(
-	    				parentPath,
+	    				folderPath,
 	    				fileList,
 	    				$('#<portlet:namespace/>canvas').width(),
 	    				$('#<portlet:namespace/>canvas').height()
 	    		);
 	    	}
 	    	else{
-	    	    <portlet:namespace/>loadFileExplorer(parentPath, fileList );
+	    	    <portlet:namespace/>loadFileExplorer(folderPath, fileList );
 	    	}
 	    }, 
 	    10

@@ -2,7 +2,8 @@
 	border:none;
 	height: 100%;
    	min-height:400px;
-   	margin: 0;
+   	margin-left: 30px !important;
+   	margin-right: 30px !important;
 }
 .osp-editor .header{
 	height: 40px;

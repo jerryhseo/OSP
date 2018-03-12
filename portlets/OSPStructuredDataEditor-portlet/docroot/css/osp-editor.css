@@ -16,6 +16,8 @@
 	vertical-align:middle; 
 	border:none; 
 	height: 100%;
+   	margin-left: 30px !important;
+   	margin-right: 30px !important;
 }
 .osp-editor .frame{ 
 	vertical-align:middle; 
