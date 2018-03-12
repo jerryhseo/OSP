@@ -192,7 +192,6 @@ $('#<portlet:namespace/>selectFile').bind(
 				$(this).prop('contentWindow').loadJSMolFile(e.target.result);
 					console.log("[JSMOL] local file load event 1 : ", e.target);
 					console.log("[JSMOL] local file load event 2 : ", e.target.result);
-				});
 			});
 	        console.log("[JSMOL] local file test : ", input);
 			console.log("[JSMOL] local file test2 : ", input.files[0]);
