@@ -47,9 +47,10 @@ function loadJSMolFile( urlToLoad ){
                   disableInitialConsole: true
         };
         
-        console.log("[JSMOL] test if : "+ myJmol._applet);
+      
         if(myJmol && myJmol._applet){
         	console.log("[JSMOL] test update 1 ", myJmol);
+        	  console.log("[JSMOL] test if : "+ myJmol._applet);
         	//Jmol.setInfo(myJmol, Info, true);
         	//Jmol.loadFile(myJmol, currentUrl, Info);
         	//Jmol.script(myJmol,Info);
