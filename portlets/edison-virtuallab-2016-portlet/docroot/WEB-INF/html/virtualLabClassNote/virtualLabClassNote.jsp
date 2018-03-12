@@ -212,12 +212,14 @@ function(popupIdToClose) {
 		<div class="conwrap2left">
 			<div class="conwraptit01">
 				<liferay-ui:message key='edison-virtuallab-class-file-download' />
-				<div class="moreicon">
-					<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
-						<liferay-ui:message key='edison-virtuallab-scienceapp-management' />
-						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
-					</a> 
-				</div>
+				<c:if test="${fn:toUpperCase(role) eq 'MANAGER' || fn:toUpperCase(role) eq 'ADMIN' }">
+					<div class="moreicon">
+						<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
+							<liferay-ui:message key='edison-virtuallab-scienceapp-management' />
+							<img src="${contextPath}/images/moreicon.png" width="11" height="11">
+						</a> 
+					</div>
+				</c:if>
 			</div>
 			
 			<!--파일제목 및 다운로드-->

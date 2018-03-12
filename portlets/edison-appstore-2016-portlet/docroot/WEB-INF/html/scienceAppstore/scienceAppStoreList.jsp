@@ -176,7 +176,7 @@
 							<button class="btn btn-default" id="keyWordB" type="button">
 								<i class="icon-search"></i>
 							</button>
-							<button class="btn btn-default" id="initB">Clear</button>
+							<button class="btn btn-default" type="button" id="initB">Clear</button>
 						</div>
 					</div>
 				</div>

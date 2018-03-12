@@ -51,7 +51,7 @@
     data.layout.height = h;
     data.layout.margin = {t:20};
 
-    var gd3 = d3.select('.plotcontent').append('div');
+    var gd3 = d3.select('#myDiv');
 
     gd = gd3.node();
     data.divClass = gd;

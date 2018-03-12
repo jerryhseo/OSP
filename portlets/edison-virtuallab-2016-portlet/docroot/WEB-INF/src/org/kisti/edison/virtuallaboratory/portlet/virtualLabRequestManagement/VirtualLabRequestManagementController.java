@@ -18,15 +18,18 @@ import javax.portlet.ResourceResponse;
 
 import org.kisti.edison.customauthmanager.service.UserGroupRoleCustomLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
+import org.kisti.edison.model.EdisonFileConstants;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonEmailSenderUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
+import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HtmlFormUtils;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
+import org.kisti.edison.virtuallaboratory.service.VirtualLabClassLocalServiceUtil;
 import org.kisti.edison.virtuallaboratory.service.VirtualLabLocalServiceUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,6 +58,8 @@ import com.liferay.portal.service.persistence.UserUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 import net.sf.json.JSONObject;
 
@@ -169,7 +174,7 @@ public class VirtualLabRequestManagementController {
 		String searchField = ParamUtil.get(request, "search_parameter", "");
 		String status = ParamUtil.get(request, "select_virtualLab_status", "0");
 		int curPage = ParamUtil.get(request, "cur_page", 1);
-		int linePerPage = ParamUtil.get(request, "select_line", 5);
+		int linePerPage = ParamUtil.get(request, "select_line", 10);
 		
 		int pagePerBlock = 10;
 		int begin = linePerPage * (curPage - 1);
@@ -224,16 +229,22 @@ public class VirtualLabRequestManagementController {
 	@ActionMapping(params = "myaction=updateVirtualLabStatus")
 	public void updateVirtualLabStatus(ActionRequest request, ActionResponse response) {
 		try {
-			long userId = PortalUtil.getUserId(request);
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+			
+			long userId = PortalUtil.getUserId(request);
 			long groupId = ParamUtil.get(request, "groupId", themeDisplay.getSiteGroupId());
 			long companyId = PortalUtil.getCompanyId(request);
+			
+			
+			Locale locale = themeDisplay.getLocale();
+			User user = PortalUtil.getUser(request);
 			
 			String processStatus = ParamUtil.get(request, "processStatus", "1401001");
 			String requestUserId = ParamUtil.get(request, "requestUserId", "0");
 			String virtualLabId = ParamUtil.get(request, "processVirtualLabId", "0");
 			String groupName = ParamUtil.get(request, "groupName", "");
 			String mailSendYn = ParamUtil.get(request, "mailSendYn", "N");
+			boolean isDelete = Boolean.parseBoolean(ParamUtil.get(request, "isDelete", "false"));
 			
 			Map<String, String> param = new HashMap<String, String>();
 			param.put("groupId", String.valueOf(groupId));
@@ -251,8 +262,57 @@ public class VirtualLabRequestManagementController {
 					Role role = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_OWNER);		// Role Id 확인
 					UserGroupRoleCustomLocalServiceUtil.addUserGroupRoleCustom(Long.parseLong(requestUserId), groupId, role.getRoleId(), Long.parseLong(virtualLabId));
 				}
-			} else if (processStatus.equals("1401001") || processStatus.equals("1401003")) {	// 요청 또는 반려일때
+			} else if (processStatus.equals("1401001") || processStatus.equals("1401003") || processStatus.equals("1401005")) {	// 요청 또는 반려, 비활성화 일때
 				
+			} else if(isDelete){	// 삭제
+				VirtualLabLocalServiceUtil.updateVirtualLabDisable(Long.parseLong(virtualLabId), "N");
+				
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("groupId", groupId);
+				params.put("virtualLabId", ParamUtil.get(request, "virtualLabId", "0"));
+				List<Map<String, Object>> virtualLabClassList = null;
+				
+				Role virtualLabOwner = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_OWNER);
+				
+				if (!(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)
+						|| EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)
+						|| EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)
+						|| UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwner.getRoleId(), Long.parseLong(virtualLabId)))) {
+					params.put("userId", user.getUserId());
+					params.put("virtualLabClassOwnerName", EdisonRoleConstants.VIRTUAL_CLASS_OWNER);
+					params.put("virtualLabClassManagerName", EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
+				}
+				
+				virtualLabClassList = VirtualLabClassLocalServiceUtil.getVirtualClassList(params, locale);
+				
+				for (Map<String, Object> resultMap : virtualLabClassList) {
+					long classId = GetterUtil.get(resultMap.get("classId"), 0L);
+					
+					if(classId > 0) {
+						VirtualLabClassLocalServiceUtil.updateVirtualLabClassDisable(classId, "N");
+						
+						// 게시판 파일 삭제
+						List<Long> boardSeqList = VirtualLabClassLocalServiceUtil.getVirtualClassBoardSeqList(groupId, classId);
+						if(boardSeqList != null && boardSeqList.size() > 0) {
+							for (Long boardSeq : boardSeqList) {
+								List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", "_"+classId+"_" + boardSeq , EdisonFileConstants.BOARD_NOTICE);
+								if(fileList != null){
+									EdisonFileUtil.deleteGroupEdisonFile(groupId, EdisonFileConstants.BOARD_NOTICE , groupId+"__"+classId+"_" + boardSeq);
+								}
+							}
+						}
+					}
+				}
+				Map<String, Object> labInfo = VirtualLabLocalServiceUtil.getVirtualLabInfomation(Long.parseLong(virtualLabId), locale);
+				long iconId =  GetterUtil.get(labInfo.get("iconId"), 0L);
+				if(iconId != 0){
+					// 기존 파일 삭제
+					try{
+						DLFileEntryLocalServiceUtil.deleteDLFileEntry(iconId);
+					}catch(NoSuchFileEntryException e){}
+				}
+				
+				return;
 			}
 			
 			//가상실험실 승인 내역을 튜터에게 전송
