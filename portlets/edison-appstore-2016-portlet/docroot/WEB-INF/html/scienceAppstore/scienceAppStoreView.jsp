@@ -350,13 +350,6 @@
 					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
-						<%-- <img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${params.solverId}');"/> --%>
-					</c:if>
-					<c:if test="${solver.appType eq 'Editor' and isSignedIn and solver.openLevel ne downloadOnly}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor();"/>
-					</c:if>
-					<c:if test="${solver.appType eq 'Analyzer' and isSignedIn and solver.openLevel ne downloadOnly}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer();"/>
 					</c:if>
 				</li>
 			</ul>
