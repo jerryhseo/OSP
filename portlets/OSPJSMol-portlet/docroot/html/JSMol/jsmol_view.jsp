@@ -189,8 +189,7 @@ $('#<portlet:namespace/>selectFile').bind(
             
 		reader.onload = function (e) {
 			$('#<portlet:namespace/>canvas').each(function(){
-				$(this).one("load", function(){
-					$(this).prop('contentWindow').loadJSMolFile(e.target.result);
+				$(this).prop('contentWindow').loadJSMolFile(e.target.result);
 					console.log("[JSMOL] local file load event 1 : ", e.target);
 					console.log("[JSMOL] local file load event 2 : ", e.target.result);
 				});
