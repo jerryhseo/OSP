@@ -1089,6 +1089,34 @@ public class OSPFileUtil {
     	return targetPath;
     }
     
+    public static Path getRepositoryPath(String userName, String path, String repoType)
+        throws PortalException, SystemException{
+        if("edison".equals(userName)){
+            userName = "edisonadm";
+        }
+        Path targetPath;
+        OSPRepositoryTypes repositoryType = OSPRepositoryTypes.valueOf(repoType);
+        switch (repositoryType){
+            case USER_HOME:
+            case USER_JOBS:
+                targetPath = Paths.get(OSPPropsUtil.getUserRootDirPath(), userName,
+                    repositoryType.value(), path);
+                break;
+            case PROVENANCE:
+                targetPath = Paths.get(OSPPropsUtil.getProvenanceRootDirPath()).resolve(path);
+                break;
+            case ICECAP:
+                targetPath = Paths.get(OSPPropsUtil.getIcecapRootDirPath()).resolve(path);
+                break;
+            case SCIENCEAPP:
+                targetPath = Paths.get(OSPPropsUtil.getSpyGlassAppsDirPath()).resolve(path);
+                break;
+            default:
+                targetPath = Paths.get("/");
+        }
+        return targetPath;
+    }
+    
     public static void getFileURL( 
     		PortletRequest portletRequest, 
     		PortletResponse portletResponse, 

@@ -161,7 +161,7 @@
 /* main visual > right bottom > buttons */
 .classtbtn {
 	position: absolute;
-	right: 40px;
+	right: 150px;
 	top: 390px;
 	min-width: 345px;
 	min-height: 40px;

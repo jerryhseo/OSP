@@ -2708,7 +2708,6 @@
 			var layout = Workbench.layout();
 			var scienceApp = Workbench.scienceApp();
 			
-			console.log( 'Switch Portlet to '+portletInstanceId );
 			layout.switchPortlet( 
 						portletInstanceId, 
 						Workbench.id(), 
