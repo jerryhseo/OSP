@@ -47,20 +47,20 @@ function loadJSMolFile( urlToLoad ){
                   disableInitialConsole: true
         };
         
-        /**
-        if(myJmol){
-		$('#canvas').html( Jmol.getAppletHtml(myJmol, Info) );
-			}
-			else{
-				Jmol.setDocument(0);
-				myJmol = Jmol.getApplet('myJmol', Info);
-				$('#canvas').html( Jmol.getAppletHtml(myJmol) );
-			}
         
-        */
-        Jmol.setDocument(0);
-		myJmol = Jmol.getApplet('myJmol', Info);
-		$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+        if(myJmol){
+        	Jmol.setInfo(myJmol, Info, true);
+		}
+		else{
+			Jmol.setDocument(0);
+			myJmol = Jmol.getApplet('myJmol', Info);
+			console.log("[JSMOL] create jmol object", myJmol);
+			$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+		}
+        
+        //Jmol.setDocument(0);
+		//myJmol = Jmol.getApplet('myJmol', Info);
+		//$('#canvas').html( Jmol.getAppletHtml(myJmol) );
 
 }
     
