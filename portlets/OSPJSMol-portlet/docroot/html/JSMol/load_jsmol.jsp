@@ -53,8 +53,9 @@ function loadJSMolFile( urlToLoad ){
         	//Jmol.setInfo(myJmol, Info, true);
         	//Jmol.loadFile(myJmol, currentUrl, Info);
         	//Jmol.script(myJmol,Info);
-        	console.log("[JSMOL] update file");
+        	console.log("[JSMOL] update file 1");
         	Jmol.loadFile(myJmol, currentUrl);
+        	console.log("[JSMOL] update file 2");
 		}
 		else{
 			console.log("[JSMOL] test update 2 create ");
