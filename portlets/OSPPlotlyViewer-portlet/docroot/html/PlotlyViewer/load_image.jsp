@@ -39,9 +39,9 @@
   };
 
   readJson = function (inData){
-	  console.log("[PlotyViewer] load data1 ");
+//	  console.log("[PlotyViewer] load data1 ");
 	  var data = JSON.parse(inData);
-	 console.log("[PlotyViewer] load data2 ", data);
+//	 console.log("[PlotyViewer] load data2 ", data);
     var h = $( window ).height();
     var w = $( window ).width();
 
@@ -67,7 +67,7 @@
   };
 
   loadImagePlotly = function (url_path){
-	  console.log("[PlotyViewer] load data ");
+//	  console.log("[PlotyViewer] load data ");
     $.ajax({
       url: url_path,
       success: function (data){
