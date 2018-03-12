@@ -441,6 +441,7 @@ function <portlet:namespace/>downloadCurrentFile(){
         var sep = (base.indexOf('?') > -1) ? '&' : '?';
         var url = base + sep + $.param(data);
         location.href = url;
+        <portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
 		//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
     }
 }
