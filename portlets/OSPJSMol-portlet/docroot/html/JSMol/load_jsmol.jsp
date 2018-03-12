@@ -17,12 +17,14 @@
  * Golbal functions
  ***********************************************************************/
 $(window).resize( function(e){
-	//$('#canvas').empty();
-	console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
-	//parent.jsMolresize();
-	Jmol.resizeApplet(myJmol, [$('body').width(), $('body').height()]);
+	if(myJmol){
+		//$('#canvas').empty();
+		//console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
+		//parent.jsMolresize();
+		Jmol.resizeApplet(myJmol, [$('body').width(), $('body').height()]);
+		//console.log("[JSMol] resize Applet end.");
+	}
 	
-	console.log("[JSMol] resize Applet end.");
 });
  
 function loadJSMolFile( urlToLoad ){
