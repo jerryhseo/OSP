@@ -230,6 +230,9 @@ function <portlet:namespace/>virtualLabDisable(virtualLabId) {
 				} else if (result == "200") {
 					alert("<liferay-ui:message key='edison-data-delete-success' />");
 					<portlet:namespace/>moveLabList();
+				} else if (result == "201") {
+					alert("<liferay-ui:message key='edison-data-delete-request-success' />");
+					<portlet:namespace/>moveLabList();
 				} else if (result == "500") {
 					alert("<liferay-ui:message key='edison-virtuallab-delete-alert-fail' />");
 				} else {

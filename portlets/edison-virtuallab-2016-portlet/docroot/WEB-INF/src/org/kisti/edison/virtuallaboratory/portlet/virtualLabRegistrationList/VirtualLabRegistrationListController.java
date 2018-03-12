@@ -248,6 +248,36 @@ public class VirtualLabRegistrationListController {
 		out.write(obj.toString());
 	}
 	
+	
+	@ResourceMapping(value="virtualLabDeleteCancel")
+	public void virtualLabDeleteCancel(ResourceRequest request, ResourceResponse response) throws SystemException, IOException, PortalException {
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+		
+		long groupId = ParamUtil.get(request, "groupId", themeDisplay.getSiteGroupId());
+		String virtualLabId = ParamUtil.get(request, "virtualLabId", "0");
+		User user = PortalUtil.getUser(request);
+		String processStatus = "1401002";
+		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("groupId", String.valueOf(groupId));
+		param.put("userId", String.valueOf(user.getUserId()));
+		param.put("virtualLabId",virtualLabId);
+		param.put("virtualLabConfirmDescription",ParamUtil.get(request, "processDescription", ""));
+		param.put("virtualLabStatus",processStatus);
+		
+		String resultCode = "400";
+		if(VirtualLabLocalServiceUtil.updateVirtualLabStatus(param) != null){
+			resultCode = "200";
+		}
+		
+		JSONObject obj = new JSONObject();
+		obj.put("resultCode", resultCode);
+		
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
+	
 	@RenderMapping(params = "myrender=virtualLabRequest")
 	public String virtualLabRequest(RenderRequest request, ModelMap model) throws PortalException, SystemException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);

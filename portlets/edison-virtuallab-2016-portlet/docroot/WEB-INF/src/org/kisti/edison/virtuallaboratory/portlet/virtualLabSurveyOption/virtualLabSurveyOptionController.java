@@ -116,7 +116,7 @@ public class virtualLabSurveyOptionController {
 				SurveyLocalServiceUtil.addVirtualLabSurvey(virtualLabId, surveySeqNo);
 			}
 			response.setRenderParameter("virtualLabId", ParamUtil.get(request, "virtualLabId", "0"));
-
+			response.setRenderParameter("myRender", "virtualLabManagementDetail");
 			SessionMessages.add(request, EdisonMessageConstants.UPDATE_SUCCESS);
 		} catch (Exception e) {
 			log.error(e);
