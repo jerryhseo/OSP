@@ -26,19 +26,19 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 %>
 
 
-<div class="container-fluid common-analyzer-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-3 col-sm-1" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor" style="margin-left:10px">
-					<li id="<portlet:namespace/>openLocal" style="margin-left:10px"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer" style="margin-left:10px"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download" style="margin-left:10px"><i class="icon-download-alt"> Download</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li ><a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt"> Download</i></a></li> 
 				</ul>
 			</div>
 		</div>	
@@ -141,12 +141,12 @@ $("#<portlet:namespace/>closeDialog").click(function() {
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
+function <portlet:namespace/>openLocalFile(){
+	$('#<portlet:namespace/>selectFile').click();
+}
 
-$('#<portlet:namespace/>openServer').click(function(){
-    var inputData;
+function <portlet:namespace/>openServerFile(){
+	var inputData;
     if(<portlet:namespace/>currentData && 
         <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.CONTEXT ){
@@ -160,12 +160,12 @@ $('#<portlet:namespace/>openServer').click(function(){
     }
    
     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
+}
 
-$('#<portlet:namespace/>download').click(function(){
+function <portlet:namespace/>downloadCurrentFile(){
 	console.log("[JSMol] download Request.");
 	<portlet:namespace/>downloadCurrentFile();
-});
+}
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
