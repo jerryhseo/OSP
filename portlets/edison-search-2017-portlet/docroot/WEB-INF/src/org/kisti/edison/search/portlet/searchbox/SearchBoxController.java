@@ -224,7 +224,7 @@ public class SearchBoxController {
         long openDataPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
             "edisondatacollection_WAR_edisonsimulationportlet");
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "Workbench_WAR_OSPWorkbenchportlet");
+            "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
