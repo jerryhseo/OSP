@@ -622,14 +622,14 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .attr("height","22px")
 				   .css("cursor","pointer")
 				   .appendTo($resultDownArea);
-// 		if($resultViewArea.attr("postprocess-state")=="Y"){
+ 		if($resultViewArea.attr("postprocess-state")=="Y"){
 			$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
 					   .attr("width","22px")
 					   .attr("height","22px")
 					   .css("cursor","pointer")
  					   .click(function(){<portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid);})
 					   .appendTo($resultViewArea);
-// 		}
+ 		}
 	//실패
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
 		if($middleCheckArea.attr("logFileProcess-state") == "Y"){

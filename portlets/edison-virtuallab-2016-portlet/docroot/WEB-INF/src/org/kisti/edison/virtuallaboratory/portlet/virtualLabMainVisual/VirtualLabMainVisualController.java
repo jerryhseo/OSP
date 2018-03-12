@@ -221,6 +221,11 @@ public class VirtualLabMainVisualController {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 		Locale locale = themeDisplay.getLocale();
 		
+		String processStatus = "1401004";
+		String requestUserId = user.getUserId()+"";
+		String groupName = ParamUtil.get(request, "groupName", "");
+		String mailSendYn = ParamUtil.get(request, "mailSendYn", "N");
+		
 		String result = "400";	// 삭제 실패
 		
 		long virtualLabId = ParamUtil.get(request, "virtualLabId", 0L);
@@ -232,8 +237,9 @@ public class VirtualLabMainVisualController {
 		log.info(UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), virtualLabId));
 		if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR) ||	// 포털 Admin Check
 				EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR) ||	// 사이트 Admin Check
-				EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER) ||	// 사이트 Owner Check
-				UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), virtualLabId)) {
+				EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)	// 사이트 Owner Check
+				) {
+			// Portal Admin, Site Admin, Site Owner인 경우 강좌 삭제
 			
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("groupId", groupId);
@@ -292,6 +298,20 @@ public class VirtualLabMainVisualController {
 				}
 				
 			}
+		} else if(UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), virtualLabId)) {
+			// Portal Admin, Site Admin, Site Owner이 아니지만 강의 관리자의 경우 강좌 삭제 요청
+			
+			Map<String, String> param = new HashMap<String, String>();
+			param.put("groupId", String.valueOf(groupId));
+			param.put("userId", String.valueOf(user.getUserId()));
+			param.put("virtualLabId", String.valueOf(virtualLabId));
+			param.put("virtualLabConfirmDescription",ParamUtil.get(request, "processDescription", ""));
+			param.put("virtualLabStatus",processStatus);
+			
+			if(VirtualLabLocalServiceUtil.updateVirtualLabStatus(param) != null){
+				result = "201";	// 삭제 성공
+			}
+			
 		} else {
 			result = "300";	// 삭제 실패 (권한 없음)
 		}
