@@ -648,6 +648,9 @@ throw new Error('AdminLTE requires jQuery')
     		});
     	}
     }
+    
+    //FLOW-GRID
+    $('#workbench-layout-area  .flow-grid div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
   };
 
   Layout.prototype.fixSidebar = function () {
