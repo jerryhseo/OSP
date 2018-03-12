@@ -137,7 +137,7 @@
 				</div>
 			</div>
 			
-			<div class="table1_list">
+			<div class="table-responsive panel edison-panel table1_list">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<tbody id="<portlet:namespace/>virtualLabListBody">
 					</tbody>
