@@ -10,6 +10,11 @@
 </liferay-portlet:renderURL> 
 <liferay-portlet:resourceURL var="getSurveyListURL" id="getSurveyList" copyCurrentRenderParameters="false" />
 
+<liferay-portlet:renderURL var="virtualLabManagementDetailURL" portletName="edisonvirtuallabmanagementlist_WAR_edisonvirtuallab2016portlet">
+	<liferay-portlet:param name="myRender" value="virtualLabManagementDetail" />
+	<portlet:param name="edionCopyParam" value="true" />
+</liferay-portlet:renderURL>
+
 <% 
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
@@ -224,6 +229,13 @@ function <portlet:namespace/>openStudentManagement(){
 	});
 }
 
+function <portlet:namespace/>moveVirtualLab(virtualLabId, groupId) {
+	var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
+	var portletName = "_edisonvirtuallabmanagementlist_WAR_edisonvirtuallab2016portlet_";
+	var URL = virtualLabManagementDetailURL + "&"+portletName+"virtualLabId=" + virtualLabId+"&"+portletName+"groupId="+groupId;
+	window.location.href = URL;
+}
+
 </script>
 
 <aui:script>
@@ -290,7 +302,7 @@ function <portlet:namespace/>myClass(){
 		</div>
 		
 		<!--공지사항-->
-		<liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r"  queryString="&customId=class_${classInfo.classId}&boardGroupId=${classInfo.groupId}&redirectName=${redirectName}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }" />
+			<liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r"  queryString="&customId=class_${classInfo.classId}&boardGroupId=${classInfo.groupId}&redirectName=${redirectName}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }" />
 
 		<!--버튼-->
 		<div class="classtbtn" align="right">
@@ -305,6 +317,10 @@ function <portlet:namespace/>myClass(){
 			<c:if test="${surveyCnt > 0}">
 				<div class="btn_linec" onclick="<portlet:namespace/>openSurvey();"><liferay-ui:message key="edison-virtuallab-survey"/></div>							<!-- 설문조사	-->
 			</c:if>
+			<div class="btn_linec" onclick="<portlet:namespace/>moveVirtualLab('${classInfo.virtualLabId }','${classInfo.groupId}');">
+				<!-- 강좌 이동 -->
+				<liferay-ui:message key="edison-virtuallab-move"/>
+			</div>
 		</div>
 
 	</div>
