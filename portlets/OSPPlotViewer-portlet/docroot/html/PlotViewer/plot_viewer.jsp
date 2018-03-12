@@ -3,8 +3,6 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
-<script src="<%=request.getContextPath() %>/js/onedplot/oneDplot.js"></script>
-
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 
 <%
@@ -19,35 +17,35 @@ boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="container-fluid common-analyzer-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-2 col-sm-2" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
-				<div class="dropdown-menu cursor">
-					<div id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></div>
-					<div id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></div>
-					<div id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></div>
-				</div>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li> <a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt"> Download</i></a></li> 
+				</ul>
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+	<div class="row-fluid frame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp">
 		</iframe>
 	</div>
 </div>
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
               <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
               <div>
                   <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
                   <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
               </div>
-          </div>
+	</div>
 	<input type="file" id="<portlet:namespace/>selectFile"/>
 	<img id="<portlet:namespace/>loadingBox" src="<%=request.getContextPath()%>/images/processing.gif" width="200" style="display: none;"/>
 </div>
@@ -59,8 +57,12 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_od"
-        + "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_od";
+if( '<portlet:namespace/>'.lastIndexOf('_INSTANCE_') > 0)
+	<portlet:namespace/>fileExplorerId += '<portlet:namespace/>'.substring('<portlet:namespace/>'.lastIndexOf('_INSTANCE_')+10);
+else
+	<portlet:namespace/>fileExplorerId += '001';
+	
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>highCharts;
@@ -82,10 +84,6 @@ if( <portlet:namespace/>eventEnable === false ){
     }
 	<portlet:namespace/>connector = '<%=connector%>';
 	
-	//for test
-	//<portlet:namespace/>initData.type_ = 'file';
-	//<portlet:namespace/>initData.parent_ = 'result';
-	//<portlet:namespace/>initData.name_ = 'E at top Vg=1.400V Vd=0.200V.oneD';
 	<portlet:namespace/>loadHighCharts(<portlet:namespace/>initData);
 }
 
@@ -93,19 +91,20 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 	autoOpen: false,
 	resizable: false,
 	height: 600,
-	width: 450,
+	width: 600,
 	modal: true
 });
 
 /***********************************************************************
  * Menu click events and binding functions 
 ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
 
-$('#<portlet:namespace/>openServer').click(function(){
-    var inputData;
+function <portlet:namespace/>openLocalFile(){
+	$('#<portlet:namespace/>selectFile').click();
+}
+
+function <portlet:namespace/>openServerFile(){
+	var inputData;
     if(<portlet:namespace/>initData && 
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
@@ -117,12 +116,8 @@ $('#<portlet:namespace/>openServer').click(function(){
         inputData.parent('');
         inputData.name('');
     }
-    <portlet:namespace/>fileExplorerDialog('VIEW', 'READ', inputData);
-});
-
-$('#<portlet:namespace/>download').click(function(){
-    <portlet:namespace/>downloadCurrentFile();
-});
+    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
+}
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
@@ -136,7 +131,8 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 });
 
 $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
-    $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
+	e.preventDefault();
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
 $('#<portlet:namespace/>selectFile').bind(
@@ -156,7 +152,7 @@ $('#<portlet:namespace/>selectFile').bind(
         
 );
 
-function <portlet:namespace/>fileExplorerDialog( mode, action, inputData ){
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
     AUI().use('liferay-portlet-url', function(A){
         var dialogURL = Liferay.PortletURL.createRenderURL();
         dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
@@ -218,6 +214,7 @@ Liferay.on(
     function(e){
       var myId = '<%=portletDisplay.getId()%>';
       if( e.targetPortlet === myId ){
+    	  console.log(myId + ' OSP_LOAD_DATA ', e.data);
         <portlet:namespace/>initData = new OSP.InputData( e.data );
   	    if( <portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ){
             <portlet:namespace/>initData.parent(
@@ -305,7 +302,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 			<portlet:namespace/>pathType: <portlet:namespace/>currentData.type(),
 			<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
 			<portlet:namespace/>parentPath: <portlet:namespace/>currentData.parent(),
-			<portlet:namespace/>fileName: <portlet:namespace/>currentData.fileName(),
+			<portlet:namespace/>fileName: <portlet:namespace/>currentData.name(),
 			<portlet:namespace/>relative: <portlet:namespace/>currentData.relative()
 	};
 	$.ajax({
@@ -314,7 +311,8 @@ function <portlet:namespace/>loadData( inputData, command ){
 		data  : data,
 		dataType : 'text',
 		success: function(data) {
-		    var title = OSP.Util.convertToPath(inputData.name()).parent();
+		    var title = <portlet:namespace/>currentData.name();
+		    $('#<portlet:namespace/>title').html('<h4>'+title+'</h4>');
 			<portlet:namespace/>drawPlot( data, title, '' );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
@@ -343,13 +341,15 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
     
+    if( ! inputData.repositoryType() )
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.name(),
-            <portlet:namespace/>relative: inputData.relative()
+            <portlet:namespace/>fileName: inputData.name()
     };
         
     $.ajax({
