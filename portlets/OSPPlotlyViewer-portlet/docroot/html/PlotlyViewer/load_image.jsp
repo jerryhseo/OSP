@@ -57,13 +57,19 @@
     data.divClass = gd;
     if (data.frames) {
  	   Plotly.newPlot(gd, data).then(function() {
- 	     Plotly.animate(gd, data.frames,
- 	       {
- 	         frame: {
- 	        	duration : data.layout.updatemenus[0].buttons[0].args[1].frame.duration,
- 	        	redraw : false
- 	         }
- 	       }
+ 	     Plotly.animate(gd, data.frames, 
+				 {
+    				"mode": "immediate",
+    				"fromcurrent": true,
+    				"transition": {
+    					"duration": 5
+    				},
+    				"frame": {
+    					"duration": 50,
+    					"redraw": false
+    				}
+
+				}
  	     )
  	   })
      } else {

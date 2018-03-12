@@ -50,13 +50,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     });
 
     function run(){
-        console.log("run");
+        // console.log("run");
         var ibToken = getIcebreakerAccessToken();
         var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
         var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
         saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
             function (workflowInstance) {
-                console.log(ibToken);
+                // console.log(ibToken);
                 executor.runWorkflowInstance(workflowInstanceId, ibToken);
                 toastr["success"]("", var_success_run_workflow_message);
             });

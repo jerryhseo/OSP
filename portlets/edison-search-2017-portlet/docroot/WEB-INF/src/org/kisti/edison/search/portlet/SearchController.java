@@ -125,7 +125,7 @@ public class SearchController{
         long openDataPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
             "datasearch_WAR_SDR_baseportlet");/*"edisondatacollection_WAR_edisonsimulationportlet"*/
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "Workbench_WAR_OSPWorkbenchportlet");
+            "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
@@ -153,7 +153,7 @@ public class SearchController{
         response.setContentType("text/html; charset=UTF-8");
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "Workbench_WAR_OSPWorkbenchportlet");
+            "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         log.debug("Paging");
