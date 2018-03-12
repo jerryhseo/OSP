@@ -8,7 +8,7 @@
 수행건수 : <p id="changeLayoutCnt">0</p>
 NOT UPDATE 건수 : <p id="notUpdateCnt">0</p>
 에러건수 : <p id="changeErrorCnt">0</p>
-<input type="button" value="실행" onclick="search();"/>
+<input type="button" class="btn btn-default" value="실행" onclick="search();"/>
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
