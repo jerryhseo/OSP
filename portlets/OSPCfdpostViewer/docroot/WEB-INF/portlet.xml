@@ -3,14 +3,14 @@
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
 
 	<portlet>
-		<portlet-name>OSPCfdpostViewer</portlet-name>
-		<display-name>OSP Cfd Post Viewer</display-name>
+		<portlet-name>OSPCfdpost</portlet-name>
+		<display-name>OSP Cfd Post</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.cfdpostviewer.OSPCfdpostViewerPortlet
+			com.kisti.osp.analyzer.portlet.jsmol.OSPJSMolPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/CfdpostViewer/plot_viewer.jsp</value>
+			<value>/html/CfdPost/cfdpost_view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -19,10 +19,16 @@
 		</supports>
 		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>OSP Cfd Post Viewer</title>
-			<short-title>OSP Cfd Post Viewer</short-title>
+			<title>OSP CfdPost</title>
+			<short-title>OSP CfdPost</short-title>
 			<keywords></keywords>
 		</portlet-info>
+		<portlet-preferences>
+			<preference>
+			<name>portletSetupShowBorders</name>
+			<value>false</value>
+			</preference>
+		</portlet-preferences>
 		<security-role-ref>
 			<role-name>administrator</role-name>
 		</security-role-ref>
