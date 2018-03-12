@@ -49,6 +49,7 @@ function loadJSMolFile( urlToLoad ){
         
         
         if(myJmol){
+        	console.log("[JSMOL] test update 1 ", myJmol);
         	//Jmol.setInfo(myJmol, Info, true);
         	//Jmol.loadFile(myJmol, currentUrl, Info);
         	Jmol.script(myJmol,Info);
@@ -56,6 +57,7 @@ function loadJSMolFile( urlToLoad ){
         	Jmol.loadFile(myJmol, currentUrl);
 		}
 		else{
+			console.log("[JSMOL] test update 2 create ");
 			Jmol.setDocument(0);
 			myJmol = Jmol.getApplet('myJmol', Info);
 			console.log("[JSMOL] create jmol object", myJmol);
