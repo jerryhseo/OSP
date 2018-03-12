@@ -51,6 +51,8 @@ function loadJSMolFile( urlToLoad ){
         if(myJmol){
         	//Jmol.setInfo(myJmol, Info, true);
         	//Jmol.loadFile(myJmol, currentUrl, Info);
+        	Jmol.scrip(myJmol,Info);
+        	console.log("[JSMOL] update file");
         	Jmol.loadFile(myJmol, currentUrl);
 		}
 		else{
@@ -64,8 +66,7 @@ function loadJSMolFile( urlToLoad ){
 		//myJmol = Jmol.getApplet('myJmol', Info);
 		//$('#canvas').html( Jmol.getAppletHtml(myJmol) );
 
-}
-    
+}  
 </script>
 
 </body>

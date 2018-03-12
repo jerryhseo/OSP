@@ -384,8 +384,7 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	
 	    		<portlet:namespace/>drawJSMol( inputData );
 	    	}
-	    }, 
-	    10
+	    }
 	);
 }
 
