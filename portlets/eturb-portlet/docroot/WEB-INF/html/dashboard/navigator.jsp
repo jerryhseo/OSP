@@ -484,11 +484,11 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
     });
     
     /* if('${bcUse}'){
-        //$("#<portlet:namespace/>appExportModal").modal("show");
-        $("#<portlet:namespace/>app-export-modal").modal("show");
+        //$("#<portlet:namespace/>appExportModal").modal({ "backdrop": "static", "keyboard": false });
+        $("#<portlet:namespace/>app-export-modal").modal({ "backdrop": "static", "keyboard": false });
     } else {
     } */
-    $("#<portlet:namespace/>appListModal").modal("show");
+    $("#<portlet:namespace/>appListModal").modal({ "backdrop": "static", "keyboard": false });
 }
 
 // Workbench로 이동
@@ -848,7 +848,7 @@ function <portlet:namespace/>projectNameOpen(confirmOpen){
 			content: '저장되지 않은 데이터는 복구되지 않습니다. 계속하시겠습니까?',
 			buttons: {
 				confirm: function () {
-					$("#<portlet:namespace/>projectNameModal").modal("show");
+					$("#<portlet:namespace/>projectNameModal").modal({ "backdrop": "static", "keyboard": false });
 				},
 				cancel: function () {
 					
@@ -859,7 +859,7 @@ function <portlet:namespace/>projectNameOpen(confirmOpen){
 		if(($("#<portlet:namespace/>projectModal").data('bs.modal') || {}).isShown){
 			$("#<portlet:namespace/>projectModal").modal("toggle");
 		}
-		$("#<portlet:namespace/>projectNameModal").modal("show");
+		$("#<portlet:namespace/>projectNameModal").modal({ "backdrop": "static", "keyboard": false });
 		
 	}
 }
@@ -928,7 +928,7 @@ function <portlet:namespace/>searchProjectList(p_curPage){
 				$tableTBody.append($rowResult);
 			}
 			
-			$("#<portlet:namespace/>projectModal").modal("show");
+			$("#<portlet:namespace/>projectModal").modal({ "backdrop": "static", "keyboard": false });
 			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
@@ -1144,39 +1144,41 @@ function <portlet:namespace/>removeSimulation(executeId){
 	</div>
 	
 	<!-- Modal -->
-	<div class="modal fade" id="<portlet:namespace/>projectModal" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">프로젝트 선택</h4>
-				</div>
-				<div class="modal-body">
-					<table class="table table-hover table-project">
-						<thead>
-							<tr>
-								<th></th>
-								<th class="TC">name</th>
-								<th class="TC">create Date</th>
-							</tr>
-						</thead>
-						<tbody id="<portlet:namespace/>projectModalTbody">
-							
-						</tbody>
-					</table>
-					
-					<div id="<portlet:namespace/>projectModalPaging" class="paging">
-						
+	<div class="modal fade" id="<portlet:namespace/>projectModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>projectModal" style="display: none;">
+		<div class="vertical-alignment-helper">
+			<div class="modal-dialog vertical-align-center" role="document">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">프로젝트 선택</h4>
 					</div>
-				</div>
-				<div class="modal-footer">
-				<button type="button" class="btn btn-success" id="openBtn" onclick="<portlet:namespace/>projectLoad()" title="Open">
-						<i class='icon-large icon-save' id="openBtnText"> Open</i>
-					</button>
-					<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectNameOpen(false);" title="NEW">
-						<i class='icon-large icon-save'> New</i>
-					</button>
+					<div class="modal-body">
+						<table class="table table-hover table-project">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="TC">name</th>
+									<th class="TC">create Date</th>
+								</tr>
+							</thead>
+							<tbody id="<portlet:namespace/>projectModalTbody">
+								
+							</tbody>
+						</table>
+						
+						<div id="<portlet:namespace/>projectModalPaging" class="paging">
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-success" id="openBtn" onclick="<portlet:namespace/>projectLoad()" title="Open">
+							<i class='icon-large icon-save' id="openBtnText"> Open</i>
+						</button>
+						<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectNameOpen(false);" title="NEW">
+							<i class='icon-large icon-save'> New</i>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1188,23 +1190,25 @@ function <portlet:namespace/>removeSimulation(executeId){
 		<aui:input name="projectStructure" value="" type="hidden"/>
 		<aui:input name="analyzerStructure" value="" type="hidden"/>
 		
-		<div class="modal fade" id="<portlet:namespace/>projectNameModal" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">새 프로젝트</h4>
-					</div>
-					<div class="modal-body">
-						<aui:input name="projectName" type="text" cssClass="long_field" label="" value="" maxLength="15">
-							<aui:validator name="required"/>
-						</aui:input>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectAction('<%=Constants.ADD%>');" title="NEW">
-							<i class='icon-large icon-save'> New</i>
-						</button>
+		<div class="modal fade" id="<portlet:namespace/>projectNameModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>projectNameModal" style="display: none;">
+			<div class="vertical-alignment-helper">
+				<div class="modal-dialog vertical-align-center" role="document">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">새 프로젝트</h4>
+						</div>
+						<div class="modal-body">
+							<aui:input name="projectName" type="text" cssClass="long_field" label="" value="" maxLength="15">
+								<aui:validator name="required"/>
+							</aui:input>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectAction('<%=Constants.ADD%>');" title="NEW">
+								<i class='icon-large icon-save'> New</i>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1216,17 +1220,19 @@ function <portlet:namespace/>removeSimulation(executeId){
 <img id="loadingBox" src="${contextPath}/images/processing.gif" width="700px" style="display: none;"/>
 
 <!-- Workbench List 출력 -->
-<div class="modal fade" id="<portlet:namespace/>appListModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Solver Selection</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="<portlet:namespace/>appListModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>appListModal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4 class="modal-title">Solver Selection</h4>
+	            </div>
+	            <div class="modal-body">
+	                
+	            </div>
+	        </div>
+		</div>
+	</div>
 </div>
