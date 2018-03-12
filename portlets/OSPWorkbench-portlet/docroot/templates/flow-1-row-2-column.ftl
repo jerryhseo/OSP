@@ -23,12 +23,12 @@
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
 				<div class="row flow-grid" style="display:none;" id="INPUT">
-					<div class="col-md-12" id="${namespace}column-4">
+					<div class="col-md-12 sub-col" id="${namespace}column-4">
 						
 					</div>
 				</div>
 				<div class="row flow-grid" style="display:none;" id="LOG">
-					<div class="col-md-12" id="${namespace}column-5">
+					<div class="col-md-12 sub-col" id="${namespace}column-5">
 						
 					</div>
 				</div>
