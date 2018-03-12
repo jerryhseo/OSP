@@ -306,16 +306,13 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 			    <portlet:namespace/>passNamespace();
-			    /*
-			    if( ! <portlet:namespace/>selectedFile ){
 					<portlet:namespace/>selectedFile = new OSP.InputData();
 					<portlet:namespace/>selectedFile.type(OSP.Enumeration.PathType.FOLDER);
 					<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 					<portlet:namespace/>selectedFile.parent('');
 					<portlet:namespace/>selectedFile.name('');
+					<portlet:namespace/>baseDir = <portlet:namespace/>selectedFile.clone();
 					<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
-				}
-			    */
 			}
 		}
 );
@@ -325,7 +322,7 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-			    console.log('['+myId+'] OSP_LOAD_DATA: ', e );
+			    console.log('[<portlet:namespace/>] OSP_LOAD_DATA: ', e );
 				
 			    <portlet:namespace/>baseDir = new OSP.InputData( e.data );
 				 if( !<portlet:namespace/>baseDir.repositoryType() ){
@@ -375,9 +372,9 @@ Liferay.on(
 				inputData.name('');
 				inputData.relative(true);
 				<portlet:namespace/>initFileExplorer( inputData );
-				*/
 				<portlet:namespace/>selectedFile = <portlet:namespace/>baseDir;
 				<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
+				*/
 			}
 		}
 );
@@ -405,10 +402,20 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
-		case OSP.Enumeration.PathType.FOLDER:
 			var filePath = OSP.Util.convertToPath( inputData.name().trim() );
 			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), filePath.parent()));
-			<portlet:namespace/>selectedFile.name( filePath.name() ? filePath.name() : '' );
+			<portlet:namespace/>selectedFile.name( filePath.name() );
+			<portlet:namespace/>lookupPath(
+			                               'GET_FILE_INFO',
+			                     			OSP.Enumeration.PathType.FOLDER,
+			                     			<portlet:namespace/>selectedFile.parent(),
+			                     			''
+			                     	);
+			$('#<portlet:namespace/>selectedFile').val(OSP.Util.mergePath( <portlet:namespace/>selectedFile.parent(), <portlet:namespace/>selectedFile.name()));
+			break;
+		case OSP.Enumeration.PathType.FOLDER:
+			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), inputData.name()));
+			<portlet:namespace/>selectedFile.name( '' );
 			<portlet:namespace/>lookupPath(
 			                               'GET_FILE_INFO',
 			                     			OSP.Enumeration.PathType.FOLDER,

@@ -76,6 +76,13 @@ var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>saveAction = false;
 
+$<portlet:namespace/>fileExplorerDialogSection.dialog({
+	autoOpen: false,
+	resizable: false,
+	height: 600,
+	width: 600,
+	modal: true
+});
 
 /***********************************************************************
  * Initailization section using parameters
@@ -88,16 +95,10 @@ if( '<%=eventEnable%>' == false ){
 	if( !<portlet:namespace/>initData.repositoryType() )
 		<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 	
+	<portlet:namespace/>currentData = <portlet:namespace/>initData.clone(); 
 	<portlet:namespace/>loadText( <portlet:namespace/>initData );
 }
 
-$<portlet:namespace/>fileExplorerDialogSection.dialog({
-	autoOpen: false,
-	resizable: false,
-	height: 600,
-	width: 600,
-	modal: true
-});
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
@@ -168,7 +169,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	  };
 	  Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
 	  $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
-	});
+});
 
 $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 	e.preventDefault();
@@ -177,11 +178,8 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 
 function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
 	AUI().use('liferay-portlet-url', function(A){
-	    $<portlet:namespace/>fileExplorerDialogSection.remove();
-		
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
-		var initData = <portlet:namespace/>initData;
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
@@ -209,7 +207,6 @@ $('#<portlet:namespace/>selectFile').bind(
 			reader.readAsText(inputFile.files[0]);
 		}
 );
-
 
 /***********************************************************************
  * Handling OSP Events
@@ -260,7 +257,9 @@ Liferay.on(
 				<portlet:namespace/>initData = new OSP.InputData( e.data );
 				if( ! <portlet:namespace/>initData.repositoryType() )
 					<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-				<portlet:namespace/>loadText( <portlet:namespace/>initData );
+					
+				<portlet:namespace/>currentData = <portlet:namespace/>initData.clone();
+				<portlet:namespace/>loadText( <portlet:namespace/>currentData );
 			}
 		}
 );
@@ -374,6 +373,7 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadText( inputData ){
+	<portlet:namespace/>currentData = inputData.clone();
 	if( !<portlet:namespace/>currentData.repositoryType() )
 		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 		
