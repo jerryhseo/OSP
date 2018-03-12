@@ -64,7 +64,7 @@
 	</div>
 </div>
 
-<script src="http://d3js.org/d3.v2.min.js" language="JavaScript"></script>
+<script src="https://d3js.org/d3.v2.min.js" language="JavaScript"></script>
 <script src="${contextPath}/js/liquidFillGauge.js" language="JavaScript"></script>
 <script type="text/javascript">
 	<c:forEach items="${clusterList}" var="item" varStatus="status">
