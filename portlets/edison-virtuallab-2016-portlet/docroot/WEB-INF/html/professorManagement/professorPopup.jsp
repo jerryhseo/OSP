@@ -19,7 +19,6 @@ var virtualLabProfessor = "${param.virtualLabProfessor}";
 var virtualLabprofessorSeq = "${param.professorSeq}";
 
 function <portlet:namespace/>dataSearchList(pageNumber) {
-	
 	if(pageNumber == 0) {
 		$("#<portlet:namespace/>cur_page").val(1);
 		$("#<portlet:namespace/>searchField").val("");
@@ -100,8 +99,9 @@ function <portlet:namespace/>selectProfessor(professorSeq, professorName){
 
 <div class="table-responsive panel edison-panel">
 	<form method="post" name="<portlet:namespace/>searchForm" class="panel-heading clearfix" id="<portlet:namespace/>searchForm" style="margin: 0px;" onsubmit="return false">
-		<div class="input-group">
+		<input type="hidden" id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" value="">
 		
+		<div class="input-group">
 			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataSearchList('1');" class="form-control" style="line-height: 15px; height:33px; width: 20%;">
 				<option value="5" <c:if test="${listSize eq 5}">selected="selected"</c:if>>5<liferay-ui:message key="edison-search-views"/></option>
 				<option value="10" <c:if test="${listSize eq 10}">selected="selected"</c:if>>10<liferay-ui:message key="edison-search-views"/></option>
