@@ -697,11 +697,11 @@ NGL.MenubarExamplesWidget = function (stage) {
     if (typeof response === 'string') {
       // for ie11
       response = JSON.parse(response)
-      //console.log("KYJ TEST JSON1", response);
+      console.log("KYJ TEST JSON1", response);
     }
-    //console.log("KYJ TEST JSON2", response);
+    console.log("KYJ TEST JSON2", response);
     response.sort().forEach(function (name) {
-    	//console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
+    	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
       var option = createOption(name, function () {
     	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
     	 // console.log("test return");
