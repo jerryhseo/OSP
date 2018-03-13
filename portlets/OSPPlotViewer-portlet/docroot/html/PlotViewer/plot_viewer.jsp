@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -10,10 +11,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-String mode = (String)renderRequest.getAttribute("mode");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <div class="container-fluid osp-analyzer">
@@ -54,7 +55,7 @@ boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-var <portlet:namespace/>connector;
+var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_od";
 if( '<portlet:namespace/>'.lastIndexOf('_INSTANCE_') > 0)
@@ -81,9 +82,8 @@ if( <portlet:namespace/>eventEnable === false ){
     }else{
         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
     }
-	<portlet:namespace/>connector = '<%=connector%>';
 	
-	<portlet:namespace/>loadHighCharts(<portlet:namespace/>initData);
+	<portlet:namespace/>loadHighCharts(<portlet:namespace/>initData.clone());
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -122,8 +122,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
   var eventData = {
       portletId : '<%=portletDisplay.getId()%>',
-      targetPortlet : <portlet:namespace/>fileExplorerId,
-      action: "READ"
+      targetPortlet : <portlet:namespace/>fileExplorerId
   };
   Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
   $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
@@ -182,7 +181,7 @@ Liferay.on(
 			if( e.action )
 				<portlet:namespace/>mode = e.mode;
 			else
-				<portlet:namespace/>action = 'VIEW';
+				<portlet:namespace/>mode = 'VIEW';
 				
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
@@ -223,7 +222,7 @@ Liferay.on(
   	  if( !<portlet:namespace/>initData.repositoryType() )
 		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
   	    
-        <portlet:namespace/>loadHighCharts( <portlet:namespace/>initData );
+        <portlet:namespace/>loadHighCharts( <portlet:namespace/>initData.clone() );
         
         var eventData = {
   	                   portletId: myId,
@@ -312,7 +311,6 @@ function <portlet:namespace/>loadData( inputData, command ){
 			<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
 			<portlet:namespace/>parentPath: <portlet:namespace/>currentData.parent(),
 			<portlet:namespace/>fileName: <portlet:namespace/>currentData.name(),
-			<portlet:namespace/>relative: <portlet:namespace/>currentData.relative()
 	};
 	$.ajax({
 		type: 'POST',
@@ -349,13 +347,6 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
-    if( inputData.type() === 'folder ){
-    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
-    	inputData.name('');
-    }
-    if( ! inputData.repositoryType() )
-		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-    
     if( inputData.type() === 'folder' ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
     	inputData.name('');
@@ -397,8 +388,7 @@ function <portlet:namespace/>downloadCurrentFile(){
             <portlet:namespace/>pathType: filePath.type(),
             <portlet:namespace/>repositoryType: filePath.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
-            <portlet:namespace/>fileName: filePath.name(),
-            <portlet:namespace/>relative: filePath.relative()
+            <portlet:namespace/>fileName: filePath.name()
         };
         
         var base = '<%=serveResourceURL.toString()%>';

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height:95%;">
+<html style="height:100%;">
 <head>
     <script src="<%=request.getContextPath()%>/js/Highcharts-4.2.7/api/js/jquery-1.11.3.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/Highcharts-4.2.7/js/highcharts.js"></script>

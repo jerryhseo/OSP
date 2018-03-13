@@ -16,9 +16,9 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 
-<div class="container-fluid common-analyzer-portlet">
-	<div class="row-fluid no-header-canvas">
-		<div class="col-sm-12 iframe" >
+<div class="container-fluid osp-analyzer">
+	<div class="row-fluid no-header-frame">
+		<div class="col-sm-12 canvas" >
 			<pre id="<portlet:namespace/>canvas"></pre>
 		</div>
 	</div>

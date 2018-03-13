@@ -59,8 +59,11 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  ***********************************************************************/
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPEditorsportlet_INSTANCE_tv" + 
-			"<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_tv";
+if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
+	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
+else
+	<portlet:namespace/>fileExplorerId += '001';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
@@ -77,7 +80,7 @@ if( <portlet:namespace/>eventEnable === false ){
     }else{
         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
     }
-    <portlet:namespace/>loadText(<portlet:namespace/>initData);
+    <portlet:namespace/>loadText(<portlet:namespace/>initData.clone());
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -227,7 +230,7 @@ Liferay.on(
 				};
 				Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 				
-				<portlet:namespace/>loadText( <portlet:namespace/>initData );
+				<portlet:namespace/>loadText( <portlet:namespace/>initData.clone() );
 			}
 		}
 );

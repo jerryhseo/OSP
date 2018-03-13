@@ -328,7 +328,13 @@ function <portlet:namespace/>drawX3Dom( inputData ){
 	);
 }
 
-function <portlet:namespace/>getFirstFileName( inputData ){
+function <portlet:namespace/>getFirstFileName( argData ){
+	var inputData = argData.clone();
+    if( inputData.type() === 'folder ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
+    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),

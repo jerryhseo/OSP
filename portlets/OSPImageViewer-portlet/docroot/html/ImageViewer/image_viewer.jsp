@@ -8,9 +8,6 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
-<portlet:renderURL var="renderURL">
-    <portlet:param name="jspPage" value="/html/ImageViewer/load_image.jsp"/>
-</portlet:renderURL>
 
 <%
 PortletPreferences preferences = portletDisplay.getPortletSetup();
@@ -23,7 +20,7 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="container-fluid common-analyzer-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-2" >
@@ -32,20 +29,20 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 					Menu<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor">
-					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li> <a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt"> Download</i></a></li> 
 				</ul>
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
+	<div class="row-fluid frame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp">
 		</iframe>
 	</div>
 </div>
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
               <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
               <div>
@@ -54,13 +51,14 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
               </div>
           </div>
 	<input type="file" id="<portlet:namespace/>selectFile"/>
+	<img id="<portlet:namespace/>loadingBox" src="<%=request.getContextPath()%>/images/processing.gif" width="200" style="display: none;"/>
 </div>
 
 <script>
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-var <portlet:namespace/>connector;
+var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_iv";
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
@@ -71,7 +69,7 @@ else
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
-var <portlet:namespace/>eventEnable = <%=eventEnable%>;
+var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
 /***********************************************************************
  * Initailization section using parameters
@@ -87,12 +85,7 @@ var <portlet:namespace/>eventEnable = <%=eventEnable%>;
 		<portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
 	}
 
-	<portlet:namespace/>connector = '<%=connector%>';
-
-//     <portlet:namespace/>currentData.type('file');
-//     <portlet:namespace/>currentData.parent('');
-//     <portlet:namespace/>currentData.name('test_image.jpg')
-     <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
+     <portlet:namespace/>loadImage(<portlet:namespace/>initData.clone(), 'fit');
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -106,30 +99,25 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
+function <portlet:namespace/>openLocalFile(){
+	$('#<portlet:namespace/>selectFile').click();
+}
 
-$('#<portlet:namespace/>openServer').click(function(){
-    var inputData;
-    if(<portlet:namespace/>initData && 
+function <portlet:namespace/>openServerFile(){
+	var inputData;
+    if(!$.isEmptyObject(<portlet:namespace/>initData) && 
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
         inputData = <portlet:namespace/>initData;
     }else{
         inputData = new OSP.InputData();
         inputData.type( OSP.Enumeration.PathType.FOLDER );
+        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
         inputData.parent('');
         inputData.name('');
-        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     }
-   
     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
-
-$('#<portlet:namespace/>download').click(function(){
-    <portlet:namespace/>downloadCurrentFile();
-});
+}
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
@@ -152,9 +140,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			var reader = new FileReader();
 			reader.onload = function (e) {
 			    // $('#<portlet:namespace/>canvas').iviewer('loadImage', e.target.result);
-			    <portlet:namespace/>drawImage(
-                                              e.target.result, 
-                                              'fit');
+			    <portlet:namespace/>drawImage( e.target.result, 'fit');
 			    <portlet:namespace/>setTitle(e.target.result);
 			    <portlet:namespace/>currentData = null;
             }
@@ -168,7 +154,6 @@ function <portlet:namespace/>fileExplorerDialog( mode,inputData ){
 		var dialogURL = Liferay.PortletURL.createRenderURL();
 		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
 		dialogURL.setParameter('inputData', JSON.stringify(inputData));
-		// dialogURL.setParameter('action', <portlet:namespace/>action ? <portlet:namespace/>action : 'output' );
 		dialogURL.setParameter('mode', mode);
 		dialogURL.setParameter('eventEnable', false);
 		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
@@ -234,7 +219,7 @@ Liferay.on(
 	  if( !<portlet:namespace/>initData.repositoryType() )
 		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	  
-	  <portlet:namespace/>loadImage(<portlet:namespace/>initData, 'fit');
+	  <portlet:namespace/>loadImage(<portlet:namespace/>initData.clone(), 'fit');
 	  
 	  var eventData = {
 	                   portletId: myId,
@@ -286,8 +271,11 @@ Liferay.on(
 		function(e){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
 				console.log('[ImageViewer]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
+				$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/ImageViewer/load_image.jsp');
 		  		<portlet:namespace/>drawImage('<%=PortalUtil.getPortalURL(request)%>'+'<%=request.getContextPath()%>'+'/images/OSP.png', '100%');
 		  		<portlet:namespace/>setTitle('');
+	   			<portlet:namespace/>initData = {};
+	   			<portlet:namespace/>currentData = {};
 			}
 		}
 );
@@ -327,7 +315,6 @@ function <portlet:namespace/>loadData( inputData, zooming ){
         serveResourceURL.setParameter('pathType', inputData.type());
         serveResourceURL.setParameter('fileName', inputData.name());
         serveResourceURL.setParameter('repositoryType', <portlet:namespace/>currentData.repositoryType());
-        serveResourceURL.setParameter('relative', inputData.relative());
         serveResourceURL.setParameter('command', 'READ_IMAGE');
 
         <portlet:namespace/>drawImage(
@@ -356,28 +343,7 @@ function <portlet:namespace/>drawImage( url, zooming ){
 	);
 }
 
-function <portlet:namespace/>clearImage(){
-    setTimeout(
-	    function(){
-	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
-	    	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
-	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.clearImage) {
-	   	    	iframe.contentWindow.clearImage ();
-	    	} 
-	    	else{
-	    		<portlet:namespace/>clearImage();
-	    	}
-	    }, 
-	    10
-	);
-}
-
-
-function <portlet:namespace/>getFirstFileName( argData, zooming ){
-    var inputData = argData.clone();
-    console.log('Image viewer: ', inputData );
+function <portlet:namespace/>getFirstFileName( inputData, zooming ){
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
@@ -425,7 +391,7 @@ function <portlet:namespace/>downloadCurrentFile(){
 }
 
 function <portlet:namespace/>setTitle( title ){
-	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
+	$('#<portlet:namespace/>title').html('<h4>'+title+'</h4>');
 }
 
 </script>

@@ -19,9 +19,9 @@
  String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
  %>
  
- <div class="container-fluid common-analyzer-portlet">
-	<div class="row-fluid no-header-canvas">
-		<iframe class ="col-sm-12 iframe"  id="<portlet:namespace/>canvas" style="" ></iframe>
+ <div class="container-fluid osp-analyzer">
+	<div class="row-fluid no-header-frame">
+		<iframe class ="col-sm-12 iframe-canvas"  id="<portlet:namespace/>canvas" style="" ></iframe>
 	</div>
 </div>
 <script>
@@ -39,10 +39,6 @@ var <portlet:namespace/>mode = '<%=mode%>';
  //<portlet:namespace/>eventEnable = false;
 
 if(!<portlet:namespace/>eventEnable){
-  $(function(){
-    $("#<portlet:namespace/>canvas").css("height", $(document).height());
-  });
-
   var inputData = '<%=inputData%>';
   var initData;
   if( !inputData ){
@@ -52,10 +48,6 @@ if(!<portlet:namespace/>eventEnable){
       initData = new OSP.InputData(JSON.parse(inputData));
   }
   
-  //initData.type('file');
-  //initData.parent('Map');
-  //initData.name('Map.html')
-
   <portlet:namespace/>loadHtml(initData);
 }
 
@@ -113,6 +105,16 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_INITIALIZE,
+   		function(e){
+   			if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
+   				console.log('[<portlet:namespace/>]OSP_INITIALIZE: ['+new Date()+']');
+   				$("#<portlet:namespace/>canvas").attr('src', '');
+   			}
+   		}
+   );
+
 
 /***********************************************************************
  * Golbal functions
@@ -131,8 +133,7 @@ function <portlet:namespace/>loadHtml(indexPath){
 						<portlet:namespace/>repositoryType: repositoryType,
 				        <portlet:namespace/>parentPath: indexPath.parent(),
 	    				<portlet:namespace/>pathType: indexPath.type(),
-	    				<portlet:namespace/>fileName: indexPath.name(),
-	    				<portlet:namespace/>relative: indexPath.relative()
+	    				<portlet:namespace/>fileName: indexPath.name()
 				},
 				dataType:'text',
 				success: function( tempPath ){

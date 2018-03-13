@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="height:100%;overflow:hidden;">
+<html style="height:100%;">
 <head>
     <script src="<%=request.getContextPath()%>/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jquery/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
