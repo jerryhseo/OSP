@@ -394,17 +394,14 @@ function <portlet:namespace/>getFirstFileName( argData ){
     console.log('[JSMol]get First File Name2 : ', inputData );
     
     
-    if( inputData.type() === 'folder ){
+    if( inputData.type() === 'folder' ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
     	inputData.name('');
     }
     if( ! inputData.repositoryType() )
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     
-    if( inputData.type() === 'folder' ){
-    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
-    	inputData.name('');
-    }
+   
     
     //if( !inputData.repositoryType() )
     //	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
