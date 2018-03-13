@@ -170,8 +170,8 @@
 }
 
 .simulation-workbench .sub-col{
-		outline: 3px solid #dddddd;
-		overflow: auto;
+	outline: 3px solid #dddddd;
+	overflow: auto;
 }
 
 .simulation-workbench #workbench-layout-area{
