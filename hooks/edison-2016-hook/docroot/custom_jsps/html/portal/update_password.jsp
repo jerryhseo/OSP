@@ -88,6 +88,7 @@ String saveMsg = LanguageUtil.get(themeDisplay.getLocale(),"edison-button-save")
 		border-bottom: 1px solid #e6e6e6;
 	}
 </style>
+<div class="body_layout container">
 <c:choose>
 	<c:when test="<%= !themeDisplay.isSignedIn() && (ticket == null) %>">
 		<div class="alert alert-warning">
@@ -207,6 +208,7 @@ String saveMsg = LanguageUtil.get(themeDisplay.getLocale(),"edison-button-save")
 		</aui:form>
 	</c:otherwise>
 </c:choose>
+</div>
 <script type="text/javascript">
 	function passWordCheck(val){
 		var retbool = true;
