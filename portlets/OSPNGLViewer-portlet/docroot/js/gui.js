@@ -704,7 +704,7 @@ NGL.MenubarExamplesWidget = function (stage) {
       var option = createOption(name, function () {
     	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
     	 // console.log("test return");
-    	// console.log(test);
+    	console.log(test);
       })
       //console.log("test option");
       //console.log(option);
