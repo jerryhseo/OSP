@@ -203,7 +203,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 		data  : dataload,
 		dataType : 'text',
 		success: function(data) {
-			var serveResourceURL = <%=serveResourceURL.toString()%>
+			var serveResourceURL = '<%=serveResourceURL.toString()%>'
 			<portlet:namespace/>drawPlot( data, dataload, serveResourceURL );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
