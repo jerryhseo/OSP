@@ -100,6 +100,10 @@ public class LayoutController {
 		String redirectName = ParamUtil.getString(request, "redirectName", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
 		
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		
 //		ProvenanceSupportApp.put("uChem", "4.0.1");
 //		ProvenanceSupportApp.put("pianostring", "1.0.0");
 //		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
@@ -118,6 +122,10 @@ public class LayoutController {
 			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
+			
+			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
+			agent.ibAgentLog();
+			
 			return "view";
 		}catch(Exception e){
 			if(e instanceof SimulationWorkbenchException){
@@ -679,10 +687,6 @@ public class LayoutController {
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(portletResponse);
 		
 		
-		String userScreenName = user.getScreenName();
-		if( userScreenName.equalsIgnoreCase("edison") )
-			userScreenName = "edisonadm";
-		
 		IBAgent ibAgent = new IBAgent(group, user);
 		
 		String simulationUuid = ParamUtil.getString(portletRequest, "simulationUuid");
@@ -870,6 +874,7 @@ public class LayoutController {
 				inputData.put( "dirty_", false);
 			}
 			
+			ibAgent.ibAgentLog();
 			JSONObject result = ibAgent.submit(
 					simulationUuid, 
 					runType, 
