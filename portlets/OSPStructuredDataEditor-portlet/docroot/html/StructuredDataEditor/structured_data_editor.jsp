@@ -372,7 +372,17 @@ Liferay.on(
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
 				console.log('<portlet:namespace/> OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-				<portlet:namespace/>loadStructure( <portlet:namespace/>initData );
+				if( $.isEmptyObject(<portlet:namespace/>initData) ){
+					var eventData = {
+										portletId: '<%=portletDisplay.getId()%>',
+										targetPortlet: <portlet:namespace/>connector
+								};
+								
+					Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
+				}
+				else{
+					<portlet:namespace/>loadStructure( <portlet:namespace/>initData );
+				}
 			}
 		}
 );

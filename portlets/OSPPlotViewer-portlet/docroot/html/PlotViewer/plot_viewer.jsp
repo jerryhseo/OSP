@@ -14,7 +14,6 @@ String inputData = (String)renderRequest.getAttribute("inputData");
 String connector = (String)renderRequest.getAttribute("connector");
 String mode = (String)renderRequest.getAttribute("mode");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
 <div class="container-fluid osp-analyzer">
@@ -40,7 +39,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 </div>
 <div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div id="<portlet:namespace/>file-explorer-content" style="height:95%"></div>
               <div>
                   <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
                   <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
@@ -105,7 +104,7 @@ function <portlet:namespace/>openLocalFile(){
 
 function <portlet:namespace/>openServerFile(){
 	var inputData;
-    if(<portlet:namespace/>initData && 
+    if(!$.isEmptyObject(<portlet:namespace/>initData) && 
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
         inputData = <portlet:namespace/>initData;
@@ -268,6 +267,16 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_INITIALIZE,
+   		function(e){
+   			console.log('[<portlet:namespace/>]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
+   			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp');
+   			<portlet:namespace/>initData = {};
+   			<portlet:namespace/>currentData = {};
+   		}
+ );
+
 /***********************************************************************
  * Golbal functions
 ***********************************************************************/
@@ -340,9 +349,17 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
-    
+    if( inputData.type() === 'folder ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
     if( ! inputData.repositoryType() )
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+    
+    if( inputData.type() === 'folder' ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
@@ -371,7 +388,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
-	if(<portlet:namespace/>currentData && 
+	if(!$.isEmptyObject(<portlet:namespace/>currentData) && 
 		<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE &&
 		<portlet:namespace/>currentData.name()){
         var filePath = <portlet:namespace/>currentData;

@@ -17,25 +17,25 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="container-fluid common-editor-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-2 col-sm-2" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 	 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu cursor">
-					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download...</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li> <a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt"> Download</i></a></li> 
 				</ul>
 			</div>
 		</div>  
 	</div>
 
-	<div class="row-fluid canvas">
-		<pre class="col-sm-12 iframe" id="<portlet:namespace/>canvas"></pre>
+	<div class="row-fluid frame">
+		<pre class="col-sm-12 canvas" id="<portlet:namespace/>canvas"></pre>
 	</div>
 </div>
 <div id="<portlet:namespace/>hiddenSection" style="display: none;">
@@ -91,12 +91,12 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
+ function <portlet:namespace/>openLocalFile(){
+	$('#<portlet:namespace/>selectFile').click();
+}
 
-$('#<portlet:namespace/>openServer').click(function(){
-    
+function <portlet:namespace/>openServerFile(){
+	var inputData;
     if(<portlet:namespace/>initData && 
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
@@ -104,13 +104,12 @@ $('#<portlet:namespace/>openServer').click(function(){
     }else{
         inputData = new OSP.InputData();
         inputData.type( OSP.Enumeration.PathType.FOLDER );
-        inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
         inputData.parent('');
         inputData.name('');
     }
-
     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
+}
 
 $('#<portlet:namespace/>download').click(function(){
     <portlet:namespace/>downloadCurrentFile();
@@ -306,6 +305,10 @@ function <portlet:namespace/>loadText( inputData ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
+    if( inputData.type() === 'folder' ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
