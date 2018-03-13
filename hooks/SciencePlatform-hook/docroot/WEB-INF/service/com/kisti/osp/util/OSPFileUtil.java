@@ -1169,6 +1169,7 @@ public class OSPFileUtil {
         if(lastPoistion > 0){
          fcIn.position(lastPoistion);   
         }
+        int i = 0;
         while(fcIn.read(buffer) != -1){
             byte[] bytes = new byte[buffer.position()];
             buffer.flip();
@@ -1178,7 +1179,8 @@ public class OSPFileUtil {
         }
         lastPoistion = fcIn.position();
         fcIn.close();
-        return new TextAndLastPosition(sb.toString(), lastPoistion);
+        TextAndLastPosition temp = new TextAndLastPosition(sb.toString(), lastPoistion);
+        return temp;
     }
     
     static private TextAndLastPosition readTextAndLastPosition(Path path, long startPosition, long size) throws IOException{
@@ -1200,19 +1202,20 @@ public class OSPFileUtil {
         return new TextAndLastPosition(sb.toString(), lastPosition);
     }
     
-    static private class TextAndLastPosition{
+    static class TextAndLastPosition{
         private String text;
         private long lastPosition;
         public TextAndLastPosition(String text, long lastPosition){
-            text = text;
-            lastPosition = lastPosition;
+            this.text = text;
+            this.lastPosition = lastPosition;
         }
         public String getText(){
-            return text;
+            return this.text;
         }
         public long getLastPosition(){
-            return lastPosition;
+            return this.lastPosition;
         }
+        
     }
     
     static private class OSPFileVisitor extends SimpleFileVisitor<Path>{
