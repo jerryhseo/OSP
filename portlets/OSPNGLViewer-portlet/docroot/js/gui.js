@@ -689,28 +689,34 @@ NGL.MenubarExamplesWidget = function (stage) {
   optionsPanel.setWidth('300px')
 
   var xhr = new XMLHttpRequest()
-  xhr.open('GET', NGL.examplesListUrl)
+  console.log("[NGLViewer] examplelist url : ", NGL.examplesListUrl);
+  
+  console.log("[NGLViewer] oepn ");
   xhr.responseType = 'json'
   xhr.onload = function (e) {
-    var response = this.response
+	  console.log("KYJ TEST JSON1", e);
+	  var response = this.response
     if (typeof response === 'string') {
       // for ie11
       response = JSON.parse(response)
-      //console.log("KYJ TEST JSON1", response);
+      console.log("KYJ TEST JSON1", response);
     }
-    //console.log("KYJ TEST JSON2", response);
-    response.sort().forEach(function (name) {
-    	//console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
-      var option = createOption(name, function () {
-    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
-    	 // console.log("test return");
-    	// console.log(test);
-      })
-      //console.log("test option");
-      //console.log(option);
-      optionsPanel.add(option)
-    })
+    console.log("KYJ TEST JSON2", response);
+    if(response){
+	    response.sort().forEach(function (name) {
+	    	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
+	      var option = createOption(name, function () {
+	    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
+	    	 // console.log("test return");
+	    	console.log(test);
+	      })
+	      //console.log("test option");
+	      //console.log(option);
+	      optionsPanel.add(option)
+	    })
+    }
   }
+  xhr.open('GET', NGL.examplesListUrl)
   xhr.send()
 
   return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)
