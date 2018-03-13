@@ -206,7 +206,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			reader.onload = function (e) {
 				$('#<portlet:namespace/>canvas').each(function(){
 					$(this).one("load", function(){
-						$(this).prop('contentWindow').loadJSMolFile(
+						$(this).prop('contentWindow').drawNglViewer(
 								e.target.result, $('#<portlet:namespace/>canvas').width(), $('#<portlet:namespace/>canvas').height()
 						);
 						
@@ -303,7 +303,7 @@ Liferay.on(
 					//<portlet:namespace/>initData.name("");
 					<portlet:namespace/>currentData.name("");
 			}
-			<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
+			<portlet:namespace/>loadNGLFile( <portlet:namespace/>currentData );
 		}
 	}
 );
@@ -321,7 +321,7 @@ Liferay.on(
                            return;
                        }
                        else{
-                           <portlet:namespace/>loadJSMolFile( inputData );
+                           <portlet:namespace/>loadNGLFile( inputData );
                            $<portlet:namespace/>fileExplorerDialogSection.dialog('close');
                        }
                    }
