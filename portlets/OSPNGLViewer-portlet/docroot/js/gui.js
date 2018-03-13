@@ -693,7 +693,8 @@ NGL.MenubarExamplesWidget = function (stage) {
   xhr.open('GET', NGL.examplesListUrl)
   xhr.responseType = 'json'
   xhr.onload = function (e) {
-    var response = this.response
+	  console.log("KYJ TEST JSON1", e);
+	  var response = this.response
     if (typeof response === 'string') {
       // for ie11
       response = JSON.parse(response)
