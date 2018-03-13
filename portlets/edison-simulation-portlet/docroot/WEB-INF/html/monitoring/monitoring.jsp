@@ -223,8 +223,8 @@
 					<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
 				</tr>
 				<tr>
-					<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
-					<th scope="col" class="greyth"><p>Re-Run</p></th>
+					<th scope="col" class="greyth"><p style="margin: 0px;"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
+					<th scope="col" class="greyth"><p style="margin: 0px;">Re-Run</p></th>
 				</tr> 
 			</thead>
 			<tbody id="mtbody">

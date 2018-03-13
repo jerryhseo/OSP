@@ -173,6 +173,8 @@ public class LayoutController {
 				this.submitJobs(request, response);
 			}else if( command.equalsIgnoreCase("CHECK_PROVENANCE")){
 				this.provenanceCheckJob(request, response);
+			}else if( command.equalsIgnoreCase("GET_DATATYPE_SAMPLE")){
+				this.getDataTypeSample(request, response);
 			}
 			
 			
@@ -671,6 +673,41 @@ public class LayoutController {
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
+	
+	protected void getDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		DataType dataType;
+		JSONObject sample = JSONFactoryUtil.createJSONObject();
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			sample.put("dlEntryId", dataType.getSamplePath());
+		}
+		else{
+			sample.put("dataStructure", dataTypeStructure.getStructure());
+		}
+
+		this.jsonObjectPrint(sample);
+		ServletResponseUtil.write(httpResponse, sample.toString());
+	}
+	
 	
 	private void provenanceCheckJob( PortletRequest request, PortletResponse response) throws JSONException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
