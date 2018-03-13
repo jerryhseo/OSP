@@ -3,8 +3,6 @@
 <head>
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/font-awesome.min.css">
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/ionicons.min.css">
 	<!-- Theme style -->
@@ -55,7 +53,7 @@
 	 <!-- SlimScroll -->
 	 <script src="<%=request.getContextPath()%>/js/jquery.slimscroll.min.js"></script>
 	 <!-- FastClick -->
-	 <script src="<%=request.getContextPath()%>/js/fastclick.min.js"></script>
+	 <script src="<%=request.getContextPath()%>/js/fastclick.js"></script>
 	 <!-- AdminLTE App -->
 	 <script src="<%=request.getContextPath()%>/js/adminlte.min.js"></script>
 	 <!-- Plotly libs -->
@@ -200,7 +198,7 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload.<portlet:namespace/>fileName = data[i].name;
+				dataload.fileName = data[i].name;
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
