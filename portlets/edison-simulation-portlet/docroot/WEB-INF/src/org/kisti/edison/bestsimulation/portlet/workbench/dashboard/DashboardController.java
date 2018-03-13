@@ -301,17 +301,13 @@ public class DashboardController {
 			response.setContentType("application/json; charset=UTF-8");
 			String fileExt = CustomUtil.strNull(type).equals("")?"out":type;
 			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
-			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
+
+			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
 			log.put( "jobStatus", simulationJob.getJobStatus() );
 			
 			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
 			ServletResponseUtil.write(httpResponse, log.toString());
-			/*Map<String, Object> outLog = FileManagementLocalServiceUtil.readOutLogFile(request, simulationUuid, jobUuid, lastPosition);
-			
-			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
-			outLog.put("jobStatus", simulationJob.getJobStatus());
-			response.getWriter().write(serializeJSON(outLog));*/
 		}catch (Exception e) {
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 			e.printStackTrace();

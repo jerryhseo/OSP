@@ -824,6 +824,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			"<portlet:namespace/>type": type
 		},
 		success:function(outLog){
+			console.log(outLog);
 			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
 			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
 			var preTextareVal = textarea.text();
