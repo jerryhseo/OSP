@@ -414,7 +414,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>drawJSMol( inputData );
         },
         error:function(data,e){
-            console.log('[JSMOL]AJAX ERROR-->'+e);
+        	console.log('[JSMOL]AJAX ERROR1-->', data);
+            console.log('[JSMOL]AJAX ERROR2-->', e);
         },
         complete: function( jqXHR, textStatus ){
         }

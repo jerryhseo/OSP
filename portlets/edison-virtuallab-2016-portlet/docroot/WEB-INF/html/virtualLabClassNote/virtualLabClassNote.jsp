@@ -24,14 +24,44 @@
 
 <style type="text/css">
 	.btn_dn, .btn_view{cursor: pointer;}
+	.<portlet:namespace/>isMoreBtn{
+		cursor: pointer;
+		text-decoration: none;
+	}
 </style>
 
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList();
+	
+	$("#<portlet:namespace/>class-note-file-dialog").dialog({
+		autoOpen: false,
+		width: 914,
+		height: 'auto',
+		modal: true,
+		resizable: false,
+		show: {effect:'fade', speed: 800},
+		hide: {effect:'fade', speed: 800},
+		open: function(event, ui) {
+			$(this).css('overflow', 'hidden');
+			$(this).parent().removeClass("ui-widget-content");
+			$(this).parent().removeClass("ui-widget");
+			$(this).removeClass("ui-widget-content");
+	    	$(this).removeClass("ui-dialog-content");
+	    },
+	    close: function() {
+	    
+	    }
+	}).dialog("widget").find(".ui-dialog-titlebar").remove();
+	
+	$("#<portlet:namespace/>class-note-file-dialog-close-btn").click(function() {
+		$("#<portlet:namespace/>class-note-file-dialog").dialog("close");
+	});
 });
 
 function <portlet:namespace/>dataSearchList() {
+	var isMore = $("#<portlet:namespace/>isMore").val();
+	
 	var dataForm = {
 		"<portlet:namespace/>classId" : "${classId}",
 		"<portlet:namespace/>groupId" : "${groupId}"
@@ -47,22 +77,22 @@ function <portlet:namespace/>dataSearchList() {
 			var getVirtualLabClassNoteList = msg.getVirtualLabClassNoteList;
 			$("body").css('overflow','');
 			var rowResult;
-			$("#<portlet:namespace/>virtualLabClassNoteBody tr:not(:has(#1))").remove();
+			$("#<portlet:namespace/>classNoteFileList div:not(:has(#1))").remove();
+			console.log("getVirtualLabClassNoteList length : " + getVirtualLabClassNoteList.length);
 			
 			if(getVirtualLabClassNoteList.length == 0) {
 				
 				$("#<portlet:namespace/>classNoteFileList").html("<liferay-ui:message key='edison-there-are-no-data' />")
 				 										   .css("text-align", "center");
-				
-				
 			} else {
 				for(var i = 0; i < getVirtualLabClassNoteList.length; i++) {
 					
-					if(3<=i){
+					if(isMore == 'true' && 3<=i){
 						break;
 					}
 					
 					var classNoteFileList = $("#<portlet:namespace/>classNoteFileList");
+					var classNoteFileList_more = $("#<portlet:namespace/>classNoteFileList_more");
 					var isContent = getVirtualLabClassNoteList[i].isContent;
 					
 					$("<div/>").addClass("filetitbox")
@@ -85,8 +115,7 @@ function <portlet:namespace/>dataSearchList() {
 									.appendTo(fileBtnBox);
 					}
 					
-					fileBtnBox.appendTo(classNoteFileList);
-					
+					classNoteFileList.append(fileBtnBox);
 				}
 			}
 		},error:function(msg,e){ 
@@ -185,6 +214,19 @@ function <portlet:namespace/>moveContentDetail(contentSeq, contentDiv) {
 	});
 }
 
+function <portlet:namespace/>moreClassFile(cmd) {
+	if(cmd == true){
+		$("#<portlet:namespace/>isMore").val("false");
+		$("#<portlet:namespace/>moreClassFile").hide();
+		$("#<portlet:namespace/>lessClassFile").show();
+	} else if(cmd == false){
+		$("#<portlet:namespace/>isMore").val("true");
+		$("#<portlet:namespace/>moreClassFile").show();
+		$("#<portlet:namespace/>lessClassFile").hide();
+	}
+	
+	<portlet:namespace/>dataSearchList();
+}
 </script>
 <aui:script>
 Liferay.provide(window, 'updateClassNotePopUp', function() {
@@ -204,6 +246,7 @@ function(popupIdToClose) {
 <form id="<portlet:namespace/>relatedAssetForm" method="post" >
 	<aui:input type="hidden" value="${classId }" name="classId" />
 	<aui:input type="hidden" value="${groupId }" name="groupId" />
+	<input type="hidden" id="<portlet:namespace/>isMore" value="true" name="isMore" >
 </form>
 
 <div class="panel edison-panel">
@@ -213,13 +256,23 @@ function(popupIdToClose) {
 			<div class="conwraptit01">
 				<liferay-ui:message key='edison-virtuallab-class-file-download' />
 				<c:if test="${fn:toUpperCase(role) eq 'MANAGER' || fn:toUpperCase(role) eq 'ADMIN' }">
-					<div class="moreicon">
+					<div class="moreicon" style="right: 13%;">
 						<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
 							<liferay-ui:message key='edison-virtuallab-scienceapp-management' />
 							<img src="${contextPath}/images/moreicon.png" width="11" height="11">
 						</a> 
 					</div>
 				</c:if>
+				<div class="moreicon">
+					<div id="<portlet:namespace/>moreClassFile" class="<portlet:namespace/>isMoreBtn" onClick="<portlet:namespace/>moreClassFile(true);" style="display: block;">
+						MORE
+						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
+					</div>
+					<div id="<portlet:namespace/>lessClassFile" class="<portlet:namespace/>isMoreBtn" onClick="<portlet:namespace/>moreClassFile(false);" style="display: none;">
+						LESS
+						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
+					</div>  
+				</div>
 			</div>
 			
 			<!--파일제목 및 다운로드-->
@@ -232,4 +285,3 @@ function(popupIdToClose) {
 	<!--end 강의자료 다운로드-->
 	
 </div>
-

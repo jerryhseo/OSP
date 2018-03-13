@@ -1397,7 +1397,7 @@
                      	   simulationTime: simulationCreateTime,
                      	   scienceAppName: scienceApp.name(),
                      	   scienceAppVersion: scienceApp.version(),
-                     	   ncores: simulation.ncores(),
+                     	   ncores: ncores,
                      	   jobs: JSON.stringify( jobsToSubmit )
                         });
 			
