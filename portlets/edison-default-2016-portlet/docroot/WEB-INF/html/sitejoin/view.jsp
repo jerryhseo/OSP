@@ -61,7 +61,7 @@
 					<c:choose>
 						<c:when test="${site.memberStatus eq 'join'}">
 							<a href="#" onClick="siteLeave('siteJoin', '${site.groupId}', '<%=user.getUserId()%>');">
-								<img src="/edison-portal-type1-theme/images/common/join.png"/>
+								<i class="icon-plus-sign"></i>
 								&nbsp;<liferay-ui:message key="edison-default-site-join-regist"/>
 							</a>
 							
@@ -69,7 +69,7 @@
 						<c:when test="${site.memberStatus eq 'leave'}">
 							
 							<a href="#" onClick="siteLeave('siteLeave',  '${site.groupId}', '<%=user.getUserId()%>');">
-								<img src="/edison-portal-type1-theme/images/common/leave.png"/>
+								<i class="icon-minus-sign-alt"></i>
 								&nbsp;<liferay-ui:message key="edison-default-site-join-leave"/>
 							</a>
 						</c:when>
