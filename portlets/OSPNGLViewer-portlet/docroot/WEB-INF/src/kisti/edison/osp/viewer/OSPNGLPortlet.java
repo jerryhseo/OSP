@@ -53,7 +53,7 @@ public class OSPNGLPortlet extends MVCPortlet {
 
         if(command.equalsIgnoreCase("GET_FILE")){
             try{
-            	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
+            	OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             	//OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException e ){
                 _log.error("readFileContent(): " + filePath.toString());

@@ -114,12 +114,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function drawNglViewer(url){
 	console.log("[NGLViewer] Draw NGL Viewer : ", url);
+	
 	stage.loadFile(url, {defaultRepresentation: true});
 }
 
 $(window).resize(function(e){
 	console.log("[NGLViewer] resize view port : "+ $('body').width() +' : '+$('body').height());
-	
 });
 
 
