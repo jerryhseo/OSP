@@ -65,6 +65,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -269,6 +270,10 @@ public class MonitoringController {
 			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 //			long plid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/workbench").getPlid();
 			model.addAttribute("workBenchPlid", plid);
+			
+			String redirectURL = HttpUtil.decodeURL(EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
+			model.addAttribute("redirectURL", redirectURL);
+			
 		}catch(Exception e){
 			log.error(e);
 			e.printStackTrace();

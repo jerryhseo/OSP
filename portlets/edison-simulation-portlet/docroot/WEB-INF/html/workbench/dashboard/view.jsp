@@ -810,7 +810,7 @@ function <portlet:namespace/>removeProjectShare(uuid,removeShareType){
 
 
 
-function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition) {
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
 	<portlet:namespace/>clearReadOutLogTimer();
 	
 	jQuery.ajax({
@@ -820,7 +820,8 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition)
 		data:{
 			"<portlet:namespace/>simulationUuid": simulationUuid,
 			"<portlet:namespace/>jobUuid": jobUuid,
-			"<portlet:namespace/>lastPosition": lastPosition
+			"<portlet:namespace/>lastPosition": lastPosition,
+			"<portlet:namespace/>type": type
 		},
 		success:function(outLog){
 			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
@@ -1240,9 +1241,15 @@ function <portlet:namespace/>closePanel() {
 		{{/form.executeTime}}
 		{{#form.logView}}
 		<tr>
-			<th>System Log</th>
+			<th>System Log (Out)</th>
 			<td>
-				<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}',0);"></button>
+				<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}',0,'out');"></button>
+			</td>
+		</tr>
+		<tr>
+			<th>System Log (Error)</th>
+			<td>
+				<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('{{form.simulation._simulationUuid}}','{{form.simulation._jobUuid}}',0,'err');"></button>
 			</td>
 		</tr>
 		{{/form.logView}}
