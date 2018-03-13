@@ -690,7 +690,8 @@ NGL.MenubarExamplesWidget = function (stage) {
 
   var xhr = new XMLHttpRequest()
   console.log("[NGLViewer] examplelist url : ", NGL.examplesListUrl);
-  xhr.open('GET', NGL.examplesListUrl)
+  
+  console.log("[NGLViewer] oepn ");
   xhr.responseType = 'json'
   xhr.onload = function (e) {
 	  console.log("KYJ TEST JSON1", e);
@@ -713,6 +714,7 @@ NGL.MenubarExamplesWidget = function (stage) {
       optionsPanel.add(option)
     })
   }
+  xhr.open('GET', NGL.examplesListUrl)
   xhr.send()
 
   return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)
