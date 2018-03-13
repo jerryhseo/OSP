@@ -1030,7 +1030,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			<img id="<portlet:namespace/>createExcel-close-btn" name="<portlet:namespace/>createExcel-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer; float: right;"/>
 		</div>
 	</div>
-	<div class="newWcont01">
+	<div class="newWcont01" style="padding: 10px;">
 		<div style="padding-bottom:10px;"><liferay-ui:message key='edison-virtuallab-reference-excelfile' /></div>
 		<input type="file" class="excelFile" id="<portlet:namespace/>excelFile" name="<portlet:namespace/>excelFile"/><br><br>
 		
