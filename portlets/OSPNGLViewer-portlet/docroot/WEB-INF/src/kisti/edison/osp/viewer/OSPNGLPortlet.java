@@ -55,36 +55,51 @@ public class OSPNGLPortlet extends MVCPortlet {
             try{
             	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             	//OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
-            }catch (PortalException | SystemException e){
+            }catch (PortalException e ){
                 _log.error("readFileContent(): " + filePath.toString());
+                throw new PortletException();
+            }catch(SystemException e){
+            	_log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_IMAGE")){
             try{
             	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
-            }catch (PortalException | SystemException e){
+            }catch (PortalException e){
                 _log.error("readFileContent(): " + filePath.toString());
+                throw new PortletException();
+            }catch( SystemException e){
+            	_log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_FIRST_FILE")){
             try{
             	OSPFileUtil.readFirstFileContent(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
-            }catch (PortalException | SystemException e){
+            }catch (PortalException e){
                 _log.error("readFileContent(): " + filePath.toString());
+                throw new PortletException();
+            }catch ( SystemException e){
+            	_log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try{
             	OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
-            }catch (PortalException | SystemException e){
+            }catch (PortalException e){
                 _log.error("getFirstFileName(): " + filePath.toString());
+                throw new PortletException();
+            }catch (SystemException e){
+            	_log.error("getFirstFileName(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("DOWNLOAD_FILE")){
             try{
             	OSPFileUtil.downloadFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
-            }catch (PortalException | SystemException e){
+            }catch (PortalException e){
                 _log.error("checkValidFile(): " + filePath.toString());
+                throw new PortletException();
+            }catch (SystemException e){
+            	_log.error("checkValidFile(): " + filePath.toString());
                 throw new PortletException();
             }
         }else{

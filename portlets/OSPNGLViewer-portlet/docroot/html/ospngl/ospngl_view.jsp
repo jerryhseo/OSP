@@ -30,10 +30,10 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 
 
-<div class="container-fluid common-analyzer-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-3 col-sm-1" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
@@ -48,7 +48,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 		</div>	
 	</div>
 	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/nglViewer.jsp" width="100%" height="600px" style="border:0">
+		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" width="100%" height="600px" style="border:0">
 		</iframe>
 	</div>
 </div>
@@ -151,7 +151,15 @@ $('#<portlet:namespace/>openLocal').click(function(){
     $('#<portlet:namespace/>selectFile').click();
 });
 
-$('#<portlet:namespace/>openServer').click(function(){
+
+//$("#menubar").children().first().find(".options");
+console.log("test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
+console.log("test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
+
+
+function iframeClickServerOpen(){
+	console.log("[NGLViewer]test openserver menu ");
+
     var inputData;
     if(<portlet:namespace/>currentData && 
         <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
@@ -166,7 +174,9 @@ $('#<portlet:namespace/>openServer').click(function(){
     }
    
     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
+};
+
+
 
 $('#<portlet:namespace/>download').click(function(){
 	console.log("[NGLViewer] download Request.");
