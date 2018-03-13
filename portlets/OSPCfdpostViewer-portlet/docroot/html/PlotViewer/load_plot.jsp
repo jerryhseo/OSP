@@ -187,9 +187,12 @@
 
     });
 
+    var serveResourceURL = '';
 
-    function drawPlot (data_json, dataload){
-			data = JSON.parse(data_json);
+    function drawPlot (data_json, dataload,serveResourceURL2){
+
+    	serveResourceURL = serveResourceURL2;
+    	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
 //          console.log(data[0].text);
       for (var i = 0; i < data.length; i++) {
@@ -504,7 +507,7 @@
     getCFDData = function (readFileList){
       $.ajax({
 				type: 'POST',
-				url: '<%=serveResourceURL.toString()%>',
+				url: serveResourceURL,
 				data  : readFileList.dataload,
 				dataType : 'text',
         success: function (data){

@@ -203,15 +203,15 @@ function <portlet:namespace/>loadData( inputData, command ){
 		data  : dataload,
 		dataType : 'text',
 		success: function(data) {
-			var title = <portlet:namespace/>currentData.name();
-			<portlet:namespace/>drawPlot( data, dataload );
+			var serveResourceURL = <%=serveResourceURL.toString()%>
+			<portlet:namespace/>drawPlot( data, dataload, serveResourceURL );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
 		}
 	});
 }
 
-function <portlet:namespace/>drawPlot( data, dataload ){
+function <portlet:namespace/>drawPlot( data, dataload, serveResourceURL ){
     setTimeout(
 	    function(){
 	    	var iframe = document.getElementById('<portlet:namespace/>canvas');
@@ -219,10 +219,10 @@ function <portlet:namespace/>drawPlot( data, dataload ){
 
 	    	console.log( 'iframeDoc.readyState', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.drawPlot ) {
-	   	    	iframe.contentWindow.drawPlot( data, dataload );
+	   	    	iframe.contentWindow.drawPlot( data, dataload, serveResourceURL );
 	    	}
 	    	else{
-	    		<portlet:namespace/>drawPlot( data, dataload );
+	    		<portlet:namespace/>drawPlot( data, dataload, serveResourceURL );
 	    	}
 	    },
 	    10
