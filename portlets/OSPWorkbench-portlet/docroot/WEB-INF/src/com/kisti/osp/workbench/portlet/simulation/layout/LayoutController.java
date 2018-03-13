@@ -2,6 +2,7 @@ package com.kisti.osp.workbench.portlet.simulation.layout;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,6 +59,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -175,6 +177,10 @@ public class LayoutController {
 				this.provenanceCheckJob(request, response);
 			}else if( command.equalsIgnoreCase("GET_DATATYPE_SAMPLE")){
 				this.getDataTypeSample(request, response);
+			}else if( command.equalsIgnoreCase("READ_DLENTRY")){
+				this.readDLEntry(request, response);
+			}else if( command.equalsIgnoreCase("READ_DATATYPE_SAMPLE")){
+				this.readDataTypeSample(request, response);
 			}
 			
 			
@@ -673,6 +679,126 @@ public class LayoutController {
 		
 		ServletResponseUtil.write(httpResponse, jsonJob.toString() );
 	}
+	
+	protected void readDLEntry( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
+		long dlEntryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		String fileContent = this.readDLFileContent( dlEntryId );
+		
+		DataType dataType;
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			result.put("contentType", "fileContent");
+			result.put("fileContent", fileContent);
+		}
+		else{
+			result.put("contentType", "structuredData");
+			result.put("fileContent", fileContent);
+			result.put("dataStructure", dataTypeStructure.getStructure());
+		}
+		
+		ServletResponseUtil.write(httpResponse, result.toString());
+	}
+	
+	protected void readDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		DataType dataType;
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		long sampleDLEntryId = Long.parseLong(dataType.getSamplePath());
+		System.out.println("Data Type Sample ID: "+ dataType.getSamplePath() );
+		if( sampleDLEntryId > 0 ){
+			String fileContent = this.readDLFileContent(sampleDLEntryId);
+			if( dataTypeStructure == null ){
+				result.put("contentType", "fileContent");
+				result.put("fileContent", fileContent);
+			}
+			else{
+				result.put("contentType", "structuredData");
+				result.put("fileContent", fileContent);
+				result.put("dataStructure", dataTypeStructure.getStructure());
+			}
+		}
+		else{
+			if( dataTypeStructure == null ){
+				result.put("error", "Data type ["+dataTypeName+"-"+dataTypeVersion+"] has no sample file.");
+			}
+			else{
+				result.put("contentType", "structuredData");
+				result.put("dataStructure", dataTypeStructure.getStructure());
+			}
+		}
+
+		this.jsonObjectPrint(result);
+		ServletResponseUtil.write(httpResponse, result.toString());
+	}
+	
+	private String readDLFileContent( long dlEntryId ) throws PortletException, IOException{
+		if( dlEntryId <= 0)
+			return "";
+		
+		FileEntry fileEntry;
+		try {
+			fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
+		} catch (NumberFormatException | PortalException | SystemException e1) {
+			_log.error("[ERROR] Wrong file entry: "+dlEntryId);
+			throw new PortletException();
+		}
+		
+		InputStream stream = null;
+		try {
+			stream = fileEntry.getContentStream();
+			
+		} catch (PortalException | SystemException e1) {
+			_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
+			throw new PortletException();
+		}
+
+		String content = new String(FileUtil.getBytes(stream));
+		if( stream != null )
+			stream.close();
+		
+		return content;
+	}
+	
 	
 	protected void getDataTypeSample( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws PortletException, IOException{
 		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
