@@ -15,13 +15,11 @@
  String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
  %>
 
-<aui:container fluid="true" cssClass="common-analyzer-portlet">
-	<aui:row  fluid="true">
-		<aui:col span="12" id="canvasPanel" >
-			<div  id="<portlet:namespace/>canvas" style="width:100%;"></div>
-		</aui:col>
-	</aui:row>
-</aui:container>
+<div class="container-fluid osp-analyzer">
+	<div class="row-fluid no-header-frame">
+		<div class ="col-sm-12 canvas"  id="<portlet:namespace/>canvas"></div>
+	</div>
+</div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -41,7 +39,7 @@ var <portlet:namespace/>initData;
  ***********************************************************************/
 if(!<portlet:namespace/>eventEnable){
   $(function(){
-    $("#<portlet:namespace/>canvasPanel").css("height", $(document).height());
+    $("#<portlet:namespace/>canvas").css("height", $(document).height());
   });
 
   var inputData = '<%=inputData%>';
