@@ -689,6 +689,7 @@ NGL.MenubarExamplesWidget = function (stage) {
   optionsPanel.setWidth('300px')
 
   var xhr = new XMLHttpRequest()
+  console.log("[NGLViewer] examplelist url : ", NGL.examplesListUrl);
   xhr.open('GET', NGL.examplesListUrl)
   xhr.responseType = 'json'
   xhr.onload = function (e) {
