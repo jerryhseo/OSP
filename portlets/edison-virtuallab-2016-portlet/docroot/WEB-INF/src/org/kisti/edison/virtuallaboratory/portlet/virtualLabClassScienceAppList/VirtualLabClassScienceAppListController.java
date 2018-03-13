@@ -250,11 +250,11 @@ public class VirtualLabClassScienceAppListController {
 		Object scienceAppCheck = null;
 		
 		if(classId == 0){
-			scienceAppCheck = params.get("virtuallabScienceAppCheck");
+			scienceAppCheck = params.get("selectEntryArr[]");
 			VirtualLabClassScienceAppLocalServiceUtil.insertVirtualLabScienceAppList(themeDisplay.getCompanyId(), virtualLabId, classId, scienceAppCheck, themeDisplay.getLocale());
 		}else{
-			scienceAppCheck = params.get("scienceAppCheck");
-			VirtualLabClassScienceAppLocalServiceUtil.insertVirtualLabClassScienceAppList(themeDisplay.getCompanyId(), virtualLabId, classId, scienceAppCheck, themeDisplay.getLocale());
+				scienceAppCheck = params.get("selectEntryArr[]");
+				VirtualLabClassScienceAppLocalServiceUtil.insertVirtualLabClassScienceAppList(themeDisplay.getCompanyId(), virtualLabId, classId, scienceAppCheck, themeDisplay.getLocale());
 		}
 		
 		writer.write("SUCCESS");
