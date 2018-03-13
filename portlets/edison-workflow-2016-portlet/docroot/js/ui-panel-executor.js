@@ -31,17 +31,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     };
 
-    /*
-    function run(){}
-    function rerun(){}
-    function pause(){}
-    function restart(){}
-    function status(){}
-     */
-
     $(JQ_PORTLET_BOUNDARY_ID + " .sidbar-run-btn").click(function (e) {
         e.preventDefault();
         var btnType = $(this).attr("data-btn-type");
+        console.log(PANEL_DATA.setting.form.workflowInstanceId);
+        if(!PANEL_DATA.setting.form.workflowInstanceId){
+            toastr["error"]("", var_create_first_message);
+            return false;
+        }
         if (btnType === "run") { run(); }
         if (btnType === "rerun") { rerun(); }
         if (btnType === "pause") { pause(); }
@@ -89,7 +86,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             fn.apply();
         }
 
-        if(btnType === "save"){
+        if(btnType === "save" ){
             if(PANEL_DATA.setting.form.workflowInstanceTitle){
                 saveOrUpdateWorkflowInstance("setting");
             }else{
@@ -383,6 +380,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return false;
     }
+
+    $(document).bind('keydown.uiPanel',function (event) {
+        if ((event.which == 115 || event.which == 83) && 
+            (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            event.preventDefault();
+            if(PANEL_DATA.setting.form.workflowInstanceTitle){
+                saveOrUpdateWorkflowInstance("setting");
+            }else{
+                toastr["error"]("", var_create_first_message);
+            }
+            return false;
+        }
+        return true;
+    });
 
     return {
         "openWorkflow": openWorkflowByWorkflowId
