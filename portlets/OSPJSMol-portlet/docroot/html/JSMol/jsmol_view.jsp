@@ -403,6 +403,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>relative: inputData.relative()
     };
         
+    console.log("[JSMOL] laod get first file test : ", data);
     $.ajax({
         type: 'POST',
         url: '<%= serveResourceURL.toString()%>', 
