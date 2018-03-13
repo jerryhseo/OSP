@@ -843,9 +843,9 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
             }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){
                 String parentPath = inputport.getString("parentPath");
                 String fileName = inputport.getString("fileName");
-                Path uploadFilePath = OSPFileUtil.getRepositoryPath(user.getScreenName(),
+                Path targetFilePath = OSPFileUtil.getRepositoryPath(user.getScreenName(),
                     Paths.get(parentPath, fileName).toString(), OSPRepositoryTypes.USER_HOME.toString());
-                String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken, uploadFilePath.toFile());
+                String fileId = getFileId(appGroupId, icebreakerVcToken, targetFilePath.toString());
                 if(fileId != null){
                     if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
                         executions.add("$" + inputPortName);
@@ -891,6 +891,45 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         return job;
     }
   
+    private String getFileId(long appGroupId, String vcToken, String path ) throws IOException, SystemException, PortalException{
+        String fileId = "";
+        Group appGroup = GroupLocalServiceUtil.getGroup(appGroupId);
+        String fileApiURL = (String) appGroup.getExpandoBridge()
+            .getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
+        
+        String apiUrl = fileApiURL + "/api/file/encode";
+        
+        HttpURLConnection connection = connect(apiUrl, "POST", "application/json", "application/json", vcToken);
+        
+        JSONObject jsonPath = JSONFactoryUtil.createJSONObject();
+        jsonPath.put("path", path.toString() );
+        
+        OutputStream outStream = connection.getOutputStream();
+        outStream.write(jsonPath.toString().getBytes() );
+        outStream.flush();
+        outStream.close();
+        
+        BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
+        String line = "";
+        StringBuffer responseBuffer = new StringBuffer();
+        
+        if( connection.getResponseCode() == 201){
+            while( (line = reader.readLine()) !=null ){
+                responseBuffer.append(line);
+            }
+            reader.close();
+            
+            JSONObject response = JSONFactoryUtil.createJSONObject(responseBuffer.toString() );
+            fileId = response.getString("id");
+        }
+        else if (connection.getResponseCode() == 400) {
+            connection.disconnect();
+            throw new SystemException("Failed IcebreakerService [ encode file id ] : BAD REQUEST : wrong body content - HTTP error code : " + connection.getResponseCode());
+        }
+        connection.disconnect();
+        return fileId;
+    }
+    
   public File downloadFileApi(User user, long appGroupId, JSONObject inputport)
       throws PortalException, SystemException, IOException{
     JSONObject inputValue = inputport.getJSONObject("input-value");
@@ -1195,6 +1234,19 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         return false;
       }
     });
+  }
+  
+  private HttpURLConnection connect( String apiUrl, String method, String accept, String contentType, String icebreakerVcToken ) throws IOException{
+      URL url = new URL(apiUrl);
+      
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setDoOutput(true);
+      connection.setRequestMethod(method);
+      connection.setRequestProperty("Accept", accept);
+      connection.setRequestProperty("Content-Type", contentType+";charset=utf-8");
+
+      connection.setRequestProperty("Authorization", "Basic " + icebreakerVcToken);
+      return connection;
   }
   
   private List<AssetCategory> getSiteAssetCategories(
