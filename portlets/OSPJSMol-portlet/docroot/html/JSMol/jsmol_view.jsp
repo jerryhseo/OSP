@@ -412,8 +412,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.name(),
-            <portlet:namespace/>relative: inputData.relative()
+            <portlet:namespace/>fileName: inputData.name()
     };
         
     console.log("[JSMOL] laod get first file test : ", data);
