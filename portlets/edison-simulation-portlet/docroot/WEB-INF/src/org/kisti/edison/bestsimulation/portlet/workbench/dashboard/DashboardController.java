@@ -291,14 +291,16 @@ public class DashboardController {
 	public void readOutLog(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
 		    @RequestParam(value = "jobUuid", required = true) String jobUuid ,
-		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion
+		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion,
+		    @RequestParam(value = "type", required = false) String type
 			) throws IOException{
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
 		
 		try{
 			response.setContentType("application/json; charset=UTF-8");
-			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
+			String fileExt = CustomUtil.strNull(type).equals("")?"out":type;
+			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
 			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
 			log.put( "jobStatus", simulationJob.getJobStatus() );

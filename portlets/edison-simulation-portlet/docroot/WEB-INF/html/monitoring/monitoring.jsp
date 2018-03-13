@@ -116,28 +116,26 @@
 	<liferay-portlet:param name="groupId" value="<%=selectedGroupId%>"/>
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false"
- plid="${workBenchPlid}" 
- portletName="Workbench_WAR_OSPWorkbenchportlet"
- windowState="<%=LiferayWindowState.NORMAL.toString()%>" 
- portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-	<liferay-portlet:param name="workbenchType" value="SIMULATION_RERUN" />
+<liferay-portlet:renderURL var="workbenchURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
+	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP" />
+	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
+	<portlet:param name="redirectName" 	value="Monitoring"/>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
 <div class="container">
+	<div class="h1">
+		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+		<liferay-ui:message key="edison-simulation-monitoring-title" />	
+	</div>
+	
 	<c:if test="${tabViewYn eq 'Y'}">
 		<div class="contabmenu">
 			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
 		</div>
 	</c:if>
-	
-	<div class="h1">
-		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-		<liferay-ui:message key="edison-simulation-monitoring-title" />	
-	</div>
 	
 	<div class="table-responsive panel edison-panel" style="width: 100%">
 	
@@ -205,10 +203,10 @@
 				</c:if>
 				<col width="5%">
 				<col width="9%">
-				<col width="10%">
 				<col width="9%">
-				<col width="15%">
-				<col width="15%">
+				<col width="9%">
+				<col width="10%">
+				<col width="10%">
 			</colgroup>
 			<thead>
 				<tr>
@@ -226,7 +224,7 @@
 				</tr>
 				<tr>
 					<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
-					<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual"/></p></th>
+					<th scope="col" class="greyth"><p>Re-Run</p></th>
 				</tr> 
 			</thead>
 			<tbody id="mtbody">
@@ -312,9 +310,6 @@
 													<img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${model.simulationUuid}','0');" alt="delete" title="delete">
 												</c:if>	
 											</c:if>
-											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-												<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${model.scienceAppId}', '${model.jobUuid}');" alt="rerun" title="rerun">
-											</c:if>	
 										</td>
 										
 										<!-- 결과 다운로드 -->
@@ -622,15 +617,13 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .attr("height","22px")
 				   .css("cursor","pointer")
 				   .appendTo($resultDownArea);
- 		if($resultViewArea.attr("postprocess-state")=="Y"){
-			$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
-					   .attr("width","22px")
-					   .attr("height","22px")
-					   .css("cursor","pointer")
- 					   .click(function(){<portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid);})
-					   .appendTo($resultViewArea);
- 		}
-	//실패
+		
+		
+		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_rerun.png")
+				  .css("cursor","pointer")
+				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+scienceAppId+"', '"+jobUuid+"');")
+				  .appendTo($resultViewArea);
+		
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
 		if($middleCheckArea.attr("logFileProcess-state") == "Y"){
 			$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_error.png")
@@ -950,12 +943,6 @@ $(function(){
 							$jobManageTd.append("&nbsp;")
 						}	
 					}
-					if(data.cluster != "EDISON-RESTORE"){
-						$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_rerun.png")
-								  .css("cursor","pointer")
-								  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+data.scienceAppId+"', '"+data.jobUuid+"');")
-								  .appendTo($jobManageTd);
-					}
 					
 					// 결과 다운로드
 					$("<td></td>").addClass("center").attr("id","result_down").appendTo($hideJobTr);
@@ -1109,16 +1096,12 @@ function <portlet:namespace/>deleteMonitoring(simulationUuid,jobSeqNo){
 
 //재실행
 function <portlet:namespace/>restartSimulation(p_scienceAppId, p_jobUuid){
-	var thisPortletNamespace = "_Workbench_WAR_OSPWorkbenchportlet_";
+	var thisPortletNamespace = "_SimulationWorkbench_WAR_OSPWorkbenchportlet_";
 
 	var URL = "<%=workbenchURL%>";
 	var params = "&" +thisPortletNamespace+ "scienceAppId=" + p_scienceAppId;
 	params += "&" +thisPortletNamespace+ "jobUuid=" + p_jobUuid;
-	params += "&" +thisPortletNamespace+ "customId=0";
-	params += "&" +thisPortletNamespace+ "classId=0";
-	params += "&" +thisPortletNamespace+ "testYn=false";
-
-	console.log(URL + params);
+	
 	location.href = URL + params;
 }
 

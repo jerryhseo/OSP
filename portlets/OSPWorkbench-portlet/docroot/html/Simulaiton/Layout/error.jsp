@@ -11,16 +11,13 @@
 %>
 <div class="alert alert-error">
 	<c:if test="<%= sae.getType() == SimulationWorkbenchException.NO_SCIENCEAPP_ID%>">
-<%-- 			<liferay-ui:message key="edison-app-no-access-exception-msg" /> --%>
-		aaaaaaaaaaaaaaaaaaaaaaaaaa
+		<liferay-ui:message key="edison-app-no-access-exception-msg" />
 	</c:if>
 	<c:if test="<%= sae.getType() == SimulationWorkbenchException.NO_SCIENCEAPP_LAYOUT_EXIST%>">
-<%-- 			<liferay-ui:message key="edison-app-no-access-exception-msg" /> --%>
-		bbbbbbbbbbbbbbbbbbbbbbb
+		<liferay-ui:message key="edison-app-no-access-exception-msg" />
 	</c:if>
 	
 	<c:if test="<%= sae.getType() == SimulationWorkbenchException.SCIENCEAPP_PORT_SEARCH_EXCEPTION%>">
-<%-- 			<liferay-ui:message key="edison-app-no-access-exception-msg" /> --%>
-		bbbbbbbbbbbbbbbbbbbbbbb
+		<liferay-ui:message key="edison-app-no-access-exception-msg" />
 	</c:if>
 </div>
