@@ -702,7 +702,8 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	 * @throws JSONException
 	 * @throws InterruptedException
 	 */
-	public Map uploadFile(String cluster, String icebreakerUrl, String vcToken, File file) throws MalformedURLException, IOException, InterruptedException {
+    public Map uploadFile(String cluster, String icebreakerUrl, String vcToken, File file)
+        throws MalformedURLException, IOException, InterruptedException{
 		 
 		URL url = new URL(icebreakerUrl+"/api/file/upload?cluster="+cluster);
 		HttpFileUtil httpFileUtil = new HttpFileUtil(url);
