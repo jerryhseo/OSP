@@ -266,6 +266,7 @@ $(function(e) {
 	* horizontal top 기준 Width check -> data-equal-id="BOTTOM DIV" data-remainder-id="TOP DIV"
 	*
 	**/
+	
 	var isDevider = false;
 	var object,container,equalDiv,RemainderDiv,moveType;
 	$(".devider").mousedown(function(e) {
@@ -282,6 +283,7 @@ $(function(e) {
 			isDevider = false;
 		}
 	});
+	
 	$("body").mousemove(function(e) {
 		if(isDevider){
 			if(moveType =="vertical"){
@@ -312,7 +314,6 @@ $(function(e) {
 			
 		}
 	});
-	
 	
 	toastr.options = {
 			"closeButton": true,

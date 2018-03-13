@@ -2,18 +2,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init-simulation-workbench.jsp"%>
 
+<style type="text/css">
+	.port .panel-heading {
+		height: 30px;
+		padding: 5px 10px;
+	}
+	
+	.port .panel-body {
+		padding: 0px;
+	}
+</style>
+
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-<div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 60px;position: absolute;z-index: 8;">
-	<div class="panel-heading" style="z-index: 10;cursor: move;"><h4>Port Selector</h4></div>
+<div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 150px;position: absolute;z-index: 8;">
+	<div class="panel-heading" style="z-index: 10;cursor: move;height: 40px;padding: 5px 10px;">
+		<h4>Port Selector</h4>
+	</div>
 	<div class="panel-body">
 		<div class="panel-group" id="<portlet:namespace/>port-accordion">
 		
 			
 		</div>
 	</div>
-	<div class="panel-footer" style="min-width: 290px;">
+	<div class="panel-footer" style="min-width: 200px;">
 		<div id="<portlet:namespace/>port-edit-btn-group">
 			<span class="<portlet:namespace/>provenance">
 				<liferay-ui:message key='edison-provenance-engin'/>
