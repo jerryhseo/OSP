@@ -76,8 +76,10 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 </liferay-portlet:renderURL>
 
 <style type="text/css">
+    #university-group{ margin-bottom: 20px;}
+    #university-group .required{ position: absolute; top: 35px;}
 	.logintitlebox {
-		margin: 0 auto;
+		margin: 10px auto;
 		width: 100%;
 	}
 	
@@ -123,33 +125,14 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 		padding: 15px 0px 25px 0px;
 		line-height: 10px;
 	}
-	
-	.edison .table3_list td.title2 {
-		vertical-align: middle;
-	}
-	
-	.aui .portlet-borderless-bar{
-		display: none;
-	}
-	
-	.aui .control-group{
-		margin-bottom: 0px;
-	}
-	
-	.aui input[type="text"],
-	.aui input[type="password"]{
-		margin-bottom: 0px;
-	}
-	
-	.aui .long_field{
-		width: 275px;
-	}
+  
+    .body_layout{margin-bottom: 20px;}
 </style>
 
 <portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="createAccountURL">
 	<portlet:param name="struts_action" value="/login/create_account" />
 </portlet:actionURL>
-
+<div class="body_layout container">
 <aui:form action="<%= createAccountURL %>" method="post" name="fm">
 	<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
@@ -237,7 +220,7 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 	</c:if>
 
 	<aui:model-context model="<%= Contact.class %>" />
-	
+  
 	<div class="logintitlebox">
 			<div class="logintitle"><liferay-ui:message key="edison-create-account-message" /></div>
 			<div class="loginintro"><liferay-ui:message key="edison-create-account-course-message" /></div>
@@ -251,187 +234,195 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
 			<p><liferay-ui:message key="edison-create-account-description-message-third-line" /></p>
 <!-- 			<p><liferay-ui:message key="edison-create-account-description-message-Fourth-line" /></p> -->
 		</div>
-		<div class="table3_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-name" />(<font color="red">*</font>)</td>
-					<td width="37%">
-						<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" model="<%= User.class %>" name="firstName" label="" cssClass="long_field" value="<%=saml_firstName%>">
-							<aui:validator name="required"/>
-							<aui:validator name="maxLength">32</aui:validator>
-						</aui:input>
-					</td>
-					<td width="20%" class="title2">ID(<font color="red">*</font>)</td>
-					<td width="37%">
-						<c:if test="<%= !PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE) %>">
-							<aui:input label="" model="<%= User.class %>" name="screenName" cssClass="long_field">
-								<aui:validator name="required"/>
-								<aui:validator name="maxLength">32</aui:validator>
-								<aui:validator name="minLength">3</aui:validator>
-								<aui:validator  name="custom"  errorMessage="<%=duplicateScreenNameMsg%>"> 
-									function (val, fieldNode, ruleValue) {
-										return idCheck(val);
-									}
-								</aui:validator>
-								<aui:validator  name="custom"  errorMessage="<%=idErrMsg%>">
-									function (val) {
-										return idExpressionCheck(val);
-									}
-								</aui:validator>
-							</aui:input>
-						</c:if>
-					</td>
-				</tr>
-				
-				
-				
-				<c:if test="<%= PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD %>">
-					<tr>
-						<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-password" />(<font color="red">*</font>)</td>
-							<td width="37%">
-								<aui:input label="" name="password1" size="30" type="password" value="">
-									<aui:validator name="required"/>
-									<aui:validator  name="custom"  errorMessage="<%=passwordErrMsg%>">
-										function (val, fieldNode, ruleValue) {
-											return passWordCheck(val);
-										}
-										
-									</aui:validator>
-								</aui:input>
-							</td>
-							<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-password-confirm" />(<font color="red">*</font>)</td>
-							<td width="37%">
-								<aui:input label="" name="password2" size="30" type="password" value="">
-									<aui:validator name="required"/>
-									<aui:validator name="equalTo">
-										'#<portlet:namespace />password1'
-									</aui:validator>
-								</aui:input>
-							</td>
-					</tr>
-				</c:if>
-				
-				
-				
-				
-				<tr>
-					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-email" />(<font color="red">*</font>)</td>
-					<td colspan="3">
-						<aui:input model="<%= User.class %>" name="emailAddress" label="" cssClass="long_field" value="<%=saml_email%>">
-							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
-								<aui:validator name="required"/>
-							</c:if>
-							<aui:validator  name="custom"  errorMessage="<%=duplicateEmaidMsg%>"> 
-								function (val, fieldNode, ruleValue) {
-									return emailCheck(val);
-								}
-							</aui:validator>
-						</aui:input>
-					</td>
-				</tr>
-				
-				
-				
-				<tr>
-					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-university" />(<font color="red">*</font>)</td>
-					<td width="37%">
-						<aui:input label="" id="com_cd_nm" name="com_cd_nm" size="50" type="text" value="" readonly="readonly">
-							<aui:validator name="required"/>
-						</aui:input>
-						<liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= 0 %>" editable="<%= true %>" label="<%= false %>" name="<%=EdisonExpando_USER_UNIVERSITY%>"/>
-						<div class="h10"></div>
-						<input type="button" class="button09" onclick="syscommoncdPopup()" value='<liferay-ui:message key="edison-button-search"/>' />
-					</td>
-					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-major" /></td>
-					<td width="37%" style="vertical-align: middle;">
-						<liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= 0 %>" editable="<%= true %>" label="<%= false %>" name="<%=EdisonExpando_USER_MAJOR%>"/>
-					</td>
-				</tr>
-				
-				
-				<tr>
-					<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-site" /></td>
-					<td colspan="3">
-						<%
-							for(Group group:siteGroups){
-								if(group.isActive()&&group.getType()==1){
-									String groupName = LanguageUtil.get(themeDisplay.getLocale(), StringUtil.toUpperCase(group.getName()));
-						%>
-									<aui:input name='<%= "join_site_id_"+group.getGroupId() %>' type="checkbox" value="<%= group.getName() %>" label="<%=groupName%>"/>
-						<%
-								}
-							}
-						%>
-					</td>
-				</tr>
-				
-				
-				
-				<c:if test="<%= PropsValues.CAPTCHA_CHECK_PORTAL_CREATE_ACCOUNT %>">
-					<tr>
-						<td width="20%" class="title2"><liferay-ui:message key="edison-create-account-field-title-captcha" />(<font color="red">*</font>)</td>
-						<td colspan="3">
-							<portlet:resourceURL var="captchaURL">
-								<portlet:param name="struts_action" value="/login/captcha" />
-							</portlet:resourceURL>
-							
-							<aui:column>
-								<liferay-ui:captcha url="<%= captchaURL %>" />
-							</aui:column>
-						</td>
-					</tr>
-				</c:if>
-				
-				
-			</table>
-		</div>
-		<div class="buttonbox08">
-			<input type="submit" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-save" />" class="button08">
-			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-cancel" />" class="button08" onclick="cancle();">
+    
+  		<div class="table3_list">
+          <fieldset>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="firstName"><liferay-ui:message key="edison-create-account-field-title-name" />(<fontcolor="red">*</font>)</label>
+                  <aui:input autoFocus="<%=windowState.equals(WindowState.MAXIMIZED)%>" model="<%=User.class%>"
+                    name="firstName" label="" cssClass="long_field" value="<%=saml_firstName%>">
+                    <aui:validator name="required" />
+                    <aui:validator name="maxLength">32</aui:validator>
+                  </aui:input>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="screenName">ID(<font color="red">*</font>)</label>
+                  <c:if test="<%= !PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE) %>">
+                      <aui:input label="" model="<%= User.class %>" name="screenName" cssClass="long_field">
+                          <aui:validator name="required"/>
+                          <aui:validator name="maxLength">32</aui:validator>
+                          <aui:validator name="minLength">3</aui:validator>
+                          <aui:validator  name="custom"  errorMessage="<%=duplicateScreenNameMsg%>"> 
+                              function (val, fieldNode, ruleValue) {
+                                  return idCheck(val);
+                              }
+                          </aui:validator>
+                          <aui:validator  name="custom"  errorMessage="<%=idErrMsg%>">
+                              function (val) {
+                                  return idExpressionCheck(val);
+                              }
+                          </aui:validator>
+                      </aui:input>
+                  </c:if>
+                </div>
+              </div>
+            </div>
+            
+            <c:if test="<%= PropsValues.LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD %>">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="password1"><liferay-ui:message key="edison-create-account-field-title-password" />(<font color="red">*</font>)</label>
+                  <aui:input label="" name="password1" size="30" type="password" value="">
+                      <aui:validator name="required"/>
+                      <aui:validator  name="custom"  errorMessage="<%=passwordErrMsg%>">
+                          function (val, fieldNode, ruleValue) {
+                              return passWordCheck(val);
+                          }
+                      </aui:validator>
+                  </aui:input>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="password2"><liferay-ui:message key="edison-create-account-field-title-password-confirm" />(<font color="red">*</font>)</label>
+                  <aui:input label="" name="password2" size="30" type="password" value="">
+                      <aui:validator name="required"/>
+                      <aui:validator name="equalTo">
+                          '#<portlet:namespace />password1'
+                      </aui:validator>
+                  </aui:input>
+                </div>
+              </div>
+            </div>
+            </c:if>
+            
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="emailAddress"><liferay-ui:message key="edison-create-account-field-title-email" />(<font color="red">*</font>)</label>
+                  <aui:input model="<%= User.class %>" name="emailAddress" label="" cssClass="long_field" value="<%=saml_email%>">
+                      <c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
+                          <aui:validator name="required"/>
+                      </c:if>
+                      <aui:validator  name="custom"  errorMessage="<%=duplicateEmaidMsg%>"> 
+                          function (val, fieldNode, ruleValue) {
+                              return emailCheck(val);
+                          }
+                      </aui:validator>
+                  </aui:input>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="com_cd_nm"><liferay-ui:message key="edison-create-account-field-title-university" />(<font color="red">*</font>)</label>
+                  <div class="input-group" id="university-group">
+                    <aui:input label="" id="com_cd_nm" name="com_cd_nm" cssClass="long_field" type="text" value="" readonly="readonly">
+                        <aui:validator name="required"/>
+                    </aui:input>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="syscommoncdPopup()"><liferay-ui:message key="edison-button-search"/></button>
+                    </span>
+                  </div>
+                  <liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= 0 %>" 
+                      editable="<%= true %>" label="<%= false %>" name="<%=EdisonExpando_USER_UNIVERSITY%>"/>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="major-field-input"><liferay-ui:message key="edison-create-account-field-title-major" /></label>
+                  <input type="text" name="major-field-input" id="major-field-input" class="form-control" size="30"/>
+                  <liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= 0 %>" 
+                      editable="<%= true %>" label="<%= false %>" name="<%=EdisonExpando_USER_MAJOR%>" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label><liferay-ui:message key="edison-create-account-field-title-site" /></label>
+                </div>
+                <div class="panel panel-default form-inline">
+                <div class="checkbox panel-body">
+                  <%
+                      for(Group group:siteGroups){
+                          if(group.isActive()&&group.getType()==1){
+                              String groupName = LanguageUtil.get(themeDisplay.getLocale(), StringUtil.toUpperCase(group.getName()));
+                  %>
+                              <aui:input name='<%= "join_site_id_"+group.getGroupId() %>' type="checkbox" value="<%= group.getName() %>" label="<%=groupName%>"/>
+                  <%
+                          }
+                      }
+                  %>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label><liferay-ui:message key="edison-create-account-field-title-captcha" />(<font color="red">*</font>)</label>
+                        <portlet:resourceURL var="captchaURL">
+                            <portlet:param name="struts_action" value="/login/captcha" />
+                        </portlet:resourceURL>
+                        <liferay-ui:captcha url="<%= captchaURL %>" />
+                    </div>
+                </div>
+            </div>
+            <c:choose>
+              <c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_BIRTHDAY) %>">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label for="birthday">birthday</label>
+                        <aui:input name="birthday" value="<%= birthdayCalendar %>" />
+                    </div>
+                </div>
+              </c:when>
+              <c:otherwise>
+                <aui:input name="birthdayMonth" type="hidden" value="<%= Calendar.JANUARY %>" />
+                <aui:input name="birthdayDay" type="hidden" value="1" />
+                <aui:input name="birthdayYear" type="hidden" value="1970" />
+              </c:otherwise>
+            </c:choose>
+            <c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_MALE) %>">
+              <div class="row">
+                  <div class="col-sm-12">
+                    <aui:select label="gender" name="male">
+                        <aui:option label="male" value="1" />
+                        <aui:option label="female" selected="<%= !male %>" value="0" />
+                    </aui:select>
+                  </div>
+              </div>
+            </c:if>
+            <div class="form-group">
+                <input type="submit" value="<liferay-ui:message key="edison-button-save" />" class="btn btn-primary">
+                <input type="button" value="<liferay-ui:message key="edison-button-cancel" />" class="btn btn-default" onclick="cancle();">
+            </div>
+          </fieldset>
 		</div>
 	</div>
-	
-	
-	
-	
-	<c:choose>
-		<c:when test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_BIRTHDAY) %>">
-			<tr>
-				<td width="20%" class="title2">birthday</td>
-				<td colspan="3">
-					<aui:input name="birthday" value="<%= birthdayCalendar %>" />
-				</td>
-			</tr>
-		</c:when>
-		<c:otherwise>
-			<aui:input name="birthdayMonth" type="hidden" value="<%= Calendar.JANUARY %>" />
-			<aui:input name="birthdayDay" type="hidden" value="1" />
-			<aui:input name="birthdayYear" type="hidden" value="1970" />
-		</c:otherwise>
-	</c:choose>
-
-
-	<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.FIELD_ENABLE_COM_LIFERAY_PORTAL_MODEL_CONTACT_MALE) %>">
-		<tr>
-			<td colspan="4">
-				<aui:select label="gender" name="male">
-					<aui:option label="male" value="1" />
-					<aui:option label="female" selected="<%= !male %>" value="0" />
-				</aui:select>
-			</td>
-		</tr>
-	</c:if>
-	
-	
 </aui:form>
-
+</div>
 <script type="text/javascript">
-	$("input[name*=firstName]").css("max-width","none");
-	$("input[name*=screenName]").css("max-width","none");
-	$("input[name*=emailAddress]").css("max-width","none");
+    $("input[name*=firstName]").css("max-width","none");
+    $("input[name*=screenName]").css("max-width","none");
+    $("input[name*=emailAddress]").css("max-width","none");
 	$("input[name*=universityField]").css("display","none");
 	$("input[name*=projectCategoryId]").css("display","none");
-	$("input[name*=com_cd_nm]").css("width","250px");
+	$("input[name*=majorField]").css("display","none");
+	
+	$(document).ready(function(){
+	    $("#major-field-input").change(function(){
+	        $("input[name*=majorField]").val($(this).val());
+	    });
+	});
 	
 	function cancle(){
 		location.href = "<%= PortalUtil.getHomeURL(request)%>";
