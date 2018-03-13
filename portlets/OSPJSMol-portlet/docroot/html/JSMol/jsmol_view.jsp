@@ -401,11 +401,6 @@ function <portlet:namespace/>getFirstFileName( argData ){
     if( ! inputData.repositoryType() )
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
-   
-    
-    //if( !inputData.repositoryType() )
-    //	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
-    
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
