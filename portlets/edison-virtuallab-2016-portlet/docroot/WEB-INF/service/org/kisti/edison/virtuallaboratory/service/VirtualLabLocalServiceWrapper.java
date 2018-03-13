@@ -690,7 +690,8 @@ public class VirtualLabLocalServiceWrapper implements VirtualLabLocalService,
 	}
 
 	/**
-	* 揶쏅벡伊��귐딅뮞占쏙옙鈺곌퀬��占쎈��믭옙�븝옙 占쎄쑴��占쎌쥙彛�疫꿸퀣占쏙옙�곗쨮 6揶쏆뮇�∽옙�됰퓠 占싼뗫맙占쏙옙占쎄퀣�좑옙占�     */
+	* 강좌 리스트 조회(클래스가 현재 날짜 기준으로 6개월안에 포함된 데이터)
+	*/
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabList(
 		java.util.Map<java.lang.String, java.lang.Object> params,
