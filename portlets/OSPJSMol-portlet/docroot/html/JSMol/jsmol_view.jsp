@@ -392,7 +392,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
     console.log('[JSMol]get First File Name : ', argData );
     var inputData = argData.clone();
     console.log('[JSMol]get First File Name2 : ', inputData );
-    console.log('[JSMOL] input data for get first file name : repositoryTypes :', inputData.type());
+    console.log('[JSMOL] input data for get first file name : repositoryTypes :', inputData.repositoryType());
     
     if( inputData.type() === 'folder' ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
