@@ -259,6 +259,8 @@ public class VirtualLabRequestManagementController {
 				if(!EdisonUserUtil.isRegularRole(requestUser, RoleConstants.ADMINISTRATOR)
 				&& !EdisonUserUtil.isSiteRole(requestUser, groupId, RoleConstants.SITE_ADMINISTRATOR)
 				&& !EdisonUserUtil.isSiteRole(requestUser, groupId, RoleConstants.SITE_OWNER)) {
+					
+					EdisonUserUtil.addGroup(requestUser, EdisonRoleConstants.TUTOR_GROUP);	// TUTOR_GROUP 권한 부여
 					Role role = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_LAB_OWNER);		// Role Id 확인
 					UserGroupRoleCustomLocalServiceUtil.addUserGroupRoleCustom(Long.parseLong(requestUserId), groupId, role.getRoleId(), Long.parseLong(virtualLabId));
 				}
