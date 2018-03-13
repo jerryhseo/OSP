@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function drawNglViewer(url){
+	console.log("[NGLViewer] Draw NGL Viewer : ", url);
 	stage.loadFile(url, {defaultRepresentation: true});
 }
 
