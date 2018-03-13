@@ -413,6 +413,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             inputData.type( OSP.Enumeration.PathType.FILE );
             inputData.name( data.fileName );
             <portlet:namespace/>drawJSMol( inputData );
+            console.log("[JSMOL] Get First File Data : ", inputData);
         },
         error:function(data,e){
         	console.log('[JSMOL]AJAX ERROR1-->', data);
