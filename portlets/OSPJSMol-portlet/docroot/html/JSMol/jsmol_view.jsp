@@ -399,7 +399,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
     	inputData.name('');
     }
     if( ! inputData.repositoryType() )
-		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
    
     
