@@ -31,29 +31,34 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 
 <div class="container-fluid osp-analyzer">
-	<div class="row-fluid header">
-		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-2" >
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-					Menu<span class="caret"></span>
-				</button>
-				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor" style="margin-left:10px">
-					<li id="<portlet:namespace/>openLocal" style="margin-left:10px"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer" style="margin-left:10px"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download" style="margin-left:10px"><i class="icon-download-alt"> Download</i></li>
-				</ul>
-			</div>
-		</div>	
-	</div>
 	<div class="row-fluid canvas">
 		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" width="100%" height="600px" style="border:0">
 		</iframe>
 	</div>
 </div>
 
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
+	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable" style="padding:0px;margin-bottom:0px;">
+		<!-- title -->
+		<div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id='<portlet:namespace/>closeDialog'>&times;</button>
+			<h4>Select a File</h4>
+		</div>
+		
+		<!-- content -->
+		<div class="panel-body" id="<portlet:namespace/>file-explorer-content" style="height: 81%"></div>
 
+		
+		<!-- bottom -->
+		<div class="panel-footer">
+			<div class="ui-dialog-buttonset">
+				<input class="btn btn-primary" id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
+				<input class="btn" id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
+			</div>
+		</div>	
+		
+	</div>
+</div>
 
 <script>
 
