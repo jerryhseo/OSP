@@ -702,17 +702,19 @@ NGL.MenubarExamplesWidget = function (stage) {
       console.log("KYJ TEST JSON1", response);
     }
     console.log("KYJ TEST JSON2", response);
-    response.sort().forEach(function (name) {
-    	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
-      var option = createOption(name, function () {
-    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
-    	 // console.log("test return");
-    	console.log(test);
-      })
-      //console.log("test option");
-      //console.log(option);
-      optionsPanel.add(option)
-    })
+    if(response){
+	    response.sort().forEach(function (name) {
+	    	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
+	      var option = createOption(name, function () {
+	    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
+	    	 // console.log("test return");
+	    	console.log(test);
+	      })
+	      //console.log("test option");
+	      //console.log(option);
+	      optionsPanel.add(option)
+	    })
+    }
   }
   xhr.open('GET', NGL.examplesListUrl)
   xhr.send()
