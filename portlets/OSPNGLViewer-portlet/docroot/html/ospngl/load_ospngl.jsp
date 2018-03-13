@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function drawNglViewer(url){
-	stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
+	stage.loadFile(url, {defaultRepresentation: true});
 }
 
 $(window).resize(function(e){
