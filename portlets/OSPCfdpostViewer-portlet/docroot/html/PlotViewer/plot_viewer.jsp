@@ -188,6 +188,14 @@ function <portlet:namespace/>loadHighCharts( inputData ){
 
 function <portlet:namespace/>loadData( inputData, command ){
 	<portlet:namespace/>currentData = inputData.clone();
+	var <portlet:namespace/>dataload = {
+			command: command,
+			pathType: <portlet:namespace/>currentData.type(),
+			repositoryType: <portlet:namespace/>currentData.repositoryType(),
+			parentPath: <portlet:namespace/>currentData.parent(),
+			fileName: <portlet:namespace/>currentData.name(),
+			relative: <portlet:namespace/>currentData.relative()
+	};
 
 	var dataload = {
 			<portlet:namespace/>command: command,
@@ -204,7 +212,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 		dataType : 'text',
 		success: function(data) {
 			var serveResourceURL = '<%=serveResourceURL.toString()%>'
-			<portlet:namespace/>drawPlot( data, dataload, serveResourceURL );
+			<portlet:namespace/>drawPlot( data, <portlet:namespace/>dataload, serveResourceURL );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
 		}

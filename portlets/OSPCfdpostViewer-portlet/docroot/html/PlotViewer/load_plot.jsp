@@ -1,6 +1,3 @@
-
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -190,7 +187,7 @@
 
     var serveResourceURL = '';
 
-    function drawPlot (data_json, dataload,serveResourceURL2){
+    function drawPlot (data_json, dataload, serveResourceURL2){
 
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
@@ -207,7 +204,7 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload.<portlet:namespace/>fileName = data[i].text;
+				dataload.fileName = data[i].text;
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
