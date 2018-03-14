@@ -495,7 +495,7 @@ public class OSPFileUtil {
 		changeFileMode(targetPath.toString(), mode);
 	}
 	
-	static private void changeFileOwner( String target, String owner ){
+	static private void changeFileOwner( String target, String owner ) throws PortalException, SystemException{
 		String strCmd = "";
 		strCmd += "sudo chown -R ";
 		strCmd += owner;
@@ -640,7 +640,7 @@ public class OSPFileUtil {
 		// Get the uploaded file as a file.
 		File uploadedFile = uploadRequest.getFile(uploadFileName);
 		
-		copyFile(uploadedFile.getAbsolutePath(), targetPath.toString(), true);
+		copyFile(uploadedFile.toPath(), targetPath, true);
 		changeFileOwner(targetPath.toString(), owner);
 		changeFileMode(targetPath.toString(), "755");
 	}
