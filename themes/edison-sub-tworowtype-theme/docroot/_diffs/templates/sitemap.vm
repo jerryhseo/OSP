@@ -63,7 +63,7 @@
 	<a href="/web${edisongroup.friendlyURL}">
 		EDISON
 	</a>
-	#foreach ($site in$sortTool.sort($siteGroups,'groupId:asc'))
+	#foreach ($site in$sortTool.sort($siteGroups,'name:asc'))
 		<a href="/web${site.friendlyURL}">
 			$getterUtil.get($site.getExpandoBridge().getAttribute("SiteName").get($locale), $site.descriptiveName)
 		</a>
