@@ -58,9 +58,9 @@ function setNamespace( ns ){
 
 NGL.cssDirectory="<%= request.getContextPath()%>/css/";
 NGL.documentationUrl = "<%=request.getContextPath()%>/build/docs/index.html";
-NGL.examplesListUrl = "<%=request.getContextPath()%>/build/scriptsList.json";
-NGL.examplesScriptUrl = "<%=request.getContextPath()%>/scripts/";
-NGL.exampleDataDirectoryURL = "<%=request.getContextPath()%>/data/";
+//NGL.examplesListUrl = "<%=request.getContextPath()%>/build/scriptsList.json";
+//NGL.examplesScriptUrl = "<%=request.getContextPath()%>/scripts/";
+//NGL.exampleDataDirectoryURL = "<%=request.getContextPath()%>/data/";
 //Datasources
 
 NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource("<%=request.getContextPath()%>/data/"));
@@ -119,10 +119,18 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 });
 
-function drawNglViewer(url){
+function drawNglViewer(url, serveResourceURL){
 	console.log("[NGLViewer] Draw NGL Viewer : ", url);
-	
-	stage.loadFile(NGL.autoLoad(url), {defaultRepresentation: true});
+	var result;
+	$.ajax({
+		type : 'GET',
+		url : url,
+		dataType : 'text',
+		success : function(data){
+			result = data;
+		}
+	});
+	stage.loadFile(result, {defaultRepresentation: true});
 }
 
 $(window).resize(function(e){
