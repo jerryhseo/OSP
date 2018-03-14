@@ -219,7 +219,7 @@
 
 				dataload[filepath_name] = data[i].text;
 
-				console.log("data[i].text :: ", data[i].text);
+				console.log("data[i].text :: ", data[i].text , " i = ", i , "dataload[filepath_name] " , dataload[filepath_name]  );
 				console.log("first add namespace");
 
         readFileList[i].tabID = tabString;
