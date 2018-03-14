@@ -63,6 +63,9 @@
 
 		var namespace;
 
+		function setNamespace( ns ){
+			namespace = ns;
+		}
 
     $('div.content').on('change','select' ,function(){
 //      console.log($(this).get(0).id);
