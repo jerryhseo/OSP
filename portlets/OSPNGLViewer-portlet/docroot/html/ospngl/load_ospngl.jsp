@@ -128,6 +128,9 @@ function drawNglViewer(url, serveResourceURL){
 		dataType : 'text',
 		success : function(data){
 			result = data;
+		},
+		error : function(data, e){
+			
 		}
 	});
 	stage.loadFile(result, {defaultRepresentation: true});
