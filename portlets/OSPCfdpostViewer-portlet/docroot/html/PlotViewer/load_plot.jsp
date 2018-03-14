@@ -517,6 +517,7 @@
 				dataType : 'text',
         success: function (getData){
 					console.log("ajax Success!!");
+					console.log(getData);
           readCFDData(getData, readFileList.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
