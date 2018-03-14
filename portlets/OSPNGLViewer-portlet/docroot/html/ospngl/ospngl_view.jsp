@@ -100,9 +100,21 @@ function <portlet:namespace/>passNamespace(){
 					<portlet:namespace/>passNamespace();
 				}
 			}, 
+			10
 	);
 }
 
+function <portlet:namespace/>iframeReady(){
+	var iframe = document.getElementById('<portlet:namespace/>canvas');
+	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+	if ( iframeDoc.readyState  == 'complete' ) {
+		return true;
+	} 
+	else{
+		return false;
+	}
+}
 
 if( <portlet:namespace/>eventEnable === false ){
 	var inputData = '<%=inputData%>';
