@@ -193,8 +193,8 @@
 
     var serveResourceURL = '';
 
-    function drawPlot (data_json, dataload, serveResourceURL2){
-			var dataload = dataload;
+    function drawPlot (data_json, dataload2, serveResourceURL2){
+			var dataload = dataload2;
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
@@ -209,6 +209,7 @@
 			console.log("namespace ::", namespace);
 			var filepath_name = namespace+"fileName"
 
+			console.log("filepath_name ::", filepath_name);
 
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
@@ -226,7 +227,7 @@
 				readFileList[i].dataload = dataload;
 
 
-				console.log(readFileList[i].dataload);
+				console.log(readFileList);
 
         if(i==0) {
           $('.nav-tabs').append($('<li />',{ 'class' : 'active'})
