@@ -215,6 +215,7 @@
 
 				dataload[namespace+"fileName"] = data[i].text;
 
+				console.log("data[i].text :: ", data[i].text);
 				console.log("first add namespace");
 				console.log(dataload);
 
