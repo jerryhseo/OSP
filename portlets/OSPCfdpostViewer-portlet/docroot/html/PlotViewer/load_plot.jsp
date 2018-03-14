@@ -175,14 +175,14 @@
 
     $(function() {
       for (var i = 1; i < readFileList.length; i++) {
-        $(readFileList[i].tabID).one( "click", function() {
+        $('#'+readFileList[i].tabID).one( "click", function() {
           var clickTagNum =this.id.slice(-1);
           getCFDData(readFileList[clickTagNum] );
 
         });
       }
       for (var i = 0; i < readFileList.length; i++) {
-        $(readFileList[i].tabID).click( function() {
+        $('#'+readFileList[i].tabID).click( function() {
           var clickTagNum =this.id.slice(-1);
           subTapControll(clickTagNum);
           resizeLayout(clickTagNum);
