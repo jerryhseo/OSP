@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -10,11 +11,10 @@ PortletPreferences preferences = portletDisplay.getPortletSetup();
 preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
 preferences.store();
 
-String inputData = (String)renderRequest.getAttribute("inputData");
-String connector = (String)renderRequest.getAttribute("connector");
-String mode = (String)renderRequest.getAttribute("mode");
-boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-boolean isPopup = LiferayWindowState.isExclusive(request);
+String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
+boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
 <div class="container-fluid osp-analyzer">
@@ -40,7 +40,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 </div>
 <div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
-              <div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
+              <div id="<portlet:namespace/>file-explorer-content" style="height:95%"></div>
               <div>
                   <input id="<portlet:namespace/>file-explorer-ok" type="button" value="OK">
                   <input id="<portlet:namespace/>file-explorer-cancel" type="button" value="Cancel">
@@ -55,7 +55,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-var <portlet:namespace/>connector;
+var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_od";
 if( '<portlet:namespace/>'.lastIndexOf('_INSTANCE_') > 0)
@@ -82,9 +82,8 @@ if( <portlet:namespace/>eventEnable === false ){
     }else{
         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
     }
-	<portlet:namespace/>connector = '<%=connector%>';
 	
-	<portlet:namespace/>loadHighCharts(<portlet:namespace/>initData);
+	<portlet:namespace/>loadHighCharts(<portlet:namespace/>initData.clone());
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -105,7 +104,7 @@ function <portlet:namespace/>openLocalFile(){
 
 function <portlet:namespace/>openServerFile(){
 	var inputData;
-    if(<portlet:namespace/>initData && 
+    if(!$.isEmptyObject(<portlet:namespace/>initData) && 
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
         inputData = <portlet:namespace/>initData;
@@ -123,8 +122,7 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
   var eventData = {
       portletId : '<%=portletDisplay.getId()%>',
-      targetPortlet : <portlet:namespace/>fileExplorerId,
-      action: "READ"
+      targetPortlet : <portlet:namespace/>fileExplorerId
   };
   Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData);
   $<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
@@ -183,7 +181,7 @@ Liferay.on(
 			if( e.action )
 				<portlet:namespace/>mode = e.mode;
 			else
-				<portlet:namespace/>action = 'VIEW';
+				<portlet:namespace/>mode = 'VIEW';
 				
 			var events = [
 				OSP.Event.OSP_EVENTS_REGISTERED,
@@ -224,7 +222,7 @@ Liferay.on(
   	  if( !<portlet:namespace/>initData.repositoryType() )
 		  <portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
   	    
-        <portlet:namespace/>loadHighCharts( <portlet:namespace/>initData );
+        <portlet:namespace/>loadHighCharts( <portlet:namespace/>initData.clone() );
         
         var eventData = {
   	                   portletId: myId,
@@ -268,6 +266,16 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_INITIALIZE,
+   		function(e){
+   			console.log('[<portlet:namespace/>]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
+   			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp');
+   			<portlet:namespace/>initData = {};
+   			<portlet:namespace/>currentData = {};
+   		}
+ );
+
 /***********************************************************************
  * Golbal functions
 ***********************************************************************/
@@ -303,7 +311,6 @@ function <portlet:namespace/>loadData( inputData, command ){
 			<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
 			<portlet:namespace/>parentPath: <portlet:namespace/>currentData.parent(),
 			<portlet:namespace/>fileName: <portlet:namespace/>currentData.name(),
-			<portlet:namespace/>relative: <portlet:namespace/>currentData.relative()
 	};
 	$.ajax({
 		type: 'POST',
@@ -340,9 +347,10 @@ function <portlet:namespace/>drawPlot( data, title, subtitle ){
 
 function <portlet:namespace/>getFirstFileName( argData ){
     var inputData = argData.clone();
-    
-    if( ! inputData.repositoryType() )
-		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+    if( inputData.type() === 'folder' ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
@@ -371,7 +379,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
-	if(<portlet:namespace/>currentData && 
+	if(!$.isEmptyObject(<portlet:namespace/>currentData) && 
 		<portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE &&
 		<portlet:namespace/>currentData.name()){
         var filePath = <portlet:namespace/>currentData;
@@ -380,8 +388,7 @@ function <portlet:namespace/>downloadCurrentFile(){
             <portlet:namespace/>pathType: filePath.type(),
             <portlet:namespace/>repositoryType: filePath.repositoryType(),
             <portlet:namespace/>parentPath: filePath.parent(),
-            <portlet:namespace/>fileName: filePath.name(),
-            <portlet:namespace/>relative: filePath.relative()
+            <portlet:namespace/>fileName: filePath.name()
         };
         
         var base = '<%=serveResourceURL.toString()%>';

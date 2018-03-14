@@ -109,6 +109,8 @@
 				
 				nodeDataAry.push( parentNode );
 			}
+			else if( folderPath === '/' )
+				folderPath = '';
 
 			for(var index in fileInfoList ){
 				var fileInfo = fileInfoList[index];

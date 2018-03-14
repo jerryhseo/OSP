@@ -23,7 +23,13 @@ String launcherURL = (String)renderRequest.getAttribute("launcherURL");
 <br/>
 <a href="<%=request.getContextPath()%>/html/pv4/start.jsp" target="_blank">Connect using Visualizer 4</a>
  --%>
-<iframe id="<portlet:namespace/>canvas"  style="width:100%; height:100%;"></iframe>
+ <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
+ 
+ <div class="container-fluid osp-analyzer">
+ 	<div class="row-fluid no-header-frame">
+		<iframe id="<portlet:namespace/>canvas"  class="col-sm-12 iframe-canvas"></iframe>
+	</div>
+</div>
 
 <script>
 /***********************************************************************
@@ -117,6 +123,14 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_INITIALIZE,
+   		function(e){
+   			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+   				$("#<portlet:namespace/>canvas").attr('src', '');
+   			}
+   		}
+   );
 
 /***********************************************************************
  * Golbal functions

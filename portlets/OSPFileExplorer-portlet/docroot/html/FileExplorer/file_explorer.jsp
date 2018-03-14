@@ -26,14 +26,19 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 %>
 
-<div class="container-fluid osp-editor file-explorer-portlet " style="height:inherit;">
+<div class="container-fluid osp-editor file-explorer-portlet ">
 	<div class="row-fluid header">
-		<div class="col-sm-10">
+		<c:if test="<%=!isEditMode%>">
+			<div class="col-sm-12">
+		</c:if>
+		<c:if test="<%=isEditMode%>">
+			<div class="col-sm-10">
+		</c:if>
 			<input class="form-control" id="<portlet:namespace/>selectedFile" style="width:100%;"/>
 		</div>
 		<c:if test="<%=isEditMode%>">
 			<div class="col-sm-2">
-				<div class="dropdown">
+				<div class="dropdown text-right">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>
     				</button>
@@ -306,16 +311,13 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
 			    <portlet:namespace/>passNamespace();
-			    /*
-			    if( ! <portlet:namespace/>selectedFile ){
 					<portlet:namespace/>selectedFile = new OSP.InputData();
 					<portlet:namespace/>selectedFile.type(OSP.Enumeration.PathType.FOLDER);
 					<portlet:namespace/>selectedFile.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 					<portlet:namespace/>selectedFile.parent('');
 					<portlet:namespace/>selectedFile.name('');
+					<portlet:namespace/>baseDir = <portlet:namespace/>selectedFile.clone();
 					<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
-				}
-			    */
 			}
 		}
 );
@@ -325,7 +327,7 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
-			    console.log('['+myId+'] OSP_LOAD_DATA: ', e );
+			    console.log('[<portlet:namespace/>] OSP_LOAD_DATA: ', e );
 				
 			    <portlet:namespace/>baseDir = new OSP.InputData( e.data );
 				 if( !<portlet:namespace/>baseDir.repositoryType() ){
@@ -344,11 +346,26 @@ Liferay.on(
 		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet === myId ){
+				console.log('[<portlet:namespace/>] OSP_REQUEST_DATA');
+				
+				var path = OSP.Util.convertToPath( $('#<portlet:namespace/>selectedFile').val() );
+				console.log( 'Converted Path: ', path );
+				var inputData;
+				if( path.name() !== <portlet:namespace/>selectedFile.name() ){
+					inputData = new OSP.InputData();
+					inputData.type( OSP.Enumeration.PathType.FILE);
+					inputData.repositoryType( <portlet:namespace/>selectedFile.repositoryType() );
+					inputData.parent( <portlet:namespace/>selectedFile.parent() );
+					inputData.name( path.name() );
+				}
+				else{
+					inputData = <portlet:namespace/>selectedFile;
+				}
 				
 				var eventData = {
 					portletId: myId,
 					targetPortlet:e.portletId,
-					data: OSP.Util.toJSON(<portlet:namespace/>selectedFile),
+					data: OSP.Util.toJSON(inputData),
 					params: e.params
 				}
 				Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, eventData );
@@ -360,23 +377,16 @@ Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
 			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
-				/*
-				var inputData = new OSP.InputData();
-				var repositoryType;
-				if( <portlet:namespace/>selectedFile.repositoryType_ )
-					repositoryType = <portlet:namespace/>selectedFile.repositoryType_;
-				else{
-					'<%=OSPRepositoryTypes.USER_HOME.toString()%>';
+				console.log('[<portlet:namespace/>] OSP_INITIALIZE');
+				if( $.isEmptyObject(<portlet:namespace/>baseDir) ){
+					<portlet:namespace/>baseDir = new OSP.InputData();
+					<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+					<portlet:namespace/>baseDir.type( OSP.Enumeration.PathType.FOLDER);
+					<portlet:namespace/>baseDir.parent( '' );
+					<portlet:namespace/>baseDir.name('');
 				}
- 
-				inputData.repositoryType( repositoryType );
-				inputData.type( OSP.Enumeration.PathType.FOLDER);
-				inputData.parent( '' );
-				inputData.name('');
-				inputData.relative(true);
-				<portlet:namespace/>initFileExplorer( inputData );
-				*/
-				<portlet:namespace/>selectedFile = <portlet:namespace/>baseDir;
+				
+				<portlet:namespace/>selectedFile = <portlet:namespace/>baseDir.clone();
 				<portlet:namespace/>initFileExplorer( <portlet:namespace/>selectedFile );
 			}
 		}
@@ -405,10 +415,20 @@ function <portlet:namespace/>initFileExplorer( inputData ){
 
 	switch( inputData.type() ){
 		case OSP.Enumeration.PathType.FILE:
-		case OSP.Enumeration.PathType.FOLDER:
 			var filePath = OSP.Util.convertToPath( inputData.name().trim() );
 			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), filePath.parent()));
-			<portlet:namespace/>selectedFile.name( filePath.name() ? filePath.name() : '' );
+			<portlet:namespace/>selectedFile.name( filePath.name() );
+			<portlet:namespace/>lookupPath(
+			                               'GET_FILE_INFO',
+			                     			OSP.Enumeration.PathType.FOLDER,
+			                     			<portlet:namespace/>selectedFile.parent(),
+			                     			''
+			                     	);
+			$('#<portlet:namespace/>selectedFile').val(OSP.Util.mergePath( <portlet:namespace/>selectedFile.parent(), <portlet:namespace/>selectedFile.name()));
+			break;
+		case OSP.Enumeration.PathType.FOLDER:
+			<portlet:namespace/>selectedFile.parent(OSP.Util.mergePath( inputData.parent(), inputData.name()));
+			<portlet:namespace/>selectedFile.name( '' );
 			<portlet:namespace/>lookupPath(
 			                               'GET_FILE_INFO',
 			                     			OSP.Enumeration.PathType.FOLDER,

@@ -437,6 +437,7 @@ public class OSPFileUtil {
 		if( !Files.exists( targetFolder ) ){
 			Files.createDirectories(targetFolder);
 			String owner = getUserName(portletRequest);
+			System.out.println("OWNER: "+owner);
 			
 			changeFileOwner(portletRequest, targetFolder.toString(), owner, repositoryType);
 			changeFileMode(portletRequest, targetFolder.toString(), "755", repositoryType);
@@ -1159,6 +1160,7 @@ public class OSPFileUtil {
     	if( userName.equalsIgnoreCase("edison") )
     		userName = "edisonadm";
     	
+    	System.out.println("getUserName(): "+userName);
     	return userName;
     }
     

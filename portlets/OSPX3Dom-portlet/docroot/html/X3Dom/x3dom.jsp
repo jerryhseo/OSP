@@ -19,7 +19,7 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="container-fluid common-analyzer-portlet ">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-2" >
@@ -28,10 +28,10 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 					Menu<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor">
-					<li id="<portlet:namespace/>openLocal"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download"><i class="icon-download-alt"> Download</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li><a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt">Download</i></a></li>
 				</ul>
 			</div>
 		</div>	
@@ -73,17 +73,12 @@ var <portlet:namespace/>eventEnable = <%=eventEnable%>;
  
  if( <portlet:namespace/>eventEnable === false ){
      var inputData = '<%=inputData%>';
-     if(!inputData){
+     if($.isEmptyObject(JSON.parse(inputData))){
          <portlet:namespace/>initData = new OSP.InputData();
      }else{
          <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
      }
      <portlet:namespace/>connector = '<%=connector%>';
-     
-   //for test...
- //    <portlet:namespace/>initData.type('file');
- //    <portlet:namespace/>initData.parent('x3dom');
- //    <portlet:namespace/>initData.name('Deer.x3d')
      
      <portlet:namespace/>loadX3Dom(<portlet:namespace/>initData );
    }
@@ -99,29 +94,26 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
+ function <portlet:namespace/>openLocalFile(){
+		$('#<portlet:namespace/>selectFile').click();
+	}
 
-$('#<portlet:namespace/>openServer').click(function(){
-    var inputData;
-    if(<portlet:namespace/>initData && 
-        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
-        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
-        inputData = <portlet:namespace/>initData;
-    }else{
-        inputData = new OSP.InputData();
-        inputData.type( OSP.Enumeration.PathType.FOLDER );
-        inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-        inputData.parent('');
-        inputData.name('');
-    }
-    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
+	function <portlet:namespace/>openServerFile(){
+		var inputData;
+	    if(!$.isEmptyObject(<portlet:namespace/>initData) && 
+	        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.URI &&
+	        <portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.CONTEXT ){
+	        inputData = <portlet:namespace/>initData;
+	    }else{
+	        inputData = new OSP.InputData();
+	        inputData.type( OSP.Enumeration.PathType.FOLDER );
+	        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+	        inputData.parent('');
+	        inputData.name('');
+	    }
+	    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
+	}
 
-$('#<portlet:namespace/>download').click(function(){
-    <portlet:namespace/>downloadCurrentFile();
-});
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
   e.preventDefault();
@@ -277,7 +269,9 @@ Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function(e){
 			console.log('[X3Dom]OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']');
-		  $("#<portlet:namespace/>canvas").empty();
+			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/X3Dom/load_x3dom.jsp');
+			<portlet:namespace/>initData = {};
+			<portlet:namespace/>currentData = {};
 		}
 );
 
@@ -327,14 +321,20 @@ function <portlet:namespace/>drawX3Dom( inputData ){
 	    	    });
 	    	} 
 	    	else{
-	    		<portlet:namespace/>drawX3Dom( url, zooming );
+	    		<portlet:namespace/>drawX3Dom( inputData );
 	    	}
 	    }, 
 	    10
 	);
 }
 
-function <portlet:namespace/>getFirstFileName( inputData ){
+function <portlet:namespace/>getFirstFileName( argData ){
+	var inputData = argData.clone();
+    if( inputData.type() === 'folder ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
+    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
@@ -350,9 +350,10 @@ function <portlet:namespace/>getFirstFileName( inputData ){
         data  : data,
         dataType : 'json',
         success: function(data) {
-            inputData.name( data.fileName );
-            inputData.type(OSP.Enumeration.PathType.FILE);
-            <portlet:namespace/>drawX3Dom( inputData );
+        	var input = inputData.clone();
+         	input.name( data.fileName );
+            input.type(OSP.Enumeration.PathType.FILE);
+            <portlet:namespace/>drawX3Dom( input );
         },
         error:function(data,e){
             console.log('AJAX ERROR-->'+data);
@@ -363,7 +364,7 @@ function <portlet:namespace/>getFirstFileName( inputData ){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
-    if(<portlet:namespace/>currentData && <portlet:namespace/>currentData.name()){
+    if(!$.isEmptyObject(<portlet:namespace/>currentData) && <portlet:namespace/>currentData.name()){
     	var filePath = <portlet:namespace/>currentData;
     	var data = {
   			<portlet:namespace/>command: "DOWNLOAD_FILE",

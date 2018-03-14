@@ -10,6 +10,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.kisti.osp.constants.OSPConstants;
 import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
 import com.kisti.osp.util.OSPFileUtil;
