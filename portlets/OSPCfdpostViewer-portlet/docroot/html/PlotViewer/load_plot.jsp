@@ -1,3 +1,6 @@
+
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -204,7 +207,7 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload.fileName = data[i].text;
+				dataload.<portlet:namespace/>fileName = data[i].text;
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
