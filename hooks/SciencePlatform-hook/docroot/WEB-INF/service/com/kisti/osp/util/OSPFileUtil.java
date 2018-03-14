@@ -1220,19 +1220,19 @@ public class OSPFileUtil {
         
     }
     
-    static private class OSPFileVisitor extends SimpleFileVisitor<Path>{
+    static class OSPFileVisitor extends SimpleFileVisitor<Path>{
     	Path targetPath;
     	Path tempFilePath;
     	
     	public OSPFileVisitor( Path target, Path tempPath ){
-    		targetPath = target;
-    		tempFilePath = tempPath;
+    		this.targetPath = target;
+    		this.tempFilePath = tempPath;
     	}
     	
 		@Override
 		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-			Path path = targetPath.relativize(dir);
-			Path tempPath = tempFilePath.resolve(path);
+			Path path = this.targetPath.relativize(dir);
+			Path tempPath = this.tempFilePath.resolve(path);
 			if( !Files.exists(tempPath) ){
 				Path tempFolder = null;
 				try {
@@ -1247,8 +1247,8 @@ public class OSPFileUtil {
 
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs){
-			Path path = targetPath.relativize(file);
-			Path tempPath = tempFilePath.resolve(path);
+			Path path = this.targetPath.relativize(file);
+			Path tempPath = this.tempFilePath.resolve(path);
 			try {
 				Files.copy(file, tempPath, StandardCopyOption.REPLACE_EXISTING);
 				tempPath.toFile().deleteOnExit();
