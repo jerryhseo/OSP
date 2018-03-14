@@ -437,13 +437,14 @@ public class OSPFileUtil {
 		if( !Files.exists( targetFolder ) ){
 			Files.createDirectories(targetFolder);
 			String owner = getUserName(portletRequest);
-			System.out.println("OWNER: "+owner);
 			
-			changeFileOwner(portletRequest, targetFolder.toString(), owner, repositoryType);
-			changeFileMode(portletRequest, targetFolder.toString(), "755", repositoryType);
+			changeFileOwner(targetFolder.toString(), owner+":edisonuser");
+			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+		changeFileOwner(targetPath.toString(), owner+":edisonuser");
+		changeFileMode(targetPath.toString(), "755");
 		
 		if( Validator.isNotNull(stream) )
 			stream.close();
@@ -462,12 +463,32 @@ public class OSPFileUtil {
 			String owner, 
 			String repositoryType ) throws PortalException, SystemException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
-		owner += owner + ":edisonuser";
+		owner = owner + ":edisonuser";
+		
+		changeFileOwner(targetPath.toString(), owner);
+	}
+	
+	/**
+	 * Change mode of a file
+	 * @throws SystemException 
+	 * @throws PortalException 
+	 */
+	public static void changeFileMode( 
+			PortletRequest portletRequest, 
+			String target, 
+			String mode, 
+			String repositoryType) throws PortalException, SystemException{
+		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
+		
+		changeFileMode(targetPath.toString(), mode);
+	}
+	
+	static private void changeFileOwner( String target, String owner ){
 		String strCmd = "";
 		strCmd += "sudo chown -R ";
 		strCmd += owner;
 		strCmd += " ";
-		strCmd += targetPath.toString();
+		strCmd += target;
 		
 		CommandLine cmdLine = CommandLine.parse( strCmd );
 		
@@ -494,23 +515,14 @@ public class OSPFileUtil {
 			throw new PortalException("Failed to chown : " + errorStream.toString());
 	}
 	
-	/**
-	 * Change mode of a file
-	 * @throws SystemException 
-	 * @throws PortalException 
-	 */
-	public static void changeFileMode( 
-			PortletRequest portletRequest, 
+	static private void changeFileMode( 
 			String target, 
-			String mode, 
-			String repositoryType) throws PortalException, SystemException{
-		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
-		
+			String mode ) throws PortalException, SystemException{
 		String strCmd = "";
 		strCmd += "sudo chmod ";
 		strCmd += mode;
 		strCmd += " ";
-		strCmd += targetPath.toString();
+		strCmd += target;
 		
 		CommandLine cmdLine = CommandLine.parse( strCmd );
 		
@@ -536,6 +548,7 @@ public class OSPFileUtil {
         if (exitValue != 0)
             throw new PortalException("Failed to chmod : " + errorStream.toString());
 	}
+
 	
 	static private DefaultExecuteResultHandler execute(CommandLine cmdLine, OutputStream outStream, OutputStream errorStream)
             throws ExecuteException, IOException {
@@ -1160,7 +1173,6 @@ public class OSPFileUtil {
     	if( userName.equalsIgnoreCase("edison") )
     		userName = "edisonadm";
     	
-    	System.out.println("getUserName(): "+userName);
     	return userName;
     }
     
