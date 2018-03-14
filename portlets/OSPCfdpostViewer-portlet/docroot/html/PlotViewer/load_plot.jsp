@@ -192,7 +192,7 @@
 
 				$('#nav_tap_2').one( "click", function() {
 					var clickTagNum =this.id.slice(-1);
-					getCFDData(readFileList[clickTagNum] );
+					getCFDData(readFileList[clickTagNum]);
 
 				});
 
@@ -253,9 +253,11 @@
 
           $('.tab-content').append($('<div />',{ 'class' : 'tab-pane', 'id' : tabContentID }));
         }
+
+
+      getCFDData(readFileList[i]);
       }
       //console.log(readFileList);
-      getCFDData(readFileList[0]);
     };
 
     select_option = function  (tab_index, div_class, selectOption ) {
