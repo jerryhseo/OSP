@@ -547,7 +547,7 @@
 			data[namespace+'fileName'] = inputDatalist.text;
 			data[namespace+'relative'] = true;
 
-			console.log(inputDatalist);
+	//		console.log(inputDatalist);
       $.ajax({
 				type: 'POST',
 				url: serveResourceURL,
