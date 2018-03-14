@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
+<%@page import="com.liferay.portal.theme.ThemeDisplay"%>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/course.css" media="screen"/>
 
@@ -356,9 +357,13 @@ function <portlet:namespace/>dataSearchTabList(groupId, universityField) {
 }
 
 function <portlet:namespace/>moveVirtualLab(virtualLabId, groupId) {
-	var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
-	var URL = virtualLabManagementDetailURL + "&<portlet:namespace/>virtualLabId=" + virtualLabId+"&<portlet:namespace/>groupId="+groupId;
-	window.location.href = URL;
+	if("${isSignedIn}" == "true"){
+		var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
+		var URL = virtualLabManagementDetailURL + "&<portlet:namespace/>virtualLabId=" + virtualLabId+"&<portlet:namespace/>groupId="+groupId;
+		window.location.href = URL;
+	} else {
+		window.location.href = "<%=themeDisplay.getURLSignIn()%>";
+	}
 }
 
 function <portlet:namespace/>onKeyDown() {

@@ -190,6 +190,7 @@ public class VirtualLabManagementController {
 			}
 			model.addAttribute("tabViewYn", tabViewYn);
 			model.addAttribute("isLogin", isLogin);
+			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
 
 			long groupId = themeDisplay.getScopeGroupId();
 			String searchType = ParamUtil.get(request, "searchType", "addClass");
@@ -425,9 +426,9 @@ public class VirtualLabManagementController {
 		Role virtualLabClassManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
 		
 		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| //
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
+			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
+			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
+			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
 			isCustomAdmin = true;
 		}else{
 			isDefaultUserWrite = true;
@@ -465,9 +466,9 @@ public class VirtualLabManagementController {
 		Role virtualLabClassManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
 		
 		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
-		UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
+				UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
+				UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
+				UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
 			isCustomAdmin = true;
 		}else{
 			isDefaultUserWrite = true;
@@ -488,6 +489,7 @@ public class VirtualLabManagementController {
 		if(isCustomAdmin || isSiteAdministrator || isVirtualLabClassMmember){
 			authYn = "Y";
 		}
+			
 		
 		model.addAttribute("classId", classId);
 		model.addAttribute("groupId", groupId);
