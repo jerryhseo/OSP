@@ -315,8 +315,15 @@ public class OSPFileUtil {
 	public static Path createFile( PortletRequest portletRequest, String target, String repositoryType ) throws PortalException, SystemException, IOException{
 		Path filePath = getRepositoryPath(portletRequest, target, repositoryType);
 		Path parentPath = Files.createDirectories(filePath.getParent());
+		String owner = getUserName(portletRequest)+":edisonuser";
+		changeFileOwner(parentPath.toString(), owner);
+		changeFileMode(parentPath.toString(), "755");
 		Files.deleteIfExists(filePath);
-		return Files.createFile(filePath);
+		Files.createFile(filePath);
+		changeFileOwner(filePath.toString(), owner);
+		changeFileMode(filePath.toString(), "755");
+		
+		return Paths.get(target);
 	}
 	
 	public static void deleteFile( 
@@ -344,15 +351,17 @@ public class OSPFileUtil {
 		
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
 		Path targetFolder = targetPath.getParent();
+		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists(targetFolder) ){
 			Files.createDirectories(targetFolder);
-			String owner = getUserName(portletRequest);
 			
-			changeFileOwner(portletRequest, targetFolder.toString(), owner, repositoryType);
-			changeFileMode(portletRequest, targetFolder.toString(), "755", repositoryType);
+			changeFileOwner(targetFolder.toString(), owner);
+			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		moveFile(sourcePath, targetPath, overwrite);
+		changeFileOwner(targetPath.toString(), owner);
+		changeFileMode(targetPath.toString(), "755");
 		
 		return target;
 	}
@@ -388,15 +397,17 @@ public class OSPFileUtil {
 		
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
 		Path targetFolder = targetPath.getParent();
+		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists(targetFolder) ){
 			Files.createDirectories(targetFolder);
-			String owner = getUserName(portletRequest);
 			
-			changeFileOwner(portletRequest, targetFolder.toString(), owner, repositoryType);
-			changeFileMode(portletRequest, targetFolder.toString(), "755", repositoryType);
+			changeFileOwner(targetFolder.toString(), owner);
+			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		copyFile(sourcePath, targetPath, overwrite);
+		changeFileOwner(targetPath.toString(), owner);
+		changeFileMode(targetPath.toString(), "755");
 		
 		return target;
 	}
@@ -434,11 +445,12 @@ public class OSPFileUtil {
 		stream = fileEntry.getContentStream();
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
 		Path targetFolder = targetPath.getParent();
+		String owner = getUserName(portletRequest)+":edisonuser";
+
 		if( !Files.exists( targetFolder ) ){
 			Files.createDirectories(targetFolder);
-			String owner = getUserName(portletRequest);
 			
-			changeFileOwner(targetFolder.toString(), owner+":edisonuser");
+			changeFileOwner(targetFolder.toString(), owner);
 			changeFileMode(targetFolder.toString(), "755");
 		}
 		
@@ -614,14 +626,23 @@ public class OSPFileUtil {
 			String repositoryType) throws SystemException, PortalException, IOException{
 		
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
+		Path targetFolder = targetPath.getParent();
+		String owner = getUserName(portletRequest)+":edisonuser";
+		if( Files.notExists(targetFolder) ){
+			Files.createDirectories(targetFolder);
+			
+			changeFileOwner(targetFolder.toString(), owner);
+			changeFileMode(targetFolder.toString(), "755");
+		}
 
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(portletRequest);
 		
 		// Get the uploaded file as a file.
 		File uploadedFile = uploadRequest.getFile(uploadFileName);
 		
-		// Move the existing temporary file to new location.
-		Files.copy(uploadedFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+		copyFile(uploadedFile.getAbsolutePath(), targetPath.toString(), true);
+		changeFileOwner(targetPath.toString(), owner);
+		changeFileMode(targetPath.toString(), "755");
 	}
 
 	/**
@@ -1003,12 +1024,19 @@ public class OSPFileUtil {
 			String content,
 			String repositoryType) throws PortalException, SystemException, IOException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
-		Path parent = targetPath.getParent();
-		if( Files.notExists( parent ) ){
-			Files.createDirectories(parent);
+		Path targetFolder = targetPath.getParent();
+		String owner = getUserName(portletRequest)+":edisonuser";
+		if( Files.notExists( targetFolder ) ){
+			Files.createDirectories(targetFolder);
+			changeFileOwner(targetFolder.toString(), owner);
+			changeFileMode(targetFolder.toString(), "755");
 		}
+		
 		OpenOption[] openOptions = new OpenOption[] { StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING};
 		Files.write(targetPath, content.getBytes(StandardCharsets.UTF_8), openOptions);
+		changeFileOwner(targetPath.toString(), owner);
+		changeFileMode(targetPath.toString(), "755");
+		
 	}
 
     public static void writeTextFile(String content, Path target) throws IOException{
