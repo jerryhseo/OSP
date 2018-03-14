@@ -725,7 +725,7 @@ NGL.MenubarExamplesWidget = function (stage) {
 	  type : "GET",
 	  url : NGL.examplesListUrl,
 	  contentType : "",
-	  datatype:'json',
+	  datatype:'text',
 	  success : function(data){
 		console.log("[NGLViewer] ajax test : ", data);  
 	  },
