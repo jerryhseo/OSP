@@ -187,12 +187,18 @@
 
     var serveResourceURL = '';
 
-    function drawPlot (data_json, dataload,serveResourceURL2){
+    function drawPlot (data_json, dataload, serveResourceURL2){
 
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
-      console.log(data);
+
+			console.log("data_json ::");
+      console.log(data_json);
+			console.log("serveResourceURL2 ::");
+      console.log(serveResourceURL2);
+			console.log("dataload ::");
+      console.log(dataload);
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
         var tabString = '#nav_tap_' + tab_num;
@@ -503,14 +509,18 @@
 		//readFileList[i].dataload = dataload;
 
     getCFDData = function (readFileList){
+			console.log(readFileList);
       $.ajax({
 				type: 'POST',
 				url: serveResourceURL,
 				data  : readFileList.dataload,
 				dataType : 'text',
-        success: function (data){
-          readCFDData(data, readFileList.tabContentID);
-        }
+        success: function (getData){
+					console.log("ajax Success!!");
+          readCFDData(getData, readFileList.tabContentID);
+        },error:function(getData,e){
+					console.log('getCFDData ajax Error-->'+e);
+				}
       });
     }
 
