@@ -123,14 +123,15 @@ function drawNglViewer(url, serveResourceURL){
 	console.log("[NGLViewer] Draw NGL Viewer : ", url);
 	var result;
 	$.ajax({
-		type : 'GET',
+		type : 'POST',
 		url : url,
-		dataType : 'text',
+		dataType : 'multipart/form-data',
 		success : function(data){
+			console.log("[NGLViewer] file object : ", data);
 			result = data;
 		},
 		error : function(data, e){
-			
+			console.log("[NGLViewer] error : ", e);
 		}
 	});
 	stage.loadFile(result, {defaultRepresentation: true});
