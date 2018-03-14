@@ -212,6 +212,9 @@ function historyback(){
 <div class="table-responsive panel edison-panel" style="margin: 0 auto;">
 	<form name="surveyForm" method="post">
 		<input type="hidden" name="<portlet:namespace/>surveySeqNo" value="${surveyMap.surveySeqNo}">
+		<input type="hidden" name="<portlet:namespace/>virtualLabId" value="${virtualLabId}">
+		<input type="hidden" name="<portlet:namespace/>classId" value="${classId}">
+		
 		<div class="panel-heading clearfix">
 			<h1>
 				<img src="${contextPath}/images/title_virtual.png" />

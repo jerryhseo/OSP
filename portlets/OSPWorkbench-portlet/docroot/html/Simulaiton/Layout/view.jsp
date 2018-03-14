@@ -266,6 +266,7 @@ $(function(e) {
 	* horizontal top 기준 Width check -> data-equal-id="BOTTOM DIV" data-remainder-id="TOP DIV"
 	*
 	**/
+	
 	var isDevider = false;
 	var object,container,equalDiv,RemainderDiv,moveType;
 	$(".devider").mousedown(function(e) {
@@ -282,6 +283,7 @@ $(function(e) {
 			isDevider = false;
 		}
 	});
+	
 	$("body").mousemove(function(e) {
 		if(isDevider){
 			if(moveType =="vertical"){
@@ -312,7 +314,6 @@ $(function(e) {
 			
 		}
 	});
-	
 	
 	toastr.options = {
 			"closeButton": true,
@@ -514,6 +515,12 @@ Liferay.on(OSP.Event.OSP_READ_STRUCTURED_DATA_FILE,function( e ){
 	if( <portlet:namespace/>workbench.id() !== e.targetPortlet ) return;
 	console.log('OSP_READ_STRUCTURED_DATA_FILE: ['+e.portletId+', '+new Date()+']', e);
 	<portlet:namespace/>workbench.handleReadStructuredDataFile(e.portletId,new OSP.InputData( e.data ),'<%=serveResourceURL%>');
+});
+
+Liferay.on(OSP.Event.OSP_SAMPLE_SELECTED,function( e ){
+		if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+		console.log('OSP_SAMPLE_SELECTED: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>workbench.handleSampleSelected(e.portletId,'<%=serveResourceURL%>');
 });
 
 /***********************************************************************

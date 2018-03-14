@@ -464,6 +464,7 @@ public class OSPFileUtil {
 			String repositoryType ) throws PortalException, SystemException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
 		owner = owner + ":edisonuser";
+<<<<<<< HEAD
 		
 		changeFileOwner(targetPath.toString(), owner);
 	}
@@ -484,6 +485,8 @@ public class OSPFileUtil {
 	}
 	
 	static private void changeFileOwner( String target, String owner ){
+=======
+>>>>>>> refs/remotes/origin/edison-jerry
 		String strCmd = "";
 		strCmd += "sudo chown -R ";
 		strCmd += owner;
@@ -1183,6 +1186,7 @@ public class OSPFileUtil {
         if(lastPoistion > 0){
          fcIn.position(lastPoistion);   
         }
+        int i = 0;
         while(fcIn.read(buffer) != -1){
             byte[] bytes = new byte[buffer.position()];
             buffer.flip();
@@ -1192,7 +1196,8 @@ public class OSPFileUtil {
         }
         lastPoistion = fcIn.position();
         fcIn.close();
-        return new TextAndLastPosition(sb.toString(), lastPoistion);
+        TextAndLastPosition temp = new TextAndLastPosition(sb.toString(), lastPoistion);
+        return temp;
     }
     
     static private TextAndLastPosition readTextAndLastPosition(Path path, long startPosition, long size) throws IOException{
@@ -1214,34 +1219,35 @@ public class OSPFileUtil {
         return new TextAndLastPosition(sb.toString(), lastPosition);
     }
     
-    static private class TextAndLastPosition{
+    static class TextAndLastPosition{
         private String text;
         private long lastPosition;
         public TextAndLastPosition(String text, long lastPosition){
-            text = text;
-            lastPosition = lastPosition;
+            this.text = text;
+            this.lastPosition = lastPosition;
         }
         public String getText(){
-            return text;
+            return this.text;
         }
         public long getLastPosition(){
-            return lastPosition;
+            return this.lastPosition;
         }
+        
     }
     
-    static private class OSPFileVisitor extends SimpleFileVisitor<Path>{
+    static class OSPFileVisitor extends SimpleFileVisitor<Path>{
     	Path targetPath;
     	Path tempFilePath;
     	
     	public OSPFileVisitor( Path target, Path tempPath ){
-    		targetPath = target;
-    		tempFilePath = tempPath;
+    		this.targetPath = target;
+    		this.tempFilePath = tempPath;
     	}
     	
 		@Override
 		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-			Path path = targetPath.relativize(dir);
-			Path tempPath = tempFilePath.resolve(path);
+			Path path = this.targetPath.relativize(dir);
+			Path tempPath = this.tempFilePath.resolve(path);
 			if( !Files.exists(tempPath) ){
 				Path tempFolder = null;
 				try {
@@ -1256,8 +1262,8 @@ public class OSPFileUtil {
 
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs){
-			Path path = targetPath.relativize(file);
-			Path tempPath = tempFilePath.resolve(path);
+			Path path = this.targetPath.relativize(file);
+			Path tempPath = this.tempFilePath.resolve(path);
 			try {
 				Files.copy(file, tempPath, StandardCopyOption.REPLACE_EXISTING);
 				tempPath.toFile().deleteOnExit();

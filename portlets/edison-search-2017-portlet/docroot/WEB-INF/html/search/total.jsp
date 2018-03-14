@@ -12,10 +12,8 @@
 <liferay-portlet:resourceURL var="downloadManualURL" id="downloadManual" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false"/>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-    <liferay-portlet:param name="jobUuid" value="0"/>
-    <liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="projectDetailUrl" portletName="edisonsimulationproject_WAR_edisonsimulationproject2017portlet" 
@@ -82,7 +80,7 @@
                 <c:if test="${empty element.current_manualId or element.current_manualId eq 0}">
                     <img src="${contextPath}/images/search/btn_manual_none.jpg" style="height: 24px; cursor: default;"/>
                 </c:if>
-                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly}">
+                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
                     <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;" 
                         onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
                 </c:if>
@@ -375,7 +373,7 @@ function <portlet:namespace/>fileDownload(manualId){
 }
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
     var URL = "<%=workbenchURL%>";
-    URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
     location.href= URL;
 }
 

@@ -31,17 +31,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     };
 
-    /*
-    function run(){}
-    function rerun(){}
-    function pause(){}
-    function restart(){}
-    function status(){}
-     */
-
     $(JQ_PORTLET_BOUNDARY_ID + " .sidbar-run-btn").click(function (e) {
         e.preventDefault();
         var btnType = $(this).attr("data-btn-type");
+        console.log(PANEL_DATA.setting.form.workflowInstanceId);
+        if(!PANEL_DATA.setting.form.workflowInstanceId){
+            toastr["error"]("", var_create_first_message);
+            return false;
+        }
         if (btnType === "run") { run(); }
         if (btnType === "rerun") { rerun(); }
         if (btnType === "pause") { pause(); }
@@ -89,7 +86,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             fn.apply();
         }
 
-        if(btnType === "save"){
+        if(btnType === "save" ){
             if(PANEL_DATA.setting.form.workflowInstanceTitle){
                 saveOrUpdateWorkflowInstance("setting");
             }else{
@@ -254,6 +251,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var _f = function(){
                 executor.createWorkfowInstance(PANEL_DATA.setting.form.workflowId, 
                     PANEL_DATA[panelDataType].form.workflowInstanceTitle, function(workflowInstance){
+                        if(panelDataType === "new"){
+                            PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
+                            designer.resetWorkflow();
+                            openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
+                        }
                         setMetaData({
                             "title": PANEL_DATA.setting.form.title,
                             "description": PANEL_DATA.setting.form.description,
@@ -261,11 +263,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                             "workflowInstanceTitle": workflowInstance.title,
                             "workflowInstanceId": workflowInstance.workflowInstanceId
                         });
-                        if(panelDataType === "new"){
-                            PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
-                            designer.resetWorkflow();
-                            openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
-                        }
                         toastr["success"]("", var_create_success_message);
                     });
                 closePanel();
@@ -306,7 +303,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
     }
     
-    
     function deleteWorkflowInstance(panelDataType){
         if (!_isEmpty(PANEL_DATA.setting.form.workflowInstanceId, var_no_workflow_instance_msg)) {
             _confirm(var_remove_workflow_confirm_message, function () {
@@ -327,14 +323,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         setTitle();
     }
 
-    function openWorkflowByWorkflowId(workflowId, notClose){
+    function openWorkflowByWorkflowId(workflowId, isNotNew){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
-            setMetaData({
-                "title": workflow.title,
-                "description": workflow.description,
-                "workflowId": workflowId
-            });
-            if(!notClose){
+            if(!isNotNew){
+                setMetaData({
+                    "title": workflow.title,
+                    "description": workflow.description,
+                    "workflowId": workflowId
+                });
                 closePanel();
             }
         });
@@ -384,6 +380,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return false;
     }
+
+    $(document).bind('keydown.uiPanel',function (event) {
+        if ((event.which == 115 || event.which == 83) && 
+            (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            event.preventDefault();
+            if(PANEL_DATA.setting.form.workflowInstanceTitle){
+                saveOrUpdateWorkflowInstance("setting");
+            }else{
+                toastr["error"]("", var_create_first_message);
+            }
+            return false;
+        }
+        return true;
+    });
 
     return {
         "openWorkflow": openWorkflowByWorkflowId

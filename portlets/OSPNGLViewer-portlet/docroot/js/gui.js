@@ -262,13 +262,13 @@ NGL.StageWidget = function (stage, id) {
 	  var clientX = parseFloat(clientX);
 	  
     if (clientX >= 50 && clientX <= endElementX - 10) {
-    	console.log("test111");
-    	console.log("changed");
-    	console.log("Window width : ", window.innerWidth);
-  	  console.log("Element Offset : ", elementOffset);
-  	  console.log("Element Width : ", elementWidth);
-  	  console.log("Element end X : ", endElementX);
-  	  console.log("Mouse X : "+clientX);
+    	//console.log("test111");
+    	//console.log("changed");
+    	//console.log("Window width : ", window.innerWidth);
+  	 // console.log("Element Offset : ", elementOffset);
+  	 // console.log("Element Width : ", elementWidth);
+  	 // console.log("Element end X : ", endElementX);
+  	 // console.log("Mouse X : "+clientX);
     	
     	var sidbarWidth = endElementX - clientX;
     	var viewWidth = clientX - elementOffset;
@@ -646,7 +646,7 @@ NGL.MenubarViewWidget = function (stage, preferences) {
 
   stage.signals.fullscreenChanged.add(function (isFullscreen) {
     var icon = menuConfig[ 3 ].children[ 0 ]
-    console.log("test Yejin Kwon Full Screen : ", icon);
+   // console.log("test Yejin Kwon Full Screen : ", icon);
     if (isFullscreen) {
       icon.switchClass('compress', 'expand')
     } else {
@@ -689,27 +689,34 @@ NGL.MenubarExamplesWidget = function (stage) {
   optionsPanel.setWidth('300px')
 
   var xhr = new XMLHttpRequest()
-  xhr.open('GET', NGL.examplesListUrl)
+  console.log("[NGLViewer] examplelist url : ", NGL.examplesListUrl);
+  
+  console.log("[NGLViewer] oepn ");
   xhr.responseType = 'json'
-  xhr.onload = function (e) {
-    var response = this.response
+	  xhr.open('GET', NGL.examplesListUrl)
+	  xhr.onload = function (e) {
+	  console.log("[NGLViewer]  loload : ", e);
+	  console.log("[NGLViewer] load 2 : ", xhr.response);
+	  var response = xhr.response;
     if (typeof response === 'string') {
       // for ie11
       response = JSON.parse(response)
-      //console.log("KYJ TEST JSON1", response);
+      console.log("KYJ TEST JSON1", response);
     }
-    //console.log("KYJ TEST JSON2", response);
-    response.sort().forEach(function (name) {
-    	//console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
-      var option = createOption(name, function () {
-    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
-    	  console.log("test return");
-    	 console.log(test);
-      })
-      //console.log("test option");
-      //console.log(option);
-      optionsPanel.add(option)
-    })
+    console.log("KYJ TEST JSON2", response);
+    if(response){
+	    response.sort().forEach(function (name) {
+	    	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
+	      var option = createOption(name, function () {
+	    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
+	    	 // console.log("test return");
+	    	console.log(test);
+	      })
+	      //console.log("test option");
+	      //console.log(option);
+	      optionsPanel.add(option)
+	    })
+    }
   }
   xhr.send()
 

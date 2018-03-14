@@ -39,9 +39,9 @@
   };
 
   readJson = function (inData){
-	  console.log("[PlotyViewer] load data1 ");
+//	  console.log("[PlotyViewer] load data1 ");
 	  var data = JSON.parse(inData);
-	 console.log("[PlotyViewer] load data2 ", data);
+//	 console.log("[PlotyViewer] load data2 ", data);
     var h = $( window ).height();
     var w = $( window ).width();
 
@@ -57,22 +57,17 @@
     data.divClass = gd;
     if (data.frames) {
  	   Plotly.newPlot(gd, data).then(function() {
- 	     Plotly.animate(gd, data.frames,
- 	       {
- 	         frame: {
- 	        	duration : data.layout.updatemenus[0].buttons[0].args[1].frame.duration,
- 	        	redraw : false
- 	         }
- 	       }
- 	     )
- 	   })a
+ 	     Plotly.animate(gd, data.frame, 
+          data.layout.updatemenus[0].buttons[0].args[1]
+		 )
+ 	   })
      } else {
        Plotly.newPlot(gd, data);
      }
   };
 
   loadImagePlotly = function (url_path){
-	  console.log("[PlotyViewer] load data ");
+//	  console.log("[PlotyViewer] load data ");
     $.ajax({
       url: url_path,
       success: function (data){

@@ -61,6 +61,8 @@ import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 
 public class IBAgent {
+	private static Log log = LogFactoryUtil.getLog(IBAgent.class);
+	
 	public static String URL = "";
 	public static String ZONE = "";
 	private String vcToken = "";
@@ -97,6 +99,8 @@ public class IBAgent {
 		connection.setRequestProperty("Content-Type", contentType+";charset=utf-8");
 
 		connection.setRequestProperty("Authorization", "Basic "+this.vcToken);
+		
+		this.ibAgentLog();
 		return connection;
 	}
 	
@@ -548,6 +552,13 @@ public class IBAgent {
     }
 
 	
+    
+    public void ibAgentLog(){
+    	log.info("screenName =>>>>"+this.user.getScreenName());
+    	log.info("userId =>>>>"+this.user.getUserId());
+    	log.info("vcToken =>>>>"+this.vcToken);
+    }
+    
 	private static Log _log = LogFactoryUtil.getLog(IBAgent.class);
 	private static final String _simulationAPI = "/api/simulation";
 }

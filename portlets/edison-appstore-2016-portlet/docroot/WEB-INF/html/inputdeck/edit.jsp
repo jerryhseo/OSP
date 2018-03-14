@@ -37,8 +37,8 @@
 		width: 150px;
 	}
 	
-	.inputdeck-portlet .to_short_field{
-		width: 50px;
+	.inputdeck-portlet .form-inline input[type=text].to_short_field{
+		width: 70px;
 		margin-right: 5px;
 	}
 	
@@ -434,9 +434,9 @@
 						<th>
 							<liferay-ui:message key='edison-table-list-header-default-data'/> <span class="requiredField">*</span>
 						</th>
-						<td colspan="3" id="dimensionValueTd">
-							<input type="text" class="to_short_field numberCheck" id="inputDeckDimensionValue_0" onkeydown="return checkNumberExp(event,this.value);"/>
-							<input type="text" class="to_short_field numberCheck" id="inputDeckDimensionValue_1" onkeydown="return checkNumberExp(event,this.value);"/>
+						<td colspan="3" id="dimensionValueTd" class="form-inline">
+							<input type="text" class="to_short_field numberCheck field" id="inputDeckDimensionValue_0" onkeydown="return checkNumberExp(event,this.value);"/>
+							<input type="text" class="to_short_field numberCheck field" id="inputDeckDimensionValue_1" onkeydown="return checkNumberExp(event,this.value);"/>
 						</td>
 					</tr>
 					
@@ -1544,7 +1544,7 @@
 		$td.empty();
 		for(var i=0;i<val;i++){
 			$("<input/>").attr("type","text")
-						 .addClass("to_short_field numberCheck")
+						 .addClass("to_short_field numberCheck field")
 						 .attr("onkeydown","return checkNumberExp(event,this.value)")
 						 .attr("name","inputDeckDimensionValue_"+i)
 						 .attr("id","inputDeckDimensionValue_"+i)

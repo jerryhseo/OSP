@@ -184,6 +184,11 @@ function <portlet:namespace/>submitVirtualLabRequest(){
 	});
 }
 
+function <portlet:namespace/>deleteVirtualLab(){
+	$("#<portlet:namespace/>isDelete").val("true");
+	$("#virtualLabManageForm").submit();
+}
+
 </script>
 
 <aui:script>

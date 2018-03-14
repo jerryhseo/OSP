@@ -70,7 +70,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
             workflowId: workflowId,
             workflowInstanceTitle: workflowInstanceTitle
         }, function(workflowInstance){
-            console.log(workflowInstance);
             if(callback){
                 callback(workflowInstance);
             }
@@ -282,7 +281,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
     });
 
     function popEditorWindow(editor, port, sciApp, jsPlumbWindowId){
-        var portData = "";
         var portName = port.name();
         var editorType = editor["editorType"];
         var portletId = editor["exeFileName"];
@@ -300,40 +298,37 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
         var inputData = "";
         var srcData = new OSP.InputData();
         if (editorType == "Inputdeck") {
+            srcData.type(OSP.Enumeration.PathType.STRUCTURED_DATA);
             if (WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId]
                 && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]
                 && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["editorType"] === "Inputdeck") {
-                portData = WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["input-value"];
+                portData = JSON.parse(WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["input-value"]);
+                srcData.context(portData.context_);
             } else {
-                portData = editor["structure"];
+                srcData.context(JSON.parse(editor["structure"]));
             }
-            srcData.type(OSP.Enumeration.PathType.STRUCTURED_DATA);
-            srcData.context(JSON.parse(portData));
         } else if (editorType == "Text") {
+            srcData.type(OSP.Enumeration.PathType.CONTEXT);
             if (WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId]
                 && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]) {
-                portData = WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["file-content"];
+                srcData.context(WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["file-content"]);
             } else {
-                portData = "";
+                srcData.context("");
             }
-            srcData.type(OSP.Enumeration.PathType.CONTEXT);
-            srcData.context(Liferay.Util.escapeHTML(portData));
-            inputData = JSON.stringify(srcData);
         } else if (editorType == "File") {
             srcData.setPath('', '', '', OSP.Constants.FOLDER, true);
             srcData.repositoryType("USER_HOME");
-            inputData = JSON.stringify(srcData);
         }
         console.log("srcData ", srcData);
         console.log("toJSON srcData ", OSP.Util.toJSON(srcData));
-        showEditorWindow(editor, srcData, saveBtnHandler);
+        showEditorWindow(editor, srcData, saveBtnHandler, sciApp);
     }
 
-    function showEditorWindow(editor, inputData, saveBtnHandler){
+    function showEditorWindow(editor, inputData, saveBtnHandler, sciApp){
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId(editor.exeFileName);
-            portletURL.setParameter('eventEnable', false);
+            portletURL.setParameter('eventEnable', true);
             portletURL.setParameter('connector', DESIGNER_PORTLET_ID);
             if(windowState){
                 portletURL.setWindowState(windowState);
@@ -344,8 +339,13 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
                 type: 'POST',
                 dataType: 'text',
                 success: function (renderResult) {
-                    drawModal(editor.name, renderResult,
-                        { "ok": "Save", "cancel": "Cancel" },
+                    console.log(sciApp);
+                    var saveBtns = { "ok": "Save", "cancel": "Cancel" };
+                    if(sciApp.workflowStatus){
+                       saveBtns = null;
+                    }
+                    drawModal(editor.name, renderResult, null,
+                        saveBtns,
                         function () {
                             fire(OSP.Event.OSP_LOAD_DATA, editor.exeFileName, OSP.Util.toJSON(inputData));
                         }, saveBtnHandler);
@@ -357,10 +357,15 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
         });
     }
 
-    function drawModal(title, body, footer, callback, footerCallback){
+    function drawModal(title, body, bodyHeightPixel, footer, callback, footerCallback){
         var modal = $("#" + namespace + "wf-modal");
         modal.find(".modal-title").text(title);
         if(body){
+            if(bodyHeightPixel){
+                modal.find(".modal-body").css("height", bodyHeightPixel + "px");
+            }else{
+                modal.find(".modal-body").css("height", "inherit");
+            }
             modal.find(".modal-body").empty().html(body).
                 promise().done(function () {
                     callback();
@@ -429,36 +434,35 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
     $.contextMenu({
         selector: '.jsplumb-endpoint.output-port',
         build: function ($trigger, e) {
-            if ($($($trigger[0]._jsPlumbRelatedElement)[0]).hasClass("loop-child-box")) {
-                alert(var_no_available_analyzer_message);
+            var sciApp = $($trigger[0]._jsPlumbRelatedElement).data();
+            if (sciApp.appType === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+                toastr["error"]("", var_no_available_analyzer_message);
                 return false;
             }
-            var items = {};
-            var sciApp = $($trigger[0]._jsPlumbRelatedElement).data();
-            var port = $trigger[0]._jsPlumb.getParameter("data");
-            var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
-            var analyzers;
-            if (sciApp.appType === WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-                alert(var_no_available_analyzer_message);
-                return false;
-            } else {
-                analyzers = synchronousAjaxHelper.post("/delegate/services/app/outputports/analyzer",
+            if(sciApp.workflowStatus && sciApp.workflowStatus.status === WF_STATUS_CODE.COMPLETED){
+                var items = {};
+                var port = $trigger[0]._jsPlumb.getParameter("data");
+                var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
+                var analyzers = synchronousAjaxHelper.post("/delegate/services/app/outputports/analyzer",
                     {
                         "name": port.dataType().name,
                         "version": port.dataType().version
                     });
+                $.each(analyzers, function (_) {
+                    var analyzer = this;
+                    items[analyzer["name"]] = {
+                        name: analyzer["name"],
+                        icon: "edit",
+                        callback: function (key, options) {
+                            popAnalyzerWindow(analyzer, port, jsPlumbWindowId, sciApp);
+                        }
+                    };
+                });
+                return { items: items };
+            }else{
+                toastr["error"]("", var_no_available_analyzer_message);
+                return false;
             }
-            $.each(analyzers, function (_) {
-                var analyzer = this;
-                items[analyzer["name"]] = {
-                    name: analyzer["name"],
-                    icon: "edit",
-                    callback: function (key, options) {
-                        popAnalyzerWindow(analyzer, port, jsPlumbWindowId, sciApp);
-                    }
-                };
-            });
-            return { items: items };
         }
     });
 
@@ -486,18 +490,17 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId(analyzer.exeFileName);
-            portletURL.setParameter('eventEnable', false);
+            portletURL.setParameter('eventEnable', true);
             portletURL.setParameter('connector', DESIGNER_PORTLET_ID);
             if (windowState) {
                 portletURL.setWindowState(windowState);
             }
-            console.log(portletURL.toString());
             $.ajax({
                 url: portletURL.toString(),
                 type: 'POST',
                 dataType: 'text',
                 success: function (renderResult) {
-                    drawModal(analyzer.name, renderResult, null, callbackFunc);
+                    drawModal(analyzer.name, renderResult, 600, null, callbackFunc);
                 },
                 error: function () {
                     console.log('AJAX loading failed');

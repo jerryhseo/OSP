@@ -87,7 +87,7 @@
 						<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile" class="form-control-file"/>
 					</div>
 					<div class="form-group">
-						<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getUserInfo('owner');"><span class="icon-file"> file save</span></button>
+						<button class="btn btn-default" type="submit" ><span class="icon-file"> file save</span></button>
 					</div>
 					<div class="form-group" id="status">
 						<c:if test="${!empty data.portSampleTitle}">

@@ -26,30 +26,30 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 %>
 
 
-<div class="container-fluid common-analyzer-portlet">
+<div class="container-fluid osp-analyzer">
 	<div class="row-fluid header">
-		<div class="col-sm-8" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-offset-3 col-sm-1" >
+		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
+		<div class="col-sm-2" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
-				<ul class="dropdown-menu cursor" style="margin-left:10px">
-					<li id="<portlet:namespace/>openLocal" style="margin-left:10px"><i class="icon-folder-open"> Open local...</i></li>
-					<li id="<portlet:namespace/>openServer" style="margin-left:10px"><i class="icon-folder-open"> Open server...</i></li>
-					<li id="<portlet:namespace/>download" style="margin-left:10px"><i class="icon-download-alt"> Download</i></li>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li ><a href="javascript:<portlet:namespace/>openLocalFile()"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openServerFile()"><i class="icon-folder-open"> Open server...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>downloadCurrentFile()"><i class="icon-download-alt"> Download</i></a></li> 
 				</ul>
 			</div>
 		</div>	
 	</div>
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp">
+	<div class="row-fluid frame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/JSMol/load_jsmol.jsp">
 		</iframe>
 	</div>
 </div>
 
-<div id="<portlet:namespace/>hiddenSection" style="display:none;">
+<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable" style="padding:0px;margin-bottom:0px;">
 		<!-- title -->
 		<div class="panel-heading">
@@ -141,12 +141,12 @@ $("#<portlet:namespace/>closeDialog").click(function() {
 /***********************************************************************
  * Menu click events and binding functions 
  ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
+function <portlet:namespace/>openLocalFile(){
+	$('#<portlet:namespace/>selectFile').click();
+}
 
-$('#<portlet:namespace/>openServer').click(function(){
-    var inputData;
+function <portlet:namespace/>openServerFile(){
+	var inputData;
     if(<portlet:namespace/>currentData && 
         <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
         <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.CONTEXT ){
@@ -160,12 +160,12 @@ $('#<portlet:namespace/>openServer').click(function(){
     }
    
     <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
-});
+}
 
-$('#<portlet:namespace/>download').click(function(){
+function <portlet:namespace/>downloadCurrentFile(){
 	console.log("[JSMol] download Request.");
 	<portlet:namespace/>downloadCurrentFile();
-});
+}
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
@@ -392,17 +392,25 @@ function <portlet:namespace/>getFirstFileName( argData ){
     console.log('[JSMol]get First File Name : ', argData );
     var inputData = argData.clone();
     console.log('[JSMol]get First File Name2 : ', inputData );
-    if( !inputData.repositoryType() )
-    	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+    console.log('[JSMOL] input data for get first file name : repositoryTypes :', inputData.repositoryType());
+    
+    if( inputData.type() === 'folder' ){
+    	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
+    	inputData.name('');
+    }
+    if( ! inputData.repositoryType() )
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+    
+    
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
             <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.name(),
-            <portlet:namespace/>relative: inputData.relative()
+            <portlet:namespace/>fileName: inputData.name()
     };
         
+    console.log("[JSMOL] laod get first file test : ", data);
     $.ajax({
         type: 'POST',
         url: '<%= serveResourceURL.toString()%>', 
@@ -412,9 +420,11 @@ function <portlet:namespace/>getFirstFileName( argData ){
             inputData.type( OSP.Enumeration.PathType.FILE );
             inputData.name( data.fileName );
             <portlet:namespace/>drawJSMol( inputData );
+            console.log("[JSMOL] Get First File Data : ", inputData);
         },
         error:function(data,e){
-            console.log('[JSMOL]AJAX ERROR-->'+e);
+        	console.log('[JSMOL]AJAX ERROR1-->', data);
+            console.log('[JSMOL]AJAX ERROR2-->', e);
         },
         complete: function( jqXHR, textStatus ){
         }
