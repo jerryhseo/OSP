@@ -515,9 +515,10 @@
 				url: serveResourceURL,
 				data  : readFileList.dataload,
 				dataType : 'text',
-        success: function (data){
-          readCFDData(data, readFileList.tabContentID);
-        },error:function(data,e){
+        success: function (getData){
+					console.log("ajax Success!!");
+          readCFDData(getData, readFileList.tabContentID);
+        },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
 				}
       });
