@@ -55,7 +55,6 @@ AUI().ready(function() {
 		}).render();
 
 		textboxlist.entries.after('add',function(event){
-			console.log(event);
 			selectEntryArr.push(event.item.key);
 		});  
 
@@ -173,7 +172,7 @@ function <portlet:namespace/>dataSearchList(reset) {
 												.attr("name","<portlet:namespace/>scienceAppCheck")
 												.attr("onclick", "<portlet:namespace/>entryLinkCheck("+virtualLabScienceAppList[i].scienceAppId+",'"+virtualLabScienceAppList[i].scienceAppName+"','"+virtualLabScienceAppList[i].scienceAppVersion+"');")
 												.attr("value",virtualLabScienceAppList[i].scienceAppId);
-						
+												
 						if(i%2 == 1){
 	 						$trNode.addClass("tablebgtr");
 	 					}
@@ -209,8 +208,6 @@ function <portlet:namespace/>dataSearchList(reset) {
 }
 
 function <portlet:namespace/>insertClassScienceApp(){
-	console.log(selectEntryArr);
-// 	var paramData = $("form[name=scienceAppForm]").serialize();
 	 var paramData = {
 			"<portlet:namespace/>virtualLabId":$("#<portlet:namespace/>virtualLabId").val(),
 			"<portlet:namespace/>selectEntryArr":selectEntryArr
