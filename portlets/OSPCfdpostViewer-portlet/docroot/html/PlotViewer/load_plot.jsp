@@ -192,7 +192,13 @@
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
-      console.log(data);
+
+			console.log("data_json ::");
+      console.log(data_json);
+			console.log("serveResourceURL2 ::");
+      console.log(serveResourceURL2);
+			console.log("dataload ::");
+      console.log(dataload);
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
         var tabString = '#nav_tap_' + tab_num;
