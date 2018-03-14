@@ -25,16 +25,29 @@ This file allows you to override and define new Velocity variables.
 		
 #end
 
-
+#set($groups=[])
+#set($siteGroups=[])
 #set($groupLocalService= $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
 #set($parentGroupId = $themeDisplay.getScopeGroup().getParentGroupId())
 #if ($parentGroupId != 0)
 	#set($edisongroup=$themeDisplay.getScopeGroup().getParentGroup())
-	#set($siteGroups = $groupLocalService.getGroups($themeDisplay.getCompanyId(),$parentGroupId,true))
+	#set($groups=$groupLocalService.getGroups($themeDisplay.getCompanyId(),$parentGroupId,true))
 #else
 	#set($edisongroup=$themeDisplay.getScopeGroup())
-	#set($siteGroups = $groupLocalService.getGroups($themeDisplay.getCompanyId(),$themeDisplay.getScopeGroupId(),true))
+	#set($groups=$groupLocalService.getGroups($themeDisplay.getCompanyId(),$themeDisplay.getScopeGroupId(),true))
 #end
+
+
+#foreach ($site in $groups)
+	#if($site.active && $site.type==1)
+		#set($siteName = $getterUtil.get($site.getExpandoBridge().getAttribute("SiteName").get($locale), $site.name))
+		#if($siteName=="")
+			#set($siteName = $site.name)
+		#end
+		#set($siteGroup = $siteGroups.add({"siteName" :$siteName,"url" :$site.friendlyURL,"groupId" :$site.groupId}))
+	#end
+#end
+
 
 
 #set($availableLocales = $languageUtil.getAvailableLocales())
