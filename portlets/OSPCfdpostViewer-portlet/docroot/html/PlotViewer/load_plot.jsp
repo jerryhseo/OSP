@@ -220,10 +220,10 @@
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
 
-			console.log("namespace ::", namespace);
+		//	console.log("namespace ::", namespace);
 			var filepath_name = namespace+"fileName"
 
-			console.log("filepath_name ::", filepath_name);
+		//	console.log("filepath_name ::", filepath_name);
 
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
@@ -554,8 +554,8 @@
 				data  : data,
 				dataType : 'text',
         success: function (getData){
-					console.log("ajax Success!!");
-					console.log(getData);
+	//				console.log("ajax Success!!");
+	//				console.log(getData);
           readCFDData(getData, inputDatalist.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
