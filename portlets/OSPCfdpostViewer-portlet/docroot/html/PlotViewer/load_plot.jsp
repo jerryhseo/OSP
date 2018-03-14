@@ -192,13 +192,13 @@
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
-//          console.log(data[0].text);
+      console.log(data);
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload.fileName = data[i].name;
+				dataload.fileName = data[i].text;
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
