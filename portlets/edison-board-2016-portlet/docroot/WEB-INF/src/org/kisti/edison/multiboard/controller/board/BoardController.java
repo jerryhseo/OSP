@@ -866,17 +866,16 @@ public class BoardController {
 			String customId = ParamUtil.getString(request, "customId");
 			long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
 			
-			
 			String divSort = request.getPreferences().getValue("divSort", "NOTICE");
 			Board brd = BoardLocalServiceUtil.deleteBoard(Long.parseLong(CustomUtil.strNull(params.get("boardSeq"),"0")));
 	
 			String preFix = "";
 			preFix += String.valueOf(boardGroupId);
 			preFix += customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
-			String folderSeq = preFix + "_" + CustomUtil.strNull(params.get("boardSeq"));
+			String folderSeq = preFix + "_" + CustomUtil.strNull(params.get("boardSeq"),"0");
 			
-			EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
-			
+//			EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
+				
 			PortletURL portletURL = PortletURLFactoryUtil.create(request, PortalUtil.getPortletId(request), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 			
 			portletURL.setPortletMode(PortletMode.VIEW);
