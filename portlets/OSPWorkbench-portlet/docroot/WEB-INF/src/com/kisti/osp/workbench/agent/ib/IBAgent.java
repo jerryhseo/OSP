@@ -370,9 +370,11 @@ public class IBAgent {
 				true, 
 				repositoryType);
 		
-		Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, target, repositoryType);
-        String ibFileId = this.getFileId(portletRequest, targetPath.toString(), repositoryType);
-        System.out.println("File: "+targetPath.toString());
+		//Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, target, repositoryType);
+        String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+        //String ibFileId = getFileId(targetPath.toString());
+        //System.out.println("File: "+targetPath.toString());
+        System.out.println("Target : " + target);
         System.out.println("File ID: "+ibFileId);
         
 		return ibFileId;
