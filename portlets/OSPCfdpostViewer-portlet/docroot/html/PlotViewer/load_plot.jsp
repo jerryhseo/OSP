@@ -216,15 +216,17 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
+        readFileList[i].tabID = tabString;
+        readFileList[i].tabContentID = tabContentID;
+				readFileList[i].dataload = dataload;
 
-				dataload[filepath_name] = data[i].text;
+				readFileList[i].dataload[filepath_name] = data[i].text;
+
+//				dataload[filepath_name] = data[i].text;
 
 				console.log("data[i].text :: ", data[i].text , " i = ", i , "dataload[filepath_name] " , dataload[filepath_name]  );
 				console.log("first add namespace");
 
-        readFileList[i].tabID = tabString;
-        readFileList[i].tabContentID = tabContentID;
-				readFileList[i].dataload = dataload;
 
 
 				console.log(readFileList);
