@@ -464,7 +464,6 @@ public class OSPFileUtil {
 			String repositoryType ) throws PortalException, SystemException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
 		owner = owner + ":edisonuser";
-<<<<<<< HEAD
 		
 		changeFileOwner(targetPath.toString(), owner);
 	}
@@ -485,8 +484,6 @@ public class OSPFileUtil {
 	}
 	
 	static private void changeFileOwner( String target, String owner ){
-=======
->>>>>>> refs/remotes/origin/edison-jerry
 		String strCmd = "";
 		strCmd += "sudo chown -R ";
 		strCmd += owner;
