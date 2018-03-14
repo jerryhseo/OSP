@@ -194,7 +194,7 @@
     var serveResourceURL = '';
 
     function drawPlot (data_json, dataload, serveResourceURL2){
-
+			var dataload = dataload;
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
