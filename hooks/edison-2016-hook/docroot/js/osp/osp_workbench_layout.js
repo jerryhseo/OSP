@@ -1917,7 +1917,6 @@
             
             if( sample ){
                 inputData.dlEntryId( sample.dlEntryId() );
-                eventData.data = OSP.Util.toJSON( inputData );
                 fireDataChanged( portletId, OSP.Util.toJSON( inputData ) );
             }
             else{
