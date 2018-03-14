@@ -190,14 +190,14 @@
       }
 
 
-				$(readFileList[2].tabID).one( "click", function() {
+				$('#nav_tap_2').one( "click", function() {
 					var clickTagNum =this.id.slice(-1);
 					getCFDData(readFileList[clickTagNum] );
 
 				});
 
 
-        $(readFileList[2].tabID).click( function() {
+        $('#nav_tap_2').click( function() {
           var clickTagNum =this.id.slice(-1);
           subTapControll(clickTagNum);
           resizeLayout(clickTagNum);
