@@ -233,7 +233,7 @@
 		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" style=" width: 70px;" />
 	</c:if>
 	<c:if test="${redirectURL ne '' and redirectName eq ''}">
-		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />"  style=" width: 70px;" />
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />" />
 	</c:if>
 </div>
 
