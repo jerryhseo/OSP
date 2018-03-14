@@ -59,35 +59,35 @@ public class OSPJSMolPortlet extends MVCPortlet {
             	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             	//OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
-                _log.error("readFileContent(): " + filePath.toString());
+                _log.error("[JSMOL] readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_IMAGE")){
             try{
             	OSPFileUtil.getFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
-                _log.error("readFileContent(): " + filePath.toString());
+                _log.error("[JSMOL] readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("READ_FIRST_FILE")){
             try{
             	OSPFileUtil.readFirstFileContent(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
-                _log.error("readFileContent(): " + filePath.toString());
+                _log.error("[JSMOL] readFileContent(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try{
             	OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
-                _log.error("getFirstFileName(): " + filePath.toString());
+                _log.error("[JSMOL] getFirstFileName(): " + filePath.toString());
                 throw new PortletException();
             }
         }else if(command.equalsIgnoreCase("DOWNLOAD_FILE")){
             try{
             	OSPFileUtil.downloadFile(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
-                _log.error("checkValidFile(): " + filePath.toString());
+                _log.error("[JSMOL] checkValidFile(): " + filePath.toString());
                 throw new PortletException();
             }
         }else{
