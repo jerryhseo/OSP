@@ -20,7 +20,7 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "EDIT");;
 <div class="container-fluid osp-editor">
 	<div class="row-fluid header">
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
-		<div class="col-sm-2" >
+		<div class="col-sm-2 text-right" >
 			<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
@@ -91,9 +91,7 @@ if( !<%=eventEnable%> ){
     }else{
         <portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
     }
-    <portlet:namespace/>currentData = <portlet:namespace/>initData; 
-	
-	<portlet:namespace/>loadStructure( <portlet:namespace/>currentData );
+	<portlet:namespace/>loadStructure( <portlet:namespace/>initData.clone() );
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -154,7 +152,7 @@ $<portlet:namespace/>fileExplorerDialogSection.dialog({
 $('#<portlet:namespace/>canvas').on('change', function(){
 		var inputData = new OSP.InputData();
 		inputData.type( OSP.Enumeration.PathType.STRUCTURED_DATA );
-		inputData.context( <portlet:namespace/>dataType.structure().clone() );
+		inputData.context( <portlet:namespace/>dataType.structure() );
 		
 		var eventData = {
 				portletId: '<%=portletDisplay.getId()%>',
@@ -272,7 +270,14 @@ Liferay.on(
 				if( ! <portlet:namespace/>initData.repositoryType() )
 					<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 				
-				<portlet:namespace/>loadStructure(<portlet:namespace/>initData);
+				<portlet:namespace/>loadStructure(<portlet:namespace/>initData.clone());
+				
+				var eventData = {
+			  	                   portletId: myId,
+			  	                   targetPortlet: <portlet:namespace/>fileExplorerId,
+			  	                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+			  	  };
+			  	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 			}
 		}
 );
@@ -381,7 +386,7 @@ Liferay.on(
 					Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
 				}
 				else{
-					<portlet:namespace/>loadStructure( <portlet:namespace/>initData );
+					<portlet:namespace/>loadStructure( <portlet:namespace/>initData.clone() );
 				}
 			}
 		}
@@ -472,7 +477,7 @@ function <portlet:namespace/>readDLEntry( dlEntryId ){
 function <portlet:namespace/>readFile( inputData ){
 	if( ! inputData.repositoryType() )
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-	<portlet:namespace/>currentData = inputData.clone();
+	<portlet:namespace/>currentData = inputData;
 	
 	var ajaxData = Liferay.Util.ns(
 	                               '<portlet:namespace/>',
@@ -498,9 +503,7 @@ function <portlet:namespace/>readFile( inputData ){
 	});
 }
 
-function <portlet:namespace/>getFirstFileName( argData ){
-	var inputData = argData.clone();
-	
+function <portlet:namespace/>getFirstFileName( inputData ){
 	if( ! inputData.repositoryType() )
 		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>');
     

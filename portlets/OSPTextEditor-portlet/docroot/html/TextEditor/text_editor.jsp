@@ -22,7 +22,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 	<div class="row-fluid header" >
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-2" >
-			<div class="dropdown">
+			<div class="dropdown text-right">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Menu<span class="caret"></span>
 				</button>
@@ -87,7 +87,7 @@ if( '<%=eventEnable%>' == false ){
 	if( !<portlet:namespace/>initData.repositoryType() )
 		<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 	
-	<portlet:namespace/>loadText( <portlet:namespace/>initData );
+	<portlet:namespace/>loadText( <portlet:namespace/>initData.clone() );
 }
 
 $<portlet:namespace/>fileExplorerDialogSection.dialog({
@@ -266,7 +266,14 @@ Liferay.on(
 				if( ! <portlet:namespace/>initData.repositoryType() )
 					<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
 					
-				<portlet:namespace/>loadText( <portlet:namespace/>initData );
+				<portlet:namespace/>loadText( <portlet:namespace/>initData.clone() );
+				
+				var eventData = {
+			  	                   portletId: myId,
+			  	                   targetPortlet: <portlet:namespace/>fileExplorerId,
+			  	                   data: OSP.Util.toJSON( <portlet:namespace/>initData )
+			  	  };
+			  	  Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 			}
 		}
 );
@@ -303,9 +310,6 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet !== myId )	return;
 			
-			console.log('Text Editor OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
-			console.log( 'saveAction: '+<portlet:namespace/>saveAction );
-
 			var filePath = new OSP.InputData( e.data );
 			if( filePath.type() !== OSP.Enumeration.PathType.FILE ){
 				alert('File Name is not available. Choose another one.');
@@ -380,12 +384,9 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadText( inputData, changeAlert ){
-	<portlet:namespace/>currentData = inputData.clone();
-	if( !<portlet:namespace/>currentData.repositoryType() )
-		<portlet:namespace/>currentData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-		
+	
 	if( inputData.type() === OSP.Enumeration.PathType.FILE){
-		<portlet:namespace/>currentData = inputData.clone();
+		<portlet:namespace/>currentData = inputData;
 		var data = {
 				<portlet:namespace/>command: 'READ_FILE',
 				<portlet:namespace/>mode: <portlet:namespace/>mode,

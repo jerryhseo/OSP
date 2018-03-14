@@ -26,7 +26,7 @@ String mode = (String)renderRequest.getAttribute("mode");
 boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 %>
 
-<div class="container-fluid osp-editor file-explorer-portlet " style="height:inherit;">
+<div class="container-fluid osp-editor file-explorer-portlet ">
 	<div class="row-fluid header">
 		<c:if test="<%=!isEditMode%>">
 			<div class="col-sm-12">
@@ -38,7 +38,7 @@ boolean isEditMode = mode.equalsIgnoreCase("EDIT");
 		</div>
 		<c:if test="<%=isEditMode%>">
 			<div class="col-sm-2">
-				<div class="dropdown">
+				<div class="dropdown text-right">
 					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 						Menu<span class="caret"></span>
     				</button>

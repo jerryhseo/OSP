@@ -20,8 +20,8 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
 <div class="container-fluid osp-editor">
 	<div class="row-fluid" >
 	    <div class="col-sm-12 no-header-frame canvas">
-	        <p>Enter string value: </p>
-	        <input type="text" name="<portlet:namespace/>canvas" id="<portlet:namespace/>canvas"/>
+	        <div>Enter string value: </div>
+	        <input class="form-control" type="text" id="<portlet:namespace/>canvas"/>
 	    </div>
 	</div>
 </div>
