@@ -693,9 +693,11 @@ NGL.MenubarExamplesWidget = function (stage) {
   
   console.log("[NGLViewer] oepn ");
   xhr.responseType = 'json'
-  xhr.onload = function (e) {
-	  console.log("KYJ TEST JSON1", e);
-	  var response = this.response
+	  xhr.open('GET', NGL.examplesListUrl)
+	  xhr.onload = function (e) {
+	  console.log("[NGLViewer]  loload : ", e);
+	  console.log("[NGLViewer] load 2 : ", xhr.response);
+	  var response = xhr.response;
     if (typeof response === 'string') {
       // for ie11
       response = JSON.parse(response)
@@ -716,7 +718,6 @@ NGL.MenubarExamplesWidget = function (stage) {
 	    })
     }
   }
-  xhr.open('GET', NGL.examplesListUrl)
   xhr.send()
 
   return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)

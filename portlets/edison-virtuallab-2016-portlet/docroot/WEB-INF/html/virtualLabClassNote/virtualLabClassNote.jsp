@@ -78,7 +78,6 @@ function <portlet:namespace/>dataSearchList() {
 			$("body").css('overflow','');
 			var rowResult;
 			$("#<portlet:namespace/>classNoteFileList div:not(:has(#1))").remove();
-			console.log("getVirtualLabClassNoteList length : " + getVirtualLabClassNoteList.length);
 			
 			if(getVirtualLabClassNoteList.length == 0) {
 				
