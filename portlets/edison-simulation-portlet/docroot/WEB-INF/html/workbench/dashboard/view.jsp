@@ -841,7 +841,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			}
 			
 			if(outLog.jobStatus === 1701006){
-				<portlet:namespace/>refreshJobLogTimer = setTimeout(<portlet:namespace/>jobSystemLog, 1000, simulationUuid,jobUuid,outLog.lastPosition,type);
+// 				<portlet:namespace/>refreshJobLogTimer = setTimeout(<portlet:namespace/>jobSystemLog, 1000, simulationUuid,jobUuid,outLog.lastPosition,type);
 			}
 			
 			modal.modal({ "backdrop": "static", "keyboard": false });
