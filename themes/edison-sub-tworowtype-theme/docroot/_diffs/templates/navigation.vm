@@ -10,7 +10,7 @@
 
 
 
-<nav class="navbar navbar-default edison-custom">
+<nav class="navbar navbar-default edison-custom" style="border:none;">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarSupportedContent">
 			<span class="icon-bar"></span>
@@ -18,7 +18,7 @@
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-			<img alt="$logo_description" width="267px" height="49px" src="$site_logo" width="$site_logo_width" usemap="#Map"/>
+			<img alt="$logo_description" width="267px" height="41px" src="$site_logo" width="$site_logo_width" usemap="#Map"/>
 			<map name="Map" id="Map">
 				<area shape="rect" coords="0,0,130,80" href="$company_url" onfocus="blur();" alt="#language("go-to") EDISON" title="#language("go-to") EDISON"/>
 				<area shape="rect" coords="131,0,267,80" href="$site_main_url" onfocus="blur();" alt="#language("go-to") #language($theme.getSetting("content-title"))" title="#language("go-to") #language($theme.getSetting("content-title"))"/>

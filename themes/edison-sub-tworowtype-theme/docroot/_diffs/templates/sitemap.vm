@@ -63,9 +63,17 @@
 	<a href="/web${edisongroup.friendlyURL}">
 		EDISON
 	</a>
-	#foreach ($site in$sortTool.sort($siteGroups,'name:asc'))
-		<a href="/web${site.friendlyURL}">
-			$getterUtil.get($site.getExpandoBridge().getAttribute("SiteName").get($locale), $site.descriptiveName)
+	
+	#foreach ($site in$sortTool.sort($siteGroups,'siteName:asc'))
+		#if ($site.groupId==$themeDisplay.getScopeGroupId())
+			#set ($siteOnClass = "site-on")
+		#else
+			#set ($siteOnClass = "")
+		#end
+		
+		
+		<a href="/web${site.url}" class="$siteOnClass">
+			$site.siteName
 		</a>
 	#end
 </div>

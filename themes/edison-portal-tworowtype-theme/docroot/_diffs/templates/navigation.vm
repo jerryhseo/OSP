@@ -10,7 +10,7 @@
 
 
 
-<nav class="navbar navbar-default edison-custom">
+<nav class="navbar navbar-default edison-custom" style="border:none;">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="icon-bar"></span>
