@@ -462,7 +462,7 @@ public class OSPFileUtil {
 			String owner, 
 			String repositoryType ) throws PortalException, SystemException{
 		Path targetPath = getRepositoryPath(portletRequest, target, repositoryType);
-		owner += owner + ":edisonuser";
+		owner = owner + ":edisonuser";
 		String strCmd = "";
 		strCmd += "sudo chown -R ";
 		strCmd += owner;
