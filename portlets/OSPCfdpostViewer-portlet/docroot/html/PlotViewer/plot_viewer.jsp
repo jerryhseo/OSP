@@ -41,6 +41,7 @@ var <portlet:namespace/>highCharts;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
+<portlet:namespace/>passNamespace();
 /***********************************************************************
  * Initailization section using parameters
  ***********************************************************************/
@@ -167,6 +168,23 @@ Liferay.on(
 /***********************************************************************
  * Golbal functions
 ***********************************************************************/
+
+function <portlet:namespace/>passNamespace(){
+	setTimeout(
+			function(){
+			    var iframe = document.getElementById('<portlet:namespace/>canvas');
+				if ( <portlet:namespace/>iframeReady() && iframe.contentWindow.setNamespace) {
+					iframe.contentWindow.setNamespace('<portlet:namespace/>');
+				}
+				else{
+					<portlet:namespace/>passNamespace();
+				}
+			},
+			10
+	);
+}
+
+
 function <portlet:namespace/>loadHighCharts( inputData ){
 	if( ! inputData.repositoryType() )
 		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
@@ -188,14 +206,6 @@ function <portlet:namespace/>loadHighCharts( inputData ){
 
 function <portlet:namespace/>loadData( inputData, command ){
 	<portlet:namespace/>currentData = inputData.clone();
-	var <portlet:namespace/>dataload = {
-			command: command,
-			pathType: <portlet:namespace/>currentData.type(),
-			repositoryType: <portlet:namespace/>currentData.repositoryType(),
-			parentPath: <portlet:namespace/>currentData.parent(),
-			fileName: <portlet:namespace/>currentData.name(),
-			relative: <portlet:namespace/>currentData.relative()
-	};
 
 	var dataload = {
 			<portlet:namespace/>command: command,
@@ -212,7 +222,7 @@ function <portlet:namespace/>loadData( inputData, command ){
 		dataType : 'text',
 		success: function(data) {
 			var serveResourceURL = '<%=serveResourceURL.toString()%>'
-			<portlet:namespace/>drawPlot( data, <portlet:namespace/>dataload, serveResourceURL );
+			<portlet:namespace/>drawPlot( data, dataload, serveResourceURL );
 		},error:function(data,e){
 			console.log('RawPlotData AJAX ERROR-->'+e);
 		}

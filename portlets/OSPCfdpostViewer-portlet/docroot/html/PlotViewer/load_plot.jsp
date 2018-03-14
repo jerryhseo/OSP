@@ -61,6 +61,9 @@
 
   <script>
 
+		var namespace;
+
+
     $('div.content').on('change','select' ,function(){
 //      console.log($(this).get(0).id);
 //      console.log($(this).find(":selected").val());
@@ -199,12 +202,18 @@
       console.log(serveResourceURL2);
 			console.log("dataload ::");
       console.log(dataload);
+
+
+
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload.fileName = data[i].text;
+				dataload[namespace+fileName] = data[i].text;
+
+				console.log("first add namespace");
+				console.log(dataload);
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
