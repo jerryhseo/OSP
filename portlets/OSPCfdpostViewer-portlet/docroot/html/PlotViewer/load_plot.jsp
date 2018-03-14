@@ -206,6 +206,8 @@
 //			console.log("dataload ::");
 //      console.log(dataload);
 
+			console.log("namespace ::", namespace);
+			var filepath_name = namespace+"fileName"
 
 
       for (var i = 0; i < data.length; i++) {
@@ -213,15 +215,18 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload[namespace+"fileName"] = data[i].text;
+
+				dataload[filepath_name] = data[i].text;
 
 				console.log("data[i].text :: ", data[i].text);
 				console.log("first add namespace");
-				console.log(dataload);
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
 				readFileList[i].dataload = dataload;
+
+
+				console.log(readFileList[i].dataload);
 
         if(i==0) {
           $('.nav-tabs').append($('<li />',{ 'class' : 'active'})
