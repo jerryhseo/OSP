@@ -210,7 +210,7 @@
         var tabString = '#nav_tap_' + tab_num;
         var tabContentID = 'tap_' + tab_num;
 
-				dataload[namespace+fileName] = data[i].text;
+				dataload[namespace+"fileName"] = data[i].text;
 
 				console.log("first add namespace");
 				console.log(dataload);
