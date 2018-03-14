@@ -211,7 +211,7 @@
     function drawPlot (data_json, parentPath, serveResourceURL2){
 
 			if (!(serveResourceURL == '')) {
-				return 0;
+//				return 0;
 			}
 
 			jobParentPath = parentPath;
