@@ -22,7 +22,7 @@
 		  <!-- Content Wrapper. Contains page content -->
 		  <div class="content-wrapper" style="margin-left: 0px">
 		    <!-- Main content -->
-		    <div class="content">
+		    <section class="content">
 		      <div class="nav-tabs-custom" style="margin-bottom : 0px">
 		          <ul class="nav nav-tabs">
 		            <li class="dropdown pull-right">
@@ -30,7 +30,7 @@
 		                  <i class="fa fa-gear"></i>
 		                </a>
 		                <ul class="dropdown-menu" style="z-index : 1040" >
-		                  <div class="content" style="min-height : 0">
+		                  <div class="content_plot" style="min-height : 0">
 
 		                  </div>
 		                </ul>
@@ -40,7 +40,7 @@
 		          </div>
 		          <!-- /.tab-content -->
 		        </div>
-		    </div>
+		    </section>
 		    <!-- /.content -->
 		 </div>
 		 <!-- /.content-wrapper -->
@@ -69,7 +69,7 @@
 			namespace = ns;
 		}
 
-    $('div.content').on('change','select' ,function(){
+    $('div.content_plot').on('change','select' ,function(){
 //      console.log($(this).get(0).id);
 //      console.log($(this).find(":selected").val());
 //      console.log($(this).find(":selected").text());
@@ -108,14 +108,14 @@
       }
     });
 
-    var plotMarginWidth = parseInt($('.content').css("padding-right"))
-     + parseInt($('.content').css("padding-left"))
+    var plotMarginWidth = parseInt($('.content_plot').css("padding-right"))
+     + parseInt($('.content_plot').css("padding-left"))
      + parseInt($('.tab-content').css("padding-right"))
      + parseInt($('.tab-content').css("padding-left"));
 
 
-    var plotMarginHeight = parseInt($('.content').css("padding-top"))
-      + parseInt($('.content').css("padding-bottom"))
+    var plotMarginHeight = parseInt($('.content_plot').css("padding-top"))
+      + parseInt($('.content_plot').css("padding-bottom"))
       + parseInt($('.tab-content').css("padding-top"))
       + parseInt($('.tab-content').css("padding-bottom"));
 
@@ -540,8 +540,8 @@
 				data  : data,
 				dataType : 'text',
         success: function (getData){
-//					console.log("ajax Success!!");
-//					console.log(getData);
+					console.log("ajax Success!!");
+					console.log(getData);
           readCFDData(getData, inputDatalist.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
