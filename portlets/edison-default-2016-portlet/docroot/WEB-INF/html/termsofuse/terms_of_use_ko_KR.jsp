@@ -47,6 +47,7 @@ function agreeCheck(){
 		color: #777777;
 		padding: 15px 0px 12px 0px;
 		float: left;
+        margin-top: 20px;
 	}
 	
 	.joinbox {
