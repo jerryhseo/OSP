@@ -509,6 +509,7 @@
 		//readFileList[i].dataload = dataload;
 
     getCFDData = function (readFileList){
+			console.log(readFileList);
       $.ajax({
 				type: 'POST',
 				url: serveResourceURL,
@@ -516,7 +517,9 @@
 				dataType : 'text',
         success: function (data){
           readCFDData(data, readFileList.tabContentID);
-        }
+        },error:function(data,e){
+					console.log('getCFDData ajax Error-->'+e);
+				}
       });
     }
 
