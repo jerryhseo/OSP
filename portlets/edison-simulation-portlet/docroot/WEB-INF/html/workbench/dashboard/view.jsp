@@ -453,10 +453,14 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
-				alert(textStatus+": "+jqXHR.responseText);
+				console.log("<portlet:namespace/>searchSimulationJob-->"+textStatus+": "+jqXHR.responseText);
 			}else{
-				alert(textStatus+": "+errorThrown);
-			}  
+				console.log("<portlet:namespace/>searchSimulationJob-->"+textStatus+": "+errorThrown);
+			}
+			
+			if(<portlet:namespace/>refreshTimer){
+				clearInterval(<portlet:namespace/>refreshTimer);
+			}
 		}
 	});
 }
@@ -1094,6 +1098,12 @@ function <portlet:namespace/>iceBreakerFileDown(fileId){
 	   }
 	};
 function <portlet:namespace/>init(){
+	
+	/*IE 대응 tree event*/
+	if(Liferay.Browser.isIe()){
+		$('[data-widget="tree"]').tree();
+	}
+	
 	
 	//Job System Log modal close event
 	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
