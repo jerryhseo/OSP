@@ -192,19 +192,15 @@
     });
 
     var serveResourceURL = '';
+		var jobParentPath ='';
 
-    function drawPlot (data_json, dataload2, serveResourceURL2){
-			var dataload = dataload2;
+    function drawPlot (data_json, parentPath, serveResourceURL2){
+
+			jobParentPath = parentPath;
+
     	serveResourceURL = serveResourceURL2;
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
-
-//			console.log("data_json ::");
-//      console.log(data_json);
-//			console.log("serveResourceURL2 ::");
-//      console.log(serveResourceURL2);
-//			console.log("dataload ::");
-//      console.log(dataload);
 
 			console.log("namespace ::", namespace);
 			var filepath_name = namespace+"fileName"
@@ -218,18 +214,10 @@
 
         readFileList[i].tabID = tabString;
         readFileList[i].tabContentID = tabContentID;
-				readFileList[i].dataload = dataload;
-
-				readFileList[i].dataload[filepath_name] = data[i].text;
 
 //				dataload[filepath_name] = data[i].text;
 
-				console.log("data[i].text :: ", data[i].text , " i = ", i , "dataload[filepath_name] " , dataload[filepath_name]  );
-				console.log("first add namespace");
-
-
-
-				console.log(readFileList);
+//				console.log(readFileList);
 
         if(i==0) {
           $('.nav-tabs').append($('<li />',{ 'class' : 'active'})
@@ -529,17 +517,26 @@
 
 		//readFileList[i].dataload = dataload;
 
-    getCFDData = function (readFileList){
-			console.log(readFileList);
+    getCFDData = function (inputDatalist){
+
+			var data = {}
+			data[namespace+'command'] = "READ_FILE";
+			data[namespace+'pathType'] = "file";
+			data[namespace+'repositoryType'] = "USER_JOBS";
+			data[namespace+'parentPath'] = jobParentPath;
+			data[namespace+'fileName'] = inputDatalist.text;
+			data[namespace+'relative'] = true;
+
+			console.log(inputDatalist);
       $.ajax({
 				type: 'POST',
 				url: serveResourceURL,
-				data  : readFileList.dataload,
+				data  : data,
 				dataType : 'text',
         success: function (getData){
 					console.log("ajax Success!!");
 					console.log(getData);
-          readCFDData(getData, readFileList.tabContentID);
+          readCFDData(getData, inputDatalist.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
 				}
