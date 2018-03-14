@@ -316,12 +316,10 @@ public class OSPFileUtil {
 		Path filePath = getRepositoryPath(portletRequest, target, repositoryType);
 		Path parentPath = Files.createDirectories(filePath.getParent());
 		String owner = getUserName(portletRequest)+":edisonuser";
-		changeFileOwner(parentPath.toString(), owner);
-		changeFileMode(parentPath.toString(), "755");
 		Files.deleteIfExists(filePath);
 		Files.createFile(filePath);
-		changeFileOwner(filePath.toString(), owner);
-		changeFileMode(filePath.toString(), "755");
+		changeFileOwner(parentPath.toString(), owner);
+		changeFileMode(parentPath.toString(), "g+w");
 		
 		return Paths.get(target);
 	}
@@ -354,14 +352,11 @@ public class OSPFileUtil {
 		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists(targetFolder) ){
 			Files.createDirectories(targetFolder);
-			
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		moveFile(sourcePath, targetPath, overwrite);
-		changeFileOwner(targetPath.toString(), owner);
-		changeFileMode(targetPath.toString(), "755");
+        changeFileOwner(targetFolder.toString(), owner);
+        changeFileMode(targetFolder.toString(), "g+w");
 		
 		return target;
 	}
@@ -400,14 +395,11 @@ public class OSPFileUtil {
 		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists(targetFolder) ){
 			Files.createDirectories(targetFolder);
-			
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		copyFile(sourcePath, targetPath, overwrite);
-		changeFileOwner(targetPath.toString(), owner);
-		changeFileMode(targetPath.toString(), "755");
+		changeFileOwner(targetFolder.toString(), owner);
+        changeFileMode(targetFolder.toString(), "g+w");
 		
 		return target;
 	}
@@ -449,14 +441,11 @@ public class OSPFileUtil {
 
 		if( !Files.exists( targetFolder ) ){
 			Files.createDirectories(targetFolder);
-			
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-		changeFileOwner(targetPath.toString(), owner+":edisonuser");
-		changeFileMode(targetPath.toString(), "755");
+		changeFileOwner(targetFolder.toString(), owner);
+        changeFileMode(targetFolder.toString(), "g+w");
 		
 		if( Validator.isNotNull(stream) )
 			stream.close();
@@ -497,7 +486,7 @@ public class OSPFileUtil {
 	
 	static private void changeFileOwner( String target, String owner ) throws PortalException, SystemException{
 		String strCmd = "";
-		strCmd += "sudo chown -R ";
+		strCmd += "sudo /bin/chown -R ";
 		strCmd += owner;
 		strCmd += " ";
 		strCmd += target;
@@ -531,7 +520,7 @@ public class OSPFileUtil {
 			String target, 
 			String mode ) throws PortalException, SystemException{
 		String strCmd = "";
-		strCmd += "sudo chmod ";
+		strCmd += "sudo /bin/chmod -R ";
 		strCmd += mode;
 		strCmd += " ";
 		strCmd += target;
@@ -630,9 +619,6 @@ public class OSPFileUtil {
 		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists(targetFolder) ){
 			Files.createDirectories(targetFolder);
-			
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "755");
 		}
 
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(portletRequest);
@@ -641,8 +627,8 @@ public class OSPFileUtil {
 		File uploadedFile = uploadRequest.getFile(uploadFileName);
 		
 		copyFile(uploadedFile.toPath(), targetPath, true);
-		changeFileOwner(targetPath.toString(), owner);
-		changeFileMode(targetPath.toString(), "755");
+        changeFileOwner(targetFolder.toString(), owner);
+        changeFileMode(targetFolder.toString(), "g+w");
 	}
 
 	/**
@@ -1028,14 +1014,12 @@ public class OSPFileUtil {
 		String owner = getUserName(portletRequest)+":edisonuser";
 		if( Files.notExists( targetFolder ) ){
 			Files.createDirectories(targetFolder);
-			changeFileOwner(targetFolder.toString(), owner);
-			changeFileMode(targetFolder.toString(), "755");
 		}
 		
 		OpenOption[] openOptions = new OpenOption[] { StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING};
 		Files.write(targetPath, content.getBytes(StandardCharsets.UTF_8), openOptions);
-		changeFileOwner(targetPath.toString(), owner);
-		changeFileMode(targetPath.toString(), "755");
+		changeFileOwner(targetFolder.toString(), owner);
+        changeFileMode(targetFolder.toString(), "g+w");
 		
 	}
 
