@@ -4,6 +4,8 @@
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
 	<!-- Ionicons -->
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/ionicons.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/AdminLTE.min.css">
@@ -20,7 +22,7 @@
 		  <!-- Content Wrapper. Contains page content -->
 		  <div class="content-wrapper" style="margin-left: 0px">
 		    <!-- Main content -->
-		    <section class="content">
+		    <div class="content">
 		      <div class="nav-tabs-custom" style="margin-bottom : 0px">
 		          <ul class="nav nav-tabs">
 		            <li class="dropdown pull-right">
@@ -38,7 +40,7 @@
 		          </div>
 		          <!-- /.tab-content -->
 		        </div>
-		    </section>
+		    </div>
 		    <!-- /.content -->
 		 </div>
 		 <!-- /.content-wrapper -->
