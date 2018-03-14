@@ -728,6 +728,11 @@ NGL.MenubarExamplesWidget = function (stage) {
 	  datatype:'json',
 	  success : function(data){
 		console.log("[NGLViewer] ajax test : ", data);  
+	  },
+	  error : function(request, status, error){
+		  console.log("[NGLViewer] ajax error : request : ", request);
+		  console.log("[NGLViewer] ajax error : status : ", status);
+		  console.log("[NGLViewer] ajax error : error : ", error);
 	  }
   });
   
