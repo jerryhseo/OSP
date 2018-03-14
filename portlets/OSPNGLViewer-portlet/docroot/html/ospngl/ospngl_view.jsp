@@ -66,6 +66,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
+<portlet:namespace/>passNamespace();
 var <portlet:namespace/>connector;
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_ngl";
@@ -87,6 +88,21 @@ var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 ***********************************************************************/
 // for test
 // <portlet:namespace/>eventEnable = false;
+
+function <portlet:namespace/>passNamespace(){
+	setTimeout(
+			function(){
+			    var iframe = document.getElementById('<portlet:namespace/>canvas');
+				if ( <portlet:namespace/>iframeReady() && iframe.contentWindow.setNamespace) {
+					iframe.contentWindow.setNamespace('<portlet:namespace/>');
+				} 
+				else{
+					<portlet:namespace/>passNamespace();
+				}
+			}, 
+	);
+}
+
 
 if( <portlet:namespace/>eventEnable === false ){
 	var inputData = '<%=inputData%>';
@@ -136,7 +152,7 @@ console.log("test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().fi
 console.log("test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
 
 
-function iframeClickServerOpen(){
+function <portlet:namespace/>iframeClickServerOpen(){
 	console.log("[NGLViewer]test openserver menu ");
 
     var inputData;
@@ -185,10 +201,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			reader.onload = function (e) {
 				$('#<portlet:namespace/>canvas').each(function(){
 					$(this).one("load", function(){
-						$(this).prop('contentWindow').drawNglViewer(
-								e.target.result, $('#<portlet:namespace/>canvas').width(), $('#<portlet:namespace/>canvas').height()
-						);
-						
+						$(this).prop('contentWindow').drawNglViewer(e.target.result);
 					});
 				});
 		                

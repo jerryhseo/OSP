@@ -38,6 +38,9 @@ public class OSPNGLPortlet extends MVCPortlet {
         renderRequest.setAttribute("connector", connector);
         renderRequest.setAttribute("mode", mode);
 
+        String exampleJson = "";
+        
+        renderRequest.setAttribute("exampleJson", exampleJson);
         super.doView(renderRequest, renderResponse);
     }
 

@@ -48,6 +48,13 @@
 	//System.out.println(request.getContextPath());
 %>
 <script>
+var namespace;
+
+function setNamespace( ns ){
+	namespace = ns;
+}
+
+
 
 NGL.cssDirectory="<%= request.getContextPath()%>/css/";
 NGL.documentationUrl = "<%=request.getContextPath()%>/build/docs/index.html";
