@@ -196,6 +196,10 @@
 
     function drawPlot (data_json, parentPath, serveResourceURL2){
 
+			if (!(serveResourceURL == '')) {
+				break;
+			}
+
 			jobParentPath = parentPath;
 
     	serveResourceURL = serveResourceURL2;
@@ -534,8 +538,8 @@
 				data  : data,
 				dataType : 'text',
         success: function (getData){
-					console.log("ajax Success!!");
-					console.log(getData);
+//					console.log("ajax Success!!");
+//					console.log(getData);
           readCFDData(getData, inputDatalist.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
