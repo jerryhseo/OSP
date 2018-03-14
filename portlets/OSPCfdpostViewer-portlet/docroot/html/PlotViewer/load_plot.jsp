@@ -175,7 +175,7 @@
 
     $(function() {
       for (var i = 1; i < readFileList.length; i++) {
-        $('#'+readFileList[i].tabID).one( "click", function() {
+        $(readFileList[i].tabID).one( "click", function() {
           var clickTagNum =this.id.slice(-1);
           getCFDData(readFileList[clickTagNum] );
 
@@ -187,9 +187,21 @@
           subTapControll(clickTagNum);
           resizeLayout(clickTagNum);
         });
-
-
       }
+
+
+				$(readFileList[2].tabID).one( "click", function() {
+					var clickTagNum =this.id.slice(-1);
+					getCFDData(readFileList[clickTagNum] );
+
+				});
+
+
+        $(readFileList[2].tabID).click( function() {
+          var clickTagNum =this.id.slice(-1);
+          subTapControll(clickTagNum);
+          resizeLayout(clickTagNum);
+        });
 
     });
 
