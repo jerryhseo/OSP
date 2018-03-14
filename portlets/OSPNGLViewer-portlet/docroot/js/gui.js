@@ -693,7 +693,7 @@ NGL.MenubarExamplesWidget = function (stage) {
   
   console.log("[NGLViewer] oepn ");
   xhr.responseType = 'json'
-	  xhr.open('GET', NGL.examplesListUrl)
+	  xhr.open('GET', NGL.examplesListUrl, true);
 	  xhr.onload = function (e) {
 	  console.log("[NGLViewer]  loload : ", e);
 	  console.log("[NGLViewer] load 2 : ", xhr.response);
@@ -720,6 +720,17 @@ NGL.MenubarExamplesWidget = function (stage) {
   }
   xhr.send()
 
+  console.log("[NGLViewer] ajax test : ");
+  $.ajax({
+	  type : "GET",
+	  url : NGL.examplesListUrl,
+	  contentType : "",
+	  datatype:'json',
+	  success : function(data){
+		console.log("[NGLViewer] ajax test : ", data);  
+	  }
+  });
+  
   return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)
 }
 
