@@ -199,12 +199,12 @@
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
 
-			console.log("data_json ::");
-      console.log(data_json);
-			console.log("serveResourceURL2 ::");
-      console.log(serveResourceURL2);
-			console.log("dataload ::");
-      console.log(dataload);
+//			console.log("data_json ::");
+//      console.log(data_json);
+//			console.log("serveResourceURL2 ::");
+//      console.log(serveResourceURL2);
+//			console.log("dataload ::");
+//      console.log(dataload);
 
 
 

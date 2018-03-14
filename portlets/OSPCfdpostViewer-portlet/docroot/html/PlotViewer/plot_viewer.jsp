@@ -184,6 +184,17 @@ function <portlet:namespace/>passNamespace(){
 	);
 }
 
+function <portlet:namespace/>iframeReady(){
+	var iframe = document.getElementById('<portlet:namespace/>canvas');
+	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+	if ( iframeDoc.readyState  == 'complete' ) {
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 function <portlet:namespace/>loadHighCharts( inputData ){
 	if( ! inputData.repositoryType() )
