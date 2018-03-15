@@ -1529,13 +1529,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			ServiceContext sc ) throws SystemException{
 		SimulationPK simulationPK = new SimulationPK(uuid, sc.getScopeGroupId());
 		Simulation simulation = super.createSimulation(simulationPK);
-		long simulationGroupId = sc.getScopeGroupId();
-		try{
-            ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
-            simulationGroupId = scienceApp.getGroupId();
-        }catch (NoSuchScienceAppException e){
-            throw new SystemException(e);
-        }
+		
 		
 		simulation.setSimulationTitle(title);
 		simulation.setClassId(srcClassCode);
@@ -1548,7 +1542,6 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		simulation.setSimulationCreateDt(new Date());
 		
 		simulation.setUserId(sc.getUserId());
-		simulation.setGroupId(simulationGroupId);
 		
 		return super.addSimulation(simulation);
 	}
