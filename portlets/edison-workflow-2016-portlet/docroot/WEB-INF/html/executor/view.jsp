@@ -408,8 +408,8 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, true);
-  var executor = new SimulationExecutor(namespace, $, designer, toastr,'<%=LiferayWindowState.EXCLUSIVE%>');
+  var designer = new Designer(namespace, $, OSP, toastr, true, '${textEditor.exeFileName}');
+  var executor = new SimulationExecutor(namespace, $, designer, toastr);
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
   var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel);
   designer.setWorkflowInputPortModule(inputportModule);

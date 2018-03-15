@@ -103,9 +103,7 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
             portletURL.setPortletId(editor.exeFileName);
             portletURL.setParameter('eventEnable', true);
             portletURL.setParameter('connector', DESIGNER_PORTLET_ID);
-            if('exclusive'){
-                portletURL.setWindowState('exclusive');
-            }
+            portletURL.setWindowState('exclusive');
             console.log(portletURL.toString());
             $.ajax({
                 url: portletURL.toString(),
