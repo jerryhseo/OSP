@@ -439,7 +439,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
             }
             if (appData["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
-                    name: "Covnerter Script",
+                    name: "Converter Script",
                     icon: "edit",
                     callback: function (key, options) {
                         var editor = {
