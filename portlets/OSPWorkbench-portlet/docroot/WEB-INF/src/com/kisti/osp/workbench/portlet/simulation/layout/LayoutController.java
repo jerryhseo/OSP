@@ -594,7 +594,7 @@ public class LayoutController {
 		SimulationJob job = null;
 		
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 			
 			if(!jobTitle.equals("")){
 				job.setJobTitle(jobTitle);
@@ -651,7 +651,7 @@ public class LayoutController {
 		
 		SimulationJob job = null;
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 			job.setJobTitle(title);
 			SimulationJobLocalServiceUtil.updateSimulationJob(job);
 		} catch ( SystemException e) {
