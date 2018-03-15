@@ -282,6 +282,7 @@ public class EdisonStatisticsAppExecController {
 			}
 			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId"), "0"));
 			
+			
 			//모든 버전 App 
 			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
 			List<Map<String, Object>> scienceAppList = new ArrayList<Map<String, Object>>();
@@ -292,10 +293,21 @@ public class EdisonStatisticsAppExecController {
 				}else{
 					scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(themeDisplay.getCompanyGroupId(), groupId, themeDisplay.getLocale(), scienceAppName, true);
 				}
+			}else{
+				Map<String,Object> appMap = new HashMap<String,Object>();
+				if(categoryId!=0){
+					appMap.put("categoryIds", new long[]{categoryId});
+				}
+				
+				String [] appTypes = new String []{"Solver"};
+				Locale locale = themeDisplay.getLocale();
+				
+				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, group.getGroupId(), locale, 0, appTypes, null, appMap, "", 0, 0, true);
 			}
 			
-			List tableOrganigationList = new ArrayList();
-			List barChartDateList = new ArrayList();
+			List<Map<String, Object>> tableOrganigationList = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> barChartDateList = new ArrayList<Map<String, Object>>();
+			
 			if(0 < scienceAppList.size()){
 				if(parentGroupId == 0){//포탈
 					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
@@ -309,6 +321,10 @@ public class EdisonStatisticsAppExecController {
 					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
 				}
 			}
+			
+			System.out.println("----->"+scienceAppList.size());
+			System.out.println("----->"+tableOrganigationList.size());
+			System.out.println("----->"+barChartDateList.size());
 			
 			JSONObject obj = new JSONObject();
 			

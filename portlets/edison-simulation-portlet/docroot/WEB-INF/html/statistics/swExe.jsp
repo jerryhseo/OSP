@@ -416,7 +416,6 @@ function excelDown(){
 		var categoryId = $(this).attr("category_id");
 		var categoryName = $(this).attr("category_name");
 		
-		$("#<portlet:namespace/>scienceAppName").val(categoryName);
 		$("#<portlet:namespace/>categoryId").val(categoryId);
 		$("#<portlet:namespace/>parentGroupId").val(parentGroupId);
 		
