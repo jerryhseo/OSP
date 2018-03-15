@@ -1244,7 +1244,17 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		searchMap.put("status", status);
 		searchMap.put("begin", begin);
 		searchMap.put("end", end);
+		
+		for( String key : searchMap.keySet() ){
+			System.out.println( String.format("키 : %s, 값 : %s", key, searchMap.get(key)) );
+		}
+		System.out.println("------------------------------------------------------------------------------");
 		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, searchMap, true, false,lanuageSearch);
+		
+		for( String key : searchParam.keySet() ){
+			System.out.println( String.format("키 : %s, 값 : %s", key, searchParam.get(key)) );
+		}
+		
 		return retrieveListScienceApp(locale, searchParam, true, false);
 	}
 	
