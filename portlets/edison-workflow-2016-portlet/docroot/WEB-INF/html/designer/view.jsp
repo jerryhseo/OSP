@@ -494,6 +494,8 @@ $(document).ready(function(){
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
+  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel);
+  designer.setWorkflowInputPortModule(inputportModule);
 
   aSyncAjaxHelper.post("/delegate/services/app/all", {
     companyGroupId: <portlet:namespace/>getCompanyGroupId(),

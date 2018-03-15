@@ -411,6 +411,8 @@ $(document).ready(function(){
   var designer = new Designer(namespace, $, OSP, toastr, true);
   var executor = new SimulationExecutor(namespace, $, designer, toastr,'<%=LiferayWindowState.EXCLUSIVE%>');
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
+  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel);
+  designer.setWorkflowInputPortModule(inputportModule);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
