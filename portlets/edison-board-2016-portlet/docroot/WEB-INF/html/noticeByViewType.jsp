@@ -315,6 +315,12 @@
 					noticeDiv.appendTo(noticeContentsListDiv);
 					
 				}else{
+					/* var boardLength = 0;
+					if(4 < boardList.length){
+						boardLength = 4;
+					} else {
+						boardLength = boardList.length;
+					} */
 					for(var i=0 ; i < boardList.length; i++){
 						noticeDiv = $("<div/>").addClass("newslist col-md-3 col-sm-12")
 											   .css("padding-left", "7px")
@@ -355,7 +361,13 @@
 				}
 					
 				/* pagination */
-				for(var i=0; i<data.pageCount; i++){
+				var pageCount = 0;
+				if(4 < data.pageCount){
+					pageCount = 4;
+				} else {
+					pageCount = data.pageCount;
+				}
+				for(var i=0; i<pageCount; i++){
 					paginationLi = $("<li/>").attr("onclick", "getBoardList<portlet:namespace/>(" + (i+1) + ");return false")
 											 .css("cursor", "pointer");
 					defaultPageBtn = $("<img/>").attr("src", "${contextPath}/images/noticepage.png")
