@@ -398,8 +398,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
     	inputData.name('');
     }
-    if( ! inputData.repositoryType() )
-		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+    //if( ! inputData.repositoryType() )
+	//	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
     
     var data = {
