@@ -1,4 +1,4 @@
-var SimulationExecutor = (function (namespace, $, designer, toastr, windowState) {
+var SimulationExecutor = (function (namespace, $, designer, toastr) {
     'use strict';
     var WF_STATUS_CODE = {
         CREATED: "CREATED",
@@ -326,9 +326,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr, windowState)
             portletURL.setPortletId(analyzer.exeFileName);
             portletURL.setParameter('eventEnable', true);
             portletURL.setParameter('connector', DESIGNER_PORTLET_ID);
-            if (windowState) {
-                portletURL.setWindowState(windowState);
-            }
+            portletURL.setWindowState('exclusive');
             $.ajax({
                 url: portletURL.toString(),
                 type: 'POST',

@@ -490,7 +490,7 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr);
+  var designer = new Designer(namespace, $, OSP, toastr, false, '${textEditor.exeFileName}');
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
