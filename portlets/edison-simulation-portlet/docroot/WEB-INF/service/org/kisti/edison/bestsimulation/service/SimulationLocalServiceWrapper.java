@@ -700,6 +700,36 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByUserIdAndTitle(groupId, userId,
+			tittleKeyword, start, end);
+	}
+
+	@Override
+	public long countByUserIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByUserIdAndTitle(groupId, userId,
+			tittleKeyword);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.findByTitle(groupId, tittleKeyword,
+			start, end);
+	}
+
+	@Override
+	public long countByTitle(long groupId, java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.countByTitle(groupId, tittleKeyword);
+	}
+
+	@Override
 	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
 		long groupId, long userId, java.lang.String tittleKeyword, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {

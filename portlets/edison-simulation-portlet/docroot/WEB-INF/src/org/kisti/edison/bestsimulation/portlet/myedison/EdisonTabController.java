@@ -19,9 +19,9 @@ public class EdisonTabController{
     @RequestMapping
     public String view(RenderRequest request, RenderResponse response, ModelMap model){
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-        String[] tabNames = {LanguageUtil.get(themeDisplay.getLocale(), "edison-myfile-title"),
-            LanguageUtil.get(themeDisplay.getLocale(), "edison-myedison-file-mng-treeview")};
-        String listTabValue = ParamUtil.getString(request, "tabValue", "myfile");
+        String[] tabNames = {LanguageUtil.get(themeDisplay.getLocale(), "edison-myedison-file-mng-treeview"),
+            LanguageUtil.get(themeDisplay.getLocale(), "edison-myfile-title")};
+        String listTabValue = ParamUtil.getString(request, "tabValue", "monitoring");
         
         model.addAttribute("tabNames", StringUtils.join(tabNames, ","));
         model.addAttribute("listTabValue", listTabValue);

@@ -560,6 +560,21 @@ public interface SimulationLocalService extends BaseLocalService,
 	public int countByUserIdAndGroupId(long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException;
+
+	public long countByUserIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public long countByTitle(long groupId, java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
 		long groupId, long userId, java.lang.String tittleKeyword, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException;

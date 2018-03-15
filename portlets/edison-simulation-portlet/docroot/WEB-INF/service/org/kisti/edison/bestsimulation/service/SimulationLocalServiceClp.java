@@ -311,78 +311,100 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 
 		_methodParameterTypes50 = new String[] { "long", "long" };
 
-		_methodName51 = "findByUserIdAndGroupIdAndTitle";
+		_methodName51 = "findByUserIdAndTitle";
 
 		_methodParameterTypes51 = new String[] {
 				"long", "long", "java.lang.String", "int", "int"
 			};
 
-		_methodName52 = "countByUserIdAndGroupIdAndTitle";
+		_methodName52 = "countByUserIdAndTitle";
 
 		_methodParameterTypes52 = new String[] {
 				"long", "long", "java.lang.String"
 			};
 
-		_methodName53 = "findByGroupIdAndTitle";
+		_methodName53 = "findByTitle";
 
 		_methodParameterTypes53 = new String[] {
 				"long", "java.lang.String", "int", "int"
 			};
 
-		_methodName54 = "countByGroupIdAndTitle";
+		_methodName54 = "countByTitle";
 
 		_methodParameterTypes54 = new String[] { "long", "java.lang.String" };
 
-		_methodName55 = "addSimulation";
+		_methodName55 = "findByUserIdAndGroupIdAndTitle";
 
 		_methodParameterTypes55 = new String[] {
+				"long", "long", "java.lang.String", "int", "int"
+			};
+
+		_methodName56 = "countByUserIdAndGroupIdAndTitle";
+
+		_methodParameterTypes56 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName57 = "findByGroupIdAndTitle";
+
+		_methodParameterTypes57 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
+
+		_methodName58 = "countByGroupIdAndTitle";
+
+		_methodParameterTypes58 = new String[] { "long", "java.lang.String" };
+
+		_methodName59 = "addSimulation";
+
+		_methodParameterTypes59 = new String[] {
 				"java.lang.String", "java.lang.String", "long",
 				"java.lang.String", "java.lang.String", "long", "long",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName56 = "deleteSimulation";
+		_methodName60 = "deleteSimulation";
 
-		_methodParameterTypes56 = new String[] { "java.lang.String" };
+		_methodParameterTypes60 = new String[] { "java.lang.String" };
 
-		_methodName57 = "addJob";
+		_methodName61 = "addJob";
 
-		_methodParameterTypes57 = new String[] {
+		_methodParameterTypes61 = new String[] {
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName58 = "addJob";
+		_methodName62 = "addJob";
 
-		_methodParameterTypes58 = new String[] {
+		_methodParameterTypes62 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName59 = "deleteJob";
+		_methodName63 = "deleteJob";
 
-		_methodParameterTypes59 = new String[] {
+		_methodParameterTypes63 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName60 = "deleteAllJobs";
+		_methodName64 = "deleteAllJobs";
 
-		_methodParameterTypes60 = new String[] { "java.lang.String" };
+		_methodParameterTypes64 = new String[] { "java.lang.String" };
 
-		_methodName61 = "getJobData";
+		_methodName65 = "getJobData";
 
-		_methodParameterTypes61 = new String[] { "java.lang.String" };
+		_methodParameterTypes65 = new String[] { "java.lang.String" };
 
-		_methodName62 = "getSimulationsByAppId";
+		_methodName66 = "getSimulationsByAppId";
 
-		_methodParameterTypes62 = new String[] { "long" };
+		_methodParameterTypes66 = new String[] { "long" };
 
-		_methodName63 = "getSimulationsByAppId";
+		_methodName67 = "getSimulationsByAppId";
 
-		_methodParameterTypes63 = new String[] { "long", "int", "int" };
+		_methodParameterTypes67 = new String[] { "long", "int", "int" };
 
-		_methodName64 = "countSimulationsByAppId";
+		_methodName68 = "countSimulationsByAppId";
 
-		_methodParameterTypes64 = new String[] { "long" };
+		_methodParameterTypes68 = new String[] { "long" };
 	}
 
 	@Override
@@ -2154,7 +2176,7 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
-	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndTitle(
 		long groupId, long userId, java.lang.String tittleKeyword, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -2194,7 +2216,7 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
-	public long countByUserIdAndGroupIdAndTitle(long groupId, long userId,
+	public long countByUserIdAndTitle(long groupId, long userId,
 		java.lang.String tittleKeyword)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -2230,7 +2252,7 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
-	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupIdAndTitle(
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByTitle(
 		long groupId, java.lang.String tittleKeyword, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -2268,14 +2290,161 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
-	public long countByGroupIdAndTitle(long groupId,
-		java.lang.String tittleKeyword)
+	public long countByTitle(long groupId, java.lang.String tittleKeyword)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName54,
 					_methodParameterTypes54,
+					new Object[] {
+						groupId,
+						
+					ClpSerializer.translateInput(tittleKeyword)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupIdAndTitle(
+		long groupId, long userId, java.lang.String tittleKeyword, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName55,
+					_methodParameterTypes55,
+					new Object[] {
+						groupId,
+						
+					userId,
+						
+					ClpSerializer.translateInput(tittleKeyword),
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.kisti.edison.bestsimulation.model.Simulation>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public long countByUserIdAndGroupIdAndTitle(long groupId, long userId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName56,
+					_methodParameterTypes56,
+					new Object[] {
+						groupId,
+						
+					userId,
+						
+					ClpSerializer.translateInput(tittleKeyword)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByGroupIdAndTitle(
+		long groupId, java.lang.String tittleKeyword, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName57,
+					_methodParameterTypes57,
+					new Object[] {
+						groupId,
+						
+					ClpSerializer.translateInput(tittleKeyword),
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.kisti.edison.bestsimulation.model.Simulation>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public long countByGroupIdAndTitle(long groupId,
+		java.lang.String tittleKeyword)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName58,
+					_methodParameterTypes58,
 					new Object[] {
 						groupId,
 						
@@ -2311,8 +2480,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName55,
-					_methodParameterTypes55,
+			returnObj = _invokableLocalService.invokeMethod(_methodName59,
+					_methodParameterTypes59,
 					new Object[] {
 						ClpSerializer.translateInput(uuid),
 						
@@ -2355,8 +2524,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName56,
-				_methodParameterTypes56,
+			_invokableLocalService.invokeMethod(_methodName60,
+				_methodParameterTypes60,
 				new Object[] { ClpSerializer.translateInput(simulationUuid) });
 		}
 		catch (Throwable t) {
@@ -2388,8 +2557,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName57,
-					_methodParameterTypes57,
+			returnObj = _invokableLocalService.invokeMethod(_methodName61,
+					_methodParameterTypes61,
 					new Object[] {
 						ClpSerializer.translateInput(simulationUUID),
 						
@@ -2424,8 +2593,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName58,
-					_methodParameterTypes58,
+			returnObj = _invokableLocalService.invokeMethod(_methodName62,
+					_methodParameterTypes62,
 					new Object[] {
 						ClpSerializer.translateInput(simulationUUID),
 						
@@ -2460,8 +2629,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName59,
-				_methodParameterTypes59,
+			_invokableLocalService.invokeMethod(_methodName63,
+				_methodParameterTypes63,
 				new Object[] {
 					ClpSerializer.translateInput(simulationUuid),
 					
@@ -2489,8 +2658,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	public void deleteAllJobs(java.lang.String simulationUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName60,
-				_methodParameterTypes60,
+			_invokableLocalService.invokeMethod(_methodName64,
+				_methodParameterTypes64,
 				new Object[] { ClpSerializer.translateInput(simulationUuid) });
 		}
 		catch (Throwable t) {
@@ -2517,8 +2686,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName61,
-					_methodParameterTypes61,
+			returnObj = _invokableLocalService.invokeMethod(_methodName65,
+					_methodParameterTypes65,
 					new Object[] { ClpSerializer.translateInput(jobUuid) });
 		}
 		catch (Throwable t) {
@@ -2551,8 +2720,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName62,
-					_methodParameterTypes62, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName66,
+					_methodParameterTypes66, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2580,8 +2749,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName63,
-					_methodParameterTypes63,
+			returnObj = _invokableLocalService.invokeMethod(_methodName67,
+					_methodParameterTypes67,
 					new Object[] { scienceAppId, start, end });
 		}
 		catch (Throwable t) {
@@ -2609,8 +2778,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName64,
-					_methodParameterTypes64, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName68,
+					_methodParameterTypes68, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2760,4 +2929,12 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	private String[] _methodParameterTypes63;
 	private String _methodName64;
 	private String[] _methodParameterTypes64;
+	private String _methodName65;
+	private String[] _methodParameterTypes65;
+	private String _methodName66;
+	private String[] _methodParameterTypes66;
+	private String _methodName67;
+	private String[] _methodParameterTypes67;
+	private String _methodName68;
+	private String[] _methodParameterTypes68;
 }

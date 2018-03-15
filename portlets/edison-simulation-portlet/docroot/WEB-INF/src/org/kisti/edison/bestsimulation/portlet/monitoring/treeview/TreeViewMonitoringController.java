@@ -160,6 +160,7 @@ public class TreeViewMonitoringController{
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         User user = PortalUtil.getUser(request);
         long groupId = themeDisplay.getSiteGroupId();
+        long parentGroupId = themeDisplay.getScopeGroup().getParentGroupId();
         
         int currentPage = ParamUtil.getInteger(request, "currentPage", 1);
         int start = (currentPage - 1) * LIST_SIZE;
@@ -168,29 +169,57 @@ public class TreeViewMonitoringController{
         
         response.setContentType("application/json; charset=UTF-8");
         try{
-            if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)
-                || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)
-                || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)){
-                long simulationsCount = SimulationLocalServiceUtil.countByGroupIdAndTitle(groupId, searchKeyword);
-                if(simulationsCount > start){
-                    List<Simulation> simulations = SimulationLocalServiceUtil.findByGroupIdAndTitle(
-                        groupId, searchKeyword, start, end);
-                    response.getWriter().write(
-                        serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+            if(parentGroupId == 0){
+                if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)
+                    || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)
+                    || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)){
+                    long simulationsCount = SimulationLocalServiceUtil.countByTitle(groupId, searchKeyword);
+                    if(simulationsCount > start){
+                        List<Simulation> simulations = SimulationLocalServiceUtil.findByTitle(
+                            groupId, searchKeyword, start, end);
+                        response.getWriter().write(
+                            serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+                    }else{
+                        response.getWriter().write("[]");
+                    }
                 }else{
-                    response.getWriter().write("[]");
+                    long userId = user.getUserId();
+                    long simulationsCount = SimulationLocalServiceUtil
+                        .countByUserIdAndTitle(groupId, userId, searchKeyword);
+                    if(simulationsCount > start){
+                        List<Simulation> simulations = SimulationLocalServiceUtil.findByUserIdAndTitle(
+                            groupId, userId, searchKeyword, start, end);
+                        response.getWriter().write(
+                            serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+                    }else{
+                        response.getWriter().write("[]");
+                    }
                 }
             }else{
-                long userId = user.getUserId();
-                long simulationsCount = SimulationLocalServiceUtil
-                    .countByUserIdAndGroupIdAndTitle(groupId, userId, searchKeyword);
-                if(simulationsCount > start){
-                    List<Simulation> simulations = SimulationLocalServiceUtil.findByUserIdAndGroupIdAndTitle(
-                        groupId, userId, searchKeyword, start, end);
-                    response.getWriter().write(
-                        serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+                if (EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)
+                    || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_ADMINISTRATOR)
+                    || EdisonUserUtil.isSiteRole(user, groupId, RoleConstants.SITE_OWNER)){
+                    long simulationsCount = SimulationLocalServiceUtil.countByGroupIdAndTitle(groupId, searchKeyword);
+                    if(simulationsCount > start){
+                        List<Simulation> simulations = SimulationLocalServiceUtil.findByGroupIdAndTitle(
+                            groupId, searchKeyword, start, end);
+                        response.getWriter().write(
+                            serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+                    }else{
+                        response.getWriter().write("[]");
+                    }
                 }else{
-                    response.getWriter().write("[]");
+                    long userId = user.getUserId();
+                    long simulationsCount = SimulationLocalServiceUtil
+                        .countByUserIdAndGroupIdAndTitle(groupId, userId, searchKeyword);
+                    if(simulationsCount > start){
+                        List<Simulation> simulations = SimulationLocalServiceUtil.findByUserIdAndGroupIdAndTitle(
+                            groupId, userId, searchKeyword, start, end);
+                        response.getWriter().write(
+                            serializeJSONArray(simulationsToJstreeModel(simulations, themeDisplay.getLocale())));
+                    }else{
+                        response.getWriter().write("[]");
+                    }
                 }
             }
         }catch(IOException e){
