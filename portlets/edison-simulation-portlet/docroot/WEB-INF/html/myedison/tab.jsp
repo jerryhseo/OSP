@@ -13,7 +13,7 @@
 
 <div class="h20"></div>
 <div class="contabmenu">
-  <edison-ui:tabs names="<%=tabNames%>" url="<%=tabSearchURL%>" tabsValues="myfile,monitoring" value="<%=listTabValue%>"
+  <edison-ui:tabs names="<%=tabNames%>" url="<%=tabSearchURL%>" tabsValues="monitoring,myfile" value="<%=listTabValue%>"
     param="tabValue" minwidth="230" />
 </div>
 
