@@ -289,9 +289,11 @@
 					<td id="fileTDArea" colspan="3"></td>
 				</tr>
 				<tr>
-					<td colspan="4">
+					<td class="center">
+							<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />
+					</td>
+					<td colspan="3">
 						<div id="fileListDiv">
-							<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;
 							<c:forEach items="${fileList}" var="fileMap">
 								<span style="cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
 									<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
