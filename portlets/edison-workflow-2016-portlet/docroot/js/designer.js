@@ -1,4 +1,4 @@
-var Designer = (function (namespace, $, OSP, toastr, isFixed) {
+var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -7,62 +7,13 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
     var currentJsPlumbInstance;
     var wfPortletGlobalData = wfPortletGlobalData ? wfPortletGlobalData : {wfElements : {}};
     var modifyingWorkflow;
+    var workflowInputPort;
 
     /** application **/
     var portDropOption = {
         // tolerance: "touch",
         hoverClass: "dropHover",
         activeClass: "dragActive"
-    };
-
-    var WF_STATUS_CODE = {
-        CREATED: "CREATED",
-        RUNNING: "RUNNING",
-        PAUSED: "PAUSED",
-        COMPLETED: "SUCCESS",
-        DONE: "DONE",
-        FAILED: "FAILED",
-        CANCELED: "CANCELED",
-        NOT_FOUND: "NOT_FOUND"
-    };
-    var WF_STATUS_CODE_STRING = {
-        CREATED: "Created",
-        RUNNING: "Running",
-        PAUSED: "Paused",
-        COMPLETED: "Completed",
-        SUCCESS: "Success",
-        DONE: "Done",
-        FAILED: "Failed",
-        CANCELED: "Canceled"
-    };
-
-    var WF_JSPLUMB_TYPES = {
-        ENDPOINT: "endpoint",
-        INPUT: "input",
-        OUTPUT: "output",
-        LOOP: "loop"
-    };
-
-    var WF_APP_TYPES = {
-        DYNAMIC_CONVERTER: {
-            NAME: "DynamicConverter",
-            INPUT_DATA_TYPE: "converter_input",
-            OUTPUT_DATA_TYPE: "converter_stdout",
-            INPUT_SCOPE: "converter_stdout_",
-            OUTPUT_SCOPE: "converter_input_",
-        },CONTROLLER: {
-            NAME: "Controller",
-            INPUT_DATA_TYPE: "controller_input",
-            OUTPUT_DATA_TYPE: "controller_stdout",
-            INPUT_SCOPE: "controller_stdout_",
-            OUTPUT_SCOPE: "controller_input_",
-        },
-        STATIC_CONVERTER: {
-            NAME: "Converter"
-        },
-        APP: {
-            NAME: "Solver"
-        }
     };
 
     var inputPortColor = "#416EC5";
@@ -488,20 +439,66 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
             }
             if (appData["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
-                    name: "Script",
+                    name: "Covnerter Script",
                     icon: "edit",
                     callback: function (key, options) {
+                        var editor = {
+                            "editorType": "Text",
+                            "exeFileName": textEditorFileName,
+                            "name": "Script Editor"
+                        };
+                        var port = {
+                            "name": function(){
+                                return WF_CONVERTER_SCRIPT;
+                            } 
+                        };
+                        workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
+
+                        // var workflowInfo = {
+                        //     jsPlumbWindowId: wfWindowId,
+                        //     portName: "converter-script",
+                        //     editorType: "Text"
+                        // };
+                        // var portletId = textEditorFileName;
+                        // var srcData = new OSP.InputData();
+                        // srcData.type(OSP.Enumeration.PathType.CONTEXT);
+                        // if(wfPortletGlobalData["wfElements"][wfWindowId]
+                        //     && wfPortletGlobalData["wfElements"][wfWindowId]["converter-script"]){
+                        //   var portData = wfPortletGlobalData["wfElements"][wfWindowId]["converter-script"]["input-value"];
+                        //   srcData.context(Liferay.Util.escapeHTML(portData));
+                        // }else{
+                        //   srcData.context("");
+                        // }
+                        
+                        //showEditorWindow(portletId, workflowInfo, JSON.stringify(srcData));
                         // TODO : popScriptEditorWindow(appData, wfWindowId);
                     }
                 };
             }
             if (appData["appType"] == WF_APP_TYPES.CONTROLLER.NAME) {
+                // items["items"]["open-texteditor"] = {
+                //     name: "Edit Condition",
+                //     icon: "edit",
+                //     callback: function (key, options) {
+                //         // TODO : popScriptEditorWindow(appData, wfWindowId);
+                //         decision.condtions(wfWindowId);
+                //     }
+                // };
                 items["items"]["open-texteditor"] = {
-                    name: "Edit Condition",
+                    name: "Condition Script",
                     icon: "edit",
                     callback: function (key, options) {
-                        // TODO : popScriptEditorWindow(appData, wfWindowId);
-                        decision.condtions(wfWindowId);
+                        var editor = {
+                            "editorType": "Text",
+                            "exeFileName": textEditorFileName,
+                            "name": "Script Editor"
+                        };
+                        var port = {
+                            "name": function(){
+                                return WF_CONVERTER_SCRIPT;
+                            } 
+                        };
+                        workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
                     }
                 };
             }
@@ -807,6 +804,9 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed) {
         },
         "getCurrentJsPlumbInstance": function(){
             return currentJsPlumbInstance;
+        },
+        "setWorkflowInputPortModule" : function(workflowInputPortInstance){
+            workflowInputPort = workflowInputPortInstance;
         }
     };
 });

@@ -17,7 +17,7 @@ boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="container-fluid osp-analyzer">
+<div class="container-fluid osp-analyzer" style="padding: 0px">
 	<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/PlotViewer/load_plot.jsp">
 	</iframe>
 </div>

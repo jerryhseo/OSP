@@ -4,6 +4,8 @@
 
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
 	<!-- Ionicons -->
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/ionicons.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/AdminLTE.min.css">
@@ -28,7 +30,7 @@
 		                  <i class="fa fa-gear"></i>
 		                </a>
 		                <ul class="dropdown-menu" style="z-index : 1040" >
-		                  <div class="content" style="min-height : 0">
+		                  <div class="content_plot" style="min-height : 0">
 
 		                  </div>
 		                </ul>
@@ -67,7 +69,7 @@
 			namespace = ns;
 		}
 
-    $('div.content').on('change','select' ,function(){
+    $('div.content_plot').on('change','select' ,function(){
 //      console.log($(this).get(0).id);
 //      console.log($(this).find(":selected").val());
 //      console.log($(this).find(":selected").text());
@@ -106,14 +108,14 @@
       }
     });
 
-    var plotMarginWidth = parseInt($('.content').css("padding-right"))
-     + parseInt($('.content').css("padding-left"))
+    var plotMarginWidth = parseInt($('.content_plot').css("padding-right"))
+     + parseInt($('.content_plot').css("padding-left"))
      + parseInt($('.tab-content').css("padding-right"))
      + parseInt($('.tab-content').css("padding-left"));
 
 
-    var plotMarginHeight = parseInt($('.content').css("padding-top"))
-      + parseInt($('.content').css("padding-bottom"))
+    var plotMarginHeight = parseInt($('.content_plot').css("padding-top"))
+      + parseInt($('.content_plot').css("padding-bottom"))
       + parseInt($('.tab-content').css("padding-top"))
       + parseInt($('.tab-content').css("padding-bottom"));
 
@@ -180,14 +182,26 @@
         });
       }
       for (var i = 0; i < readFileList.length; i++) {
-        $(readFileList[i].tabID).click( function() {
+        $('#'+readFileList[i].tabID).click( function() {
           var clickTagNum =this.id.slice(-1);
           subTapControll(clickTagNum);
           resizeLayout(clickTagNum);
         });
-
-
       }
+
+
+				$('#nav_tap_2').one( "click", function() {
+					var clickTagNum =this.id.slice(-1);
+					getCFDData(readFileList[clickTagNum]);
+
+				});
+
+
+        $('#nav_tap_2').click( function() {
+          var clickTagNum =this.id.slice(-1);
+          subTapControll(clickTagNum);
+          resizeLayout(clickTagNum);
+        });
 
     });
 
@@ -206,10 +220,10 @@
     	data = JSON.parse(data_json);
       readFileList = JSON.parse(data_json);
 
-			console.log("namespace ::", namespace);
+		//	console.log("namespace ::", namespace);
 			var filepath_name = namespace+"fileName"
 
-			console.log("filepath_name ::", filepath_name);
+		//	console.log("filepath_name ::", filepath_name);
 
       for (var i = 0; i < data.length; i++) {
         var tab_num = i;
@@ -239,9 +253,11 @@
 
           $('.tab-content').append($('<div />',{ 'class' : 'tab-pane', 'id' : tabContentID }));
         }
+
+
+      getCFDData(readFileList[i]);
       }
       //console.log(readFileList);
-      getCFDData(readFileList[0]);
     };
 
     select_option = function  (tab_index, div_class, selectOption ) {
@@ -531,15 +547,15 @@
 			data[namespace+'fileName'] = inputDatalist.text;
 			data[namespace+'relative'] = true;
 
-			console.log(inputDatalist);
+	//		console.log(inputDatalist);
       $.ajax({
 				type: 'POST',
 				url: serveResourceURL,
 				data  : data,
 				dataType : 'text',
         success: function (getData){
-//					console.log("ajax Success!!");
-//					console.log(getData);
+	//				console.log("ajax Success!!");
+	//				console.log(getData);
           readCFDData(getData, inputDatalist.tabContentID);
         },error:function(getData,e){
 					console.log('getCFDData ajax Error-->'+e);
