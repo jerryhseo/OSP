@@ -322,10 +322,6 @@ public class EdisonStatisticsAppExecController {
 				}
 			}
 			
-			System.out.println("----->"+scienceAppList.size());
-			System.out.println("----->"+tableOrganigationList.size());
-			System.out.println("----->"+barChartDateList.size());
-			
 			JSONObject obj = new JSONObject();
 			
 			obj.put("tableOrganigationList", tableOrganigationList);
