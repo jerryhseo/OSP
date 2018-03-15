@@ -1126,21 +1126,8 @@ public class LayoutController {
 			portalUrl += serverName+":"+themeDisplay.getServerPort();
 		}
 		
-		Simulation simulation = null;
-        try{
-            simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
-        }catch (NoSuchSimulationException | SystemException e){
-            _log.error("no simulation", e);
-        }
-		
-		//portalUrl = "http://150.183.247.221:8080";
-		
 		String url = portalUrl +_callbackAPI;
-		if(simulation == null){
-		    url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
-		}else{
-		    url = HttpUtil.addParameter(url, "gid", simulation.getGroupId());
-		}
+		url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
 		url = HttpUtil.addParameter(url, "simulationUuid", simulationUuid); 
 		url = HttpUtil.addParameter(url, "jobSeqNo", jobSeqNo); 
 		
