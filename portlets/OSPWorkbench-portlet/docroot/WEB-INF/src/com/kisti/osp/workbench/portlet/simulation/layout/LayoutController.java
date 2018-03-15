@@ -107,7 +107,7 @@ public class LayoutController {
 		
 		
 //		ProvenanceSupportApp.put("uChem", "4.0.1");
-//		ProvenanceSupportApp.put("pianostring", "1.0.0");
+		ProvenanceSupportApp.put("pianostring", "1.0.0");
 //		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
 //		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
 //		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
@@ -896,7 +896,7 @@ public class LayoutController {
 			System.out.println("Job UUID to be submitted: "+jobUuid);
 			if( jobUuid.isEmpty() || isJobSubmitted ){
 				try {
-					job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+					job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 				} catch (SystemException e) {
 					_log.error("Job creation failed: "+jobUuid);
 					throw new IOException();
