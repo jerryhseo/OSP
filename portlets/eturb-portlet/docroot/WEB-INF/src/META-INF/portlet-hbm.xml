@@ -8,6 +8,7 @@
 		<composite-id name="primaryKey" class="org.kisti.eturb.dbservice.service.persistence.ProjectPK">
 			<key-property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		</composite-id>
 		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="projectStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />

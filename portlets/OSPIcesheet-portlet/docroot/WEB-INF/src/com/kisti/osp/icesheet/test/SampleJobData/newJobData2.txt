@@ -1,0 +1,6 @@
+{
+	"-param": {
+		"port_data": "V0 = -0.5 ;\nh = 6 ;\n",
+		"editor_type": "Inputdeck"
+	}
+}

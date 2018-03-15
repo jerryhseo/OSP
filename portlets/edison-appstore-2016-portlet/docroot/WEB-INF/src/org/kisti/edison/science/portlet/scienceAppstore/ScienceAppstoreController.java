@@ -35,11 +35,13 @@ import org.kisti.edison.science.service.ScienceAppDescriptionLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppFavoriteLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerLocalServiceUtil;
+import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonHttpUtil;
 import org.kisti.edison.util.EdisonUserUtil;
+import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +52,10 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 /*import com.kisti.osp.workbench.service.WorkbenchLayoutLocalServiceUtil;*/
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -70,10 +75,13 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.asset.NoSuchCategoryPropertyException;
 import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.model.AssetCategoryProperty;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
@@ -94,6 +102,13 @@ public class ScienceAppstoreController {
 				model.addAttribute("returnParams", params);
 			}
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
+			
+			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
+			if(tabViewYn.equals("Y")){
+				model = scienceAppstoreList(request, response, model);
+				model.addAttribute("tabViewYn", tabViewYn);
+				return "scienceAppstore/scienceAppStoreList";
+			}
 			
 			//다른곳에서 solverID가 넘어올경우
 			if(!CustomUtil.strNull(params.get("search_solverId")).equals("")){
@@ -184,7 +199,8 @@ public class ScienceAppstoreController {
 			model.addAttribute("contentCheckAuth" , contentCheckAuth);
 			String responseNamespace = response.getNamespace();
 			responseNamespace = responseNamespace.substring(1, responseNamespace.length()-1);
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			//long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			
 			model.addAttribute("workBenchPlid", plid);
 			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
@@ -342,7 +358,8 @@ public class ScienceAppstoreController {
 			/*asset 바로가기 상태 체크*/
 			String viewStatus = ParamUtil.getString(request, "viewStatus", "");
 			model.addAttribute("viewStatus", viewStatus);
-
+			model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
+			
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -353,6 +370,88 @@ public class ScienceAppstoreController {
 		return "scienceAppstore/scienceAppStoreView";
 	}
 	
+	public ModelMap scienceAppstoreList(RenderRequest request, RenderResponse response,ModelMap model){
+		try{
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+			Map params = RequestUtil.getParameterMap(request);
+			long companyId = themeDisplay.getCompanyId();
+			
+			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
+			
+			/* tab */
+			String visitSite ="";
+			long parentGroupId = GroupLocalServiceUtil.getGroup(PortalUtil.getScopeGroupId(request)).getParentGroupId();
+			
+			String searchGroupId =CustomUtil.strNull(params.get("search_groupId"));
+			
+			//default visitSite
+			Group defaultGroup = GroupLocalServiceUtil.getGroup(companyId, "CFD");
+			model.addAttribute("visitSite", Long.toString(defaultGroup.getGroupId()));
+			
+			//User Expando 값 가지고 오기
+			if(themeDisplay.isSignedIn()){
+				visitSite =  themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
+			}else{
+				model.addAttribute("visitSite", CustomUtil.strNull(params.get("groupId"), Long.toString(defaultGroup.getGroupId()) ));
+			}
+			
+			String groupName = "";
+			int groupCnt = 0;
+			String groupId = "";
+
+			Map<String,Long> GroupMap = new HashMap<String,Long>();
+			if(!tabUseStr.equals("")){
+				String []tabUseArray = tabUseStr.split(",");
+				for(int i=0;i<tabUseArray.length;i++){
+					
+					Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
+					Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
+					GroupMap.put(group.getName(), group.getGroupId());
+					
+					if(groupCnt==0){
+						groupName += group.getName();
+						groupId += group.getGroupId();
+						groupCnt++;
+					}else{
+						groupName += ","+group.getName();
+						groupId += ","+group.getGroupId();
+					}
+					
+					if(!visitSite.equals("")&&visitSite.equals(group.getName())){
+						model.addAttribute("visitSite", Long.toString(group.getGroupId()));
+					}
+				}
+			}
+			model.addAttribute("tabNames", groupName);
+			model.addAttribute("tabsValues", groupId);
+			
+			/*다른 곳에서 search_groupId 파라미터가 넘어 올경우 최종적으로 searchGroupId 값을 셋팅*/
+			if(!searchGroupId.equals("")){
+				model.addAttribute("visitSite", searchGroupId);
+			}
+			
+			net.sf.json.JSONObject json = new net.sf.json.JSONObject();
+			json.putAll(GroupMap);
+			model.addAttribute("groupMap", json.toString());
+			
+			String searchField = ParamUtil.get(request, "searchField", "");
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "edisonbestsimulation_WAR_edisonsimulationportlet");
+			model.addAttribute("simulationPlid", plid);
+			params.put("solverStatus", "1901004");
+			params.put("recommandation_flag", "true");
+			
+			model.addAttribute("searchField",searchField);
+			model.addAttribute("params", params);
+		}catch(Exception e){
+			log.error(e);
+			e.printStackTrace();
+			
+			//Session Error Message
+			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
+		}
+		return model;
+	}
+	
 	@ResourceMapping(value="edisonFileDownload")
 	public void edisonFileDownload(ResourceRequest request, ResourceResponse response) throws SystemException, JSONException, IOException, PortalException, ParseException, PortletModeException{
 
@@ -360,6 +459,58 @@ public class ScienceAppstoreController {
 		long fileEntryId = Long.parseLong(CustomUtil.strNull(paramsMap.get("fileEntryId")));
 		
 		EdisonFileUtil.edisonFileDownload(response, fileEntryId);
+	}
+	
+	@ResourceMapping(value ="solverTypeList" )
+	public void solverTypeList(ResourceRequest request, ResourceResponse response) throws IOException{
+		try {
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+			Map params = RequestUtil.getParameterMap(request);
+			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
+			long globalGroupId = themeDisplay.getCompany().getGroupId();
+			long companyId = themeDisplay.getCompanyId();
+			
+			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			List<Map> solverTypeList =  new ArrayList<Map>();
+			
+			for(AssetCategory aCategory : aCategoryList){
+				Map categoryMap = new HashMap();
+				if(aCategory.getVocabularyId()== assetVocabulary.getVocabularyId() && aCategory.getParentCategoryId() != 0){
+					categoryMap.put("categoryId", aCategory.getCategoryId());
+					categoryMap.put("title", aCategory.getTitle(themeDisplay.getLanguageId()));
+					categoryMap.put("companyId", aCategory.getCompanyId());
+					categoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
+					categoryMap.put("userId", aCategory.getUserId());
+					categoryMap.put("userName", aCategory.getUserName());
+
+					try{
+						AssetCategoryProperty categoryProperty = AssetCategoryPropertyLocalServiceUtil.getCategoryProperty(aCategory.getCategoryId(), "IMAGE");
+						categoryMap.put("image", categoryProperty);
+					}catch(NoSuchCategoryPropertyException e){
+						
+					}
+					
+					solverTypeList.add(categoryMap);
+				}
+			}
+			
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter writer = response.getWriter();
+			JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
+			com.liferay.portal.kernel.json.JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
+			
+			String optionJson = jsonSerializer.serialize(solverTypeList);
+			JSONArray optionArr = JSONFactoryUtil.createJSONArray(optionJson);
+			jsonObj.put("solverTypeList", optionArr);
+			writer.write(jsonObj.toString());
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	@ActionMapping(params="myAction=updateSolverInfoAction")
@@ -481,7 +632,7 @@ public class ScienceAppstoreController {
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
@@ -558,6 +709,139 @@ public class ScienceAppstoreController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	@ResourceMapping(value ="searchList" ) //하위사이트 groupId로 각 리스트 가져오기
+	public void searchList(ResourceRequest request, ResourceResponse response) throws IOException{
+		List solverIconList = new ArrayList();
+		try {
+			
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+			Map<String, Object> params = RequestUtil.getParameterMap(request);
+			
+			params.put("languageId", themeDisplay.getLocale().toString());
+			
+			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
+			long userId = PortalUtil.getUserId(request);
+			String searchValue = CustomUtil.strNull(params.get("searchValue"), "");
+			
+			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter writer = response.getWriter();
+
+			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("p_curPage"), "1"));
+			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "10"));
+			int pagePerBlock = 5;
+			
+			params.put("groupId", groupId);
+			params.put("status", "1901004");
+			
+			long companyGroupId = themeDisplay.getCompany().getGroupId();
+			
+			String categoryValue = CustomUtil.strNull(params.get("categoryId"), "");
+			long categoryId = 0;
+			
+			if(!categoryValue.equals("")){
+				categoryId = Long.valueOf(categoryValue);
+			}
+			
+			long globalGroupId = themeDisplay.getCompany().getGroupId();
+			long companyId = themeDisplay.getCompanyId();
+			
+			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			int categoryIdsLength = 0;
+			long[] categoryIds = null;
+			if(categoryId == 0){
+				categoryIdsLength = aCategoryList.size();
+				categoryIds = new long[categoryIdsLength];
+				for(int i=0; i<aCategoryList.size(); i++){
+					categoryIds[i] = aCategoryList.get(i).getCategoryId();
+				}
+			} else {
+				categoryIdsLength = 1;
+				categoryIds = new long[categoryIdsLength];
+				categoryIds[0] = categoryId;
+			}
+			
+			String[] appTypes = null;
+			int solverCount = ScienceAppLocalServiceUtil.countScienceAppFromExplore(
+					companyGroupId, groupId,
+					themeDisplay.getLocale(),  appTypes, categoryIds, searchValue);
+			
+			int begin = (curPage - 1) * linePerPage;
+			int end = linePerPage;
+			
+			List<Map<String, Object>> writeDataList = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
+					companyGroupId, groupId,
+					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
+					begin, linePerPage);
+			
+			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", solverCount, curPage, linePerPage, pagePerBlock);
+			
+			int totalCnt = solverCount;
+			
+			JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
+			com.liferay.portal.kernel.json.JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
+			
+			String optionJson = jsonSerializer.serialize(writeDataList);
+			JSONArray optionArr = JSONFactoryUtil.createJSONArray(optionJson);
+			jsonObj.put("dataList", optionArr);
+			jsonObj.put("pageList", pagingStr);
+			jsonObj.put("select_line", linePerPage);
+			jsonObj.put("totalCnt", totalCnt);
+			writer.write(jsonObj.toString());
+
+		}catch(Exception e){
+			System.out.println("searchList Exception");
+			e.printStackTrace();
+		}
+	}
+	
+	//탭 이벤트 저장
+	@ResourceMapping(value ="cickTab")
+	public void cickTab(ResourceRequest request, ResourceResponse response){
+		try{
+			Map param = RequestUtil.getParameterMap(request);
+			long groupId = ParamUtil.getLong(request, "groupId",0);
+			if(groupId!=0){
+				ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+				Group group = GroupLocalServiceUtil.getGroup(groupId);
+				themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	//탭 이벤트 저장
+	@ActionMapping(params="myaction=saveClickTab")
+	public void saveClickTab(ActionRequest request, ActionResponse response){
+		try{
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			Map param = RequestUtil.getParameterMap(request);
+			long groupId = ParamUtil.getLong(request, "groupId",0);
+			if(themeDisplay.isSignedIn()) {
+				if(groupId!=0){
+					Group group = GroupLocalServiceUtil.getGroup(groupId);
+					themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
+				}
+			}
+			String responseNamespace = response.getNamespace();
+			responseNamespace = responseNamespace.substring(1, responseNamespace.length()-1);
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), responseNamespace);
+			PortletURL url = PortletURLFactoryUtil.create(request, responseNamespace, plid, "");
+			url.setParameter("groupId", CustomUtil.strNull(groupId));
+			response.sendRedirect(url.toString());
+		}catch(Exception e){
+			log.error(e);
+			e.printStackTrace();
+			
+			//Session Error Message
+			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
 	}
 }

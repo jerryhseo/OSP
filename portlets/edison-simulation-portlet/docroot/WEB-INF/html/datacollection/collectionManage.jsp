@@ -45,6 +45,12 @@
 	text-align: right;
 	margin-bottom: 10px;
 }
+.input-group-btn input{
+	margin: 0px 1px;
+}
+.input-group-btn input:HOVER{
+	cursor: pointer;
+}
 </style>
 <liferay-portlet:actionURL secure="<%=request.isSecure()%>" var="manageDataCollectionUrl">
 	<portlet:param name="myAction" value="manageDataCollection" />
@@ -81,273 +87,271 @@
 <liferay-portlet:resourceURL var="deleteSingleEdisonFileURL" escapeXml="false" id="deleteSingleEdisonFile" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
 
-<c:if test="<%= SessionErrors.contains(renderRequest, DataCollectionException.class.getName()) %>">
-	<%
-		DataCollectionException dcException = (DataCollectionException)SessionErrors.get(renderRequest, DataCollectionException.class.getName());
-	%>
-	<div class="alert alert-error">
-		<c:if test="<%= dcException.getType() == DataCollectionException.EXISTS_NAME_VERSION_DATABASE %>">
-			<liferay-ui:message key="edison-data-collection-duplication-name-exception-msg" />
-		</c:if>
-		
-		<c:if test="<%= dcException.getType() == DataCollectionException.FAIL_VALIDATION_SCIENCE_APP_NAME %>">
-			<liferay-ui:message key="edison-data-collection-validation-name-exception-msg" />
-		</c:if>
-	</div>	
-</c:if>
-<aui:form method="POST" name="collectionForm">
-	<aui:input type="hidden" name="dataTypeId" value="${dataType.typeId }"/>
-	<c:if test="${redirectURL ne ''}"> 
-		<h3><a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > 
-		Data Collection <liferay-ui:message key="edison-virtuallab-scienceapp-management"/>
-		</h3>
+<div class="table-responsive panel edison-panel">
+	<c:if test="<%= SessionErrors.contains(renderRequest, DataCollectionException.class.getName()) %>">
+		<%
+			DataCollectionException dcException = (DataCollectionException)SessionErrors.get(renderRequest, DataCollectionException.class.getName());
+		%>
+		<div class="alert alert-error">
+			<c:if test="<%= dcException.getType() == DataCollectionException.EXISTS_NAME_VERSION_DATABASE %>">
+				<liferay-ui:message key="edison-data-collection-duplication-name-exception-msg" />
+			</c:if>
+			
+			<c:if test="<%= dcException.getType() == DataCollectionException.FAIL_VALIDATION_SCIENCE_APP_NAME %>">
+				<liferay-ui:message key="edison-data-collection-validation-name-exception-msg" />
+			</c:if>
+		</div>	
 	</c:if>
-	
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-science-appstore-toolkit-default-information' /> 
-		</div>
-		<liferay-ui:icon-help message="edison-data-collection-descriptive-message"/>
+	<aui:form method="POST" name="collectionForm">
+		<aui:input type="hidden" name="dataTypeId" value="${dataType.typeId }"/>
+		<c:if test="${redirectURL ne ''}"> 
+			<h3><a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > 
+			Data Collection <liferay-ui:message key="edison-virtuallab-scienceapp-management"/>
+			</h3>
+		</c:if>
 		
-		<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-			<div class="contentbtnGroup">
-			<c:if test="${empty collection}">
-				<input type="button" onclick="<portlet:namespace/>actionUpdate('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save' />"  class="button02_1" />
-			</c:if>
-			<c:if test="${!empty collection}">
-				<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>actionUpdate('<%=Constants.UPDATE%>'); return false;" value="<liferay-ui:message key='edison-button-board-modify'/>" type="button">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>actionDelete(); return false;" value="<liferay-ui:message key='delete'/>" type="button">
-			</c:if>
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-science-appstore-toolkit-default-information' /> 
+				<liferay-ui:icon-help message="edison-data-collection-descriptive-message"/>
+			</h3>
+			
+			<div class="input-group">
+				<div class="input-group-btn" align="right">
+					<c:if test="${empty collection}">
+						<input type="button" onclick="<portlet:namespace/>actionUpdate('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save' />"  class="button02_1" />
+					</c:if>
+					<c:if test="${!empty collection}">
+						<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button" style="width: 100px;" >
+						<input class="addIp button02_1" onclick="<portlet:namespace/>actionUpdate('<%=Constants.UPDATE%>'); return false;" value="<liferay-ui:message key='edison-button-board-modify'/>" type="button">
+						<input class="addIp button02_1" onclick="<portlet:namespace/>actionDelete(); return false;" value="<liferay-ui:message key='delete'/>" type="button">
+					</c:if>
+				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div class="h10"></div>
-	
-	<div class="table1_list">
 		
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="15%" />
-				<col width="35%" />
-				<col width="15%" />
-				<col width="35%" />
-			</colgroup>
-			<tbody>
-				<tr>
-					<th><liferay-ui:message key="edison-create-account-field-title-name"/><span class="requiredField"> *</span></th>
-					<td>
-						<aui:input name="name" type="text" cssClass="long_field" label="" value="${collection.name }" maxLength="100">
-							<aui:validator name="required"/>
-							<aui:validator  name="custom"  errorMessage="<%=exceptionNameMsg%>">
-								function (val, fieldNode, ruleValue) {
-									 var retbool = true;
-									 var kor_check = /^[A-Za-z0-9][A-Za-z0-9\\_]*$/;
-<!-- 										 var kor_check = /[a-zA-Z][a-zA-Z0-9\\-\\.\\+\\_]+/; -->
-									 if (!kor_check.test(val)){
-										 retbool = false;
-									 }
-									return retbool;
-								}
-							</aui:validator>
-						</aui:input>
-					</td>
-					
-					<th><liferay-ui:message key='version' /> <span class="requiredField">*</span></th>
-					<td>
-						<aui:input name="version" type="text" cssClass="short_field" label="" value="${collection.version }" placeholder="ex) 1.0.0">
-							<aui:validator name="required"/>
-								<aui:validator  name="custom"  errorMessage="<%=exceptionVersionMsg%>">
+		<div class="table1_list">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<colgroup>
+					<col width="15%" />
+					<col width="35%" />
+					<col width="15%" />
+					<col width="35%" />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th><liferay-ui:message key="edison-create-account-field-title-name"/><span class="requiredField"> *</span></th>
+						<td>
+							<aui:input name="name" type="text" cssClass="long_field" label="" value="${collection.name }" maxLength="100">
+								<aui:validator name="required"/>
+								<aui:validator  name="custom"  errorMessage="<%=exceptionNameMsg%>">
 									function (val, fieldNode, ruleValue) {
 										 var retbool = true;
-										 var kor_check = /[1-9][0-9]*[.](0|[1-9][0-9]*)[.](0|[1-9][0-9]*)$/;
+										 var kor_check = /^[A-Za-z0-9][A-Za-z0-9\\_]*$/;
+	<!-- 										 var kor_check = /[a-zA-Z][a-zA-Z0-9\\-\\.\\+\\_]+/; -->
 										 if (!kor_check.test(val)){
 											 retbool = false;
 										 }
 										return retbool;
 									}
 								</aui:validator>
-						</aui:input>
-					</td>
-				</tr>
-				
-				<tr>
-					<th><liferay-ui:message key="edison-content-service-language"/></th>
-					<td>
-						<aui:select name="targetLanguage" label="" >
-						<option value="" selected="selected"><liferay-ui:message key='full' /></option>
-						<%
+							</aui:input>
+						</td>
 						
-						for(Locale aLocale : locales){
-							String languageId = LocaleUtil.toLanguageId(aLocale);
-							if(localesStr.equals("")){
-								localesStr += languageId;
-							}else{
-								localesStr += ","+languageId;
-							}
+						<th><liferay-ui:message key='version' /> <span class="requiredField">*</span></th>
+						<td>
+							<aui:input name="version" type="text" cssClass="short_field" label="" value="${collection.version }" placeholder="ex) 1.0.0">
+								<aui:validator name="required"/>
+									<aui:validator  name="custom"  errorMessage="<%=exceptionVersionMsg%>">
+										function (val, fieldNode, ruleValue) {
+											 var retbool = true;
+											 var kor_check = /[1-9][0-9]*[.](0|[1-9][0-9]*)[.](0|[1-9][0-9]*)$/;
+											 if (!kor_check.test(val)){
+												 retbool = false;
+											 }
+											return retbool;
+										}
+									</aui:validator>
+							</aui:input>
+						</td>
+					</tr>
+					
+					<tr>
+						<th><liferay-ui:message key="edison-content-service-language"/></th>
+						<td>
+							<aui:select name="targetLanguage" label="" >
+							<option value="" selected="selected"><liferay-ui:message key='full' /></option>
+							<%
 							
-							String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
-						%>
-							<aui:option label="<%=languageNm%>" value="<%=languageId%>"/>
-						<%} %>
-					</aui:select>
-					</td>
-					<th><liferay-ui:message key="edison-workflow-public-status"/></th>
-					<td>
-						<aui:select name="status" label="">
-							<aui:option value="public"><liferay-ui:message key='edison-appstore-status-service'/></aui:option>
-							<aui:option value="private"><liferay-ui:message key='edison-appstore-status-private'/></aui:option>
+							for(Locale aLocale : locales){
+								String languageId = LocaleUtil.toLanguageId(aLocale);
+								if(localesStr.equals("")){
+									localesStr += languageId;
+								}else{
+									localesStr += ","+languageId;
+								}
+								
+								String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
+							%>
+								<aui:option label="<%=languageNm%>" value="<%=languageId%>"/>
+							<%} %>
 						</aui:select>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key="edison-table-list-header-title"/><span class="requiredField"> *</span></th>
-					<td colspan="3">
-						<liferay-ui:input-localized name="title" xml="${collection.title}" cssClass="too_long_field"  type="input"/>
-					</td>
-				</tr>
-				
-				<tr>
-					<th id="dataTypeInfoHeaderTd"  rowspan="${defaultRowNum + 1}">
-						<liferay-ui:message key="edison-data-collection-select-data-type-list"/> <span class="requiredField">*</span> <liferay-ui:icon-help message="edison-data-collection-select-data-type-descriptive-message"/>
-						<br/>
-						
+						</td>
+						<th><liferay-ui:message key="edison-workflow-public-status"/></th>
+						<td>
+							<aui:select name="status" label="">
+								<aui:option value="public"><liferay-ui:message key='edison-appstore-status-service'/></aui:option>
+								<aui:option value="private"><liferay-ui:message key='edison-appstore-status-private'/></aui:option>
+							</aui:select>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key="edison-table-list-header-title"/><span class="requiredField"> *</span></th>
+						<td colspan="3">
+							<liferay-ui:input-localized name="title" xml="${collection.title}" cssClass="too_long_field"  type="input"/>
+						</td>
+					</tr>
+					
+					<tr>
+						<th id="dataTypeInfoHeaderTd"  rowspan="${defaultRowNum + 1}">
+							<liferay-ui:message key="edison-data-collection-select-data-type-list"/> <span class="requiredField">*</span> <liferay-ui:icon-help message="edison-data-collection-select-data-type-descriptive-message"/>
+							<br/>
+							
+							<c:if test="${empty dataType }">
+								<input type="button" value="<liferay-ui:message key='edison-table-list-header-select' />" class="btn btn-default" 
+								onClick="<portlet:namespace/>openDataTypeView();"/>
+							</c:if>
+						</th>
 						<c:if test="${empty dataType }">
-							<input type="button" value="<liferay-ui:message key='edison-table-list-header-select' />" class="button06" 
-							onClick="<portlet:namespace/>openDataTypeView();"/>
+							<td id="selectedDataTypeTd" colspan="3">
+							</td>
 						</c:if>
-					</th>
-					<c:if test="${empty dataType }">
-						<td id="selectedDataTypeTd" colspan="3">
-						</td>
-					</c:if>
-					
-				</tr>
-				
-				<c:if test="${!empty dataType }">
-					<tr>
-						<td > Data Type Name </td>
-						<td colspan="2">${dataType.name }</td>
-					</tr>
-					
-					<tr>
-						<td > Data Type Version </td>
-						<td colspan="2">${dataType.version }</td>
-					</tr>
-					
-					<c:if test="${!empty dataTypeEditorMap.editor }">
-						<tr>
-							<td > Data Type Editor </td>
-							<td colspan="2">${dataTypeEditorMap.editor }</td>
-						</tr>	
-					</c:if>
-					
-					<c:if test="${!empty dataTypeEditorMap.analyzer }">
-						<tr>
-							<td > Data Type Analyzer </td>
-							<td colspan="2">${dataTypeEditorMap.analyzer }</td>
-						</tr>	
-					</c:if>
-					
-				</c:if>
-					
-				<!-- Category Start -->
-				<tr>
-					<th rowspan="${fn:length(parentCategoryList)+1}">
-						<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
 						
-					</th>
+					</tr>
 					
-				</tr>
-				<c:forEach items="${parentCategoryList}" var="parentCategory">
+					<c:if test="${!empty dataType }">
+						<tr>
+							<td > Data Type Name </td>
+							<td colspan="2">${dataType.name }</td>
+						</tr>
+						
+						<tr>
+							<td > Data Type Version </td>
+							<td colspan="2">${dataType.version }</td>
+						</tr>
+						
+						<c:if test="${!empty dataTypeEditorMap.editor }">
+							<tr>
+								<td > Data Type Editor </td>
+								<td colspan="2">${dataTypeEditorMap.editor }</td>
+							</tr>	
+						</c:if>
+						
+						<c:if test="${!empty dataTypeEditorMap.analyzer }">
+							<tr>
+								<td > Data Type Analyzer </td>
+								<td colspan="2">${dataTypeEditorMap.analyzer }</td>
+							</tr>	
+						</c:if>
+						
+					</c:if>
+						
+					<!-- Category Start -->
 					<tr>
-						<td id="<portlet:namespace/>${parentCategory.value}_parentTd" colspan="3">
-							<span id="<portlet:namespace/>${parentCategory.value}_parent_open" style="cursor: pointer;" onclick="<portlet:namespace/>openRootCategory('OPEN','${parentCategory.value}');">${parentCategory.name}(OPEN)</span>
-							<span id="<portlet:namespace/>${parentCategory.value}_parent_close" style="cursor: pointer;display: none;" onclick="<portlet:namespace/>openRootCategory('CLOSE','${parentCategory.value}');">${parentCategory.name}(CLOSE)</span>
-						</td>
-						<td colspan="2" id="<portlet:namespace/>${parentCategory.value}_childrenTd" style="display: none;">
-							<c:set value="${parentCategory.value}" var="parentCategoryValue"/>
-							<c:forEach items="${childrenCategoryGroupMap[parentCategoryValue]}" var="childrenCategory">
-								<c:set value="${parentCategory.value}_${childrenCategory.value}_Children_Category" var="childrenCategoryName"/>
-								<aui:input name="childrenCategory" id="${childrenCategoryName}" label="${childrenCategory.name}" value="${parentCategory.value}_${childrenCategory.value}" type="checkbox"/>
-							</c:forEach>
+						<th rowspan="${fn:length(parentCategoryList)+1}">
+							<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
+							
+						</th>
+						
+					</tr>
+					<c:forEach items="${parentCategoryList}" var="parentCategory">
+						<tr>
+							<td id="<portlet:namespace/>${parentCategory.value}_parentTd" colspan="3">
+								<span id="<portlet:namespace/>${parentCategory.value}_parent_open" style="cursor: pointer;" onclick="<portlet:namespace/>openRootCategory('OPEN','${parentCategory.value}');">${parentCategory.name}(OPEN)</span>
+								<span id="<portlet:namespace/>${parentCategory.value}_parent_close" style="cursor: pointer;display: none;" onclick="<portlet:namespace/>openRootCategory('CLOSE','${parentCategory.value}');">${parentCategory.name}(CLOSE)</span>
+							</td>
+							<td colspan="2" id="<portlet:namespace/>${parentCategory.value}_childrenTd" style="display: none;">
+								<c:set value="${parentCategory.value}" var="parentCategoryValue"/>
+								<c:forEach items="${childrenCategoryGroupMap[parentCategoryValue]}" var="childrenCategory">
+									<c:set value="${parentCategory.value}_${childrenCategory.value}_Children_Category" var="childrenCategoryName"/>
+									<aui:input name="childrenCategory" id="${childrenCategoryName}" label="${childrenCategory.name}" value="${parentCategory.value}_${childrenCategory.value}" type="checkbox"/>
+								</c:forEach>
+							</td>
+						</tr>
+					</c:forEach>
+					<!-- Category END -->
+					
+					<tr>
+						<th><liferay-ui:message key='descriptive' /></th>
+						<td colspan="3">	
+							<liferay-ui:input-localized name="description" xml="${collection.description}" cssClass="text_field" type="textarea"/>
 						</td>
 					</tr>
-				</c:forEach>
-				<!-- Category END -->
-				
-				<tr>
-					<th><liferay-ui:message key='descriptive' /></th>
-					<td colspan="3">	
-						<liferay-ui:input-localized name="description" xml="${collection.description}" cssClass="text_field" type="textarea"/>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key="edison-appstore-icon"/></th>
-					<td colspan="3" >
-						<c:choose>
-							<c:when test="${!empty dcIcon }">
-								<div id="<portlet:namespace/>fileIconDiv">
-									<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${dcIcon.fileEntryId }')" >
-										${dcIcon.fileTitle}
+					<tr>
+						<th><liferay-ui:message key="edison-appstore-icon"/></th>
+						<td colspan="3" >
+							<c:choose>
+								<c:when test="${!empty dcIcon }">
+									<div id="<portlet:namespace/>fileIconDiv">
+										<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${dcIcon.fileEntryId }')" >
+											${dcIcon.fileTitle}
+											<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+										</div>
+										&nbsp;&nbsp;
+										
+										<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" 
+													onClick="<portlet:namespace/>deleteSingleEdisonFile('${dcIcon.fileEntryId}');" />
+									</div>
+								</c:when>
+								<c:otherwise>
+									<aui:input type="file" name="dc_icon" label=""/>
+								</c:otherwise>
+							</c:choose>
+	<%-- 						<aui:input type="file" name="dc_icon" label=""/> --%>
+						</td>
+					</tr>
+					<tr>
+						<th><liferay-ui:message key="edison-content-main-image"/></th>
+						<td colspan="3" >
+							<%-- <aui:input type="file" name="dc_mainImg" label=""/> --%>
+							<div id="<portlet:namespace/>fileTDArea">
+								<div id="<portlet:namespace/>fileDivDefault">
+									<input type="file" name="<portlet:namespace/>dc_mainImg" />
+									<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="<portlet:namespace/>moreFileTag()" style="cursor:pointer;"/>
+								</div>
+							</div>
+							
+							<c:if test="${fn:length(dcMainImg) > 0}">
+								<c:forEach var="mainImg" items="${dcMainImg }">
+									<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${mainImg.fileEntryId }')" >
+										${mainImg.fileTitle}
 										<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
 									</div>
 									&nbsp;&nbsp;
 									
 									<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" 
-												onClick="<portlet:namespace/>deleteSingleEdisonFile('${dcIcon.fileEntryId}');" />
-								</div>
-							</c:when>
-							<c:otherwise>
-								<aui:input type="file" name="dc_icon" label=""/>
-							</c:otherwise>
-						</c:choose>
-<%-- 						<aui:input type="file" name="dc_icon" label=""/> --%>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key="edison-content-main-image"/></th>
-					<td colspan="3" >
-						<%-- <aui:input type="file" name="dc_mainImg" label=""/> --%>
-						<div id="<portlet:namespace/>fileTDArea">
-							<div id="<portlet:namespace/>fileDivDefault">
-								<input type="file" name="<portlet:namespace/>dc_mainImg" />
-								<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="<portlet:namespace/>moreFileTag()" style="cursor:pointer;"/>
-							</div>
-						</div>
-						
-						<c:if test="${fn:length(dcMainImg) > 0}">
-							<c:forEach var="mainImg" items="${dcMainImg }">
-								<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${mainImg.fileEntryId }')" >
-									${mainImg.fileTitle}
-									<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
-								</div>
-								&nbsp;&nbsp;
-								
-								<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" 
-											onClick="<portlet:namespace/>deleteSingleEdisonFile('${mainImg.fileEntryId}');" />
-								<br/>
-							</c:forEach>
-						</c:if>
-					</td>
-				</tr>
-				
-				
-			</tbody>
-		</table>
-		
-		<br/>
-		<c:if test="${!empty collection}">
-			<liferay-portlet:runtime 
-				portletName="edisonrelateasset_WAR_edisondefault2016portlet" 
-				defaultPreferences="" 
-				queryString="&entryId=${entryId}&isMgrBtn=${isAdmin}&isVirTitle=true&redirectURL=${redirectURL }&redirectName=${redirectName }"/>
-		</c:if>
-	</div>
-</aui:form>
-
+												onClick="<portlet:namespace/>deleteSingleEdisonFile('${mainImg.fileEntryId}');" />
+									<br/>
+								</c:forEach>
+							</c:if>
+						</td>
+					</tr>
+					
+					
+				</tbody>
+			</table>
+			
+			<br/>
+			<c:if test="${!empty collection}">
+				<liferay-portlet:runtime 
+					portletName="edisonrelateasset_WAR_edisondefault2016portlet" 
+					defaultPreferences="" 
+					queryString="&entryId=${entryId}&isMgrBtn=${isAdmin}&isVirTitle=true&redirectURL=${redirectURL }&redirectName=${redirectName }"/>
+			</c:if>
+		</div>
+	</aui:form>
+</div>
 
 <script>
 <%
@@ -494,7 +498,7 @@ function <portlet:namespace/>moreFileTag()
 	fileIndex++;
 	var frmTag = "<div id=\"<portlet:namespace/>fileDiv"+fileIndex+"\">";
 	frmTag += "<input type=\"file\" name=\"<portlet:namespace/>dc_mainImg\" />&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button06\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv"+fileIndex+"\')\" />";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"<portlet:namespace/>deleteFileTag(\'<portlet:namespace/>fileDiv"+fileIndex+"\')\" />";
 	frmTag += "</div>";
 	
 	$("#<portlet:namespace/>fileTDArea").append(frmTag);

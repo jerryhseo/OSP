@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -433,130 +433,126 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 				"long[][]", "java.lang.String"
 			};
 
-		_methodName89 = "retrieveListHotScienceApp";
+		_methodName89 = "retrieveListScienceAppAsManager";
 
 		_methodParameterTypes89 = new String[] {
-				"long", "long", "java.util.Locale", "long[][]", "int", "int"
+				"long", "long", "java.util.Locale", "long",
+				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
+				"java.lang.String", "boolean", "int", "int"
 			};
 
-		_methodName90 = "retrieveListScienceAppAsManager";
+		_methodName90 = "countScienceAppAsManager";
 
 		_methodParameterTypes90 = new String[] {
 				"long", "long", "java.util.Locale", "long",
-				"java.lang.String[][]", "java.lang.String[][]",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"boolean", "int", "int"
+				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
+				"java.lang.String", "boolean"
 			};
 
-		_methodName91 = "countScienceAppAsManager";
+		_methodName91 = "retrieveListScienceAppAsCategory";
 
 		_methodParameterTypes91 = new String[] {
 				"long", "long", "java.util.Locale", "long",
-				"java.lang.String[][]", "java.lang.String[][]",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"boolean"
+				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
+				"java.lang.String", "int", "int", "boolean"
 			};
 
-		_methodName92 = "retrieveListScienceAppAsCategory";
+		_methodName92 = "countListScienceAppAsCategory";
 
 		_methodParameterTypes92 = new String[] {
 				"long", "long", "java.util.Locale", "long",
-				"java.lang.String[][]", "java.lang.String[][]",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"int", "int", "boolean"
+				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
+				"java.lang.String", "boolean"
 			};
 
-		_methodName93 = "countListScienceAppAsCategory";
+		_methodName93 = "retrieveListScienceAppByName";
 
 		_methodParameterTypes93 = new String[] {
-				"long", "long", "java.util.Locale", "long",
-				"java.lang.String[][]", "java.lang.String[][]",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"boolean"
-			};
-
-		_methodName94 = "retrieveListScienceAppByName";
-
-		_methodParameterTypes94 = new String[] {
 				"long", "long", "java.util.Locale", "java.lang.String",
 				"boolean"
 			};
 
-		_methodName95 = "retrieveListScienceApp";
+		_methodName94 = "retrieveListScienceApp";
+
+		_methodParameterTypes94 = new String[] {
+				"long", "java.util.Locale", "long", "java.lang.String[][]",
+				"java.lang.String[][]", "java.util.Map", "java.lang.String",
+				"int", "int", "boolean"
+			};
+
+		_methodName95 = "countListScienceApp";
 
 		_methodParameterTypes95 = new String[] {
 				"long", "java.util.Locale", "long", "java.lang.String[][]",
-				"java.lang.String[][]", "java.lang.String", "java.lang.String",
-				"java.lang.String", "int", "int", "boolean"
+				"java.lang.String[][]", "java.util.Map", "java.lang.String",
+				"boolean"
 			};
 
-		_methodName96 = "countListScienceApp";
+		_methodName96 = "getScienceAppReturnObject";
 
-		_methodParameterTypes96 = new String[] {
-				"long", "java.util.Locale", "long", "java.lang.String[][]",
-				"java.lang.String[][]", "java.lang.String", "java.lang.String",
-				"java.lang.String", "boolean"
-			};
+		_methodParameterTypes96 = new String[] { "long", "java.util.Locale" };
 
-		_methodName97 = "getScienceAppReturnObject";
+		_methodName97 = "deleteScienceAppRelation";
 
-		_methodParameterTypes97 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes97 = new String[] { "long" };
 
-		_methodName98 = "deleteScienceAppRelation";
+		_methodName98 = "updateExeInfomaionScienceApp";
 
-		_methodParameterTypes98 = new String[] { "long" };
-
-		_methodName99 = "updateExeInfomaionScienceApp";
-
-		_methodParameterTypes99 = new String[] {
+		_methodParameterTypes98 = new String[] {
 				"com.liferay.portal.service.ServiceContext", "java.util.Map",
 				"long"
 			};
 
-		_methodName100 = "copyScienceApp";
+		_methodName99 = "copyScienceApp";
 
-		_methodParameterTypes100 = new String[] {
+		_methodParameterTypes99 = new String[] {
 				"com.liferay.portal.service.ServiceContext", "long"
 			};
 
-		_methodName101 = "addScienceAppFile";
+		_methodName100 = "addScienceAppFile";
 
-		_methodParameterTypes101 = new String[] {
+		_methodParameterTypes100 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.io.InputStream"
 			};
 
-		_methodName102 = "retrieveListAppTest";
+		_methodName101 = "retrieveListAppTest";
 
-		_methodParameterTypes102 = new String[] { "java.util.Map" };
+		_methodParameterTypes101 = new String[] { "java.util.Map" };
 
-		_methodName103 = "countAppTest";
+		_methodName102 = "countAppTest";
 
-		_methodParameterTypes103 = new String[] { "long" };
+		_methodParameterTypes102 = new String[] { "long" };
 
-		_methodName104 = "getMyAppListWithQna";
+		_methodName103 = "getMyAppListWithQna";
+
+		_methodParameterTypes103 = new String[] {
+				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName104 = "getListMyAppQna";
 
 		_methodParameterTypes104 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName105 = "getListMyAppQna";
+		_methodName105 = "searchAssetEntryModelAPP";
 
-		_methodParameterTypes105 = new String[] {
-				"java.util.Map", "java.util.Locale"
-			};
+		_methodParameterTypes105 = new String[] { "java.util.Map" };
 
-		_methodName106 = "searchAssetEntryModelAPP";
+		_methodName106 = "searchAssetEntryModelAPPCount";
 
 		_methodParameterTypes106 = new String[] { "java.util.Map" };
 
-		_methodName107 = "searchAssetEntryModelAPPCount";
+		_methodName107 = "relatedAssetLinkedEntryScienceAPP";
 
 		_methodParameterTypes107 = new String[] { "java.util.Map" };
 
-		_methodName108 = "relatedAssetLinkedEntryScienceAPP";
+		_methodName108 = "updateScienceApp";
 
-		_methodParameterTypes108 = new String[] { "java.util.Map" };
+		_methodParameterTypes108 = new String[] {
+				"org.kisti.edison.science.model.ScienceApp", "int"
+			};
 
 		_methodName109 = "migrationScienceApp";
 
@@ -575,6 +571,29 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		_methodParameterTypes111 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
+
+		_methodName112 = "getScienceApp";
+
+		_methodParameterTypes112 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName113 = "countScienceApp";
+
+		_methodParameterTypes113 = new String[] {
+				"long", "long", "long", "java.util.Locale", "java.util.Map"
+			};
+
+		_methodName114 = "retrieveListScienceApp";
+
+		_methodParameterTypes114 = new String[] {
+				"long", "long", "long", "java.util.Locale", "java.util.Map",
+				"int", "int", "boolean"
+			};
+
+		_methodName115 = "retrieveListByTemplateId";
+
+		_methodParameterTypes115 = new String[] { "java.lang.String" };
 	}
 
 	@Override
@@ -3426,9 +3445,12 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	}
 
 	@Override
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListHotScienceApp(
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppAsManager(
 		long companyGroupId, long groupId, java.util.Locale locale,
-		long[] appIds, int begin, int end)
+		long managerId, java.lang.String[] appTypes,
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean categorySearch, int begin, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -3443,66 +3465,13 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(locale),
 						
-					ClpSerializer.translateInput(appIds),
-						
-					begin,
-						
-					end
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppAsManager(
-		long companyGroupId, long groupId, java.util.Locale locale,
-		long managerId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean categorySearch, int begin, int end)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName90,
-					_methodParameterTypes90,
-					new Object[] {
-						companyGroupId,
-						
-					groupId,
-						
-					ClpSerializer.translateInput(locale),
-						
 					managerId,
 						
 					ClpSerializer.translateInput(appTypes),
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3539,16 +3508,16 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	@Override
 	public int countScienceAppAsManager(long companyGroupId, long groupId,
 		java.util.Locale locale, long managerId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean categorySearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean categorySearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName91,
-					_methodParameterTypes91,
+			returnObj = _invokableLocalService.invokeMethod(_methodName90,
+					_methodParameterTypes90,
 					new Object[] {
 						companyGroupId,
 						
@@ -3562,9 +3531,7 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3598,16 +3565,16 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppAsCategory(
 		long companyGroupId, long groupId, java.util.Locale locale,
 		long authorId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status, int begin,
-		int end, boolean lanuageSearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, int begin, int end, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName92,
-					_methodParameterTypes92,
+			returnObj = _invokableLocalService.invokeMethod(_methodName91,
+					_methodParameterTypes91,
 					new Object[] {
 						companyGroupId,
 						
@@ -3621,9 +3588,7 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3660,16 +3625,16 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	@Override
 	public int countListScienceAppAsCategory(long companyGroupId, long groupId,
 		java.util.Locale locale, long authorId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean lanuageSearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName93,
-					_methodParameterTypes93,
+			returnObj = _invokableLocalService.invokeMethod(_methodName92,
+					_methodParameterTypes92,
 					new Object[] {
 						companyGroupId,
 						
@@ -3683,9 +3648,7 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3724,8 +3687,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName94,
-					_methodParameterTypes94,
+			returnObj = _invokableLocalService.invokeMethod(_methodName93,
+					_methodParameterTypes93,
 					new Object[] {
 						companyGroupId,
 						
@@ -3765,15 +3728,15 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
 		long groupId, java.util.Locale locale, long authorId,
 		java.lang.String[] appTypes, java.lang.String[] editorTypes,
-		java.lang.String searchType, java.lang.String searchText,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
 		java.lang.String status, int begin, int end, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName95,
-					_methodParameterTypes95,
+			returnObj = _invokableLocalService.invokeMethod(_methodName94,
+					_methodParameterTypes94,
 					new Object[] {
 						groupId,
 						
@@ -3785,9 +3748,7 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3824,16 +3785,16 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	@Override
 	public int countListScienceApp(long groupId, java.util.Locale locale,
 		long authorId, java.lang.String[] appTypes,
-		java.lang.String[] editorTypes, java.lang.String searchType,
-		java.lang.String searchText, java.lang.String status,
-		boolean lanuageSearch)
+		java.lang.String[] editorTypes,
+		java.util.Map<java.lang.String, java.lang.Object> searchMap,
+		java.lang.String status, boolean lanuageSearch)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName96,
-					_methodParameterTypes96,
+			returnObj = _invokableLocalService.invokeMethod(_methodName95,
+					_methodParameterTypes95,
 					new Object[] {
 						groupId,
 						
@@ -3845,9 +3806,7 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 						
 					ClpSerializer.translateInput(editorTypes),
 						
-					ClpSerializer.translateInput(searchType),
-						
-					ClpSerializer.translateInput(searchText),
+					ClpSerializer.translateInput(searchMap),
 						
 					ClpSerializer.translateInput(status),
 						
@@ -3886,8 +3845,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName97,
-					_methodParameterTypes97,
+			returnObj = _invokableLocalService.invokeMethod(_methodName96,
+					_methodParameterTypes96,
 					new Object[] {
 						scienceAppId,
 						
@@ -3926,8 +3885,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName98,
-				_methodParameterTypes98, new Object[] { scienceAppId });
+			_invokableLocalService.invokeMethod(_methodName97,
+				_methodParameterTypes97, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -3959,8 +3918,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName99,
-					_methodParameterTypes99,
+			returnObj = _invokableLocalService.invokeMethod(_methodName98,
+					_methodParameterTypes98,
 					new Object[] {
 						ClpSerializer.translateInput(sc),
 						
@@ -3999,8 +3958,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName100,
-					_methodParameterTypes100,
+			returnObj = _invokableLocalService.invokeMethod(_methodName99,
+					_methodParameterTypes99,
 					new Object[] { ClpSerializer.translateInput(sc), scienceAppId });
 		}
 		catch (Throwable t) {
@@ -4028,8 +3987,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		java.io.InputStream uploadedInputStream)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName101,
-				_methodParameterTypes101,
+			_invokableLocalService.invokeMethod(_methodName100,
+				_methodParameterTypes100,
 				new Object[] {
 					companyId,
 					
@@ -4067,8 +4026,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName102,
-					_methodParameterTypes102,
+			returnObj = _invokableLocalService.invokeMethod(_methodName101,
+					_methodParameterTypes101,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -4099,8 +4058,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName103,
-					_methodParameterTypes103, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName102,
+					_methodParameterTypes102, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -4125,8 +4084,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName104,
-					_methodParameterTypes104,
+			returnObj = _invokableLocalService.invokeMethod(_methodName103,
+					_methodParameterTypes103,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -4162,8 +4121,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName105,
-					_methodParameterTypes105,
+			returnObj = _invokableLocalService.invokeMethod(_methodName104,
+					_methodParameterTypes104,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -4191,8 +4150,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName106,
-					_methodParameterTypes106,
+			returnObj = _invokableLocalService.invokeMethod(_methodName105,
+					_methodParameterTypes105,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -4215,8 +4174,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName107,
-					_methodParameterTypes107,
+			returnObj = _invokableLocalService.invokeMethod(_methodName106,
+					_methodParameterTypes106,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -4240,8 +4199,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName108,
-					_methodParameterTypes108,
+			returnObj = _invokableLocalService.invokeMethod(_methodName107,
+					_methodParameterTypes107,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -4257,6 +4216,45 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		}
 
 		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceApp updateScienceApp(
+		org.kisti.edison.science.model.ScienceApp scienceApp, int status)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName108,
+					_methodParameterTypes108,
+					new Object[] {
+						ClpSerializer.translateInput(scienceApp),
+						
+					status
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceApp)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -4360,6 +4358,175 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		}
 
 		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceApp(
+		java.lang.String scienceAppName, java.lang.String scienceAppVersion)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName112,
+					_methodParameterTypes112,
+					new Object[] {
+						ClpSerializer.translateInput(scienceAppName),
+						
+					ClpSerializer.translateInput(scienceAppVersion)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof org.kisti.edison.science.NoSuchScienceAppException) {
+				throw (org.kisti.edison.science.NoSuchScienceAppException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceApp)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int countScienceApp(long companyGroupId, long groupId,
+		long categoryId, java.util.Locale locale,
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName113,
+					_methodParameterTypes113,
+					new Object[] {
+						companyGroupId,
+						
+					groupId,
+						
+					categoryId,
+						
+					ClpSerializer.translateInput(locale),
+						
+					ClpSerializer.translateInput(searchParam)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceApp(
+		long companyGroupId, long groupId, long categoryId,
+		java.util.Locale locale,
+		java.util.Map<java.lang.String, java.lang.Object> searchParam,
+		int begin, int end, boolean widthFile)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName114,
+					_methodParameterTypes114,
+					new Object[] {
+						companyGroupId,
+						
+					groupId,
+						
+					categoryId,
+						
+					ClpSerializer.translateInput(locale),
+						
+					ClpSerializer.translateInput(searchParam),
+						
+					begin,
+						
+					end,
+						
+					widthFile
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<org.kisti.edison.science.model.ScienceApp> retrieveListByTemplateId(
+		java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName115,
+					_methodParameterTypes115,
+					new Object[] { ClpSerializer.translateInput(templateId) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.kisti.edison.science.model.ScienceApp>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -4585,4 +4752,12 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes110;
 	private String _methodName111;
 	private String[] _methodParameterTypes111;
+	private String _methodName112;
+	private String[] _methodParameterTypes112;
+	private String _methodName113;
+	private String[] _methodParameterTypes113;
+	private String _methodName114;
+	private String[] _methodParameterTypes114;
+	private String _methodName115;
+	private String[] _methodParameterTypes115;
 }

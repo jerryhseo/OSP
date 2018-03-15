@@ -9,17 +9,24 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.portlet.PortletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.ExecuteStreamHandler;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
@@ -30,6 +37,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
@@ -52,6 +61,8 @@ import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 
 public class IBAgent {
+	private static Log log = LogFactoryUtil.getLog(IBAgent.class);
+	
 	public static String URL = "";
 	public static String ZONE = "";
 	private String vcToken = "";
@@ -77,18 +88,19 @@ public class IBAgent {
 		}
 	}
 
-	private HttpURLConnection connect( String apiUrl, String method, String accept, String type ) throws IOException{
+	private HttpURLConnection connect( String apiUrl, String method, String accept, String contentType ) throws IOException{
 		URL url = new URL(apiUrl);
 		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
-		String contentType = type;
 		connection.setDoOutput(true);
 		connection.setRequestMethod(method);
 		connection.setRequestProperty("Accept", accept);
 		connection.setRequestProperty("Content-Type", contentType+";charset=utf-8");
 
 		connection.setRequestProperty("Authorization", "Basic "+this.vcToken);
+		
+		this.ibAgentLog();
 		return connection;
 	}
 	
@@ -223,7 +235,7 @@ public class IBAgent {
 	      }
 	}
 	
-	public String getSimulationUuid() throws IOException, SystemException{
+	public String createSimulation() throws IOException, SystemException{
 //		String apiUrl = URL+_simulationAPI+"/create?zone="+ZONE;
 		String apiUrl = URL+_simulationAPI+"/create";
 		
@@ -271,73 +283,114 @@ public class IBAgent {
 		return jsonResult.getString("uuid");
 	}
 	
-	public String uploadFile( String fileName, String content, String cluster ) throws IOException, JSONException, SystemException{
-		String fileId = "";
-		String apiUrl = URL+"/api/file/write";
-		//String apiUrl = URL+"/api/file/upload";
-		apiUrl = HttpUtil.addParameter(apiUrl, "cluster", cluster);
-		apiUrl = HttpUtil.addParameter(apiUrl, "name", fileName);
-		System.out.println("Upload URL: "+apiUrl);
+	public String copyIBFile(
+			PortletRequest portletRequest,
+			String source, 
+			String target,
+			String cluster
+			) throws IOException, SystemException, PortalException{
 		
-		HttpURLConnection connection = this.connect( apiUrl, "POST", "application/json", "plain/text" );
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+
+		/*
+		String strBaseCmd = "sshpass ";
+		strBaseCmd += "-pedison2016!!";
+		strBaseCmd += " ssh -p 22002 -o StrictHostKeyChecking=no ";
+		strBaseCmd += "root@150.183.247.151 ";
+		*/
 		
-		OutputStream outStream = connection.getOutputStream();
-		System.out.println("IB.Uploading **************************************");
-		System.out.println("Content Size: "+content.length());
-		System.out.println("************************************** IB.Uploading");
+		//String strMvCmd = new String(strBaseCmd);
+		String filePath = OSPFileUtil.copyFile(
+				portletRequest, 
+				source, 
+				target, 
+				true, 
+				repositoryType);
 		
-		outStream.write(content.getBytes(), 0, content.length());
-		outStream.flush();
-		outStream.close();
-		
-		BufferedReader reader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-		String line = "";
-		StringBuffer responseBuffer = new StringBuffer();
-		
-		if( connection.getResponseCode() == 201){
-			while( (line = reader.readLine()) !=null ){
-				responseBuffer.append(line);
-			}
-			reader.close();
-			
-			JSONObject response = JSONFactoryUtil.createJSONObject(responseBuffer.toString() );
-			System.out.println("File Upload response: "+responseBuffer.toString());
-			fileId = response.getString("id");
-		}
-		else if (connection.getResponseCode() == 400) {
-			connection.disconnect();
-			throw new SystemException("Failed IcebreakerService [ encode file id ] : BAD REQUEST : wrong body content - HTTP error code : " + connection.getResponseCode());
-		}
-		
-		connection.disconnect();
-		return fileId;
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+        
+        System.out.println("File: "+filePath);
+        System.out.println("File ID: "+ibFileId );
+        
+		return ibFileId;
 	}
 	
-	public String getFileId( String path, boolean isJobResult ) throws IOException, SystemException, JSONException{
+	public String uploadIBFile(
+			PortletRequest portletRequest,
+			String paramName,
+			String target,
+			String cluster
+			) throws IOException, SystemException, PortalException{
+		
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+
+		/*
+		String strBaseCmd = "sshpass ";
+		strBaseCmd += "-pedison2016!!";
+		strBaseCmd += " ssh -p 22002 -o StrictHostKeyChecking=no ";
+		strBaseCmd += "root@150.183.247.151 ";
+		*/
+		
+		//String strMvCmd = new String(strBaseCmd);
+		OSPFileUtil.upload(portletRequest, target, paramName, repositoryType);
+		
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+        
+        System.out.println("File ID: "+ibFileId );
+        
+		return ibFileId;
+	}
+	
+	public String uploadFileContent(
+			PortletRequest portletRequest,
+			String content, 
+			String target,
+			String cluster ) throws PortalException, SystemException, IOException{
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+		
+		OSPFileUtil.saveFileContent(portletRequest, target, content, repositoryType);
+
+		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+		
+		return ibFileId;
+	}
+	
+	public String uploadDLEntryFile(
+			PortletRequest portletRequest,
+			long dlEntryId, 
+			String target,
+			String cluster
+			) throws IOException, SystemException, PortalException{
+		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+		
+		String filePath = OSPFileUtil.copyDLEntryFile(
+				portletRequest, 
+				dlEntryId, 
+				target, 
+				true, 
+				repositoryType);
+		
+		//Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, target, repositoryType);
+        String ibFileId = this.getFileId(portletRequest, target, repositoryType);
+        //String ibFileId = getFileId(targetPath.toString());
+        //System.out.println("File: "+targetPath.toString());
+        System.out.println("Target : " + target);
+        System.out.println("File ID: "+ibFileId);
+        
+		return ibFileId;
+	}
+	
+	private String getFileId( String path ) throws IOException, SystemException, PortalException{
 		String fileId = "";
 		
-		String userScreenName;
-		if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
-			userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
-		}else{
-			userScreenName = String.valueOf(user.getScreenName());
-		}
-		
-		Path filePath = Paths.get("/EDISON/LDAP/DATA").resolve(userScreenName);
-		if( isJobResult ){
-			filePath = filePath.resolve("jobs").resolve(path);
-		}
-		else{
-			filePath = filePath.resolve("repository").resolve(path);
-		}
-			
+		System.out.println("Get File ID: "+path);
 		
 		String apiUrl = URL+"/api/file/encode";
 		
 		HttpURLConnection connection = connect( apiUrl, "POST", "application/json", "application/json" );
 		
 		JSONObject jsonPath = JSONFactoryUtil.createJSONObject();
-		jsonPath.put("path", filePath.toString() );
+		jsonPath.put("path", path.toString() );
 		
 		OutputStream outStream = connection.getOutputStream();
 		outStream.write(jsonPath.toString().getBytes() );
@@ -367,6 +420,11 @@ public class IBAgent {
 		return fileId;
 	}
 	
+	public String getFileId( PortletRequest portletRequest, String path, String repositoryType ) throws IOException, SystemException, PortalException{
+		Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, path, repositoryType);
+		return this.getFileId(targetPath.toString());
+	}
+	
 	public JSONObject submit(
 			String simulationUuid,
 			String runType, 
@@ -379,7 +437,7 @@ public class IBAgent {
 			String classId,
 			String executable,
 			String[] dependencies,
-			Map<String, String> files,
+			Map<String, JSONObject> progArgs,
 			String cluster,
 			Map<String, String> mpiAttributes,
 			String callbackUrl ) throws IOException{
@@ -393,7 +451,7 @@ public class IBAgent {
 				executable, 
 				dependencies, 
 				cluster, 
-				files, 
+				progArgs, 
 				category, 
 				mpiAttributes, 
 				simulationUuid, 
@@ -475,6 +533,34 @@ public class IBAgent {
 		return jsonResult;
 	}
 	
+	DefaultExecuteResultHandler execute(CommandLine cmdLine, OutputStream outStream, OutputStream errorStream)
+            throws ExecuteException, IOException {
+        return execute(cmdLine, Collections.<String, String> emptyMap(), outStream, errorStream);
+    }
+
+    DefaultExecuteResultHandler execute(CommandLine cmdLine, Map<String, String> environment, OutputStream outStream,
+            OutputStream errorStream) throws ExecuteException, IOException {
+        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+        ExecuteStreamHandler streamHandler = new PumpStreamHandler(outStream, errorStream);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setExitValue(0);
+        executor.setStreamHandler(streamHandler);
+        if (environment != null) {
+            executor.execute(cmdLine, environment, resultHandler);
+        } else {
+            executor.execute(cmdLine, resultHandler);
+        }
+        return resultHandler;
+    }
+
+	
+    
+    public void ibAgentLog(){
+    	log.info("screenName =>>>>"+this.user.getScreenName());
+    	log.info("userId =>>>>"+this.user.getUserId());
+    	log.info("vcToken =>>>>"+this.vcToken);
+    }
+    
 	private static Log _log = LogFactoryUtil.getLog(IBAgent.class);
 	private static final String _simulationAPI = "/api/simulation";
 }

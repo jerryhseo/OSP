@@ -153,9 +153,6 @@ function bStart(){
         message: $('#loadingBox'),
         css: { 
         	color: '#FFF',
-            top:  ($(window).height() - 400) /2 + 'px', 
-            //left: ($(window).width() - 400) /2 + 'px', 
-            left: '500px',
             width: '700px' 
         } 
     });	
@@ -307,4 +304,51 @@ function removeChar(event) {
 		return;
 	else
 		event.target.value = event.target.value.replace(/[^0-9]/g, "");
+}
+
+
+function jobCodeConvertorFromStatus(JobStatusStr) {
+	switch(JobStatusStr) {
+	case "INITIALIZED":
+		return Number(0);
+		break;
+	case "Unknown":
+		return Number(1701001);
+		break;
+	case "INITIALIZE_FAILED":
+		return Number(1701002);
+		break;
+	case "INITIALIZED":
+		return Number(1701003);
+		break;
+	case "SUBMISSION_FAILED":
+		return Number(1701004);
+		break;
+	case "QUEUED":
+		return Number(1701005);
+		break;
+	case "RUNNING":
+		return Number(1701006);
+		break;
+	case "SUSPEND_REQUESTED":
+		return Number(1701007);
+		break;
+	case "SUSPENDED":
+		return Number(1701008);
+		break;
+	case "CANCEL_REQUESTED":
+		return Number(1701009);
+		break;
+	case "CANCELED":
+		return Number(1701010);
+		break;
+	case "SUCCESS":
+		return Number(1701011);
+		break;
+	case "FAILED":
+		return Number(1701012);
+		break;
+	default:
+		return Number(0);
+	}
 }

@@ -67,7 +67,7 @@
 			};
 			
 			_P.localizedName = function( languageId, text ){
-				var displayName = OpenObject.displayName();
+				var displayName = _P.displayName();
 
 				switch( arguemnts.length ){
 					case 1:
@@ -140,36 +140,7 @@
 				var sample = IP.safeSample();
 				return sample.setPath.apply( sample, arguments );
 			};
-
-			IP.sampleUri = function( uri ){
-				var sample = IP.safeSample();
-				return sample.uri.apply( sample, arguments );
-			};
-
-			IP.samplePathType = function( pathType ){
-				var sample = IP.safeSample();
-				return sample.type.apply( sample, arguments );
-			};
-
-			IP.sampleParentFolderPath = function( parentPath ){
-				var sample = IP.safeSample();
-				return sample.parent.apply( sample, arguments );
-			};
-
-			IP.sampleName = function( name ){
-				var sample = IP.safeSample();
-				return sample.name.apply( sample, arguments );
-			};
-
-			IP.sampleRelative = function( relative ){
-				var sample = IP.safeSample();
-				return sample.relative.apply( sample, arguments );
-			};
-
-			IP.getSampleData = function( url, params ){
-
-			};
-
+			
 			IP.clone = function(){
 				return new InputPort( OSP.Util.toJSON(IP) );
 			};
@@ -372,9 +343,21 @@
 		ScienceApp.runType = function( runType ){
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.RUNTYPE, arguments));
 		};
+		
+		ScienceApp.currentManualId = function( manualId ){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.CURRENT_MANUAL_ID, arguments));
+		};
 
 		ScienceApp.inputPorts = function( inputPorts ){
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.INPUT_PORTS, arguments));
+		};
+		
+		ScienceApp.templateId = function(templateId){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
+		};
+		
+		ScienceApp.isProvenance = function(isProvenance){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.IS_PROVENANCE, arguments));
 		};
 
 		ScienceApp.deserializeInputPorts = function( portsJson ){
@@ -631,6 +614,18 @@
 			}
 			
 			return 'NPT';
+		};
+		
+		ScienceApp.isInputPort = function( portName ){
+			var inputPorts = ScienceApp.inputPorts();
+			if( inputPorts ){
+				for( var key in inputPorts ){
+					var port = inputPorts[key];
+					if( port.name() === portName )	return port;
+				}
+			}
+			
+			return false;
 		};
 		
 		ScienceApp.getPortSample = function( portName ){

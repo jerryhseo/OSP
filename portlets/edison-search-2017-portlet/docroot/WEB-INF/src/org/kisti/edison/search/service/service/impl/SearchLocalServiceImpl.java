@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,8 +36,10 @@ import org.kisti.edison.search.service.model.Search;
 import org.kisti.edison.search.service.model.SearchCondition;
 import org.kisti.edison.search.service.service.base.SearchLocalServiceBaseImpl;
 import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
+import org.springframework.util.StringUtils;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -43,6 +48,7 @@ import com.google.common.primitives.Longs;
 import com.kisti.osp.icecap.service.DataCollectionLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.DynamicResourceRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -54,6 +60,7 @@ import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.rits.cloning.Cloner;
+import com.sdr.metadata.service.CollectionLocalServiceUtil;
 
 /**
  * The implementation of the search local service.
@@ -83,6 +90,7 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
    */
   
   private static Log log = LogFactory.getLog(SearchLocalServiceImpl.class);
+  private static final String COLLECTION_SEARCH_SELECT = "titleDescription";
   
   /** deep copy cloner **/
   private Cloner cloner = new Cloner();
@@ -295,6 +303,39 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
     return dataSearch(searchCondition, null);
   }
   
+    public Search dataSearch(ResourceRequest request, ResourceResponse response, SearchCondition searchCondition)
+        throws PortalException, SystemException{
+        return dataSearch(request, response, searchCondition, null);
+    }
+  
+    @SuppressWarnings("unchecked")
+    public Search dataSearch(ResourceRequest request, ResourceResponse response, SearchCondition searchCondition, Search searchResults)
+        throws PortalException, SystemException{
+        if(searchResults == null){
+            searchResults = this.createSearch(0);
+        }
+        List<Long> categoryIds = getCategoryIds(searchCondition);
+
+        DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
+        newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
+        newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
+        newRequest.setParameter("searchSelect", COLLECTION_SEARCH_SELECT);
+        if(categoryIds != null){
+            newRequest.setParameterValues("categories",
+                Iterables.toArray(
+                    Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
+        }
+        
+        Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
+        int count = GetterUtil.getInteger(result.get("total"));
+        if(count > 0){
+            searchResults.setDataCount(count);
+            searchResults.setDataResults((List<Map<String, Object>>) result.get("collectionList"));
+        }
+        
+        return searchResults;
+    }  
+  
   public Search dataSearch(SearchCondition searchCondition, Search searchResults)
       throws PortalException, SystemException{
     long[] categoryIds = getCategoryIdArrays(searchCondition);
@@ -317,7 +358,8 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
     return searchResults;
   }
   
-  public Search totalSearch(SearchCondition searchCondition)  throws Exception{
+  public Search totalSearch(ResourceRequest request, ResourceResponse response, SearchCondition searchCondition)
+    throws Exception{
     Search searchResults = this.createSearch(0);
     if(searchCondition.getAreaScienceApp()){
       appSearch(searchCondition, searchResults);
@@ -329,7 +371,7 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
       projectSearch(searchCondition, searchResults);
     }
     if(searchCondition.getAreaScienceData()){
-      dataSearch(searchCondition, searchResults);
+      dataSearch(request, response, searchCondition, searchResults);
     }
     return searchResults;
   }

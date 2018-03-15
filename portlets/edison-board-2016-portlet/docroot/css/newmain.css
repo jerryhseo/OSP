@@ -1,0 +1,60 @@
+
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+	img {
+		max-width:1500px;
+		max-height:747px;
+	}
+				
+	/*h2 title*/
+	.h2title{font-size:30px !important; color:#3b143d; text-align:center; padding-top:60px; font-weight:600 !important; font-family:'Nanum Gothic', sans-serif;}		
+	
+	.newswrap{padding-bottom:10px; position:relative; clear:both;}
+	.newslist{ padding-top:50px; position:relative;}
+	.newslist ul{ padding:45px 34px 28px 34px; background-color:#f4f4f4; margin:0;}
+	.newslist ul li{ list-style:none; font-family:'Nanum Gothic', sans-serif; font-size:14px; color:#444; padding:0;}
+	.newslist ul li:first-child{font-size:18px; color:#162f40; font-weight:600; padding-bottom:35px;}
+	.newslist ul li a{color:#444!important;}
+	.newslist ul li a:hover{text-decoration:underline!important;}
+	.newslist ul li:last-child{padding-top:20px; text-align:center;}
+	
+	.newsbtnicon{ margin:0 auto;
+		background-color: #fff; text-align:center; padding-bottom:75px; padding-top: 5px;}
+	.newsbtnicon ul{background-color: #fff;}
+	.newsbtnicon ul li{ list-style:none; display:inline-block; margin-right:7px;}
+	
+	
+	/*더보기 버튼*/
+	.btn_line{
+		border-radius:20px !important;
+		cursor:pointer !important;
+		color:#162f40; border:solid 1px #7ec9ae; background-color:#fff;
+		font-size: 12px !important;
+		vertical-align: middle !important;
+		line-height: 18px !important;
+		display: inline-block !important;
+		padding:3px 16px !important;
+		font-weight:600; text-align:center;}
+		
+		.btn_line a{color:#162f40 !important;}
+		.btn_line a:hover{color:#162f40; text-decoration:none !important;}
+		.btn_line:hover{ background-color:#65be9f; color:#fff !important;  text-decoration:none !important;
+	}
+
+@media all and (min-width:768px)and (max-width:1024px){
+	
+	.h2title{font-size:35px !important; color:#3b143d; text-align:center; padding-top:60px; font-weight:600 !important; font-family:'Nanum Gothic', sans-serif;}	
+	
+}
+
+@media all and (min-width:1025px)and (max-width:1199px){
+
+	.h2title{font-size:35px !important; color:#3b143d; text-align:center; padding-top:60px; font-weight:600 !important; font-family:'Nanum Gothic', sans-serif;}
+	
+}
+
+@media all and (min-width:1200px){
+	
+	.h2title{font-size:35px !important; color:#3b143d; text-align:center; padding-top:60px; font-weight:600 !important; font-family:'Nanum Gothic', sans-serif;}	
+	
+}

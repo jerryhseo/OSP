@@ -157,7 +157,10 @@
 <script type="text/javascript" src="${contextPath}/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <c:choose>
 	<c:when test="${empty redirectName }">
-		<h1>${boardDivTitle}</h1>
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+			${boardDivTitle}
+		</h1>
 	</c:when>
 	<c:otherwise>
 	   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
@@ -176,14 +179,14 @@
 	<tr class="tablebgtr01">
 		<c:choose>
 			<c:when test="${boardDiv.divNm=='FAQ' || boardDiv.divNm=='QNA'}">
-				<td width="51%" class="title"><liferay-ui:message key='edison-appstore-myapp-question' /> : ${boardMap.title} </td>
+				<td width="75%" class="title"><liferay-ui:message key='edison-appstore-myapp-question' /> : ${boardMap.title} </td>
 			</c:when>
 			<c:otherwise>
-				<td width="51%" class="title"><liferay-ui:message key='edison-table-list-header-title' /> : ${boardMap.title} </td>
+				<td width="75%" class="title"><liferay-ui:message key='edison-table-list-header-title' /> : ${boardMap.title} </td>
 			</c:otherwise>
 		</c:choose>
 		
-		<td width="49%" class="bold TR">${boardMap.writerName} ｜ ${boardMap.writerDate} </td>
+		<td width="25%" class="bold TR">${boardMap.writerName} ｜ ${boardMap.writerDate} </td>
 	</tr>
 	<tbody>
 	<tr style="height: 230px;">
@@ -219,15 +222,18 @@
 			<c:choose>	
 				<c:when test="${isPortal == false && boardMap.groupId ne boardGroupId}"></c:when>
 				<c:otherwise>
-					<input type="button" class="button02" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
-					<input type="button" class="button02" style="margin-right:5px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;  width: 70px;" onClick="javascript:<portlet:namespace/>deleteBoard(); return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
+					<input type="button" class="btn btn-default" style="margin-right:5px;  width: 70px;" onClick="javascript:<portlet:namespace/>modify('${maxWindowStatus}'); return false;" value="<liferay-ui:message key='edison-button-board-modify' />" />
 				</c:otherwise>
 			</c:choose>
 		</c:if>
 	</c:if>
-	<input type="button" class="button02" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
-	<c:if test="${redirectURL ne '' }">
-		<input type="button" class="button02" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" />
+	<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" style=" width: 70px;" />
+	<c:if test="${redirectURL ne '' and redirectName ne ''}">
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="${redirectName}" style=" width: 70px;" />
+	</c:if>
+	<c:if test="${redirectURL ne '' and redirectName eq ''}">
+		<input type="button" class="btn btn-default" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />" />
 	</c:if>
 </div>
 
@@ -240,7 +246,7 @@
 	%>
 		<c:if test="${replyBoardSeq == null || replyBoardSeq == ''}">			
 		<div id="replyInputButton" style="float: right;">
-			<input type="button" onclick="replyInputFormSlideDown();" value="<liferay-ui:message key='edison-button-board-write' />" class="button04">
+			<input type="button" onclick="replyInputFormSlideDown();" value="<liferay-ui:message key='edison-button-board-write' />" class="btn btn-default">
 		</div>
 		</c:if>
 	<%
@@ -279,15 +285,15 @@
 									<c:choose>
 										<c:when test="${boardDiv.fileUpLoadUseYn == true}">
 											<div>
-												<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
+												<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
 												<div id="fileTDArea" style="float: left;"/>	
 											</div>
 										</c:when>
 									</c:choose>
 									<div class="boardbtnbox">
 										<div class="boardbtn1 boardbtnboxtoppd">
-											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-virtuallab-save' />" class="button04">
-											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyInputFormSlideUp();" value="<liferay-ui:message key='cancel' />" class="button04">											
+											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-virtuallab-save' />" class="btn btn-default">
+											<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyInputFormSlideUp();" value="<liferay-ui:message key='cancel' />" class="btn btn-default">											
 										</div>
 									</div>
 								</div>	
@@ -333,13 +339,13 @@
 										}//if(replyFileList != null && replyFileList.size() > 0){										
 %>
 										<div>
-											<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button02" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
+											<div style="float: left;"><input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer;"/>&nbsp;&nbsp;</div>
 											<div id="fileTDArea" style="float: left;"/>	
 										</div>
 										<div class="boardbtnbox">
 											<div class="boardbtn1 boardbtnboxtoppd">
-												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-button-board-modify' />" class="button04">
-												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyWriteCancel('${maxWindowStatus}');" value="<liferay-ui:message key='cancel' />" class="button04">
+												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="submitForm<portlet:namespace/>();" value="<liferay-ui:message key='edison-button-board-modify' />" class="btn btn-default">
+												<input type="button" name="<portlet:namespace />fullsize" id="fullsize" onclick="replyWriteCancel('${maxWindowStatus}');" value="<liferay-ui:message key='cancel' />" class="btn btn-default">
 											</div>
 										</div>
 									</td>
@@ -485,7 +491,7 @@ function moreFileTag()
 	fileIndex++;
 	var frmTag = "<div id=\"fileDiv"+fileIndex+"\">";
 	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button06\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
 	frmTag += "</div>";
 
 	$("#fileTDArea").append(frmTag);

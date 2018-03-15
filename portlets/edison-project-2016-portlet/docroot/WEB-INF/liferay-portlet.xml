@@ -14,14 +14,14 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-project-achievements</css-class-wrapper>
+		<css-class-wrapper>edison-project-achievements container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-project-uses</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-project-uses</css-class-wrapper>
+		<css-class-wrapper>edison-project-uses container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-project-register</portlet-name>
@@ -50,16 +50,24 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-project-management-app</css-class-wrapper>
+		<css-class-wrapper>edison-project-management-app container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-project-management-content</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-project-management-content</css-class-wrapper>
+		<css-class-wrapper>edison-project-management-content container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+	<portlet>
+		<portlet-name>edison-project-achievements-data</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<header-portlet-css>/css/style.css</header-portlet-css>
+		<css-class-wrapper>edison-project-achievements-data container</css-class-wrapper>
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

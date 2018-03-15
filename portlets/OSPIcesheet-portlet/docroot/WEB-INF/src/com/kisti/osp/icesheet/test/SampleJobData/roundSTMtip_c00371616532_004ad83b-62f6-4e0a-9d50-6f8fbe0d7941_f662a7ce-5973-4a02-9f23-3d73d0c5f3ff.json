@@ -1,0 +1,89 @@
+{
+  "code_mpi_number": "1",
+  "simulation_description": "",
+  "-inp": [
+    {
+      "file-content": "V0 = -0.5 ;\nh = 4 ;\n",
+      "available-language-ids": "{ko_KR}",
+      "variable-map": {
+        "map": {
+          "V0": {
+            "unit": "",
+            "sweepable": false,
+            "value-domain": {
+              
+            },
+            "name": "V0",
+            "value": -0.5,
+            "active": true,
+            "disable": false,
+            "activate-condition-container": {
+              
+            },
+            "type": "numeric",
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tipuc5d0 uac78ub9b0 uc804uc555",
+                "en_US": "STM tipuc5d0 uac78ub9b0 uc804uc555"
+              }
+            },
+            "sweeped": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "V0",
+                "en_US": "V0"
+              }
+            }
+          },
+          "h": {
+            "unit": "",
+            "sweepable": false,
+            "value-domain": {
+              "upper-limit": 10,
+              "lower-limit": 2,
+              "operand": "=="
+            },
+            "name": "h",
+            "value": "4",
+            "active": true,
+            "disable": false,
+            "activate-condition-container": {
+              
+            },
+            "type": "numeric",
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tipuc758 ub192uc774",
+                "en_US": "STM tipuc758 ub192uc774"
+              }
+            },
+            "sweeped": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "h",
+                "en_US": "h"
+              }
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "variable-form": {
+        "control-char": "",
+        "comment-char": "",
+        "space": false,
+        "variable-delimiter": " ;",
+        "value-delimiter": " = "
+      },
+      "vector-form": {
+        "delimiter": " ",
+        "brace-char": "SQUARE_SPACE",
+        "space": false,
+        "sample": "[ A B C ]"
+      },
+      "sweep-max": 1
+    }
+  ],
+  "simulation_title": "거리4",
+  "-inp_type": "Inputdeck"
+}

@@ -175,6 +175,8 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="virtualClassCd" />
+			<basic name="classCurriculumUrl" />
+			<basic name="classExternalPersonnel" />
 			<transient name="classDescriptionCurrentLanguageId" />
 			<transient name="classDescriptionMap" />
 			<transient name="classTitleCurrentLanguageId" />

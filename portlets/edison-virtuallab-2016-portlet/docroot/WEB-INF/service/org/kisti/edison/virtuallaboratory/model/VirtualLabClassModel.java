@@ -380,6 +380,35 @@ public interface VirtualLabClassModel extends BaseModel<VirtualLabClass> {
 	 */
 	public void setVirtualClassCd(String virtualClassCd);
 
+	/**
+	 * Returns the class curriculum url of this virtual lab class.
+	 *
+	 * @return the class curriculum url of this virtual lab class
+	 */
+	@AutoEscape
+	public String getClassCurriculumUrl();
+
+	/**
+	 * Sets the class curriculum url of this virtual lab class.
+	 *
+	 * @param classCurriculumUrl the class curriculum url of this virtual lab class
+	 */
+	public void setClassCurriculumUrl(String classCurriculumUrl);
+
+	/**
+	 * Returns the class external personnel of this virtual lab class.
+	 *
+	 * @return the class external personnel of this virtual lab class
+	 */
+	public int getClassExternalPersonnel();
+
+	/**
+	 * Sets the class external personnel of this virtual lab class.
+	 *
+	 * @param classExternalPersonnel the class external personnel of this virtual lab class
+	 */
+	public void setClassExternalPersonnel(int classExternalPersonnel);
+
 	@Override
 	public boolean isNew();
 

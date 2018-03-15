@@ -305,347 +305,345 @@ function <portlet:namespace/>historyBack(){
 </script>
 
 <!-- 페이지 타이틀 & 네비게이션 -->
-<h1>
-	<c:choose>		
-		<c:when test="${empty redirectName }">
-			<liferay-ui:message key='edison-appstore-workspace-request' />
-		</c:when>
-		<c:when test="${not empty redirectName }">
-		   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-appstore-workspace-request' />
-		</c:when>
-	</c:choose>
-</h1>
 
-<form name="workspaceform" method="post" enctype="multipart/form-data">
-	<input name="<portlet:namespace/>userId" type="hidden" value="${delevoperMap.userId}"/>
-	<input name="<portlet:namespace/>screenName" type="hidden" value="${delevoperMap.screenName}"/>
-	<input name="<portlet:namespace/>requestSeq" type="hidden" value="${delevoperMap.requestSeq}"/>
-
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='user-information' />
+<div class="table-responsive panel edison-panel">
+	<form name="workspaceform" method="post" enctype="multipart/form-data" class="table1_list">
+		<input name="<portlet:namespace/>userId" type="hidden" value="${delevoperMap.userId}"/>
+		<input name="<portlet:namespace/>screenName" type="hidden" value="${delevoperMap.screenName}"/>
+		<input name="<portlet:namespace/>requestSeq" type="hidden" value="${delevoperMap.requestSeq}"/>
+		
+		<h1>
+			<c:choose>		
+				<c:when test="${empty redirectName }">
+					<liferay-ui:message key='edison-appstore-workspace-request' />
+				</c:when>
+				<c:when test="${not empty redirectName }">
+				   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-appstore-workspace-request' />
+				</c:when>
+			</c:choose>
+		</h1>
+	
+		<!-- 사용자 정보 -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='user-information' />
+			</h3>
 		</div>
-	</div>
-
-	<div class="h10"></div>
-
-	<div class="table1_list">
-		  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
+	
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
 				<col width="15%" />
 				<col width="35%" />
 			</colgroup>
-		  <tr>
-		      <th><liferay-ui:message key='edison-table-list-header-userid' /></th>
-		      <td>${delevoperMap.screenName}
-		      </td>
-		      <th><liferay-ui:message key='edison-table-list-header-usernm' /></th>
-		      <td>${delevoperMap.firstName}
-		      </td>
-   	       </tr>  
-		  <tr>
-		      <th><liferay-ui:message key='edison-table-list-header-email' /></th>
-		      <td>${delevoperMap.emailAddress}</td>
-		      <th><liferay-ui:message key='edison-create-account-field-title-university' /></th>
-		      <td>${delevoperMap.universityFieldNm}/${delevoperMap.majorField}</td>
-   	       </tr>     	       
-	      </table>
-	</div>
-	
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-appstore-workspace-request-info' />
+			
+			<tr>
+				<th><liferay-ui:message key='edison-table-list-header-userid' /></th>
+				<td>${delevoperMap.screenName}
+				</td>
+				<th><liferay-ui:message key='edison-table-list-header-usernm' /></th>
+				<td>${delevoperMap.firstName}
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-table-list-header-email' /></th>
+				<td>${delevoperMap.emailAddress}</td>
+				<th><liferay-ui:message key='edison-create-account-field-title-university' /></th>
+				<td>${delevoperMap.universityFieldNm}/${delevoperMap.majorField}</td>
+			</tr>
+		</table>
+		
+		<br>
+		
+		<!-- 워크스페이스 요청정보 -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-appstore-workspace-request-info' />
+			</h3>
 		</div>
-	</div>
-
-	<div class="h10"></div>
 	
-	<div class="table1_list">		
-		  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
-		  	<colgroup>
-				<col width="15%" />
-				<col width="35%" />
-				<col width="15%" />
-				<col width="35%" />
-			</colgroup>
-		  <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-request-use' /></th>
-		      <td>
-		      		<select name="<portlet:namespace/>developerSort">
-		      			<option value="1201001" ${delevoperMap.developerSort == '1201001' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-solver-development' /></option>
-		      			<option value="1201002" ${delevoperMap.developerSort == '1201002' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-solver-development-test' /></option>
-		      			<option value="1201003" ${delevoperMap.developerSort == '1201003' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-etc' /></option>
-		      		</select>
-		      </td>
-		      <th><liferay-ui:message key='edison-appstore-developer-preferred-date' /></th>
-		      <td colspan="3">
-		       	<input name="<portlet:namespace/>useStart" id="<portlet:namespace/>useStart" readonly="readonly" value="${delevoperMap.useStart}" /> ~ <input name="<portlet:namespace/>useEnd" id="<portlet:namespace/>useEnd" readonly="readonly" value="${delevoperMap.useEnd}"/>		      
-		      </td>
-	        </tr>
-		    <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-use-language' /></th>
-		      <td colspan="6">
-		      	<div style="float:left;">
-			      <label class="checkbox-label"><input name="<portlet:namespace/>languageFortran" type="checkbox" value="Y" ${delevoperMap.languageFortran == 'Y' ? 'checked=checked' : '' }/>&nbsp;fortran</label>
-			      <label class="checkbox-label"><input name="<portlet:namespace/>languageCpp" type="checkbox" value="Y" ${delevoperMap.languageCpp == 'Y' ? 'checked=checked' : '' }/>&nbsp;c/c++</label>
-			      <label class="checkbox-label"><input name="<portlet:namespace/>languagePython" type="checkbox" value="Y" ${delevoperMap.languagePython == 'Y' ? 'checked=checked' : '' }/>&nbsp;python</label>
-			      <label class="checkbox-label"><input name="<portlet:namespace/>languageJava" type="checkbox" value="Y" ${delevoperMap.languageJava == 'Y' ? 'checked=checked' : '' }/>&nbsp;java</label>
-			      <label class="checkbox-label"><input name="<portlet:namespace/>languageOther" type="checkbox" onclick="otherEvent(this)" value="Y" ${delevoperMap.languageOther == 'Y' ? 'checked=checked' : '' }/>&nbsp;<liferay-ui:message key='edison-appstore-workspace-etc' /></label>
-			      <input type="text" name="<portlet:namespace/>languageOtherDescription" class="text_box_04" ${delevoperMap.languageOther == 'Y' ? '' : 'readonly=readonly' } maxlength="100" value="${delevoperMap.languageOtherDescription}"/>
-			    </div>
-			</td>
-			</tr>		    		    
-		    <c:choose>	
-		    	<c:when test="${!empty ipList}">		    	
-			      <c:forEach var="data" items="${ipList}" varStatus="status" >
-			        <c:choose>
-			        	<c:when test="${status.index == 0}">
-						      <tr>	    
-						           <th id="mainIp" rowspan="${fn:length(ipList)})"><liferay-ui:message key='edison-appstore-workspace-access-ip' /></th>
-							      	<td colspan="7">
-								      	<input name="<portlet:namespace/>ip1" type="text" maxlength="3" value="${data.ip1}"/>.
-								      	<input name="<portlet:namespace/>ip2" type="text" maxlength="3" value="${data.ip2}"/>.	     
-								        <input name="<portlet:namespace/>ip3" type="text" maxlength="3" value="${data.ip3}"/>.
-								        <input name="<portlet:namespace/>ip4" type="text" maxlength="3" value="${data.ip4}"/>
-								        <input type="button" class="addIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
-							        </td>
-				        	  </tr>
-			        	</c:when>
-			        	<c:otherwise>
-			        		  <tr>
-							      	<td colspan="7">
-								      	<input name="<portlet:namespace/>ip1" type="text" maxlength="3" value="${data.ip1}"/>.
-								      	<input name="<portlet:namespace/>ip2" type="text" maxlength="3" value="${data.ip2}"/>.	     
-								        <input name="<portlet:namespace/>ip3" type="text" maxlength="3" value="${data.ip3}"/>.
-								        <input name="<portlet:namespace/>ip4" type="text" maxlength="3" value="${data.ip4}"/>
-										<input type="button" class="deleteIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
-							        </td>
-				        	  </tr>						        	
-			        	</c:otherwise>
-			        </c:choose>
-			      </td>		
-			      </c:forEach>
-		      </c:when>
-		      <c:otherwise>
-		      <tr id="ipTrNode">
-		     	  <th id="mainIp"><liferay-ui:message key='edison-appstore-workspace-access-ip' /></th>
-			      <td colspan="7">
-			      	<input name="<portlet:namespace/>ip1" type="text"/>.
-			      	<input name="<portlet:namespace/>ip2" type="text"/>.
-			        <input name="<portlet:namespace/>ip3" type="text"/>.
-			        <input name="<portlet:namespace/>ip4" type="text"/>
-			        <input type="button" class="addIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
-			      </td>
-		      </tr>
-		      </c:otherwise>
-		     </c:choose>     		        
-		    <tr>
-		      <th><liferay-ui:message key='edison-appstore-remark' /></th>
-		      <td width="85%" colspan="5">
-		      	<textarea name="<portlet:namespace/>rem" cols="150" rows="5" style="resize: none;width: 95%;margin: 0px;" spellcheck="false">${delevoperMap.rem}</textarea>
-		      </td>
-	        </tr>        		       	  
-	        <%if(true){ %>
-	        <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-user-management-list' /></th>
-		      <td width="85%" colspan="5">
-		      	<textarea name="<portlet:namespace/>etc" cols="150" rows="5" style="resize: none;width: 95%;margin: 0px;" spellcheck="false">${delevoperMap.etc}</textarea>
-		      </td>
-	        </tr>
-	        
-	        <%} %>
-	      </table>
-	</div>
-	
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-appstore-workspace-detail-view' />
-			<input type="button" id="workspaceDetailButton" value="<liferay-ui:message key='edison-appstore-open' />" class="button01b" onclick="workspaceDetailView();return false;" />
-		</div>
-	</div>
-
-	<div class="h10"></div>
-	
-	<div class="table1_list">		
-		  <table id="workspaceDetail" style="display: none; table-layout: fixed;" width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
 				<col width="15%" />
 				<col width="35%" />
 			</colgroup>
-		    <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-server-ip' /></th>
-		      <td colspan="3"><input type="text" name="<portlet:namespace/>detailIp" style="width:90%;" value="${delevoperMap.detailIp}"/></td>
-	        </tr>
-		    <tr>
-		      <th>OS</th>
-		      <td colspan="3"><input type="text" style="width:90%;"  name="<portlet:namespace/>detailOs" value="${delevoperMap.detailOs}" /></td>
-	        </tr>
-		    <tr>
-		      <th>CPU</th>
-		      <td colspan="3"><input type="text" style="width:90%;"  name="<portlet:namespace/>detailCpu" value="${delevoperMap.detailCpu}"/></td>
-	        </tr>
-		    <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-storage-capacity' /></th>
-		      <td colspan="3"><input type="text" style="width:90%;"  name="<portlet:namespace/>detailStorate" value="${delevoperMap.detailStorate}"/></td>
-	        </tr>
-		    <tr>
-		      <th><liferay-ui:message key='edison-appstore-workspace-etc' /></th>
-		      <td colspan="3"><input type="text" style="width:90%;"  name="<portlet:namespace/>detailLibrary" value="${delevoperMap.detailLibrary}"/></td>
-	        </tr>
-	      </table>
-	</div>
-	
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-virtuallab-confirm-info' />
+			
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-request-use' /></th>
+				<td>
+					<select name="<portlet:namespace/>developerSort" class="btn btn-default">
+						<option value="1201001" ${delevoperMap.developerSort == '1201001' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-solver-development' /></option>
+						<option value="1201002" ${delevoperMap.developerSort == '1201002' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-solver-development-test' /></option>
+						<option value="1201003" ${delevoperMap.developerSort == '1201003' ? 'selected=selected' : ''}><liferay-ui:message key='edison-appstore-workspace-etc' /></option>
+					</select>
+				</td>
+				<th><liferay-ui:message key='edison-appstore-developer-preferred-date' /></th>
+				<td colspan="3">
+					<input name="<portlet:namespace/>useStart" id="<portlet:namespace/>useStart" readonly="readonly" value="${delevoperMap.useStart}" /> ~ <input name="<portlet:namespace/>useEnd" id="<portlet:namespace/>useEnd" readonly="readonly" value="${delevoperMap.useEnd}"/>		      
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-use-language' /></th>
+				<td colspan="6">
+					<div style="float:left;">
+						<label class="checkbox-label"><input name="<portlet:namespace/>languageFortran" type="checkbox" value="Y" ${delevoperMap.languageFortran == 'Y' ? 'checked=checked' : '' }/>&nbsp;fortran</label>
+						<label class="checkbox-label"><input name="<portlet:namespace/>languageCpp" type="checkbox" value="Y" ${delevoperMap.languageCpp == 'Y' ? 'checked=checked' : '' }/>&nbsp;c/c++</label>
+						<label class="checkbox-label"><input name="<portlet:namespace/>languagePython" type="checkbox" value="Y" ${delevoperMap.languagePython == 'Y' ? 'checked=checked' : '' }/>&nbsp;python</label>
+						<label class="checkbox-label"><input name="<portlet:namespace/>languageJava" type="checkbox" value="Y" ${delevoperMap.languageJava == 'Y' ? 'checked=checked' : '' }/>&nbsp;java</label>
+						<label class="checkbox-label"><input name="<portlet:namespace/>languageOther" type="checkbox" onclick="otherEvent(this)" value="Y" ${delevoperMap.languageOther == 'Y' ? 'checked=checked' : '' }/>&nbsp;<liferay-ui:message key='edison-appstore-workspace-etc' /></label>
+						<input type="text" name="<portlet:namespace/>languageOtherDescription" class="form-control" ${delevoperMap.languageOther == 'Y' ? '' : 'readonly=readonly' } maxlength="100" value="${delevoperMap.languageOtherDescription}" style="width: 180px; margin-left: 5px; float: right;"/>
+					</div>
+				</td>
+			</tr>
+			<c:choose>	
+				<c:when test="${!empty ipList}">		    	
+					<c:forEach var="data" items="${ipList}" varStatus="status" >
+						<c:choose>
+							<c:when test="${status.index == 0}">
+								<tr>
+									<th id="mainIp" rowspan="${fn:length(ipList)})"><liferay-ui:message key='edison-appstore-workspace-access-ip' /></th>
+									<td colspan="7">
+										<input name="<portlet:namespace/>ip1" type="text" maxlength="3" value="${data.ip1}" /> .
+										<input name="<portlet:namespace/>ip2" type="text" maxlength="3" value="${data.ip2}" /> .
+										<input name="<portlet:namespace/>ip3" type="text" maxlength="3" value="${data.ip3}" /> .
+										<input name="<portlet:namespace/>ip4" type="text" maxlength="3" value="${data.ip4}" />
+										<input type="button" class="btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
+									</td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+									<tr>
+										<td colspan="7">
+											<input name="<portlet:namespace/>ip1" type="text" maxlength="3" value="${data.ip1}"/> .
+											<input name="<portlet:namespace/>ip2" type="text" maxlength="3" value="${data.ip2}"/> .
+											<input name="<portlet:namespace/>ip3" type="text" maxlength="3" value="${data.ip3}"/> .
+											<input name="<portlet:namespace/>ip4" type="text" maxlength="3" value="${data.ip4}"/>
+											<input type="button" class="deleteIp btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-button-board-delete' />" />
+										</td>
+									</tr>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<tr id="ipTrNode">
+						<th id="mainIp"><liferay-ui:message key='edison-appstore-workspace-access-ip' /></th>
+						<td colspan="7">
+							<input name="<portlet:namespace/>ip1" type="text"/>.
+							<input name="<portlet:namespace/>ip2" type="text"/>.
+							<input name="<portlet:namespace/>ip3" type="text"/>.
+							<input name="<portlet:namespace/>ip4" type="text"/>
+							<input type="button" class="addIp btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
+						</td>
+					</tr>
+				</c:otherwise>
+			</c:choose>     		        
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-remark' /></th>
+				<td width="85%" colspan="5">
+					<textarea name="<portlet:namespace/>rem" cols="150" rows="5" style="resize: none;width: 95%;margin: 0px;" spellcheck="false">${delevoperMap.rem}</textarea>
+				</td>
+			</tr>        		       	  
+			<%if(true){ %>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-user-management-list' /></th>
+				<td width="85%" colspan="5">
+					<textarea name="<portlet:namespace/>etc" cols="150" rows="5" style="resize: none;width: 95%;margin: 0px;" spellcheck="false">${delevoperMap.etc}</textarea>
+				</td>
+			</tr>
+			<%} %>
+		</table>
+		
+		<br>
+		
+		<!-- 워크스페이스 상세정보 -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-appstore-workspace-detail-view' />
+				<input type="button" id="workspaceDetailButton" value="<liferay-ui:message key='edison-appstore-open' />" class="btn btn-default" onclick="workspaceDetailView();return false;" style="width: 100px;" />
+			</h3>
 		</div>
-	</div>
-
-	<div class="h10"></div>
 	
-	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
+		
+		<table id="workspaceDetail" style="display: none; table-layout: fixed;" width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
 				<col width="15%" />
 				<col width="35%" />
 			</colgroup>
-		 	<tr>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-server-ip' /></th>
+				<td colspan="3"><input type="text" class="form-control" name="<portlet:namespace/>detailIp" style="width:90%;" value="${delevoperMap.detailIp}"/></td>
+			</tr>
+			<tr>
+				<th>OS</th>
+				<td colspan="3"><input type="text" class="form-control" style="width:90%;"  name="<portlet:namespace/>detailOs" value="${delevoperMap.detailOs}" /></td>
+			</tr>
+			<tr>
+				<th>CPU</th>
+				<td colspan="3"><input type="text" class="form-control" style="width:90%;"  name="<portlet:namespace/>detailCpu" value="${delevoperMap.detailCpu}"/></td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-storage-capacity' /></th>
+				<td colspan="3"><input type="text" class="form-control" style="width:90%;"  name="<portlet:namespace/>detailStorate" value="${delevoperMap.detailStorate}"/></td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-etc' /></th>
+				<td colspan="3"><input type="text" class="form-control" style="width:90%;"  name="<portlet:namespace/>detailLibrary" value="${delevoperMap.detailLibrary}"/></td>
+			</tr>
+		</table>
+		
+		<br>
+		
+		<!-- 처리정보 -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-virtuallab-confirm-info' />
+			</h3>
+		</div>
+	
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
+			<colgroup>
+				<col width="15%" />
+				<col width="35%" />
+				<col width="15%" />
+				<col width="35%" />
+			</colgroup>
+			<tr>
 				<th><liferay-ui:message key='edison-science-appstore-toolkit-change-processing-status' /></th>
-			    <td>
-			      <select id="<portlet:namespace/>requestStatus" name="<portlet:namespace/>requestStatus">
-			      	<c:if test="${delevoperMap.requestStatus < 1202004 }">
-			      		<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
-			      			<c:if test="${status.cd < 1202004 }">
-			      				<option value="${status.cd}" <c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if> >${status.cdNm}</option>
-			      			</c:if>
-			      			<c:if test="${status.cd == 1202007 }">
-			      				<option value="${status.cd}" <c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if> >${status.cdNm}</option>
-			      			</c:if>
-			      		</c:forEach>
-			      	</c:if>
-			      	<c:if test="${delevoperMap.requestStatus > 1202003 && delevoperMap.requestStatus != '1202007'}">
-			      		<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
-			      			<c:if test="${status.cd > 1202003 }">
-			      				<option value="${status.cd}"<c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if>>${status.cdNm}</option>
-		      				</c:if>
-			      		</c:forEach>
-			      	</c:if>
-			      	<c:if test="${delevoperMap.requestStatus eq '1202007' }">
-			      		<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
-		      				<option value="${status.cd}"<c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if>>${status.cdNm}</option>
-			      		</c:forEach>
-			      	</c:if>
-			      </select>
-					</td>
-					<th><liferay-ui:message key='edison-science-appstore-toolkit-change-processing-date' /></th>			    
-					<td>
-						<input type="text" name="<portlet:namespace/>processDate" id="<portlet:namespace/>processDate" readonly="readonly" value="${delevoperMap.processDate}"/>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='edison-table-list-header-userid' /></th>
-					<td>
-						<input type="text" name="<portlet:namespace/>developerId" style="width:90%;" value="${delevoperMap.developerId}" />
-					</td>
-					<th><liferay-ui:message key='edison-appstore-workspace-temporary-password' /></th>
-					<td colspan="3">
-						<input type="text" name="<portlet:namespace/>developerPassword" style="width:90%;" value="${delevoperMap.developerPassword}" />
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='edison-appstore-workspace-request-use' /></th>
-					<td colspan="5">
-						${delevoperMap.requestSortNm}
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='edison-science-appstore-toolkit-change-request-content' /></th>
-					<td width="95%" colspan="5">
-						<textarea cols="150" rows="5" style="resize:none;"readOnly>${delevoperMap.requestNote}</textarea>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='edison-process-note' /></th>
-					<td width="95%" colspan="5">
-						<textarea name="<portlet:namespace/>processNote" cols="150" rows="5" style="resize:none;">${delevoperMap.processNote}</textarea>
-					</td>
-				</tr>
-				<tr>
-					<th><liferay-ui:message key='edison-process-note-info' /></th>
-					<td colspan="3" style="line-height: 15px;">
-						<c:forEach var="data" items="${requestList}">
-						<div style="padding:10px 0px; border-bottom: 1px dashed #e0e0e0">
-							<span style="font-weight: 600;"><liferay-ui:message key='edison-science-appstore-toolkit-change-result-of-management' /> : </span><span>${data.requestStatusNm}</span><br>
-							<span style="font-weight: 600;"><liferay-ui:message key='edison-process-note' /> : </span>
-							<pre style="margin:5px; width:94%; font-family: Arial,Nanum Barun Gothic,NanumGothic;">${data.processNote}</pre>
-							<span style="font-weight: 600;">${data.requestStatusNm} <liferay-ui:message key='edison-science-appstore-toolkit-change-date' /> : </span><span>${fn:substring(data.updateDate,0,19)}</span><br>		      
-							<span style="font-weight: 600;"><liferay-ui:message key='edison-appstore-workspace-request-use' /> : </span><span>${data.requestSortNm}</span><br/>
-							<span style="font-weight: 600;"><liferay-ui:message key='edison-science-appstore-toolkit-change-request-content' /> : </span>
-							<pre style="margin:5px; width:94%; font-family: Arial,Nanum Barun Gothic,NanumGothic;">${data.requestNote}</pre>
-						</div>
-						</c:forEach>
-					</td>
-				</tr>
-		 </table>		 
-		</div>
+				<td>
+					<select id="<portlet:namespace/>requestStatus" class="btn btn-default" name="<portlet:namespace/>requestStatus">
+						<c:if test="${delevoperMap.requestStatus < 1202004 }">
+							<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
+								<c:if test="${status.cd < 1202004 }">
+									<option value="${status.cd}" <c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if> >${status.cdNm}</option>
+								</c:if>
+								<c:if test="${status.cd == 1202007 }">
+									<option value="${status.cd}" <c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if> >${status.cdNm}</option>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${delevoperMap.requestStatus > 1202003 && delevoperMap.requestStatus != '1202007'}">
+							<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
+								<c:if test="${status.cd > 1202003 }">
+									<option value="${status.cd}"<c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if>>${status.cdNm}</option>
+							</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${delevoperMap.requestStatus eq '1202007' }">
+							<c:forEach items="${statusList}" var="status">	<!-- 리스트 -->
+							<option value="${status.cd}"<c:if test="${status.cd == delevoperMap.requestStatus}">selected</c:if>>${status.cdNm}</option>
+							</c:forEach>
+						</c:if>
+					</select>
+				</td>
+				<th><liferay-ui:message key='edison-science-appstore-toolkit-change-processing-date' /></th>			    
+				<td>
+					<input type="text" class="form-control" name="<portlet:namespace/>processDate" id="<portlet:namespace/>processDate" readonly="readonly" value="${delevoperMap.processDate}" style="width: 160px; margin-right: 5px; float: left;"/>
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-table-list-header-userid' /></th>
+				<td>
+					<input type="text" class="form-control" name="<portlet:namespace/>developerId" style="width:90%;" value="${delevoperMap.developerId}" />
+				</td>
+				<th><liferay-ui:message key='edison-appstore-workspace-temporary-password' /></th>
+				<td colspan="3">
+					<input type="text" class="form-control" name="<portlet:namespace/>developerPassword" style="width:90%;" value="${delevoperMap.developerPassword}" />
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-appstore-workspace-request-use' /></th>
+				<td colspan="5">
+					${delevoperMap.requestSortNm}
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-science-appstore-toolkit-change-request-content' /></th>
+				<td width="95%" colspan="5">
+					<textarea cols="150" rows="5" style="resize:none;"readOnly>${delevoperMap.requestNote}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-process-note' /></th>
+				<td width="95%" colspan="5">
+					<textarea name="<portlet:namespace/>processNote" cols="150" rows="5" style="resize:none;">${delevoperMap.processNote}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-process-note-info' /></th>
+				<td colspan="3" style="line-height: 15px;">
+					<c:forEach var="data" items="${requestList}">
+					<div style="padding:10px 0px; border-bottom: 1px dashed #e0e0e0">
+						<span style="font-weight: 600;"><liferay-ui:message key='edison-science-appstore-toolkit-change-result-of-management' /> : </span><span>${data.requestStatusNm}</span><br>
+						<span style="font-weight: 600;"><liferay-ui:message key='edison-process-note' /> : </span>
+						<pre style="margin:5px; width:94%; font-family: Arial,Nanum Barun Gothic,NanumGothic;">${data.processNote}</pre>
+						<span style="font-weight: 600;">${data.requestStatusNm} <liferay-ui:message key='edison-science-appstore-toolkit-change-date' /> : </span><span>${fn:substring(data.updateDate,0,19)}</span><br>		      
+						<span style="font-weight: 600;"><liferay-ui:message key='edison-appstore-workspace-request-use' /> : </span><span>${data.requestSortNm}</span><br/>
+						<span style="font-weight: 600;"><liferay-ui:message key='edison-science-appstore-toolkit-change-request-content' /> : </span>
+						<pre style="margin:5px; width:94%; font-family: Arial,Nanum Barun Gothic,NanumGothic;">${data.requestNote}</pre>
+					</div>
+					</c:forEach>
+				</td>
+			</tr>
+		</table>		 
 		
-		<div class="virtitlebox">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-			<div class="virtitle">
+		<br>
+		
+		<!-- 보안서약서 -->
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-appstore-workspace-security-pledge' />
-			</div>
+			</h3>
 		</div>
 	
-		<div class="h10"></div>
-		
-		<div class="table1_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
-			 <colgroup>
-				<col width="15%" />
-				<col width="35%" />
-				<col width="15%" />
-				<col width="35%" />
-			</colgroup>
-		 		<tr>
-					<th><liferay-ui:message key='edison-table-list-header-file' /></th>
-					<td colspan="3">
-						<c:if test="${!empty fileList}">
-							<c:forEach items="${fileList}" var="fileMap">
-								<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" style="cursor: pointer;">
-									<img src="${contextPath}/images/fileicon.png" width="19" height="21"/>
-									${fileMap.fileTitle }
-								</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
+		 <colgroup>
+			<col width="15%" />
+			<col width="35%" />
+			<col width="15%" />
+			<col width="35%" />
+		</colgroup>
+	 		<tr>
+				<th><liferay-ui:message key='edison-table-list-header-file' /></th>
+				<td colspan="3">
+					<c:if test="${!empty fileList}">
+						<c:forEach items="${fileList}" var="fileMap">
+							<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" style="cursor: pointer; float: left;">
+								<img src="${contextPath}/images/fileicon.png" width="19" height="21"/>
+								${fileMap.fileTitle }
+							</div>
+						</c:forEach>
+						<span style="margin-left:30px; margin-right: 10px; float: left;"><liferay-ui:message key='edison-appstore-workspace-security-pledge' /> <liferay-ui:message key='edison-button-board-modify' /> : </span>
+						<input type="file" name="<portlet:namespace/>addfile" style="float: left;"/>
+						<c:if test="${!empty securityFileList}">
+							<c:forEach items="${securityFileList}" var="fileMap">
+								<p style="float: right; cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" >[${fileMap.fileTitle}]</p>
 							</c:forEach>
-							<span style="margin-left:30px;"><liferay-ui:message key='edison-appstore-workspace-security-pledge' /> <liferay-ui:message key='edison-button-board-modify' /> : </span><input type="file" name="<portlet:namespace/>addfile"/>
-							<c:if test="${!empty securityFileList}">
-								<c:forEach items="${securityFileList}" var="fileMap">
-									<p style="float: right; cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" >[${fileMap.fileTitle}]</p>
-								</c:forEach>
-							</c:if>
 						</c:if>
-						<c:if test="${empty fileList}">
-							<span><liferay-ui:message key='edison-appstore-workspace-security-pledge' /> <liferay-ui:message key='edison-button-register' /> : </span><input type="file" name="<portlet:namespace/>addfile"/>
-							<c:if test="${!empty securityFileList}">
-								<c:forEach items="${securityFileList}" var="fileMap">
-									<p style="float: right; cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" >[${fileMap.fileTitle}]</p>
-								</c:forEach>
-							</c:if>
+					</c:if>
+					<c:if test="${empty fileList}">
+						<span><liferay-ui:message key='edison-appstore-workspace-security-pledge' /> <liferay-ui:message key='edison-button-register' /> : </span><input type="file" name="<portlet:namespace/>addfile"/>
+						<c:if test="${!empty securityFileList}">
+							<c:forEach items="${securityFileList}" var="fileMap">
+								<p style="float: right; cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" >[${fileMap.fileTitle}]</p>
+							</c:forEach>
 						</c:if>
-					</td>
-				</tr>
-			</table>
-		</div>
+					</c:if>
+				</td>
+			</tr>
+		</table>
 		
+		<!-- 하단 버튼 -->
 		<div style="padding:10px; float:right;">
 			<c:choose>		
 				<c:when test="${delevoperMap.requestStatus == '1202001' || delevoperMap.requestStatus == '1202004'}">
@@ -655,14 +653,15 @@ function <portlet:namespace/>historyBack(){
 							<liferay-ui:message key='edison-appstore-workspace-send-email' />
 						</i>
 					</label>
-					<input type="button" class="button0801" onclick="workspaceConfirm();return false;" value="<liferay-ui:message key='edison-button-register' />" style="margin-left:20px;"></input>
+					<input type="button" class="btn btn-default" onclick="workspaceConfirm();return false;" value="<liferay-ui:message key='edison-button-register' />" style="margin-left:20px; width: 90px;"></input>
 				</c:when>
 				<c:otherwise>
-					<input type="button" class="button0801" onclick="workspaceUpdate();return false;" value="<liferay-ui:message key='edison-button-board-modify' />" style="margin-left:15px;"></input>
+					<input type="button" class="btn btn-default" onclick="workspaceUpdate();return false;" value="<liferay-ui:message key='edison-button-board-modify' />" style="margin-left:15px; width: 90px;"></input>
 				</c:otherwise>
 			</c:choose>
-			<input type="button" class="button0801" onclick="<portlet:namespace/>deleteWorkSpace()" value="<liferay-ui:message key='edison-button-board-delete' />" style="margin-left:15px;"></input>
-			<input type="button" class="button0801" onclick="historyBack()" value="<liferay-ui:message key='edison-button-board-list' />" style="margin-left:15px;"></input>
+			<input type="button" class="btn btn-default" onclick="<portlet:namespace/>deleteWorkSpace()" value="<liferay-ui:message key='edison-button-board-delete' />" style="margin-left:15px; width: 90px;"></input>
+			<input type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack()" value="<liferay-ui:message key='edison-button-board-list' />" style="margin-left:15px; width: 90px;"></input>
 		</div>
-	
-</form>
+		
+	</form>
+</div>

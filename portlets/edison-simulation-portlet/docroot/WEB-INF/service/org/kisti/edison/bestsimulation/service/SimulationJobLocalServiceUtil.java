@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -432,11 +432,9 @@ public class SimulationJobLocalServiceUtil {
 	}
 
 	/**
-	* 시뮬레이션 프로젝트 모니터링 리스트
+	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑬以덌옙�븍뱜 筌뤴뫀�뀐옙怨뺤춦 �귐딅뮞占쏙옙     *
 	*
-	* @param classId - 시뮬레이션 프로젝트 모델 아이디
-	* @param customId - 시뮬레이션 프로젝트 아이디
-	* @return
+	* @param classId - 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑬以덌옙�븍뱜 筌뤴뫀��占쎄쑴�좑옙占�    * @param customId - 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑬以덌옙�븍뱜 占쎄쑴�좑옙占�    * @return
 	* @throws SystemException
 	* @throws PortalException
 	* @throws ParseException
@@ -451,10 +449,9 @@ public class SimulationJobLocalServiceUtil {
 	}
 
 	/**
-	* 시뮬레이션 프로젝트 모니터링 카운트
+	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑬以덌옙�븍뱜 筌뤴뫀�뀐옙怨뺤춦 燁삳똻�ワ옙占�    *
 	*
-	* @param simulationProjectId - 시뮬레이션 프로젝트 아이디
-	* @return
+	* @param simulationProjectId - 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑬以덌옙�븍뱜 占쎄쑴�좑옙占�    * @return
 	* @throws SystemException
 	* @throws PortalException
 	* @throws ParseException
@@ -470,7 +467,7 @@ public class SimulationJobLocalServiceUtil {
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
-	* ##### 통계 Service #########################################################################################################################################################
+	* ##### 占쎈벀��Service #########################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
@@ -560,7 +557,7 @@ public class SimulationJobLocalServiceUtil {
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
-	* ##### EDISON 프로젝트 앱, 시뮬레이션 통계 Service #########################################################################################################################################################
+	* ##### EDISON 占쎄쑬以덌옙�븍뱜 占쏙옙 占쎌뮆占쏙옙�됱뵠占쏙옙占쎈벀��Service #########################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
@@ -602,6 +599,91 @@ public class SimulationJobLocalServiceUtil {
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale) {
 		return getService().getCountVirtualClassStatistics(params, locale);
+	}
+
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
+	}
+
+	/**
+	* Added By Jerry H. Seo
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().addJob(simulationUuid, groupId);
+	}
+
+	public static org.kisti.edison.bestsimulation.model.SimulationJob getJob(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getService().getJob(jobUuid);
+	}
+
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsByAppUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getJobsByAppUuid(uuid);
+	}
+
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsByAppUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getJobsByAppUuid(uuid, start, end);
+	}
+
+	public static int countJobsByAppUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().countJobsByAppUuid(uuid);
+	}
+
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getJobsBySimulationUuid(uuid);
+	}
+
+	public static java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getJobsBySimulationUuid(uuid, start, end);
+	}
+
+	public static int countJobsBySimulationUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().countJobsBySimulationUuid(uuid);
+	}
+
+	public static java.lang.String getJobInputData(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException {
+		return getService().getJobInputData(jobUuid);
+	}
+
+	public static void deleteJobsBySimulationUuid(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteJobsBySimulationUuid(simulationUuid);
+	}
+
+	public static java.lang.String getJobWorkingDirPath(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		return getService().getJobWorkingDirPath(jobUuid);
+	}
+
+	public static void deleteJob(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		getService().deleteJob(jobUuid);
 	}
 
 	public static void clearService() {

@@ -90,7 +90,8 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			
 			if(virtualLabClassRegisterList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "8")
+				$("<td/>").addClass("center")
+						  .attr("colspan", "8")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-search-no-result' />")
 						  .appendTo($rowResult);
@@ -104,72 +105,79 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
  						$rowResult.addClass("tablebgtr");
  					}
 					
-					$("<td/>").text(virtualLabClassRegisterList[i].groupName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].groupName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabTitle)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabTitle)
 							  .css("text-align","left")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabUniversityField)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabUniversityField)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].virtualLabPersonName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].virtualLabPersonName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].classTitle)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].classTitle)
 							  .css("text-align","left")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabClassRegisterList[i].createDt)
+					$("<td/>").addClass("center")
+							  .text(virtualLabClassRegisterList[i].createDt)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					if(virtualLabClassRegisterList[i].requestSort == "CONFIRM" || virtualLabClassRegisterList[i].requestSort == "TEMP") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' />")
 												   .css("font-weight", "600")
 												   .css("color", "blue")
 												   .css("margin","0")
 									)
 						  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-move' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>registerCheck('" + virtualLabClassRegisterList[i].virtualLabId + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId + "')")
 								  )
 						  .appendTo($rowResult);
 					} else if (virtualLabClassRegisterList[i].requestSort == "REQUEST") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-during-registration' />")
 												   .css("font-weight", "600")
 												   .css("margin","0")
 									)
 								  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-button-cancel' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>registerCheck('" + virtualLabClassRegisterList[i].virtualLabId + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId + "')")
 								  )
 								  .appendTo($rowResult);
 					} else if (virtualLabClassRegisterList[i].requestSort == "DENIED") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-registration-denial' />")
 												   .css("font-weight", "600")
 												   .css("color", "red")
 												   .css("margin","0")
 								  )
 								  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .attr("onClick","<portlet:namespace/>openDeniedDialog('" + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" + virtualLabClassRegisterList[i].processNote + "','" + virtualLabClassRegisterList[i].classId + "','" + virtualLabClassRegisterList[i].groupId +"')")
 								  )
 								  .appendTo($rowResult);
 					} else {
-						$("<td/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
+						$("<td/>").addClass("center")
+								  .text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					}
@@ -288,21 +296,18 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 
 </script>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
-	</div>
-</div>
-
-<div class="h30"></div>
-
 <form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 	<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 </form>
 
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-class-registration-status' />
+		</h3>
+	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="9%" />
 			<col width="20%" />
@@ -311,7 +316,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 			<col width="20%" />
 			<col width="11%" />
 			<col width="15%" />
-			<col width="10%" />
 		</colgroup>
 		<thead>
 			<tr>
@@ -322,7 +326,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-status' /></th>
-				<th align="center" scope="col"></th>
 			</tr>
 		</thead>
 		<tbody id="<portlet:namespace/>registrationListBody">
@@ -375,7 +378,7 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 30px 25px 0px;">
-			<input id="register_request_button" name="register_request_button" class="button06" type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />" />
+			<input id="register_request_button" name="register_request_button" class="btn btn-default" type="submit" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />" />
 		</div>
 	</form>
 </div>
@@ -404,6 +407,6 @@ function <portlet:namespace/>cancelClassRequest(classId, groupId) {
 		</table>
 	</div>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="register_delete_button" name="register_delete_button" class="button06" type="button" onclick="deleteClassRequest()" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />" />
+		<input id="register_delete_button" name="register_delete_button" class="btn btn-default" type="button" onclick="deleteClassRequest()" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />" />
 	</div>
 </div>

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html style="height:85%;">
 <head>
-    <script src="<%=request.getContextPath()%>/js/jsmol/jquery/jquery.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jsmol/JSmol.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
 </head>
@@ -12,16 +11,24 @@
     <script>
 
     var currentUrl;
+    var myJmol;
     
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/
 $(window).resize( function(e){
-    loadJSMolFile( currentUrl );
+	if(myJmol){
+		//$('#canvas').empty();
+		//console.log("[JSMol] resize Applet : "+ $('body').width() +' : '+$('body').height());
+		//parent.jsMolresize();
+		Jmol.resizeApplet(myJmol, [$('body').width(), $('body').height()]);
+		//console.log("[JSMol] resize Applet end.");
+	}
+	
 });
  
 function loadJSMolFile( urlToLoad ){
-        console.log( 'URL To Load: '+ urlToLoad );
+        console.log( '[JSMOL]URL To Load: '+ urlToLoad );
         if( !urlToLoad )    return;
         currentUrl = urlToLoad;
         
@@ -41,12 +48,31 @@ function loadJSMolFile( urlToLoad ){
                   serverURL: '<%=request.getContextPath()%>/js/jsmol/php/jsmol.php',
                   disableInitialConsole: true
         };
+        
+      
+        if(myJmol && myJmol._applet){
+        	console.log("[JSMOL] test update 1 ", myJmol);
+        	  console.log("[JSMOL] test if : "+ myJmol._applet);
+        	//Jmol.setInfo(myJmol, Info, true);
+        	//Jmol.loadFile(myJmol, currentUrl, Info);
+        	//Jmol.script(myJmol,Info);
+        	console.log("[JSMOL] update file 1");
+        	Jmol.loadFile(myJmol, currentUrl);
+        	console.log("[JSMOL] update file 2");
+		}
+		else{
+			console.log("[JSMOL] test update 2 create ");
+			Jmol.setDocument(0);
+			myJmol = Jmol.getApplet('myJmol', Info);
+			console.log("[JSMOL] create jmol object", myJmol);
+			$('#canvas').html( Jmol.getAppletHtml(myJmol) );
+		}
+        
+        //Jmol.setDocument(0);
+		//myJmol = Jmol.getApplet('myJmol', Info);
+		//$('#canvas').html( Jmol.getAppletHtml(myJmol) );
 
-        Jmol.setDocument(0);
-        Jmol.getApplet('jmol_1', Info);
-        $('#canvas').html( Jmol.getAppletHtml(jmol_1) );
-}
-    
+}  
 </script>
 
 </body>

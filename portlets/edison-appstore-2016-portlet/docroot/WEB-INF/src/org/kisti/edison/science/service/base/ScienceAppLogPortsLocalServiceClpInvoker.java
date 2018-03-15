@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -129,6 +129,10 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 		_methodName173 = "getScienceAppLogPortsesCount";
 
 		_methodParameterTypes173 = new String[] { "long" };
+
+		_methodName174 = "portAppList";
+
+		_methodParameterTypes174 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -255,6 +259,12 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 			return ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(((Long)arguments[0]).longValue());
 		}
 
+		if (_methodName174.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+			return ScienceAppLogPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -302,4 +312,6 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes172;
 	private String _methodName173;
 	private String[] _methodParameterTypes173;
+	private String _methodName174;
+	private String[] _methodParameterTypes174;
 }

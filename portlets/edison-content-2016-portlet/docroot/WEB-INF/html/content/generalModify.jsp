@@ -113,7 +113,8 @@
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
 </liferay-portlet:renderURL>
 
-<aui:form action="<%= modifyGeneralContentUrl %>" method="post" name="createGeneralContentForm" enctype="multipart/form-data"  >
+
+<aui:form action="<%= modifyGeneralContentUrl %>" method="post" name="createGeneralContentForm" enctype="multipart/form-data" cssClass="table-responsive panel edison-panel">
 	<aui:input name="groupId" type="hidden" value="${groupId }"/>
 	<aui:input name="mode" type="hidden" value="<%=mode%>"/>
 <%-- 	<aui:input name="contentDiv" type="hidden" value="<%=contentDiv%>"/> --%>
@@ -123,46 +124,47 @@
 	
 	<c:if test="${redirectURL ne ''}"> 
 		<c:set value="<%=title%>" var="title"/>
-	
 		<h3><a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > <liferay-ui:message key='edison-content-management' /></h3>
-				
 	</c:if>
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
-		</div>
-		
-		<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-		
-			<c:choose>
-				<c:when test="${mode eq 'add' }">
-					<div class="contentbtnGroup">
-<%-- 						<aui:input label="" name="content_add" type="submit" value="<%=create %>"  cssClass="button02_1" /> --%>
-						<input type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save' />"  class="button02_1" />
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="contentbtnGroup">
-						<input class="addIp button02_2" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button">
-				
-<%-- 						<input  type="button" onclick="<portlet:namespace/>goContentList();" value="<liferay-ui:message key='edison-button-board-list'/>" class="button02_2" /> --%>
-						<input  type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.UPDATE%>');" value="<liferay-ui:message key='edison-button-board-modify'/>"  class="button02_1"/>
-						<c:if test="${isOwner == true }"> 
-							<input  type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');"  value="<liferay-ui:message key='edison-button-board-delete'/>"  class="button02_1" />
-						</c:if>
-						<%-- <aui:input label="" value="<%=update%>" name="content_submit" id="content_submit" type="submit" cssClass="graybtn"/> --%>
-					</div>
-				</c:otherwise>
-			</c:choose>
-		</div>
-	</div>
-
-	<div class="h10"></div>
 	
 	<div class="table1_list">
+		<div class="panel-heading clearfix">
 		
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+				<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
+			</h3>
+			
+			<div class="input-group">
+				<div class="input-group-btn">
+					<c:choose>
+						<c:when test="${mode eq 'add' }">
+							<div class="contentbtnGroup">
+								<button class="btn button02_1" type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');">
+									<liferay-ui:message key='edison-button-save' />
+								</button>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="contentbtnGroup">
+								<input class="addIp btn button02_2" style="width: 115px;" onclick="<portlet:namespace/>goDetailView();" value="<liferay-ui:message key='edison-simulation-monitoring-table-header-detail'/>" type="button">
+						
+								<button class="btn button02_1" style="margin: 0px 5px;" type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.UPDATE%>');">
+									<liferay-ui:message key='edison-button-board-modify'/>
+								</button>
+								<c:if test="${isOwner == true }"> 
+									<button class="btn button02_1" type="button" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');">
+										<liferay-ui:message key='edison-button-board-delete'/>
+									</button>
+								</c:if>
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+	
+		<table border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="width:99%;">
 			<colgroup>
 				<col width="16%" />
 				<col width="34%" />
@@ -173,25 +175,25 @@
 				<tr>
 					<th><liferay-ui:message key="edison-content-service-language"/><span class="requiredField"> *</span></th>
 					<td>
-							<aui:select name="serviceLanguage" label="" >
-								<option value=""><liferay-ui:message key='full' /></option>
-								<%
-								String siteDefaultLanuageId = LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale());
+						<aui:select name="serviceLanguage" label="" >
+							<option value=""><liferay-ui:message key='full' /></option>
+							<%
+							String siteDefaultLanuageId = LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale());
+							
+							for(Locale aLocale : locales){
+								String languageId = LocaleUtil.toLanguageId(aLocale);
+								if(localesStr.equals("")){
+									localesStr += languageId;
+								}else{
+									localesStr += ","+languageId;
+								}
 								
-								for(Locale aLocale : locales){
-									String languageId = LocaleUtil.toLanguageId(aLocale);
-									if(localesStr.equals("")){
-										localesStr += languageId;
-									}else{
-										localesStr += ","+languageId;
-									}
-									
-									String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
-								%>
-									<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
-								<%} %>
-						
-							</aui:select>
+								String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
+							%>
+								<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
+							<%} %>
+					
+						</aui:select>
 					</td>
 					<th><liferay-ui:message key="edison-workflow-public-status"/><span class="requiredField"> *</span></th>
 					<td>
@@ -204,7 +206,7 @@
 				<tr>
 					<th><liferay-ui:message key="edison-content-type"/><span class="requiredField"> *</span></th>
 					<td colspan="3">
-						<select name="<portlet:namespace/>contentDivSelect" id ="<portlet:namespace/>contentDivSelect" onChange="<portlet:namespace/>changeContentDiv(this.value)" <%=selectDisable %>>
+						<select name="<portlet:namespace/>contentDivSelect" class="btn btn-default" id ="<portlet:namespace/>contentDivSelect" onChange="<portlet:namespace/>changeContentDiv(this.value)" <%=selectDisable %>>
 							<%=codeOption%>
 						</select>
 					</td>
@@ -213,7 +215,7 @@
 					<th><liferay-ui:message key="edison-table-list-header-title"/><span class="requiredField"> *</span></th>
 					<td colspan="3">
 						<div class="control-group">
-							<liferay-ui:input-localized name="title" xml="${content.title}" cssClass="too_long_field"  type="input"> </liferay-ui:input-localized>
+							<liferay-ui:input-localized name="title" xml="${content.title}" cssClass="form-control"  type="input" style="width:500px;"> </liferay-ui:input-localized>
 						</div>
 					</td>
 				</tr>
@@ -228,7 +230,7 @@
 					</td>
 				</tr>
 				
-				<tr class="contentFile">
+				<tr>
 					<th><liferay-ui:message key="edison-table-list-header-file"/><span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-content-file-descriptive-message"/></th>
 					<td class="advancedContentTd">
 					
@@ -236,7 +238,7 @@
 					
 						<c:choose>
 							<c:when test="${mode eq 'add' }">
-<%-- 								<aui:input type="file" name="contentFile" cssClass="edison_file" label=""></aui:input> --%>
+	<%-- 								<aui:input type="file" name="contentFile" cssClass="edison_file" label=""></aui:input> --%>
 								<div class="control-group">
 									<input type="file" name="<portlet:namespace/>contentFile" id="<portlet:namespace/>contentFile"  style="border:1px solid #CCCCCC;" />
 								</div>
@@ -261,7 +263,6 @@
 									<div class="control-group">
 										<input type="file" name="<portlet:namespace/>contentFile" id="<portlet:namespace/>contentFile"  style ="border:1px solid #CCCCCC;" />
 									</div>
-<%-- 									<aui:input type="file" name="contentFile" cssClass="edison_file" label=""></aui:input> --%>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
@@ -275,53 +276,45 @@
 				</tr>
 				
 				
-				<!--메뉴얼 파일 업로드-->
-				<tr class="manualContentFile">
-					<th rowspan="<%=locales.length+1%>"><liferay-ui:message key="edison-table-list-header-file"/><span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-content-manual-file-descriptive-message"/></th>
-				</tr>
-					<%for(Locale aLocale : locales){
-						String languageId = LocaleUtil.toLanguageId(aLocale);
-						String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
-						String manualId = "contentFileNm_manual_"+languageId;
-						String manualTitle = "manualTitle_"+languageId;
-					%>
-						<tr class="manualContentFile">
-							<td colspan="3">
-								
-								<%=languageNm%>&nbsp;&nbsp;
-								<c:choose>
-								<c:when test="${mode eq 'add' }">
-									<input type="file" id="<portlet:namespace/>manual<%=languageId%>" name="<portlet:namespace/>manual<%=languageId%>" style ="border:1px solid #CCCCCC;"><br/>
-								</c:when>
-								<c:otherwise>
-									<c:set value="<%=manualId%>" var="manualId"/>
-									<c:if test="${content[manualId] ne null}">
-										<div id="contentManualFilediv<%=languageId %>">
-											<span>
-												<span style="cursor:pointer" onclick="<portlet:namespace/>contentFileDownload('<%=languageId %>')" class="onMouseHover">
-													${content[manualId]}
-												
-													<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
-												</span>
+				<%for(Locale aLocale : locales){
+					String languageId = LocaleUtil.toLanguageId(aLocale);
+					String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
+					String manualId = "contentFileNm_manual_"+languageId;
+					String manualTitle = "manualTitle_"+languageId;
+				%>
+					<tr class="manualContentFile">
+						<td colspan="3">
+							
+							<%=languageNm%>&nbsp;&nbsp;
+							<c:choose>
+							<c:when test="${mode eq 'add' }">
+								<input type="file" id="<portlet:namespace/>manual<%=languageId%>" name="<portlet:namespace/>manual<%=languageId%>" style ="border:1px solid #CCCCCC;"><br/>
+							</c:when>
+							<c:otherwise>
+								<c:set value="<%=manualId%>" var="manualId"/>
+								<c:if test="${content[manualId] ne null}">
+									<div id="contentManualFilediv<%=languageId %>">
+										<span>
+											<span style="cursor:pointer" onclick="<portlet:namespace/>contentFileDownload('<%=languageId %>')" class="onMouseHover">
+												${content[manualId]}
+											
+												<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
 											</span>
-											&nbsp;&nbsp;
-											<%-- <span style="cursor:pointer" onclick="<portlet:namespace/>deleteAdvancedFile('contentManualFilediv<%=languageId %>', 'manual<%=languageId%>')">
-												<u>[delete]</u>
-											</span> --%>
-											<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" onclick="<portlet:namespace/>deleteAdvancedFiles('contentManualFilediv<%=languageId %>', 'manual<%=languageId%>')"/>
-										</div>
-									</c:if>
-								</c:otherwise>
-								</c:choose>
-								
-								
-							</td>
-						</tr>
-					<%} %>
-				<tr>
-				<!--메뉴얼 파일 업로드 END -->	
-				
-					
+										</span>
+										&nbsp;&nbsp;
+										<%-- <span style="cursor:pointer" onclick="<portlet:namespace/>deleteAdvancedFile('contentManualFilediv<%=languageId %>', 'manual<%=languageId%>')">
+											<u>[delete]</u>
+										</span> --%>
+										<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" onclick="<portlet:namespace/>deleteAdvancedFiles('contentManualFilediv<%=languageId %>', 'manual<%=languageId%>')"/>
+									</div>
+								</c:if>
+							</c:otherwise>
+							</c:choose>
+							
+							
+						</td>
+					</tr>
+				<%} %>
 					
 				<tr>
 					<th><liferay-ui:message key="edison-content-main-image"/><span class="requiredField"> *</span></th>
@@ -354,7 +347,7 @@
 						</div>
 					</td>
 				</tr>
-					
+				
 				<tr>
 					<th rowspan="${fn:length(parentCategoryList)+1}">
 						<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
@@ -383,49 +376,54 @@
 					<tr>
 						<th><liferay-ui:message key="edison-virtuallab-owner"/></th>
 						<td colspan="3">
-							<input id="<portlet:namespace/>nowOwnerName" name="<portlet:namespace/>nowOwnerName" 
-								type="text" value="${content.insertNm}" style="width: 120px;margin-bottom:0px;" readOnly/>
-							<input id="<portlet:namespace/>newOwnerName" name="<portlet:namespace/>newOwnerName" 
-								type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" 
-								style="margin-bottom:0px;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('owner', '<%=contentSeq %>'); return false;}" />
-							<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="button01b" value="<liferay-ui:message key='edison-content-owner-transfer' />" onClick="<portlet:namespace/>getUserInfo('owner' , '<%=contentSeq %>')"/>
+							<div class="input-group">
+								<input id="<portlet:namespace/>nowOwnerName" class="form-control" name="<portlet:namespace/>nowOwnerName" 
+									type="text" value="${content.insertNm}" style="width: 120px;margin-bottom:0px; float: " readOnly/>
+								<input id="<portlet:namespace/>newOwnerName" class="form-control" name="<portlet:namespace/>newOwnerName" 
+									type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" 
+									style="margin-bottom:0px; width: 60%; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('owner', '<%=contentSeq %>'); return false;}" />
+								<div class="input-group-btn">
+									<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-owner-transfer' />" onClick="<portlet:namespace/>getUserInfo('owner' , '<%=contentSeq %>')"/ style="width: 110px;">
+								</div>
+							</div>
 						</td>
 					</tr>	
 					<tr>
 						<th><liferay-ui:message key="edison-content-manager"/></th>
 						<td  colspan="3">
-							<%-- <div class="searchbox03">
-								<input id="<portlet:namespace/>now_MgrUserScreenName" name="<portlet:namespace/>now_MgrUserScreenName" type="hidden"/>
-								<input type="button" class="btnsearch" value="" onclick="<portlet:namespace/>getUserInfo('manager');">
-							</div> --%>
-							
-							<c:forEach var="manager" items="${contentManagerList }">
-								<input id="<portlet:namespace/>nowMgrId" name="<portlet:namespace/>nowMgrId" type="hidden" value="${manager.userId}" readonly/>
-								<input id="<portlet:namespace/>nowMgrName" name="<portlet:namespace/>nowMgrName" type="text" value="${manager.userScreenName}" style="width: 120px;margin-bottom: 0px;"  readonly />
-							</c:forEach>
-							<input id="<portlet:namespace/>newMgrName" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
-							<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="button01b" value="<liferay-ui:message key='edison-content-manager-transfer' />" onClick="<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>')"/>
-							
-							<c:if test="${contentManagerList!=null && fn:length(contentManagerList) > 0 }">
-								<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="button01b" value="<liferay-ui:message key='edison-button-board-delete' />" onClick="<portlet:namespace/>deleteContentMgr('<%=contentSeq%>')"/>
-							</c:if>
+							<div class="input-group">
+								<c:forEach var="manager" items="${contentManagerList }">
+									<input id="<portlet:namespace/>nowMgrId" name="<portlet:namespace/>nowMgrId" type="hidden" value="${manager.userId}" readonly/>
+									<input id="<portlet:namespace/>nowMgrName" name="<portlet:namespace/>nowMgrName" type="text" value="${manager.userScreenName}" style="width: 120px;margin-bottom: 0px;" class="form-control"  readonly />
+								</c:forEach>
+								<c:if test="${fn:length(contentManagerList) > 0}">
+									<input id="<portlet:namespace/>newMgrName"  class="form-control" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px; width: 60%; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
+								</c:if>
+								<c:if test="${fn:length(contentManagerList) <=0}">
+									<input id="<portlet:namespace/>newMgrName"  class="form-control" name="<portlet:namespace/>newMgrName" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" style="margin-bottom:0px; float: right;" onkeypress="if(event.keyCode==13) {<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>'); return false;}"/>
+								</c:if>
+								<div class="input-group-btn">
+									<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-content-manager-transfer' />" onClick="<portlet:namespace/>getUserInfo('manager', '<%=contentSeq %>')" style="width: 130px;"/>
+									
+									<c:if test="${contentManagerList!=null && fn:length(contentManagerList) > 0 }">
+										<input id="search_button"  name="<portlet:namespace />search_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-delete' />" onClick="<portlet:namespace/>deleteContentMgr('<%=contentSeq%>')" style="width: 96px;"/>
+									</c:if>
+								</div>
+							</div>
 						</td>
 					</tr>	
 				</c:if>
 			</tbody>
 		</table>
-		<br/>
-		
-		<c:if test="${mode ne 'add' }">
-			<liferay-portlet:runtime 
-				portletName="edisonrelateasset_WAR_edisondefault2016portlet" 
-				defaultPreferences="" 
-				queryString="&entryId=${entryId}&isMgrBtn=${isOwner || isManager}&isVirTitle=true&redirectURL=${redirectURL }&redirectName=${redirectName }"/>
-		</c:if>
-		<br/>
-		<div>
-		</div>
-</div>
+	</div>
+	<br/>
+	
+	<c:if test="${mode ne 'add' }">
+		<liferay-portlet:runtime 
+			portletName="edisonrelateasset_WAR_edisondefault2016portlet" 
+			defaultPreferences="" 
+			queryString="&entryId=${entryId}&isMgrBtn=${isOwner || isManager}&isVirTitle=true&redirectURL=${redirectURL }&redirectName=${redirectName }"/>
+	</c:if>
 </aui:form>
 
 		
@@ -438,10 +436,10 @@
 					<img id="content-owner-add-dialog-close-btn" name="content-owner-add-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="25" height="25" style="cursor:pointer; float: right;"/>
 				</div>
 			</div>
-			<div style="padding: 30px;" class="newWcont01">
+			<div style="padding: 30px;" class="newWcont01 table-responsive panel edison-panel">
 				<form id="ownerUpdateForm" name="ownerUpdateForm" method="post" action="<%=updateContentOwnerURL%>" > 
 					<div class="table1_list" style="width:85%; padding:15px; margin:0 auto;">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 							<colgroup>
 								<col width="30%" />
 								<col width="70%" />
@@ -981,7 +979,7 @@ function moreFileTag(){
 		
 		var div = $("<div/>").attr("id", "fileDiv"+fileIndex);
 		div.append($("<input/>").attr("type","file").attr("name", "addfile").css("border", "1px solid #CCC").css("margin", "2px 4px 2px 0"));
-		div.append($("<input/>").attr("type","button").attr("value","delete").css("cursor", "pointer").addClass("button01b").attr("onClick", "deleteFileTag('fileDiv"+fileIndex+"')"));
+		div.append($("<input/>").attr("type","button").attr("value","delete").css("cursor", "pointer").addClass("btn btn-default").attr("onClick", "deleteFileTag('fileDiv"+fileIndex+"')"));
 		
 		
 		$("#fileTDArea").append(div);

@@ -32,9 +32,29 @@ if(areaScienceData){
 <liferay-portlet:resourceURL var="categorySearchUrl" id="categorySearch"/>
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false" />
 
-<h2 class="search-main-title"><img src="${contextPath}/images/search/title_virtual.png" /><span><c:if test="<%=areaCount == 1%>"><liferay-ui:message key="<%=areaLabel%>"/> <liferay-ui:message key="search"/></c:if><c:if test="<%=areaCount != 1%>"><liferay-ui:message key="edison-search-total"/></c:if>
-</span></h2>
-<aui:form name="search-condition" method="post" action="<%= totalSearchUrl %>">
+<style>
+	.searchViewForm{
+		width: 1200px;
+	}
+	#category-list > ul{
+		padding: 0px;
+	}
+  .search-btn-height{height: 36px !important;}
+  .top_category{margin-right: 5px !important;}
+</style>
+
+<h2 class="search-main-title">
+	<img src="${contextPath}/images/search/title_virtual.png" />
+	<span>
+		<c:if test="<%=areaCount == 1%>">
+			<liferay-ui:message key="<%=areaLabel%>"/> <liferay-ui:message key="search"/>
+		</c:if>
+		<c:if test="<%=areaCount != 1%>">
+			<liferay-ui:message key="edison-search-total"/>
+		</c:if>
+	</span>
+</h2>
+<aui:form name="search-condition" method="post" action="<%= totalSearchUrl %>" cssClass="searchViewForm">
   <div class="top_category">
     <aui:field-wrapper name="search-panel" label="" inlineLabel="true" inlineField="true" cssClass="category01" >
       <ul>
@@ -67,11 +87,15 @@ if(areaScienceData){
       </ul>
     </aui:field-wrapper>
   </div>
-  <aui:field-wrapper name="search-btn" label="" inlineLabel="true" inlineField="true" cssClass="rightsearch" >
-    <aui:input name="searchKeyword" type="text" label="" cssClass="search-input"/>
-    <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn_blue"/>
-    <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn_blue"/>
-  </aui:field-wrapper>
+
+  <div class="input-group">
+    <aui:input name="searchKeyword" type="text" label="" cssClass="form-control search-btn-height" />
+    <div class="input-group-btn search-btn-height">
+      <aui:button type="submit" value="edison-button-search" name="searchSubmit" cssClass="btn-default search-btn-height" />
+      <aui:button type="button" value="edison-button-board-initialize" name="searchInit" cssClass="btn btn-primary search-btn-height" />
+    </div>
+  </div>
+
   <div class="category02wrap">
     <div id="<portlet:namespace/>content-expand-div">
       <div class="category02arrow"><img src="${contextPath}/images/search/arrow02.png" width="13" height="8"></div>
@@ -125,7 +149,7 @@ if(areaScienceData){
   </div>
 </aui:form>
 
-<div class="bottom">
+<div class="bottom searchViewForm">
   <div id="category-list" class="leftm"></div>
   <div id="search-content" class="rightcon search-content-wrapper">
     <div class="path connav">
@@ -160,6 +184,7 @@ if(areaScienceData){
     </div>
   </div>
 </div>
+
 <img id="loadingBox" src="${contextPath}/images/loading.gif" style="display: none;"/>
 <script>
   var <portlet:namespace/>initData = ${categoriesJsonString};

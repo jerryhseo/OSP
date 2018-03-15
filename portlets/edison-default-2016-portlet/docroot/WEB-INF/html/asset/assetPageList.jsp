@@ -53,7 +53,7 @@
 }
 
 #<portlet:namespace />titleArea, #<portlet:namespace />detailArea {
-	width: 34%;
+	width: 39%;
 	padding: 12px 15px 10px 20px;
 	margin :0;
 }
@@ -68,6 +68,7 @@
 	right: 2%;
 	bottom: 5%;
 }
+
 </style>
 <script>
 var categoryAreaValue = "<%=SCIENCE_APP%>";
@@ -320,25 +321,24 @@ function <portlet:namespace/>shortcuts(seq, div) {
 
 <c:choose>
 	<c:when test="${isVirTitle == true }">
-		<div class="virtitlebox">
-			<img src="${contextPath}/images/title_virtual.png" width="20"
-				height="20" />
-			<div class="virtitle">관련자료</div>
-			<c:if test="${isMgrBtn == true }">
-				<div style="float: right; padding-top: 22px">
-					<input type="button" value="관련정보관리" class="btn_blue"
-						onClick="<portlet:namespace/>linkManagementPopup()" />
+		<div class="edison-panel">
+			<div class="panel-heading clearfix">
+				<h3 class="panel-title pull-left">
+					<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+					관련 자료
+				</h3>
+				<div class="btn-group pull-right">
+					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>linkManagementPopup();"><span class="icon-cog"> 관련정보관리</span></button>
 				</div>
-			</c:if>
+			</div>
 		</div>
-		<div class="h10"></div>
 	</c:when>
 	<c:otherwise>
 		<h3 class="styleh32" style="font-size: 22px; color: #000;">
 			관련자료
 			<c:if test="${isMgrBtn == true }">
 				<span style="float: right;"> <input type="button"
-					value="관련정보관리" class="btn_blue"
+					value="관련정보관리" class="btn btn-default"
 					onClick="<portlet:namespace/>linkManagementPopup()" />
 				</span>
 			</c:if>

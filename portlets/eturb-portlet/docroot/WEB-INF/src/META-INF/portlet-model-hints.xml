@@ -4,6 +4,7 @@
 	<model name="org.kisti.eturb.dbservice.model.Project">
 		<field name="projectId" type="long" />
 		<field name="userId" type="long" />
+		<field name="groupId" type="long" />
 		<field name="name" type="String" />
 		<field name="projectStructure" type="String">
 			<hint name="max-length">4096</hint>

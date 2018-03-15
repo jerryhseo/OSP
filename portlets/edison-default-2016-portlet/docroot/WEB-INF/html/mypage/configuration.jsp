@@ -24,7 +24,7 @@
 	<div class="dialogSelectGroupLeft">
 		<h4>
 			<liferay-ui:message key='edison-content-config-select-group'/>
-			<input type="button" value="초기화" onclick="initialMyPageSelectedTab()"/>
+			<input class="btn btn-default" type="button" value="초기화" onclick="initialMyPageSelectedTab()"/>
 		</h4>
 			<ul class="target connected">
 				<c:forEach var="select" items="${selectedTab }" varStatus="status" >
@@ -43,7 +43,7 @@
 </div>
 
 <div>
-	<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
+	<input type="button" class="btn btn-primary" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
 </div>
 </aui:form>
 

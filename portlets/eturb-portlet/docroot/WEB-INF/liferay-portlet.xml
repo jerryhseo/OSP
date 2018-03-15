@@ -12,6 +12,7 @@
     <portlet>
         <portlet-name>eturb-editor-dashboard</portlet-name>
         <icon>/icon.png</icon>
+        <configuration-action-class>org.kisti.eturb.editor.portlet.dashboard.ConfigurationController</configuration-action-class>
         <action-url-redirect>true</action-url-redirect>
         <css-class-wrapper>eturb-editor-dashboard</css-class-wrapper>
     </portlet>

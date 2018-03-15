@@ -69,129 +69,141 @@
 <%
 	String thisPageRedirectURL = EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent());
 %>
+
+<style>
+	a.hover:HOVER{
+		text-decoration: underline;
+	}
+</style>
+
 <aui:form name="dataEntryManageForm" method="post">
 	<aui:input type="hidden" name="collectionId" value="${collectionInfoMap.collection.collectionId }"/>
 	<aui:input type="hidden" name="mode" value=""/>
 	
-	<c:if test="${redirectURL ne ''}"> 
-		<h3><a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > 
-		Data Entry <liferay-ui:message key="edison-virtuallab-scienceapp-management" />
-		</h3>
-	</c:if>
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
-			<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
-		</div>
-		<div style="width:60%; float:right; text-align:right; padding-top:15px;">
-			<div class="contentbtnGroup">
-			<c:if test="${empty dataEntry}">
-				<input type="button" onclick="<portlet:namespace/>actionUpdate('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save' />"  class="button02_1" />
-			</c:if>
-			<c:if test="${!empty dataEntry}">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>actionUpdate('<%=Constants.UPDATE%>'); return false;" value="<liferay-ui:message key='edison-button-board-modify'/>" type="button">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>actionDelete(); return false;" value="<liferay-ui:message key='delete'/>" type="button">
-			</c:if>
-			</div>
-		</div>
-	</div>
-	
-	<div class="h10"></div>
+	<div class="table-responsive panel edison-panel">
+		<div class="table1_list">
 		
-	<div class="table1_list">
-		
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
-			<colgroup>
-				<col width="30%" />
-				<col width="20%" />
-				<col width="50%" />
-			</colgroup>
-			<tbody>
-				<tr>
-					<th ><liferay-ui:message key="edison-table-list-header-file"/><span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-data-entry-descriptive-message"/></th>
-					<td colspan="2">
-						<c:if test="${empty monitoringResultFileId}">
-							<c:choose>
-								<c:when test="${!empty dataEntryFile}">
-									<div id="<portlet:namespace/>fileIconDiv">
-										<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${dataEntryFile.fileEntryId }')" >
-											${dataEntryFile.title}
-											<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
-										</div>
-										&nbsp;&nbsp;
-										
-									</div>
-								</c:when>
-								<c:otherwise>
-									<input type="file" name="<portlet:namespace/>entryFile" />
-								</c:otherwise>
-							</c:choose>
-						</c:if>
-						<c:if test="${!empty monitoringResultFileId}">
-							${monitoringResultFileNm }
-						</c:if> 
-					</td>
-				</tr>
-				<tr>
-					<th id="dataCollectionInfoHeaderTd" rowspan="${defaultRowNum+1}">
-						Data Collection<span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-data-entry-select-data-collection-descriptive-message"/>
-						
-						<c:if test="${empty collectionInfoMap.collection}">
-						<br/>
-						<input type="button" value="<liferay-ui:message key='edison-table-list-header-select' />" class="button06" 
-						onClick="<portlet:namespace/>openDataCollectionSelectedView();"/>
-						</c:if>
-					</th>
-					<c:if test="${empty collectionInfoMap.collection}">
- 						<td id="selectedDataCollectionTd" colspan="2">
- 						</td>
-					</c:if>
-<!-- 					<td id="selectedDataCollectionTd"> -->
-						<%-- <c:if test="${!empty collectionInfoMap.collection }">
-							<div style="float:left;width:40%;">${collectionInfoMap.collection.name }</div>
-							<div style="float:left;width:20%;">${collectionInfoMap.collection.version }</div>
-							<div style="float:left;width:40%;">${collectionInfoMap.dataType.name } ( V${collectionInfoMap.dataType.version })</div>
-						</c:if> --%>
-<!-- - 					</td>  -->
-				</tr>
-				<c:if test="${!empty collectionInfoMap.collection }">
-					<tr>
-						<td> Collection Name </td>
-						<td><a href="#;return false;" onclick="<portlet:namespace/>moveCollection(${collectionInfoMap.collection.collectionId })">${collectionInfoMap.collection.name }</a></td>
-						
-					</tr>
-					<tr>
-						<td> Collection Version </td>
-						<td>${collectionInfoMap.collection.version }</td>
-					</tr>
-					<tr>
-						<td> Data Type ( Version )</td>
-						<td>${collectionInfoMap.dataType.name } (&nbsp;V${collectionInfoMap.dataType.version }&nbsp;)</td>
-					</tr>
-					<c:if test="${!empty  collectionInfoMap.dataTypeEditorMap.editor }">
-						<tr>
-							<td> Data Type Editor</td>
-							<td>${ collectionInfoMap.dataTypeEditorMap.editor }</td>
-						</tr>
-					</c:if>
-					<c:if test="${!empty collectionInfoMap.dataTypeEditorMap.analyzer }">
-					<tr>
-						<td> Data Type Analyzer</td>
-						<td>${ collectionInfoMap.dataTypeEditorMap.analyzer }</td>
-					</tr>
-					</c:if>
+			<div class="panel-heading clearfix">
+				<c:if test="${redirectURL ne ''}"> 
+					<h3 style="font-weight: normal;">
+						<a class="hover" onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;> ${redirectName } </a>  > 
+						Data Entry <liferay-ui:message key="edison-virtuallab-scienceapp-management" />
+					</h3>
 				</c:if>
-				<tr>
-					<th><liferay-ui:message key="edison-simulation-execute-simulation-description"/><span class="requiredField"> *</span></th>
-					<td colspan="2">
-						<liferay-ui:input-localized name="comment" xml="${dataEntry.comments }" cssClass="too_long_field"  type="input"></liferay-ui:input-localized>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+				
+				<br>
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+					<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
+				</h3>
+				
+				<!-- <div style="width:60%; float:right; text-align:right; padding-top:15px;"> -->
+				<div class="input-group">
+					<div class="input-group-btn" align="right">
+						<c:if test="${empty dataEntry}">
+							<input type="button" onclick="<portlet:namespace/>actionUpdate('<%=Constants.ADD%>');" value="<liferay-ui:message key='edison-button-save' />"  class="button02_1" />
+						</c:if>
+						<c:if test="${!empty dataEntry}">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>actionUpdate('<%=Constants.UPDATE%>'); return false;" value="<liferay-ui:message key='edison-button-board-modify'/>" type="button">
+							<input class="addIp button02_1" onclick="<portlet:namespace/>actionDelete(); return false;" value="<liferay-ui:message key='delete'/>" type="button">
+						</c:if>
+					</div>
+				</div>
+			</div>
+			
+			<table width="100%" border="0" cellspacing="0" class="table table-bordered table-hover edison-table">
+				<colgroup>
+					<col width="30%" />
+					<col width="20%" />
+					<col width="50%" />
+				</colgroup>
+				<tbody class="headPositionLeft">
+					<tr>
+						<th><liferay-ui:message key="edison-table-list-header-file"/><span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-data-entry-descriptive-message"/></th>
+						<td colspan="2">
+							<c:if test="${empty monitoringResultFileId}">
+								<c:choose>
+									<c:when test="${!empty dataEntryFile}">
+										<div id="<portlet:namespace/>fileIconDiv">
+											<div style="cursor:pointer;display: inline-block;" onclick="<portlet:namespace/>fileDownload('${dataEntryFile.fileEntryId }')" >
+												${dataEntryFile.title}
+												<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+											</div>
+											&nbsp;&nbsp;
+											
+										</div>
+									</c:when>
+									<c:otherwise>
+										<input type="file" name="<portlet:namespace/>entryFile" />
+									</c:otherwise>
+								</c:choose>
+							</c:if>
+							<c:if test="${!empty monitoringResultFileId}">
+								${monitoringResultFileNm }
+							</c:if> 
+						</td>
+					</tr>
+					<tr>
+						<th id="dataCollectionInfoHeaderTd" rowspan="${defaultRowNum+1}">
+							Data Collection<span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-data-entry-select-data-collection-descriptive-message"/>
+							
+							<c:if test="${empty collectionInfoMap.collection}">
+							<br/>
+							<input type="button" value="<liferay-ui:message key='edison-table-list-header-select' />" class="btn btn-default" 
+							onClick="<portlet:namespace/>openDataCollectionSelectedView();"/>
+							</c:if>
+						</th>
+						<c:if test="${empty collectionInfoMap.collection}">
+								<td id="selectedDataCollectionTd" colspan="2">
+								</td>
+						</c:if>
+		<!-- 					<td id="selectedDataCollectionTd"> -->
+							<%-- <c:if test="${!empty collectionInfoMap.collection }">
+								<div style="float:left;width:40%;">${collectionInfoMap.collection.name }</div>
+								<div style="float:left;width:20%;">${collectionInfoMap.collection.version }</div>
+								<div style="float:left;width:40%;">${collectionInfoMap.dataType.name } ( V${collectionInfoMap.dataType.version })</div>
+							</c:if> --%>
+		<!-- - 					</td>  -->
+					</tr>
+					<c:if test="${!empty collectionInfoMap.collection }">
+						<tr>
+							<td> Collection Name </td>
+							<td><a href="#;return false;" onclick="<portlet:namespace/>moveCollection(${collectionInfoMap.collection.collectionId })">${collectionInfoMap.collection.name }</a></td>
+							
+						</tr>
+						<tr>
+							<td> Collection Version </td>
+							<td>${collectionInfoMap.collection.version }</td>
+						</tr>
+						<tr>
+							<td> Data Type ( Version )</td>
+							<td>${collectionInfoMap.dataType.name } (&nbsp;V${collectionInfoMap.dataType.version }&nbsp;)</td>
+						</tr>
+						<c:if test="${!empty  collectionInfoMap.dataTypeEditorMap.editor }">
+							<tr>
+								<td> Data Type Editor</td>
+								<td>${ collectionInfoMap.dataTypeEditorMap.editor }</td>
+							</tr>
+						</c:if>
+						<c:if test="${!empty collectionInfoMap.dataTypeEditorMap.analyzer }">
+						<tr>
+							<td> Data Type Analyzer</td>
+							<td>${ collectionInfoMap.dataTypeEditorMap.analyzer }</td>
+						</tr>
+						</c:if>
+					</c:if>
+					<tr>
+						<th><liferay-ui:message key="edison-simulation-execute-simulation-description"/><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<liferay-ui:input-localized name="comment" xml="${dataEntry.comments }" cssClass="too_long_field"  type="input"></liferay-ui:input-localized>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-
 </aui:form>
+	
 
 <script>
 $(function(){

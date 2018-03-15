@@ -29,6 +29,7 @@
 			<basic name="simulationTitle" />
 			<basic name="scienceAppId" />
 			<basic name="scienceAppName" />
+			<basic name="scienceAppVersion" />
 			<basic name="simulationCreateDt">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
@@ -66,7 +67,6 @@
 			<id name="jobSeqNo" />
 			<id name="simulationUuid" />
 			<id name="groupId" />
-			<basic name="simulationJobId" />
 			<basic name="jobUuid" />
 			<basic name="jobStatus" />
 			<basic name="jobStartDt">
@@ -127,6 +127,23 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.bestsimulation.model.impl.SimulationShareModelImpl">
+		<id-class class="org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK" />
+		<attributes>
+			<id name="shareSeqno" />
+			<id name="jobSeqNo" />
+			<id name="jobUuid" />
+			<id name="simulationUuid" />
+			<basic name="classId" />
+			<basic name="customId" />
+			<basic name="simulationShareDt">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
 	<mapped-superclass class="org.kisti.edison.bestsimulation.model.impl.UniversityExecuteModelImpl">
 		<id-class class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePK" />
 		<attributes>
@@ -163,6 +180,10 @@
 	</entity>
 	<entity class="org.kisti.edison.bestsimulation.model.impl.SimulationJobStatusImpl" name="SimulationJobStatus">
 		<table name="EDSIM_SimulationJobStatus" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.bestsimulation.model.impl.SimulationShareImpl" name="SimulationShare">
+		<table name="EDSIM_SimulationShare" />
 		<attributes />
 	</entity>
 	<entity class="org.kisti.edison.bestsimulation.model.impl.UniversityExecuteImpl" name="UniversityExecute">

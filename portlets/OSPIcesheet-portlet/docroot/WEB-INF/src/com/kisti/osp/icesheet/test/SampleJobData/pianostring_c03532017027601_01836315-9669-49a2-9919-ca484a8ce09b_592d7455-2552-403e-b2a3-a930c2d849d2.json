@@ -1,0 +1,113 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "test 0.278",
+  "simulation_description": "",
+  "-inp_type": "Inputdeck",
+  "-inp": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "brace-char": "SQUARE_SPACE",
+        "sample": "[ A B C ]",
+        "delimiter": " ",
+        "space": false
+      },
+      "variable-form": {
+        "value-delimiter": " = ",
+        "comment-char": "",
+        "control-char": "",
+        "variable-delimiter": " ;",
+        "space": false
+      },
+      "variable-map": {
+        "map": {
+          "a": {
+            "type": "numeric",
+            "active": true,
+            "name": "a",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "a [L]",
+                "en_US": "a [L]"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "해머가 때리는 피아노 줄(길이 L)의 위치, 단위 : L m",
+                "en_US": "해머가 때리는 피아노 줄(길이 L)의 위치, 단위 : L m"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": 0,
+              "upper-limit": 1,
+              "operand": "=="
+            },
+            "value": "0.278",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "opt": {
+            "type": "list",
+            "active": true,
+            "name": "opt",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "option",
+                "en_US": "option"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "gif 파일(animation)을 생성할 지 여부, default : 0 (animation을 생성), 1: animation을 생성하지 않음",
+                "en_US": "gif 파일(animation)을 생성할 지 여부, default : 0 (animation을 생성), 1: animation을 생성하지 않음"
+              }
+            },
+            "list-map": {
+              "map": {
+                "Theoph": {
+                  "value": "0",
+                  "localized-text-map": {
+                    "map": {
+                      "ko_KR": "Animation on",
+                      "en_US": "Animation on"
+                    }
+                  },
+                  "activate-condition-container": {
+                    
+                  }
+                },
+                "Indometh": {
+                  "value": "1",
+                  "localized-text-map": {
+                    "map": {
+                      "ko_KR": "Animation off",
+                      "en_US": "Animation off"
+                    }
+                  },
+                  "activate-condition-container": {
+                    
+                  }
+                }
+              }
+            },
+            "value": 0,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR}",
+      "file-content": "a = 0.278 ;\nopt = 0 ;\n"
+    }
+  ]
+}

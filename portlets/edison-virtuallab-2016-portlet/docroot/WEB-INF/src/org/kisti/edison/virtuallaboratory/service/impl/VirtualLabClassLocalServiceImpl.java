@@ -86,6 +86,7 @@ public class VirtualLabClassLocalServiceImpl
 				resultParam.put("classDescription", virtualLabClass.getClassDescription(locale, true));
 				resultParam.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 				resultParam.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+				resultParam.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 				resultParam.put("classStartDt", virtualLabClass.getClassStartDt());
 				resultParam.put("classEndDt", virtualLabClass.getClassEndDt());
 				resultParam.put("classUseYn", virtualLabClass.getClassUseYn());
@@ -136,6 +137,8 @@ public class VirtualLabClassLocalServiceImpl
 				resultRow.put("classDescriptionMap", virtualLabClass.getClassDescription());
 				resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 				resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+				resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
+				resultRow.put("classCurriculumUrl", virtualLabClass.getClassCurriculumUrl());
 				resultRow.put("classStartDt", virtualLabClass.getClassStartDt());
 				resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
 				resultRow.put("classEndDt", virtualLabClass.getClassEndDt());
@@ -193,6 +196,7 @@ public class VirtualLabClassLocalServiceImpl
 					resultRow.put("classTitle", virtualLabClass.getClassTitle(locale, true));
 					resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 					resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+					resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 					resultRow.put("classStartDt", virtualLabClass.getClassStartDt());
 					resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
 					resultRow.put("classEndDt", virtualLabClass.getClassEndDt());
@@ -226,16 +230,19 @@ public class VirtualLabClassLocalServiceImpl
 		virtualLabClass.setClassStartDt((String) params.get("classStartDt"));
 		virtualLabClass.setClassEndDt((String) params.get("classEndDt"));
 		virtualLabClass.setClassPersonnel((Integer) params.get("classPersonnel"));
+		virtualLabClass.setClassCurriculumUrl((String) params.get("classCurriculumUrl"));
+		virtualLabClass.setClassExternalPersonnel((Integer) params.get("classExternalPersonnel"));
 		virtualLabClass = virtualLabClassPersistence.update(virtualLabClass);
 		virtualLabPersistence.addVirtualLabClass(virtualLabId, virtualLabClass);
 		
-		
-		List<VirtualLabScienceAppLink> scienceAppLink = virtualLabScienceAppLinkPersistence.findByVirtualLabId(virtualLabId);
-		for(VirtualLabScienceAppLink scienceAppLinkClass : scienceAppLink){
-			VirtualLabScienceAppLinkClass virtualLabClassScienceAppTarget = virtualLabScienceAppLinkClassPersistence.create(counterLocalService.increment("scienceAppClassSeqNo"));
-			virtualLabClassScienceAppTarget.setScienceAppSeqNo(scienceAppLinkClass.getScienceAppSeqNo());		
-			virtualLabClassScienceAppTarget.setClassId(virtualLabClass.getClassId());
-			VirtualLabScienceAppLinkClassLocalServiceUtil.addVirtualLabScienceAppLinkClass(virtualLabClassScienceAppTarget);
+		if(classId == 0){
+			List<VirtualLabScienceAppLink> scienceAppLink = virtualLabScienceAppLinkPersistence.findByVirtualLabId(virtualLabId);
+			for(VirtualLabScienceAppLink scienceAppLinkClass : scienceAppLink){
+				VirtualLabScienceAppLinkClass virtualLabClassScienceAppTarget = virtualLabScienceAppLinkClassPersistence.create(counterLocalService.increment("scienceAppClassSeqNo"));
+				virtualLabClassScienceAppTarget.setScienceAppSeqNo(scienceAppLinkClass.getScienceAppSeqNo());		
+				virtualLabClassScienceAppTarget.setClassId(virtualLabClass.getClassId());
+				VirtualLabScienceAppLinkClassLocalServiceUtil.addVirtualLabScienceAppLinkClass(virtualLabClassScienceAppTarget);
+			}
 		}
 		
 		return virtualLabClass;
@@ -320,6 +327,7 @@ public class VirtualLabClassLocalServiceImpl
 					resultRow.put("classTitle", virtualLabClass.getClassTitle(locale, true));
 					resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 					resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+					resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 					resultRow.put("classCount", String.valueOf(classCount));
 					resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
 					resultRow.put("tempUserCount", tempUserCount);
@@ -417,6 +425,7 @@ public class VirtualLabClassLocalServiceImpl
 					resultRow.put("classTitle", virtualLabClass.getClassTitle(locale, true));
 					resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 					resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+					resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 					resultRow.put("classCount", String.valueOf(classCount));
 					resultRow.put("classUseYn", virtualLabClass.getClassUseYn());
 					resultRow.put("tempUserCount", tempUserCount);
@@ -514,6 +523,7 @@ public List<Map<String, Object>> getVirtualLabClassList(Map<String, Object> para
 					resultRow.put("classTitle", virtualLabClass.getClassTitle(locale, true));
 					resultRow.put("classCreateDt", new SimpleDateFormat("yyyy-MM-dd").format(virtualLabClass.getClassCreateDt()));
 					resultRow.put("classPersonnel", String.valueOf(virtualLabClass.getClassPersonnel()));
+					resultRow.put("classExternalPersonnel", String.valueOf(virtualLabClass.getClassExternalPersonnel()));
 					resultRow.put("classStartDt", virtualLabClass.getClassStartDt());
 					resultRow.put("classEndDt", virtualLabClass.getClassEndDt());
 					resultRow.put("classUseYn", virtualLabClass.getClassUseYn());

@@ -6,16 +6,7 @@
 		<portlet-name>science-app-manager</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>science-app-manager-portlet</css-class-wrapper>
-	</portlet>
-	
-	<portlet>
-		<portlet-name>edison-main-search-app</portlet-name>
-		<icon>/icon.png</icon>
-		<configuration-action-class>org.kisti.edison.science.portlet.mainSearchApp.ConfigurationController</configuration-action-class>
-		<action-url-redirect>true</action-url-redirect>
-		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-main-search-app</css-class-wrapper>
+		<css-class-wrapper>science-app-manager-portlet container-fluid</css-class-wrapper>
 	</portlet>
 	
 	<portlet>
@@ -24,7 +15,7 @@
 		<configuration-action-class>org.kisti.edison.science.portlet.workspace.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-workspace</css-class-wrapper>
+		<css-class-wrapper>edison-workspace container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -34,7 +25,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-developer-request-list</css-class-wrapper>
+		<css-class-wrapper>edison-developer-request-list container</css-class-wrapper>
 	</portlet>	
 	
 	
@@ -57,34 +48,10 @@
 		<portlet-name>edison-scienceAppstore</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.science.portlet.scienceAppstore.ConfigurationController</configuration-action-class>
+        <indexer-class>org.kisti.edison.science.search.ScienceAppIndexer</indexer-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-scienceAppstore</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	
-	
-	<portlet>
-		<portlet-name>edison-inputDeck</portlet-name>
-		<icon>/icon.png</icon>
-		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>inputdeck-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	
-	<portlet>
-		<portlet-name>edison-inputDeck-viewer</portlet-name>
-		<icon>/icon.png</icon>
-		<action-url-redirect>true</action-url-redirect>
-		<private-session-attributes>false</private-session-attributes>
-		<header-portlet-css>/css/style.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.theme.min.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/editor/inputdeck/osp_inputdeck.js</header-portlet-javascript>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>inputdeck-portlet-viewer</css-class-wrapper>
+		<css-class-wrapper>edison-scienceAppstore container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -106,91 +73,9 @@
 		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
 		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>edison-myapp-qna</css-class-wrapper>
+		<css-class-wrapper>edison-myapp-qna container</css-class-wrapper>
 	</portlet>
 	
-	
-	
-	
-	<portlet>
-		<portlet-name>science-app-string-editor</portlet-name>
-		<icon>/icon.png</icon>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>science-app-string-editor-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-
-	<portlet>
-		<portlet-name>science-app-file-selector</portlet-name>
-		<icon>/icon.png</icon>
-		<action-url-redirect>true</action-url-redirect>		
-		<header-portlet-css>/css/jstreestyle.css</header-portlet-css>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/editor/fileselector/fileselector.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui-1.10.4.custom.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/editor/fileselector/fileselector.js</header-portlet-javascript>
-		<css-class-wrapper>science-app-file-selector-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	
-	
-	<portlet>
-		<portlet-name>science-app-text-viewer</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/analyzer/analyzer.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<css-class-wrapper>
-			scienceapp-text-viewer-portlet
-		</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	<portlet>
-		<portlet-name>science-app-onedplot-viewer</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/analyzer/analyzer.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/analyzer/onedplot/oneDplot.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/analyzer/onedplot/highcharts.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/analyzer/onedplot/modules/exporting.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/analyzer/onedplot/theme/gray.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/editor/inputdeck/hashmap.js</header-portlet-javascript>
-		<css-class-wrapper>
-			science-app-onedplot-viewer-portlet
-		</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	<portlet>
-		<portlet-name>science-app-webgl-viewer</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/analyzer/analyzer.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<css-class-wrapper>
-			science-app-webglviewer-portlet
-		</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
 	<portlet>
 		<portlet-name>science-app-founder</portlet-name>
 		<icon>/icon.png</icon>
@@ -199,40 +84,11 @@
 			science-app-founder-portlet
 		</css-class-wrapper>
 	</portlet>
-	<portlet>
-		<portlet-name>science-app-text-editor</portlet-name>
-		<icon>/icon.png</icon>
-		<header-portlet-css>/css/jstreestyle.css</header-portlet-css>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/editor/fileselector/fileselector.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui-1.10.4.custom.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/editor/fileselector/fileselector.js</header-portlet-javascript>
-		<css-class-wrapper>science-app-texteditor-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	<portlet>
-		<portlet-name>science-app-jmol-viewer</portlet-name>
-		<icon>/icon.png</icon>
-		<header-portlet-css>/css/jstreestyle.min.css</header-portlet-css>
-		<header-portlet-css>/css/jquery/jquery-ui.min.css</header-portlet-css>
-		<header-portlet-css>/css/analyzer/imageviewer/jquery.iviewer.css</header-portlet-css>
-		<header-portlet-css>/css/analyzer/analyzer.css</header-portlet-css>
-		<header-portlet-javascript>/js/jquery-1.10.2.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery-ui.min.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jquery.blockUI.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
-		<css-class-wrapper>science-app-jmol-viewer-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
 	
 	<portlet>
 		<portlet-name>edison-data-type-editor</portlet-name>
 		<icon>/icon.png</icon>
-		<css-class-wrapper>edison-port-type-editor-portlet</css-class-wrapper>
+		<css-class-wrapper>edison-data-type-editor container-fluid</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -243,6 +99,15 @@
 		<css-class-wrapper>edison-science-app-pro-link-portlet</css-class-wrapper>
 	</portlet>
 	
+	
+	<portlet>
+		<portlet-name>edison-inputDeck</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>inputdeck-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

@@ -26,13 +26,15 @@ import java.io.Serializable;
 public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 	public long projectId;
 	public long userId;
+	public long groupId;
 
 	public ProjectPK() {
 	}
 
-	public ProjectPK(long projectId, long userId) {
+	public ProjectPK(long projectId, long userId, long groupId) {
 		this.projectId = projectId;
 		this.userId = userId;
+		this.groupId = groupId;
 	}
 
 	public long getProjectId() {
@@ -49,6 +51,14 @@ public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(long groupId) {
+		this.groupId = groupId;
 	}
 
 	@Override
@@ -87,6 +97,20 @@ public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 			return value;
 		}
 
+		if (groupId < pk.groupId) {
+			value = -1;
+		}
+		else if (groupId > pk.groupId) {
+			value = 1;
+		}
+		else {
+			value = 0;
+		}
+
+		if (value != 0) {
+			return value;
+		}
+
 		return 0;
 	}
 
@@ -102,7 +126,8 @@ public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 
 		ProjectPK pk = (ProjectPK)obj;
 
-		if ((projectId == pk.projectId) && (userId == pk.userId)) {
+		if ((projectId == pk.projectId) && (userId == pk.userId) &&
+				(groupId == pk.groupId)) {
 			return true;
 		}
 		else {
@@ -112,12 +137,13 @@ public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 
 	@Override
 	public int hashCode() {
-		return (String.valueOf(projectId) + String.valueOf(userId)).hashCode();
+		return (String.valueOf(projectId) + String.valueOf(userId) +
+		String.valueOf(groupId)).hashCode();
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append(StringPool.OPEN_CURLY_BRACE);
 
@@ -130,6 +156,12 @@ public class ProjectPK implements Comparable<ProjectPK>, Serializable {
 		sb.append("userId");
 		sb.append(StringPool.EQUAL);
 		sb.append(userId);
+
+		sb.append(StringPool.COMMA);
+		sb.append(StringPool.SPACE);
+		sb.append("groupId");
+		sb.append(StringPool.EQUAL);
+		sb.append(groupId);
 
 		sb.append(StringPool.CLOSE_CURLY_BRACE);
 

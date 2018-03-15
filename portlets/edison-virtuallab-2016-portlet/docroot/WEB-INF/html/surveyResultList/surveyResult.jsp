@@ -69,7 +69,7 @@ function <portlet:namespace/>surveySetting(surveySeqNo){
 			$questionTable.empty();
 			if(dataMap.dataList.length==0){
 
-				$questionTable.append('<tr><td colspan=7><liferay-ui:message key="edison-there-are-no-data" /></td></tr>');
+				$questionTable.append('<tr><td class="center" colspan=7><liferay-ui:message key="edison-there-are-no-data" /></td></tr>');
 
 			}else{
 
@@ -85,61 +85,71 @@ function <portlet:namespace/>surveySetting(surveySeqNo){
 
 						var rowCnt = 1;
 						if(dataMap.dataList[i].question1 != null && dataMap.dataList[i].question1 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 1"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 1"))
 									  .append($("<td/>").text(dataMap.dataList[i].question1))
 									  .append($("<td/>").text(dataMap.dataList[i].question1Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question2 != null && dataMap.dataList[i].question2 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 2"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" + " 2"))
 									  .append($("<td/>").text(dataMap.dataList[i].question2))
 									  .append($("<td/>").text(dataMap.dataList[i].question2Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question3 != null && dataMap.dataList[i].question3 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 3"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 3"))
 									  .append($("<td/>").text(dataMap.dataList[i].question3))
 									  .append($("<td/>").text(dataMap.dataList[i].question3Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question4 != null && dataMap.dataList[i].question4 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 4"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 4"))
 									  .append($("<td/>").text(dataMap.dataList[i].question4))
 									  .append($("<td/>").text(dataMap.dataList[i].question4Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question5 != null && dataMap.dataList[i].question5 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 5"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 5"))
 									  .append($("<td/>").text(dataMap.dataList[i].question5))
 									  .append($("<td/>").text(dataMap.dataList[i].question5Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question6 != null && dataMap.dataList[i].question6 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 6"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 6"))
 									  .append($("<td/>").text(dataMap.dataList[i].question6))
 									  .append($("<td/>").text(dataMap.dataList[i].question6Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question7 != null && dataMap.dataList[i].question7 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 7"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 7"))
 									  .append($("<td/>").text(dataMap.dataList[i].question7))
 									  .append($("<td/>").text(dataMap.dataList[i].question7Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question8 != null && dataMap.dataList[i].question8 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 8"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 8"))
 									  .append($("<td/>").text(dataMap.dataList[i].question8))
 									  .append($("<td/>").text(dataMap.dataList[i].question8Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question9 != null && dataMap.dataList[i].question9 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 9"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 9"))
 									  .append($("<td/>").text(dataMap.dataList[i].question9))
 									  .append($("<td/>").text(dataMap.dataList[i].question9Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
 						}
 						if(dataMap.dataList[i].question10 != null && dataMap.dataList[i].question10 != ''){
-							$("<tr/>").append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 10"))
+							$("<tr/>")
+									  .append($("<th/>").text("<liferay-ui:message key='edison-virtuallab-surveyResultList-answer-number' />" +" 10"))
 									  .append($("<td/>").text(dataMap.dataList[i].question10))
 									  .append($("<td/>").text(dataMap.dataList[i].question10Cnt+"<liferay-ui:message key='edison-virtuallab-surveyResultList-people' />")).appendTo($questionTable);
 							rowCnt++;
@@ -213,98 +223,107 @@ function <portlet:namespace/>historyback(){
 
 }
 </script>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-	<tr>
-		<td style="text-align: right;">
-			<input class="button06" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
-			<input class="button06" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-excel-down' />" />
-		</td>
-	</tr>
-</table>
-<h1>
-	<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />
-</h1>
-<c:if test="${null ne classInfo}" >
-<div class="table6_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="25%" />
-			<col width="25%" />
-			<col width="25%" />
-			<col width="25%" />
-		</colgroup>
-		<thead>
-			<tr>
-				<th><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
-				<th><liferay-ui:message key='edison-virtuallab-tablerow-affiliation' /></th>
-				<th><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
-				<th><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td style="text-align: center">${classInfo.virtualLabTitle}</td>
-				<td style="text-align: center">${classInfo.virtualLabPersonName}</td>
-				<td style="text-align: center">${classInfo.virtualLabUniversityFieldNM}</td>
-				<td style="text-align: center">${classInfo.classTitle}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-</c:if>
-<div style="height: 15px;" ></div>
-<div id="data_text_wrap">
-<div class="table1_list" >
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="30%" />
-			<col width="70%" />
-		</colgroup>
-		<tr>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
-			<td>
-				${surveyMap.surveyTitle}
-			</td>
-		</tr>
-		<tr>
-			<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-period'/></th>
-			<td>
-        <input name="<portlet:namespace/>answerStartDate" id="<portlet:namespace/>answerStartDate" readonly="readonly"
-          value="${surveyMap.surveyStartDate}" style="width: 105px; text-align: center;" /> ~
-        <input name="<portlet:namespace/>answerEndDate" id="<portlet:namespace/>answerEndDate" readonly="readonly"
-          value="${surveyMap.surveyEndDate}" style="width: 105px; text-align: center;" /> <input class="button01b" type="button"
-          onClick="<portlet:namespace/>surveySetting('${surveyMap.surveySeqNo}')" value="<liferay-ui:message key='edison-button-search' />" /> 
-        </td>
-		</tr>
-	</table>
-</div>
-<div class="table1_list" style="border-top: 0px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="15%" />
-			<col width="60%" />
-			<col width="10%" />
-		</colgroup>
-		<tbody id="questionTable">
-		</tbody>
-	</table>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-		<colgroup>
-			<col width="15%" />
-			<col width="15%" />
-			<col width="70%" />
-		</colgroup>
-		<tbody class="surveyMain">
-		</tbody>
-	</table>
+
+<div class="table-responsive panel edison-panel">
+	<!-- 상단 버튼 -->
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
 		<tr>
 			<td style="text-align: right;">
-				<input class="button06" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
-				<input class="button06" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-excel-down' />" />
+				<input class="btn btn-default" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
+				<input class="btn btn-default" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-excel-down' />" />
 			</td>
 		</tr>
 	</table>
-</div>
+	
+	<div class="panel-heading clearfix">
+		<h1>
+			<img src="${contextPath}/images/title_virtual.png"/>
+			<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />
+		</h1>
+	</div>
+	
+	<c:if test="${null ne classInfo}" >
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
+				<col width="25%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th><liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' /></th>
+					<th><liferay-ui:message key='edison-virtuallab-tablerow-affiliation' /></th>
+					<th><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
+					<th><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td style="text-align: center">${classInfo.virtualLabTitle}</td>
+					<td style="text-align: center">${classInfo.virtualLabPersonName}</td>
+					<td style="text-align: center">${classInfo.virtualLabUniversityFieldNM}</td>
+					<td style="text-align: center">${classInfo.classTitle}</td>
+				</tr>
+			</tbody>
+		</table>
+	</c:if>
+	
+	<div class="table1_list">
+		<!-- 설문조사명, 설문조사 기간 -->
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="30%" />
+				<col width="70%" />
+			</colgroup>
+			<tr>
+				<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-title2' /></th>
+				<td>
+					${surveyMap.surveyTitle}
+				</td>
+			</tr>
+			<tr>
+				<th><liferay-ui:message key='edison-virtuallab-surveyResultList-survey-period'/></th>
+				<td>
+					<input name="<portlet:namespace/>answerStartDate" id="<portlet:namespace/>answerStartDate" readonly="readonly"
+					value="${surveyMap.surveyStartDate}" style="width: 105px; text-align: center;" /> ~
+					<input name="<portlet:namespace/>answerEndDate" id="<portlet:namespace/>answerEndDate" readonly="readonly"
+					value="${surveyMap.surveyEndDate}" style="width: 105px; text-align: center;" /> 
+					<input class="btn btn-default" type="button" onClick="<portlet:namespace/>surveySetting('${surveyMap.surveySeqNo}')" 
+					value="<liferay-ui:message key='edison-button-search' />" /> 
+				</td>
+			</tr>
+		</table>
+		
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="15%" />
+				<col width="15%" />
+				<col width="60%" />
+				<col width="10%" />
+			</colgroup>
+			<tbody id="questionTable">
+			</tbody>
+		</table>
+		
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+			<colgroup>
+				<col width="15%" />
+				<col width="15%" />
+				<col width="70%" />
+			</colgroup>
+			<tbody class="surveyMain">
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- 하단 버튼 -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
+		<tr>
+			<td style="text-align: right;">
+				<input class="btn btn-default" type="button" onclick="<portlet:namespace/>historyback()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-list' />" />
+				<input class="btn btn-default" type="button" onclick="<portlet:namespace/>onclickConfirm()" value="<liferay-ui:message key='edison-virtuallab-surveyResultList-excel-down' />" />
+			</td>
+		</tr>
+	</table>
 </div>

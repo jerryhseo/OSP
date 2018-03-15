@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="kisti.edison.challenge">
+	<author>KYJ</author>
+	<namespace>challenge</namespace>
+    <entity local-service="true" name="Challenge" uuid="true">
+		<!-- PK fields -->
+		<column name="challengeId" primary="true" type="long"></column>
+		
+		<!-- Group instance -->
+		<column name="groupId" type="long"></column>
+		
+		<!-- Audit fields -->
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+		<column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		<column name="status" type="int" />
+		<column name="statusByUserId" type="long" />
+        <column name="statusByUserName" type="String" />
+        <column name="statusDate" type="Date" /> 
+		
+		
+		<column name="name" type="String" localized="true"></column>
+		<column name="field" type="String" localized="true"></column>
+		<column name="description" type="String" localized="true"></column>
+		
+		<!-- FK fields -->
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="challengeId" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+		</finder>
+		<finder name="GroupAndStatus" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="status"></finder-column>
+		</finder>
+		<finder name="GroupAndField" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="field" comparator="LIKE"></finder-column>
+		</finder>
+		
+		<!-- Asset -->
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
+    </entity>
+    
+    <entity name="ChildChallenge" local-service="true" uuid="true">
+   		<!-- PK fields -->
+		<column name="childChallengeId" primary="true" type="long"></column>
+		
+		<!-- Group instance -->
+		<column name="groupId" type="long"></column>
+		
+		<!-- Audit fields -->
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+        <column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		<column name="status" type="int"></column>
+		<column name="statusByUserId" type="long" />
+        <column name="statusByUserName" type="String" />
+        <column name="statusDate" type="Date" /> 
+		
+		<!-- Audit fields -->
+		<column name="number" type="int"></column>
+		<column name="presentationDay" type="Date"></column>
+		<column name="paperStartDay" type="Date"></column>
+		<column name="paperEndDay" type="Date"></column>
+		<column name="evaluationDay" type="Date"></column>
+		<column name="challengeStartDay" type="Date"></column>
+		<column name="challengeEndDay" type="Date"></column>
+		<column name="challengeStatus" type="String"></column>
+		
+		<!-- FK fields -->
+		<column name="challengeId" type="long"></column>
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="childChallengeId"/>
+			<order-column name="challengeEndDay" />
+		</order>
+		
+		<!-- Finder -->
+		<finder name="GourpId" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+		</finder>
+		<finder name="GroupAndChallengeStatus" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="challengeStatus" comparator="LIKE"></finder-column>
+		</finder>
+		<finder name="GroupIdAndChallengeAndStatus" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="challengeId"></finder-column>
+			<finder-column name="status"></finder-column>
+		</finder>
+		<finder name="GroupIdAndNumber" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+		<finder-column name="number"></finder-column>
+		</finder>
+		<finder name="GroupIdAndChallenge" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="challengeId"></finder-column>
+		</finder>
+		<finder name="GroupIdAndChallengeAndChallengeStatus" return-type="Collection">
+			<finder-column name="groupId"></finder-column>
+			<finder-column name="challengeId"></finder-column>
+			<finder-column name="challengeStatus" comparator="LIKE"></finder-column>
+		</finder>
+		<!-- Asset -->
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
+    </entity>
+    <entity name="ChallengeTeam" local-service="true" uuid="true">
+    	<!-- PK fields -->
+		<column name="challengeTeamId" primary="true" type="long"></column>
+		
+		<!-- Group instance -->
+		<column name="groupId" type="long"></column>
+		
+		<!-- Audit fields -->
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+        <column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		<column name="status" type="int"></column>
+		<column name="statusByUserId" type="long" />
+        <column name="statusByUserName" type="String" />
+        <column name="statusDate" type="Date" /> 
+		
+		<!-- Audit fields -->
+		<column name="teamName" type="String" localized="false"></column>
+		<column name="subject" type="String" localized="true"></column>
+		
+		<!-- Audit fields : paper attribute -->
+		<column name="paperName" type="String" localized="true"></column>
+        <column name="paperAbstract" type="String" localized="true"></column>
+		<column name="paperFileName" type="String"></column>
+		<column name="paperSubmissionDay" type="Date"></column>
+		<column name="paperModifyDay" type="Date"></column>
+		<column name="paperStatusDOC" type="boolean"></column>
+		
+		<!-- Audit fields : pdf paper attribute -->
+		<column name="paperPDFFileName" type="String"></column>
+		<column name="paperPDFSubmissionDay" type="Date"></column>
+		<column name="paperPDFModifyDay" type="Date"></column>
+		<column name="paperStatusPDF" type="boolean"></column>
+		
+		<!-- Audit fields : presentation attribute -->
+		<column name="presentationName" type="String"></column>
+		<column name="presentationFileName" type="String"></column>
+		<column name="presentationSubmissionDay" type="Date"></column>
+		<column name="presentationModifyDay" type="Date"></column>
+		<column name="presentationStatus" type="boolean"></column>
+		
+		<column name="filepath" type="String"></column>
+		
+		<!-- <column name="presentationOrder" type="long"></column> -->
+		
+		<!-- FK Field -->
+        <column name="aggrement" type="boolean"></column>
+        <column name="childChallengeId" type="long"></column>
+        <!-- Order -->
+        <order>
+            <order-column name="challengeTeamId"></order-column>
+        </order>
+        
+        <!-- Finder -->
+        
+        <!-- Asset -->
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndStatus" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="status"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChildChallenge" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="childChallengeId"></finder-column>
+        </finder>
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
+    </entity>
+    <entity local-service="true" name="ChallengeTeamMember" uuid="true">
+        <column name="challengeTeamMemberId" primary="true" type="long"></column>
+        <column name="groupId" type="long"></column>
+        <column name="companyId" type="long"></column>
+        <column name="userId" type="long"></column>
+        <column name="userName" type="String"></column>
+        <column name="createDate" type="Date"></column>
+        <column name="modifiedDate" type="Date"></column>
+        <column name="status" type="int"></column>
+        <column name="statusByUserId" type="long"></column>
+        <column name="statusByUserName" type="String"></column>
+        <column name="statusDate" type="Date"></column>
+        <column name="applyUserId" type="long"></column>
+        <column name="applyUserName" type="String"></column>
+        <column name="email" type="String"></column>
+        <column localized="true" name="institute" type="String"></column>
+        <column localized="true" name="major" type="String"></column>
+        <column name="grade" type="String"></column>
+        <column name="phone" type="String"></column>
+        <column name="leader" type="boolean"></column>
+        
+        <!-- FK Field -->
+        <column name="challengeTeamId" primary="false" type="long"></column>
+        <order>
+            <order-column name="challengeTeamId"></order-column>
+            <order-column name="challengeTeamMemberId"></order-column>
+        </order>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndStatus" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="status"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChallengeTeamId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="challengeTeamId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndApplyUserId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="applyUserId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndApplyUserIdAndChallengeTeamId" return-type="ChallengeTeamMember">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="applyUserId"></finder-column>
+            <finder-column name="challengeTeamId"></finder-column>
+        </finder>
+        <reference entity="AssetEntry" package-path="com.liferay.portlet.asset"></reference>
+        <reference entity="AssetLink" package-path="com.liferay.portlet.asset"></reference>
+    </entity>
+    <entity local-service="true" name="ChallengeEvaluationManagement" uuid="true">
+        <column name="challengeEvaluationManagementId" primary="true" type="long"></column>
+        <column name="groupId" type="long"></column>
+        <column name="companyId" type="long"></column>
+        <column name="userId" type="long"></column>
+        <column name="userName" type="String"></column>
+        <column name="createDate" type="Date"></column>
+        <column name="modifiedDate" type="Date"></column>
+        <column name="status" type="int"></column>
+        <column name="statusByUserId" type="long"></column>
+        <column name="statusByUserName" type="String"></column>
+        <column name="statusDate" type="Date"></column>
+        <column localized="true" name="assessmentItem" type="String"></column>
+        <column name="distribution" type="double"></column>
+        <column name="childChallengeId" type="long"></column>
+        <order by="asc">
+            <order-column name="challengeEvaluationManagementId"></order-column>
+            <order-column name="createDate"></order-column>
+        </order>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChildChallengeId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="childChallengeId"></finder-column>
+        </finder>
+    </entity>
+    
+    <entity local-service="true" name="ChallengeEvaluationScore" uuid="true">
+        <column name="challengeEvaluationScoreId" primary="true" type="long"></column>
+        <column name="groupId" type="long"></column>
+        <column name="companyId" type="long"></column>
+        <column name="userId" type="long"></column>
+        <column name="userName" type="String"></column>
+        <column name="createDate" type="Date"></column>
+        <column name="modifiedDate" type="Date"></column>
+        <column name="status" type="int"></column>
+        <column name="statusByUserId" type="long"></column>
+        <column name="statusByUserName" type="String"></column>
+        <column name="statusDate" type="Date"></column>
+        <column name="score" type="double"></column>
+        
+        <!-- FK Field -->
+        <column name="challengeTeamId" type="long"></column>
+        <column name="challengeEvaluationManagementId" type="long"></column>
+        <order by="asc">
+            <order-column name="challengeEvaluationScoreId"></order-column>
+            <order-column name="createDate"></order-column>
+        </order>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChallengeTeamId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="challengeTeamId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChallengeEvaluationManagementId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="challengeEvaluationManagementId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChallengeTeamIdAndUserId" return-type="Collection">
+            <finder-column name="userId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="challengeTeamId"></finder-column>
+        </finder>
+        <finder name="GroupIdAndChallengeEvaluatinManagementIdAndUserId" return-type="ChallengeEvaluationScore">
+            <finder-column name="userId"></finder-column>
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="challengeEvaluationManagementId"></finder-column>
+        </finder>
+    </entity>
+    <exceptions>
+        <exception>ChallengeName</exception>
+        <exception>ChallengeField</exception>
+        <exception>ChallengeDescription</exception>
+        <exception>ChildChallengeStatus</exception>
+        <exception>ChildChallengeMessage</exception>
+    </exceptions>
+</service-builder>

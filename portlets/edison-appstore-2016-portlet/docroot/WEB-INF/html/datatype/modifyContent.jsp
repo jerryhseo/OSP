@@ -4,10 +4,6 @@
 
 <script type="text/javascript" src="${contextPath}/js/jquery.form.min.js"></script>
 
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/datatypeeditor.css" media="screen"/>
-
-
 <liferay-portlet:renderURL var="dataTypePreURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>">
 	<liferay-portlet:param name="dataTypeId" value="${dataTypeMap.typeId}" />
 	<liferay-portlet:param name="modifyMode" value="modifyEditorAnalyzer" />
@@ -45,7 +41,14 @@
 </liferay-portlet:resourceURL>
 
 <style type="text/css">
-	#progress_bar_wrap2 {
+	.edison-data-type-editor .portlet-body{
+		width: 1200px;
+		padding-left: unset;
+		padding-right: unset;
+		margin: 0 auto;
+	}
+	
+	.edison-data-type-editor #progress_bar_wrap2 {
 		width:500px;  
 		padding: 10px 30px 30px 30px; 
 		background-color:#f7f7f7;
@@ -55,14 +58,14 @@
 	    border-bottom: 1px solid #e8e8e8; 
 	    overflow-y: hidden;
 	}
-	#progress_bar_line {
+	.edison-data-type-editor #progress_bar_line {
 		padding:1px; 
 		border-top: 1px solid #CCCCCC; 
 	    border-right: 1px solid #CCCCCC; 
 	    border-left: 1px solid #CCCCCC; 
 	    border-bottom: 1px solid #CCCCCC; 
 	}
-	#progress_bar2 {
+	.edison-data-type-editor #progress_bar2 {
 		width: 0%;
 		background-image:url(/edison-appstore-2016-portlet/images/progress_bar.jpg);
 		height:20px; 
@@ -72,21 +75,24 @@
 	}
 </style>
 
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;"> ${redirectName} </a> >
-		<c:choose>
-			<c:when test="${mode eq 'update'}">
-				DataType <liferay-ui:message key='action.UPDATE' />
-			</c:when>
-			<c:otherwise>
-				DataType <liferay-ui:message key='registration' />
-			</c:otherwise>
-		</c:choose>
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;"> ${redirectName} </a> >
+			<c:choose>
+				<c:when test="${mode eq 'update'}">
+					DataType
+					<liferay-ui:message key='action.UPDATE' />
+				</c:when>
+				<c:otherwise>
+					DataType
+					<liferay-ui:message key='registration' />
+				</c:otherwise>
+			</c:choose>
+		</h3>
 	</div>
 </div>
-<div class="h10"></div>
 <aui:form name="modifyStructure" method="POST" action="<%=submitURL%>">
 	<aui:input name="structure" type="hidden" />
 </aui:form>
@@ -148,7 +154,7 @@
 					<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile"/>
 				</td>
 				<td>
-					<input class="addIp button02_1" value="file save" type="submit" id="<portlet:namespace/>fileSave"/>
+					<button class="btn btn-default" type="submit"><span class="icon-file"> file save</span></button>
 				</td>
 				<td id="status">
 					<c:if test="${!empty dataTypeMap.sampleTitle}">
@@ -162,13 +168,15 @@
 		</table>
 	</div>
 </form>
-<div class="buttonbox">
-	<input class="button0801" type="button" onclick="<portlet:namespace/>preBack();" value="<liferay-ui:message key="previous"/>"/>
+<div class="pull-right" style="margin: 18px 0px;">
+	<button type="button" class="btn btn-default" onclick="<portlet:namespace/>preBack();"><span class="icon-arrow-left">  <liferay-ui:message key='previous'/></span></button>
 	<c:if test="${inputdeckExist}">
-		<input class="button0801" type="button" onclick="<portlet:namespace/>modify();" value="<liferay-ui:message key="save"/>"/>
+		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>modify();"><span class="icon-edit">  <liferay-ui:message key='save'/></span></button>
 	</c:if>
-	<input class="button0801" type="button" onclick="<portlet:namespace/>historyBack();" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-list"/>"/>
+	<button type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack();"><span class="icon-list-ul">  <liferay-ui:message key='edison-virtuallab-surveyResultList-list'/></span></button>
 </div>
+
+<div class="h15"></div>
 
 <c:if test="${inputdeckExist}">
 	<liferay-portlet:runtime portletName="edisoninputDeck_WAR_edisonappstore2016portlet"/>
@@ -180,6 +188,7 @@
         <div id="progress_bar2"><span id="percent">0%</span></div>    
     </div>
 </div>
+	
 
 
 <script type="text/javascript">

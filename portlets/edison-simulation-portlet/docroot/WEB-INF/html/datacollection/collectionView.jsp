@@ -66,6 +66,7 @@
 .edison .table1_list a{
 	color : #00aaff;
 }
+
 </style>
 
 
@@ -132,9 +133,9 @@
 
 
 <c:if test="${isAdmin == true}"> 
-	<div class="topvisualbtnbox">  
+	<div class="topvisualbtnbox" style="padding-right: 10px;">  
 		<aui:form action="<%=manageDataCollectionURL%>" method="post" name="updateCollectionForm">
-			<input  type="submit" class="btn_blueb topbtn" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>"  />
+			<input  type="submit" class="btn btn-default topbtn" style="width: 100px;" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management'/>"  />
 		</aui:form>
 	</div>
 </c:if>
@@ -142,7 +143,7 @@
 <div class="h10"></div>
 	
 <!--좌측-->
-<div class="commleft">
+<div class="commleft panel edison-panel">
 	<c:if test="${!empty dcMainImg}">
 		<div class="commleftbox">
 			<div id="collectionImageArea" class="owl-carousel owl-theme" style="display:table-cell;">
@@ -166,21 +167,18 @@
 				<div class="cright"><a id="rollingNext" href="#rollingNext" title="nextview"><img src="${contextPath}/images/sciencedata/arrow_right.png" width="28" height="49"></a></div>
 			</c:if>
 		</div>
-		<%-- <div  style="text-align: center"> <!-- class="commleftbox" -->
-			<img src="/documents/${dcMainImg.fileRepositoryId }/${dcMainImg.fileEntryId }/${dcMainImg.fileTitle }/${dcMainImg.fileUuid }" width="250">
-		</div> --%>
 	</c:if>
+	
 	<!-- data type list -->
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<div class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key="edison-data-collection-select-data-type-list"/>
 		</div>
 	</div>
-	<div class="h10"></div>
 	
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 			
 				<c:if test="${dataTypeEditorMap.columnCnt == 1}">
@@ -233,16 +231,15 @@
 	</div>
 	
 	<!-- data entry list -->
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<div class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			Data Entry 
 		</div>
 	</div>
-	<div class="h10"></div>
 	
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<c:choose>
 					<c:when test="${isAdmin == true}">
@@ -295,7 +292,7 @@
 								
 								<c:if test="${isAdmin == true}">
 									<td>
-										<input type="button" value="삭제 " class="button06" onclick="<portlet:namespace/>deleteDataEntryByCollection('${dataEntry.entryId}')">
+										<input type="button" value="삭제 " class="btn btn-default" onclick="<portlet:namespace/>deleteDataEntryByCollection('${dataEntry.entryId}')">
 									</td>
 								</c:if>
 							</tr>

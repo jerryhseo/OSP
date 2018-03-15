@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -286,6 +286,11 @@ public class ScienceAppInputPortsLocalServiceUtil {
 		return getService().getInputPortsJsonString(scienceAppId);
 	}
 
+	public static java.lang.String getInputPortsJsonArray(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getInputPortsJsonArray(scienceAppId);
+	}
+
 	public static void removeAllInputPorts()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().removeAllInputPorts();
@@ -311,6 +316,13 @@ public class ScienceAppInputPortsLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().addSampeFile(scienceAppId, portName, sc, upload);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().portAppList(scienceAppId, locale);
 	}
 
 	public static void clearService() {

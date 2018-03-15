@@ -30,8 +30,6 @@ public class ScienceAppConstants {
 	public final static String PARALLER_MODULE_INTEL_OPENMPI_1_4	= "Intel_openmpi_1_4";  
 	public final static String PARALLER_MODULE_INTEL_OPENMP		= "Intel_openmp";
 	
-	
-	
 	public final static String EMPTY= "EMPTY";
 	public final static String GENERAL_INFO_READY = "GENERAL_INFO_READY";
 	public final static String INPUT_PORT_READY = "INPUT_PORT_READY";
@@ -48,6 +46,7 @@ public class ScienceAppConstants {
 	public final static String OPENLEVEL_SRC="OPEN_SOURCE";
 	public final static String OPENLEVEL_BIN="OPEN_BINARY";
 	public final static String OPENLEVEL_RUN="OPEN_RUN_ONLY";
+	public final static String OPENLEVEL_DWN="DOWNLOAD_ONLY";
 	
 	public final static String INPUT_PORT_ATTR_NAME="name";
 	public final static String INPUT_PORT_ATTR_PORTTYPE_ID="port-type-id";
@@ -127,7 +126,8 @@ public class ScienceAppConstants {
 		String[] openLevels = {
 				OPENLEVEL_RUN,
 				OPENLEVEL_SRC,
-				OPENLEVEL_BIN
+				OPENLEVEL_BIN,
+				OPENLEVEL_DWN
 		};
 		
 		return openLevels;

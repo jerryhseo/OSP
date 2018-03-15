@@ -62,7 +62,7 @@
 .category02arrow.app{position:absolute; left:15%; margin-top:-12px;}
 
 /*좌측*/
-.leftm{width:244px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:42px; min-height: 400px;}
+.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:42px; min-height: 400px;}
 .leftm > ul{margin:20px 20px;}
 .leftm > ul > li {font-size:16px; color:#011144; background:url(../images/search/minus.png) no-repeat 0 10px; padding-left:20px; line-height:1.5em; padding-top: 5px; padding-bottom: 5px;}
 .leftm > ul > li a:link{color:#011144;}
@@ -74,7 +74,7 @@
 .leftm > ul > li > ul > li a:hover{text-decoration:underline;}
 
 /*우측*/
-.rightcon{width:926px; float:right; margin-top:30px;}
+.rightcon{width:940px; float:left; margin-top:30px; margin-left:30px;}
 .connav{ border-bottom:solid 1px #e3e8e9; overflow:hidden;}
 .connav ul{ margin:0; padding:0;}
 .connav ul li{ font-size:13px; color:#777; float:left; margin-right:11px; line-height:2.0em;}
@@ -91,7 +91,7 @@
 .boxlist > ul > li > div.left{float:left; text-align: center; margin:10px 20px 10px 12px; white-space: nowrap; width: 100px; height: 98px; border: solid 1px #efefef;}
 .boxlist > ul > li > div.left > img{vertical-align: middle; max-width: 100px; max-height: 98px;}
 .boxlist > ul > li > div.left > span.align-helper{display: inline-block; height: 100%; vertical-align: middle;}
-.boxlist > ul > li > div.right{float:right; margin-right:0; width: 300px;}
+.boxlist > ul > li > div.right{margin-right:0; width: 300px;}
 
 /*컨텐츠탭*/
 .contabm{padding-top:15px; padding-bottom:36px;}
@@ -103,7 +103,7 @@
 .contabm ul li.sel{background-color:#f6f6f6; border-bottom:solid 4px #547dcd; line-height:39.5px;}
 
 .styleh32{font-size:22px; color:#000; border-bottom:solid 1px #444; line-height:2.6em; background:url(../images/portlet/subtit_bl.png) no-repeat 0 8px; padding-left:18px;}
-.styleh3{font-size:21px; color:#444; border-bottom:solid 1px #444; line-height:2.6em; padding-bottom:2px; background:url(../images/search/tit_bl.png) no-repeat 0 10px; padding-left:27px;}
+.styleh3{font-size:21px; color:#444; border-bottom:solid 1px #444; line-height:2.6em; padding-bottom:2px; background:url(../images/search/tit_bl.png) no-repeat 0 3px; padding-left:27px;}
 
 
 .conlist{}
@@ -123,7 +123,7 @@
 .conpage .sel{font-size:20px; color:#606060; font-weight:600; vertical-align:top;}
 
 
-.rightsearch{float:right; width:452px; margin:0; padding:0;}
+.rightsearch{float:right; width:430px; margin:0; padding:0;}
 .rightsearch input{width:264px !important;}
 
 .search-content-wrapper > .blockMsg {top: 180px !important;}

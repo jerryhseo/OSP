@@ -1,18 +1,12 @@
 package org.kisti.edison.multiboard.controller.comment;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,69 +21,44 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.MimeResponse;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-import javax.portlet.WindowState;
 
 import org.kisti.edison.model.EdisonFileConstants;
 import org.kisti.edison.model.EdisonMessageConstants;
-import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.multiboard.model.Board;
 import org.kisti.edison.multiboard.model.BoardDiv;
 import org.kisti.edison.multiboard.service.BoardDivLocalServiceUtil;
 import org.kisti.edison.multiboard.service.BoardLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonFileUtil;
-import org.kisti.edison.util.EdisonUserUtil;
-import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.facebook.FacebookConnect;
-import com.liferay.portal.kernel.facebook.FacebookConnectUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
-import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -144,6 +113,8 @@ public class CommentController {
         ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
         Map params = RequestUtil.getParameterMap(request);
         
+        Iterator<String> keys = params.keySet().iterator();
+        
         //VIEW가 아니면서 (게시물 보기) 로그인이 안되어있을 경우 홈 화면으로 보냄
         if(!themeDisplay.isSignedIn()) {
             return;
@@ -173,7 +144,7 @@ public class CommentController {
             
             // divCd : board 구분(700 : commant)      boardGroupId : Portlet Theme에 지정된 boardGroupId      searchValue : 검색 값
             // groupBoardSeq : 댓글이 위치한 게시글의 boardSeq        siteGroupId :
-            List<Map<String,Object>> boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup);
+            List<Map<String,Object>> boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup, "");
             
             // 첨부파일, 댓글 및 comment(reply) 작성자 Img 추출
             String preFix = customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
@@ -196,7 +167,7 @@ public class CommentController {
                     
                     // 댓글 갯수 추출
                     groupBoardSeq = Long.parseLong((String) boardList.get(i).get("boardSeq"));
-                    List<Map<String,Object>> boardReplyList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup);
+                    List<Map<String,Object>> boardReplyList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup, "");
                     
                     replyCntMap.put((String) boardList.get(i).get("boardSeq"), boardReplyList.size());
                     
@@ -494,5 +465,32 @@ public class CommentController {
         
         EdisonFileUtil.edisonFileDownload(response, fileEntryId);
     }   
+    
+    /* 타임라인 추가 */
+    @ResourceMapping(value="writeTimeLineAboutSharing")
+    public void writeTimeLineAboutSharing(ResourceRequest request, ResourceResponse response){
+    	try{
+    		Map<String, Object> paramsMap = RequestUtil.getParameterMap(request);
+    		
+    		long currentTime = System.currentTimeMillis();
+    		SimpleDateFormat currentTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    		String thisTime = currentTimeFormat.format(new Date(currentTime));
+    		
+    		String groupBoardSeq = CustomUtil.strNull(paramsMap.get("groupBoardSeq"), "0");
+    		String comment = "[ " + thisTime + " ] " + CustomUtil.strNull(paramsMap.get("comment"), "");
+    		
+    		JSONObject jsonData = new JSONObject();
+    		jsonData.put("comment", comment);
+    		jsonData.put("groupBoardSeq", groupBoardSeq);
+    		String saveData = jsonData.toString();
+    		
+    		addCommentList(request, response, saveData);
+    		
+    	} catch (Exception e) {
+    		log.error(e);
+			e.printStackTrace();
+			SessionErrors.add(request, EdisonMessageConstants.EVENT_ERROR);
+		}
+    }
     
 }

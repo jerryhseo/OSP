@@ -323,7 +323,8 @@
 				E.classId,
 				E.classEndDt,
 				E.classDescription,
-				E.classCreateDt
+				E.classCreateDt,
+				E.classCurriculumUrl
 		]]>
 	</sql>
 
@@ -363,6 +364,7 @@
 				E.classEndDt,
 				E.classDescription,
 				E.classCreateDt,
+				E.classCurriculumUrl,
 				G.surveyTitle,
 				G.surveyStatus,
 				G.surveyStartDate,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,6 +41,8 @@ import org.kisti.edison.bestsimulation.service.persistence.SimulationJobFinder;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationJobPersistence;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationJobStatusPersistence;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationPersistence;
+import org.kisti.edison.bestsimulation.service.persistence.SimulationShareFinder;
+import org.kisti.edison.bestsimulation.service.persistence.SimulationSharePersistence;
 import org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinder;
 import org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistence;
 
@@ -669,6 +671,82 @@ public abstract class SimulationJobDataLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the simulation share local service.
+	 *
+	 * @return the simulation share local service
+	 */
+	public org.kisti.edison.bestsimulation.service.SimulationShareLocalService getSimulationShareLocalService() {
+		return simulationShareLocalService;
+	}
+
+	/**
+	 * Sets the simulation share local service.
+	 *
+	 * @param simulationShareLocalService the simulation share local service
+	 */
+	public void setSimulationShareLocalService(
+		org.kisti.edison.bestsimulation.service.SimulationShareLocalService simulationShareLocalService) {
+		this.simulationShareLocalService = simulationShareLocalService;
+	}
+
+	/**
+	 * Returns the simulation share remote service.
+	 *
+	 * @return the simulation share remote service
+	 */
+	public org.kisti.edison.bestsimulation.service.SimulationShareService getSimulationShareService() {
+		return simulationShareService;
+	}
+
+	/**
+	 * Sets the simulation share remote service.
+	 *
+	 * @param simulationShareService the simulation share remote service
+	 */
+	public void setSimulationShareService(
+		org.kisti.edison.bestsimulation.service.SimulationShareService simulationShareService) {
+		this.simulationShareService = simulationShareService;
+	}
+
+	/**
+	 * Returns the simulation share persistence.
+	 *
+	 * @return the simulation share persistence
+	 */
+	public SimulationSharePersistence getSimulationSharePersistence() {
+		return simulationSharePersistence;
+	}
+
+	/**
+	 * Sets the simulation share persistence.
+	 *
+	 * @param simulationSharePersistence the simulation share persistence
+	 */
+	public void setSimulationSharePersistence(
+		SimulationSharePersistence simulationSharePersistence) {
+		this.simulationSharePersistence = simulationSharePersistence;
+	}
+
+	/**
+	 * Returns the simulation share finder.
+	 *
+	 * @return the simulation share finder
+	 */
+	public SimulationShareFinder getSimulationShareFinder() {
+		return simulationShareFinder;
+	}
+
+	/**
+	 * Sets the simulation share finder.
+	 *
+	 * @param simulationShareFinder the simulation share finder
+	 */
+	public void setSimulationShareFinder(
+		SimulationShareFinder simulationShareFinder) {
+		this.simulationShareFinder = simulationShareFinder;
+	}
+
+	/**
 	 * Returns the university execute local service.
 	 *
 	 * @return the university execute local service
@@ -960,6 +1038,14 @@ public abstract class SimulationJobDataLocalServiceBaseImpl
 	protected org.kisti.edison.bestsimulation.service.SimulationJobStatusService simulationJobStatusService;
 	@BeanReference(type = SimulationJobStatusPersistence.class)
 	protected SimulationJobStatusPersistence simulationJobStatusPersistence;
+	@BeanReference(type = org.kisti.edison.bestsimulation.service.SimulationShareLocalService.class)
+	protected org.kisti.edison.bestsimulation.service.SimulationShareLocalService simulationShareLocalService;
+	@BeanReference(type = org.kisti.edison.bestsimulation.service.SimulationShareService.class)
+	protected org.kisti.edison.bestsimulation.service.SimulationShareService simulationShareService;
+	@BeanReference(type = SimulationSharePersistence.class)
+	protected SimulationSharePersistence simulationSharePersistence;
+	@BeanReference(type = SimulationShareFinder.class)
+	protected SimulationShareFinder simulationShareFinder;
 	@BeanReference(type = org.kisti.edison.bestsimulation.service.UniversityExecuteLocalService.class)
 	protected org.kisti.edison.bestsimulation.service.UniversityExecuteLocalService universityExecuteLocalService;
 	@BeanReference(type = org.kisti.edison.bestsimulation.service.UniversityExecuteService.class)

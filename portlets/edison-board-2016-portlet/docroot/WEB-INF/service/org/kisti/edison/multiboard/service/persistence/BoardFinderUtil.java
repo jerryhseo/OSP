@@ -24,10 +24,12 @@ public class BoardFinderUtil {
 	public static java.util.List<java.lang.Object[]> getCustomListBoard(
 		long divCd, int begin, int listSize, long groupId,
 		java.lang.String customId, java.lang.String searchValue,
-		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup) {
+		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup,
+		java.lang.String virtualLabId) {
 		return getFinder()
 				   .getCustomListBoard(divCd, begin, listSize, groupId,
-			customId, searchValue, groupBoardSeq, popupYn, siteGroup);
+			customId, searchValue, groupBoardSeq, popupYn, siteGroup,
+			virtualLabId);
 	}
 
 	public static int getCustomCountBoard(long divCd, long groupId,

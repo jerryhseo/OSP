@@ -61,13 +61,14 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "projectId", Types.BIGINT },
 			{ "userId", Types.BIGINT },
+			{ "groupId", Types.BIGINT },
 			{ "name", Types.VARCHAR },
 			{ "projectStructure", Types.VARCHAR },
 			{ "analyzerStructure", Types.VARCHAR },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table ETURB_Project (projectId LONG not null,userId LONG not null,name VARCHAR(75) null,projectStructure TEXT null,analyzerStructure TEXT null,createDate DATE null,modifiedDate DATE null,primary key (projectId, userId))";
+	public static final String TABLE_SQL_CREATE = "create table ETURB_Project (projectId LONG not null,userId LONG not null,groupId LONG not null,name VARCHAR(75) null,projectStructure TEXT null,analyzerStructure TEXT null,createDate DATE null,modifiedDate DATE null,primary key (projectId, userId, groupId))";
 	public static final String TABLE_SQL_DROP = "drop table ETURB_Project";
 	public static final String ORDER_BY_JPQL = " ORDER BY project.id.projectId DESC, project.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY ETURB_Project.projectId DESC, ETURB_Project.createDate DESC";
@@ -83,9 +84,10 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.kisti.eturb.dbservice.model.Project"),
 			true);
-	public static long USERID_COLUMN_BITMASK = 1L;
-	public static long PROJECTID_COLUMN_BITMASK = 2L;
-	public static long CREATEDATE_COLUMN_BITMASK = 4L;
+	public static long GROUPID_COLUMN_BITMASK = 1L;
+	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long PROJECTID_COLUMN_BITMASK = 4L;
+	public static long CREATEDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.kisti.eturb.dbservice.model.Project"));
 
@@ -94,18 +96,19 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public ProjectPK getPrimaryKey() {
-		return new ProjectPK(_projectId, _userId);
+		return new ProjectPK(_projectId, _userId, _groupId);
 	}
 
 	@Override
 	public void setPrimaryKey(ProjectPK primaryKey) {
 		setProjectId(primaryKey.projectId);
 		setUserId(primaryKey.userId);
+		setGroupId(primaryKey.groupId);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new ProjectPK(_projectId, _userId);
+		return new ProjectPK(_projectId, _userId, _groupId);
 	}
 
 	@Override
@@ -129,6 +132,7 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		attributes.put("projectId", getProjectId());
 		attributes.put("userId", getUserId());
+		attributes.put("groupId", getGroupId());
 		attributes.put("name", getName());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
@@ -150,6 +154,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
 		}
 
 		String name = (String)attributes.get("name");
@@ -225,6 +235,28 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	public long getOriginalUserId() {
 		return _originalUserId;
+	}
+
+	@Override
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	@Override
+	public void setGroupId(long groupId) {
+		_columnBitmask |= GROUPID_COLUMN_BITMASK;
+
+		if (!_setOriginalGroupId) {
+			_setOriginalGroupId = true;
+
+			_originalGroupId = _groupId;
+		}
+
+		_groupId = groupId;
+	}
+
+	public long getOriginalGroupId() {
+		return _originalGroupId;
 	}
 
 	@Override
@@ -314,6 +346,7 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		projectImpl.setProjectId(getProjectId());
 		projectImpl.setUserId(getUserId());
+		projectImpl.setGroupId(getGroupId());
 		projectImpl.setName(getName());
 		projectImpl.setProjectStructure(getProjectStructure());
 		projectImpl.setAnalyzerStructure(getAnalyzerStructure());
@@ -391,6 +424,10 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		projectModelImpl._setOriginalUserId = false;
 
+		projectModelImpl._originalGroupId = projectModelImpl._groupId;
+
+		projectModelImpl._setOriginalGroupId = false;
+
 		projectModelImpl._columnBitmask = 0;
 	}
 
@@ -401,6 +438,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		projectCacheModel.projectId = getProjectId();
 
 		projectCacheModel.userId = getUserId();
+
+		projectCacheModel.groupId = getGroupId();
 
 		projectCacheModel.name = getName();
 
@@ -449,12 +488,14 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{projectId=");
 		sb.append(getProjectId());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", groupId=");
+		sb.append(getGroupId());
 		sb.append(", name=");
 		sb.append(getName());
 		sb.append(", projectStructure=");
@@ -472,7 +513,7 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.eturb.dbservice.model.Project");
@@ -485,6 +526,10 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		sb.append(
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>groupId</column-name><column-value><![CDATA[");
+		sb.append(getGroupId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>name</column-name><column-value><![CDATA[");
@@ -521,6 +566,9 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	private String _userUuid;
 	private long _originalUserId;
 	private boolean _setOriginalUserId;
+	private long _groupId;
+	private long _originalGroupId;
+	private boolean _setOriginalGroupId;
 	private String _name;
 	private String _projectStructure;
 	private String _analyzerStructure;

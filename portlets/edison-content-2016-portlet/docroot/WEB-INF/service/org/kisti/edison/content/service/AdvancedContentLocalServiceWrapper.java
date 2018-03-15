@@ -289,6 +289,24 @@ public class AdvancedContentLocalServiceWrapper
 			arguments);
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _advancedContentLocalService.getAdvancedContentListByGroupId(groupId,
+			locale);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getAdvancedContentListByGroupId(
+		long groupId, com.liferay.portal.model.User user,
+		java.util.Locale locale,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws java.lang.Exception {
+		return _advancedContentLocalService.getAdvancedContentListByGroupId(groupId,
+			user, locale, themeDisplay);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

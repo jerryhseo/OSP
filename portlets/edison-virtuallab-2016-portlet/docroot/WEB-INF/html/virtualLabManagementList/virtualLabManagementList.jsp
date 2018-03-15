@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
+<%@page import="com.liferay.portal.theme.ThemeDisplay"%>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/course.css" media="screen"/>
 
@@ -58,90 +59,96 @@
 </style>
 
 <body>
-	<c:choose>
-		<c:when test="${not empty tabsValues}">
-			<div class="course_warp">
-				<div class="course_card_category">
-					<table id="<portlet:namespace/>tabtable" class="tabtable">
-						<thead>
-							<tr class="tabtable_tr">
-								<td class="category_tab_td" >
-									<a style="text-decoration: none;" onClick="<portlet:namespace/>allCategoryDataSearchList()"  ><p class="category_header"><liferay-ui:message key='edison-button-all-search' /></p></a>
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="tablist" items="${tablist }"> 
-								<tr>
-									<td class="category_tab_td" id="tabId_${tablist.groupId }">
-										<a style="text-decoration: none;" onclick="<portlet:namespace/>dataAndTabSearchList('1','${tablist.groupId }');" ><p class="category_list"><liferay-ui:message key='${tablist.groupName }' /></p></a>
+	<div class="container">
+		<c:choose>
+			<c:when test="${not empty tabsValues}">
+				<div class="course_warp">
+					<div class="course_card_category">
+						<table id="<portlet:namespace/>tabtable" class="tabtable">
+							<thead>
+								<tr class="tabtable_tr">
+									<td class="category_tab_td" >
+										<a style="text-decoration: none;" onClick="<portlet:namespace/>allCategoryDataSearchList()"  ><p class="category_header"><liferay-ui:message key='edison-button-all-search' /></p></a>
 									</td>
 								</tr>
-							</c:forEach> 
-			            </tbody>
-					</table>
-				</div>
-				
-				<div id="<portlet:namespace/>virtualLabTabListBody">
-				</div>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="course_warp">
-				<div id="<portlet:namespace/>virtualLabTabListBody">
-				</div>
-			</div>
-		</c:otherwise>
-	</c:choose>
-	
-	<div id="courselist" class="courselist">
-	
-	<h1><liferay-ui:message key='edison-course-list' /></h1>
-	
-	<div class="portlet-borderless-container">
-		<div class="portlet-body">
-			<div style="float: left; width: 100%">
-				<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-					
-					<c:if test="${isLogin == 'Y' }">
-						<div class="virtualLabtype">
-							<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:150px; height: 38px">
-								<option value="ALL" ><liferay-ui:message key='full' /></option>
-								<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
-								<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
-							</select>
-						</div>
-					</c:if>
-					<input type="text" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="height:28px; margin-top: 10px" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
-					<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-					<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
-					<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" />
-					<input type="button" onClick="<portlet:namespace/>dataAndTabSearchList('1','');" class="btn_blue" value="<liferay-ui:message key='edison-button-search' />" />
-					<input type="button" onClick="<portlet:namespace/>initDataSearchList();" class="btn_blue" value="<liferay-ui:message key='edison-button-all-search' />" />
-					<div class="tabletopright">
-						<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" class="selectview" style="line-height: 15px;">
-							<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-							<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-							<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-							<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-						</select>
+							</thead>
+							<tbody>
+								<c:forEach var="tablist" items="${tablist }"> 
+									<tr>
+										<td class="category_tab_td" id="tabId_${tablist.groupId }">
+											<a style="text-decoration: none;" onclick="<portlet:namespace/>dataAndTabSearchList('1','${tablist.groupId }');" ><p class="category_list"><liferay-ui:message key='${tablist.groupName }' /></p></a>
+										</td>
+									</tr>
+								</c:forEach> 
+				            </tbody>
+						</table>
 					</div>
-				</form>
+					
+					<div id="<portlet:namespace/>virtualLabTabListBody">
+					</div>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="course_warp">
+					<div id="<portlet:namespace/>virtualLabTabListBody">
+					</div>
+				</div>
+			</c:otherwise>
+		</c:choose>
+		
+		<div id="courselist" class="courselist">
+		
+			<h1>
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+				<liferay-ui:message key='edison-course-list' />
+			</h1>
+		
+			<div class="portlet-borderless-container">
+				<div class="portlet-body">
+					<div style="float: left; width: 100%" class="table-responsive panel edison-panel">
+						<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+							<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+							<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
+							<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" />
+							
+							<div class="input-group">
+								<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" style="width: 50%; float: right; margin-left: 1%;" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown(event);"/>
+								
+								<select id="<portlet:namespace/>selectsearch_groupIdsearch_groupId_line" class="form-control" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataAndTabSearchList('1','')" style="line-height: 15px; width: 15%; float: right;">
+									<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+									<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+									<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+									<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+								</select>
+								<c:if test="${isLogin == 'Y' }">
+									<select name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" class="form-control" onChange="<portlet:namespace/>dataAndTabSearchList('1','',0)" style="width:15%; float: right;">
+										<option value="ALL" ><liferay-ui:message key='full' /></option>
+										<option value="addClass" <c:if test="${searchType == 'addClass' }"> selected</c:if> ><liferay-ui:message key='edison-course-virtualLabClassRegistrationList-registration-available' /></option>
+										<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
+									</select>
+								</c:if>
+								
+								<div class="input-group-btn">
+									<button class="btn btn-default" onClick="<portlet:namespace/>dataAndTabSearchList('1','');"><liferay-ui:message key='edison-button-search' /></button>
+									<button class="btn btn-default" onClick="<portlet:namespace/>initDataSearchList();">Clear</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			<div class="table-responsive panel edison-panel table1_list">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tbody id="<portlet:namespace/>virtualLabListBody">
+					</tbody>
+				</table>
+				
+				<div class="h20"></div>
+				<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
 			</div>
 		</div>
 	</div>
-	
-	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tbody id="<portlet:namespace/>virtualLabListBody">
-			</tbody>
-		</table>
-		
-		<div class="h20"></div>
-		<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
-	</div>
-	
 </body>
 
 <script type="text/javascript">
@@ -248,29 +255,31 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
    						groupClass = "label_cmed";
    					}
 					if(virtualLabCount % 2 != 0){
-						$rowUl = $("<ul/>").css("width","46%").css("padding","8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')");
+						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 								if(virtualLabManagementList[i].iconId != 0){
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" ).attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}else{														
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}
 								$("<div/>").addClass("infoDiv").append($("<li/>").addClass(groupClass).text(groupField).css("margin-top","6px"))
-															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px"))
+															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
 															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
 															   .appendTo($rowUl);
 						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}else{
-						$rowUl = $("<ul/>").css("width","46%").css("padding","8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')");
+						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 								if(virtualLabManagementList[i].iconId != 0){
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" ).attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}else{
 									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2").css("width","110px").css("height","110px")).appendTo($rowUl);
 								}
 								$("<div/>").addClass("infoDiv").append($("<li/>").addClass(groupClass).text(groupField).css("margin-top","6px"))
-															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px"))
+															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","10px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
 															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
 															   .appendTo($rowUl);
 						$rowUl.appendTo($rowResult);
@@ -348,9 +357,13 @@ function <portlet:namespace/>dataSearchTabList(groupId, universityField) {
 }
 
 function <portlet:namespace/>moveVirtualLab(virtualLabId, groupId) {
-	var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
-	var URL = virtualLabManagementDetailURL + "&<portlet:namespace/>virtualLabId=" + virtualLabId+"&<portlet:namespace/>groupId="+groupId;
-	window.location.href = URL;
+	if("${isSignedIn}" == "true"){
+		var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
+		var URL = virtualLabManagementDetailURL + "&<portlet:namespace/>virtualLabId=" + virtualLabId+"&<portlet:namespace/>groupId="+groupId;
+		window.location.href = URL;
+	} else {
+		window.location.href = "<%=themeDisplay.getURLSignIn()%>";
+	}
 }
 
 function <portlet:namespace/>onKeyDown() {

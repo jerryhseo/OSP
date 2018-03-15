@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.2.0//EN" "http://www.liferay.com/dtd/liferay-display_6_2_0.dtd">
+
+<display>
+	
+	<category name="challenge2017">
+		<portlet id="challenge-team"></portlet>
+		<portlet id="challenge-participation"></portlet>
+        <portlet id="challenge-evaluation-management"></portlet>
+        <portlet id="challenge-evaluation"></portlet>
+        <portlet id="challenge-result"></portlet>
+	</category>
+	<category name="category.hidden">
+		<portlet id="challenge-admin"></portlet>
+	</category>
+</display>

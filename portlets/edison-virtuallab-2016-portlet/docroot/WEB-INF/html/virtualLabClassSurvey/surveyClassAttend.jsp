@@ -12,7 +12,7 @@
 </liferay-portlet:renderURL>
 
 <style type="text/css">
-.edison .button01b {
+.edison .btn.btn-default {
 	padding: 3px 7px;
 }
 </style>
@@ -74,31 +74,31 @@ function <portlet:namespace/>dataSearchList() {
 					}
 					
 					if (role == "STUDENT" && surveyAttend[i].surveyCheck <= 0) {
-						$("<td/>").append(
+						$("<td/>").addClass("center")
+								  .append(
 								  $("<input/>").attr("type","button")
 								  			   .attr("name","<portlet:namespace/>surveySeqNo")
-								  			   .addClass("button01b")
+								  			   .addClass("btn btn-default")
 								  			   .attr("value","<liferay-ui:message key='edison-virtuallab-participate-in-survey' />")
 								  			   .attr("onclick","surveyVote('" + surveyAttend[i].surveySeqNo + "');")
 								  )
 								  .css("text-align","center")
-								  .css("padding-left","50px")
 								  .appendTo($rowResult);
 					} else if (role == "STUDENT" && surveyAttend[i].surveyCheck > 0){
-						$("<td/>").text("<liferay-ui:message key='edison-virtuallab-complete-in-survey' />")
+						$("<td/>").addClass("center")
+								  .text("<liferay-ui:message key='edison-virtuallab-complete-in-survey' />")
 								  .css("text-align","center")
-								  .css("padding-left","50px")
 								  .appendTo($rowResult);
 					} else if (role == "ADMIN" || role == "MANAGER") {
-						$("<td/>").append(
+						$("<td/>").addClass("center")
+								  .append(
 								  $("<input/>").attr("type","button")
-											   .addClass("button01b")
+											   .addClass("btn btn-default")
 								  			   .attr("name","<portlet:namespace/>surveySeqNo")
 								  			   .attr("value","<liferay-ui:message key='edison-virtuallab-view-survey' />")
 								  			   .attr("onclick","surveyVote('" + surveyAttend[i].surveySeqNo + "');")
 								  )
 								  .css("text-align","center")
-								  .css("padding-left","50px")
 								  .appendTo($rowResult);
 					} else {
 						$("<td/>").text("")
@@ -122,32 +122,21 @@ function surveyVote(surveySeqNo) {
 }
 
 </script>
-<div id="<portlet:namespace/>display" style="display:none;">
-	<c:choose>
-		<c:when test="${role eq 'ADMIN' }">
-			<div class="virtitlebox">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<div class="virtitle">
-					<liferay-ui:message key='edison-virtuallab-survey' />
-				</div>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<h3>Servey</h3>
-		</c:otherwise>
-	</c:choose>
-	
-	<div class="h10"></div>
-	
-	<div class="table1_list" style="display: inline-block; margin-bottom: 10px;">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="60%" />
-				<col width="25%" />
-				<col width="15%" />
-			</colgroup>
-			<tbody id="<portlet:namespace/>surveyListBody">
-			</tbody>
-		</table>
+<div id="<portlet:namespace/>display" style="display:none;" class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-virtuallab-survey' />
+		</h3>
 	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+		<colgroup>
+			<col width="60%" />
+			<col width="25%" />
+			<col width="15%" />
+		</colgroup>
+		<tbody id="<portlet:namespace/>surveyListBody">
+		</tbody>
+	</table>
 </div>

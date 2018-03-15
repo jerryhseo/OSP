@@ -14,7 +14,6 @@
 
 package org.kisti.edison.service.impl;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,12 +30,10 @@ import org.kisti.edison.service.persistence.RequestMemberPK;
 import org.kisti.edison.util.EdisonExpndoUtil;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.TeamLocalServiceUtil;
-import com.liferay.portal.service.UserLocalServiceUtil;
 
 /**
  * The implementation of the request member local service.
@@ -98,19 +95,18 @@ public class RequestMemberLocalServiceImpl
 			requestMember.setRequestState(requestState);
 			requestMember.setProcessDate(new Date());
 			
-			
+			/* Team Role 관리체계 제거 : 2017.12.05 */
 			if("2003001".equals(requestState)){
 				long[] userIds = new long[]{userId};
-				UserLocalServiceUtil.unsetTeamUsers(simulationProjectId, userIds);
 				requestMember.setProcessDate(null);
 			}else if("2003002".equals(requestState)){
 				requestMember.setProcessDate(new Date());
-				UserLocalServiceUtil.addTeamUser(simulationProjectId, userId);
 			}
 			
 			requestMember = RequestMemberLocalServiceUtil.updateRequestMember(requestMember);
 			
 			return requestMember;
+			
 		}catch(Exception e){
 			throw new SystemException(e);
 		} 
@@ -231,12 +227,13 @@ public class RequestMemberLocalServiceImpl
 		
 		boolean isMember = false;
 		
-		List<Team> userTeams = TeamLocalServiceUtil.getUserTeams(userId, portalGroupId);
-		if(userTeams != null){
-			for(Team userTeam : userTeams){
-				long userTeamId = userTeam.getTeamId();
-				if(userTeamId == simulationProjectId){
+		List<RequestMember> requestMemberList = requestMemberPersistence.findBySimulationProjectIdAndUseId(userId, simulationProjectId);
+		if(requestMemberList != null){
+			for(RequestMember requestMember : requestMemberList){
+				// 가입 승인된 requestMember
+				if("2003002".equals(requestMember.getRequestState()) && requestMember.getProcessDate() != null){
 					isMember = true;
+					break;
 				}
 			}
 		}

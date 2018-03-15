@@ -525,7 +525,7 @@ function <portlet:namespace/>dataSearchList() {
 					$("<td/>").text(virtualClassStudentList[i].executeCount)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-simulation-monitoring-title' />' class='button01b' onclick=\"<portlet:namespace/>searchMonitoring('" + virtualClassStudentList[i].userId + "')\"/>")
+					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-simulation-monitoring-title' />' class='btn btn-default' onclick=\"<portlet:namespace/>searchMonitoring('" + virtualClassStudentList[i].userId + "')\"/>")
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					if(virtualClassStudentList[i].requestSort == "REQUEST") {
@@ -533,7 +533,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-approve' />' class='button01b' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "CONFIRM" + "\", \"" + virtualClassStudentList[i].userId + "\")'/><input type='button' value='<liferay-ui:message key='edison-virtuallab-denial' />' style='margin-left:10px;' class='button01b' onclick='<portlet:namespace/>deniedDialogOpen(\"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-approve' />' class='btn btn-default' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "CONFIRM" + "\", \"" + virtualClassStudentList[i].userId + "\")'/><input type='button' value='<liferay-ui:message key='edison-virtuallab-denial' />' style='margin-left:10px;' class='btn btn-default' onclick='<portlet:namespace/>deniedDialogOpen(\"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "CONFIRM") {
@@ -541,7 +541,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />' class='button01b' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "REQUEST" + "\", \"" + virtualClassStudentList[i].userId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-cancel-registration' />' class='btn btn-default' onclick='<portlet:namespace/>classRegister(\"" + virtualClassStudentList[i].virtualLabUserId + "\",\"" + "REQUEST" + "\", \"" + virtualClassStudentList[i].userId + "\")'/>")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "DENIED") {
@@ -549,7 +549,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />' class='button01b' onclick='alert(\"" + virtualClassStudentList[i].processNote +"\");' />")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />' class='btn btn-default' onclick='alert(\"" + virtualClassStudentList[i].processNote +"\");' />")
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 					} else if(virtualClassStudentList[i].requestSort == "TEMP") {
@@ -557,7 +557,7 @@ function <portlet:namespace/>dataSearchList() {
 						  .css("text-align","center")
 						  .appendTo($rowResult);
 						
-						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='button01b' onclick='studentDelete(\"" + virtualClassStudentList[i].userScreenName + "\", \"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
+						$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-student-delete' />' class='btn btn-default' onclick='studentDelete(\"" + virtualClassStudentList[i].userScreenName + "\", \"" + virtualClassStudentList[i].virtualLabUserId + "\")'/>")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					} else {
@@ -829,33 +829,33 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 }
 </script>
 <div class="h10"></div>
-<div class="virtitlebox"><img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle"><liferay-ui:message key='edison-virtuallab-student-infomation' /></div> 
-	<div class="search01">
-		<div class="buttonbox0802">
-			<input id="<portlet:namespace/>addStudentBtn" name="<portlet:namespace/>addStudentBtn" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-student-add' />"/>
-			<input id="addStudentAllBtn" name="addStudentAllBtn" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-excel-add' />" onClick="studentExcelInsert();return false;"/>
-		</div>
-		<div class="searchbox01">
-			<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
-			<input id="search_button" name="search_button" type="button" class="btnsearch" onClick="<portlet:namespace/>dataSearchList()"/>
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath }/images/title_virtual.png" width="20" height="20" /> 
+			<liferay-ui:message key='edison-virtuallab-student-infomation' />
+		</h3>
+		<div class="input-group">
+			<input style="margin: 1px 0;" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" type="text" class="form-control" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-search-option' />" onkeypress="<portlet:namespace/>onKeyDown();" />
+			<div class="input-group-btn">
+				<button id="search_button" name="search_button" class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList()"><i class="icon-search"></i></button>
+				<input id="<portlet:namespace/>addStudentBtn" name="<portlet:namespace/>addStudentBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-student-add' />"/>
+				<input id="addStudentAllBtn" name="addStudentAllBtn" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-excel-add' />" onClick="studentExcelInsert();return false;"/>
+			</div>
 		</div>
 	</div>
-</div>
-<div class="h10"></div>
-<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-	<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
-	<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
-</form>
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
+		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
+	</form>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="5%" />
 			<col width="15%" />
 			<col width="10%" />
 			<col width="10%" />
 			<col width="10%" />
-			<col width="15%" />
+			<col width="10%" />
 			<col width="10%" />
 			<col width="10%" />
 			<col width="13%" />
@@ -899,7 +899,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
 		<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
 	
-		<div class="newWcont01">
+		<div class="table1_list">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<colgroup>
 					<col width="20%" />
@@ -947,7 +947,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='edison-virtuallab-student-registration' />" class="button06" onclick="studentCreate()"/>
+			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='edison-virtuallab-student-registration' />" class="btn btn-default" onclick="studentCreate()"/>
 		</div>
 	</form>
 </div>
@@ -1003,7 +1003,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 						</td>
 						<td class="puptitle"><liferay-ui:message key='password' /></td>
 						<td class="puptxt">
-							<input id="init_password_button" name="init_password_button" type="button" value="<liferay-ui:message key='edison-virtuallab-password-reset' />" class="button06" onclick="initPassword()"/>
+							<input id="init_password_button" name="init_password_button" type="button" value="<liferay-ui:message key='edison-virtuallab-password-reset' />" class="btn btn-default" onclick="initPassword()"/>
 						</td>
 					</tr>
 					<tr class="puptrline">
@@ -1013,7 +1013,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="virtualLab_creation_button" name="virtualLab_creation_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="graybtn" onclick="studentUpdate()"/>
+			<input id="virtualLab_update_button" name="virtualLab_update_button" type="button" value="<liferay-ui:message key='action.UPDATE' />" class="btn btn-default" onclick="studentUpdate()"/>
 		</div>
 	</form>
 </div>
@@ -1030,7 +1030,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			<img id="<portlet:namespace/>createExcel-close-btn" name="<portlet:namespace/>createExcel-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21" style="cursor:pointer; float: right;"/>
 		</div>
 	</div>
-	<div class="newWcont01">
+	<div class="newWcont01" style="padding: 10px;">
 		<div style="padding-bottom:10px;"><liferay-ui:message key='edison-virtuallab-reference-excelfile' /></div>
 		<input type="file" class="excelFile" id="<portlet:namespace/>excelFile" name="<portlet:namespace/>excelFile"/><br><br>
 		
@@ -1043,7 +1043,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</c:if>
 	</div>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="<portlet:namespace/>file_check" name="<portlet:namespace/>file_check" type="button"  class="button06" value="<liferay-ui:message key='edison-simulation-execute-pre-processor-form-create-attachments-upload' />" onClick="fileCheck();" />
+		<input id="<portlet:namespace/>file_check" name="<portlet:namespace/>file_check" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-simulation-execute-pre-processor-form-create-attachments-upload' />" onClick="fileCheck();" />
 	</div>
 </div>
 
@@ -1090,7 +1090,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</div>
 	</form>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="<portlet:namespace/>register" name="<portlet:namespace/>register" type="button"  class="button06" value="<liferay-ui:message key='edison-button-register' />" onClick="excelListAdd();" />
+		<input id="<portlet:namespace/>register" name="<portlet:namespace/>register" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-button-register' />" onClick="excelListAdd();" />
 	</div>
 </div> 
 
@@ -1127,7 +1127,7 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="<portlet:namespace/>registerDenied_button" name="<portlet:namespace/>registerDenied_button" type="button"  class="button06" value="<liferay-ui:message key='edison-virtuallab-denial' />" onClick="<portlet:namespace/>checkValidation();" />
+			<input id="<portlet:namespace/>registerDenied_button" name="<portlet:namespace/>registerDenied_button" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-denial' />" onClick="<portlet:namespace/>checkValidation();" />
 		</div>
 	</form>
 </div>

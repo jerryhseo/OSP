@@ -373,6 +373,18 @@ public interface WorkflowInstanceLocalService extends BaseLocalService,
 	public org.kisti.edison.model.WorkflowInstance createWorkflowInstance()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public org.kisti.edison.model.WorkflowInstance updateWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowInstance createWorkflowInstance(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<org.kisti.edison.model.WorkflowInstance> getWorkflowWorkflowInstancesByWorkflowId(
 		long workflowId)

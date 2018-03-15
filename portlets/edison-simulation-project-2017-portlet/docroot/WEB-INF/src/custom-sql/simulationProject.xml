@@ -27,7 +27,8 @@
               FROM 
                 EDSIMPRO_SimulationProject SIMPRO, 
                 AssetEntry AE, 
-                AssetEntries_AssetCategories AE_AC
+                AssetEntries_AssetCategories AE_AC,
+                EDSIMPRO_RequestMember REQ_MEM
               WHERE
                 SIMPRO.simulationProjectId = AE.classPK
                 AND AE.entryId = AE_AC.entryId
@@ -39,7 +40,7 @@
                 AND SIMPRO.simulationProjectId IN(@@simProIds@@)
             </isNotEmpty>    
             <isNotEmpty property="ownerId">
-                AND SIMPRO.ownerId = #ownerId#
+                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002 AND SIMPRO.projectOpenYn = 1)
             </isNotEmpty>
             <isNotEmpty property="searchValue">
             	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'
@@ -68,7 +69,8 @@
               FROM 
                 EDSIMPRO_SimulationProject SIMPRO, 
                 AssetEntry AE, 
-                AssetEntries_AssetCategories AE_AC
+                AssetEntries_AssetCategories AE_AC,
+                EDSIMPRO_RequestMember REQ_MEM
               WHERE
                 SIMPRO.simulationProjectId = AE.classPK
                 AND AE.entryId = AE_AC.entryId
@@ -80,7 +82,7 @@
                 AND AE_AC.categoryId IN(@@simProIds@@)
             </isNotEmpty>     
             <isNotEmpty property="ownerId">
-                AND SIMPRO.ownerId = #ownerId#
+                AND (SIMPRO.ownerId = #ownerId# OR SIMPRO.simulationProjectId = REQ_MEM.simulationProjectId AND REQ_MEM.requestState = 2003002 AND SIMPRO.projectOpenYn = 1)
             </isNotEmpty>
             <isNotEmpty property="searchValue">
             	AND	ExtractValue(SIMPRO.title, 'root/Title[@language-id="@@languageId@@"]') LIKE '%@@searchValue@@%'

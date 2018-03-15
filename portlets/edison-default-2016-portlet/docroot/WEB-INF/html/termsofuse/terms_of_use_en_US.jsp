@@ -36,8 +36,8 @@ function agreeCheck(){
 	.logintitle {
 		font-size: 27px;
 		color: #000;
-		padding: 0px 20px 12px 0px;
-		font-family: Tahoma, Arial, Nanum Barun Gothic,"나눔고딕", NanumGothic;
+		padding: 20px 20px 12px 0px;
+		font-family: Arial, Nanum Barun Gothic,NanumGothic;
 		float: left;
 	}
 	
@@ -47,6 +47,7 @@ function agreeCheck(){
 		color: #777777;
 		padding: 15px 0px 12px 0px;
 		float: left;
+        margin-top: 20px;
 	}
 	
 	.joinbox {
@@ -121,9 +122,17 @@ function agreeCheck(){
 	.aui input[type="radio"], .aui input[type="checkbox"]{
 		margin:0px;
 	}
+	
+	.buttonbox08 {
+		margin: 0 auto;
+		overflow: hidden;
+		padding-top: 15px;
+		padding-bottom: 10px;
+		text-align: center;
+	}
 </style>
 
-<aui:fieldset cssClass="body_layout">
+<aui:fieldset cssClass="body_layout container">
 	<form method="post" name="form">
 		<div class="logintitlebox">
 				<div class="logintitle"><liferay-ui:message key="edison-create-account-message" /></div>
@@ -338,7 +347,7 @@ b). Information preserve reason by related statute
 			<div style="clear:left;"></div>
 			<div class="borderline"></div>
 			<div class="buttonbox08">
-				<input type="button" name="fullsize" id="fullsize" value="SignUp" onclick="agreeCheck();" class="button08"><span> <input type="button" name="fullsize" id="fullsize" onclick="deAgree();" value="Cancel" class="button08"></span>
+				<input type="button" name="fullsize" id="fullsize" value="SignUp" onclick="agreeCheck();" class="btn btn-primary"><span> <input type="button" name="fullsize" id="fullsize" onclick="deAgree();" value="Cancel" class="btn btn-default"></span>
 			</div>
 		</div>
 	</form>

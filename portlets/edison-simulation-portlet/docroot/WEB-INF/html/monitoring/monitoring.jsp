@@ -41,6 +41,28 @@
 .postlist:hover {
 	background: #e0e0e0;
 }
+
+.search, .searchbox{
+	float: left;
+	margin-bottom: 10px;
+}
+.tabletoptab01{
+	position: absolute;
+	left: 45%;
+    width: 450px;
+}
+.tabletoptab01 ul li{
+	list-style: none;
+    float: left;
+    margin-left: 3px;
+    width: 59px;
+    text-align: center;
+}
+.tabletopright{
+	position: absolute;
+	width: 120px;
+	right: 1%;
+}
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="stopSimulationAPI" escapeXml="false" id="stopAPICall" copyCurrentRenderParameters="false"/>
@@ -94,315 +116,314 @@
 	<liferay-portlet:param name="groupId" value="<%=selectedGroupId%>"/>
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false"
- plid="${workBenchPlid}" 
- portletName="Workbench_WAR_OSPWorkbenchportlet"
- windowState="<%=LiferayWindowState.NORMAL.toString()%>" 
- portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-	<liferay-portlet:param name="workbenchType" value="SIMULATION_RERUN" />
+<liferay-portlet:renderURL var="workbenchURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
+	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP" />
+	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
+	<portlet:param name="redirectName" 	value="Monitoring"/>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
-
-<c:if test="${tabViewYn eq 'Y'}">
-	<div class="contabmenu">
-		<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+<div class="container">
+	<div class="h1">
+		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+		<liferay-ui:message key="edison-simulation-monitoring-title" />	
 	</div>
-</c:if>
-
-
-
-<div class="h1">
-	<liferay-ui:message key="edison-simulation-monitoring-title" />	
-</div>
-
-<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>">
-	<aui:input name="currentPage" type="hidden" value="1"/>
-	<aui:input name="userId" type="hidden" value="${userId}"/>
-	<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
-	<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
-	<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
-	<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
 	
-	<div class="tabletopbox">
-		<div class="search">
-			<div class="searchbox">
-				<aui:input name="searchValue" class="textfieldcss" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
+	<c:if test="${tabViewYn eq 'Y'}">
+		<div class="contabmenu">
+			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
+		</div>
+	</c:if>
+	
+	<div class="table-responsive panel edison-panel" style="width: 100%">
+	
+		<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>" cssClass="panel-heading clearfix">
+			<aui:input name="currentPage" type="hidden" value="1"/>
+			<aui:input name="userId" type="hidden" value="${userId}"/>
+			<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>
+			<aui:input name="jobStatus" type="hidden" value="${param.jobStatus}"/>
+			<aui:input name="simulationUuid" type="hidden" value="${param.simulationUuid}"/>
+			<aui:input name="jobSeqNo" type="hidden" value="${param.jobSeqNo}"/>
+			
+			<div class="tabletopbox" style="width: inherit;">
+				<div class="search" style="width: 34%;">
+					<div class="input-group">
+						<aui:input name="searchValue" class="textfieldcss" cssClass="form-control" type="text" placeholder="<%=searchStr%>" label="" style="width: 300px;"/>
+						<div class="input-group-btn">
+							<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="btn btn-default"/>
+							<button name="total_search_button" type="button" class="btn btn-default" onClick="<portlet:namespace/>allSearch();">
+								Clear
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="tabletoptab01">
+					<ul>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
+						</li>
+						<li style="cursor: pointer;">
+							<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
+							<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
+						</li>
+					</ul>
+				</div>
+				<div style="float: right;">
+					<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
+						<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
+						<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
+					</aui:select>
+				</div>
 			</div>
-			<input name="search_button" type="submit" value="<liferay-ui:message key='edison-button-search' />" class="button01"/>
-			<input name="total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01" onClick="<portlet:namespace/>allSearch();" />
-		</div>
-		<div class="tabletoptab01">
-<%-- 			<input type="image" style="margin-left:90px;" src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/search_ALL<c:if test="${param.jobStatus eq null||param.jobStatus eq ''}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('');"/> --%>
-			<ul>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_QUEUED<c:if test="${param.jobStatus eq '1701005'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.QUEUED%>');"  style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.QUEUED%>');"><liferay-ui:message key="edison-simulation-monitoring-queued"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_RUNNING<c:if test="${param.jobStatus eq '1701006'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.RUNNING%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.RUNNING%>');"><liferay-ui:message key="edison-simulation-monitoring-running"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_FAILED<c:if test="${param.jobStatus eq '1701012'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.FAILED%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.FAILED%>');"><liferay-ui:message key="edison-simulation-monitoring-fail"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_SUCCESS<c:if test="${param.jobStatus eq '1701011'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.SUCCESS%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.SUCCESS%>');"><liferay-ui:message key="edison-simulation-monitoring-success"/></p>
-				</li>
-				<li style="cursor: pointer;">
-					<input type="image" src="${contextPath}/images/monitoring/search_CANCEL<c:if test="${param.jobStatus eq '1701010'}">_active</c:if>.png" onclick="<portlet:namespace/>statusSearch('<%=MonitoringStatusConstatns.CANCELED%>');" style="display: block;"/>
-					<p onclick="<portlet:namespace/>statusSearchAndSubmit('<%=MonitoringStatusConstatns.CANCELED%>');"><liferay-ui:message key="edison-simulation-monitoring-cancel"/></p>
-				</li>
-			</ul>
-		</div>
-		<div class="tabletopright">
-			<aui:select name="searchLine" onChange="searchLine();" cssClass="edison_select selectview" label="">
-				<aui:option value="10">10<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="15">15<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="20">20<liferay-ui:message key="edison-search-views"/></aui:option>
-				<aui:option value="30">30<liferay-ui:message key="edison-search-views"/></aui:option>
-			</aui:select>
-		</div>
-	</div>
-</aui:form>
-<div class="table5_list borderno">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup>
-			<col width="5%">
-			<col width="*">
-			<col width="8%">
-			<c:if test="${deleteMonitoring eq true }">
-				<col width="10%">
-			</c:if>
-			<col width="5%">
-			<col width="9%">
-			<col width="10%">
-			<col width="9%">
-			<col width="15%">
-			<col width="15%">
-		</colgroup>
-		<thead>
-			<tr>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-appstore-solver-name" />/<liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail"/></th>
+		</aui:form>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
+			<colgroup>
+				<col width="5%">
+				<col width="*">
+				<col width="8%">
 				<c:if test="${deleteMonitoring eq true }">
-					<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-userid" /></th>
+					<col width="10%">
 				</c:if>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
-				<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
-				<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
-			</tr>
-			<tr>
-				<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
-				<th scope="col" class="greyth"><p><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual"/></p></th>
-			</tr> 
-		</thead>
-		<tbody id="mtbody">
-			<c:choose>
-				<c:when test="${!empty dataList}">
-					<c:forEach items="${dataList}" var="model" varStatus="data">
-						<c:set value="" var="trClass"/>
-						<c:if test="${data.index%2==1}">
-							<c:set value="tablebgtr" var="trClass"/>
-						</c:if>
-						
-						<c:set value="<%= false %>" var="subJobState"/>
-						<c:if test="${model.jobCnt eq 'Y'}">
-							<c:set value="<%=true%>" var="subJobState"/>
-						</c:if>
-						
-						<c:choose>
-							<c:when test="${subJobState}">
-								<tr id="row_${model.jobUuid}" sub-job="${model.jobCnt}"class="${trClass}">
-							</c:when>
-							<c:otherwise>
-								<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
-							</c:otherwise>
-						</c:choose>
-							<td class="TC">
-								<c:if test="${subJobState}">
-									<img src="${contextPath}/images/monitoring/btn_plus.png" class="plusBtn" style="cursor: pointer;" id="${model.simulationUuid}" data-uuid="${model.jobUuid}"/>
-								</c:if>
-								${seq - data.index}
-							</td>
-							<td>
-								${model.scienceAppName}<br/>/${model.simulationTitle}
-							</td>
+				<col width="5%">
+				<col width="9%">
+				<col width="9%">
+				<col width="9%">
+				<col width="10%">
+				<col width="10%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-index"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-appstore-solver-name" />/<liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail"/></th>
+					<c:if test="${deleteMonitoring eq true }">
+						<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-userid" /></th>
+					</c:if>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
+					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
+					<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
+				</tr>
+				<tr>
+					<th scope="col" class="greyth"><p style="margin: 0px;"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
+					<th scope="col" class="greyth"><p style="margin: 0px;">Re-Run</p></th>
+				</tr> 
+			</thead>
+			<tbody id="mtbody">
+				<c:choose>
+					<c:when test="${!empty dataList}">
+						<c:forEach items="${dataList}" var="model" varStatus="data">
+							<c:set value="" var="trClass"/>
+							<c:if test="${data.index%2==1}">
+								<c:set value="tablebgtr" var="trClass"/>
+							</c:if>
+							
+							<c:set value="<%= false %>" var="subJobState"/>
+							<c:if test="${model.jobCnt eq 'Y'}">
+								<c:set value="<%=true%>" var="subJobState"/>
+							</c:if>
+							
 							<c:choose>
 								<c:when test="${subJobState}">
-									<td></td>
-									<c:if test="${deleteMonitoring eq true }">
-										<td></td>
-									</c:if>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<tr id="row_${model.jobUuid}" sub-job="${model.jobCnt}"class="${trClass}">
 								</c:when>
 								<c:otherwise>
-									<td class="TC">
-										<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-											<img src="${contextPath}/images/monitoring/bnt_info.png" onclick="<portlet:namespace/>searchSimulationParam('${model.simulationUuid}','${model.jobSeqNo}','${model.jobUuid}');" style="cursor: pointer;" />
-										</c:if>
-									</td>
-									<c:if test="${deleteMonitoring eq true }">
-										<td>
-											<span style="text-decoration: underline;cursor: pointer;" onclick="<portlet:namespace/>searchUser('${model.userId}');">${model.userNm}</span>
-										</td>
-									</c:if>
-									<td class="TC">
-										<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
-									</td>
-									<td id="job_controll" class="TC">
-										
-									</td>
-									<td id="middle_check" class="TC" logFileProcess-state="${model.jobLogFileProcessorYn }">
-										
-									</td>
-									<td class="TC">
-										<c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
-										<c:if test="${deleteMonitoring || model.userId eq thisUser}">
-											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-												<img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${model.simulationUuid}','0');" alt="delete" title="delete">
-											</c:if>	
-										</c:if>
-										<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
-											<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;" onclick="<portlet:namespace/>restartSimulation('${model.scienceAppId}', '${model.jobUuid}');" alt="rerun" title="rerun">
-										</c:if>	
-									</td>
-									<td id="result_down" class="TC">
-										
-									</td>
-									<td id="result_view" class="TC" postprocess-state="${model.jobPostProcessorYn}" middleFileprocess-state="${model.jobMiddleFileProcessorYn}">
-										
-									</td>
+									<tr id="row_${model.jobUuid}" data-status="${model.jobStatus}" sub-job="${model.jobCnt}" simulation-id="${model.simulationUuid}" scienceApp-id="${model.scienceAppId}" cluster="${model.cluster}" class="${trClass}">
 								</c:otherwise>
 							</c:choose>
+							
+								<!-- index -->
+								<td class="center">	
+									<c:if test="${subJobState}">
+										<img src="${contextPath}/images/monitoring/btn_plus.png" class="plusBtn" style="cursor: pointer;" id="${model.simulationUuid}" data-uuid="${model.jobUuid}"/>
+									</c:if>
+									${seq - data.index}
+								</td>
+								
+								<!-- App Name -->
+								<td>
+									${model.scienceAppName}<br/>/${model.simulationTitle}
+								</td>
+								<c:choose>
+									<c:when test="${subJobState}">
+										<td></td>
+										<c:if test="${deleteMonitoring eq true }">
+											<td></td>
+										</c:if>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</c:when>
+									<c:otherwise>
+										<!-- 상세정보 -->
+										<td class="center">	
+											<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
+												<img src="${contextPath}/images/monitoring/bnt_info.png" onclick="<portlet:namespace/>searchSimulationParam('${model.simulationUuid}','${model.jobSeqNo}','${model.jobUuid}');" style="cursor: pointer;" />
+											</c:if>
+										</td>
+										<c:if test="${deleteMonitoring eq true }">
+											<td class="center">
+												<span style="text-decoration: underline;cursor: pointer;" onclick="<portlet:namespace/>searchUser('${model.userId}');">${model.userNm}</span>
+											</td>
+										</c:if>
+										
+										<!-- 상태 -->
+										<td class="center">	
+											<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
+										</td>
+										<!-- 작업 취소-->
+										<td id="job_controll" class="center">
+											
+										</td>
+										
+										<!-- 중간 확인 -->
+										<td id="middle_check" class="center" logFileProcess-state="${model.jobLogFileProcessorYn }">
+											
+										</td>
+										
+										<!-- 작업 관리 -->
+										<td class="center">
+											<c:set value="<%=themeDisplay.getUserId()%>" var="thisUser"/>
+											<c:if test="${deleteMonitoring || model.userId eq thisUser}">
+												<c:if test="${model.cluster ne 'EDISON-RESTORE'}">
+													<img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;" onclick="<portlet:namespace/>deleteMonitoring('${model.simulationUuid}','0');" alt="delete" title="delete">
+												</c:if>	
+											</c:if>
+										</td>
+										
+										<!-- 결과 다운로드 -->
+										<td id="result_down" class="center">
+											
+										</td>
+										
+										<!-- 결과 가시화 -->
+										<td id="result_view" class="center" postprocess-state="${model.jobPostProcessorYn}" middleFileprocess-state="${model.jobMiddleFileProcessorYn}">
+											
+										</td>
+									</c:otherwise>
+								</c:choose>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<tr>
+							<td colspan="11" class="center"><liferay-ui:message key='edison-there-are-no-data'/></td>
 						</tr>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<tr>
-						<td colspan="11" class="TC"><liferay-ui:message key='edison-there-are-no-data'/></td>
-					</tr>
-				</c:otherwise>
-			</c:choose>
-		</tbody>
-	</table>
-</div>
-<div class="paging">
-	<div style="width:100%;text-align: center;">
-		${paging}
+					</c:otherwise>
+				</c:choose>
+			</tbody>
+		</table>
 	</div>
-</div>
-
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
-
-<table id="hideJobTable" style="display: none">
-</table>
-
-<div id="<portlet:namespace/>result-down-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-</div>
-
-<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
+	<div class="paging">
+		<div style="width:100%;text-align: center;">
+			${paging}
+		</div>
+	</div>
+	
+	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+	
+	<table id="hideJobTable" style="display: none">
+	</table>
+	
+	<div id="<portlet:namespace/>result-down-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
+	</div>
+	
+	<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
+		<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
+				<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+					<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
+				</div>
+				<div class="newWclose" style="cursor: pointer;">
+					<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+				</div>
+		</div>
+		<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
+		</div>
+	</div>
+	
+	<div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="table-responsive panel edison-panel">
+		<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
 			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-				<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
+				<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
 			</div>
 			<div class="newWclose" style="cursor: pointer;">
-				<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+				<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
 			</div>
+		</div>
+		<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table" style="word-break: break-all;table-layout: fixed;">
+				<colgroup>
+					<col width="300px" />
+					<col width="*" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>error-dialog-content" style="font-size: 25px;">
+					
+				</tbody>
+			</table>
+		</div>
 	</div>
-	<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
+	
+	
+	<div id="<portlet:namespace/>post-dialog" style="display:none; background-color:white; padding:0px;" class="table-responsive panel edison-panel">
+		<div class="newWheader" id="<portlet:namespace/>post-dialog-title" style="cursor: move;">
+			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+				<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
+			</div>
+			<div class="newWclose" style="cursor: pointer;">
+				<img id="<portlet:namespace/>post-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+			</div>
+		</div>
+		<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table" style="word-break: break-all;table-layout: fixed;">
+				<colgroup>
+					<col width="300px" />
+					<col width="*" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
+						<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>post-dialog-content" style="font-size: 25px;">
+					
+				</tbody>
+			</table>
+		</div>
 	</div>
+	
+	<div id="<portlet:namespace/>show-analyzer-dialog">
+		<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
+	</div>
+
 </div>
-
-<%-- <div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle">Log</div>
-		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-		</div>
-	</div>
-	<div id="<portlet:namespace/>error-dialog-content" style="padding: 30px;" class="newWcont01">
-			
-	</div>
-</div> --%>
-
-
-<div id="<portlet:namespace/>error-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>error-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
-		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>error-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-		</div>
-	</div>
-	<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;table-layout: fixed;">
-			<colgroup>
-				<col width="300px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>error-dialog-content" style="font-size: 25px;">
-				
-			</tbody>
-		</table>
-	</div>
-</div>
-
-
-<div id="<portlet:namespace/>post-dialog" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>post-dialog-title" style="cursor: move;">
-		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-			<div class="newWtitle"><liferay-ui:message key="edison-simulation-monitoring-post-process-choice"/></div>
-		</div>
-		<div class="newWclose" style="cursor: pointer;">
-			<img id="<portlet:namespace/>post-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-		</div>
-	</div>
-	<div style="padding: 30px;overflow:auto; max-height:400px;" class="newWcont01">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table1" style="word-break: break-all;table-layout: fixed;">
-			<colgroup>
-				<col width="300px" />
-				<col width="*" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-execute-port-label-portname"/></th>
-					<th scope="col" class="left"><liferay-ui:message key="edison-simulation-monitoring-post-process-nm"/></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>post-dialog-content" style="font-size: 25px;">
-				
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div id="<portlet:namespace/>show-analyzer-dialog">
-	<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
-</div>
-
-
 <script type="text/javascript">
 function searchLine(){
 	$("#<portlet:namespace/>monitoringSearch").submit();
@@ -471,7 +492,6 @@ function <portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid
 			"<portlet:namespace/>groupId": "<%=selectedGroupId%>"
 			};
 	
-	//console.log('searchPostProcessor');
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=searchPostProcessorURL%>",
@@ -483,6 +503,15 @@ function <portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid
 				var dataSize = msg.length;
 				var dataMap = msg.portMapList;
 				//console.log( JSON.stringify( dataMap, null, 4) );
+				if(dataMap == null || dataMap == ""){
+					alert('<liferay-ui:message key="edison-there-are-no-data"/>');
+					return;
+				} else {
+					if(dataMap.length == 0){
+						alert('<liferay-ui:message key="edison-there-are-no-data"/>');
+						return;
+					}
+				}
 				$dialogBody = $("#<portlet:namespace/>post-dialog-content");
 				for(var i=0; i< dataMap.length; i++){
 					
@@ -588,16 +617,13 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .attr("height","22px")
 				   .css("cursor","pointer")
 				   .appendTo($resultDownArea);
-// 		if($resultViewArea.attr("postprocess-state")=="Y"){
-			$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
-					   .attr("width","22px")
-					   .attr("height","22px")
-					   .css("cursor","pointer")
-// 					   .click(function(){<portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid);})
-						.click(function(){event.cancelBubble=true; <portlet:namespace/>restartSimulation(scienceAppId,jobUuid);})
-					   .appendTo($resultViewArea);
-// 		}
-	//실패
+		
+		
+		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_rerun.png")
+				  .css("cursor","pointer")
+				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+scienceAppId+"', '"+jobUuid+"');")
+				  .appendTo($resultViewArea);
+		
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
 		if($middleCheckArea.attr("logFileProcess-state") == "Y"){
 			$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_error.png")
@@ -609,12 +635,6 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 			
 			$middleCheckArea.append("&nbsp;");
 		}
-/* 		$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_graph.png")
-				   .attr("width","22px")
-				   .attr("height","22px")
-				   .click(function(){<portlet:namespace/>graph_event(scienceAppId,jobUuid, simulationUuid);})
-				   .css("cursor","pointer")
-				   .appendTo($middleCheckArea); */
 		
 		$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_save.png")
 				   .attr("width","22px")
@@ -872,20 +892,26 @@ $(function(){
 					$hideJobTr.attr("data-status",data.jobStatus);
 					$hideJobTr.attr("seq-no",data.jobSeqNo);
 					
-					$("<td></td>").addClass("TC").text("-").appendTo($hideJobTr);
+					// sequence
+					$("<td></td>").addClass("center").text("-").appendTo($hideJobTr);
+					
+					// app name
 					$("<td></td>").html(data.jobTitle).appendTo($hideJobTr);
+					
+					// 상서정보
 					if(data.cluster != "EDISON-RESTORE"){
-						$("<td></td>").addClass("TC").append(
+						$("<td></td>").addClass("center").append(
 								$("<img/>").attr("src","${contextPath}/images/monitoring/bnt_info.png")
 										   .css("cursor","pointer")
 										   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>searchSimulationParam('"+data.simulationUuid+"','"+data.jobSeqNo+"','"+data.jobUuid+"');")
 						).appendTo($hideJobTr);
 					}else{
-						$("<td></td>").addClass("TC").append().appendTo($hideJobTr);
+						$("<td></td>").addClass("center").append().appendTo($hideJobTr);
 					}
 					
+					// 아이디
 					if(<%=deleteMonitoring%>){
-						$("<td></td>").append(
+						$("<td></td>").addClass("center").append(
 								$("<span></span>").css("text-decoration","underline")
 												  .css("cursor","pointer")
 												  .click(function(){
@@ -895,15 +921,19 @@ $(function(){
 						).appendTo($hideJobTr);
 					}
 					
-					$("<td></td>").addClass("TC").append(
+					// 상태
+					$("<td></td>").addClass("center").append(
 							$("<img/>").attr("src","${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/"+data.jobStatusImg)
 						).appendTo($hideJobTr);
 					
 					
-					$("<td></td>").addClass("TC").attr("id","job_controll").appendTo($hideJobTr);
-					$("<td></td>").addClass("TC").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
+					// 작업 취소
+					$("<td></td>").addClass("center").attr("id","job_controll").appendTo($hideJobTr);
+					// 중간 확인
+					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
 					
-					$jobManageTd = $("<td></td>").addClass("TC").appendTo($hideJobTr);
+					// 작업 관리
+					$jobManageTd = $("<td></td>").addClass("center").appendTo($hideJobTr);
 					if(<%=deleteMonitoring%>||data.userId==<%=themeDisplay.getUserId()%>){
 						if(data.cluster != "EDISON-RESTORE"){
 							$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_delete.png")
@@ -913,14 +943,11 @@ $(function(){
 							$jobManageTd.append("&nbsp;")
 						}	
 					}
-					if(data.cluster != "EDISON-RESTORE"){
-						$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_rerun.png")
-								  .css("cursor","pointer")
-								  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+data.scienceAppId+"', '"+data.jobUuid+"');")
-								  .appendTo($jobManageTd);
-					}
-					$("<td></td>").addClass("TC").attr("id","result_down").appendTo($hideJobTr);
-					$("<td></td>").addClass("TC").attr("postprocess-state",data.jobPostProcessorYn).attr("middleFileprocess-state",data.jobMiddleFileProcessorYn).attr("id","result_view").appendTo($hideJobTr);
+					
+					// 결과 다운로드
+					$("<td></td>").addClass("center").attr("id","result_down").appendTo($hideJobTr);
+					// 결과 가시화
+					$("<td></td>").addClass("center").attr("postprocess-state",data.jobPostProcessorYn).attr("middleFileprocess-state",data.jobMiddleFileProcessorYn).attr("id","result_view").appendTo($hideJobTr);
 					
 					$hideJobTr.appendTo($hideJobList);
 					if(data.cluster != "EDISON-RESTORE"){
@@ -1004,7 +1031,7 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid,jobSeqNo,jobUu
 				
 				
 				for (var i = 0; i < portNameList.length; i++) {
-					var portType = simulationJobData[portNameList[i]]["editor_type"];
+					var portType = simulationJobData[portNameList[i] + "_type"];
 					var portData = simulationJobData[portNameList[i]];
 					
 					var optionHtmlStr = "";
@@ -1028,39 +1055,6 @@ function <portlet:namespace/>searchSimulationParam(simulationUuid,jobSeqNo,jobUu
 					
 				}
 			}
-			
-			/* if(optionSize>0){
-				$("<div>").addClass("tbcell070101").append(
-						$("<img/>").attr("src","${contextPath}/images/monitoring/contents_arr.png")
-						).append("<liferay-ui:message key='edison-simulation-execute-job-pre' />").appendTo($content);
-				var optionHtmlStr = "";
-				for(var i=0;i<optionSize;i++){
-					if(data.optionList[i].optionType == "1907003" || data.optionList[i].optionType == "1907004" || data.optionList[i].optionType == "1907005"){
-						optionHtmlStr+="<p>"+data.optionList[i].optionNm+" : "+data.optionList[i].optionLogicalFileValue+"</p>"
-					}else{
-						optionHtmlStr+="<p>"+data.optionList[i].optionNm+" : "+data.optionList[i].optionValue+"</p>"
-					}
-				}
-				
-				$("<div>").addClass("tbcell070201").html(optionHtmlStr).appendTo($content);;
-			}
-			
-			if(paramSize>0){
-				$("<div>").addClass("tbcell070101").append(
-						$("<img/>").attr("src","${contextPath}/images/monitoring/contents_arr.png")
-						).append("<liferay-ui:message key='edison-simulation-execute-job-detail'/>").appendTo($content);;
-				var paramHtmlStr = "";
-				for(var i=0;i<paramSize;i++){
-					var dataValue = data.parameterList[i];
-					if(dataValue.paraElement == "1909005"){
-						paramHtmlStr+="<p>"+dataValue.paraName + dataValue.paraDelimiterStr + dataValue.paraLogicalFileValue+dataValue.paraSeperatorStr+"</p>";
-					}else{
-						paramHtmlStr+="<p>"+dataValue.paraName + dataValue.paraDelimiterStr + dataValue.paraValue + dataValue.paraSeperatorStr+"</p>";
-					}
-				}
-				$("<div>").addClass("tbcell070301").css("border-bottom","none").html(paramHtmlStr).appendTo($content);;
-				
-			} */
 			
 			$("#<portlet:namespace/>jobparameter-dialog").dialog("open");
 		},
@@ -1102,16 +1096,12 @@ function <portlet:namespace/>deleteMonitoring(simulationUuid,jobSeqNo){
 
 //재실행
 function <portlet:namespace/>restartSimulation(p_scienceAppId, p_jobUuid){
-	var thisPortletNamespace = "_Workbench_WAR_OSPWorkbenchportlet_";
+	var thisPortletNamespace = "_SimulationWorkbench_WAR_OSPWorkbenchportlet_";
 
 	var URL = "<%=workbenchURL%>";
 	var params = "&" +thisPortletNamespace+ "scienceAppId=" + p_scienceAppId;
 	params += "&" +thisPortletNamespace+ "jobUuid=" + p_jobUuid;
-	params += "&" +thisPortletNamespace+ "customId=0";
-	params += "&" +thisPortletNamespace+ "classId=0";
-	params += "&" +thisPortletNamespace+ "testYn=false";
-
-	console.log(URL + params);
+	
 	location.href = URL + params;
 }
 
@@ -1292,17 +1282,17 @@ AUI().ready(function() {
 		show: {effect:'fade', speed: 800}, 
 		hide: {effect:'fade', speed: 800},
 		open: function(event, ui) {
-/* 			$('.ui-dialog-titlebar-close').bind('click',function(){
+ 			$('.ui-dialog-titlebar-close').bind('click',function(){
 				$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
 	    	});
 			$('.ui-widget-overlay').bind('click',function(){
 				$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
-	    	}); */
+	    	});
 	    },
 	    close: function() {
-// 	    	$("body").css('overflow','');
-// 			$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
-// 			$("#<portlet:namespace/>show-analyzer-dialog-content").empty();
+ 	    	$("body").css('overflow','');
+ 			$("#<portlet:namespace/>show-analyzer-dialog").dialog("close");
+ 			$("#<portlet:namespace/>show-analyzer-dialog-content").empty();
 			
 			location.reload();
 	    }
@@ -1337,7 +1327,7 @@ function openAnalyzerWindow(
 	  		$("#<portlet:namespace/>post-dialog").dialog("close");
 	  	}
 	  	
-  		<%-- var renderURL = Liferay.PortletURL.createRenderURL();
+  		var renderURL = Liferay.PortletURL.createRenderURL();
 		renderURL.setPortletId( 'Workbench_WAR_OSPWorkbenchportlet');
 		renderURL.setWindowState('<%=LiferayWindowState.POP_UP%>');
 	  	renderURL.setParameter("workbenchType", "MORANALYSIS");
@@ -1347,7 +1337,7 @@ function openAnalyzerWindow(
 		renderURL.setParameter("parentPath", lookUpPath + "/result/");
 		renderURL.setParameter("fileName", filePath);
 		renderURL.setParameter("relative", true);
-		renderURL.setParameter("loadNow", true);  --%>
+		renderURL.setParameter("loadNow", true);
 // 		renderURL.setParameter("pathType", "url");
 // 		renderURL.setParameter("url", lookUpPath + "/result/" + filePath);
 		

@@ -179,14 +179,18 @@
 	</c:otherwise>
 </c:choose>
 
-<h1>${boardDivTitle}</h1>
-
 <form id="boardInputForm<portlet:namespace/>" name="boardInputForm<portlet:namespace/>" method="POST"  action="${actionUrl}" onsubmit="return boardInputFormCheck<portlet:namespace/>()" enctype="multipart/form-data">
 	<input type="hidden" name="<portlet:namespace/>RENDER_SORT" value="UPDATE">
 	<input type="hidden" id="<portlet:namespace/>currentLocale" name="<portlet:namespace/>current_languageId" value="${select_languageId }">
 
-	<div class="table1_list">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<div class="table1_list table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h1>
+				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+				${boardDivTitle}
+			</h1>
+		</div>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table">
 			<colgroup id="boardColgroup">
 				<col width="240px" />
 				<col width="240px" />
@@ -266,7 +270,7 @@
 						<th><liferay-ui:message key='title' /></th>
 					</c:otherwise>
 				</c:choose>
-				<td colspan="3"><input type="text" id="<portlet:namespace/>title" name="<portlet:namespace/>title" style="width:80%; margin:0px;" value="${boardMap.title }"> </td>
+				<td colspan="3"><input type="text" id="<portlet:namespace/>title" class="form-control" name="<portlet:namespace/>title" style="width:80%; margin:0px;" value="${boardMap.title }"> </td>
 			</tr>
 			<tr>
 				<td colspan="4" style="height:300px;">
@@ -278,16 +282,18 @@
 				<tr>								
 					<th width="20%" rowspan="2" valign="top">
 						<liferay-ui:message key='edison-table-list-header-file' />&nbsp;
-						<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="button06" onClick="moreFileTag()" style="cursor:pointer;"/>	
+						<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer; width: 30%;"/>	
 					</th>
 				</tr>	
 				<tr>
 					<td id="fileTDArea" colspan="3"></td>
 				</tr>
 				<tr>
-					<td colspan="4">
+					<td class="center">
+							<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />
+					</td>
+					<td colspan="3">
 						<div id="fileListDiv">
-							<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;
 							<c:forEach items="${fileList}" var="fileMap">
 								<span style="cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
 									<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
@@ -308,8 +314,8 @@
 	</div>
 <br> 
 	<div class="boardbtnbox" style="text-align: right;">
-		<input type="button" class="button02" style="margin-right:5px;" onClick="submitForm<portlet:namespace/>(); return false;" value="<liferay-ui:message key='edison-virtuallab-save' />" />
-		<input type="button" class="button02" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-button-board-list' />" />
+		<input type="button" class="btn btn-default" style="margin-right:5px; width: 70px;" onClick="submitForm<portlet:namespace/>(); return false;" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+		<input type="button" class="btn btn-default" onClick="goList<portlet:namespace/>('${maxWindowStatus}');" value="<liferay-ui:message key='edison-button-board-list' />" style="width: 70px;" />
 	</div>
 </form>
 
@@ -352,9 +358,13 @@ var fileIndex = 0;
 function moreFileTag()
 {	
 	fileIndex++;
+	var marginTop = "";
+	if(1<fileIndex){
+		marginTop = "1%";
+	}
 	var frmTag = "<div id=\"fileDiv"+fileIndex+"\">";
-	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin-bottom:2px;\">&nbsp;";
-	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer;\" class=\"button06\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
+	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin:0% 1% 2% 0%; float:left;\">";
+	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer; margin:0% 1% 2% 0%;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
 	frmTag += "</div>";
 	
 	$("#fileTDArea").append(frmTag);

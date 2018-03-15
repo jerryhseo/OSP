@@ -59,6 +59,10 @@
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.RELATIVE, arguments) );
 		};
 		
+		Path.repositoryType = function( repositoryType ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments) );
+		};
+		
 		Path.dlEntryId = function( entryId ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments) );
 		};
@@ -152,6 +156,7 @@
 				//console.log('value: ', jsonInputData[key]);
 				switch( key ){
 				case OSP.Constants.TYPE:
+				case OSP.Constants.REPOSITORY_TYPE:
 				case OSP.Constants.PARENT:
 				case OSP.Constants.NAME:
 				case OSP.Constants.URI:
@@ -202,13 +207,13 @@
 					if( !operand )	return false;
 
 					if( whichEnd === OSP.Constants.LOWER_BOUNDARY && flag == true )
-						operand = '=' + operand.substring(1);
+						operand = '=' + operand[1];
 					else if( whichEnd === OSP.Constants.LOWER_BOUNDARY && flag == false )
-						operand = '<' + operand.substring(1);
+						operand = '<' + operand[1];
 					else if( whichEnd === OSP.Constants.UPPER_BOUNDARY && flag == true )
-						operand = operand.substring(0, 1) + '=';
+						operand = operand[0] + '=';
 					else if( whichEnd === OSP.Constants.UPPER_BOUNDARY && flag == false )
-						operand = operand.substring(0, 1) + '>';
+						operand = operand[0] + '>';
 					else
 						return false;
 
@@ -3067,16 +3072,17 @@
 
 			var valueRangeBoundaryDiv = function(parameter, place){
 				var boundary;
-				var div = $('<div>');
+				var div = $('<div>').addClass(Layout.InputAddon);
 				if( place === OSP.Constants.LOWER_BOUNDARY){
 					boundary = parameter.rangeLowerBoundary();
-					div.attr('style', Style.ValueRangeLowerBoundaryDiv);
+//					div.attr('style', Style.ValueRangeLowerBoundaryDiv);
 				}
 				else{
 					boundary = parameter.rangeUpperBoundary();
-					div.attr('style', Style.ValueRangeUpperBoundaryDiv);
+//					div.attr('style', Style.ValueRangeUpperBoundaryDiv);
 				}
 				div.append( boundary );
+				div.append( rangeUnit(parameter) );
 
 				return div;
 			};
@@ -3084,18 +3090,24 @@
 				var unit = parameter.unit();
 				if( !unit )
 					unit = '';
-
-				var div = $('<div>');
-				div.attr('style', Style.RangeUnitDiv);
+				
+				var div = $('<div>').addClass(Layout.InputAddon);
+//					div.attr('style', Style.RangeUnitDiv);
 				div.append(unit);
-
 				return div;
 			};
+			var rangeUnit = function(parameter){
+				var unit = parameter.unit();
+				if( !unit )
+					unit = '';
+
+				return unit;
+			};
 			var valueRangeOperandDiv = function(parameter, place){
-				var div = $('<div>');
-				div.attr('style', Style.ValueRangeOperandDiv);
+				var div = $('<div>').addClass(Layout.InputAddon);
+//				div.attr('style', Style.ValueRangeOperandDiv);
 				var operand;
-				if( place === OSP.Constants.LOWER_BOUNDARY ){
+				if( place === OSP.Constants.LOWER_OPERAND ){
 					if( parameter.rangeCheckLowerBoundary() )
 						operand = '&le;';
 					else
@@ -3111,19 +3123,16 @@
 
 				return div;
 			};
-			var valueRangeInputDiv = function(parameter, eventFlag){
-				var div = $('<div>');
-				div.attr('style', Style.ValueRangeInputDiv);
-
+			var valueRangeInputDiv = function(parameter, eventFlag, div){
 				var input = $('<input>');
 				input.attr({
 					'type':'text',
 					'id' : TagAttr.valueRangeInputId(parameter),
 					'name': TagAttr.valueRangeInputName(parameter),
-					'style': Style.ValueRangeInput,
-					'value': parameter.value()
+					'value': parameter.value(),
+					'class': Layout.AuiFieldSelect
 				});
-
+				
 				if( eventFlag === true ){
 					//console.log('onChange Handler binded...');
 					var onInputChange = function (event){
@@ -3159,7 +3168,8 @@
 			var sweepCheckBoxDiv = function(parameter){
 				var div = $('<div>');
 				div.attr('style', Style.SweepCheckBoxDiv);
-				//div.addClass(Layout.SweepCheckBoxDiv);
+				div.addClass(Layout.SweepCheckBoxDiv);
+				
 				var label = $('<label/>');
 				label.attr('style', Style.SweepRadio);
 				var checkBox = $('<input type=\"checkbox\" >Sweep</input>');
@@ -3174,7 +3184,6 @@
 			};
 			var sweepMethodDiv = function(parameter){
 				var div = $('<div>');
-				div.addClass(Layout.SweepMethodValue);
 				div.addClass(Layout.SweepMethodDiv);
 				div.attr('style', Style.SweepMethodDiv);
 
@@ -3285,8 +3294,6 @@
 
 			var sweepRangeBoundaryDiv = function(parameter, place){
 				var limit;
-				var div = $('<div>');
-				div.attr('style', Style.SweepRangeLowerBoundaryDiv);
 				var input = $('<input>');
 				var inputId;
 				if( place === OSP.Constants.LOWER_BOUNDARY){
@@ -3301,8 +3308,9 @@
 					'type' : 'text',
 					'id' : inputId,
 					'value' : limit,
-					'style' : Style.SweepRangeLowerBoundary
+					'class': Layout.AuiFieldSelect
 				};
+				
 				input.attr(props);
 				input.bind('change',
 						{
@@ -3312,15 +3320,14 @@
 						},
 						onSweepChange
 				);
-				div.append(input);
 
-				return div;
+				return input;
 			};
+			
 			var sweepRangeOperandDiv = function(parameter, place){
-				var div = $('<div>');
-				div.attr('style', Style.SweepRangeOperandDiv);
 				var select = $('<select>');
-				select.attr('style', Style.SweepRangeOperandSelect);
+				select.addClass(Layout.AuiFieldSelect);
+				select.css("min-width","60px");
 				var selectId;
 				var optionE, optionT;
 
@@ -3356,18 +3363,15 @@
 						onSweepChange
 				);
 
-				div.append(select);
-				return div;
+				return select;
 			};
 			var sweepSliceValueDiv = function(parameter){
-				var div = $('<div>');
-				div.attr('style', Style.SweepSliceValueDiv);
 				var input = $('<input>');
 				input.attr({
 					'type':'text',
 					'id' : TagAttr.sweepSliceValueId(parameter),
 					'name': TagAttr.sweepSliceValueName(parameter),
-					'style': Style.SweepSliceValue
+					'class': Layout.AuiFieldSelect
 				});
 				var value;
 				if(parameter.sweepMethod() == OSP.Enumeration.SweepMethod.BY_SLICE  ){
@@ -3388,10 +3392,7 @@
 						onSweepChange
 				);
 
-				div.append(input);
-				div.append( sweepSliceValueUnitDiv(parameter) );
-
-				return div;
+				return input;
 			};
 			var sweepSliceValueUnitDiv = function (parameter){
 				var div = $('<div>');
@@ -3409,24 +3410,32 @@
 			};
 			var sweepRangeDiv = function(parameter){
 				var div = $('<div>');
-				div.addClass(Layout.SweepMethodValue);
 				div.addClass(Layout.SweepMethodDiv);
 				div.attr('style', Style.SweepRangeDiv);
-
-				div.append(sweepRangeBoundaryDiv(parameter, OSP.Constants.LOWER_BOUNDARY));
-				div.append(rangeUnitDiv(parameter));
-				div.append(sweepRangeOperandDiv(parameter, OSP.Constants.LOWER_OPERAND));
-				div.append($('<div style=\"display:inline;\">x</div>'));
-				div.append(sweepRangeOperandDiv(parameter, OSP.Constants.UPPER_OPERAND));
-				div.append(sweepRangeBoundaryDiv(parameter, OSP.Constants.UPPER_BOUNDARY));
-				div.append(rangeUnitDiv(parameter));
+				
+				var sweepRangeCol = $("<div>").addClass("col-md-12").css("padding","0px").appendTo(div);
+				var formGroup = $("<div>").addClass("form-group").appendTo(sweepRangeCol);
+				var inputGroup = $("<div>").addClass("input-group").appendTo(formGroup);
+				
+				
+				
+				inputGroup.append(sweepRangeBoundaryDiv(parameter, OSP.Constants.LOWER_BOUNDARY));
+				inputGroup.append($("<span class=\"input-group-addon\" style=\"width:0px; padding-left:0px; padding-right:0px; border:none;\"></span>"));
+				
+				inputGroup.append(sweepRangeOperandDiv(parameter, OSP.Constants.LOWER_OPERAND));
+				inputGroup.append($('<div class=\"input-group-addon\">x</div>'));
+				inputGroup.append(sweepRangeOperandDiv(parameter, OSP.Constants.UPPER_OPERAND));
+				inputGroup.append($("<span class=\"input-group-addon\" style=\"width:0px; padding-left:0px; padding-right:0px; border:none;\"></span>"));
+				inputGroup.append(sweepRangeBoundaryDiv(parameter, OSP.Constants.UPPER_BOUNDARY));
+				inputGroup.append($("<span class=\"input-group-addon\" style=\"width:0px; padding-left:0px; padding-right:0px; border:none;\"></span>"));
 
 				var divSweepSliceValue = sweepSliceValueDiv(parameter);
-				div.append(divSweepSliceValue);
+				inputGroup.append(divSweepSliceValue);
 				div.setSweepSliceValue = function(value){
 					var input = divSweepSliceValue.find('input');
 					input.val(value);
 				};
+				
 				div.setSweepSliceValueUnit = function(unit){
 					var unitDiv = $('#'+TagAttr.sweepSliceValueUnitId(parameter));
 					unitDiv.html(unit);
@@ -3437,7 +3446,8 @@
 
 			var sweepDiv = function(parameter, eventFlag){
 				var div = $('<div>');
-				div.addClass(Layout.SweepMethodValueDiv);
+				div.addClass("row-fluid");
+				var divCol = $("<div>").addClass("col-md-12").appendTo(div);
 
 				if(parameter.sweeped()){
 					div.attr('style', Style.SweepDivVisible);
@@ -3450,8 +3460,8 @@
 					}
 				}
 
-				var divSweepRange = sweepRangeDiv(parameter);
 				var divSweepMethod = sweepMethodDiv(parameter);
+				var divSweepRange = sweepRangeDiv(parameter);
 
 				var onSweepMethodChange = function (event){
 					var sweepMethodDiv = event.data.sweepMethodDiv;
@@ -3483,8 +3493,8 @@
 						data,
 						onSweepMethodChange);
 
-				div.append(divSweepMethod);
-				div.append(divSweepRange);
+				divCol.append(divSweepMethod);
+				divCol.append(divSweepRange);
 
 				return div;
 			};
@@ -3499,30 +3509,35 @@
 			};
 			var numericParameterValueDiv = function(parameter, eventFlag){
 				var div = $('<div>');
-				div.addClass(Layout.ParameterRangeDiv);
-				div.attr('style', Style.NumericParameterValueDiv);
+				div.addClass(Layout.ParameterRangeInlineDiv);
+//				div.attr('style', Style.NumericParameterValueDiv);
+				
+				var formGroupDiv = $('<div>').addClass("form-group").appendTo(div);
+				var inputGroupDiv = $('<div>').addClass(Layout.InputGroup).appendTo(formGroupDiv);
+				
 				var range = parameter.range();
-				var divInput = valueRangeInputDiv(parameter, eventFlag);
 				if( !range || JSON.stringify(range) === '{}'){
-					div.append(divInput);
-					div.append(rangeUnitDiv(parameter));
+					var divInput = valueRangeInputDiv(parameter, eventFlag, inputGroupDiv);
+					inputGroupDiv.append(divInput);
+					inputGroupDiv.append(rangeUnitDiv(parameter));
 				}
 				else {
 					var lowerBoundary = parameter.rangeLowerBoundary();
 					if( lowerBoundary ){
-						div.append(valueRangeBoundaryDiv(parameter, OSP.Constants.LOWER_BOUNDARY));
-						div.append(rangeUnitDiv(parameter));
-						div.append(valueRangeOperandDiv(parameter, OSP.Constants.LOWER_OPERAND));
+						inputGroupDiv.append(valueRangeBoundaryDiv(parameter, OSP.Constants.LOWER_BOUNDARY));
+//						div.append(rangeUnitDiv(parameter));
+						inputGroupDiv.append(valueRangeOperandDiv(parameter, OSP.Constants.LOWER_OPERAND));
 					}
-					divInput = valueRangeInputDiv(parameter, eventFlag);
-					div.append(divInput);
-					div.append(rangeUnitDiv(parameter));
+					
+					divInput = valueRangeInputDiv(parameter, eventFlag, inputGroupDiv);
+					inputGroupDiv.append(divInput);
+					inputGroupDiv.append(rangeUnitDiv(parameter));
 
 					var upperBoundary = parameter.rangeUpperBoundary();
 					if( upperBoundary ){
-						div.append(valueRangeOperandDiv(parameter, OSP.Constants.UPPER_OPERAND));
-						div.append(valueRangeBoundaryDiv(parameter, OSP.Constants.UPPER_BOUNDARY));
-						div.append(rangeUnitDiv(parameter));
+						inputGroupDiv.append(valueRangeOperandDiv(parameter, OSP.Constants.UPPER_OPERAND));
+						inputGroupDiv.append(valueRangeBoundaryDiv(parameter, OSP.Constants.UPPER_BOUNDARY));
+//						div.append(rangeUnitDiv(parameter));
 					}
 				}
 
@@ -3575,14 +3590,15 @@
 			};
 			var listParameterValueDiv = function(parameter, eventFlag){
 				var div = $('<div>');
-				div.addClass(Layout.ParameterRangeDiv);
-				div.attr('style', Style.ListParameterValueDiv);
+				div.addClass(Layout.ParameterRangeInlineDiv);
+//				div.attr('style', Style.ListParameterValueDiv);
 				var select = $('<select>');
 				var id = TagAttr.valueRangeInputId(parameter);
 				var name = id;
 				select.attr({
 					'id' : id,
-					'name' : name
+					'name' : name,
+					'class': Layout.AuiFieldSelect
 				});
 				var listItems = parameter.localizedListItems(languageId);
 				if( OSP.Util.isEmpty(listItems) ){
@@ -3640,8 +3656,12 @@
 			};
 			var vectorParameterValueDiv = function(parameter, eventFlag){
 				var div = $('<div>');
-				div.addClass(Layout.ParameterRangeDiv);
-				div.attr('style', Style.VectorParameterValueDiv);
+				div.addClass(Layout.ParameterRangeInlineDiv);
+				
+				var formGroupDiv = $('<div>').addClass("form-group").appendTo(div);
+				var inputGroupDiv = $('<div>').addClass(Layout.InputGroup).appendTo(formGroupDiv);
+				
+//				div.attr('style', Style.VectorParameterValueDiv);
 				var leftBrace, rightBrace;
 				switch(dataStructure.vectorFormBraceChar()){
 				case OSP.Constants.SQUARE_SPACE:
@@ -3656,12 +3676,15 @@
 					break;
 				}
 				var vector = parameter.value();
-				var leftBraceDiv = $('<div style=\"display:inline;\"/>');
-				leftBraceDiv.append(leftBrace);
-				div.append(leftBraceDiv);
-				var inputDiv = $('<div style=\"display:inline;\"/>');
+				var leftBraceDiv = $('<div>').addClass(Layout.InputAddon);
+				leftBraceDiv.html(leftBrace);
+				inputGroupDiv.append(leftBraceDiv);
+				
+				var inputDiv = $('<div>');
 				inputDiv.attr('id', TagAttr.vectorInputDivId(parameter));
-				var dimension = Number( parameter.dimension() );
+				var dimension = Number( parameter.dimension());
+				var inputWidth = Math.floor(100/dimension);
+				
 				for(var i=0; i<dimension; i++){
 					if( i !== 0){
 						inputDiv.append(dataStructure.vectorFormDelimiter());
@@ -3669,7 +3692,8 @@
 					var input = $('<input>');
 					input.attr({
 						'type' : 'text',
-						'style': Style.VectorInput,
+						'style': 'width:'+inputWidth+'%',
+						'class': Layout.AuiFieldSelect,
 						'value': vector[i]
 					});
 					if( eventFlag === true ){
@@ -3692,13 +3716,13 @@
 
 					inputDiv.append(input);
 				}
-				div.append(inputDiv);
-				var rightBraceDiv = 	$('<div style=\"display:inline;\"/>');
-				rightBraceDiv.append(rightBrace);
-				div.append(rightBraceDiv);
+				inputGroupDiv.append(inputDiv);
+				var rightBraceDiv = $('<div>').addClass(Layout.InputAddon);
+				rightBraceDiv.html(rightBrace);
+				inputGroupDiv.append(rightBraceDiv);
 
 				if( eventFlag === true ){
-					div.setParameterValue = function(value){
+					inputGroupDiv.setParameterValue = function(value){
 						var inputs = inputDiv.find('input');
 						for(var i=0; i<inputs.length; i++){
 							inputs[i].val(value[i]);
@@ -3712,12 +3736,12 @@
 			var stringParameterValueDiv = function(parameter, eventFlag){
 				var div = $('<div>');
 				div.addClass(Layout.ParameterRangeDiv);
-				div.attr('style', Style.StringParameterValueDiv);
+//				div.attr('style', Style.StringParameterValueDiv);
 
 				var input = $('<input>');
 				input.attr({
 					'type' : 'text',
-					'style': Style.StringInput,
+					'class': Layout.AuiFieldSelect,
 					'value': parameter.value()
 				});
 				if( eventFlag === true ){
@@ -3932,39 +3956,50 @@
 				return div;
 			};
 			var groupParameterRow = function( parameter, eventFlag ){
-				var outerDiv = $('<div  style="text-align:right;"/>');/*class=\"span12\" 삭제*/
+				var outerDiv = $('<div">');/*class=\"span12\" 삭제*/
 				outerDiv.attr('id', TagAttr.parameterRowId(parameter));
-				var div = $('<div>');
-				div.attr('style', Style.ParameterRow);
-				div.addClass(Layout.ParameterRow);
-				//div.attr('style', Style.GroupParameterRow);
-				var groupNameDiv = $('<div class=\"span6\" style=\"font-weight:bold; text-align:left; display:inline;\"/>');
+				
+				
+				var groupNameRow = $('<div>').appendTo(outerDiv);
+				groupNameRow.addClass(Layout.ParameterRow);
+				groupNameRow.css("line-height","40px");
+				groupNameRow.css("border-bottom","2px solid #b4b4b4");
+				groupNameRow.css("font-weight","600");
+				groupNameRow.css("vertical-align", "middle");
+				
+				
+				
+				var groupNameDiv = $("<div>").addClass("col-md-10").appendTo(groupNameRow);
+				
 				var groupName = parameter.localizedNameText(languageId);
 				if( !groupName || groupName == false || groupName == '' )
 					groupName = parameter.localizedNameText(dataStructure.defaultLanguageId());
 
 				if( OSP.Util.isEmpty(groupName) )
 					groupName = parameter.name();
-
-				groupNameDiv.append("&nbsp;").append(groupName);
-				div.append(groupNameDiv);
-				var groupDescriptionDiv = $('<div class=\"span6\" style=\"display:inline; text-align:left; \"/>');
+				
+				groupNameDiv.html("&nbsp;"+groupName);
+				
+				
+				var groupDescriptionDiv = $("<div>").addClass("col-md-2").appendTo(groupNameRow);
 				groupDescriptionDiv.append(parameter.localizedDescription(languageId));
-				div.append(groupDescriptionDiv);
+				
+				
 
 				var attachedNames = parameter.parameters();
 				if(attachedNames.length > 0){
 					for(var index in attachedNames){
 						var subParameter = dataStructure.parameter(attachedNames[index]);
-						div.append(  parameterRow( subParameter, eventFlag) );
+						outerDiv.append(  parameterRow( subParameter, eventFlag) );
 					}
 				}else{
-					div.css("padding", "5px 0px");
+//					div.css("padding", "5px 0px");
 				}
 
-				outerDiv.append(div)
+//				outerDiv.append(div)
 				return outerDiv;
 			};
+			
 			var listParameterRow = function(parameter, eventFlag){
 				var div = $('<div>');
 				div.attr({
@@ -4105,21 +4140,25 @@
 				editor : function(){
 
 					Layout = {
-							SweepCheckBoxDiv: 'span1',
+							SweepCheckBoxDiv: 'form-group',
 							SweepMethodDiv: 'row-fluid',
-							SweepRadioBySlice: 'span4',
-							SweepRadioByValue: 'span4',
+							SweepRadioBySlice: 'col-md-6',
+							SweepRadioByValue: 'col-md-6',
 							SweepMethodValueDiv: 'span11',
 							SweepMethodValue: 'span12',
-							ParameterNameDiv: 'span3',
-							ParameterRangeDiv: 'span8',
-							ParameterDescriptionDiv: 'span1',
+							ParameterNameDiv: 'col-md-3',
+							ParameterRangeDiv: 'col-md-7',
+							ParameterRangeInlineDiv: 'col-md-7 form-inline',
+							ParameterDescriptionDiv: 'col-md-2',
 							ParameterRow: 'row-fluid parameter-row',
+							AuiFieldSelect: 'form-control',
+							InputGroup:'input-group',
+							InputAddon:'input-group-addon'
 					};
 
 					Style = {
-							SweepCheckBoxDiv: 'padding-left:30px; display:inline;',
-							SweepMethodDiv: ' border-bottom:2px solid grey;',
+							SweepCheckBoxDiv: 'padding-left:10px;',
+							SweepMethodDiv: ' padding-top:7px; border-bottom:2px solid grey;',
 							SweepRadio: 'display:inline;',
 							SweepRadioBySlice: 'display:inline;',
 							SweepRadioByValue: 'display:inline;',
@@ -4131,10 +4170,10 @@
 							SweepSliceValueDiv: 'padding:5px;',
 							SweepSliceValue: 'width:40px; text-align:right; display:inline;',
 							SweepSliceValueUnitDiv: 'width:20px; display:inline;',
-							SweepDivVisible: 'border:1px solid #d0d0d0;display:block; margin:5px auto;',
-							SweepDivInvisible: 'border:1px solid #d0d0d0; padding-left:20px; display:none;',
-							ParameterNameDiv:'text-align:right; display:inline;word-wrap: break-word;',
-							ParameterDescriptionDiv:'text-align:center; display:inline; margin-left: 0px;',
+							SweepDivVisible: 'border:3px solid #d0d0d0;display:block;margin-top:5px;',
+							SweepDivInvisible: 'border:3px solid #d0d0d0;display:none;margin-top:5px;',
+							ParameterNameDiv:'text-align:right; word-wrap: break-word;vertical-align:middle;line-height:30px;',
+							ParameterDescriptionDiv:'text-align:center;display:inline;margin-left: 0px;line-height: 30px;vertical-align: middle;',
 							ValueRangeLowerBoundaryDiv: 'width:60px; text-align:right; display:inline;',
 							ValueRangeUpperBoundaryDiv: 'width:60px; display:inline;',
 							RangeUnitDiv:'width:20px; display:inline;',
@@ -4164,20 +4203,24 @@
 				},
 				form : function(){
 					Layout = {
-							SweepCheckBoxDiv: 'span1',
+							SweepCheckBoxDiv: 'form-group',
 							SweepMethodDiv: 'row-fluid',
-							SweepRadioBySlice: 'span4',
-							SweepRadioByValue: 'span4',
+							SweepRadioBySlice: 'col-md-6',
+							SweepRadioByValue: 'col-md-6',
 							SweepMethodValueDiv: 'span11',
 							SweepMethodValue: 'span12',
-							ParameterNameDiv: 'span3',
-							ParameterRangeDiv: 'span8',
-							ParameterDescriptionDiv: 'span1',
+							ParameterNameDiv: 'col-md-3',
+							ParameterRangeDiv: 'col-md-7',
+							ParameterRangeInlineDiv: 'col-md-7 form-inline',
+							ParameterDescriptionDiv: 'col-md-2',
 							ParameterRow: 'row-fluid parameter-row',
+							AuiFieldSelect: 'form-control',
+							InputGroup:'input-group',
+							InputAddon:'input-group-addon'
 					};
 					Style = {
-							SweepCheckBoxDiv: 'padding-left:30px; display:inline;',
-							SweepMethodDiv: ' border-bottom:2px solid grey;',
+							SweepCheckBoxDiv: 'padding-left:10px;',
+							SweepMethodDiv: ' padding-top:7px; border-bottom:2px solid grey;',
 							SweepRadio: 'display:inline;',
 							SweepRadioBySlice: 'display:inline;',
 							SweepRadioByValue: 'display:inline;',
@@ -4189,10 +4232,10 @@
 							SweepSliceValueDiv: 'padding:5px;',
 							SweepSliceValue: 'width:40px; text-align:right; display:inline;',
 							SweepSliceValueUnitDiv: 'width:20px; display:inline;',
-							SweepDivVisible: 'border:1px solid #d0d0d0;display:block; margin:5px auto;',
-							SweepDivInvisible: 'border:1px solid #d0d0d0; padding-left:20px; display:none;',
-							ParameterNameDiv:'text-align:right; display:inline;word-wrap: break-word;',
-							ParameterDescriptionDiv:'text-align:center; display:inline; margin-left: 0px;',
+							SweepDivVisible: 'border:3px solid #d0d0d0;display:block;margin-top:5px;',
+							SweepDivInvisible: 'border:3px solid #d0d0d0;display:none;margin-top:5px;',
+							ParameterNameDiv:'text-align:right; word-wrap: break-word;vertical-align:middle;line-height:30px;',
+							ParameterDescriptionDiv:'text-align:center;display:inline;margin-left: 0px;line-height: 30px;vertical-align: middle;',
 							ValueRangeLowerBoundaryDiv: 'width:60px; text-align:right; display:inline;',
 							ValueRangeUpperBoundaryDiv: 'width:60px; display:inline;',
 							RangeUnitDiv:'width:20px; display:inline;',

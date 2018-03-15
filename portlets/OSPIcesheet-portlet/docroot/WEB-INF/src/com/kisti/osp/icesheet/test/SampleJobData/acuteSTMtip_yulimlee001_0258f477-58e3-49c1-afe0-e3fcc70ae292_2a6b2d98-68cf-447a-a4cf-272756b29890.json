@@ -1,0 +1,97 @@
+{
+  "code_mpi_number": "1",
+  "simulation_description": "",
+  "-inp": [
+    {
+      "file-content": "V0 = -0.5 ;\nh = 9 ;\n",
+      "available-language-ids": "{ko_KR,en_US}",
+      "variable-map": {
+        "map": {
+          "V0": {
+            "unit": "",
+            "sweepable": false,
+            "value-domain": {
+              
+            },
+            "name": "V0",
+            "value": "-0.5",
+            "active": true,
+            "disable": false,
+            "activate-condition-container": {
+              
+            },
+            "type": "numeric",
+            "sweep": {
+              "domain": {
+                
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tip에 걸어준 전압",
+                "en_US": ""
+              }
+            },
+            "sweeped": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "V0",
+                "en_US": "V0"
+              }
+            }
+          },
+          "h": {
+            "unit": "",
+            "sweepable": false,
+            "value-domain": {
+              "upper-limit": 10,
+              "lower-limit": 0.2,
+              "operand": "=="
+            },
+            "name": "h",
+            "value": "9",
+            "active": true,
+            "activate-condition-container": {
+              
+            },
+            "type": "numeric",
+            "sweep": {
+              "domain": {
+                
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tip의 높이",
+                "en_US": "STM tip의 높이"
+              }
+            },
+            "sweeped": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "h",
+                "en_US": "h"
+              }
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "variable-form": {
+        "comment-char": "",
+        "space": false,
+        "variable-delimiter": " ;",
+        "value-delimiter": " = "
+      },
+      "vector-form": {
+        "delimiter": " ",
+        "brace-char": "SQUARE",
+        "space": false,
+        "sample": "[A B C]"
+      },
+      "sweep-max": 1
+    }
+  ],
+  "simulation_title": "이유림",
+  "-inp_type": "Inputdeck"
+}

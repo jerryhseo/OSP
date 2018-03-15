@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -355,11 +355,8 @@ public interface SimulationJobLocalService extends BaseLocalService,
 		long groupId, long jobStatus, boolean dateUpdate);
 
 	/**
-	* 시뮬레이션 프로젝트 모니터링 리스트
-	*
-	* @param classId - 시뮬레이션 프로젝트 모델 아이디
-	* @param customId - 시뮬레이션 프로젝트 아이디
-	* @return
+	* �쒕��덉씠���꾨줈�앺듃 紐⑤땲�곕쭅 由ъ뒪��     *
+	* @param classId - �쒕��덉씠���꾨줈�앺듃 紐⑤뜽 �꾩씠��     * @param customId - �쒕��덉씠���꾨줈�앺듃 �꾩씠��     * @return
 	* @throws SystemException
 	* @throws PortalException
 	* @throws ParseException
@@ -372,10 +369,8 @@ public interface SimulationJobLocalService extends BaseLocalService,
 			java.text.ParseException;
 
 	/**
-	* 시뮬레이션 프로젝트 모니터링 카운트
-	*
-	* @param simulationProjectId - 시뮬레이션 프로젝트 아이디
-	* @return
+	* �쒕��덉씠���꾨줈�앺듃 紐⑤땲�곕쭅 移댁슫��     *
+	* @param simulationProjectId - �쒕��덉씠���꾨줈�앺듃 �꾩씠��     * @return
 	* @throws SystemException
 	* @throws PortalException
 	* @throws ParseException
@@ -389,7 +384,7 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
-	* ##### 통계 Service #########################################################################################################################################################
+	* ##### �듦퀎 Service #########################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
@@ -460,7 +455,7 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
-	* ##### EDISON 프로젝트 앱, 시뮬레이션 통계 Service #########################################################################################################################################################
+	* ##### EDISON �꾨줈�앺듃 �� �쒕��덉씠���듦퀎 Service #########################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
 	* ###########################################################################################################################################################################
@@ -491,4 +486,68 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	public int getCountVirtualClassStatistics(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuidWithAdditionalCondition(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Added By Jerry H. Seo
+	*
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public org.kisti.edison.bestsimulation.model.SimulationJob addJob(
+		java.lang.String simulationUuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public org.kisti.edison.bestsimulation.model.SimulationJob getJob(
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsByAppUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsByAppUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countJobsByAppUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsBySimulationUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countJobsBySimulationUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getJobInputData(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
+
+	public void deleteJobsBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getJobWorkingDirPath(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
+
+	public void deleteJob(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 }

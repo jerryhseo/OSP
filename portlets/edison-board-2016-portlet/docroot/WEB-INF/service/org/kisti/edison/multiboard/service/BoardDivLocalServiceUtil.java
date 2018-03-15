@@ -414,12 +414,14 @@ public class BoardDivLocalServiceUtil {
 	public static java.util.List getCustomListBoard(long divCd, int start,
 		int listSize, long groupId, java.lang.String customId,
 		java.lang.String searchValue, java.util.Locale locale,
-		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup)
+		long groupBoardSeq, boolean popupYn, java.lang.String siteGroup,
+		java.lang.String virtualLabId)
 		throws com.liferay.portal.NoSuchUserException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getCustomListBoard(divCd, start, listSize, groupId,
-			customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup);
+			customId, searchValue, locale, groupBoardSeq, popupYn, siteGroup,
+			virtualLabId);
 	}
 
 	public static int getCustomCountBoard(long divCd, long groupId,

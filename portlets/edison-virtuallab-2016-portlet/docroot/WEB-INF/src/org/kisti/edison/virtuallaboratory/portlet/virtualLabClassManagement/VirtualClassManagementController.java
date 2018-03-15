@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -217,6 +218,8 @@ public class VirtualClassManagementController {
 			params.put("classStartDt",ParamUtil.get(request, "classStartDt", ""));
 			params.put("classEndDt",ParamUtil.get(request, "classEndDt", ""));
 			params.put("classPersonnel",ParamUtil.get(request, "classPersonnel", 50));
+			params.put("classCurriculumUrl",ParamUtil.get(request, "classCurriculumUrl", ""));
+			params.put("classExternalPersonnel",ParamUtil.get(request, "classExternalPersonnel", 0));
 			
 			VirtualLabClass virtualLabClass = VirtualLabClassLocalServiceUtil.insertVirtualLabClass(params, locale);
 			if(classId == 0 && (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwner.getRoleId(), virtualLabId)

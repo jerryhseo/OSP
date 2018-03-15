@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="kisti.edison.challenge.service.ChallengeLocalService" class="kisti.edison.challenge.service.impl.ChallengeLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChallengeService" class="kisti.edison.challenge.service.impl.ChallengeServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengePersistence" class="kisti.edison.challenge.service.persistence.ChallengePersistenceImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.ChallengeEvaluationManagementLocalService" class="kisti.edison.challenge.service.impl.ChallengeEvaluationManagementLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChallengeEvaluationManagementService" class="kisti.edison.challenge.service.impl.ChallengeEvaluationManagementServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengeEvaluationManagementPersistence" class="kisti.edison.challenge.service.persistence.ChallengeEvaluationManagementPersistenceImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.ChallengeEvaluationScoreLocalService" class="kisti.edison.challenge.service.impl.ChallengeEvaluationScoreLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChallengeEvaluationScoreService" class="kisti.edison.challenge.service.impl.ChallengeEvaluationScoreServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengeEvaluationScorePersistence" class="kisti.edison.challenge.service.persistence.ChallengeEvaluationScorePersistenceImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.ChallengeTeamLocalService" class="kisti.edison.challenge.service.impl.ChallengeTeamLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChallengeTeamService" class="kisti.edison.challenge.service.impl.ChallengeTeamServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengeTeamPersistence" class="kisti.edison.challenge.service.persistence.ChallengeTeamPersistenceImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengeTeamFinder" class="kisti.edison.challenge.service.persistence.ChallengeTeamFinderImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.ChallengeTeamMemberLocalService" class="kisti.edison.challenge.service.impl.ChallengeTeamMemberLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChallengeTeamMemberService" class="kisti.edison.challenge.service.impl.ChallengeTeamMemberServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChallengeTeamMemberPersistence" class="kisti.edison.challenge.service.persistence.ChallengeTeamMemberPersistenceImpl" parent="basePersistence" />
+	<bean id="kisti.edison.challenge.service.ChildChallengeLocalService" class="kisti.edison.challenge.service.impl.ChildChallengeLocalServiceImpl" />
+	<bean id="kisti.edison.challenge.service.ChildChallengeService" class="kisti.edison.challenge.service.impl.ChildChallengeServiceImpl" />
+	<bean id="kisti.edison.challenge.service.persistence.ChildChallengePersistence" class="kisti.edison.challenge.service.persistence.ChildChallengePersistenceImpl" parent="basePersistence" />
+</beans>

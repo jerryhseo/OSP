@@ -1,0 +1,151 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "[Rerun] 37.9",
+  "simulation_description": "",
+  "-inp_type": "Inputdeck",
+  "-inp": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "space": false,
+        "brace-char": "SQUARE_SPACE",
+        "sample": "[ A B C ]",
+        "delimiter": " "
+      },
+      "variable-form": {
+        "space": false,
+        "value-delimiter": " = ",
+        "variable-delimiter": " ;",
+        "comment-char": "",
+        "control-char": ""
+      },
+      "variable-map": {
+        "map": {
+          "v0": {
+            "type": "numeric",
+            "active": true,
+            "name": "v0",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "v0V",
+                "en_US": "v0V"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "우주선의 초기 발사 속력(태양 기준), 단위 : km/s",
+                "en_US": "우주선의 초기 발사 속력(태양 기준), 단위 : km/s"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": 0,
+              "upper-limit": 39,
+              "operand": "=="
+            },
+            "value": "37.9",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "thetaV0": {
+            "type": "numeric",
+            "active": true,
+            "name": "thetaV0",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "theta0V",
+                "en_US": "theta0V"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "우주선의 초기 발사 각도 (지구를 중심으로 +x축에서 반시계 방향은 +, 시계 방향은 -, 단위: degree)",
+                "en_US": "우주선의 초기 발사 각도 (지구를 중심으로 +x축에서 반시계 방향은 +, 시계 방향은 -, 단위: degree)"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": -180,
+              "upper-limit": 180,
+              "operand": "=="
+            },
+            "value": "0",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "thetaE0": {
+            "type": "numeric",
+            "active": true,
+            "name": "thetaE0",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "theta0E",
+                "en_US": "theta0E"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "지구의 초기 위치 (각도로 표시, 위치와 속력은 이 각도로부터 계산됨, +x축에서 반시계 방향은 +, 시계 방향은 -,  원점 중심, 단위: degree)",
+                "en_US": "지구의 초기 위치 (각도로 표시, 위치와 속력은 이 각도로부터 계산됨, +x축에서 반시계 방향은 +, 시계 방향은 -,  원점 중심, 단위: degree)"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": -180,
+              "upper-limit": 180,
+              "operand": "=="
+            },
+            "value": "0",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "thetaJ0": {
+            "type": "numeric",
+            "active": true,
+            "name": "thetaJ0",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "theta0J",
+                "en_US": "theta0J"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "목성의 초기 위치 (각도로 표시, 위치와 속력은 이 각도로부터 계산됨, +x축에서 반시계 방향은 +, 시계 방향은 -,  원점 중심, 단위: degree)",
+                "en_US": "목성의 초기 위치 (각도로 표시, 위치와 속력은 이 각도로부터 계산됨, +x축에서 반시계 방향은 +, 시계 방향은 -,  원점 중심, 단위: degree)"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": -180,
+              "upper-limit": 180,
+              "operand": "=="
+            },
+            "value": "-46.07",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR, en_US}",
+      "file-content": "v0 = 37.9 ;\nthetaV0 = 0 ;\nthetaE0 = 0 ;\nthetaJ0 = -46.07 ;\n"
+    }
+  ]
+}

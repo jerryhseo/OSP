@@ -466,6 +466,26 @@ public class WorkflowInstanceLocalServiceWrapper
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowInstance updateWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _workflowInstanceLocalService.updateWorkflowInstance(workflowInstanceId,
+			params);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowInstance createWorkflowInstance(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _workflowInstanceLocalService.createWorkflowInstance(params,
+			request);
+	}
+
+	@Override
 	public java.util.List<org.kisti.edison.model.WorkflowInstance> getWorkflowWorkflowInstancesByWorkflowId(
 		long workflowId)
 		throws com.liferay.portal.kernel.exception.SystemException {

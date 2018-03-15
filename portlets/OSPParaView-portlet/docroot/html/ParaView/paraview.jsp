@@ -1,3 +1,4 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
@@ -11,7 +12,7 @@ preferences.store();
 String inputData = ParamUtil.getString(request, "inputData", "");
 String connector = ParamUtil.getString(request, "connector", "BROADCAST");
 boolean eventEnable = ParamUtil.getBoolean(request, "eventEnable", true);
-String action = ParamUtil.getString(request, "action", "output");
+String mode = ParamUtil.getString(request, "mode", "VIEW");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 
 String launcherURL = (String)renderRequest.getAttribute("launcherURL");
@@ -22,7 +23,13 @@ String launcherURL = (String)renderRequest.getAttribute("launcherURL");
 <br/>
 <a href="<%=request.getContextPath()%>/html/pv4/start.jsp" target="_blank">Connect using Visualizer 4</a>
  --%>
-<iframe id="<portlet:namespace/>canvas"  style="width:100%; height:100%;"></iframe>
+ <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
+ 
+ <div class="container-fluid osp-analyzer">
+ 	<div class="row-fluid no-header-frame">
+		<iframe id="<portlet:namespace/>canvas"  class="col-sm-12 iframe-canvas"></iframe>
+	</div>
+</div>
 
 <script>
 /***********************************************************************
@@ -30,7 +37,7 @@ String launcherURL = (String)renderRequest.getAttribute("launcherURL");
  ***********************************************************************/
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>launcherURL = '<%=launcherURL%>';
 
 
@@ -71,7 +78,7 @@ Liferay.on(
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
       <portlet:namespace/>connector = e.portletId;
-      <portlet:namespace/>action = e.action;
+      <portlet:namespace/>mode = e.mode;
       var events = [ 
           'OSP_EVENTS_REGISTERED', 
           'OSP_LOAD_DATA'
@@ -91,11 +98,7 @@ Liferay.on(
     
     var myId = '<%=portletDisplay.getId()%>';
     if(e.targetPortlet === myId){
-      var eventData = {
-         portletId: myId,
-         targetPortlet: <portlet:namespace/>connector
-      };
-      Liferay.fire('OSP_REQUEST_OUTPUT_PATH', eventData);
+    	console.log(e.portletId+' activated. '+new Date()+']');
     }
   });
  
@@ -120,6 +123,14 @@ Liferay.on(
 		}
 );
 
+Liferay.on(
+   		OSP.Event.OSP_INITIALIZE,
+   		function(e){
+   			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+   				$("#<portlet:namespace/>canvas").attr('src', '');
+   			}
+   		}
+   );
 
 /***********************************************************************
  * Golbal functions
@@ -127,6 +138,9 @@ Liferay.on(
 function <portlet:namespace/>loadParaView( inputData ){
     var dataDirectory;
     var fileToLoad = '';
+    
+    if( ! inputData.repositoryType_ )
+    	inputData.repositoryType_ = '<%=OSPRepositoryTypes.USER_JOBS.toString()%>';
 
     if( inputData.type_ === 'folder'){
 		dataDirectory = <portlet:namespace/>mergePath( inputData.parent_, inputData.name_ ); 
@@ -142,7 +156,7 @@ function <portlet:namespace/>loadParaView( inputData ){
 			data:{
 			    <portlet:namespace/>command: 'GET_ABSOLUTE_PATH',
 			    <portlet:namespace/>targetPath: dataDirectory,
-			    <portlet:namespace/>action: <portlet:namespace/>action
+			    <portlet:namespace/>repositoryType: inputData.repositoryType_
 			},
 			success: function( result ){
 			    dataDirectory = result;

@@ -11,7 +11,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -32,12 +33,12 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
         boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
         String inputData = ParamUtil.getString(renderRequest, "inputData", "");
         String connector = ParamUtil.getString(renderRequest, "connector", "BROADCAST");
-        String action = ParamUtil.getString(renderRequest, "action", "output");
+        String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
         renderRequest.setAttribute("inputData", inputData);
         renderRequest.setAttribute("eventEnable", eventEnable);
         renderRequest.setAttribute("connector", connector);
-        renderRequest.setAttribute("action", action);
+        renderRequest.setAttribute("mode",mode);
         super.doView(renderRequest, renderResponse);
     }
 
@@ -48,15 +49,13 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
         String fileName = ParamUtil.getString(resourceRequest, "fileName");
         String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
         String command = ParamUtil.getString(resourceRequest, "command");
-        String action = ParamUtil.getString(resourceRequest, "action", "output");
+        String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
         
-        boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
         Path filePath = Paths.get(parentPath).resolve(fileName);
         
         if(command.equalsIgnoreCase("READ_FILE")){
             try{
-                FileManagementLocalServiceUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(),
-                    isJobResult);
+            	OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("readFileContent(): " + filePath.toString());
                 throw new PortletException();
@@ -64,7 +63,9 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
         }else if(command.equalsIgnoreCase("GET_COPIED_TEMP_FILE_PATH")){
             String result;
             try{
-                result = FileManagementLocalServiceUtil.getCopiedTemporaryFilePath(resourceRequest, parentPath, "", ".tmp", isJobResult);
+            	result = OSPFileUtil.getCopiedTemporaryFilePath(resourceRequest, parentPath.toString(), "", "", repositoryType);
+            	result = Paths.get(result, fileName).toString();
+            	System.out.println("getCopiedTemporaryFilePath: "+result);
             }catch (PortalException | SystemException e){
                 _log.error("FileManagementLocalServiceUtil.getCopiedTemporaryFilePath()");
                 throw new PortletException();
@@ -72,7 +73,20 @@ public class OSPHtmlViewerPortlet extends MVCPortlet {
             
             HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
             ServletResponseUtil.write(httpResponse, result);
-        }else{
+        }else if(command.equalsIgnoreCase("GET_LINKED_TEMP_FILE_PATH")){
+            String result;
+            try{ 
+            	result = OSPFileUtil.getLinkedTemporaryFilePath(resourceRequest, parentPath.toString(), "", "", repositoryType);
+            	System.out.println("getCopiedTemporaryFilePath: "+result);
+            }catch (PortalException | SystemException e){
+                _log.error("FileManagementLocalServiceUtil.getCopiedTemporaryFilePath()");
+                throw new PortletException();
+            }
+            
+            HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+            ServletResponseUtil.write(httpResponse, result);
+        }
+        else{
             _log.info("There are no command option.");
         }
         

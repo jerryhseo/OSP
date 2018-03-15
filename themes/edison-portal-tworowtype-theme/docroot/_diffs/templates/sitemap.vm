@@ -1,0 +1,79 @@
+<div id="sitemap" class="fullscreen">
+	<div class="container opentotalmenu">
+		<button type="button" class="close">×</button>
+		<div class="row">
+			#foreach ($nav_item in $nav_items)
+				#set ($nav_visible = "true")
+				#set ($nav_url = "$nav_item.getURL()")
+				
+				
+				#if ($htmlUtil.escape($nav_item.getName())=='HOME')
+					#set ($nav_visible = "false")
+				#end
+				
+				#if ($stringUtil.toUpperCase($nav_item.getLayout().getType()) =="URL")
+					#set ($custom-menu-url=$nav_item.getLayout().getExpandoBridge().getAttribute($languageUtil.format($locale, "edison-menu-link-custom-field","")))
+					#if($custom-menu-url!="")
+						#set ($nav_url = $custom-menu-url)
+					#end
+					
+				#end
+				
+				
+				#if ($nav_visible=='true')
+					<div class="col-md-3">
+						<h4><a aria-labelledby="layout_$nav_item.getLayoutId()" href="$nav_url" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a></h4>
+						<ul>
+						#if ($nav_item.hasChildren())
+							
+							#foreach ($nav_child in $nav_item.getChildren())
+								#set ($nav_child_url = "$nav_child.getURL()")
+								#if ($stringUtil.toUpperCase($nav_child.getLayout().getType()) =="URL")
+									#set ($custom-menu-url=$nav_child.getLayout().getExpandoBridge().getAttribute($languageUtil.format($locale, "edison-menu-link-custom-field","")))
+									#if($custom-menu-url!="")
+										#set ($nav_child_url = $custom-menu-url)
+									#end
+									
+								#end
+								
+								<li id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
+									<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child_url" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+								</li>
+							#end
+							
+						#end
+						</ul>
+					</div>
+				#end
+			#end
+		</div>
+	</div>
+</div>
+
+<div id="themesearch" class="fullscreen">
+	<button type="button" class="close">×</button>
+	<form action="$searchURL" method="post" onsubmit="return false;">
+		<input type="search" value="" placeholder="$search_keyword" />
+		<button type="submit" class="btn btn-primary">Search</button>
+	</form>
+</div>
+
+<div id="mySidenav" class="sidenav">
+	<button type="button" class="closebtn" onclick="closeNav()">×</button>
+	<a href="/web${edisongroup.friendlyURL}">
+		EDISON
+	</a>
+	
+	#foreach ($site in$sortTool.sort($siteGroups,'siteName:asc'))
+		#if ($site.groupId==$themeDisplay.getScopeGroupId())
+			#set ($siteOnClass = "site-on")
+		#else
+			#set ($siteOnClass = "")
+		#end
+		
+		
+		<a href="/web${site.url}" class="$siteOnClass">
+			$site.siteName
+		</a>
+	#end
+</div>

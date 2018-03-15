@@ -344,6 +344,7 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 				"edison-appstore-status-service") : LanguageUtil.get(locale, "edison-appstore-status-private"));
 
 			resultRow.put("screenName", contentList.get(i)[1]);
+			resultRow.put("viewCnt", contentList.get(i)[2]);
 
 			returnList.add(resultRow);
 		}

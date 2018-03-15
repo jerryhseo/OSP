@@ -1,16 +1,10 @@
 package com.kisti.osp.workbench.agent.ib;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
-import org.kisti.edison.util.CustomUtil;
-
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.StringUtil;
 
 public class IBJob {
 	protected String type = "SEQUENTIAL";
@@ -24,7 +18,7 @@ public class IBJob {
 	protected String executable = "";
 	protected Map<String, String> attributes = null;
 	protected String[] dependencies = null;
-	protected Map<String, String> commandOptions = null;
+	protected Map<String, JSONObject> commandOptions = null;
 	protected String cluster = "";
 	protected String simulationUuid = "";
 	
@@ -34,7 +28,7 @@ public class IBJob {
 			String executable, 
 			String[] dependencies,
 			String cluster, 
-			Map<String, String> commandOptions, 
+			Map<String, JSONObject> commandOptions, 
 			String category, 
 			Map<String, String> attributes, 
 			String simulationUuid,
@@ -133,10 +127,10 @@ public class IBJob {
 	public void setDependencies(String[] dependencies) {
 		this.dependencies = dependencies; 
 	}
-	public Map<String, String> getCommandOptions() {
+	public Map<String, JSONObject> getCommandOptions() {
 		return this.commandOptions;
 	}
-	public void setCommandOptions(Map<String, String> commandOptions) {
+	public void setCommandOptions(Map<String, JSONObject> commandOptions) {
 		this.commandOptions = commandOptions;
 	}
 	public String getCluster() {
@@ -179,9 +173,16 @@ public class IBJob {
 		String execution = "<execution>";
 		for( String key : keys ){
 			System.out.println("File Key: "+key);
-			xml.append("<item key=\""+key.replace("-", "")+"\" value=\""+this.commandOptions.get(key)+"\"/>");
-			System.out.println("File Item: "+xml.toString());
-			execution += " "+key+ " $"+key.replace("-", "");
+			JSONObject optionValue = this.commandOptions.get(key);
+			
+			if( "FILE_ID".equalsIgnoreCase(optionValue.getString("type"))){
+				xml.append("<item key=\""+key.replace("-", "")+"\" value=\""+optionValue.getString("value")+"\"/>");
+				System.out.println("File Item: "+xml.toString());
+				execution += " "+key+ " $"+key.replace("-", "");
+			}
+			else if( "STRING".equalsIgnoreCase(optionValue.getString("type"))){
+				execution += " "+key+ " "+optionValue.getString("value");
+			}
 		}
 		execution += "</execution>";
 		xml.append("</files>");

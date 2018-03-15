@@ -1,0 +1,10 @@
+.emerald.edison{
+	.edison-table thead{
+		background-color: #e9f7f5;
+	}
+	
+	/*theme breadcrumbs*/
+	#nsubtopwrap #barcolor{
+		background-color: #00a0e0;
+	}
+}

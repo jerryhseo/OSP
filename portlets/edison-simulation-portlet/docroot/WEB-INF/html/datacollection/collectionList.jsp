@@ -30,48 +30,47 @@
 }
 
 </style>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-		Data Collection
-	</div>
-</div>
 
-<div style="height: 10px;clear: both;"></div>
 
-<div class="tabletopbox clear">
-	<div class="search">
-		<div class="searchbox">
-			<input name="<portlet:namespace/>textfield" type="text"
-				id="<portlet:namespace/>textfield"
-				placeholder="<liferay-ui:message key="edison-table-list-header-name"/>"
-				size="40"
-				onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataCollectionList('');" 
-				value="${searchText }"
-			/>
-			<input type="button" name="fullsize" id="fullsize" value="" class="btnsearch" onclick="<portlet:namespace/>dataCollectionList('');">
-		</div>
-		
-		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="button01" onclick="<portlet:namespace/>dataCollectionListAllSearch();">
-	</div>
-	
-	<!--우편 셀렉트-->
-	<div class="tabletopright">
-		<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="selectview" style="line-height: 15px;">
-<%-- 			<option value="5">5<liferay-ui:message key="edison-search-views"/></option> --%>
-			<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-			<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-			<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-		</select>
-	</div>
-</div> 
 	
 <aui:form name="collectionForm" method="post">
 	<aui:input type="hidden" name="isAdmin" value="${isAdmin }"></aui:input>	
 	<aui:input type="hidden" name="groupId" value="${groupId }"></aui:input>	
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="내 사이언스데이터 테이블">
+	<div class="table-responsive panel edison-panel">
+		<div class="panel-heading clearfix">
+			<h1>
+				<img src="${contextPath}/images/title_virtual.png" />
+				Data Collection
+			</h1>
+			
+			<div class="btn-group pull-right">
+				<input name="<portlet:namespace/>textfield" type="text"
+					id="<portlet:namespace/>textfield"
+					class="form-control"
+					placeholder="<liferay-ui:message key="edison-table-list-header-name"/>"
+					size="40"
+					onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataCollectionList('');" 
+					value="${searchText }"
+					style="width: 220px; float: left;"
+				/>
+				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataCollectionList('');">
+					<i class="icon-search"></i>
+				</button>
+				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataCollectionListAllSearch();">
+				
+				<!--우편 셀렉트-->
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="btn btn-default" style="line-height: 15px;">
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
+				
+			</div>
+			
+		</div>
+		
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="내 사이언스데이터 테이블" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="10%" />
 				<col width="27%" />
@@ -94,7 +93,7 @@
 				<c:choose>
 					<c:when test="${fn:length(collectionList) == 0 }">
 						<tr>
-							<td class="TC" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
+							<td class="center" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
 						</tr>
 					</c:when>
 					<c:otherwise>
@@ -107,11 +106,11 @@
 								<tr id="collectionTr_${collection.collectionId }" style="word-break: break-all; cursor: pointer;"
 									onClick="<portlet:namespace/>collectionMoveDetail('${collection.collectionId }');">
 							</c:if>
-								<td class="TC">${seq - status.index }</td>
+								<td class="center">${seq - status.index }</td>
 								<td >${collection.name }</td>
 								<td >${collection.dataType.name}</td>
-								<td class="TC">${collection.version }</td>
-								<td class="TC">
+								<td class="center">${collection.version }</td>
+								<td class="center">
 								<c:choose>
 									<c:when test="${collection.status eq 'private'}">
 										<liferay-ui:message key="edison-simulation-project-private"/>
@@ -122,32 +121,34 @@
 								</c:choose>
 								</td>
 								
-								<td class="TC">${collection.createDate }</td>
+								<td class="center">${collection.createDate }</td>
 							</tr>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
 			</tbody>
 		</table>
+		
+		<div class="paging text-center">
+			<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+		</div>
+		
+		<div class="h10"></div>
+		
+		<div class="buttonbox" id="<portlet:namespace/>createCollection" style="float: right;">
+			<c:choose>
+				<c:when test="<%=LiferayWindowState.isPopUp(request)%>">
+					<input type="button" class="btn btn-default choiceButton" value="<liferay-ui:message key="select" />" onclick="<portlet:namespace/>dataCollectionChoice()" style="display:none"/>
+				</c:when>
+				<c:otherwise>
+					<c:if test="${ isAdmin==true }">
+						<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-virtualLabClassManagement-class-create" />" onclick="<portlet:namespace/>createCollection()"/>
+					</c:if>
+				</c:otherwise>
+			</c:choose>
+		</div>
 	</div>
-	<div class="paging">
-		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
-	</div>
-
-	
-	<div class="buttonbox" id="<portlet:namespace/>createCollection">
-	<c:choose>
-		<c:when test="<%=LiferayWindowState.isPopUp(request)%>">
-			<input type="button" class="button06 choiceButton" value="<liferay-ui:message key="select" />" onclick="<portlet:namespace/>dataCollectionChoice()" style="display:none"/>
-		</c:when>
-		<c:otherwise>
-			<c:if test="${ isAdmin==true }">
-				<input type="button" class="button06" value="<liferay-ui:message key="edison-virtuallab-virtualLabClassManagement-class-create" />" onclick="<portlet:namespace/>createCollection()"/>
-			</c:if>
-		</c:otherwise>
-	</c:choose>
 </aui:form>
-</div>
 	
 
 <script>

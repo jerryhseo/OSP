@@ -17,77 +17,80 @@
 <%
 	if((Boolean)request.getAttribute("isPortalMain")){
 %>
-<div class="contabmenu"> 
-	<edison-ui:tabs 
-		names="<%=tabNames%>" 
-		tabsValues="<%=tabsValues%>" 
-		value="<%=visitSite%>" 
-		refresh="<%=false%>" 
-		onClick="<%=portletNameSpace%>"
-		minwidth="195"
-	/>
-</div>
-<div style="clear: both;height:20px;"></div> 
-<%
-	}
-%>
 
-<div class="tabletopbox clear">
-		<form name="<portlet:namespace/>statisticsForm" method="post">
-			<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
-			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-			
-			<div id="data_wrap">
-				<div class="tabletoptab">
-			  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-						~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
-				</div>
-			
-				<div class="search03" style="padding: 11px 10px 9px 515px;">
-						<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="button01"  onclick="<portlet:namespace/>dataSearch()"/>
-				</div>
-			</div>
-		</form>
-  	</div>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 
-<div style="width:100%;margin-top:20px; ">
-	<div id="container1" style="width: 44%; height: 350px; float: left;"></div>
-	<div id="container2" style="width: 55%; height: 350px; float: right;"></div>
-</div>
-   
-<div style="clear: both;height:20px;"></div>
-
-<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
-	<div class="boardbtn2" style="float:right;">
-<!-- 		<div class="boardbtnNormal" style="width:140px;"><a href="#" onClick="excelDown()">Excel Download</a></div>&nbsp;&nbsp; -->
-		<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="button02" onClick="excelDown()"/>
+	<div class="contabmenu"> 
+		<edison-ui:tabs 
+			names="<%=tabNames%>" 
+			tabsValues="<%=tabsValues%>" 
+			value="<%=visitSite%>" 
+			refresh="<%=false%>" 
+			onClick="<%=portletNameSpace%>"
+			minwidth="150"
+		/>
 	</div>
-</div>
-
-<br> <br>
-<div id="data_wrap" style="clear: both; ">
-	<div id="userTable_wrap">
-		<div class="table1_list ">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<thead>
-				<tr> 
-					<th width="10%"><liferay-ui:message key="edison-table-list-header-index" /></th>
-					<th ><liferay-ui:message key="edison-create-account-field-title-university" /></th>
-					<th width="20%"><liferay-ui:message key="edison-science-appstore-view-regist-count" /></th>
-				</tr> 
-			</thead>
-			<tbody id="<portlet:namespace/>userTableBody">
-			</tbody>
-		</table>
+	<div style="clear: both;height:20px;"></div> 
+	<%
+		}
+	%>
+	
+	<div class="tabletopbox clear">
+			<form name="<portlet:namespace/>statisticsForm" method="post">
+				<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
+				<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
+				
+				<div id="data_wrap">
+					<div class="tabletoptab">
+				  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
+							~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
+					</div>
+				
+					<div class="search03">
+							<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default"  onclick="<portlet:namespace/>dataSearch()"/>
+					</div>
+				</div>
+			</form>
+	  	</div>
+	
+	<div style="width:100%;margin-top:20px; ">
+		<div id="container1" style="width: 44%; height: 350px; float: left;"></div>
+		<div id="container2" style="width: 55%; height: 350px; float: right;"></div>
+	</div>
+	   
+	<div style="clear: both;height:20px;"></div>
+	
+	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
+		<div class="boardbtn2" style="float:right;">
+	<!-- 		<div class="boardbtnNormal" style="width:140px;"><a href="#" onClick="excelDown()">Excel Download</a></div>&nbsp;&nbsp; -->
+			<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
 		</div>
 	</div>
-</div>
-<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;">
-	<div style="float:right;height:33px;padding-top: 7px;">Result : <span id="totalSpan"></span></div>
-</div>	
-<br><br>
-
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+	
+	<br> <br>
+	<div id="data_wrap" style="clear: both; ">
+		<div id="userTable_wrap">
+			<div class="table-responsive panel edison-panel ">
+				<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr> 
+							<th width="10%"><liferay-ui:message key="edison-table-list-header-index" /></th>
+							<th ><liferay-ui:message key="edison-create-account-field-title-university" /></th>
+							<th width="20%"><liferay-ui:message key="edison-science-appstore-view-regist-count" /></th>
+						</tr> 
+					</thead>
+					<tbody id="<portlet:namespace/>userTableBody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;">
+		<div style="float:right;height:33px;padding-top: 7px;">Result : <span id="totalSpan"></span></div>
+	</div>	
+	<br><br>
+	
+	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
 <script type="text/javascript">
 //liferay-ui 탭 이벤트 return Script
@@ -126,9 +129,9 @@ function setTable(dataList){
 		if(dataList.length > 0){
 			for(var a=0; a<dataList.length; a++){
 				$userTableTr = $("<tr/>");
-				$("<td/>").addClass("TC").html(++rownum).appendTo($userTableTr);
-				$("<td/>").addClass("TC").html(dataList[a].universityNm).appendTo($userTableTr);
-				$("<td/>").addClass("TC").html(dataList[a].cnt).appendTo($userTableTr);
+				$("<td/>").addClass("center").html(++rownum).appendTo($userTableTr);
+				$("<td/>").addClass("center").html(dataList[a].universityNm).appendTo($userTableTr);
+				$("<td/>").addClass("center").html(dataList[a].cnt).appendTo($userTableTr);
 				
 				$("#<portlet:namespace/>userTableBody").append($userTableTr);
 				
@@ -139,7 +142,7 @@ function setTable(dataList){
 	}else{
 		$("#totalSpan").html("<b>0 <liferay-ui:message key='edison-search-article'/></b>");
 		$("<tr/>").append(
-							$("<td/>").addClass("TC").attr("colspan","3").html('<liferay-ui:message key="edison-there-are-no-data" />')
+							$("<td/>").addClass("center").attr("colspan","3").html('<liferay-ui:message key="edison-there-are-no-data" />')
 						).appendTo("#<portlet:namespace/>userTableBody");
 	}
 }

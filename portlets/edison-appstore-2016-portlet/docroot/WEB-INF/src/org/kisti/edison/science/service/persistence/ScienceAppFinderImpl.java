@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.kisti.edison.science.NoSuchScienceAppException;
 import org.kisti.edison.science.model.ScienceApp;
+import org.kisti.edison.science.model.impl.ScienceAppCategoryLinkImpl;
 import org.kisti.edison.science.model.impl.ScienceAppImpl;
 import org.kisti.edison.util.GBatisUtil;
 
@@ -61,6 +62,13 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 		+ ".getMyAppListForProject";
 	public static final String GET_MY_APP_LIST_FOR_PROJECT_COUNT = ScienceAppFinder.class.getName()
 		+ ".getMyAppListForProjectCount";
+	
+	//ADD
+	public static final String GET_MY_MANAGER_APP_COUNT_HEADER =ScienceAppFinder.class.getName() + ".countMyManagerScienceApp.header";
+	public static final String GET_APP_COUNT_HEADER = ScienceAppFinder.class.getName() + ".countScienceApp.header";
+	public static final String GET_MY_MANAGER_APPLIST_HEADER = ScienceAppFinder.class.getName() + ".retrieveListMyManagerScienceApp.header";
+	public static final String GET_APPLIST_HEADER_OLD = ScienceAppFinder.class.getName() + ".retrieveListScienceApp.header.old";
+	public static final String GET_APPLIST_WHERE_OLD = ScienceAppFinder.class.getName() + ".ScienceApp.where.old";
 	
 	public int countScienceApp(Map<String, Object> searchParam,boolean categorySearch,boolean managerSearch) throws SystemException{
 		StringBuilder sqlSb = new StringBuilder();
@@ -489,4 +497,80 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 		}
 		return cnt;
 	}
+	
+	// ADD ScienceAppList source by imJeong at 2018.03.06
+	public int countScienceApp(Map<String,Object> searchParam) throws SystemException{
+	    StringBuilder sqlSb = new StringBuilder();
+	    Session session = null;
+	    int cnt = 0;
+
+	    try{
+	      String sqlQuerySelect = "";
+	      //MyManagerApp 조회 일 경우
+	      boolean myAppSearchStatus = GetterUtil.getBoolean(searchParam.get("myManagerAppSearch"),false);
+
+	      if(myAppSearchStatus){
+	        sqlQuerySelect = CustomSQLUtil.get(GET_MY_MANAGER_APP_COUNT_HEADER );
+	      }else{
+	        sqlQuerySelect = CustomSQLUtil.get(GET_APP_COUNT_HEADER);
+	      }
+
+	      String sqlQuery = CustomSQLUtil.get(GET_APPLIST_WHERE);
+	      sqlSb.append(sqlQuerySelect);
+	      sqlSb.append(sqlQuery);
+
+	      session = openSession();
+	      String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+	      SQLQuery query = session.createSQLQuery(gBatisQuery);
+	      query.addScalar("totalCnt", Type.INTEGER);
+
+	      cnt = (Integer) query.uniqueResult();
+	    }catch (Exception e) {
+	      throw new SystemException(e);
+	    } finally {
+	      closeSession(session);
+	    }
+
+	    return cnt;
+	  }
+	
+	public List<Object[]> retrieveListScienceApp(Map<String,Object> searchParam) throws SystemException{
+	    StringBuilder sqlSb = new StringBuilder();
+	    Session session = null;
+
+	    //DB Cache Clear
+	    CacheRegistryUtil.clear();
+	    try{
+	      searchParam.put("listsearch", true);
+
+	      String sqlQuerySelect = "";
+	      //MyManagerApp 조회 일 경우
+	      boolean myAppSearchStatus = GetterUtil.getBoolean(searchParam.get("myManagerAppSearch"),false);
+
+	      if(myAppSearchStatus){
+	        sqlQuerySelect = CustomSQLUtil.get(GET_MY_MANAGER_APPLIST_HEADER);
+	      }else{
+	        sqlQuerySelect = CustomSQLUtil.get(GET_APPLIST_HEADER_OLD);
+	      }
+
+	      String sqlQuery = CustomSQLUtil.get(GET_APPLIST_WHERE_OLD);
+	      sqlSb.append(sqlQuerySelect);
+	      sqlSb.append(sqlQuery);
+
+	      session = openSession();
+	      String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+	      SQLQuery query = session.createSQLQuery(gBatisQuery);
+	      query.addEntity("EDAPP_ScienceAppCategoryLink", ScienceAppCategoryLinkImpl.class);
+	      query.addEntity("EDAPP_ScienceApp", ScienceAppImpl.class);
+	      query.addScalar("appModifiedDate", Type.DATE);
+
+	      return (List<Object[]>) query.list();
+
+	    }catch (Exception e) {
+	      e.printStackTrace();
+	      throw new SystemException(e);
+	    } finally {
+	      closeSession(session);
+	    }
+	  }
 }

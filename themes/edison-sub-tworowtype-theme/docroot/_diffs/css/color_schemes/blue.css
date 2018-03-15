@@ -1,0 +1,10 @@
+.blue.edison{
+	.edison-table thead{
+		background-color: #f4f9ed;
+	}
+	
+	/*theme breadcrumbs*/
+	#nsubtopwrap #barcolor{
+		background-color: #00a0e0;
+	}
+}

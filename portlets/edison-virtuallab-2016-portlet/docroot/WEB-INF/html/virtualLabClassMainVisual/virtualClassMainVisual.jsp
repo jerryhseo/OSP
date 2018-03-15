@@ -8,52 +8,24 @@
 <liferay-portlet:renderURL var="myClassURL" portletName="edisonmypage_WAR_edisondefault2016portlet" plid="${myClassPlid}">
 	<liferay-portlet:param name="clickTab" value="myClass" />
 </liferay-portlet:renderURL> 
+<liferay-portlet:resourceURL var="getSurveyListURL" id="getSurveyList" copyCurrentRenderParameters="false" />
+
+<liferay-portlet:renderURL var="virtualLabManagementDetailURL" portletName="edisonvirtuallabmanagementlist_WAR_edisonvirtuallab2016portlet">
+	<liferay-portlet:param name="myRender" value="virtualLabManagementDetail" />
+	<portlet:param name="edionCopyParam" value="true" />
+</liferay-portlet:renderURL>
+
 <% 
 PasswordPolicy edionPasswordPolicy = PasswordPolicyLocalServiceUtil.getDefaultPasswordPolicy(company.getCompanyId());
 %>
 
-<style type="text/css">
-input[type="password"]{
-	margin-bottom: 0px;
-}
-.classvisual {
-	width: 1220px;
-	height: 206px;
-	background: url(${contextPath}/images/virtualvisualclass.jpg)
-		no-repeat
-}
-
-.cvtxt01 {
-	margin-top: 160px;
-	font-size: 14px;
-	font-weight: 600;
-	color: #fff;
-	padding-left: 25px;
-	float: left;
-}
-
-.cvtxt02 {
-	margin-top: 160px;
-	font-size: 14px;
-	font-weight: 600;
-	color: #fff;
-	padding-left: 25px;
-	float: left;
-}
-
-.cvtxt02 span {
-	font-size: 17px;
-	font-weight: 600;
-	color: #ffeab8;
-}
-
-</style>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualClassMainVisual.css" media="screen"/>
 
 <script type="text/javascript">
 AUI().ready(function() {
 	$("#<portlet:namespace/>tempUserPasswordUpdate-dialog").dialog({
 		autoOpen: false,
-		width: 'auto',
+		width: '360px',
 		height: 'auto',
 		modal: true,
 		resizable: false,
@@ -177,6 +149,93 @@ function <portlet:namespace/>checkValidation() {
 	});
 }
 
+/* 설문조사 */
+function <portlet:namespace/>openSurvey(){
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId("edisonvirtuallabclasssurvey_WAR_edisonvirtuallab2016portlet"); 
+		portletURL.setParameter("classId", "${classInfo.classId}");
+		portletURL.setParameter("groupId", "${classInfo.groupId}");
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					width:1024,
+					height:720,
+					cache: false,
+					draggable: false,
+					resizable: false,
+					modal: true,
+					destroyOnClose: true,
+					after: {
+						render: function(event) {
+							$("button.btn.close").on("click", function(e){
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+				id: "surveyDialog",
+				uri: portletURL.toString(),
+				title: "<liferay-ui:message key='edison-virtuallab-survey' />",
+				dialogIframe: {
+					on: {
+						load : function(evt) {
+							$(".modal-body").css('overflow-y','hidden');
+						}
+					}
+				}
+			}
+		);
+		
+	});
+}
+
+/* 학생관리 */
+function <portlet:namespace/>openStudentManagement(){
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId("edisonvirtuallabclassstudentmanagement_WAR_edisonvirtuallab2016portlet"); 
+		portletURL.setParameter("classId", "${classInfo.classId}");
+		portletURL.setParameter("groupId", "${classInfo.groupId}");
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					width:1024,
+					height:720,
+					cache: false,
+					draggable: false,
+					resizable: false,
+					modal: true,
+					destroyOnClose: true,
+					after: {
+						render: function(event) {
+							$("button.btn.close").on("click", function(e){
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+			id: "studentManagementDialog",
+			uri: portletURL.toString(),
+			title: "<liferay-ui:message key='edison-virtuallab-student-infomation' />",
+			}
+		);
+		
+	});
+}
+
+function <portlet:namespace/>moveVirtualLab(virtualLabId, groupId) {
+	var virtualLabManagementDetailURL = "<%=virtualLabManagementDetailURL%>"
+	var portletName = "_edisonvirtuallabmanagementlist_WAR_edisonvirtuallab2016portlet_";
+	var URL = virtualLabManagementDetailURL + "&"+portletName+"virtualLabId=" + virtualLabId+"&"+portletName+"groupId="+groupId;
+	window.location.href = URL;
+}
+
 </script>
 
 <aui:script>
@@ -195,6 +254,16 @@ function <portlet:namespace/>moveClassList() {
 		window.location.href = portletURL.toString();
 	});
 	
+	jQuery.ajax({
+		type: "POST",
+		url: "",
+		data  : searchData,
+		success: function(data) {
+			openWindow(renderURL, dialogId);
+		},error:function(data,e){
+			alert("tagScript ERROR-->"+e);
+		}
+	});
 	
 }
 
@@ -213,26 +282,51 @@ function <portlet:namespace/>myClass(){
 }
 </aui:script>
 
-<div class="contentwrap">
-	<div class="classvisual">
-		<div class="cvtxt01"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/>${classInfo.classTitle }</div>
-		<div class="cvtxt02"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/><span>Professor :</span> ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</div>
-		<c:if test="${role eq 'TEMP'}">
-			<div class="cvtxt02"><img src="<%=renderRequest.getContextPath()%>/images/lighticon.png" width="17" height="25" style="margin:0 10px 0 0;"/>
-				<span><liferay-ui:message key="edison-table-list-header-usernm"/> : </span><%=themeDisplay.getUser().getFirstName()%>
-			</div>
-			<div class="vlbtn">
-				<input id="<portlet:namespace/>tempUserPasswordUpdate" name="<portlet:namespace/>tempUserPasswordUpdate" type="button" value="<liferay-ui:message key='update-password' />" class="button06" onclick="<portlet:namespace/>dialogOpen()"/>
-			</div>
-		</c:if>
-		<div class="vlbtn" style="float:right; margin-right:10px;">
-			<input type="button" value="<liferay-ui:message key='edison-button-board-list' />" class="button06" onclick="<portlet:namespace/>moveClassList()" />
-			<input type="button" value="<liferay-ui:message key='edison-course-class-myclass-list' />" class="button06" onclick="<portlet:namespace/>myClass()"  />
+<div class="topbgwrap">
+	<div class="classtopbg">
+		
+		<div class="classttxt">
+			<img src="${contextPath}/images/subtop_txt.png" width="643" height="40">
+			<span>
+				<img src="${contextPath}/images/class_txt.png" width="233" height="82">
+			</span>
 		</div>
+		
+		
+		<!--class 정보-->
+		<div class="infobox">
+			<ul>
+				<li>${classInfo.classTitle }</li>
+				<li>Professor : ${classInfo.virtualLabPersonName }(${classInfo.virtualLabUniversityFieldNM })</li>
+			</ul>
+		</div>
+		
+		<!--공지사항-->
+			<liferay-portlet:runtime portletName="edisonmultiboard_WAR_edisonboard2016portlet_INSTANCE_qY3mIhmesY9r"  queryString="&customId=class_${classInfo.classId}&boardGroupId=${classInfo.groupId}&redirectName=${redirectName}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }" />
+
+		<!--버튼-->
+		<div class="classtbtn" align="right">
+			<c:if test="${role eq 'CONFIRM' || role eq 'TEMP' }">
+				<div class="btn_linec" onclick="<portlet:namespace/>dialogOpen()">
+					<liferay-ui:message key="edison-virtuallab-modify-my-info"/>
+				</div>&nbsp; 			<!-- 내 정보 수정 -->
+			</c:if>
+			<c:if test="${role eq 'MANAGER' || role eq 'ADMIN' }">
+				<div class="btn_linec" onclick="<portlet:namespace/>openStudentManagement();"><liferay-ui:message key="edison-virtuallab-student-management"/></div>&nbsp; 		<!-- 학생 관리 	-->
+			</c:if>
+			<c:if test="${surveyCnt > 0}">
+				<div class="btn_linec" onclick="<portlet:namespace/>openSurvey();"><liferay-ui:message key="edison-virtuallab-survey"/></div>							<!-- 설문조사	-->
+			</c:if>
+			<div class="btn_linec" onclick="<portlet:namespace/>moveVirtualLab('${classInfo.virtualLabId }','${classInfo.groupId}');">
+				<!-- 강좌 이동 -->
+				<liferay-ui:message key="edison-virtuallab-move"/>
+			</div>
+		</div>
+
 	</div>
 </div>
 
-<div id="<portlet:namespace/>tempUserPasswordUpdate-dialog" class="newWindow" style="background-color:#fff; display:none;">
+<div id="<portlet:namespace/>tempUserPasswordUpdate-dialog" class="table-responsive panel edison-panel" style="background-color:#fff; display:none;">
 	<div class="newWheader">
 		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
 			<div class="newWtitle">
@@ -245,8 +339,8 @@ function <portlet:namespace/>myClass(){
 	</div>
 	
 	<form id="tempUserPasswordUpdateForm" name="tempUserPasswordUpdateForm" method="post">
-		<div class="newWcont01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<div class="table1_list">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 				<colgroup>
 					<col width="40%" />
 					<col width="60%" />
@@ -255,26 +349,28 @@ function <portlet:namespace/>myClass(){
 					<tr class="puptrline">
 						<td class="puptitle"><liferay-ui:message key='current-password' /></td>
 						<td class="puptitle">
-							<input id="<portlet:namespace/>currentPassword" name="<portlet:namespace/>currentPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
+							<input id="<portlet:namespace/>currentPassword" class="form-control" name="<portlet:namespace/>currentPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
 						</td>
 					</tr>
+					<!-- <tr class="input-group" style="display: table-cell;"> -->
 					<tr>
 						<td class="puptxt2"><liferay-ui:message key='new-password' /></td>
 						<td class="puptxt2">
-							<input id="<portlet:namespace/>newPassword" name="<portlet:namespace/>newPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
+							<input id="<portlet:namespace/>newPassword" class="form-control" name="<portlet:namespace/>newPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
 						</td>
 					</tr>
+					<!-- <tr class="input-group" style="display: table-cell;"> -->
 					<tr>
 						<td class="puptxt2"><liferay-ui:message key='edison-create-account-field-title-password-confirm' /></td>
 						<td class="puptxt2">
-							<input id="<portlet:namespace/>reNewPassword" name="<portlet:namespace/>reNewPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
+							<input id="<portlet:namespace/>reNewPassword" class="form-control" name="<portlet:namespace/>reNewPassword" type="password" maxlength="15" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div style="text-align: right; margin:0px 25px 30px 0px;">
-			<input id="<portlet:namespace/>tempUserPasswordUpdate_button" name="<portlet:namespace/>tempUserPasswordUpdate_button" type="button"  class="button06" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>checkValidation();" />
+			<input id="<portlet:namespace/>tempUserPasswordUpdate_button" name="<portlet:namespace/>tempUserPasswordUpdate_button" type="button"  class="btn btn-default" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>checkValidation();" />
 		</div>
 	</form>
 </div>

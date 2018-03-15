@@ -1,6 +1,7 @@
 package org.kisti.eturb.dbservice.model;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class MeshData{
@@ -9,5 +10,9 @@ public class MeshData{
     private List<Long> pitchGap;
     private List<Long> axialGap;
     private List<Airfoil> airfoils;
+    
+    public int getAirfoilsCount(){
+        return airfoilsCount;
+    }
 }
 

@@ -5,6 +5,7 @@
 <%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil" %>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/course.css" media="screen"/>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualLabClass.css" media="screen"/>
 
 <liferay-portlet:resourceURL var="virtualLabScienceAppListURL" id="virtualLabScienceAppList" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
@@ -23,7 +24,9 @@
 
 <style type="text/css">
 	.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;} 
+	.apparrow{cursor: pointer;}
 </style>
+
 <aui:script>
 Liferay.provide(
         window,
@@ -61,46 +64,73 @@ function <portlet:namespace/>dataSearchList() {
 			var rowResult;
 			$("#<portlet:namespace/>virtualLabClassScienceAppBody tr:not(:has(#1))").remove();
 			
+			if(virtualLabScienceAppList.length<=4){
+				$("#<portlet:namespace/>scienceapp .apparrow").hide();
+			} else{
+				$("#<portlet:namespace/>scienceapp .apparrow").show();
+			}
+			
+			/* 수정해야 할 코드 */
+			$("#<portlet:namespace/>scienceappContent").html("");
 			if(virtualLabScienceAppList.length == 0) {
-				$rowResult = $("<tr/>");
-				$("<td/>").addClass("appbgcolor01")
-						  .attr("colspan", "5")
-						  .css("text-align","center")
-						  .text("<liferay-ui:message key='edison-there-are-no-data' />")
-						  .appendTo($rowResult);
-				$("#<portlet:namespace/>virtualLabClassScienceAppBody").append($rowResult);
+				$("#<portlet:namespace/>scienceapp").attr("align","center")
+													.text("<liferay-ui:message key='edison-there-are-no-data' />");
 			} else {
+				
+				scienceAppList = null;
+				scienceappListSeq = 0;
 				for(var i = 0; i < virtualLabScienceAppList.length; i++) {
-					$rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
 					
-					$("<td/>").append($("<a/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveScienceAppDetail('" + virtualLabScienceAppList[i].scienceAppId +"', '"+ groupId + "');")
-											   .text(virtualLabScienceAppList[i].scienceAppName)
-											   .css("cursor", "pointer")
-							 ).appendTo($rowResult)
-							  .css("white-space","nowrap")
-							  .css("overflow","hidden")
-							  .css("text-overflow","ellipsis")
-					$("<td/>").text("Ver " + virtualLabScienceAppList[i].scienceAppVersion)
-							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabScienceAppList[i].scienceAppUniversityNm)
-							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabScienceAppList[i].userFirstName)
-							  .appendTo($rowResult);
-					if(virtualScienceAppManualList[i].fileEntryId != undefined) {
-						$("<td/>").append($("<img/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualScienceAppManualList[i].fileEntryId + "');")
-												   .attr("src","${contextPath}/images/btn_manual.jpg").attr("width","84").attr("height","28")
-												   .css("cursor", "pointer")
-								 ).appendTo($rowResult);
-					} else {
-						$("<td/>").append($("<img/>").attr("src","${contextPath}/images/btn_manual_none.jpg").attr("width","84").attr("height","28")
-										).appendTo($rowResult);
+					if(i%4 == 0){
+						classActive = "";
+						if(i==0){
+							classActive = "active"
+						}
+						scienceappListSeq = $(".scienceappList").length;
+						scienceAppList = $("<div/>").addClass("scienceappList item "+classActive)
+													.attr("id", "scienceappList_"+scienceappListSeq);
 					}
 					
-					/*$("<td/>").append($("<img/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('" + virtualLabScienceAppList[i].scienceAppId + "');")
-												 .attr("src","${contextPath}/images/btn_run.jpg").attr("width","84").attr("height","28")
-												 .css("cursor", "pointer")
-							 ).appendTo($rowResult); */
-					$("#<portlet:namespace/>virtualLabClassScienceAppBody").append($rowResult);
+					scienceApp = $("<div/>").addClass("scienceapp");
+					scienceappUl = $("<ul/>");
+					
+					/* science app title */
+					scienceAppTitle = $("<a/>").text(virtualLabScienceAppList[i].scienceAppName)
+											   .attr("onclick", "event.cancelBubble=true; <portlet:namespace/>moveScienceAppDetail('" + virtualLabScienceAppList[i].scienceAppId +"', '"+ groupId + "');")
+											   .css("cursor", "pointer");
+					
+					$("<li/>").addClass("scienceappTitle")
+							  .append(scienceAppTitle)
+							  .appendTo(scienceappUl);
+					
+					/* science app version / univ name / user name */
+					$("<li/>").html("Ver " + virtualLabScienceAppList[i].scienceAppVersion
+									+"<br>" + virtualLabScienceAppList[i].scienceAppUniversityNm
+									+"<br>" + virtualLabScienceAppList[i].userFirstName )
+									.appendTo(scienceappUl);
+					
+					manualDownloadIcon = $("<img/>").attr("src", "${contextPath}/images/download_icon.png")
+													.attr("width", "9")
+													.attr("height", "12");
+					if(virtualScienceAppManualList[i].fileEntryId != undefined) {
+						$("<div/>").addClass("manualdnbtn")
+								   .text("MANUAL ")
+								   .append(manualDownloadIcon)
+								   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualScienceAppManualList[i].fileEntryId + "');")
+								   .css("cursor", "pointer")
+								   .appendTo(scienceappUl);
+					} else {
+						$("<div/>").addClass("manualdnbtn")
+						   .text("NO MANUAL")
+						   .appendTo(scienceappUl);
+					}
+					
+					scienceappUl.appendTo(scienceApp);
+					scienceApp.appendTo(scienceAppList);
+					
+					if(i%3 == 0 || i == virtualLabScienceAppList.length-1){
+						$("#<portlet:namespace/>scienceappContent").append(scienceAppList);
+					}
 				}
 			}
 		},error:function(msg,e){ 
@@ -163,6 +193,12 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
 }
 
+function <portlet:namespace/>moveScienceAppList(btnType){
+	$("#<portlet:namespace/>"+btnType+"Btn").click();
+}
+
+$("#<portlet:namespace/>scienceapp .carousel").carousel("pause");
+
 </script>
 
 <aui:script>
@@ -207,47 +243,64 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 }
 
 </aui:script>
-<c:choose>
-	<c:when test="${virtualLabScienceAppList == 0 && role eq 'member' }">
-	</c:when>
-	<c:otherwise>
-		<c:choose>
-			<c:when test="${role eq 'admin' }">
-				<div class="virtitlebox">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
-						<c:choose>
-							<c:when test="${empty classId || classId == 0}">
-								<liferay-ui:message key='edison-virtuallab-scienceapp' />
-							</c:when>
-							<c:otherwise>
+<div>
+	<c:choose>
+		<c:when test="${virtualLabScienceAppList == 0 && role eq 'member' }">
+		</c:when>
+		<c:otherwise>
+			<c:choose>
+					<c:when test="${role eq 'admin' }">
+						<%-- <img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> --%> 
+						<div class="classtitle">
+							<c:choose>
+								<c:when test="${empty classId || classId == 0}">
+									<liferay-ui:message key='edison-virtuallab-scienceapp' />
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
+								</c:otherwise>
+							</c:choose>
+							<div class="adminbtn">
+								<img src="${contextPath}/images/class_admin_btn.png" width="81" height="36" onClick="<portlet:namespace/>openScienceAppListPopup()">
+							</div>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="classtitle">
+							<h3>
 								<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
-							</c:otherwise>
-						</c:choose>
-					</div>
-					<div class="buttonbox0801">
-						<input id="<portlet:namespace/>scienceAppManagementButton" name="<portlet:namespace/>scienceAppManagementButton" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openScienceAppListPopup()"/>
-					</div>
+							</h3>
+						</div>
+					</c:otherwise>
+			</c:choose>
+			
+			<!--박스리스트-->
+			<div class="scienceappwrap carousel slide" id="<portlet:namespace/>scienceapp" data-ride="false" >
+			
+				<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('prev')">
+					<img src="${contextPath}/images/class_l_arrow.png" width="28" height="49">
 				</div>
-			</c:when>
-			<c:otherwise>
-				<h3><liferay-ui:message key='edison-course-using-science-apps' /></h3>
-			</c:otherwise>
-		</c:choose>
-		<div class="h10"></div>
-		<div class="table6_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
-				<colgroup>
-					<col width="*" />
-					<col width="100" />
-					<col width="200" />
-					<col width="150" />
-					<col width="120" />
-<!-- 					<col width="120" /> -->
-				</colgroup>
-				<tbody id="<portlet:namespace/>virtualLabClassScienceAppBody">
-				</tbody>
-			</table>
-		</div>
-	</c:otherwise>
-</c:choose>
+				
+				<!-- Science App List -->
+				<div id="<portlet:namespace/>scienceappContent" class="carousel-inner" style="width: 95%; float: left;">
+				</div>
+				
+				<div class="apparrow" onclick="<portlet:namespace/>moveScienceAppList('next')">
+					<img src="${contextPath}/images/class_r_arrow.png" width="28" height="49">
+				</div>
+				
+				<div style="display: none;">
+					<a class="left carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="prev" id="<portlet:namespace/>prevBtn">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="right carousel-control" href="#<portlet:namespace/>scienceapp" data-slide="next" id="<portlet:namespace/>nextBtn">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+	
+			</div>
+		</c:otherwise>
+	</c:choose>
+</div>

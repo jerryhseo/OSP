@@ -12,10 +12,8 @@
 <liferay-portlet:resourceURL var="downloadManualURL" id="downloadManual" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false"/>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-    <liferay-portlet:param name="jobUuid" value="0"/>
-    <liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="projectDetailUrl" portletName="edisonsimulationproject_WAR_edisonsimulationproject2017portlet" 
@@ -33,41 +31,42 @@
   <liferay-portlet:param name="myaction" value="generalModifyView" />
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="openDataDetailUrl" portletName="edisondatacollection_WAR_edisonsimulationportlet" 
+<liferay-portlet:renderURL var="openDataDetailUrl" portletName="datasearch_WAR_SDR_baseportlet" 
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
-  <liferay-portlet:param name="myRender" value="detailViewDataCollection" />
+  <liferay-portlet:param name="controller" value="Collection"/>
+  <liferay-portlet:param name="action" value="collectionDetail"/>
 </liferay-portlet:renderURL>
 
 <div class="contabm">
   <ul id="<portlet:namespace/>search-tab-button">
     <li class="sel" onclick="<portlet:namespace/>toggleTab(this); return false;">
-      <a id="total-tab-button" href="#total-tab">통합검색(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</a>
+      <a id="total-tab-button" href="#total-tab"><liferay-ui:message key="edison-search-total"/>(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</a>
     </li>
     <c:if test="${param.areaScienceApp}">
       <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="app-tab-button" href="#app-tab">사이언스앱(${searchResults.appCount})</a>
+        <a id="app-tab-button" href="#app-tab"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount})</a>
       </li>
     </c:if>
     <c:if test="${param.areaContents}">
       <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="content-tab-button" href="#content-tab">콘텐츠(${searchResults.contentCount})</a>
+        <a id="content-tab-button" href="#content-tab"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount})</a>
       </li>
     </c:if>
     <c:if test="${param.areaSimulationProject}">
       <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="project-tab-button" href="#project-tab">시뮬레이션 프로젝트(${searchResults.projectCount})</a>
+        <a id="project-tab-button" href="#project-tab"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount})</a>
       </li>
     </c:if>
     <c:if test="${param.areaScienceData}">
       <li onclick="<portlet:namespace/>toggleTab(this); return false;">
-        <a id="data-tab-button" href="#data-tab">사이언스 데이터(${searchResults.dataCount})</a>
+        <a id="data-tab-button" href="#data-tab"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount})</a>
       </li>
     </c:if>
   </ul>
 </div>
 <div id="<portlet:namespace/>total-search-tab" class="search-tab loaded conlist">
   <c:if test="${searchResults.appCount > 0}">
-    <h3 class="styleh3">사이언스앱(${searchResults.appCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results">
       <ul>
         <c:forEach items="${searchResults.appResults}" var="element">
@@ -81,7 +80,7 @@
                 <c:if test="${empty element.current_manualId or element.current_manualId eq 0}">
                     <img src="${contextPath}/images/search/btn_manual_none.jpg" style="height: 24px; cursor: default;"/>
                 </c:if>
-                <c:if test="${workBenchPlid ne 0 and isSignedIn}">
+                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
                     <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;" 
                         onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
                 </c:if>
@@ -91,7 +90,7 @@
                 ${element.title}<br/>version : ${element.version} / <liferay-ui:message key="edison-virtuallab-owner"/> : ${element.screenName}
               </c:if>
               <c:if test="${empty element.title}">
-                            상세 정보가 없습니다.
+                            <liferay-ui:message key="edison-search-no-detail"/>
               </c:if>
             </div>
           </li>
@@ -99,13 +98,13 @@
       </ul>
       <c:if test="${searchResults.appCount > 5}">
         <div class="more-button-wrapper">
-          <a class="btn_s" href="#appMore" onclick="<portlet:namespace/>toggleTabByTabType('app'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;결과 더 보기</a>
+          <a class="btn_s" href="#appMore" onclick="<portlet:namespace/>toggleTabByTabType('app'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
         </div>
       </c:if>
     </div>
   </c:if>
   <c:if test="${searchResults.contentCount > 0}">
-    <h3 class="styleh3">콘텐츠(${searchResults.contentCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results">
       <ul>
         <c:forEach items="${searchResults.contentResults}" var="element">
@@ -114,7 +113,7 @@
             <div>
               ${element.resume}
               <c:if test="${empty element.resume}">
-                상세 정보가 없습니다.
+                <liferay-ui:message key="edison-search-no-detail"/>
               </c:if>
             </div>
           </li>
@@ -122,13 +121,13 @@
       </ul>
       <c:if test="${searchResults.contentCount > 5}">
         <div class="more-button-wrapper">
-          <a class="btn_s" href="#contentMore" onclick="<portlet:namespace/>toggleTabByTabType('content'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;결과 더 보기</a>
+          <a class="btn_s" href="#contentMore" onclick="<portlet:namespace/>toggleTabByTabType('content'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
         </div>
       </c:if>
     </div>
   </c:if>
   <c:if test="${searchResults.projectCount > 0}">
-    <h3 class="styleh3">시뮬레이션 프로젝트(${searchResults.projectCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results">
       <ul>
         <c:forEach items="${searchResults.projectResults}" var="element">
@@ -137,7 +136,7 @@
             <div>
               ${element.explain}
               <c:if test="${empty element.explain}">
-                상세 정보가 없습니다.
+                <liferay-ui:message key="edison-search-no-detail"/>
               </c:if>
             </div>
           </li>
@@ -145,30 +144,59 @@
       </ul>
       <c:if test="${searchResults.projectCount > 5}">
         <div class="more-button-wrapper">
-          <a class="btn_s" href="#projectMore" onclick="<portlet:namespace/>toggleTabByTabType('project'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;결과 더 보기</a>
+          <a class="btn_s" href="#projectMore" onclick="<portlet:namespace/>toggleTabByTabType('project'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
         </div>
       </c:if>
     </div>
   </c:if>
   <c:if test="${searchResults.dataCount > 0}">
-    <h3 class="styleh3">사이언스 데이터(${searchResults.dataCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results">
       <ul>
         <c:forEach items="${searchResults.dataResults}" var="element">
           <li>
-            <a href="#dataDetail" onclick="<portlet:namespace/>moveDataDetail(${element.collectionId}); return false;">${element.title}</a>
+            <a href="#dataDetail" onclick="<portlet:namespace/>moveDataDetail(${element.vo.collectionId}); return false;">${element.vo.title}
+            <c:if test="${!empty element.dsCnt && element.dsCnt ne 0}">(${element.dsCnt })</c:if></a>
+            <div style="float: right; line-height: 2.3em !important;">
+              <c:choose>
+                <c:when test="${empty element.embago}">
+                              Inavailable
+                          </c:when>
+                <c:when test="${element.embago == 0}">
+                              Available now.
+                          </c:when>
+                <c:otherwise>
+                              Available in
+                              <c:if test="${element.embago > 30}">
+                    <fmt:parseNumber value="${element.embago / 30}" integerOnly="true" /> month.
+                              </c:if>
+                  <c:if test="${element.embago <= 30}">
+                                  ${element.embago} day.
+                              </c:if>
+                </c:otherwise>
+              </c:choose>
+            </div>
             <div>
-              ${element.description}
-              <c:if test="${empty element.description}">
-                상세 정보가 없습니다.
-              </c:if>
+              <p class="description">${element.vo.description}</p>
+              <fmt:formatDate value="${element.vo.createDate }" pattern="yyyy-MM-dd" /> |
+              ${element.vo.doi } | 
+              ${element.communityname }
+              <c:choose>
+                <c:when test="${!empty element.contributorNames[0] }">
+                  | ${element.contributorNames[0] }
+                  <c:if test="${fn:length(element.contributorNames) > 1 }">
+                      and ${fn:length(element.contributorNames) - 1} others
+                  </c:if>
+                </c:when>
+                <c:otherwise> | ${element.userName }</c:otherwise>
+              </c:choose>
             </div>
           </li>
         </c:forEach>
       </ul>
       <c:if test="${searchResults.dataCount > 5}">
         <div class="more-button-wrapper">
-          <a class="btn_s" href="#datatMore" onclick="<portlet:namespace/>toggleTabByTabType('data'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;결과 더 보기</a>
+          <a class="btn_s" href="#datatMore" onclick="<portlet:namespace/>toggleTabByTabType('data'); return false;"><i class="icon-plus"></i>&nbsp;&nbsp;<liferay-ui:message key="edison-search-more"/></a>
         </div>
       </c:if>
     </div>
@@ -176,32 +204,32 @@
   <c:if test="${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount eq 0}">
     <div class="search-results">
       <ul>
-        <li><span class="result-none">검색 결과가 없습니다.</span></li>
+        <li><span class="result-none"><liferay-ui:message key="edison-search-no-result"/></span></li>
       </ul>
     </div>
   </c:if>
 </div>
 <c:if test="${param.areaScienceApp}">
   <div id="<portlet:namespace/>app-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3">사이언스앱(${searchResults.appCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaContents}">
   <div id="<portlet:namespace/>content-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3">콘텐츠(${searchResults.contentCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaSimulationProject}">
   <div id="<portlet:namespace/>project-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3">시뮬레이션 프로젝트(${searchResults.projectCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaScienceData}">
   <div id="<portlet:namespace/>data-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3">사이언스 데이터(${searchResults.dataCount} 건)</h3>
+    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
     <div class="search-results"></div>
   </div>
 </c:if>
@@ -326,7 +354,7 @@ function <portlet:namespace/>moveSimulationProjectDetail(simulationProjectId) {
 
 function <portlet:namespace/>moveDataDetail(collectionId) {
   <portlet:namespace/>setRedirectUrlAndLocationHref(function(redirectURL){
-    var thisPortletNamespace = "_edisondatacollection_WAR_edisonsimulationportlet_";
+    var thisPortletNamespace = "_datasearch_WAR_SDR_baseportlet_";
     var params = "&" + thisPortletNamespace + "collectionId=" + collectionId;
         params += "&" + thisPortletNamespace + "redirectName=" + "<liferay-ui:message key='edison-search-total'/>";
         params += "&" + thisPortletNamespace + "redirectURL=" + redirectURL;
@@ -345,7 +373,7 @@ function <portlet:namespace/>fileDownload(manualId){
 }
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
     var URL = "<%=workbenchURL%>";
-    URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
     location.href= URL;
 }
 

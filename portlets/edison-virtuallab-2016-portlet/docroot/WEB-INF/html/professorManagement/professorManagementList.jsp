@@ -19,7 +19,7 @@
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
-<input type="button" value="Synce" onclick="<portlet:namespace/>syncProfessorList();" class="button06"/>
+<input type="button" value="Synce" onclick="<portlet:namespace/>syncProfessorList();" class="btn btn-default"/>
 
 <script>
 AUI().ready(function() {
@@ -72,7 +72,8 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			
 			if(professorList.length == 0) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "6")
+				$("<td/>").addClass("center)")
+						  .attr("colspan", "6")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-search-no-result' />")
 						  .appendTo($rowResult);
@@ -83,24 +84,30 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 					$rowResult = $("<tr/>").attr("onClick","<portlet:namespace/>moveProfessor('" + professorList[i].professorSeq + "','" + professorList[i].userId + "','" + redirectURL + "')")
 										   .addClass("onHover")  					   
 										   .css("cursor","pointer");
-					$("<td/>").text(professorCount--)
+					$("<td/>").addClass("center")
+							  .text(professorCount--)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].screenName)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].screenName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].firstName)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].firstName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].emailAddress)
+					$("<td/>").addClass("center")
+							  .text(professorList[i].emailAddress)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].universityFieldNm)
-					  .css("text-align","center")
-					  .appendTo($rowResult);
-					$("<td/>").text(professorList[i].major)
-					  .css("text-align","center")
-					  .appendTo($rowResult);
+					$("<td/>").addClass("center")
+							  .text(professorList[i].universityFieldNm)
+							  .css("text-align","center")
+							  .appendTo($rowResult);
+					$("<td/>").addClass("center")
+							  .text(professorList[i].major)
+							  .css("text-align","center")
+							  .appendTo($rowResult);
 					$("#<portlet:namespace/>professorListBody").append($rowResult);
 				}
 			}
@@ -119,27 +126,31 @@ function <portlet:namespace/>moveProfessor(professorSeq, userId, redirectURL) {
 }
 </script>
 
-<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle"><liferay-ui:message key='edison-professor-history-management-list' /></div>
-</div>
-
-<div class="h30"></div>
-<div class="tabletopbox">
-	<form method="post" name="<portlet:namespace/>searchForm" id="<portlet:namespace/>searchForm" style="margin: 0px;" onsubmit="return false;">
-		<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+<div class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-professor-history-management-list' />
+		</h3>
 		
-		<div class="search">
-			<div class="searchbox">
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-id' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" />
-				<input id="search_button" name="<portlet:namespace />search_button" type="button" class="btnsearch" onclick="<portlet:namespace/>dataSearchList(1)"/>
-			</div>
-			<input id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01" onclick="<portlet:namespace/>dataSearchList(0)" />
+		<div class="tabletopbox">
+			<form method="post" name="<portlet:namespace/>searchForm" id="<portlet:namespace/>searchForm" style="margin: 0px;" onsubmit="return false;">
+				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+				
+				<div class="input-group">
+					<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-id' />" onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" />
+					<div class="input-group-btn">
+						<button id="search_button" name="<portlet:namespace />search_button" class="btn btn-default" type="button" onclick="<portlet:namespace/>dataSearchList(1)"><i class="icon-search"></i></button>
+						<button id="total_search_button" name="<portlet:namespace />total_search_button" type="button" class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0)" >
+							Clear
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
-	</form>
-</div>
+	</div>
 
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<table class="table table-bordered table-hover edison-table" width="100%" border="0" cellspacing="0" cellpadding="0">
 		<colgroup>
 			<col width="10%" />
 			<col width="10%" />
@@ -162,6 +173,6 @@ function <portlet:namespace/>moveProfessor(professorSeq, userId, redirectURL) {
 		</tbody>
 	</table>
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+	<div id="<portlet:namespace/>pageListDiv" class=text-center></div>	<!-- pagination -->
 </div>
 </body>

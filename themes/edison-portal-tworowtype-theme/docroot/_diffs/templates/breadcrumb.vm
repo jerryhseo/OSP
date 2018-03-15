@@ -1,0 +1,14 @@
+<div class="row-fluid" id="nsubtopwrap">
+	<div class="container">
+		<div class="row" style="padding: 48px 0 13px 0;">
+			<div class="col-md-8" id="nsubtoplefttxt">
+				$theme.getSetting("breadcrumb-title")<br/>
+				<span>BRIDGE TO COMPUTATIONAL SCIENCE FOR HIGHER EDUCATION AND ADVANCED RESEARCH</span>
+			</div>
+			<div class="col-md-4 text-right" id="nsubtoprighttxt">
+				<div id="txtabout">$themeDisplay.getLayout().getName($themeDisplay.getLocale())</div>
+				#breadcrumbs()
+			</div>
+		</div>
+	</div>
+</div>

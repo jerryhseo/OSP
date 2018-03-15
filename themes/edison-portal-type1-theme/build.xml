@@ -5,4 +5,6 @@
 	<property name="theme.parent" value="_styled" />
 
 	<import file="../build-common-theme.xml" />
+	<property name="theme.type" value="vm" />
+	<property name="theme.type" value="vm" />
 </project>

@@ -90,7 +90,7 @@
                     
                     <div class="modal-boundary">
                         <div class="title boundary">
-                            <i class="icon-folder-close-alt"></i> <span></span>
+                            <i class="icon-folder-close-alt"></i> <span>Boundary Condition</span>
                         </div>
                         
                         <div class="interval"></div>
@@ -112,25 +112,27 @@
     </div>
 </div>
 
-<%-- <div class="modal fade" id="<portlet:namespace/>appListModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">App List</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="saveBtn" onclick="" title="NEW">
-                    <i class='icon-large icon-share'> <liferay-ui:message key='choice'/></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div> --%>
+<div class="modal fade" id="<portlet:namespace/>appExportModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>appExportModal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4 class="modal-title">App List</h4>
+	            </div>
+	            <div class="modal-body">
+	                
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-success" id="saveBtn" onclick="" title="NEW">
+	                    <i class='icon-large icon-share'> <liferay-ui:message key='choice'/></i>
+	                </button>
+	            </div>
+	        </div>
+		</div>
+	</div>
+</div>
         
 <script>
 
@@ -252,7 +254,8 @@ function <portlet:namespace/>operExport(){
     var sendData = {
         "<portlet:namespace/>fileIds" : fileIdArray,
         "<portlet:namespace/>fileNames" : fileNameArray,
-        "<portlet:namespace/>bcData" : boundaryArray
+        "<portlet:namespace/>bcData" : boundaryArray,
+        "<portlet:namespace/>bcUse" : true
         };
     
     $("#<portlet:namespace/>app-export-modal .close").click();
@@ -286,14 +289,9 @@ function <portlet:namespace/>confirmMoveWorkbench(fileName, meshFileName, meshFi
         boxWidth: '30%',
         useBootstrap: false,
         title: 'Confirm!',
-        content: fileName + ' 파일이 생성되었습니다.'+ '<br/>' +'워크벤치로 이동하시겠습니까?',
+        content: fileName + ' 파일이 생성되었습니다.',
         buttons: {
             confirm: function () {
-                // workbench app 선택하는 dialog 띄우기
-                <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId);
-            },
-            cancel: function () {
-                
             }
         }
     });
@@ -316,7 +314,7 @@ function <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId){
             var appNames = data.appNames;
             //app id 추출해서 popup(dialog)에 출력
             
-            var modalBody = $("#<portlet:namespace/>appListModal .modal-body");
+            var modalBody = $("#<portlet:namespace/>appExportModal .modal-body");
             modalBody.html("");
             var ul = $("<ul/>").addClass("panel-body sortable-ui ui-sortable");
             for(var i=0; i<appIdList.length; i++){
@@ -337,7 +335,7 @@ function <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId){
         }
     });
     
-    $("#<portlet:namespace/>appListModal").modal("show");
+    $("#<portlet:namespace/>appExportModal").modal({ "backdrop": "static", "keyboard": false });
 }
 
 function <portlet:namespace/>selectMeshFileCheck(){

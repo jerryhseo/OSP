@@ -62,6 +62,7 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -93,6 +94,9 @@ public class BoardController {
 		Map params = RequestUtil.getParameterMap(request);
 		String mainListYn = request.getPreferences().getValue("mainListYn", "N");
 		String maxWindowStatus = GetterUtil.get(params.get("maxWindowStatus"), "N");
+		String viewStructure = request.getPreferences().getValue("viewStructure", "N");
+		Long divCd=0l;
+		String customId="";
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
 			long companyId = PortalUtil.getCompanyId(request);
@@ -101,7 +105,7 @@ public class BoardController {
 			long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
 			String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 			String redirectName = ParamUtil.getString(request, "redirectName");
-			String customId = ParamUtil.getString(request, "customId");
+			customId = ParamUtil.getString(request, "customId");
 			boolean isCustomAdmin = ParamUtil.getBoolean(request, "isCustomAdmin",false);
 			boolean isDefaultUserWrite = ParamUtil.getBoolean(request, "isDefaultUserWrite",false);
 			
@@ -116,7 +120,7 @@ public class BoardController {
 				isDefaultUserWrite=false;
 			}
 			
-			Long divCd = ParamUtil.getLong(request, "divCd",0);
+			divCd = ParamUtil.getLong(request, "divCd",0);
 			if(divCd==0){
 				divCd = Long.parseLong(request.getPreferences().getValue("divCd", "100"));
 			}
@@ -129,7 +133,7 @@ public class BoardController {
 			
 			List popupList = new ArrayList();
 			if(popState){		
-				List boardPopupList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100, boardGroupId, customId, "", themeDisplay.getLocale(), 0, true, String.valueOf(boardGroupId));
+				List boardPopupList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100, boardGroupId, customId, "", themeDisplay.getLocale(), 0, true, String.valueOf(boardGroupId), "");
 				
 				Map cookieMap = new java.util.HashMap();
 	
@@ -172,6 +176,11 @@ public class BoardController {
 				}
 			}
 			
+			/*통합검색*/
+			long searchPlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/search").getPlid();
+			PortletURL searchUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", searchPlid, PortletRequest.RENDER_PHASE);
+			model.addAttribute("searchURL", searchUrl);
+			
 			//parameter
 			model.addAttribute("isCustomAdmin", isCustomAdmin);
 			model.addAttribute("customId", customId);
@@ -181,9 +190,11 @@ public class BoardController {
 			model.addAttribute("boardGroupId", String.valueOf(boardGroupId));
 			
 			model.addAttribute("currentPage", CustomUtil.strNull(params.get("currentPage"), "1"));
-			model.addAttribute("searchValue", CustomUtil.strNull(params.get("searchValue")));
+			model.addAttribute("searchValue", CustomUtil.strNull(params.get("searchValue")).equals("undefined") ? "" :  CustomUtil.strNull(params.get("searchValue")));
 			model.addAttribute("listSize", CustomUtil.strNull(params.get("listSize"),"10"));
 			model.addAttribute("popState", popState);
+			model.addAttribute("viewStructure", viewStructure);
+			model.addAttribute("siteName", themeDisplay.getSiteGroupName());
 			
 			//redirectURL decode
 			model.addAttribute("redirectOrignURL", HttpUtil.decodeURL(redirectURL));
@@ -194,6 +205,10 @@ public class BoardController {
 			model.addAttribute("divSort", divSort);
 			model.addAttribute("popupList", popupList);
 			
+			boolean isVirtualClass = Boolean.parseBoolean(ParamUtil.getString(request, "isVirtualClass"));
+			model.addAttribute("isVirtualClass", isVirtualClass);
+			String virtualLabId = ParamUtil.getString(request, "virtualLabId");
+			model.addAttribute("virtualLabId", virtualLabId);
 			
 		} catch (Exception e) {
 			log.error(e);
@@ -211,8 +226,26 @@ public class BoardController {
 		}
 		
 		if(mainListYn.equals("Y") && maxWindowStatus.equals("N")){
+			if(divCd == 100 && viewStructure.equals("card")){
+				return "noticeByViewType";
+			} else if(divCd == 100 && !customId.contains("class") && (viewStructure.equals("list") || viewStructure.equals("N"))){
+				return "list";
+			} else if(customId.contains("class")){
+				if(divCd==100){
+					return "noticeInVirtualClass";
+				} else if(divCd==200){
+					return "qnaInVirtualClass";
+				}
+			}
 			return "listMain";
 		}else{
+			if(customId.contains("class") && maxWindowStatus.equals("N")){
+				if(divCd==100){
+					return "noticeInVirtualClass";
+				} else if(divCd==200){
+					return "qnaInVirtualClass";
+				}
+			}
 			return "list";
 		}
 	}
@@ -225,12 +258,19 @@ public class BoardController {
 		
 		//parameter
 		long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
+		long groupBoardSeq = ParamUtil.get(request, "groupBoardSeq", 0);	// QnA > 답변 데이터 추출을 위한 Parameter 추가
 		String customId = ParamUtil.getString(request, "customId");
 		
 		int listSize = Integer.parseInt(CustomUtil.strNull(params.get("listSize"), "10"));
 		int currentPage = Integer.parseInt(CustomUtil.strNull(params.get("currentPage"), "1"));
 		
-
+		// 강좌에서 호출하였을 경우 virtualLabId추출
+		boolean isVirtualClass = Boolean.parseBoolean(CustomUtil.strNull(params.get("isVirtualClass"), "false"));
+		String virtualLabId = "";
+		if(isVirtualClass){
+			virtualLabId = CustomUtil.strNull(params.get("virtualLabId"), "");
+		}
+		
 		String searchValue = CustomUtil.strNull(params.get("searchValue"));
 		Long divCd = Long.parseLong(((PortletRequest) request).getPreferences().getValue("divCd", "100"));
 		int blockSize = Integer.parseInt(((PortletRequest) request).getPreferences().getValue("blockSize", "10"));
@@ -247,15 +287,25 @@ public class BoardController {
 			siteGroup = String.valueOf(ParamUtil.get(request, "groupId", ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId())));
 		}
 		
-		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, 0, false, siteGroup);
-		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, 0, siteGroup);
+		// 강좌에서 호출 -> 강의들의 질의응답 추출 , 그 외에는 해당 페이지 내의 boardList만 추출 :: 추출을 위해 virtualLabId(Parameter) 추가
+		List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, start, listSize, boardGroupId, customId, searchValue, locale, groupBoardSeq, false, siteGroup, virtualLabId);
+		int totalCount = BoardDivLocalServiceUtil.getCustomCountBoard(divCd, boardGroupId, customId, searchValue, groupBoardSeq, siteGroup);
 		String paging = PagingUtil.getPaging(request.getContextPath(), CustomUtil.strNull(params.get("methodName")), totalCount, currentPage, listSize, blockSize);
+		
+		int pageCount = 0;		// 구현해야하는 pagination 개수
+		if(totalCount % listSize == 0){
+			pageCount = (totalCount / listSize);
+		} else {
+			pageCount = (totalCount / listSize)+1;
+		}
 		
 		JSONObject obj = new JSONObject();
 		obj.put("divCd", divCd);	// divCd(구분코드)를 넘겨주어 어떤 게시판인지 확인
 		obj.put("boardList", boardList);
 		obj.put("seq", totalCount - ((currentPage - 1)*listSize));
 		obj.put("paging", paging);
+		obj.put("isVirtualClass", isVirtualClass);
+		obj.put("pageCount", pageCount);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
@@ -279,9 +329,9 @@ public class BoardController {
 		try {
 		    
 		    String boardSeq = ParamUtil.getString(request, "boardSeq", "");
-            if(!StringUtils.hasText(boardSeq) 
+            if( ( !StringUtils.hasText(boardSeq) && !mode.equals("WRITE") )
                 || ( NumberUtils.isNumber(boardSeq) 
-                    && NumberUtils.toLong(boardSeq) <= 0)){
+                    && NumberUtils.toLong(boardSeq) <= 0 && mode.equals("VIEW"))){
                 log.error("BoardSeq is not valid.");
                 SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
                 return null;
@@ -396,7 +446,7 @@ public class BoardController {
 			List replyList = new ArrayList();
 			
 			if(boardDiv.getReplyYn() && !GetterUtil.get(params.get("boardSeq"), "").equals("")){
-				List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100000, boardGroupId, customId, "", locale, GetterUtil.get(params.get("boardSeq"), 0L), false, siteGroup);
+				List boardList = BoardDivLocalServiceUtil.getCustomListBoard(divCd, 0, 100000, boardGroupId, customId, "", locale, GetterUtil.get(params.get("boardSeq"), 0L), false, siteGroup, "");
 				
 				List replyFileList = null;
 				Map map = null;
@@ -430,7 +480,7 @@ public class BoardController {
 			model.addAttribute("RENDER_MSG",	CustomUtil.strNull(params.get("RENDER_MSG")));
 
 			model.addAttribute("currentPage",	CustomUtil.strNull(params.get("currentPage"), "1"));
-			model.addAttribute("searchValue",	CustomUtil.strNull(params.get("searchValue")));
+			model.addAttribute("searchValue",	CustomUtil.strNull(params.get("searchValue")).equals("undefined") ? "" :  CustomUtil.strNull(params.get("searchValue")));
 			model.addAttribute("listSize",	CustomUtil.strNull(params.get("listSize")));
 			
 			
@@ -816,17 +866,16 @@ public class BoardController {
 			String customId = ParamUtil.getString(request, "customId");
 			long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
 			
-			
 			String divSort = request.getPreferences().getValue("divSort", "NOTICE");
 			Board brd = BoardLocalServiceUtil.deleteBoard(Long.parseLong(CustomUtil.strNull(params.get("boardSeq"),"0")));
 	
 			String preFix = "";
 			preFix += String.valueOf(boardGroupId);
 			preFix += customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
-			String folderSeq = preFix + "_" + CustomUtil.strNull(params.get("boardSeq"));
+			String folderSeq = preFix + "_" + CustomUtil.strNull(params.get("boardSeq"),"0");
 			
-			EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
-			
+//			EdisonFileUtil.deleteGroupEdisonFile(boardGroupId, divSort, folderSeq);
+				
 			PortletURL portletURL = PortletURLFactoryUtil.create(request, PortalUtil.getPortletId(request), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 			
 			portletURL.setPortletMode(PortletMode.VIEW);
@@ -959,5 +1008,23 @@ public class BoardController {
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.write(obj.toString());
+	}
+	
+	@ResourceMapping(value="getNoticeListForVirtualClass")
+	public void getNoticeListForVirtualClass(ResourceRequest request, ResourceResponse response){
+		
+		try {
+			
+			getBoardDivBoards(request, response);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

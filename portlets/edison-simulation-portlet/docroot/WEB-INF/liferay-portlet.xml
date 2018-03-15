@@ -9,7 +9,7 @@
 		<action-url-redirect>true</action-url-redirect>		
 		<instanceable>false</instanceable>
 		<private-session-attributes>false</private-session-attributes>
-		<css-class-wrapper>edison-bestsimulation</css-class-wrapper>		
+		<css-class-wrapper>edison-bestsimulation container</css-class-wrapper>		
 	</portlet>
 	
 	<portlet>
@@ -45,6 +45,7 @@
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>		
+		<css-class-wrapper>container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -54,7 +55,7 @@
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>		
-		<css-class-wrapper>edison-statistics-app</css-class-wrapper>		
+		<css-class-wrapper>edison-statistics-app container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -64,7 +65,7 @@
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>		
-		<css-class-wrapper>edison-statistics-exec</css-class-wrapper>		
+		<css-class-wrapper>edison-statistics-exec container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -74,7 +75,7 @@
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/main.css</header-portlet-css>		
-		<css-class-wrapper>edison-statistics-app-exec</css-class-wrapper>		
+		<css-class-wrapper>edison-statistics-app-exec container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -83,7 +84,7 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>edison-statistics-class</css-class-wrapper>		
+		<css-class-wrapper>edison-statistics-class container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -91,7 +92,7 @@
 		<portlet-name>edison-data-collection</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>edison-data-collection</css-class-wrapper>		
+		<css-class-wrapper>edison-data-collection container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -99,7 +100,7 @@
 		<portlet-name>edison-data-entry</portlet-name>
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>
-		<css-class-wrapper>edison-data-entry</css-class-wrapper>		
+		<css-class-wrapper>edison-data-entry container</css-class-wrapper>		
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
@@ -118,7 +119,7 @@
 	  <header-portlet-css>/css/main.css</header-portlet-css>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
 	  <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-	  <css-class-wrapper>edison-workbench-job-monitoring-portlet</css-class-wrapper>
+	  <css-class-wrapper>edison-workbench-job-monitoring-portlet container</css-class-wrapper>
     <add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
@@ -129,7 +130,37 @@
 	  <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 	  <css-class-wrapper>edison-workbench-job-status-and-result</css-class-wrapper>
     <add-default-resource>true</add-default-resource>
+    
 	</portlet>
+	<portlet>
+		<portlet-name>SimulationDashboard</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>dashboard-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+    
+    <portlet>
+        <portlet-name>edison-tab</portlet-name>
+        <icon>/icon.png</icon>
+        <css-class-wrapper>edison-tab</css-class-wrapper>
+        <add-default-resource>true</add-default-resource>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>edison-tree-view-monitoring</portlet-name>
+        <icon>/icon.png</icon>
+        <action-url-redirect>true</action-url-redirect>
+        <header-portlet-css>/css/treeview-monitoring.css</header-portlet-css>
+        <header-portlet-css>/css/jstreestyle.css</header-portlet-css>
+        <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
+        <header-portlet-css>/css/jquery.contextMenu.css</header-portlet-css>
+        <header-portlet-javascript>/js/jquery.contextMenu.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/jstree.min.js</header-portlet-javascript>
+        <css-class-wrapper>
+            tree-view-monitoring-portlet
+        </css-class-wrapper>
+    </portlet>
+    
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

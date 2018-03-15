@@ -9,7 +9,7 @@
 		<action-url-redirect>true</action-url-redirect>		
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>edison-multiboard</css-class-wrapper>		
+		<css-class-wrapper>edison-multiboard container</css-class-wrapper>		
 	</portlet>
 	<portlet>
 		<portlet-name>edison-multitab</portlet-name>
@@ -18,13 +18,13 @@
 		<action-url-redirect>true</action-url-redirect>		
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>edison-multitab</css-class-wrapper>		
+		<css-class-wrapper>edison-multitab container</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-comment</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>edison-comment</css-class-wrapper>		
+		<css-class-wrapper>edison-comment container</css-class-wrapper>		
 	</portlet>
 	<portlet>
 		<portlet-name>edison-comment-crud</portlet-name>

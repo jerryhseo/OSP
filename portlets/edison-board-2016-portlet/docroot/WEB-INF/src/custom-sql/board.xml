@@ -22,17 +22,30 @@
 	</sql>
 	<sql id="org.kisti.edison.service.persistence.Board.getBoardCommon">
 	<![CDATA[
+		<isNotEmpty property="virtualLabId">	
+			, G.classId, G.classTitle, G.virtualClassCd
+		</isNotEmpty>
 		FROM
 			EDCON_BoardDiv_Board A
 				INNER JOIN EDCON_Board B ON B.boardSeq = A.boardSeq
 				INNER JOIN EDCON_BoardDiv C ON C.divCd = A.divCd
 				INNER JOIN User_ D ON D.userId = B.writerId
+		<isNotEmpty property="virtualLabId">	
+			, EDVIR_VirtualLabs_VirtualLabClasses E
+			INNER JOIN  EDVIR_VirtualLab F ON F.virtualLabId = E.virtualLabId 
+			INNER JOIN  EDVIR_VirtualLabClass G  ON G.classId = E.classId
+		</isNotEmpty>
 		WHERE
 			C.divCd = #divCd#
 			AND B.groupBoardSeq = #groupBoardSeq#
 		
 		<isNotEmpty property="customId">	
 			AND B.customId = #customId#
+		</isNotEmpty>
+		
+		<isNotEmpty property="virtualLabId">	
+			AND F.VirtualLabId = #virtualLabId#
+			AND REPLACE(B.customId, 'class_', '') = G.classId
 		</isNotEmpty>
 			
 		<isNotEmpty property="boardSeq">

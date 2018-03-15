@@ -25,11 +25,15 @@
 		display:table-row;
 	}
 </style>
+
+<div class="table-responsive panel edison-panel">
 	<input type="button"
 			value="<liferay-ui:message key='edison-batch-manual-execute' />"
-			class="button02"
+			class="btn btn-default"
 			onclick="<portlet:namespace/>showOrHideBatchManualExecute()" />
+	
 	<div id="batchManualExecute" style="display: none;">
+		
 		<h1><liferay-ui:message key='edison-batch-manual-execute' /></h1>
 		
 		<div class="tabletopbox clear">
@@ -48,8 +52,8 @@
 			</form>
 		</div>
 	
-		<div class="table1_list borderno">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+		<div class="table1_list">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 				<colgroup id="boardColgroup">
 					<col width="50%" />
 					<col width="50%"/>
@@ -73,10 +77,16 @@
 			</table>
 		</div>
 	</div>
-	<h1><liferay-ui:message key='edison-batch-execute-history' /></h1>
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="panel-heading clearfix">
+		<h1>
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+			<liferay-ui:message key='edison-batch-execute-history' />
+		</h1>
+	</div>
+	
+	<div class="table1_list">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup id="boardColgroup">
 				<col width="8%" />
 				<col width="10%" />
@@ -102,7 +112,8 @@
 		</table>
 	</div>
 	
-	<div id="<portlet:namespace/>paging" class="paging"></div>
+	<div id="<portlet:namespace/>paging" class="paging text-center"></div>
+</div>
 	
 	<script type="text/javascript">
 	

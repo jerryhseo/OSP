@@ -263,7 +263,7 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 사이트 분야 카테고리 조회
+	* �ъ씠��遺꾩빞 移댄뀒怨좊━ 議고쉶
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getLv1Categories(
@@ -272,7 +272,7 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 카테고리 JSTree 데이터 조회
+	* 移댄뀒怨좊━ JSTree �곗씠��議고쉶
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getCategoriesJsonString(long companyGroupId,
@@ -337,12 +337,29 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.search.service.model.Search dataSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
+		org.kisti.edison.search.service.model.SearchCondition searchCondition,
+		org.kisti.edison.search.service.model.Search searchResults)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.search.service.model.Search dataSearch(
 		org.kisti.edison.search.service.model.SearchCondition searchCondition,
 		org.kisti.edison.search.service.model.Search searchResults)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public org.kisti.edison.search.service.model.Search totalSearch(
+		javax.portlet.ResourceRequest request,
+		javax.portlet.ResourceResponse response,
 		org.kisti.edison.search.service.model.SearchCondition searchCondition)
 		throws java.lang.Exception;
 

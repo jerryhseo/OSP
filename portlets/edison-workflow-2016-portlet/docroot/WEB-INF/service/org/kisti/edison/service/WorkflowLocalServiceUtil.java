@@ -427,10 +427,12 @@ public class WorkflowLocalServiceUtil {
 
 	public static org.kisti.edison.model.Workflow createWorkflow(
 		java.lang.String screenLogic, java.lang.String title,
+		java.lang.String description,
 		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().createWorkflow(screenLogic, title, request);
+		return getService()
+				   .createWorkflow(screenLogic, title, description, request);
 	}
 
 	public static org.kisti.edison.model.Workflow createWorkflow()
@@ -439,10 +441,21 @@ public class WorkflowLocalServiceUtil {
 	}
 
 	public static org.kisti.edison.model.Workflow copyWorkflow(
-		long sourceWorkflowId, javax.servlet.http.HttpServletRequest request)
+		long sourceWorkflowId, java.lang.String newTitle,
+		java.lang.String descrption,
+		javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().copyWorkflow(sourceWorkflowId, request);
+		return getService()
+				   .copyWorkflow(sourceWorkflowId, newTitle, descrption, request);
+	}
+
+	public static org.kisti.edison.model.Workflow copyWorkflow(
+		long sourceWorkflowId, java.lang.String newTitle,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().copyWorkflow(sourceWorkflowId, newTitle, request);
 	}
 
 	public static org.kisti.edison.model.Workflow updateWorkflow(
@@ -517,6 +530,18 @@ public class WorkflowLocalServiceUtil {
 		return getService().runWorkflow(workflowId, workflowParams, request);
 	}
 
+	public static org.kisti.edison.model.WorkflowInstance runWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> workflowParams,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .runWorkflowInstance(workflowInstanceId, workflowParams,
+			request);
+	}
+
 	public static int startWorkflowInstance(long workflowInstanceId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
@@ -548,6 +573,11 @@ public class WorkflowLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .updateWorkflowInstance(workflowStatusJson, workflowInstance);
+	}
+
+	public static org.codehaus.jackson.JsonNode askForWorkflowStart(
+		java.lang.String workflowUUID) throws java.io.IOException {
+		return getService().askForWorkflowStart(workflowUUID);
 	}
 
 	public static org.codehaus.jackson.JsonNode askForWorkflowStatus(

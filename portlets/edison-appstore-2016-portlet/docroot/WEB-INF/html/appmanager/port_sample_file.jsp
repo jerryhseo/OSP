@@ -15,12 +15,10 @@
 
 <style type="text/css">
 	#port-sampe-file-dialog label{
-		display: inline;
 		margin-bottom: 0px;
 		font-size: 17px;
-	}
-	#port-sampe-file-dialog .puptrline {
-		border-bottom: solid 1px #ccc;
+		margin-right: 20px;
+		cursor: pointer;
 	}
 	
 	#port-sampe-file-dialog .puptitle {
@@ -29,14 +27,6 @@
 		color: #334b7e;
 		padding-left: 8px;
 		padding: 10px;
-	}
-	
-	#port-sampe-file-dialog .puptxt {
-		font-size: 14px;
-		font-weight: 600;
-		color: #666;
-		line-height: 25px;
-		padding: 10px 0 10px 8px;
 	}
 	
 	#progress_bar_wrap2 {
@@ -79,57 +69,51 @@
 	</div>
 	
 	<div class="newWcont01">
-		<div style="width:50%; float:right; text-align:right; padding-top:15px;">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>portSave();return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button"/>
-		</div>
-		<form name="<portlet:namespace/>portSampleForm" id="<portlet:namespace/>portSampleForm" method="POST" action="<%=addPortSampleFileURL%>" enctype="multipart/form-data" >
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" >
-				<colgroup>
-					<col width="27%">
-					<col width="25%">
-					<col width="15%">
-					<col width="33%">
-				</colgroup>
-				<tr class="puptrline">
-					<td class="puptitle">
+		<div class="edison-panel">
+			<div class="panel-heading clearfix">
+				<div class="btn-group pull-right">
+					<button class="btn btn-primary" type="button" onClick="<portlet:namespace/>portSave();"><span class="icon-ok"> <liferay-ui:message key='edison-button-save'/></span></button>
+				</div>
+			</div>
+			<div class="panel-body">
+				<form name="<portlet:namespace/>portSampleForm" id="<portlet:namespace/>portSampleForm" method="POST" action="<%=addPortSampleFileURL%>" enctype="multipart/form-data" class="form-inline">
+					<div class="form-group puptitle">
 						<input type="radio" name="CheckFile" id="portSampleFile" value="${data.portSampleId}">
 						<label for='portSampleFile'>
 							<liferay-ui:message key='edison-table-list-header-port-file'/>
 						</label>
-					</td>
-					<td class="puptxt">
-						<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile"/>
-					</td>
-					<td class="puptxt">
-						<input class="addIp button02_1" value="file save" type="submit" id="<portlet:namespace/>fileSave"/>
-					</td>
-					<td class="puptxt" id="status">
+					</div>
+					<div class="form-group">
+						<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile" class="form-control-file"/>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-default" type="submit" ><span class="icon-file"> file save</span></button>
+					</div>
+					<div class="form-group" id="status">
 						<c:if test="${!empty data.portSampleTitle}">
 							<div class="down_date portSampleFileClass"  onclick="<portlet:namespace/>fileDownload('${data.portSampleId}')" style="cursor: pointer;display: inline-block;">
 								${data.portSampleTitle}
 							</div>
 							<img src='${contextPath}/images/icon_dustbin.png' class="portSampleFileClass noUpdateHidden" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${data.portSampleId}','portSampleFile','portSampleFileClass');"/>
 						</c:if>
-					</td>
-				</tr>
-				
-				<c:if test="${!empty data.dataTypeSampleTitle}">
-					<tr class="puptrline">
-						<td class="puptitle">
-							<input type="radio" name="CheckFile" id ="dataTypeSampleFile" value="${data.dataTypeSampleId}">
-							<label for='dataTypeSampleFile'>
-								<liferay-ui:message key='edison-table-list-header-data-type-file'/>
-							</label>
-						</td>
-						<td class="puptxt" colspan="3">
-							<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${data.dataTypeSampleId}')" style="cursor: pointer;display: inline-block;">
-								${data.dataTypeSampleTitle}
-							</div>
-						</td>
-					</tr>
-				</c:if>
-			</table>
-		</form>
+					</div>
+					
+					<div class="clearfix" style="border-bottom: solid 1px #ccc;margin: 15px 0px;"></div>
+					
+					<div class="form-group puptitle">
+						<input type="radio" name="CheckFile" id ="dataTypeSampleFile" value="${data.dataTypeSampleId}">
+						<label for='dataTypeSampleFile'>
+							<liferay-ui:message key='edison-table-list-header-data-type-file'/>
+						</label>
+					</div>
+					<div class="form-group">
+						<div class="down_date"  onclick="<portlet:namespace/>fileDownload('${data.dataTypeSampleId}')" style="cursor: pointer;display: inline-block;">
+							${data.dataTypeSampleTitle}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
 

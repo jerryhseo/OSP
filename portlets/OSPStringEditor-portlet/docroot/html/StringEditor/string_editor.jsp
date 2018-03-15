@@ -13,15 +13,17 @@ preferences.store();
 String inputData = (String)renderRequest.getAttribute("inputData");
 String connector = (String)renderRequest.getAttribute("connector");
 boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
-String action = (String)renderRequest.getAttribute("action");
+String mode = (String)renderRequest.getAttribute("mode");
 boolean isPopup = LiferayWindowState.isExclusive(request);
 %>
 
-<div class="row-fluid editor-portlet stringeditor-portlet " >
-    <div class="span12 canvasPanel">
-        <p>Enter string value: </p>
-        <input type="text" name="<portlet:namespace/>canvas" id="<portlet:namespace/>canvas" />
-    </div>
+<div class="container-fluid osp-editor">
+	<div class="row-fluid" >
+	    <div class="col-sm-12 no-header-frame canvas">
+	        <div>Enter string value: </div>
+	        <input class="form-control" type="text" id="<portlet:namespace/>canvas"/>
+	    </div>
+	</div>
 </div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
@@ -31,7 +33,7 @@ boolean isPopup = LiferayWindowState.isExclusive(request);
  * Global variables section
  ***********************************************************************/
 var <portlet:namespace/>connector = 'broadcast';
-var <portlet:namespace/>action = '<%=action%>';
+var <portlet:namespace/>mode = '<%=mode%>';
 
 /***********************************************************************
  * Initailization section using parameters
@@ -65,15 +67,18 @@ $('#<portlet:namespace/>canvas').on('change', function(){
  ***********************************************************************/
 Liferay.on(
 		OSP.Event.OSP_HANDSHAKE,
-		function( eventData ){
+		function( e ){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( eventData.targetPortlet === myId ){
-				<portlet:namespace/>connector = eventData.portletId;
-				<portlet:namespace/>action = eventData.action;
+				<portlet:namespace/>connector = e.portletId;
+				if( e.mode )
+					<portlet:namespace/>mode = e.mode;
+				else
+					<portlet:namespace/>mode = 'VIEW';
 	
 				var events = [
 					OSP.Event.OSP_EVENTS_REGISTERED,
-					OSP.Event.OSP_REQUEST_DATA,
+					OSP.Event.OSP_REQUEST_DATA
 					OSP.Event.OSP_LOAD_DATA
 				];
 				var eventData = {
@@ -109,7 +114,8 @@ Liferay.on(
 				var eventData = {
 						portletId: myId,
 						targetPortlet: e.portletId,
-						data: data
+						data: data,
+						params: e.params
 				}
 				
 				Liferay.fire(
@@ -135,7 +141,9 @@ Liferay.on(
 Liferay.on(
 		OSP.Event.OSP_INITIALIZE,
 		function( e ){
-			$('#<portlet:namespace/>canvas').val('');
+			if( e.targetPortlet === '<%=portletDisplay.getId()%>'){
+				$('#<portlet:namespace/>canvas').val('');
+			}
 		}
 );
 

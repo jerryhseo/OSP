@@ -1,918 +1,2771 @@
 (function(window){
-	'use strict';
+    'use strict';
 
-	if( window.OSP ){
-		if( OSP.Layout )	return;
-	}
-	else
-		window.OSP = {};
-	
-	OSP.Layout = function( jsonLayout ){
-		var Layout = this;
-		OSP._MapObject.apply( Layout );
+    if( window.OSP ){
+        if( OSP.Layout )    return;
+    }
+    else
+        window.OSP = {};
+    
+    OSP.Layout = function( jsonLayout ){
+        var Layout = this;
+        OSP._MapObject.apply( Layout );
 
-		var Portlet = function( jsonPortlet ){
-			var P = this;
-			OSP._MapObject.apply(P);
+        var Portlet = function( jsonPortlet ){
+            var P = this;
+            OSP._MapObject.apply(P);
 
-			P.instanceId = function( instanceId ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.INSTANCE_ID, arguments));
-			};
-			
-			P.portName = function( portName ){
-				if( portName === '' )	return false;
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.PORT_NAME, arguments));
-			};
-			
-			P.portType = function( type ){
-			    return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.TYPE, arguments));
-			};
+            P.instanceId = function( instanceId ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.INSTANCE_ID, arguments));
+            };
+            
+            P.portName = function( portName ){
+                if( portName === '' )   return false;
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.PORT_NAME, arguments));
+            };
+            
+            P.portType = function( type ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.TYPE, arguments));
+            };
 
-			P.generateInstanceId = function( instanceIndex ){
-				var instanceId = P.instanceId();
-				if( instanceId.indexOf('_INSTANCE_') > 0)
-					instanceId = instanceId.slice(0, instanceId.indexOf('_INSTANCE_'));
-				
-				var instanceString;
-				var idStr = "" + instanceIndex;
-				var pad = "0000";
-				var instanceString = pad.substring(0, pad.length - idStr.length) + idStr;
-				P.instanceId(instanceId+'_INSTANCE_'+instanceString);
-				
-				return P.instanceId();
-			};
-			
-			P.getRootId = function(){
-				var instanceId = P.instanceId();
-				var index = instanceId.indexOf('_INSTANCE_');
-				if( index < 0 )
-					return instanceId;
-				else
-					return instanceId.slice(0, instanceId.indexOf('_INSTANCE_'));
-			};
+            P.generateInstanceId = function( instanceIndex ){
+                var instanceId = P.instanceId();
+                if( instanceId.indexOf('_INSTANCE_') > 0)
+                    instanceId = instanceId.slice(0, instanceId.indexOf('_INSTANCE_'));
+                
+                var instanceString;
+                var idStr = "" + instanceIndex;
+                var pad = "0000";
+                var instanceString = pad.substring(0, pad.length - idStr.length) + idStr;
+                P.instanceId(instanceId+'_INSTANCE_'+instanceString);
+                
+                return P.instanceId();
+            };
+            
+            P.getRootId = function(){
+                var instanceId = P.instanceId();
+                var index = instanceId.indexOf('_INSTANCE_');
+                if( index < 0 )
+                    return instanceId;
+                else
+                    return instanceId.slice(0, instanceId.indexOf('_INSTANCE_'));
+            };
 
-			P.getNamespace = function(){
-				return '_'+P.instanceId()+'_';
-			};
+            P.getNamespace = function(){
+                return '_'+P.instanceId()+'_';
+            };
 
-			P.data = function( data ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.DATA, arguments));
-			};
-			
-			P.status = function( status ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.STATUS, arguments));
-			};
+            P.status = function( status ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.STATUS, arguments));
+            };
 
-			P.preferences = function( preferences ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.PREFERENCES, arguments));
-			};
-			
-			P.eventEnable = function( eventEnable ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.EVENT_ENABLE, arguments));
-			};
+            P.preferences = function( preferences ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.PREFERENCES, arguments));
+            };
+            
+            P.addPreference = function( key, value ){
+                var preferences = P.preferences();
+                switch( arguments.length){
+                case 1:
+                    if( !preferences )  return '';
+                    return preferences[key];
+                case 2:
+                    if( !preferences ){
+                        preferences = [];
+                        P.preferences( preferences );
+                    }
+                    return preferences[key] = value;
+                default:
+                    console.log( 'Arguments mismatch: Portlet.preference.');
+                    return false;
+                }
+            };
 
-			P.windowState = function( windowState ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.WINDOW_STATE, arguments));
-			};
+            P.removePreference = function( preference ){
+                var preferences = P.preferences();
+                if( !preferences )  return true;
+                return delete preferences[preference];
+            };
+            
+            P.events = function( events ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.EVENTS, arguments));
+            };
+            
+            P.checkEvent = function( event ){
+                var events = P.events();
+                if( !events )   return false;
+                
+                for( var index in events ){
+                    if( event === events[index] )
+                        return true;
+                }
+                
+                return false;
+            };
+            
+            P.display = function( displayOption ){
+                var $portletDiv = $('#'+P.getNamespace());
+                if( $portletDiv.length > 0 ){
+                    $portletDiv.css('display', displayOption);
+                    return true;
+                }
+                else
+                    return false;
+            };
+            
+            P.load = function( $targetDiv, connector, eventEnable, windowState, callback ){
+                AUI().use('liferay-portlet-url', function(A){
+                    var portletURL = Liferay.PortletURL.createRenderURL();
+                    portletURL.setPortletId( P.instanceId() );
+                    portletURL.setParameter( 'eventEnable', eventEnable);
+                    portletURL.setParameter( 'connector', connector);
+                    portletURL.setWindowState(windowState);
 
-			P.addPreference = function( key, value ){
-				var preferences = P.preferences();
-				switch( arguments.length){
-				case 1:
-					if( !preferences )	return '';
-					return preferences[key];
-				case 2:
-					if( !preferences ){
-						preferences = [];
-						P.preferences( preferences );
-					}
-					return preferences[key] = value;
-				default:
-					console.log( 'Arguments mismatch: Portlet.preference.');
-					return false;
-				}
-			};
+                    $.ajax({
+                        url: portletURL.toString(),
+                        type:'POST',
+                        async: false,
+                        dataType:'text',
+                        success: function( renderResult ){
+                            if(typeof $targetDiv.attr("section-type")!="undefined"){
+                                $targetDiv.html( renderResult );
+                            }else{
+                                var $portletDiv = $('<div>');
+                                console.log(P.getNamespace());
+                                $portletDiv.attr('id', P.getNamespace());
+                                $portletDiv.css('height', "inherit");
+                                $portletDiv.html( renderResult );
+                                $targetDiv.append( $portletDiv );
+                            }
+                            
+                            P.status(true);
+                            callback( connector, P.instanceId() );
+                        },
+                        error: function(){
+                            console.log('AJAX loading failed', P);
+                        }
+                    });
+                }); 
+            };
+            
+            P.fire = function( event, sourcePortlet, data ){
+                if( !P.checkEvent(event) )
+                    return false;
+                
+                var eventData = {
+                        portletId: sourcePortlet,
+                        targetPortlet: P.instanceId(),
+                        data: data
+                };
+                
+                Liferay.fire( event, eventData);
+            };
+            
+            P.fireLoadData = function( connector ){
+                var data = P.data();
+                if( !data ) return false;
+                
+                P.fire( OSP.Event.OSP_LOAD_DATA, connector, data );
+            };
 
-			P.removePreference = function( preference ){
-				var preferences = P.preferences();
-				if( !preferences )	return true;
-				return delete preferences[preference];
-			};
-			
-			P.events = function( events ){
-				return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.EVENTS, arguments));
-			};
-			
-			P.checkEvent = function( event ){
-				var events = P.events();
-				if( !events )	return false;
-				
-				for( var index in events ){
-					if( event === events[index] )
-						return true;
-				}
-				
-				return false;
-			};
-			
-			P.display = function( displayOption ){
-				var $portletDiv = $('#'+P.getNamespace());
-				if( $portletDiv.length > 0 ){
-					$portletDiv.css('display', displayOption);
-					return true;
-				}
-				else
-					return false;
-			};
-			
-			P.load = function( $targetDiv, connector, eventEnable, windowState, callback ){
-				AUI().use('liferay-portlet-url', function(A){
-					var portletURL = Liferay.PortletURL.createRenderURL();
-					portletURL.setPortletId( P.instanceId() );
-					portletURL.setParameter( 'eventEnable', eventEnable);
-					portletURL.setParameter( 'connector', connector);
-					portletURL.setParameter( 'action', P.portType());
-					portletURL.setWindowState(windowState);
+            P.clone = function(){
+                return new Portlet( OSP.Util.toJSON(P) );
+            };
 
-					$.ajax({
-						url: portletURL.toString(),
-						type:'POST',
-						async: false,
-						dataType:'text',
-						success: function( renderResult ){
-							var $portletDiv = $('<div>');
-							$portletDiv.attr('id', P.getNamespace());
-							$portletDiv.css( 'height', 'inherit');
-							$portletDiv.css( 'overflow', 'overlay');
-							$portletDiv.html( renderResult );
-							$targetDiv.append( $portletDiv );
-							callback( connector, P.instanceId() );
-						},
-						error: function(){
-							console.log('AJAX loading failed', P);
-						}
-					});
-				}); 
-			};
-			
-			P.fire = function( event, source, data ){
-				if( !P.checkEvent(event) )
-					return false;
-				
-				var eventData = {
-						portletId: source,
-						targetPortlet: P.instanceId(),
-						data: data
-				};
-				
-				Liferay.fire( event, eventData);
-			};
-			
-			P.loadData = function( connector ){
-				var data = P.data();
-				if( !data )	return false;
-				
-				P.fire( OSP.Event.OSP_LOAD_DATA, connector, data );
-			};
+            P.deserialize = function( jsonPortlet ){
+                for( var key in jsonPortlet ){
+                    switch( key ){
+                    case OSP.Constants.INSTANCE_ID:
+                    case OSP.Constants.PREFERENCES:
+                    case OSP.Constants.PORT_NAME:
+                    case OSP.Constants.REPOSITORY_TYPE:
+                        P.property( key, jsonPortlet[key] );
+                        break;
+                    default:
+                        console.log( 'Un-recognizable Portlet property: '+key);
+                    }
+                }
+            };
 
-			P.clone = function(){
-				return new Portlet( OSP.Util.toJSON(P) );
-			};
+            if( arguments.length === 1 )
+                P.deserialize( jsonPortlet );
+        }; // End of Portlet
+        Layout.newPortlet = function(jsonPortlet ){
+            return new Portlet(jsonPortlet);
+        };
+        
+        var Column = function( jsonColumn ){
+            var C = this;
+            OSP._MapObject.apply(C);
+            
+            // Column Definitions
+            C.id = function( id ){
+                return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments));
+            };
+            
+            C.height = function( height ){
+                return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.HEIGHT, arguments));
+            };
+            
+            C.currentPortletId = function( instanceId ){
+                return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.CURRENT_PORTLET, arguments));
+            };
+            
+            C.getCurrentPortlet = function(){
+                var portletAry = C.getPortlet( C.currentPortletId() );
+                if( protletAry.length === 0 )
+                    return portletAry[0];
+                else
+                    return false;
+            };
 
-			P.deserialize = function( jsonPortlet ){
-				for( var key in jsonPortlet ){
-					switch( key ){
-					case OSP.Constants.INSTANCE_ID:
-					case OSP.Constants.PREFERENCES:
-					case OSP.Constants.PORT_NAME:
-					case OSP.Constants.DATA:
-						P.property( key, jsonPortlet[key] );
-						break;
-					default:
-						console.log( 'Un-recognizable Portlet property: '+key);
-					}
-				}
-			};
+            C.portlets = function( portlets ){
+                return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.PORTLETS, arguments));
+            };
+            
+            C.getPortlet = function( instanceId ){
+                var portlets  = C.portlets();
+                if( !portlets ) false;
+                
+                for( var index in portlets ){
+                    var portlet = portlets[index];
+                    if( instanceId === portlet.instanceId() )
+                        return portlet;
+                }
+                return false;
+            };
+            
+            C.getPortlets = function( portName ){
+                var portlets  = C.portlets();
+                if( !portlets ) false;
+                
+                var retrievedPortlets = [];
+                for( var index in portlets ){
+                    var portlet = portlets[index];
+                    if( portName === portlet.portName() )
+                        retrievedPortlets.push( portlet );
+                }
+                return retrievedPortlets;
+            };
+            
+            C.addPortlet = function( portlet ){
+                var portlets = C.portlets();
+                if( !portlets ){
+                    portlets = [];
+                    C.portlets(portlets);
+                }
 
-			if( arguments.length === 1 )
-				P.deserialize( jsonPortlet );
-		}; // End of Portlet
-		Layout.newPortlet = function(jsonPortlet ){
-			return new Portlet(jsonPortlet);
-		};
-		
-		var Column = function( jsonColumn ){
-			var C = this;
-			OSP._MapObject.apply(C);
-			
-			// Column Definitions
-			C.id = function( id ){
-				return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments));
-			};
-			
-			C.height = function( height ){
-				return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.HEIGHT, arguments));
-			};
-			
-			C.currentPortlet = function( instanceId ){
-				return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.CURRENT_PORTLET, arguments));
-			};
-			
-			C.getVisualPortlet = function(){
-				return C.getPortlet( C.currentPortlet() );
-			};
+                for( var index in portlets ){
+                    var savedPortlet = portlets[index];
+                    if( portlet.instanceId() === savedPortlet.instanceId() ){
+                        console.log('ERROR]portlet is already assigned to the column: '+portlet.instanceId());
+                        return false;
+                    }
+                }
+                
+                portlets.push(portlet);
+                
+                return portlets;
+            };
+            
+            C.removePortlet = function( instanceId ){
+                var portlets = C.portlets();
+                if( !portlets ){
+                    return false;
+                }
+                
+                for( var index in portlets ){
+                    var portlet = portlets[index];
+                    if( portlet.instanceId() === instanceId ){
+                        portlets = OSP.Util.removeArrayElement( portlets, index );
+                    }
+                }
+                
+                return portlets;
+            };
+            
+            C.removePortlets = function( portName ){
+                var portlets = C.portlets();
+                if( !portlets ){
+                    return false;
+                }
+                
+                for( var index in portlets ){
+                    var portlet = portlets[index];
+                    if( portlet.portName() === portName ){
+                        portlets = OSP.Util.removeArrayElement( portlets, index );
+                    }
+                }
+                
+                return portlets;
+            };
+            
+            C.isAssigned = function( portName /* or portlet instance id */ ){
+                var portlets = C.portlets();
+                if( !portlets ){
+                    return false;
+                }
+                
+                var instanceId = portName;
+                for( var index in portlets ){
+                    var portlet = portlets[index];
+                    if( portName === portlet.portName() || instanceId === portlet.instanceId() ){
+                        return true;
+                    }
+                }
+                return false;
+            };
+            
+            C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
+                if( targetPortlet.status() ){
+                    targetPortlet.display( 'block' );
+                    return true;
+                }
+                
+                targetPortlet.status( true );
+                
+                var $targetDiv = $('#'+C.getPortletSectionId(connector));
+                targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
+            };
+            
+            C.switchPortlet = function( targetPortlet, connector, eventEnable, windowState, callback){
+                var currentPortletId = C.currentPortletId();
+                if( !currentPortletId ) return false;
+                
+                var currentPortlet = C.getPortlet( currentPortletId );
+                currentPortlet.display( 'none' );
 
-			C.portlets = function( portlets ){
-				return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.PORTLETS, arguments));
-			};
-			
-			C.getPortlet = function( instanceId /* or port name */){
-				var portlets  = C.portlets();
-				if( !portlets )	false;
-				
-				var portName = instanceId;
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					if( instanceId === portlet.instanceId() || portName === portlet.portName() )
-						return portlet;
-				}
-				return false;
-			};
-			
-			C.addPortlet = function( portlet ){
-				var portlets = C.portlets();
-				if( !portlets ){
-					portlets = [];
-					C.portlets(portlets);
-				}
+                var $targetDiv = $('#'+C.getPortletSectionId(connector));
+                $targetDiv.effect("highlight", {color:"#F5F6CE"}, 2000);
+                C.loadPortlet( targetPortlet, connector, eventEnable, windowState, callback);
+                
+                C.currentPortletId(targetPortlet.instanceId());
+            };
+            
+            C.getPortletSectionId = function( callerId ){
+                    return OSP.Event.getNamespace(callerId)+C.id();
+            };
+            
+            C.clone = function(){
+                return new Column( OSP.Util.toJSON(C) );
+            };
 
-				var portName = portlet.portName();
-				
-				for( var index in portlets ){
-					var savedPortlet = portlets[index];
-					if( portlet.instanceId() === savedPortlet.instanceId() ){
-						console.log('ERROR]portlet is already assigned to the column: '+portlet.instanceId());
-						return false;
-					}
-					else if( portlet.portName() && portlet.portName() === savedPortlet.portName() ){
-						savedPortlet.instanceId( portlet.instanceId() );
-						var preferences = portlet.preferences();
-						if( preferences ){
-							savedPortlet.preferences(preferences);
-							return portlets;
-						}
-					}
-				}
-				
-				portlets.push(portlet);
-				
-				return portlets;
-			};
-			
-			C.getAssignedPortNames = function(){
-				var portlets = C.portlets();
-				if( !portlets ){
-					console.log('[ERROR]no AssignedPorts to getAssignedPortNames');
-					return false;
-				}
-				
-				var portNames = [];
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					if( portlet.portName() && portlet.portName() !== '' )
-						portNames.push(portlet.portName());
-				}
-				
-				return portNames;
-			};
-			
-			// if portName is a portlet id, then specified connection removed also
-			var removePortlet = function( instanceId /* or port name */){
-				var portlets = C.portlets();
-				if( !portlets ){
-					console.log('[ERROR]no portlets to be removed: '+portlerId);
-					return false;
-				}
-				var portName = instanceId;
-				
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					if( portName === portlet.portName() || instanceId === portlet.instanceId()){
-						OSP.Util.removeArrayElement(portlets, index);
-						return portlets;
-					}
-				}
-				
-				return false;
-			};
-			
-			C.isAssigned = function( portName /* or portlet instance id */ ){
-				var portlets = C.portlets();
-				if( !portlets ){
-					return false;
-				}
-				
-				var instanceId = portName;
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					if( portName === portlet.portName() || instanceId === portlet.instanceId() ){
-						return true;
-					}
-				}
-				return false;
-			};
-			
-			C.getAssignedPortName = function( instanceId ){
-				var portlets = C.portlets();
-				if( !portlets )	return false;
-				
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					if( instanceId === portlet.instanceId() )
-						return portlet.portName();
-				}
-				
-				return false;
-			};
-			
-			C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
-				//console.log( 'Target Portlet ID: '+portletId);
-				if( targetPortlet.status() ){
-					targetPortlet.display( 'block' );
-					return true;
-				}
-				
-				targetPortlet.status( true );
-				
-				var $targetDiv = $('#'+C.getPortletSectionId(connector));
-				targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
-			};
-			
-			C.loadData = function( instanceId/* or portName*/, connector ){
-				var portlet = C.getPortlet(instanceId);
-				if( !portlet )	return false;
-				return portlet.loadData( connector );
-			};
+            C.deserialize = function( jsonColumn ){
+                for( var key in jsonColumn ){
+                    switch( key ){
+                    case OSP.Constants.ID:
+                    case OSP.Constants.HEIGHT:
+                    case OSP.Constants.CURRENT_PORTLET:
+                        C.property( key, jsonColumn[key] );
+                        break;
+                    case OSP.Constants.PORTLETS:
+                        var jsonPortlets = jsonColumn[key];
+                        for( var index in jsonPortlets ){
+                            C.addPortlet( new Portlet(jsonPortlets[index]) );
+                        }
+                        break;
+                    default:
+                        console.log( 'Un-recognizable Portlet property: '+key);
+                    }
+                }
+            };
+            
+            if( arguments.length === 1 )
+                C.deserialize( jsonColumn );
+            
+        }; /* End of Column */
+        
+        Layout.newColumn = function( jsonColumn ){
+            return new Column( jsonColumn );
+        };
+        
+        Layout.templateId = function( templateId ){
+            return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
+        };
+        
+        Layout.columns = function( columns ){
+            return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.COLUMNS, arguments));
+        };
 
-			C.switchDisplayPortlet = function( targetPortlet, connector, eventEnable, windowState, callback){
-				var currentPortletId = C.currentPortlet();
-				if( !currentPortletId )	return false;
-				var currentPortlet = C.getPortlet( currentPortletId );
-				currentPortlet.display( 'none' );
+        Layout.getColumnIds = function(){
+            var columns = Layout.columns();
+            if( !columns )  return [];
+            
+            var columnIds = [];
+            for( var index in columns ){
+                var column = columns[index];
+                columnIds.push( column.id() );
+            }
+            return columnIds;
+        };
 
-				var $targetDiv = $('#'+C.getPortletSectionId(connector));
-				C.loadPortlet( targetPortlet, connector, eventEnable, windowState, callback);
-				
-				C.currentPortlet(targetPortlet.instanceId());
-			};
-			
-			C.getPortletSectionId = function( callerId ){
-					return OSP.Event.getNamespace(callerId)+C.id();
-			};
-			
-			C.fire = function( event, source, data ){
-				var portlets = C.portlets();
-				if( !portlets )	return false;
-				
-				for( var index in portlets ){
-					var portlet = portlets[index];
-					portlet.fire( event, source, data);
-				}
-				
-				return true;
-			};
-			
-			C.clone = function(){
-				return new Column( OSP.Util.toJSON(C) );
-			};
-
-			C.deserialize = function( jsonColumn ){
-				for( var key in jsonColumn ){
-					switch( key ){
-					case OSP.Constants.ID:
-					case OSP.Constants.HEIGHT:
-					case OSP.Constants.CURRENT_PORTLET:
-						C.property( key, jsonColumn[key] );
-						break;
-					case OSP.Constants.PORTLETS:
-						var jsonPortlets = jsonColumn[key];
-						for( var index in jsonPortlets ){
-							C.addPortlet( new Portlet(jsonPortlets[index]) );
-						}
-						break;
-					default:
-						console.log( 'Un-recognizable Portlet property: '+key);
-					}
-				}
-			};
-			
-			if( arguments.length === 1 )
-				C.deserialize( jsonColumn );
-			
-		}; /* End of Column */
-		Layout.newColumn = function( jsonColumn ){
-			return new Column( jsonColumn );
-		};
-		
-		Layout.templateId = function( templateId ){
-			return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
-		};
-		
-		Layout.workbenchId = function( workbenchId ){
-			return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.WORKBENCH_ID, arguments));
-		};
-		
-		Layout.height = function( templateId ){
-			return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.HEIGHT, arguments));
-		};
-
-		Layout.columns = function( columns ){
-			return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.COLUMNS, arguments));
-		};
-
-		Layout.getColumnIds = function(){
-			var columns = Layout.columns();
-			if( !columns )	return [];
-			
-			var columnIds = [];
-			for( var index in columns ){
-				var column = columns[index];
-				columnids.push( column.id() );
-			}
-			return columnIds;
-		};
-
-		Layout.getPortlet = function( instanceId /* or port name */ ){
-			var columns = Layout.columns();
-			if( !columns ){
-				console.log('[ERROR]there is no columns to be searched: ');
-				return false;
-			}
-			var portName = instanceId;
-
-			for( var index in columns ){
-				var column  = columns[index];
-				
-				if( column.isAssigned( portName ) )
-					return column.getPortlet(instanceId);
-			}
-			return false;
-		};
-		
-		Layout.addColumn = function( column ){
-			var columns = Layout.columns();
-			if( !columns ){
-				columns = [];
-				Layout.columns(columns);
-			} 
-			
-			columns.push(column);
-			return columns;
-		};
-
-		Layout.getColumn = function( columnId /* or port name or instance id */ ){
-			var columns = Layout.columns();
-			if( !columns )	return false;
-			
-			var instanceId = columnId;
-			
-			for( var index in columns ){
-				var column = columns[index];
-				if( column.id() === columnId )
-					return column;
-				else{
-					if( column.isAssigned(instanceId) ){
-						return column;
-					}
-				}
-			}
-			
-			return false;
-		};
-		
-		Layout.getVisualPortlet = function( portName ){
-			var column = Layout.getColumn(portName);
-			return column.getVisualPortlet();
-		};
-		
-		Layout.getAssignedPortName = function( portletId ){
-			var columns = Layout.columns();
-			if( !columns )	return false;
-			
-			for( var index in columns ){
-				var column = columns[index];
-				var portName = column.getAssignedPortName( portletId );
-				if( portName != false )
-					return portName;
-			}
-			
-			return false;
-		};
-		
-		Layout.removeColumn = function( columnId ){
-			var columns = Layout.columns();
-			if( !columns )	return true;
-			
-			for( var index in columns ){
-				var column = columns[index];
-				if( column.id() === columnId )
-					return OSP.Util.removeArrayElement(columns, index);
-			}
-			
-			return false;
-		};
-		
-		Layout.hasPortlet = function( instanceId ){
-			var columns = Layout.columns();
-			if( !columns )	return [];
-			
-			for( var index in columns ){
-				var column = columns[index];
-				if( column.isAssigned(instanceId) === true )
-					return true;
-			}
-			
-			return false;
-		};
-		
-		var retriveRootPortlets = function( rootPortletId ){
-			var columns = Layout.columns();
-			if( !columns )	return [];
-			
-			var retrieved = [];
-			for( var index in columns ){
-				var column = columns[index];
-				var portlets = column.portlets();
-				for( var idx in portlets ){
-					var portlet = portlets[idx];
-					if( portlet.getRootId() === rootPortletId )
-						retrieved.push(portlet);
-				}
-			}
-			
-			return retrieved;
-		};
-		
-		Layout.addPortlet = function( columnId, rootId, display, portName, preferences ){
-			var column = Layout.getColumn(columnId);
-			if( !column ){
-				column = new Column();
-				column.id(columnId);
-				Layout.addColumn(column);
-			}
-			
-			var portlet = new Portlet();
-			portlet.instanceId(rootId);
-			if( portName )	portlet.portName(portName);
-			if( preferences )	portlet.preferences( preferences );
-			var retrievedPortlets = retriveRootPortlets(rootId);
-			switch( retrievedPortlets.length ){
-				case 0:
-					column.addPortlet( portlet );
-					if( display )
-						column.currentPortlet(portlet.instanceId());
-					return column;
-				case 1:
-					var prevId = retrievedPortlets[0].instanceId();
-					var prevColumn = Layout.getColumn(prevId);
-					retrievedPortlets[0].generateInstanceId( 1 );
-					if( prevId === prevColumn.currentPortlet() )
-						prevColumn.currentPortlet( retrievedPortlets[0].instanceId() );
-					
-					portlet.generateInstanceId( 2 );
-					column.addPortlet(portlet);
-					if( display )
-						column.currentPortlet(portlet.instanceId());
-					return column;
-				default:
-					var instanceIndex = 1;
-					var duplicated = false;
-					do{
-						for( var index in retrievedPortlets ){
-							portlet.generateInstanceId(instanceIndex);
-							if( retrievedPortlets[index].instanceId() === portlet.instanceId() ){
-								duplicated = true;
-								instanceIndex++;
-							}
-							else
-								duplicated = false;
-						}
-					}while( duplicated );
-
-					column.addPortlet(portlet);
-					if( display )
-						column.currentPortlet(portlet.instanceId());
-					return column;
-			}
-		};
-		
-		Layout.removeColumn = function( columnId ){
-			var columns = Layout.columns();
-			
-			for( var index in columns ){
-				var column = columns[index];
-				if( columnId === column.id() )
-					return OSP.Util.removeArrayElement(columns, index);
-			}
-
-			return false;
-		};
-
-		Layout.removeColumnPortlet = function( columnId, portletId /* or port name */){
-			var column = Layout.column(columnId);
-			if( !column ){
-				console.log( "[ERROR]column does not exist: "+columnId);
-				return false;
-			}
-			
-			return column.removePortlet(portletId);
-		};
-
-		Layout.loadPortlets = function( scienceApp, workbenchId, eventEnable, windowState, callback ){
-			var columns = Layout.columns();
-			if( !columns )	return false;
-				
-			for( var index in columns ){
-				var column = columns[index];
-				//console.log('current column: ', column);
-				var portletId = column.currentPortlet();
-				var targetPortlet;
-				if( !portletId ){
-					targetPortlet = column.getPortlet('_DOWNLOAD_');
-					column.currentPortlet( targetPortlet.instanceId() );
-				}
-				else{
-					targetPortlet = column.getPortlet(portletId);
-					var portName = targetPortlet.portName();
-					if( portName ){
-						var portType = scienceApp.getPortType( portName );
-
-						targetPortlet.portType( portType );
-					}
-				}
-				
-				column.loadPortlet( 
-							targetPortlet, 
-							workbenchId, 
-							eventEnable,
-							windowState,
-							callback 
-				);
-			}
-		};
-		
-		Layout.loadData = function( instanceId /* or portName */, connector ){
-			var portlet = Layout.getPortlet(instanceId);
-			if( !portlet )	return false;
-			
-			return portlet.loadData();
-		};
-		
-		Layout.switchDisplayColumnPortlet = function( portType, toPortletId /* or port name */, connector, eventEnable, windowState, callback ){
-			var column = Layout.getColumn(toPortletId);
-			if( !column ){
-				console.log('[ERROR]no column: '+toPortletId);
-				return false;
-			}
-			
-			//console.log( 'Column: ', column );
-			var targetPortlet = Layout.getPortlet(toPortletId);
-            var portName = targetPortlet.portName();
-            if( portName ){
-                targetPortlet.portType(portType);
+        Layout.getPortlet = function( instanceId ){
+            var columns = Layout.columns();
+            if( !columns ){
+                console.log('[ERROR]there is no columns to be searched: ');
+                return false;
             }
 
-			return column.switchDisplayPortlet(targetPortlet, connector, eventEnable, windowState, callback);
-		};
+            for( var index in columns ){
+                var column  = columns[index];
+                
+                var portlet = column.getPortlet(instanceId);
+                if( portlet )
+                    return portlet;
+            }
+            return false;
+        };
+        
+        Layout.getPortlets = function( portName ){
+            var columns = Layout.columns();
+            if( !columns ){
+                console.log('[ERROR]there is no columns to be searched: ');
+                return false;
+            }
 
-		Layout.getPortletSectionId = function( namespace, instanceId /* or port name */ ){
-			var column = Layout.getColumn( instanceId );
-			if( !column ){
-				console.log('[ERROR]no columns for: '+instanceId);
-				return false;
-			}
-			
-			return column.getPortletSectionId(namespace);
-		};
-		
-		Layout.registerEvents = function( instanceId, events ){
-			var portlet = Layout.getPortlet(instanceId);
-			if( !portlet )	return false;
-			
-			return portlet.events( events );
-		};
-		
-		Layout.fire = function( event, source, data ){
-			var columns = Layout.columns();
-			if( !columns )	return false;
-			
-			for( var index in columns ){
-				var column = columns[index];
-				column.fire(event, source, data);
-			}
-		};
-		
-		Layout.checkVisual = function( portName /* or portlet instance ID */){
-			var column = Layout.getColumn(portName);
-			var portlet = column.getPortlet( portName );
-			
-			if( column.currentPortlet() === portlet.instanceId() )
-				return true;
-			else
-				return false;
-		};
-		
-		Layout.clone = function(){
-			return new OSP.Layout( OSP.Util.toJSON(Layout) );
-		};
+            var portlets = [];
+            for( var index in columns ){
+                var column  = columns[index];
+                
+                var columnPortlets = column.getPortlets(portName);
+                if( columnPortlets.length > 0 )
+                    portlets = portlets.concat( columnPortlets );
+            }
+            return portlets;
+        };
+        
+        Layout.addColumn = function( column ){
+            var columns = Layout.columns();
+            if( !columns ){
+                columns = [];
+                Layout.columns(columns);
+            } 
+            
+            columns.push(column);
+            return columns;
+        };
 
-		Layout.deserialize = function( jsonLayout ){
-			for( var key in jsonLayout ){
-				switch( key ){
-					case OSP.Constants.TEMPLATE_ID:
-					case OSP.Constants.HEIGHT:
-						Layout.property( key, jsonLayout[key] );
-						break;
-					case OSP.Constants.COLUMNS:
-						var columnsJson = jsonLayout[key];
-						var columns = [];
-						for( var index in columnsJson ){
-							var column = new Column( columnsJson[index] );
-							columns.push(column);
-						}
-						Layout.columns(columns);
-						break;
-					default:
-						console.log("Un-recognizable key: "+ key);
-				}
-			}
-		};
-		
-		if( arguments.length === 1 )
-			Layout.deserialize( jsonLayout );
-		
-		//return Layout;
-	}; // End of Layout
-	OSP.newLayout = function( jsonLayout ){
-		return new OSP.Layout( jsonLayout );
-	};
-	
-	OSP.Workbench = function( jsonWorkbench ){
-		var Workbench = this;
-		OSP._MapObject.apply( Workbench );
-		
-		Workbench.layout = function( layout ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.LAYOUT, arguments));
-		};
-		
-		Workbench.workingSimulation = function( simulation ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.WORKING_SIMULATION, arguments));
-		};
-		
-		Workbench.simulations = function( simulations ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SIMULATIONS, arguments));
-		};
-		
-		Workbench.addSimulation = function( simulation ){
-			var simulations = Workbench.simulations();
-			if( !simulations ){
-				simulations = {};
-				Workbench.simulations( simulations );
-			}
-			
-			simulations[simulation.uuid()] = simulation;
-			
-			return simulations;
-		};
-		
-		Workbench.removeSimulation = function( simulationUuid ){
-			var simulations = Workbench.simulations();
-			if( !simulations )		return false;
-			
-			if( simulationUuid === this.workingSimulation().uuid() )
-				delete Workbench[OSP.Constants.WORKING_SIMULATION];
-			
-			delete simulations[simulationUuid];
-		};
-		
-		Workbench.getSimulation = function( simulationUuid ){
-			var simulations = Workbench.simulations();
-			if( !simulations )		return false;
-			
-			return simulations[simulationUuid];
-		};
-		
-		Workbench.newSimulation = function( jsonSimulation ){
-			return  new OSP.Simulation( jsonSimulation );
-		};
-		
-		Workbench.scienceApp = function( scienceApp ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SCIENCE_APP, arguments));
-		};
-		
-		Workbench.type = function( type ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.TYPE, arguments));
-		};
-		
-		Workbench.id = function( id ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments));
-		};
-		
-		Workbench.classId = function( classId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CLASS_ID, arguments));
-		};
-		
-		Workbench.customId = function( customId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CUSTOM_ID, arguments));
-		};
-		
-		Workbench.loadPortlets = function( eventEnable, windowState, callback ){
-			var layout = Workbench.layout();
-			if( !layout )		return false;
-			//console.log('Workbench Layout: ', layout );
-			
-			layout.loadPortlets( Workbench.scienceApp(), Workbench.id(), eventEnable, windowState, callback );
-		};
-		
-		Workbench.getPortlet = function( portletId /* or portName */){
-			var layout = Workbench.layout();
-			if( !layout )		return false;
-			
-			return layout.getPortlet( portletId );
-		};
-		
-		Workbench.registerEvents = function( portletId, events ){
-			var layout = Workbench.layout();
-			if( !layout )		return false;
-			
-			var portlet = layout.getPortlet( portletId );
-			return portlet.events( events );
-		};
-		
-		Workbench.getWorkingJobInputs = function(){
-			var job = Workbench.workingJob();
-			return job.inputs();
-		};
-		
-		Workbench.simulationStatus = function( simulationUuid, status ){
-			var simulation = Workbench.getSimulation(simulationUuid);
-			
-			switch( arguments.length ){
-			case 1:
-				return simulation.status();
-			case 2:
-				return simulation.status( status );
-			default:
-				console.log('[ERROR] Arguments mis-match.');
-				return false;
-			}
-		};
-		
-		Workbench.fire = function( event, targetPortletId, data ){
-			var layout = Workbench.layout();
-			if( !layout )	return false;
-			
-			var portlet = layout.getPortlet( targetPortletId );
-			return portlet.fire( event, Workbench.id(), data );
-		};
-		
-		Workbench.fireRefresh = function(){
-			var layout = Workbench.layout();
-			if( !layout )	return false;
-			
-			layout.fire( 
-					OSP.Event.OSP_REFRESH, 
-					{
-						portletId: Workbench.id(),
-						targetPortlet: 'BROADCAST'
-					}
-			);
-		};
-		
-		Workbench.simulationMonitorPortlet = function ( monitorId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SIMULATION_MONITOR_PORTLET, arguments));
-		};
-		
-		Workbench.jobMonitorPortlet = function( monitorId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_MONITOR_PORTLET, arguments));
-		};
-		
-		Workbench.dashboardPortlet = function( dashboardId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.DASHBOARD_PORTLET, arguments));
-		};
-		
-		Workbench.jobStatusPortlet = function( jobStatusPortletId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_STATUS_PORTLET, arguments));
-		};
-		
-		Workbench.scienceAppInfoPortlet = function( portletId ){
-			return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SCIENCE_APP_INFO_PORTLET, arguments));
-		};
-		
-		Workbench.print = function( msg ){
-			console.log( '***** '+msg+' *****');
-			console.log( Workbench);
-		};
-	}; /* End of Workbench */
-	
+        Layout.getColumn = function( columnId ){
+            var columns = Layout.columns();
+            if( !columns )  return false;
+            
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.id() === columnId )
+                    return column;
+            }
+            
+            return false;
+        };
+        
+        Layout.getAssignedColumn = function( instanceId ){
+            var columns = Layout.columns();
+            if( !columns )  return false;
+            
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.isAssigned(instanceId) ){
+                    return column;
+                }
+            }
+            
+            return false;
+        };
+
+        Layout.getAssignedColumns = function( portName ){
+            var columns = Layout.columns();
+            if( !columns )  return false;
+            
+            var assignedColumns = [];
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.isAssigned(portName) ){
+                    assignedColumns.push( column );
+                }
+            }
+            
+            return assignedColumns;
+        };
+
+        Layout.getVisualPortlets = function( portName ){
+            var columns = Layout.columns();
+            var portlets = [];
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.isAssigned( portName ) ){
+                    portlets.push( column.getCurrentPortlet() );
+                }
+            }
+            return portlets;
+        };
+        
+        Layout.removeColumn = function( columnId ){
+            var columns = Layout.columns();
+            if( !columns )  return true;
+            
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.id() === columnId )
+                    return OSP.Util.removeArrayElement(columns, index);
+            }
+            
+            return false;
+        };
+        
+        Layout.hasPortlet = function( instanceId ){
+            var columns = Layout.columns();
+            if( !columns )  return false;
+            
+            for( var index in columns ){
+                var column = columns[index];
+                if( column.isAssigned(instanceId) === true )
+                    return true;
+            }
+            
+            return false;
+        };
+        
+        var retriveRootPortlets = function( rootPortletId ){
+            var columns = Layout.columns();
+            if( !columns )  return [];
+            
+            var retrieved = [];
+            for( var index in columns ){
+                var column = columns[index];
+                var portlets = column.portlets();
+                for( var idx in portlets ){
+                    var portlet = portlets[idx];
+                    if( portlet.getRootId() === rootPortletId )
+                        retrieved.push(portlet);
+                }
+            }
+            
+            return retrieved;
+        };
+        
+        Layout.addPortlet = function( columnId, rootId, display, portName, preferences ){
+            var column = Layout.getColumn(columnId);
+            if( !column ){
+                column = new Column();
+                column.id(columnId);
+                Layout.addColumn(column);
+            }
+            
+            var portlet = new Portlet();
+            portlet.instanceId(rootId);
+            if( portName )  portlet.portName(portName);
+            if( preferences )   portlet.preferences( preferences );
+            var retrievedPortlets = retriveRootPortlets(rootId);
+            switch( retrievedPortlets.length ){
+                case 0:
+                    column.addPortlet( portlet );
+                    if( display )
+                        column.currentPortletId(portlet.instanceId());
+                    return column;
+                case 1:
+                    var prevId = retrievedPortlets[0].instanceId();
+                    var prevColumn = Layout.getAssignedColumn(prevId);
+                    retrievedPortlets[0].generateInstanceId( 1 );
+                    if( prevId === prevColumn.currentPortletId() )
+                        prevColumn.currentPortletId( retrievedPortlets[0].instanceId() );
+                    
+                    portlet.generateInstanceId( 2 );
+                    column.addPortlet(portlet);
+                    if( display )
+                        column.currentPortletId(portlet.instanceId());
+                    return column;
+                default:
+                    var instanceIndex = 1;
+                    var duplicated = false;
+                    do{
+                        for( var index in retrievedPortlets ){
+                            portlet.generateInstanceId(instanceIndex);
+                            if( retrievedPortlets[index].instanceId() === portlet.instanceId() ){
+                                duplicated = true;
+                                instanceIndex++;
+                            }
+                            else
+                                duplicated = false;
+                        }
+                    }while( duplicated );
+
+                    column.addPortlet(portlet);
+                    if( display )
+                        column.currentPortletId(portlet.instanceId());
+                    return column;
+            }
+        };
+        
+        Layout.removeColumn = function( columnId ){
+            var columns = Layout.columns();
+            
+            for( var index in columns ){
+                var column = columns[index];
+                if( columnId === column.id() )
+                    return OSP.Util.removeArrayElement(columns, index);
+            }
+
+            return false;
+        };
+
+        Layout.removePortlet = function( instanceId ){
+            var columns = Layout.columns();
+            if( !columns ){
+                console.log( "[ERROR]column does not exist: "+columnId);
+                return false;
+            }
+            
+            for( var index in columns ){
+                var column = columns[index];
+                column.removePortlet( instanceId );
+            }
+            
+            return true;
+        };
+        
+        Layout.removePortlets = function( portName ){
+            var columns = Layout.columns();
+            if( !columns ){
+                console.log( "[ERROR]column does not exist: "+columnId);
+                return false;
+            }
+            
+            for( var index in columns ){
+                var column = columns[index];
+                column.removePortlets( portName );
+            }
+            
+            return true;
+        };
+
+        Layout.loadPortlets = function( connectorId, eventEnable, windowState, callback ){
+            var columns = Layout.columns();
+            if( !columns )  return false;
+                
+            for( var index in columns ){
+                var column = columns[index];
+                //console.log('current column: ', column);
+                var portletId = column.currentPortletId();
+                var targetPortlet;
+                if( !portletId ){
+                    targetPortlet = column.getPortlets('_DOWNLOAD_')[0];
+                    column.currentPortletId( targetPortlet.instanceId() );
+                }
+                else{
+                    targetPortlet = column.getPortlet(portletId);
+                }
+                
+                column.loadPortlet( 
+                            targetPortlet, 
+                            connectorId, 
+                            eventEnable,
+                            windowState,
+                            callback 
+                );
+            }
+        };
+        
+        Layout.switchPortlet = function( toPortletId, connector, eventEnable, windowState, callback ){
+            var column = Layout.getAssignedColumn(toPortletId );
+            if( !column )   return false;
+            
+            column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
+            return true;
+        };
+        
+        Layout.getPortletSectionId = function( namespace, instanceId ){
+            var column = Layout.getAssignedColumn( instanceId );
+            if( !column ){
+                console.log('[ERROR]no columns for: '+instanceId);
+                return false;
+            }
+            
+            return column.getPortletSectionId(namespace);
+        };
+        
+        Layout.registerPortletEvents = function( instanceId, events ){
+            var portlet = Layout.getPortlet(instanceId);
+            if( !portlet )  return false;
+            
+            return portlet.events( events );
+        };
+        
+        Layout.clone = function(){
+            return new OSP.Layout( OSP.Util.toJSON(Layout) );
+        };
+
+        Layout.deserialize = function( jsonLayout ){
+            for( var key in jsonLayout ){
+                switch( key ){
+                    case OSP.Constants.TEMPLATE_ID:
+                        Layout.property( key, jsonLayout[key] );
+                        break;
+                    case OSP.Constants.COLUMNS:
+                        var columnsJson = jsonLayout[key];
+                        var columns = [];
+                        for( var index in columnsJson ){
+                            var column = new Column( columnsJson[index] );
+                            columns.push(column);
+                        }
+                        Layout.columns(columns);
+                        break;
+                    case OSP.Constants.HEIGHT:
+                        break;
+                    default:
+                        console.log("Un-recognizable key: "+ key);
+                }
+            }
+        };
+        
+        if( arguments.length === 1 )
+            Layout.deserialize( jsonLayout );
+        
+    }; // End of Layout
+
+    OSP.newLayout = function( jsonLayout ){
+        return new OSP.Layout( jsonLayout );
+    };
+    
+    OSP.Workbench = function( namespace ){
+        if( !namespace ){
+            console.log('Namespace should be provided to create a workbench instance.');
+            return false;
+        }
+        
+        
+        var Workbench = this;
+        OSP._MapObject.apply( Workbench );
+        
+        var isValid = function( outputType, jobStatus ){
+            switch( outputType ){
+                case OSP.Enumeration.PortType.LOG:
+                    switch( jobStatus ){
+                        case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+                        case OSP.Enumeration.JobStatus.INITIALIZED:
+                        case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+                        case OSP.Enumeration.JobStatus.QUEUED:
+                            return false;
+                        case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+                        case OSP.Enumeration.JobStatus.SUSPENDED:
+                        case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+                        case OSP.Enumeration.JobStatus.CANCELED:
+                        case OSP.Enumeration.JobStatus.SUCCESS:
+                        case OSP.Enumeration.JobStatus.RUNNING:
+                        case OSP.Enumeration.JobStatus.FAILED:
+                            return true;
+                        default: 
+                            console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+                            return false;
+                    }
+                    break;
+                case OSP.Enumeration.PortType.OUTPUT:
+                    switch( jobStatus ){
+                        case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+                        case OSP.Enumeration.JobStatus.INITIALIZED:
+                        case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+                        case OSP.Enumeration.JobStatus.QUEUED:
+                        case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+                        case OSP.Enumeration.JobStatus.SUSPENDED:
+                        case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+                        case OSP.Enumeration.JobStatus.CANCELED:
+                        case OSP.Enumeration.JobStatus.RUNNING:
+                        case OSP.Enumeration.JobStatus.FAILED:
+                            return false;
+                        case OSP.Enumeration.JobStatus.SUCCESS:
+                            return true;
+                        default: 
+                            console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+                            return false;
+                    }
+                break;
+            }
+        };
+        
+        var fire = function( event, targetPortletId, data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortletId,
+                             data: data
+            };
+            Liferay.fire( event, eventData );
+        };
+        
+        var fireDataChanged = function( sourcePortletId, data){
+            var eventData = {
+                             portletId: sourcePortletId,
+                             targetPortlet: Workbench.id(),
+                             data: data
+            };
+            Liferay.fire( OSP.Event.OSP_DATA_CHANGED, eventData );
+        };
+        
+        var fireRefresh = function(){
+            var layout = Workbench.layout();
+            if( !layout )   return false;
+            
+            layout.fire( 
+                    OSP.Event.OSP_REFRESH, 
+                    {
+                        portletId: Workbench.id(),
+                        targetPortlet: 'BROADCAST'
+                    }
+            );
+        };
+        
+        var fireCreateJob = function( inputs ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: Workbench.id(),
+                             data: inputs
+            };
+            
+            Liferay.fire( OSP.Event.OSP_CREATE_JOB, eventData );
+        };
+        
+        var fireSimulationModal= function( inputs ){
+            var eventData = {
+                 portletId: Workbench.id(),
+                 targetPortlet: Workbench.id(),
+                 data: inputs
+        };
+    
+            Liferay.fire( OSP.Event.OSP_REQUEST_SIMULATION_MODAL, eventData );
+        };
+        
+        var fireRefreshPortsStatus = function( targetPortlet ){
+            var dashboard = Workbench.dashboardPortlet();
+            if( !dashboard )    return;
+            
+            evaluatePortsStatus();
+            
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortlet,
+                             data: {
+                                scienceApp: Workbench.scienceApp() 
+                             }
+            };
+            Liferay.fire( OSP.Event.OSP_REFRESH_PORTS_STATUS, eventData );
+        };
+        
+        var firePortStatusChanged = function( portName, status ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: Workbench.dashboardPortlet(),
+                             data: {
+                                 portName: portName,
+                                 status: status
+                             }
+            };
+            
+            Liferay.fire( OSP.Event.OSP_PORT_STATUS_CHANGED, eventData );
+        };
+        
+        var fireCreateSimulationResult = function( targetPortId,data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: data
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_RESULT, eventData );
+        };
+        var fireSaveSimulationResult = function( targetPortId,data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: data
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, eventData );
+        };
+        var fireDeleteSimulationResult = function( targetPortId,simulationUuid, status ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: {
+                                simulationUuid:simulationUuid,
+                                status : status
+                             }
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, eventData );
+        };
+        
+        var fireSubmitJobResult = function(data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: 'BROADCAST',
+                             data: data
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, eventData );
+        };
+        
+        var fireCreateSimulationJobResult = function( targetPortId,data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: data
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, eventData );
+        };
+        
+        var fireDeleteSimulationJobResult = function( targetPortId,data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: data
+            };
+            Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, eventData );
+        };
+        
+        var fireRefreshJobs = function( data ){
+            var eventData = {
+                                portletId: Workbench.id(),
+                                targetPortlet: 'BROADCAST',
+                                data: data
+                        };
+            Liferay.fire( OSP.Event.OSP_REFRESH_JOBS, eventData );
+        };
+        
+        var fireRefreshJobStatus = function( data ){
+            
+            if(Workbench.isFlowLayout()){
+                var jobStatusCode = jobCodeConvertorFromStatus(data.jobStatus);
+                var logPortLength = Workbench.scienceApp().logPortsArray().length
+                var flowLayoutCode;
+                if(jobStatusCode <=1701005){
+                    flowLayoutCode = "INPUT";
+                }else if(1701005 < jobStatusCode&&jobStatusCode <= 1701010 &&logPortLength > 0){
+                    flowLayoutCode = "LOG";
+                }else if(jobStatusCode >= 1701011){
+                    flowLayoutCode = "OUTPUT";
+                }else{
+                    flowLayoutCode = "INPUT";
+                }
+                
+                data.flowLayoutCode = flowLayoutCode;
+            }
+            
+            var eventData = {
+                                portletId: Workbench.id(),
+                                targetPortlet: 'BROADCAST',
+                                data: data
+                        };
+            Liferay.fire( OSP.Event.OSP_REFRESH_JOB_STATUS, eventData );
+        };
+        
+        var fireRefreshSimulations = function( data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: 'BROADCAST',
+                             data: data
+            };
+            Liferay.fire( OSP.Event.OSP_REFRESH_SIMULATIONS, eventData );
+        };
+        
+        var fireShowJobStatus = function( data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: Workbench.id(),
+                             data: data
+            };
+            
+            Liferay.fire( OSP.Event.OSP_SHOW_JOB_STATUS, eventData );
+        };
+        
+        var fireInitializeEvent = function( portletId ){
+            var portlet = Workbench.getPortlet( portletId );
+            
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: portlet.instanceId()
+            };
+            Liferay.fire( OSP.Event.OSP_INITIALIZE, eventData );
+        };
+        
+        var fireInitializeEvents = function( portName ){
+            var layout = Workbench.layout();
+            var portlets = layout.getPortlets( portName );
+            
+            for( var index in portlets ){
+                var portlet = portlets[index];
+                fireInitializeEvent( portlet.instanceId() );
+            }
+        };
+        
+        var fireRequestWorkingJobInfo = function( data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: 'BROADCAST',
+                             data: data
+            };
+            
+            Liferay.fire(OSP.Event.OSP_REQUEST_WORKING_JOB_INFO, eventData );
+        };
+        
+        
+        var initializeAllLogPortlets = function(){
+            var scienceApp = Workbench.scienceApp();
+            var layout = Workbench.layout();
+            
+            var logPorts = scienceApp.logPorts();
+            if( !logPorts ) return;
+            for( var index in logPorts ){
+                var logPort = logPorts[index];
+                fireInitializeEvents( logPort.name() );
+            }
+        };
+
+        var initializeAllOutputPortlets = function(){
+            var scienceApp = Workbench.scienceApp();
+            
+            var outputPorts = scienceApp.outputPorts();
+            if( !outputPorts ) return;
+            for( var index in outputPorts ){
+                var outputPort = outputPorts[index];
+                fireInitializeEvents( outputPort.name() );
+            }
+        };
+        
+        var evaluatePortsStatus = function(){
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.workingJob();
+            var scienceApp = Workbench.scienceApp();
+
+            var ports = scienceApp.inputPorts();
+            if( ports ){
+                for( var portName in ports ){
+                    var portData = job.inputData( portName );
+                    var port = ports[portName];
+                    if( !portData ){
+                        port.status( OSP.Enumeration.PortStatus.EMPTY );
+                    }
+                    else{
+                        if( portData.dirty() ){
+                            port.status( OSP.Enumeration.PortStatus.READY );
+                        }
+                        else{
+                            port.status( OSP.Enumeration.PortStatus.EMPTY );
+                        }
+                    }
+                }
+            }
+            
+            ports = scienceApp.logPorts();
+            if( ports ){
+                var isLogValid = isValid( OSP.Enumeration.PortType.LOG, job.status() );
+                for( var portName in ports ){
+                    var port = ports[portName];
+                    if( isLogValid ){
+                        port.status( OSP.Enumeration.PortStatus.LOG_VALID );
+                    }
+                    else{
+                        port.status( OSP.Enumeration.PortStatus.LOG_INVALID );
+                    }
+                }
+            }
+            
+            ports = scienceApp.outputPorts();
+            if( ports ){
+                var isOutputValid = isValid( OSP.Enumeration.PortType.OUTPUT, job.status() );
+                for( var portName in ports ){
+                    var port = ports[portName];
+                    
+                    if( isOutputValid ){
+                        port.status( OSP.Enumeration.PortStatus.OUTPUT_VALID );
+                    }
+                    else{
+                        port.status( OSP.Enumeration.PortStatus.OUTPUT_INVALID );
+                    }
+                }
+            }
+        };
+        
+        var evaluatePortletType = function(){
+            var scienceApp = Workbench.scienceApp();
+            var layout = Workbench.layout();
+            
+            var columns = layout.columns();
+            for(var ci in columns ){
+                var column = columns[ci];
+                var portlets = column.portlets();
+                for( var pi in portlets ){
+                    var portlet = portlets[pi];
+                    
+                    var portType = scienceApp.getPortType(portlet.portName());
+                    if( portType )
+                        portlet.portType( portType );
+                }
+            }
+            
+            console.log( 'evaluatePortletType: ', columns);
+        };
+        
+        var createSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL){
+            var scienceApp = Workbench.scienceApp();
+            
+            var ajaxData = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'CREATE_SIMULATION',
+                                           scienceAppId: scienceApp.id(),
+                                           scienceAppName: scienceApp.name(),
+                                           scienceAppVersion: scienceApp.version(),
+                                           srcClassCode: Workbench.classId(),
+                                           srcClassId: Workbench.customId(),
+                                           title: Liferay.Util.escapeHTML(title),
+                                           jobTitle: Liferay.Util.escapeHTML(jobTitle),
+                                           jobInitData: jobInitData ? jobInitData : '' 
+                                       });
+            
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                data  : ajaxData,
+                dataType : 'json',
+                success: function(jsonSimulation) {
+                    
+                    fireCreateSimulationResult(portletId,true);
+                    var simulation = new OSP.Simulation(jsonSimulation);
+                    var data = {
+                        simulationUuid: simulation.uuid()
+                    };
+                    fireRefreshSimulations(data);
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    fireCreateSimulationResult(portletId,false);
+                }
+            });
+        };
+        
+        var loadSimulation = function( simulationUuid, resourceURL ){
+            var data = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'LOAD_SIMULATION',
+                                           simulationUuid: simulationUuid
+                                       });
+            
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : data,
+                dataType : 'json',
+                success: function(jsonSimulation) {
+                    var simulation = new OSP.Simulation( jsonSimulation );
+                    var scienceApp = Workbench.scienceApp();
+                    simulation.runType( scienceApp.runType() );
+                    Workbench.addSimulation( simulation );
+                    Workbench.workingSimulation( simulation );
+                    Workbench.print( 'After loading simulation');
+                    
+                    var data = {
+                        simulationUuid: simulation.uuid()
+                    }
+                    fireRequestWorkingJobInfo( data ); 
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                }
+            });
+        };
+        
+        var saveSimulation = function( portletId, simulation, resourceURL ){
+            
+            var dirtyJobs = jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), false,resourceURL);
+            
+            var data = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'SAVE_SIMULATION',
+                                           simulationUuid: simulation.uuid(),
+                                           srcClassCode: Workbench.classId(),
+                                           srcClassId: Workbench.customId(),
+                                           jobs: JSON.stringify(dirtyJobs)
+                                       });
+                
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : data,
+                dataType : 'text',
+                success: function(result) {
+                    fireSaveSimulationResult(portletId,true);
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    fireSaveSimulationResult(portletId,false);
+                }
+            });
+        };
+        
+        var deleteSimulation = function(portletId, simulationUuid, resourceURL ){
+            var data = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'DELETE_SIMULATION',
+                                           simulationUuid: simulationUuid
+                                       });
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : data,
+                success: function(result) {
+                    fireDeleteSimulationResult(portletId,simulationUuid,true);
+                    fireRefreshSimulations({});
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    fireDeleteSimulationResult(portletId,simulationUuid,false);
+                }
+            });
+        };
+        
+        var submitSimulation = function( simulation, resourceURL  ){
+            var scienceApp = Workbench.scienceApp();
+            var simulationCreateTime = simulation.createTime();
+            
+            var jobsToSubmit = [];
+            var dirtyJobs = simulation.getDirtyJobs();
+            for( var index in dirtyJobs ){
+                var job = dirtyJobs[index];
+                console.log( 'dirtyJob: '+index, job);
+                var inputPortNames = scienceApp.getInputPortNames();
+                console.log( 'inputPortNames: ', inputPortNames );
+                
+                var proliferatedJobs = job.proliferate( inputPortNames );
+                for( var jobIndex in proliferatedJobs ){
+                    var proliferatedJob = proliferatedJobs[jobIndex];
+                    
+                    if( !proliferatedJob.ncores() && simulation.ncores() ){
+                        proliferatedJob.ncores( simulation.ncores() );
+                    }
+                    
+                    if( jobIndex > 0 ){
+                        proliferatedJob.uuid('');
+                    }
+                    jobsToSubmit.push( proliferatedJob );
+                }
+            }
+            console.log( 'Jobs To Submit: ', jobsToSubmit);
+            
+            $.ajax({
+                url: resourceURL,
+                type: 'POST',
+                dataType: 'json',
+                data: Liferay.Util.ns(
+                                      Workbench.namespace(),
+                                      {
+                                          command: 'SUBMIT_JOBS',
+                                          simulationUuid: simulation.uuid(),
+                                          simulationTime: simulationCreateTime,
+                                          scienceAppName: scienceApp.name(),
+                                          scienceAppVersion: scienceApp.version(),
+                                          ncores: simulation.ncores(),
+                                          jobs: JSON.stringify( jobsToSubmit )
+                                      }),
+                success: function( submittedJobs ){
+                    simulation.cleanJobs();
+                    
+                    var data = {
+                                simulationUuid: simulation.uuid()
+                    };
+                    
+                    fireRefreshJobs( data );
+                },
+                error: function( data, e ){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                }
+            });
+        };
+        
+        var submitMPJobs = function(job,resourceURL){
+            $.confirm({
+                title: 'CPU Cores',
+                content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label>Enter number of cores</label>' +
+                '<input type="text" placeholder="cores" class="cores form-control" required />' +
+                '</div>' +
+                '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'Submit',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var cores = this.$content.find('.cores').val();
+                            if(!cores){
+                                $.alert('provide a valid cores');
+                                return false;
+                            }else{
+                                var pattern = /^\d+$/;
+                                if(!pattern.test(cores)){
+                                    $.alert('only number');
+                                    return false;
+                                }
+                            }
+                            
+                            var simulation = Workbench.workingSimulation();
+                            if( !job ){
+                                simulation.ncores( cores );
+                                jobsToSubmitGetParameters(simulation,simulation.getDirtyJobs(), true,resourceURL );
+                            }else{
+                                job.ncores( cores );
+                                jobsToSubmitGetParameters(simulation,job, true, resourceURL );
+                            }
+                        }
+                    },
+                    cancel: function () {
+                        
+                    }
+                },
+                onContentReady: function () {
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+        };
+        
+        var jobsToSubmitGetParameters = function(simulation, jobs, isSubmit, resourceURL ){
+            var scienceApp = Workbench.scienceApp();
+            
+            var jobsToSubmit = [];
+            var inputPortNames = scienceApp.getInputPortNames();
+            
+            var ncores = 0;
+             var dirtyJobs = [];
+            if(Array.isArray(jobs)){
+                dirtyJobs = jobs;
+                ncores = simulation.ncores();
+            }else{
+                dirtyJobs.push(jobs);
+                ncores = jobs.ncores();
+            }
+            
+            for( var index in dirtyJobs ){
+                var job = dirtyJobs[index];
+                console.log( 'dirtyJob: '+index, job);
+                console.log( 'inputPortNames: ', inputPortNames );
+                
+                var proliferatedJobs = job.proliferate( inputPortNames );
+                if(!proliferatedJobs){return false;}
+                
+                for( var jobIndex in proliferatedJobs ){
+                    var proliferatedJob = proliferatedJobs[jobIndex];
+                    
+                    if( jobIndex > 0 ){
+                        proliferatedJob.uuid('');
+                    }
+                    jobsToSubmit.push( proliferatedJob );
+                }
+            }
+            
+            console.log( 'Jobs To Submit: ', jobsToSubmit);
+            
+            if(isSubmit){
+                submitJobs(simulation,jobsToSubmit,ncores,resourceURL);
+            }else{
+                return jobsToSubmit;
+            }
+            
+        }
+        
+        var submitJobs = function(simulation,jobsToSubmit,ncores,resourceURL ){
+            var scienceApp = Workbench.scienceApp();
+            var simulationCreateTime = simulation.createTime();
+            
+            //block
+            bStart();
+            setTimeout(function(){
+                var ajaxData = Liferay.Util.ns(
+                        Workbench.namespace(),
+                        {
+                           command: 'SUBMIT_JOBS',
+                           simulationUuid: simulation.uuid(),
+                           simulationTime: simulationCreateTime,
+                           scienceAppName: scienceApp.name(),
+                           scienceAppVersion: scienceApp.version(),
+                           ncores: ncores,
+                           jobs: JSON.stringify( jobsToSubmit )
+                        });
+            
+                $.ajax({
+                    url : resourceURL,
+                    type: 'post',
+                    dataType: 'json',
+                    data : ajaxData,
+                    success : function(submittedJobs){
+                        console.log('[SUCCESS] submit job : '+submittedJobs);
+                        var submittedJob = submittedJobs[0];
+                        var data = {
+                            simulationUuid: simulation.uuid(),
+                            jobUuid: submittedJob.uuid,
+                            status: true
+                        };
+
+                        bEnd();
+                        
+                        fireSubmitJobResult(data);
+                    },
+                    error:function(jqXHR, textStatus, errorThrown){
+                        bEnd();
+                        
+                        fireSubmitJobResult({status:false});
+                    }
+                });
+            },500);
+            
+            setTimeout(function(){
+                bEnd()
+            },1000*5);
+        };
+        
+        var loadJobData = function ( job ){
+            var scienceApp = Workbench.scienceApp();
+            var inputPorts = scienceApp.inputPorts();
+            var outputPorts = scienceApp.outputPorts();
+            var logPorts = scienceApp.logPorts();
+            
+            resetPortlets( job, inputPorts, OSP.Enumeration.PortType.INPUT );
+            resetPortlets( job, logPorts, OSP.Enumeration.PortType.LOG );
+            resetPortlets( job, outputPorts, OSP.Enumeration.PortType.OUTPUT );
+        }
+
+        var resetPortlets = function( job, ports, portType ){
+            var layout = Workbench.layout();
+            
+            var fireLoadOutputData = function( ports, resultFolder ){
+                for( var portName in ports ){
+                    var portlets = layout.getPortlets( portName );
+                    var port = ports[portName];
+                    
+                    var portData = port.outputData();
+                    var inputData = new OSP.InputData();
+                    inputData.type( portData.type() );
+                    
+                    var parentPath = OSP.Util.mergePath( resultFolder, portData.parent() );
+                    inputData.parent( parentPath );
+                    inputData.name( portData.name() );
+                    inputData.relative( true );
+                    console.log(inputData);
+                    for( var index in portlets ){
+                        var portlet = portlets[index];
+                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
+                    }
+                }
+            };
+            
+            switch( portType ){
+                case OSP.Enumeration.PortType.INPUT:
+                    for( var portName in ports ){
+                        var portlets = layout.getPortlets( portName );
+                        var inputData = job.inputData( portName );
+                        
+                        for( var index in portlets ){
+                            var portlet = portlets[index];
+                            if( !inputData ){
+                                fire( OSP.Event.OSP_INITIALIZE, portlet.instanceId(), {} );
+                            }
+                            else{
+                                fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
+                            }
+                        }
+                    }
+                    break;
+                case OSP.Enumeration.PortType.LOG:
+                    var isLogValid = isValid( OSP.Enumeration.PortType.LOG, job.status() );
+                    if( isLogValid ){
+                        var simulation = Workbench.workingSimulation();
+                        var resultFolder = simulation.getJobOutputFolder(job);
+                        
+                        fireLoadOutputData( ports, resultFolder );
+                    }
+                    else{
+                        fireShowJobStatus( {} );
+                        initializeAllLogPortlets();
+                    }
+                    break;
+                case OSP.Enumeration.PortType.OUTPUT:
+                    var isOutputValid = isValid( OSP.Enumeration.PortType.OUTPUT, job.status() );
+                    if( isOutputValid ){
+                        var simulation = Workbench.workingSimulation();
+                        var resultFolder = simulation.getJobOutputFolder(job);
+                        
+                        fireLoadOutputData( ports, resultFolder );
+                    }
+                    else{
+                        fireShowJobStatus( {} );
+                        initializeAllOutputPortlets();
+                    }
+                    
+                    break;
+                default:
+                    console.log('[ERROR] Unknown port type - resetPortlets(): '+portType);
+            }
+        };
+
+        var saveInputs = function( 
+                                scienceAppName,
+                                scienceAppVersion,
+                                simulationTime,
+                                jobNumber,
+                                portName,
+                                content,
+                                resourceURL){
+            var fileInfo;
+            $.ajax({
+                url: resourceURL,
+                type:'post',
+                dataType: 'json',
+                async: false,
+                data: Liferay.Util.ns(
+                                      Workbench.namespace(),
+                                      {
+                                          command: 'SAVE_AS_INPUT',
+                                          scienceAppName: scienceAppName,
+                                          scienceAppVersion: scienceAppVersion,
+                                          simulationTime: simulationTime.toJSON().replace(/:/ig, '-'),
+                                          jobNumber: jobNumber,
+                                          portName: portName,
+                                          content: content
+                                      }),
+                success: function( result ){
+                    fileInfo = result;
+                },
+                error: function( data, e ){
+                    console.log('[ERROR] Ajax to uploadFile');
+                }
+            });
+
+            return fileInfo;
+        };
+
+        var deleteJob = function( portletId, simulationUuid, jobUuid, resourceURL ){
+            var data = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'DELETE_JOB',
+                                           simulationUuid: simulationUuid,
+                                           jobUuid: jobUuid
+                                       });
+            
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : data,
+                success: function(result ) {
+                    var data = {
+                            jobUuid: jobUuid,
+                            simulationUuid: simulationUuid,
+                            status:true
+                    };
+                    fireDeleteSimulationJobResult(portletId,data);
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    var data = {
+                            jobUuid: jobUuid,
+                            status:false
+                    };
+                    
+                    fireDeleteSimulationJobResult(portletId,data);
+                }
+            });
+        };
+
+        var setJobInputData = function( portName, inputData ){
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation )   setJobInputData( portName, inputData );
+                        else{
+                            var job = simulation.workingJob();
+                            if( !job )  setJobInputData( portName, inputData );
+                            else{
+                                job.inputData( portName, inputData );
+                            }
+                        }
+                    },
+                    10
+            );
+        };
+
+        var submitUpload = function( uploadFile, targetFolder, fileName, resourceURL ){
+                
+            var formData = new FormData();
+            formData.append(Workbench.namespace()+'uploadFile', uploadFile);
+            formData.append(Workbench.namespace()+'command', 'UPLOAD');
+            formData.append(Workbench.namespace()+'targetFolder', targetFolder);
+            formData.append(Workbench.namespace()+'fileName', fileName);
+
+            $.ajax({
+                url : resourceURL,
+                type : 'POST',
+                data : formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                success : function(data) {
+                    alert( 'Upload Succeded: ', JSON.stringify(data));
+                }
+            });
+        };
+        
+        Workbench.layout = function( layout ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.LAYOUT, arguments));
+        };
+        
+        Workbench.workingSimulation = function( simulation ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.WORKING_SIMULATION, arguments));
+        };
+        
+        Workbench.simulations = function( simulations ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SIMULATIONS, arguments));
+        };
+        
+        Workbench.addSimulation = function( simulation ){
+            var simulations = Workbench.simulations();
+            if( !simulations ){
+                simulations = {};
+                Workbench.simulations( simulations );
+            }
+            
+            simulations[simulation.uuid()] = simulation;
+            
+            return simulations;
+        };
+        
+        Workbench.removeSimulation = function( simulationUuid ){
+            var simulations = Workbench.simulations();
+            if( !simulations )      return false;
+            
+            if( simulationUuid === this.workingSimulation().uuid() )
+                delete Workbench[OSP.Constants.WORKING_SIMULATION];
+            
+            delete simulations[simulationUuid];
+        };
+        
+        Workbench.cleanSimulations = function(){
+            return P.removeProperty(OSP.Constants.SIMULATIONS);
+        };
+        
+        Workbench.getSimulation = function( simulationUuid ){
+            var simulations = Workbench.simulations();
+            if( !simulations )      return false;
+            
+            return simulations[simulationUuid];
+        };
+        
+        Workbench.countSimulations = function(){
+            var simulations = Workbench.simulations();
+            if( !simulations )  return 0;
+            
+            return simulations.length;
+        }
+        
+        Workbench.newSimulation = function( jsonSimulation ){
+            return  new OSP.Simulation( jsonSimulation );
+        };
+        
+        Workbench.scienceApp = function( scienceApp ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SCIENCE_APP, arguments));
+        };
+        
+        Workbench.type = function( type ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.TYPE, arguments));
+        };
+        
+        Workbench.id = function( id ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments));
+        };
+        
+        Workbench.namespace = function( namespace ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.NAMESPACE, arguments));
+        };
+        
+        Workbench.classId = function( classId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CLASS_ID, arguments));
+        };
+        
+        Workbench.isFlowLayout = function( isFlowLayout ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.IS_FLOW_LAYOUT, arguments));
+        };
+        
+        Workbench.customId = function( customId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.CUSTOM_ID, arguments));
+        };
+        
+        Workbench.redirectName = function( redirectName ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_NAME, arguments));
+        };
+        
+        Workbench.redirectURL = function( redirectURL ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_URL, arguments));
+        };
+        
+        Workbench.loadPortlets = function( windowState ){
+            var layout = Workbench.layout();
+            if( !layout )       return false;
+            //console.log('Workbench Layout: ', layout );
+            
+            //evaluatePortletType();
+            layout.loadPortlets( Workbench.id(), true, windowState, handShakeCallback );
+        };
+        
+        Workbench.getPortlet = function( portletId ){
+            var layout = Workbench.layout();
+            if( !layout )       return false;
+            
+            return layout.getPortlet( portletId );
+        };
+        
+        Workbench.getPortlets = function( portName ){
+            var layout = Workbench.layout();
+            if( !layout )       return false;
+            
+            return layout.getPortlets( portName );
+        };
+        
+        Workbench.registerEvents = function( portletId, events ){
+            var layout = Workbench.layout();
+            if( !layout )       return false;
+            
+            var portlet = layout.getPortlet( portletId );
+            return portlet.events( events );
+        };
+        
+        Workbench.getWorkingJobInputs = function(){
+            var job = Workbench.workingJob();
+            return job.inputs();
+        };
+        
+        Workbench.simulationStatus = function( simulationUuid, status ){
+            var simulation = Workbench.getSimulation(simulationUuid);
+            
+            switch( arguments.length ){
+            case 1:
+                return simulation.status();
+            case 2:
+                return simulation.status( status );
+            default:
+                console.log('[ERROR] Arguments mis-match.');
+                return false;
+            }
+        };
+        
+        
+        Workbench.simulationMonitorPortlet = function ( monitorId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SIMULATION_MONITOR_PORTLET, arguments));
+        };
+        
+        Workbench.jobMonitorPortlet = function( monitorId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_MONITOR_PORTLET, arguments));
+        };
+        
+        Workbench.dashboardPortlet = function( dashboardId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.DASHBOARD_PORTLET, arguments));
+        };
+        
+        Workbench.jobStatusPortlet = function( jobStatusPortletId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.JOB_STATUS_PORTLET, arguments));
+        };
+        
+        Workbench.scienceAppInfoPortlet = function( portletId ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.SCIENCE_APP_INFO_PORTLET, arguments));
+        };
+        
+        Workbench.print = function( msg ){
+            console.log( '***** '+msg+' *****');
+            console.log( Workbench);
+        };
+        
+        Workbench.namespace( namespace );
+        
+        Workbench.handleRegisterEvents = function( portletId, portletType, events ){
+            switch( portletType ){
+                case OSP.Enumeration.PortType.DASHBOARD:
+                    Workbench.dashboardPortlet( portletId );
+                    break;
+                case OSP.Enumeration.PortType.SIMULATION_MONITOR:
+                    Workbench.simulationMonitorPortlet( portletId );
+                    break;
+                case OSP.Enumeration.PortType.JOB_MONITOR:
+                    Workbench.jobMonitorPortlet( portletId );
+                    break;
+                case OSP.Enumeration.PortType.JOB_STATUS:
+                    Workbench.jobStatusPorltet( portletId );
+                    break;
+                case OSP.Enumeration.PortType.APP_INFO:
+                    Workbench.scienceAppInfoPortlet( portletId );
+                    break;
+            }
+            
+            if( Workbench.registerEvents( portletId, events ))
+                fire( OSP.Event.OSP_EVENTS_REGISTERED, portletId, events );
+        };
+        
+        Workbench.handleRequestSampleContent = function( portletId, resourceURL ){
+            var scienceApp = Workbench.scienceApp();
+            var portlet = Workbench.getPortlet(portletId);
+            var port = scienceApp.getPort( portlet.portName() );
+            var dataType = port.dataType();
+            
+            var sample = port.sample();
+            var dlEntryId = 0;
+            var command;
+            var ajaxData;
+            if( sample ){
+                ajaxData = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                            command: 'READ_DLENTRY',
+                                            dlEntryId: sample.dlEntryId(),
+                                            dataTypeName: dataType.name,
+                                            dataTypeVersion: dataType.version
+                                       });
+            }
+            else{
+                ajaxData = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                            command: 'READ_DATATYPE_SAMPLE',
+                                            dataTypeName: dataType.name,
+                                            dataTypeVersion: dataType.version
+                                       });
+            }
+            
+            $.ajax({
+                url: resourceURL,
+                type:'POST',
+                async: false,
+                dataType: 'json',
+                data: ajaxData,
+                success:function(result){
+                    if( result.error ){
+                        alert( result.error );
+                        return;
+                    }
+                    
+                    var contentType = result.contentType;
+                    
+                    var inputData = new OSP.InputData();
+                    inputData.type( contentType);
+                    inputData.order( port.order() );
+                    inputData.portName( port.name() );
+                    inputData.name( result.fileName );
+                    
+                    switch( contentType ){
+                        case 'fileContent':
+                            inputData.context( result.fileContent );
+                            break;
+                        case 'structuredData':
+                            var ospDataType = new OSP.DataType();
+                            ospDataType.deserializeStructure( JSON.parse(result.dataStructure) );
+                            if( result.fileContent ){
+                                ospDataType.loadStructure( result.fileContent );
+                            }
+                            inputData.context( ospDataType.structure() );
+                            break;
+                        default:
+                            console.log('[ERROR] Wrong sample data type.'+contentType);
+                            return;
+                    }
+                    
+                    fire( 
+                            OSP.Event.OSP_LOAD_DATA, 
+                            portletId, 
+                            OSP.Util.toJSON(inputData) );
+                    
+                    
+                    fireDataChanged( 
+                                    portletId,
+                                    OSP.Util.toJSON(inputData) );
+                },
+                error: function(){
+                    alert('[ERROR] AJAX FAILED during READ_DATATYPE_SAMPLE: '+sample.dlEntryId()+
+                          '\nPlease contact site manager.');
+                }
+            });
+        };
+        
+        Workbench.handleSampleSelected = function( portletId, resourceURL ){
+            var scienceApp = Workbench.scienceApp();
+            var portlet = Workbench.getPortlet(portletId);
+            var inputPort = scienceApp.inputPort( portlet.portName() );
+            var portDataType = inputPort.dataType();
+            
+            var inputData = new OSP.InputData();
+            inputData.portName( inputPort.name() );
+            inputData.order( inputPort.order() );
+            inputData.type( OSP.Enumeration.PathType.DLENTRY_ID );
+            inputData.dirty( true );
+
+            var sample = inputPort.sample();
+            
+            if( sample ){
+                inputData.dlEntryId( sample.dlEntryId() );
+                fireDataChanged( portletId, OSP.Util.toJSON( inputData ) );
+            }
+            else{
+                var ajaxData = Liferay.Util.ns(
+                                           Workbench.namespace(),
+                                           {
+                                                command: 'GET_DATATYPE_SAMPLE',
+                                                dataTypeName: portDataType.name,
+                                                dataTypeVersion: portDataType.version
+                                           });
+                $.ajax({
+                    url: resourceURL,
+                    type: 'post',
+                    dataType: 'json',
+                    data: ajaxData,
+                    success: function( result ){
+                        console.log( 'SAMPLE_SELECTED RESULT: ', result);
+                        inputData.dlEntryId( result.dlEntryId );
+                        fireDataChanged( portletId, OSP.Util.toJSON( inputData ) );
+                    },
+                    error: function( data, e ){
+                        console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
+                    }
+                });
+            }
+        };
+        
+        Workbench.handleReadStructuredDataFile = function( portletId, inputData, resourceURL ){
+            var scienceApp = Workbench.scienceApp();
+            var portlet = Workbench.getPortlet(portletId);
+            var inputPort = scienceApp.inputPort( portlet.portName() );
+            var portDataType = inputPort.dataType();
+            
+            var repositoryType = inputData.repositoryType();
+            
+            var ajaxData = Liferay.Util.ns(
+                                           Workbench.namespace(),
+                                           {
+                                               command: 'GET_DATA_STRUCTURE_WITH_DATA',
+                                                dataTypeName: portDataType.name,
+                                                dataTypeVersion: portDataType.version,
+                                                parentPath: inputData.parent(),
+                                                fileName: inputData.name(),
+                                                repositoryType: repositoryType
+                                           });
+            $.ajax({
+                url: resourceURL,
+                type: 'post',
+                dataType: 'json',
+                data: ajaxData,
+                success: function( result ){
+                    console.log( 'OSP_READ_STRUCTURED_DATA_FILE', result);
+                    var dataType = new OSP.DataType();
+                    dataType.deserializeStructure(JSON.parse(result.dataStructure));
+                    dataType.loadStructure( result.structuredData );
+                    
+                    var data = {
+                                type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
+                                context_: OSP.Util.toJSON( dataType.structure() )
+                    };
+                    
+                    fire( OSP.Event.OSP_LOAD_DATA, portletId, data );
+                },
+                error: function( data, e ){
+                    console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
+                }
+            });
+        };
+        
+        Workbench.handleRequestPortInfo = function( portletId, resourceURL ){
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handleRequestPortInfo( portletId, resourceURL );
+                        }
+                        else{
+                            var job = simulation.workingJob();
+                            if( !job ){
+                                Workbench.handleRequestPortInfo( portletId, resourceURL );
+                            }
+                            else{
+                                Workbench.evaluatePortsStatus();
+                                
+                                var data = {
+                                            scienceApp: Workbench.scienceApp()
+                                };
+                                
+                                fire( OSP.Event.OSP_RESPONSE_PORT_INFO, portletId, data );
+                            }
+                        }
+                    }, 
+                    10
+                );
+        };
+        
+        Workbench.handleRequestMonitorInfo = function( portletId ){
+            var data = {
+                        scienceAppId: Workbench.scienceApp().id(),
+                        classId: Workbench.classId(),
+                        customId: Workbench.customId()
+                    };
+                
+            fire( OSP.Event.OSP_RESPONSE_MONITOR_INFO, portletId, data);
+        };
+        
+        
+        Workbench.handleRequestAppInfo = function( portletId ){
+            var data = {
+                        scienceApp: Workbench.scienceApp(),
+                        workbenchId: Workbench.id(),
+                        workbenchRedirectURL: Workbench.redirectURL(),
+                        workbenchRedirectName: Workbench.redirectName()
+                    };
+                
+            fire( OSP.Event.OSP_RESPONSE_APP_INFO, portletId, data);
+        };
+        
+        Workbench.handleRequestSimulationUuid = function( portletId ){
+            setTimeout( 
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handleRequestSimulationUuid(portletId);
+                        }
+                        else{
+                            var data = {
+                                        simulationUuid: simulation.uuid(),
+                                };
+                            
+                            fire(OSP.Event.OSP_RESPONSE_SIMULATION_UUID, portletId, data);
+                        }
+                    }, 
+                    10
+            );
+        };
+        
+        Workbench.handlePortSelected = function( portName, portletInstanceId ){
+            console.log( 'handlePortSelected(): ', portName, portletInstanceId);
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handlePortSelected( portName, portletInstanceId );
+                        }
+                        else{
+                            var job = simulation.workingJob();
+                            if( !job ){
+                                Workbench.handlePortSelected( portName, portletInstanceId );
+                            }
+                            else{
+                                console.log(Workbench.layout());
+                                if( portletInstanceId )
+                                    Workbench.switchPortlet( portletInstanceId );
+                                else
+                                    Workbench.switchPortlets( portName );
+                            }
+                        }
+                    },
+                   10
+            );
+        };
+        
+        Workbench.handleDataChanged = function( portletId, data){
+            console.log( 'handleDataChanged(): ',portletId, data);
+            
+            setTimeout(
+                function(){
+                    var simulation = Workbench.workingSimulation();
+                    var job = simulation.workingJob();
+                    
+                    var portlet = Workbench.getPortlet( portletId );
+                    var portName = portlet.portName();
+                    if( !portName ){
+                        console.log( "[Warning] Received OSP.Event.OSP_DATA_CHANGED from a portlet without port name: "+e.portletId);
+                        return;
+                    }
+                    
+                    // Check the event coming from input ports
+                    var scienceApp = Workbench.scienceApp();
+                    var port = scienceApp.inputPort( portName );
+                    if( !port ){
+                        console.log('[Warning] Not an input port: '+portName);
+                        return;
+                    }
+                    
+                    console.log('Data Changed data: ', data);
+                    var changedData = new OSP.InputData( data );
+                    changedData.portName( port.name() );
+                    changedData.order(port.order() );
+                    changedData.relative( true );
+                    changedData.dirty( true );
+                        
+                    if( job.isSubmit() ){
+                        $.confirm({
+                            boxWidth: '30%',
+                            useBootstrap: false,
+                            title: 'Confirm!',
+                            content: '<p>Submitted job data changed.<br>Would you like to copy the job with changed data?</p>',
+                            buttons: {
+                                confirm: function () {
+                                    var inputs = job.copyInputs();
+                                    for( var index in inputs ){
+                                        var input = inputs[index];
+                                        if( input.portName() === changedData.portName() ){
+                                            inputs[index] = changedData;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    console.log("Copy inputs: ", inputs);
+                                    console.log("Passed InputData: ", changedData);
+                                    
+                                    fireSimulationModal( JSON.stringify( inputs ) );
+                                },
+                                cancel: function () {
+                                    
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        job.inputData( portName, changedData );
+                        firePortStatusChanged( portName, OSP.Enumeration.PortStatus.READY );
+                    }
+                },
+               10
+            );
+        };
+
+        Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
+            createSimulation(portletId, title, jobTitle, jobInitData, resourceURL );
+        };
+        
+        
+        Workbench.handleSaveSimulation = function( portletId, resourceURL ){
+            var simulation = Workbench.workingSimulation();
+            if( simulation.checkDirty() )
+                saveSimulation( portletId, Workbench.workingSimulation(), resourceURL );
+            else
+            $.alert({
+                title: 'Alert!',
+                content: 'No changes to be saved: '+simulation.title()
+            });
+        };
+        
+        Workbench.handleDeleteSimulation = function( portletId, simulationUuid, resourceURL ){
+            deleteSimulation( portletId, simulationUuid, resourceURL );
+        };
+        
+        Workbench.handleSimulationSelected = function( simulationUuid, $confirmDialog, resourceURL ){
+            var simulation = Workbench.getSimulation( simulationUuid );
+            if( !simulation ){
+                loadSimulation( simulationUuid, resourceURL );
+            }
+            else{
+                var prevSimulation = Workbench.workingSimulation();
+                if( prevSimulation.uuid() === simulationUuid )
+                    return;
+                
+                if( prevSimulation.checkDirty() ){
+                    $confirmDialog.dialog({
+                        resizable: false,
+                        height: "auto",
+                        title:'Make sure to save...',
+                        width: 400,
+                        modal: true,
+                        buttons: {
+                            'YES': function() {
+                                    $( this ).dialog( "destroy" );
+                                    saveSimulation( prevSimulation );
+                            },
+                            'NO': function() {
+                                $( this ).dialog( "destroy" );
+                            }
+                        }
+                    });
+                }
+
+                Workbench.workingSimulation( simulation );
+                
+                var data = {
+                                simulationUuid: simulationUuid
+                            };
+                fireRequestWorkingJobInfo( data ); 
+            }
+        };
+        
+        Workbench.handleCheckProvenance = function(resourceURL){
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.workingJob();
+            
+            var jobParameter = jobsToSubmitGetParameters(simulation,job, false,'');
+            
+            var data = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'CHECK_PROVENANCE',
+                                           jobParameter: JSON.stringify(jobParameter)
+                                       });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: resourceURL, 
+                        async : false,
+                        data  : data,
+                        dataType : 'json',
+                        success: function(aa) {
+                            
+                        },
+                        error:function(data,e){
+                            if(jqXHR.responseText !== ''){
+                                alert("CHECK_PROVENANCE-->"+textStatus+": "+jqXHR.responseText);
+                            }else{
+                                alert("CHECK_PROVENANCE-->"+textStatus+": "+errorThrown);
+                            }
+                        }
+                    });
+                    
+                    
+        };
+        
+        Workbench.handleSubmitJob = function(resourceURL){
+            var scienceApp = Workbench.scienceApp();
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.workingJob();
+            
+            if( scienceApp.runType() === 'Sequential' ){
+                jobsToSubmitGetParameters(simulation,job, true, resourceURL );
+            }else{
+                submitMPJobs(job,resourceURL);
+            }
+        };
+        
+        Workbench.handleJobSelected = function(simulationUuid, jobUuid, resourceURL ){
+            var searchSimulation = false;
+            //init
+            if(!Workbench.workingSimulation()){
+                searchSimulation = true;
+            }else{
+                //simulation exist check
+                if(Workbench.getSimulation(simulationUuid)){
+                    Workbench.workingSimulation(Workbench.getSimulation(simulationUuid));
+                }else{
+                    searchSimulation = true;
+                }
+                    
+            }
+            
+            if(searchSimulation){
+                var data = Liferay.Util.ns(
+                    Workbench.namespace(),
+                    {
+                       command: 'LOAD_SIMULATION',
+                       simulationUuid: simulationUuid
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: resourceURL, 
+                        async : false,
+                        data  : data,
+                        dataType : 'json',
+                        success: function(jsonSimulation) {
+                            var simulation = new OSP.Simulation( jsonSimulation );
+                            var scienceApp = Workbench.scienceApp();
+                            simulation.runType( scienceApp.runType() );
+                            Workbench.addSimulation( simulation );
+                            Workbench.workingSimulation( simulation );
+                        },
+                        error:function(data,e){
+                            if(jqXHR.responseText !== ''){
+                                alert("LOAD_SIMULATION-->"+textStatus+": "+jqXHR.responseText);
+                            }else{
+                                alert("LOAD_SIMULATION-->"+textStatus+": "+errorThrown);
+                            }
+                        }
+                    });
+            }
+            
+            var searchSimulationJob = false;
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.getJob( jobUuid );
+            
+            var jobSearch = false;
+            if(!job){
+                jobSearch = true;
+            }else{
+                if(job.isSubmit()){
+                    jobSearch = true;
+                }
+            }
+            
+            
+            if(jobSearch){
+                $.ajax({
+                    url : resourceURL,
+                    type : 'POST',
+                    async : false,
+                    dataType: 'json',
+                    data : Liferay.Util.ns(
+                                           Workbench.namespace(),
+                                           {
+                                               command: 'LOAD_JOB',
+                                               simulationUuid: simulationUuid,
+                                               jobUuid: jobUuid
+                                           }),
+                    success : function( result ) {
+                        var jsonJob = result.job_;
+                        if(result.inputs_){
+                            jsonJob.inputs_ = JSON.parse(result.inputs_);
+                        }
+                        
+                        job = simulation.newJob( jsonJob );
+                        if( job.isSubmit() ){
+                            job.dirty( false );
+                        }
+                        
+                        simulation.addJob( job );
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        if(jqXHR.responseText !== ''){
+                            alert(textStatus+": "+jqXHR.responseText);
+                        }else{
+                            alert(textStatus+": "+errorThrown);
+                        }
+                    }
+                });
+            }
+            
+            //default logic
+            simulation.workingJob( job );
+            
+            loadJobData( job );
+            
+            var statusData = {
+                    simulationTitle: simulation.title(),
+                    jobTitle: job.title(),
+                    simulationUuid: simulation.uuid(),
+                    jobUuid: job.uuid(),
+                    jobStatus: job.status()
+            };
+            
+            fireRefreshJobStatus(statusData);
+        };
+        
+        Workbench.handleRequestJobUuid = function( targetPortlet ){
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handleRequestJobUuid( targetPortlet );
+                        }
+                        else{
+                            var workingJob = simulation.workingJob();
+                            if( !workingJob ){
+                                Workbench.handleRequestJobUuid( targetPortlet );
+                            }
+                            else{
+                                var data = {
+                                                        simulationUuid: simulation.uuid(),
+                                                        jobUuid: workingJob.uuid()
+                                };
+                                
+                                fire( OSP.Event.OSP_RESPONSE_JOB_UUID, targetPortlet, data );
+                            }
+                        }
+                    },
+                    10
+            );
+        };
+        
+        Workbench.handleShowJobStatus = function(){
+            Workbench.switchPortlet(Workbench.jobStatusPortlet());
+        };
+        
+        Workbench.handleDeleteJob = function( portletId, simulationUuid, jobUuid, resourceURL){
+            deleteJob( portletId, simulationUuid, jobUuid, resourceURL );
+        };
+
+        Workbench.handleJobStatusChanged = function( jobUuid, status ){
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.getJob( jobUuid );
+            job.status( OSP.Util.convertJobStatus(Number(status)) );
+
+            var workingJob = simulation.workingJob();
+            if( workingJob.uuid() !== jobUuid ){
+                return;
+            }
+
+            var statusData = {
+                    simulationTitle: simulation.title(),
+                    jobTitle: job.title(),
+                    simulationUuid: simulation.uuid(),
+                    jobUuid: job.uuid(),
+                    jobStatus: job.status()
+            };
+            
+            fireRefreshJobStatus(statusData);
+            
+            var scienceApp = Workbench.scienceApp();
+            var logPorts = scienceApp.logPorts();
+            var outputPorts = scienceApp.outputPorts();
+
+            var isLogValid = isValid( OSP.Enumeration.PortType.LOG, workingJob.status() );
+            var isOutputValid = isValid( OSP.Enumeration.PortType.OUTPUT, workingJob.status() );
+            
+            var ports;
+            if( isOutputValid ){
+                for( var portName in outputPorts ){
+                    var port = outputPorts[portName];
+                    var outputData = port.outputData();
+                    outputData.parent( OSP.Util.mergePath( simulation.getJobOutputFolder(job), outputData.parent() ) );
+                    var portlets = Workbench.getPortlets( portName );
+                    for( var index in portlets ){
+                        var portlet = portlets[index];
+                        console.log('Ooutput Data: ', port.outputData());
+                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
+                    }
+
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
+                }
+            }
+            
+            if( isLogValid ){
+                for( var portName in logPorts ){
+                    var port = logPorts[portName];
+                    var outputData = port.outputData();
+                    outputData.parent( OSP.Util.mergePath( simulation.getJobOutputFolder(job), outputData.parent() ) );
+                    var portlets = Workbench.getPortlets( portName );
+                    for( var index in portlets ){
+                        var portlet = portlets[index];
+                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
+                    }
+
+//                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
+                }
+            }
+        };
+        
+        Workbench.handleRequestPath = function( targetPortlet ){
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handleRequestPath( targetPortlet );
+                        }
+                        else{
+                            var workingJob = simulation.workingJob();
+                            if( !workingJob ){
+                                Workbench.handleRequestPath( targetPortlet );
+                            }
+                            else{
+                                var portlet = Workbench.getPortlet( targetPortlet );
+                                var scienceApp = Workbench.scienceApp();
+                                var inputPort = scienceApp.inputPort( portlet.portName() );
+                                
+                                var inputData = workingJob.inputData( portlet.portName() );
+                                
+                                console.log( "HandleRequestPath: ", workingJob );
+                                if( inputData ){
+                                    console.log( "HandleRequestPath: ", inputData );
+                                }
+                                else{
+                                    console.log( "Job has No input data.....");
+                                    inputData = new OSP.InputData();
+                                    inputData.portName( inputPort.name() );
+                                    inputData.order( inputPort.order() );
+                                    inputData.type(OSP.Enumeration.PathType.FOLDER);
+                                    inputData.parent( '' );
+                                    inputData.name('');
+                                    inputData.relative(true);
+
+                                    setJobInputData( portlet.portName(), inputData )
+                                }
+                                
+                                
+                                fire( 
+                                        OSP.Event.OSP_LOAD_DATA, 
+                                        targetPortlet, 
+                                        OSP.Util.toJSON(inputData) );
+                            }
+                        }
+                    },
+                    10
+            );
+        };
+
+        Workbench.handleRequestOutputPath = function( targetPortlet ){
+            setTimeout(
+                    function(){
+                        var simulation = Workbench.workingSimulation();
+                        if( !simulation ){
+                            Workbench.handleRequestOutputPath( targetPortlet );
+                        }
+                        else{
+                            var workingJob = simulation.workingJob();
+                            if( !workingJob ){
+                                Workbench.handleRequestOutputPath( targetPortlet );
+                            }
+                            else{
+                                var isOutputValid = isValid( OSP.Enumeration.PortType.OUTPUT, workingJob.status());
+                                if( !isOutputValid ){
+                                    return;
+                                }
+                                
+                                var portlet = Workbench.getPortlet( targetPortlet );
+                                var scienceApp = Workbench.scienceApp();
+                                var outputPorts = scienceApp.outputPorts();
+                                if( !outputPorts ){
+                                    // To do: display Download portlet
+                                    return;
+                                }
+
+                                var outputPort = scienceApp.getPort( portlet.portName() );
+                                var portData = outputPort.outputData(); 
+
+                                var parentPath =OSP.Util.mergePath( simulation.getJobOutputFolder(workingJob), portData.parent() );
+                                
+                                var inputData = new OSP.InputData();
+                                inputData.type(portData.type());
+                                inputData.parent( parentPath );
+                                inputData.name(portData.name());
+                                inputData.relative(true);
+                                
+                                fire( 
+                                        OSP.Event.OSP_LOAD_DATA, 
+                                        targetPortlet, 
+                                        OSP.Util.toJSON(inputData) );
+                            }
+                        }
+                    },
+                    10
+            );
+        };
+        
+        Workbench.handleRequestDataStructure = function( portletId, resourceURL ){
+            var portlet = Workbench.getPortlet( portletId );
+            var portName = portlet.portName();
+            
+            var scienceApp = Workbench.scienceApp();
+            var port = scienceApp.getPort( portlet.portName() );
+            var dataType = port.dataType();
+            var ajaxParam = Liferay.Util.ns(
+                                Workbench.namespace(),
+                                {
+                                    command: 'GET_DATA_STRUCTURE',
+                                    dataTypeName: dataType.name,
+                                    dataTypeVersion: dataType.version
+                                });
+            
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : ajaxParam,
+                dataType : 'json',
+                success: function(jsonDataStructure) {
+                    var data = {
+                                type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
+                                context_: jsonDataStructure
+                            };
+                    fire( OSP.Event.OSP_LOAD_DATA, portletId, data );
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('REQUEST_DATA_STRUCTURE AJAX ERROR-->', e);
+                }
+            });
+        };
+
+        Workbench.handleRequestPortInfo = function( targetPortletId  ){
+            var data = {
+                scienceApp: Workbench.scienceApp()
+            };
+            fire( OSP.Event.OSP_RESPONSE_PORT_INFO, targetPortletId, data );
+        };
+        
+        Workbench.handleJobDeleted = function( simulationUuid, jobUuid ){
+            console.log( 'handleJobDeleted(): '+jobUuid );
+            var simulation = Workbench.getSimulation( simulationUuid );
+            if( !simulation ){
+                return true;
+            }
+            
+            var job = simulation.getJob( jobUuid );
+            if( !job ){
+                return true;
+            }
+            
+            simulation.removeJob( jobUuid );
+        };
+        
+        Workbench.handleRequestSpreadToPort = function( portletId, event, data ){
+            var reqPortlet = Workbench.getPortlet( portletId );
+            console.log( reqPortlet );
+            var portlets = Workbench.getPortlets( reqPortlet.portName() );
+            console.log( portlets );
+            for( var index in portlets ){
+                var portlet = portlets[index];
+                if( portletId === portlet.instanceId() )    continue;
+                
+                var eventData = {
+                                 portletId: Workbench.id(),
+                                 targetPortlet: portlet.instanceId(),
+                                 data: data
+                };
+                Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData);
+            }
+
+        };
+        
+        Workbench.handleCreateJob = function(portletId, simulationUuid, title, initData, resourceURL){
+            console.log('handleCreateJob: ', initData );
+            
+            var scienceApp = Workbench.scienceApp();
+            
+            var ajaxData = Liferay.Util.ns(
+                                       Workbench.namespace(),
+                                       {
+                                           command: 'CREATE_JOB',
+                                           simulationUuid: simulationUuid,
+                                           title: title,
+                                           scienceAppName: scienceApp.name(),
+                                           scienceAppVersion: scienceApp.version(),
+                                           initData: initData ? initData : '' 
+                                       }
+            );
+            
+            $.ajax({
+                type: 'POST',
+                url: resourceURL, 
+                async : false,
+                data  : ajaxData,
+                dataType : 'json',
+                success: function(jsonJob ) {
+                    var data = {
+                            simulationUuid: simulationUuid,
+                            jobUuid: jsonJob.uuid_,
+                            status:true
+                    };
+                    fireCreateSimulationJobResult(portletId,data);
+                },
+                error:function(data,e){
+                    console.log(data);
+                    console.log('AJAX ERROR-->'+e);
+                    var data = {
+                             status:false
+                    };
+                    fireCreateSimulationJobResult(portletId,data);
+                }
+            });
+        };
+        
+        Workbench.handleSubmitSimulation = function( $inputHandler, $getCoresDialog, resourceURL ){
+            var simulation = Workbench.workingSimulation();
+            
+            var dirtyJobs = simulation.getDirtyJobs();
+            if( dirtyJobs.length < 1 ){
+                console.log("No dirty jobs....");
+                return;
+            }
+            
+            if( simulation.runType() === 'Sequential' ){
+                submitSimulation( simulation, resourceURL );
+            }
+            else{
+                submitMPJobs( $inputHandler, $getCoresDialog, resourceURL );
+            }
+        };
+        
+        
+        
+        var handShakeCallback = function( sourceId, targetId ){
+            var portlet = Workbench.getPortlet( targetId );
+            var scienceApp = Workbench.scienceApp();
+            var portType = scienceApp.getPortType( portlet.portName() );
+            portlet.portType( portType );
+            
+            var eventData = {
+                    portletId: sourceId,
+                    targetPortlet: targetId,
+            };
+            
+            Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
+        };
+        
+        Workbench.switchPortlet = function( portletInstanceId ){
+            var layout = Workbench.layout();
+            var scienceApp = Workbench.scienceApp();
+            
+            layout.switchPortlet( 
+                        portletInstanceId, 
+                        Workbench.id(), 
+                        true, 
+                        'exclusive', 
+                        handShakeCallback );
+
+            var simulation = Workbench.workingSimulation();
+            var job = simulation.workingJob();
+            
+            var portlet = layout.getPortlet( portletInstanceId );
+            var portType = scienceApp.getPortType(portlet.portName());
+            
+            var inputData;
+            var portData;
+            switch( portType ){
+                case OSP.Enumeration.PortType.INPUT:
+                    inputData = job.inputData( portlet.portName() );
+                    break;
+                case OSP.Enumeration.PortType.OUTPUT:
+                    if( isValid(OSP.Enumeration.PortType.OUTPUT, job.status() ) ){
+                        var outputPort = scienceApp.outputPort( portlet.portName() );
+                        portData = outputPort.outputData(); 
+                    }
+                    break;
+                case OSP.Enumeration.PortType.LOG:
+                    if( isValid(OSP.Enumeration.PortType.LOG, job.status() ) ){
+                        var logPort = scienceApp.logPort( portlet.portName() );
+                        portData = logPort.outputData();    
+                    }
+                    break;
+            }
+            
+            if( portData ){
+                var parentPath =OSP.Util.mergePath( simulation.getJobOutputFolder(job), portData.parent() );
+                
+                inputData = new OSP.InputData();
+                inputData.type(portData.type());
+                inputData.parent( parentPath );
+                inputData.name(portData.name());
+                inputData.relative(true);
+            }
+            
+            if( inputData ){
+                fire( OSP.Event.OSP_LOAD_DATA, portletInstanceId,  OSP.Util.toJSON( inputData ) );
+            }
+        };
+                
+        Workbench.switchPortlets = function( portName ){
+            console.log('switchPortlets: '+portName);
+            var portlets = Workbench.getPortlets(portName);
+            console.log(portlets);
+            
+            for( var index in portlets ){
+                var portlet = portlets[index];
+                Workbench.switchPortlet( portlet.instanceId() );
+            }
+        };
+        
+    }; /* End of Workbench */
+    
 })(window);

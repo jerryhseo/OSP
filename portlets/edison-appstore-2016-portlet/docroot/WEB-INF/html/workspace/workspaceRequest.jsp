@@ -174,18 +174,16 @@ function <portlet:namespace/>historyBack(){
 	</c:choose>	
 </h1>
 
-<form name="workspaceform" action="<%=workspaceRequestURL%>" method="post" enctype="multipart/form-data">
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+<form name="workspaceform" action="<%=workspaceRequestURL%>" method="post" enctype="multipart/form-data" class="table-responsive panel edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='user-information' />
-		</div>
+		</h3>
 	</div>
 	
-	<div class="h10"></div>
-		
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
@@ -207,17 +205,15 @@ function <portlet:namespace/>historyBack(){
 		</table>
 	</div>
 
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-appstore-workspace-request-info' />
-		</div>
+		</h3>
 	</div>
 	
-	<div class="h10"></div>
-	
 		<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
@@ -227,7 +223,7 @@ function <portlet:namespace/>historyBack(){
 			<tr>
 				<th><liferay-ui:message key='edison-appstore-workspace-request-use' /></th>
 				<td>
-					<select id="<portlet:namespace/>developerSort" name="<portlet:namespace/>developerSort">
+					<select id="<portlet:namespace/>developerSort" class="btn btn-default" name="<portlet:namespace/>developerSort">
 						<option value="1201001" ><liferay-ui:message key='edison-appstore-workspace-solver-development' /></option>
 						<option value="1201002" ><liferay-ui:message key='edison-appstore-workspace-solver-development-test' /></option>
 						<option value="1201003" ><liferay-ui:message key='edison-appstore-workspace-etc' /></option>
@@ -235,18 +231,19 @@ function <portlet:namespace/>historyBack(){
 				</td>
 				<th><liferay-ui:message key='edison-appstore-developer-preferred-date' /><font color="red">*</font></th>
 				<td colspan="3">
-				<input name="<portlet:namespace/>useStart" id="<portlet:namespace/>useStart" readonly="readonly"/> ~ <input name="<portlet:namespace/>useEnd" id="<portlet:namespace/>useEnd" readonly="readonly"/>			  
+				<input name="<portlet:namespace/>useStart" id="<portlet:namespace/>useStart" readonly="readonly" style="width: 170px;"/> ~ <input name="<portlet:namespace/>useEnd" id="<portlet:namespace/>useEnd" readonly="readonly" style="width: 170px;"/>			  
 				</td>
 			</tr>
 			<tr>
 				<th><liferay-ui:message key='edison-appstore-workspace-use-language' /></th>
 				<td colspan="6">
-					<label class="checkbox-label"><input name="<portlet:namespace/>languageFortran" type="checkbox" value="Y"/>fortran</label>
-					<label class="checkbox-label"><input name="<portlet:namespace/>languageCpp" type="checkbox" value="Y"/>c/c++</label>
-					<label class="checkbox-label"><input name="<portlet:namespace/>languagePython" type="checkbox" value="Y"/>python</label>
-					<label class="checkbox-label"><input name="<portlet:namespace/>languageJava" type="checkbox" value="Y"/>java</label>
-					<label class="checkbox-label"><input name="<portlet:namespace/>languageOther" onclick="otherEvent(this)" type="checkbox" value="Y"/><liferay-ui:message key='edison-appstore-workspace-etc' /></label>
-					<input type="text" name="<portlet:namespace/>languageOtherDescription" readonly="readonly" class="text_box_04" maxlength="100" />
+					<label class="checkbox-label" style="float:left;"><input name="<portlet:namespace/>languageFortran" type="checkbox" value="Y"/>fortran</label>
+					<label class="checkbox-label" style="float:left;"><input name="<portlet:namespace/>languageCpp" type="checkbox" value="Y"/>c/c++</label>
+					<label class="checkbox-label" style="float:left;"><input name="<portlet:namespace/>languagePython" type="checkbox" value="Y"/>python</label>
+					<label class="checkbox-label" style="float:left;"><input name="<portlet:namespace/>languageJava" type="checkbox" value="Y"/>java</label>
+					<label class="checkbox-label" style="float:left;"><input name="<portlet:namespace/>languageOther" onclick="otherEvent(this)" type="checkbox" value="Y"/><liferay-ui:message key='edison-appstore-workspace-etc' /></label>
+					<input type="text" name="<portlet:namespace/>languageOtherDescription" readonly="readonly" class="form-control" style="width: 250px; margin-left: 5px; float: left;" maxlength="100" />
+				</td>
 			</tr>
 			<tr>
 				<th id="mainIp" rowspan="1"><liferay-ui:message key='edison-appstore-workspace-access-ip' /><font color="red">*</font></th>
@@ -255,7 +252,7 @@ function <portlet:namespace/>historyBack(){
 					<input name="<portlet:namespace/>ip2" maxlength="3" type="text"></input>.
 					<input name="<portlet:namespace/>ip3" maxlength="3" type="text"></input>.
 					<input name="<portlet:namespace/>ip4" maxlength="3" type="text"></input>
-					<input type="button" class="addIp button01b" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
+					<input type="button" class="addIp btn btn-default" onclick="return false;" value="<liferay-ui:message key='edison-appstore-add' />" />
 				</td>
 			</tr>
 			<tr>
@@ -267,17 +264,15 @@ function <portlet:namespace/>historyBack(){
 		</table>
 	</div>
 	
-	<div class="virtitlebox">
-		<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-		<div class="virtitle">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-appstore-workspace-agreement-info' />
-		</div>
+		</h3>
 	</div>
 	
-	<div class="h10"></div>
-	
 	<div class="table1_list">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="data" style="table-layout: fixed;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" style="table-layout: fixed;">
 			<colgroup>
 				<col width="15%" />
 				<col width="35%" />
@@ -316,7 +311,7 @@ function <portlet:namespace/>historyBack(){
 			</tr>
 			<tr>
 			  <th><liferay-ui:message key='edison-appstore-workspace-security-pledge' /><font color="red">*</font></th>
-			  <td colspan="2"><input type="file" name="<portlet:namespace/>addfile"/></td>
+			  <td colspan="2"><input type="file" name="<portlet:namespace/>addfile" style="float: left;"/></td>
 			  <td>
 			  	<c:if test="${!empty securityFileList}">
 					<c:forEach items="${securityFileList}" var="fileMap">
@@ -328,6 +323,6 @@ function <portlet:namespace/>historyBack(){
 		  </table>
 	</div>
 	<div style="padding:10px; float:right;">
-		<input type="button" value="<liferay-ui:message key='edison-appstore-request' />" class="button0801" onclick="workspaceRequest();return false;" />
+		<input type="button" value="<liferay-ui:message key='edison-appstore-request' />" class="btn btn-default" onclick="workspaceRequest();return false;" />
 	</div>
 </form>

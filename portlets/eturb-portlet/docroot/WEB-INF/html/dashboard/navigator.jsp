@@ -12,12 +12,8 @@
 
 <liferay-portlet:resourceURL var="getWorkbenchAppListURL" id="getWorkbenchAppList" escapeXml="false" copyCurrentRenderParameters="false" />
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-    <liferay-portlet:param name="classId" value="${classId}"/>
-    <liferay-portlet:param name="customId" value="${customId}"/>
-    <liferay-portlet:param name="jobUuid" value="0"/>
-    <liferay-portlet:param name="testYn" value="false"/>
 </liferay-portlet:renderURL>
 
 
@@ -29,6 +25,12 @@
 
 	
 <style type="text/css">
+.edison #wrap article { 
+	background-color:white; 
+}
+.edison #wrap .content-sub { 
+	width: 95%; 
+}
 .project-active {
 	background-color: #ddd;
 }
@@ -76,41 +78,47 @@ i .test{
 </style>
 <script type="text/javascript">
 var local = true;
-// var initRootData = [
-// 	{
-// 		"id":"<portlet:namespace/>GEO",
-// 		"text":"Geometries",
-// 		"type":"root-geo",
-// 		"data":{"NodeType_":"root-geo"}
-// 	},
-// 	{
-// 		"id":"<portlet:namespace/>MESH",
-// 		"type":"root-mesh",
-// 		"text":"Meshes",
-// 		"data":{"NodeType_":"root-mesh"}
-// 	},
-// 	{
-// 		"id":"<portlet:namespace/>BOUNDARY",
-// 		"type":"root-boundary",
-// 		"text":"Boundary Conditions",
-// 		"data":{"NodeType_":"root-boundary"}
-// 	}
-// ];
-
-var initRootData = [
-	{
-		"id":"<portlet:namespace/>GEO",
-		"text":"Geometries",
-		"type":"root-geo",
-		"data":{"NodeType_":"root-geo"}
-	},
-	{
-		"id":"<portlet:namespace/>MESH",
-		"type":"root-mesh",
-		"text":"Meshes",
-		"data":{"NodeType_":"root-mesh"}
-	}
-];
+var initRootData = null;
+<c:choose>
+	<c:when test="${bcUse eq true}">
+		initRootData = [
+			{
+				"id":"<portlet:namespace/>GEO",
+				"text":"Geometries",
+				"type":"root-geo",
+				"data":{"NodeType_":"root-geo"}
+			},
+			{
+				"id":"<portlet:namespace/>MESH",
+				"type":"root-mesh",
+				"text":"Meshes",
+				"data":{"NodeType_":"root-mesh"}
+			},
+			{
+				"id":"<portlet:namespace/>BOUNDARY",
+				"type":"root-boundary",
+				"text":"Boundary Conditions",
+				"data":{"NodeType_":"root-boundary"}
+			}
+		];
+	</c:when>
+	<c:otherwise>
+		initRootData = [
+			{
+				"id":"<portlet:namespace/>GEO",
+				"text":"Geometries",
+				"type":"root-geo",
+				"data":{"NodeType_":"root-geo"}
+			},
+			{
+				"id":"<portlet:namespace/>MESH",
+				"type":"root-mesh",
+				"text":"Meshes",
+				"data":{"NodeType_":"root-mesh"}
+			}
+		];
+	</c:otherwise>
+</c:choose>
 
 var initDisplayData = {
 	"camera" : {
@@ -121,14 +129,6 @@ var initDisplayData = {
 		}
 	}
 };
-
-function <portlet:namespace/>openAccordionAll() {
-	document.getElementById("<portlet:namespace/>acc-parameter").setAttribute("style", "display:block");
-	document.getElementById("ui-accordion-<portlet:namespace/>accordion-panel-1").setAttribute("style","display:block;");
-	
-	document.getElementById("<portlet:namespace/>acc-boundary").setAttribute("style", "display:block");
-	document.getElementById("ui-accordion-<portlet:namespace/>accordion-panel-2").setAttribute("style","display:block;");
-}
 
 function <portlet:namespace/>setNavigatorInitAttr(initState) {
 	if (initState) {
@@ -405,6 +405,11 @@ function <portlet:namespace/>removeNode(){
 //meshFile Export click
 function <portlet:namespace/>exportNode(){
     
+    if("${bcUse}" == "true"){
+        <portlet:namespace/>exportApp();
+        return;
+    }
+    
     //var selectNode = $("#navigatorTree").jstree("node").get_node("data");
     var tree = $("#navigatorTree").jstree(true);
     var selectNode = $("#navigatorTree").jstree("get_selected");
@@ -478,14 +483,19 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
         }
     });
     
-    $("#<portlet:namespace/>appListModal").modal("show");
+    /* if('${bcUse}'){
+        //$("#<portlet:namespace/>appExportModal").modal({ "backdrop": "static", "keyboard": false });
+        $("#<portlet:namespace/>app-export-modal").modal({ "backdrop": "static", "keyboard": false });
+    } else {
+    } */
+    $("#<portlet:namespace/>appListModal").modal({ "backdrop": "static", "keyboard": false });
 }
 
 // Workbench로 이동
 function <portlet:namespace/>moveWorkBench(targetScienceAppId, meshFileId) {
     var URL = "<%=workbenchURL%>";
-    URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-    URL += "&_Workbench_WAR_OSPWorkbenchportlet_meshFileId="+meshFileId;
+    URL += "&_Workbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ_scienceAppId="+targetScienceAppId;
+//     URL += "&_Workbench_WAR_OSPWorkbenchportlet_meshFileId="+meshFileId;
     
     location.href= URL;
 }
@@ -542,8 +552,10 @@ function <portlet:namespace/>selectedNode(treeData){
 	        && <portlet:namespace/>checkAnalyzerJob){
 	        <portlet:namespace/>checkAnalyzerJob(treeData.node.data["analyzerJob"]);
 	    }
+		
 	    if(node_data_type == DASH.Constants.TYPE_GEO_PARAMETER
 	        && <portlet:namespace/>setXYPlotterResultPath){
+	    	console.log("SETXY_PLOT");
 	        <portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
 	    }
 	    /* parameter event - end*/
@@ -836,7 +848,7 @@ function <portlet:namespace/>projectNameOpen(confirmOpen){
 			content: '저장되지 않은 데이터는 복구되지 않습니다. 계속하시겠습니까?',
 			buttons: {
 				confirm: function () {
-					$("#<portlet:namespace/>projectNameModal").modal("show");
+					$("#<portlet:namespace/>projectNameModal").modal({ "backdrop": "static", "keyboard": false });
 				},
 				cancel: function () {
 					
@@ -847,7 +859,7 @@ function <portlet:namespace/>projectNameOpen(confirmOpen){
 		if(($("#<portlet:namespace/>projectModal").data('bs.modal') || {}).isShown){
 			$("#<portlet:namespace/>projectModal").modal("toggle");
 		}
-		$("#<portlet:namespace/>projectNameModal").modal("show");
+		$("#<portlet:namespace/>projectNameModal").modal({ "backdrop": "static", "keyboard": false });
 		
 	}
 }
@@ -916,7 +928,7 @@ function <portlet:namespace/>searchProjectList(p_curPage){
 				$tableTBody.append($rowResult);
 			}
 			
-			$("#<portlet:namespace/>projectModal").modal("show");
+			$("#<portlet:namespace/>projectModal").modal({ "backdrop": "static", "keyboard": false });
 			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
@@ -1077,7 +1089,7 @@ function <portlet:namespace/>removeSimulation(executeId){
 	</ul>
 </div>
 
-<div class="dashboard-content" id="<portlet:namespace/>dashboard-content">
+<div class="dashboard-content" id="<portlet:namespace/>dashboard-content" style='height:630px;overflow-y:auto;'>
 	<div class="btn-group">
 		<c:choose>
 			<c:when test="${!empty project}">
@@ -1132,39 +1144,41 @@ function <portlet:namespace/>removeSimulation(executeId){
 	</div>
 	
 	<!-- Modal -->
-	<div class="modal fade" id="<portlet:namespace/>projectModal" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Project List</h4>
-				</div>
-				<div class="modal-body">
-					<table class="table table-hover table-project">
-						<thead>
-							<tr>
-								<th></th>
-								<th class="TC">name</th>
-								<th class="TC">create Date</th>
-							</tr>
-						</thead>
-						<tbody id="<portlet:namespace/>projectModalTbody">
-							
-						</tbody>
-					</table>
-					
-					<div id="<portlet:namespace/>projectModalPaging" class="paging">
-						
+	<div class="modal fade" id="<portlet:namespace/>projectModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>projectModal" style="display: none;">
+		<div class="vertical-alignment-helper">
+			<div class="modal-dialog vertical-align-center" role="document">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">프로젝트 선택</h4>
 					</div>
-				</div>
-				<div class="modal-footer">
-				<button type="button" class="btn btn-success" id="openBtn" onclick="<portlet:namespace/>projectLoad()" title="Open">
-						<i class='icon-large icon-save' id="openBtnText"> Open</i>
-					</button>
-					<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectNameOpen(false);" title="NEW">
-						<i class='icon-large icon-save'> New</i>
-					</button>
+					<div class="modal-body">
+						<table class="table table-hover table-project">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="TC">name</th>
+									<th class="TC">create Date</th>
+								</tr>
+							</thead>
+							<tbody id="<portlet:namespace/>projectModalTbody">
+								
+							</tbody>
+						</table>
+						
+						<div id="<portlet:namespace/>projectModalPaging" class="paging">
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-success" id="openBtn" onclick="<portlet:namespace/>projectLoad()" title="Open">
+							<i class='icon-large icon-save' id="openBtnText"> Open</i>
+						</button>
+						<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectNameOpen(false);" title="NEW">
+							<i class='icon-large icon-save'> New</i>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1176,23 +1190,25 @@ function <portlet:namespace/>removeSimulation(executeId){
 		<aui:input name="projectStructure" value="" type="hidden"/>
 		<aui:input name="analyzerStructure" value="" type="hidden"/>
 		
-		<div class="modal fade" id="<portlet:namespace/>projectNameModal" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">New Project</h4>
-					</div>
-					<div class="modal-body">
-						<aui:input name="projectName" type="text" cssClass="long_field" label="" value="" maxLength="15">
-							<aui:validator name="required"/>
-						</aui:input>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectAction('<%=Constants.ADD%>');" title="NEW">
-							<i class='icon-large icon-save'> New</i>
-						</button>
+		<div class="modal fade" id="<portlet:namespace/>projectNameModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>projectNameModal" style="display: none;">
+			<div class="vertical-alignment-helper">
+				<div class="modal-dialog vertical-align-center" role="document">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">새 프로젝트</h4>
+						</div>
+						<div class="modal-body">
+							<aui:input name="projectName" type="text" cssClass="long_field" label="" value="" maxLength="15">
+								<aui:validator name="required"/>
+							</aui:input>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-success" id="saveBtn" onclick="<portlet:namespace/>projectAction('<%=Constants.ADD%>');" title="NEW">
+								<i class='icon-large icon-save'> New</i>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1204,17 +1220,19 @@ function <portlet:namespace/>removeSimulation(executeId){
 <img id="loadingBox" src="${contextPath}/images/processing.gif" width="700px" style="display: none;"/>
 
 <!-- Workbench List 출력 -->
-<div class="modal fade" id="<portlet:namespace/>appListModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Solver Selection</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="<portlet:namespace/>appListModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>appListModal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4 class="modal-title">Solver Selection</h4>
+	            </div>
+	            <div class="modal-body">
+	                
+	            </div>
+	        </div>
+		</div>
+	</div>
 </div>

@@ -12,7 +12,37 @@
 		<javascript-path>${root-path}/js</javascript-path>
 		<settings>
 			<setting key="content-title" value="Edison" configurable="true" type="text"></setting>
+			<setting key="breadcrumb-title" value="Edison" configurable="true" type="text"></setting>
 			<setting key="portlet-setup-show-borders-default" value="false"></setting>
 		</settings>
+		
+		<color-scheme id="01" name="default">
+			<default-cs>true</default-cs>
+			<css-class>default</css-class>
+		</color-scheme>
+		<color-scheme id="02" name="red">
+			<css-class>red</css-class>
+		</color-scheme>
+		<color-scheme id="03" name="green">
+			<css-class>green</css-class>
+		</color-scheme>
+		<color-scheme id="04" name="yellow">
+			<css-class>yellow</css-class>
+		</color-scheme>
+		<color-scheme id="05" name="blue">
+			<css-class>blue</css-class>
+		</color-scheme>
+		<color-scheme id="06" name="purple">
+			<css-class>purple</css-class>
+		</color-scheme>
+		<color-scheme id="07" name="emerald">
+			<css-class>emerald</css-class>
+		</color-scheme>
+		<color-scheme id="08" name="brown">
+			<css-class>brown</css-class>
+		</color-scheme>
+		<color-scheme id="09" name="navy">
+			<css-class>navy</css-class>
+		</color-scheme>
 	</theme>
 </look-and-feel>

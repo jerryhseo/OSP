@@ -180,9 +180,11 @@
 	<sql id="org.kisti.edison.bestsimulation.service.persistence.Monitoring.getSimProMonitoringBody" >
 		<![CDATA[
 		FROM
-			EDSIM_Simulation A,EDSIM_SimulationJob B,  User_ C
+			EDSIM_Simulation A,EDSIM_SimulationJob B,  User_ C, EDSIM_SimulationShare D
 		WHERE
 			A.simulationUuid = B.simulationUuid
+		AND
+			B.jobUuid = D.jobUuid
 		AND
 			B.jobStatus > 1701004 
 		AND 
@@ -195,11 +197,11 @@
 			A.testYn != true
 		<isNotEmpty property="classId">
 			AND
-				A.classId = #classId#
+				D.classId = #classId#
 		</isNotEmpty>
 		<isNotEmpty property="customId">
 			AND
-				A.customId = #customId#
+				D.customId = #customId#
 		</isNotEmpty>			
 		ORDER BY A.simulationCreateDt DESC
 		

@@ -14,6 +14,7 @@ import javax.portlet.ResourceResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.search.service.model.Search;
 import org.kisti.edison.search.service.model.SearchCondition;
 import org.kisti.edison.search.service.model.impl.SearchConditionModelImpl;
@@ -57,10 +58,10 @@ public class SearchController{
         List<Map<String, Object>> lv1Categories = SearchLocalServiceUtil.assetCategoryToJstreeModel(
             SearchLocalServiceUtil.getLv1Categories(companyGroupId, groupId, locale), locale);
         for(Map<String, Object> assetCategory : lv1Categories){
-        String imageName = prefs.getValue(String.valueOf(assetCategory.get("categoryId")), "");
-        if(StringUtils.hasText(imageName)){
-            assetCategory.put("image", imageName);
-        }
+	        String imageName = prefs.getValue(String.valueOf(assetCategory.get("categoryId")), "");
+	        if(StringUtils.hasText(imageName)){
+	            assetCategory.put("image", imageName);
+	        }
         }
         if(themeDisplay.getURLCurrent().indexOf("?") > 0){
         model.addAttribute("redirectURL",
@@ -122,14 +123,14 @@ public class SearchController{
         long simulationProjectPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
             "edisonsimulationproject_WAR_edisonsimulationproject2017portlet");
         long openDataPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "edisondatacollection_WAR_edisonsimulationportlet");
+            "datasearch_WAR_SDR_baseportlet");/*"edisondatacollection_WAR_edisonsimulationportlet"*/
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "Workbench_WAR_OSPWorkbenchportlet");
+            "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         try{
-            model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(searchCondition));
+            model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(request, response, searchCondition));
         }catch (Exception e){
             throw new SystemException(e);
         }
@@ -140,6 +141,7 @@ public class SearchController{
         model.addAttribute("simulationProjectPlid", simulationProjectPlid);
         model.addAttribute("openDataPlid", openDataPlid);
         model.addAttribute("groupId", groupId);
+        model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
         return "search/total";
     }
     
@@ -151,7 +153,7 @@ public class SearchController{
         response.setContentType("text/html; charset=UTF-8");
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "Workbench_WAR_OSPWorkbenchportlet");
+            "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         log.debug("Paging");
@@ -165,6 +167,7 @@ public class SearchController{
         model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
         model.addAttribute("workBenchPlid", workBenchPlid);
         model.addAttribute("searchResults", searchResults);
+        model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
         model.addAttribute("paging", paging);
         return "search/type";
     }
@@ -225,7 +228,8 @@ public class SearchController{
         log.debug("Paging");
         log.debug(request.getParameter("currentPage"));
         log.debug(searchCondition.getModelAttributes().toString());
-        Search searchResults = SearchLocalServiceUtil.dataSearch(searchCondition);
+        //Search searchResults = SearchLocalServiceUtil.dataSearch(searchCondition);
+        Search searchResults = SearchLocalServiceUtil.dataSearch(request, response, searchCondition);
         String portletNameSpace = themeDisplay.getPortletDisplay().getNamespace();
         String paging = PagingUtil.getPaging(request.getContextPath(), portletNameSpace + "loadDatas",
             searchResults.getDataCount(), searchCondition.getCurrentPage(), searchCondition.getListSize(),

@@ -33,6 +33,7 @@ import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.HttpFileUtil;
+import org.kisti.edison.util.MyFileIcebreakerTokenUtil;
 import org.kisti.edison.util.MyFileIcebreakerUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.util.TokenProviderUtil;
@@ -144,7 +145,7 @@ public class MyFileController {
 						}
 					}
 				}else{//icebreaker 계정은 있으나 포털에 expando가 없는 경우 expando 추가 생성
-					icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
+					icebreakerVcToken = MyFileIcebreakerTokenUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
 				}
 			}else{ // Icebreaker 계정이 없는경우
 				//icebreaker 계정도 없는 경우 생성
@@ -152,7 +153,7 @@ public class MyFileController {
 				
 				if (resultRegist == 201) {
 					//icebreaker 가입이 성공한 경우 신규 토큰 발행 및 커스텀 필드 추가
-					icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
+					icebreakerVcToken = MyFileIcebreakerTokenUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
 				}
 			}
 			
@@ -739,6 +740,45 @@ public class MyFileController {
 		}
 	}
 	
+	@ResourceMapping(value ="moveNode")
+	public void moveNode(ResourceRequest request, ResourceResponse response){
+	    try {
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            Map param = RequestUtil.getParameterMap(request);
+            
+            User user = PortalUtil.getUser(request);
+            long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
+            
+            Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+            String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+            
+            String icebreakerToken = MyFileIcebreakerTokenUtil.getOrCreateToken(groupId, user).getVcToken();
+            
+            int responseStatus = 0;
+            
+            String userScreenName = "";
+            if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.ADMINISTRATOR)){
+                userScreenName = (String)thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+            }else{
+                userScreenName = String.valueOf(user.getScreenName());
+            }
+            
+            responseStatus = MyFileIcebreakerUtil.moveNode(icebreakerUrl, icebreakerToken, param, userScreenName);
+            
+            System.out.println("responseStatus : " + responseStatus);
+            JSONObject json = new JSONObject();
+            json.put("status", responseStatus);
+            
+            response.setContentType("application/json; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.write(json.toString());
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+	}
+	
+	
 	/**
 	 * 선택한 폴더 삭제
 	 * @param request
@@ -779,8 +819,8 @@ public class MyFileController {
 						conn.setRequestProperty("Accept", "application/json");
 						conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 						
-						
-						deleteResponseCode = conn.getResponseCode();	
+
+						deleteResponseCode = conn.getResponseCode();
 						if(deleteResponseCode != 200){
 							break;
 						}
@@ -904,7 +944,7 @@ public class MyFileController {
 						}
 					}
 
-					
+
 					FileOutputStream output = new FileOutputStream(ICEBREAKER_TEMP_PATH + File.separator + fileNames[i]);
 					FileInputStream inputStream = new FileInputStream(tempFile);
 					byte[] buffer = new byte[1024 * 8];
@@ -985,5 +1025,44 @@ public class MyFileController {
 			e.printStackTrace();
 		}
 	}
+	
+	/* 파일 복사 붙여넣기 */
+	@ResourceMapping(value ="copyFile")
+    public void copyFile(ResourceRequest request, ResourceResponse response){
+	    try {
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            Map param = RequestUtil.getParameterMap(request);
+            
+            User user = PortalUtil.getUser(request);
+            long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
+            
+            Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+            String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+            
+            String icebreakerToken = MyFileIcebreakerTokenUtil.getOrCreateToken(groupId, user).getVcToken();
+            
+            int responseStatus = 0;
+            
+            String userScreenName = "";
+            if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.ADMINISTRATOR)){
+                userScreenName = (String)thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+            }else{
+                userScreenName = String.valueOf(user.getScreenName());
+            }
+            
+            responseStatus = MyFileIcebreakerUtil.copyFile(icebreakerUrl, icebreakerToken, param, userScreenName);
+            
+            System.out.println("responseStatus : " + responseStatus);
+            JSONObject json = new JSONObject();
+            json.put("status", responseStatus);
+            
+            response.setContentType("application/json; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.write(json.toString());
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 	
 }

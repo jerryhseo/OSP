@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -264,7 +264,7 @@ public interface ScienceAppFavoriteLocalService extends BaseLocalService,
 			org.kisti.edison.science.NoSuchScienceAppFavoriteException;
 
 	/**
-	* 즐겨찾기앱  리스트 조회 사이트 카테고리 생성하여 조회
+	* 利먭꺼李얘린�� 由ъ뒪��議고쉶 �ъ씠��移댄뀒怨좊━ �앹꽦�섏뿬 議고쉶
 	*
 	* @param companyGroupId
 	* @param groupId
@@ -285,8 +285,7 @@ public interface ScienceAppFavoriteLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 카테고리 배열 생성 통합검색은 사용 안함. 콘텐츠는 포탈에서는 카테고리별로 조회하지 않으므로 parentCategory 가 0인
-	* 사이트(포탈)에 대해서 null을 반환함.
+	* 移댄뀒怨좊━ 諛곗뿴 �앹꽦 �듯빀寃�깋���ъ슜 �덊븿. 肄섑뀗痢좊뒗 �ы깉�먯꽌��移댄뀒怨좊━蹂꾨줈 議고쉶�섏� �딆쑝誘�줈 parentCategory 媛�0��     * �ъ씠���ы깉)����빐��null��諛섑솚��
 	*
 	* @param companyGroupId
 	* @param groupId

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -302,6 +302,13 @@ public class ScienceAppOutputPortsLocalServiceUtil {
 	public static long getOutPortsCountByPotyTypeId(long portTypeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getOutPortsCountByPotyTypeId(portTypeId);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
+		long scienceAppId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().portAppList(scienceAppId, locale);
 	}
 
 	public static void clearService() {

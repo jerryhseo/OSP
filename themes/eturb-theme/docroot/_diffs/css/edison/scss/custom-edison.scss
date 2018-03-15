@@ -1,0 +1,16 @@
+.edison-custom{
+	@media (min-width: $screen-lg-min) {
+		.navbar{
+			margin-bottom: 0px;
+		}
+	}
+}
+
+.edison{
+	@media (min-width: $screen-lg-min) {
+		.container{
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	}
+}

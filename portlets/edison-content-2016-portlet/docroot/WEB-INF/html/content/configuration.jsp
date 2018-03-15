@@ -1,12 +1,118 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<%-- <script type="text/javascript"  src="${contextPath}/js/jquery-1.10.2.min.js"></script> --%>
-<%-- <script type="text/javascript"  src="${contextPath}/js/jquery-ui.min.js"></script> --%>
-<%-- <script type="text/javascript"  src="${contextPath}/js/main.js"></script> --%>
-<%-- <link type="text/css" rel="stylesheet" href="${contextPath}/css/jquery/jquery-ui.theme.min.css" media="screen"/> --%>
-<%-- <link type="text/css" rel="stylesheet" href="${contextPath}/css/jquery/jquery-ui.min.css" media="screen"/> --%>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
+
+<style>
+body > li {
+  width: 177px;
+  margin: 5px;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  list-style-type: none;
+  list-style-position: inside;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc !important;
+  background-color: #fafafa !important;
+  color: #bbb !important;
+}
+.listActive {
+  border: 1px solid #ccc;
+  background-color: #fcfcfc;
+  padding: 0.5em 0 3em 0 !important;
+}
+.placeholder {
+  list-style-type: none;
+  text-align: center;
+  font-style: italic;
+  border: 1px dashed #ddd !important;
+  background-color: #fff !important;
+  color: #aaa !important;
+}
+.dismiss {
+  float: right;
+  position: relative;
+  top: -8px;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none !important;
+  color: #468847;
+}
+ul.source, ul.target {
+  min-height: 50px;
+  margin: 0px 25px 10px 0px;
+  padding: 2px;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  list-style-type: none;
+  list-style-position: inside;
+}
+ul.source {
+  border-color: #f8e0b1;
+}
+ul.target {
+  border-color: #add38d;
+}
+.source li, .target li {
+  margin: 5px;
+  padding: 5px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  cursor: move;
+}
+.source li {
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  color: #c09853;
+}
+.target li {
+  background-color: #ebf5e6;
+  border: 1px solid #d6e9c6;
+  color: #468847;
+}
+.sortable-dragging {
+  border-color: #ccc !important;
+  background-color: #fafafa !important;
+  color: #bbb !important;
+}
+.sortable-placeholder {
+  height: 40px;
+}
+.source .sortable-placeholder {
+  border: 2px dashed #f8e0b1 !important;
+  background-color: #fefcf5 !important;
+}
+.target .sortable-placeholder {
+  border: 2px dashed #add38d !important;
+  background-color: #f6fbf4 !important;
+}
+.sideBySide{
+	width:35%;
+	margin:auto;
+}
+.left, .right{
+	width:50%;
+	float:left;
+}
+
+.left h4, .right h4{
+	text-align: center;
+}
+
+.aui input[type="text"]{
+	width: 50%;
+}
+</style>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
@@ -24,8 +130,8 @@
 <aui:form action="<%= configurationURL %>" method="post" name="configForm">
 	<input name="<portlet:namespace/>tabUseValue" id="<portlet:namespace/>tabUseValue"  type="hidden" />
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" >
+	<div class="table1_list borderno table-responsive panel edison-panel">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 		<colgroup>
 			<col width="25%" />
 			<col width="25%" />
@@ -55,18 +161,37 @@
 					String selectedY = value.equals("Y") ? "selected" : "";
 					String selectedN = value.equals("N") ? "selected" : "";
 					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
-					out.print("	<td>"+j+"</td>\n");
-					out.print("	<td>portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-					out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
+					out.print("	<td class=\"center\">"+j+"</td>\n");
+					out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
+					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
 					out.print("</tr>\n");
+					
+					j=j+1;
+				} else if(key.equals("tabViewYn")){
+					tabViewCount++;
+					String selectedY = value.equals("Y") ? "selected" : "";
+					String selectedN = value.equals("N") ? "selected" : "";
+					out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_"+j+"\">\n");
+					out.print("	<td class=\"center\">"+j+"</td>\n");
+					out.print("	<td class=\"center\">tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
+					out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'"+value+"');\" style=\"width:220px;\" ><option value=\"Y\" "+selectedY+" >Y</option><option value=\"N\" "+selectedN+" >N</option></select>\n");
+					out.print("</tr>\n");
+					
+					j=j+1;
 				}
-				j=j+1;
 			}
 		 	if(tabViewCount == 0){
 		 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
-				out.print("	<td>1</td>\n");
-				out.print("	<td>portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
-				out.print("	<td><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
+				out.print("	<td class=\"center\">1</td>\n");
+				out.print("	<td class=\"center\">portalYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"portalYn\" size=\"20\"></td>\n");
+				out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\" name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" style=\"width:220px;\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
+				out.print("</tr>\n");
+		 	}
+		 	if(tabViewCount == 0){
+		 		out.print("<tr id=\"_"+PortalUtil.getPortletId(request)+"_tr_1\">\n");
+				out.print("	<td class=\"center\">2</td>\n");
+				out.print("	<td class=\"center\">tabViewYn<input type=\"hidden\" id=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" name=\"_"+PortalUtil.getPortletId(request)+"_keyTextBox\" value=\"tabViewYn\" size=\"20\"></td>\n");
+				out.print("	<td class=\"center\"><select id=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" class=\"btn btn-default\"  name=\"_"+PortalUtil.getPortletId(request)+"_valueTextBox\" onchange=\"changeTabViewYn(this,'');\" style=\"width:220px;\" ><option value=\"Y\">Y</option><option value=\"N\" selected=\"selected\" >N</option></select>\n");
 				out.print("</tr>\n");
 		 	}
 		%>
@@ -74,15 +199,150 @@
 		</table>
 	</div>
 <h1 class="h40"></h1>
+
+<div class="sideBySide">
+	<div class="left">
+		<h4><liferay-ui:message key='edison-content-config-select-group'/></h4>
+			<ul class="target connected">
+				<c:forEach var="tab" items="${tabGroup }">
+					<li value="${tab.groupId }">${tab.name }<a href='#' class='dismiss'>x</a></li>	
+				</c:forEach>
+			</ul>
+	</div>
+	<div class="right">
+		<h4><liferay-ui:message key='edison-content-config-all-group'/></h4>
+		<ul class="source connected">
+			<c:forEach var="group" items="${groupList }">
+				<li value="${group.groupId }">${group.name }</li>	
+			</c:forEach>
+		</ul>
+	</div>
+	<div style="clear:both"></div>
+	<h1 class="h40"></h1>
+</div>
+
 <div>
-	<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
+	<input type="button" class="btn btn-primary" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>
 </div>
 </aui:form>
 <script>
-function <portlet:namespace/>doSubmit(){
+/* function <portlet:namespace/>doSubmit(){
 	
 	$("form[name=<portlet:namespace/>configForm]").submit();
 	
+} */
+
+var items = [];
+$(function () {
+	/* $(".source, .target").sortable({
+	connectWith: ".connected"
+	}); */
+	
+	$("ul.target").children().each(function() {
+		items.push($(this).prop("value"));
+	});
+	
+	
+	var initTabViewYn = $("select[name*=valueTextBox]").val();
+	if(initTabViewYn == "Y"){
+		$(".sideBySide").show();
+	}else{
+		$(".sideBySide").hide();
+		
+	}
+	
+	
+	$(".source li").draggable({
+		addClasses: false,
+		appendTo: "body",
+		helper: "clone"
+	});
+	
+	$(".target").droppable({
+		addClasses: false,
+		activeClass: "listActive",
+		accept: ":not(.ui-sortable-helper)",
+		drop: function(event, ui) {
+			check = updateValues("add", ui.draggable.val());
+			if(check){
+				$(this).find(".placeholder").remove();
+				var link = $("<a href='#' class='dismiss'>x</a>");
+				var list = $("<li></li>").attr("value",ui.draggable.val()).text(ui.draggable.text());
+				$(list).append(link);
+				$(list).appendTo(this);
+			}
+		}
+	}).on("click", ".dismiss", function(event) {
+		check = updateValues("delete", $(this).parent().prop("value"));
+		if(check){
+			event.preventDefault();
+			$(this).parent().remove();
+		}
+	}).sortable({
+		items: "li:not(.placeholder)",
+		sort: function() {
+			$(this).removeClass("listActive");
+		},
+		update: function() {
+			updateValues("sort");
+		}
+	});
+
+	
+	
+});
+
+
+function updateValues(mode, targetValue) {
+	var index = items.indexOf(targetValue);
+	var checkExist = true;
+	if(mode == "add"){
+		if(index == -1){
+			items.push(targetValue);
+		}else{
+			alert(Liferay.Language.get('edison-content-config-register-groupid-alret'));
+			checkExist = false;
+		}
+	}else if(mode == "delete"){
+		if(index != -1){
+			items.splice(index, 1);
+		}
+	}else if(mode == "sort"){
+		items = [];
+		
+		$("ul.target").children().each(function() {
+			items.push($(this).prop("value"));
+		});
+	}
+
+	return checkExist;
+};
+
+function <portlet:namespace/>doSubmit(){
+	if(items != null && items.length > 0){
+		$("#<portlet:namespace/>tabUseValue").val(items);
+	}
+	
+	var initTabViewYn = $("select[name*=valueTextBox]").val();
+	
+	if(initTabViewYn == "Y"){
+		if(items.length == 0){
+			alert(Liferay.Language.get('edison-content-config-no-register-groupid-alret'));
+			return false;
+		}
+	}
+	
+	$("form[name=<portlet:namespace/>configForm]").submit();
+	
+}
+function changeTabViewYn(obj, value){
+	tabViewYn = $(obj).val();
+	
+	if(tabViewYn == "Y"){
+		$(".sideBySide").show();
+	}else if(tabViewYn  == "N"){
+		$(".sideBySide").hide();
+	}
 }
 
 </script>

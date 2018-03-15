@@ -65,81 +65,107 @@
 		background: #606060;
 		border: solid 1px #6a6a6b;
 	}
+	
+	.table3_list{line-height:2.0em; width:100%; border-top:2px solid #c2c2c2; border-collapse:collapse; font-size:14px;}
+	.borderno{border-top:0px solid #6a8ec6;}
+	.table3_list a{color:#777777; text-decoration:none;} 
+	.table3_list a:hover{color:#4688b2; text-decoration:none;}
+	.table3_list caption {text-align:right; padding-right:15px; color:#777;width:100%; padding-bottom:5px;}
+	.table3_list th {border-bottom:1px solid #b4b4b4; padding:8px; color:#383838; font-weight:600; background-color:#f7f7f7; text-align:center; font-size:15px;}
+	.table3_list td.bottom {border-bottom:1px solid #9397AE;}
+	.table3_list td {border-right:0px solid #e2e2e2; color:#777777; border-bottom:1px solid #ccc; padding:8px; vertical-align:middle;}
+	.table3_list td img{vertical-align:middle;}
+	.tablebgtr{background-color:#fafafc;}
+	.tablebgtr01{background-color:#f0f1f5;}
+	.tablebgtr02{background-color:#f7f7f7;}
+	.tablebgtr03{background-color:#fbfbfb;}
+	.tablebg01{background-color:#ededed;}
+	.table3_list td.title{font-weight:500; color:#383838; font-size:17px;}
+	.table3_list td.title1{font-size:15px; font-weight:600; background-color:#f7f7f7; color:#383838;}
+	.table3_list td.title2{font-size:15px; font-weight:600; background-color:#f7f7f7; color:#383838; padding-left:22px;}
+	
+	.buttonbox08 {
+		margin: 0 auto;
+		overflow: hidden;
+		padding-top: 15px;
+		padding-bottom: 10px;
+		text-align: center;
+	}
 </style>
 <portlet:actionURL var="findIdURL">
 	<portlet:param name="struts_action" value="/login/find_id" />
 </portlet:actionURL>
-
-<aui:form action="<%= findIdURL %>" method="post" name="fm">
-	<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
-	<!-- 	해당 주석은 아이디 찾기 성공 후 parameter에 p_p_id=58이 들어가 있어서 로그인 후 메인 화면에 로그인 포틀릿 노출 -->
-<!-- 	<portlet:renderURL var="redirectURL" /> -->
-<%-- 	<aui:input name="redirect" type="hidden" value="<%= redirectURL %>" /> --%>
-	
-	<liferay-ui:error exception="<%= CaptchaTextException.class %>" message="text-verification-failed" />
-	
-	<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="the-email-address-you-requested-is-not-registered-in-our-database"/>
-	<liferay-ui:error exception="<%= UserEmailAddressException.class %>" message="please-enter-a-valid-email-address" />
-	<liferay-ui:error exception="<%= UserActiveException.class %>" message="your-account-is-not-active" />
-	<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
-	<liferay-ui:error exception="<%= AccountNameException.class %>" message="the-name-you-requested-is-not-registered-in-our-database" />
-	<liferay-ui:error exception="<%= RolePermissionsException.class %>" message="you-cannot-use-the-permissions-of-this-role" />
-	
-	
-	<div class="logintitlebox">
-			<div class="logintitle"><liferay-ui:message key="forgot-id"/></div>
-			<div class="loginintro"><liferay-ui:message key="edison-forgot-find-message"/></div>
-	</div>
-	<div class="h20"></div>
-	<div style="clear:left;"></div>
-	<div class="joinbox">
-		<div class="jointitle"><liferay-ui:message key="forgot-id"/></div>
-		<div class="table3_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tbody>
-					<tr>
-						<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-email" /></td>
-						<td width="*">
-							<aui:input label="" name="emailAddress" size="50" type="text" value="">
-								<aui:validator name="required"/>
-								<aui:validator name="email" />
-							</aui:input>
-						</td>
-					</tr>
-					<tr>
-						<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-name" /></td>
-						<td width="*">
-							<aui:input label="" name="firstName" size="40" type="text" value="">
-								<aui:validator name="required"/>
-								<aui:validator name="maxLength">32</aui:validator>
-							</aui:input>
-						</td>
-					</tr>
-					<c:if test="<%= PropsValues.CAPTCHA_CHECK_PORTAL_SEND_PASSWORD %>">
+<div class="container">
+	<aui:form action="<%= findIdURL %>" method="post" name="fm">
+		<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
+		<!-- 	해당 주석은 아이디 찾기 성공 후 parameter에 p_p_id=58이 들어가 있어서 로그인 후 메인 화면에 로그인 포틀릿 노출 -->
+	<!-- 	<portlet:renderURL var="redirectURL" /> -->
+	<%-- 	<aui:input name="redirect" type="hidden" value="<%= redirectURL %>" /> --%>
+		
+		<liferay-ui:error exception="<%= CaptchaTextException.class %>" message="text-verification-failed" />
+		
+		<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="the-email-address-you-requested-is-not-registered-in-our-database"/>
+		<liferay-ui:error exception="<%= UserEmailAddressException.class %>" message="please-enter-a-valid-email-address" />
+		<liferay-ui:error exception="<%= UserActiveException.class %>" message="your-account-is-not-active" />
+		<liferay-ui:error exception="<%= UserLockoutException.class %>" message="this-account-has-been-locked" />
+		<liferay-ui:error exception="<%= AccountNameException.class %>" message="the-name-you-requested-is-not-registered-in-our-database" />
+		<liferay-ui:error exception="<%= RolePermissionsException.class %>" message="you-cannot-use-the-permissions-of-this-role" />
+		
+		
+		<div class="logintitlebox">
+				<div class="logintitle"><liferay-ui:message key="forgot-id"/></div>
+				<div class="loginintro"><liferay-ui:message key="edison-forgot-find-message"/></div>
+		</div>
+		<div class="h20"></div>
+		<div style="clear:left;"></div>
+		<div class="joinbox">
+			<div class="jointitle"><liferay-ui:message key="forgot-id"/></div>
+			<div class="table3_list">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tbody>
 						<tr>
-							<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-captcha" /></td>
-							<td>
-								<portlet:resourceURL var="captchaURL">
-									<portlet:param name="struts_action" value="/login/captcha" />
-								</portlet:resourceURL>
-								
-								<aui:column>
-									<liferay-ui:captcha url="<%= captchaURL %>" />
-								</aui:column>
+							<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-email" /></td>
+							<td width="*">
+								<aui:input label="" name="emailAddress" size="50" type="text" value="">
+									<aui:validator name="required"/>
+									<aui:validator name="email" />
+								</aui:input>
 							</td>
 						</tr>
-					</c:if>
-				</tbody>
-			</table>
+						<tr>
+							<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-name" /></td>
+							<td width="*">
+								<aui:input label="" name="firstName" size="40" type="text" value="">
+									<aui:validator name="required"/>
+									<aui:validator name="maxLength">32</aui:validator>
+								</aui:input>
+							</td>
+						</tr>
+						<c:if test="<%= PropsValues.CAPTCHA_CHECK_PORTAL_SEND_PASSWORD %>">
+							<tr>
+								<td width="18%" class="title2"><liferay-ui:message key="edison-create-account-field-title-captcha" /></td>
+								<td>
+									<portlet:resourceURL var="captchaURL">
+										<portlet:param name="struts_action" value="/login/captcha" />
+									</portlet:resourceURL>
+									
+									<aui:column>
+										<liferay-ui:captcha url="<%= captchaURL %>" />
+									</aui:column>
+								</td>
+							</tr>
+						</c:if>
+					</tbody>
+				</table>
+			</div>
+			<div style="clear:left;"></div>
+			<div class="buttonbox08">
+				<aui:button type="submit" value="<%=sendEmailMessage%>" cssClass="btn btn-primary"/>
+				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-cancel" />" class="btn btn-default" onclick="cancle();">
+			</div>
 		</div>
-		<div style="clear:left;"></div>
-		<div class="buttonbox08">
-			<aui:button type="submit" value="<%=sendEmailMessage%>" cssClass="button08"/>
-			<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-cancel" />" class="button08" onclick="cancle();">
-		</div>
-	</div>
-				
-</aui:form>
+	</aui:form>
+</div>
 <script type="text/javascript">
 function cancle(){
 	window.history.back();

@@ -122,7 +122,7 @@ public class DataTypeEditorController{
 		
 		//DATA SEARCH
 		int curPage = Integer.parseInt(CustomUtil.strNull(params.get("p_curPage"), "1"));
-		int linePerPage = 10;
+		int linePerPage = 15;
 		int pagePerBlock = 5;
 		int begin = (curPage - 1) * linePerPage;
 		int end = begin+linePerPage;
@@ -181,12 +181,12 @@ public class DataTypeEditorController{
                 //String[] editorTypes = {ScienceAppConstants.EDITOR_TYPE_FILE,
                     ///ScienceAppConstants.EDITOR_TYPE_INPUT_DECK, ScienceAppConstants.EDITOR_TYPE_TEXT};
 				List<Map<String, Object>> editorList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
-				    groupId, locale, 0, editorAppTypes, null, "", "", "1901004", 0, 0,true);
+				    groupId, locale, 0, editorAppTypes, null, null, "1901004", 0, 0,true);
 				
 				//EDISON ANALYZER 목록 조회
 				String[] analyzerAppTypes = {ScienceAppConstants.APP_TYPE_ANALYZER};
 				List<Map<String, Object>> analyzerList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
-				    groupId, locale, 0, analyzerAppTypes, null, "", "", "1901004", 0, 0,true);
+				    groupId, locale, 0, analyzerAppTypes, null, null, "1901004", 0, 0,true);
 				
 				model.addAttribute("editorList", editorList);
 				model.addAttribute("analyzerList", analyzerList);

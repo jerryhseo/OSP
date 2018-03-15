@@ -165,6 +165,7 @@ public class VirtualLabClassSurveyController {
 			long virtualLabId = ParamUtil.get(request, "virtualLabId", 0);
 			
 			model.addAttribute("classId",classId);
+			model.addAttribute("virtualLabId",virtualLabId);
 			model.addAttribute("surveyMap",surveyMap);
 			model.addAttribute("surveyQuestionList",surveyQuestionList);
 			

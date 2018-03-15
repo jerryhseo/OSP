@@ -14,7 +14,7 @@
 	String searchSwTitle = LanguageUtil.get(themeDisplay.getLocale(), "edison-table-list-header-app-title");
 	String searchOrgNm = LanguageUtil.get(themeDisplay.getLocale(), "edison-table-list-header-orgNm");
 	String searchUserNm = LanguageUtil.get(themeDisplay.getLocale(), "edison-table-list-header-name");
-	String searchAll = "("+searchSwTitle+"+"+searchSwNm+"+"+searchOrgNm+"+"+searchUserNm+")";
+	String searchSwNameAndTitle = searchSwNm+"("+searchSwTitle+")";
 	
 	
 	//Tab Setting
@@ -61,124 +61,106 @@
 				margin-right: 10px
 			}
 		</style>
-		
-			<!-- 페이지 타이틀 & 네비게이션 -->
 			
-			<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<div class="virtitle"><liferay-ui:message key='edison-appstore-myapp-list' /></div>
-			</div>
-			<div class="h20"></div>
-			
-			<div class="contabmenu"> 
+			<div class="contabmenu clearfix"> 
 				<edison-ui:tabs names="<%=tabNames%>" url="<%=swTabSearchURL%>" tabsValues="owner_sw,manager_sw" value="<%=listTabValue%>" param="tabValue" minwidth="230"/>
 			</div>
-			<div class="tabletopsearchbox">
-				<div class="search">
-					<div class="apptype">
-						<select name="<portlet:namespace/>searchAppType" id="<portlet:namespace/>searchAppType" onChange="<portlet:namespace/>searchList()"  style="width:150px; line-height: 25px;">
-							<option value="ALL"><liferay-ui:message key='edison-appstore-type' /></option>
-							<option value="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" <c:if test="${searchAppType == 'Solver' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-solver' /></option>
-							<option value="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" <c:if test="${searchAppType == 'Editor' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-editor' /></option>
-							<option value="<%=ScienceAppConstants.APP_TYPE_ANALYZER %>" <c:if test="${searchAppType == 'Analyzer' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-analyzer' /></option>
-							<option value="<%=ScienceAppConstants.APP_TYPE_CONVERTER  %>" <c:if test="${searchAppType == 'Converter' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-converter' /></option>
-						</select>
+			<!-- 페이지 타이틀 & 네비게이션 -->
+			<div class="table-responsive panel filterable edison-panel" id="<portlet:namespace/>appFilterTable">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-appstore-myapp-list' />
+					</h3>
+					<div class="btn-group pull-right">
+						<button class="btn btn-default" onClick="<portlet:namespace/>searchListAll()">Clear</button>
+					 	<button class="btn btn-default btn-filter"><i class="icon-filter"></i>Filter</button>
 					</div>
-					<div class="searchbox">
-						<input type="text" id="<portlet:namespace/>searchValue" name="<portlet:namespace/>searchValue" value="${searchValue }" onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchList();" autocomplete="off"/>
-						<input type="button" onClick="<portlet:namespace/>searchList()" class="btnsearch" />
-					</div>
-					<input type="button" onClick="<portlet:namespace/>searchListAll()" class="button01" value="<liferay-ui:message key='edison-button-all-search' />" />
 				</div>
 				
-				<div class="search_toggle" style="padding:7px;display:none;width:98%;height:100%;background-color: #FFFFFF;border: solid 2px #29547e;margin: 0 auto;color: #777;" >
-					<fieldset class="group" style="padding-left: 20px;">
-						<aui:input name="searchOption" type="radio" label="<%=searchAll%>" cssClass="searchoption" value="APP_MANAGER_SEARCH_ALL" checked="true"/>
-						<aui:input name="searchOption" type="radio" label="<%=searchSwNm%>" cssClass="searchoption" value="SWNM" />
-						<aui:input name="searchOption" type="radio" label="<%=searchSwTitle%>" cssClass="searchoption" value="SWTITLE"/>
-						<aui:input name="searchOption" type="radio" label="<%=searchOrgNm%>" cssClass="searchoption" value="SWORGNM"/>
-						<aui:input name="searchOption" type="radio" label="<%=searchUserNm%>" cssClass="searchoption" value="SWUSERNM"/>
-					</fieldset>
-				</div>
-			</div>			
-
-			<div class="table7_list" >	
-				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<table class = "table table-bordered table-hover edison-table">
 					<thead>
-						<tr style="word-break: break-word;">
+						<tr class="filters">
 							<th width="5%"><liferay-ui:message key='edison-table-list-header-index' /></th>
-							<th width="10%"><liferay-ui:message key="edison-table-list-header-type" /></th>
-							<th width="*"><liferay-ui:message key="edison-appstore-solver-name" />(<liferay-ui:message key="edison-table-list-header-app-title" />)</th>
-							<th width="6%"><liferay-ui:message key='edison-virtuallab-version' /></th>
-							<th width="20%"> 
-								<select name="<portlet:namespace/>searchStatus" id="<portlet:namespace/>searchStatus" onChange="<portlet:namespace/>searchList()"  style="width:150px;">
-									<option value=""><liferay-ui:message key='edison-virtuallab-confirm-status' /></option>
+							<th width="10%">
+								<select name="<portlet:namespace/>searchAppType" id="<portlet:namespace/>searchAppType" onChange="<portlet:namespace/>dataSearchList();" class="form-control filter" disabled>
+									<option value=""><liferay-ui:message key="edison-table-list-header-type" /></option>
+									<option value="<%=ScienceAppConstants.APP_TYPE_SOLVER%>" <c:if test="${searchAppType == 'Solver' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-solver' /></option>
+									<option value="<%=ScienceAppConstants.APP_TYPE_EDITOR%>" <c:if test="${searchAppType == 'Editor' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-editor' /></option>
+									<option value="<%=ScienceAppConstants.APP_TYPE_ANALYZER %>" <c:if test="${searchAppType == 'Analyzer' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-analyzer' /></option>
+									<option value="<%=ScienceAppConstants.APP_TYPE_CONVERTER  %>" <c:if test="${searchAppType == 'Converter' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-type-converter' /></option>
+								</select>
+							</th>
+							<th width="*">
+								<aui:input name="likeSwNameAndSwTitle" type="text" placeholder="<%=searchSwNameAndTitle%>" label="" cssClass="form-control filter"/>
+							</th>
+							<th width="13%"> 
+								<select name="<portlet:namespace/>searchStatus" id="<portlet:namespace/>searchStatus" onChange="<portlet:namespace/>dataSearchList();" class="form-control filter" disabled>
+									<option value=""><liferay-ui:message key='status' /></option>
 									<option value="1901001" <c:if test="${searchStatus == '1901001' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-write' /></option>
 									<option value="1901002" <c:if test="${searchStatus == '1901002' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-request' /></option>
 									<option value="1901003" <c:if test="${searchStatus == '1901003' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-private' /></option>
 									<option value="1901004" <c:if test="${searchStatus == '1901004' }"> selected</c:if> ><liferay-ui:message key='edison-appstore-status-service' /></option>
 								</select>
 							</th>
-							<th width="20%"><liferay-ui:message key='edison-table-list-header-name' />(<liferay-ui:message key='edison-table-list-header-orgNm' />)</th>
+							<th width="10%">
+<%-- 								<input type="text" class="form-control filter" placeholder="<liferay-ui:message key='edison-table-list-header-name' />" disabled> --%>
+								<aui:input name="likeUserName" type="text" placeholder="<%=searchUserNm%>" label="" cssClass="form-control filter"/>
+							</th>
+							<th width="15%">
+<%-- 								<input type="text" class="form-control filter" placeholder="<liferay-ui:message key='edison-table-list-header-orgNm' />" disabled> --%>
+								<aui:input name="likeOrgName" type="text" placeholder="<%=searchOrgNm%>" label="" cssClass="form-control filter"/>
+							</th>
 							<th width="12%"><liferay-ui:message key='edison-appstore-last-modified' /></th>
 						</tr>
 					</thead>
 					<tbody>
-					<c:choose>
-						<c:when test="${!empty swList}">
-							<c:set value="${pageNum }" var="num"></c:set>
-							<c:forEach items="${swList}" var="solverMap" varStatus="status" >
-								<tr style="word-break: break-all;cursor:pointer;"
-									<c:if test="${status.count%2 == 1}"> class="backgroundOdd" </c:if>
-									onClick="<portlet:namespace/>detailView('${solverMap.scienceAppId}');"
-								>
-									<td class="TC">${num}</td>
-									<td class="TC">${solverMap.appType}</td>
-									<td style="text-align:left;">${solverMap.name}(${solverMap.title})</td>
-									<td style="text-align:center;">${solverMap.version}</td>
-									<td style="width: 155px;">
-										<div>
-											<c:choose>
-												<c:when test="${solverMap.status=='1901001'}"><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_001_on.png" width="35" height="35" style="vertical-align: middle;"/></c:when>
-												<c:otherwise><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_001_off.png" width="35" height="35" style="vertical-align: middle;"/></c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="${solverMap.status=='1901002'}"><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_002_on.png" width="35" height="35" style="vertical-align: middle;"/></c:when>
-												<c:otherwise><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_002_off.png" width="35" height="35" style="vertical-align: middle;"/></c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="${solverMap.status=='1901003'}"><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_003_on.png" width="35" height="35" style="vertical-align: middle;"/></c:when>
-												<c:otherwise><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_003_off.png" width="35" height="35" style="vertical-align: middle;"/></c:otherwise>
-											</c:choose>
-											<c:choose>
-												<c:when test="${solverMap.status=='1901004'}"><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_004_on.png" width="35" height="35" style="vertical-align: middle;"/></c:when>
-												<c:otherwise><img src="${contextPath}/images/toolkit/<%=themeDisplay.getLanguageId() %>/TKT_01_004_off.png" width="35" height="35" style="vertical-align: middle;"/></c:otherwise>
-											</c:choose>
-										</div>
-									</td>
-									<td style="text-align: left;">${solverMap.firstName}(${solverMap.affiliation})</td>
-									<td style="text-align: center;">
-										<fmt:formatDate pattern="yyyy-MM-dd"   value="${solverMap.modifiedDate}" />
-									</td>
+						<c:choose>
+							<c:when test="${!empty swList}">
+								<c:set value="${pageNum }" var="num"></c:set>
+								<c:forEach items="${swList}" var="solverMap" varStatus="status" >
+									<tr onClick="<portlet:namespace/>detailView('${solverMap.scienceAppId}');">
+										<td class="center">${num}</td>
+										<td class="center">${solverMap.appType}</td>
+										<td>${solverMap.name}_${solverMap.version}<br/>(${solverMap.title})</td>
+										<td class="center">
+											<c:set value="label label-success" var="statusClass"></c:set>
+											<c:if test="${solverMap.status=='1901003'}">
+												<c:set value="label label-danger" var="statusClass"></c:set>
+											</c:if>
+											<c:if test="${solverMap.status=='1901004'}">
+												<c:set value="label label-primary" var="statusClass"></c:set>
+											</c:if>
+											
+											<span class="${statusClass}">${solverMap.statusName}</span>
+										</td>
+										<td>${solverMap.firstName}</td>
+										<td>${solverMap.affiliation}</td>
+										<td class="center">
+											<fmt:formatDate pattern="yyyy-MM-dd"   value="${solverMap.modifiedDate}" />
+										</td>
+									</tr>
 									<c:set value="${num-1 }" var="num"></c:set>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<tr>
+									<td colspan="7" class="center"><liferay-ui:message key='edison-there-are-no-data' /></td>
 								</tr>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<tr>
-								<td colspan="7" class="TC"><liferay-ui:message key='edison-there-are-no-data' /></td>
-							</tr>
-						</c:otherwise>
-					</c:choose>
+							</c:otherwise>
+						</c:choose>
 					</tbody>
 				</table>
-			
-				<div class="paging">${pagingStr}</div>
-				<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;">
-					<input type="button" class="button0801" onClick="<portlet:namespace/>addApp('true');" value="<liferay-ui:message key='edison-appstore-sw-register' />" />
-					<input type="button" class="button0801" onClick="<portlet:namespace/>addApp('');" value="<liferay-ui:message key='edison-appstore-sw-editor-register' />" />
+				<div class="row" style="margin: 0px;">
+					<div class="col-md-6 text-center">${pagingStr}</div>
+					<div class="col-md-6" style="margin: 18px 0px;">
+						<div class="btn-group pull-right">
+							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('true');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-register' /></span></button>
+							<button class="btn btn-default" onClick="<portlet:namespace/>addApp('');"><span class="icon-edit">   <liferay-ui:message key='edison-appstore-sw-editor-register' /></span></button>
+						</div>
+					</div>
 				</div>
 			</div>
-			
 			
 			<script type="text/javascript">
 			function <portlet:namespace/>addApp(isPort){
@@ -197,31 +179,15 @@
 			
 				function <portlet:namespace/>searchListAll(){
 					$("#<portlet:namespace/>searchStatus").val("");
-					$("#<portlet:namespace/>searchValue").val("");
 					$("#<portlet:namespace/>searchAppType").val("");
+					$("#<portlet:namespace/>likeSwNameAndSwTitle").val("");
+					$("#<portlet:namespace/>likeUserName").val("");
+					$("#<portlet:namespace/>likeOrgName").val("");
 					location.href="<%=swSearchURL %>"
 				}
 				
-				function <portlet:namespace/>searchList(scienceAppId){
-					var searchParameter = "";
-					if($("#<portlet:namespace/>searchStatus").val()!=""){
-						searchParameter += "&<portlet:namespace/>searchStatus="+$("#<portlet:namespace/>searchStatus").val();
-					}
-					
-					if($("#<portlet:namespace/>searchAppType").val()!=""){
-						searchParameter += "&<portlet:namespace/>searchAppType="+$("#<portlet:namespace/>searchAppType").val();
-					}
-					
-					if($("#<portlet:namespace/>searchValue").val()!=""){
-						searchParameter += "&<portlet:namespace/>searchValue="+$("#<portlet:namespace/>searchValue").val();
-			 			var searchOption_val = $(':radio[name="<portlet:namespace/>searchOption"]:checked').val();
-			 			searchParameter += "&<portlet:namespace/>searchOption="+searchOption_val;
-					}
-					
-					location.href="<%=swSearchURL %>"+searchParameter;
-				}	
-			
 				function <portlet:namespace/>dataSearchList(p_curPage){
+					if(p_curPage==null){p_curPage=1;}
 					var searchParameter = "&<portlet:namespace/>p_curPage="+p_curPage;
 					
 					if($("#<portlet:namespace/>searchStatus").val()!=""){
@@ -232,41 +198,45 @@
 						searchParameter += "&<portlet:namespace/>searchAppType="+$("#<portlet:namespace/>searchAppType").val();
 					}
 					
-					if($("#<portlet:namespace/>searchValue").val()!=""){
-						searchParameter += "&<portlet:namespace/>searchValue="+$("#<portlet:namespace/>searchValue").val();
-			 			var searchOption_val = $(':radio[name="<portlet:namespace/>searchOption"]:checked').val();
-			 			searchParameter += "&<portlet:namespace/>searchOption="+searchOption_val;
+					if($("#<portlet:namespace/>likeSwNameAndSwTitle").val()!=""){
+						searchParameter += "&<portlet:namespace/>likeSwNameAndSwTitle="+$("#<portlet:namespace/>likeSwNameAndSwTitle").val();
+					}
+					
+					if($("#<portlet:namespace/>likeUserName").val()!=""){
+						searchParameter += "&<portlet:namespace/>likeUserName="+$("#<portlet:namespace/>likeUserName").val();
+					}
+					
+					if($("#<portlet:namespace/>likeOrgName").val()!=""){
+						searchParameter += "&<portlet:namespace/>likeOrgName="+$("#<portlet:namespace/>likeOrgName").val();
 					}
 					
 					location.href="<%=swSearchURL %>"+searchParameter;	
 				}
 				
 				$(document).ready(function(){
-					(function(jQuery) {
-						jQuery.fn.<portlet:namespace/>clickoutside = function(callback) {
-							var outside = 1, self = $(this);
-								self.cb = callback;
-								this.click(function() {
-									outside = 0;
-								});
-							$(document).click(function() {
-								outside && self.cb();
-								outside = 1;
-								});
-							return $(this);
-						}
-					})(jQuery);
+					$('.filterable .filters input').attr("disabled","disabled");
 					
-					$("#<portlet:namespace/>searchValue").focus(function(){
-						if($(".search_toggle").is(":hidden")){
-							$('.search_toggle').slideToggle('fast');
-						}
-					});
+					$('.filterable .filters input').keyup(function(e){
+				        /* Ignore tab key */
+				        var code = e.keyCode || e.which;
+				        if (code == '9'){
+				        	return;
+				        } else if(code == '13'){
+				        	<portlet:namespace/>dataSearchList();
+				        }
+				    });
 					
-					$(".search").<portlet:namespace/>clickoutside(function(){
-						var search_val = $("#<portlet:namespace/>searchValue").val();
-						if(search_val==""&&!$(".search_toggle").is(":hidden")){$('.search_toggle').slideToggle('fast');}
-					});
+					
+					$('.filterable .btn-filter').click(function(){
+				        var $panel = $(this).parents('#<portlet:namespace/>appFilterTable'),
+				        $filters = $panel.find('.filters .filter')
+				        if ($filters.prop('disabled') == true) {
+				            $filters.prop('disabled', false);
+				            $filters.first().focus();
+				        } else {
+				        	$filters.val('').prop('disabled', true);
+				        }
+				    });
 				});
 				
 			

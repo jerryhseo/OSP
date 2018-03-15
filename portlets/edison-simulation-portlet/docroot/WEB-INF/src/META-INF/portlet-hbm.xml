@@ -8,6 +8,7 @@
 	<import class="org.kisti.edison.bestsimulation.model.SimulationJob" />
 	<import class="org.kisti.edison.bestsimulation.model.SimulationJobData" />
 	<import class="org.kisti.edison.bestsimulation.model.SimulationJobStatus" />
+	<import class="org.kisti.edison.bestsimulation.model.SimulationShare" />
 	<import class="org.kisti.edison.bestsimulation.model.UniversityExecute" />
 	<class name="org.kisti.edison.bestsimulation.model.impl.ScienceAppExecuteImpl" table="EDSIM_ScienceAppExecute">
 		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.ScienceAppExecutePK">
@@ -27,6 +28,7 @@
 		<property name="simulationTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="scienceAppName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="scienceAppVersion" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="simulationCreateDt" type="org.hibernate.type.TimestampType" />
 		<property name="cluster" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="classId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
@@ -49,7 +51,6 @@
 			<key-property name="simulationUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 			<key-property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		</composite-id>
-		<property name="simulationJobId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="jobUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="jobStatus" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="jobStartDt" type="org.hibernate.type.TimestampType" />
@@ -80,6 +81,17 @@
 		<property name="jobStartDt" type="org.hibernate.type.TimestampType" />
 		<property name="jobEndDt" type="org.hibernate.type.TimestampType" />
 		<property name="writeDt" type="org.hibernate.type.TimestampType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.SimulationShareImpl" table="EDSIM_SimulationShare">
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.SimulationSharePK">
+			<key-property name="shareSeqno" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="jobSeqNo" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="jobUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="simulationUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="classId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="customId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="simulationShareDt" type="org.hibernate.type.TimestampType" />
 	</class>
 	<class name="org.kisti.edison.bestsimulation.model.impl.UniversityExecuteImpl" table="EDSIM_UniversityExecute">
 		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePK">

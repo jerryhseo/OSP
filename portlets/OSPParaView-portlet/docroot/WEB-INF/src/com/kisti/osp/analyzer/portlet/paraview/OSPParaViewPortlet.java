@@ -9,7 +9,9 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -40,24 +42,18 @@ public class OSPParaViewPortlet extends MVCPortlet {
 
         String targetPath = ParamUtil.getString(resourceRequest, "targetPath");
         String command = ParamUtil.getString(resourceRequest, "command");
-        String action = ParamUtil.getString(resourceRequest, "action", "output");
+        String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType" );
         _log.info("command: "+command);
-        _log.info("action: "+action);
+        _log.info("repositoryType: "+repositoryType);
         _log.info("targetPath: "+targetPath);
         
-        boolean isJobResult = action.equalsIgnoreCase("input") ? false : true;
-        
         if(command.equalsIgnoreCase("GET_ABSOLUTE_PATH")){
-        	String absolutePath = "";
-            try{
-                absolutePath = FileManagementLocalServiceUtil.getAbolutePath(resourceRequest, targetPath, isJobResult);
-            }catch (PortalException | SystemException e){
-                _log.error("GET_ABSOLUTE_PATH: " + targetPath);
-                throw new PortletException();
-            }
-            
-            HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
-            ServletResponseUtil.write(httpResponse, absolutePath);
+        	try {
+				OSPFileUtil.getFileURL(resourceRequest, resourceResponse, targetPath, repositoryType);
+			} catch (PortalException | SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }else{
             _log.info("There are no command option.");
         }

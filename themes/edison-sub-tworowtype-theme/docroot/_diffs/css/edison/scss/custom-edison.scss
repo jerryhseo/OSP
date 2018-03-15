@@ -1,0 +1,38 @@
+.edison-custom{
+	@media (min-width: $screen-lg-min) {
+		.navbar-left{
+			font-size: 15px;
+		}
+		
+		.navbar-right{
+			margin-right: 0px;
+		}
+		
+		.navbar-btn{
+			margin-top: 18px;
+		}
+		
+		.navbar-nav > li.active{
+			border-bottom: solid 3px #ff5454;
+		}
+		
+		.navbar-nav > li.active > a{
+			background-color: #f8f8f8;
+			font-weight: 600;
+		}
+		
+		.navbar-nav > li > a{
+			padding-top: 25px;
+			padding-bottom: 25px;
+		}
+	}
+}
+
+.edison{
+	@media (min-width: $screen-lg-min) {
+		.container{
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+	}
+}

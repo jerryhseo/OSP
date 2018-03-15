@@ -5,6 +5,7 @@
 <%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil" %>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/course.css" media="screen"/>
+<link type="text/css" rel="stylesheet" href="${contextPath}/css/virtualLabClass.css" media="screen"/>
 
 <liferay-portlet:resourceURL var="virtualLabClassNoteListURL" id="virtualLabClassNoteList" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
@@ -16,21 +17,57 @@
 	<liferay-portlet:param name="myaction" value="popupClassNote" />
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="contentDetailUrl" portletName="edisoncontent_WAR_edisoncontent2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="generalModifyView" />
+</liferay-portlet:renderURL>
+
 <style type="text/css">
-	.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;} 
+	.btn_dn, .btn_view{cursor: pointer;}
+	.<portlet:namespace/>isMoreBtn{
+		cursor: pointer;
+		text-decoration: none;
+	}
 </style>
+
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList();
+	
+	$("#<portlet:namespace/>class-note-file-dialog").dialog({
+		autoOpen: false,
+		width: 914,
+		height: 'auto',
+		modal: true,
+		resizable: false,
+		show: {effect:'fade', speed: 800},
+		hide: {effect:'fade', speed: 800},
+		open: function(event, ui) {
+			$(this).css('overflow', 'hidden');
+			$(this).parent().removeClass("ui-widget-content");
+			$(this).parent().removeClass("ui-widget");
+			$(this).removeClass("ui-widget-content");
+	    	$(this).removeClass("ui-dialog-content");
+	    },
+	    close: function() {
+	    
+	    }
+	}).dialog("widget").find(".ui-dialog-titlebar").remove();
+	
+	$("#<portlet:namespace/>class-note-file-dialog-close-btn").click(function() {
+		$("#<portlet:namespace/>class-note-file-dialog").dialog("close");
+	});
 });
 
 function <portlet:namespace/>dataSearchList() {
+	var isMore = $("#<portlet:namespace/>isMore").val();
+	
 	var dataForm = {
 		"<portlet:namespace/>classId" : "${classId}",
 		"<portlet:namespace/>groupId" : "${groupId}"
 	};
 	
-	var admin = "${role }";
+	var admin = "${role}";
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=virtualLabClassNoteListURL%>",
@@ -40,47 +77,44 @@ function <portlet:namespace/>dataSearchList() {
 			var getVirtualLabClassNoteList = msg.getVirtualLabClassNoteList;
 			$("body").css('overflow','');
 			var rowResult;
-			$("#<portlet:namespace/>virtualLabClassNoteBody tr:not(:has(#1))").remove();
+			$("#<portlet:namespace/>classNoteFileList div:not(:has(#1))").remove();
 			
 			if(getVirtualLabClassNoteList.length == 0) {
-				$rowResult = $("<tr/>");
-				$("<td/>").addClass("appbgcolor01")
-						  .attr("colspan", "3")
-						  .css("text-align","center")
-						  .text("<liferay-ui:message key='edison-there-are-no-data' />")
-						  .appendTo($rowResult);
-				$("#<portlet:namespace/>virtualLabClassNoteBody").append($rowResult);
+				
+				$("#<portlet:namespace/>classNoteFileList").html("<liferay-ui:message key='edison-there-are-no-data' />")
+				 										   .css("text-align", "center");
 			} else {
 				for(var i = 0; i < getVirtualLabClassNoteList.length; i++) {
-					$rowResult = $("<tr/>").css("border-bottom", "1px solid rgb(224, 224, 224)");
 					
-					$("<td/>").text(getVirtualLabClassNoteList[i].description).css("word-break","break-all")
-							  .appendTo($rowResult);
-					if(admin == 'admin'){
-						if(getVirtualLabClassNoteList[i].fileEntryId != 0) {
-							$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + getVirtualLabClassNoteList[i].fileEntryId + "');")
-													   .css("cursor", "pointer")
-									 ).appendTo($rowResult);
-						} else {
-							$("<td/>").css("height","20px").appendTo($rowResult);
-						}
-					
-						$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='delete' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>classNoteDelete('" + getVirtualLabClassNoteList[i].classNoteSeq + "');")
-													.css("cursor", "pointer")
-						 ).appendTo($rowResult);	
-					}else{
-						$("<td/>").css("height","20px").appendTo($rowResult);
-						if(getVirtualLabClassNoteList[i].fileEntryId != 0) {
-							
-							$("<td/>").append($("<input/>").attr("type", "button").addClass("button02_1").attr("value","<liferay-ui:message key='edison-table-list-header-download' />").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + getVirtualLabClassNoteList[i].fileEntryId + "');")
-													   .css("cursor", "pointer")
-									 ).appendTo($rowResult); 
-						} else {
-							$("<td/>").css("height","20px").appendTo($rowResult);
-						}
+					if(isMore == 'true' && 3<=i){
+						break;
 					}
 					
-					$("#<portlet:namespace/>virtualLabClassNoteBody").append($rowResult);
+					var classNoteFileList = $("#<portlet:namespace/>classNoteFileList");
+					var classNoteFileList_more = $("#<portlet:namespace/>classNoteFileList_more");
+					var isContent = getVirtualLabClassNoteList[i].isContent;
+					
+					$("<div/>").addClass("filetitbox")
+							   .text(getVirtualLabClassNoteList[i].description)
+							   .appendTo(classNoteFileList);
+					
+					var fileBtnBox = $("<div/>").addClass("btnbox");
+					if(isContent == "false"){
+						$("<span/>").addClass("btn_dn")
+								 .attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
+								 .css("height", "80px").css("padding-top", "15%")
+								 .text("DOWNLOAD")
+								 .appendTo(fileBtnBox);
+					}
+					if(isContent == "true"){
+						$("<span/>").addClass("btn_view")
+									.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
+									.css("height", "80px").css("padding-top", "15%")
+									.text("VIEW")
+									.appendTo(fileBtnBox);
+					}
+					
+					classNoteFileList.append(fileBtnBox);
 				}
 			}
 		},error:function(msg,e){ 
@@ -165,12 +199,33 @@ function <portlet:namespace/>openClassNotePopup() //Relate AssetEntry 팝업 띄
 	});  
 }
 
-
-
 function <portlet:namespace/>fileDownload(p_fileEntryId){
 	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
 }
 
+function <portlet:namespace/>moveContentDetail(contentSeq, contentDiv) {
+	AUI().use("liferay-portlet-url", function(a) {
+		var thisPortletNamespace = "_edisoncontent_WAR_edisoncontent2016portlet_";
+		var params = "&" + thisPortletNamespace + "contentDiv=" + contentDiv;
+		params += "&" + thisPortletNamespace + "contentSeq=" + contentSeq;
+		params += "&" + thisPortletNamespace + "redirectName=" + "<liferay-ui:message key='edison-search-total'/>";
+		location.href = "<%=contentDetailUrl%>" + params;
+	});
+}
+
+function <portlet:namespace/>moreClassFile(cmd) {
+	if(cmd == true){
+		$("#<portlet:namespace/>isMore").val("false");
+		$("#<portlet:namespace/>moreClassFile").hide();
+		$("#<portlet:namespace/>lessClassFile").show();
+	} else if(cmd == false){
+		$("#<portlet:namespace/>isMore").val("true");
+		$("#<portlet:namespace/>moreClassFile").show();
+		$("#<portlet:namespace/>lessClassFile").hide();
+	}
+	
+	<portlet:namespace/>dataSearchList();
+}
 </script>
 <aui:script>
 Liferay.provide(window, 'updateClassNotePopUp', function() {
@@ -190,39 +245,42 @@ function(popupIdToClose) {
 <form id="<portlet:namespace/>relatedAssetForm" method="post" >
 	<aui:input type="hidden" value="${classId }" name="classId" />
 	<aui:input type="hidden" value="${groupId }" name="groupId" />
+	<input type="hidden" id="<portlet:namespace/>isMore" value="true" name="isMore" >
 </form>
 
-<c:choose>
-	<c:when test="${getVirtualLabClassNoteList == 0 && role eq 'member' }">
-	</c:when>
-	<c:otherwise>
-		<c:choose>
-			<c:when test="${role eq 'admin' }">
-				<div class="virtitlebox">
-					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-					<div class="virtitle">
-						<liferay-ui:message key='edison-course-class-material' />
+<div class="panel edison-panel">
+	<!--강의자료 다운로드-->
+	<div class="conwrap2">
+		<div class="conwrap2left">
+			<div class="conwraptit01">
+				<liferay-ui:message key='edison-virtuallab-class-file-download' />
+				<c:if test="${fn:toUpperCase(role) eq 'MANAGER' || fn:toUpperCase(role) eq 'ADMIN' }">
+					<div class="moreicon" style="right: 13%;">
+						<a href="#" onClick="<portlet:namespace/>openClassNotePopup();">
+							<liferay-ui:message key='edison-virtuallab-scienceapp-management' />
+							<img src="${contextPath}/images/moreicon.png" width="11" height="11">
+						</a> 
 					</div>
-					<div class="buttonbox0801">
-						<input id="<portlet:namespace/>classNoteManagementButton" name="<portlet:namespace/>classNoteManagementButton" type="button" class="button0801" value="<liferay-ui:message key='edison-virtuallab-scienceapp-management' />" onClick="<portlet:namespace/>openClassNotePopup()"/>
+				</c:if>
+				<div class="moreicon">
+					<div id="<portlet:namespace/>moreClassFile" class="<portlet:namespace/>isMoreBtn" onClick="<portlet:namespace/>moreClassFile(true);" style="display: block;">
+						MORE
+						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
 					</div>
+					<div id="<portlet:namespace/>lessClassFile" class="<portlet:namespace/>isMoreBtn" onClick="<portlet:namespace/>moreClassFile(false);" style="display: none;">
+						LESS
+						<img src="${contextPath}/images/moreicon.png" width="11" height="11">
+					</div>  
 				</div>
-			</c:when>
-			<c:otherwise>
-				<h3><liferay-ui:message key='edison-course-class-material-member' /></h3>
-			</c:otherwise>
-		</c:choose>
-		<div class="h10"></div>
-		<div class="table6_list">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
-				<colgroup>
-					<col width="*" />
-					<col width="120" />
-					<col width="120" />
-				</colgroup>
-				<tbody id="<portlet:namespace/>virtualLabClassNoteBody">
-				</tbody>
-			</table>
+			</div>
+			
+			<!--파일제목 및 다운로드-->
+			<div id="<portlet:namespace/>classNoteFileList">
+			</div>
+			
 		</div>
-	</c:otherwise>
-</c:choose>
+
+	</div>
+	<!--end 강의자료 다운로드-->
+	
+</div>

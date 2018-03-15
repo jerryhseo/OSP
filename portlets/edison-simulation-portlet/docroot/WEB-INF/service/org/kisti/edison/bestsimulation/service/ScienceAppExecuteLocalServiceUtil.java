@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -286,27 +286,27 @@ public class ScienceAppExecuteLocalServiceUtil {
 		long companyGroupId, long groupId, java.util.Locale locale,
 		long columnId, java.lang.String startDt, java.lang.String endDt,
 		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> scienceAppList,
-		boolean categorySearch)
+		boolean categorySearch, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.text.ParseException {
 		return getService()
 				   .getStatisticsSwExeTableOrganigation(companyGroupId,
 			groupId, locale, columnId, startDt, endDt, scienceAppList,
-			categorySearch);
+			categorySearch, categoryId);
 	}
 
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getStatisticsSwExeBarChartDate(
 		long companyGroupId, long groupId, long columnId,
 		java.lang.String startDt, java.lang.String endDt,
 		java.util.List<java.util.Map<java.lang.String, java.lang.Object>> scienceAppList,
-		boolean categorySearch)
+		boolean categorySearch, long categoryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.text.ParseException {
 		return getService()
 				   .getStatisticsSwExeBarChartDate(companyGroupId, groupId,
-			columnId, startDt, endDt, scienceAppList, categorySearch);
+			columnId, startDt, endDt, scienceAppList, categorySearch, categoryId);
 	}
 
 	public static int insertCustomScienceAppExecute(java.lang.String startDt,

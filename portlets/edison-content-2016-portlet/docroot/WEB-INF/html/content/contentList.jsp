@@ -81,87 +81,86 @@
 	}
 	
 </style>
-<%-- <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/> --%>
-<%-- <liferay-portlet:resourceURL var="retrieveAdvancedURL" id="retrieveListAdvanced" copyCurrentRenderParameters="false" escapeXml="false"/> --%>
 <liferay-portlet:resourceURL var="retrieveGeneralURL" id="retrieveListGeneral" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<%-- <liferay-portlet:renderURL var="advancedWriterURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>" copyCurrentRenderParameters="false">
-	<liferay-portlet:param name="myaction" value="advancedModifyView" />
-</liferay-portlet:renderURL> --%>
 
 <liferay-portlet:renderURL var="contentSearchURL" copyCurrentRenderParameters="false" >
-<%-- 	<liferay-portlet:param name="redirectName" value="${redirectName}" /> --%>
-<%-- 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="generalWriterURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>">
 	<liferay-portlet:param name="myaction" value="generalModifyView" />
 	<liferay-portlet:param name="redirectName" value="${redirectName}" />
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
-<%-- 	<liferay-portlet:param name="mode" value="<%=Constants.VIEW %>" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="contentManageViewURL" copyCurrentRenderParameters="false" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>">
 	<liferay-portlet:param name="myaction" value="contentManageView" />
 	<liferay-portlet:param name="redirectName" value="${redirectName}" />
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
-<%-- 	<liferay-portlet:param name="mode" value="<%=Constants.ADD %>" /> --%>
 </liferay-portlet:renderURL>
 
 <liferay-portlet:renderURL var="contentTabSearchURL" portletMode='view'/>
 
+
+<style>
+	#<portlet:namespace/>textfield{
+		width: 220px;
+	}
+</style>
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
-<div class="h10"></div>
-<div class="contabmenu"> 
-	<edison-ui:tabs names="<%=tabNames%>" url="<%=contentTabSearchURL%>" tabsValues="owner_content,manager_content" value="<%=listTabValue%>" param="tabValue" minwidth="230"/>
-</div>
+	<div class="h10"></div>
+	<div class="contabmenu"> 
+		<edison-ui:tabs names="<%=tabNames%>" url="<%=contentTabSearchURL%>" tabsValues="owner_content,manager_content" value="<%=listTabValue%>" param="tabValue" minwidth="230"/>
+	</div>
 </c:if>
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle">
-			<liferay-ui:message key='edison-content' />
-	</div>
-</div>
+
 <div class="h10"></div>
-
-
-	
-<div class="tabletopbox clear">
-	<div class="search">
-		<div class="searchbox">
-		<input name="<portlet:namespace/>textfield" type="text"
-			id="<portlet:namespace/>textfield"
-			placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
-			size="40"
-			onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
-			value="${searchText }" 
-		/>
-		<input type="button" name="fullsize" id="fullsize" value="" class="btnsearch" onclick="<portlet:namespace/>generalContentSearch('');">
-		</div>
-		
-		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="button01" onclick="<portlet:namespace/>dafaultContentAllSearch();">
-	</div>
-	
-	<!--우편 셀렉트-->
-	<div class="tabletopright">
-		<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="selectview" style="line-height: 15px;">
-<%-- 				<option value="5">5<liferay-ui:message key="edison-search-views"/></option> --%>
-			<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
-			<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-			<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
-		</select>
-	</div>
-</div> 
 	
 <aui:form name="contentListForm" method="post">
 	<aui:input type="hidden" name="groupId" value="${groupId }"/>
 	<aui:input type="hidden" name="isAdmin" value="${isAdmin }"/>
-<%-- 	<aui:input type="hidden" name="mode" value=""/> --%>
 	<aui:input type="hidden" name="contentSeq" value=""/>
 	<aui:input type="hidden" name="contentDiv" value=""/>
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="일반콘텐츠 테이블">
+	<div class="table-responsive panel edison-panel">
+		
+		<div class="panel-heading clearfix">
+		
+			<h3 class="panel-title pull-left">
+				<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+				<liferay-ui:message key='edison-content' />
+			</h3>
+			
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" style="width: 24%;">
+					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
+					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+				</select>
+					
+				<input class="form-control" name="<portlet:namespace/>textfield" type="text"
+					   id="<portlet:namespace/>textfield"
+					   placeholder="<liferay-ui:message key="edison-table-list-header-title"/>"
+					   size="40"
+					   onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('');"
+					   value="${searchText }" 
+					   style="width:75%; margin-left: 1%;"
+				/>
+				
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button" onclick="<portlet:namespace/>generalContentSearch('');">
+						<i class="icon-search"></i>
+					</button>
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" value="Clear" onclick="<portlet:namespace/>dafaultContentAllSearch();">
+						Clear
+					</button>
+				</div>
+				
+				
+			</div>
+		</div>
+		
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="일반콘텐츠 테이블" class="table table-bordered table-hover edison-table">
 			<colgroup>
 				<col width="10%" />
 				<col width="15%" />
@@ -184,7 +183,7 @@
 			<c:choose>
 				<c:when test="${fn:length(dataList) == 0}">
 					<tr>
-						<td class="TC" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
+						<td class="center" colspan="6"><liferay-ui:message key="edison-there-are-no-data"/></td>
 					</tr>
 				</c:when>
 				<c:otherwise>
@@ -197,26 +196,33 @@
 							<tr style="word-break: break-all; cursor: pointer;"
 								onClick="<portlet:namespace/>generalModify('<%=Constants.VIEW%>','${data.contentSeq }','${data.contentDiv}')">
 						</c:if>
-							<td class="TC">${seq - status.index }</td>
-							<td class="TC">${data.contentDivNm }</td>
+							<td class="center">${seq - status.index }</td>
+							<td class="center">${data.contentDivNm }</td>
 							<td >${data.title }</td>
-							<td class="TC">${data.openYn }</td>
-							<td class="TC">${data.screenName}</td>
-							<td class="TC">${ data.insertDate }</td>
+							<td class="center">${data.openYn }</td>
+							<td class="center">${data.screenName}</td>
+							<td class="center">${ data.insertDate }</td>
 						</tr>
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
 			</tbody>
 		</table>
-	</div>
-	<div class="paging">
-		<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+		
+		<div class="h10"></div>
+		
+		<div class="row" style="margin: 0px;">
+			<div class="col-md-10 paging">
+				<div id="<portlet:namespace/>paging" style="width:100%;text-align: center;">${paging }</div>
+			</div>
+			
+			<div class="col-md-2 buttonbox" id="<portlet:namespace/>addGeneralContentDiv" style="margin: 18px 0px;">
+				<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;" style="width: 100%;" />
+			</div>
+			
+		</div>
 	</div>
 
-	<div class="buttonbox" style="position: absolute; bottom: 24px; width:auto; right:1%;" id="<portlet:namespace/>addGeneralContentDiv">
-		<input type="button" class="button06" value="<liferay-ui:message key="edison-content-create" />" onclick="<portlet:namespace/>contentManageViewMove('<%=Constants.ADD%>');return false;"/>
-	</div>
 </aui:form>	
 
 <script type="text/javascript">

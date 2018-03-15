@@ -14,16 +14,27 @@
 
 package org.kisti.edison.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowInstance;
+import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.base.WorkflowInstanceLocalServiceBaseImpl;
+import org.springframework.util.StringUtils;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.model.User;
+import com.liferay.portal.util.PortalUtil;
 
 /**
  * The implementation of the workflow instance local service.
@@ -47,17 +58,49 @@ public class WorkflowInstanceLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.kisti.edison.service.WorkflowInstanceLocalServiceUtil} to access the workflow instance local service.
 	 */
   
-  public WorkflowInstance createWorkflowInstance() throws SystemException{
-    long workflowInstanceId = super.counterLocalService.increment();
-    return super.workflowInstanceLocalService.createWorkflowInstance(workflowInstanceId);
-  }
-  
-  @SuppressWarnings("unchecked")
-  public List<WorkflowInstance> getWorkflowWorkflowInstancesByWorkflowId(long workflowId) throws SystemException{
-    DynamicQuery query = DynamicQueryFactoryUtil.forClass(WorkflowInstance.class);
-    query.add(RestrictionsFactoryUtil.eq("workflowId", workflowId));
-    query.addOrder(OrderFactoryUtil.desc("workflowInstanceId"));
-    return (List<WorkflowInstance>) super.workflowInstanceLocalService.dynamicQuery(query); 
-  }
+    public WorkflowInstance createWorkflowInstance() throws SystemException{
+        long workflowInstanceId = super.counterLocalService.increment();
+        return super.workflowInstanceLocalService.createWorkflowInstance(workflowInstanceId);
+    }
+
+    public WorkflowInstance updateWorkflowInstance(long workflowInstanceId, Map<String, Object> params)
+        throws SystemException, PortalException{
+        WorkflowInstance workflowInstance = super.workflowInstanceLocalService.getWorkflowInstance(workflowInstanceId);
+        String workflowInstanceTitle = GetterUtil.getString(params.get("workflowInstanceTitle"));
+        String screenLogic = GetterUtil.getString(params.get("screenLogic"));
+        workflowInstance.setTitle(workflowInstanceTitle);
+        workflowInstance.setModifiedDate(new Date());
+        if(StringUtils.hasText(screenLogic)){
+            workflowInstance.setScreenLogic(screenLogic);
+        }
+        
+        return workflowInstancePersistence.update(workflowInstance);
+    }
+
+    public WorkflowInstance createWorkflowInstance(Map<String, Object> params, HttpServletRequest request)
+        throws SystemException, PortalException{
+        WorkflowInstance workflowInstance = createWorkflowInstance();
+        User user = PortalUtil.getUser(request);
+        long companyId = PortalUtil.getCompanyId(request);
+        long workflowId = GetterUtil.getLong(params.get("workflowId"));
+        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+        String title = GetterUtil.getString(params.get("workflowInstanceTitle"));
+        workflowInstance.setTitle(title);
+        workflowInstance.setWorkflowId(workflowId);
+        workflowInstance.setScreenLogic(workflow.getScreenLogic());
+        workflowInstance.setStatus("CREATED");
+        workflowInstance.setUserId(user.getUserId());
+        workflowInstance.setCompanyId(companyId);
+        workflowInstance.setCreateDate(new Date());
+        return super.workflowInstanceLocalService.updateWorkflowInstance(workflowInstance);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<WorkflowInstance> getWorkflowWorkflowInstancesByWorkflowId(long workflowId) throws SystemException{
+        DynamicQuery query = DynamicQueryFactoryUtil.forClass(WorkflowInstance.class);
+        query.add(RestrictionsFactoryUtil.eq("workflowId", workflowId));
+        query.addOrder(OrderFactoryUtil.desc("workflowInstanceId"));
+        return (List<WorkflowInstance>) super.workflowInstanceLocalService.dynamicQuery(query);
+    }
   
 }

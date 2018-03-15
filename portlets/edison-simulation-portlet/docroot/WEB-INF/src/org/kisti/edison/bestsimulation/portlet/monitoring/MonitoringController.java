@@ -44,6 +44,7 @@ import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonHttpUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -64,6 +65,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -117,6 +119,10 @@ public class MonitoringController {
 						Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
 						Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
 						GroupMap.put(group.getName(), group.getGroupId());
+						
+						if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+							group.setName("EDISON");
+						}
 						
 						if(groupCnt==0){
 							groupName += group.getName();
@@ -261,9 +267,13 @@ public class MonitoringController {
 			model.addAttribute("userIdSearchStatus", userIdSearchStatus);
 			
 			//WORKBENCH
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 //			long plid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/workbench").getPlid();
 			model.addAttribute("workBenchPlid", plid);
+			
+			String redirectURL = HttpUtil.decodeURL(EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
+			model.addAttribute("redirectURL", redirectURL);
+			
 		}catch(Exception e){
 			log.error(e);
 			e.printStackTrace();
@@ -1412,14 +1422,14 @@ public class MonitoringController {
 		try{
 			long simulationClassId = GetterUtil.getLong(param.get("simulationClassId"),0L);
 			long simulationCustomId = GetterUtil.getLong(param.get("simulationCustomId"),0L);
-			long monitoringPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-			        "edisonmonitoring_WAR_edisonsimulationportlet");
-			long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			long monitoringPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,"edisonmonitoring_WAR_edisonsimulationportlet");
+			long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			model.addAttribute("simulationClassId", simulationClassId);
 			model.addAttribute("simulationCustomId", simulationCustomId);
 			model.addAttribute("workBenchPlid", workBenchPlid);
 			model.addAttribute("portletState", CustomUtil.strNull(param.get("portletState")));
 			model.addAttribute("monitoringPlid", monitoringPlid);
+			model.addAttribute("redirectURL", EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
 			
 		}catch(Exception e){
 			log.error(e);

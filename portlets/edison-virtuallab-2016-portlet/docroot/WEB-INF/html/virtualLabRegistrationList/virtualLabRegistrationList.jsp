@@ -7,6 +7,7 @@
 <liferay-portlet:resourceURL var="virtualLabRegistrationListURL" id="virtualLabRegistrationList" copyCurrentRenderParameters="false" />
 
 <liferay-portlet:resourceURL var="virtualLabCancelResourceURL" id="cancelVirtualLabResource" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="virtualLabDeleteCancelURL" id="virtualLabDeleteCancel" copyCurrentRenderParameters="false" />
 
 <liferay-portlet:renderURL var="virtualLabRequestURL" portletMode="view" copyCurrentRenderParameters="false">
 	<liferay-portlet:param name="myrender" value="virtualLabRequest" />
@@ -65,7 +66,6 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 	}
 	
 	var searchForm = $("form[name=searchForm]").serialize();
-	console.log(searchForm);
 	
 	jQuery.ajax({
 		type: "POST",
@@ -73,7 +73,6 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 		async : false,
 		data : searchForm,
 		success: function(msg) {
-		    console.log(msg);
 			var virtualLabRegisterList = msg.virtualLabRegisterList;
 			var groupId = msg.groupId;
 			var curPage = msg.curPage;
@@ -85,49 +84,60 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 			var rowResult;
 			$("#<portlet:namespace/>registrationListBody tr:not(:has(#1))").remove();
 			
-			if(virtualLabRegisterList.length == 0) {
+			if(virtualLabRegisterList.length == 0 || (virtualLabRegisterList.length == 1 && virtualLabRegisterList[0].virtualLabStatus  == "1401005")) {
 				$rowResult = $("<tr/>");
-				$("<td/>").attr("colspan", "8")
+				$("<td/>").addClass("center")
+						  .attr("colspan", "8")
 						  .css("text-align","center")
 						  .text("<liferay-ui:message key='edison-search-no-result' />")
 						  .appendTo($rowResult);
 				$("#<portlet:namespace/>registrationListBody").append($rowResult);
 			} else {
 				
-					console.log("virtualLabRegisterList ", virtualLabRegisterList);
+				var sequence = 0;
 				for(var i = 0; i < virtualLabRegisterList.length; i++) {
 					$rowResult = $("<tr/>");
 					
- 					if(i%2 == 1){
+					if(virtualLabRegisterList[i].virtualLabStatus == "1401005"){
+						continue;
+					}
+					
+ 					if(sequence%2 == 1){
  						$rowResult.addClass("tablebgtr");
  					}
+ 					sequence++;
 					
-					$("<td/>").text(virtualLabRegisterList[i].groupName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabRegisterList[i].groupName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabRegisterList[i].virtualLabTitle)
+					$("<td/>").addClass("center")
+							  .text(virtualLabRegisterList[i].virtualLabTitle)
 							  .css("text-align","left")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabRegisterList[i].virtualLabUniversityField)
+					$("<td/>").addClass("center")
+							  .text(virtualLabRegisterList[i].virtualLabUniversityField)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabRegisterList[i].virtualLabPersonName)
+					$("<td/>").addClass("center")
+							  .text(virtualLabRegisterList[i].virtualLabPersonName)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").text(virtualLabRegisterList[i].virtualLabRequestDt)
+					$("<td/>").addClass("center")
+							  .text(virtualLabRegisterList[i].virtualLabRequestDt)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
 					if(virtualLabRegisterList[i].virtualLabStatus == "1401002") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 						  .append($("<p/>").text("<liferay-ui:message key='edison-simulation-job-create-success' />")
 										   .css("font-weight", "600")
 										   .css("margin","0")
 						  )
 						  .appendTo($rowResult);
 						
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-move' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabRegisterList[i].virtualLabId + "','" + virtualLabRegisterList[i].groupId + "')")
@@ -135,16 +145,16 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 						  .appendTo($rowResult);
 						
 					} else if (virtualLabRegisterList[i].virtualLabStatus == "1401001") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-creation-request' />")
 												   .css("font-weight", "600")
 												   .css("margin","0")
 								  )
 								  .appendTo($rowResult);
 						
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 								  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-lab-creation-request-cancel' />")
-													   .addClass("button01b")
+													   .addClass("btn btn-default")
 													   .attr("type", "button")
 													   .css("text-align","center")
 													   .attr("onClick","<portlet:namespace/>cancelVirtualLabRequest('" + virtualLabRegisterList[i].virtualLabId + "')")
@@ -153,16 +163,16 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 						
 						virtualLabCount--;
 					} else if (virtualLabRegisterList[i].virtualLabStatus == "1401003") {
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 							  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' />")
 											   .css("font-weight", "600")
 											   .css("color", "red")
 											   .css("margin","0")
 							  )
 							  .appendTo($rowResult);
-						$("<td/>").css("text-align","center")
+						$("<td/>").addClass("center").css("text-align","center")
 							  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />")
-												   .addClass("button01b")
+												   .addClass("btn btn-default")
 												   .attr("type", "button")
 												   .attr("onClick","<portlet:namespace/>openDeniedDialog('" 
 												         + "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />" + "','" 
@@ -172,10 +182,29 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 							  .appendTo($rowResult);
 						
 						virtualLabCount--;
+					} else if (virtualLabRegisterList[i].virtualLabStatus == "1401004") {
+						$("<td/>").addClass("center").css("text-align","center")
+						  .append($("<p/>").text("<liferay-ui:message key='edison-virtuallab-lab-deleter-request' />")
+										   .css("font-weight", "600")
+										   .css("margin","0")
+						  )
+						  .appendTo($rowResult);
+						/* 삭제요청 취소 */
+						$("<td/>").addClass("center").css("text-align","center")
+						  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-lab-deleter-request-cancel' />")
+											   .addClass("btn btn-default")
+											   .attr("type", "button")
+											   .attr("onClick","<portlet:namespace/>deleteRequestCancel('"+ virtualLabRegisterList[i].virtualLabId +"')")
+						  )
+						  .appendTo($rowResult);
+						
+						virtualLabCount--;
 					} else {
-						$("<td/>").text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
+						$("<td/>").addClass("center")
+								  .text("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-unknown-class' />")
 								  .css("text-align","center")
 								  .appendTo($rowResult);
+						$("<td/>").appendTo($rowResult);
 					}
 					
 					$("#<portlet:namespace/>registrationListBody").append($rowResult);
@@ -240,6 +269,32 @@ function <portlet:namespace/>openDeniedDialog(title, content, virtualLabId) {
 	$("#<portlet:namespace/>request-denied-dialog").dialog("open");
 }
 
+function <portlet:namespace/>deleteRequestCancel(virtualLabId){
+	if(confirm("<liferay-ui:message key='edison-virtuallab-cancel-delete-request-alert' />")){	
+		var checkForm = {
+			"<portlet:namespace/>virtualLabId" : virtualLabId
+		}
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=virtualLabDeleteCancelURL%>",
+			async : false,
+			data : checkForm,
+			success: function(msg) {
+				var resultCode = msg.resultCode;
+				if(resultCode == 400){
+					alert("<liferay-ui:message key='edison-data-update-error' />");
+				}
+				
+				<portlet:namespace/>dataSearchList();
+			},error:function(msg,e){ 
+				alert(e);
+				return false;
+			}
+		});
+	}
+}
+
 function <portlet:namespace/>checkValidation(form) {
 	if (form.submitted) return false;
 	if(!checkValue(form.<portlet:namespace/>virtualLabPersonName, "<liferay-ui:message key='edison-table-list-header-tutor' />", 1, 30)) {
@@ -284,62 +339,61 @@ function <portlet:namespace/>onKeyDown() {
 }
 
 </script>
+
+<style>
+	#<portlet:namespace/>virtualLab-request-button{
+		width: 13%;
+	}
+</style>
+
 </body>
-<div class="virtitlebox"><img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-	<div class="virtitle"><liferay-ui:message key='edison-virtuallab-virtualLabRegistrationList-registration-status' /></div>
-	<div class="buttonbox0801" style="padding-top: 25px;  float: right;">
-		<c:choose>
-			<c:when test="${role eq 'LABOWNER' }">
-				<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="button0801" value="<liferay-ui:message key='edison-virtuallab-creation' />" />
-			</c:when>
-			<c:otherwise>
-				<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="button0801" value="<liferay-ui:message key='edison-virtuallab-creation-request' />" />
-			</c:otherwise>
-		</c:choose>
-	</div>
-</div>
 
-<div class="h20"></div>
-
-<div class="tabletopbox">
-	<form method="post" name="searchForm" style="margin: 0px;" onsubmit="return false;">
-		<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-		<div class="search">
-			<div class="searchbox">
-				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' />" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList('1');" value="${searchField}"/>
-				<input id="search_button" name="<portlet:namespace />search_button" type="button" class="btnsearch" onclick="<portlet:namespace/>dataSearchList(1);"/>
+<div class="table-responsive panel edison-panel">
+	
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-virtuallab-virtualLabRegistrationList-registration-status' />
+		</h3>
+			
+		<form method="post" name="searchForm" style="margin: 0px;" onsubmit="return false;">
+			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+			<div class="input-group">
+				<select class="form-control" id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" style="width: 19%;">
+					<option value="0">ALL</option>
+					<option value="1401001"><liferay-ui:message key='edison-virtuallab-lab-creation-request' /></option>
+					<option value="1401002"><liferay-ui:message key='edison-simulation-job-create-success' /></option>
+					<option value="1401003"><liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' /></option>
+					<option value="1401004"><liferay-ui:message key='edison-virtuallab-lab-deleter-request' /></option>
+				</select>
+				
+				<select class="form-control" id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);"style="width: 21%;">
+					<option value="10" <c:if test="${selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
+					<option value="20" <c:if test="${selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
+					<option value="30" <c:if test="${selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
+					<option value="40" <c:if test="${selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
+				</select>
+				
+				<input id="<portlet:namespace/>searchField" name="<portlet:namespace/>searchField" class="form-control" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-tablerow-virtuallab' />" onKeydown="if(event.keyCode ==13){<portlet:namespace/>dataSearchList('1');return false;}" value="${searchField}" style="width: 59%; margin-left: 1%;" />
+				
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button"><i class="icon-search" onclick="<portlet:namespace/>dataSearchList('1');"></i></button>
+					<button class="btn btn-default" id="total_search_button" name="<portlet:namespace />total_search_button" onclick="<portlet:namespace/>dataSearchList(0);">
+						Clear
+					</button>
+				</div>
 			</div>
-			<input id="total_search_button" name="<portlet:namespace />total_search_button" type="button" value="<liferay-ui:message key='edison-button-all-search' />" class="button01" onclick="<portlet:namespace/>dataSearchList(0)" />
-		</div>
-		<div class="tabletopright" style="right: 150px;">
-			<select id="<portlet:namespace/>selectStatus" name="<portlet:namespace/>selectStatus" onchange="<portlet:namespace/>dataSearchList(1)" class="selectview" style="line-height: 15px;">
-				<option value="0">ALL</option>
-				<option value="1401001"><liferay-ui:message key='edison-virtuallab-lab-creation-request' /></option>
-				<option value="1401002"><liferay-ui:message key='edison-simulation-job-create-success' /></option>
-				<option value="1401003"><liferay-ui:message key='edison-virtuallab-lab-creation-request-denial' /></option>
-			</select>
-		</div>
-		<div class="tabletopright">
-			<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1);" class="selectview" style="line-height: 15px;">
-				<option value="10" <c:if test="${selectLine == '10' }"> selected="selected" </c:if>>10<liferay-ui:message key='edison-search-views' /></option>
-				<option value="20" <c:if test="${selectLine == '20' }"> selected="selected" </c:if>>20<liferay-ui:message key='edison-search-views' /></option>
-				<option value="30" <c:if test="${selectLine == '30' }"> selected="selected" </c:if>>30<liferay-ui:message key='edison-search-views' /></option>
-				<option value="40" <c:if test="${selectLine == '40' }"> selected="selected" </c:if>>40<liferay-ui:message key='edison-search-views' /></option>
-			</select>
-		</div>
-	</form>
-</div>
-
-<div class="table7_list">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		</form>
+	</div>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="9%" />
-			<col width="20%" />
+			<col width="25%" />
 			<col width="20%" />
 			<col width="10%" />
-			<col width="20%" />
 			<col width="15%" />
-			<col width="10%" />
+			<col width="15%" />
 		</colgroup>
 		<thead>
 			<tr>
@@ -349,14 +403,27 @@ function <portlet:namespace/>onKeyDown() {
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-status' /></th>
-				<th align="center" scope="col"></th>
 			</tr>
 		</thead>
 		<tbody id="<portlet:namespace/>registrationListBody">
 		</tbody>
 	</table>
+	
+	<div style="padding: 10px 5px 5px 5px;">
+		<div class="input-group-btn" align="right">
+			<c:choose>
+				<c:when test="${role eq 'LABOWNER' }">
+					<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-creation' />" />
+				</c:when>
+				<c:otherwise>
+					<input id="<portlet:namespace/>virtualLab-request-button" name="<portlet:namespace/>virtualLab-request-button" type="button" onclick="<portlet:namespace/>VirtualLabRequest();" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-creation-request' />" />
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+	
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+	<div id="<portlet:namespace/>pageListDiv" class="text-center"></div>
 </div>
 </body>
 
@@ -384,6 +451,6 @@ function <portlet:namespace/>onKeyDown() {
 		</table>
 	</div>
 	<div style="text-align: right; margin:0px 25px 30px 0px;">
-		<input id="<portlet:namespace/>register_delete_button" name="<portlet:namespace/>register_delete_button" class="button06" type="button" onclick="deleteVirtualLabRequest()" value="<liferay-ui:message key='edison-virtuallab-cancel-request' />" />
+		<input id="<portlet:namespace/>register_delete_button" name="<portlet:namespace/>register_delete_button" class="btn btn-default" type="button" onclick="deleteVirtualLabRequest()" value="<liferay-ui:message key='edison-virtuallab-cancel-request' />" />
 	</div>
 </div>

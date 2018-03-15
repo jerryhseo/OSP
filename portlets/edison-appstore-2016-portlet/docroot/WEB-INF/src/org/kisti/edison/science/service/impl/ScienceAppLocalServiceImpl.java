@@ -67,14 +67,12 @@ import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -82,7 +80,6 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -235,8 +232,8 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 */
 	public ScienceApp addScienceApp(ScienceApp scienceApp, ServiceContext sc) throws SystemException,
 		PortalException{
-		super.resourceLocalService.addResources(scienceApp.getCompanyId(), scienceApp.getGroupId(), scienceApp
-			.getUserId(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
+//		super.resourceLocalService.addResources(scienceApp.getCompanyId(), scienceApp.getGroupId(), scienceApp
+//			.getUserId(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
 
 		AssetEntry assetEntry = super.assetEntryLocalService.updateEntry(scienceApp.getUserId(), scienceApp
 			.getGroupId(), scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(),
@@ -909,6 +906,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		query.add(RestrictionsFactoryUtil.in("scienceAppId", ArrayUtils.toObject(scienceAppIds)));
 		query.add(RestrictionsFactoryUtil.like("targetLanguage", "%" + LocaleUtil.toLanguageId(locale) + "%"));
 		query.add(RestrictionsFactoryUtil.eq("status", 1901004));
+		query.add(RestrictionsFactoryUtil.ne("openLevel", ScienceAppConstants.OPENLEVEL_DWN));
 		query.addOrder(OrderFactoryUtil.desc("createDate"));
 		query.addOrder(OrderFactoryUtil.desc("version"));
 		return (List<ScienceApp>) super.getScienceAppLocalService().dynamicQuery(query, start, end);
@@ -1010,7 +1008,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			newApp.setProjectCategoryId(0);
 			
 			// asset 등록
-			long entryId = scienceAppAddAssetEntry(sc.getCompanyId(), sc.getScopeGroupId(), newApp);
+			long entryId = scienceAppAddAssetEntry(sc, sc.getCompanyId(), sc.getScopeGroupId(), newApp);
 			
 			// 카테고리 등록
 			List<String[]> categoryList = new ArrayList<String[]>();
@@ -1186,10 +1184,10 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		param.put("end", end);
 		param.put("status", 1901004);
 		param.put("appTypes", appTypes);
-		param.put("searchText", searchText);
+		param.put("likeSwNameAndSwTitle", searchText);
 		param.put("categoryIds", categoryIds);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, "SWNM", categorySearch, false,true);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
 		return retrieveListScienceApp(locale,searchParam, categorySearch, false);
 	}
 	
@@ -1206,90 +1204,58 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("status", 1901004);
 		param.put("appTypes", appTypes);
-		param.put("searchText", searchText);
+		param.put("likeSwNameAndSwTitle", searchText);
 		param.put("categoryIds", categoryIds);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, "SWNM", categorySearch, false,true);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
 		return countScienceApp(locale,searchParam, categorySearch, false);
 	}
 	
-	/**
-	 * EDISON - MAIN 추천 앱 조회
-	 */
-	public List<Map<String, Object>> retrieveListHotScienceApp(long companyGroupId, long groupId, Locale locale,long[] appIds, int begin, int end) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("status", 1901004);
-		String appTypes[] = {"Solver"};
-		param.put("appTypes", appTypes);
-		if(appIds != null){
-			String scienceAppIdstr = ""; 
-			for(long appId : appIds){
-				if("".equals(scienceAppIdstr)){
-					scienceAppIdstr += appId;
-				}else{
-					scienceAppIdstr += ", " + appId;
-				}				
-			}
-			
-			param.put("scienceAppIds", scienceAppIdstr);
-		}
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, "", false, false,true);
-		return retrieveListScienceApp(locale,searchParam, false, false);
-	}
-	
-	
-	public List<Map<String, Object>> retrieveListScienceAppAsManager(long companyGroupId,long groupId,Locale locale, long managerId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status, boolean categorySearch,int begin, int end) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("managerId", managerId);
-		param.put("searchText", searchText);
-		param.put("status", status);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		param.put("begin", begin);
-		param.put("end", end);
+	public List<Map<String, Object>> retrieveListScienceAppAsManager(long companyGroupId,long groupId,Locale locale, long managerId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status, boolean categorySearch,int begin, int end) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("managerId", managerId);
+		searchMap.put("status", status);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
+		searchMap.put("begin", begin);
+		searchMap.put("end", end);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, searchType, categorySearch, true,false);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, searchMap, categorySearch, true,false);
 		return retrieveListScienceApp(locale, searchParam, categorySearch, true);
 	}
 	
-	public int countScienceAppAsManager(long companyGroupId,long groupId,Locale locale, long managerId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status, boolean categorySearch) throws SystemException, PortalException{
+	public int countScienceAppAsManager(long companyGroupId,long groupId,Locale locale, long managerId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status, boolean categorySearch) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("managerId", managerId);
+		searchMap.put("status", status);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
 		
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("managerId", managerId);
-		param.put("searchText", searchText);
-		param.put("status", status);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, searchType, categorySearch, true,false);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, searchMap, categorySearch, true,false);
 		return countScienceApp(locale, searchParam, categorySearch, true);
 	}
 
 	
-	public List<Map<String, Object>> retrieveListScienceAppAsCategory(long companyGroupId,long groupId,Locale locale, long authorId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status,int begin, int end,boolean lanuageSearch) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("userId", authorId);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		param.put("searchType", searchType);
-		param.put("searchText", searchText);
-		param.put("status", status);
-		param.put("begin", begin);
-		param.put("end", end);
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, searchType, true, false,lanuageSearch);
+	public List<Map<String, Object>> retrieveListScienceAppAsCategory(long companyGroupId,long groupId,Locale locale, long authorId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status,int begin, int end,boolean lanuageSearch) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("userId", authorId);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
+		searchMap.put("status", status);
+		searchMap.put("begin", begin);
+		searchMap.put("end", end);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, searchMap, true, false,lanuageSearch);
 		return retrieveListScienceApp(locale, searchParam, true, false);
 	}
 	
-	public int countListScienceAppAsCategory(long companyGroupId,long groupId,Locale locale, long authorId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status,boolean lanuageSearch) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("userId", authorId);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		param.put("searchType", searchType);
-		param.put("searchText", searchText);
-		param.put("status", status);
+	public int countListScienceAppAsCategory(long companyGroupId,long groupId,Locale locale, long authorId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status,boolean lanuageSearch) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("userId", authorId);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
+		searchMap.put("status", status);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, searchType, true, false,lanuageSearch);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, searchMap, true, false,lanuageSearch);
 		return countScienceApp(locale,searchParam, true, false);
 	}
 	
@@ -1310,7 +1276,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		param.put("status", 1901004);
 		param.put("name", StringUtil.trim(appName));
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, "", categorySearch, false, true);
+		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false, true);
 		return retrieveListScienceApp(locale, searchParam, true, false);
 	}
 	
@@ -1328,31 +1294,27 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * @param end
 	 * @param lanuageSearch - 앱의 서비스 언어별 조회 여부
 	 */
-	public List<Map<String, Object>> retrieveListScienceApp(long groupId, Locale locale, long authorId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status,int begin, int end,boolean lanuageSearch) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("userId", authorId);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		param.put("searchType", searchType);
-		param.put("searchText", searchText);
-		param.put("status", status);
-		param.put("begin", begin);
-		param.put("end", end);
+	public List<Map<String, Object>> retrieveListScienceApp(long groupId, Locale locale, long authorId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status,int begin, int end,boolean lanuageSearch) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("userId", authorId);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
+		searchMap.put("status", status);
+		searchMap.put("begin", begin);
+		searchMap.put("end", end);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(0, groupId, locale, param, searchType, false, false,lanuageSearch);
+		Map<String,Object> searchParam = settingScienceAppParameter(0, groupId, locale, searchMap, false, false,lanuageSearch);
 		return retrieveListScienceApp(locale, searchParam, false, false);
 	}
 	
-	public int countListScienceApp(long groupId, Locale locale, long authorId, String[] appTypes, String[] editorTypes, String searchType,String searchText, String status,boolean lanuageSearch) throws SystemException, PortalException{
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("userId", authorId);
-		param.put("appTypes", GetterUtil.getStringValues(appTypes));
-		param.put("editorTypes", GetterUtil.getStringValues(editorTypes));
-		param.put("searchType", searchType);
-		param.put("searchText", searchText);
-		param.put("status", status);
+	public int countListScienceApp(long groupId, Locale locale, long authorId, String[] appTypes, String[] editorTypes, Map<String,Object>searchMap, String status,boolean lanuageSearch) throws SystemException, PortalException{
+		if(searchMap==null){searchMap = new HashMap<String,Object>();}
+		searchMap.put("userId", authorId);
+		searchMap.put("appTypes", GetterUtil.getStringValues(appTypes));
+		searchMap.put("editorTypes", GetterUtil.getStringValues(editorTypes));
+		searchMap.put("status", status);
 		
-		Map<String,Object> searchParam = settingScienceAppParameter(0, groupId, locale, param, searchType, false, false,lanuageSearch);
+		Map<String,Object> searchParam = settingScienceAppParameter(0, groupId, locale, searchMap, false, false,lanuageSearch);
 		return countScienceApp(locale, searchParam, false, false);
 	}
 	
@@ -1370,7 +1332,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	protected Map<String, Object> settingScienceAppParameter(long companyGroupId,long groupId, Locale locale,Map<String, Object> param, String searchType, boolean categorySearch,boolean managerSearch,boolean lanuageSearch) throws PortalException, SystemException{
+	protected Map<String, Object> settingScienceAppParameter(long companyGroupId,long groupId, Locale locale,Map<String, Object> param, boolean categorySearch,boolean managerSearch,boolean lanuageSearch) throws PortalException, SystemException{
 		Map<String,Object> searchMap = new HashMap<String,Object>();
 		
 		Group group = GroupLocalServiceUtil.getGroup(groupId);
@@ -1385,6 +1347,15 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		searchMap.put("status", GetterUtil.getLong(param.get("status")));
 		searchMap.put("userId", GetterUtil.getLong(param.get("userId")));
 		searchMap.put("name", GetterUtil.getString(param.get("name")));
+		
+		searchMap.put("likeSwNameAndSwTitle", GetterUtil.getString(param.get("likeSwNameAndSwTitle")));
+		searchMap.put("likeSwName", GetterUtil.getString(param.get("likeSwName")));
+		searchMap.put("likeSwTitle", GetterUtil.getString(param.get("likeSwTitle")));
+		searchMap.put("likeUserName", GetterUtil.getString(param.get("likeUserName")));
+		searchMap.put("likeOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("likeOrgName"))));
+		searchMap.put("likeDeveloper", GetterUtil.getString(param.get("likeDeveloper")));
+		
+		
 		
 		int end = GetterUtil.getInteger(param.get("end"));
 		if(end != 0){
@@ -1430,21 +1401,6 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		if(managerSearch){
 			searchMap.put("managerId", param.get("managerId"));
 		}
-//		searchText
-		if(!GetterUtil.getString(searchType).equals("")){
-			searchMap.put("searchValue", GetterUtil.getString(param.get("searchText")));
-			
-			if(searchType.equals("APP_MANAGER_SEARCH_ALL")){
-				searchMap.put("APP_MANAGER_SEARCH_ALL", "SET");
-				searchMap.put("searchOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("searchText"))));
-			}else if(searchType.equals("SWORGNM")){
-				searchMap.put("searchOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("searchText"))));
-				searchMap.put("SWORGNM", "SET");
-			}else{
-				searchMap.put(searchType, "SET");
-			}
-		}
-		
 		return searchMap;
 	}
 	
@@ -1492,6 +1448,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(userOrgCode, EdisonExpando.CDNM,locale);
 			
 			Map<String, Object> resultRow = scienceApp.getModelAttributes();
+			resultRow.put("statusName", EdisonExpndoUtil.getCommonCdSearchFieldValue(scienceApp.getStatus(), EdisonExpando.CDNM, locale));
 			resultRow.put("title", scienceApp.getTitle(locale));
 			
 			if(StringUtils.hasText(scienceApp.getManualId(locale))){
@@ -1912,7 +1869,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			}
 			
 			//ASSET Entry 등록
-			scienceAppAddAssetEntry(sc.getCompanyId(), scienceApp.getGroupId(), newScienceApp);
+			scienceAppAddAssetEntry(sc, sc.getCompanyId(), scienceApp.getGroupId(), newScienceApp);
 
 			// New App 정보 등록
 			super.addScienceApp(newScienceApp);
@@ -2171,22 +2128,32 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	private long scienceAppAddAssetEntry(long companyId, long groupId, ScienceApp scienceApp) throws PortalException,
-		SystemException{
-		try{
-			// entry 등록
-			AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, scienceApp
-				.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), scienceApp.getScienceAppId(), scienceApp
-					.getUuid(), 0, null, null, true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
-				null, null, null, null, 0, 0, null, false);
-			return assetEntry.getEntryId();
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-
-		return 0;
+	private long scienceAppAddAssetEntry(ServiceContext sc, long companyId, long groupId, ScienceApp scienceApp) throws PortalException, SystemException{
+		// entry 등록
+//	    super.resourceLocalService.addResources(scienceApp.getCompanyId(), groupId, scienceApp.getUserId(), 
+//            ScienceApp.class.getName(), scienceApp.getScienceAppId(), false, true, true);
+	    
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(scienceApp.getUserId(), groupId, 
+		    scienceApp.getCreateDate(), scienceApp.getModifiedDate(), ScienceApp.class.getName(), 
+		    scienceApp.getScienceAppId(), scienceApp.getUuid(), 0, sc.getAssetCategoryIds(), sc.getAssetTagNames(),
+		    true, null, null, null, ContentTypes.TEXT_PLAIN, scienceApp.getTitle(),
+			null, null, null, null, 0, 0, null, false);
+		
+		return assetEntry.getEntryId();
 	}
 	
+	public ScienceApp updateScienceApp(ScienceApp scienceApp, int status) throws SystemException, PortalException{
+        // status :{ public : 1901004 , private : less than 1901004}
+	    if(status == 1901004){
+	        reIndexScienceApp(scienceApp);
+	    }
+	    return updateScienceApp(scienceApp);
+	}
+
+	private void reIndexScienceApp(ScienceApp scienceApp) throws SearchException{
+		Indexer indexer = IndexerRegistryUtil.getIndexer(ScienceApp.class);
+		indexer.reindex(scienceApp);
+	}
 	
 	/**
 	 * ScienceApp Mirgation = 2017-03-23 HKD
@@ -2280,5 +2247,218 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	// Jul. 16, 2017
 	public ScienceApp getScienceApp( String scienceAppName, String scienceAppVersion ) throws NoSuchScienceAppException, SystemException{
 		return super.scienceAppPersistence.findByNameVersion(scienceAppName, scienceAppVersion);
+	}
+	
+	// ADD ScienceAppList source by imJeong at 2018.03.06
+	public int countScienceApp(long companyGroupId, long groupId,long categoryId,Locale locale, Map<String,Object> searchParam) throws SystemException, PortalException{
+		Map<String,Object> search = settingScienceAppParameter(companyGroupId, groupId, categoryId, locale, searchParam, 0, 0);
+		return scienceAppFinder.countScienceApp(search);
+	}
+	
+	/**
+	 * ScienceApp List 조회
+	 * @param companyGroupId
+	 * @param groupId
+	 * @param categoryId - 0일 경우 groupId를 통하여 전체 카테고리를 조회
+	 * @param locale
+	 * @param searchParam - 조회할 parameter Map
+	 * @param begin - 시작 0 LIMIT를 사용
+	 * @param end
+	 * @param widthFile - 목록에서 파일이 필요 할 경우 true
+	 * @return
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public List<Map<String, Object>> retrieveListScienceApp(long companyGroupId, long groupId, long categoryId, Locale locale, Map<String,Object> searchParam, int begin, int end, boolean widthFile) throws PortalException, SystemException{
+		
+		Map<String,Object> search = settingScienceAppParameter(companyGroupId, groupId, categoryId, locale, searchParam, begin, end);
+		List<Object[]> scienceAppList = scienceAppFinder.retrieveListScienceApp(search);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		try{
+			for (int i = 0; i < scienceAppList.size(); i++) {
+				Object[] resultArray = scienceAppList.get(i);
+				ScienceAppCategoryLink sAppCategoryLink = (ScienceAppCategoryLink) resultArray[0];
+				ScienceApp scienceApp = (ScienceApp) resultArray[1];
+				User user = UserLocalServiceUtil.getUser(scienceApp.getAuthorId());
+				
+				//ScienceAppCategoryLink,ScienceApp 테이블에서 modifiedDate column 중복으로 인한 수정 - (20170202 HKD)
+				Date modifiedDate = (Date) resultArray[2];
+				scienceApp.setModifiedDate(CustomUtil.StringToDateFormat(CustomUtil.strNull(modifiedDate), "yyyy-MM-dd"));;
+				
+				Map<String, Object> resultRow = getScienceAppMap(locale, sAppCategoryLink, scienceApp, user);
+				
+
+				long classPK = GetterUtil.getLong(user.getExpandoBridge().getAttribute(EdisonExpando.USER_UNIVERSITY),0);
+				String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(classPK, EdisonExpando.CDNM, locale);
+				resultRow.put("affiliation", affiliation);
+				
+				if(widthFile){
+					//파일 - icon
+					if(scienceApp.getIconId()!=0){
+						resultRow.put("iconId", scienceApp.getIconId());
+						try{
+						DLFileEntry iconDl =  DLFileEntryLocalServiceUtil.getDLFileEntry(scienceApp.getIconId());
+						resultRow.put("iconRepositoryId", iconDl.getRepositoryId());
+						resultRow.put("iconUuid", iconDl.getUuid());
+						resultRow.put("iconTitle", iconDl.getTitle());
+						}catch(Exception e){
+							if(e instanceof NoSuchFileEntryException){
+							}else{
+								throw new PortalException(e);
+							}							
+						}
+					}
+					
+					//메뉴얼
+					long manualId = GetterUtil.getLong(scienceApp.getManualId(locale),0l);
+					if(manualId !=0){
+						try{
+							DLFileEntry manualDl =DLFileEntryLocalServiceUtil.getDLFileEntry(manualId);
+							resultRow.put("manualId", manualId);
+							resultRow.put("manualRepositoryId", manualDl.getRepositoryId());
+							resultRow.put("manualUuid", manualDl.getUuid());
+							resultRow.put("manualTitle", manualDl.getTitle());
+						}catch(Exception e){
+							if(e instanceof NoSuchFileEntryException){
+							}else{
+								throw new PortalException(e);
+							}							
+						}
+					}
+				}
+				
+				
+				returnList.add(resultRow);
+			}
+		}catch(Exception e){
+			if(e instanceof PortalException){
+				throw new PortalException(e);
+			}else{
+				throw new SystemException(e);
+			}
+		}
+		
+		return returnList;
+	}
+	
+	protected Map<String,Object> settingScienceAppParameter(long companyGroupId, long groupId,long categoryId, Locale locale,Map<String,Object> searchParam,int begin, int end) throws PortalException, SystemException {
+		//categoryId가 0일 경우 해당 groupId의 상위 카테고리를 조회 해서 parentCategoryId에 셋팅 한다.
+		if(categoryId==0){
+			//카테고리
+			AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+			
+			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
+			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+			
+			String categoryStr = "";
+			for(AssetCategory aCategory : aCategoryList){
+				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&&aCategory.getParentCategoryId()==0){
+					if(categoryStr.equals("")){
+						categoryStr += aCategory.getCategoryId();
+					}else{
+						categoryStr += ","+aCategory.getCategoryId();
+					}
+				}
+			}
+			
+			long[] parentCategoryId = StringUtil.split(categoryStr,0l);
+			searchParam.put("parentCategoryId", parentCategoryId);
+		}else{
+			searchParam.put("categoryId", categoryId);
+		}
+		
+		
+		String targetLanguage = LocaleUtil.toLanguageId(locale);
+		searchParam.put("targetLanguage", targetLanguage);
+		searchParam.put("companyId", GroupLocalServiceUtil.getGroup(companyGroupId).getCompanyId());
+		
+		
+		
+		//User 확장 필드 조회
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
+		ExpandoColumn column = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY);
+		searchParam.put("columnId", column.getColumnId());
+		
+		
+		
+		//전체 검색 및 기관 검색이 있을 경우
+		String searchOption = CustomUtil.strNull(searchParam.get("searchOption"));
+		if(!searchOption.equals("")){
+			searchParam.put(searchOption, "Y");
+				
+			if(StringUtil.equalsIgnoreCase(searchOption, "APP_MANAGER_SEARCH_ALL")||StringUtil.equalsIgnoreCase(searchOption, "SCIENCEAPPSTORE_SEARCH_ALL")||StringUtil.equalsIgnoreCase(searchOption, "SWORGNM")){
+				String searchValue = CustomUtil.strNull(searchParam.get("searchValue"));
+				String searchOrgCodeStr = "";
+				//공통코드에서 Like 조회
+				List<Map<String, String>> commonCodeList = EdisonExpndoUtil.getCodeListByUpCode(1501, locale);
+				for(Map<String,String> codeMap : commonCodeList){
+					String codeName = codeMap.get(EdisonExpando.CDNM);
+					if(codeName.indexOf(searchValue)>-1){
+						String codeValue = codeMap.get(EdisonExpando.CD);
+						
+						if(searchOrgCodeStr.equals("")){
+							searchOrgCodeStr += codeValue;
+						}else{
+							searchOrgCodeStr += ","+codeValue;
+						}
+					}
+				}
+				
+				if(searchOrgCodeStr.equals("")){
+					searchParam.put("searchOrgCode", searchValue);
+				}else{
+					long[] searchOrgCode = StringUtil.split(searchOrgCodeStr,0l);
+					searchParam.put("searchOrgCode", searchOrgCode);
+				}
+				
+				
+			}
+		}
+		
+		//페이징
+		if(end!=0){
+			searchParam.put("begin", begin);
+			searchParam.put("end", end);
+		}
+		
+		return searchParam;
+	}
+	
+	public List<ScienceApp> retrieveListByTemplateId(String templateId) throws SystemException{
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(ScienceApp.class, PortletClassLoaderUtil.getClassLoader());
+		query.add(RestrictionsFactoryUtil.eq("templetId",templateId));
+		return ScienceAppLocalServiceUtil.dynamicQuery(query);
+	}
+	
+	protected Map<String, Object> getScienceAppMap(
+		      Locale locale, ScienceAppCategoryLink sAppCategoryLink, ScienceApp scienceApp, User user
+		      ) 
+		      throws ParseException, PortalException, SystemException{
+		    
+		Map<String, Object> resultRow = new HashMap<String, Object>();
+	    resultRow.put("groupId", sAppCategoryLink.getGroupId());
+	    resultRow.put("companyId", sAppCategoryLink.getCompanyId());
+	    resultRow.put("categoryId", sAppCategoryLink.getCategoryId());
+	    resultRow.put("parentCategoryId", sAppCategoryLink.getParentCategoryId());
+	    
+	    resultRow.put("scienceAppId", scienceApp.getScienceAppId());
+	    resultRow.put("createDate", scienceApp.getCreateDate());
+	    resultRow.put("statusDate", scienceApp.getStatusDate());
+	    resultRow.put("name", scienceApp.getName());
+	    resultRow.put("version", scienceApp.getVersion());
+	    resultRow.put("title", scienceApp.getTitle(locale));
+	    resultRow.put("status", scienceApp.getStatus());
+	    resultRow.put("modifiedDate", scienceApp.getModifiedDate());
+	    resultRow.put("developers", StringUtil.split(scienceApp.getDevelopers(locale), StringPool.NEW_LINE));
+	    resultRow.put("appType", scienceApp.getAppType());
+	    
+	    resultRow.put("firstName", user.getFirstName());
+	    resultRow.put("screenName", user.getScreenName());
+	    resultRow.put("userId", user.getUserId());
+	    
+	    return resultRow;
 	}
 }

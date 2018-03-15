@@ -130,6 +130,7 @@
 .infoBtnbox input{float: right; margin-left: 3px; }
 
 .wbba {word-break: break-all;}
+
 </style>
 
 <link href="${contextPath}/css/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
@@ -139,10 +140,13 @@
 
 </head>
 <body>
-<c:if test="${isMainAppSearch eq true }">
-	<div class="subvisualwrap"> <div class="subnaviwrap"> <div class="subnaviwrap">  </div> </div> </div>
-	<div class="content-sub">
-</c:if>
+	<c:if test="${isMainAppSearch eq true }">
+		<div class="subvisualwrap"> 
+			<div class="subnaviwrap"> 
+				<div class="subnaviwrap">  </div> 
+			</div> 
+		</div>
+	</c:if>
 
 	<form name="exeform" method="post" action="<%=exeURL%>" style="margin:0px;">
 		<input name="<portlet:namespace />id"    type="hidden"/>
@@ -177,79 +181,82 @@
 		</div>
 	</div>
 	<!-- 좌측	 -->
-	<div class="commleft" style="padding: 0px 18px 0px 0px;">
+	<div class="commleft panel edison-panel" style="padding: 0px 18px 0px 0px;">
 		<form id="<portlet:namespace/>solverInfoForm" name="<portlet:namespace/>solverInfoForm" method="POST"  action="${actionUrl}" onsubmit="return <portlet:namespace/>solverInfoFormCheck()">
 			<input type="hidden" id="<portlet:namespace/>selectLocaleId" name="<portlet:namespace/>selectLocaleId" value="${solver.selectLocaleId}"/>
-			<div class="h4" style="float: left;">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-				<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
+			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+				<h3 class="panel-title pull-left">
+					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
+					<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
+				</h3>
+				
+				<div class="btn-group pull-right">
+					<c:if test="${contentCheckAuth eq 'TRUE' }">
+						<input type="button" id="tabs-1" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>detailInfoModify(); return false;"/>
+					</c:if>
+						<input type="button" id="tabs-1" class="btn btn-default" 
+							value="<liferay-ui:message key='edison-science-appstore-view-tab-sw-statistics' />" onClick="<portlet:namespace/>moveScienceAppExecStatistice('${solver.name}','${solverGroupId}');"/>	
+				</div>
 			</div>
 				
-			<div class="infoBtnbox" style="float: right; padding-top: 15px;">
-			<c:if test="${contentCheckAuth eq 'TRUE' }">
-				<input type="button" id="tabs-1" class="button02" value="<liferay-ui:message key='edison-button-board-modify' />" onClick="<portlet:namespace/>detailInfoModify(); return false;"/>
-			</c:if>
-				<input type="button" id="tabs-1" class="button02" 
-					value="<liferay-ui:message key='edison-science-appstore-view-tab-sw-statistics' />" onClick="<portlet:namespace/>moveScienceAppExecStatistice('${solver.name}','${solverGroupId}');"/>	
-			</div>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			  <c:if test="${contentCheckAuth eq 'FALSE' }">
-			  <tr>
-		  		<td width="100%">
-			  		<%
-						for(Locale aLocale : locales){
-							String languageId = LocaleUtil.toLanguageId(aLocale);
-							String descriptionKey = "description_"+languageId;
-				    %>	
-				    	<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
-				    	<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>">
-				    		${solver.description[descriptionKey] }
-				    	</div>
-				    <%
-						}
-				    %>
-			    </td>	
-			  </tr>
-			  </c:if>
-			  <c:if test="${contentCheckAuth eq 'TRUE' }">
-			  	  <tr>
-				  	<td width="100%">
-				  		<aui:select name="serviceLocaleId" label="" onChange="changeLocale(this.value)">
-							<%
+				<c:if test="${contentCheckAuth eq 'FALSE' }">
+					<tr>
+					<td width="100%">
+						<%
 							for(Locale aLocale : locales){
 								String languageId = LocaleUtil.toLanguageId(aLocale);
-								if(localesStr.equals("")){
-									localesStr += languageId;
-								}else{
-									localesStr += ","+languageId;
-								}
-								
-								String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
-							%>
-								<c:set var="langId" value="<%=languageId%>"></c:set>
-								<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="${solver.selectLocaleId eq langId ? true : false}"/>
-							<%} %>
-						</aui:select>
-						<br>
-				  	</td>
-				  </tr>
-				  <tr>
-				    <td width="100%">
-				    <%
-						for(Locale aLocale : locales){
-							String languageId = LocaleUtil.toLanguageId(aLocale);
-							String descriptionKey = "description_"+languageId;
-				    %>	
-				    	<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
-				    	<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>">
-				    		<textarea id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" style="width:100%;height:300px;">${solver.description[descriptionKey] }</textarea>
-				    	</div>
-				    <%
-						}
-				    %>	
-				    </td>
-				  </tr>
-			  </c:if>
+								String descriptionKey = "description_"+languageId;
+						%>	
+							<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
+							<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>">
+								${solver.description[descriptionKey] }
+							</div>
+						<%
+							}
+						%>
+					</td>	
+					</tr>
+				</c:if>
+				<c:if test="${contentCheckAuth eq 'TRUE' }">
+					<tr>
+						<td width="100%">
+							<aui:select name="serviceLocaleId" label="" onChange="changeLocale(this.value)">
+								<%
+								for(Locale aLocale : locales){
+									String languageId = LocaleUtil.toLanguageId(aLocale);
+									if(localesStr.equals("")){
+										localesStr += languageId;
+									}else{
+										localesStr += ","+languageId;
+									}
+									
+									String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
+								%>
+									<c:set var="langId" value="<%=languageId%>"></c:set>
+									<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="${solver.selectLocaleId eq langId ? true : false}"/>
+								<%} %>
+							</aui:select>
+							<br>
+						</td>
+					</tr>
+					<tr>
+						<td width="100%">
+						<%
+							for(Locale aLocale : locales){
+								String languageId = LocaleUtil.toLanguageId(aLocale);
+								String descriptionKey = "description_"+languageId;
+						%>	
+							<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
+							<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>">
+								<textarea id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" style="width:100%;height:300px;">${solver.description[descriptionKey] }</textarea>
+							</div>
+						<%
+							}
+						%>	
+						</td>
+					</tr>
+				</c:if>
 			</table>
 			
 			<c:if test="${!empty solver.openLevel && !empty solver.srcFileId}">
@@ -340,14 +347,9 @@
 					<c:if test="${empty solver.current_manualId}">
 						<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 					</c:if>
-					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${params.solverId}');"/>
-					</c:if>
-					<c:if test="${solver.appType eq 'Editor' and isSignedIn}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor();"/>
-					</c:if>
-					<c:if test="${solver.appType eq 'Analyzer' and isSignedIn}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer();"/>
+					
+					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
+						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
 					</c:if>
 				</li>
 			</ul>
@@ -415,14 +417,13 @@
 			</div>
 		</c:if>
 	</div>
-<c:if test="${isMainAppSearch eq true }">	
-</div>
-</c:if>
+	<c:if test="${isMainAppSearch eq true }">	
+	</div>
+	</c:if>
 
-<div id="<portlet:namespace/>show-analyzer-dialog">
-	<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
-</div>
-
+	<div id="<portlet:namespace/>show-analyzer-dialog">
+		<div id="<portlet:namespace/>show-analyzer-dialog-content"></div>
+	</div>
 
 </body>
 <style>
@@ -684,6 +685,24 @@ function <portlet:namespace/>deleteFavoriteApp(solverId,groupId) {
 function <portlet:namespace/>historyBack(){
 	location.href = "${redirectOrignURL}";
 }
+
+
+function <portlet:namespace/>goWorkbench(targetScienceAppId){
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
+		portletURL.setPlid("${workBenchPlid}");
+		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
+		portletURL.setParameter("scienceAppId", targetScienceAppId);
+		
+		portletURL.setParameter("redirectName", "My Project");
+		portletURL.setParameter("redirectURL", "${redirectURL}");
+		window.location.href = portletURL;
+	});
+}
+
 </script>
 
 <aui:script>

@@ -1,0 +1,10 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "H2O",
+  "simulation_description": "",
+  "-f_type": "File",
+  "-f": {
+    "fileId": "L0VESVNPTi8uL0xEQVAvREFUQS8yMTQwMS80ODUvYzA0ODU2MzczL3JlcG9zaXRvcnkvSDJPX2lucHV0LmlucA==",
+    "fileName": "H2O_input.inp"
+  }
+}

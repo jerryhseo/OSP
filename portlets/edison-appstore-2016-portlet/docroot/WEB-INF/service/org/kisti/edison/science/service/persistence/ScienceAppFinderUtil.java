@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present EDISON, KISTI. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -100,6 +100,18 @@ public class ScienceAppFinderUtil {
 	public static int getMyAppListForProjectCount(java.util.Map params,
 		java.util.Locale locale) {
 		return getFinder().getMyAppListForProjectCount(params, locale);
+	}
+
+	public static int countScienceApp(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().countScienceApp(searchParam);
+	}
+
+	public static java.util.List<java.lang.Object[]> retrieveListScienceApp(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().retrieveListScienceApp(searchParam);
 	}
 
 	public static ScienceAppFinder getFinder() {

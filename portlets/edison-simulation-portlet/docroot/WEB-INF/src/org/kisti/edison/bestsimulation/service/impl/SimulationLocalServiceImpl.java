@@ -158,9 +158,14 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
   private DynamicQuery makeSimulationsQuery(long scienceAppId, long userId, boolean isTest){
     DynamicQuery query = DynamicQueryFactoryUtil.forClass(
         Simulation.class, "sim", PortletClassLoaderUtil.getClassLoader());
-    return query.add(RestrictionsFactoryUtil.eq("sim.testYn", isTest))
-        .add(RestrictionsFactoryUtil.eq("sim.scienceAppId", String.valueOf(scienceAppId)))
-        .add(RestrictionsFactoryUtil.eq("sim.userId", userId));
+    query.add(RestrictionsFactoryUtil.eq("sim.testYn", isTest))
+        .add(RestrictionsFactoryUtil.eq("sim.scienceAppId", String.valueOf(scienceAppId)));
+    
+    if(userId!=0){
+    	query.add(RestrictionsFactoryUtil.eq("sim.userId", userId));
+    }
+        
+    return query;
   }
 
   private DynamicQuery makeSimulationsQuery(long scienceAppId, long userId){
@@ -697,7 +702,8 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	 * @throws JSONException
 	 * @throws InterruptedException
 	 */
-	public Map uploadFile(String cluster, String icebreakerUrl, String vcToken, File file) throws MalformedURLException, IOException, InterruptedException {
+    public Map uploadFile(String cluster, String icebreakerUrl, String vcToken, File file)
+        throws MalformedURLException, IOException, InterruptedException{
 		 
 		URL url = new URL(icebreakerUrl+"/api/file/upload?cluster="+cluster);
 		HttpFileUtil httpFileUtil = new HttpFileUtil(url);
@@ -1411,6 +1417,39 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	    return getSimulationPersistence().countByUserId_G(groupId, userId);
 	}
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+    public List<Simulation> findByUserIdAndTitle(
+        long groupId, long userId, String tittleKeyword, int start,int end) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitleWithOutGroupId(userId, tittleKeyword);
+        query.addOrder(OrderFactoryUtil.desc("sim.simulationCreateDt"));
+        List result = getSimulationLocalService().dynamicQuery(query, start, end);
+        return result == null ? null : (List<Simulation>)result;
+    }
+    
+    public long countByUserIdAndTitle(
+        long groupId, long userId, String tittleKeyword) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitleWithOutGroupId(userId, tittleKeyword);
+        return getSimulationLocalService().dynamicQueryCount(query);
+    }
+    
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public List<Simulation> findByTitle(
+        long groupId, String tittleKeyword, int start,int end) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(tittleKeyword);
+        query.addOrder(OrderFactoryUtil.desc("sim.simulationCreateDt"));
+        List result = getSimulationLocalService().dynamicQuery(query, start, end);
+        return result == null ? null : (List<Simulation>)result;
+    }
+    
+    public long countByTitle(long groupId, String tittleKeyword) 
+            throws SystemException{
+        DynamicQuery query = makeSimulationsQueryWithTitle(tittleKeyword);
+        return getSimulationLocalService().dynamicQueryCount(query);
+    }
+	
     @SuppressWarnings({"unchecked", "rawtypes"})
     public List<Simulation> findByUserIdAndGroupIdAndTitle(
         long groupId, long userId, String tittleKeyword, int start,int end) 
@@ -1442,6 +1481,19 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
             throws SystemException{
         DynamicQuery query = makeSimulationsQueryWithTitle(groupId, tittleKeyword);
         return getSimulationLocalService().dynamicQueryCount(query);
+    }
+    private DynamicQuery makeSimulationsQueryWithTitle(String tittleKeyword){
+        DynamicQuery query = DynamicQueryFactoryUtil.forClass(
+            Simulation.class, "sim", PortletClassLoaderUtil.getClassLoader());
+        if(StringUtils.hasText(tittleKeyword)){
+            query.add(RestrictionsFactoryUtil.like("sim.simulationTitle", "%" + tittleKeyword + "%"));
+        }
+        return query;
+    }
+    
+    private DynamicQuery makeSimulationsQueryWithTitleWithOutGroupId(long userId, String tittleKeyword){
+        return makeSimulationsQueryWithTitle(tittleKeyword)
+            .add(RestrictionsFactoryUtil.eq("sim.userId", userId));
     }
 
     private DynamicQuery makeSimulationsQueryWithTitle(long groupId, String tittleKeyword){
@@ -1477,13 +1529,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			ServiceContext sc ) throws SystemException{
 		SimulationPK simulationPK = new SimulationPK(uuid, sc.getScopeGroupId());
 		Simulation simulation = super.createSimulation(simulationPK);
-		long simulationGroupId = sc.getScopeGroupId();
-		try{
-            ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppName, scienceAppVersion);
-            simulationGroupId = scienceApp.getGroupId();
-        }catch (NoSuchScienceAppException e){
-            throw new SystemException(e);
-        }
+		
 		
 		simulation.setSimulationTitle(title);
 		simulation.setClassId(srcClassCode);
@@ -1496,7 +1542,6 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		simulation.setSimulationCreateDt(new Date());
 		
 		simulation.setUserId(sc.getUserId());
-		simulation.setGroupId(simulationGroupId);
 		
 		return super.addSimulation(simulation);
 	}

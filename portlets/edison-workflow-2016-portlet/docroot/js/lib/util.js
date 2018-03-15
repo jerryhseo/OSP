@@ -1,5 +1,6 @@
+var slice = Array.prototype.slice;
 var consoleLog = {
-  loggingLevel: { info: true, debug: true, error: true },
+  loggingLevel: { info: true, debug: false, error: true },
   setLoggingLevel : function(loggingLevelJson){
     this.loggingLevel = loggingLevelJson;
   },
@@ -20,6 +21,65 @@ var consoleLog = {
   }
 };
 
+var aSyncAjaxHelper = {
+  "get": function (requestUrl, callback, errorCallback) {
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      method: 'GET',
+      timeout: 10000,
+    }).done(function (result) {
+      if(callback){ callback(result); }
+      consoleLog.debug(requestUrl + " success");
+    }).error(function () {
+      consoleLog.debug(requestUrl + " error");
+      if(errorCallback){ errorCallback(); }
+    }).always(function () {
+      consoleLog.debug(requestUrl + " complete");
+    });
+  },
+  "post": function (requestUrl, jsonData, callback, errorCallback) {
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      data : jsonData,
+      method: 'POST',
+      timeout: 10000,
+    }).done(function (result) {
+      if(callback){ callback(result); }
+      consoleLog.debug(requestUrl + " success");
+    }).error(function (msg) {
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
+    }).always(function (msg) {
+      consoleLog.debug(requestUrl + " complete");
+      consoleLog.debug(msg);
+    });
+  },
+  "jsonPost": function (requestUrl, jsonData, callback, errorCallback) {
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      data : jsonData,
+      method: "POST",
+      dataType: "json",
+      timeout: 10000,
+    }).done(function (result) {
+      if(callback){ callback(result); }
+      consoleLog.debug(requestUrl + " success");
+    }).error(function (msg) {
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
+    }).always(function (msg) {
+      consoleLog.debug(requestUrl + " complete");
+      consoleLog.debug(msg);
+    });
+  }
+};
+
 var synchronousAjaxHelper = {
   "get": function (requestUrl, callback, errorCallback) {
     var resultData;
@@ -30,17 +90,17 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function () {
+    }).error(function (msg) {
       consoleLog.debug(requestUrl + " error");
-      if(errorCallback){ errorCallback(); }
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function () {
       consoleLog.debug(requestUrl + " complete");
     });
     return resultData;
   },
-  "post": function (requestUrl, jsonData, callback) {
+  "post": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -50,18 +110,19 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
-      consoleLog.debug(msg);
+    }).error(function (msg) {
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);
     });
     return resultData;
   },
-  "jsonPost": function (requestUrl, jsonData, callback) {
+  "jsonPost": function (requestUrl, jsonData, callback, errorCallback) {
     var resultData;
     $.ajax({
       url: requestUrl,
@@ -73,11 +134,12 @@ var synchronousAjaxHelper = {
       timeout: 10000,
     }).done(function (result) {
       resultData = result;
-      if(callback){ callback(result) };
+      if(callback){ callback(result); }
       consoleLog.debug(requestUrl + " success");
-    }).fail(function (msg) {
-      consoleLog.debug(requestUrl + " fail ");
-      consoleLog.debug(msg);
+    }).error(function (msg) {
+      consoleLog.info(requestUrl + " error ");
+      consoleLog.info(msg);
+      if(errorCallback){ errorCallback(msg.responseText); }
     }).always(function (msg) {
       consoleLog.debug(requestUrl + " complete");
       consoleLog.debug(msg);
@@ -96,3 +158,44 @@ var getGUID = function () {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 };
+
+function _enterkey(selector, runEventHandler){
+  $(selector).keypress(function(e){
+    if(e.which == 13){
+      runEventHandler(e);
+    }
+  });
+}
+
+function _instantDelay(wait) {
+  var timer = 0;
+  return function (func) {
+    clearTimeout(timer);
+    var args = slice.call(arguments, 1);
+    timer = setTimeout(function () { return func.apply(null, args); }, wait);
+  };
+}
+
+function _delay(func, wait) {
+  var args = slice.call(arguments, 2);
+  return setTimeout(function(){ return func.apply(null, args); }, wait);
+}
+
+function _clearTimeout(timer){
+  if (timer) {
+    clearTimeout(timer);
+  }
+}
+
+function _confirm(msg, _of, _cf){
+  _of = _of || function(){};
+  _cf = _cf || function(){};
+  $.confirm({
+      "title": "",
+      "content": msg,
+      "buttons": {
+          "ok": _of,
+          "cancel": _cf
+      }
+  });
+}

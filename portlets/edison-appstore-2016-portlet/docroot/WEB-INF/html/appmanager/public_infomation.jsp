@@ -1,5 +1,3 @@
-<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
-<%@page import="com.liferay.portal.kernel.portlet.LiferayPortletMode"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 <%@ page import="com.liferay.portal.kernel.util.LocaleUtil" %>
@@ -16,12 +14,6 @@
 <%@ page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@ page import="com.liferay.portal.service.GroupLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.model.Group"%>
-
-<liferay-portlet:renderURL var="appTestURL" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-	<liferay-portlet:param name="scienceAppId" value="${scienceAppId}"/>
-<%-- 	<liferay-portlet:param name="testYn" value="true"/> --%>
-</liferay-portlet:renderURL>
 
 <portlet:actionURL var="submitURL" copyCurrentRenderParameters="false" name="appAction" >
 	<portlet:param name="clickTab" value="${clickTab}"/>
@@ -91,27 +83,23 @@
 %>
 <!-- ------------- -->
 <style type="text/css">
-	.aui input[type="text"],
-	.aui textarea{
-		margin-bottom: 0px;
-	}
-	
 	.aui .long_field{
-		width: 350px;
+		width: 350px !important;
 	}
 	
 	.aui .short_field{
-		width: 150px;
+		width: 150px !important;
 	}
 	
 	.aui .too_long_field{
-		width: 500px;
+		width: 500px !important;
 	}
 	
 	.aui .text_field{
-		width: 700px;
-		height: 100px;
+		width: 100%;
 		resize: none;
+		height:auto;
+		margin-bottom: 10px;
 	}
 	
 	.aui .swrightcont .alert{
@@ -151,47 +139,47 @@ public String marshallParams(Map<String, String> params) {
 		</c:if>
 	</div>
 </c:if>
-
-<div class="virtitlebox">
-	<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
-	<div class="virtitle">
-		<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
-	</div>
-	<div style="width:70%; float:right; text-align:right; padding-top:15px;">
-		<input class="addIp button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
-		
-		<c:if test="${data.status gt 1901003}">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
-		</c:if>
-		
-		<c:if test="${appStatusButtonView}">
-			<c:if test="${data.status eq '1901001'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
-			</c:if>
-			<c:if test="${data.status eq '1901002' && isAdmin}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
-			</c:if>
-			<c:if test="${data.status eq '1901003'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+<div class="edison-panel">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left">
+			<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+			<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
+		</h3>
+		<div class="btn-group pull-right">
+			<input class=" button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
+			
+			<c:if test="${data.status gt 1901003}">
+				<input class=" button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
 			</c:if>
 			
-			<c:if test="${data.status eq '1901004'}">
-				<input class="addIp button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+			<c:if test="${appStatusButtonView}">
+				<c:if test="${data.status eq '1901001'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901002' && isAdmin}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				<c:if test="${data.status eq '1901003'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
+				</c:if>
+				
+				<c:if test="${data.status eq '1901004'}">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+				</c:if>
 			</c:if>
-		</c:if>
-		
-		<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
-		<c:if test="${!empty scienceAppId && ownerThan }">
-			<input class="addIp button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
-			<c:if test="${workBenchPlid ne 0}">
-				<input class="addIp button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
+			
+			<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			<c:if test="${!empty scienceAppId && ownerThan }">
+				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
+				<c:if test="${workBenchPlid ne 0 && appTestButtonView}">
+					<input class=" button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
+				</c:if>
 			</c:if>
-		</c:if>
+		</div>
 	</div>
 </div>
-<div class="h10"></div>
 <div class="table1_list">
 	<aui:form name="frm" method="POST" action="<%=submitURL%>">
 		<aui:input name="actionMode" value="${mode}" type="hidden"/>
@@ -250,7 +238,8 @@ public String marshallParams(Map<String, String> params) {
 				%>
 					<tr>
 						<td colspan="3">
-							<%=languageNm%>&nbsp;&nbsp;<input type="file" id="<portlet:namespace/>app_manual<%=languageId%>" name="<portlet:namespace/>app_manual<%=languageId %>"><br/>
+							<%=languageNm%>&nbsp;&nbsp;
+							<input type="file" id="<portlet:namespace/>app_manual<%=languageId%>" name="<portlet:namespace/>app_manual<%=languageId %>">
 							<c:set value="<%=manualId%>" var="manualId"/>
 							<c:set value="<%=manualTitle%>" var="manualTitle"/>
 							
@@ -302,10 +291,6 @@ public String marshallParams(Map<String, String> params) {
 		<portlet:namespace/>setCKeditor();
 		
 	});
-	
-	function <portlet:namespace/>appTest(){
-		window.location.href = "<%=appTestURL%>";
-	}
 	
 	function <portlet:namespace/>actionCall(mode){
 		if(mode=='<%=Constants.ADD%>'){

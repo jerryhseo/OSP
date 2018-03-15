@@ -1,3 +1,5 @@
+<%@page import="com.kisti.osp.constants.OSPRepositoryTypes"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css"/>
@@ -7,28 +9,27 @@
  preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
  preferences.store();
  
- boolean eventEnable = (Boolean)renderRequest.getAttribute("eventEnable");
- String inputData = (String)renderRequest.getAttribute("inputData");
- String connector = (String)renderRequest.getAttribute("connector");
+ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
+ String inputData = GetterUtil.getString(renderRequest.getAttribute("inputData"), "{}");
+ String connector = GetterUtil.getString(renderRequest.getAttribute("connector"), "");
+ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
  %>
 
-<aui:container fluid="true" cssClass="common-analyzer-portlet">
-	<aui:row  fluid="true">
-		<aui:col span="12" id="canvasPanel" >
-			<div  id="<portlet:namespace/>canvas" style="width:100%;"></div>
-		</aui:col>
-	</aui:row>
-</aui:container>
+<div class="container-fluid osp-analyzer">
+	<div class="row-fluid no-header-frame">
+		<div class ="col-sm-12 canvas"  id="<portlet:namespace/>canvas"></div>
+	</div>
+</div>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
-<aui:script>
+<script>
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-var <portlet:namespace/>initialized = false;
 var <portlet:namespace/>connector = '<%=connector%>';
 var <portlet:namespace/>eventEnable = <%=eventEnable%>;
+var <portlet:namespace/>mode = '<%=mode%>';
 
 var <portlet:namespace/>dataType;
 var <portlet:namespace/>initData;
@@ -38,7 +39,7 @@ var <portlet:namespace/>initData;
  ***********************************************************************/
 if(!<portlet:namespace/>eventEnable){
   $(function(){
-    $("#<portlet:namespace/>canvasPanel").css("height", $(document).height());
+    $("#<portlet:namespace/>canvas").css("height", $(document).height());
   });
 
   var inputData = '<%=inputData%>';
@@ -76,23 +77,27 @@ Liferay.on(
     });
 
 Liferay.on(
-  OSP.Event.OSP_EVENTS_REGISTERED, 
-  function(e) {
-    var myId = '<%=portletDisplay.getId()%>';
-    if(e.targetPortlet === myId){
-      var eventData = {
-         portletId: myId,
-         targetPortlet: <portlet:namespace/>connector
-      };
-      Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
-    }
-  });
+	OSP.Event.OSP_EVENTS_REGISTERED, 
+	function(e) {
+		var myId = '<%=portletDisplay.getId()%>';
+		if(e.targetPortlet === myId){
+			console.log(myId + ' activated by OSP_EVENTS_REGISTERED.');
+			
+			var eventData = {
+								portletId: '<%=portletDisplay.getId()%>',
+								targetPortlet: <portlet:namespace/>connector
+						};
+						
+			Liferay.fire( OSP.Event.OSP_REQUEST_DATA_STRUCTURE, eventData );
+		}
+	}
+);
  
 Liferay.on(OSP.Event.OSP_LOAD_DATA, function(eventData){
   var myId = '<%=portletDisplay.getId()%>';
   if( eventData.targetPortlet === myId ){
     if( eventData.data){
-      <portlet:namespace/>loadStructure(eventData.data);
+      <portlet:namespace/>loadStructure(new OSP.InputData(eventData.data));
     }
   }
 });
@@ -119,7 +124,8 @@ function <portlet:namespace/>loadStructure( inputData ){
 			data:{
 				<portlet:namespace/>command: 'READ_FILE',
 				<portlet:namespace/>parentPath: inputData.parent(),
-				<portlet:namespace/>fileName: inputData.name()
+				<portlet:namespace/>fileName: inputData.name(),
+				<portlet:namespace/>repositoryType: inputData.repositoryType()
 			},
 			success:function(result){
 				dataType.loadStructure( result );
@@ -140,4 +146,4 @@ function <portlet:namespace/>loadStructure( inputData ){
 					'<%=request.getContextPath()%>',
 					'<%=themeDisplay.getLanguageId()%>');
 }
-</aui:script>
+</script>

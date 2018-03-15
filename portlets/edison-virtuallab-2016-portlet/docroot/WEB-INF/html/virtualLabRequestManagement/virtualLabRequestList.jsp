@@ -50,78 +50,84 @@ label.checkbox-label input[type=checkbox]{
 		String searchField = CustomUtil.strNull(request.getAttribute("searchField"));
 	%>
 	
-	<c:if test="${not empty tabsValues}">
-		<div class="contabmenu"> 
-			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
-		</div>
-	</c:if>
-
-	<h1>
-		<c:if test="${groupName ne null}">
-			<liferay-ui:message key='edison-virtuallab-request-list' />(${groupName})
+		<c:if test="${not empty tabsValues}">
+			<div class="contabmenu"> 
+				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+			</div>
 		</c:if>
-		<c:if test="${groupName eq null }">
-			<liferay-ui:message key='edison-virtuallab-request-list' />
-		</c:if>
-	</h1>
 	
-	<div class="tabletopbox">
-		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-			<div class="search">
-				<div class="searchbox">
-					<input type="text" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown();"/>
-					<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
-					<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
-					<input type="button" onClick="<portlet:namespace/>dataSearchList()" class="btnsearch" />
+		
+		<div class="table-responsive panel edison-panel">
+			<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
+				<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
+				<div class="panel-heading clearfix">
+					<h1 class="pull-left">
+						<c:if test="${groupName ne null}">
+							<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+							<liferay-ui:message key='edison-virtuallab-request-list' />(${groupName})
+						</c:if>
+						<c:if test="${groupName eq null }">
+							<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+							<liferay-ui:message key='edison-virtuallab-request-list' />
+						</c:if>
+					</h1>
+				
+					<div class="input-group" style="top: 22px;">
+						<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown();" style="width: 50%; float: right; margin-top: 0px; margin-left: 1%;"/>
+						
+						<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 15%; float: right; margin-top: 0px;">
+							<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
+							<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
+							<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
+							<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
+						</select>
+						
+						<select id="<portlet:namespace/>select_virtualLab_status" name="<portlet:namespace/>select_virtualLab_status" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 20%; float: right; margin-top: 0px;">
+							<option value="0">All</option>
+							${selectOptionStr}
+						</select>
+						
+						<div class="input-group-btn">
+							<button class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList();">
+								<i class="icon-search"></i>
+							</button>
+							<button class="btn btn-default" type="button" onClick="<portlet:namespace/>dataSearchList(0);">
+								Clear
+							</button>
+						</div>
+					</div>
 				</div>
-				<input type="button" onClick="<portlet:namespace/>dataSearchList(0)" class="button01" value="<liferay-ui:message key='edison-button-all-search' />" />
-			</div>
-			<div class="tabletopright1">
-				<select id="<portlet:namespace/>select_virtualLab_status" name="<portlet:namespace/>select_virtualLab_status" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview">
-					<option value="0">All</option>
-					${selectOptionStr}
-				</select>
-			</div>
+			</form>
 			
-			<div class="tabletopright">
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(0)" class="selectview">
-					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
-					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
-					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
-					<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
-				</select>
-			</div>
-		</form>
-	</div>
-	
-	<div class="table1_list borderno onhover">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<colgroup>
-				<col width="5%" />
-				<col width="20%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="15%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-virtuallab' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-affiliate' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-request-date' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-simulation-execute-job-create-list-state' /></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>virtualLabListBody">
-			</tbody>
-		</table>
-	</div>
-	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
-	<div id="<portlet:namespace/>pageListDiv" class="paging"></div>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
+				<colgroup>
+					<col width="5%" />
+					<col width="20%" />
+					<col width="15%" />
+					<col width="15%" />
+					<col width="15%" />
+					<col width="15%" />
+					<col width="15%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-index' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-virtuallab' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-affiliate' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-toolkit-change-request-date' /></th>
+						<th align="center" scope="col"><liferay-ui:message key='edison-simulation-execute-job-create-list-state' /></th>
+					</tr>
+				</thead>
+				<tbody id="<portlet:namespace/>virtualLabListBody">
+				</tbody>
+			</table>
+			
+			<div id="<portlet:namespace/>spaceDiv" align="center"></div>
+			<div id="<portlet:namespace/>pageListDiv" class="paging text-center"></div>
+		</div>
 </body>
 
 	<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
@@ -138,24 +144,26 @@ label.checkbox-label input[type=checkbox]{
 	</div>
 
 	<div id="<portlet:namespace/>jobparameter-dialog" title="<liferay-ui:message key="edison-simulation-execute-job-detail"/>" style="display:none; background-color:white; padding:0px;" class="newWindow">
-	<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
-			<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
-				<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
-			</div>
-			<div class="newWclose" style="cursor: pointer;">
-				<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
-			</div>
+		<div class="newWheader" id="<portlet:namespace/>jobparameter-dialog-title" style="cursor: move;">
+				<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+					<div class="newWtitle"><liferay-ui:message key="edison-simulation-execute-job-detail"/></div>
+				</div>
+				<div class="newWclose" style="cursor: pointer;">
+					<img id="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" name="<portlet:namespace/>jobparameter-dialog-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="21" height="21">
+				</div>
+		</div>
+		<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
+		</div>
 	</div>
-	<div id="<portlet:namespace/>jobparameter-dialog-content" style="padding: 30px;" class="newWcont01">
-	</div>
-</div>
 
 
 	<div id="<portlet:namespace/>virtualLab-process-dialog" title="<liferay-ui:message key='edison-virtuallab-request-infomation' />" class="newWindow" style="display:none; background-color:white; padding:0px;">
-		<form id="virtualLabManageForm" name="virtualLabManageForm" method="post" action="<%= updateVirtualLabStatusURL %>" >
+		<form id="virtualLabManageForm" name="virtualLabManageForm" method="post" action="<%= updateVirtualLabStatusURL %>" class="table-responsive panel edison-panel">
 			<input id="<portlet:namespace/>processVirtualLabId" name="<portlet:namespace/>processVirtualLabId" type="hidden" value="0"/>
 			<input id="<portlet:namespace/>requestUserId" name="<portlet:namespace/>requestUserId" type="hidden" value="0"/>
 			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
+			<input id="<portlet:namespace/>isDelete" name="<portlet:namespace/>isDelete" type="hidden" value=""/>
+			
 			<c:if test="${groupName ne null}">
 				<input id="<portlet:namespace/>groupName" name="<portlet:namespace/>groupName" type="hidden" value="${groupName}"/>
 			</c:if>
@@ -168,8 +176,8 @@ label.checkbox-label input[type=checkbox]{
 				</div>
 			</div>
 	
-			<div class="newWcont01">
-				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<div class="table1_list" style="padding: 20px 30px 25px 30px;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 					<colgroup>
 						<col width="20%" />
 						<col width="30%" />
@@ -199,9 +207,13 @@ label.checkbox-label input[type=checkbox]{
 						</tr>
 					</tbody>
 				</table>
-				<h4>
-					<liferay-ui:message key='edison-virtuallab-confirm-info' />
-				</h4>
+				
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-virtuallab-confirm-info' />
+					</h3>
+				</div>
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<colgroup>
 						<col width="20%" />
@@ -213,7 +225,7 @@ label.checkbox-label input[type=checkbox]{
 						<tr class="puptrline">
 							<th class="puptitle"><liferay-ui:message key='edison-virtuallab-confirm-status' /></th>
 							<td colspan="3">
-								<select id="<portlet:namespace/>processStatus" name="<portlet:namespace/>processStatus" title="option" >
+								<select id="<portlet:namespace/>processStatus" name="<portlet:namespace/>processStatus" title="option" class="btn btn-default" >
 									${selectOptionStr}
 								</select>
 							</td>
@@ -221,7 +233,7 @@ label.checkbox-label input[type=checkbox]{
 						<tr class="puptrline">
 							<th class="puptitle"><liferay-ui:message key='edison-process-note' /></th>
 							<td colspan="3">
-								<input id="<portlet:namespace/>processDescription" name="<portlet:namespace/>processDescription" type="text" maxlength="100" style="width:90%;"/>
+								<input id="<portlet:namespace/>processDescription" class="form-control" name="<portlet:namespace/>processDescription" type="text" maxlength="100" style="width:90%;"/>
 							</td>
 						</tr>
 						<tr class="puptrline">
@@ -241,7 +253,8 @@ label.checkbox-label input[type=checkbox]{
 						<liferay-ui:message key='edison-appstore-workspace-send-email' />
 					</i>
 				</label>
-				<input id="register_request_button" name="register_request_button" type="submit" class="button0801" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+				<input id="register_request_button" name="register_request_button" type="submit" class="btn btn-default" value="<liferay-ui:message key='edison-virtuallab-save' />" />
+				<input id="<portlet:namespace/>delete_button" name="delete_button" type="button" class="btn btn-default" value="<liferay-ui:message key='edison-button-board-delete' />" style="display: none; margin-left: 10px;" onclick="<portlet:namespace/>deleteVirtualLab();" />
 			</div>
 			
 		</form>
@@ -391,6 +404,8 @@ label.checkbox-label input[type=checkbox]{
 				
 				if(virtualLabInfo.virtualLabStatus==1401001){
 					$("#mailCheckBox").show();
+				} else if (virtualLabInfo.virtualLabStatus==1401004){
+					$("#<portlet:namespace/>delete_button").show();
 				}
 				
 				$("#<portlet:namespace/>virtualLab-process-dialog").dialog("open");
@@ -410,5 +425,10 @@ label.checkbox-label input[type=checkbox]{
 	//liferay-ui 탭 이벤트 return Script
 	function <portlet:namespace/>tagScript(tabUrl,tabNames,value,scriptName){
 		window.location.href = "<%= saveClickTabURL.toString() %>"+"&<portlet:namespace/>groupId=" + value;
+	}
+	
+	function <portlet:namespace/>deleteVirtualLab(){
+		$("#<portlet:namespace/>isDelete").val("true");
+		$("#virtualLabManageForm").submit();
 	}
 </script>

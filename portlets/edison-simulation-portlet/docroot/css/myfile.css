@@ -3,10 +3,6 @@ i.jstree-icon, i.jstree-ocl{
 /* 	margin-right: 10px; */
 }
 
-li.jstree-open > a .jstree-icon {background:url("/edison-simulation-portlet/images/myfile/myfile-icon01.png") 0px 0px no-repeat !important;}
-li.jstree-closed > a .jstree-icon {background:url("/edison-simulation-portlet/images/myfile/myfile-icon02.png") 0px 0px no-repeat !important;}
-
-
 /*jstree context menu*/
 .vakata-context,
 .jstree-contextmenu,
@@ -252,5 +248,43 @@ input[type=file] {
 
 .aui ul, .aui ol {
 	margin: 0px;
+}
+
+
+/* myFile UI  */
+.myfilefolderlist {
+	
+}
+
+.myfilefolderlist ul {
+	list-style: none;
+}
+
+.myfilefolderlist ul li {
+	float: left;
+	background-color: #f2f2f2;
+	border-radius: 3px;
+	padding: 17px 26px;
+	min-width: 210px;
+	margin-left: 20px;
+	font-size: 13px;
+	color: #000;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+.myfilefolderlist ul label {
+	cursor: pointer;
+}
+
+.myfilefolderlist ul li img {
+	float: left;
+	margin: 10px 20px 10px 5px;;
+}
+
+.myfilefolderlist ul li span {
+	font-size: 11px;
+	color: #000;
+	display: block;
 }
 
