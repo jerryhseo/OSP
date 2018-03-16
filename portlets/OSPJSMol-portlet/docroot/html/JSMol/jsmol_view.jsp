@@ -280,7 +280,7 @@ Liferay.on(
 			<portlet:namespace/>currentData = new OSP.InputData( e.data );
 			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
 				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>currentData.parent());
-				//console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>initData.name());
+				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>initData.name());
 				//<portlet:namespace/>currentData.parent( OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>initData.name()));
 				//<portlet:namespace/>initData.name("");
 				<portlet:namespace/>currentData.name("");
@@ -407,8 +407,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
-            //<portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>parentPath: inputData.parent_,
+            <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name()
     };
         
