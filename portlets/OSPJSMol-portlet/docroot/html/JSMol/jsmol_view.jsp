@@ -418,8 +418,11 @@ function <portlet:namespace/>getFirstFileName( argData ){
         data  : data,
         dataType : 'json',
         success: function(data) {
+        	console.log("[JSMOL] get result data ", data);
+        	var result = JSON.parse(data);
+        	console.log("[JSMOL] get result data ", result);
             inputData.type( OSP.Enumeration.PathType.FILE );
-            inputData.name( data.fileName );
+            inputData.name( result.fileName );
             <portlet:namespace/>drawJSMol( inputData );
             console.log("[JSMOL] Get First File Data : ", inputData);
         },
@@ -428,6 +431,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
             console.log('[JSMOL]AJAX ERROR2-->', e);
         },
         complete: function( jqXHR, textStatus ){
+        	console.log('[JSMOL]AJAX complete ', jqXHR);
+        	console.log('[JSMOL]AJAX complete ', textStatus);
         }
     });
 }
