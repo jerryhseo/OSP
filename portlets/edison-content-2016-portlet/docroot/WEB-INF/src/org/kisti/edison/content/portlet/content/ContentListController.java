@@ -203,7 +203,6 @@ public class ContentListController{
 			Role managerRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 				EdisonRoleConstants.CONTENT_MANAGER);
 			
-
 			Locale locale = themeDisplay.getLocale();
 			long companyGroupId = themeDisplay.getCompanyGroupId();
 
