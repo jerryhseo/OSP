@@ -1,0 +1,10 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "optimization of h2o",
+  "simulation_description": "",
+  "-inp_type": "File",
+  "-inp": {
+    "fileId": "L0VESVNPTi8uL0xEQVAvREFUQS9yb2JlcnR5dW4vcmVwb3NpdG9yeS93YXRlci5pbnA=",
+    "fileName": "water.inp"
+  }
+}

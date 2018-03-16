@@ -1,0 +1,222 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "[Rerun] ㅁ",
+  "simulation_description": "",
+  "-i_type": "Inputdeck",
+  "-i": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "space": false,
+        "brace-char": "SQUARE",
+        "sample": "[A B C]",
+        "delimiter": " "
+      },
+      "variable-form": {
+        "space": false,
+        "value-delimiter": " = ",
+        "variable-delimiter": " ;",
+        "comment-char": "",
+        "control-char": ""
+      },
+      "variable-map": {
+        "map": {
+          "a": {
+            "type": "numeric",
+            "active": true,
+            "name": "a",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Driving angular frequency"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Driving angular frequency"
+              }
+            },
+            "unit": "/s",
+            "value-domain": {
+              
+            },
+            "value": "48.25",
+            "sweepable": true,
+            "sweep": {
+              "slice-max": "20",
+              "sweep-by-slice": "false",
+              "slice-value": "",
+              "domain": {
+                "lower-limit": "0",
+                "upper-limit": "10000",
+                "operand": "=="
+              }
+            },
+            "activate-condition-container": {
+              
+            }
+          },
+          "b": {
+            "type": "numeric",
+            "active": true,
+            "name": "b",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Length of string"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Length of string"
+              }
+            },
+            "unit": "m",
+            "value-domain": {
+              
+            },
+            "value": "1.5",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "c": {
+            "type": "numeric",
+            "active": true,
+            "name": "c",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Tension"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Tension"
+              }
+            },
+            "unit": "N",
+            "value-domain": {
+              
+            },
+            "value": "0.8",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "d": {
+            "type": "numeric",
+            "active": true,
+            "name": "d",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Line density of string"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Line density of string"
+              }
+            },
+            "unit": "kg/m",
+            "value-domain": {
+              
+            },
+            "value": "0.0015",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "e": {
+            "type": "numeric",
+            "active": true,
+            "name": "e",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Damping coefficient"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Damping coefficient"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "0.001",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "f": {
+            "type": "numeric",
+            "active": true,
+            "name": "f",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Amplitude of driving force"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Amplitude of driving force"
+              }
+            },
+            "unit": "N",
+            "value-domain": {
+              
+            },
+            "value": "1.0",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "g": {
+            "type": "numeric",
+            "active": true,
+            "name": "g",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Phase of driving force"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Phase of driving force"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "0.0",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR}",
+      "file-content": "a = 48.37 ;\nb = 1.5 ;\nc = 0.8 ;\nd = 0.0015 ;\ne = 0.0 ;\nf = 1.0 ;\ng = 0.0 ;\n"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "acuteSTMtip7",
+  "simulation_description": ".......",
+  "-inp_type": "Inputdeck",
+  "-inp": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "space": false,
+        "brace-char": "SQUARE",
+        "sample": "[A B C]",
+        "delimiter": " "
+      },
+      "variable-form": {
+        "space": false,
+        "value-delimiter": " = ",
+        "variable-delimiter": " ;",
+        "comment-char": ""
+      },
+      "variable-map": {
+        "map": {
+          "V0": {
+            "type": "numeric",
+            "active": true,
+            "name": "V0",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "V0",
+                "en_US": "V0"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tip에 걸어준 전압",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value": "-0.5",
+            "sweep": {
+              "domain": {
+                
+              }
+            },
+            "value-domain": {
+              
+            },
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            },
+            "disable": false
+          },
+          "h": {
+            "type": "numeric",
+            "active": true,
+            "name": "h",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "h",
+                "en_US": "h"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "STM tip의 높이",
+                "en_US": "STM tip의 높이"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": 0.2,
+              "upper-limit": 10,
+              "operand": "=="
+            },
+            "value": "2.8",
+            "sweep": {
+              "domain": {
+                
+              }
+            },
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR,en_US}",
+      "file-content": "V0 = -0.5 ;\nh = 2.8 ;\n"
+    }
+  ]
+}

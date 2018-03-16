@@ -279,10 +279,11 @@ Liferay.on(
 			//<portlet:namespace/>initData = new OSP.InputData( e.data );
 			<portlet:namespace/>currentData = new OSP.InputData( e.data );
 			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
-				<portlet:namespace/>currentData.parent(
-					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
-					//<portlet:namespace/>initData.name("");
-					<portlet:namespace/>currentData.name("");
+				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>currentData.parent());
+				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>initData.name());
+				//<portlet:namespace/>currentData.parent( OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>initData.name()));
+				//<portlet:namespace/>initData.name("");
+				<portlet:namespace/>currentData.name("");
 			}
 			<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
 		}
@@ -328,7 +329,8 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadJSMolFile( inputData ){
-	
+	if(! inputData.repositoryType())
+		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	console.log("[JSMol] Load Data : input Data ", inputData);
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
@@ -337,7 +339,6 @@ function <portlet:namespace/>loadJSMolFile( inputData ){
 	case OSP.Enumeration.PathType.FOLDER:
 	case OSP.Enumeration.PathType.EXT:
 	    <portlet:namespace/>getFirstFileName( inputData );
-	    // serveResourceUrl.setParameter('command', 'READ_FIRST_FILE');
 		break;
 	case OSP.Enumeration.PathType.URL:
 		alert('Un supported yet.'+inputData.type());
@@ -398,15 +399,16 @@ function <portlet:namespace/>getFirstFileName( argData ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
     	inputData.name('');
     }
-    if( ! inputData.repositoryType() )
-		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
+    //if( ! inputData.repositoryType() )
+	//	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
     
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
-            <portlet:namespace/>parentPath: inputData.parent(),
+            //<portlet:namespace/>parentPath: inputData.parent(),
+            <portlet:namespace/>parentPath: inputData.parent_,
             <portlet:namespace/>fileName: inputData.name()
     };
         

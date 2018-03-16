@@ -1,0 +1,10 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "Ammonium Ion",
+  "simulation_description": "",
+  "-inp_type": "File",
+  "-inp": {
+    "fileId": "L0VESVNPTi8uL0xEQVAvREFUQS90b21raW0wMDcvcmVwb3NpdG9yeS9PcHRpbWl6dGlvbl9vZl9BbW1vbml1bV9Jb24uaW5w",
+    "fileName": "Optimiztion_of_Ammonium_Ion.inp"
+  }
+}

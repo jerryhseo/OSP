@@ -1,0 +1,10 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "Water molecule",
+  "simulation_description": "",
+  "-inp_type": "File",
+  "-inp": {
+    "fileId": "L0VESVNPTi8uL0xEQVAvREFUQS8yMjUzbWluaG8vcmVwb3NpdG9yeS9XYXRlci5pbnA=",
+    "fileName": "Water.inp"
+  }
+}

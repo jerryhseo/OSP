@@ -1,0 +1,6 @@
+{
+  "-param": {
+    "port_data": "Point_Number 100\n,Target_Time 0.2\n,Density_Left 1\n,X_Init 0\n,Time_Integration 2\n,Total_Iteration 10000\n,X_Break 0.3\n,Velocity_Left 0.75\n,X_End 1\n,Limiter 2\n,Flux_Scheme 5\n,CFL 0.7\n,Density_Right 0.125\n,Pressure_Right 0.1\n,Pressure_Left 1\n,Velocity_Right 0\n",
+    "editor_type": "Inputdeck"
+  }
+}

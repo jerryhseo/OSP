@@ -1,0 +1,176 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "test",
+  "simulation_description": "",
+  "-i_type": "Inputdeck",
+  "-i": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "space": false,
+        "brace-char": "SQUARE",
+        "sample": "[A B C]",
+        "delimiter": " "
+      },
+      "variable-form": {
+        "space": false,
+        "value-delimiter": " = ",
+        "variable-delimiter": " ;",
+        "comment-char": ""
+      },
+      "variable-map": {
+        "map": {
+          "a": {
+            "type": "numeric",
+            "active": true,
+            "name": "a",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "scale factor",
+                "en_US": "scale factor"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "출발지점과 원궤도 최고지점간의 높이의 비율에 해당하는 지표로, 궤도의 모양과 원궤도의 곡률반지름등과 관련있는 값이다",
+                "en_US": "궤도의 시작점으로부터 물체의 출발점까지의 거리 입니다."
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": 0.4,
+              "upper-limit": 0.9,
+              "operand": "<>"
+            },
+            "value": "0.5",
+            "sweep": {
+              "slice-max": 20,
+              "domain": {
+                "lower-limit": 0.4,
+                "upper-limit": 0.9,
+                "operand": "<>"
+              }
+            },
+            "sweepable": true,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            },
+            "disable": false
+          },
+          "b": {
+            "type": "numeric",
+            "active": true,
+            "name": "b",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "초기속도 (m/s)",
+                "en_US": "initial velocity (m/s)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "물체의 초기속도",
+                "en_US": "물체의 초기속도 입니다."
+              }
+            },
+            "unit": "",
+            "value": "5",
+            "sweep": {
+              "slice-max": 20,
+              "domain": {
+                "lower-limit": 0,
+                "upper-limit": 10,
+                "operand": "<>"
+              }
+            },
+            "value-domain": {
+              
+            },
+            "sweepable": true,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            },
+            "disable": false
+          },
+          "c": {
+            "type": "numeric",
+            "active": true,
+            "name": "c",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "마찰계수",
+                "en_US": "friction coefficient"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "마찰계수",
+                "en_US": "마찰계수 입니다."
+              }
+            },
+            "unit": "",
+            "value": "5",
+            "sweep": {
+              "slice-max": 20,
+              "domain": {
+                "lower-limit": 0,
+                "upper-limit": 10,
+                "operand": "<>"
+              }
+            },
+            "value-domain": {
+              
+            },
+            "sweepable": true,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            },
+            "disable": false
+          },
+          "d": {
+            "type": "numeric",
+            "active": true,
+            "name": "d",
+            "name-text-map": {
+              "map": {
+                "ko_KR": "공기저항계수",
+                "en_US": "air resistance coefficient"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "공기저항계수",
+                "en_US": "공기저항계수 입니다."
+              }
+            },
+            "unit": "",
+            "value": "5",
+            "sweep": {
+              "slice-max": 20,
+              "domain": {
+                "lower-limit": 0,
+                "upper-limit": 10,
+                "operand": "<>"
+              }
+            },
+            "value-domain": {
+              
+            },
+            "sweepable": true,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            },
+            "disable": false
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR,en_US}",
+      "file-content": "a = 0.5 ;\nb = 5 ;\nc = 5 ;\nd = 5 ;\n"
+    }
+  ]
+}

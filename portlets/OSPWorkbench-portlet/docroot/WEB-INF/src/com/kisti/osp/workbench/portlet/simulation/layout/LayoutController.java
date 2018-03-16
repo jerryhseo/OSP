@@ -107,7 +107,7 @@ public class LayoutController {
 		
 		
 //		ProvenanceSupportApp.put("uChem", "4.0.1");
-//		ProvenanceSupportApp.put("pianostring", "1.0.0");
+		ProvenanceSupportApp.put("pianostring", "1.0.0");
 //		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
 //		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
 //		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
@@ -594,7 +594,7 @@ public class LayoutController {
 		SimulationJob job = null;
 		
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 			
 			if(!jobTitle.equals("")){
 				job.setJobTitle(jobTitle);
@@ -651,7 +651,7 @@ public class LayoutController {
 		
 		SimulationJob job = null;
 		try {
-			job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+			job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 			job.setJobTitle(title);
 			SimulationJobLocalServiceUtil.updateSimulationJob(job);
 		} catch ( SystemException e) {
@@ -896,7 +896,7 @@ public class LayoutController {
 			System.out.println("Job UUID to be submitted: "+jobUuid);
 			if( jobUuid.isEmpty() || isJobSubmitted ){
 				try {
-					job = SimulationLocalServiceUtil.addJob(simulationUuid, scienceAppName, scienceAppVersion, sc);
+					job = SimulationLocalServiceUtil.addJob(simulationUuid, sc);
 				} catch (SystemException e) {
 					_log.error("Job creation failed: "+jobUuid);
 					throw new IOException();
@@ -1126,21 +1126,8 @@ public class LayoutController {
 			portalUrl += serverName+":"+themeDisplay.getServerPort();
 		}
 		
-		Simulation simulation = null;
-        try{
-            simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
-        }catch (NoSuchSimulationException | SystemException e){
-            _log.error("no simulation", e);
-        }
-		
-		//portalUrl = "http://150.183.247.221:8080";
-		
 		String url = portalUrl +_callbackAPI;
-		if(simulation == null){
-		    url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
-		}else{
-		    url = HttpUtil.addParameter(url, "gid", simulation.getGroupId());
-		}
+		url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
 		url = HttpUtil.addParameter(url, "simulationUuid", simulationUuid); 
 		url = HttpUtil.addParameter(url, "jobSeqNo", jobSeqNo); 
 		

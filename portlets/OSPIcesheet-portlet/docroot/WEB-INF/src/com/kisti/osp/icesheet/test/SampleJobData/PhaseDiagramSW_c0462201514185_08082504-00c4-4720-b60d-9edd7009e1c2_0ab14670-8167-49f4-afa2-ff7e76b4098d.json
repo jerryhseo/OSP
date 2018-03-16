@@ -1,0 +1,424 @@
+{
+  "code_mpi_number": "1",
+  "simulation_title": "solid 30",
+  "simulation_description": "",
+  "-inp_type": "Inputdeck",
+  "-inp": [
+    {
+      "sweep-max": 1,
+      "vector-form": {
+        "brace-char": "SQUARE_SPACE",
+        "sample": "[ A B C ]",
+        "delimiter": " ",
+        "space": false
+      },
+      "variable-form": {
+        "value-delimiter": " = ",
+        "comment-char": "",
+        "control-char": "",
+        "variable-delimiter": " ;",
+        "space": false
+      },
+      "variable-map": {
+        "map": {
+          "tmin": {
+            "type": "numeric",
+            "active": true,
+            "name": "tmin",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Minimum temperautre (K)",
+                "en_US": "Minimum temperautre (K)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Temperature range to plot",
+                "en_US": "Temperature range to plot (INTEGER)"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": 0,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "tmax": {
+            "type": "numeric",
+            "active": true,
+            "name": "tmax",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Maximum temperature (K)",
+                "en_US": "Maximum temperature (K)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Temperature range to plot",
+                "en_US": "Temperature range to plot (INTEGER)"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": 2000,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "plott": {
+            "type": "numeric",
+            "active": true,
+            "name": "plott",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Temperature to plot (K)",
+                "en_US": "Temperature to plot (K)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "Temperature to plot Gibbs free energy diagram",
+                "en_US": "Temperature to plot Gibbs free energy diagram"
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "1100",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "xbint": {
+            "type": "numeric",
+            "active": true,
+            "name": "xbint",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "xb interval",
+                "en_US": "xb interval"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              "lower-limit": 0,
+              "operand": "=="
+            },
+            "value": 0.01,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "has": {
+            "type": "numeric",
+            "active": true,
+            "name": "has",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Enthalpy of solid A (kJ/mol)",
+                "en_US": "Enthalpy of solid A"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "-366",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "hal": {
+            "type": "numeric",
+            "active": true,
+            "name": "hal",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Enthalpy of liquid A (kJ/mol)",
+                "en_US": "Enthalpy of liquid A"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": -330,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "hbs": {
+            "type": "numeric",
+            "active": true,
+            "name": "hbs",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Enthalpy of solid B (kJ/mol)",
+                "en_US": "Enthalpy of solid B"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "-350",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "hbl": {
+            "type": "numeric",
+            "active": true,
+            "name": "hbl",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Enthalpy of liquid B (kJ/mol)",
+                "en_US": "Enthalpy of liquid B"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": -330,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "sas": {
+            "type": "numeric",
+            "active": true,
+            "name": "sas",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Entropy of solid A (J/mol/K)",
+                "en_US": "Entropy of solid A"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": 50,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "sal": {
+            "type": "numeric",
+            "active": true,
+            "name": "sal",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Entropy of liquid A (J/mol/K)",
+                "en_US": "Entropy of liquid A"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": 80,
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "sbs": {
+            "type": "numeric",
+            "active": true,
+            "name": "sbs",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Entropy of solid B (J/mol/K)",
+                "en_US": "Entropy of solid B"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "60",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "sbl": {
+            "type": "numeric",
+            "active": true,
+            "name": "sbl",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Entropy of liquid B (J/mol/K)",
+                "en_US": "Entropy of liquid B"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "80",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "oma": {
+            "type": "numeric",
+            "active": true,
+            "name": "oma",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Regular solution constant of solid (kJ/mol)",
+                "en_US": "Regular solution constant of A (kJ/mol)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "30",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          },
+          "omb": {
+            "type": "numeric",
+            "active": true,
+            "name": "omb",
+            "disable": false,
+            "name-text-map": {
+              "map": {
+                "ko_KR": "Regular solution constant of liquid (kJ/mol)",
+                "en_US": "Regular solution constant of B (kJ/mol)"
+              }
+            },
+            "description-map": {
+              "map": {
+                "ko_KR": "",
+                "en_US": ""
+              }
+            },
+            "unit": "",
+            "value-domain": {
+              
+            },
+            "value": "-70",
+            "sweepable": false,
+            "sweeped": false,
+            "activate-condition-container": {
+              
+            }
+          }
+        }
+      },
+      "default-language-id": "ko_KR",
+      "available-language-ids": "{ko_KR}",
+      "file-content": "tmin = 0 ;\ntmax = 2000 ;\nplott = 1100 ;\nxbint = 0.01 ;\nhas = -366 ;\nhal = -330 ;\nhbs = -350 ;\nhbl = -330 ;\nsas = 50 ;\nsal = 80 ;\nsbs = 60 ;\nsbl = 80 ;\noma = 30 ;\nomb = -70 ;\n"
+    }
+  ]
+}
