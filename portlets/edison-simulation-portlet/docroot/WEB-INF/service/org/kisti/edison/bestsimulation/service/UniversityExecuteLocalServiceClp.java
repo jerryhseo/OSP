@@ -802,7 +802,7 @@ public class UniversityExecuteLocalServiceClp
 	@Override
 	public int insertCustomUniversityExecute(long columnId,
 		java.lang.String startDt, java.lang.String endDt)
-		throws com.liferay.portal.NoSuchModelException,
+		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.lang.NumberFormatException {
 		Object returnObj = null;
@@ -821,8 +821,8 @@ public class UniversityExecuteLocalServiceClp
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.NoSuchModelException) {
-				throw (com.liferay.portal.NoSuchModelException)t;
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {

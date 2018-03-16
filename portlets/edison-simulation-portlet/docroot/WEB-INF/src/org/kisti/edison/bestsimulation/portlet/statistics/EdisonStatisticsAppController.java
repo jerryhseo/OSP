@@ -183,6 +183,7 @@ public class EdisonStatisticsAppController {
 				visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
 			}
 
+			model.addAttribute("pageTitle", themeDisplay.getLayout().getName(themeDisplay.getLocale()));
 			model.addAttribute("isPortalMain", isPortalMain);
 			model.addAttribute("visitSite", visitSite);
 			model.addAttribute("preDay", preDay);

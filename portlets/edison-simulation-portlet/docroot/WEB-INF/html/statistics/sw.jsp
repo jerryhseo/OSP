@@ -17,7 +17,6 @@
 <%
 	if((Boolean)request.getAttribute("isPortalMain")){
 %>
-
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 
 	<div class="contabmenu"> 
@@ -34,24 +33,49 @@
 	<%
 		}
 	%>
-	
-	<div class="tabletopbox clear">
-			<form name="<portlet:namespace/>statisticsForm" method="post">
-				<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
-				<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-				
-				<div id="data_wrap">
-					<div class="tabletoptab">
-				  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-							~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
+	<div class="container">
+		<form class="form-inline" name="<portlet:namespace/>statisticsForm"  method="post" onsubmit="return false;">
+			<aui:input type="hidden" name="status"/>
+			<aui:input type="hidden" name="visitSite" value="<%=visitSite%>"/>
+			<div class="row">
+				<div class="col-md-4">
+					<h2 style="margin: 0px;"> 
+						<img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image">
+						<span style="margin-left: 10px;"> ${pageTitle} </span> 
+					</h2>
+				</div>
+				<div class="col-md-8 text-right">
+					<div class='input-group date'>
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="begin-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>startDt' name="<portlet:namespace/>startDt" readonly="readonly"  class="form-control" value="${preDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
 					</div>
-				
-					<div class="search03">
-							<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default"  onclick="<portlet:namespace/>dataSearch()"/>
+					<div class='input-group date' >
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="end-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>endDt' name='<portlet:namespace/>endDt' class="form-control" readonly="readonly" value="${toDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
+						<div class="input-group-btn">
+							<button class="btn btn-primary" onclick="<portlet:namespace/>dataSearch();">
+								<liferay-ui:message key="edison-button-search" />
+							</button>
+							<button class="btn btn-primary" onclick="<portlet:namespace/>excelDown();">
+								<i class="icon-download"></i>
+								<span>  Excel</span>
+							</button>
+						</div>
 					</div>
 				</div>
-			</form>
-	  	</div>
+			</div>
+		</form>
+	</div>
 	
 	<div style="width:100%;margin-top:20px; ">
 		<div id="container1" style="width: 44%; height: 350px; float: left;"></div>
@@ -60,14 +84,6 @@
 	   
 	<div style="clear: both;height:20px;"></div>
 	
-	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
-		<div class="boardbtn2" style="float:right;">
-	<!-- 		<div class="boardbtnNormal" style="width:140px;"><a href="#" onClick="excelDown()">Excel Download</a></div>&nbsp;&nbsp; -->
-			<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
-		</div>
-	</div>
-	
-	<br> <br>
 	<div id="data_wrap" style="clear: both; ">
 		<div id="userTable_wrap">
 			<div class="table-responsive panel edison-panel ">
@@ -100,23 +116,24 @@ function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
 
 function <portlet:namespace/>dataSearch(){
     bStart();
-	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
-	jQuery.ajax({
-		type: "POST",
-		url: "<%=getStatisticsSwURL%>",
-		data: searchForm,
-		async : false,
-		success: function(data) {
-			setTable(data.tableOrganigationList);
-			setPie(data.pieChartOrganigationList);
-			setBar(data.barChartDateList);
-		},error:function(msg){
-			alert("System Exception dataSearch: " + msg);
-		},complete: function(){
-            bEnd();
-        }
-
-	});
+    setTimeout(function() {
+		var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=getStatisticsSwURL%>",
+			data: searchForm,
+			async : false,
+			success: function(data) {
+				setTable(data.tableOrganigationList);
+				setPie(data.pieChartOrganigationList);
+				setBar(data.barChartDateList);
+			},error:function(msg){
+				alert("System Exception dataSearch: " + msg);
+			},complete: function(){
+	            bEnd();
+	        }
+		});
+    },500);
 }
 
 
@@ -196,7 +213,7 @@ function setBar(barChartDateList){
 	}
 }
 
-function excelDown(){
+function <portlet:namespace/>excelDown(){
 	var url = "<%=excelDownURL%>"+"&"+$("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	window.location.href = spaceDelete(url);
 }
@@ -214,26 +231,18 @@ function dtCheckBox(){
 	
 	AUI().ready(function() {
 		$("#<portlet:namespace/>startDt").datepicker({
-			showButtonPanel: true,
-			showOn: 'button',
 			dateFormat:"yy-mm-dd",
 			changeMonth: true,
 			changeYear: true,
-			buttonImage: "${contextPath}/images/calendar.png",
-			buttonImageOnly: true,
 			onClose: function( selectedDate ) {
 				$("#<portlet:namespace/>endDt").datepicker("option", "minDate", selectedDate);
 			}
 			});
 	
 			$("#<portlet:namespace/>endDt").datepicker({
-			showButtonPanel: true,
-			showOn: 'button',
 			dateFormat:"yy-mm-dd",
 			changeMonth: true,
 			changeYear: true,
-			buttonImage: "${contextPath}/images/calendar.png",
-			buttonImageOnly: true,
 			onClose: function( selectedDate ) {
 				$("#<portlet:namespace/>startDt").datepicker("option", "maxDate", selectedDate);
 			}

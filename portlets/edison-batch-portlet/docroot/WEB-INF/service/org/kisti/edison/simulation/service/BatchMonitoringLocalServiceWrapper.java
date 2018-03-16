@@ -290,12 +290,9 @@ public class BatchMonitoringLocalServiceWrapper
 	}
 
 	/**
-	* 배치 결과 메세지
+	* 獄쏄퀣��野껉퀗��筌롫뗄苑�쭪占�    *
 	*
-	* @param exeDate - 배치 실행 시간
-	* @param startDt -시작 날짜
-	* @param endDt - 종료 날짜
-	* @param batchSuccess - 배치 성공 여부
+	* @param exeDate - 獄쏄퀣��占썬끋六�占쎌뮄而�     * @param startDt -占쎌뮇��占쎌쥙彛�     * @param endDt - �ル굝利�占쎌쥙彛�     * @param batchSuccess - 獄쏄퀣��占쎄퉫��占싼됵옙
 	* @return
 	*/
 	@Override
@@ -306,15 +303,11 @@ public class BatchMonitoringLocalServiceWrapper
 	}
 
 	/**
-	* 배치 실행 이력 저장
-	*
-	* @param batDiv - 배치 분류
-	* @param manualYN - 수동실행 여부
-	* @param status - 실행 상태 (SUCCESS, FAIL)
-	* @param message - 실행 정보
-	* @param insertId - 배치실행 아이디 (스케쥴러로 실행시는 아이디 없음)
-	* @param exeDate - 실행 시간
-	*/
+	* 獄쏄퀣��占썬끋六�占쎈���占쏙옙��     *
+	* @param batDiv - 獄쏄퀣���브쑬履�     * @param manualYN - 占쎌꼶猷욑옙�쎈뻬 占싼됵옙
+	* @param status - 占썬끋六�占쎄낱源�(SUCCESS, FAIL)
+	* @param message - 占썬끋六�占쎈베��     * @param insertId - 獄쏄퀣�귨옙�쎈뻬 占쎄쑴�좑옙占�占썬끉占썰펺��쑎嚥∽옙占썬끋六억옙�뺣뮉 占쎄쑴�좑옙占쏙옙�곸벉)
+	* @param exeDate - 占썬끋六�占쎌뮄而�     */
 	@Override
 	public org.kisti.edison.simulation.model.BatchMonitoring insertCustomBatchMonitoring(
 		java.lang.String batDiv, java.lang.String manualYN,
@@ -328,12 +321,11 @@ public class BatchMonitoringLocalServiceWrapper
 	}
 
 	/**
-	* 배치 실행 이력 리스트
+	* 獄쏄퀣��占썬끋六�占쎈����귐딅뮞占쏙옙     *
 	*
 	* @param begin
 	* @param end
-	* @return 실행 이력
-	*/
+	* @return 占썬끋六�占쎈���     */
 	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getCustomBatchMonitoringList(
 		int begin, int end)
@@ -345,10 +337,9 @@ public class BatchMonitoringLocalServiceWrapper
 	}
 
 	/**
-	* 배치 실행 이력 카운트
+	* 獄쏄퀣��占썬끋六�占쎈���燁삳똻�ワ옙占�    *
 	*
-	* @return 실행 이력 카운트
-	*/
+	* @return 占썬끋六�占쎈���燁삳똻�ワ옙占�     */
 	@Override
 	public int getCustomBatchMonitoringCount()
 		throws com.liferay.portal.kernel.exception.PortalException,

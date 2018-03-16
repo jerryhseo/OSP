@@ -6,23 +6,27 @@
 <liferay-portlet:renderURL var="statisticsViewURL" portletMode='view'></liferay-portlet:renderURL>
 <liferay-portlet:resourceURL var="getStatisticsSwExeURL"		id="getStatisticsSwExe"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 <% 
 	//Tab Setting
-	String tabNames = (String)request.getAttribute("tabNames");
-	String visitSite = CustomUtil.strNull(request.getAttribute("visitSite"));
-	String tabsValues = (String)request.getAttribute("tabsValues");
+	String tabNames =  CustomUtil.strNull(request.getAttribute("tabNames"));
+	String selectedGroupId = CustomUtil.strNull(request.getAttribute("selectedGroupId"));
+	String tabsValues =  CustomUtil.strNull(request.getAttribute("tabsValues"));
 	String portletNameSpace = "_"+portletDisplay.getId()+"_"+"tagScript";
 	
 %>   
 <%
-	if((Boolean)request.getAttribute("isPortalMain")){
+	if((Boolean)request.getAttribute("tabViewYn")){
 %>
-
-<style>
+<style type="text/css">
 	.<portlet:namespace/>category{
 		cursor: pointer;
 		text-align: center;
+	}
+	
+	table#_edisonstatisticsappexec_WAR_edisonsimulationportlet_categoryTable td.selected{
+		background-color: #f5030391;
 	}
 </style>
 
@@ -32,26 +36,12 @@
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
 			tabsValues="<%=tabsValues%>" 
-			value="<%=visitSite%>" 
+			value="<%=selectedGroupId%>" 
 			refresh="<%=false%>" 
 			onClick="<%=portletNameSpace%>"
 			minwidth="150"
 		/>
 	</div>
-	<div style="clear: both;height:20px;"></div>
-	
-	<div class="tabletoptab">
-		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-			~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
-	</div>
-	
-	<div class="search03">
-		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="btn btn-default" onclick="<portlet:namespace/>dataSearch();"/>
-	</div>
-	
-	<div style="clear: both;height:20px;"></div>
-	
-	<h3>Science App</h3>
 	<div style="clear: both;height:20px;"></div>
 	
 	<div id="<portlet:namespace/>categoryList">
@@ -69,7 +59,7 @@
 						</c:if>
 						<td category_id="${category.categoryId}" category_name="${category.categoryTitle}" parentCategory_id="${category.parentCategoryId}" class="<portlet:namespace/>category" width="<fmt:formatNumber value='${100/fn:length(categoryList)}' pattern='.0' />%">
 							<div>
-								<img id="<portlet:namespace/>categoryImage_${category.categoryId}" src="" style="margin: 15px 0px 0px; height: 76px; max-width: 100px;" />
+								<img id="<portlet:namespace/>categoryImage_${category.categoryId}" src="${contextPath}/images/solverType/${category.image}.png" style="margin: 15px 0px 0px; height: 76px; max-width: 100px;" />
 							</div>
 							<div style="height: 55px; margin: 0px auto;">
 								${category.categoryTitle}
@@ -86,38 +76,68 @@
 	<%
 		}
 	%>
-	<div class="tabletopbox clear">
-		<form name="<portlet:namespace/>statisticsForm" method="post">
-			<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
-			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-			<input type="hidden" name="<portlet:namespace/>scienceAppName" id="<portlet:namespace/>scienceAppName" value="${scienceAppName}">
-			<input type="hidden" name="<portlet:namespace/>parentGroupId" id="<portlet:namespace/>parentGroupId" value="">
-			<input type="hidden" name="<portlet:namespace/>categoryId" id="<portlet:namespace/>categoryId" value="">
+	<div class="container">
+		<form class="form-inline" name="<portlet:namespace/>statisticsForm"  method="post" onsubmit="return false;">
+			<aui:input type="hidden" name="categoryId"/>
+			<aui:input type="hidden" name="selectedGroupId" value="${selectedGroupId}"/>
+			<aui:input type="hidden" name="scienceAppName" value="${scienceAppName}"/>
 			
-			<%-- <div class="tabletoptab">
-		  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-					~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
+			<div class="row">
+				<div class="col-md-3">
+					<h2 style="margin: 0px;"> 
+						<img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image">
+						<span style="margin-left: 10px;"> ${pageTitle} </span> 
+					</h2>
+				</div>
+				<div class="col-md-9 text-right">
+				<c:if test="${empty scienceAppName}">
+					<div class='input-group'>
+						<select class="form-control" id="<portlet:namespace/>likeOrgName" name="<portlet:namespace/>likeOrgName" style="width:150px;" onchange="<portlet:namespace/>dataSearch();">
+							<option value="" selected><liferay-ui:message key="edison-create-account-field-title-university"/></option>
+							<c:forEach var="code" items="${orgCodes}">
+								<option value="${code.cdNm}">${code.cdNm}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</c:if>
+					<div class='input-group date'>
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="begin-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>startDt' name="<portlet:namespace/>startDt" readonly="readonly"  class="form-control" value="${preDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
+					</div>
+					<div class='input-group date' >
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="end-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>endDt' name='<portlet:namespace/>endDt' class="form-control" readonly="readonly" value="${toDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
+						<div class="input-group-btn">
+							<button class="btn btn-primary" onclick="<portlet:namespace/>dataSearch();">
+								<liferay-ui:message key="edison-button-search" />
+							</button>
+							<button class="btn btn-primary" onclick="<portlet:namespace/>excelDown();">
+								<i class="icon-download"></i>
+								<span>  Excel</span>
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
-			
-			<div class="search03">
-				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="btn btn-default" onclick="<portlet:namespace/>dataSearch();"/>
-			</div> --%>
 		</form>
 	</div>
-	
 	
 	<div style="width:100%;margin-top:20px; ">
 		<div id="container1" style="width: 55%; height: 350px; float: left;"></div>
 		<div id="container2" style="width: 45%; height: 350px; float: right;"></div>
 	</div>
 	
-	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
-		<br>
-		<div class="boardbtn2" style="float:right;">
-			<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
-		</div>
-	</div>
-	<br> <br>
+	<div style="clear: both;height:20px;"></div>
 		
 	<div class="table-responsive panel edison-panel ">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="실행 현황 테이블" class="table table-bordered table-hover edison-table">
@@ -159,37 +179,42 @@
 <script type="text/javascript">
 //liferay-ui 탭 이벤트 return Script
 function <portlet:namespace/>tagScript(tabUrl, tabNames, value, scriptName){
-	var parameters = "";
-	var scienceAppName = "${scienceAppName}";
-	parameters += "&<portlet:namespace/>thisGroupId="+value;
+	var searchData = {"<portlet:namespace/>groupId":value};
 	
-	if(scienceAppName != ""){
-		parameters += "&<portlet:namespace/>scienceAppName="+scienceAppName;
-	}
-	
-	location.href="<%=statisticsViewURL%>"+parameters;
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=saveClickTab%>",
+		async : false,
+		data  : searchData,
+		success: function(data) {
+			var selectedTabId = value;
+			location.href="<%=statisticsViewURL%>";
+		},error:function(data,e){
+			alert("tagScript ERROR-->"+e);
+		}
+	});
 }
 
 function <portlet:namespace/>dataSearch(){
     bStart();
-	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
-	
-	jQuery.ajax({
-		type: "POST",
-		url: "<%=getStatisticsSwExeURL%>",
-		data: searchForm,
-		async : false,
-		success: function(data) {
-			setTable(data.tableOrganigationList);
-			setPie(data.pieChartOrganigationList);
-			setBar(data.barChartDateList);
-		},error:function(msg){
-			alert("System Exception dataSearch: " + msg);
-		},complete: function(){
-            bEnd();
-        }
-
-	});
+    setTimeout(function() {
+		var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=getStatisticsSwExeURL%>",
+			data: searchForm,
+			async : false,
+			success: function(data) {
+				setTable(data.tableOrganigationList);
+				setPie(data.pieChartOrganigationList);
+				setBar(data.barChartDateList);
+			},error:function(msg){
+				alert("System Exception dataSearch: " + msg);
+			},complete: function(){
+	            bEnd();
+	        }
+		});
+    },500);
 }
 
 
@@ -281,7 +306,7 @@ function setBar(barChartDateList){
 	}
 }
 
-function excelDown(){
+function <portlet:namespace/>excelDown(){
 	var url = "<%=excelDownURL%>"+"&"+$("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	window.location.href = spaceDelete(url);
 }
@@ -291,26 +316,18 @@ function excelDown(){
 	
 	AUI().ready(function() {
 		$("#<portlet:namespace/>startDt").datepicker({
-			showButtonPanel: true,
-			showOn: 'button',
 			dateFormat:"yy-mm-dd",
 			changeMonth: true,
 			changeYear: true,
-			buttonImage: "${contextPath}/images/calendar.png",
-			buttonImageOnly: true,
 			onClose: function( selectedDate ) {
 				$("#<portlet:namespace/>endDt").datepicker("option", "minDate", selectedDate);
 			}
 			});
 	
 			$("#<portlet:namespace/>endDt").datepicker({
-			showButtonPanel: true,
-			showOn: 'button',
 			dateFormat:"yy-mm-dd",
 			changeMonth: true,
 			changeYear: true,
-			buttonImage: "${contextPath}/images/calendar.png",
-			buttonImageOnly: true,
 			onClose: function( selectedDate ) {
 				$("#<portlet:namespace/>startDt").datepicker("option", "maxDate", selectedDate);
 			}
@@ -412,29 +429,13 @@ function excelDown(){
 	$(".<portlet:namespace/>category").on("click", <portlet:namespace/>categoryClickHandler);
 	
 	function <portlet:namespace/>categoryClickHandler(e){
-		var parentGroupId = $(this).attr("parentCategory_id");
 		var categoryId = $(this).attr("category_id");
-		var categoryName = $(this).attr("category_name");
+		
+		$(this).addClass("selected");
+		$(this).siblings().removeClass("selected");
 		
 		$("#<portlet:namespace/>categoryId").val(categoryId);
-		$("#<portlet:namespace/>parentGroupId").val(parentGroupId);
 		
 		<portlet:namespace/>dataSearch();
-		
-		$("#<portlet:namespace/>scienceAppName").val("");
-		$("#<portlet:namespace/>categoryId").val("");
-		$("#<portlet:namespace/>parentGroupId").val("");
 	}
-	
-	var <portlet:namespace/>categoriesInitData = ${categoriesJsonString};
-	$(document).ready(function(){
-		
-		$.each(<portlet:namespace/>categoriesInitData, function(i) {
-			var that = this;
-			$("#<portlet:namespace/>categoryImage_"+that.categoryId).attr("src","${contextPath}/images/solverType/"+that.image+".png");
-		});
-		
-	});
-	
-	
 </script>

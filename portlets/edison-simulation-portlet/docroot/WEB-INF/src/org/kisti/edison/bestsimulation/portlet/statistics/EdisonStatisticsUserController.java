@@ -3,7 +3,6 @@ package org.kisti.edison.bestsimulation.portlet.statistics;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.util.CustomUtil;
-import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.ExcelUtil;
-import org.kisti.edison.util.HtmlFormUtils;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,8 +45,6 @@ import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
-import com.liferay.portlet.expando.model.ExpandoColumn;
-import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.model.ExpandoTable;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
@@ -184,6 +179,8 @@ public class EdisonStatisticsUserController {
 				visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
 			}
 
+			
+			model.addAttribute("pageTitle", themeDisplay.getLayout().getName(themeDisplay.getLocale()));
 			model.addAttribute("isPortalMain", isPortalMain);
 			model.addAttribute("visitSite", visitSite);
 			model.addAttribute("preDay", preDay);

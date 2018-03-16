@@ -4,61 +4,45 @@
 
 <%
 //Tab Setting
-	String tabNames = (String)request.getAttribute("tabNames");
-	String visitSite = CustomUtil.strNull(request.getAttribute("visitSite"), "test");
-	String tabsValues = (String)request.getAttribute("tabsValues");
+	String tabNames =  CustomUtil.strNull(request.getAttribute("tabNames"));
+	String selectedGroupId = CustomUtil.strNull(request.getAttribute("selectedGroupId"));
+	String tabsValues =  CustomUtil.strNull(request.getAttribute("tabsValues"));
 	String portletNameSpace = "_"+portletDisplay.getId()+"_"+"tagScript";
 %>
 <head>
-<liferay-portlet:actionURL var="saveClickTabURL" portletMode="view" copyCurrentRenderParameters="false">
-	<liferay-portlet:param name="myaction" value="saveClickTabSatis"/>
-</liferay-portlet:actionURL>
-
+<liferay-portlet:renderURL var="statisticsViewURL" portletMode='view'></liferay-portlet:renderURL>
 <liferay-portlet:resourceURL var="classStatisticsListURL" 	escapeXml="false"	 id="classStatisticsList"  copyCurrentRenderParameters="false"/>
-
 <liferay-portlet:resourceURL var="classStatisticsExcelDownLoadURL"		id="classStatisticsExcelDownLoad"	escapeXml="false" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
+
 <script type="text/javascript">
 
 
 AUI().ready(function() {
-	<portlet:namespace/>dataSearchList();
+	<portlet:namespace/>dataSearch();
 	
-	$("#<portlet:namespace/>jobStartDt").datepicker({
-		showButtonPanel: true,
-		showOn: 'button',
+	$("#<portlet:namespace/>startDt").datepicker({
 		dateFormat:"yy-mm-dd",
 		changeMonth: true,
 		changeYear: true,
-		buttonImage: "${contextPath}/images/calendar.png",
-		buttonImageOnly: true,
 		onClose: function( selectedDate ) {
-			$("#<portlet:namespace/>jobEndDt").datepicker("option", "minDate", selectedDate);
+			$("#<portlet:namespace/>endDt").datepicker("option", "minDate", selectedDate);
 		}
 		});
 
-	$("#<portlet:namespace/>jobEndDt").datepicker({
-		showButtonPanel: true,
-		showOn: 'button',
+	$("#<portlet:namespace/>endDt").datepicker({
 		dateFormat:"yy-mm-dd",
 		changeMonth: true,
 		changeYear: true,
-		buttonImage: "${contextPath}/images/calendar.png",
-		buttonImageOnly: true,
 		onClose: function( selectedDate ) {
-			$("#<portlet:namespace/>jobStartDt").datepicker("option", "maxDate", selectedDate);
+			$("#<portlet:namespace/>startDt").datepicker("option", "maxDate", selectedDate);
 		}
 	});
 
 		$("img.ui-datepicker-trigger").attr("style", "margin-left:2px; vertical-align:middle; cursor: Pointer; width: 18px;");
 });
-function <portlet:namespace/>dataSearchList(pageNumber){
+function <portlet:namespace/>dataSearch(){
 	bStart();
-	if(pageNumber == 0) {
-		$("#<portlet:namespace/>curPage").val(1);
-	} else {
-		$("#<portlet:namespace/>curPage").val(pageNumber);
-	}
-	
 	var searchForm = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	
 	$.ajax({
@@ -127,7 +111,7 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 						}
 					}
 					
-					$("<td/>").addClass("center").html(scienceAppTitle).appendTo($rowResult);
+					$("<td/>").html(scienceAppTitle).appendTo($rowResult);
 					$("<td/>").addClass("center").text(statisticsList[i].executeStudentcount).css("text-align","center").appendTo($rowResult);
 					
 					
@@ -155,7 +139,7 @@ function <portlet:namespace/>dataSearchList(pageNumber){
 	});
 }
 
-function excelDown(){
+function <portlet:namespace/>excelDown(){
 	var form = $("form[name=<portlet:namespace/>statisticsForm]").serialize();
 	var url = "<%=classStatisticsExcelDownLoadURL%>"+"&"+form;
 	window.location.href = spaceDelete(url);
@@ -165,7 +149,7 @@ function excelDown(){
 </head>
 <body>
 <%
-	if((Boolean)request.getAttribute("isPortalMain")){
+	if((Boolean)request.getAttribute("tabViewYn")){
 %>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
@@ -179,38 +163,63 @@ function excelDown(){
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
 			tabsValues="<%=tabsValues%>" 
-			value="<%=visitSite%>" 
+			value="<%=selectedGroupId%>" 
 			refresh="<%=false%>" 
 			onClick="<%=portletNameSpace%>"
 			minwidth="195"
 		/>
 	</div>
+	
+	<div style="clear: both;height:20px;"></div> 
 	<%
 		}
 	%>
-	
-	<div class="table-responsive panel edison-panel" style="border-top: 0px;">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
-			<tr>
-				<td style="text-align: right;">
-					<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<div class="tabletopbox clear">
-		<form name="<portlet:namespace/>statisticsForm" method="post">
-			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-			<%-- <input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/> --%>
-			
-			<div id="data_wrap">
-				<div class="tabletoptab" style="float: left; margin-right: 10px;">
-			  		<input class="box01" type="text" id="<portlet:namespace/>jobStartDt" name="<portlet:namespace/>jobStartDt" readonly="readonly" value="${preDay}"/> 
-						~	<input class="box01" type="text" id="<portlet:namespace/>jobEndDt" name="<portlet:namespace/>jobEndDt" readonly="readonly" value="${toDay}"/>
+	<div class="container">
+		<form class="form-inline" name="<portlet:namespace/>statisticsForm"  method="post" onsubmit="return false;">
+			<aui:input type="hidden" name="selectedGroupId" value="${selectedGroupId}"/>
+			<div class="row">
+				<div class="col-md-3">
+					<h2 style="margin: 0px;"> 
+						<img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image">
+						<span style="margin-left: 10px;"> ${pageTitle} </span> 
+					</h2>
 				</div>
-				
-				<div class="search03">
-						<input type="button" name="<portlet:namespace />fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0);" />
+				<div class="col-md-9 text-right">
+					<div class='input-group'>
+						<select class="form-control" id="<portlet:namespace/>universityCode" name="<portlet:namespace/>universityCode" style="width:150px;" onchange="<portlet:namespace/>dataSearch();">
+							<option value="" selected><liferay-ui:message key="edison-create-account-field-title-university"/></option>
+							<c:forEach var="code" items="${orgCodes}">
+								<option value="${code.cd}">${code.cdNm}</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div class='input-group date'>
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="begin-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>startDt' name="<portlet:namespace/>startDt" readonly="readonly"  class="form-control" value="${preDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
+					</div>
+					<div class='input-group date' >
+						<span class="input-group-addon">
+							<span><liferay-ui:message key="end-date"/></span>
+						</span>
+						<input type='text' id='<portlet:namespace/>endDt' name='<portlet:namespace/>endDt' class="form-control" readonly="readonly" value="${toDay}"/>
+						<span class="input-group-addon">
+							<span class="icon-calendar"></span>
+						</span>
+						<div class="input-group-btn">
+							<button class="btn btn-primary" onclick="<portlet:namespace/>dataSearch();">
+								<liferay-ui:message key="edison-button-search" />
+							</button>
+							<button class="btn btn-primary" onclick="<portlet:namespace/>excelDown();">
+								<i class="icon-download"></i>
+								<span>  Excel</span>
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -254,7 +263,19 @@ function excelDown(){
 
 //liferay-ui 탭 이벤트 return Script
 function <portlet:namespace/>tagScript(tabUrl,tabNames,value,scriptName){
-	window.location.href = "<%= saveClickTabURL.toString() %>&<portlet:namespace/>groupId=" + value;
+var searchData = {"<portlet:namespace/>groupId":value};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=saveClickTab%>",
+		async : false,
+		data  : searchData,
+		success: function(data) {
+			window.location.href="<%=statisticsViewURL%>";
+		},error:function(data,e){
+			alert("tagScript ERROR-->"+e);
+		}
+	});
 }
 </script>
 </body>

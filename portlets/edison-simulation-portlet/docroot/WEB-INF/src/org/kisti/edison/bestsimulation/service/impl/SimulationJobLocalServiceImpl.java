@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,6 +80,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -1118,6 +1121,34 @@ public class SimulationJobLocalServiceImpl
 					map.put("cnt",		objs[1]);
 					resultList.add(map);
 				}
+				
+				Comparator<HashMap> affiliation = new Comparator<HashMap>() {
+					@Override
+					public int compare(HashMap o1, HashMap o2) {
+						String s1 = o1.get("universityNm").toString();
+						String s2 = o2.get("universityNm").toString();
+						
+						int n1=s1.length(), n2=s2.length();
+						for (int i1=0, i2=0; i1<n1 && i2<n2; i1++, i2++) {
+							char c1 = s1.charAt(i1);
+							char c2 = s2.charAt(i2);
+							if (c1 != c2) {
+								c1 = Character.toUpperCase(c1);
+								c2 = Character.toUpperCase(c2);
+								if (c1 != c2) {
+									c1 = Character.toLowerCase(c1);
+									c2 = Character.toLowerCase(c2);
+									if (c1 != c2) {
+										return c1 - c2;
+									}
+								}
+							}
+						}
+						return n1 - n2;
+					}
+				};
+				
+				Collections.sort(resultList, affiliation);
 			}
 		}		
 		return resultList;
@@ -1170,11 +1201,38 @@ public class SimulationJobLocalServiceImpl
 					objs = (Object[])tempList.get(i);
 					map = new HashMap();
 					String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(objs[0]), EdisonExpando.CDNM, locale);
-					map.put("affiliation", 		affiliation); 
+					map.put("affiliation",	affiliation); 
 					map.put("userCnt",		objs[1]);
 					
 					resultList.add(map);
 				}
+				Comparator<HashMap> affiliation = new Comparator<HashMap>() {
+					@Override
+					public int compare(HashMap o1, HashMap o2) {
+						String s1 = o1.get("affiliation").toString();
+						String s2 = o2.get("affiliation").toString();
+						
+						int n1=s1.length(), n2=s2.length();
+						for (int i1=0, i2=0; i1<n1 && i2<n2; i1++, i2++) {
+							char c1 = s1.charAt(i1);
+							char c2 = s2.charAt(i2);
+							if (c1 != c2) {
+								c1 = Character.toUpperCase(c1);
+								c2 = Character.toUpperCase(c2);
+								if (c1 != c2) {
+									c1 = Character.toLowerCase(c1);
+									c2 = Character.toLowerCase(c2);
+									if (c1 != c2) {
+										return c1 - c2;
+									}
+								}
+							}
+						}
+						return n1 - n2;
+					}
+				};
+				
+				Collections.sort(resultList, affiliation);
 			}
 		}		
 		return resultList;
