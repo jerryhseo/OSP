@@ -161,7 +161,7 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 			</h2>
 		</div>
     
-    <div class="btn-group pull-right" style="width: 60%; top: 50px;">
+    <div class="btn-group pull-right" style="width: 60%; top: 20px;">
       <div class="input-group">
         <select class="form-control" style="width: 29%" id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_project"
           onchange="<portlet:namespace/>dataSearchList(1)">
