@@ -52,7 +52,9 @@ public class OSPJSMolPortlet extends MVCPortlet {
         String command = ParamUtil.getString(resourceRequest, "command");
         String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
 
-        System.out.println("\n\n\n[JSMOL] get RepositoryType : "+repositoryType);
+        System.out.println("\n\n\n\n[JSMOL] RepositoryType : "+repositoryType);
+        System.out.println("[JSMOL] file name : "+fileName);
+        System.out.println("[JSMOL] parent path : "+parentPath);
         
         if(command.equalsIgnoreCase("GET_FILE")){
             try{
