@@ -4,6 +4,10 @@
 <%@ page import="java.util.Locale"%>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/course.css" media="screen"/>
 
+<style>
+	.detailViewSubTitle{padding-left: 0px !important;}
+</style>
+
 <liferay-portlet:resourceURL var="professorListURL" id="professorList" copyCurrentRenderParameters="false" />
 
 <liferay-portlet:renderURL var="professorManagementURL" portletMode="view" copyCurrentRenderParameters="false">
@@ -13,7 +17,7 @@
 <c:choose>
 	<c:when test="${admin eq 'Y' }">
 		<div class="table-responsive panel filterable edison-panel">
-			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+			<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 				<h3 class="panel-title pull-left">
 					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 					<liferay-ui:message key='edison-professor-infomation' />

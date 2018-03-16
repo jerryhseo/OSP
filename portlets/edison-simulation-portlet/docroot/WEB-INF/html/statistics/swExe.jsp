@@ -24,6 +24,7 @@
 		cursor: pointer;
 		text-align: center;
 	}
+	
 </style>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
@@ -39,6 +40,13 @@
 		/>
 	</div>
 	<div style="clear: both;height:20px;"></div>
+	
+	<h2>
+		<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+		<liferay-ui:message key='edison-statistics-app-exec' />
+	</h2>
+	
+	<div class="h10"></div>
 	
 	<div class="tabletoptab">
 		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 

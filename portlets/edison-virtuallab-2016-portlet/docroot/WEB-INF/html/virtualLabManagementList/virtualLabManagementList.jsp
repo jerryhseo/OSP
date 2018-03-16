@@ -55,11 +55,21 @@
 		margin-top: 10px;
 		margin-right: 3px;
 	}
+.subtitlearea{
+	margin-left: 10px;
 }
 </style>
 
 <body>
 	<div class="container">
+		
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<liferay-ui:message key='edison-course-list' />
+			</span>
+		</h2>
+		
 		<c:choose>
 			<c:when test="${not empty tabsValues}">
 				<div class="course_warp">
@@ -97,11 +107,6 @@
 		</c:choose>
 		
 		<div id="courselist" class="courselist">
-		
-			<h1>
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-				<liferay-ui:message key='edison-course-list' />
-			</h1>
 		
 			<div class="portlet-borderless-container">
 				<div class="portlet-body">

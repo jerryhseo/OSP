@@ -6,7 +6,6 @@
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="searchSelect"		id="searchSelect"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
-
 <% 
 	//Tab Setting
 	String tabNames = (String)request.getAttribute("tabNames");
@@ -19,7 +18,7 @@
 %>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
-
+	
 	<div class="contabmenu"> 
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
@@ -36,22 +35,30 @@
 	%>
 	
 	<div class="tabletopbox clear">
-			<form name="<portlet:namespace/>statisticsForm" method="post">
-				<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
-				<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-				
-				<div id="data_wrap">
-					<div class="tabletoptab">
-				  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-							~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
-					</div>
-				
-					<div class="search03">
-							<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default"  onclick="<portlet:namespace/>dataSearch()"/>
-					</div>
+	
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<liferay-ui:message key='edison-statistics-app-register' />
+		</h2>
+		
+		<div class="h10"></div>
+		
+		<form name="<portlet:namespace/>statisticsForm" method="post">
+			<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
+			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
+			
+			<div id="data_wrap">
+				<div class="tabletoptab">
+			  		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
+						~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
 				</div>
-			</form>
-	  	</div>
+			
+				<div class="search03">
+						<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default"  onclick="<portlet:namespace/>dataSearch()"/>
+				</div>
+			</div>
+		</form>
+	</div>
 	
 	<div style="width:100%;margin-top:20px; ">
 		<div id="container1" style="width: 44%; height: 350px; float: left;"></div>
@@ -62,7 +69,6 @@
 	
 	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;margin-bottom: 5px;">
 		<div class="boardbtn2" style="float:right;">
-	<!-- 		<div class="boardbtnNormal" style="width:140px;"><a href="#" onClick="excelDown()">Excel Download</a></div>&nbsp;&nbsp; -->
 			<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
 		</div>
 	</div>

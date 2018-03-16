@@ -53,6 +53,10 @@ label.checkbox-label input[type=checkbox]{
 	bottom: 2px;
 	margin-right: 2px;
 }
+.subtitlearea{
+	margin-left: 10px;
+}
+.detailViewSubTitle{padding-left: 0px !important;}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -312,19 +316,22 @@ function <portlet:namespace/>historyBack(){
 		<input name="<portlet:namespace/>screenName" type="hidden" value="${delevoperMap.screenName}"/>
 		<input name="<portlet:namespace/>requestSeq" type="hidden" value="${delevoperMap.requestSeq}"/>
 		
-		<h1>
-			<c:choose>		
-				<c:when test="${empty redirectName }">
-					<liferay-ui:message key='edison-appstore-workspace-request' />
-				</c:when>
-				<c:when test="${not empty redirectName }">
-				   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-appstore-workspace-request' />
-				</c:when>
-			</c:choose>
-		</h1>
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<c:choose>		
+					<c:when test="${empty redirectName }">
+						<liferay-ui:message key='edison-appstore-workspace-request' />
+					</c:when>
+					<c:when test="${not empty redirectName }">
+					   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-appstore-workspace-request' />
+					</c:when>
+				</c:choose>
+			</span>
+		</h2>
 	
 		<!-- 사용자 정보 -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='user-information' />
@@ -358,7 +365,7 @@ function <portlet:namespace/>historyBack(){
 		<br>
 		
 		<!-- 워크스페이스 요청정보 -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-appstore-workspace-request-info' />
@@ -462,7 +469,7 @@ function <portlet:namespace/>historyBack(){
 		<br>
 		
 		<!-- 워크스페이스 상세정보 -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-appstore-workspace-detail-view' />
@@ -503,7 +510,7 @@ function <portlet:namespace/>historyBack(){
 		<br>
 		
 		<!-- 처리정보 -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-virtuallab-confirm-info' />
@@ -599,7 +606,7 @@ function <portlet:namespace/>historyBack(){
 		<br>
 		
 		<!-- 보안서약서 -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-appstore-workspace-security-pledge' />

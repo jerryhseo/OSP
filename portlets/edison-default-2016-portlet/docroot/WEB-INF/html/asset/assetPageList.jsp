@@ -69,7 +69,9 @@
 	bottom: 5%;
 }
 
+.detailViewSubTitle{padding-left: 0px !important;}
 </style>
+
 <script>
 var categoryAreaValue = "<%=SCIENCE_APP%>";
 $(function(){
@@ -322,7 +324,7 @@ function <portlet:namespace/>shortcuts(seq, div) {
 <c:choose>
 	<c:when test="${isVirTitle == true }">
 		<div class="edison-panel">
-			<div class="panel-heading clearfix">
+			<div class="panel-heading clearfix detailViewSubTitle">
 				<h3 class="panel-title pull-left">
 					<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 					관련 자료

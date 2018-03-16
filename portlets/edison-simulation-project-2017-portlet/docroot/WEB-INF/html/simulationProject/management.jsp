@@ -75,25 +75,36 @@
 	}
 %>
 
+<style>
+.detailViewSubTitle{padding-left: 0px !important;}
+
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
 <div class="container">
 <div class="table-responsive panel edison-panel">
 	<div class="table1_list">
-		<h3>
-			<c:choose>
-				<c:when test="${empty simulationProjectId && empty redirectName }">
-					<liferay-ui:message key='edison-simulation-project-create-project' />
-				</c:when>
-				<c:when test="${empty simulationProjectId && not empty redirectName }">
-					<a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-create-project' />
-				</c:when>
-				<c:when test="${not empty simulationProjectId && empty redirectName }">
-					<liferay-ui:message key='edison-simulation-project-management' />
-				</c:when>
-				<c:when test="${not empty simulationProjectId && not empty redirectName }">
-				   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-management' />
-				</c:when>
-			</c:choose>
-		</h3>
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<c:choose>
+					<c:when test="${empty simulationProjectId && empty redirectName }">
+						<liferay-ui:message key='edison-simulation-project-create-project' />
+					</c:when>
+					<c:when test="${empty simulationProjectId && not empty redirectName }">
+						<a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-create-project' />
+					</c:when>
+					<c:when test="${not empty simulationProjectId && empty redirectName }">
+						<liferay-ui:message key='edison-simulation-project-management' />
+					</c:when>
+					<c:when test="${not empty simulationProjectId && not empty redirectName }">
+					   <a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName} </a>  > <liferay-ui:message key='edison-simulation-project-management' />
+					</c:when>
+				</c:choose>
+			</span>
+		</h2>
 		
 		<aui:form name="frm" method="POST">
 			<aui:input type="hidden" name="simulationProjectId" value="${simulationProjectId}"></aui:input>
@@ -106,7 +117,7 @@
 			<aui:input type="hidden" name="methodName" value="${methodName}"></aui:input>
 			
 			
-			<div class="panel-heading clearfix">
+			<div class="panel-heading clearfix detailViewSubTitle">
 				<h3 class="panel-title pull-left">
 					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 					<liferay-ui:message key='edison-science-appstore-toolkit-default-information' />
@@ -295,7 +306,7 @@
 			
 			<!-- 멤버관리 -->
 			<div class="table1_list table-responsive panel edison-panel">
-				<div class="panel-heading clearfix">
+				<div class="panel-heading clearfix detailViewSubTitle">
 					<h3 class="panel-title pull-left">
 						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key='edison-simulation-project-member-management' />

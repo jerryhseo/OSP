@@ -17,6 +17,7 @@
 <liferay-portlet:resourceURL var="classStatisticsListURL" 	escapeXml="false"	 id="classStatisticsList"  copyCurrentRenderParameters="false"/>
 
 <liferay-portlet:resourceURL var="classStatisticsExcelDownLoadURL"		id="classStatisticsExcelDownLoad"	escapeXml="false" copyCurrentRenderParameters="false"/>
+
 <script type="text/javascript">
 
 
@@ -173,6 +174,7 @@ function excelDown(){
 #data_wrap{
 	margin: 10px 0px;
 }
+
 </style>
 
 	<div class="contabmenu"> 
@@ -190,18 +192,16 @@ function excelDown(){
 	%>
 	
 	<div class="table-responsive panel edison-panel" style="border-top: 0px;">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
-			<tr>
-				<td style="text-align: right;">
-					<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()"/>
-				</td>
-			</tr>
-		</table>
+	
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<liferay-ui:message key='edison-statistics-class' />
+		</h2>
 	</div>
+	
 	<div class="tabletopbox clear">
 		<form name="<portlet:namespace/>statisticsForm" method="post">
 			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
-			<%-- <input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/> --%>
 			
 			<div id="data_wrap">
 				<div class="tabletoptab" style="float: left; margin-right: 10px;">
@@ -211,13 +211,16 @@ function excelDown(){
 				
 				<div class="search03">
 						<input type="button" name="<portlet:namespace />fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />"  class="btn btn-default" onclick="<portlet:namespace/>dataSearchList(0);" />
+						<input type="button" name="fullsize" id="fullsize" value="Excel Download" class="btn btn-default" onClick="excelDown()" style="float: right;"/>
 				</div>
+				
 			</div>
 		</form>
 	</div>
 	
 	<div class="table-responsive panel edison-panel">
-		<div class="panel-heading clearfix"></div>
+		<div class="panel-heading clearfix">
+		</div>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
 				<col width="10%" />

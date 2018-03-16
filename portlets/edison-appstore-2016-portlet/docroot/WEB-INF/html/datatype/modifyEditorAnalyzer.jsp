@@ -44,6 +44,16 @@
 	.edison-data-type-editor .checkbox{
 		cursor: pointer;
 	}
+	.newsubtitle{
+		font-size: 27px !important;
+	}
+	.subtitlearea{
+		margin-left: 10px;
+	}
+	.aTitle{
+		color: #0af !important;
+		text-decoration: none;
+	}
 </style>
 
 <c:if test="<%= SessionErrors.contains(renderRequest, DataTypeException.class.getName()) %>">
@@ -55,20 +65,22 @@
 <div class="container">
 	<div class="edison-panel">
 		<div class="panel-heading clearfix">
-			<h3 class="panel-title pull-left">
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
-				<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;"> ${redirectName} </a> >
-				<c:choose>
-					<c:when test="${mode eq 'update'}">
-						DataType
-						<liferay-ui:message key='action.UPDATE' />
-					</c:when>
-					<c:otherwise>
-						DataType
-						<liferay-ui:message key='registration' />
-					</c:otherwise>
-				</c:choose>
-			</h3>
+			<h2 class="panel-title pull-left newsubtitle">
+				<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png"/>
+				<span class="subtitlearea">
+					<a onClick="<portlet:namespace/>historyBack();" style="cursor: pointer;" class="aTitle"> ${redirectName} </a> >
+					<c:choose>
+						<c:when test="${mode eq 'update'}">
+							DataType
+							<liferay-ui:message key='action.UPDATE' />
+						</c:when>
+						<c:otherwise>
+							DataType
+							<liferay-ui:message key='registration' />
+						</c:otherwise>
+					</c:choose>
+				</span>
+			</h2>
 		</div>
 		<aui:form name="frm" method="POST" action="<%=submitURL%>">
 			<div class="table1_list">

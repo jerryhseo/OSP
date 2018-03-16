@@ -3,6 +3,21 @@
 <liferay-portlet:resourceURL var="searchPortURL" id="searchPort" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="updateLayoutURL" id="updateLayout" copyCurrentRenderParameters="false" />
 
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
+<h2>
+	<img src="${contextPath}/images/sub_tit_bl.png"/>
+	<span class="subtitlearea">
+		<liferay-ui:message key='edison-migration-title' />
+	</span>
+</h2>
+
+<div class="h30"></div>
+
 <h3>APP LAYOUT Migration</h3>
 <h3>Default : flow-1-row-1-column</h3>
 <p>${totalCnt}</p>
