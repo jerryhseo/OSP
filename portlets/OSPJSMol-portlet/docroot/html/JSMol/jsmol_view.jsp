@@ -406,7 +406,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
-            <portlet:namespace/>parentPath: inputData.parent(),
+            //<portlet:namespace/>parentPath: inputData.parent(),
+            <portlet:namespace/>parentPath: inputData.parent_,
             <portlet:namespace/>fileName: inputData.name()
     };
         
