@@ -47,7 +47,20 @@
 
 
 /*통합검색*/
-.top_category{width:760px; height:36px; float:left; border-radius:3px; background-color:#f6f8f8; border:solid 1px #dfdfdf;}
+.top_category{
+	width:760px; 
+	height:36px; 
+	float:left; 
+	border-radius:3px; 
+	background-color:#f6f8f8; 
+	border:solid 1px #dfdfdf;
+	/* 추가 */
+	font-size: 14px;
+	color: #666;
+	line-height: 2.3em;
+	font-family: NanumGothic;
+	margin-right: 50px !important;
+}
 
 .category01{}
 .category01 ul{margin:0; padding:0; margin-left:50px;}
@@ -62,7 +75,7 @@
 .category02arrow.app{position:absolute; left:15%; margin-top:-12px;}
 
 /*좌측*/
-.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:42px; min-height: 400px;}
+.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:30px; min-height: 400px;}
 .leftm > ul{margin:20px 20px;}
 .leftm > ul > li {font-size:16px; color:#011144; background:url(../images/search/minus.png) no-repeat 0 10px; padding-left:20px; line-height:1.5em; padding-top: 5px; padding-bottom: 5px;}
 .leftm > ul > li a:link{color:#011144;}
@@ -80,11 +93,11 @@
 .connav ul li{ font-size:13px; color:#777; float:left; margin-right:11px; line-height:2.0em;}
 .connav ul li:first-child{ color:#000; font-weight:600;}
 
-.boxlist > ul {margin: 0px !important;}
-.boxlist > ul > li{cursor: pointer; margin:0; padding:0; width:437px; height:118px; float:left; 
-	margin-right:12px; border:solid 1px #edebeb; border-radius:5px; margin-top:15px; 
+.boxlist > ul {margin: 0px !important; padding: 0px;}
+.boxlist > ul > li{cursor: pointer; margin:0; padding:0; width:457px; height:118px; float:left; 
+	margin-right:12px; border:solid 1px #dcdcdc; border-radius:5px; margin-top:15px; 
 	padding-right:7px; box-shadow: 1px 1px 0px #ddd; }
-.boxlist > ul > li .tit{ font-size:17px; color:#0084ad; line-height:1.3em; padding-top:10px; margin: 5px 0px 5px 0px; padding-right: 10px;}
+.boxlist > ul > li .tit{ font-size:17px; color:#0084ad; line-height:1.3em; padding-top:10px; margin: 25px 0px 5px 0px; padding-right: 10px;}
 .boxlist > ul > li .des{ font-size:15px; color:#647f8d; line-height:1.3em; font-weight:500; padding-right: 10px;
 	overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; 
 	-webkit-box-orient: vertical; word-wrap:break-word; height: 3.9em;}
@@ -107,7 +120,7 @@
 
 
 .conlist{}
-.conlist > .search-results > ul {margin: 0px !important;}
+.conlist > .search-results > ul {margin: 0px !important; padding: 0;}
 .conlist > .search-results > ul > li{ margin:0; padding:0; padding-top:3px; padding-bottom:15px; border-bottom:solid 1px #eee;}
 .conlist > .search-results > ul > li > a, 
 .conlist > .search-results > ul > li > div, 

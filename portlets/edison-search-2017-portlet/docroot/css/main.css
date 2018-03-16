@@ -5,7 +5,7 @@
 .rightsearch .btn_blue{vertical-align: middle !important; margin-top: 0px !important;;}
 .leftm ul > li.jstree-open{background:url(../images/search/plus.png) no-repeat 0 10px;}
 
-.search-main-title > span{font-size: 18px !important; margin-left: 10px;}
+.search-main-title > span{font-size: 25px !important; margin-left: 10px; font-family: NanumGothic; font-weight: 600;}
 .search-main-title > img{ padding-top: 5px;}
 
 h3.styleh3 {font-size:21px; color:#444;}

@@ -40,7 +40,7 @@ if(areaScienceData){
 		padding: 0px;
 	}
   .search-btn-height{height: 36px !important;}
-  .top_category{margin-right: 5px !important;}
+  
 </style>
 
 <h2 class="search-main-title">
