@@ -194,7 +194,7 @@
 .visul{width:1220px; margin:0 auto;}
 
 /*community main 20170223*/
-.topvisual{ margin-bottom:17px; width:1220px; height:100px; background-color:#f6f6f6; border:solid 1px #e6e6e6;/*background:url(../images/comm_proj/visual_topbg.jpg) no-repeat;*/ position:relative;}
+.topvisual{ margin-bottom:17px; margin-top:20px; width:1220px; height:100px; background-color:#f6f6f6; border:solid 1px #e6e6e6;/*background:url(../images/comm_proj/visual_topbg.jpg) no-repeat;*/ position:relative;}
 
 .visualimg{
 	position: absolute;
@@ -241,7 +241,7 @@
 .commrighttxt ul li.stxt2.last{ padding-bottom:18px; border-bottom:solid 1px #ddd; margin-bottom:15px;}
 
 
-.commrighttop{width:215px; border-radius:50px 5px 5px 50px; float:right; border:solid 1px #e6e6e6; padding:0px; min-height:65px; margin-bottom:13px; position:relative;} 
+.commrighttop{width:215px; border-radius:50px 5px 5px 50px; float:right; padding:0px; min-height:65px; margin-bottom:13px; position:relative;} 
 .commtopbox{ width:65px; height:65px; border-radius:70px; float:left; border:solid 1px #eee;}
 .commtopbox img{ width:100%; height:auto;}
 .commtopboxtxt{

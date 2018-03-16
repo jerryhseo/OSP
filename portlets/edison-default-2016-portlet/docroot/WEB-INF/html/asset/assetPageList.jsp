@@ -47,7 +47,7 @@
 	
 <style>
 #<portlet:namespace />categoryArea {
-	width: 20%;
+	width: 21%;
 	padding : 12px 15px 10px 20px;
 	margin:0;
 }
