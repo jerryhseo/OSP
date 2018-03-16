@@ -10,6 +10,12 @@
 
 <liferay-portlet:resourceURL var="virtualLabInfomationURL" id="virtualLabInfomation" copyCurrentRenderParameters="false" />
 
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList(1);
@@ -253,43 +259,43 @@ function <portlet:namespace/>goRequestManagementURL(groupId, groupName) {
 </aui:script>
 
 <div class="table-responsive panel edison-panel">
-	<div class="table1_list">
-		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-			<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1" />
-		</form>
-		<div class="panel-heading clearfix">
-			<h1>
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
+	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
+		<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1" />
+	</form>
+	<div class="panel-heading clearfix">
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
 				<liferay-ui:message key='edison-virtuallab-request-list' />
-			</h1>
-		</div>
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
-			<colgroup>
-				<col width="10%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="15%" />
-				<col width="10%" />
-				<col width="10%" />
-				<col width="10%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-site' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-virtuallab' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-affiliate' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-tutor' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant-id' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-req-date' /></th>
-					<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-status' /></th>
-				</tr>
-			</thead>
-			<tbody id="<portlet:namespace/>virtualLabListBody" >
-			</tbody>
-		</table>
+			</span>
+		</h2>
 	</div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list table table-bordered table-hover edison-table">
+		<colgroup>
+			<col width="10%" />
+			<col width="15%" />
+			<col width="15%" />
+			<col width="15%" />
+			<col width="15%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
+		</colgroup>
+		<thead>
+			<tr>
+				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-site' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-virtuallab' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-affiliate' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-tutor' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-applicant-id' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-req-date' /></th>
+				<th align="center" scope="col"><liferay-ui:message key='edison-table-list-header-status' /></th>
+			</tr>
+		</thead>
+		<tbody id="<portlet:namespace/>virtualLabListBody" >
+		</tbody>
+	</table>
 	<div id="<portlet:namespace/>spaceDiv" align="center"></div>
 	<div id="<portlet:namespace/>pageListDiv" class="paging text-center"></div>
 </div>

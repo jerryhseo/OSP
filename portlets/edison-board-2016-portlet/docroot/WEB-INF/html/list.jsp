@@ -54,6 +54,10 @@
 	.onFaqContent {
 		display:table-row;
 	}
+	
+	.subtitlearea{
+		margin-left: 10px;
+	}
 </style>
 <%--### Default Board List Start ######################################################################################################################  --%>	
 <% 	
@@ -85,19 +89,21 @@
 			<!-- Board Title -->
 			<c:choose>
 				<c:when test="${empty redirectName }">
-					<h1 class="pull-left" style="width: 50%;">
-						<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-						${boardDivTitle}
-					</h1>
+					<h2 class="pull-left" style="width: 50%;">
+						<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+						<span class="subtitlearea">
+							${boardDivTitle}
+						</span>
+					</h2>
 				</c:when>
 				<c:otherwise>
-					<h1 class="pull-left" style="width: 50%;">
+					<h2 class="pull-left" style="width: 50%;">
 						<a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}
-					</h1>
+					</h2>
 				</c:otherwise>
 			</c:choose>
 			
-			<div class="input-group" style="top: 32px;">
+			<div class="input-group" style="top: 20px;">
 				
 				<select id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" onchange="getBoardList<portlet:namespace/>(1)" class="form-control" style="width: 25%;">
 					<option value="10" <c:if test="${listSize == '10' }"> selected="selected"</c:if> >10<liferay-ui:message key='edison-search-views' /></option>

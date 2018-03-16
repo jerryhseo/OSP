@@ -62,25 +62,23 @@
 		</div>
 	</div>
 	
-	<div class="table1_list borderno">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table table-bordered table-hover edison-table">
-			<thead id="<portlet:namespace/>scienceAppTableHeader">
-				<tr>
-					<th width="35%"><liferay-ui:message key="edison-appstore-solver-name" /></th>
-					<th width="10%"><liferay-ui:message key="edison-table-list-header-version" /></th>
-					<th width="55%"><liferay-ui:message key="edison-table-list-header-app-title" /></th>
-				</tr>
-			</thead>
-	
-			<tbody id="<portlet:namespace/>entryTableBody">
-				<tr >
-					<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
-						<liferay-ui:message key='edison-asset-related-information' />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="관련 Entry 테이블" class="table1_list table table-bordered table-hover edison-table">
+		<thead id="<portlet:namespace/>scienceAppTableHeader">
+			<tr>
+				<th width="35%"><liferay-ui:message key="edison-appstore-solver-name" /></th>
+				<th width="10%"><liferay-ui:message key="edison-table-list-header-version" /></th>
+				<th width="55%"><liferay-ui:message key="edison-table-list-header-app-title" /></th>
+			</tr>
+		</thead>
+
+		<tbody id="<portlet:namespace/>entryTableBody">
+			<tr >
+				<td colspan="3" class="TC" id="<portlet:namespace/>enterEntryTitle">
+					<liferay-ui:message key='edison-asset-related-information' />
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<div class="paging">
 		<div id="<portlet:namespace/>paging"
 			style="width: 100%; text-align: center;"></div>

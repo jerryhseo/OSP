@@ -131,6 +131,7 @@
 
 .wbba {word-break: break-all;}
 
+.detailViewSubTitle{padding-left: 0px !important;}
 </style>
 
 <link href="${contextPath}/css/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
@@ -184,7 +185,7 @@
 	<div class="commleft panel edison-panel" style="padding: 0px 18px 0px 0px;">
 		<form id="<portlet:namespace/>solverInfoForm" name="<portlet:namespace/>solverInfoForm" method="POST"  action="${actionUrl}" onsubmit="return <portlet:namespace/>solverInfoFormCheck()">
 			<input type="hidden" id="<portlet:namespace/>selectLocaleId" name="<portlet:namespace/>selectLocaleId" value="${solver.selectLocaleId}"/>
-			<div class="panel-heading clearfix" style="border-bottom: 0px;">
+			<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 				<h3 class="panel-title pull-left">
 					<img src="${contextPath}/images/title_virtual.png" width="20" height="20" />
 					<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />

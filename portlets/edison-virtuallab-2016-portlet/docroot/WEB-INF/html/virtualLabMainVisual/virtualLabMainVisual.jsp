@@ -55,6 +55,8 @@
     margin: 0;
 }
 
+.detailViewSubTitle{padding-left: 0px !important;}
+
 </style>
 
 <c:choose>
@@ -90,7 +92,7 @@
 			<form id="createVirtualLabForm" name="createVirtualLabForm"  method="post" action="<%= updateVirtualLabInfomationURL %>" onsubmit="return <portlet:namespace/>checkValidation(this);" enctype="multipart/form-data">
 				<aui:input name="<portlet:namespace/>groupId" id="<portlet:namespace/>sgroupId" type="hidden" value="${groupId}" label=""/>
 				<div class="panel edison-panel">
-					<div class="panel-heading clearfix">
+					<div class="panel-heading clearfix detailViewSubTitle">
 						<h3 class="panel-title pull-left">
 							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 							<liferay-ui:message key='edison-virtuallab-infomation-management' />

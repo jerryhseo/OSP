@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
+<style>
+ .detailViewSubTitle{padding-left: 0px !important;}
+</style>
+
 <c:if test="${fn:length(data.scienceAppList) > 0 }">
 	<div class="panel edison-panel">
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key="edison-simulation-project-science-app"/>

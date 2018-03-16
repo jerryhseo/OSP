@@ -38,6 +38,11 @@ label.checkbox-label input[type=checkbox]{
 .onHover:hover {
 		background:#e0e0e0;
 	}
+	
+	
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 
 <body>
@@ -62,16 +67,20 @@ label.checkbox-label input[type=checkbox]{
 				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 				<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
 				<div class="panel-heading clearfix">
-					<h1 class="pull-left">
+					<h2 class="pull-left">
 						<c:if test="${groupName ne null}">
-							<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-							<liferay-ui:message key='edison-virtuallab-request-list' />(${groupName})
+							<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+							<span class="subtitlearea">
+								<liferay-ui:message key='edison-virtuallab-request-list' />(${groupName})
+							</span>
 						</c:if>
 						<c:if test="${groupName eq null }">
-							<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-							<liferay-ui:message key='edison-virtuallab-request-list' />
+							<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+							<span class="subtitlearea">
+								<liferay-ui:message key='edison-virtuallab-request-list' />
+							</span>
 						</c:if>
-					</h1>
+					</h2>
 				
 					<div class="input-group" style="top: 22px;">
 						<input type="text" class="form-control" id="<portlet:namespace/>search_parameter" name="<portlet:namespace/>search_parameter" maxlength="15" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onkeypress="<portlet:namespace/>onKeyDown();" style="width: 50%; float: right; margin-top: 0px; margin-left: 1%;"/>
