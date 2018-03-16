@@ -279,10 +279,11 @@ Liferay.on(
 			//<portlet:namespace/>initData = new OSP.InputData( e.data );
 			<portlet:namespace/>currentData = new OSP.InputData( e.data );
 			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
-				<portlet:namespace/>currentData.parent(
-					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
-					//<portlet:namespace/>initData.name("");
-					<portlet:namespace/>currentData.name("");
+				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>currentData.parent());
+				console.log("[JSMOL] Merge data Path test : ", <portlet:namespace/>currentData.name());
+				//<portlet:namespace/>currentData.parent( OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
+				//<portlet:namespace/>initData.name("");
+				<portlet:namespace/>currentData.name("");
 			}
 			<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
 		}
