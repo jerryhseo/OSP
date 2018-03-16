@@ -328,7 +328,8 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadJSMolFile( inputData ){
-	
+	if(! inputData.repositoryType())
+		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	console.log("[JSMol] Load Data : input Data ", inputData);
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
@@ -337,7 +338,6 @@ function <portlet:namespace/>loadJSMolFile( inputData ){
 	case OSP.Enumeration.PathType.FOLDER:
 	case OSP.Enumeration.PathType.EXT:
 	    <portlet:namespace/>getFirstFileName( inputData );
-	    // serveResourceUrl.setParameter('command', 'READ_FIRST_FILE');
 		break;
 	case OSP.Enumeration.PathType.URL:
 		alert('Un supported yet.'+inputData.type());
