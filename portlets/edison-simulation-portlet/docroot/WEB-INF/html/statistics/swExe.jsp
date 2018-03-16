@@ -25,15 +25,9 @@
 		text-align: center;
 	}
 	
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 	table#_edisonstatisticsappexec_WAR_edisonsimulationportlet_categoryTable td.selected{
 		background-color: #f5030391;
 	}
-=======
->>>>>>> 2017
->>>>>>> theme-kdhan
 </style>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
@@ -50,33 +44,6 @@
 	</div>
 	<div style="clear: both;height:20px;"></div>
 	
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> theme-kdhan
-	<h2>
-		<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
-		<liferay-ui:message key='edison-statistics-app-exec' />
-	</h2>
-	
-	<div class="h10"></div>
-	
-	<div class="tabletoptab">
-		<input class="box01" type="text" id="<portlet:namespace/>startDt" name="<portlet:namespace/>startDt" readonly="readonly" value="${preDay}"/> 
-			~	<input class="box01" type="text" id="<portlet:namespace/>endDt" name="<portlet:namespace/>endDt" readonly="readonly" value="${toDay}"/>
-	</div>
-	
-	<div class="search03">
-		<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-search" />" class="btn btn-default" onclick="<portlet:namespace/>dataSearch();"/>
-	</div>
-	
-	<div style="clear: both;height:20px;"></div>
-	
-	<h3>Science App</h3>
-	<div style="clear: both;height:20px;"></div>
-	
->>>>>>> 2017
 	<div id="<portlet:namespace/>categoryList">
 		<!-- 카테고리 출력 -->
 		<c:if test="${categoryList ne '' and categoryList ne null}">
