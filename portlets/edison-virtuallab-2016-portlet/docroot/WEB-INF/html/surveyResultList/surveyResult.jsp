@@ -18,6 +18,12 @@
 	<liferay-portlet:param name="surveySeqNo" value="${surveyMap.surveySeqNo}"/>
 </liferay-portlet:renderURL>
 
+<style>
+	.subtitlearea{
+		margin-left: 10px;
+	}
+</style>
+
 <script>
 
 $(document).ready(function () {
@@ -236,10 +242,12 @@ function <portlet:namespace/>historyback(){
 	</table>
 	
 	<div class="panel-heading clearfix">
-		<h1>
-			<img src="${contextPath}/images/title_virtual.png"/>
-			<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />
-		</h1>
+		<h2>
+			<img src="${contextPath}/images/sub_tit_bl.png"/>
+			<span class="subtitlearea">
+				<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />
+			</span>
+		</h2>
 	</div>
 	
 	<c:if test="${null ne classInfo}" >

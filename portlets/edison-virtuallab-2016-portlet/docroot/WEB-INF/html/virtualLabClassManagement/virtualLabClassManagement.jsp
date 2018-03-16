@@ -51,6 +51,8 @@
 	background:#e0e0e0;
 }
 
+.detailViewSubTitle{padding-left: 0px !important;}
+
 </style>
 
 <script type="text/javascript">
@@ -529,7 +531,7 @@ function <portlet:namespace/>virtualLabClassDisable(virtualLabId, classId, group
 </script>
 
 <div class="table-responsive panel edison-panel">
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix detailViewSubTitle">
 		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 			<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-management' />

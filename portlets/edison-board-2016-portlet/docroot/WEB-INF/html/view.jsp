@@ -146,6 +146,12 @@
 	boolean isCustomAdmin = GetterUtil.get(request.getAttribute("isCustomAdmin"), false);
 %>
 
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
 <c:choose>
 	<c:when test="${replyBoardSeq == null || replyBoardSeq == ''}">
 		<c:set var="actionUrl" value="<%=addReplyBoardActionURL%>"/>
@@ -157,13 +163,17 @@
 <script type="text/javascript" src="${contextPath}/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <c:choose>
 	<c:when test="${empty redirectName }">
-		<h1>
-			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-			${boardDivTitle}
-		</h1>
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				${boardDivTitle}
+			</span>
+		</h2>
 	</c:when>
 	<c:otherwise>
-	   <h1><a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}</h1>
+		<h2>
+			<a onClick="historyBack<portlet:namespace/>()" style="cursor: pointer;"> ${redirectName } </a>  > ${boardDivTitle}
+		</h2>
 	</c:otherwise>
 </c:choose>
 

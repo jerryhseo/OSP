@@ -25,6 +25,13 @@
 <style type="text/css">
 	.buttonbox0801{margin:0 auto; overflow:hidden; padding-top:18px; padding-bottom:5px; text-align:center; float:right;} 
 	.apparrow{cursor: pointer;}
+	.manualdnbtn.run-btn{
+		cursor: pointer;
+		right: 95px;
+	}
+	.manualdnbtn.run-btn.no-manual{
+		right: 105px;
+	}
 </style>
 
 <aui:script>
@@ -112,6 +119,7 @@ function <portlet:namespace/>dataSearchList() {
 					manualDownloadIcon = $("<img/>").attr("src", "${contextPath}/images/download_icon.png")
 													.attr("width", "9")
 													.attr("height", "12");
+					var runBtnClassName = "run-btn";
 					if(virtualScienceAppManualList[i].fileEntryId != undefined) {
 						$("<div/>").addClass("manualdnbtn")
 								   .text("MANUAL ")
@@ -120,10 +128,18 @@ function <portlet:namespace/>dataSearchList() {
 								   .css("cursor", "pointer")
 								   .appendTo(scienceappUl);
 					} else {
+						runBtnClassName += " no-manual";
 						$("<div/>").addClass("manualdnbtn")
 						   .text("NO MANUAL")
 						   .appendTo(scienceappUl);
 					}
+					/* TODO Run button 만들기 */
+					
+					$("<div/>").addClass("manualdnbtn " + runBtnClassName)
+							   .attr("onclick", "<portlet:namespace/>moveWorkBench('"+virtualLabScienceAppList[i].scienceAppId+"');")
+							   .text("RUN")
+							   .append($("<i/>").addClass("icon-play-circle").css("margin-left","3px"))
+							   .appendTo(scienceappUl);
 					
 					scienceappUl.appendTo(scienceApp);
 					scienceApp.appendTo(scienceAppList);

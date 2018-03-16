@@ -387,14 +387,14 @@ function <portlet:namespace/>searchListEntry(p_currentPage){
 
 <!--table view -->
 <div class="tabletopbox clear">
-	<div class="search">
-		<div class="searchbox">
-			<input name="<portlet:namespace/>textfield" type="text" class="form-control"
-				id="<portlet:namespace/>textfield"
-				placeholder="<liferay-ui:message key="edison-table-list-header-title"/>
-				size="40"
-				style="width: 250px; float: left;"
-				onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
+	<div class="input-group">
+		<input name="<portlet:namespace/>textfield" type="text" class="form-control"
+			id="<portlet:namespace/>textfield"
+			placeholder="<liferay-ui:message key="edison-table-list-header-title"/>
+			size="40"
+			style="width: 250px; float: right;"
+			onKeydown="if(event.keyCode ==13)<portlet:namespace/>searchListEntry(1);" />
+		<div class="input-group-btn">
 			<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>searchListEntry(1);" >
 				<i class="icon-search"></i>
 			</button>

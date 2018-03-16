@@ -5,7 +5,6 @@
 <liferay-portlet:resourceURL var="getStatisticsUserURL"		id="getStatisticsUser"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
-
 <% 
 	//Tab Setting
 	String tabNames = (String)request.getAttribute("tabNames");
@@ -19,7 +18,7 @@
 
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
-
+	
 	<div class="contabmenu"> 
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
@@ -30,11 +29,19 @@
 			minwidth="150"
 		/>
 	</div>
-	<div style="clear: both;height:20px;"></div> 
+	<div style="clear: both;height:20px;"></div>
 	<%
 		}
 	%>
 	<div class="tabletopbox clear">
+		
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<liferay-ui:message key='edison-statistics-user-register' />
+		</h2>
+		
+		<div class="h10"></div>
+		
 		<form name="<portlet:namespace/>statisticsForm" method="post">
 			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">
 			

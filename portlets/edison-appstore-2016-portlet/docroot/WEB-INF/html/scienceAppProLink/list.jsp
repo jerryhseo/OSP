@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
+<style>
+	.detailViewSubTitle{padding-left: 0px !important;}
+</style>
+
 <liferay-portlet:renderURL var="scienceAppProLinkViewDialogueURL"
 	windowState="<%=LiferayWindowState.POP_UP.toString()%>"
 	copyCurrentRenderParameters="false">
@@ -14,7 +18,7 @@
 
 <c:if test="${fn:length(selectSimulationProjectList) > 0 || isMgrBtn == true}">
 	<div class="table-responsive panel edison-panel" style="margin-top: 60px;">
-		<div class="panel-heading clearfix" style="border-bottom: 0px;">
+		<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 				<liferay-ui:message key='edison-simulation-project-recommend-title' />			

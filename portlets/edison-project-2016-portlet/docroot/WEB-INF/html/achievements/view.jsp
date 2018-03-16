@@ -7,20 +7,30 @@
 <script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
-<h1 class="perfoh1">
-	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-	EDISON <liferay-ui:message key="edison-project-achievemnet-title"/>
-</h1>
-	
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
+<h2>
+	<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+	<span class="subtitlearea">
+		EDISON <liferay-ui:message key="edison-project-achievemnet-title"/>
+	</span>
+</h2>
+
 <div>
 	<img src="${contextPath }/images/output/intro_01.jpg" width="1221"
 		height="744">
 </div>
 
-<h1 class="perfoh1">
-	<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
-	EDISON 프로젝트 주요 성과
-</h1>
+<h2>
+	<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+	<span class="subtitlearea">
+		EDISON 프로젝트 주요 성과
+	</span>
+</h2>
 
 <!--챠트영역-->
 <div class="perfochartbox">

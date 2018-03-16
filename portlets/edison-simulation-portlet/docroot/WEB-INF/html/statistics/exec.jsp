@@ -37,6 +37,14 @@
 %>
 
 	<div class="tabletopbox clear">
+	
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<liferay-ui:message key='edison-statistics-exec' />
+		</h2>
+		
+		<div class="h10"></div>
+		
 		<form name="<portlet:namespace/>statisticsForm" method="post">
 			<input type="hidden" name="<portlet:namespace/>status" id="<portlet:namespace/>status">
 			<input type="hidden" name="<portlet:namespace/>visitSite" id="<portlet:namespace/>visitSite" value="<%=visitSite%>">

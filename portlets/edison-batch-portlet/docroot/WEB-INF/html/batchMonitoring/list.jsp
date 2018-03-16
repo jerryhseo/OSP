@@ -24,6 +24,10 @@
 	.onFaqContent {
 		display:table-row;
 	}
+	
+	.subtitlearea{
+		margin-left: 10px;
+	}
 </style>
 
 <div class="table-responsive panel edison-panel">
@@ -79,10 +83,12 @@
 	</div>
 	
 	<div class="panel-heading clearfix">
-		<h1>
-			<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-			<liferay-ui:message key='edison-batch-execute-history' />
-		</h1>
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<liferay-ui:message key='edison-batch-execute-history' />
+			</span>
+		</h2>
 	</div>
 	
 	<div class="table1_list">

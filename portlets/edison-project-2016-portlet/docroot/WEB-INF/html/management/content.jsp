@@ -143,6 +143,9 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 	padding: 5px;
 	border: solid 1px #ddd;
 }
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 
 <div id="<portlet:namespace/>display" class="table-responsive panel edison-panel" >
@@ -150,13 +153,15 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 	
 	<div class="panel-heading clearfix">
 		<div class="panel-title pull-left" style="width: 40%">
-			<h1 class="pull-left">
-				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-				<liferay-ui:message key='edison-project-management-content' />
-			</h1>
+			<h2 class="pull-left">
+				<img src="${contextPath}/images/sub_tit_bl.png"/> 
+				<span class="subtitlearea">
+					<liferay-ui:message key='edison-project-management-content' />
+				</span>
+			</h2>
 		</div>
     
-    <div class="btn-group pull-right" style="width: 60%; top: 30px;">
+    <div class="btn-group pull-right" style="width: 60%; top: 50px;">
       <div class="input-group">
         <select class="form-control" style="width: 29%" id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_project"
           onchange="<portlet:namespace/>dataSearchList(1)">
