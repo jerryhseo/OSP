@@ -173,7 +173,7 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 			</span>
 		</h2>
 		
-		<div class="btn-group pull-right" style="width: 60%; top: 50px;">
+		<div class="btn-group pull-right" style="width: 60%; top: 20px;">
             <div class="input-group">
               <select style="width: 29%" id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="form-control">
                   <option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>
