@@ -221,7 +221,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
         console.log("[JSMol] file explorer call inputData  : ", inputData);
         console.log("[JSMol] file explorer url : ", dialogURL);
         console.log("[JSMol] file explorer url2 : " + dialogURL);
-        if( $('#<portlet:namespace/>file-explorer-content').children().length > 0 ){
+        if( $('<portlet:namespace/>file-explorer-content').children().length > 0 ){
         	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}
         else{
