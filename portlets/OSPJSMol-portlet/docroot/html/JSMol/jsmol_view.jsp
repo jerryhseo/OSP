@@ -416,9 +416,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
         type: 'POST',
         url: '<%= serveResourceURL.toString()%>', 
         data  : data,
-        dataType : 'text',
         success: function(data) {
-        	console.log("[JSMOL] get result data ", data);
+        	console.log("[JSMOL] get result data " + data);
         	var result = JSON.parse(data);
         	console.log("[JSMOL] get result data ", result);
             inputData.type( OSP.Enumeration.PathType.FILE );
