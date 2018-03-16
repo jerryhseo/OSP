@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -25,6 +23,7 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.search.service.service.SearchLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.ExcelUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
@@ -41,20 +40,16 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.model.AssetCategoryProperty;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoTable;
@@ -75,177 +70,105 @@ public class EdisonStatisticsAppExecController {
 		try{
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
-			long companyId = themeDisplay.getCompanyId();
 			long companyGroupId = themeDisplay.getCompany().getGroupId();
 
 			String toDay = CustomUtil.dateToStringFormat(new Date(), "yyyy-MM-dd");
 			int preYear = Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyy"));
 			String preDay = (preYear-1)+"-01-01";
 			
-			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
-			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
+			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
 			
-			String visitSite ="";		
-			Group thisGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getSiteGroupId());
-			long thisGoupId = PortalUtil.getScopeGroupId(request);
-			String groupId = "";
-			boolean isPortalMain = true;		
-			
-			Locale locale = themeDisplay.getLocale();
-			
-			//사이언스앱 상세보기 -> SW통계
-			String appExecGroupId = CustomUtil.strNull(params.get("appExecGroupId"));
-			if(!"".equals(appExecGroupId)){
-				tabViewYn = "N";
-				visitSite = appExecGroupId;
-			}
-			
-			if(tabViewYn.equals("Y")){
+			if(!scienceAppName.equals("")){
+				//APP 상세 보기
+				model.addAttribute("scienceAppName", scienceAppName);
+				model.addAttribute("tabViewYn", false);
+			}else{
+				//LIST
+				String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
+				String tabUseStr = request.getPreferences().getValue("tabUseList", "");
+				long selectedGroupId = 0;
 				
-				Layout layout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/project-download");
-				boolean layoutViewPermission = LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser(), true), layout, ActionKeys.VIEW);
-				PortletURL classURL = PortletURLFactoryUtil.create(request, "", layout.getPlid(), PortletRequest.RENDER_PHASE);
-				
-				model.addAttribute("projectDownloadURL", classURL);
-				
-				String searchGroupId =CustomUtil.strNull(params.get("search_groupId"));
-				
-				if(thisGroup.getParentGroupId() > 0){//child site
-					isPortalMain = false;
-					visitSite = String.valueOf(themeDisplay.getSiteGroupId());
-				}else{
-					
-					//하위 사이트 존재 여부
-					boolean isChildrenSite = false;
-					if(GroupLocalServiceUtil.getGroups(companyId, PortalUtil.getScopeGroupId(request), true).size()>0){
-						isChildrenSite = true;
+				if(tabViewYn.equals("Y")){
+					String visitSite = "";
+					//User Expando 값 가지고 오기
+					if(themeDisplay.isSignedIn()){
+						visitSite = CustomUtil.strNull(themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE));
 					}
 					
-					if(isChildrenSite){
-						long selectGroupId = ParamUtil.getLong(request, "thisGroupId",0);				
-						Group selectGroup = null;
-						
-						if(selectGroupId == 0){
-							selectGroup = thisGroup;
-						}else{
-							selectGroup = GroupLocalServiceUtil.getGroup(selectGroupId);	
-						}
-	
-						if(selectGroupId != 0){
-							Group group = GroupLocalServiceUtil.getGroup(selectGroupId);
-							themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,selectGroup.getName());				
-						}
-						
-						//TABS VALUE CREATE
-						List<com.liferay.portal.model.Group> parentGroupList = GroupLocalServiceUtil.getGroups(companyId, 0, true);
-						Group parentGroup = null;
-						for(Group group:parentGroupList){
-							if(group.getName().toUpperCase().equals("GUEST")){
-								parentGroup = group;
-								break;
-							}
-						}
-						
-						Group defaultGroup = GroupLocalServiceUtil.getGroup(companyId, "CFD");
-						model.addAttribute("visitSite", Long.toString(defaultGroup.getGroupId()));
-						
-						if(themeDisplay.isSignedIn()){
-							visitSite =  themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
-						}else{
-							visitSite = CustomUtil.strNull(params.get("groupId"), Long.toString(defaultGroup.getGroupId()) );
-						}
-						
+					if(visitSite.equals("")){
+						visitSite = "CFD";
+					}
+					
+					Map<String,Long> GroupMap = new HashMap<String,Long>();
+					if(!tabUseStr.equals("")){
 						String groupName = "";
 						int groupCnt = 0;
+						String groupId = "";
 						
-						Map<String,Long> GroupMap = new HashMap<String,Long>();
-						if(!tabUseStr.equals("")){
-							String []tabUseArray = tabUseStr.split(",");
-							for(int i=0;i<tabUseArray.length;i++){
-								
-								Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
-								Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
-								GroupMap.put(group.getName(), group.getGroupId());
-						
-									if(groupCnt==0){
-										groupName += group.getName();
-										groupId += group.getGroupId();
-										groupCnt++;
-									}else{
-										groupName += ","+group.getName();
-										groupId += ","+group.getGroupId();
-									}
-									
-									if(!visitSite.equals("")&&visitSite.equals(group.getName())){
-										visitSite = Long.toString(group.getGroupId());
-									}
+						String []tabUseArray = tabUseStr.split(",");
+						for(int i=0;i<tabUseArray.length;i++){
+							Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
+							Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
+							GroupMap.put(group.getName(), group.getGroupId());
+							
+							if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+								group.setName("EDISON");
+							}
+							
+							if(groupCnt==0){
+								groupName += group.getName();
+								groupId += group.getGroupId();
+								groupCnt++;
+							}else{
+								groupName += ","+group.getName();
+								groupId += ","+group.getGroupId();
+							}
+							
+							if(visitSite.equals(group.getName())){
+								selectedGroupId = group.getGroupId();
+								model.addAttribute("selectedGroupId", Long.toString(group.getGroupId()));
 							}
 						}
 						
 						model.addAttribute("tabNames", groupName);
 						model.addAttribute("tabsValues", groupId);
-					}else{
-						isPortalMain = false;
-						visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
+						model.addAttribute("tabViewYn", true);
 					}
-					
-				}//end if(thisGroup.getParentGroupId() > 0){
-			}else{
-				//상세 사이트 일경우 Tab Not View
-				isPortalMain = false;
-				if(!"".equals(appExecGroupId)){
-					visitSite = appExecGroupId;
+					model.addAttribute("visitSite", visitSite);
 				}else{
-					visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
+					selectedGroupId = themeDisplay.getScopeGroupId();
+					model.addAttribute("selectedGroupId", themeDisplay.getScopeGroupId());
+					model.addAttribute("tabViewYn", false);
 				}
-			}//else if(tabViewYn.equals("Y")){
+				
+				AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+				
+				/* default thisGroupId = 23212(=CFD) */
+				AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), selectedGroupId);
+				List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
+				
+				List<Map<String, Object>> categoryList = new ArrayList<Map<String, Object>>() ;
+				for(AssetCategory aCategory : aCategoryList){
+					if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&& aCategory.getParentCategoryId() != 0){
+						Map<String, Object> aCategoryMap = new HashMap<String, Object>();
+						aCategoryMap.put("categoryId", aCategory.getCategoryId());
+						aCategoryMap.put("categoryTitle", aCategory.getTitle(themeDisplay.getLocale()));
+						aCategoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
+						AssetCategoryProperty assetCategoryProperty = AssetCategoryPropertyLocalServiceUtil.getCategoryProperty(aCategory.getCategoryId(), "IMAGE");
+						aCategoryMap.put(assetCategoryProperty.getKey().toLowerCase(), assetCategoryProperty.getValue());
+						categoryList.add(aCategoryMap);
+					}
+				}
+				
+				model.addAttribute("categoryList", categoryList);
+				
+				//기관 코드 조회
+				model.addAttribute("orgCodes", EdisonExpndoUtil.getCodeListByUpCode(1501, themeDisplay.getLocale()));
+			}
 			
-			model.addAttribute("isPortalMain", isPortalMain);
-			model.addAttribute("visitSite", visitSite);
+			model.addAttribute("pageTitle", themeDisplay.getLayout().getName(themeDisplay.getLocale()));
 			model.addAttribute("preDay", preDay);
 			model.addAttribute("toDay", toDay);
-			
-			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
-			if(!"".equals(scienceAppName)){
-				model.addAttribute("scienceAppName", scienceAppName);
-			}
-			
-			AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
-			
-			/* default thisGroupId = 23212(=CFD) */
-			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), ParamUtil.getLong(request, "thisGroupId",23212));
-			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
-			
-			String categoryStr = "";
-			List<Map<String, Object>> parentCategoryList = new ArrayList<Map<String, Object>>() ;
-			List<Map<String, Object>> categoryList = new ArrayList<Map<String, Object>>() ;
-			
-			//parentCategory 찾기
-			for(AssetCategory aCategory : aCategoryList){
-				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&& aCategory.getParentCategoryId() == 0){
-					Map<String, Object> aCategoryMap = new HashMap<String, Object>();
-					aCategoryMap.put("categoryId", aCategory.getCategoryId());
-					aCategoryMap.put("categoryTitle", aCategory.getTitle(themeDisplay.getLocale()));
-					aCategoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
-					parentCategoryList.add(aCategoryMap);
-				}
-			}
-				
-			for(AssetCategory aCategory : aCategoryList){
-				if(aCategory.getVocabularyId()==aVocabulary.getVocabularyId()&& aCategory.getParentCategoryId() != 0){
-					Map<String, Object> aCategoryMap = new HashMap<String, Object>();
-					aCategoryMap.put("categoryId", aCategory.getCategoryId());
-					aCategoryMap.put("categoryTitle", aCategory.getTitle(themeDisplay.getLocale()));
-					aCategoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
-					categoryList.add(aCategoryMap);
-				}
-			}
-			
-			String categoriesJsonString = SearchLocalServiceUtil.getCategoriesJsonString(companyGroupId, thisGoupId, locale);
-			
-			model.addAttribute("categoryList", categoryList);
-			model.addAttribute("categoriesJsonString", categoriesJsonString);
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -261,65 +184,45 @@ public class EdisonStatisticsAppExecController {
 	
 			String startDt = CustomUtil.strNull(params.get("startDt"));
 			String endDt = CustomUtil.strNull(params.get("endDt"));
-			String visiteSiteStr = CustomUtil.strNull(params.get("visitSite"), "0");
-			if(StringUtil.toUpperCase(visiteSiteStr).equals("GUEST")){
-				// Defailt visiteSite is CFD
-				visiteSiteStr = "23212";
-			}
-			long visitSite = Long.parseLong(visiteSiteStr);
-			long groupId = themeDisplay.getScopeGroupId();
-			Group group = GroupLocalServiceUtil.getGroup(visitSite);
-			ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
-			long columnId = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY).getColumnId();
-			long companyGroupId = themeDisplay.getCompany().getGroupId();
-			//long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
-			long parentGroupId = 0l;
-			String parentGroupIdStr = CustomUtil.strNull(params.get("parentGroupId"));
-			if(parentGroupIdStr.equals("") || parentGroupIdStr == null){
-				parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
-			} else {
-				parentGroupId = Long.parseLong(parentGroupIdStr);
-			}
+			
+			long selectedGroupId = Long.parseLong(CustomUtil.strNull(params.get("selectedGroupId"), "0"));
 			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId"), "0"));
 			
+			long companyGroupId = themeDisplay.getCompanyGroupId();
+			
+			long groupId = 0;
+			
+			ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(themeDisplay.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
+			long columnId = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY).getColumnId();
 			
 			//모든 버전 App 
 			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
 			List<Map<String, Object>> scienceAppList = new ArrayList<Map<String, Object>>();
 			
 			if(!"".equals(scienceAppName)){
-				if(parentGroupId == 0){//포탈
-					scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(themeDisplay.getCompanyGroupId(), visitSite, themeDisplay.getLocale(), scienceAppName, true);
-				}else{
-					scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(themeDisplay.getCompanyGroupId(), groupId, themeDisplay.getLocale(), scienceAppName, true);
-				}
+				groupId = themeDisplay.getScopeGroupId();
+				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(companyGroupId, groupId, themeDisplay.getLocale(), scienceAppName, true);
 			}else{
-				Map<String,Object> appMap = new HashMap<String,Object>();
+				groupId = selectedGroupId;
+				Map<String,Object> appSearchMap = new HashMap<String,Object>();
 				if(categoryId!=0){
-					appMap.put("categoryIds", new long[]{categoryId});
+					appSearchMap.put("categoryIds", new long[]{categoryId});
 				}
+				
+				appSearchMap.put("likeOrgName", CustomUtil.strNull(params.get("likeOrgName")));
 				
 				String [] appTypes = new String []{"Solver"};
 				Locale locale = themeDisplay.getLocale();
 				
-				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, group.getGroupId(), locale, 0, appTypes, null, appMap, "", 0, 0, true);
+				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, appSearchMap, "", 0, 0, true);
 			}
 			
 			List<Map<String, Object>> tableOrganigationList = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> barChartDateList = new ArrayList<Map<String, Object>>();
 			
 			if(0 < scienceAppList.size()){
-				if(parentGroupId == 0){//포탈
-					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
-					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, visitSite, columnId, startDt, endDt, scienceAppList, true, 0);
-				}else if(parentGroupId != 0 && !"".equals(scienceAppName)){
-					/* 카테고리 선택 시 해당  카테고리의 통계 정보 출력 */
-					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, categoryId);
-					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, categoryId);
-				}else{
-					tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
-					barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
-				}
+				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
+				barChartDateList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(companyGroupId, groupId, columnId, startDt, endDt, scienceAppList, true, 0);
 			}
 			
 			JSONObject obj = new JSONObject();
@@ -339,33 +242,45 @@ public class EdisonStatisticsAppExecController {
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
 		try {		
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-	
+			
 			String startDt = CustomUtil.strNull(params.get("startDt"));
 			String endDt = CustomUtil.strNull(params.get("endDt"));
-			long visitSite = Long.parseLong(CustomUtil.strNull(params.get("visitSite"), "0"));
-			long groupId = themeDisplay.getScopeGroupId();
-			Group group = GroupLocalServiceUtil.getGroup(visitSite);
-			ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
+			
+			long selectedGroupId = Long.parseLong(CustomUtil.strNull(params.get("selectedGroupId"), "0"));
+			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId"), "0"));
+			
+			long companyGroupId = themeDisplay.getCompanyGroupId();
+			
+			long groupId = 0;
+			
+			ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(themeDisplay.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
 			long columnId = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY).getColumnId();
-			long companyGroupId = themeDisplay.getCompany().getGroupId();
-			long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
 			
 			//모든 버전 App 
 			String scienceAppName = CustomUtil.strNull(params.get("scienceAppName"));
 			List<Map<String, Object>> scienceAppList = new ArrayList<Map<String, Object>>();
+			
 			if(!"".equals(scienceAppName)){
-				if(parentGroupId == 0){//포탈
-					scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(themeDisplay.getCompanyGroupId(), visitSite, themeDisplay.getLocale(), scienceAppName, true);
-				}else{
-					scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(themeDisplay.getCompanyGroupId(), groupId, themeDisplay.getLocale(), scienceAppName, true);
+				groupId = themeDisplay.getScopeGroupId();
+				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppByName(companyGroupId, groupId, themeDisplay.getLocale(), scienceAppName, true);
+			}else{
+				groupId = selectedGroupId;
+				Map<String,Object> appSearchMap = new HashMap<String,Object>();
+				if(categoryId!=0){
+					appSearchMap.put("categoryIds", new long[]{categoryId});
 				}
+				
+				appSearchMap.put("likeOrgName", CustomUtil.strNull(params.get("likeOrgName")));
+				
+				String [] appTypes = new String []{"Solver"};
+				Locale locale = themeDisplay.getLocale();
+				
+				scienceAppList = ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(companyGroupId, groupId, locale, 0, appTypes, null, appSearchMap, "", 0, 0, true);
 			}
 			
-			List tableOrganigationList = new ArrayList();
+			List<Map<String, Object>> tableOrganigationList = new ArrayList<Map<String, Object>>();
 			
-			if(parentGroupId == 0){//포탈
-				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, visitSite, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
-			}else{
+			if(0 < scienceAppList.size()){
 				tableOrganigationList  = ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(companyGroupId, groupId, themeDisplay.getLocale(), columnId, startDt, endDt, scienceAppList, true, 0);
 			}
 			
@@ -402,5 +317,21 @@ public class EdisonStatisticsAppExecController {
 		}
 	}
 	
-		
+	
+	//탭 이벤트 저장
+	@ResourceMapping(value ="cickTab")
+	public void fileList(ResourceRequest request, ResourceResponse response){
+		try{
+			Map param = RequestUtil.getParameterMap(request);
+			long groupId = ParamUtil.getLong(request, "groupId",0);
+			if(groupId!=0){
+				ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+				Group group = GroupLocalServiceUtil.getGroup(groupId);
+				themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
+			}
+		}catch(Exception e){
+			log.error(e);
+			e.printStackTrace();
+		}
+	}
 }

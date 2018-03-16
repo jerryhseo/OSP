@@ -16,6 +16,8 @@ package org.kisti.edison.bestsimulation.service.impl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +31,10 @@ import org.kisti.edison.util.EdisonExpndoUtil;
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.User;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.expando.model.ExpandoTableConstants;
+import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
 
 /**
  * The implementation of the university execute local service.
@@ -80,6 +86,34 @@ public class UniversityExecuteLocalServiceImpl
 					
 					resultList.add(map);
 				}
+				
+				Comparator<HashMap> affiliation = new Comparator<HashMap>() {
+					@Override
+					public int compare(HashMap o1, HashMap o2) {
+						String s1 = o1.get("affiliation").toString();
+						String s2 = o2.get("affiliation").toString();
+						
+						int n1=s1.length(), n2=s2.length();
+						for (int i1=0, i2=0; i1<n1 && i2<n2; i1++, i2++) {
+							char c1 = s1.charAt(i1);
+							char c2 = s2.charAt(i2);
+							if (c1 != c2) {
+								c1 = Character.toUpperCase(c1);
+								c2 = Character.toUpperCase(c2);
+								if (c1 != c2) {
+									c1 = Character.toLowerCase(c1);
+									c2 = Character.toLowerCase(c2);
+									if (c1 != c2) {
+										return c1 - c2;
+									}
+								}
+							}
+						}
+						return n1 - n2;
+					}
+				};
+				
+				Collections.sort(resultList, affiliation);
 			}
 		}		
 		return resultList;
@@ -112,10 +146,11 @@ public class UniversityExecuteLocalServiceImpl
 	}
 	
 	/*UniversityExecute Insert*/
-	public int insertCustomUniversityExecute(long columnId, String startDt, String endDt) throws SystemException, NumberFormatException, NoSuchModelException {
+	public int insertCustomUniversityExecute(long columnId, String startDt, String endDt) throws SystemException, NumberFormatException, PortalException {
 		
 		Map<String,Object> searchParam = new HashMap<String,Object>();
 		
+		searchParam.put("tableId", ExpandoTableLocalServiceUtil.getTable(PortalUtil.getDefaultCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME));
 		searchParam.put("columnId", columnId);
 		searchParam.put("startDt", CustomUtil.strNull(startDt,""));
 		searchParam.put("endDt", CustomUtil.strNull(endDt,""));

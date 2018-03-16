@@ -255,12 +255,11 @@ public interface BatchMonitoringLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	/**
-	* 배치 결과 메세지
-	*
-	* @param exeDate - 배치 실행 시간
-	* @param startDt -시작 날짜
-	* @param endDt - 종료 날짜
-	* @param batchSuccess - 배치 성공 여부
+	* 諛곗튂 寃곌낵 硫붿꽭吏�     *
+	* @param exeDate - 諛곗튂 �ㅽ뻾 �쒓컙
+	* @param startDt -�쒖옉 �좎쭨
+	* @param endDt - 醫낅즺 �좎쭨
+	* @param batchSuccess - 諛곗튂 �깃났 �щ�
 	* @return
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -268,14 +267,14 @@ public interface BatchMonitoringLocalService extends BaseLocalService,
 		java.lang.String startDt, java.lang.String endDt, boolean batchSuccess);
 
 	/**
-	* 배치 실행 이력 저장
+	* 諛곗튂 �ㅽ뻾 �대젰 ��옣
 	*
-	* @param batDiv - 배치 분류
-	* @param manualYN - 수동실행 여부
-	* @param status - 실행 상태 (SUCCESS, FAIL)
-	* @param message - 실행 정보
-	* @param insertId - 배치실행 아이디 (스케쥴러로 실행시는 아이디 없음)
-	* @param exeDate - 실행 시간
+	* @param batDiv - 諛곗튂 遺꾨쪟
+	* @param manualYN - �섎룞�ㅽ뻾 �щ�
+	* @param status - �ㅽ뻾 �곹깭 (SUCCESS, FAIL)
+	* @param message - �ㅽ뻾 �뺣낫
+	* @param insertId - 諛곗튂�ㅽ뻾 �꾩씠��(�ㅼ�伊대윭濡��ㅽ뻾�쒕뒗 �꾩씠���놁쓬)
+	* @param exeDate - �ㅽ뻾 �쒓컙
 	*/
 	public org.kisti.edison.simulation.model.BatchMonitoring insertCustomBatchMonitoring(
 		java.lang.String batDiv, java.lang.String manualYN,
@@ -286,11 +285,10 @@ public interface BatchMonitoringLocalService extends BaseLocalService,
 			java.lang.NumberFormatException;
 
 	/**
-	* 배치 실행 이력 리스트
-	*
+	* 諛곗튂 �ㅽ뻾 �대젰 由ъ뒪��     *
 	* @param begin
 	* @param end
-	* @return 실행 이력
+	* @return �ㅽ뻾 �대젰
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getCustomBatchMonitoringList(
@@ -300,10 +298,8 @@ public interface BatchMonitoringLocalService extends BaseLocalService,
 			java.text.ParseException;
 
 	/**
-	* 배치 실행 이력 카운트
-	*
-	* @return 실행 이력 카운트
-	*/
+	* 諛곗튂 �ㅽ뻾 �대젰 移댁슫��     *
+	* @return �ㅽ뻾 �대젰 移댁슫��     */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCustomBatchMonitoringCount()
 		throws com.liferay.portal.kernel.exception.PortalException,

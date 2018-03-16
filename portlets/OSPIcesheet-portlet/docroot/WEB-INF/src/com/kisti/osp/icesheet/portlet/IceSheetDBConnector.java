@@ -1,4 +1,4 @@
-package com.kisti.osp.icesheet.portlet;
+\package com.kisti.osp.icesheet.portlet;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

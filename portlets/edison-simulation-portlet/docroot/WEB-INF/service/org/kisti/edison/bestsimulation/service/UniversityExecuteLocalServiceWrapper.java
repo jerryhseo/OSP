@@ -313,7 +313,7 @@ public class UniversityExecuteLocalServiceWrapper
 	@Override
 	public int insertCustomUniversityExecute(long columnId,
 		java.lang.String startDt, java.lang.String endDt)
-		throws com.liferay.portal.NoSuchModelException,
+		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.lang.NumberFormatException {
 		return _universityExecuteLocalService.insertCustomUniversityExecute(columnId,
