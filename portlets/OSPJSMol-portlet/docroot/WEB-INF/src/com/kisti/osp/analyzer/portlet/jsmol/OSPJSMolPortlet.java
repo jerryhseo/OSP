@@ -81,6 +81,7 @@ public class OSPJSMolPortlet extends MVCPortlet {
             }
         }else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try{
+            	System.out.println("[JSMOL] test get firstFileName");
             	OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("[JSMOL] getFirstFileName(): " + filePath.toString());
