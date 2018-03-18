@@ -419,15 +419,12 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
 					
 					
-					console.log("Sync SelectedJobId--->"+selectJobId+"__jobStatus--->"+jobStatus);
-					
 					if(typeof selectJobId != 'undefined'){
 						if(job._jobUuid===nullToStr(selectJobId)){
 							$topLi.addClass("active");
-							<portlet:namespace/>prevStatus.log())
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
-								
 								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
+								
 								var eventData = {
 										portletId: '<%=portletDisplay.getId()%>',
 										targetPortlet:<portlet:namespace/>connector,
