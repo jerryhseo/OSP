@@ -23,7 +23,7 @@
 				
 				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 30%; float: right; margin-left: 1%;" />
 			
-				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 11%; float: right;">
+				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 12%; float: right;">
 					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
