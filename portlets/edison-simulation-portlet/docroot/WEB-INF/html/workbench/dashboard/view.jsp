@@ -422,7 +422,9 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 					if(typeof selectJobId != 'undefined'){
 						if(job._jobUuid===nullToStr(selectJobId)){
 							$topLi.addClass("active");
+							
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
+								/*JOB Sync Status UPDATE*/
 								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
 								
 								var eventData = {
