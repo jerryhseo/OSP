@@ -426,6 +426,9 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 							$topLi.addClass("active");
 							<portlet:namespace/>prevStatus.log())
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
+								
+								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
+								
 								var eventData = {
 										portletId: '<%=portletDisplay.getId()%>',
 										targetPortlet:<portlet:namespace/>connector,
