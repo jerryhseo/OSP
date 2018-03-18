@@ -331,8 +331,6 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 			topSimultionSection.children("a").trigger('click');
 		}
 		
-		console.log("<portlet:namespace/>selectRow--->simulationUuid-->"+simulationUuid+"--jobUuid->"+jobUuid);
-		
 		if(nullToStr(jobUuid)===''){
 			topSimultionSection.find("li[id*=<portlet:namespace/>job-]:first > a").trigger('click');
 		}else{
@@ -421,7 +419,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
 					
 					
-					console.log("Sync SelectedJobId--->"+selectJobId+"__jobStatus--->"+jobStatus+"__job._jobUuid--->"+job._jobUuid);
+					console.log("Sync SelectedJobId--->"+selectJobId+"__jobStatus--->"+jobStatus);
 					
 					if(typeof selectJobId != 'undefined'){
 						if(job._jobUuid===nullToStr(selectJobId)){
@@ -430,7 +428,6 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
 								
 								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
-								
 								var eventData = {
 										portletId: '<%=portletDisplay.getId()%>',
 										targetPortlet:<portlet:namespace/>connector,
