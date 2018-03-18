@@ -331,6 +331,8 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 			topSimultionSection.children("a").trigger('click');
 		}
 		
+		console.log("<portlet:namespace/>selectRow--->simulationUuid-->"+simulationUuid+"--jobUuid->"+jobUuid);
+		
 		if(nullToStr(jobUuid)===''){
 			topSimultionSection.find("li[id*=<portlet:namespace/>job-]:first > a").trigger('click');
 		}else{
