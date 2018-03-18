@@ -130,6 +130,16 @@
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
 <div class="container">
+	
+	
+	<c:if test="${tabViewYn eq 'Y'}">
+		<div class="contabmenu">
+			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
+		</div>
+	</c:if>
+	
+	<div class="h10"></div>
+	
 	<div>
 		<h2>
 			<img src="${contextPath}/images/sub_tit_bl.png" />
@@ -138,14 +148,6 @@
 			</span>
 		</h2>
 	</div>
-	
-	<div class="h10"></div>
-	
-	<c:if test="${tabViewYn eq 'Y'}">
-		<div class="contabmenu">
-			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
-		</div>
-	</c:if>
 	
 	<div class="table-responsive panel edison-panel" style="width: 100%">
 	
