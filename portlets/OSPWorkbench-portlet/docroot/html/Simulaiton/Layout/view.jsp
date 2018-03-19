@@ -278,6 +278,7 @@ $(function(e) {
 		moveType = $(this).hasClass("vertical") ? "vertical" : "horizontal"
 	});
 	
+	
 	$("body").mouseup(function(a) {
 		if(isDevider){
 			isDevider = false;
