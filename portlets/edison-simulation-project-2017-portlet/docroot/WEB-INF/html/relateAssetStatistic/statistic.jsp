@@ -15,10 +15,6 @@
 		<liferay-ui:message
 				key="org.kisti.edison.content.model.Content"></liferay-ui:message> :
 			${data.linkConetentCount}</li>
-		<li class="stxt2"><img src="${contextPath}/images/comm_proj/icon03.png" width="13" height="12">
-		<liferay-ui:message
-				key="com.kisti.osp.icecap.model.DataCollection"></liferay-ui:message>
-			: ${data.linkScienceDataCount}</li>
 		<li class="stxt2"><img src="${contextPath}/images/comm_proj/icon04.png" width="13" height="12">
 		<liferay-ui:message
 				key="org.kisti.edison.model.SimulationProject"></liferay-ui:message>
