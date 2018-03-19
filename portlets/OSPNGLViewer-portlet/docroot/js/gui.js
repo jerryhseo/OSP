@@ -718,7 +718,7 @@ NGL.MenubarExamplesWidget = function (stage) {
     	console.log("KYJ TEST JSON3"+NGL.examplesScriptUrl + name + '.js');
       var option = createOption(name, function () {
     	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
-    	  console.log("test return");
+    	  
     	 console.log(test);
       })
       //console.log("test option");
