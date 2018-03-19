@@ -28,6 +28,7 @@
 <liferay-portlet:renderURL var="collectionPopupURL" portletName="sdrcommon_WAR_SDR_baseportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
     <portlet:param name="action" value="collectionPopup" />
     <portlet:param name="targetGroupId" value="${sdrGroupId}" />
+    <portlet:param name="allCollection" value="true" />
 </liferay-portlet:renderURL>
 <style>
 .job-file-item {cursor: pointer;}
