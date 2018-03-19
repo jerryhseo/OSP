@@ -46,6 +46,11 @@ function <portlet:namespace/>checkName(){
 		return false;
 	}else{
 		var checkName = $("#portName").val();
+		if(/^[0-9]/.test(checkName)){
+			alert(Liferay.Language.get('expression-is-not-numeric-start'));
+			$("#portName").focus();
+			return false;
+		}
 		if(!/^[-|_]?[a-zA-Z0-9_]+$/.test(checkName)){
 			alert(Liferay.Language.get('expression-is-not-valid-ex-3',['param','param1','-param']));
 			return false;
