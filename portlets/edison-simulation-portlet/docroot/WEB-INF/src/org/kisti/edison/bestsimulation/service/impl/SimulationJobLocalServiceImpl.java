@@ -600,9 +600,10 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("jobPostProcessorYn","N");
 					resultRow.put("jobMiddleFileProcessorYn","N");
 					
-					//후처리기 존재 여부
 					long scienceAppId = GetterUtil.get(simulation.getScienceAppId(),0L);
-					if(scienceAppId > 0L) {
+					
+					//후처리기 존재 여부 - 미사용, 2018.03.19
+					/*if(scienceAppId > 0L) {
 						String outputPort = "";
 						
 						ScienceAppOutputPorts scienceAppOutputPorts = ScienceAppOutputPortsLocalServiceUtil.fetchScienceAppOutputPorts(scienceAppId);
@@ -610,9 +611,7 @@ public class SimulationJobLocalServiceImpl
 							outputPort = scienceAppOutputPorts.getOutputPorts();
 						}
 						if(outputPort != null && !outputPort.equals("")) {
-							log.info("outputPort : " + outputPort);
 							JSONObject outputPortJson = JSONObject.fromObject(JSONSerializer.toJSON(outputPort));
-							log.info("outputPortJson : " + outputPortJson.toString());
 							Iterator<String> itr = outputPortJson.keys();
 							int analyzerCount = 0;
 							int middleFileCount = 0;
@@ -636,7 +635,7 @@ public class SimulationJobLocalServiceImpl
 								resultRow.put("jobMiddleFileProcessorYn","Y");
 							}
 						}
-					}
+					}*/
 
 					//로그포트 존재 여부
 					if(scienceAppId > 0L) {
