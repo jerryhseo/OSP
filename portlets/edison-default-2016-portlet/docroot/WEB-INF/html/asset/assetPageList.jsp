@@ -358,10 +358,6 @@ function <portlet:namespace/>shortcuts(seq, div) {
 		<li id="<%=CONTENT%>"><liferay-ui:message key="<%=CONTENT%>" />&nbsp;&nbsp;<img
 			src="${contextPath}/images/asset/arrow01.png" width="6" height="10"></li>
 
-		<li id="<%=OPEN_DATA%>"><liferay-ui:message
-				key="<%=OPEN_DATA%>" />&nbsp;&nbsp;<img
-			src="${contextPath}/images/asset/arrow01.png" width="6" height="10"></li>
-
 		<li id="<%=PROJECT%>"><liferay-ui:message key="<%=PROJECT%>" />&nbsp;&nbsp;<img
 			src="${contextPath}/images/asset/arrow01.png" width="6" height="10"></li>
 

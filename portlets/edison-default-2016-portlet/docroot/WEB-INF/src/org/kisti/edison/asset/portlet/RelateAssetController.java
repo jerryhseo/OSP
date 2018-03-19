@@ -53,7 +53,6 @@ public class RelateAssetController{
 			model.addAttribute("COMMUNITY", AssetCustomModelConstants.COMMUNITY);
 			model.addAttribute("SCIENCE_APP", AssetCustomModelConstants.SCIENCE_APP);
 			model.addAttribute("CONTENT", AssetCustomModelConstants.SCIENCE_INFORMATION);
-			model.addAttribute("OPEN_DATA", AssetCustomModelConstants.OPEN_DATA);
 			model.addAttribute("PROJECT", AssetCustomModelConstants.SIMULATION_PROJECT);
 
 			// 유저에 따라 관리버튼 제공 여부
@@ -131,13 +130,11 @@ public class RelateAssetController{
 			// DATA,SIMULATION PROJECT";
 			String tabsValues = AssetCustomModelConstants.SCIENCE_APP + ","
 				+ AssetCustomModelConstants.SCIENCE_INFORMATION + "," 
-				+ AssetCustomModelConstants.OPEN_DATA + ","
 				+ AssetCustomModelConstants.SIMULATION_PROJECT;
 
 			String tabNames = LanguageUtil.get(themeDisplay.getLocale(), AssetCustomModelConstants.SCIENCE_APP)
 				+ "," + LanguageUtil.get(themeDisplay.getLocale(), AssetCustomModelConstants.SCIENCE_INFORMATION)
-				+ "," + LanguageUtil.get(themeDisplay.getLocale(), AssetCustomModelConstants.OPEN_DATA) + ","
-				+ LanguageUtil.get(themeDisplay.getLocale(), AssetCustomModelConstants.SIMULATION_PROJECT);
+				+ "," + LanguageUtil.get(themeDisplay.getLocale(), AssetCustomModelConstants.SIMULATION_PROJECT);
 
 			long sourceEntryId = ParamUtil.getLong(request, "sourceEntryId");
 			String sourceClassName = ParamUtil.getString(request, "sourceClassName");
@@ -152,7 +149,6 @@ public class RelateAssetController{
 
 			model.addAttribute("SCIENCE_APP", AssetCustomModelConstants.SCIENCE_APP);
 			model.addAttribute("CONTENT", AssetCustomModelConstants.SCIENCE_INFORMATION);
-			model.addAttribute("OPEN_DATA", AssetCustomModelConstants.OPEN_DATA);
 			model.addAttribute("PROJECT", AssetCustomModelConstants.SIMULATION_PROJECT);
 
 		}catch (Exception e){
