@@ -469,6 +469,8 @@ function <portlet:namespace/>initialize( inputData ){
 		return;
 	}
 	else{
+		console.log('[JSMOL] initialize input data', inpuData);
+	
 		<portlet:namespace/>initData = new OSP.InputData(inputData);
 		
 		if( !<portlet:namespace/>initData.repositoryType() ){
