@@ -704,8 +704,9 @@ NGL.MenubarExamplesWidget = function (stage) {
 
 
   var xhr = new XMLHttpRequest()
-  xhr.open('GET', NGL.examplesListUrl)
-  xhr.responseType = 'json'
+  console.log("[NGLViewer] get example url : ", NGL.examplesListUrl);
+  xhr.open('GET', NGL.examplesListUrl, true);
+  xhr.responseType = 'json';
   xhr.onload = function (e) {
     var response = this.response
     if (typeof response === 'string') {
