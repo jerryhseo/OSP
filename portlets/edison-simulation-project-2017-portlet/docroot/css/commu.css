@@ -241,7 +241,7 @@
 .commrighttxt ul li.stxt2.last{ padding-bottom:18px; border-bottom:solid 1px #ddd; margin-bottom:15px;}
 
 
-.commrighttop{width:100%; border-radius: 0; border:solid 1px #e6e6e6; padding:0px; min-height:65px; margin-bottom:13px; position:relative;} 
+.commrighttop{width:100%; border-radius: 0; padding:0px; min-height:65px; margin-bottom:13px; position:relative;} 
 .commtopbox{border:none;}
 .commtopboxtxt{
 	position: absolute;
