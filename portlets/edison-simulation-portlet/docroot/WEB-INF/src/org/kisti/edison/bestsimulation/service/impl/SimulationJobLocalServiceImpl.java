@@ -32,7 +32,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,11 +53,7 @@ import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.science.model.ScienceApp;
-import org.kisti.edison.science.model.ScienceAppLogPorts;
-import org.kisti.edison.science.model.ScienceAppOutputPorts;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
-import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
@@ -66,8 +61,6 @@ import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonPropsUtil;
 import org.kisti.edison.util.MonitoringStatusConstatns;
 
-import com.kisti.osp.icecap.model.DataType;
-import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
@@ -80,7 +73,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -102,7 +94,6 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
 import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 /**
  * The implementation of the simulation job local service.
@@ -600,10 +591,10 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("jobPostProcessorYn","N");
 					resultRow.put("jobMiddleFileProcessorYn","N");
 					
-					long scienceAppId = GetterUtil.get(simulation.getScienceAppId(),0L);
 					
 					//후처리기 존재 여부 - 미사용, 2018.03.19
-					/*if(scienceAppId > 0L) {
+					/*long scienceAppId = GetterUtil.get(simulation.getScienceAppId(),0L);
+					if(scienceAppId > 0L) {
 						String outputPort = "";
 						
 						ScienceAppOutputPorts scienceAppOutputPorts = ScienceAppOutputPortsLocalServiceUtil.fetchScienceAppOutputPorts(scienceAppId);
@@ -635,7 +626,7 @@ public class SimulationJobLocalServiceImpl
 								resultRow.put("jobMiddleFileProcessorYn","Y");
 							}
 						}
-					}*/
+					}
 
 					//로그포트 존재 여부
 					if(scienceAppId > 0L) {
@@ -669,7 +660,7 @@ public class SimulationJobLocalServiceImpl
 								}
 							}
 						}
-					}
+					}*/
 					
 					
 /*					if(CustomUtil.strNull(simulationJob.getJobPostProcessor()).equals("")){
