@@ -29,6 +29,9 @@
 	background-color: #A5CAEF;
 }
 
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 
 
@@ -39,12 +42,14 @@
 	
 	<div class="table-responsive panel edison-panel">
 		<div class="panel-heading clearfix">
-			<h1>
-				<img src="${contextPath}/images/title_virtual.png" />
-				Data Collection
-			</h1>
+			<h2 class="pull-left">
+				<img src="${contextPath}/images/sub_tit_bl.png" />
+				<span class="subtitlearea">
+					Data Collection
+				</span>
+			</h2>
 			
-			<div class="btn-group pull-right">
+			<div class="input-group" style="top: 20px;">
 				<input name="<portlet:namespace/>textfield" type="text"
 					id="<portlet:namespace/>textfield"
 					class="form-control"
@@ -52,19 +57,23 @@
 					size="40"
 					onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataCollectionList('');" 
 					value="${searchText }"
-					style="width: 220px; float: left;"
+					style="width: 45%; float: right; margin-left: 1%"
 				/>
-				<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataCollectionList('');">
-					<i class="icon-search"></i>
-				</button>
-				<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataCollectionListAllSearch();">
 				
 				<!--우편 셀렉트-->
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="btn btn-default" style="line-height: 15px;">
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>dataCollectionList('');" class="form-control" style="line-height: 15px; width: 20%; float: right;">
 					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
 					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
 				</select>
+				
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button" name="fullsize" id="fullsize" onclick="<portlet:namespace/>dataCollectionList('');">
+						<i class="icon-search"></i>
+					</button>
+					<input type="button" name="fullsize" id="fullsize" value="<liferay-ui:message key="edison-button-all-search"/>" class="btn btn-default" onclick="<portlet:namespace/>dataCollectionListAllSearch();">
+				</div>
+				
 				
 			</div>
 			

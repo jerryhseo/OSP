@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -65,121 +66,75 @@ public class EdisonStatisticsClassController {
 		try{
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
-			long companyId = themeDisplay.getCompanyId();
-
+			
 			String toDay = CustomUtil.dateToStringFormat(new Date(), "yyyy-MM-dd");
 			int preYear = Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyy"));
 			String preDay = (preYear-1)+"-01-01";
 			
 			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
 			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
-			
-			String visitSite ="";		
-			Group thisGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getSiteGroupId());			
-			boolean isPortalMain = true;		
+			long selectedGroupId = 0;
 			
 			if(tabViewYn.equals("Y")){
+				String visitSite = "";
 				
-				Layout layout = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/project-download");
-				boolean layoutViewPermission = LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser(), true), layout, ActionKeys.VIEW);
-				PortletURL classURL = PortletURLFactoryUtil.create(request, "", layout.getPlid(), PortletRequest.RENDER_PHASE);
+				//User Expando 값 가지고 오기
+				if(themeDisplay.isSignedIn()){
+					visitSite = CustomUtil.strNull(themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE));
+				}
 				
-				model.addAttribute("projectDownloadURL", classURL);
+				if(visitSite.equals("")){
+					visitSite = "CFD";
+				}
 				
-				String searchGroupId =CustomUtil.strNull(params.get("search_groupId"));
-				
-								
-				if(thisGroup.getParentGroupId() > 0){//child site
-					isPortalMain = false;
-					visitSite = String.valueOf(themeDisplay.getSiteGroupId());
-				}else{
+				Map<String,Long> GroupMap = new HashMap<String,Long>();
+				if(!tabUseStr.equals("")){
+					String groupName = "";
+					int groupCnt = 0;
+					String groupId = "";
 					
-					//하위 사이트 존재 여부
-					boolean isChildrenSite = false;
-					if(GroupLocalServiceUtil.getGroups(companyId, PortalUtil.getScopeGroupId(request), true).size()>0){
-						isChildrenSite = true;
-					}
-					
-					if(isChildrenSite){
-						long selectGroupId = ParamUtil.getLong(request, "thisGroupId",0);				
-						Group selectGroup = null;
+					String []tabUseArray = tabUseStr.split(",");
+					for(int i=0;i<tabUseArray.length;i++){
+						Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
+						Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
+						GroupMap.put(group.getName(), group.getGroupId());
 						
-						if(selectGroupId == 0){
-							selectGroup = thisGroup;
+						if(StringUtil.toUpperCase(group.getName()).equals("GUEST")){
+							group.setName("EDISON");
+						}
+						
+						if(groupCnt==0){
+							groupName += group.getName();
+							groupId += group.getGroupId();
+							groupCnt++;
 						}else{
-							selectGroup = GroupLocalServiceUtil.getGroup(selectGroupId);	
-						}
-	
-						if(selectGroupId != 0){
-							Group group = GroupLocalServiceUtil.getGroup(selectGroupId);
-							themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,selectGroup.getName());				
+							groupName += ","+group.getName();
+							groupId += ","+group.getGroupId();
 						}
 						
-						//TABS VALUE CREATE
-						List<com.liferay.portal.model.Group> parentGroupList = GroupLocalServiceUtil.getGroups(companyId, 0, true);
-						Group parentGroup = null;
-						for(Group group:parentGroupList){
-							if(group.getName().toUpperCase().equals("GUEST")){
-								parentGroup = group;
-								break;
-							}
-						}
-						
-						Group defaultGroup = GroupLocalServiceUtil.getGroup(companyId, "CFD");
-						model.addAttribute("visitSite", Long.toString(defaultGroup.getGroupId()));
-						
-						if(themeDisplay.isSignedIn()){
-							visitSite =  themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
-						}else{
-							model.addAttribute("visitSite", CustomUtil.strNull(params.get("groupId"), Long.toString(defaultGroup.getGroupId()) ));
-						}
-						
-						String groupName = "";
-						int groupCnt = 0;
-						String groupId = "";
-						
-						
-						Map<String,Long> GroupMap = new HashMap<String,Long>();
-						if(!tabUseStr.equals("")){
-							String []tabUseArray = tabUseStr.split(",");
-							for(int i=0;i<tabUseArray.length;i++){
-								
-								Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
-								Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
-								GroupMap.put(group.getName(), group.getGroupId());
-						
-								if(groupCnt==0){
-									groupName += group.getName();
-									groupId += group.getGroupId();
-									groupCnt++;
-								}else{
-									groupName += ","+group.getName();
-									groupId += ","+group.getGroupId();
-								}
-								
-								if(!visitSite.equals("")&&visitSite.equals(group.getName())){
-									visitSite = Long.toString(group.getGroupId());
-								}
-							}
+						if(visitSite.equals(group.getName())){
+							selectedGroupId = group.getGroupId();
 							
 						}
-						
-						model.addAttribute("tabNames", groupName);
-						model.addAttribute("tabsValues", groupId);
-					}else{
-						isPortalMain = false;
-						visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
 					}
 					
+					model.addAttribute("tabNames", groupName);
+					model.addAttribute("tabsValues", groupId);
+					model.addAttribute("tabViewYn", true);
 				}
+				
+				model.addAttribute("visitSite", visitSite);
+				model.addAttribute("tabViewYn", true);
 			}else{
-				//상세 사이트 일경우 Tab Not View
-				isPortalMain = false;
-				visitSite = Long.toString(PortalUtil.getScopeGroupId(request));
+				selectedGroupId = themeDisplay.getScopeGroupId();
+				model.addAttribute("tabViewYn", false);
 			}
-
-			model.addAttribute("isPortalMain", isPortalMain);
-			model.addAttribute("visitSite", visitSite);
+			
+			//기관 코드 조회
+			model.addAttribute("orgCodes", EdisonExpndoUtil.getCodeListByUpCode(1501, themeDisplay.getLocale()));
+			
+			model.addAttribute("selectedGroupId", selectedGroupId);
+			model.addAttribute("pageTitle", themeDisplay.getLayout().getName(themeDisplay.getLocale()));
 			model.addAttribute("preDay", preDay);
 			model.addAttribute("toDay", toDay);
 			
@@ -191,29 +146,19 @@ public class EdisonStatisticsClassController {
 	}
 	
 	//탭 이벤트 저장
-	@ActionMapping(params="myaction=saveClickTabSatis")
-	public void saveClickTab(ActionRequest request, ActionResponse response){
+	@ResourceMapping(value ="cickTab")
+	public void fileList(ResourceRequest request, ResourceResponse response){
 		try{
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map param = RequestUtil.getParameterMap(request);
 			long groupId = ParamUtil.getLong(request, "groupId",0);
-			
-			if(themeDisplay.isSignedIn()) {
-				if(groupId!=0){
-					Group group = GroupLocalServiceUtil.getGroup(groupId);
-					themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
-				}
+			if(groupId!=0){
+				ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+				Group group = GroupLocalServiceUtil.getGroup(groupId);
+				themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
 			}
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), "edisonstatisticsclass_WAR_edisonsimulationportlet");
-			PortletURL url = PortletURLFactoryUtil.create(request, "edisonstatisticsclass_WAR_edisonsimulationportlet", plid, "");
-			url.setParameter("groupId", CustomUtil.strNull(groupId));
-			response.sendRedirect(url.toString());
 		}catch(Exception e){
 			log.error(e);
 			e.printStackTrace();
-			
-			//Session Error Message
-			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
 	}
 	
@@ -226,7 +171,7 @@ public class EdisonStatisticsClassController {
 			
 			params.put("languageId", themeDisplay.getLocale().toString());
 		
-			long groupId = Long.parseLong(CustomUtil.strNull(params.get("visitSite"),String.valueOf(PortalUtil.getScopeGroupId(request))));
+			long groupId = Long.parseLong(CustomUtil.strNull(params.get("selectedGroupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			long userId = PortalUtil.getUserId(request);
 			
 			response.setContentType("text/html");
@@ -234,7 +179,8 @@ public class EdisonStatisticsClassController {
 			
 			params.put("userId", userId);
 			params.put("groupId", groupId);
-
+			params.put("universityCode", CustomUtil.strNull(params.get("universityCode")));
+			
 			List<Map<String, Object>> statisticsDataList = SimulationJobLocalServiceUtil.getVirtualClassStatisticsList(params, themeDisplay.getLocale(), false);
 			
 			JSONObject obj = new JSONObject();
@@ -256,9 +202,10 @@ public class EdisonStatisticsClassController {
 		
 		try {
 			Map params = RequestUtil.getParameterMap(request);
-			long groupId = Long.parseLong(CustomUtil.strNull(params.get("visitSite"),String.valueOf(PortalUtil.getScopeGroupId(request))));
+			long groupId = Long.parseLong(CustomUtil.strNull(params.get("selectedGroupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			params.put("groupId", groupId);
 			params.put("languageId", themeDisplay.getLocale().toString());
+			params.put("universityCode", CustomUtil.strNull(params.get("universityCode")));
 			
 			List resultList = SimulationJobLocalServiceUtil.getVirtualClassStatisticsList(params, themeDisplay.getLocale(), true);
 			

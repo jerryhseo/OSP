@@ -43,6 +43,10 @@
 	text-align: right;
 }
 
+.detailViewSubTitle{
+	padding-left: 0px !important;
+}
+
 </style>
 
 <script>
@@ -115,10 +119,6 @@ function <portlet:namespace/>closeDialog ( data ){
 
 <aui:form action="<%=contentManageViewURL%>" name="contentDetailForm" method="get">
 	
-		<%-- 	<aui:input type="hidden" name="mode" value=""/> --%>
-		<%-- <aui:input type="hidden" name="contentSeq" value="${content.contentSeq }"/>
-		<aui:input type="hidden" name="contentDiv" value="${content.contentDiv }"/> --%>
-		
 		<!--좌측-->
 	
 		<div class="topvisual">
@@ -148,11 +148,11 @@ function <portlet:namespace/>closeDialog ( data ){
 	
 	
 		<div class="commleft panel edison-panel">
-			
+		
 			<!-- 파일 목록 -->
 			<c:choose>
 				<c:when test="${content.contentDiv eq 2001004 && content.advancedStartFileNm ne ''}">
-					<div class="panel-heading clearfix" style="border-bottom: 0px;">
+					<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 						<h3 class="panel-title pull-left">
 							<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 							<liferay-ui:message key="edison-content-file"/>
@@ -170,7 +170,7 @@ function <portlet:namespace/>closeDialog ( data ){
 				<c:otherwise>
 					<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
 						<div>
-							<div class="panel-heading clearfix" style="border-bottom: 0px;">
+							<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 								<h3 class="panel-title pull-left">
 									<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 									<liferay-ui:message key="edison-content-file"/>
@@ -214,7 +214,7 @@ function <portlet:namespace/>closeDialog ( data ){
 			</c:choose>
 			
 			<c:if test="${isOwner == true || isManager == true}"> 
-				<div class="panel-heading clearfix">
+				<div class="panel-heading clearfix detailViewSubTitle">
 					<h3 class="panel-title pull-left">
 						<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
 						<liferay-ui:message key="edison-content-manager"/>

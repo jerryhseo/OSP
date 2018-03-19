@@ -58,13 +58,12 @@
 	font-size: 14px;
 	color: #666;
 	line-height: 2.3em;
-	font-family: NanumGothic;
 	margin-right: 50px !important;
 }
 
 .category01{}
 .category01 ul{margin:0; padding:0; margin-left:50px;}
-.category01 ul li{ float:left; font-size:15px; color:#333; margin-right:50px; line-height:2.3em;}
+.category01 ul li{ float:left; font-size:14px; color:#333; margin-right:50px; line-height:2.3em;}
 
 
 .category02wrap{width:500px; padding-top:10px; position:relative; clear:both; z-index:999;}
@@ -75,7 +74,7 @@
 .category02arrow.app{position:absolute; left:15%; margin-top:-12px;}
 
 /*좌측*/
-.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:30px; min-height: 400px;}
+.leftm{width:230px; border-radius:3px; border:solid 1px #a9b2bf; float:left; margin-top:15px; min-height: 400px;}
 .leftm > ul{margin:20px 20px;}
 .leftm > ul > li {font-size:16px; color:#011144; background:url(../images/search/minus.png) no-repeat 0 10px; padding-left:20px; line-height:1.5em; padding-top: 5px; padding-bottom: 5px;}
 .leftm > ul > li a:link{color:#011144;}
@@ -87,7 +86,7 @@
 .leftm > ul > li > ul > li a:hover{text-decoration:underline;}
 
 /*우측*/
-.rightcon{width:940px; float:left; margin-top:30px; margin-left:30px;}
+.rightcon{width:940px; float:left; margin-top:15px; margin-left:30px;}
 .connav{ border-bottom:solid 1px #e3e8e9; overflow:hidden;}
 .connav ul{ margin:0; padding:0;}
 .connav ul li{ font-size:13px; color:#777; float:left; margin-right:11px; line-height:2.0em;}

@@ -97,7 +97,7 @@ var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
-
+<portlet:namespace/>initData = new OSP.InputData();
 /***********************************************************************
  * Initailization section using parameters
 ***********************************************************************/
@@ -221,7 +221,7 @@ function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
         console.log("[JSMol] file explorer call inputData  : ", inputData);
         console.log("[JSMol] file explorer url : ", dialogURL);
         console.log("[JSMol] file explorer url2 : " + dialogURL);
-        if( $('#<portlet:namespace/>file-explorer-content').children().length > 0 ){
+        if( $('<portlet:namespace/>file-explorer-content').children().length > 0 ){
         	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}
         else{
@@ -407,8 +407,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
             <portlet:namespace/>pathType: inputData.type(),
             <portlet:namespace/>repositoryType: inputData.repositoryType(),
-            //<portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>parentPath: inputData.parent_,
+            <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name()
     };
         
@@ -417,10 +416,12 @@ function <portlet:namespace/>getFirstFileName( argData ){
         type: 'POST',
         url: '<%= serveResourceURL.toString()%>', 
         data  : data,
-        dataType : 'json',
         success: function(data) {
+        	console.log("[JSMOL] get result data " + data);
+        	var result = JSON.parse(data);
+        	console.log("[JSMOL] get result data ", result);
             inputData.type( OSP.Enumeration.PathType.FILE );
-            inputData.name( data.fileName );
+            inputData.name( result.fileName );
             <portlet:namespace/>drawJSMol( inputData );
             console.log("[JSMOL] Get First File Data : ", inputData);
         },
@@ -429,6 +430,8 @@ function <portlet:namespace/>getFirstFileName( argData ){
             console.log('[JSMOL]AJAX ERROR2-->', e);
         },
         complete: function( jqXHR, textStatus ){
+        	console.log('[JSMOL]AJAX complete ', jqXHR);
+        	console.log('[JSMOL]AJAX complete ', textStatus);
         }
     });
 }

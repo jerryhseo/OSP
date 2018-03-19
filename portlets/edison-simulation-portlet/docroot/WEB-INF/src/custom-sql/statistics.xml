@@ -374,18 +374,22 @@
 								P.userId = U.userId
 						) PU WHERE A.professorSeq = PU.professorSeq) virtualLabPersonName,
 					  GROUP_CONCAT(DISTINCT(E.scienceAppId)) scienceAppId,
-					  SUM(CASE WHEN jobPhase = 1301003 THEN 1 ELSE 0 END) executeCount,
+					  SUM(CASE WHEN jobSubmit = 1 THEN 1 ELSE 0 END) executeCount,
 					  A.virtualClassCd as classId, 
-					  count(distinct(case when F.jobPhase = 1301003 then B.userId end)) executeStudentcount,
-					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobPhase = 1301003 then B.userId end))),0) as avgerageRuntime
+					  count(distinct(case when F.jobSubmit = 1 then B.userId end)) executeStudentcount,
+					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobSubmit = 1 then B.userId end))),0) as avgerageRuntime
 					FROM 
 					  (SELECT lab.*, class.*, (SELECT COUNT(*) FROM EDVIR_VirtualLabs_VirtualLabClasses B INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId WHERE B.virtualLabId = lab.virtualLabId AND C.classUseYn = 'Y' ) AS classCount
 			 FROM EDVIR_VirtualLab lab
 					  INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses labClasses on lab.virtualLabId = labClasses.virtualLabId
 					  INNER JOIN EDVIR_VirtualLabClass class on labClasses.classId = class.classId
-					  WHERE lab.groupId = #groupId# and  lab.virtualLabUseYn = 'Y' AND  class.classUseYn = 'Y' 
+					  WHERE lab.groupId = #groupId#
+					  <isNotEmpty property="universityCode">    
+			            and lab.virtualLabUniversityField = #universityCode#
+			        </isNotEmpty>  
+					  and  lab.virtualLabUseYn = 'Y' AND  class.classUseYn = 'Y' 
 					    AND(
-					    	STR_TO_DATE(class.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d') 
+					    	STR_TO_DATE(class.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
 					    )
 					  ) A
 					  LEFT OUTER JOIN(SELECT classesUsers.classId, LabUesr.userId, LabUesr.virtualLabUserId 
@@ -399,12 +403,12 @@
 					  LEFT OUTER JOIN EDVIR_VirtualLabClassScienceApp D on C.scienceAppSeqNo = D.scienceAppSeqNo
 					  LEFT OUTER JOIN EDAPP_ScienceApp E on D.scienceAppId = E.scienceAppId
 					  LEFT OUTER JOIN (SELECT 
-					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobPhase, job.jobStartDt, job.jobEndDt,simulation.scienceAppId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
+					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
 					                      FROM EDSIM_Simulation simulation 
 					                      INNER JOIN EDSIM_SimulationJob job on simulation.simulationUuid = job.simulationUuid 
 					                      WHERE simulation.groupId = #groupId# AND (
-					                                                  	STR_TO_DATE(jobStartDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d') 
-					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d')
+					                                                  	STR_TO_DATE(jobStartDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
 					                                                  )
 					                                                  AND simulation.testYn != true
 					  ) F ON F.userId = B.userId
@@ -420,12 +424,15 @@
 						ExtractValue(mgr.virtualLabPersonName,'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS  virtualLabPersonName,
 						mgr.virtualClassCd as classId, 
 						mgr.executeCount,
-						mgr.executeStudentcount, 
+						mgr.executeStudentcount,
 						mgr.scienceAppId,
 						mgr.avgerageRuntime  
 					FROM EDVIR_VirtualLabClassStsMigration mgr
 					WHERE mgr.groupId = #groupId# 
-					AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d')  
+					<isNotEmpty property="universityCode">    
+						AND mgr.universityField = #universityCode#
+					</isNotEmpty>
+					AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')  
 			)B
 			GROUP BY B.university, B.virtualLabId ,B.classId
 			ORDER BY B.university, B.virtualLabId, B.classId			
@@ -470,18 +477,22 @@
 					  A.classTitle,
 					  A.virtualLabPersonName,
 					  GROUP_CONCAT(DISTINCT(E.scienceAppId)) scienceAppId,
-					  SUM(CASE WHEN jobPhase = 1301003 THEN 1 ELSE 0 END) executeCount,
+					  SUM(CASE WHEN jobSubmit = 1 THEN 1 ELSE 0 END) executeCount,
 					  A.virtualClassCd as classId,
-					  count(distinct(case when F.jobPhase = 1301003 then B.userId end)) executeStudentcount,
-					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobPhase = 1301003 then B.userId end))),0) as avgerageRuntime
+					  count(distinct(case whjobSubmit = 101003 then B.userId end)) executeStudentcount,
+					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobSubmit = 1 then B.userId end))),0) as avgerageRuntime
 					  
 					FROM 
 					  (SELECT lab.*, class.* FROM EDVIR_VirtualLab lab
 					  INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses labClasses on lab.virtualLabId = labClasses.virtualLabId
 					  INNER JOIN EDVIR_VirtualLabClass class on labClasses.classId = class.classId
-					  WHERE lab.groupId = #groupId# and  lab.virtualLabUseYn = 'Y' AND  class.classUseYn = 'Y' 
+					  WHERE lab.groupId = #groupId#
+					  <isNotEmpty property="universityCode">    
+			            and lab.virtualLabUniversityField = #universityCode#
+			          </isNotEmpty> 
+					  and  lab.virtualLabUseYn = 'Y' AND  class.classUseYn = 'Y' 
 					    AND(
-					    	STR_TO_DATE(class.classCreatedt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d') 
+					    	STR_TO_DATE(class.classCreatedt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
 					    )
 					  ) A
 					  
@@ -496,12 +507,12 @@
 					  LEFT OUTER JOIN EDVIR_VirtualLabClassScienceApp D on C.scienceAppSeqNo = D.scienceAppSeqNo
 					  LEFT OUTER JOIN EDAPP_ScienceApp E on D.scienceAppId = E.ScienceAppId
 					  LEFT OUTER JOIN (SELECT 
-					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobPhase, job.jobStartDt, job.jobEndDt,simulation.scienceAppId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
+					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
 					                      FROM EDSIM_Simulation simulation 
 					                      INNER JOIN EDSIM_SimulationJob job on simulation.simulationUuid = job.simulationUuid 
 					                      WHERE simulation.groupId = #groupId# AND (
-					                                                  	jobStartDt BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d') 
-					                                                    OR jobEndDt BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d')
+					                                                  	jobStartDt BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+					                                                    OR jobEndDt BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
 					                                                  )
 					                                                  AND simulation.testYn != true
 					  ) F ON F.userId = B.userId
@@ -521,8 +532,11 @@
 			        mgr.scienceAppId,
 			        mgr.avgerageRuntime  
 			  FROM EDVIR_VirtualLabClassStsMigration mgr
-			WHERE mgr.groupId = #groupId# 
-			AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#jobStartDt#, '%Y-%m-%d') AND STR_TO_DATE(#jobEndDt#, '%Y-%m-%d') 
+			WHERE mgr.groupId = #groupId#
+			<isNotEmpty property="universityCode">    
+				AND mgr.universityField = #universityCode#
+			</isNotEmpty> 
+			AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
 			)B
 			GROUP BY university, virtualLabId, classId
 		)C

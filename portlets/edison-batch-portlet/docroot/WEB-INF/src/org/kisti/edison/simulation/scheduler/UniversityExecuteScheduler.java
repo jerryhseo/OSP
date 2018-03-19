@@ -68,6 +68,9 @@ public class UniversityExecuteScheduler implements MessageListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			batError = true;
+		} catch (PortalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(batError){

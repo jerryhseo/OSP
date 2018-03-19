@@ -65,6 +65,7 @@
 .<portlet:namespace/>mprightcont .edison-comment{
 	width: 100%;
 }
+
 </style>
 <c:set var="authYn" value="N" />
 <c:if test="${isOwner eq true || isAdmin eq true || isMember eq true}">

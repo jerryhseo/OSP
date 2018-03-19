@@ -52,7 +52,10 @@ public class OSPJSMolPortlet extends MVCPortlet {
         String command = ParamUtil.getString(resourceRequest, "command");
         String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
 
-        System.out.println("\n\n\n[JSMOL] get RepositoryType : "+repositoryType);
+        System.out.println("\n\n\n\n[JSMOL] command : "+command);
+        System.out.println("[JSMOL] RepositoryType : "+repositoryType);
+        System.out.println("[JSMOL] file name : "+fileName);
+        System.out.println("[JSMOL] parent path : "+parentPath);
         
         if(command.equalsIgnoreCase("GET_FILE")){
             try{
@@ -78,6 +81,7 @@ public class OSPJSMolPortlet extends MVCPortlet {
             }
         }else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
             try{
+            	System.out.println("[JSMOL] test get firstFileName");
             	OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath, fileName, repositoryType);
             }catch (PortalException | SystemException e){
                 _log.error("[JSMOL] getFirstFileName(): " + filePath.toString());

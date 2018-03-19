@@ -60,6 +60,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -107,7 +108,7 @@ public class LayoutController {
 		
 		
 //		ProvenanceSupportApp.put("uChem", "4.0.1");
-		ProvenanceSupportApp.put("pianostring", "1.0.0");
+//		ProvenanceSupportApp.put("pianostring", "1.0.0");
 //		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
 //		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
 //		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
@@ -838,6 +839,7 @@ public class LayoutController {
 	private void provenanceCheckJob( PortletRequest request, PortletResponse response) throws JSONException{
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 		JSONArray job = JSONFactoryUtil.createJSONArray(ParamUtil.getString(request, "jobParameter" ));
+//		ProvDataLoader
 		System.out.println(job.getJSONObject(0).getJSONArray("inputs_"));
 	}
 	
@@ -890,6 +892,7 @@ public class LayoutController {
 		int jobCount = jobs.length();
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
+			boolean isProvenanceJob = GetterUtil.getBoolean(jsonJob.getBoolean("provenance_"),false);
 			SimulationJob job = null;
 			String jobUuid = jsonJob.getString("uuid_", "");
 			boolean isJobSubmitted = jsonJob.getBoolean("submit_");
@@ -1069,6 +1072,7 @@ public class LayoutController {
 				job.setJobStartDt( new Date(result.getLong("submitTime")) );
 				job.setJobStatus(Integer.valueOf(result.getString("status")));
 				job.setJobSubmit(true);
+				job.setJobSubmitDt(new Date());
 				
 				try {
 					SimulationJobLocalServiceUtil.updateSimulationJob(job);

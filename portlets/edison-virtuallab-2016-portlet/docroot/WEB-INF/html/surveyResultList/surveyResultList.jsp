@@ -1,15 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
 <div class="table-responsive panel edison-panel">
 	<div class="panel-heading clearfix">
 		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="<%= tabs1 %>"/>
 			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
-			<div class="input-group" align="right">
+			
+			<h2>
+				<img src="${contextPath}/images/sub_tit_bl.png"/> 
+				<span class="subtitlearea">
+					<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
+				</span>
+			</h2>
+			
+			<div class="input-group">
 				
 				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 30%; float: right; margin-left: 1%;" />
 			
-				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 11%; float: right;">
+				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 12%; float: right;">
 					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
@@ -41,16 +55,14 @@
 					<button id="total_search_button" name="total_search_button" class="btn btn-default" onClick="<portlet:namespace/>dataSearchList(0)">
 						Clear
 					</button>
+					
+					<input id="<portlet:namespace/>surveyResultGroupBtn" name="<portlet:namespace/>surveyResultGroupBtn" type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-group" />" onClick="<portlet:namespace/>searchGroupSurveyResult();" style="margin-left: 10px;"/>
 				</div>
-				
 			</div>
 			<div class="tabletopright" style="right: 150px;">
 			</div>
 			
 			<br>
-			<div style="text-align: right; margin: 5px;">
-				<input id="<portlet:namespace/>surveyResultGroupBtn" name="<portlet:namespace/>surveyResultGroupBtn" type="button" class="btn btn-default" value="<liferay-ui:message key="edison-virtuallab-surveyResultList-group" />" onClick="<portlet:namespace/>searchGroupSurveyResult();"/>
-			</div>
 		</form>
 	</div>
 	
@@ -194,12 +206,11 @@ function <portlet:namespace/>dataSearchList(curPage) {
 									  .text(surveyResultList[i].voteStartDate + " ~ " + surveyResultList[i].voteEndDate)
 									  .css("text-align","center")
 									  .appendTo($rowResult);
-														   <!-- (" + surveyResultList[i].answerCount + "/" + surveyResultList[i].userTotalCount + ") -->
 							$("<td/>").addClass("center")
 									  .append($("<input/>").attr("onClick", "event.cancelBubble=true; <portlet:namespace/>surveyResult('" + surveyResultList[i].surveySeqNo + "','" + surveyResultList[i].classId + "');")
 														   .attr("type", "button")
 														   .attr("value", "<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-result' />")
-														   .addClass("button01b")
+														   .addClass("btn btn-default")
 									  )
 									  .append( $("<p/>").text("(" + surveyResultList[i].answerCount + "/" + surveyResultList[i].userTotalCount + ")")
 									  )

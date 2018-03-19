@@ -39,12 +39,17 @@ if(areaScienceData){
 	#category-list > ul{
 		padding: 0px;
 	}
+	
   .search-btn-height{height: 36px !important;}
   
+  .search-main-title-image{
+  	padding-top: 0px !important;
+  	margin-top: -4px;
+  }
 </style>
 
 <h2 class="search-main-title">
-	<img src="${contextPath}/images/search/title_virtual.png" />
+	<img src="${contextPath}/images/sub_tit_bl.png" class="search-main-title-image" />
 	<span>
 		<c:if test="<%=areaCount == 1%>">
 			<liferay-ui:message key="<%=areaLabel%>"/> <liferay-ui:message key="search"/>

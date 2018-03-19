@@ -75,6 +75,11 @@
 	display: none;
 }
 
+.subtitlearea{
+	margin-left: 10px;
+}
+.detailViewSubTitle{padding-left: 0px !important;}
+
 </style>
 <liferay-portlet:actionURL secure="<%=request.isSecure()%>" var="modifyGeneralContentUrl">
 	<portlet:param name="myaction" value="generalModify" />
@@ -124,11 +129,16 @@
 	
 	<c:if test="${redirectURL ne ''}"> 
 		<c:set value="<%=title%>" var="title"/>
-		<h3><a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > <liferay-ui:message key='edison-content-management' /></h3>
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<a onClick="<portlet:namespace/>historyBack()" style="cursor: pointer;"> ${redirectName } </a>  > <liferay-ui:message key='edison-content-management' />
+			</span>
+		</h2>
 	</c:if>
 	
 	<div class="table1_list">
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 		
 			<h3 class="panel-title pull-left">
 				<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 

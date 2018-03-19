@@ -20,7 +20,24 @@ select.categorySelect {
 	width: 170px;
 	margin-bottom: 0px;
 }
+
+.managementTitle{
+	font-size: 18px;
+	color: #000;
+	padding-top: 22px;
+}
+.selectProject_menu{
+	float: left;
+	margin-right: 10px;
+	width: 160px;
+	padding: 5px;
+	border: solid 1px #ddd;
+}
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
+
 <script type="text/javascript">
 AUI().ready(function() {
 	<portlet:namespace/>dataSearchList();
@@ -144,32 +161,19 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 }
 </aui:script>
 
-<style>
-	.managementTitle{
-		font-size: 18px;
-		color: #000;
-		padding-top: 22px;
-	}
-	.selectProject_menu{
-		float: left;
-		margin-right: 10px;
-		width: 160px;
-		padding: 5px;
-		border: solid 1px #ddd;
-	}
-</style>
-
 <div id="<portlet:namespace/>display" class="table-responsive panel edison-panel" >
 	<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId }">
 	<input type="hidden" id="<portlet:namespace/>solverId" name="<portlet:namespace/>solverId" value="0">
 	
 	<div class="panel-heading clearfix">
-		<h1 class="pull-left" style="width: 40%;">
-			<img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> 
-			<liferay-ui:message key='edison-project-management-app' />
-		</h1>
+		<h2 class="pull-left" style="width: 40%;">
+			<img src="${contextPath}/images/sub_tit_bl.png"/> 
+			<span class="subtitlearea">
+				<liferay-ui:message key='edison-project-management-app' />
+			</span>
+		</h2>
 		
-		<div class="btn-group pull-right" style="width: 60%; top: 30px;">
+		<div class="btn-group pull-right" style="width: 60%; top: 20px;">
             <div class="input-group">
               <select style="width: 29%" id="<portlet:namespace/>select_project" name="<portlet:namespace/>select_line" onchange="<portlet:namespace/>dataSearchList(1)" class="form-control">
                   <option value="0"><liferay-ui:message key="edison-content-project-affiliation-yn"/></option>

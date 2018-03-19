@@ -168,6 +168,10 @@
 
 <style>
 .dp_ib {display: inline-block !important; margin: 1px;}
+
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 
 <c:choose>
@@ -185,10 +189,12 @@
 
 	<div class="table1_list table-responsive panel edison-panel">
 		<div class="panel-heading clearfix">
-			<h1>
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-				${boardDivTitle}
-			</h1>
+			<h2>
+				<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+				<span class="subtitlearea">
+					${boardDivTitle}
+				</span>
+			</h2>
 		</div>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table">
 			<colgroup id="boardColgroup">

@@ -637,8 +637,8 @@
 					<li>
 						<button class="btn btn-primary">Search</button>
 					</li>
-					 <li role="separator" class="divider">10</li>
-					 <li><a href="#">10</a></li>
+					<li role="separator" class="divider">10</li>
+					<li><a href="#">10</a></li>
 					<li><a href="#">50</a></li>
 					<li><a href="#">100</a></li>
 				</ul>

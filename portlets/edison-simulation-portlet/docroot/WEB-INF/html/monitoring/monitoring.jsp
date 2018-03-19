@@ -63,6 +63,10 @@
 	width: 120px;
 	right: 1%;
 }
+
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="stopSimulationAPI" escapeXml="false" id="stopAPICall" copyCurrentRenderParameters="false"/>
@@ -126,16 +130,24 @@
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
 <div class="container">
-	<div class="h1">
-		<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-		<liferay-ui:message key="edison-simulation-monitoring-title" />	
-	</div>
+	
 	
 	<c:if test="${tabViewYn eq 'Y'}">
 		<div class="contabmenu">
 			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
 		</div>
 	</c:if>
+	
+	<div class="h10"></div>
+	
+	<div>
+		<h2>
+			<img src="${contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<liferay-ui:message key="edison-simulation-monitoring-title" />	
+			</span>
+		</h2>
+	</div>
 	
 	<div class="table-responsive panel edison-panel" style="width: 100%">
 	

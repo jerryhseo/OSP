@@ -394,10 +394,20 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 					
 					var jobStatus = job._jobStatus;
 					var jobUuid = job._jobUuid;
-					//Status Setting
+					/*
+					   - Status Setting
+					   1701005 - QUEUED
+					   1701006 - RUNNING 일 경우  Sync JOB ADD
+					   1701011	SUCCESS
+					   1701012	FAILED 일 경우 JOB Status Set OR UPDATE
+					   isUncompletedJobExist 값에 의하여 Sync는 설정 되지 않음.
+					...상태 UPDATE를 통하여 OSP_JOB_STATUS_CHANGED 가 중복 발생 되지 않음.
+					*/
 					if(jobStatus == 0 || jobStatus == 1701005 || jobStatus == 1701006){
 						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 						isUncompletedJobExist = true;
+					}else if(jobStatus == 1701011 || jobStatus == 1701012){
+						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 					}
 					
 					var jobStatusCss = "fa fa-circle";
@@ -424,6 +434,9 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 							$topLi.addClass("active");
 							
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
+								/*JOB Sync Status UPDATE*/
+								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
+								
 								var eventData = {
 										portletId: '<%=portletDisplay.getId()%>',
 										targetPortlet:<portlet:namespace/>connector,
@@ -433,9 +446,6 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 										}
 								};
 								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
-							}else if(jobUuid === selectJobId){
-								/*submit 후 JOB ID가 변경되었을때 - 처리중*/
-// 								<portlet:namespace/>jobSelect($aWrapper);
 							}
 						}
 					}

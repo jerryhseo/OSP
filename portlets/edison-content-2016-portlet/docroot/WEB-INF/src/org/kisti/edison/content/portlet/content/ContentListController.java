@@ -43,7 +43,6 @@ import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
@@ -175,7 +174,6 @@ public class ContentListController{
 			
 			String listTabValue = CustomUtil.strNull(param.get("tabValue"), "owner_content");
 			model.addAttribute("listTabValue", listTabValue);
-
 			model.addAttribute("groupId", groupId);
 
 			/* 포탈여부에 따라 admin 분류 */
@@ -194,7 +192,7 @@ public class ContentListController{
 			String searchText = CustomUtil.strNull(param.get("searchText"));
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
-			int searchLine = ParamUtil.get(request, "searchLine", 5);
+			int searchLine = ParamUtil.get(request, "searchLine", 10);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
 			int end = searchLine;
@@ -204,7 +202,6 @@ public class ContentListController{
 			Role managerRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 				EdisonRoleConstants.CONTENT_MANAGER);
 			
-
 			Locale locale = themeDisplay.getLocale();
 			long companyGroupId = themeDisplay.getCompanyGroupId();
 
@@ -310,7 +307,7 @@ public class ContentListController{
 			String searchText = CustomUtil.strNull(param.get("searchText"), "");
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
-			int searchLine = ParamUtil.get(request, "searchLine", 5);
+			int searchLine = ParamUtil.get(request, "searchLine", 10);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
 			String listTabValue = CustomUtil.strNull(param.get("listTabValue"), "owner_content");

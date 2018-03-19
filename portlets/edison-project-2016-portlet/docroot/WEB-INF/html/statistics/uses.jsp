@@ -4,10 +4,20 @@
 <script type="text/javascript" src="${contextPath}/js/chart/highcharts.js"></script>
 <script type="text/javascript" src="${contextPath}/js/chart/modules/exporting.js"></script>
 
-<h1 class="h1">
-	<img src="${pageContext.request.contextPath}/images/title_virtual.png" />
-	EDISON <liferay-ui:message key="edison-project-statistics-title"/>
-</h1>
+<style>
+.subtitlearea{
+	margin-left: 10px;
+}
+</style>
+
+<h2>
+	<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+	<span class="subtitlearea">
+		EDISON <liferay-ui:message key="edison-project-statistics-title"/>
+	</span>
+</h2>
+
+<div class="h10"></div>
 
 <!--table-->
 <liferay-portlet:runtime portletName="edisonmultitab_WAR_edisonboard2016portlet_INSTANCE_multitab" />
