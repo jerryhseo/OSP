@@ -410,7 +410,6 @@ function <portlet:namespace/>getFirstFileName( inputData ){
         },
         complete: function( jqXHR, textStatus ){
         	console.log('[JSMOL]AJAX complete ', jqXHR);
-        	console.log('[JSMOL]AJAX complete ', textStatus);
         }
     });
 }
