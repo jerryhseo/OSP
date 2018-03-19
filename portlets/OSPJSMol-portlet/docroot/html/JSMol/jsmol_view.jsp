@@ -255,7 +255,7 @@ Liferay.on(
 		console.log('[JSMol]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 
 		<portlet:namespace/>initialize( e.data );
-		<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
+		<portlet:namespace/>loadJSMolFile( <portlet:namespace/>initData.clone() );
 		<portlet:namespace/>initializeFileExplorer();
 	}
 );
