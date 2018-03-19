@@ -425,7 +425,6 @@ function <portlet:namespace/>initializeFileExplorer(){
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
-	console.log("[JSMol] Download current file");
 	console.log("[JSMol] Download current data", <portlet:namespace/>currentData);
 	if( $.isEmptyObject(<portlet:namespace/>currentData) || 
 		<portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.FILE )
@@ -439,6 +438,11 @@ function <portlet:namespace/>downloadCurrentFile(){
 		<portlet:namespace/>parentPath: filePath.parent_,
 		<portlet:namespace/>fileName: filePath.name_
 	};
+	
+	
+	var base = '<%=serveResourceURL.toString()%>';
+	var sep = (base.indexOf('?') > -1) ? '&' : '?';
+	var url = base + sep + $.param(data);
 	
 	location.href = url;
 	<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
