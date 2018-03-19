@@ -174,7 +174,6 @@ public class ContentListController{
 			
 			String listTabValue = CustomUtil.strNull(param.get("tabValue"), "owner_content");
 			model.addAttribute("listTabValue", listTabValue);
-
 			model.addAttribute("groupId", groupId);
 
 			/* 포탈여부에 따라 admin 분류 */
@@ -193,7 +192,7 @@ public class ContentListController{
 			String searchText = CustomUtil.strNull(param.get("searchText"));
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
-			int searchLine = ParamUtil.get(request, "searchLine", 5);
+			int searchLine = ParamUtil.get(request, "searchLine", 10);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
 			int end = searchLine;
@@ -308,7 +307,7 @@ public class ContentListController{
 			String searchText = CustomUtil.strNull(param.get("searchText"), "");
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
-			int searchLine = ParamUtil.get(request, "searchLine", 5);
+			int searchLine = ParamUtil.get(request, "searchLine", 10);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
 			String listTabValue = CustomUtil.strNull(param.get("listTabValue"), "owner_content");
