@@ -50272,13 +50272,9 @@ var PluginLoader = (function (Loader) {
     var basePath;
     if (this.protocol) {
       basePath = this.protocol + '://' + this.dir;
-      //console.log("test in protocol");
-      //console.log(this.protocal);
     } else {
       basePath = this.dir;
     }
-    console.log("test plugin");
-    console.log(basePath);
     return this.streamer.read().then(function () {
       var manifest = JSON.parse(this$1.streamer.asText());
       var promiseList = [];
