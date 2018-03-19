@@ -376,42 +376,37 @@ function <portlet:namespace/>drawJSMol( inputData ){
 }
 
 function <portlet:namespace/>getFirstFileName( inputData ){
-    console.log('[JSMol]get First File Name : ', inputData );
-    console.log('[JSMOL] input data for get first file name : repositoryTypes :', inputData.repositoryType_);
-    
-    //if( inputData.type() === 'folder' ){
-    //	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
-    //	inputData.name('');
-    //}
-    
-    var data = {
-            <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
-            <portlet:namespace/>pathType: inputData.type_,
-            <portlet:namespace/>repositoryType: inputData.repositoryType_,
-            <portlet:namespace/>parentPath: inputData.parent_,
-            <portlet:namespace/>fileName: inputData.name_
-    };
+	console.log('[JSMol]get First File Name : ', inputData );
+
+	var data = {
+		<portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
+		<portlet:namespace/>pathType: inputData.type_,
+		<portlet:namespace/>repositoryType: inputData.repositoryType_,
+		<portlet:namespace/>parentPath: inputData.parent_,
+		<portlet:namespace/>fileName: inputData.name_
+	};
     console.log("[JSMOL] laod get first file test : ", data);
-    $.ajax({
-        type: 'POST',
-        url: '<%= serveResourceURL.toString()%>', 
-        data  : data,
-        dataType : 'json',
-        success: function(data) {
-        	console.log("[JSMOL] get result data ", data);
-            inputData.name( data.fileName );
-            inputData.type( OSP.Enumeration.PathType.FILE );
-            <portlet:namespace/>drawJSMol( inputData );
-            console.log("[JSMOL] Get First File Data : ", inputData);
-        },
-        error:function(data,e){
-        	console.log('[JSMOL]AJAX ERROR1-->', data);
-            console.log('[JSMOL]AJAX ERROR2-->', e);
-        },
-        complete: function( jqXHR, textStatus ){
-        	console.log('[JSMOL]AJAX complete ', jqXHR);
-        }
-    });
+    
+	$.ajax({
+		url: '<%= serveResourceURL.toString()%>',
+		type: 'POST',
+		data  : data,
+		dataType : 'json',
+		success: function(data) {
+			console.log("[JSMOL] get result data ", data);
+			inputData.name( data.fileName );
+			inputData.type( OSP.Enumeration.PathType.FILE );
+			<portlet:namespace/>drawJSMol( inputData );
+			console.log("[JSMOL] Get First File Data : ", inputData);
+		},
+		error:function(data,e){
+			console.log('[JSMOL]AJAX ERROR1-->', data);
+			console.log('[JSMOL]AJAX ERROR2-->', e);
+		},
+		complete: function( jqXHR, textStatus ){
+			console.log('[JSMOL]AJAX complete ', jqXHR);
+		}
+	});
 }
 
 function <portlet:namespace/>initializeFileExplorer(){
