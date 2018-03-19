@@ -469,7 +469,7 @@ function <portlet:namespace/>initialize( inputData ){
 		return;
 	}
 	else{
-		console.log('[JSMOL] initialize input data', inpuData);
+		console.log('[JSMOL] initialize input data', inputData);
 	
 		<portlet:namespace/>initData = new OSP.InputData(inputData);
 		
