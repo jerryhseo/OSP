@@ -414,7 +414,7 @@ function <portlet:namespace/>getFirstFileName( argData ){
         data  : data,
         dataType : 'json',
         success: function(data) {
-        	console.log("[JSMOL] get result data " + data);
+        	console.log("[JSMOL] get result data ", data);
         	
             inputData.type( OSP.Enumeration.PathType.FILE );
             inputData.name( data.fileName );
