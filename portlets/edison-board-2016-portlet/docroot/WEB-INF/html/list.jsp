@@ -250,6 +250,7 @@
 							
 							$vRow = $("<tr/>").addClass("faqHeader")
 											  .css("cursor", "pointer")
+											  .css("height", "45px")
 											  .attr("onclick","viewDownRow('" + (data.seq - i) + "')");
 							
 							$("<td/>").text(data.seq-i)
@@ -319,7 +320,9 @@
 						
 						for(var i = 0 ; i < boardList.length; i++ ){
 							
-							$vRow = $("<tr/>").addClass("onMouseHover").attr("onclick", "javascript:viewClick<portlet:namespace/>('"+boardList[i].boardSeq+"')");
+							$vRow = $("<tr/>").addClass("onMouseHover")
+											  .attr("onclick", "javascript:viewClick<portlet:namespace/>('"+boardList[i].boardSeq+"')")
+											  .css("height", "45px");
 							
 		 					if(i%2 == 1){
 		 						$vRow.addClass("tablebgtr");
