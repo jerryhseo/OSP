@@ -435,25 +435,23 @@ function <portlet:namespace/>initializeFileExplorer(){
 function <portlet:namespace/>downloadCurrentFile(){
 	console.log("[JSMol] Download current file");
 	console.log("[JSMol] Download current data", <portlet:namespace/>currentData);
-    if(<portlet:namespace/>currentData &&
-        <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE ){
-        var filePath = <portlet:namespace/>currentData;
-        var data = {
-            <portlet:namespace/>command: "DOWNLOAD_FILE",
-            <portlet:namespace/>pathType: filePath.type(),
-            <portlet:namespace/>repositoryType: filePath.repositoryType(),
-            <portlet:namespace/>parentPath: filePath.parent(),
-            <portlet:namespace/>fileName: filePath.name(),
-            <portlet:namespace/>relative: filePath.relative()
-        };
-        
-        var base = '<%=serveResourceURL.toString()%>';
-        var sep = (base.indexOf('?') > -1) ? '&' : '?';
-        var url = base + sep + $.param(data);
-        location.href = url;
-        <portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
-		//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
-    }
+	if( $.isEmptyObject(<portlet:namespace/>currentData) || 
+		<portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.FILE )
+		return;
+					
+	var filePath = <portlet:namespace/>currentData;
+	var data = {
+		<portlet:namespace/>command: "DOWNLOAD_FILE",
+		<portlet:namespace/>pathType: filePath.type_,
+		<portlet:namespace/>repositoryType: filePath.repositoryType_,
+		<portlet:namespace/>parentPath: filePath.parent_,
+		<portlet:namespace/>fileName: filePath.name_
+	};
+	
+	location.href = url;
+	<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
+	//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
+    
 }
 
 function <portlet:namespace/>setTitle( title ){
