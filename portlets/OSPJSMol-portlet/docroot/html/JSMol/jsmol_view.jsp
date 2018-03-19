@@ -317,8 +317,6 @@ Liferay.on(
  * Golbal functions
  ***********************************************************************/
 function <portlet:namespace/>loadJSMolFile( inputData ){
-	if(! inputData.repositoryType())
-		inputData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 	console.log("[JSMol] Load Data : input Data ", inputData);
 	switch( inputData.type() ){
 	case OSP.Enumeration.PathType.FILE:
