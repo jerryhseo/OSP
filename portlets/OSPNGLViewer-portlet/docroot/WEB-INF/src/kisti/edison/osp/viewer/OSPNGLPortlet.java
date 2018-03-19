@@ -1,7 +1,6 @@
 package kisti.edison.osp.viewer;
 
-<<<<<<< HEAD
-=======
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,16 +18,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
->>>>>>> a35dcd9c4ae92d7f3050fa6346b62812557f6e5e
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 /**
  * Portlet implementation class OSPNGLPortlet
  */
 public class OSPNGLPortlet extends MVCPortlet {
-<<<<<<< HEAD
- 
-=======
+
     private static Log _log = LogFactoryUtil.getLog(OSPNGLPortlet.class);
 
     @Override
@@ -116,6 +112,5 @@ public class OSPNGLPortlet extends MVCPortlet {
             throw new PortletException();
         }
     }
->>>>>>> a35dcd9c4ae92d7f3050fa6346b62812557f6e5e
 
 }

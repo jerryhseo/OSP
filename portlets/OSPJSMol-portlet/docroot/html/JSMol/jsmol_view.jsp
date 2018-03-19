@@ -399,9 +399,6 @@ function <portlet:namespace/>getFirstFileName( argData ){
     	inputData.parent( OSP.Util.mergePath(inputData.parent(), inputData.name()) );
     	inputData.name('');
     }
-    //if( ! inputData.repositoryType() )
-	//	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
-    
     
     var data = {
             <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
@@ -410,18 +407,17 @@ function <portlet:namespace/>getFirstFileName( argData ){
             <portlet:namespace/>parentPath: inputData.parent(),
             <portlet:namespace/>fileName: inputData.name()
     };
-        
     console.log("[JSMOL] laod get first file test : ", data);
     $.ajax({
         type: 'POST',
         url: '<%= serveResourceURL.toString()%>', 
         data  : data,
+        dataType : 'json',
         success: function(data) {
         	console.log("[JSMOL] get result data " + data);
-        	var result = JSON.parse(data);
-        	console.log("[JSMOL] get result data ", result);
+        	
             inputData.type( OSP.Enumeration.PathType.FILE );
-            inputData.name( result.fileName );
+            inputData.name( data.fileName );
             <portlet:namespace/>drawJSMol( inputData );
             console.log("[JSMOL] Get First File Data : ", inputData);
         },
