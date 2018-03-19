@@ -610,7 +610,9 @@ public class SimulationJobLocalServiceImpl
 							outputPort = scienceAppOutputPorts.getOutputPorts();
 						}
 						if(outputPort != null && !outputPort.equals("")) {
+							log.info("outputPort : " + outputPort);
 							JSONObject outputPortJson = JSONObject.fromObject(JSONSerializer.toJSON(outputPort));
+							log.info("outputPortJson : " + outputPortJson.toString());
 							Iterator<String> itr = outputPortJson.keys();
 							int analyzerCount = 0;
 							int middleFileCount = 0;
