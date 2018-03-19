@@ -164,8 +164,6 @@ $('#<portlet:namespace/>selectFile').bind(
 			
 	        
 			<portlet:namespace/>setTitle(input.files[0].name);
-		    <portlet:namespace/>currentData = null;
-			delete <portlet:namespace/>currentData;
 		};
             
 		reader.readAsDataURL(input.files[0]);
@@ -371,7 +369,8 @@ function <portlet:namespace/>drawJSMol( inputData ){
 	    	
 	    		<portlet:namespace/>drawJSMol( inputData );
 	    	}
-	    }
+	    },
+	    10
 	);
 }
 
@@ -446,7 +445,6 @@ function <portlet:namespace/>downloadCurrentFile(){
 	
 	location.href = url;
 	<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
-	//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
     
 }
 
