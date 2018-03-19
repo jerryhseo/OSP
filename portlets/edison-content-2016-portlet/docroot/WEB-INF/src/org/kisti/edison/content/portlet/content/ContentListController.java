@@ -174,7 +174,6 @@ public class ContentListController{
 			
 			String listTabValue = CustomUtil.strNull(param.get("tabValue"), "owner_content");
 			model.addAttribute("listTabValue", listTabValue);
-
 			model.addAttribute("groupId", groupId);
 
 			/* 포탈여부에 따라 admin 분류 */
