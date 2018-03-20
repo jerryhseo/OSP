@@ -146,12 +146,13 @@ function <portlet:namespace/>moveContent(contentSeq, contentDiv) {
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <div id="<portlet:namespace/>display" class="table-responsive panel edison-panel" >
 	<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId }">
 	
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix detailViewSubTitle">
 		<div class="panel-title pull-left" style="width: 40%">
 			<h2 class="pull-left">
 				<img src="${contextPath}/images/sub_tit_bl.png"/> 

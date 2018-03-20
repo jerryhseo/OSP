@@ -58,6 +58,8 @@
 	.subtitlearea{
 		margin-left: 10px;
 	}
+	
+	.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 <%--### Default Board List Start ######################################################################################################################  --%>	
 <% 	
@@ -85,7 +87,7 @@
 	
 		
 		<!-- Board Contents -->
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix detailViewSubTitle">
 			<!-- Board Title -->
 			<c:choose>
 				<c:when test="${empty redirectName }">

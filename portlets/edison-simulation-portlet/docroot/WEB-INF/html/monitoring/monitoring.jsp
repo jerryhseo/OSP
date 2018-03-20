@@ -67,6 +67,7 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="stopSimulationAPI" escapeXml="false" id="stopAPICall" copyCurrentRenderParameters="false"/>
@@ -131,15 +132,6 @@
 </liferay-portlet:renderURL>
 <div class="container">
 	
-	
-	<c:if test="${tabViewYn eq 'Y'}">
-		<div class="contabmenu">
-			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
-		</div>
-	</c:if>
-	
-	<div class="h10"></div>
-	
 	<div>
 		<h2>
 			<img src="${contextPath}/images/sub_tit_bl.png" />
@@ -148,10 +140,19 @@
 			</span>
 		</h2>
 	</div>
+	<div class="h20"></div>
+	
+	<c:if test="${tabViewYn eq 'Y'}">
+		<div class="contabmenu">
+			<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="133"/>
+		</div>
+	</c:if>
+	
+	<div class="h20"></div>
 	
 	<div class="table-responsive panel edison-panel" style="width: 100%">
 	
-		<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>" cssClass="panel-heading clearfix">
+		<aui:form method="post" name="monitoringSearch" action="<%=monitoringSearchUrl%>" cssClass="panel-heading clearfix detailViewSubTitle">
 			<aui:input name="currentPage" type="hidden" value="1"/>
 			<aui:input name="userId" type="hidden" value="${userId}"/>
 			<aui:input name="selectedGroupId" type="hidden" value="${selectedGroupId}"/>

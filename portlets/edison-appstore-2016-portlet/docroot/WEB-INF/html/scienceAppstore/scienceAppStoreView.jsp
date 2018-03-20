@@ -343,14 +343,14 @@
 				</li>
 				<li class="stxt2 last" style="text-align:center;">
 					<c:if test="${!empty solver.current_manualId}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_manual.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>fileDownload('${solver.current_manualId}')" />
+						<img src="${contextPath}/images/scienceappstorelist/btn_manual.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>fileDownload('${solver.current_manualId}')" />
 					</c:if>
 					<c:if test="${empty solver.current_manualId}">
 						<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 					</c:if>
 					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
+						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
 					</c:if>
 				</li>
 			</ul>

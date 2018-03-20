@@ -43,6 +43,7 @@ label.checkbox-label input[type=checkbox]{
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <body>
@@ -66,7 +67,7 @@ label.checkbox-label input[type=checkbox]{
 			<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 				<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1"/>
 				<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${visitSite}"/>
-				<div class="panel-heading clearfix">
+				<div class="panel-heading clearfix detailViewSubTitle">
 					<h2 class="pull-left">
 						<c:if test="${groupName ne null}">
 							<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />

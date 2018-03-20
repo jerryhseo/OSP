@@ -11,10 +11,11 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <div class="table-responsive panel edison-panel">
-	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" class="panel-heading clearfix">
+	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;" class="panel-heading clearfix detailViewSubTitle">
 		<input id="<portlet:namespace/>cur_page" name="<portlet:namespace/>cur_page" type="hidden" value="1" />
 		
 		<h2 class="pull-left">
