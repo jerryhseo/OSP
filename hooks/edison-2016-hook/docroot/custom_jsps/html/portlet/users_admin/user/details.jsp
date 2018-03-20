@@ -41,6 +41,8 @@ String duplicationCheckURL = themeDisplay.getURLPortal()+themeDisplay.getPathMai
 String duplicateScreenNameMsg = "";
 String duplicateEmaidMsg = "";
 
+String eppn = "";
+
 if(selUser != null){
 	Serializable serialozableUniversityCode = selUser.getExpandoBridge().getAttribute("universityField");
 	int universityCode = 0;
@@ -52,6 +54,9 @@ if(selUser != null){
 	long tableClassNameId = Long.valueOf(tableClassIdSearch.compare(0,0));
 	ExpandoValue value = ExpandoValueLocalServiceUtil.getValue(themeDisplay.getCompanyId(), tableClassNameId, "EDISON_SysCommonCd", "cdNm", universityCode);
 	universityNm = value.getString(themeDisplay.getLocale());
+    
+	eppn = selUser.getExpandoBridge().getAttribute("eppn").toString();
+	request.setAttribute("eppn", eppn);
 	
 // 	universityNm = !universityCode.equals("")?EdisonExpndoUtil.getCommonCdSearchFieldValue(StringUtil.trim(universityCode),cdNmSearch):"";
 }else{
@@ -73,7 +78,6 @@ if(selUser != null){
 <aui:model-context bean="<%= selUser %>" model="<%= User.class %>" />
 
 <h3><liferay-ui:message key="details" /></h3>
-
 <div class="row-fluid">
 	<aui:fieldset cssClass="span6">
 		<liferay-ui:success key="verificationEmailSent" message="your-email-verification-code-has-been-sent-and-the-new-email-address-will-be-applied-to-your-account-once-it-has-been-verified" />
@@ -181,8 +185,14 @@ if(selUser != null){
 		
 		<br/><b><liferay-ui:message key="edison-create-account-field-title-major" /></b><br/>
 		<liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= (selUser != null) ? selUser.getUserId() : 0 %>" editable="<%= true %>" label="<%= false %>" name="majorField"/>
+        <c:if test="${eppn eq null or eppn eq ''}">
+        <aui:button-row>
+            <aui:button type="button" value="Sign in with KAFE" cssClass="btn-success login-btn" onclick="window.parent.location.href='/c/portal/login/shibboleth'; return false;"/>
+        </aui:button-row>
+        </c:if>
 	</aui:fieldset>
 
+    
 	<aui:fieldset cssClass="span5">
 		<div>
 			<c:if test="<%= selUser != null %>">
