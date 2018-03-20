@@ -706,7 +706,8 @@ NGL.MenubarExamplesWidget = function (stage) {
 	var xhr = new XMLHttpRequest();
 	
 	xhr.open('GET', NGL.examplesListUrl, true);
-	xhr.send(null);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	
 	xhr.onload = function(){
 		if(xhr.status == 200){
 			var response = xhr.responseText;
@@ -724,6 +725,8 @@ NGL.MenubarExamplesWidget = function (stage) {
 			});
 		}
 	};
+	
+	xhr.send(null);
 	
 	
 	return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel);
