@@ -40,7 +40,7 @@ if(areaScienceData){
 		padding: 0px;
 	}
 	
-  .search-btn-height{height: 30px !important;}
+  .search-btn-height{height: 36px !important;}
   
   .search-main-title-image{
   	padding-top: 0px !important;
@@ -59,6 +59,7 @@ if(areaScienceData){
 		</c:if>
 	</span>
 </h2>
+<div class="h20"></div>
 <aui:form name="search-condition" method="post" action="<%= totalSearchUrl %>" cssClass="searchViewForm">
   <div class="top_category">
     <aui:field-wrapper name="search-panel" label="" inlineLabel="true" inlineField="true" cssClass="category01" >

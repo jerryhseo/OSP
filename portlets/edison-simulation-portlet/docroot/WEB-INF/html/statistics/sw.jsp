@@ -29,7 +29,7 @@
 			minwidth="150"
 		/>
 	</div>
-	<div style="clear: both;height:20px;"></div> 
+	<div style="clear: both;height:40px;"></div> 
 	<%
 		}
 	%>

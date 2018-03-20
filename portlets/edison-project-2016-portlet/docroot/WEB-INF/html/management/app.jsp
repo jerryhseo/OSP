@@ -36,6 +36,7 @@ select.categorySelect {
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <script type="text/javascript">
@@ -165,7 +166,7 @@ function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 	<input type="hidden" id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${groupId }">
 	<input type="hidden" id="<portlet:namespace/>solverId" name="<portlet:namespace/>solverId" value="0">
 	
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix detailViewSubTitle">
 		<h2 class="pull-left" style="width: 40%;">
 			<img src="${contextPath}/images/sub_tit_bl.png"/> 
 			<span class="subtitlearea">

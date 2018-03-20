@@ -4,33 +4,35 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <div class="table-responsive panel edison-panel">
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix detailViewSubTitle">
+		
 		<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
 			<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="<%= tabs1 %>"/>
 			<input id="<portlet:namespace/>curPage" name="<portlet:namespace/>curPage" type="hidden" value="1"/>
 			
-			<h2>
+			<h2 class="pull-left">
 				<img src="${contextPath}/images/sub_tit_bl.png"/> 
 				<span class="subtitlearea">
 					<liferay-ui:message key='edison-virtuallab-surveyResultList-survey-management' />
 				</span>
 			</h2>
 			
-			<div class="input-group">
+			<div class="input-group" style="top: 20px;">
 				
-				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 30%; float: right; margin-left: 1%;" />
+				<input id="<portlet:namespace/>searchField" class="form-control" name="<portlet:namespace/>searchField" type="text" maxlength="20" placeholder="<liferay-ui:message key='edison-virtuallab-placeholder' />" onKeypress="<portlet:namespace/>onKeyDown(event);" style="width: 35%; float: right; margin-left: 1%;" />
 			
-				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 12%; float: right;">
+				<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 15%; float: right;">
 					<option value="10">10<liferay-ui:message key='edison-search-views' /></option>
 					<option value="20">20<liferay-ui:message key='edison-search-views' /></option>
 					<option value="30">30<liferay-ui:message key='edison-search-views' /></option>
 					<option value="40">40<liferay-ui:message key='edison-search-views' /></option>
 				</select>
 				
-				<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 21%; float: right;">
+				<select id="<portlet:namespace/>surveySeqNo" name="<portlet:namespace/>surveySeqNo" title="option" onchange="<portlet:namespace/>dataSearchList(0)" class="form-control" style="width: 27%; float: right;">
 					<c:if test="${null eq surveySelectList}">
 						<option value="0"><liferay-ui:message key='edison-virtuallab-surveyResultList-no-data' /></option>
 					</c:if>

@@ -28,6 +28,7 @@
 	.subtitlearea{
 		margin-left: 10px;
 	}
+	.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
 </style>
 
 <div class="table-responsive panel edison-panel">
@@ -82,7 +83,7 @@
 		</div>
 	</div>
 	
-	<div class="panel-heading clearfix">
+	<div class="panel-heading clearfix detailViewSubTitle">
 		<h2>
 			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
 			<span class="subtitlearea">

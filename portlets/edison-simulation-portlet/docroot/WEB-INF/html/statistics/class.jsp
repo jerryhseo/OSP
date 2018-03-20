@@ -170,7 +170,7 @@ function <portlet:namespace/>excelDown(){
 		/>
 	</div>
 	
-	<div style="clear: both;height:20px;"></div> 
+	<div style="clear: both;height:40px;"></div> 
 	<%
 		}
 	%>
