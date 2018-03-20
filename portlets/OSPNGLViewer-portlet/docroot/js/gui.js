@@ -722,12 +722,10 @@ NGL.MenubarExamplesWidget = function (stage) {
     	  
     	 console.log(test);
       })
-      //console.log("test option");
-      //console.log(option);
       optionsPanel.add(option)
     })
   }
-  xhr.send();
+  xhr.send(null);
   
   return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)
 }
