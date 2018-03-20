@@ -39,14 +39,10 @@
   };
 
   readJson = function (inData){
-//	  console.log("[PlotyViewer] load data1 ");
-	  var data = JSON.parse(inData);
-//	 console.log("[PlotyViewer] load data2 ", data);
+	var data = JSON.parse(inData);
     var h = $( window ).height();
     var w = $( window ).width();
 
-    //      console.log(h);
-    //      console.log(w);
     data.layout.width = w;
     data.layout.height = h;
     data.layout.margin = {t:20};
@@ -67,18 +63,13 @@
   };
 
   loadImagePlotly = function (url_path){
-//	  console.log("[PlotyViewer] load data ");
     $.ajax({
       url: url_path,
       success: function (data){
         readJson(data);
      }
    })
-   
-	  //readJson(url_path);
   };
-
-
 
 </script>
 </body>
