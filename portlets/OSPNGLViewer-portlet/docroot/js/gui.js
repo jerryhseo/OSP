@@ -698,36 +698,35 @@ NGL.MenubarViewWidget = function (stage, preferences) {
 NGL.MenubarExamplesWidget = function (stage) {
     // configure menu contents
 
-  var createOption = UI.MenubarHelper.createOption
-  var optionsPanel = UI.MenubarHelper.createOptionsPanel([])
-  optionsPanel.setWidth('300px')
+	var createOption = UI.MenubarHelper.createOption
+	var optionsPanel = UI.MenubarHelper.createOptionsPanel([])
+	optionsPanel.setWidth('300px')
+	console.log("[NGLViewer] get example url : ", NGL.examplesListUrl);
 
-
-  var xhr = new XMLHttpRequest()
-  console.log("[NGLViewer] get example url : ", NGL.examplesListUrl);
-  xhr.open('GET', NGL.examplesListUrl, true);
-  xhr.responseType = 'json';
-  xhr.onload = function (e) {
-    var response = this.response
-    if (typeof response === 'string') {
-      // for ie11
-      response = JSON.parse(response)
-      //console.log("KYJ TEST JSON1", response);
-    }
-    console.log("[NGLViewer] get file content : ", response);
-    response.sort().forEach(function (name) {
-    	console.log("[NGLViewer] list example : "+NGL.examplesScriptUrl + name + '.js');
-      var option = createOption(name, function () {
-    	  var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
-    	  
-    	 console.log(test);
-      })
-      optionsPanel.add(option)
-    })
-  }
-  xhr.send(null);
-  
-  return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel)
+	var xhr = new XMLHttpRequest();
+	
+	xhr.open('GET', NGL.examplesListUrl, true);
+	xhr.onload = function(){
+		if(xhr.status == 200){
+			var response = xhr.responseText;
+			if (typeof response === 'string')
+				response = JSON.parse(response)
+			
+			console.log("[NGLViewer] get file content : ", response);
+			
+			response.sort().forEach(function (name){
+				console.log("[NGLViewer] list example : "+NGL.examplesScriptUrl + name + '.js');
+				var option = createOption(name, function(){
+					var test = $.getScript(NGL.examplesScriptUrl + name + '.js');
+				});
+				optionsPanel.add(option);
+			});
+		}
+	};
+	
+	xhr.send(null);
+	return UI.MenubarHelper.createMenuContainer('Examples', optionsPanel);
+	
 }
 
 NGL.MenubarPluginsWidget = function (stage) {
