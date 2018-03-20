@@ -707,7 +707,7 @@ NGL.MenubarExamplesWidget = function (stage) {
 	
 	xhr.open('GET', NGL.examplesListUrl, true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	
+	xhr.setresponseType='json';
 	xhr.onload = function(){
 		if(xhr.status == 200){
 			var response = xhr.responseText;
