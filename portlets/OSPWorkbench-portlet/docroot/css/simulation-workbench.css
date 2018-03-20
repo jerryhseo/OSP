@@ -154,7 +154,9 @@
 .simulation-workbench .sidebar .pagination{
 	display: inline-block;
 }
-
+.simulation-workbench .sidebar .treeview-menu i.init{
+	color: #777777;
+}
 .simulation-workbench .sidebar .treeview-menu i.success{
 	color: green;
 }
@@ -235,5 +237,11 @@
     /* To center horizontally */
     margin: 0 auto;
     pointer-events: all;
+}
+
+
+
+.simulation-workbench .menu-panel div.op-0{
+	opacity: 0;
 }
 

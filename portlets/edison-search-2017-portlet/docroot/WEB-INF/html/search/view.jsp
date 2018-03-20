@@ -40,11 +40,11 @@ if(areaScienceData){
 		padding: 0px;
 	}
 	
-  .search-btn-height{height: 36px !important;}
+  .search-btn-height{height: 30px !important;}
   
   .search-main-title-image{
   	padding-top: 0px !important;
-  	margin-top: -4px;
+  	margin-top: -5px;
   }
 </style>
 

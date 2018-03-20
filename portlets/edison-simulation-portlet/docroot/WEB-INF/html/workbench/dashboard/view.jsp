@@ -254,7 +254,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 		"<portlet:namespace/>jobUuid": jobUuid,
 		"<portlet:namespace/>currentPage": currentPage,
 		"<portlet:namespace/>paginFunction": "loadSimulations",
-		"<portlet:namespace/>searchLine": "3"
+		"<portlet:namespace/>searchLine": "6"
 		
 	};
 	
@@ -269,13 +269,13 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 		dataType: 'json',
 		success: function(result) {
 			var searchData = result.searchJob;
-			console.log(searchData);
+// 			console.log(searchData);
 			if(searchData!=null){
 				$targetUL = $("#<portlet:namespace/>sidebar-menu");
 				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).appendTo($targetUL);
 				$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",searchData._simulationUuid)
 							.attr("data-job-uuid",searchData._jobUuid)
-							.attr("onclick","<portlet:namespace/>jobSelect(this)")
+							.attr("onclick","<portlet:namespace/>jobSelect(this);return false;")
 							.appendTo($topLi);
 				$("<i/>").addClass("fa fa-lg icon-search").appendTo($aWrapper);
 				$("<span/>").attr("id","jobTitle").html("  "+cutStr(searchData._jobTitle,15)).appendTo($aWrapper);
@@ -342,6 +342,10 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 
 
 function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
+// 	"<portlet:namespace/>currentPage": currentPage,
+// 	"<portlet:namespace/>paginFunction": "loadSimulations",
+// 	"<portlet:namespace/>searchLine": "6"
+	
 	var searchForm = {
 			"<portlet:namespace/>simulationUuid": simulationUuid
 		};
@@ -410,7 +414,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 					}
 					
-					var jobStatusCss = "fa fa-circle";
+					var jobStatusCss = "fa fa-circle init";
 					if(jobStatus==1701005||jobStatus==1701006){
 						jobStatusCss = "fa fa-circle running";
 					}else if(jobStatus==1701011){
@@ -424,7 +428,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 										$("<i/>").addClass("icon-arrow-right")
 								).appendTo($topLi);
 					$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
-								.attr("onclick","<portlet:namespace/>jobSelect(this)").appendTo($topLi);
+								.attr("onclick","<portlet:namespace/>jobSelect(this);return false;").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
 					
@@ -536,6 +540,11 @@ function <portlet:namespace/>jobSelect(object){
 	
 	//Global workSimulationJobId Setting
 	<portlet:namespace/>workSimulationJobId = jobUuid;
+	
+	/*Mustache Event*/
+	if($(".menu-panel").is(':visible')){
+		$("#<portlet:namespace/>job-"+jobUuid+" span:first-child").trigger('click');
+	}
 }
 
 
@@ -1131,6 +1140,8 @@ function <portlet:namespace/>init(){
 		if(templateData){
 			<portlet:namespace/>activateLi(this);
 // 			templateData["boxtitle"] = $(this).text()
+			templateData["lest-col"] = 12-templateData["col"];
+
 			$("#" + <portlet:namespace/>parentNamespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
 			
 			if(templateData["script-search"]){
@@ -1225,6 +1236,9 @@ function <portlet:namespace/>closePanel() {
 		</div>
 	</div>
 </div>
+<div class="col-md-{{lest-col}} box menu-panel-close op-0">
+	
+</div>
 </script>
 <script id="tpl-job-infomation-panel-setting" type="text/html">
 <form class="form-horizontal" onsubmit="return false;">
@@ -1285,12 +1299,7 @@ function <portlet:namespace/>closePanel() {
 		<tr>
 			<th><liferay-ui:message key='edison-table-list-header-is-project-share'/></th>
 			<td>
-				{{#form.isShare}}
-					<button class="btn btn-success btn-sm">{{form.isShare}}</button>
-				{{/form.isShare}}
-				{{^form.isShare}}
-					<button class="btn btn-danger btn-sm">{{form.isShare}}</button>
-				{{/form.isShare}}
+				{{form.isShare}}
 			</td>
 		</tr>
 	</table>

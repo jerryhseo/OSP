@@ -110,9 +110,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	fileMenu.append('<div class="option" id="openServerMenu">Open Server</div>');
 
 	var openServerMenu = $("#openServerMenu");
-	console.log("[NGLViewer] find open server menu : " + openServerMenu);
 	openServerMenu.click(function(){
-		console.log("test iframe 1");
 		parent.iframeClickServerOpen();
 	});
 	//stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
