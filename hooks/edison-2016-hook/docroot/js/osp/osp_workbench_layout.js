@@ -1920,7 +1920,6 @@
                 fireDataChanged( portletId, OSP.Util.toJSON( inputData ) );
             }
             else{
-            
                 var ajaxData = Liferay.Util.ns(
                                            Workbench.namespace(),
                                            {
