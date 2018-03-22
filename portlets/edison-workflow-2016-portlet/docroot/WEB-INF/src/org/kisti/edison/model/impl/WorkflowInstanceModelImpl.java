@@ -81,9 +81,10 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 			{ "endTime", Types.TIMESTAMP },
 			{ "workflowId", Types.BIGINT },
 			{ "workflowUUID", Types.VARCHAR },
+			{ "reuseWorkflowUUID", Types.VARCHAR },
 			{ "screenLogic", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowInstance (workflowInstanceId LONG not null primary key,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title STRING null,status VARCHAR(75) null,statusResponse TEXT null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,screenLogic TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowInstance (workflowInstanceId LONG not null primary key,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title STRING null,status VARCHAR(75) null,statusResponse TEXT null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,reuseWorkflowUUID VARCHAR(75) null,screenLogic TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table EDWF_WorkflowInstance";
 	public static final String ORDER_BY_JPQL = " ORDER BY workflowInstance.workflowInstanceId DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDWF_WorkflowInstance.workflowInstanceId DESC";
@@ -167,6 +168,7 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 		attributes.put("endTime", getEndTime());
 		attributes.put("workflowId", getWorkflowId());
 		attributes.put("workflowUUID", getWorkflowUUID());
+		attributes.put("reuseWorkflowUUID", getReuseWorkflowUUID());
 		attributes.put("screenLogic", getScreenLogic());
 
 		return attributes;
@@ -244,6 +246,12 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 
 		if (workflowUUID != null) {
 			setWorkflowUUID(workflowUUID);
+		}
+
+		String reuseWorkflowUUID = (String)attributes.get("reuseWorkflowUUID");
+
+		if (reuseWorkflowUUID != null) {
+			setReuseWorkflowUUID(reuseWorkflowUUID);
 		}
 
 		String screenLogic = (String)attributes.get("screenLogic");
@@ -511,6 +519,21 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 	}
 
 	@Override
+	public String getReuseWorkflowUUID() {
+		if (_reuseWorkflowUUID == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _reuseWorkflowUUID;
+		}
+	}
+
+	@Override
+	public void setReuseWorkflowUUID(String reuseWorkflowUUID) {
+		_reuseWorkflowUUID = reuseWorkflowUUID;
+	}
+
+	@Override
 	public String getScreenLogic() {
 		if (_screenLogic == null) {
 			return StringPool.BLANK;
@@ -622,6 +645,7 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 		workflowInstanceImpl.setEndTime(getEndTime());
 		workflowInstanceImpl.setWorkflowId(getWorkflowId());
 		workflowInstanceImpl.setWorkflowUUID(getWorkflowUUID());
+		workflowInstanceImpl.setReuseWorkflowUUID(getReuseWorkflowUUID());
 		workflowInstanceImpl.setScreenLogic(getScreenLogic());
 
 		workflowInstanceImpl.resetOriginalValues();
@@ -772,6 +796,14 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 			workflowInstanceCacheModel.workflowUUID = null;
 		}
 
+		workflowInstanceCacheModel.reuseWorkflowUUID = getReuseWorkflowUUID();
+
+		String reuseWorkflowUUID = workflowInstanceCacheModel.reuseWorkflowUUID;
+
+		if ((reuseWorkflowUUID != null) && (reuseWorkflowUUID.length() == 0)) {
+			workflowInstanceCacheModel.reuseWorkflowUUID = null;
+		}
+
 		workflowInstanceCacheModel.screenLogic = getScreenLogic();
 
 		String screenLogic = workflowInstanceCacheModel.screenLogic;
@@ -785,7 +817,7 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{workflowInstanceId=");
 		sb.append(getWorkflowInstanceId());
@@ -811,6 +843,8 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 		sb.append(getWorkflowId());
 		sb.append(", workflowUUID=");
 		sb.append(getWorkflowUUID());
+		sb.append(", reuseWorkflowUUID=");
+		sb.append(getReuseWorkflowUUID());
 		sb.append(", screenLogic=");
 		sb.append(getScreenLogic());
 		sb.append("}");
@@ -820,7 +854,7 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.WorkflowInstance");
@@ -875,6 +909,10 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 		sb.append(getWorkflowUUID());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>reuseWorkflowUUID</column-name><column-value><![CDATA[");
+		sb.append(getReuseWorkflowUUID());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>screenLogic</column-name><column-value><![CDATA[");
 		sb.append(getScreenLogic());
 		sb.append("]]></column-value></column>");
@@ -905,6 +943,7 @@ public class WorkflowInstanceModelImpl extends BaseModelImpl<WorkflowInstance>
 	private Date _endTime;
 	private long _workflowId;
 	private String _workflowUUID;
+	private String _reuseWorkflowUUID;
 	private String _screenLogic;
 	private long _columnBitmask;
 	private WorkflowInstance _escapedModel;

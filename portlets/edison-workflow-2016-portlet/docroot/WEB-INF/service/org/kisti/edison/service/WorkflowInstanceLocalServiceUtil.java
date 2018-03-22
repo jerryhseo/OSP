@@ -438,6 +438,14 @@ public class WorkflowInstanceLocalServiceUtil {
 		return getService().updateWorkflowInstance(workflowInstanceId, params);
 	}
 
+	public static org.kisti.edison.model.WorkflowInstance reuseWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().reuseWorkflowInstance(workflowInstanceId, params);
+	}
+
 	public static org.kisti.edison.model.WorkflowInstance createWorkflowInstance(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		javax.servlet.http.HttpServletRequest request)

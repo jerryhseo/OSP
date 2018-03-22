@@ -1384,6 +1384,7 @@ public class WorkflowInstancePersistenceImpl extends BasePersistenceImpl<Workflo
 		workflowInstanceImpl.setEndTime(workflowInstance.getEndTime());
 		workflowInstanceImpl.setWorkflowId(workflowInstance.getWorkflowId());
 		workflowInstanceImpl.setWorkflowUUID(workflowInstance.getWorkflowUUID());
+		workflowInstanceImpl.setReuseWorkflowUUID(workflowInstance.getReuseWorkflowUUID());
 		workflowInstanceImpl.setScreenLogic(workflowInstance.getScreenLogic());
 
 		return workflowInstanceImpl;

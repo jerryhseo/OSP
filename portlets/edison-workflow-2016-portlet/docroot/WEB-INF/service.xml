@@ -55,6 +55,7 @@
     <column name="workflowId" type="long" />
     <!-- Workflow Engine fields -->
     <column name="workflowUUID" type="String" />
+    <column name="reuseWorkflowUUID" type="String" />
     <column name="screenLogic" type="String" />
     
     <column name="workflows" type="Collection" 

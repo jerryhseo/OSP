@@ -27,6 +27,7 @@ var WF_JSPLUMB_TYPES = {
 };
 
 var WF_CONVERTER_SCRIPT = "converter-script";
+var WF_CONDITION_SCRIPT = "condition-script";
 
 var WF_APP_TYPES = {
     DYNAMIC_CONVERTER: {

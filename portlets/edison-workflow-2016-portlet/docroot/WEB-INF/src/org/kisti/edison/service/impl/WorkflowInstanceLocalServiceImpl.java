@@ -76,6 +76,23 @@ public class WorkflowInstanceLocalServiceImpl
         
         return workflowInstancePersistence.update(workflowInstance);
     }
+    
+    public WorkflowInstance reuseWorkflowInstance(long workflowInstanceId, Map<String, Object> params)
+        throws SystemException, PortalException{
+        WorkflowInstance newWorkflowInstance = createWorkflowInstance();
+        WorkflowInstance workflowInstance = super.workflowInstanceLocalService.getWorkflowInstance(workflowInstanceId);
+        workflowInstance.setWorkflowInstanceId(newWorkflowInstance.getWorkflowInstanceId());
+        workflowInstance.setReuseWorkflowUUID(workflowInstance.getWorkflowUUID());
+        workflowInstance.setWorkflowUUID("");
+        workflowInstance.setStatus("CREATED");
+        String screenLogic = GetterUtil.getString(params.get("screenLogic"));
+        workflowInstance.setCreateDate(newWorkflowInstance.getCreateDate());
+        if(StringUtils.hasText(screenLogic)){
+            workflowInstance.setScreenLogic(screenLogic);
+        }
+        
+        return workflowInstancePersistence.update(workflowInstance);
+    }
 
     public WorkflowInstance createWorkflowInstance(Map<String, Object> params, HttpServletRequest request)
         throws SystemException, PortalException{

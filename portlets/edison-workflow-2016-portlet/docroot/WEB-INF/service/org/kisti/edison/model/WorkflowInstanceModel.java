@@ -335,6 +335,21 @@ public interface WorkflowInstanceModel extends BaseModel<WorkflowInstance> {
 	public void setWorkflowUUID(String workflowUUID);
 
 	/**
+	 * Returns the reuse workflow u u i d of this workflow instance.
+	 *
+	 * @return the reuse workflow u u i d of this workflow instance
+	 */
+	@AutoEscape
+	public String getReuseWorkflowUUID();
+
+	/**
+	 * Sets the reuse workflow u u i d of this workflow instance.
+	 *
+	 * @param reuseWorkflowUUID the reuse workflow u u i d of this workflow instance
+	 */
+	public void setReuseWorkflowUUID(String reuseWorkflowUUID);
+
+	/**
 	 * Returns the screen logic of this workflow instance.
 	 *
 	 * @return the screen logic of this workflow instance

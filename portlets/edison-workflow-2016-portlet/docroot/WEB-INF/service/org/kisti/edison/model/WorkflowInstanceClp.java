@@ -96,6 +96,7 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 		attributes.put("endTime", getEndTime());
 		attributes.put("workflowId", getWorkflowId());
 		attributes.put("workflowUUID", getWorkflowUUID());
+		attributes.put("reuseWorkflowUUID", getReuseWorkflowUUID());
 		attributes.put("screenLogic", getScreenLogic());
 
 		return attributes;
@@ -173,6 +174,12 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 
 		if (workflowUUID != null) {
 			setWorkflowUUID(workflowUUID);
+		}
+
+		String reuseWorkflowUUID = (String)attributes.get("reuseWorkflowUUID");
+
+		if (reuseWorkflowUUID != null) {
+			setReuseWorkflowUUID(reuseWorkflowUUID);
 		}
 
 		String screenLogic = (String)attributes.get("screenLogic");
@@ -570,6 +577,30 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 	}
 
 	@Override
+	public String getReuseWorkflowUUID() {
+		return _reuseWorkflowUUID;
+	}
+
+	@Override
+	public void setReuseWorkflowUUID(String reuseWorkflowUUID) {
+		_reuseWorkflowUUID = reuseWorkflowUUID;
+
+		if (_workflowInstanceRemoteModel != null) {
+			try {
+				Class<?> clazz = _workflowInstanceRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setReuseWorkflowUUID",
+						String.class);
+
+				method.invoke(_workflowInstanceRemoteModel, reuseWorkflowUUID);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public String getScreenLogic() {
 		return _screenLogic;
 	}
@@ -729,6 +760,7 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 		clone.setEndTime(getEndTime());
 		clone.setWorkflowId(getWorkflowId());
 		clone.setWorkflowUUID(getWorkflowUUID());
+		clone.setReuseWorkflowUUID(getReuseWorkflowUUID());
 		clone.setScreenLogic(getScreenLogic());
 
 		return clone;
@@ -790,7 +822,7 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{workflowInstanceId=");
 		sb.append(getWorkflowInstanceId());
@@ -816,6 +848,8 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 		sb.append(getWorkflowId());
 		sb.append(", workflowUUID=");
 		sb.append(getWorkflowUUID());
+		sb.append(", reuseWorkflowUUID=");
+		sb.append(getReuseWorkflowUUID());
 		sb.append(", screenLogic=");
 		sb.append(getScreenLogic());
 		sb.append("}");
@@ -825,7 +859,7 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.WorkflowInstance");
@@ -880,6 +914,10 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 		sb.append(getWorkflowUUID());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>reuseWorkflowUUID</column-name><column-value><![CDATA[");
+		sb.append(getReuseWorkflowUUID());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>screenLogic</column-name><column-value><![CDATA[");
 		sb.append(getScreenLogic());
 		sb.append("]]></column-value></column>");
@@ -903,6 +941,7 @@ public class WorkflowInstanceClp extends BaseModelImpl<WorkflowInstance>
 	private Date _endTime;
 	private long _workflowId;
 	private String _workflowUUID;
+	private String _reuseWorkflowUUID;
 	private String _screenLogic;
 	private BaseModel<?> _workflowInstanceRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.service.ClpSerializer.class;

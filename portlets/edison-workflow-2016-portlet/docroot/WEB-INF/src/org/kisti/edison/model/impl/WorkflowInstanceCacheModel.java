@@ -38,7 +38,7 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{workflowInstanceId=");
 		sb.append(workflowInstanceId);
@@ -64,6 +64,8 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 		sb.append(workflowId);
 		sb.append(", workflowUUID=");
 		sb.append(workflowUUID);
+		sb.append(", reuseWorkflowUUID=");
+		sb.append(reuseWorkflowUUID);
 		sb.append(", screenLogic=");
 		sb.append(screenLogic);
 		sb.append("}");
@@ -137,6 +139,13 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 			workflowInstanceImpl.setWorkflowUUID(workflowUUID);
 		}
 
+		if (reuseWorkflowUUID == null) {
+			workflowInstanceImpl.setReuseWorkflowUUID(StringPool.BLANK);
+		}
+		else {
+			workflowInstanceImpl.setReuseWorkflowUUID(reuseWorkflowUUID);
+		}
+
 		if (screenLogic == null) {
 			workflowInstanceImpl.setScreenLogic(StringPool.BLANK);
 		}
@@ -163,6 +172,7 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 		endTime = objectInput.readLong();
 		workflowId = objectInput.readLong();
 		workflowUUID = objectInput.readUTF();
+		reuseWorkflowUUID = objectInput.readUTF();
 		screenLogic = objectInput.readUTF();
 	}
 
@@ -207,6 +217,13 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 			objectOutput.writeUTF(workflowUUID);
 		}
 
+		if (reuseWorkflowUUID == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(reuseWorkflowUUID);
+		}
+
 		if (screenLogic == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -227,5 +244,6 @@ public class WorkflowInstanceCacheModel implements CacheModel<WorkflowInstance>,
 	public long endTime;
 	public long workflowId;
 	public String workflowUUID;
+	public String reuseWorkflowUUID;
 	public String screenLogic;
 }

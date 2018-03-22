@@ -25,5 +25,6 @@
 		<dependency org="org.apache.commons" name="commons-exec" rev="1.1" />
 		
 		<dependency org="uk.com.robust-it" name="cloning" rev="1.9.2" />
+		<dependency org="com.google.code.gson" name="gson" rev="2.5"/>
 	</dependencies>
 </ivy-module>

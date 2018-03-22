@@ -42,6 +42,7 @@ public class WorkflowInstanceSoap implements Serializable {
 		soapModel.setEndTime(model.getEndTime());
 		soapModel.setWorkflowId(model.getWorkflowId());
 		soapModel.setWorkflowUUID(model.getWorkflowUUID());
+		soapModel.setReuseWorkflowUUID(model.getReuseWorkflowUUID());
 		soapModel.setScreenLogic(model.getScreenLogic());
 
 		return soapModel;
@@ -193,6 +194,14 @@ public class WorkflowInstanceSoap implements Serializable {
 		_workflowUUID = workflowUUID;
 	}
 
+	public String getReuseWorkflowUUID() {
+		return _reuseWorkflowUUID;
+	}
+
+	public void setReuseWorkflowUUID(String reuseWorkflowUUID) {
+		_reuseWorkflowUUID = reuseWorkflowUUID;
+	}
+
 	public String getScreenLogic() {
 		return _screenLogic;
 	}
@@ -213,5 +222,6 @@ public class WorkflowInstanceSoap implements Serializable {
 	private Date _endTime;
 	private long _workflowId;
 	private String _workflowUUID;
+	private String _reuseWorkflowUUID;
 	private String _screenLogic;
 }

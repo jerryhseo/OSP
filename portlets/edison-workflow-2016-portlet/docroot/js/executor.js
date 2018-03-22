@@ -55,7 +55,16 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     var currentJsPlumbInstance = designer.getCurrentJsPlumbInstance();
 
+    function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId, 
+        function(workflowInstance){
+            callback(workflowInstance);
+        }, errorCallback);
+    }
+
     function loadWorkflowInstance(workflowInstanceId, callback, errorCallback){
+        _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId, 
         function(workflowInstance){
             callback(workflowInstance);
@@ -66,6 +75,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     }
 
     function createWorkfowInstance(workflowId, workflowInstanceTitle, callback){
+        _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post("/delegate/services/workflows/instance/create", {
             workflowId: workflowId,
             workflowInstanceTitle: workflowInstanceTitle
@@ -76,7 +86,38 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         }, function(){});
     }
 
+    function pauseWorkflowInstance(workflowInstanceId, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            "/delegate/services/workflows/instance/" + workflowInstanceId + "/pause", {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+                if (workflowStatus.workflow) {
+                    drawWorkflowInstanceStatus(workflowStatus);
+                    updateStatus(workflowInstanceId);
+                }
+            }, function () { });
+    }
+    
+    function resumeWorkflowInstance(workflowInstanceId, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            "/delegate/services/workflows/instance/"+workflowInstanceId+"/resume", {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+                if (workflowStatus.workflow) {
+                    drawWorkflowInstanceStatus(workflowStatus);
+                    updateStatus(workflowInstanceId);
+                }
+            }, function () { });
+    }
+
     function deleteWorkflowInstance(workflowInstanceId, callback){
+        _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post("/delegate/services/workflows/instance/" + workflowInstanceId + "/delete",
             {},
             function (workflowInstance) {
@@ -87,6 +128,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     }
 
     function updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle, screenLogic, callback){
+        _clearTimeout(STATUS_TIMER);
         var workflowInstanceData = {
             workflowInstanceId: workflowInstanceId,
             workflowInstanceTitle: workflowInstanceTitle
@@ -108,9 +150,24 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             "/delegate/services/workflows/instance/" + workflowInstanceId + "/run", icebreakerAccessToken,
             function (status) {
                 if (status) {
-                    console.log(status);
                     drawWorkflowInstanceStatus(status);
                     updateStatus(workflowInstanceId);
+                }
+            });
+    }
+
+    function reRunWorkflowInstance(workflowInstanceId, screenLogic, callback){
+        var workflowInstanceData = {};
+        if(screenLogic){
+            workflowInstanceData.screenLogic = JSON.stringify(screenLogic) ;
+        }
+        aSyncAjaxHelper.post(
+            "/delegate/services/workflows/instance/" + workflowInstanceId + "/reuse", workflowInstanceData,
+            function (workflowInstance) {
+                if (workflowInstance && callback) {
+                    callback(workflowInstance);
+                    // drawWorkflowInstanceStatus(status);
+                    // updateStatus(workflowInstanceId);
                 }
             });
     }
@@ -139,7 +196,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                 } else if (workflowStatus.workflow.status === WF_STATUS_CODE.RUNNING ||
                     workflowStatus.workflow.status === WF_STATUS_CODE.CREATED) {
                     _clearTimeout(STATUS_TIMER);
-                    STATUS_TIMER = _delay(updateStatus, 3000, workflowInstanceId);
+                    STATUS_TIMER = _delay(updateStatus, 1000, workflowInstanceId);
                 }
             }
         });
@@ -186,7 +243,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             $(wfBoxSelector + " .wf-app-status").text("Waiting");
         } else if (status === WF_STATUS_CODE.RUNNING) {
             $(wfBoxSelector).addClass("runningbox");
-            $(wfBoxSelector + " .wf-app-status").html("Running");
+            $(wfBoxSelector + " .wf-app-status").html("Running" + " <i class='fa fa-cog fa-spin fa-lg fa-fw'></i>");
         } else if (status === WF_STATUS_CODE.PAUSED) {
             $(wfBoxSelector).addClass("pausebox");
             $(wfBoxSelector + " .wf-app-status").html("Paused");
@@ -284,8 +341,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                     });
                 $.each(analyzers, function (_) {
                     var analyzer = this;
-                    items[analyzer["name"]] = {
-                        name: analyzer["name"],
+                    items[analyzer.name] = {
+                        name: analyzer.name,
                         icon: "edit",
                         callback: function (key, options) {
                             popAnalyzerWindow(analyzer, port, jsPlumbWindowId, sciApp);
@@ -304,13 +361,18 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         var portletId = analyzer.exeFileName;
         var callbackFunc = function () {
             var ospPath = port.outputData();
+            console.log("ospPath : ", ospPath);
             var inputData = new OSP.InputData();
             var simUuid = sciApp.workflowStatus.jobs[0].ibSimUuid;
             var jobUuid = sciApp.workflowStatus.jobs[0].ibUuid;
             var parentPaths = [simUuid, jobUuid + ".job"];
-            inputData.type(OSP.Enumeration.PathType.FILE);
+            if(ospPath.type_){
+                inputData.type(ospPath.type());
+            }else{
+                inputData.type(OSP.Enumeration.PathType.FILE);
+            }
             if(ospPath.parent()){
-                parentPaths.push( ospPath.parent());
+                parentPaths.push(ospPath.parent());
             }
             inputData.parent(parentPaths.join("/"));
             inputData.name(ospPath.name());
@@ -423,6 +485,11 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "updateWorkflowInstance": updateWorkflowInstance,
         "deleteWorkflowInstance": deleteWorkflowInstance,
         "runWorkflowInstance": runWorkflowInstance,
+        "reRunWorkflowInstance": reRunWorkflowInstance,
+        "pauseWorkflowInstance": pauseWorkflowInstance,
+        "resumeWorkflowInstance": resumeWorkflowInstance,
+        "getWorkflowInstanceStatus": getWorkflowInstanceStatus,
+        "getWorkflowInstance": getWorkflowInstance,
         "loadWorkflowInstance": loadWorkflowInstance
     };
 });

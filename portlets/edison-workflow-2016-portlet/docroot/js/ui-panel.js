@@ -582,6 +582,9 @@ var UIPanel = (function (namespace, $, designer, toastr) {
     }
 
     return {
-        "openWorkflow": openWorkflowByWorkflowId
+        "openWorkflow": openWorkflowByWorkflowId,
+        "isEmpty": function(){
+            return _isEmpty(PANEL_DATA.setting.form.workflowId);
+        }
     };
 });

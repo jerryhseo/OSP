@@ -1,4 +1,4 @@
-var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName) {
+var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -433,7 +433,10 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                     icon: "info",
                     callback: function (key, options) {
                         var scienceAppId = appData["scienceAppId"];
-                        // TODO : openSolverDeatilPopup(scienceAppId);
+                        var fn = window[namespace + "openSolverDeatilPopup"];
+                        if(fn){
+                            fn.apply(null, [scienceAppId]);
+                        }
                     }
                 };
             }
@@ -444,7 +447,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                     callback: function (key, options) {
                         var editor = {
                             "editorType": "Text",
-                            "exeFileName": textEditorFileName,
+                            "exeFileName": editorPortletIds.Text,
                             "name": "Script Editor"
                         };
                         var port = {
@@ -453,44 +456,17 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                             } 
                         };
                         workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
-
-                        // var workflowInfo = {
-                        //     jsPlumbWindowId: wfWindowId,
-                        //     portName: "converter-script",
-                        //     editorType: "Text"
-                        // };
-                        // var portletId = textEditorFileName;
-                        // var srcData = new OSP.InputData();
-                        // srcData.type(OSP.Enumeration.PathType.CONTEXT);
-                        // if(wfPortletGlobalData["wfElements"][wfWindowId]
-                        //     && wfPortletGlobalData["wfElements"][wfWindowId]["converter-script"]){
-                        //   var portData = wfPortletGlobalData["wfElements"][wfWindowId]["converter-script"]["input-value"];
-                        //   srcData.context(Liferay.Util.escapeHTML(portData));
-                        // }else{
-                        //   srcData.context("");
-                        // }
-                        
-                        //showEditorWindow(portletId, workflowInfo, JSON.stringify(srcData));
-                        // TODO : popScriptEditorWindow(appData, wfWindowId);
                     }
                 };
             }
             if (appData["appType"] == WF_APP_TYPES.CONTROLLER.NAME) {
-                // items["items"]["open-texteditor"] = {
-                //     name: "Edit Condition",
-                //     icon: "edit",
-                //     callback: function (key, options) {
-                //         // TODO : popScriptEditorWindow(appData, wfWindowId);
-                //         decision.condtions(wfWindowId);
-                //     }
-                // };
                 items["items"]["open-texteditor"] = {
                     name: "Condition Script",
                     icon: "edit",
                     callback: function (key, options) {
                         var editor = {
                             "editorType": "Text",
-                            "exeFileName": textEditorFileName,
+                            "exeFileName": editorPortletIds.Text,
                             "name": "Script Editor"
                         };
                         var port = {
@@ -502,51 +478,90 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                     }
                 };
             }
-            if (appData["runType"] === "Parallel") {
-                items["items"]["mpi-title"] = {
-                    name: "MPI Setting",
-                    icon: "edit",
+
+            if(appData["startPoint"]){
+                items["items"]["is-start-point"] = {
+                    name: "Start Point",
+                    icon: "fa-check-square",
                     disabled: true
                 };
-                items["items"]["mpi-input"] = {
-                    name: "Cpu Number (scope : " + appData["defaultCpus"] + " ~ " + appData["maxCpus"] + ")",
-                    type: 'text',
-                    value: cpuNumber,
-                    events: {
-                        keyup: function (e) {
-                            appData["cpuNumber"] = $(this).val();
+                items["items"]["sep0"] = "---------";
+            }
+
+            if(!appData.workflowStatus){
+                if(appData["startPoint"]){
+                    items["items"]["start-point"] = {
+                        name: "Remove Start Point",
+                        icon: "fa-remove",
+                        callback: function (key, options) {
+                            delete appData["startPoint"];
+                        }
+                    };
+                }
+    
+                if (appData["appType"] !== WF_APP_TYPES.CONTROLLER.NAME && !appData["startPoint"]) {
+                    items["items"]["start-point"] = {
+                        name: "Start Point",
+                        icon: "fa-play",
+                        callback: function (key, options) {
+                            appData["startPoint"] = true;
+                        }
+                    };
+                }
+    
+                if (appData["runType"] === "Parallel") {
+                    items["items"]["mpi-title"] = {
+                        name: "MPI Setting",
+                        icon: "edit",
+                        disabled: true
+                    };
+                    items["items"]["mpi-input"] = {
+                        name: "Cpu Number (scope : " + appData["defaultCpus"] + " ~ " + appData["maxCpus"] + ")",
+                        type: 'text',
+                        value: cpuNumber,
+                        events: {
+                            keyup: function (e) {
+                                appData["cpuNumber"] = $(this).val();
+                            }
+                        }
+                    };
+                    items["items"]["sep1"] = "---------";
+                }
+            }else{
+                items["items"]["reset"] = {
+                    name: "Reset Simulation",
+                    icon: "fa-eraser",
+                    callback: function (key, options) {
+                        delete appData["workflowStatus"];
+                        $trigger.removeClass("donebox runningbox failbox").addClass("waitingbox reset");
+                        $trigger.find(".addIp").text("Waiting")
+                        $trigger.attr("id", getGUID());
+                    }
+                };
+            }
+
+            if(!isFixed){
+                items["items"]["delete"] = {
+                    name: "Delete App",
+                    icon: "delete",
+                    callback: function (key, options) {
+                        if ($(".ui-selected").length > 0) {
+                            currentJsPlumbInstance.removeFromPosse($(".wf-box"), "posse");
+                            removeSicenceApps($(".ui-selected"));
+                        } else {
+                            removeSicenceApps($(this));
                         }
                     }
                 };
-                items["items"]["sep1"] = "---------";
             }
-            items["items"]["delete"] = {
-                name: "Delete App",
-                icon: "delete",
-                callback: function (key, options) {
-                    if ($(".ui-selected").length > 0) {
-                        currentJsPlumbInstance.removeFromPosse($(".wf-box"), "posse");
-                        removeSicenceApps($(".ui-selected"));
-                    } else {
-                        removeSicenceApps($(this));
-                    }
-                }
-            };
             return items;
         }
     });
 
     function getWorkflowDefinition(currentJsPlumbInstance) {
-        var wfData = { elements: [], connections: [] };
+        var wfData = { elements: [], connections: [], outPorts:{} };
         if (wfPortletGlobalData) {
             wfData["wfPortletGlobalData"] = wfPortletGlobalData;
-        }
-
-        // TODO : remove Loop Start App Add 
-        if ($(currentJsPlumbInstance.getContainer()).children(".loopbox").length > 0) {
-            wfData["loopStartElementId"] = $(currentJsPlumbInstance.getContainer()).children(".loopbox").attr("id");
-        } else {
-            wfData["loopStartElementId"] = "";
         }
 
         $(currentJsPlumbInstance.getContainer()).children(".wf-box").each(function () {
@@ -589,12 +604,14 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                 data: thisData
             });
         });
+
+        var switcherFiles = getSwticherFiles(currentJsPlumbInstance.getAllConnections(), wfData.elements);
+
         $.each(currentJsPlumbInstance.getAllConnections(), function (idx, connection) {
-            consoleLog.debug(connection);
-            // loop connection
-            if (connection.hasType(WF_JSPLUMB_TYPES.LOOP)) {
-                return;
-            }
+            var sourceOutputPort = connection.endpoints[0].getParameter("data");
+            var targetInputPort = connection.endpoints[1].getParameter("data");
+            // console.log("sourceOutputPort ", sourceOutputPort);
+            // console.log("targetInputPort ", targetInputPort);
             wfData.connections.push({
                 connectionId: connection.id,
                 pageSourceId: connection.sourceId,
@@ -602,10 +619,48 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, textEditorFileName
                 sourceUuid: connection.endpoints[0].getUuid(),
                 targetUuid: connection.endpoints[1].getUuid()
             });
+
+            var targetInputPortName = "cmd" + targetInputPort.name();
+            if(!wfData.outPorts[connection.sourceId]){
+                wfData.outPorts[connection.sourceId] = {outPort: {}, outPortFile: {}};
+            }
+            if(wfData.outPorts[connection.sourceId].outPort[targetInputPortName]){
+                wfData.outPorts[connection.sourceId].outPort[targetInputPortName].push(connection.targetId);
+            }else{
+                wfData.outPorts[connection.sourceId].outPort[targetInputPortName] = [connection.targetId];
+                if(switcherFiles[connection.sourceId]){
+                    wfData.outPorts[connection.sourceId].outPortFile[targetInputPortName] = switcherFiles[connection.sourceId];
+                }else{
+                    wfData.outPorts[connection.sourceId].outPortFile[targetInputPortName] = sourceOutputPort.outputData().name();
+                }
+            }
         });
+
         consoleLog.info("before saving!");
         consoleLog.info(wfData);
         return wfData;
+    }
+
+    function getSwticherFiles(connections, elements){
+        var switcherFiles = {};
+        $.each(connections, function (idx, connection) {
+            var sourceOutputPort = connection.endpoints[0].getParameter("data");
+            var targetInputPort = connection.endpoints[1].getParameter("data");
+            if(amIController(elements, connection.targetId) && targetInputPort.name() == "transfer"){
+                switcherFiles[connection.targetId] = sourceOutputPort.outputData().name();
+            }
+        });
+        return switcherFiles;
+    }
+
+    function amIController(elements, clientId){
+        var amI = false;
+        $.each(elements, function(i){
+            if(this.id == clientId){
+                amI = true;
+            }
+        });
+        return amI;
     }
 
     function afterSave(workflowData, callback, backgroudSave) {

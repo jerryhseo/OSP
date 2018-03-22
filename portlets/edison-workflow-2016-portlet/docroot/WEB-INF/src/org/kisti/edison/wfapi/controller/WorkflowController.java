@@ -255,13 +255,29 @@ public class WorkflowController{
         }
     }
     
+    @RequestMapping(value = "/instance/{workflowInstanceId}/reuse", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> reuseWorkflowInstance(
+        @RequestParam Map<String, Object> params,
+        @PathVariable("workflowInstanceId") long workflowInstanceId, 
+        HttpServletRequest request) throws Exception{
+        try{
+            return WorkflowInstanceLocalServiceUtil.reuseWorkflowInstance(workflowInstanceId, params).getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/instance/{workflowInstanceId}/run", method = RequestMethod.POST)
     public @ResponseBody JsonNode runWorkflowInstance(
         @RequestParam Map<String, Object> params,
         @PathVariable("workflowInstanceId") long workflowInstanceId, 
         HttpServletRequest request) throws Exception{
         try{
-            WorkflowInstance workflowInstance = WorkflowLocalServiceUtil.runWorkflowInstance(workflowInstanceId, params, request);
+            WorkflowInstance workflowInstance = WorkflowInstanceLocalServiceUtil.getWorkflowInstance(workflowInstanceId);
+            if("CREATED".equals(workflowInstance.getStatus())){
+                workflowInstance = WorkflowLocalServiceUtil.runWorkflowInstance(workflowInstanceId, params, request);
+            }
             return Transformer.string2Json(workflowInstance.getStatusResponse());
         }catch (Exception e){
             log.error("error", e);

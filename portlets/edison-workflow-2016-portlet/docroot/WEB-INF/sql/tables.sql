@@ -26,6 +26,7 @@ create table EDWF_WorkflowInstance (
 	endTime DATE null,
 	workflowId LONG,
 	workflowUUID VARCHAR(75) null,
+	reuseWorkflowUUID VARCHAR(75) null,
 	screenLogic TEXT null
 );
 

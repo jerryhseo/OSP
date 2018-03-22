@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonRootName;
@@ -27,8 +28,15 @@ public class MWorkflow{
   private String contentType;
   private String body;
   private String refUuid = "0";
+  private String reUseWorkflowUuid;
   private List<Simulations.Simulation> simulations = new LinkedList<Simulations.Simulation>();
   public MWorkflow(){
+  }
+  public String getReUseWorkflowUuid(){
+    return reUseWorkflowUuid;
+  }
+  public void setReUseWorkflowUuid(String reUseWorkflowUuid){
+    this.reUseWorkflowUuid = reUseWorkflowUuid;
   }
   public String getRefUuid(){
     return refUuid;
@@ -43,6 +51,9 @@ public class MWorkflow{
     this.title = title;
   }
   public void setUserId(String userId){
+    if("edison".equals(userId)){
+      userId = "edisonadm";
+    }
     this.userId = userId;
   }
   public void setAccessToken(String accessToken){
@@ -90,6 +101,9 @@ public class MWorkflow{
       List<Simulations.Simulation> simulations){
     this.uuid = uuid;
     this.title = title;
+    if("edison".equals(userId)){
+      userId = "edisonadm";
+    }
     this.userId = userId;
     this.accessToken = accessToken;
     this.status = status;
@@ -177,8 +191,55 @@ public class MWorkflow{
       private Integer jobCount;
       private Long last_Update;
       private String backend;
+      private Boolean startPoint;
+      private Boolean switcher;
       private List<Simulations.Simulation.Jobs.Job> jobs = new LinkedList<Simulations.Simulation.Jobs.Job>();
       public Simulation(){
+      }
+      private Map<String, Object> outPort;
+      private Map<String, Object> outPortFile;
+      
+      public Map<String, Object> getOutPortFile(){
+        return outPortFile;
+    }
+    public void setOutPortFile(Map<String, Object> outPortFile){
+        this.outPortFile = outPortFile;
+    }
+    public Map<String, Object> getOutPort(){
+        return outPort;
+    }
+    public void setOutPort(Map<String, Object> outPort){
+        this.outPort = outPort;
+    }
+    //      @JsonRawValue
+//      private String outPort;
+//      @JsonRawValue
+//      private String outPortFile;
+//      @JsonRawValue
+//      public String getOutPort(){
+//        return outPort;
+//      }
+//      public void setOutPort(String outPort){
+//        this.outPort = outPort;
+//      }
+//      @JsonRawValue
+//      public String getOutPortFile(){
+//        return outPortFile;
+//      }
+//      public void setOutPortFile(String outPortFile){
+//        this.outPortFile = outPortFile;
+//      }
+      public Boolean getSwitcher(){
+        return switcher;
+      }
+      public void setSwitcher(Boolean switcher){
+        this.switcher = switcher;
+      }
+      public Boolean getStartPoint(){
+        return startPoint;
+      }
+      public void setStartPoint(Boolean startPoint){
+        this.startPoint = startPoint;
       }
       public String getBackend(){
         return backend;

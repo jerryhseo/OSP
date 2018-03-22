@@ -62,6 +62,7 @@ public class WorkflowInstanceWrapper implements WorkflowInstance,
 		attributes.put("endTime", getEndTime());
 		attributes.put("workflowId", getWorkflowId());
 		attributes.put("workflowUUID", getWorkflowUUID());
+		attributes.put("reuseWorkflowUUID", getReuseWorkflowUUID());
 		attributes.put("screenLogic", getScreenLogic());
 
 		return attributes;
@@ -139,6 +140,12 @@ public class WorkflowInstanceWrapper implements WorkflowInstance,
 
 		if (workflowUUID != null) {
 			setWorkflowUUID(workflowUUID);
+		}
+
+		String reuseWorkflowUUID = (String)attributes.get("reuseWorkflowUUID");
+
+		if (reuseWorkflowUUID != null) {
+			setReuseWorkflowUUID(reuseWorkflowUUID);
 		}
 
 		String screenLogic = (String)attributes.get("screenLogic");
@@ -548,6 +555,26 @@ public class WorkflowInstanceWrapper implements WorkflowInstance,
 	@Override
 	public void setWorkflowUUID(java.lang.String workflowUUID) {
 		_workflowInstance.setWorkflowUUID(workflowUUID);
+	}
+
+	/**
+	* Returns the reuse workflow u u i d of this workflow instance.
+	*
+	* @return the reuse workflow u u i d of this workflow instance
+	*/
+	@Override
+	public java.lang.String getReuseWorkflowUUID() {
+		return _workflowInstance.getReuseWorkflowUUID();
+	}
+
+	/**
+	* Sets the reuse workflow u u i d of this workflow instance.
+	*
+	* @param reuseWorkflowUUID the reuse workflow u u i d of this workflow instance
+	*/
+	@Override
+	public void setReuseWorkflowUUID(java.lang.String reuseWorkflowUUID) {
+		_workflowInstance.setReuseWorkflowUUID(reuseWorkflowUUID);
 	}
 
 	/**

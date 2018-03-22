@@ -195,15 +195,19 @@ public class WorkflowInstanceLocalServiceClp
 
 		_methodParameterTypes36 = new String[] { "long", "java.util.Map" };
 
-		_methodName37 = "createWorkflowInstance";
+		_methodName37 = "reuseWorkflowInstance";
 
-		_methodParameterTypes37 = new String[] {
+		_methodParameterTypes37 = new String[] { "long", "java.util.Map" };
+
+		_methodName38 = "createWorkflowInstance";
+
+		_methodParameterTypes38 = new String[] {
 				"java.util.Map", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName38 = "getWorkflowWorkflowInstancesByWorkflowId";
+		_methodName39 = "getWorkflowWorkflowInstancesByWorkflowId";
 
-		_methodParameterTypes38 = new String[] { "long" };
+		_methodParameterTypes39 = new String[] { "long" };
 	}
 
 	@Override
@@ -1298,6 +1302,46 @@ public class WorkflowInstanceLocalServiceClp
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowInstance reuseWorkflowInstance(
+		long workflowInstanceId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37,
+					new Object[] {
+						workflowInstanceId,
+						
+					ClpSerializer.translateInput(params)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.model.WorkflowInstance)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowInstance createWorkflowInstance(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		javax.servlet.http.HttpServletRequest request)
@@ -1306,8 +1350,8 @@ public class WorkflowInstanceLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName37,
-					_methodParameterTypes37,
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38,
 					new Object[] {
 						ClpSerializer.translateInput(params),
 						
@@ -1344,8 +1388,8 @@ public class WorkflowInstanceLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName38,
-					_methodParameterTypes38, new Object[] { workflowId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName39,
+					_methodParameterTypes39, new Object[] { workflowId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1443,4 +1487,6 @@ public class WorkflowInstanceLocalServiceClp
 	private String[] _methodParameterTypes37;
 	private String _methodName38;
 	private String[] _methodParameterTypes38;
+	private String _methodName39;
+	private String[] _methodParameterTypes39;
 }

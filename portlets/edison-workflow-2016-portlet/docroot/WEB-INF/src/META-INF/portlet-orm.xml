@@ -57,6 +57,7 @@
 			</basic>
 			<basic name="workflowId" />
 			<basic name="workflowUUID" />
+			<basic name="reuseWorkflowUUID" />
 			<basic name="screenLogic" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />

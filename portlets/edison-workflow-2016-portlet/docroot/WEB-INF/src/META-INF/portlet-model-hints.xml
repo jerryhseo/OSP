@@ -32,6 +32,7 @@
 		<field name="endTime" type="Date" />
 		<field name="workflowId" type="long" />
 		<field name="workflowUUID" type="String" />
+		<field name="reuseWorkflowUUID" type="String" />
 		<field name="screenLogic" type="String">
 			<hint name="max-length">4096</hint>
 		</field>

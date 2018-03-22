@@ -7,6 +7,10 @@
 <liferay-portlet:renderURL var="designerUrl" portletName="workflowdesigner_WAR_edisonworkflow2016portlet" 
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
 </liferay-portlet:renderURL>
+<liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="detailView" />
+</liferay-portlet:renderURL>
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -18,7 +22,10 @@ var var_save_success_message =  Liferay.Language.get("edison-workflow-save-succe
 var var_create_first_message = "Create First.";
 var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
+var var_pause_success_message = "Workflow paused.";
+var var_resume_success_message = "Workflow restarted.";
 var var_no_workflow_instance_msg = "Select workflowInstance first.";
+var var_already_run_message = "This workflow has already been executed.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
@@ -88,6 +95,7 @@ var contextPath = '${contextPath}';
 
 .loopbox{background-color:#f7b036;}
 
+
 .runningbox{border-radius:3px; border:solid 1px #00abe3; background-color:#8db9e5;}
 .runningbox span{font-size:18px; color:#fff; font-weight:500;}
 
@@ -118,7 +126,7 @@ var contextPath = '${contextPath}';
 	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px; 
 	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
 .waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
-.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; padding-right: 25px !important; background-position: 60px; background-repeat:no-repeat; background-image: url(../images/Workflow/ajax-loader.gif);}
+.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; }
 .failbox .addIp{ background: #c84444; border-color: #b73535; }
 .pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
 .donebox .addIp{ background: #32a993; border-color: #2e9886; }
@@ -128,6 +136,8 @@ var contextPath = '${contextPath}';
 .wf-converter.wf-dynamic > .wf-app-title{overflow: visible; white-space: normal;}
 .waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
 .waitingbox.wf-converter.wf-static{background: #3181c6;}    
+
+.wf-box.wf-controller{background-color:transparent !important;}
 
 .wf-box.wf-controller{
     width: 150px !important;
@@ -147,6 +157,26 @@ var contextPath = '${contextPath}';
 .wf-box g.fc-decision > .fc-rhombus{
     stroke: #00abe3;
     fill: #44b4c5;
+}
+
+.runningbox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #3a81c0;
+}
+
+.donebox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #32a993;
+}
+
+.failbox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #c84444;
+}
+
+.pausebox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #4E5A68;
 }
 
 .hidden{display: none;}
@@ -221,10 +251,10 @@ var contextPath = '${contextPath}';
               </a>
               <ul class="treeview-menu">
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
-                <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li>
+                <%-- <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li> --%>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>
-                <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
               </ul>
             </li>
           </ul>
@@ -326,6 +356,23 @@ $.widget.bridge('uibutton', $.ui.button);
   </h3>
 </script>
 
+<script id="tpl-menu-panel-load" type="text/html">
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            {{#header.theads}}
+            <th>{{.}}</th>
+            {{/header.theads}}
+        </tr>
+    </thead>
+    <tbody class="panel-tbody">
+      <tr>
+        <td colspan="{{header.theads.length}}">No Data</td>
+      </tr>
+    </tbody>
+</table>
+</script>
+
 <script id="tpl-menu-panel-new" type="text/html">
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
@@ -387,6 +434,11 @@ $(document).ready(function(){
     info : true,
     debug : false
   });
+  var EDITOR_PORTLET_IDS = {
+    "Text": '${textEditor.exeFileName}',
+    "File": '${fileEditor.exeFileName}',
+    "SDE": '${structuredEditor.exeFileName}'
+  };
   var namespace = "<portlet:namespace/>";
   var jqPortletBoundaryId = "#p_p_id" + namespace;
   var workflowId = "${workflowId}";
@@ -408,10 +460,10 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, true, '${textEditor.exeFileName}');
+  var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS);
   var executor = new SimulationExecutor(namespace, $, designer, toastr);
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
-  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel);
+  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
   designer.setWorkflowInputPortModule(inputportModule);
   /*
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
@@ -448,6 +500,14 @@ function <portlet:namespace/>getIcebreakerAccessToken(){
   var url = "<%=getIcebreakerAccessTokenUrl%>";
   var result = synchronousAjaxHelper.post(url, {});
   return result;
+}
+
+function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
+  var groupId = <portlet:namespace/>getSiteGroupId();
+  var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
+  var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
+      params += "&" + thisPortletNamespace + "groupId=" + groupId;
+  window.open("<%=scienceAppDetailUrl%>" + params);
 }
 
 </script>

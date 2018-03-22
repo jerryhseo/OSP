@@ -63,7 +63,7 @@
 	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px; 
 	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
 .waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
-.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; padding-right: 25px !important; background-position: 60px; background-repeat:no-repeat; background-image: url(../images/Workflow/ajax-loader.gif);}
+.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; }
 .failbox .addIp{ background: #c84444; border-color: #b73535; }
 .pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
 .donebox .addIp{ background: #32a993; border-color: #2e9886; }

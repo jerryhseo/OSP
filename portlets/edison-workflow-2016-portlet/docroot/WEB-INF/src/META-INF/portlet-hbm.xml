@@ -37,6 +37,7 @@
 		<property name="endTime" type="org.hibernate.type.TimestampType" />
 		<property name="workflowId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="workflowUUID" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="reuseWorkflowUUID" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="screenLogic" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 </hibernate-mapping>

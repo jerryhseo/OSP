@@ -1,4 +1,4 @@
-var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
+var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel, editorPortletIds){
     'use strict';
     var DESIGNER_PORTLET_ID = namespace.slice(1, -1);
     var WF_PORTLET_GLOBAL_DATA = designer.getWfPortletGlobalData();
@@ -20,12 +20,12 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
                     {
                         appType: "Editor",
                         editorType: "File",
-                        exeFileName: "FileExplorer_WAR_OSPEditorsportlet",
+                        exeFileName: editorPortletIds.File,
                         name: "FILE_SELECTOR"
                     }, {
                         appType: "Editor",
                         editorType: "Text",
-                        exeFileName: "TextEditor_WAR_OSPEditorsportlet",
+                        exeFileName: editorPortletIds.Text,
                         name: "TEXT_EDITOR"
                     }
                 ];
@@ -38,8 +38,8 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
             }
             $.each(editors, function (_) {
                 var editor = this;
-                items[editor["name"]] = {
-                    name: editor["name"],
+                items[editor.name] = {
+                    name: editor.name,
                     icon: "edit",
                     callback: function (key, options) {
                         // TODO : popEditorWindow(editor, port, jsPlumbWindowId);
@@ -70,20 +70,25 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
         var srcData = new OSP.InputData();
         if (editorType == "Inputdeck") {
             srcData.type(OSP.Enumeration.PathType.STRUCTURED_DATA);
-            if (WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId]
-                && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]
-                && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["editorType"] === "Inputdeck") {
-                var portData = JSON.parse(WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["input-value"]);
-                srcData.context(portData.context_);
+            if (WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId] &&
+                WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId][portName] &&
+                WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId][portName]["editorType"] === "Inputdeck") {
+                var localInputValue = WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId][portName]["input-value"];
+                if(typeof localInputValue === "string"){
+                    var portData = JSON.parse(localInputValue);
+                    srcData.context(portData.context_);
+                }else{
+                    srcData.context(localInputValue.context_);
+                }
             } else {
-                srcData.context(JSON.parse(editor["structure"]));
+                srcData.context(JSON.parse(editor.structure));
             }
         } else if (editorType == "Text") {
             srcData.type(OSP.Enumeration.PathType.CONTEXT);
             srcData.repositoryType("USER_HOME");
-            if (WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId]
-                && WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]) {
-                srcData.context(WF_PORTLET_GLOBAL_DATA["wfElements"][jsPlumbWindowId][portName]["file-content"]);
+            if (WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId] && 
+                WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId][portName]) {
+                srcData.context(WF_PORTLET_GLOBAL_DATA.wfElements[jsPlumbWindowId][portName]["file-content"]);
             } else {
                 srcData.context("");
             }
@@ -91,9 +96,8 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
             srcData.setPath('', '', '', OSP.Constants.FOLDER, true);
             srcData.repositoryType("USER_HOME");
         }
-
-        console.log("srcData ", srcData);
-        console.log("toJSON srcData ", OSP.Util.toJSON(srcData));
+        // console.log("srcData ", srcData);
+        // console.log("toJSON srcData ", OSP.Util.toJSON(srcData));
         showEditorWindow(editor, srcData, saveBtnHandler, sciApp);
     }
     
@@ -104,7 +108,6 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
             portletURL.setParameter('eventEnable', true);
             portletURL.setParameter('connector', DESIGNER_PORTLET_ID);
             portletURL.setWindowState('exclusive');
-            console.log(portletURL.toString());
             $.ajax({
                 url: portletURL.toString(),
                 type: 'POST',
@@ -114,7 +117,7 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
                     if(sciApp.workflowStatus){
                        saveBtns = null;
                     }
-                    drawModal(editor.name, renderResult, null,
+                    drawModal(editor.name, renderResult, 600,
                         saveBtns,
                         function () {
                             fire(OSP.Event.OSP_LOAD_DATA, editor.exeFileName, OSP.Util.toJSON(inputData));
@@ -165,44 +168,51 @@ var WorkflowInputPort = (function(namespace, $, designer, toastr, uiPanel){
             console.log("OSP_RESPONSE_DATA ", eventData);
             var workflowInfo = eventData.params;
             var editorType = workflowInfo.editorType;
-            var editorData = JSON.stringify(eventData.data);
-            if(workflowInfo.portName === WF_CONVERTER_SCRIPT){
-                editorData = Liferay.Util.escapeHTML(editorData);
-            }
+            var editorInputData = new OSP.InputData(eventData.data);
             var fileContent = "";
 
             if (WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId]) {
                 if (!WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName]) {
                     WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName] = {};
                 }
-                WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName]["input-value"] = editorData;
+                WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName]["input-value"] = editorInputData;
                 WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName]["editorType"] = workflowInfo.editorType;
             } else {
                 var portJson = {};
                 portJson[workflowInfo.portName] = {};
-                portJson[workflowInfo.portName]["input-value"] = editorData;
+                portJson[workflowInfo.portName]["input-value"] = editorInputData;
                 portJson[workflowInfo.portName]["editorType"] = workflowInfo.editorType;
                 WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId] = portJson;
             }
 
             if (editorType == "Inputdeck") {
-                var inputData = new OSP.InputData(eventData.data);
                 var dataType = new OSP.DataType();
-                var dataStructure = dataType.deserializeStructure(inputData.context());
-                fileContent = dataType.structure().activeParameterFormattedInputs().join("");
+                var dataStructure = dataType.deserializeStructure(editorInputData.context());
+                fileContent = _join(dataType.structure().activeParameterFormattedInputs()[0], "");
             } else if (editorType == "Text") {
-                fileContent = editorData;
+                fileContent = editorInputData.context();
             } else if (editorType == "File") {
                 var portInfo = WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName];
-                var inputData = new OSP.InputData(eventData.data);
-                portInfo.fileName = inputData.name();
-                portInfo.parentPath = inputData.parent();
-                portInfo.pathType = inputData.type();
+                portInfo.fileName = editorInputData.name();
+                portInfo.parentPath = editorInputData.parent();
+                portInfo.pathType = editorInputData.type();
             }
             WF_PORTLET_GLOBAL_DATA.wfElements[workflowInfo.jsPlumbWindowId][workflowInfo.portName]["file-content"] = fileContent;
         }
         console.log("WF_PORTLET_GLOBAL_DATA : ", WF_PORTLET_GLOBAL_DATA);
     });
+
+    function _join(arr, sep){
+        var rValue = "";
+        $.each(arr, function(i){
+            var that = arr[i];
+            if(i !== 0){
+                rValue += sep;
+            }
+            rValue += that;
+        });
+        return rValue;
+    }
 
     return {
         "showEditorWindow": showEditorWindow,

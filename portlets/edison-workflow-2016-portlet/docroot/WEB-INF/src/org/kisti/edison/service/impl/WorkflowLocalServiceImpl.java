@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -72,6 +72,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
@@ -147,15 +149,16 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
 //  private final String WORKFLOW_ENGINE_URL_PRIVATE = "http://10.183.100.103:8090/simflow";
   private final String WORKFLOW_ENGINE_URL_PRIVATE = PropsUtil.get(EdisonPropsUtil.WORKFLOW_ENGIN_URL);
   private final String WORKFLOW_TEMP_PATH = PropsUtil.get(PropsKeys.LIFERAY_HOME)+"/WORKFLOW_TEMP";
-  private final String WORKFLOW_INSTANCE_PATH = "/EDISON/LDAP/DATA/";
+  //private final String WORKFLOW_INSTANCE_PATH = "/EDISON/LDAP/DATA/";
   private static final String DYNAMIC_CONVERTER = "DynamicConverter";
+  private static final String CONTROLLER = "Controller";
   private Ordering<String> scriptFirst = new Ordering<String>(){
     @Override
     public int compare(String left, String right){
-      if(left.equals("$script")){
+      if(left.equals("$cmdscript")){
         return -1;
       }
-      if(right.equals("$script")){
+      if(right.equals("$cmdscript")){
         return 1;
       }
       return 0;
@@ -318,13 +321,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
       Map<String, Object> workflowParams,
       HttpServletRequest request) throws SystemException, PortalException, IOException{
     Workflow workflow = getWorkflow(workflowId);
-    JSONObject screenLogic = JSONFactoryUtil.createJSONObject(workflow.getScreenLogic());
-    boolean isLoopWorkflow = GetterUtil.getString(screenLogic.getString("loopStartElementId")).equals("") ? false : true;
-    if(isLoopWorkflow){
-      return runLoopWorkflow(workflowParams, request, workflow);
-    }else{
-      return runNormalWorkflow(workflowParams, request, workflow);
-    }
+    return runNormalWorkflow(workflowParams, request, workflow);
   }
   
   public WorkflowInstance runWorkflowInstance(
@@ -343,30 +340,9 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         JsonNode statusJson = askForWorkflowStart(workflowUUID);
         workflowInstance.setStatusResponse(statusJson.toString());
         workflowInstance.setWorkflowUUID(workflowUUID);
+        workflowInstance.setReuseWorkflowUUID("");
     }
     return WorkflowInstanceLocalServiceUtil.updateWorkflowInstance(workflowInstance);
-  }
-
-  private WorkflowInstance runLoopWorkflow(Map<String, Object> workflowParams,
-      HttpServletRequest request, Workflow workflow) throws SystemException, PortalException, IOException{
-    Map<String, MWorkflow> workflowPair =  createLoopWorkflow(workflow, workflowParams, request);
-    MWorkflow loopWorkflow = workflowPair.get("loopWorkflow");
-    MWorkflow loopTargetWorkflow = workflowPair.get("loopTargetWorkflow");
-    
-    if(loopWorkflow == null || loopTargetWorkflow == null){
-      throw new SystemException("LoopWorkflow Empty Error");
-    }
-    WorkflowInstance workflowInstance = null;
-    String loopTargetWorkflowUuid = askForCreateWorkflow(Transformer.pojo2Json(loopTargetWorkflow));
-    loopWorkflow.setRefUuid(loopTargetWorkflowUuid);
-    String loopWorkflowUuid = askForCreateWorkflow(Transformer.pojo2Json(loopWorkflow));
-    if(StringUtils.hasLength(loopWorkflowUuid)){
-      workflowInstance = createWorkflowInstance(loopWorkflowUuid, workflow, request);
-      startWorkflowInstance(workflowInstance.getWorkflowInstanceId());
-    }else{
-      throw new SystemException("runNormalWorkflow Failed");
-    }
-    return workflowInstance;
   }
 
   private WorkflowInstance runNormalWorkflow(Map<String, Object> workflowParams,
@@ -640,44 +616,6 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     }
   }
   
-  private Map<String, MWorkflow> createLoopWorkflow(
-      Workflow workflow, 
-      Map<String, Object> workflowParams,
-      HttpServletRequest request) throws SystemException, PortalException, IOException{
-    long companyId = PortalUtil.getCompanyId(request);
-    Locale locale = PortalUtil.getLocale(request);
-    String exec_path = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
-    JSONObject screenLogic = JSONFactoryUtil.createJSONObject(workflow.getScreenLogic());
-    JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
-    User user = PortalUtil.getUser(request);
-    String icebreakerVcToken = GetterUtil.getString(workflowParams.get("icebreakerVcToken"));
-    MWorkflow loopWorkflow = makeMWorkflow(workflowParams, user, icebreakerVcToken);
-    MWorkflow loopTargetWorkflow = makeMWorkflow(workflowParams, user, icebreakerVcToken);
-    
-    // loop workflow
-    String loopStartElementId = GetterUtil.getString(screenLogic.getString("loopStartElementId"));
-    Map<String, MWorkflow> loopWorkflowPair = new HashMap<String, MWorkflow>(); 
-    JSONArray loopControllerSimulation = JSONFactoryUtil.createJSONArray();
-    JSONArray loopTargetSimulations = JSONFactoryUtil.createJSONArray();
-    for(int i=0; i<simulationJsonArray.length(); i++){
-      JSONObject simulationLoopJson = simulationJsonArray.getJSONObject(i);
-      if(simulationLoopJson.getString("id").equals(loopStartElementId)){
-        loopControllerSimulation.put(simulationLoopJson);
-      }else{
-        loopTargetSimulations.put(simulationLoopJson);
-      }
-    }
-    if(loopTargetSimulations.length() > 0){
-      loopWorkflow.setSimulations(getSimulations(user, exec_path, locale, loopTargetSimulations, icebreakerVcToken));
-      loopWorkflow.setRefUuid("-1");
-      loopWorkflowPair.put("loopTargetWorkflow", loopWorkflow);
-    }
-    if(loopControllerSimulation.length() > 0){
-      loopTargetWorkflow.setSimulations(getSimulations(user, exec_path, locale, loopControllerSimulation, icebreakerVcToken));
-      loopWorkflowPair.put("loopWorkflow", loopTargetWorkflow);
-    }
-    return loopWorkflowPair;
-  }
 
   private MWorkflow makeMWorkflow(Map<String, Object> workflowParams, User user,
       String icebreakerVcToken){
@@ -696,11 +634,15 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     Locale locale = PortalUtil.getLocale(request);
     String exec_path = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
     JSONObject screenLogic = JSONFactoryUtil.createJSONObject(workflowInstance.getScreenLogic());
+    JSONObject outPorts = screenLogic.getJSONObject("outPorts");
     JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
     User user = PortalUtil.getUser(request);
     String icebreakerVcToken = GetterUtil.getString(workflowParams.get("icebreakerVcToken"));
     MWorkflow mWorkflow = makeMWorkflow(workflowParams, user, icebreakerVcToken);
-    mWorkflow.setSimulations(getSimulations(user, exec_path, locale, simulationJsonArray, icebreakerVcToken));
+    if(StringUtils.hasText(workflowInstance.getReuseWorkflowUUID())){
+        mWorkflow.setReUseWorkflowUuid(workflowInstance.getReuseWorkflowUUID());
+    }
+    mWorkflow.setSimulations(getSimulations(user, exec_path, locale, simulationJsonArray, outPorts, icebreakerVcToken));
     return Transformer.pojo2Json(mWorkflow);
   }
   
@@ -712,15 +654,16 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     Locale locale = PortalUtil.getLocale(request);
     String exec_path = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
     JSONObject screenLogic = JSONFactoryUtil.createJSONObject(workflow.getScreenLogic());
+    JSONObject outPorts = screenLogic.getJSONObject("outPorts");
     JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
     User user = PortalUtil.getUser(request);
     String icebreakerVcToken = GetterUtil.getString(workflowParams.get("icebreakerVcToken"));
     MWorkflow mWorkflow = makeMWorkflow(workflowParams, user, icebreakerVcToken);
-  	mWorkflow.setSimulations(getSimulations(user, exec_path, locale, simulationJsonArray, icebreakerVcToken));
+  	mWorkflow.setSimulations(getSimulations(user, exec_path, locale, simulationJsonArray, outPorts, icebreakerVcToken));
   	return Transformer.pojo2Json(mWorkflow);
   }
 
-  private List<MWorkflow.Simulations.Simulation> getSimulations(User user, String exec_path, Locale locale, JSONArray simulationJsonArray, String icebreakerVcToken)
+  private List<MWorkflow.Simulations.Simulation> getSimulations(User user, String exec_path, Locale locale, JSONArray simulationJsonArray, JSONObject simulationOutPorts, String icebreakerVcToken)
       throws PortalException, SystemException, IOException, JSONException{
     MWorkflow.Simulations simulations = new MWorkflow.Simulations();
     for(int i=0; i<simulationJsonArray.length(); i++){
@@ -735,6 +678,13 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         scienceApp.setAppType(data.getString("appType"));
         scienceApp.setGroupId(data.getLong("groupId"));
         simulation.setBackend("docker");
+      }else if(ObjectUtils.nullSafeEquals(data.getString("appType"), CONTROLLER)){
+        scienceApp = ScienceAppLocalServiceUtil.createScienceApp(-1);
+        scienceApp.setTitle("Switcher");
+        scienceApp.setName("Switcher");
+        scienceApp.setAppType(data.getString("appType"));
+        scienceApp.setGroupId(data.getLong("groupId"));
+        simulation.setBackend("docker");
       }else{
         scienceApp = ScienceAppLocalServiceUtil.getScienceApp(data.getLong("scienceAppId"));
         scienceApp.setTitle(scienceApp.getTitle(locale));
@@ -744,6 +694,27 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
       simulation.setDescription(scienceApp.getTitle());
       simulation.setClientId(clientId);
       simulation.getJobs().add(getJob(user, exec_path, data, scienceApp, icebreakerVcToken));
+      if(simulationOutPorts.has(clientId)){
+          JSONObject outPorts = simulationOutPorts.getJSONObject(clientId);
+          Gson gson = new Gson();
+          Type type = new TypeToken<Map<String, Object>>(){}.getType();
+          if(outPorts.has("outPort")){
+              Map<String, Object> myMap = gson.fromJson(outPorts.getJSONObject("outPort").toString(), type);
+              simulation.setOutPort(myMap);
+          }
+          if(outPorts.has("outPortFile")){
+              Map<String, Object> myMap = gson.fromJson(outPorts.getJSONObject("outPortFile").toString(), type);
+              simulation.setOutPortFile(myMap);
+          }
+      }
+      if(ObjectUtils.nullSafeEquals(CONTROLLER, scienceApp.getAppType())){
+          simulation.setSwitcher(true);
+      }else{
+          if(data.getBoolean("startPoint")){
+              simulation.setStartPoint(true); ;
+          }
+      }
+      
       if(data.has("parentNodes")){
         JSONArray parentsJson = data.getJSONArray("parentNodes");
         List<String> parents = new ArrayList<String>();
@@ -782,6 +753,9 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
             job.setExecutable(exec_path + "DCExcution/1.0.0/bin/DCExcution.sh");
             job.setType(ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL.toUpperCase());
+        }else if(ObjectUtils.nullSafeEquals(CONTROLLER, scienceApp.getAppType())){
+            job.setExecutable(exec_path + "WFSwitcher/1.0.0/bin/WFSwitcher.sh");
+            job.setType(ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL.toUpperCase());
         }else{
             job.setExecutable(
                 exec_path + ScienceAppLocalServiceUtil.getScienceAppBinPath(scienceApp.getScienceAppId()));
@@ -811,71 +785,64 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
             String inputPortName = inputPortNames.next();
             JSONObject inputport = inputports.getJSONObject(inputPortName);
             MWorkflow.Simulations.Simulation.Jobs.Job.File item = new MWorkflow.Simulations.Simulation.Jobs.Job.File();
-            // if parent node exist
-            if(inputport.has("hasParent") && inputport.getBoolean("hasParent")){
-                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
-                    executions.add("$" + inputPortName);
-                    item.setKey(inputPortName);
-                }else{
-                    executions.add(inputPortName + " $cmd" + inputPortName);
-                    item.setKey("cmd" + inputPortName);
-                }
-                item.setExpectedSource(inputport.getString("expectedSource"));
-                item.setExpectedValue(inputport.getString("expectedValue"));
-                files.add(item);
-                continue;
-            }
+            
             String editorType = inputport.getString("editorType");
+            JSONObject inputValue = inputport.getJSONObject("input-value");
             log.info("editorType : " + editorType);
             if(ScienceAppConstants.EDITOR_TYPE_INPUT_DECK.equals(editorType)){
-                String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken,
-                    inputport.getString("input-value"));
-                if(fileId != null){
-                    if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
-                        executions.add("$inputdeck");
-                    }else{
-                        executions.add(inputPortName + " $inputdeck");
-                    }
-                    item.setKey("inputdeck");
-                    item.setValue(fileId);
-                    files.add(item);
+                String inputData = "";
+                if(inputValue != null && inputValue.has("context_")){
+                    inputData = inputValue.getString("context_");
+                }else{
+                    inputData = inputport.getString("input-value");
                 }
+                String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken, inputData);
+                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
+                    executions.add("$cmd" + inputPortName);
+                    //executions.add("$inputdeck");
+                }else{
+                    executions.add(inputPortName + " $cmd" + inputPortName);
+                    //executions.add(inputPortName + " $inputdeck");
+                }
+                item.setKey("cmd" + inputPortName);
+                if(fileId != null){
+                    item.setValue(fileId);
+                }
+                files.add(item);
             }else if(ScienceAppConstants.EDITOR_TYPE_FILE.equals(editorType)){
                 String parentPath = inputport.getString("parentPath");
                 String fileName = inputport.getString("fileName");
                 Path targetFilePath = OSPFileUtil.getRepositoryPath(user.getScreenName(),
                     Paths.get(parentPath, fileName).toString(), OSPRepositoryTypes.USER_HOME.toString());
                 String fileId = getFileId(appGroupId, icebreakerVcToken, targetFilePath.toString());
+                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
+                    executions.add("$cmd" + inputPortName);
+                }else{
+                    executions.add(inputPortName + " $cmd" + inputPortName);
+                }
+                item.setKey("cmd" + inputPortName);
                 if(fileId != null){
-                    if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
-                        executions.add("$" + inputPortName);
-                        item.setKey(inputPortName);
-                    }else{
-                        executions.add(inputPortName + " $cmd" + inputPortName);
-                        item.setKey("cmd" + inputPortName);
-                    }
                     item.setValue(fileId);
-                    files.add(item);
                 }
+                files.add(item);
             }else if(ScienceAppConstants.EDITOR_TYPE_STRING.equals(editorType)){
-                executions.add(inputPortName + " " + inputport.getString("input-value"));
+                if(inputValue != null && inputValue.has("context_")){
+                    executions.add(inputPortName + " " + inputValue.getString("context_"));
+                }
             }else{
-                String inputValue = inputport.getString("input-value");
-                if(StringUtils.hasText(inputValue)){
-                    String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken,
-                        inputport.getString("input-value"));
+                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
+                    executions.add("$cmd" + inputPortName);
+                }else{
+                    executions.add(inputPortName + " $cmd" + inputPortName);
+                }
+                item.setKey("cmd" + inputPortName);
+                if(inputValue != null && inputValue.has("context_")){
+                    String fileId = uploadFileToIcebreaker(appGroupId, icebreakerVcToken, inputValue.getString("context_"));
                     if(fileId != null){
-                        if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
-                            executions.add("$" + inputPortName);
-                            item.setKey(inputPortName);
-                        }else{
-                            executions.add(inputPortName + " $cmd" + inputPortName);
-                            item.setKey("cmd" + inputPortName);
-                        }
                         item.setValue(fileId);
-                        files.add(item);
                     }
                 }
+                files.add(item);
             }
         }
 
@@ -1087,7 +1054,11 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
   }
   
   public String uploadFileToIcebreaker(long appGroupId, String icebreakerVcToken, String fileContent) throws IOException, SystemException, PortalException{
-    return uploadFileToIcebreaker(appGroupId, icebreakerVcToken, new ByteArrayInputStream(fileContent.getBytes()));
+      if(StringUtils.hasLength(fileContent)){
+          return uploadFileToIcebreaker(appGroupId, icebreakerVcToken, new ByteArrayInputStream(fileContent.getBytes()));
+      }else{
+          return null;
+      }
   }
   
   @SuppressWarnings("unchecked")

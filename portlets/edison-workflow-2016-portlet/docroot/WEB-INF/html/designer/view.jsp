@@ -7,7 +7,10 @@
 <liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet" 
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
 </liferay-portlet:renderURL> 
-
+<liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  <liferay-portlet:param name="myaction" value="detailView" />
+</liferay-portlet:renderURL>
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -118,7 +121,7 @@ var contextPath = '${contextPath}';
 	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px; 
 	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
 .waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
-.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; padding-right: 25px !important; background-position: 60px; background-repeat:no-repeat; background-image: url(../images/Workflow/ajax-loader.gif);}
+.runningbox .addIp{ background: #3a81c0; border-color: #3371a8;}
 .failbox .addIp{ background: #c84444; border-color: #b73535; }
 .pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
 .donebox .addIp{ background: #32a993; border-color: #2e9886; }
@@ -490,11 +493,20 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, false, '${textEditor.exeFileName}');
+  var EDITOR_PORTLET_IDS = {
+    "Text": '${textEditor.exeFileName}',
+    "File": '${fileEditor.exeFileName}',
+    "SDE": '${structuredEditor.exeFileName}'
+  };
+  var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
   var uiPanel = new UIPanel(namespace, $, designer, toastr);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
-  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel);
+  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
+  consoleLog.setLoggingLevel({
+     info: true, debug: false, error: true
+  });
+
   designer.setWorkflowInputPortModule(inputportModule);
 
   aSyncAjaxHelper.post("/delegate/services/app/all", {
@@ -543,6 +555,14 @@ function <portlet:namespace/>getSpecificSiteGroupId(){
   var url = "<%=getSpecificSiteGroupIdUrl%>";
   var result = synchronousAjaxHelper.post(url, {});
   return result["groupId"];
+}
+
+function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
+  var groupId = <portlet:namespace/>getSiteGroupId();
+  var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
+  var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
+      params += "&" + thisPortletNamespace + "groupId=" + groupId;
+  window.open("<%=scienceAppDetailUrl%>" + params);
 }
 </script>
 </div>

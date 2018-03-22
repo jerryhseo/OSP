@@ -193,15 +193,19 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 
 		_methodParameterTypes61 = new String[] { "long", "java.util.Map" };
 
-		_methodName62 = "createWorkflowInstance";
+		_methodName62 = "reuseWorkflowInstance";
 
-		_methodParameterTypes62 = new String[] {
+		_methodParameterTypes62 = new String[] { "long", "java.util.Map" };
+
+		_methodName63 = "createWorkflowInstance";
+
+		_methodParameterTypes63 = new String[] {
 				"java.util.Map", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName63 = "getWorkflowWorkflowInstancesByWorkflowId";
+		_methodName64 = "getWorkflowWorkflowInstancesByWorkflowId";
 
-		_methodParameterTypes63 = new String[] { "long" };
+		_methodParameterTypes64 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -433,12 +437,18 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 
 		if (_methodName62.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
-			return WorkflowInstanceLocalServiceUtil.createWorkflowInstance((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
-				(javax.servlet.http.HttpServletRequest)arguments[1]);
+			return WorkflowInstanceLocalServiceUtil.reuseWorkflowInstance(((Long)arguments[0]).longValue(),
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
 		}
 
 		if (_methodName63.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
+			return WorkflowInstanceLocalServiceUtil.createWorkflowInstance((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
+				(javax.servlet.http.HttpServletRequest)arguments[1]);
+		}
+
+		if (_methodName64.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.getWorkflowWorkflowInstancesByWorkflowId(((Long)arguments[0]).longValue());
 		}
 
@@ -521,4 +531,6 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes62;
 	private String _methodName63;
 	private String[] _methodParameterTypes63;
+	private String _methodName64;
+	private String[] _methodParameterTypes64;
 }

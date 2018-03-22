@@ -19,7 +19,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 "search-input-name": "search"
             },
             "form": {}
-        }, "setting": {
+        },"status": {
+            "col": 10,
+            "panel-type": "status",
+            "body": "tpl-menu-panel-load",
+            "header":{
+                "id": "tpl-menu-panel-search-header",
+                "search-input-name": "search",
+                "theads": ["Title", "Status", "Submitted Time", "End Time"]
+            },
+            "form": {}/* ,
+            "footer":{
+                "id": "tpl-menu-panel-pagination",
+                "btns" : [
+                    { "name": "Open", "func": openWorkflow },
+                    { "name": "Rename", "func": renameWorkflow },
+                    { "name": "Duplicate", "func": duplicateWorkflow },
+                    { "name": "Delete", "func": deleteWorkflow }
+                ]
+            } */
+        },  "setting": {
             "col": 6,
             "panel-type": "setting",
             "body": "tpl-menu-panel-setting",
@@ -43,31 +62,182 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (btnType === "rerun") { rerun(); }
         if (btnType === "pause") { pause(); }
         if (btnType === "restart") { restart(); }
-        if (btnType === "status") { status(); }
+        if (btnType === "status") { status(this, "status"); }
     });
 
     function run(){
         // console.log("run");
-        var ibToken = getIcebreakerAccessToken();
         var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
         var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
-        saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
-            function (workflowInstance) {
-                // console.log(ibToken);
-                executor.runWorkflowInstance(workflowInstanceId, ibToken);
-                toastr["success"]("", var_success_run_workflow_message);
-            });
+        executor.getWorkflowInstance(workflowInstanceId,
+            function (currentWorkflowInstance) {
+                if(currentWorkflowInstance.status === WF_STATUS_CODE.CREATED){
+                    var ibToken = getIcebreakerAccessToken();
+                    saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
+                        function (workflowInstance) {
+                            executor.runWorkflowInstance(workflowInstanceId, ibToken);
+                            toastr["success"]("", var_success_run_workflow_message);
+                        });
+                }else{
+                    toastr["error"]("", var_already_run_message);
+                }
+            }, function () { });
+        
     }
     function rerun(){
+        if($(".wf-box.reset").length){
+            var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+            executor.reRunWorkflowInstance(workflowInstanceId,
+                designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()),
+                function (workflowInstance) {
+                    var ibToken = getIcebreakerAccessToken();
+                    executor.runWorkflowInstance(workflowInstance.workflowInstanceId, ibToken);
+                    toastr["success"]("", var_success_run_workflow_message);
+                });
+        }else{
+            toastr["error"]("","Reset First.");
+        }
         
     }
     function pause(){
-        
+        var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+        executor.getWorkflowInstance(workflowInstanceId,
+            function (currentWorkflowInstance) {
+                if(currentWorkflowInstance.status === WF_STATUS_CODE.RUNNING){
+                    executor.pauseWorkflowInstance(workflowInstanceId, function(workflowInstance){
+                        toastr["success"]("", var_pause_success_message);
+                    });
+                }else{
+                    toastr["error"]("", "Workflow is not running.");
+                }});
     }
+    
     function restart(){
-        
+        var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+        executor.getWorkflowInstance(workflowInstanceId,
+            function (currentWorkflowInstance) {
+                if(currentWorkflowInstance.status === WF_STATUS_CODE.PAUSED){
+                    executor.resumeWorkflowInstance(workflowInstanceId, function(workflowInstance){
+                        toastr["success"]("", var_resume_success_message);
+                    });
+                }else{
+                    toastr["error"]("", "Workflow is not paused.");
+                }});
     }
-    function status(){
+
+    function drawWorkflowStatus(workflowInstanceId){
+        executor.getWorkflowInstanceStatus(workflowInstanceId, function(workflowStatus){
+            var simulations = workflowStatus.workflow.simulations;
+            if (!simulations.length || simulations.length < 1) {
+                toastr["error"]("", "No Simulations");
+                return false;
+            } 
+            sortSimulations(simulations);
+            var tableSimulations = [];
+            for (var i = 0; i < simulations.length; i++) {
+                var tableSimulation = {};
+                tableSimulation.title = simulations[i].title;
+                if (simulations[i].status) {
+                    tableSimulation.status = WF_STATUS_CODE_STRING[simulations[i].status]; 
+                } else {
+                    tableSimulation.status = "Waiting";
+                }
+                if(simulations[i].jobs[0].submittedTime){
+                    tableSimulation.submittedTime = $.format.date(new Date(simulations[i].jobs[0].submittedTime), "yyyy.MM.dd HH:mm:ss")
+                }else{
+                    tableSimulation.submittedTime = "";
+                }
+                if(simulations[i].jobs[0].endTime){
+                    tableSimulation.endTime = $.format.date(new Date(simulations[i].jobs[0].endTime), "yyyy.MM.dd HH:mm:ss");
+                }else{
+                    tableSimulation.endTime = "";
+                }
+                tableSimulations.push(tableSimulation);
+            }
+            console.log(tableSimulations);
+            var tbodyTemplate = '{{#rows}}' +
+                '    <tr>' +
+                '        <td>{{title}}</td>' +
+                '        <td>{{status}}</td>' +
+                '        <td>{{submittedTime}}</td>' +
+                '        <td>{{endTime}}</td>' +
+                '    </tr>' +
+                '{{/rows}}';
+            tbodyTemplate +=
+                '{{^rows}}' +
+                '    <tr>' +
+                '        <td colspan="4">No Data</td>' +
+                '    </tr>' +
+                '{{/rows}}';
+
+            if (tableSimulations && tableSimulations.length > 0) {
+                $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
+                    Mustache.render(tbodyTemplate, { "rows": tableSimulations }));
+            }else{
+                $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
+                    Mustache.render(tbodyTemplate, { "rows": tableSimulations }));
+            }
+
+        });
+    }
+
+    function sortSimulations(simulations){
+        simulations.sort(function (a, b) {
+            if (!a.jobs[0].submittedTime || !b.jobs[0].submittedTime)
+                return 1;
+            if (a.jobs[0].submittedTime > b.jobs[0].submittedTime)
+                return 1;
+            if (a.jobs[0].submittedTime < b.jobs[0].submittedTime)
+                return -1;
+            return 0;
+        });
+    }
+
+    function status(that, btnType){
+        var templateData = PANEL_DATA[btnType];
+        templateData.boxtitle = "Simulation Status";
+        var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+        $("#" + namespace + "menu-panel-box").show();
+        $("#" + namespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
+        $("#" + namespace + "menu-panel-box .box-body").mustache(templateData.body, templateData);
+        if (templateData.header) {
+            var boxTitleSelecotr = "#" + namespace + "menu-panel-box .box-header.with-border.header-inner > .box-title";
+            $(boxTitleSelecotr).replaceWith($.Mustache.render(templateData.header.id, templateData));
+            var _delay600 = _instantDelay(600);
+            $(boxTitleSelecotr + " > .search-input").keyup(function (e) {
+                _delay600(drawWorkflowStatus, btnType);
+            });
+        }
+
+        drawWorkflowStatus(workflowInstanceId);
+
+        $(".menu-panel .menu-panel-close").click(function (e) {
+            e.preventDefault();
+            closePanel();
+        });
+
+        $("#" + namespace + "menu-panel-box .data-binded").change(function (e) {
+            var thisValue = $(this).val();
+            var thisName = $(this).attr("name");
+            templateData.form[thisName] = thisValue;
+        });
+
+        $("#" + namespace + "menu-panel-box .func").each(function (_) {
+            var thisName = $(this).attr("name");
+            if (templateData.btn && templateData.btn[thisName]) {
+                $(this).click(function (e) {
+                    templateData.btn[thisName](btnType, this, e);
+                });
+            }
+        });
+
+        if($(that).parent("li").hasClass("menu-open")){
+            $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
+            $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-menu > li").removeClass("menu-open");
+        }else{
+            $(that).parent("li").addClass("menu-open")
+            $(".menu-panel").show('slide', { direction: 'left' }, 500);
+        }
         
     }
 
@@ -221,11 +391,28 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-
     function loadWorkflowInstances(panelType, currentPage){
         if(panelType === 'open' || panelType === 'import'){
+            if(!_isEmpty(PANEL_DATA.setting.form.workflowInstanceId)){
+                silentSave();
+            }
             drawWorkflowInstances({});
         }
+    }
+
+    function silentSave(){
+        var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
+        var workflowInstanceTitle = PANEL_DATA.setting.form.workflowInstanceTitle;
+        saveWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
+            function (workflowInstance) {
+                setMetaData({
+                    "title": PANEL_DATA.setting.form.title,
+                    "description": PANEL_DATA.setting.form.description,
+                    "workflowId": PANEL_DATA.setting.form.workflowId,
+                    "workflowInstanceTitle": workflowInstance.title,
+                    "workflowInstanceId": workflowInstance.workflowInstanceId
+                });
+            });
     }
 
     function drawWorkflowInstances(params) {
@@ -396,7 +583,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     });
 
     return {
-        "openWorkflow": openWorkflowByWorkflowId
+        "openWorkflow": openWorkflowByWorkflowId,
+        "isEmpty": function(){
+            return _isEmpty(PANEL_DATA.setting.form.workflowId && PANEL_DATA.setting.form.workflowInstanceId);
+        }
     };
 });
 
