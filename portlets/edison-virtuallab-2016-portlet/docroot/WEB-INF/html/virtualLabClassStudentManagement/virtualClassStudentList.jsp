@@ -745,7 +745,7 @@ function studentDelete(userScreenName, virtualLabUserId){
 			var dataForm = {
 				"<portlet:namespace/>virtualLabUserId" : virtualLabUserId,
 				"<portlet:namespace/>userScreenName" : userScreenName,
-				"<portlet:namespace/>classId" : $("#<portlet:namespace/>classId").val()
+				"<portlet:namespace/>classId" : $(".<portlet:namespace/>classId").val()
 			};
 			jQuery.ajax({
 				type: "POST",
@@ -845,8 +845,8 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</div>
 	</div>
 	<form id="searchForm" name="searchForm" method="post" onsubmit="return false;">
-		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
-		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
+		<input id="<portlet:namespace/>virtualLabId_searchForm" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabId}" />
+		<input id="<portlet:namespace/>groupId_searchForm" name="<portlet:namespace/>groupId" type="hidden" value="${groupId}" />
 	</form>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
@@ -894,10 +894,10 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 	</div>
 
 	<form id="addVirtualClassStudentForm" name="addVirtualClassStudentForm" method="post">
-		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabClassInfo.virtualLabId }"/>
-		<input id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" type="hidden" value="${virtualLabClassInfo.classId }"/>
-		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
-		<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
+		<input id="<portlet:namespace/>virtualLabId_addVirtualClassStudentForm" class="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabClassInfo.virtualLabId }"/>
+		<input id="<portlet:namespace/>classId_addVirtualClassStudentForm" class="<portlet:namespace/>classId" name="<portlet:namespace/>classId" type="hidden" value="${virtualLabClassInfo.classId }"/>
+		<input id="<portlet:namespace/>groupId_addVirtualClassStudentForm" class="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
+		<input id="<portlet:namespace/>universityField_addVirtualClassStudentForm" class="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
 	
 		<div class="table1_list">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -1059,10 +1059,10 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 		</div>
 	</div>
 	<form name="excelForm" method="post" style="margin:0px;">
-		<input id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabClassInfo.virtualLabId }"/>
-		<input id="<portlet:namespace/>classId" name="<portlet:namespace/>classId" type="hidden" value="${virtualLabClassInfo.classId }"/>
-		<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
-		<input id="<portlet:namespace/>universityField" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
+		<input id="<portlet:namespace/>virtualLabId_excelForm" name="<portlet:namespace/>virtualLabId" type="hidden" value="${virtualLabClassInfo.virtualLabId }"/>
+		<input id="<portlet:namespace/>classId_excelForm" name="<portlet:namespace/>classId" type="hidden" value="${virtualLabClassInfo.classId }"/>
+		<input id="<portlet:namespace/>groupId_excelForm" name="<portlet:namespace/>groupId" type="hidden" value="${groupId }"/>
+		<input id="<portlet:namespace/>universityField_excelForm" name="<portlet:namespace/>universityField" type="hidden" value="${virtualLabClassInfo.virtualLabUniversityField}"/>
 		<input id="<portlet:namespace/>virtualClassCd" name="<portlet:namespace/>virtualClassCd" type="hidden" value="${virtualLabClassInfo.virtualClassCd}"/>
 		<div class="newWcont01" style="overflow:auto; max-height:400px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table1_list" >
