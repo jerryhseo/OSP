@@ -70,13 +70,15 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 var <portlet:namespace/>canvas = $('#<portlet:namespace/>canvas');
 var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
-var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_ngl";
+
+
+var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_nl";
+
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
 	<portlet:namespace/>fileExplorerId += "<portlet:namespace/>".substring("<portlet:namespace/>".lastIndexOf("_INSTANCE_")+10);
 else
 	<portlet:namespace/>fileExplorerId += '001'; 
-console.log('[NGLViewer] file explorer id Check : '+<portlet:namespace/>fileExplorerId);
-	
+
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
@@ -85,6 +87,7 @@ var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 if(<portlet:namespace/>eventEnable){
 	<portlet:namespace/>initialize( JSON.parse('<%=inputData%>') );
 	<portlet:namespace/><portlet:namespace/>loadNGLFile( inputData );
+	<portlet:namespace/>initializeFileExplorer();
 }
 
 /***********************************************************************
@@ -158,7 +161,7 @@ console.log("[NGLViewer] test ngl viewer : " + $('#<portlet:namespace/>canvas').
 
 
 function iframeClickServerOpen(){
-	console.log("[NGLViewer]test openserver menu ");
+	console.log("[NGLViewer]test openserver menu");
 
     <portlet:namespace/>openFileExplorer();
 };
@@ -172,7 +175,7 @@ $('#<portlet:namespace/>download').click(function(){
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
-	var eventData = {
+	var eventData = {fileExplorerDialogSection
 		portletId : '<%=portletDisplay.getId()%>',
 		targetPortlet : <portlet:namespace/>fileExplorerId,
 	};
@@ -378,6 +381,21 @@ function <portlet:namespace/>drawNGL( inputData ){
 	    }, 
 	    10
 	);
+}
+
+function <portlet:namespace/>initializeFileExplorer(){
+	if( $.isEmptyObject(<portlet:namespace/>initData) ||( 
+		<portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.FILE &&
+		<portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.FOLDER &&
+		<portlet:namespace/>initData.type() !== OSP.Enumeration.PathType.EXT ))	return;
+
+	var eventData = {
+              portletId: '<%=portletDisplay.getId()%>',
+              targetPortlet: <portlet:namespace/>fileExplorerId,
+              data: OSP.Util.toJSON(<portlet:namespace/>initData)
+	};
+	
+	Liferay.fire( 'OSP_LOAD_DATA', eventData );
 }
 
 function <portlet:namespace/>downloadCurrentFile(){
