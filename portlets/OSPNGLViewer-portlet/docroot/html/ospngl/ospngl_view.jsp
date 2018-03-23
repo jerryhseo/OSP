@@ -168,7 +168,7 @@ console.log("test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().fi
 console.log("test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
 
 
-function <portlet:namespace/>iframeClickServerOpen(){
+function iframeClickServerOpen(){
 	console.log("[NGLViewer]test openserver menu ");
 
     var inputData;
