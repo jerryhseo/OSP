@@ -175,7 +175,7 @@ $('#<portlet:namespace/>download').click(function(){
 
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
-	var eventData = {fileExplorerDialogSection
+	var eventData = {
 		portletId : '<%=portletDisplay.getId()%>',
 		targetPortlet : <portlet:namespace/>fileExplorerId,
 	};
