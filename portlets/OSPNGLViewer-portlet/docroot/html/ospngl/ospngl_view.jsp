@@ -120,22 +120,11 @@ function <portlet:namespace/>iframeReady(){
 	}
 }
 
+
 if( <portlet:namespace/>eventEnable === false ){
-	var inputData = '<%=inputData%>';
-	<portlet:namespace/>connector = '<%=connector%>';
-	if(!inputData){
-		<portlet:namespace/>initData = new OSP.InputData();
-	}else{
-		<portlet:namespace/>initData = new OSP.InputData(JSON.parse(inputData));
-	}
-
-	<portlet:namespace/>connector = '<%=connector%>';
-	//for test
-//	<portlet:namespace/>initData.type_ = 'file';
-//	<portlet:namespace/>initData.parent_ = 'pdbs';
-//	<portlet:namespace/>initData.name_ = '1nmr.pdb';
-
-  <portlet:namespace/>loadNGLFile( <portlet:namespace/>initData );
+	<portlet:namespace/>initialize( JSON.parse('<%=inputData%>') );
+	<portlet:namespace/>loadNGLFile( <portlet:namespace/>initData );
+	<portlet:namespace/>initializeFileExplorer();
 }
 
 $("#<portlet:namespace/>fileExplorer").dialog({
@@ -164,27 +153,14 @@ $('#<portlet:namespace/>openLocal').click(function(){
 
 
 //$("#menubar").children().first().find(".options");
-console.log("test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
-console.log("test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
+console.log("[NGLViewer] test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
+console.log("[NGLViewer] test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
 
 
 function iframeClickServerOpen(){
 	console.log("[NGLViewer]test openserver menu ");
 
-    var inputData;
-    if(<portlet:namespace/>currentData && 
-        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.URI &&
-        <portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.CONTEXT ){
-        inputData = <portlet:namespace/>currentData;
-    }else{
-        inputData = new OSP.InputData();
-        inputData.type( OSP.Enumeration.PathType.FOLDER );
-        inputData.parent('');
-        inputData.name('');
-        inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-    }
-   
-    <portlet:namespace/>fileExplorerDialog('VIEW', inputData);
+    <portlet:namespace/>openFileExplorer();
 };
 
 
@@ -211,28 +187,37 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 
 
 
-function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
-    AUI().use('liferay-portlet-url', function(A){
-  
-        var dialogURL = Liferay.PortletURL.createRenderURL();
-        dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
-        dialogURL.setParameter('inputData', JSON.stringify(inputData));
-        //dialogURL.setParameter('loadNow', true);
-        dialogURL.setParameter('mode', mode);
-        dialogURL.setParameter('eventEnable', false);
-        dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
-        dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
-
-        console.log("[NGLViewer] file explorer call inputData  : ", inputData);
-        console.log("[NGLViewer] file explorer url : ", dialogURL);
-        console.log("[NGLViewer] file explorer url2 : " + dialogURL);
-        if( $('#<portlet:namespace/>file-explorer-content').children().length > 0 ){
-        	$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
-		}
-        else{
+function <portlet:namespace/>openFileExplorer(){
+	AUI().use('liferay-portlet-url', function(A){
+		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}else{
+			var inputData;
+			if(	!$.isEmptyObject(<portlet:namespace/>initData) && (
+				<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE ||
+				<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER ||
+				<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.EXT )){
+				inputData = <portlet:namespace/>initData;
+			}
+			else{
+				inputData = new OSP.InputData();
+				inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+				inputData.type( OSP.Enumeration.PathType.FOLDER );
+				inputData.parent('');
+				inputData.name('');
+			}
+			
+			var dialogURL = Liferay.PortletURL.createRenderURL();
+			dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
+			dialogURL.setParameter('inputData', JSON.stringify(inputData));
+			dialogURL.setParameter('mode', 'VIEW');
+			dialogURL.setParameter('eventEnable', false);
+			dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
+			dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
+			
 			$("#<portlet:namespace/>file-explorer-content").load( dialogURL.toString());
 			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
-        }
+		}
 	});
 }
 
@@ -395,64 +380,36 @@ function <portlet:namespace/>drawNGL( inputData ){
 	);
 }
 
-function <portlet:namespace/>getFirstFileName( argData ){
-    console.log('[NGLViewer]get First File Name : ', argData );
-    var inputData = argData.clone();
-    console.log('[NGLViewer]get First File Name2 : ', inputData );
-    if( !inputData.repositoryType() )
-    	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
-    var data = {
-            <portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
-            <portlet:namespace/>pathType: inputData.type(),
-            <portlet:namespace/>repositoryType: inputData.repositoryType(),
-            <portlet:namespace/>parentPath: inputData.parent(),
-            <portlet:namespace/>fileName: inputData.name(),
-            <portlet:namespace/>relative: inputData.relative()
-    };
-        
-    $.ajax({
-        type: 'POST',
-        url: '<%= serveResourceURL.toString()%>', 
-        data  : data,
-        dataType : 'json',
-        success: function(data) {
-            inputData.type( OSP.Enumeration.PathType.FILE );
-            inputData.name( data.fileName );
-            <portlet:namespace/>drawNGL( inputData );
-        },
-        error:function(data,e){
-            console.log('[NGLViewer]AJAX ERROR-->'+e);
-        },
-        complete: function( jqXHR, textStatus ){
-        }
-    });
-}
-
 function <portlet:namespace/>downloadCurrentFile(){
-	console.log("[NGLViewer] Download current file");
-	console.log("[NGLViewer] Download current data", <portlet:namespace/>currentData);
-    if(<portlet:namespace/>currentData &&
-        <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FILE ){
-        var filePath = <portlet:namespace/>currentData;
-        var data = {
-            <portlet:namespace/>command: "DOWNLOAD_FILE",
-            <portlet:namespace/>pathType: filePath.type(),
-            <portlet:namespace/>repositoryType: filePath.repositoryType(),
-            <portlet:namespace/>parentPath: filePath.parent(),
-            <portlet:namespace/>fileName: filePath.name(),
-            <portlet:namespace/>relative: filePath.relative()
-        };
-        
-        var base = '<%=serveResourceURL.toString()%>';
-        var sep = (base.indexOf('?') > -1) ? '&' : '?';
-        var url = base + sep + $.param(data);
-        location.href = url;
-		//($('#<portlet:namespace/>downloadAnchor').attr('href', url))[0].click();
-    }
+	console.log("[JSMol] Download current data", <portlet:namespace/>currentData);
+	if( $.isEmptyObject(<portlet:namespace/>currentData) || 
+		<portlet:namespace/>currentData.type() !== OSP.Enumeration.PathType.FILE )
+		return;
+					
+	var filePath = <portlet:namespace/>currentData;
+	var data = {
+		<portlet:namespace/>command: "DOWNLOAD_FILE",
+		<portlet:namespace/>pathType: filePath.type_,
+		<portlet:namespace/>repositoryType: filePath.repositoryType_,
+		<portlet:namespace/>parentPath: filePath.parent_,
+		<portlet:namespace/>fileName: filePath.name_
+	};
+	
+	
+	var base = '<%=serveResourceURL.toString()%>';
+	var sep = (base.indexOf('?') > -1) ? '&' : '?';
+	var url = base + sep + $.param(data);
+	
+	location.href = url;
+	<portlet:namespace/>loadJSMolFile( <portlet:namespace/>currentData );
+    
 }
 
 function <portlet:namespace/>setTitle( title ){
-	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
+	if(!title){
+		title = '<h4>/'+ <portlet:namespace/>currentData.name_+'</h4>';
+	}
+	$('#<portlet:namespace/>title').html('<h4>'+title+'</h4>');
 }
 
 
