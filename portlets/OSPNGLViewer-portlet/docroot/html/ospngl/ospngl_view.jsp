@@ -160,11 +160,7 @@ console.log("[NGLViewer] test ngl viewer : ", $('#<portlet:namespace/>canvas').c
 console.log("[NGLViewer] test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
 
 
-function iframeClickServerOpen(){
-	console.log("[NGLViewer]test openserver menu");
 
-    <portlet:namespace/>openFileExplorer();
-};
 
 
 
@@ -490,6 +486,11 @@ function <portlet:namespace/>initialize( inputData ){
 	}
 }
 
+function iframeClickServerOpen(){
+	console.log("[NGLViewer]test openserver menu");
+
+    <portlet:namespace/>openFileExplorer();
+};
 
 </script>
 
