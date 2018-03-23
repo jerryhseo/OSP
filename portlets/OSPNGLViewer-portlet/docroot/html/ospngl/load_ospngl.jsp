@@ -48,6 +48,7 @@ var namespace;
 
 function setNamespace( ns ){
 	namespace = ns;
+	console.log('[NGLViewer] Set namespace ' + namespace);
 }
 
 

@@ -67,7 +67,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
  * Global variables section
  ***********************************************************************/
 <portlet:namespace/>passNamespace();
-var <portlet:namespace/>connector;
+var <portlet:namespace/>canvas = $('#<portlet:namespace/>canvas');
+var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
 var <portlet:namespace/>fileExplorerId = "FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_ngl";
 if( "<portlet:namespace/>".lastIndexOf("_INSTANCE_") > 0)
@@ -81,7 +82,10 @@ var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
-
+if(<portlet:namespace/>eventEnable){
+	<portlet:namespace/>initialize( JSON.parse('<%=inputData%>') );
+	<portlet:namespace/><portlet:namespace/>loadNGLFile( inputData );
+}
 
 /***********************************************************************
  * Initailization section using parameters
@@ -471,6 +475,67 @@ function <portlet:namespace/>downloadCurrentFile(){
 function <portlet:namespace/>setTitle( title ){
 	$('#<portlet:namespace/>title').html('<h5>'+title+'</h5>');
 }
+
+
+function <portlet:namespace/>initialize( inputData ){
+	if( $.isEmptyObject( inputData ) ){
+		<portlet:namespace/>baseDir = new OSP.InputData();
+		<portlet:namespace/>baseDir.parent( '');
+		<portlet:namespace/>baseDir.name('');
+		<portlet:namespace/>baseDir.type(OSP.Enumeration.PathType.FOLDER);
+		<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+	}
+	else{
+		<portlet:namespace/>baseDir = new OSP.InputData(inputData);
+		
+		if( !<portlet:namespace/>baseDir.repositoryType() ){
+			<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		}
+	
+		switch( <portlet:namespace/>baseDir.type() ){
+			case OSP.Enumeration.PathType.FILE:
+				var subPath = OSP.Util.convertToPath( <portlet:namespace/>baseDir.name() );
+				
+				<portlet:namespace/>baseDir.type( OSP.Enumeration.PathType.FOLDER );
+				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), subPath.parent() ) );
+				<portlet:namespace/>baseDir.name( '' );
+				
+				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				<portlet:namespace/>currentPath.type(OSP.Enumeration.PathType.FILE);
+				<portlet:namespace/>currentPath.name(subPath.name());
+				break;
+			case OSP.Enumeration.PathType.FOLDER:
+				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), <portlet:namespace/>baseDir.name() ) );
+				<portlet:namespace/>baseDir.name( '' );
+				
+				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				break;
+			case OSP.Enumeration.PathType.EXT:
+				var subPath = OSP.Util.convertToPath( <portlet:namespace/>baseDir.name() );
+				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), subPath.parent() ) );
+				<portlet:namespace/>baseDir.name( subPath.name() );
+				
+				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				break;
+			case OSP.Enumeration.PathType.DLENTRY_ID:
+				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				break;
+			default:
+				alert('OSPFileExplorer: Un-expected type: ' + <portlet:namespace/>baseDir.type());
+				<portlet:namespace/>baseDir = new OSP.InputData();
+				<portlet:namespace/>baseDir.parent( '');
+				<portlet:namespace/>baseDir.name('');
+				<portlet:namespace/>baseDir.type(OSP.Enumeration.PathType.FOLDER);
+				<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+				
+
+				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				break;
+		}
+	}
+}
+
 
 </script>
 
