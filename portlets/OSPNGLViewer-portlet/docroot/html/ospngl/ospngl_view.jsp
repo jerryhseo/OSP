@@ -208,27 +208,6 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
-$('#<portlet:namespace/>selectFile').bind(
-		'change', 
-		function(event){
-			var input = document.getElementById('<portlet:namespace/>selectFile');
-			var reader = new FileReader();
-	            
-			reader.onload = function (e) {
-				$('#<portlet:namespace/>canvas').each(function(){
-					$(this).one("load", function(){
-						$(this).prop('contentWindow').drawNglViewer(e.target.result);
-					});
-				});
-		                
-				<portlet:namespace/>setTitle(e.target.result);
-			    <portlet:namespace/>currentData = null;
-				delete <portlet:namespace/>currentData;
-			};
-	            
-			reader.readAsDataURL(input.files[0]);
-		}
-	);
 
 
 
@@ -401,7 +380,7 @@ function <portlet:namespace/>drawNGL( inputData ){
 	    	        
 	    	        console.log( '[NGLViewer]Draw JSMol: ', inputData);
 	    	        
-		    	    iframe.contentWindow.drawNglViewer(serveResourceUrl.toString());
+		    	    iframe.contentWindow.drawNglViewer(inputData, serveResourceUrl.toString());
 		    	    
 		    	    $('#<portlet:namespace/>title').html(inputData.name());
 	    	    });

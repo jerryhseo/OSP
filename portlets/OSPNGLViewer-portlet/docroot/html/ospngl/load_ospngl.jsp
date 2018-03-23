@@ -55,9 +55,9 @@ function setNamespace( ns ){
 
 NGL.cssDirectory="<%= request.getContextPath()%>/css/";
 NGL.documentationUrl = "<%=request.getContextPath()%>/build/docs/index.html";
-NGL.examplesListUrl = "<%=request.getContextPath()%>/build/scriptsList.json";
-NGL.examplesScriptUrl = "<%=request.getContextPath()%>/scripts/";
-NGL.exampleDataDirectoryURL = "<%=request.getContextPath()%>/data/";
+//NGL.examplesListUrl = "<%=request.getContextPath()%>/build/scriptsList.json";
+//NGL.examplesScriptUrl = "<%=request.getContextPath()%>/scripts/";
+//NGL.exampleDataDirectoryURL = "<%=request.getContextPath()%>/data/";
 //Datasources
 
 NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource("<%=request.getContextPath()%>/data/"));
@@ -114,13 +114,26 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 });
 
-function drawNglViewer(url, serveResourceURL){
-	console.log("[NGLViewer] Draw NGL Viewer : ", url);
+function drawNglViewer(inputData, serveResourceURL){
+	console.log("[NGLViewer] Draw NGL Viewer URL : ", serveResourceURL);
+	console.log('[NGLViewer] input data : ', inputData);
 	var result;
+	
+	var data ={};
+	data[namespace+'command'] = "READ_FILE";
+	data[namespace+'pathType'] = "file";
+	data[namespace+'repositoryType'] = inputData.repositoryType_,
+	data[namespace+'parentPath'] = inputData.parent;
+	data[namespace+'fileName'] = inputData.name_;
+	data[namespace+'relative'] = true;
+	
+	console.log('[NGLViewer] input data', data);
+	
 	$.ajax({
 		type : 'POST',
-		url : url,
-		dataType : 'multipart/form-data',
+		url : serveResourceURL,
+		data : data,
+		dataType : 'text',
 		success : function(data){
 			console.log("[NGLViewer] file object : ", data);
 			result = data;
