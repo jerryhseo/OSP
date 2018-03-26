@@ -343,7 +343,7 @@ function <portlet:namespace/>getFirstFileName( inputData ){
 			console.log("[NGLViewer] get result data ", data);
 			inputData.name( data.fileName );
 			inputData.type( OSP.Enumeration.PathType.FILE );
-			<portlet:namespace/>drawJSMol( inputData );
+			<portlet:namespace/>drawNGL( inputData );
 			console.log("[NGLViewer] Get First File Data : ", inputData);
 		},
 		error:function(data,e){
