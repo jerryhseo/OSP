@@ -21,7 +21,6 @@ import org.kisti.edison.bestsimulation.service.ScienceAppExecuteLocalServiceUtil
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.search.service.service.SearchLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.ExcelUtil;

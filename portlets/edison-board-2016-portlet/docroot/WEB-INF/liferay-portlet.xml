@@ -24,7 +24,8 @@
 		<portlet-name>edison-comment</portlet-name>
 		<icon>/icon.png</icon>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<css-class-wrapper>edison-comment container</css-class-wrapper>		
+		<css-class-wrapper>edison-comment container</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>		
 	</portlet>
 	<portlet>
 		<portlet-name>edison-comment-crud</portlet-name>
