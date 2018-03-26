@@ -31,8 +31,9 @@ AUI().ready(
 			);
 			var WIN = A.getWin();
 			var BODY = A.getBody();
-			
-			var banner = A.one('#banner');
+			var banner = A.one('#banner') === null ? 
+                {removeClass:function(){}, addClass:function(){} } : 
+                    A.one('#banner');
 			var triggerPos = 200;
 			var lastScrollPos = 0;
 			var savedScrollPos = 0;

@@ -130,7 +130,9 @@ AUI().ready(
 		var displayBanner = function() {
 			var lastScrollPos = 0;
 			var savedScrollPos = 0;
-			var banner = A.one('#banner');
+			var banner = A.one('#banner') === null ? 
+                {removeClass:function(){}, addClass:function(){} } : 
+                    A.one('#banner');
 			
 			var scrollPos = WIN.get('docScrollY');
 
