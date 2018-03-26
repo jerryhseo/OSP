@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
@@ -207,8 +208,7 @@ public class CommentController {
         /*comment 추가하거나 댓글 작성할 경우 commant 내용과 해당 게시글 또는 commant의 boardSeq*/
         JSONObject requestJson = JSONObject.fromObject(saveData);
         String comment = (String) requestJson.get("comment");
-        String gBoardSeq = (String) requestJson.get("groupBoardSeq");
-
+        String[] gBoardSeq = ((String) requestJson.get("groupBoardSeq")).split(",");
         
         long userId = themeDisplay.getUserId();
         long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
@@ -220,32 +220,35 @@ public class CommentController {
         String customId = CustomUtil.strNull(params.get("customId"), "");
         
         /* 다른 게시글의 boardSeq를 groupBoardSeq로 등록할 경우 해당 게시글의 코멘트로 작성됨. */
-        long groupBoardSeq = Long.parseLong(gBoardSeq);
+//        long groupBoardSeq = Long.parseLong(gBoardSeq);
         boolean popupYn = false;
         
         /* File 저장 */
         try{
             /* 전달받은 데이터 저장 */
             /* TODO groupBoardSeq값을 통해 특정 게시글에 코멘트로 등록 */
-            params.put("groupId", boardGroupId);
-            params.put("divCd", divCd);
-            params.put("userId", themeDisplay.getUserId());
-            params.put("locale", CustomUtil.stringToLocale(CustomUtil.strNull(params.get("select_languageId"))));
-            params.put("allNoticeYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("allNoticeYn"), "0")));
-            params.put("popupYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("popupYn"), "0")));
-            params.put("popupStartDt", CustomUtil.strNull(params.get("popupStartDt")));
-            params.put("popupEndDt", CustomUtil.strNull(params.get("popupEndDt")));
-            params.put("groupBoardSeq", groupBoardSeq);
-            params.put("groupBoardTurn", "0");
-            params.put("replyDepth", 0);
-            params.put("title", comment);
-            params.put("content", comment);     // 코멘트 내용
-            params.put("customId", customId);
-            
-            Board brd = BoardLocalServiceUtil.addBoard(params);
-            
-            String preFix = customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
-            EdisonFileUtil.insertEdisonFile(request, upload, userId, boardGroupId, preFix, CustomUtil.strNull(String.valueOf(brd.getBoardSeq())), "addfile", divSort);
+        	for(String groupBoardSeq : gBoardSeq){
+        		
+        		params.put("groupId", boardGroupId);
+        		params.put("divCd", divCd);
+        		params.put("userId", themeDisplay.getUserId());
+        		params.put("locale", CustomUtil.stringToLocale(CustomUtil.strNull(params.get("select_languageId"))));
+        		params.put("allNoticeYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("allNoticeYn"), "0")));
+        		params.put("popupYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("popupYn"), "0")));
+        		params.put("popupStartDt", CustomUtil.strNull(params.get("popupStartDt")));
+        		params.put("popupEndDt", CustomUtil.strNull(params.get("popupEndDt")));
+        		params.put("groupBoardSeq", Long.parseLong(groupBoardSeq));
+        		params.put("groupBoardTurn", "0");
+        		params.put("replyDepth", 0);
+        		params.put("title", comment);
+        		params.put("content", comment);     // 코멘트 내용
+        		params.put("customId", customId);
+        		
+        		Board brd = BoardLocalServiceUtil.addBoard(params);
+        		
+        		String preFix = customId.equals("")?"":"_"+customId.replaceAll("\\D", "");
+        		EdisonFileUtil.insertEdisonFile(request, upload, userId, boardGroupId, preFix, CustomUtil.strNull(String.valueOf(brd.getBoardSeq())), "addfile", divSort);
+        	}
             
             //JSON
             JSONObject jsonObj = new JSONObject();
@@ -467,7 +470,7 @@ public class CommentController {
     }   
     
     /* 타임라인 추가 */
-    @ResourceMapping(value="writeTimeLineAboutSharing")
+    @ResourceMapping(value="writeTimeLineAboutShare")
     public void writeTimeLineAboutSharing(ResourceRequest request, ResourceResponse response){
     	try{
     		Map<String, Object> paramsMap = RequestUtil.getParameterMap(request);
@@ -476,7 +479,13 @@ public class CommentController {
     		SimpleDateFormat currentTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		String thisTime = currentTimeFormat.format(new Date(currentTime));
     		
-    		String groupBoardSeq = CustomUtil.strNull(paramsMap.get("groupBoardSeq"), "0");
+    		String groupBoardSeq = "";
+    		if(paramsMap.get("groupBoardSeq") instanceof String[]){
+    			groupBoardSeq = StringUtil.merge((String[]) paramsMap.get("groupBoardSeq"), ",");
+    		}else{
+    			groupBoardSeq = paramsMap.get("groupBoardSeq").toString();
+    		}
+    		
     		String comment = "[ " + thisTime + " ] " + CustomUtil.strNull(paramsMap.get("comment"), "");
     		
     		JSONObject jsonData = new JSONObject();

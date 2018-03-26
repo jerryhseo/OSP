@@ -439,7 +439,7 @@ public class DashboardController {
 	
 	@ResourceMapping(value="addProjectShareJob")
 	public void addProjectShareJob(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "jobUuid", required = true) String jobUuid) throws IOException{
+			@RequestParam(value = "jobUuid", required = true) String jobUuid) throws IOException, SystemException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		Map param = RequestUtil.getParameterMap(request);
@@ -448,12 +448,25 @@ public class DashboardController {
 		if(param.get("customIds[]") instanceof String[]){
 			customIds = StringUtil.merge((String[]) param.get("customIds[]"), ",");
 		}else{
-			customIds = param.get("customIds[]").toString();
+			customIds = CustomUtil.strNull(param.get("customIds[]"), "0");
 		}
-
+		
 		try{
+			List<SimulationShare> simulationShareList = SimulationShareLocalServiceUtil.findListByJobUuid(jobUuid);
+			
 			long classId = ClassNameLocalServiceUtil.getClassNameId(SimulationProject.class);
 			SimulationShareLocalServiceUtil.removeAndCreateByJobUUids(jobUuid, classId, customIds);
+			
+			// 2018.03.26, 공유 취소(또는 삭제)를 위한 SimulationJob 데이터 전달
+			// customIds == 0 --> Delete simulationJob
+			if(customIds.equals("0")){
+				JsonObject jsonObj = new JsonObject();
+				jsonObj.add("removeJobList", new Gson().toJsonTree(simulationShareList, new TypeToken<List<SimulationShare>>() {}.getType()));
+				
+				response.setContentType("application/json; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.write(jsonObj.toString());
+			}
 		}catch(Exception e){
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 			e.printStackTrace();
@@ -478,8 +491,6 @@ public class DashboardController {
 			e.printStackTrace();
 		}
 	}
-			
-	
 	
 	
 	private void fileDownload(ResourceResponse response, long fileEntryId) throws Exception{

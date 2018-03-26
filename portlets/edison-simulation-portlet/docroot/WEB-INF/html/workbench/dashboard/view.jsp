@@ -57,6 +57,8 @@ var <portlet:namespace/>jqPortletBoundaryId;
 var <portlet:namespace/>scienceAppId;
 var <portlet:namespace/>refreshJobLogTimer;
 var <portlet:namespace/>workSimulationJobId;
+var <portlet:namespace/>scienceAppNameAndVerstion="";		// 2018.03.26, 현재 실행중인 ScienceApp의 이름과 버전
+var <portlet:namespace/>deleteSimulationJobTitle="";			// 2018.03.26, SimulationJob 삭제 시 해당 데이터의 이름
 
 
 var <portlet:namespace/>prevStatus = (function(){
@@ -138,6 +140,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>scienceAppId = e.data.scienceApp.id();
+		<portlet:namespace/>scienceAppNameAndVerstion = e.data.scienceApp.name() + " " + e.data.scienceApp.version();
 		<portlet:namespace/>drawAppInfomation(e.data.scienceApp);
 	}
 });
@@ -690,6 +693,7 @@ function <portlet:namespace/>deleteSimulationJob(panelDataType, that, event){
 		buttons: {
 			confirm: function () {
 				<portlet:namespace/>closePanel();
+				<portlet:namespace/>deleteSimulationJobTitle = <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._jobTitle
 				var myId = '<%=portletDisplay.getId()%>';
 				var data = {
 						simulationUuid : <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._simulationUuid,
@@ -721,6 +725,8 @@ function <portlet:namespace/>shareSimulationJob(panelDataType, that, event){
 	$saveButton.attr("onclick","");
 	
 	var jobUuid = <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._jobUuid;
+	var jobTitle = <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._jobTitle;
+	
 	var searchForm = {
 		<portlet:namespace/>simulationUuid : <portlet:namespace/>PANEL_DATA[panelDataType].form.simulation._simulationUuid,
 		<portlet:namespace/>jobUuid : jobUuid
@@ -756,8 +762,9 @@ function <portlet:namespace/>shareSimulationJob(panelDataType, that, event){
 					}
 				}
 				
-				$saveButton.attr("onclick","<portlet:namespace/>shareProjectByjobUuid('"+jobUuid+"')");
+				$saveButton.attr("onclick","<portlet:namespace/>shareProjectByjobUuid('"+jobUuid+"','"+jobTitle+"')");
 				$saveButton.css("display","block");
+				
 			}else{
 				$tr = $("<tr></tr>").appendTo($shareAreaTbody);
 				$("<td></td>").addClass("text-center").html(Liferay.Language.get('edison-search-no-result')).appendTo($tr)
@@ -775,7 +782,7 @@ function <portlet:namespace/>shareSimulationJob(panelDataType, that, event){
 	});
 }
 
-function <portlet:namespace/>shareProjectByjobUuid(jobUuid){
+function <portlet:namespace/>shareProjectByjobUuid(jobUuid, jobTitle){
 	var modal = $("#"+<portlet:namespace/>parentNamespace+"share-modal");
 	var shareArea = modal.find("#"+<portlet:namespace/>parentNamespace+"share-select-info");
 	
@@ -788,7 +795,6 @@ function <portlet:namespace/>shareProjectByjobUuid(jobUuid){
 		customIds.push(po.value);
 	});
 	
-	
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=addProjectShareJobURL%>",
@@ -799,6 +805,7 @@ function <portlet:namespace/>shareProjectByjobUuid(jobUuid){
 		},
 		success: function(result) {
 			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+			<portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, "add");
 		},error:function(jqXHR, textStatus, errorThrown){
 			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 		}
@@ -814,6 +821,7 @@ function <portlet:namespace/>removeProjectShare(uuid,removeShareType){
 		jobUuid = uuid;
 	}
 	
+	
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=removeProjectShareURL%>",
@@ -823,14 +831,57 @@ function <portlet:namespace/>removeProjectShare(uuid,removeShareType){
 			"<portlet:namespace/>jobUuid": jobUuid
 		},
 		success: function(result) {
+			var removeJobList = result.removeJobList;
+			var jobTitle = <portlet:namespace/>deleteSimulationJobTitle;		// 삭제된 SimulationJob의 Title
+			var customIds = new Array();
 			
+			for(var i=0; i<removeJobList.length; i++){
+				// 2018.03.26, simulationJob이 공유되었던 프로젝트의 Id 추출 
+				customIds.push(removeJobList[i]._customId);
+			}
+			<portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, "delete");
 		},error:function(jqXHR, textStatus, errorThrown){
 			
 		}
 	});
 }
 
-
+/* 시뮬레이션 공유 시간, 정보 - 타임라인 생성 */
+function <portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, writeType){
+	var shareComment = "";
+	
+	if(writeType == "add"){
+		shareComment = "<liferay-ui:message key='edison-share-simulation-success-message'/>";
+	} else if (writeType == "delete"){
+		shareComment = "<liferay-ui:message key='edison-simulation-execute-title'/><liferay-ui:message key='edison-share-cancel-message'/>";
+	}
+	
+	var commentMessage = shareComment+"</br>" +
+						 "<liferay-ui:message key='edison-search-science-app'/> : "+ <portlet:namespace/>scienceAppNameAndVerstion +"</br>" +
+						 "<liferay-ui:message key='edison-simulation-execute-job-create-list-job-name'/> : "+jobTitle+"</br>";
+	
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createResourceURL();
+		portletURL.setPortletId("edisoncomment_WAR_edisonboard2016portlet");
+		portletURL.setResourceId("writeTimeLineAboutShare");
+		portletURL.setParameter("groupBoardSeq", customIds);		// projectId
+		portletURL.setParameter("comment", commentMessage);
+		
+		jQuery.ajax({
+			type: "POST",
+			url: portletURL,
+			async : false,
+			dataType: 'json',
+			success: function(result) {
+				// 2018.03.26, 공유 내용 작성 후 삭제된 simulationJob의 Title은 공백 처리
+				// 이미 삭제된 데이터이기 떄문에 Timeline 작성 목적 외 필요 없음
+				<portlet:namespace/>deleteSimulationJobTitle = "";
+			},error:function(jqXHR, textStatus, errorThrown){
+				alert("<liferay-ui:message key='edison-share-timeline-failed-message'/>");
+			}
+		});
+	});
+}
 
 
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
