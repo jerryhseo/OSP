@@ -137,12 +137,13 @@ function drawNglViewer(inputData, serveResourceURL){
 		success : function(data){
 			console.log("[NGLViewer] file object : ", data);
 			result = data;
+			stage.loadFile(result, {defaultRepresentation: true});
 		},
 		error : function(data, e){
 			console.log("[NGLViewer] error : ", e);
 		}
 	});
-	stage.loadFile(result, {defaultRepresentation: true});
+	
 }
 
 $(window).resize(function(e){
