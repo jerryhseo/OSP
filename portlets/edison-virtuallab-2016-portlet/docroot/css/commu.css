@@ -81,13 +81,18 @@
 .connav ul li:first-child{ color:#000; font-weight:600;}
 
 .boxlist{ }
-.boxlist ul{margin:0; padding:0; width:447px; height:118px; float:left; border-radius:5px; margin-top:15px; padding-right:7px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); }
+.boxlist ul{margin:0; padding:0; width:447px; height:118px; float:left; border-radius:5px; margin-top:15px; padding-right:7px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); position: relative; }
 .boxlist ul li{ line-height:1.3em; }
 .boxlist ul li a:link{color:#647f8d;}
 .boxlist ul li a:hover{ text-decoration:underline;}
 .boxlist ul li.tit{ font-size:19px; color:#0084ad; line-height:2.0em; padding-top:10px;}
 .boxlist ul li.tit a:link{color:#0084ad;}
 .boxlist ul li.tit a:hover{text-decoration:underline;}
+.boxlist ul li.box{
+	position: absolute;
+	right: 1px;
+	top: 1px;
+}
 
 .boxlist ul li img{ float:left; margin:10px 20px 10px 12px;}
 .boxlist ul.bright{float:right; margin-right:0;}
@@ -124,3 +129,12 @@
 .rightsearch input{width:264px;}
 
 
+/*교육추가, 2018.03.20*/
+.cfdbox{background-color:#ed1c24; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.nanobox{background-color:#bcd630; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.chembox{background-color:#f0cc00; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.csdbox{background-color:#00a0e0; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.cmedbox{background-color:#12a89d; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.designbox{background-color:#662d91; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.uebox{background-color:#00a0e0; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
+.cembox{background-color:#2a5390; font-size:12px !important; color:#fff !important; font-weight:600; border-radius:3px; text-align:center; padding:5px; line-height:0.7em !important; height:18px; margin: 2px 2px 2px 0; border:solid 0px #eee;cursor:pointer !important; font-family:'Nanum Gothic';}
