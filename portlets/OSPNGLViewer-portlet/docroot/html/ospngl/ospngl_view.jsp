@@ -166,9 +166,14 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 
 function <portlet:namespace/>openFileExplorer(){
 	AUI().use('liferay-portlet-url', function(A){
+		console.log('[NGLViewer] test open file explorer');
 		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
+			console.log('[NGLViewer] test open file explorer : open exist file explorer');
+		
 			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
 		}else{
+			console.log('[NGLViewer] test open file explorer : create file explorer');	
+		
 			var inputData;
 			if(	!$.isEmptyObject(<portlet:namespace/>initData) && (
 				<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE ||
@@ -313,6 +318,42 @@ function <portlet:namespace/>loadNGLFile( inputData ){
 	default:
 		alert('Un supported yet.'+inputData.type());
 	}
+}
+
+
+
+function <portlet:namespace/>getFirstFileName( inputData ){
+	console.log('[NGLViewer]get First File Name : ', inputData );
+
+	var data = {
+		<portlet:namespace/>command: 'GET_FIRST_FILE_NAME',
+		<portlet:namespace/>pathType: inputData.type_,
+		<portlet:namespace/>repositoryType: inputData.repositoryType_,
+		<portlet:namespace/>parentPath: inputData.parent_,
+		<portlet:namespace/>fileName: inputData.name_
+	};
+    console.log("[NGLViewer] laod get first file test : ", data);
+    
+	$.ajax({
+		url: '<%= serveResourceURL.toString()%>',
+		type: 'POST',
+		data  : data,
+		dataType : 'json',
+		success: function(data) {
+			console.log("[NGLViewer] get result data ", data);
+			inputData.name( data.fileName );
+			inputData.type( OSP.Enumeration.PathType.FILE );
+			<portlet:namespace/>drawJSMol( inputData );
+			console.log("[NGLViewer] Get First File Data : ", inputData);
+		},
+		error:function(data,e){
+			console.log('[NGLViewer]AJAX ERROR1-->', data);
+			console.log('[NGLViewer]AJAX ERROR2-->', e);
+		},
+		complete: function( jqXHR, textStatus ){
+			console.log('[NGLViewer]AJAX complete ', jqXHR);
+		}
+	});
 }
 
 function <portlet:namespace/>drawNGL( inputData ){
