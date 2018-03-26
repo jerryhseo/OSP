@@ -84,9 +84,9 @@ var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
-if(<portlet:namespace/>eventEnable){
+if(<portlet:namespace/>eventEnable === false){
 	<portlet:namespace/>initialize( JSON.parse('<%=inputData%>') );
-	<portlet:namespace/><portlet:namespace/>loadNGLFile( inputData );
+	<portlet:namespace/>loadNGLFile( <portlet:namespace/>initData.clone() );
 	<portlet:namespace/>initializeFileExplorer();
 }
 
@@ -123,13 +123,6 @@ function <portlet:namespace/>iframeReady(){
 	}
 }
 
-
-if( <portlet:namespace/>eventEnable === false ){
-	<portlet:namespace/>initialize( JSON.parse('<%=inputData%>') );
-	<portlet:namespace/>loadNGLFile( <portlet:namespace/>initData );
-	<portlet:namespace/>initializeFileExplorer();
-}
-
 $("#<portlet:namespace/>fileExplorer").dialog({
 	autoOpen: false,
 	resizable: false,
@@ -149,26 +142,13 @@ $("#<portlet:namespace/>closeDialog").click(function() {
 
 /***********************************************************************
  * Menu click events and binding functions 
- ***********************************************************************/
-$('#<portlet:namespace/>openLocal').click(function(){
-    $('#<portlet:namespace/>selectFile').click();
-});
-
-
-//$("#menubar").children().first().find(".options");
-console.log("[NGLViewer] test ngl viewer : ", $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
-console.log("[NGLViewer] test ngl viewer : " + $('#<portlet:namespace/>canvas').contents().find("#openServerMenu"));
-
-
-
-
-
+ ***********************************************************************
 
 $('#<portlet:namespace/>download').click(function(){
 	console.log("[NGLViewer] download Request.");
 	<portlet:namespace/>downloadCurrentFile();
 });
-
+********/
 $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 	e.preventDefault();
 	var eventData = {
@@ -182,8 +162,6 @@ $("#<portlet:namespace/>file-explorer-ok").click(function(e){
 $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
-
-
 
 
 function <portlet:namespace/>openFileExplorer(){
@@ -428,59 +406,49 @@ function <portlet:namespace/>setTitle( title ){
 
 
 function <portlet:namespace/>initialize( inputData ){
+	inputData.parent_ = OSP.Util.removeEndSlashes(inputData.parent_);
+	inputData.name_ = OSP.Util.removeEndSlashes(inputData.name_ );
+	
 	if( $.isEmptyObject( inputData ) ){
-		<portlet:namespace/>baseDir = new OSP.InputData();
-		<portlet:namespace/>baseDir.parent( '');
-		<portlet:namespace/>baseDir.name('');
-		<portlet:namespace/>baseDir.type(OSP.Enumeration.PathType.FOLDER);
-		<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-		<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+		return;
 	}
 	else{
-		<portlet:namespace/>baseDir = new OSP.InputData(inputData);
+		console.log('[JSMOL] initialize input data', inputData);
+	
+		<portlet:namespace/>initData = new OSP.InputData(inputData);
 		
-		if( !<portlet:namespace/>baseDir.repositoryType() ){
-			<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		if( !<portlet:namespace/>initData.repositoryType() ){
+			<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_JOBS.toString()%>');
 		}
 	
-		switch( <portlet:namespace/>baseDir.type() ){
+		switch( <portlet:namespace/>initData.type() ){
 			case OSP.Enumeration.PathType.FILE:
-				var subPath = OSP.Util.convertToPath( <portlet:namespace/>baseDir.name() );
+				var subPath = OSP.Util.convertToPath( <portlet:namespace/>initData.name() );
 				
-				<portlet:namespace/>baseDir.type( OSP.Enumeration.PathType.FOLDER );
-				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), subPath.parent() ) );
-				<portlet:namespace/>baseDir.name( '' );
-				
-				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
-				<portlet:namespace/>currentPath.type(OSP.Enumeration.PathType.FILE);
-				<portlet:namespace/>currentPath.name(subPath.name());
+				<portlet:namespace/>initData.parent( OSP.Util.mergePath( <portlet:namespace/>initData.parent(), subPath.parent() ) );
+				<portlet:namespace/>initData.parent( OSP.Util.mergePath( <portlet:namespace/>initData.parent(), subPath.parent() ) );
+				<portlet:namespace/>initData.name( subPath.name() );
 				break;
 			case OSP.Enumeration.PathType.FOLDER:
-				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), <portlet:namespace/>baseDir.name() ) );
-				<portlet:namespace/>baseDir.name( '' );
-				
-				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				<portlet:namespace/>initData.parent( OSP.Util.mergePath( <portlet:namespace/>initData.parent(), <portlet:namespace/>initData.name() ) );
+				<portlet:namespace/>initData.name( '' );
 				break;
 			case OSP.Enumeration.PathType.EXT:
-				var subPath = OSP.Util.convertToPath( <portlet:namespace/>baseDir.name() );
-				<portlet:namespace/>baseDir.parent( OSP.Util.mergePath( <portlet:namespace/>baseDir.parent(), subPath.parent() ) );
-				<portlet:namespace/>baseDir.name( subPath.name() );
-				
-				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				var subPath = OSP.Util.convertToPath( <portlet:namespace/>initData.name() );
+				<portlet:namespace/>initData.parent( OSP.Util.mergePath( <portlet:namespace/>initData.parent(), subPath.parent() ) );
+				<portlet:namespace/>initData.name( subPath.name() );
 				break;
 			case OSP.Enumeration.PathType.DLENTRY_ID:
-				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+			case OSP.Enumeration.PathType.FILE_CONTENT:
+			case OSP.Enumeration.PathType.URL:
 				break;
 			default:
-				alert('OSPFileExplorer: Un-expected type: ' + <portlet:namespace/>baseDir.type());
-				<portlet:namespace/>baseDir = new OSP.InputData();
-				<portlet:namespace/>baseDir.parent( '');
-				<portlet:namespace/>baseDir.name('');
-				<portlet:namespace/>baseDir.type(OSP.Enumeration.PathType.FOLDER);
-				<portlet:namespace/>baseDir.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
-				
-
-				<portlet:namespace/>currentPath = <portlet:namespace/>baseDir.clone();
+				console.log('OSPTextViewer: Un-expected type: ' + <portlet:namespace/>initData.type());
+				<portlet:namespace/>initData = new OSP.InputData();
+				<portlet:namespace/>initData.parent( '' );
+				<portlet:namespace/>initData.name( '' );
+				<portlet:namespace/>initData.type( 'folder' );
+				<portlet:namespace/>initData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
 				break;
 		}
 	}
