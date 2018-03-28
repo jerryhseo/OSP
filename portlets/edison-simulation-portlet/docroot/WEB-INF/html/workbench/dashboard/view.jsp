@@ -971,8 +971,8 @@ function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
 			
 			if(result.zipFileId!=""){
 				modal.find(".modal-footer").css("display","block");
-				modal.find(".modal-footer > "+<portlet:namespace/>parentNamespace+"all-down-btn")
-					 .attr("onclick","<portlet:namespace/>iceBreakerFileDow('"+result.zipFileId+"')");
+				modal.find(".modal-footer #"+<portlet:namespace/>parentNamespace+"all-down-btn")
+					 .attr("onclick","<portlet:namespace/>iceBreakerFileDown('"+result.zipFileId+"')");
 			}else{
 				modal.find(".modal-footer").css("display","none");
 			}
