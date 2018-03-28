@@ -41,6 +41,7 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 	
 	#wrap{
 		padding: 0 30px;
+		overflow-y:hidden;
 		
 		.portlet-column{
 			padding : 0px;
