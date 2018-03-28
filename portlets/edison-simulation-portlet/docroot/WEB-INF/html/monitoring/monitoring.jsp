@@ -347,10 +347,11 @@
 				</c:choose>
 			</tbody>
 		</table>
-	</div>
-	<div class="paging">
-		<div style="width:100%;text-align: center;">
-			${paging}
+		
+		<div class="text-center">
+			<div>
+				${paging}
+			</div>
 		</div>
 	</div>
 	
