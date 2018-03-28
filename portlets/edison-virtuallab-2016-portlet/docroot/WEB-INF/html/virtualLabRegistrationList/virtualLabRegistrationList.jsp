@@ -191,10 +191,11 @@ function <portlet:namespace/>dataSearchList(pageNumber) {
 						  .appendTo($rowResult);
 						/* 삭제요청 취소 */
 						$("<td/>").addClass("center").css("text-align","center")
-						  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-lab-deleter-request-cancel' />")
-											   .addClass("btn btn-default")
-											   .attr("type", "button")
-											   .attr("onClick","<portlet:namespace/>deleteRequestCancel('"+ virtualLabRegisterList[i].virtualLabId +"')")
+						  .append($("<input/>").attr("value", "<liferay-ui:message key='edison-virtuallab-move' />")
+													   .addClass("btn btn-default")
+													   .attr("type", "button")
+													   .css("text-align","center")
+													   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabRegisterList[i].virtualLabId + "','" + virtualLabRegisterList[i].groupId + "')")
 						  )
 						  .appendTo($rowResult);
 						
