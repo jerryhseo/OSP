@@ -402,7 +402,7 @@ function <portlet:namespace/>onKeyDown() {
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-affiliation' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
 				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th>
-				<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-status' /></th>
+				<th align="center" scope="col" colspan="2"><liferay-ui:message key='edison-virtuallab-tablerow-status' /></th>
 			</tr>
 		</thead>
 		<tbody id="<portlet:namespace/>registrationListBody">
