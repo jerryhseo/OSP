@@ -44,6 +44,8 @@ import org.kisti.edison.content.model.GeneralContent;
 import org.kisti.edison.content.portlet.util.AdvancedFileUtil;
 import org.kisti.edison.content.service.ContentLocalServiceUtil;
 import org.kisti.edison.content.service.base.ContentLocalServiceBaseImpl;
+import org.kisti.edison.content.service.persistence.ContentFinderImpl;
+import org.kisti.edison.content.service.persistence.ContentFinderUtil;
 import org.kisti.edison.customauthmanager.service.UserGroupRoleCustomLocalServiceUtil;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
@@ -86,6 +88,7 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetLinkLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.util.ContentUtil;
 
 /**
  * The implementation of the content local service.
@@ -1434,5 +1437,10 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 			e.printStackTrace();
 		}
 
+	}
+	
+	
+	public List<Content> findByContentDiv(long contentDiv) throws SystemException{
+		return contentPersistence.findBycontentDiv(contentDiv);
 	}
 }

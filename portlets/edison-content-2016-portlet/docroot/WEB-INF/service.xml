@@ -29,6 +29,10 @@
 			<finder-column name="contentSeq" />
 		</finder>
 		
+		<finder name="contentDiv" return-type="Collection">
+			<finder-column name="contentDiv" />
+		</finder>
+		
         <!--   custom entity  -->
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 		
