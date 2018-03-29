@@ -157,7 +157,7 @@ if(areaScienceData){
 
 <div class="bottom searchViewForm">
   <div id="category-list" class="leftm"></div>
-  <div id="search-content" class="rightcon search-content-wrapper">
+  <div id="search-content" class="rightcon search-content-wrapper"  style="${isSingleCategory ? 'display:none;' : ''}">
     <div class="path connav">
       <ul>
         <li>Categories</li>
@@ -356,16 +356,20 @@ if(areaScienceData){
 
   function categoryCardClickHandler(e) {
     e.preventDefault();
-    var categoryData = getCategory($(this).attr("category-id"));
-    if(categoryData.type === "category") {
-      var categories = getSubCategories(categoryData.categoryId);
-      var ulFrag = getContentCategoryFragment(categories);
-      var jsTreeNode = getJsTreeNodeById(categoryData.categoryId);
-      drawContentCategory(ulFrag);
-      drawPaths(categoryData.id);
-      jsTreeNode["data"]["isParentCardClick"] = true;
-    }
-    selectJstreeNode(categoryData.categoryId);
+    selectCategory($(this).attr("category-id"));
+  }
+  
+  function selectCategory(categoryId){
+      var categoryData = getCategory(categoryId);
+      if(categoryData.type === "category") {
+        var categories = getSubCategories(categoryData.categoryId);
+        var ulFrag = getContentCategoryFragment(categories);
+        var jsTreeNode = getJsTreeNodeById(categoryData.categoryId);
+        drawContentCategory(ulFrag);
+        drawPaths(categoryData.id);
+        jsTreeNode["data"]["isParentCardClick"] = true;
+      }
+      selectJstreeNode(categoryData.categoryId);  
   }
   
   function categorySelectHandler(e, jstreeData){
@@ -399,6 +403,11 @@ if(areaScienceData){
       var parameterCategoryId = "${param.categoryId}"; 
       if(parameterCategoryId){
         selectJstreeNode(parameterCategoryId);
+      }else{
+        if(${isSingleCategory}){
+            selectCategory(${singleCategoryId});
+            $("#search-content").show();
+        }
       }
     }).bind("select_node.jstree", function(event, data) {
       var nodeId = data.node.id;

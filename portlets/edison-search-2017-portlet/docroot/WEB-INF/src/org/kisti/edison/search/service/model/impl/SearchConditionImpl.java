@@ -56,7 +56,7 @@ public class SearchConditionImpl extends SearchConditionBaseImpl{
   
   public SearchConditionImpl(){
     setBlockSize(10);
-    setListSize(5);
+    setListSize(10);
     setCurrentPage(1);
   }
   private Locale locale;

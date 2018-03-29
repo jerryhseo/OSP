@@ -263,7 +263,7 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* �ъ씠��遺꾩빞 移댄뀒怨좊━ 議고쉶
+	* 사이트 분야 카테고리 조회
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getLv1Categories(
@@ -272,7 +272,7 @@ public interface SearchLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* 移댄뀒怨좊━ JSTree �곗씠��議고쉶
+	* 카테고리 JSTree 데이터 조회
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getCategoriesJsonString(long companyGroupId,

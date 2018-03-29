@@ -72,10 +72,14 @@ public class SearchController{
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         log.debug("searchCondition : " + searchCondition.toString());
-        
+        model.addAttribute("isSingleCategory", false);
         model.addAttribute("lv1Categories", lv1Categories);
         model.addAttribute("categoriesJsonString",
             SearchLocalServiceUtil.getCategoriesJsonString(companyGroupId, groupId, locale));
+        if(lv1Categories != null && lv1Categories.size() == 1){
+            model.addAttribute("isSingleCategory", true);
+            model.addAttribute("singleCategoryId", lv1Categories.get(0).get("categoryId"));
+        }
         return "search/view";
     }
     
@@ -129,6 +133,7 @@ public class SearchController{
         
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
+        searchCondition.setListSize(5);
         try{
             model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(request, response, searchCondition));
         }catch (Exception e){
