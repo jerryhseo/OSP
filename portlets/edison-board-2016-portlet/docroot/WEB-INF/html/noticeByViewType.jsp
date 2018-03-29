@@ -190,7 +190,7 @@
 					</div>
 				</div>
 			</c:forEach>
-	</c:if>	
+	</c:if>
 
 
 <%--### Default Board List Start ######################################################################################################################  --%>	
@@ -269,6 +269,7 @@
 
 	$(document).ready(function(){
 		getBoardList<portlet:namespace/>('${currentPage}');
+		<portlet:namespace/>popupCreate("${popState}");
 		
 		if('${siteName}' != 'EDISON'){
 			$(".newsbtnicon").css("padding-top","16px").css("padding-bottom","20px");
@@ -447,10 +448,6 @@
 		}
 	}
 	
-	//####################################################################################
-	// Document Ready Define #############################################################
-	//####################################################################################		
-
 	getBoardList<portlet:namespace/>('${currentPage}');
 	
 	function historyBack<portlet:namespace/>(){
@@ -465,12 +462,8 @@
 	}
 	
 	
-	//####################################################################################
-	// popup
-	//####################################################################################
-	
-	function popupCreate(state){
-		if(state="YES"){
+	function <portlet:namespace/>popupCreate(state){
+		if(state=="YES" || state=="true"){
 			$(".smallpupboxBoard").each(function(index){
 				$(this).dialog({
 					resizable: false,
@@ -479,8 +472,8 @@
 					width:606,
 					height:'auto',
 					position: [100*(index+1), 225 + (index*10)],
-				    show: {effect:'fade', speed: 800}, 
-			        hide: {effect:'fade', speed: 800}
+					show: {effect:'fade', speed: 800}, 
+					hide: {effect:'fade', speed: 800}
 				}).dialog("widget").find(".ui-dialog-titlebar").remove();
 				
 			});
@@ -501,10 +494,7 @@
 		todayDate.setDate(todayDate.getDate() + 1 );
 		document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"   
 	}
-	
-	popupCreate("${popState}");
+		
 </script>
 
-
-<%--### Default Board List End ######################################################################################################################  --%>
 
