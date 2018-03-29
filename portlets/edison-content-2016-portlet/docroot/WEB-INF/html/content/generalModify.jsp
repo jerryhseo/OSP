@@ -286,15 +286,19 @@
 				</tr>
 				
 				
-				<%for(Locale aLocale : locales){
-					String languageId = LocaleUtil.toLanguageId(aLocale);
-					String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
-					String manualId = "contentFileNm_manual_"+languageId;
-					String manualTitle = "manualTitle_"+languageId;
+				<%
+					int localeIndex = 0;
+					for(Locale aLocale : locales){
+						String languageId = LocaleUtil.toLanguageId(aLocale);
+						String languageNm =aLocale.getDisplayName(themeDisplay.getLocale());
+						String manualId = "contentFileNm_manual_"+languageId;
+						String manualTitle = "manualTitle_"+languageId;
 				%>
 					<tr class="manualContentFile">
+						<%if(localeIndex == 0){ %>
+						<th class="manualFileName" rowspan="2"><liferay-ui:message key="edison-content-manual"/></th>
+						<%} %>
 						<td colspan="3">
-							
 							<%=languageNm%>&nbsp;&nbsp;
 							<c:choose>
 							<c:when test="${mode eq 'add' }">
@@ -324,7 +328,10 @@
 							
 						</td>
 					</tr>
-				<%} %>
+				<%
+					localeIndex++;
+					} 
+				%>
 					
 				<tr>
 					<th><liferay-ui:message key="edison-content-main-image"/><span class="requiredField"> *</span></th>
