@@ -374,7 +374,8 @@ function <portlet:namespace/>fileDownload(manualId){
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
     var URL = "<%=workbenchURL%>";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-    location.href= URL;
+    window.open(URL);
+    //location.href= URL;
 }
 
 </script>
