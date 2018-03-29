@@ -17,28 +17,28 @@ This file allows you to override and define new Velocity variables.
 	
 	#set($singleValue = $paramUtil.getInteger($request,"p_p_id",0))
 	#if($singleValue=="58"||$singleValue=="1001"||$singleValue=="1004")
-		#set ($content_class ="content-sub")
+		#set ($content_class ="content-sub container-fluid")
 		#set ($show_breadcrumbs = false)
 	#end
 	
 	#set($ticketKey = $paramUtil.getString($request,"ticketKey",""))
 	#if($ticketKey!="")
-		#set ($content_class ="content-sub")
+		#set ($content_class ="content-sub container-fluid")
 		#set ($show_breadcrumbs = true)
 	#end
 #else
-	#set ($content_class ="content-sub")
+	#set ($content_class ="content-sub container-fluid")
 	#set ($show_breadcrumbs = true)
 #end
 
 #if ( $is_signed_in )
 	#if(!$themeDisplay.getUser().isEmailAddressVerificationComplete())
-		#set ($content_class ="content-sub")
+		#set ($content_class ="content-sub container-fluid")
 		#set ($show_breadcrumbs = false)
 	#end
 	
 	#if($themeDisplay.getUser().isPasswordReset())
-		#set ($content_class ="content-sub")
+		#set ($content_class ="content-sub container-fluid")
 		#set ($show_breadcrumbs = false)
 	#end
 		
