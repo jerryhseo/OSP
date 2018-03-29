@@ -423,6 +423,258 @@ public class ContentUtil {
 	}
 
 	/**
+	* Returns all the contents where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @return the matching contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> findBycontentDiv(
+		long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findBycontentDiv(contentDiv);
+	}
+
+	/**
+	* Returns a range of all the contents where contentDiv = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.content.model.impl.ContentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param contentDiv the content div
+	* @param start the lower bound of the range of contents
+	* @param end the upper bound of the range of contents (not inclusive)
+	* @return the range of matching contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> findBycontentDiv(
+		long contentDiv, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findBycontentDiv(contentDiv, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the contents where contentDiv = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.content.model.impl.ContentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param contentDiv the content div
+	* @param start the lower bound of the range of contents
+	* @param end the upper bound of the range of contents (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> findBycontentDiv(
+		long contentDiv, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findBycontentDiv(contentDiv, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first content in the ordered set where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching content
+	* @throws org.kisti.edison.content.NoSuchContentException if a matching content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content findBycontentDiv_First(
+		long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.content.NoSuchContentException {
+		return getPersistence()
+				   .findBycontentDiv_First(contentDiv, orderByComparator);
+	}
+
+	/**
+	* Returns the first content in the ordered set where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching content, or <code>null</code> if a matching content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content fetchBycontentDiv_First(
+		long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBycontentDiv_First(contentDiv, orderByComparator);
+	}
+
+	/**
+	* Returns the last content in the ordered set where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching content
+	* @throws org.kisti.edison.content.NoSuchContentException if a matching content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content findBycontentDiv_Last(
+		long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.content.NoSuchContentException {
+		return getPersistence()
+				   .findBycontentDiv_Last(contentDiv, orderByComparator);
+	}
+
+	/**
+	* Returns the last content in the ordered set where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching content, or <code>null</code> if a matching content could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content fetchBycontentDiv_Last(
+		long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchBycontentDiv_Last(contentDiv, orderByComparator);
+	}
+
+	/**
+	* Returns the contents before and after the current content in the ordered set where contentDiv = &#63;.
+	*
+	* @param contentSeq the primary key of the current content
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next content
+	* @throws org.kisti.edison.content.NoSuchContentException if a content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content[] findBycontentDiv_PrevAndNext(
+		long contentSeq, long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.content.NoSuchContentException {
+		return getPersistence()
+				   .findBycontentDiv_PrevAndNext(contentSeq, contentDiv,
+			orderByComparator);
+	}
+
+	/**
+	* Returns all the contents that the user has permission to view where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @return the matching contents that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> filterFindBycontentDiv(
+		long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterFindBycontentDiv(contentDiv);
+	}
+
+	/**
+	* Returns a range of all the contents that the user has permission to view where contentDiv = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.content.model.impl.ContentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param contentDiv the content div
+	* @param start the lower bound of the range of contents
+	* @param end the upper bound of the range of contents (not inclusive)
+	* @return the range of matching contents that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> filterFindBycontentDiv(
+		long contentDiv, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterFindBycontentDiv(contentDiv, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the contents that the user has permissions to view where contentDiv = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.content.model.impl.ContentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param contentDiv the content div
+	* @param start the lower bound of the range of contents
+	* @param end the upper bound of the range of contents (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching contents that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.content.model.Content> filterFindBycontentDiv(
+		long contentDiv, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindBycontentDiv(contentDiv, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the contents before and after the current content in the ordered set of contents that the user has permission to view where contentDiv = &#63;.
+	*
+	* @param contentSeq the primary key of the current content
+	* @param contentDiv the content div
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next content
+	* @throws org.kisti.edison.content.NoSuchContentException if a content with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.content.model.Content[] filterFindBycontentDiv_PrevAndNext(
+		long contentSeq, long contentDiv,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.content.NoSuchContentException {
+		return getPersistence()
+				   .filterFindBycontentDiv_PrevAndNext(contentSeq, contentDiv,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the contents where contentDiv = &#63; from the database.
+	*
+	* @param contentDiv the content div
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeBycontentDiv(long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeBycontentDiv(contentDiv);
+	}
+
+	/**
+	* Returns the number of contents where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @return the number of matching contents
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countBycontentDiv(long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countBycontentDiv(contentDiv);
+	}
+
+	/**
+	* Returns the number of contents that the user has permission to view where contentDiv = &#63;.
+	*
+	* @param contentDiv the content div
+	* @return the number of matching contents that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountBycontentDiv(long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountBycontentDiv(contentDiv);
+	}
+
+	/**
 	* Caches the content in the entity cache if it is enabled.
 	*
 	* @param content the content

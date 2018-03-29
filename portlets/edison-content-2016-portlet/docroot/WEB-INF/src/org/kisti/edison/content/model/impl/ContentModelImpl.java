@@ -105,8 +105,9 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.kisti.edison.content.model.Content"),
 			true);
-	public static long CONTENTSEQ_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
+	public static long CONTENTDIV_COLUMN_BITMASK = 1L;
+	public static long CONTENTSEQ_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -384,7 +385,19 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 
 	@Override
 	public void setContentDiv(long contentDiv) {
+		_columnBitmask |= CONTENTDIV_COLUMN_BITMASK;
+
+		if (!_setOriginalContentDiv) {
+			_setOriginalContentDiv = true;
+
+			_originalContentDiv = _contentDiv;
+		}
+
 		_contentDiv = contentDiv;
+	}
+
+	public long getOriginalContentDiv() {
+		return _originalContentDiv;
 	}
 
 	@JSON
@@ -1036,6 +1049,10 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 
 		contentModelImpl._setOriginalContentSeq = false;
 
+		contentModelImpl._originalContentDiv = contentModelImpl._contentDiv;
+
+		contentModelImpl._setOriginalContentDiv = false;
+
 		contentModelImpl._columnBitmask = 0;
 	}
 
@@ -1284,6 +1301,8 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 	private long _originalContentSeq;
 	private boolean _setOriginalContentSeq;
 	private long _contentDiv;
+	private long _originalContentDiv;
+	private boolean _setOriginalContentDiv;
 	private String _title;
 	private String _titleCurrentLanguageId;
 	private String _resume;

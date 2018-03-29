@@ -1,6 +1,7 @@
 create index IX_315F4C3F on EDMED_AdvancedContent (groupId);
 create index IX_87E8CCBE on EDMED_AdvancedContent (groupId, serviceLanguage);
 
+create index IX_943B9719 on EDMED_Content (contentDiv);
 create index IX_950D1367 on EDMED_Content (contentSeq);
 create index IX_6E414C47 on EDMED_Content (uuid_);
 
