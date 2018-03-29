@@ -190,7 +190,7 @@
 			</c:choose>
 			
 			<c:if test="${redirectURL ne '' and redirectName ne ''}">
-				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="${redirectName}"/>
+				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-class-move' />"/>
 			</c:if>
 			<c:if test="${redirectURL ne '' and redirectName eq ''}">
 				<input class="btn btn-default" type="button" style="margin-left:5px;" onClick="historyBack<portlet:namespace/>()" value="<liferay-ui:message key='edison-virtuallab-move' />"/>
