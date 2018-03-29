@@ -262,6 +262,10 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		_methodName43 = "migrationAdvancedContentTable";
 
 		_methodParameterTypes43 = new String[] { "long", "long" };
+
+		_methodName44 = "findByContentDiv";
+
+		_methodParameterTypes44 = new String[] { "long" };
 	}
 
 	@Override
@@ -1753,6 +1757,35 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		}
 	}
 
+	@Override
+	public java.util.List<org.kisti.edison.content.model.Content> findByContentDiv(
+		long contentDiv)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName44,
+					_methodParameterTypes44, new Object[] { contentDiv });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<org.kisti.edison.content.model.Content>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -1840,4 +1873,6 @@ public class ContentLocalServiceClp implements ContentLocalService {
 	private String[] _methodParameterTypes42;
 	private String _methodName43;
 	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
 }

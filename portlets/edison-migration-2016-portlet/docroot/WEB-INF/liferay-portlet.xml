@@ -83,6 +83,12 @@
 		<css-class-wrapper>edison-migration-port-app-id container</css-class-wrapper>
 	</portlet>
 	
+	<portlet>
+		<portlet-name>edison-convertor-content-file-name</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-convertor-content-file-name container</css-class-wrapper>
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

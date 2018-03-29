@@ -342,4 +342,33 @@
 		</security-role-ref>
 	</portlet>
 	
+	
+	<portlet>
+		<portlet-name>edison-convertor-content-file-name</portlet-name>
+		<display-name>Edison Convertor Content File Name</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>classpath:org/kisti/edison/migration/portlet/contentfilename/edison-convertor-content-file-name.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<portlet-info>
+			<title>Edison Convertor Content File Name</title>
+			<short-title>Edison Convertor Content File Name</short-title>
+			<keywords>Edison Convertor Content File Name</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
 </portlet-app>
