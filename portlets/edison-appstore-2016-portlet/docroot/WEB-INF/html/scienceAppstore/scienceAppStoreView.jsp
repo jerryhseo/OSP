@@ -700,7 +700,8 @@ function <portlet:namespace/>goWorkbench(targetScienceAppId){
 		
 		portletURL.setParameter("redirectName", "My Project");
 		portletURL.setParameter("redirectURL", "${redirectURL}");
-		window.location.href = portletURL;
+		window.open(portletURL);
+		//window.location.href = portletURL;
 	});
 }
 
@@ -710,9 +711,8 @@ function <portlet:namespace/>goWorkbench(targetScienceAppId){
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
 	var URL = "<%=workbenchURL%>";
 	URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-	
- 	location.href= URL;
-    
+	window.open(URL);
+	//location.href= URL;
 }
 
 function <portlet:namespace/>moveScienceAppExecStatistice(solverName, groupId) {
