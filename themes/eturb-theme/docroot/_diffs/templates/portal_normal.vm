@@ -50,10 +50,11 @@
 				#end
 			</div>
 		</article>
-		<footer class="footerwrap">
-			#parse ("$full_templates_path/footer.vm")
-		</footer>
 	</div>
+	
+	<footer id="footer" role="contentinfo">
+		#parse ("$full_templates_path/footer.vm")
+	</footer>
 	
 	$theme.include($body_bottom_include)
 
