@@ -22,7 +22,6 @@
 <%@ include file="/html/portlet/login/init.jsp" %>
 <%
 String EdisonExpando_USER_UNIVERSITY = renderRequest.getAttribute("EdisonExpando_USER_UNIVERSITY")!=null?(String)renderRequest.getAttribute("EdisonExpando_USER_UNIVERSITY"):"";
-String EdisonExpando_USER_MAJOR = renderRequest.getAttribute("EdisonExpando_USER_MAJOR")!=null?(String)renderRequest.getAttribute("EdisonExpando_USER_MAJOR"):"";
 String EdisonExpando_USER_PROJECT_CATEGORY_ID = renderRequest.getAttribute("EdisonExpando_USER_PROJECT_CATEGORY_ID")!=null?(String)renderRequest.getAttribute("EdisonExpando_USER_PROJECT_CATEGORY_ID"):"";
 
 String saml_email = (String) renderRequest.getAttribute("saml_email");
@@ -337,10 +336,8 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
-                  <label for="major-field-input"><liferay-ui:message key="edison-create-account-field-title-major" /></label>
-                  <input type="text" name="major-field-input" id="major-field-input" class="form-control" size="30"/>
-                  <liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%= 0 %>" 
-                      editable="<%= true %>" label="<%= false %>" name="<%=EdisonExpando_USER_MAJOR%>" />
+                  <label for="<portlet:namespace/>major-field-input"><liferay-ui:message key="edison-create-account-field-title-major" /></label>
+                  <input type="text" name="<portlet:namespace/>major-field-input" id="<portlet:namespace/>major-field-input" class="form-control" size="30"/>
                 </div>
               </div>
             </div>
@@ -416,13 +413,6 @@ List<Group> siteGroups = ListUtil.sort(GroupLocalServiceUtil.getGroups(themeDisp
     $("input[name*=emailAddress]").css("max-width","none");
 	$("input[name*=universityField]").css("display","none");
 	$("input[name*=projectCategoryId]").css("display","none");
-	$("input[name*=majorField]").css("display","none");
-	
-	$(document).ready(function(){
-	    $("#major-field-input").change(function(){
-	        $("input[name*=majorField]").val($(this).val());
-	    });
-	});
 	
 	function cancle(){
 		location.href = "<%= PortalUtil.getHomeURL(request)%>";

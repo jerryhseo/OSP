@@ -69,6 +69,10 @@ public class EdisonUserLocalService extends UserLocalServiceWrapper {
 		if(!Validator.isBlank(eppn)){
 		    user.getExpandoBridge().setAttribute("eppn", eppn);
 		}
+		String majorField = CustomUtil.strNull(serviceContext.getAttribute("major-field-input"));
+		if(!Validator.isBlank(majorField)){
+		    user.getExpandoBridge().setAttribute("majorField", majorField);
+		}
 		
 		Group parentGroup = GroupLocalServiceUtil.getGroup(user.getCompanyId(), GroupConstants.GUEST);
 		List<Group> childGroups = GroupLocalServiceUtil.getGroups(user.getCompanyId(),parentGroup.getGroupId(),true);
