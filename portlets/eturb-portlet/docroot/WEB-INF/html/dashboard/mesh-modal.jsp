@@ -6,6 +6,12 @@
 </liferay-portlet:resourceURL>
 
 <style>
+#<portlet:namespace/>create-mesh-modal{
+	width: 1020px !important;
+	margin: 30px auto !important;
+	padding-left: 0px !important;
+	overflow-y : hidden !important;
+}
 #<portlet:namespace/>create-mesh-modal .btn-group {float: none; margin-left:10px; margin-bottom: 0px; z-index: auto;display: inline-block;}
 #<portlet:namespace/>create-mesh-modal .modal-body { max-height: none !important; }
 #<portlet:namespace/>create-mesh-modal .required-message::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -26,7 +32,7 @@
         <aui:input type="hidden" name="mesh-type" value="<%=MeshType.AERODYNAMICS_2D.name()%>" />
         <aui:input type="hidden" name="analyzerUuid" value="" />
         <div class="modal fade" id="<portlet:namespace/>create-mesh-modal" role="dialog" style="display: none;">
-            <div class="modal-dialog">
+            <div class="modal-dialog" style="width: 100%;">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -38,20 +44,16 @@
                             <ul class="dropdown-menu">
                                 <li><a class="mesh-type one" type="<%=MeshType.AERODYNAMICS_2D.name()%>" 
                                         href="#"><%=MeshType.AERODYNAMICS_2D.getViewName()%></a></li>
-                               <%--  <li><a class="mesh-type two" type="<%=MeshType.AERODYNAMICS_3D.name()%>" 
-                                        href="#"><%=MeshType.AERODYNAMICS_3D.getViewName()%></a></li>
-                                <li><a class="mesh-type three" type="<%=MeshType.BLADE_VIBRATION_3D.name()%>" 
-                                        href="#"><%=MeshType.BLADE_VIBRATION_3D.getViewName()%></a></li> --%>
                             </ul>
                         </div>
                         </h4>
                     </div>
                     <div class="modal-body mesh-type one">
-                        <section class="row-fluid">
+                        <section class="">
                             <div class="span12">
-                                <section class="row-fluid">
+                                <section class="row-fluid-test">
                                     <div class="span8">
-                                        <aui:input name="airfoilsCount" type="number" cssClass="input-small" readonly="true"
+                                        <aui:input name="airfoilsCount" type="number" cssClass="form-control input-small" readonly="true"
                                             label="Number of Airfoils : " value="" maxLength="15" inlineLabel="left">
                                         </aui:input>
                                     </div>
@@ -61,7 +63,7 @@
                                 </section>
                             </div>
                         </section>
-                        <section class="row-fluid" >
+                        <section class="" >
                             <div class="span12" style="margin-top: 30px; margin-bottom: 20px; min-height: 220px;">
                                 <div class="row-fluid">
                                     <div class="span5 panel panel-default panel-airfoil" style="padding-top: 15px; padding-botom: 15px;">
@@ -77,8 +79,8 @@
                                     <div class="span1" style="min-height: 225px; padding-top: 90px; padding-left: 10px;">
                                         <i class="icon-arrow-right icon-3x"></i>
                                     </div>
-                                    <div class="span6 panel panel-primary panel-airfoil" style="margin-left: 15px;">
-                                        <div class="panel-body" style="padding-left: 0px; padding-top: 0px;">
+                                    <div class="span6 panel panel-primary panel-airfoil" style="margin-left: 15px; width: 45%;">
+                                        <div class="panel-body" style="padding: 0px;">
                                             <div class="span3" style="padding-top: 15px; padding-botom: 15px; border-right: 1px solid #337ab7; min-height: 225px;">
                                                  <ul class="airfoil-order" id="<portlet:namespace/>mesh-target-ordinal">
                                                 </ul>
@@ -92,7 +94,7 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="row-fluid mb-10">
+                        <section class="mb-10">
                             <div class="span2">
                                 <label for="<portlet:namespace/>staggerAngle" 
                                     class="control-label">Stagger Angle :</label>
@@ -103,7 +105,7 @@
                                     cssClass="form-control airfoil-req" label=""/>
                             </div>
                         </section>
-                        <section class="row-fluid mb-10">
+                        <section class="mb-10">
                             <div class="span2">
                                 <label for="<portlet:namespace/>pitchGap" 
                                     class="control-label">Pitch Gap :</label>
@@ -114,7 +116,7 @@
                                     cssClass="form-control airfoil-req" label=""/>
                             </div>
                         </section>
-                        <section class="row-fluid mb-10">
+                        <section class="mb-10">
                             <div class="span2">
                                 <label for="<portlet:namespace/>axialGap"
                                     class="control-label">Axial Gap :</label>
