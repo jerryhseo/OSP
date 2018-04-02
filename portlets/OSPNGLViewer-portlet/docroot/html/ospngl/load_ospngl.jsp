@@ -41,7 +41,7 @@
 
 
 <div id="viewArea">
-	<div id="nglViewer" style="width:100%; height:100%; margin: 0 auto;"></div>
+	<div id="nglViewer" style="width:100%; height:95%; margin: 0 auto;"></div>
 </div>
 <script>
 var namespace;
@@ -66,7 +66,7 @@ if (mdsrv) {
 
 
 //Plugins
-NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.plugin");
+NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.nglin");
 
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
