@@ -130,6 +130,9 @@
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
 <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
+
+<liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false"/>
+
 <div class="container">
 	
 	<div>
@@ -210,14 +213,13 @@
 			<colgroup>
 				<col width="5%">
 				<col width="*">
-				<col width="8%">
+				<col width="10%">
 				<c:if test="${deleteMonitoring eq true }">
 					<col width="10%">
 				</c:if>
 				<col width="5%">
-				<col width="9%">
-				<col width="9%">
-				<col width="9%">
+				<col width="10%">
+				<col width="10%">
 				<col width="10%">
 				<col width="10%">
 			</colgroup>
@@ -230,14 +232,13 @@
 						<th rowspan="2" scope="col"><liferay-ui:message key="edison-table-list-header-userid" /></th>
 					</c:if>
 					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle"/></th>
 					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate"/></th>
 					<th rowspan="2" scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage"/></th>
 					<th colspan="2" scope="col" class="borderno"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-result"/></th>
 				</tr>
 				<tr>
 					<th scope="col" class="greyth"><p style="margin: 0px;"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-down"/></p></th>
-					<th scope="col" class="greyth"><p style="margin: 0px;">Re-Run</p></th>
+					<th scope="col" class="greyth"><p style="margin: 0px;">Workbench</p></th>
 				</tr> 
 			</thead>
 			<tbody id="mtbody">
@@ -286,7 +287,6 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td></td>
 									</c:when>
 									<c:otherwise>
 										<!-- 상세정보 -->
@@ -304,10 +304,6 @@
 										<!-- 상태 -->
 										<td class="center">	
 											<img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${model.jobStatusImg}"/>
-										</td>
-										<!-- 작업 취소-->
-										<td id="job_controll" class="center">
-											
 										</td>
 										
 										<!-- 중간 확인 -->
@@ -562,25 +558,17 @@ function <portlet:namespace/>searchPostProcessor(jobSeqNo,simulationUuid,jobUuid
 //상태값에 따른 모니터링 작업 영역 update
 function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUuid,scienceAppId,jobStatus,area){
 	$trArea = area;
-	$jobControllArea =  $trArea.children("td[id=job_controll]");
 	$middleCheckArea = $trArea.children("td[id=middle_check]");
 	$resultDownArea = $trArea.children("td[id=result_down]");
 	$resultViewArea = $trArea.children("td[id=result_view]");
 	
 	//초기화
-	$jobControllArea.empty();
 	$middleCheckArea.empty();
 	$resultDownArea.empty();
 	$resultViewArea.empty();
 	
 	//대기,처리중
 	if(jobStatus=="<%=MonitoringStatusConstatns.QUEUED%>"||jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
-		$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_cancel.png")
-				   .css("cursor","pointer")
-// 				   .attr("onClick","<portlet:namespace/>stop_simulation('"+jobSeqNo+"','"+simulationUuid+"','"+jobUuid+"','"+area+"');")
-				   .click(function(){<portlet:namespace/>stop_simulation(jobSeqNo,simulationUuid,jobUuid,area);})
-				   .appendTo($jobControllArea);
-		
 		
 		//2015-05-14 추가(처리중일 경우 중간 결과 확인 할 수 있도록)
 		if(jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
@@ -633,7 +621,7 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .appendTo($resultDownArea);
 		
 		
-		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_rerun.png")
+		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
 				  .css("cursor","pointer")
 				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+scienceAppId+"', '"+jobUuid+"');")
 				  .appendTo($resultViewArea);
@@ -941,10 +929,8 @@ $(function(){
 						).appendTo($hideJobTr);
 					
 					
-					// 작업 취소
-					$("<td></td>").addClass("center").attr("id","job_controll").appendTo($hideJobTr);
 					// 중간 확인
-					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
+					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($middleCheck);
 					
 					// 작업 관리
 					$jobManageTd = $("<td></td>").addClass("center").appendTo($hideJobTr);
@@ -1403,11 +1389,48 @@ function <portlet:namespace/>closeDialog ( data ){
 }
 
 function IsJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
+	try {
+		JSON.parse(str);
+	} catch (e) {
+		return false;
+	}
+	return true;
 }
-</script>
+
+function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
+	//<portlet:namespace/>clearReadOutLogTimer();
+	
+	jQuery.ajax({
+		url: '<%=readOutLogURL.toString()%>',
+		type:'POST',
+		dataType:'json',
+		data:{
+			"<portlet:namespace/>simulationUuid": simulationUuid,
+			"<portlet:namespace/>jobUuid": jobUuid,
+			"<portlet:namespace/>lastPosition": lastPosition,
+			"<portlet:namespace/>type": type
+		},
+		success:function(outLog){
+			console.log(outLog);
+			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
+			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			var preTextareVal = textarea.text();
+			
+			textarea.empty();
+			if(lastPosition === 0){
+				textarea.text(outLog.outLog);
+			}else{
+				textarea.text(preTextareVal+outLog.outLog);
+			}
+			
+			if(outLog.jobStatus === 1701006){
+				<portlet:namespace/>refreshJobLogTimer = setTimeout(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,outLog.lastPosition,type);
+			}
+			
+			modal.modal({ "backdrop": "static", "keyboard": false });
+		},error:function(jqXHR, textStatus, errorThrown){
+			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+		}
+	});
+	
+}</script>
