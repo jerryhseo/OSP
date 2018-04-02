@@ -77,13 +77,13 @@
 <div class="modal fade" id="<portlet:namespace/>job-log-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-log-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
-			<div class="modal-content">
+			<div class="modal-content" style="width: 75%;">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Job System Log</h4>
 				</div>
 				<div class="modal-body">
-					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 80%;height: 350px;resize:none;" autofocus="autofocus" readonly="readonly" >
+					<textarea class="form-control" id="<portlet:namespace/>log-text" style="min-width: 90%;height: 350px;resize:none;" autofocus="autofocus" readonly="readonly" >
 					
 					</textarea>
 				</div>
@@ -121,7 +121,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Simulation</h4>
+					<h4 class="modal-title">Simulation List</h4>
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
@@ -276,12 +276,27 @@ $(function(e) {
 		equalDiv = $("#"+$(this).attr("data-equal-id"));
 		RemainderDiv = $("#"+$(this).attr("data-remainder-id"));
 		moveType = $(this).hasClass("vertical") ? "vertical" : "horizontal"
+		if(moveType =="vertical"){
+			equalDiv.addClass("moving");
+			RemainderDiv.addClass("moving");
+		}else{
+			$(equalDiv).find("div.sub-col").addClass("moving");
+			$(RemainderDiv).find("div.sub-col").addClass("moving");
+		}
 	});
 	
 	
 	$("body").mouseup(function(a) {
 		if(isDevider){
 			isDevider = false;
+			if(moveType =="vertical"){
+				equalDiv.removeClass("moving");
+				RemainderDiv.removeClass("moving");
+			}else{
+				$(equalDiv).find("div.sub-col").removeClass("moving");
+				$(RemainderDiv).find("div.sub-col").removeClass("moving");
+			}
+			
 		}
 	});
 	
@@ -337,8 +352,8 @@ $(function(e) {
 	
 	
 	
-	//time out - 3 sec
-	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*3);
+	//time out - 5 sec
+	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
 });
 
 /***********************************************************************

@@ -26,7 +26,7 @@
 <ul class="sidebar-menu top" data-widget="tree" id="<portlet:namespace/>sidebar-menu">
 	<li class="header">
 		<div class="header-inner" id="<portlet:namespace/>appInfoHeader">
-			<h2 id="<portlet:namespace/>appName"></h2>
+			<h2 id="<portlet:namespace/>appName" data-toggle="tooltip" data-placement="bottom" style="cursor: pointer;"></h2>
 			<h4 id="<portlet:namespace/>appVersion"></h4>
 		</div>
 	</li>
@@ -230,7 +230,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
  * Portlet AJAX Function
  ***********************************************************************/
 function <portlet:namespace/>drawAppInfomation(data){
-	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12));
+	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12)).attr("title",data.name());
 	$("#<portlet:namespace/>appVersion").html(data.version());
 	
 	if(data.currentManualId()!=0){
@@ -381,6 +381,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 				
 				$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Job Create")
 							  .attr("data-simulation-uuid",simulationUuid)
+							  .attr("job-count",length)
 							  .attr("data-btn-type","new-simulation-job")
 							  .html("<i class=\"fa fa-plus-circle\"></i>")
 							  .appendTo($editSpan);
@@ -1176,7 +1177,8 @@ function <portlet:namespace/>init(){
 		$('[data-widget="tree"]').tree();
 	}
 	
-	
+	/*tooltip*/
+	$('[data-toggle="tooltip"]').tooltip(); 
 	//Job System Log modal close event
 	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
 		<portlet:namespace/>clearReadOutLogTimer();
@@ -1218,6 +1220,8 @@ function <portlet:namespace/>init(){
 					templateData.form.simulationUuid = simulationUuid;
 				}else if(btnType=="new-simulation-job"){
 					var simulationUuid = $(this).attr("data-simulation-uuid");
+					var jobCnt = $(this).attr("job-count");
+					templateData.form.title = "#"+<portlet:namespace/>alpad(String(Number(jobCnt)+1),3,0);
 					templateData.form.simulationUuid = simulationUuid;
 				}
 				
@@ -1250,6 +1254,12 @@ function <portlet:namespace/>init(){
 			$(".menu-panel").show('slide', {direction:'left'}, 500);
 		}
 	});
+}
+
+function <portlet:namespace/>alpad(s, padLength, padString){
+	while(s.length < padLength)
+		s = padString + s;
+	return s;
 }
 
 function <portlet:namespace/>activateLi(jqLink){
