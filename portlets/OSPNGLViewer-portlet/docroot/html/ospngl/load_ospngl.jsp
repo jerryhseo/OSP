@@ -31,12 +31,14 @@
 <link rel="subresource" href="<%=request.getContextPath()%>/css/light.css" />
 <link rel="subresource" href="<%=request.getContextPath()%>/css/dark.css" />
 
+<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
+
 </head>
 
 <body style="width:100%; height:100%">
 <%@include file="/html/init.jsp"%>
 
-<script src="<%=request.getContextPath()%>/js/plugins.js"></script>
+
 
 <div id="viewArea">
 	<div id="nglViewer" style="width:100%; height:100%; margin: 0 auto;"></div>
@@ -84,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	
 	var plugin = NGL.getQuery("plugin");
+	console.log('[NGLViewer] set plugin test 1 : ', plugin);
 	if (plugin) NGL.PluginRegistry.load(plugin, stage);
 
 	
