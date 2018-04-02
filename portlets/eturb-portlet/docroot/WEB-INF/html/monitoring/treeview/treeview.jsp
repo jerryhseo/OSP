@@ -25,9 +25,14 @@
 <div class="h10"></div>
 <div class="myfilebox">
     <div class="mflefttree">
-        <div class="searchbox">
-            <input id="<portlet:namespace/>simulation-search-keyword" name="simulation-search-keyword" type="text" value="" autocomplete="off" placeholder="Search"/>
-            <input type="button" id="<portlet:namespace/>simulation-search"/>
+        <div class="input-group">
+            <input id="<portlet:namespace/>simulation-search-keyword" class="form-control" name="simulation-search-keyword" type="text" value="" autocomplete="off" placeholder="Search"/>
+            <div class="input-group-btn">
+	            <button class="btn btn-default" id="<portlet:namespace/>simulation-search" type="button">
+	            	<i class="icon-search"></i>
+	            </button>
+	            <%-- <input type="button" id="<portlet:namespace/>simulation-search"/> --%>
+            </div>
           </div>
         <div id="<portlet:namespace/>simulation-tree" class="simulation-tree"></div>
     </div>
