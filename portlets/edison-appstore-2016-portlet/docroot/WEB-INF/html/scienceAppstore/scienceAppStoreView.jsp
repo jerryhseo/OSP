@@ -268,7 +268,7 @@
 					<c:if test="${solver.openLevel eq 'OPEN_RUN_ONLY'}">
 						<liferay-ui:message key='edison-science-appstore-view-execute-file-download' />
 					</c:if>
-					<c:if test="${!empty solver.srcFileId }">
+					<%-- <c:if test="${!empty solver.srcFileId }">
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
 							<tr>
 								<td>
@@ -278,7 +278,7 @@
 								</td>
 							</tr>	
 						</table>
-					</c:if>
+					</c:if> --%>
 				</div>	
 			</c:if>	
 			
@@ -351,6 +351,13 @@
 					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
+					</c:if>
+					<!-- DOWNLOAD 이미지 요청하기 -->
+					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel eq downloadOnly}">
+						<button class="btn btn-default" style="cursor:pointer; width: 80px; height: 25px; padding: 0px;" 
+							onclick="<portlet:namespace/>fileDownload('${solver.srcFileId }')">
+						<i class="icon-download-alt"></i>Download
+					</button>
 					</c:if>
 				</li>
 			</ul>

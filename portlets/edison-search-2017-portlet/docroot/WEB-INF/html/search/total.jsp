@@ -81,8 +81,14 @@
                     <img src="${contextPath}/images/search/btn_manual_none.jpg" style="height: 24px; cursor: default;"/>
                 </c:if>
                 <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel ne downloadOnly and element.appType eq 'Solver'}">
-                    <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;" 
+                    <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;"
                         onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
+                </c:if>
+                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel eq downloadOnly}">
+                    <button class="btn btn-default" style="cursor:pointer; height: 24px; padding: 4px 6px;" 
+                    		onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')">
+                    	<i class="icon-download-alt"></i> Download
+                    </button>
                 </c:if>
             </div>
             <div>
