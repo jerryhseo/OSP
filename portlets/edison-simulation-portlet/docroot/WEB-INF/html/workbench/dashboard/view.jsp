@@ -839,7 +839,9 @@ function <portlet:namespace/>removeProjectShare(uuid,removeShareType){
 				// 2018.03.26, simulationJob이 공유되었던 프로젝트의 Id 추출 
 				customIds.push(removeJobList[i]._customId);
 			}
-			<portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, "delete");
+			if(customIds.length > 0){
+				<portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, "delete");
+			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			
 		}
