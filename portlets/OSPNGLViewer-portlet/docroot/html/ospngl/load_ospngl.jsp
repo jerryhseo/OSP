@@ -3,14 +3,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>NGL - webapp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
 
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
 <link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
-
 
 <!-- NGL -->
 <script src="<%=request.getContextPath()%>/build/js/ngl.dev.js"></script>
@@ -23,26 +24,23 @@
 <script src="<%=request.getContextPath()%>/js/ui/ui.extra.js"></script>
 <script src="<%=request.getContextPath()%>/js/ui/ui.ngl.js"></script>
 <script src="<%=request.getContextPath()%>/js/gui.js"></script>
-<!-- NGL Style -->
+
+<!-- css style -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/font-awesome.min.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/main.css" />
 <link rel="subresource" href="<%=request.getContextPath()%>/css/light.css" />
 <link rel="subresource" href="<%=request.getContextPath()%>/css/dark.css" />
+
 </head>
 
-<body>
+<body style="width:100%; height:100%">
 <%@include file="/html/init.jsp"%>
 
-<!-- NGL style -->
 <script src="<%=request.getContextPath()%>/js/plugins.js"></script>
 
-
 <div id="viewArea">
-	<div id="nglViewer" style="width:100%; height:100%;">
-	</div>
+	<div id="nglViewer" style="width:100%; height:100%; margin: 0 auto;"></div>
 </div>
-
-
 <script>
 var namespace;
 
@@ -55,12 +53,7 @@ function setNamespace( ns ){
 
 NGL.cssDirectory="<%= request.getContextPath()%>/css/";
 NGL.documentationUrl = "<%=request.getContextPath()%>/build/docs/index.html";
-//NGL.examplesListUrl = "<%=request.getContextPath()%>/build/scriptsList.json";
-//NGL.examplesScriptUrl = "<%=request.getContextPath()%>/scripts/";
-//NGL.exampleDataDirectoryURL = "<%=request.getContextPath()%>/data/";
-//Datasources
 
-NGL.DatasourceRegistry.add("data", new NGL.StaticDatasource("<%=request.getContextPath()%>/data/"));
 
 var mdsrv = NGL.getQuery("mdsrv")
 if (mdsrv) {
@@ -72,15 +65,15 @@ if (mdsrv) {
 
 //Plugins
 NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.plugin");
-	
+
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
-	stage = new NGL.Stage();
-	var viewElement = document.getElementById('nglViewer');
-	NGL.StageWidget(stage, 'nglViewer');
-
-
 	
+	stage = new NGL.Stage();
+	console.log('[NGLViewer] Set gui1 ');
+	NGL.StageWidget(stage, 'nglViewer');
+	console.log('[NGLViewer] Set gui2 ');
+
 	var load = NGL.getQuery("load");
 	if(load)
 		stage.loadFile(load, {defaultRepresentation: true});
@@ -95,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 	
 	var struc = NGL.getQuery("struc");
-	var traj = NGL.getQuery("traj")
+	var traj = NGL.getQuery("traj");
 		
 	if(struc) {
 		stage.loadFile(struc, {defaultRepresentation: true}).then(function(o) {
@@ -120,39 +113,26 @@ function drawNglViewer(inputData, serveResourceURL){
 	var result;
 	
 	var data ={};
-	data[namespace+'command'] = "READ_FILE";
+	data[namespace+'command'] = "GET_FILE";
 	data[namespace+'pathType'] = "file";
 	data[namespace+'repositoryType'] = inputData.repositoryType_,
 	data[namespace+'parentPath'] = inputData.parent;
 	data[namespace+'fileName'] = inputData.name_;
 	data[namespace+'relative'] = true;
+
+	stage.removeAllComponents();
 	
-	console.log('[NGLViewer] input data', data);
-	
-	$.ajax({
-		type : 'POST',
-		url : serveResourceURL,
-		data : data,
-		dataType : 'text',
-		success : function(data){
-			console.log("[NGLViewer] file object : ", data);
-			result = data;
-			stage.loadFile(result, {defaultRepresentation: true});
-		},
-		error : function(data, e){
-			console.log("[NGLViewer] error : ", e);
-		}
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", serveResourceURL);
+	xhr.responseType = "blob";
+	xhr.addEventListener('load', function(){
+		console.log('[NGLViewer] test xmlhttprequest ', xhr.response);
+		var blob = new Blob([xhr.response]);
+		var file = new File([blob], inputData.name_);
+		stage.loadFile(file, {defaultRepresentation: true});
 	});
-	
+	xhr.send();
 }
-
-$(window).resize(function(e){
-	console.log("[NGLViewer] resize view port : "+ $('body').width() +' : '+$('body').height());
-});
-
-
-
-
 </script>
 </body>
 </html>

@@ -31,8 +31,8 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 
 <div class="container-fluid osp-analyzer">
-	<div class="row-fluid canvas">
-		<iframe class ="col-sm-12 iframe" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" width="100%" height="600px" style="border:0">
+	<div class="row-fluid canvas" id="<portlet:namespace/>canvasFrame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" style="border:0">
 		</iframe>
 	</div>
 </div>
@@ -211,26 +211,28 @@ Liferay.on(
   	OSP.Event.OSP_HANDSHAKE,
   	function(e){
   		var myId = '<%=portletDisplay.getId()%>';
-  		if( e.targetPortlet === myId ){
-  			console.log('[NGLViewer]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
-  			<portlet:namespace/>connector = e.portletId;
-  			if( e.mode )
-  				<portlet:namespace/>action = e.mode;
-  			else
-  				<portlet:namespace/>action = 'VIEW';	
-  			var events = [
-  				OSP.Event.OSP_EVENTS_REGISTERED,
-  				OSP.Event.OSP_LOAD_DATA
-  			];
-  			var eventData = {
-  				portletId: myId,
-  				targetPortlet: <portlet:namespace/>connector,
-  				data: events
-  			};
-  			
-  			Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
+  		if( e.targetPortlet !== myId ){
+  			return
   		}
-  	}
+  		console.log('[NGLViewer]OSP_HANDSHAKE: ['+e.portletId+', '+new Date()+']');
+  		<portlet:namespace/>connector = e.portletId;
+  		
+  		if( e.mode )
+  			<portlet:namespace/>action = e.mode;
+  		else
+  			<portlet:namespace/>action = 'VIEW';	
+  		var events = [
+  			OSP.Event.OSP_EVENTS_REGISTERED,
+  			OSP.Event.OSP_LOAD_DATA
+  		];
+  		var eventData = {
+  			portletId: myId,
+  			targetPortlet: <portlet:namespace/>connector,
+  			data: events
+		};
+  			
+		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
+	}
 );
 
 Liferay.on(
@@ -247,47 +249,47 @@ Liferay.on(
 	OSP.Event.OSP_LOAD_DATA, 
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
-		if( e.targetPortlet === myId ){
-			console.log('[NGLViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
-			//<portlet:namespace/>initData = new OSP.InputData( e.data );
-			<portlet:namespace/>currentData = new OSP.InputData( e.data );
-			if( <portlet:namespace/>currentData.type() === OSP.Enumeration.PathType.FOLDER ){
-				<portlet:namespace/>currentData.parent(
-					OSP.Util.mergePath(<portlet:namespace/>currentData.parent(), <portlet:namespace/>currentData.name()));
-					//<portlet:namespace/>initData.name("");
-					<portlet:namespace/>currentData.name("");
-			}
-			<portlet:namespace/>loadNGLFile( <portlet:namespace/>currentData );
-		}
+		if( e.targetPortlet !== myId )
+			return;
+		
+		console.log('[NGLViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
+			
+		<portlet:namespace/>initialize(e.data);
+		<portlet:namespace/>loadNGLFile(<portlet:namespace/>initData.clone());
+		<portlet:namespace/>initializeFileExplorer();
+
 	}
 );
 
 Liferay.on(
-           OSP.Event.OSP_RESPONSE_DATA,
-           function( e ){
-               if( e.targetPortlet === '<%=portletDisplay.getId()%>' ){
-                   console.log('[NGLViewer] OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
-                   if( e.portletId === <portlet:namespace/>fileExplorerId ){
-                       var inputData = new OSP.InputData( e.data );
-                       
-                       if( inputData.type() !== OSP.Enumeration.PathType.FILE ){
-                           alert( 'File should be selected!' );
-                           return;
-                       }
-                       else{
-                           <portlet:namespace/>loadNGLFile( inputData );
-                           $<portlet:namespace/>fileExplorerDialogSection.dialog('close');
-                       }
-                   }
-               }
-           }
+	OSP.Event.OSP_RESPONSE_DATA,
+	function( e ){
+		var myId = '<%=portletDisplay.getId()%>';
+		if( myId !== e.targetPortlet ) return;
+		
+		console.log('[NGLViewer] OSP_RESPONSE_DATA: ['+e.portletId+', '+new Date()+']');
+		
+		var inputData = new OSP.InputData( e.data );
+		
+		if( inputData.type() !== OSP.Enumeration.PathType.FILE ){
+			alert( 'File should be selected!' );
+			return;
+		}else{
+			<portlet:namespace/>loadNGLFile( inputData );
+			$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
+		}
+	}		
 );
 
 
 Liferay.on(
 		OSP.Event.OSP_REFRESH_OUTPUT_VIEW,
 		function(e){
+			var myId = '<%=portletDisplay.getId()%>';
+			if( myId !== e.targetPortlet ) return;
+			
 			console.log('[NGLViewer]OSP_REFRESH_OUTPUT_VIEW: ['+e.portletId+', '+new Date()+']');
+
 			var eventData = {
 					portletId: '<%=portletDisplay.getId()%>',
 					targetPortlet: <portlet:namespace/>connector
@@ -295,6 +297,19 @@ Liferay.on(
 
 			Liferay.fire(OSP.Event.OSP_REQUEST_OUTPUT_PATH, eventData);
 		}
+);
+
+Liferay.on(
+	OSP.Event.OSP_INITIALIZE,
+	function(e){
+		var myId = '<%=portletDisplay.getId()%>';
+		if(myId !== e.targetPortlet) return;
+			
+		console.log('[NGLViewer] OSP_INITIALIZE: ['+e.portletId+', '+new Date()+']', e);
+
+		if( $.isEmptyObject(<portlet:namespace/>initData) )	return;
+		<portlet:namespace/>initializeFileExplorer( <portlet:namespace/>initData.clone() );
+	}
 );
 
 /***********************************************************************
@@ -365,7 +380,7 @@ function <portlet:namespace/>drawNGL( inputData ){
 	    	console.log( '[NGLViewer]iframeDoc.readyState : ', iframeDoc.readyState);
 	    	if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.drawNglViewer ) {
 	    		
-	    		console.log("[NGLViewer] test 1 : load data in drawNGL");
+	    		console.log("[NGLViewer]  Load data in drawNGL");
 	    	    AUI().use('liferay-portlet-url', function(a) {
 	                <portlet:namespace/>currentData = inputData.clone();
 	                if( !<portlet:namespace/>currentData.repositoryType() )
@@ -381,7 +396,7 @@ function <portlet:namespace/>drawNGL( inputData ){
 	    	        serveResourceUrl.setParameter('fileName', inputData.name());
 	    	        serveResourceUrl.setParameter('relative', inputData.relative());
 	    	        
-	    	        console.log( '[NGLViewer]Draw JSMol: ', inputData);
+	    	        console.log( '[NGLViewer]Draw NGL Input Data : ', inputData);
 	    	        
 		    	    iframe.contentWindow.drawNglViewer(inputData, serveResourceUrl.toString());
 		    	    
@@ -454,7 +469,7 @@ function <portlet:namespace/>initialize( inputData ){
 		return;
 	}
 	else{
-		console.log('[JSMOL] initialize input data', inputData);
+		console.log('[NGLViewer] initialize input data', inputData);
 	
 		<portlet:namespace/>initData = new OSP.InputData(inputData);
 		
@@ -484,7 +499,7 @@ function <portlet:namespace/>initialize( inputData ){
 			case OSP.Enumeration.PathType.URL:
 				break;
 			default:
-				console.log('OSPTextViewer: Un-expected type: ' + <portlet:namespace/>initData.type());
+				console.log('[NGLViewer] Un-expected type: ' + <portlet:namespace/>initData.type());
 				<portlet:namespace/>initData = new OSP.InputData();
 				<portlet:namespace/>initData.parent( '' );
 				<portlet:namespace/>initData.name( '' );
