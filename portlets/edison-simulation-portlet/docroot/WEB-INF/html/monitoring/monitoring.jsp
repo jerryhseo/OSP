@@ -930,7 +930,7 @@ $(function(){
 					
 					
 					// 중간 확인
-					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($middleCheck);
+					$("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
 					
 					// 작업 관리
 					$jobManageTd = $("<td></td>").addClass("center").appendTo($hideJobTr);
