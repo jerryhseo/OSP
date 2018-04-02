@@ -50352,7 +50352,7 @@ function autoLoad (file, params) {
     LoaderClass = ParserLoader;
   } else if (ScriptExtensions.includes(p.ext)) {
     LoaderClass = ScriptLoader;
-  } else if (p.ext === 'plugin') {
+  } else if (p.ext === 'nglin') {
     LoaderClass = PluginLoader;
   }
 
