@@ -104,9 +104,14 @@
             <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;"
               onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete"
               title="delete">
-          </c:if> <img src="${contextPath}/images/monitoring/btn_monitor_visual.png" style="cursor: pointer;"
-          onclick="<portlet:namespace/>moveWorkBench('${job.scienceAppId}');" alt="workbench"
-          title="workbench"></td>
+          </c:if> 
+          	<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
+		          onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
+		          title="rerun">
+          	<%-- <img src="${contextPath}/images/monitoring/btn_monitor_visual.png" style="cursor: pointer;"
+          		onclick="<portlet:namespace/>moveWorkBench('${job.scienceAppId}');" alt="workbench"
+          		title="workbench"> --%>
+        	</td>
         <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
           <td class="center" id="result_view">view</td>
         </c:if>
