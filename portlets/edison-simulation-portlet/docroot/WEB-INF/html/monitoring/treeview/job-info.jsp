@@ -70,7 +70,7 @@
       <col width="*">
       <!-- <col width="13%"> -->
       <col width="10%">
-      <col width="14%">
+      <!-- <col width="14%"> -->
       <col width="14%">
       <col width="20%">
       <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
@@ -82,7 +82,7 @@
         <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
         <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail" /></th> --%>
         <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle" /></th>
+        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle" /></th> --%>
         <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate" /></th>
         <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage" /></th>
         <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
@@ -97,16 +97,16 @@
           onclick="<portlet:namespace/>searchSimulationParam('${job.simulationUuid}','${job.jobSeqNo}','${job.jobUuid}');"
           style="cursor: pointer;" /></td> --%>
         <td class="center"><img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${job.jobStatusImg}" /></td>
-        <td id="job_controll" class="center"></td>
+        <!-- <td id="job_controll" class="center"></td> -->
         <td id="middle_check" class="center" logFileProcess-state="${job.jobLogFileProcessorYn }"></td>
         <td class="center"><c:set value="<%=themeDisplay.getUserId()%>" var="thisUser" /> <c:if
             test="${deleteMonitoring || job.userId eq thisUser}">
             <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;"
               onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete"
               title="delete">
-          </c:if> <img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
-          onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
-          title="rerun"></td>
+          </c:if> <img src="${contextPath}/images/monitoring/btn_monitor_visual.png" style="cursor: pointer;"
+          onclick="<portlet:namespace/>moveWorkBench('${job.scienceAppId}');" alt="workbench"
+          title="workbench"></td>
         <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
           <td class="center" id="result_view">view</td>
         </c:if>
@@ -706,22 +706,22 @@ function <portlet:namespace/>error_event(simulationUuid, jobSeqNo, jobUuid){
 //상태값에 따른 모니터링 작업 영역 update
 function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUuid,scienceAppId,jobStatus){
     $trArea = $("#<portlet:namespace/>monitoring-tr");
-    $jobControllArea =  $trArea.children("td[id=job_controll]");
+    /* $jobControllArea =  $trArea.children("td[id=job_controll]"); */
     $middleCheckArea = $trArea.children("td[id=middle_check]");
     $resultViewArea = $trArea.children("td[id=result_view]");
     
     //초기화
-    $jobControllArea.empty();
+    /* $jobControllArea.empty(); */
     $middleCheckArea.empty();
     $resultViewArea.empty();
     
     //대기,처리중
     if(jobStatus=="<%=MonitoringStatusConstatns.QUEUED%>" 
         || jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
-        $("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_cancel.png")
+        /* $("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_cancel.png")
                    .css("cursor","pointer")
                    .click(function(){<portlet:namespace/>stop_simulation(jobSeqNo,simulationUuid,jobUuid,$trArea);})
-                   .appendTo($jobControllArea);
+                   .appendTo($jobControllArea); */
         
         
         //처리중일 경우 중간 결과 확인 할 수 있도록
@@ -968,5 +968,12 @@ function sdrcommon_collectionPopup(result){
       }).error(function (msg) {
           console.log(msg);
       });
+}
+
+//워크벤치 이동
+function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
+    var URL = "<%=workbenchURL%>";
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+    window.open(URL);
 }
 </script>
