@@ -623,7 +623,7 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 		
 		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
 				  .css("cursor","pointer")
-				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>restartSimulation('"+scienceAppId+"', '"+jobUuid+"');")
+				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('"+scienceAppId+"');")
 				  .appendTo($resultViewArea);
 		
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
@@ -645,6 +645,13 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .css("cursor","pointer")
 				   .appendTo($resultDownArea);
 	}
+}
+
+//워크벤치 이동
+function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
+    var URL = "<%=workbenchURL%>";
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+    window.open(URL);
 }
 
 //결과 다운로드
