@@ -86,7 +86,7 @@
         <!-- search -->
         <div style="float: right; padding: 10px 20px 15px 0px; width: 35%;">
             <div>
-                <input id="<portlet:namespace/>searchKeyword" name="searchKeyword" type="text" onkeyup="searchFile(this.value);" style="width: 75%;" />
+                <input id="<portlet:namespace/>searchKeyword" class="form-control" name="searchKeyword" type="text" onkeyup="searchFile(this.value);" style="width: 75%; float: left;" />
                 <input type="button" value="<liferay-ui:message key='edison-button-board-initialize'/>" id="<portlet:namespace/>searchInit" name="searchInit" class="btn btn-primary" cssClass="btn_blue" onclick="<portlet:namespace/>searchInit();" />
             </div>
         </div>
@@ -104,7 +104,7 @@
 <!-- 폴더 생성 Btn -->
 <div style="width:50%; float:left;">
     <c:if test="${portletWindowState ne liferayWindowState}">
-       <input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button">
+       <input class="addIp button08_2" id="createFolder"  onclick="<portlet:namespace/>createFolder();" value="<liferay-ui:message key='edison-simulation-myfile-create-folder'/>" type="button" style="width: 100px;">
     </c:if>
 </div>
 
@@ -116,10 +116,9 @@
                 <input class="addIp button08_1" id="<portlet:namespace/>selectBtn" onclick="<portlet:namespace/>selectBtn();" value="<liferay-ui:message key='edison-table-list-header-select'/>" type="button" />
             </c:when>
             <c:otherwise>
-                <input class="addIp button08_1" onclick="$('#<portlet:namespace/>uploadBtn').click();" value=<liferay-ui:message key='edison-button-upload'/> type="button" />
-                <!-- <input class="addIp button08_1" onclick="openPopUpFileUpload();" value=<liferay-ui:message key='edison-button-upload'/> type="button" /> -->
-                <input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
-                <input class="addIp button01b" style="min-width:90px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
+                <input class="btn btn-primary" onclick="$('#<portlet:namespace/>uploadBtn').click();" value=<liferay-ui:message key='edison-button-upload'/> type="button" style=" width: 100px;" />
+                <input class="btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDownload();" value="<liferay-ui:message key='edison-table-list-header-download'/>" type="button"/>
+                <input class="btn btn-default" style="min-width:90px; width: 100px;" onclick="<portlet:namespace/>checkfileDelete();" value="<liferay-ui:message key='edison-button-file-delete'/>" type="button"/>
             </c:otherwise>
         </c:choose>
         
@@ -129,6 +128,9 @@
     </div>
     
 </div>
+
+<div class="h40"></div>
+
 <div style="clear:both"></div>
 <div id="fileDownloadIframe"> </div>
 
