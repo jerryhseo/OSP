@@ -113,10 +113,17 @@ public class ScienceAppServiceImpl extends ScienceAppServiceBaseImpl {
 			
 			String affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(classPK, EdisonExpando.CDNM, Locale.KOREAN);
 			
-			String detailUrl = "https://www.edison.re.kr/web/portal/scienceappstore?p_p_id=edisonscienceAppstore_WAR_edisonappstore2016portlet&_edisonscienceAppstore_WAR_edisonappstore2016portlet_myaction=detailView&"
-					+"_edisonscienceAppstore_WAR_edisonappstore2016portlet_solverId="+scienceApp.getScienceAppId();
-			String manualUrl = !scienceApp.getManualIdCurrentValue().equals("0")?"https://www.edison.re.kr/web/portal/scienceappstore?p_p_id=edisonscienceAppstore_WAR_edisonappstore2016portlet&p_p_lifecycle=2&p_p_resource_id=edisonFileDownload&"
-					+ "_edisonscienceAppstore_WAR_edisonappstore2016portlet_fileEntryId="+scienceApp.getManualIdCurrentValue():"";
+			String detailUrl = "https://www.edison.re.kr/web/portal/scienceappstore"
+			    + "?p_p_id=edisonscienceAppstore_WAR_edisonappstore2016portlet"
+			    + "&_edisonscienceAppstore_WAR_edisonappstore2016portlet_myaction=detailView"
+			    + "&p_p_state=maximized&_edisonscienceAppstore_WAR_edisonappstore2016portlet_solverId="
+			    + scienceApp.getScienceAppId();
+			String manualUrl = !scienceApp.getManualIdCurrentValue().equals("0") 
+			    ? "https://www.edison.re.kr/web/portal/scienceappstore"
+			        + "?p_p_id=edisonscienceAppstore_WAR_edisonappstore2016portlet&p_p_lifecycle=2"
+			        + "&p_p_resource_id=edisonFileDownload&_edisonscienceAppstore_WAR_edisonappstore2016portlet_fileEntryId="
+			        + scienceApp.getManualIdCurrentValue()
+		        : "";
 			
 			dataRow.put("Name", name);
 			dataRow.put("Title", title);
