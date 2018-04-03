@@ -1270,11 +1270,12 @@
                                           ncores: simulation.ncores(),
                                           jobs: JSON.stringify( jobsToSubmit )
                                       }),
-                success: function( submittedJobs ){
+                success: function( submittedJob ){
                     simulation.cleanJobs();
                     
                     var data = {
-                                simulationUuid: simulation.uuid()
+                                simulationUuid: simulation.uuid(),
+                                jobUuid: submittedJob.jobUuid
                     };
                     
                     fireRefreshJobs( data );
@@ -1406,12 +1407,12 @@
                     type: 'post',
                     dataType: 'json',
                     data : ajaxData,
-                    success : function(submittedJobs){
-                        console.log('[SUCCESS] submit job : '+submittedJobs);
-                        var submittedJob = submittedJobs[0];
+                    success : function(submittedJob){
+                        console.log('[SUCCESS] submit job : '+submittedJob);
                         var data = {
                             simulationUuid: simulation.uuid(),
-                            jobUuid: submittedJob.uuid,
+                            jobUuid: submittedJob.jobUuid,
+                            tempJobUuid: submittedJob.tempJobUuid,
                             status: true
                         };
 

@@ -246,7 +246,7 @@
 }
 
 .simulation-workbench #workbench-layout-area .moving{
-	background-color: black;
+	background-color: #ebeff4;
 	background-image: url('../images/simulation-workbench/loding.gif');
 	background-repeat: no-repeat;
 	background-position: center;
