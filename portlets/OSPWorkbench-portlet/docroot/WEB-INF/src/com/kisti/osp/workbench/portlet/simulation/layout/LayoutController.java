@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
@@ -105,7 +107,6 @@ public class LayoutController {
 		
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		
 		
 //		ProvenanceSupportApp.put("uChem", "4.0.1");
 //		ProvenanceSupportApp.put("pianostring", "1.0.0");
@@ -886,7 +887,10 @@ public class LayoutController {
 		Map<String, String> files = new LinkedHashMap<>();
 		Map<String, JSONObject> progArgs = new LinkedHashMap<>();
 		
-		JSONArray submitedJobs = JSONFactoryUtil.createJSONArray();
+		//SubmitJob return
+		String submittedJobUuid = "";
+		String tempJobUuid = "";
+		
 		_log.info("jobs.length()-->"+jobs.length());
 		
 		int jobCount = jobs.length();
@@ -1064,9 +1068,10 @@ public class LayoutController {
 			if( result.getInt("error") > 0 ){
 				_log.error("Job submission failed: "+ result.getInt("error"));
 			}else{
-				JSONObject submittedJob = JSONFactoryUtil.createJSONObject();
-				submittedJob.put("tempUuid", job.getJobUuid());
-				submittedJob.put("uuid", result.getString("uuid"));
+				if(submittedJobUuid.equals("")){
+					submittedJobUuid = result.getString("uuid");
+					tempJobUuid = job.getJobUuid();
+				}
 				
 				job.setJobUuid(result.getString("uuid"));
 				job.setJobStartDt( new Date(result.getLong("submitTime")) );
@@ -1085,12 +1090,16 @@ public class LayoutController {
 					e.printStackTrace();
 				}
 				
-				submitedJobs.put( submittedJob );
+				
 			}
 			
 		} //END jobCount FOR
 		
-		ServletResponseUtil.write(httpResponse, submitedJobs.toString());
+		//reload Job Setting
+		JSONObject submittedJob = JSONFactoryUtil.createJSONObject();
+		submittedJob.put("tempJobUuid", tempJobUuid);
+		submittedJob.put("jobUuid", submittedJobUuid);
+		ServletResponseUtil.write(httpResponse, submittedJob.toString());
 	}
 	
 	protected void jsonObjectPrint( JSONObject jsonObject ){
@@ -1124,8 +1133,8 @@ public class LayoutController {
 		String serverName = themeDisplay.getServerName(); 
 		String virtualHostName = themeDisplay.getCompany().getVirtualHostname(); 
 
-		if(serverName.equals(virtualHostName)){ 
-			portalUrl += virtualHostName; 
+		if(serverName.equals(virtualHostName)&&!ip(serverName)){ 
+			portalUrl += virtualHostName;
 		}else{ 
 			portalUrl += serverName+":"+themeDisplay.getServerPort();
 		}
@@ -1137,6 +1146,12 @@ public class LayoutController {
 		
 		System.out.println("Callback: "+url);
 		return url;
+	}
+	
+	public static boolean ip(String text) {
+		Pattern p = Pattern.compile("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+		Matcher m = p.matcher(text);
+		return m.find();
 	}
 	
 	private static final String _callbackAPI = "/api/jsonws/edison-simulation-portlet.simulationjob/update-simulation-job";
