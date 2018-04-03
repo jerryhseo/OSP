@@ -173,9 +173,6 @@ NGL.StageWidget = function (stage, id) {
 	//var viewport = new NGL.ViewportWidget(stage).setId(viewArea)
 	var parentDomElement = document.getElementById(id);
 	
-	console.log("[NGLViewer] yejin test view element : ");
-	console.log("[NGLViewer] parentElement test : "+parentDomElement.html());
-
 	parentDomElement.appendChild(viewport.dom)
   // ensure initial focus on viewer canvas for key-stroke listening
   stage.viewer.renderer.domElement.focus()
