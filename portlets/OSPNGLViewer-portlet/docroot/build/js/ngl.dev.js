@@ -50352,7 +50352,7 @@ function autoLoad (file, params) {
     LoaderClass = ParserLoader;
   } else if (ScriptExtensions.includes(p.ext)) {
     LoaderClass = ScriptLoader;
-  } else if (p.ext === 'nglin') {
+  } else if (p.ext === 'ngldat') {
 	  console.log("[NGLViewer] autoload test by yejin");
     LoaderClass = PluginLoader;
   }

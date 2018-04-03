@@ -66,7 +66,7 @@ if (mdsrv) {
 
 
 //Plugins
-NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.nglin");
+NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.ngldat");
 
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
