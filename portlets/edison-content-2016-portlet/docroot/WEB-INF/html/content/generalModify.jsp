@@ -240,7 +240,7 @@
 					</td>
 				</tr>
 				
-				<tr>
+				<tr class="contentFile">
 					<th><liferay-ui:message key="edison-table-list-header-file"/><span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-content-file-descriptive-message"/></th>
 					<td class="advancedContentTd">
 					
@@ -296,7 +296,10 @@
 				%>
 					<tr class="manualContentFile">
 						<%if(localeIndex == 0){ %>
-						<th class="manualFileName" rowspan="2"><liferay-ui:message key="edison-content-manual"/></th>
+						<th class="manualFileName" rowspan="2">
+							<liferay-ui:message key="edison-content-manual"/>
+							<span class="requiredField"> *</span> <liferay-ui:icon-help message="edison-content-file-descriptive-message"/>
+						</th>
 						<%} %>
 						<td colspan="3">
 							<%=languageNm%>&nbsp;&nbsp;
@@ -324,8 +327,6 @@
 								</c:if>
 							</c:otherwise>
 							</c:choose>
-							
-							
 						</td>
 					</tr>
 				<%
@@ -671,10 +672,11 @@ function changeLanguage(val){
 }
 function <portlet:namespace/>changeContentDiv(contentDiv){
 	
-	$("#<portlet:namespace/>contentDiv").val(contentDiv);
+	$("#<portlet:namespace/>contentDivSelect").val(contentDiv);
 		
 	//초기화
 	$(".advancedContentTd").attr("colspan",3);
+	$(".contentFile").show();
 	$(".manualContentFile").hide();
 	$(".contentFile").hide();
 	$(".advancedContent").hide();
@@ -696,6 +698,7 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 			}
 		}
 	}else if(contentDiv == 2001002){//메뉴얼일떄
+		$(".contentFile").hide();
 		$(".manualContentFile").show();
 	}
 	else{//그외
@@ -744,7 +747,7 @@ function <portlet:namespace/>openRootCategory(status,rootCatogoryId) {
 
 function <portlet:namespace/>actionCall(mode){
 	if(mode=='<%=Constants.ADD%>' || mode=='<%=Constants.UPDATE%>'){
-		var contentDiv = $("#<portlet:namespace/>contentDiv").val();
+		var contentDiv = $("#<portlet:namespace/>contentDivSelect").val();
 		//앱제목 Validation
 		$serviceLanguage = $("#<portlet:namespace/>serviceLanguage option:selected");
 		var lanuageCode = $serviceLanguage.val();
@@ -811,6 +814,7 @@ function <portlet:namespace/>actionCall(mode){
 }
 
 function <portlet:namespace/>checkFileExtensions( contentDiv){
+	console.log("contentDiv : " + contentDiv);
 	//첨부파일
 	if(contentDiv == 2001002){
 		//add 일때,
@@ -820,6 +824,7 @@ function <portlet:namespace/>checkFileExtensions( contentDiv){
 			String manualId = "manual"+languageId;
 		%>
 			var manualFile = $("#<portlet:namespace/><%=manualId%>").val();
+			console.log("manualFile : " + manualFile);
 			if(manualFile == ""){
 				alert(Liferay.Language.get('edison-simulation-execute-user-define-select-your-own-attachments'));
 				return false;
@@ -829,16 +834,16 @@ function <portlet:namespace/>checkFileExtensions( contentDiv){
 				var extension = fileNmArr[fileNmArr.length-1];
 				extension = extension.toLowerCase();
 				
-				if(extension != "zip"){
+				/* if(extension != "zip"){
 					alert(Liferay.Language.get('edison-content-file-extension-alert'));
 					return false;
-				}
+				} */
 			}
 			
 		<%}%>
 	}else{
 		var contentFileNm = $("#<portlet:namespace/>contentFile").val();
-		if(contentFileNm == ""){
+		if(contentDiv != 2001002 && contentFileNm == ""){
 			alert(Liferay.Language.get('edison-simulation-execute-user-define-select-your-own-attachments'));
 			return false;
 		}
