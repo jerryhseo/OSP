@@ -104,11 +104,6 @@ public class ScienceAppstoreController {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
 			
 			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
-			if(tabViewYn.equals("Y")){
-				model = scienceAppstoreList(request, response, model);
-				model.addAttribute("tabViewYn", tabViewYn);
-				return "scienceAppstore/scienceAppStoreList";
-			}
 			
 			//다른곳에서 solverID가 넘어올경우
 			if(!CustomUtil.strNull(params.get("search_solverId")).equals("")){
@@ -368,88 +363,6 @@ public class ScienceAppstoreController {
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
 		return "scienceAppstore/scienceAppStoreView";
-	}
-	
-	public ModelMap scienceAppstoreList(RenderRequest request, RenderResponse response,ModelMap model){
-		try{
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
-			Map params = RequestUtil.getParameterMap(request);
-			long companyId = themeDisplay.getCompanyId();
-			
-			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
-			
-			/* tab */
-			String visitSite ="";
-			long parentGroupId = GroupLocalServiceUtil.getGroup(PortalUtil.getScopeGroupId(request)).getParentGroupId();
-			
-			String searchGroupId =CustomUtil.strNull(params.get("search_groupId"));
-			
-			//default visitSite
-			Group defaultGroup = GroupLocalServiceUtil.getGroup(companyId, "CFD");
-			model.addAttribute("visitSite", Long.toString(defaultGroup.getGroupId()));
-			
-			//User Expando 값 가지고 오기
-			if(themeDisplay.isSignedIn()){
-				visitSite =  themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
-			}else{
-				model.addAttribute("visitSite", CustomUtil.strNull(params.get("groupId"), Long.toString(defaultGroup.getGroupId()) ));
-			}
-			
-			String groupName = "";
-			int groupCnt = 0;
-			String groupId = "";
-
-			Map<String,Long> GroupMap = new HashMap<String,Long>();
-			if(!tabUseStr.equals("")){
-				String []tabUseArray = tabUseStr.split(",");
-				for(int i=0;i<tabUseArray.length;i++){
-					
-					Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
-					Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
-					GroupMap.put(group.getName(), group.getGroupId());
-					
-					if(groupCnt==0){
-						groupName += group.getName();
-						groupId += group.getGroupId();
-						groupCnt++;
-					}else{
-						groupName += ","+group.getName();
-						groupId += ","+group.getGroupId();
-					}
-					
-					if(!visitSite.equals("")&&visitSite.equals(group.getName())){
-						model.addAttribute("visitSite", Long.toString(group.getGroupId()));
-					}
-				}
-			}
-			model.addAttribute("tabNames", groupName);
-			model.addAttribute("tabsValues", groupId);
-			
-			/*다른 곳에서 search_groupId 파라미터가 넘어 올경우 최종적으로 searchGroupId 값을 셋팅*/
-			if(!searchGroupId.equals("")){
-				model.addAttribute("visitSite", searchGroupId);
-			}
-			
-			net.sf.json.JSONObject json = new net.sf.json.JSONObject();
-			json.putAll(GroupMap);
-			model.addAttribute("groupMap", json.toString());
-			
-			String searchField = ParamUtil.get(request, "searchField", "");
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "edisonbestsimulation_WAR_edisonsimulationportlet");
-			model.addAttribute("simulationPlid", plid);
-			params.put("solverStatus", "1901004");
-			params.put("recommandation_flag", "true");
-			
-			model.addAttribute("searchField",searchField);
-			model.addAttribute("params", params);
-		}catch(Exception e){
-			log.error(e);
-			e.printStackTrace();
-			
-			//Session Error Message
-			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
-		}
-		return model;
 	}
 	
 	@ResourceMapping(value="edisonFileDownload")

@@ -133,7 +133,7 @@
 		
 		<div class="h40"></div>
 		
-		<div class="panel-heading clearfix">
+		<div class="panel-heading clearfix" style="padding-right: 0px;">
 			<c:if test="${addAdvancedContentAuth}">
 				<div style="float: right;margin: 5px;" id="<portlet:namespace/>addAdvancedContentDiv">
 					<input type="button" class="btn btn-default" value="<liferay-ui:message key="edison-advanced-content-create"/>" onclick="<portlet:namespace/>advancedModify('<%=Constants.ADD%>','');return false;"/>
@@ -163,7 +163,7 @@
 						Clear
 					</button>
 					
-					<button class="btn btn-default" name="fullsize" id="fullsize">
+					<%-- <button class="btn btn-default" name="fullsize" id="fullsize">
 						<a href="#boardicon01"><img src="${contextPath}/images/content/boardicon01off.png" style="width: 18px;" />&nbsp;<liferay-ui:message key="edison-content-classnote"/></a>
 					</button>
 					<button class="btn btn-default" name="fullsize" id="fullsize">
@@ -171,7 +171,7 @@
 					</button>
 					<button class="btn btn-default" name="fullsize" id="fullsize">
 						<a href="#boardicon03"><img src="${contextPath}/images/content/boardicon03off.png" style="width: 16px;" />&nbsp;<liferay-ui:message key="edison-content-reference"/></a>
-					</button>
+					</button> --%>
 				</div>
 				
 			</div>
@@ -191,7 +191,6 @@
 				<col width="100" />
 				<col width="100" />
 				<col width="100" />
-				<col width="110" />
 				<col width="100" />
 			</colgroup>
 			<thead>
@@ -200,7 +199,6 @@
 					<th scope="col" colspan="3"><liferay-ui:message key="edison-table-list-header-title"/></th>
 					<th scope="col"><liferay-ui:message key="edison-table-list-header-name"/></th>
 					<th scope="col"><liferay-ui:message key="edison-table-list-header-date"/></th>
-					<th scope="col"><liferay-ui:message key="edison-table-list-header-file"/></th>
 					<th scope="col"><liferay-ui:message key="edison-table-list-header-views"/></th>
 				</tr>
 			</thead>
@@ -398,7 +396,7 @@ function <portlet:namespace/>advancedContentView(fileFullPath,title,groupId,cont
 		data: updateCntForm,
   		async : false,
 		error:function(data,e){ 
-			alert("fileCntUpdate ERROR"+e);	
+			alert("fileCntUpdate ERROR"+e);
 		}
 	});
 }
@@ -552,7 +550,8 @@ function <portlet:namespace/>generalContentSearch(searchDiv,p_currentPage){
  						$tr.addClass("tablebgtr");
  					}
 					$("<td></td>").addClass("TC").html(data.seq-i).appendTo($tr);
-					var src = "";
+					
+					/* var src = "";
 					if(dataMap[i].contentDiv=="2001001"){
 						src = "${contextPath}/images/content/boardicon01.png";
 					}else if(dataMap[i].contentDiv=="2001002"){
@@ -569,7 +568,7 @@ function <portlet:namespace/>generalContentSearch(searchDiv,p_currentPage){
 											$("<img/>").attr("src",src)
 													   .attr("width","26")
 													   .attr("height","25")
-										).appendTo($tr);
+										).appendTo($tr); */
 					
 					// title
 					$titleTd = $("<td></td>").css("word-break","break-all")
@@ -587,27 +586,13 @@ function <portlet:namespace/>generalContentSearch(searchDiv,p_currentPage){
 									 .attr("onclick","<portlet:namespace/>generalModify('<%=Constants.UPDATE%>','"+dataMap[i].contentSeq+"','"+dataMap[i].contentDiv+"');")
 									 .appendTo($modifyTd);
 					}else{
-						$titleTd.attr("colspan","2");
+						$titleTd.attr("colspan","3");
 					}
 					
-					// user name
-					// $("<td></td>").addClass("TC").html(privateInformationConverter(dataMap[i].screenName)).appendTo($tr);
 					$("<td></td>").addClass("TC").html(dataMap[i].screenName).appendTo($tr);
 					
 					// date
 					$("<td></td>").addClass("TC").html(dataMap[i].insertDate).appendTo($tr);
-					
-					$downLoadImageTd = $("<td></td>").addClass("TC").appendTo($tr);
-					/* var fileDataSize = dataMap[i].fileList.length;
-					var fileDataMap = dataMap[i].fileList;
-					
-					if(fileDataSize>0){
-						iClass = "icon-text";
-						$("<i></i>").addClass("icon-edison")
-										.addClass(iClass)
-										.attr("onclick","<portlet:namespace/>fileCntUpdate('"+dataMap[i].groupId+"','"+dataMap[i].contentDiv+"','"+dataMap[i].contentSeq+"');")
-										.appendTo($downLoadImageTd);
-					}  */
 					
 					$("<td></td>").attr("id","downloadTd_"+dataMap[i].contentSeq).addClass("TC").html(dataMap[i].viewCnt).appendTo($tr);
 				}
@@ -1016,7 +1001,7 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 		p_curPage = "1";
 	}
 	
-	var currentTabGroupId = <%=visitSite%>;
+	var currentTabGroupId = "<%=visitSite%>";
 	
 	var searchData = {
 			"<portlet:namespace/>categoryId":categoryIdValue,
@@ -1024,6 +1009,7 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 			"<portlet:namespace/>currentPage": p_curPage
 	};
 	
+	//bStart();
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=resorceSearchURL%>",
@@ -1062,42 +1048,19 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 					var vSolverImageSrc = "";
 					vSolverIconId = dataList[i].iconId;
 					
-					var src = "";
-					if(dataList[i].contentDiv=="2001001"){
-						src = "${contextPath}/images/content/boardicon01.png";
-					}else if(dataList[i].contentDiv=="2001002"){
-						src = "${contextPath}/images/content/boardicon02.png";
-					}else if(dataList[i].contentDiv=="2001003"){
-						src = "${contextPath}/images/content/boardicon03.png";
-					}else if(dataList[i].contentDiv=="2001004"){
-						src = "${contextPath}/images/content/boardicon03.png";
-					}
-					
-					// image
-					$("<td/>").addClass("TC").append(
-						$("<img/>").attr("src",src)
-								   .css("width","33px")
-								   .css("height","27px")
-								   .attr("alt","Icon")
-					).appendTo($vRow);
-					
 					// title
 					$tdRow = $("<td/>").css("word-break", "break-all")
 									   .css("text-align","left")
 									   .text(dataList[i].title)
 									   .attr("onclick","javascript:detailView('goView','"+dataList[i].scienceAppId+"', '"+currentTabGroupId+"')")
+									   .attr("colspan", "3")
 									   .css("cursor", "pointer")
 					$tdRow.appendTo($vRow);
-					
-					// modify button
-					$("<td/>").appendTo($vRow);
 					
 					$("<td/>").text(dataList[i].screenName).addClass("TC").appendTo($vRow);
 					var statusDate = new Date(dataList[i].insertDate);
 					$("<td/>").text(formatDate(statusDate) ).addClass("TC").appendTo($vRow);
 
-					$("<td/>").addClass("TC").appendTo($vRow);
-					
 					//실행
 					$("<td/>").css("text-align","center").text(dataList[i].viewCnt).appendTo($vRow);
 					
@@ -1123,6 +1086,8 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 		},
 		error:function(msg){
 			alert("System Exception : " + msg);
+		},complete: function(){
+			//bEnd();
 		}
 	});
 }

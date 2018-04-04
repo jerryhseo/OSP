@@ -61,11 +61,6 @@
 </liferay-portlet:renderURL>
 
 <style type="text/css">
-.aui .tabletopbox .radio{
-	float:left;
-	padding-right: 20px;
-}
-
 #solverTypeBody .portalClass:hover ,.onClass{
 	background-color:#e5eff8;
 }
@@ -108,6 +103,9 @@
 .sideline{
 	width:1px; background-color:#e5e5e5;
 }
+.categoriesDiv{
+	text-align: center;
+}
 </style>
 
 
@@ -145,7 +143,7 @@
 			
 			<!-- Category -->
 			<div class="scAppmenu">
-				<div class="table5app" style="border:none;">
+				<div class="categoriesDiv" style="border:none;">
 					<table width="100%" height="146" border="0" cellpadding="0" cellspacing="0" >
 						<tr id="solverTypeBody" style="border-left:1px solid #e5e5e5; border-right:1px solid #e5e5e5;">
 						</tr>
@@ -236,12 +234,6 @@
 				return $(this);
 			}
 		})(jQuery);
-		
-		
-		$(".tabletopbox").<portlet:namespace/>clickoutside(function(){
-			var search_val = $("#<portlet:namespace/>searchValue").val();
-		});
-		
 		
 		selectedTabId = "<%=visitSite%>";
 		var searchField = "<%=searchField%>";
@@ -370,6 +362,7 @@
 		document.searchParamForm.<portlet:namespace/>p_curPage.value = p_curPage;
 		var searchForm = $("form[name=searchParamForm]").serialize();
 		
+		// bStart();
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=resorceSearchURL%>",
@@ -499,6 +492,8 @@
 			},
 			error:function(msg){
 				alert("System Exception : " + msg);
+			},complete: function(){
+				//bEnd();
 			}
 		});
 	}
@@ -553,7 +548,7 @@
 		<portlet:namespace/>dataSearchList();
 	});
 	
-	//전체보기
+	//전체보기(clear)
 	$(document).on( "click", "#initB", function(){
 		filterInit();
 	});
@@ -606,37 +601,12 @@
 		}
 	});
 	
+	// Manual Download
 	function <portlet:namespace/>fileDownload(p_fileEntryId){
 		location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
 	}
 	
-	function <portlet:namespace/>deleteFavoriteApp(solverId,groupId) {
-		if(confirm("<liferay-ui:message key='edison-appstore-favorite-app-delete-alert' />")){	
-			var dataForm = {
-				"<portlet:namespace/>solverId" : solverId,
-				"<portlet:namespace/>groupId" : groupId
-			};
-			
-			jQuery.ajax({
-				type: "POST",
-				url: "<%=deleteFavoriteAppURL%>",
-				async : false,
-				data : dataForm,
-				success: function(msg) {
-					var result = msg.result;
-					if(result == '200') {
-						alert("<liferay-ui:message key='edison-data-delete-success' />");
-					}
-					<portlet:namespace/>dataSearchList();
-				},error:function(msg,e){ 
-					alert(e);
-					return false;
-				}
-			});
-
-		}
-	}
-	
+	// scienceApp 상세보기
 	function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 		var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
 		var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;

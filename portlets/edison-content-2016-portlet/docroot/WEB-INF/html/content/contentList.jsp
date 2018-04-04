@@ -1,17 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<%-- <script type="text/javascript" src="${contextPath}/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="${contextPath}/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="${contextPath}/js/main.js"></script>
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/jquery/jquery-ui.theme.min.css" media="screen"/>
-<link type="text/css" rel="stylesheet" href="${contextPath}/css/jquery/jquery-ui.min.css" media="screen"/> --%>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/commu.css" media="screen"/>
-
-<%-- <link href="${contextPath}/css/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
-<link href="${contextPath}/css/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css" />
-<script src="${contextPath}/js/owl-carousel/owl.carousel.min.js"></script> --%>
 
 <%
 	//Tab Setting
