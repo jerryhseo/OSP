@@ -218,7 +218,7 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 		long[] contentDiv, int start, int end, Locale locale, boolean categoryJoin) throws Exception{
 		// 관리자/사이트 관리자이고, 현재 사이트가 하위사이트일때( 카테고리가 있음 )
 		long[] categoryIds = makeCategoryEntryList(companyGroupId, groupId);
-		return retrieveListContent(categoryIds, searchText, contentDiv, start, end, locale, categoryJoin, false);
+		return retrieveListContent(categoryIds, searchText, contentDiv, start, end, locale, categoryJoin, true);
 	}
 
 	

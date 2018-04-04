@@ -23,7 +23,6 @@ import javax.portlet.WindowState;
 
 import org.kisti.edison.content.model.Content;
 import org.kisti.edison.content.portlet.util.AdvancedFileUtil;
-import org.kisti.edison.content.service.AdvancedContentLocalServiceUtil;
 import org.kisti.edison.content.service.ContentLocalServiceUtil;
 import org.kisti.edison.customauthmanager.service.UserGroupRoleCustomLocalServiceUtil;
 import org.kisti.edison.exception.EdisonException;
@@ -49,9 +48,6 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -75,13 +71,10 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
-import com.liferay.portlet.asset.NoSuchCategoryPropertyException;
 import com.liferay.portlet.asset.model.AssetCategory;
-import com.liferay.portlet.asset.model.AssetCategoryProperty;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
-import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 
@@ -93,7 +86,7 @@ public class ContentListController{
 
 	private static Log log = LogFactoryUtil.getLog(ContentListController.class);
 	private String contentFilePreFix = EdisonFileConstants.INFORMATION;
-	
+
 	@RequestMapping // default
 	public String view(RenderRequest request, ModelMap model){
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
@@ -103,81 +96,34 @@ public class ContentListController{
 			
 			long groupId = ParamUtil.getLong(request, "groupId", PortalUtil.getScopeGroupId(request));
 			long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
-			
-			String visitGroupId = "";
-			String visitSite ="";
+
 			
 			String portalYn = request.getPreferences().getValue("portalYn", "Y");
-			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
-			String tabUseStr = request.getPreferences().getValue("tabUseList", "");
-			
-			long globalGroupId = themeDisplay.getCompany().getGroupId();
-			long companyId = themeDisplay.getCompanyId();
-			
-			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
-			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
-			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
-			
-			if(tabViewYn.equals("Y")){
 
-				Group defaultGroup = GroupLocalServiceUtil.getGroup(companyId, "CFD");
-				
-				//User Expando 값 가지고 오기
-				if(themeDisplay.isSignedIn()){
-					visitSite =  themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
-				}else{
-					model.addAttribute("visitSite", CustomUtil.strNull(param.get("groupId"), Long.toString(defaultGroup.getGroupId()) ));
-				}
-				
-				String groupName = "";
-				int groupCnt = 0;
-				String groupIdStr = "";
+			model.addAttribute("groupId", groupId);
 
-				Map<String,Long> GroupMap = new HashMap<String,Long>();
-				if(!tabUseStr.equals("")){
-					String []tabUseArray = tabUseStr.split(",");
-					for(int i=0;i<tabUseArray.length;i++){
-						
-						Long tabUserGroupId = Long.parseLong(CustomUtil.strNull(tabUseArray[i]));
-						Group group = GroupLocalServiceUtil.getGroup(tabUserGroupId);
-						GroupMap.put(group.getName(), group.getGroupId());
-						
-						if(groupCnt==0){
-							groupName += group.getName();
-							groupIdStr += group.getGroupId();
-							groupCnt++;
-						}else{
-							groupName += ","+group.getName();
-							groupIdStr += ","+group.getGroupId();
-						}
-						
-						if(!visitSite.equals("")&&visitSite.equals(group.getName())){
-							model.addAttribute("visitSite", Long.toString(group.getGroupId()));
-						}
-					}
-				}
-				model.addAttribute("tabNames", groupName);
-				model.addAttribute("tabsValues", groupIdStr);
-				
-				JSONObject json = new JSONObject();
-				json.putAll(GroupMap);
-				model.addAttribute("groupMap", json.toString());
-				model.addAttribute("parentGroupId", parentGroupId);
-				
-			} else {
-				/* Tabs - Setting */
-				String tabNames = LanguageUtil.get(themeDisplay.getLocale(), "edison-content-list-owned-content") + ",";
-				tabNames += LanguageUtil.get(themeDisplay.getLocale(), "edison-content-list-management-content");
-				
-				model.addAttribute("tabNames", tabNames);
-			}
-			
+			/* Tabs - Setting */
+			String tabNames = LanguageUtil.get(themeDisplay.getLocale(), "edison-content-list-owned-content") + ",";
+			tabNames += LanguageUtil.get(themeDisplay.getLocale(), "edison-content-list-management-content");
+
+			model.addAttribute("tabNames", tabNames);
 			String listTabValue = CustomUtil.strNull(param.get("tabValue"), "owner_content");
 			model.addAttribute("listTabValue", listTabValue);
-			model.addAttribute("groupId", groupId);
 
 			/* 포탈여부에 따라 admin 분류 */
 			boolean isAdmin = false;
+		/*	if(portalYn.equals("Y")){// 포탈
+				// admin 만 모든 목록
+				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser())){
+					isAdmin = true;
+				}
+			}else{
+				// admin, site admin 모든 목록
+				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser()) || EdisonUserUtil.isSiteRole(themeDisplay
+					.getUser(), themeDisplay.getScopeGroupId(), EdisonRoleConstants.SITE_ADMINISTRATOR)){
+					isAdmin = true;
+				}
+			}*/
 
 			// 프로젝트 성과관리에서 링크로 연결될때 사용
 			/*
@@ -195,13 +141,13 @@ public class ContentListController{
 			int searchLine = ParamUtil.get(request, "searchLine", 10);
 			int blockSize = 10;
 			int start = ((currentPage - 1) * searchLine);
-			int end = searchLine;
 
 			Role ownerRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 				EdisonRoleConstants.CONTENT_OWNER);
 			Role managerRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(),
 				EdisonRoleConstants.CONTENT_MANAGER);
 			
+
 			Locale locale = themeDisplay.getLocale();
 			long companyGroupId = themeDisplay.getCompanyGroupId();
 
@@ -233,32 +179,22 @@ public class ContentListController{
 						locale.toString(), isCategoryJoin);
 				}
 			}
-			
-			if(tabViewYn.equals("Y")){
-				long[] categoryIds = new long[aCategoryList.size()];
-				for(int i=0; i<aCategoryList.size(); i++){
-					categoryIds[i] = aCategoryList.get(i).getCategoryId();
-				}
-				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, "", null, start, end, themeDisplay.getLocale(), true, true);
-				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, "", null, themeDisplay.getLocale().toString(), true, true);
-			} else {
-				if(!isAdmin){
-					long roleId = 0;
-					if(listTabValue.equals("owner_content")){ // owner 인것
-						roleId = ownerRole.getRoleId();
-					}else if(listTabValue.equals("manager_content")){ // manager 인것
-						roleId = managerRole.getRoleId();
-					}
-					
-					dataList = ContentLocalServiceUtil.retrieveListUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, start, searchLine, locale, themeDisplay.getUserId(), roleId);
-					totalCount = ContentLocalServiceUtil.retrieveCountUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, locale.toString(), themeDisplay.getUserId(), roleId);
-				}
-			}
 
 			model.addAttribute("isAdmin", isAdmin);
 			
+			if(!isAdmin){
+				long roleId = 0;
+				if(listTabValue.equals("owner_content")){ // owner 인것
+					roleId = ownerRole.getRoleId();
+				}else if(listTabValue.equals("manager_content")){ // manager 인것
+					roleId = managerRole.getRoleId();
+				}
+
+				dataList = ContentLocalServiceUtil.retrieveListUserContent(companyGroupId, parentGroupId, groupId,
+					searchText, start, searchLine, locale, themeDisplay.getUserId(), roleId);
+				totalCount = ContentLocalServiceUtil.retrieveCountUserContent(companyGroupId, parentGroupId, groupId,
+					searchText, locale.toString(), themeDisplay.getUserId(), roleId);
+			}
 
 			String portletNameSpace = themeDisplay.getPortletDisplay().getNamespace();
 			String paging = PagingUtil.getPaging(request.getContextPath(), portletNameSpace
@@ -277,10 +213,6 @@ public class ContentListController{
 			model.addAttribute("redirectName",  "My Edison");
 			String redirectURL = ParamUtil.getString(request, "redirectURL", EdisonHttpUtil.removeAndencodeURL(themeDisplay.getURLCurrent()));
 			model.addAttribute("redirectURL", redirectURL);
-			
-			if(tabViewYn.equals("Y")){
-				return "content/contentListTabView";
-			}
 			
 		}catch (Exception e){
 			e.printStackTrace();
@@ -304,7 +236,8 @@ public class ContentListController{
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
 			long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId")));
-			String searchText = CustomUtil.strNull(param.get("searchText"), "");
+			// Long contentDiv = ParamUtil.getLong(request, "contentDiv",0);
+			String searchText = CustomUtil.strNull(param.get("searchText"));
 
 			int currentPage = ParamUtil.get(request, "currentPage", 1);
 			int searchLine = ParamUtil.get(request, "searchLine", 10);
@@ -326,14 +259,6 @@ public class ContentListController{
 			int totalCount = 0;
 
 			String portalYn = request.getPreferences().getValue("portalYn", "N");
-			String tabViewYn = request.getPreferences().getValue("tabViewYn", "N");
-			
-			long globalGroupId = themeDisplay.getCompany().getGroupId();
-			long companyId = themeDisplay.getCompanyId();
-			
-			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
-			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
-			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
 
 			boolean isCategoryJoin = false;
 			boolean isAdmin = false;
@@ -361,30 +286,21 @@ public class ContentListController{
 						locale.toString(), isCategoryJoin);
 				}
 			}
-			
-			if(tabViewYn.equals("Y")){
-				long[] categoryIds = new long[aCategoryList.size()];
-				for(int i=0; i<aCategoryList.size(); i++){
-					categoryIds[i] = aCategoryList.get(i).getCategoryId();
+
+			if(!isAdmin){
+				long roleId = 0;
+				if(listTabValue.equals("owner_content")){ // owner 인것
+					roleId = ownerRole.getRoleId();
+				}else if(listTabValue.equals("manager_content")){ // manager 인것
+					roleId = managerRole.getRoleId();
 				}
-				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, start, searchLine, themeDisplay.getLocale(), true, true);
-				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, themeDisplay.getLocale().toString(), true, true);
-			} else {
-				if(!isAdmin){
-					long roleId = 0;
-					if(listTabValue.equals("owner_content")){ // owner 인것
-						roleId = ownerRole.getRoleId();
-					}else if(listTabValue.equals("manager_content")){ // manager 인것
-						roleId = managerRole.getRoleId();
-					}
-					
-					dataList = ContentLocalServiceUtil.retrieveListUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, start, searchLine, locale, themeDisplay.getUserId(), roleId);
-					totalCount = ContentLocalServiceUtil.retrieveCountUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, locale.toString(), themeDisplay.getUserId(), roleId);
-				}
+
+				dataList = ContentLocalServiceUtil.retrieveListUserContent(companyGroupId, parentGroupId, groupId,
+					searchText, start, searchLine, locale, themeDisplay.getUserId(), roleId);
+				totalCount = ContentLocalServiceUtil.retrieveCountUserContent(companyGroupId, parentGroupId, groupId,
+					searchText, locale.toString(), themeDisplay.getUserId(), roleId);
 			}
-			
+
 			String portletNameSpace = themeDisplay.getPortletDisplay().getNamespace();
 			String paging = PagingUtil.getPaging(request.getContextPath(), portletNameSpace
 				+ "generalContentPageSearch", totalCount, currentPage, searchLine, blockSize);
@@ -1321,201 +1237,6 @@ public class ContentListController{
 			}else{
 				e.printStackTrace();
 			}
-		}
-	}
-	
-	@ResourceMapping(value ="solverTypeList" )
-	public void solverTypeList(ResourceRequest request, ResourceResponse response) throws IOException{
-		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
-			Map params = RequestUtil.getParameterMap(request);
-			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
-			long globalGroupId = themeDisplay.getCompany().getGroupId();
-			long companyId = themeDisplay.getCompanyId();
-			
-			AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(globalGroupId, EdisonAssetCategory.GLOBAL_DOMAIN);
-			AssetEntry aEntry = AssetEntryLocalServiceUtil.fetchEntry(Group.class.getName(), groupId);
-			List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(aEntry.getEntryId());
-			
-			List<Map> solverTypeList =  new ArrayList<Map>();
-			
-			for(AssetCategory aCategory : aCategoryList){
-				Map categoryMap = new HashMap();
-				if(aCategory.getVocabularyId()== assetVocabulary.getVocabularyId() && aCategory.getParentCategoryId() != 0){
-					categoryMap.put("categoryId", aCategory.getCategoryId());
-					categoryMap.put("title", aCategory.getTitle(themeDisplay.getLanguageId()));
-					categoryMap.put("companyId", aCategory.getCompanyId());
-					categoryMap.put("parentCategoryId", aCategory.getParentCategoryId());
-					categoryMap.put("userId", aCategory.getUserId());
-					categoryMap.put("userName", aCategory.getUserName());
-
-					try{
-						AssetCategoryProperty categoryProperty = AssetCategoryPropertyLocalServiceUtil.getCategoryProperty(aCategory.getCategoryId(), "IMAGE");
-						categoryMap.put("image", categoryProperty);
-					}catch(NoSuchCategoryPropertyException e){
-						
-					}
-					
-					solverTypeList.add(categoryMap);
-				}
-			}
-			
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			PrintWriter writer = response.getWriter();
-			JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
-			com.liferay.portal.kernel.json.JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-			
-			String optionJson = jsonSerializer.serialize(solverTypeList);
-			JSONArray optionArr = JSONFactoryUtil.createJSONArray(optionJson);
-			jsonObj.put("solverTypeList", optionArr);
-			writer.write(jsonObj.toString());
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-	
-	//탭 이벤트 저장
-	@ResourceMapping(value ="cickTab")
-	public void cickTab(ResourceRequest request, ResourceResponse response){
-		try{
-			Map param = RequestUtil.getParameterMap(request);
-			long groupId = ParamUtil.getLong(request, "groupId",0);
-			if(groupId!=0){
-				ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-				Group group = GroupLocalServiceUtil.getGroup(groupId);
-				themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
-				
-				//SITE ROLE 체크
-				response.setContentType("application/json; charset=UTF-8");
-				PrintWriter out = response.getWriter();
-				
-				JSONObject json = new JSONObject();
-				boolean addContentAuth = false;
-				
-				if(EdisonUserUtil.isPowerUserThan(themeDisplay.getUser()) 
-						|| EdisonUserUtil.isSiteRole(themeDisplay.getUser(), group.getGroupId(), EdisonRoleConstants.SITE_ADMINISTRATOR)){
-					addContentAuth = true;
-				}
-				
-				json.put("addContentAuth", addContentAuth);
-				out.write(json.toString());
-				
-			}
-		}catch(Exception e){
-			log.error(e);
-			e.printStackTrace();
-		}
-		
-	}
-	
-	//탭 이벤트 저장
-	@ActionMapping(params="myaction=saveClickTab")
-	public void saveClickTab(ActionRequest request, ActionResponse response){
-		try{
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			Map param = RequestUtil.getParameterMap(request);
-			long groupId = ParamUtil.getLong(request, "groupId",0);
-			if(themeDisplay.isSignedIn()) {
-				if(groupId!=0){
-					Group group = GroupLocalServiceUtil.getGroup(groupId);
-					themeDisplay.getUser().getExpandoBridge().setAttribute(EdisonExpando.USER_VISIT_SITE,group.getName());
-				}
-			}
-			String responseNamespace = response.getNamespace();
-			responseNamespace = responseNamespace.substring(1, responseNamespace.length()-1);
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), responseNamespace);
-			PortletURL url = PortletURLFactoryUtil.create(request, responseNamespace, plid, "");
-			url.setParameter("groupId", CustomUtil.strNull(groupId));
-			response.sendRedirect(url.toString());
-		}catch(Exception e){
-			log.error(e);
-			e.printStackTrace();
-			
-			//Session Error Message
-			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
-		}
-	}
-	
-	@ResourceMapping(value ="searchList" ) //하위사이트 groupId로 각 리스트 가져오기
-	public void searchList(ResourceRequest request, ResourceResponse response) throws IOException{
-		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			Map params = RequestUtil.getParameterMap(request);
-			
-			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
-			long globalGroupId = themeDisplay.getCompany().getGroupId();
-			long companyId = themeDisplay.getCompanyId();
-			long categoryId = Long.parseLong(CustomUtil.strNull(params.get("categoryId")));
-			long[] categoryIds =  new long[]{categoryId};
-			String searchText = CustomUtil.strNull(params.get("searchText"), "");
-			
-			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("currentPage"), "1"));
-			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "5"));
-			int pagePerBlock = 5;
-			
-			int begin = (curPage - 1) * linePerPage;
-			int end = linePerPage;
-			
-			List<Map<String, Object>> dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, begin, end, themeDisplay.getLocale(), true, true);
-			int count = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, themeDisplay.getLocale().toString(), true, true);
-			
-			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", count, curPage, linePerPage, pagePerBlock);
-			
-			int totalCnt = count;
-			
-			JSONObject jsonObj = new JSONObject();
-            jsonObj.put("dataList", dataList);
-			jsonObj.put("select_line", linePerPage);
-			jsonObj.put("totalCnt", totalCnt);
-			jsonObj.put("pageList", pagingStr);
-            
-            response.setContentType("application/json; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.write(jsonObj.toString());
-			
-		} catch (PortalException | SystemException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 고급 콘텐츠 조회
-	 * @param request
-	 * @param response
-	 * @throws PortalException
-	 * @throws SystemException
-	 * @throws IOException
-	 */
-	@ResourceMapping(value ="retrieveListAdvanced")
-	public void retrieveListAdvanced(ResourceRequest request, ResourceResponse response){
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		try{
-			Map param = RequestUtil.getParameterMap(request);
-			
-			Long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId")));
-			User user = null;
-			
-			boolean isSiteAdmin = false;
-			if(themeDisplay.isSignedIn()){
-				user = themeDisplay.getUser();
-			}
-			
-			List<Map<String, Object>> returnList = AdvancedContentLocalServiceUtil.getAdvancedContentListByGroupId(groupId,user,themeDisplay.getLocale(),themeDisplay);
-			
-			JSONObject json = new JSONObject();
-			json.put("dataList", returnList);
-			
-			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.write(json.toString());
-		}catch(Exception e){
-			log.error(e);
-			e.printStackTrace();
 		}
 	}
 }

@@ -13,6 +13,7 @@
 		<portlet id="edison-library-required-list" />
 		<portlet id="edison-data-type-editor" />
 		<portlet id="edison-inputDeck"/>
+		<portlet id="edison-scienceAppstore-list" />
 	</category>
 	<category name="ScienceApp Portlet">
 		<portlet id="science-app-founder"></portlet>

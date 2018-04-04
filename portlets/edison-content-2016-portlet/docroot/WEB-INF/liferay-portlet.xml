@@ -13,6 +13,16 @@
 	</portlet>
 	
 	<portlet>
+		<portlet-name>edison-category-content-list</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.kisti.edison.content.portlet.content.ConfigurationController</configuration-action-class>
+		<use-default-template>true</use-default-template>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-content container</css-class-wrapper>	
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	
+	<portlet>
 		<portlet-name>edison-mainResource</portlet-name>
 		<icon>/icon.png</icon>
 		<configuration-action-class>org.kisti.edison.content.portlet.mainResource.ConfigurationController</configuration-action-class>
