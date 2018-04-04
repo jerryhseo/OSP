@@ -25,6 +25,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
@@ -51,17 +52,21 @@ import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -657,8 +662,6 @@ public class MonitoringController {
 			
 			if(jobStatusSearch){
 				String jobUuid = CustomUtil.strNull(resultMap.get("jobUuid"));
-				//simulationStatus 확인 - 20151228 - GPLUS
-				//SimulationJobStatusLocalServiceUtil.getSimulationJobStatusBySimulationUuidASMonitoring(jobSeqNo,groupId, simulationUuid, jobUuid);
 			}
 		}
 		
@@ -1470,6 +1473,30 @@ public class MonitoringController {
 			out.write(obj.toString());
 		}catch(Exception e){
 			log.error(e);
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="readOutLog")
+	public void readOutLog(ResourceRequest request, ResourceResponse response, @RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+			@RequestParam(value = "jobUuid", required = true) String jobUuid , @RequestParam(value = "lastPosition", required = false) String strLastPoistion,
+			@RequestParam(value = "type", required = false) String type ) throws IOException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
+		
+		try{
+			response.setContentType("application/json; charset=UTF-8");
+			String fileExt = CustomUtil.strNull(type).equals("")?"out":type;
+			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
+
+			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+			log.put( "jobStatus", simulationJob.getJobStatus());
+			
+			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+			ServletResponseUtil.write(httpResponse, log.toString());
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
