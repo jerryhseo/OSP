@@ -17,6 +17,7 @@
 </style>
 
 
+
 <div class="dashboard-content span12" style="margin-left: 0px !important;height: 304px; overflow-y:auto;">
 	<div id="<portlet:namespace/>inputdeck-editor" style="display: none;">
 		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group">
@@ -31,7 +32,7 @@
 		
 	</div>
     
-    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;height: 18px;">
+    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;height: 30px;">
       <div class="bar" style="width: 50%;"></div>
       <span id="<portlet:namespace/>progress-percent" class="progress-percent">0%</span>
     </div>
