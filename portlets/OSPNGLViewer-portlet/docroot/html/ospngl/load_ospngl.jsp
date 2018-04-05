@@ -41,7 +41,7 @@
 
 
 <div id="viewArea">
-	<div id="nglViewer" style="width:100%; height:95%; margin: 0 auto;"></div>
+	<div id="nglViewer" style="width:100%; height:95%;"></div>
 </div>
 <script>
 var namespace;
@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		parent.iframeClickServerOpen();
 	});
 	//stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
-	
 });
 
 function drawNglViewer(inputData, serveResourceURL){

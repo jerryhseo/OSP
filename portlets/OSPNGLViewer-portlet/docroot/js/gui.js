@@ -170,14 +170,11 @@ NGL.Preferences.prototype = {
 
 NGL.StageWidget = function (stage, id) {
 	var viewport = new NGL.ViewportWidget(stage).setId('viewport')
-	//var viewport = new NGL.ViewportWidget(stage).setId(viewArea)
 	var parentDomElement = document.getElementById(id);
 	
 	parentDomElement.appendChild(viewport.dom)
   // ensure initial focus on viewer canvas for key-stroke listening
   stage.viewer.renderer.domElement.focus()
-
-  //
 
   var preferences = new NGL.Preferences('ngl-stage-widget')
 
