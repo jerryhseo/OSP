@@ -3,7 +3,7 @@
 <%@ include file="/common/init.jsp"%>
 <liferay-portlet:resourceURL var="loadFileUrl" id="loadFile" copyCurrentRenderParameters="false"/>
 <style>
-#p_p_id<portlet:namespace/> {margin-left: -30px; display:none;}
+#p_p_id<portlet:namespace/> {display:none;}
 #<portlet:namespace/>canvas {height: 670px; width: 98%; margin-top: 13.2px; border: 1px solid #d3d3d3; overflow: hidden;}
 </style>
 <div style="min-height: 670px; display: none;" id="<portlet:namespace/>xyPlotter">
