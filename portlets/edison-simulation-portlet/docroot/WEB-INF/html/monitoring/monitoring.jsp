@@ -597,16 +597,12 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 	if(jobStatus=="<%=MonitoringStatusConstatns.QUEUED%>"||jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
 		
 		//2015-05-14 추가(처리중일 경우 중간 결과 확인 할 수 있도록)
+		// 2018.04.04. log Port가 존재할 때 중간확인 서비스 제공
 		if(jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
 			if($middleCheckArea.attr("logFileProcess-state")=="Y"){
-				$("<img/>").attr("src","${contextPath}/images/monitoring/btn_monitor_error.png")
-				.attr("width","22px")
-				.attr("height","22px")
-				   .click(function(){<portlet:namespace/>error_event(simulationUuid, jobSeqNo, jobUuid);})
-				   .css("cursor","pointer")
-				   .appendTo($middleCheckArea);
-				
-				$middleCheckArea.append("&nbsp;");
+				$("<button></button>").addClass("btn btn-default icon-bar-chart")
+									  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
+									  .appendTo($middleCheckArea);
 			}
 			
 			if($resultViewArea.attr("middleFileprocess-state")=="Y"){
@@ -652,10 +648,12 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('"+scienceAppId+"','"+simulationUuid+"','"+jobUuid+"');")
 				  .appendTo($resultViewArea);
 		
-		// success인 경우만 log(중간확인) 서비스 제공
-		/* $("<button></button>").addClass("btn btn-default icon-bar-chart")
-							  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
-							  .appendTo($middleCheckArea); */
+		// success인 경우 log Port가 존재할 때 중간확인 서비스 제공
+		if($middleCheckArea.attr("logfileprocess-state")=="Y"){
+			$("<button></button>").addClass("btn btn-default icon-bar-chart")
+								  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
+								  .appendTo($middleCheckArea);
+		}
 		
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
 		if($middleCheckArea.attr("logFileProcess-state") == "Y"){
