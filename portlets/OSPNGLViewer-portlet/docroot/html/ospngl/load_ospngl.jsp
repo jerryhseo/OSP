@@ -45,9 +45,11 @@
 </div>
 <script>
 var namespace;
+var serveResourceURL;
 
-function setNamespace( ns ){
+function setNamespace( ns, parentServeResourceURL ){
 	namespace = ns;
+	serveResourceURL = parentServeResourceURL;
 	console.log('[NGLViewer] Set namespace ' + namespace);
 }
 
@@ -123,7 +125,8 @@ function drawNglViewer(inputData, serveResourceURL){
 	data[namespace+'fileName'] = inputData.name_;
 	data[namespace+'relative'] = true;
 
-	stage.removeAllComponents();
+	
+	//stage.removeAllComponents();
 	
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", serveResourceURL);

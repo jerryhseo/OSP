@@ -101,7 +101,7 @@ function <portlet:namespace/>passNamespace(){
 			function(){
 			    var iframe = document.getElementById('<portlet:namespace/>canvas');
 				if ( <portlet:namespace/>iframeReady() && iframe.contentWindow.setNamespace) {
-					iframe.contentWindow.setNamespace('<portlet:namespace/>');
+					iframe.contentWindow.setNamespace('<portlet:namespace/>', '<%= serveResourceURL.toString()%>');
 				} 
 				else{
 					<portlet:namespace/>passNamespace();
