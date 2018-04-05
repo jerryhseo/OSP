@@ -17,28 +17,28 @@ This file allows you to override and define new Velocity variables.
 	
 	#set($singleValue = $paramUtil.getInteger($request,"p_p_id",0))
 	#if($singleValue=="58"||$singleValue=="1001"||$singleValue=="1004")
-		#set ($content_class ="content-sub container-fluid")
+		#set ($content_class ="container")
 		#set ($show_breadcrumbs = false)
 	#end
 	
 	#set($ticketKey = $paramUtil.getString($request,"ticketKey",""))
 	#if($ticketKey!="")
-		#set ($content_class ="content-sub container-fluid")
+		#set ($content_class ="container")
 		#set ($show_breadcrumbs = true)
 	#end
 #else
-	#set ($content_class ="content-sub container-fluid")
+	#set ($content_class ="container")
 	#set ($show_breadcrumbs = true)
 #end
 
 #if ( $is_signed_in )
 	#if(!$themeDisplay.getUser().isEmailAddressVerificationComplete())
-		#set ($content_class ="content-sub container-fluid")
+		#set ($content_class ="container")
 		#set ($show_breadcrumbs = false)
 	#end
 	
 	#if($themeDisplay.getUser().isPasswordReset())
-		#set ($content_class ="content-sub container-fluid")
+		#set ($content_class ="container")
 		#set ($show_breadcrumbs = false)
 	#end
 		
@@ -46,6 +46,29 @@ This file allows you to override and define new Velocity variables.
 		#if($role.getName() == "Temp User")
 			#set ($temp_user =true)
 		#end
+	#end
+#end
+
+#set($groups=[])
+#set($siteGroups=[])
+#set($groupLocalService= $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
+#set($parentGroupId = $themeDisplay.getScopeGroup().getParentGroupId())
+#if ($parentGroupId != 0)
+	#set($edisongroup=$themeDisplay.getScopeGroup().getParentGroup())
+	#set($groups=$groupLocalService.getGroups($themeDisplay.getCompanyId(),$parentGroupId,true))
+#else
+	#set($edisongroup=$themeDisplay.getScopeGroup())
+	#set($groups=$groupLocalService.getGroups($themeDisplay.getCompanyId(),$themeDisplay.getScopeGroupId(),true))
+#end
+
+
+#foreach ($site in $groups)
+	#if($site.active && $site.type==1)
+		#set($siteName = $getterUtil.get($site.getExpandoBridge().getAttribute("SiteName").get($locale), $site.name))
+		#if($siteName=="")
+			#set($siteName = $site.name)
+		#end
+		#set($siteGroup = $siteGroups.add({"siteName" :$siteName,"url" :$site.friendlyURL,"groupId" :$site.groupId}))
 	#end
 #end
 

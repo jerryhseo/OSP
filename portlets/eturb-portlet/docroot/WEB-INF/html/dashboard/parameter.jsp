@@ -31,7 +31,7 @@
 		
 	</div>
     
-    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;">
+    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;height: 18px;">
       <div class="bar" style="width: 50%;"></div>
       <span id="<portlet:namespace/>progress-percent" class="progress-percent">0%</span>
     </div>

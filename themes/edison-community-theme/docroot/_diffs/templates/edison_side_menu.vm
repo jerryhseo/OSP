@@ -32,43 +32,23 @@
 		
 		<nav aria-label="Site Pages" role="navigation">
 			<ul>
-				#if (!$is_signed_in)
-				 	
-				 	<li>
-						<a href="/web${page_group.getParentGroup().friendlyURL}">
-							$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($$page_group.getParentGroup().descriptiveName)),"")
+				<li>
+					<a href="/web${page_group.getParentGroup().friendlyURL}">
+						$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($$page_group.getParentGroup().descriptiveName)),"")
+					</a>
+				</li>
+				#foreach ($site in$sortTool.sort($siteGroups,'siteName:asc'))
+					#if ($site.groupId==$themeDisplay.getScopeGroupId())
+						#set ($siteOnClass = "site-on")
+					#else
+						#set ($siteOnClass = "")
+					#end
+					
+					<li>
+						<a href="/web${site.url}" class="$siteOnClass">
+							$site.siteName
 						</a>
 					</li>
-					
-					
-					#set ($groupLocalServiceUtil = $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
-					#foreach($site in $groupLocalServiceUtil.getGroups($themeDisplay.getCompanyId(),$page_group.getParentGroupId(),true))
-						#if ($site.groupId==$themeDisplay.getScopeGroupId())
-							#set ($siteOnClass = "site-on")
-						#else
-							#set ($siteOnClass = "")
-						#end
-						<li>
-							<a href="/web${site.friendlyURL}" class="$siteOnClass">
-								$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
-							</a>
-						</li>
-					#end
-				#else
-					#foreach($site in $sortTool.sort($user.MySiteGroups,'groupId:asc'))
-						#if ($site.hasPublicLayouts())
-							#if ($site.groupId==$themeDisplay.getScopeGroupId())
-								#set ($siteOnClass = "site-on")
-							#else
-								#set ($siteOnClass = "")
-							#end
-							<li>
-								<a href="/web${site.friendlyURL}" class="$siteOnClass">
-									$languageUtil.format($locale, $stringUtil.trim($stringUtil.toUpperCase($site.descriptiveName)),"")
-								</a>
-							</li>
-						#end
-					#end
 				#end
 			</ul>
 		</nav>

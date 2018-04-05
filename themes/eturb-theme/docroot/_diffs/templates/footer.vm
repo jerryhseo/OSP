@@ -3,7 +3,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8" style="margin-top: 25px;margin-bottom: 20px;">
-				<span>COPYRIGHT(C) 2017 NISN, KISTI ALL RIGHTS RESERVED. </span>
+				<span>COPYRIGHT(C) 2017~ NISN, KISTI ALL RIGHTS RESERVED. </span>
 				<span>Frameworked by KISTI  </span>
 				<span>Solvered by $theme.getSetting("flow-solvered-by")  <br/></span>
 				<span><a href = "$privateInfoURL" style="cursor:pointer;" target="_self">$infomation_text</a></span>
