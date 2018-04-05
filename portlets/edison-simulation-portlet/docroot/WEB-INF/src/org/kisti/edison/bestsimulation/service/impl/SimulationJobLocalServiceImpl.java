@@ -32,6 +32,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -53,7 +54,9 @@ import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.science.model.ScienceApp;
+import org.kisti.edison.science.model.ScienceAppLogPorts;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
@@ -61,6 +64,8 @@ import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonPropsUtil;
 import org.kisti.edison.util.MonitoringStatusConstatns;
 
+import com.kisti.osp.icecap.model.DataType;
+import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
@@ -94,6 +99,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
 import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * The implementation of the simulation job local service.
@@ -593,8 +599,7 @@ public class SimulationJobLocalServiceImpl
 					
 					
 					//후처리기 존재 여부 - 미사용, 2018.03.19
-					/*long scienceAppId = GetterUtil.get(simulation.getScienceAppId(),0L);
-					if(scienceAppId > 0L) {
+					/*if(scienceAppId > 0L) {
 						String outputPort = "";
 						
 						ScienceAppOutputPorts scienceAppOutputPorts = ScienceAppOutputPortsLocalServiceUtil.fetchScienceAppOutputPorts(scienceAppId);
@@ -626,9 +631,10 @@ public class SimulationJobLocalServiceImpl
 								resultRow.put("jobMiddleFileProcessorYn","Y");
 							}
 						}
-					}
+					}*/
 
 					//로그포트 존재 여부
+					long scienceAppId = GetterUtil.get(simulation.getScienceAppId(),0L);
 					if(scienceAppId > 0L) {
 						String logPort = "";
 						ScienceAppLogPorts scienceAppLogPorts =  ScienceAppLogPortsLocalServiceUtil.fetchScienceAppLogPorts(scienceAppId);
@@ -659,8 +665,10 @@ public class SimulationJobLocalServiceImpl
 									resultRow.put("jobLogFileProcessorYn","Y");
 								}
 							}
+						} else {
+							resultRow.put("jobLogFileProcessorYn","N");
 						}
-					}*/
+					}
 					
 					
 /*					if(CustomUtil.strNull(simulationJob.getJobPostProcessor()).equals("")){
