@@ -41,7 +41,7 @@
 
 
 <div id="viewArea">
-	<div id="nglViewer" style="width:100%; height:95%;"></div>
+	<div id="nglViewer"></div>
 </div>
 <script>
 var namespace;
