@@ -343,6 +343,8 @@ public class SearchConditionPersistenceImpl extends BasePersistenceImpl<SearchCo
 		searchConditionImpl.setManual(searchCondition.isManual());
 		searchConditionImpl.setReference(searchCondition.isReference());
 		searchConditionImpl.setAdvanced(searchCondition.isAdvanced());
+		searchConditionImpl.setSortOrder(searchCondition.getSortOrder());
+		searchConditionImpl.setSortField(searchCondition.getSortField());
 		searchConditionImpl.setSolver(searchCondition.isSolver());
 		searchConditionImpl.setConverter(searchCondition.isConverter());
 		searchConditionImpl.setEditor(searchCondition.isEditor());

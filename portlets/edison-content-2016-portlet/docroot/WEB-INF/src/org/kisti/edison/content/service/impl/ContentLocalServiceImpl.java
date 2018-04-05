@@ -285,30 +285,37 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 	}
 	
 	/**
-	 * 콘텐츠 리스트 조회 콘텐츠 목록 : 포털 -> categoryIds null
-	 * 
-	 * @param categoryIds
-	 * @param searchText
-	 *          콘텐츠 검색어
-	 * @param contentDiv
-	 *          콘텐츠 유형검색
-	 * @param start
-	 * @param end
-	 * @param locale
-	 * @param categoryJoin
-	 *          카테고리 테이블과 조인 여부
-	 * @param isTotalSearch
-	 *          통합검색에서 조회하면 true - openYn, serviceLanguage 추가
-	 * @return
-	 * @throws Exception
-	 */
-	public List<Map<String, Object>> retrieveListContent(long[] categoryIds, String searchText,
-		long[] contentDiv, int start, int end, Locale locale, boolean categoryJoin, boolean isTotalSearch)
-		throws Exception{
+     * 콘텐츠 리스트 조회 콘텐츠 목록 : 포털 -> categoryIds null
+     * 
+     * @param categoryIds
+     * @param searchText
+     *          콘텐츠 검색어
+     * @param contentDiv
+     *          콘텐츠 유형검색
+     * @param start
+     * @param end
+     * @param locale
+     * @param categoryJoin
+     *          카테고리 테이블과 조인 여부
+     * @param isTotalSearch
+     *          통합검색에서 조회하면 true - openYn, serviceLanguage 추가
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> retrieveListContent(long[] categoryIds, String searchText,
+        long[] contentDiv, int start, int end, Locale locale, boolean categoryJoin, boolean isTotalSearch)
+        throws Exception{
+        return retrieveListContent(categoryIds, searchText, contentDiv, start, end, locale, 
+            categoryJoin, isTotalSearch, null, null);
+    }
+	
+    public List<Map<String, Object>> retrieveListContent(long[] categoryIds, String searchText, long[] contentDiv,
+        int start, int end, Locale locale, boolean categoryJoin, boolean isTotalSearch,
+        String sortField, String sortOrder) throws Exception{
 
 		long classNameId = ClassNameLocalServiceUtil.getClassNameId(Content.class.getName());
 		List<Object[]> contentList = contentFinder.getContentList(categoryIds, searchText, contentDiv, start, end,
-			locale.toString(), classNameId, categoryJoin, isTotalSearch);
+			locale.toString(), classNameId, categoryJoin, isTotalSearch, sortField, sortOrder);
 
 		// nullpointer exception prevention
 		if(contentList == null || contentList.isEmpty()){
@@ -395,12 +402,11 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 		boolean categoryJoin, boolean isTotalSearch){ // 포탈
 		// isSite --> 통합검색에서는 category가 있어서 조인을 해야하고, 콘텐츠에서 포탈인 경우에는 category가
 		// 없어도되니까 조인이 필요없음.
-
-		long classNameId = ClassNameLocalServiceUtil.getClassNameId(Content.class.getName());
-		return contentFinder.getContentCount(categoryIds, searchText, contentDiv, languageId, classNameId,
-			categoryJoin, isTotalSearch);
+	    long classNameId = ClassNameLocalServiceUtil.getClassNameId(Content.class.getName());
+        return contentFinder.getContentCount(categoryIds, searchText, contentDiv, languageId, classNameId,
+            categoryJoin, isTotalSearch);
 	}
-
+	
 	/**
 	 * 유저의 콘텐츠 리스트 조회 콘텐츠 중 현재 사용자가 OWNER/MANAGER인 항목조회
 	 * 

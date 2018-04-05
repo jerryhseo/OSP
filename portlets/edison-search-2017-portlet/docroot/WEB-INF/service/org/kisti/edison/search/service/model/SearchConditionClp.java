@@ -90,6 +90,8 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 		attributes.put("manual", getManual());
 		attributes.put("reference", getReference());
 		attributes.put("advanced", getAdvanced());
+		attributes.put("sortOrder", getSortOrder());
+		attributes.put("sortField", getSortField());
 		attributes.put("Solver", getSolver());
 		attributes.put("Converter", getConverter());
 		attributes.put("Editor", getEditor());
@@ -201,6 +203,18 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 
 		if (advanced != null) {
 			setAdvanced(advanced);
+		}
+
+		String sortOrder = (String)attributes.get("sortOrder");
+
+		if (sortOrder != null) {
+			setSortOrder(sortOrder);
+		}
+
+		String sortField = (String)attributes.get("sortField");
+
+		if (sortField != null) {
+			setSortField(sortField);
 		}
 
 		Boolean Solver = (Boolean)attributes.get("Solver");
@@ -669,6 +683,52 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 	}
 
 	@Override
+	public String getSortOrder() {
+		return _sortOrder;
+	}
+
+	@Override
+	public void setSortOrder(String sortOrder) {
+		_sortOrder = sortOrder;
+
+		if (_searchConditionRemoteModel != null) {
+			try {
+				Class<?> clazz = _searchConditionRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSortOrder", String.class);
+
+				method.invoke(_searchConditionRemoteModel, sortOrder);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getSortField() {
+		return _sortField;
+	}
+
+	@Override
+	public void setSortField(String sortField) {
+		_sortField = sortField;
+
+		if (_searchConditionRemoteModel != null) {
+			try {
+				Class<?> clazz = _searchConditionRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSortField", String.class);
+
+				method.invoke(_searchConditionRemoteModel, sortField);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public boolean getSolver() {
 		return _Solver;
 	}
@@ -781,6 +841,101 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 	}
 
 	@Override
+	public java.lang.String SORT_ORDER_ASC() {
+		try {
+			String methodName = "SORT_ORDER_ASC";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			java.lang.String returnObj = (java.lang.String)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_CREATED() {
+		try {
+			String methodName = "SORT_FIELD_CREATED";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			java.lang.String returnObj = (java.lang.String)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public java.lang.String[] getAppTypes() {
+		try {
+			String methodName = "getAppTypes";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			java.lang.String[] returnObj = (java.lang.String[])invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_VIEW() {
+		try {
+			String methodName = "SORT_FIELD_VIEW";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			java.lang.String returnObj = (java.lang.String)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public int getStart() {
+		try {
+			String methodName = "getStart";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Integer returnObj = (Integer)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public void setLocale(java.util.Locale locale) {
 		try {
 			String methodName = "setLocale";
@@ -833,25 +988,6 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 	}
 
 	@Override
-	public java.lang.String[] getAppTypes() {
-		try {
-			String methodName = "getAppTypes";
-
-			Class<?>[] parameterTypes = new Class<?>[] {  };
-
-			Object[] parameterValues = new Object[] {  };
-
-			java.lang.String[] returnObj = (java.lang.String[])invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
 	public java.util.Locale getLocale() {
 		try {
 			String methodName = "getLocale";
@@ -871,15 +1007,34 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 	}
 
 	@Override
-	public int getStart() {
+	public java.lang.String SORT_ORDER_DESC() {
 		try {
-			String methodName = "getStart";
+			String methodName = "SORT_ORDER_DESC";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			Integer returnObj = (Integer)invokeOnRemoteModel(methodName,
+			java.lang.String returnObj = (java.lang.String)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_NAME() {
+		try {
+			String methodName = "SORT_FIELD_NAME";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			java.lang.String returnObj = (java.lang.String)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -977,6 +1132,8 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 		clone.setManual(getManual());
 		clone.setReference(getReference());
 		clone.setAdvanced(getAdvanced());
+		clone.setSortOrder(getSortOrder());
+		clone.setSortField(getSortField());
 		clone.setSolver(getSolver());
 		clone.setConverter(getConverter());
 		clone.setEditor(getEditor());
@@ -1033,7 +1190,7 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(47);
 
 		sb.append("{id=");
 		sb.append(getId());
@@ -1069,6 +1226,10 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 		sb.append(getReference());
 		sb.append(", advanced=");
 		sb.append(getAdvanced());
+		sb.append(", sortOrder=");
+		sb.append(getSortOrder());
+		sb.append(", sortField=");
+		sb.append(getSortField());
 		sb.append(", Solver=");
 		sb.append(getSolver());
 		sb.append(", Converter=");
@@ -1084,7 +1245,7 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(73);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.search.service.model.SearchCondition");
@@ -1159,6 +1320,14 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 		sb.append(getAdvanced());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>sortOrder</column-name><column-value><![CDATA[");
+		sb.append(getSortOrder());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>sortField</column-name><column-value><![CDATA[");
+		sb.append(getSortField());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>Solver</column-name><column-value><![CDATA[");
 		sb.append(getSolver());
 		sb.append("]]></column-value></column>");
@@ -1197,6 +1366,8 @@ public class SearchConditionClp extends BaseModelImpl<SearchCondition>
 	private boolean _manual;
 	private boolean _reference;
 	private boolean _advanced;
+	private String _sortOrder;
+	private String _sortField;
 	private boolean _Solver;
 	private boolean _Converter;
 	private boolean _Editor;

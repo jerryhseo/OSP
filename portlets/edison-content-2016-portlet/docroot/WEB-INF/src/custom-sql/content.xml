@@ -98,7 +98,12 @@
 					A.openYn = #openYn#
 				</isNotEmpty>
 				GROUP BY A.contentSeq
+                <isNotEmpty property="sortField">
+                ORDER BY A.@@sortField@@ @@sortOrder@@    
+                </isNotEmpty>
+                <isNotEmpty property="defaultSortOrder">
 				ORDER BY insertDate DESC
+                </isNotEmpty>
 			)DATA
 			<isNotEmpty property="begin">
 				Limit #begin#, #end#

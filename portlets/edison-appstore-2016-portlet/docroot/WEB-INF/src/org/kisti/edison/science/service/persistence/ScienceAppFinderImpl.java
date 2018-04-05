@@ -132,6 +132,10 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 				}
 			}
 			
+			if(!searchParam.containsKey("defaultSortOrder") && !searchParam.containsKey("sortField")){
+			    searchParam.put("defaultSortOrder", "true");
+			}
+			
 			String sqlQuery = CustomSQLUtil.get(GET_APPLIST_WHERE);
 			sqlSb.append(sqlQueryHeader);
 			sqlSb.append(sqlQuery);

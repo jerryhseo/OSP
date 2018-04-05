@@ -249,7 +249,13 @@
 			</isNotEmpty>
 			
 		GROUP BY A.scienceAppId
+        <isNotEmpty property="sortField">
+            ORDER BY @@sortField@@ @@sortOrder@@
+        </isNotEmpty>
+        <isNotEmpty property="defaultSortOrder">
 		ORDER BY A.createDate DESC
+        </isNotEmpty>
+        
 			<isNotEmpty property="begin">
 				LIMIT
 					#begin#, #end#

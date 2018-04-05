@@ -152,43 +152,43 @@ public class ContentLocalServiceClp implements ContentLocalService {
 				"java.util.Locale", "boolean", "boolean"
 			};
 
-		_methodName25 = "retrieveCountContent";
+		_methodName25 = "retrieveListContent";
 
 		_methodParameterTypes25 = new String[] {
-				"long", "long", "java.lang.String", "long[][]",
-				"java.lang.String", "boolean"
+				"long[][]", "java.lang.String", "long[][]", "int", "int",
+				"java.util.Locale", "boolean", "boolean", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName26 = "retrieveCountContent";
 
 		_methodParameterTypes26 = new String[] {
+				"long", "long", "java.lang.String", "long[][]",
+				"java.lang.String", "boolean"
+			};
+
+		_methodName27 = "retrieveCountContent";
+
+		_methodParameterTypes27 = new String[] {
 				"long[][]", "java.lang.String", "long[][]", "java.lang.String",
 				"boolean", "boolean"
 			};
 
-		_methodName27 = "retrieveListUserContent";
+		_methodName28 = "retrieveListUserContent";
 
-		_methodParameterTypes27 = new String[] {
+		_methodParameterTypes28 = new String[] {
 				"long", "long", "long", "java.lang.String", "int", "int",
 				"java.util.Locale", "long", "long"
 			};
 
-		_methodName28 = "retrieveCountUserContent";
+		_methodName29 = "retrieveCountUserContent";
 
-		_methodParameterTypes28 = new String[] {
+		_methodParameterTypes29 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"long", "long"
 			};
 
-		_methodName29 = "createContent";
-
-		_methodParameterTypes29 = new String[] {
-				"com.liferay.portal.kernel.upload.UploadPortletRequest",
-				"javax.portlet.PortletRequest", "long", "long", "long",
-				"java.util.Map"
-			};
-
-		_methodName30 = "updateContent";
+		_methodName30 = "createContent";
 
 		_methodParameterTypes30 = new String[] {
 				"com.liferay.portal.kernel.upload.UploadPortletRequest",
@@ -196,72 +196,80 @@ public class ContentLocalServiceClp implements ContentLocalService {
 				"java.util.Map"
 			};
 
-		_methodName31 = "deleteContent";
+		_methodName31 = "updateContent";
 
-		_methodParameterTypes31 = new String[] { "long", "long", "java.util.Map" };
+		_methodParameterTypes31 = new String[] {
+				"com.liferay.portal.kernel.upload.UploadPortletRequest",
+				"javax.portlet.PortletRequest", "long", "long", "long",
+				"java.util.Map"
+			};
 
-		_methodName32 = "relatedAssetLinkedEntryContent";
+		_methodName32 = "deleteContent";
 
-		_methodParameterTypes32 = new String[] { "java.util.Map" };
+		_methodParameterTypes32 = new String[] { "long", "long", "java.util.Map" };
 
-		_methodName33 = "searchAssetEntryModelContent";
+		_methodName33 = "relatedAssetLinkedEntryContent";
 
 		_methodParameterTypes33 = new String[] { "java.util.Map" };
 
-		_methodName34 = "searchAssetEntryModelContentCount";
+		_methodName34 = "searchAssetEntryModelContent";
 
 		_methodParameterTypes34 = new String[] { "java.util.Map" };
 
-		_methodName35 = "contentAddAssetEntry";
+		_methodName35 = "searchAssetEntryModelContentCount";
 
-		_methodParameterTypes35 = new String[] {
+		_methodParameterTypes35 = new String[] { "java.util.Map" };
+
+		_methodName36 = "contentAddAssetEntry";
+
+		_methodParameterTypes36 = new String[] {
 				"long", "long", "org.kisti.edison.content.model.Content"
 			};
 
-		_methodName36 = "updateContentInsertId";
+		_methodName37 = "updateContentInsertId";
 
-		_methodParameterTypes36 = new String[] {
+		_methodParameterTypes37 = new String[] {
 				"long", "long", "long", "java.lang.String", "long"
 			};
 
-		_methodName37 = "makeCategoryEntryList";
+		_methodName38 = "makeCategoryEntryList";
 
-		_methodParameterTypes37 = new String[] { "long", "long" };
+		_methodParameterTypes38 = new String[] { "long", "long" };
 
-		_methodName38 = "getContentDatailListForProjectStatistics";
+		_methodName39 = "getContentDatailListForProjectStatistics";
 
-		_methodParameterTypes38 = new String[] {
+		_methodParameterTypes39 = new String[] {
 				"java.lang.String", "long", "long", "java.lang.String",
 				"java.util.Locale"
 			};
 
-		_methodName39 = "getContentForProjectList";
+		_methodName40 = "getContentForProjectList";
 
-		_methodParameterTypes39 = new String[] {
+		_methodParameterTypes40 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "int", "int", "java.util.Locale"
 			};
 
-		_methodName40 = "getContentCenterListForProjectStatistics";
+		_methodName41 = "getContentCenterListForProjectStatistics";
 
-		_methodParameterTypes40 = new String[] {
+		_methodParameterTypes41 = new String[] {
 				"java.lang.String", "java.lang.String", "java.util.Locale"
 			};
 
-		_methodName41 = "getGeneralContentCountByGroupIdForProjectList";
+		_methodName42 = "getGeneralContentCountByGroupIdForProjectList";
 
-		_methodParameterTypes41 = new String[] {
+		_methodParameterTypes42 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName42 = "migrationGeneralContentTable";
-
-		_methodParameterTypes42 = new String[] { "long", "long" };
-
-		_methodName43 = "migrationAdvancedContentTable";
+		_methodName43 = "migrationGeneralContentTable";
 
 		_methodParameterTypes43 = new String[] { "long", "long" };
+
+		_methodName44 = "migrationAdvancedContentTable";
+
+		_methodParameterTypes44 = new String[] { "long", "long" };
 	}
 
 	@Override
@@ -1051,6 +1059,58 @@ public class ContentLocalServiceClp implements ContentLocalService {
 	}
 
 	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListContent(
+		long[] categoryIds, java.lang.String searchText, long[] contentDiv,
+		int start, int end, java.util.Locale locale, boolean categoryJoin,
+		boolean isTotalSearch, java.lang.String sortField,
+		java.lang.String sortOrder) throws java.lang.Exception {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
+					new Object[] {
+						ClpSerializer.translateInput(categoryIds),
+						
+					ClpSerializer.translateInput(searchText),
+						
+					ClpSerializer.translateInput(contentDiv),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(locale),
+						
+					categoryJoin,
+						
+					isTotalSearch,
+						
+					ClpSerializer.translateInput(sortField),
+						
+					ClpSerializer.translateInput(sortOrder)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof java.lang.Exception) {
+				throw (java.lang.Exception)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public int retrieveCountContent(long companyGroupId, long groupId,
 		java.lang.String searchText, long[] contentDiv,
 		java.lang.String languageId, boolean categoryJoin)
@@ -1059,8 +1119,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
 					new Object[] {
 						companyGroupId,
 						
@@ -1105,8 +1165,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
 					new Object[] {
 						ClpSerializer.translateInput(categoryIds),
 						
@@ -1146,8 +1206,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
 					new Object[] {
 						companyGroupId,
 						
@@ -1200,8 +1260,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29,
 					new Object[] {
 						companyGroupId,
 						
@@ -1250,8 +1310,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName29,
-					_methodParameterTypes29,
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
 					new Object[] {
 						ClpSerializer.translateInput(upload),
 						
@@ -1294,8 +1354,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30,
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31,
 					new Object[] {
 						ClpSerializer.translateInput(upload),
 						
@@ -1334,8 +1394,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		java.util.Map<java.lang.String, java.lang.Object> param)
 		throws java.lang.Exception {
 		try {
-			_invokableLocalService.invokeMethod(_methodName31,
-				_methodParameterTypes31,
+			_invokableLocalService.invokeMethod(_methodName32,
+				_methodParameterTypes32,
 				new Object[] {
 					companyId,
 					
@@ -1367,8 +1427,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32,
+			returnObj = _invokableLocalService.invokeMethod(_methodName33,
+					_methodParameterTypes33,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -1392,8 +1452,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33,
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -1416,8 +1476,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34,
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35,
 					new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
@@ -1443,8 +1503,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35,
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
 					new Object[] {
 						companyId,
 						
@@ -1481,8 +1541,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		long userId, java.lang.String projectYn, long projectId)
 		throws java.lang.Exception {
 		try {
-			_invokableLocalService.invokeMethod(_methodName36,
-				_methodParameterTypes36,
+			_invokableLocalService.invokeMethod(_methodName37,
+				_methodParameterTypes37,
 				new Object[] {
 					groupId,
 					
@@ -1519,8 +1579,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName37,
-					_methodParameterTypes37,
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38,
 					new Object[] { companyGroupId, groupId });
 		}
 		catch (Throwable t) {
@@ -1554,8 +1614,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName38,
-					_methodParameterTypes38,
+			returnObj = _invokableLocalService.invokeMethod(_methodName39,
+					_methodParameterTypes39,
 					new Object[] {
 						ClpSerializer.translateInput(projectYn),
 						
@@ -1595,8 +1655,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName39,
-					_methodParameterTypes39,
+			returnObj = _invokableLocalService.invokeMethod(_methodName40,
+					_methodParameterTypes40,
 					new Object[] {
 						userId,
 						
@@ -1639,8 +1699,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName40,
-					_methodParameterTypes40,
+			returnObj = _invokableLocalService.invokeMethod(_methodName41,
+					_methodParameterTypes41,
 					new Object[] {
 						ClpSerializer.translateInput(projectYn),
 						
@@ -1675,8 +1735,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName41,
-					_methodParameterTypes41,
+			returnObj = _invokableLocalService.invokeMethod(_methodName42,
+					_methodParameterTypes42,
 					new Object[] {
 						userId,
 						
@@ -1706,8 +1766,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 	public void migrationGeneralContentTable(long companyGroupId, long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName42,
-				_methodParameterTypes42,
+			_invokableLocalService.invokeMethod(_methodName43,
+				_methodParameterTypes43,
 				new Object[] { companyGroupId, companyId });
 		}
 		catch (Throwable t) {
@@ -1732,8 +1792,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName43,
-				_methodParameterTypes43,
+			_invokableLocalService.invokeMethod(_methodName44,
+				_methodParameterTypes44,
 				new Object[] { companyGroupId, companyId });
 		}
 		catch (Throwable t) {
@@ -1840,4 +1900,6 @@ public class ContentLocalServiceClp implements ContentLocalService {
 	private String[] _methodParameterTypes42;
 	private String _methodName43;
 	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
 }

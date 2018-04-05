@@ -36,7 +36,7 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(47);
 
 		sb.append("{id=");
 		sb.append(id);
@@ -72,6 +72,10 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 		sb.append(reference);
 		sb.append(", advanced=");
 		sb.append(advanced);
+		sb.append(", sortOrder=");
+		sb.append(sortOrder);
+		sb.append(", sortField=");
+		sb.append(sortField);
 		sb.append(", Solver=");
 		sb.append(Solver);
 		sb.append(", Converter=");
@@ -113,6 +117,21 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 		searchConditionImpl.setManual(manual);
 		searchConditionImpl.setReference(reference);
 		searchConditionImpl.setAdvanced(advanced);
+
+		if (sortOrder == null) {
+			searchConditionImpl.setSortOrder(StringPool.BLANK);
+		}
+		else {
+			searchConditionImpl.setSortOrder(sortOrder);
+		}
+
+		if (sortField == null) {
+			searchConditionImpl.setSortField(StringPool.BLANK);
+		}
+		else {
+			searchConditionImpl.setSortField(sortField);
+		}
+
 		searchConditionImpl.setSolver(Solver);
 		searchConditionImpl.setConverter(Converter);
 		searchConditionImpl.setEditor(Editor);
@@ -142,6 +161,8 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 		manual = objectInput.readBoolean();
 		reference = objectInput.readBoolean();
 		advanced = objectInput.readBoolean();
+		sortOrder = objectInput.readUTF();
+		sortField = objectInput.readUTF();
 		Solver = objectInput.readBoolean();
 		Converter = objectInput.readBoolean();
 		Editor = objectInput.readBoolean();
@@ -175,6 +196,21 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 		objectOutput.writeBoolean(manual);
 		objectOutput.writeBoolean(reference);
 		objectOutput.writeBoolean(advanced);
+
+		if (sortOrder == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(sortOrder);
+		}
+
+		if (sortField == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(sortField);
+		}
+
 		objectOutput.writeBoolean(Solver);
 		objectOutput.writeBoolean(Converter);
 		objectOutput.writeBoolean(Editor);
@@ -198,6 +234,8 @@ public class SearchConditionCacheModel implements CacheModel<SearchCondition>,
 	public boolean manual;
 	public boolean reference;
 	public boolean advanced;
+	public String sortOrder;
+	public String sortField;
 	public boolean Solver;
 	public boolean Converter;
 	public boolean Editor;

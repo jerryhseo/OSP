@@ -7,6 +7,7 @@ import java.util.Map;
 import org.kisti.edison.content.model.Content;
 import org.kisti.edison.content.model.impl.ContentImpl;
 import org.kisti.edison.util.GBatisUtil;
+import org.springframework.util.StringUtils;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
@@ -15,9 +16,13 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
 public class ContentFinderImpl extends BasePersistenceImpl<Content> implements ContentFinder{
-
+    final String SORT_ORDER_ASC = "asc";
+    final String SORT_TYPE_VIEW = "view"; 
+    final String SORT_TYPE_NAME = "name";
+    
 	public int getContentCount(long[] categoryIds, String searchText, long[] contentDiv, String languageId,
 		long classNameId, boolean categoryJoin, boolean isTotalSearch){
+	    
 		Session session = openSession();
 		int cnt = 0;
 		try{
@@ -71,9 +76,14 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 		return cnt;
 
 	}
+	
+	public List<Object[]> getContentList(long[] categoryIds, String searchText, long[] contentDiv, int start,
+        int end, String languageId, long classNameId, boolean categoryJoin, boolean isTotalSearch){
+	    return getContentList(categoryIds, searchText, contentDiv, start, end, languageId, classNameId, categoryJoin, isTotalSearch, null, null);
+	}
 
 	public List<Object[]> getContentList(long[] categoryIds, String searchText, long[] contentDiv, int start,
-		int end, String languageId, long classNameId, boolean categoryJoin, boolean isTotalSearch){
+		int end, String languageId, long classNameId, boolean categoryJoin, boolean isTotalSearch, String sortField, String sortOrder){
 		Session session = openSession();
 		try{
 			String sqlQuerySelect = CustomSQLUtil.get(
@@ -112,6 +122,23 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 			params.put("languageId", languageId);
 			params.put("begin", start);
 			params.put("end", end);
+			
+			if(StringUtils.hasText(sortField) && StringUtils.hasText(sortOrder)){
+                if(sortField.equals(SORT_TYPE_NAME)){
+                    params.put("sortField", "title");
+                }else if(sortField.equals(SORT_TYPE_VIEW)){
+                    params.put("sortField", "viewCnt");
+                }else{
+                    params.put("sortField", "insertDate");
+                }
+                if(sortOrder.equals(SORT_ORDER_ASC)){
+                    params.put("sortOrder", "asc");
+                }else{
+                    params.put("sortOrder", "desc");
+                }
+            }else{
+                params.put("defaultSortOrder", "true");
+            }
 
 			String gBatisQuery = GBatisUtil.getGBatis(params, sql.toString());
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
@@ -211,6 +238,7 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 			params.put("languageId", languageId);
 			params.put("begin", start);
 			params.put("end", end);
+			params.put("defaultSortOrder", "true");
 
 			String gBatisQuery = GBatisUtil.getGBatis(params, sql.toString());
 
