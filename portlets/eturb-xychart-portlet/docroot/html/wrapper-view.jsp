@@ -7,7 +7,7 @@
 #<portlet:namespace/>canvas {height: 670px; width: 98%; margin-top: 13.2px; border: 1px solid #d3d3d3; overflow: hidden;}
 </style>
 <div style="min-height: 670px; display: none;" id="<portlet:namespace/>xyPlotter">
-  <div class="row-fluid eturb-xy-chart-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
+  <div class="eturb-xy-chart-portlet common-analyzer-portlet" id="<portlet:namespace/>ground">
     <div class="span12" style="height: inherit;">
       <div class="row-fluid canvas-wrapper" id="<portlet:namespace/>canvasPanel">
         <iframe class="span12 canvas" id="<portlet:namespace/>canvas"
