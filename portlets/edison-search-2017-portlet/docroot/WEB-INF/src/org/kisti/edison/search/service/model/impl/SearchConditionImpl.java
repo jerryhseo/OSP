@@ -54,10 +54,19 @@ public class SearchConditionImpl extends SearchConditionBaseImpl{
   public static final long DIV_CONTENTS_REFERENCE = 2001003;
   public static final long DIV_CONTENTS_ADVANCED = 2001004;
   
+  public static final String SORT_ORDER_ASC = "asc";
+  public static final String SORT_ORDER_DESC = "desc";
+  
+  public static final String SORT_FIELD_VIEW = "view"; 
+  public static final String SORT_FIELD_CREATED = "latest"; 
+  public static final String SORT_FIELD_NAME = "name"; 
+  
   public SearchConditionImpl(){
     setBlockSize(10);
     setListSize(10);
     setCurrentPage(1);
+    setSortOrder(SORT_ORDER_DESC());
+    setSortField(SORT_FIELD_CREATED());
   }
   private Locale locale;
   public Locale getLocale(){
@@ -88,6 +97,26 @@ public class SearchConditionImpl extends SearchConditionBaseImpl{
       return null;
     }
     return ArrayUtils.toPrimitive(Iterables.toArray(divisions, Long.class));
+  }
+  
+  public String SORT_FIELD_CREATED(){
+      return SORT_FIELD_CREATED;
+  }
+  
+  public String SORT_FIELD_NAME(){
+      return SORT_FIELD_NAME;
+  }
+  
+  public String SORT_FIELD_VIEW(){
+      return SORT_FIELD_VIEW;
+  }
+  
+  public String SORT_ORDER_ASC(){
+      return SORT_ORDER_ASC;
+  }
+  
+  public String SORT_ORDER_DESC(){
+      return SORT_ORDER_DESC;
   }
   
   public String[] getAppTypes(){

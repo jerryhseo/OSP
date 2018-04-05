@@ -66,6 +66,8 @@ public class SearchConditionWrapper implements SearchCondition,
 		attributes.put("manual", getManual());
 		attributes.put("reference", getReference());
 		attributes.put("advanced", getAdvanced());
+		attributes.put("sortOrder", getSortOrder());
+		attributes.put("sortField", getSortField());
 		attributes.put("Solver", getSolver());
 		attributes.put("Converter", getConverter());
 		attributes.put("Editor", getEditor());
@@ -177,6 +179,18 @@ public class SearchConditionWrapper implements SearchCondition,
 
 		if (advanced != null) {
 			setAdvanced(advanced);
+		}
+
+		String sortOrder = (String)attributes.get("sortOrder");
+
+		if (sortOrder != null) {
+			setSortOrder(sortOrder);
+		}
+
+		String sortField = (String)attributes.get("sortField");
+
+		if (sortField != null) {
+			setSortField(sortField);
 		}
 
 		Boolean Solver = (Boolean)attributes.get("Solver");
@@ -655,6 +669,46 @@ public class SearchConditionWrapper implements SearchCondition,
 	}
 
 	/**
+	* Returns the sort order of this search condition.
+	*
+	* @return the sort order of this search condition
+	*/
+	@Override
+	public java.lang.String getSortOrder() {
+		return _searchCondition.getSortOrder();
+	}
+
+	/**
+	* Sets the sort order of this search condition.
+	*
+	* @param sortOrder the sort order of this search condition
+	*/
+	@Override
+	public void setSortOrder(java.lang.String sortOrder) {
+		_searchCondition.setSortOrder(sortOrder);
+	}
+
+	/**
+	* Returns the sort field of this search condition.
+	*
+	* @return the sort field of this search condition
+	*/
+	@Override
+	public java.lang.String getSortField() {
+		return _searchCondition.getSortField();
+	}
+
+	/**
+	* Sets the sort field of this search condition.
+	*
+	* @param sortField the sort field of this search condition
+	*/
+	@Override
+	public void setSortField(java.lang.String sortField) {
+		_searchCondition.setSortField(sortField);
+	}
+
+	/**
 	* Returns the solver of this search condition.
 	*
 	* @return the solver of this search condition
@@ -897,6 +951,31 @@ public class SearchConditionWrapper implements SearchCondition,
 	@Override
 	public long[] getContentDivisions() {
 		return _searchCondition.getContentDivisions();
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_CREATED() {
+		return _searchCondition.SORT_FIELD_CREATED();
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_NAME() {
+		return _searchCondition.SORT_FIELD_NAME();
+	}
+
+	@Override
+	public java.lang.String SORT_FIELD_VIEW() {
+		return _searchCondition.SORT_FIELD_VIEW();
+	}
+
+	@Override
+	public java.lang.String SORT_ORDER_ASC() {
+		return _searchCondition.SORT_ORDER_ASC();
+	}
+
+	@Override
+	public java.lang.String SORT_ORDER_DESC() {
+		return _searchCondition.SORT_ORDER_DESC();
 	}
 
 	@Override

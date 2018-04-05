@@ -1173,23 +1173,52 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * 통합 검색 앱 조회 서비스
 	 * @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
 	 */
-	public List<Map<String, Object>> retrieveListScienceAppFromExplore(long companyGroupId,long groupId, Locale locale, String[] appTypes, long[] categoryIds, String searchText, int begin, int end) throws SystemException, PortalException{
-		boolean categorySearch = false;
-		if(categoryIds != null && categoryIds.length > 0){
-			categorySearch = true;
-		}
-		
-		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("begin", begin);
-		param.put("end", end);
-		param.put("status", 1901004);
-		param.put("appTypes", appTypes);
-		param.put("likeSwNameAndSwTitle", searchText);
-		param.put("categoryIds", categoryIds);
-		
-		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
-		return retrieveListScienceApp(locale,searchParam, categorySearch, false);
+    public List<Map<String, Object>> retrieveListScienceAppFromExplore(long companyGroupId, long groupId, Locale locale,
+        String[] appTypes, long[] categoryIds, String searchText, int begin, int end)
+        throws SystemException, PortalException{
+		return retrieveListScienceAppFromExplore(companyGroupId, groupId, locale, appTypes, categoryIds, searchText, begin, end, null, null);
 	}
+    
+    public List<Map<String, Object>> retrieveListScienceAppFromExplore(long companyGroupId, long groupId, Locale locale,
+        String[] appTypes, long[] categoryIds, String searchText, int begin, int end, String sortField, String sortOrder)
+        throws SystemException, PortalException{
+        final String SORT_ORDER_ASC = "asc";
+        final String SORT_TYPE_VIEW = "view"; 
+        final String SORT_TYPE_NAME = "name";
+        boolean categorySearch = false;
+        if(categoryIds != null && categoryIds.length > 0){
+            categorySearch = true;
+        }
+        
+        Map<String,Object> param = new HashMap<String,Object>();
+        param.put("begin", begin);
+        param.put("end", end);
+        param.put("status", 1901004);
+        param.put("appTypes", appTypes);
+        param.put("likeSwNameAndSwTitle", searchText);
+        param.put("categoryIds", categoryIds);
+        
+        Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
+        
+        if(StringUtils.hasText(sortField) && StringUtils.hasText(sortOrder)){
+            if(sortField.equals(SORT_TYPE_NAME)){
+                searchParam.put("sortField", "A.name");
+            }else if(sortField.equals(SORT_TYPE_VIEW)){
+                searchParam.put("sortField", "A.viewCnt");
+            }else{
+                searchParam.put("sortField", "A.createDate");
+            }
+            if(sortOrder.equals(SORT_ORDER_ASC)){
+                searchParam.put("sortOrder", "asc");
+            }else{
+                searchParam.put("sortOrder", "desc");
+            }
+        }else{
+            searchParam.put("defaultSortOrder", "true");
+        }
+        
+        return retrieveListScienceApp(locale,searchParam, categorySearch, false);
+    }
 	
 	/**
 	 * 통합 검색 앱 카운트 서비스

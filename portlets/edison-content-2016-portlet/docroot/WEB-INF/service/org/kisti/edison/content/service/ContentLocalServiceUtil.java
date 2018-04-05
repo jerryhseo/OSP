@@ -385,6 +385,17 @@ public class ContentLocalServiceUtil {
 			start, end, locale, categoryJoin, isTotalSearch);
 	}
 
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListContent(
+		long[] categoryIds, java.lang.String searchText, long[] contentDiv,
+		int start, int end, java.util.Locale locale, boolean categoryJoin,
+		boolean isTotalSearch, java.lang.String sortField,
+		java.lang.String sortOrder) throws java.lang.Exception {
+		return getService()
+				   .retrieveListContent(categoryIds, searchText, contentDiv,
+			start, end, locale, categoryJoin, isTotalSearch, sortField,
+			sortOrder);
+	}
+
 	/**
 	* �꾩꼹�쀯㎘占썹㎉�곸뒲占쏙옙鈺곌퀬��燁삳똾�믤�醫듼봺 獄쏄퀣肉�占쎌빘苑�     *
 	* @param companyGroupId

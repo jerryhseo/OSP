@@ -27,6 +27,9 @@
     <column name="reference" type="boolean" />
     <column name="advanced" type="boolean" />
     
+    <column name="sortOrder" type="String" />
+    <column name="sortField" type="String" />
+    
     <column name="Solver" type="boolean" />
     <column name="Converter" type="boolean" />
     <column name="Editor" type="boolean" />

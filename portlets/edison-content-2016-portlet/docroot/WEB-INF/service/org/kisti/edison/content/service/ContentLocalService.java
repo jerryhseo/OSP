@@ -345,6 +345,12 @@ public interface ContentLocalService extends BaseLocalService,
 		int start, int end, java.util.Locale locale, boolean categoryJoin,
 		boolean isTotalSearch) throws java.lang.Exception;
 
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListContent(
+		long[] categoryIds, java.lang.String searchText, long[] contentDiv,
+		int start, int end, java.util.Locale locale, boolean categoryJoin,
+		boolean isTotalSearch, java.lang.String sortField,
+		java.lang.String sortOrder) throws java.lang.Exception;
+
 	/**
 	* 肄섑뀗痢�移댁슫��議고쉶 移댄뀒怨좊━ 諛곗뿴 �앹꽦
 	*

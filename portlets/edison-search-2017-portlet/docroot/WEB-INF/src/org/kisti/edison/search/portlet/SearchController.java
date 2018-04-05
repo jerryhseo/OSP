@@ -15,6 +15,7 @@ import javax.portlet.ResourceResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
+import org.kisti.edison.search.domain.SearchConstants;
 import org.kisti.edison.search.service.model.Search;
 import org.kisti.edison.search.service.model.SearchCondition;
 import org.kisti.edison.search.service.model.impl.SearchConditionModelImpl;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.common.collect.Lists;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -111,12 +113,34 @@ public class SearchController{
         return "search/category";
     }
     
+    private boolean checkSearchType(ResourceRequest request, String key){
+        return request.getParameter(key) != null && request.getParameter(key).equals("true");
+    }
+    
+    private List<String> searchTypes(ResourceRequest request){
+        List<String> types = Lists.newArrayList();
+        if(checkSearchType(request, SearchConstants.AREA_SCIENCE_APP)){
+            types.add(SearchConstants.AREA_SCIENCE_APP);
+        }
+        if(checkSearchType(request, SearchConstants.AREA_CONTENTS)){
+            types.add(SearchConstants.AREA_CONTENTS);
+        }
+        if(checkSearchType(request, SearchConstants.AREA_SCIENCE_DATA)){
+            types.add(SearchConstants.AREA_SCIENCE_DATA);
+        }
+        if(checkSearchType(request, SearchConstants.AREA_SIMULATION_PROJECT)){
+            types.add(SearchConstants.AREA_SIMULATION_PROJECT);
+        }
+        return types;
+    }
+    
     @ResourceMapping(value = "totalSearch")
     public String totalSearchView(
         ResourceRequest request, ResourceResponse response, ModelMap model)
         throws PortalException, SystemException{
         log.debug("view rendering");
         response.setContentType("text/html; charset=UTF-8");
+        
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long groupId = PortalUtil.getScopeGroupId(request);
         
@@ -127,18 +151,27 @@ public class SearchController{
         long simulationProjectPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
             "edisonsimulationproject_WAR_edisonsimulationproject2017portlet");
         long openDataPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
-            "datasearch_WAR_SDR_baseportlet");/*"edisondatacollection_WAR_edisonsimulationportlet"*/
+            "datasearch_WAR_SDR_baseportlet");
         long workBenchPlid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false,
             "SimulationWorkbench_WAR_OSPWorkbenchportlet");
         
         SearchCondition searchCondition = SearchConditionLocalServiceUtil
             .createSearchCondition(request);
         searchCondition.setListSize(5);
+        List<String> searchTypes = searchTypes(request);
+        if(searchTypes.size() == 1){
+            String searchType = searchTypes.get(0);
+            model.addAttribute("isSingleSearch", true);
+            model.addAttribute("singleSearchType", searchType);
+        }else{
+            model.addAttribute("isSingleSearch", false);
+        }
         try{
             model.addAttribute("searchResults", SearchLocalServiceUtil.totalSearch(request, response, searchCondition));
         }catch (Exception e){
             throw new SystemException(e);
         }
+        
         model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
         model.addAttribute("workBenchPlid", workBenchPlid);
         model.addAttribute("appstorePlid", appstorePlid);
@@ -147,6 +180,11 @@ public class SearchController{
         model.addAttribute("openDataPlid", openDataPlid);
         model.addAttribute("groupId", groupId);
         model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
+        model.addAttribute("SORT_FIELD_CREATED", searchCondition.SORT_FIELD_CREATED());
+        model.addAttribute("SORT_FIELD_VIEW", searchCondition.SORT_FIELD_VIEW());
+        model.addAttribute("SORT_FIELD_NAME", searchCondition.SORT_FIELD_NAME());
+        model.addAttribute("SORT_ORDER_ASC", searchCondition.SORT_ORDER_ASC());
+        model.addAttribute("SORT_ORDER_DESC", searchCondition.SORT_ORDER_DESC());
         return "search/total";
     }
     
@@ -174,6 +212,7 @@ public class SearchController{
         model.addAttribute("searchResults", searchResults);
         model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
         model.addAttribute("paging", paging);
+        model.addAttribute("searchCondition", searchCondition);
         return "search/type";
     }
 
@@ -196,6 +235,7 @@ public class SearchController{
             searchCondition.getBlockSize());
         model.addAttribute("searchResults", searchResults);
         model.addAttribute("paging", paging);
+        model.addAttribute("searchCondition", searchCondition);
         return "search/type";
     }
 
@@ -218,6 +258,7 @@ public class SearchController{
             searchCondition.getBlockSize());
         model.addAttribute("searchResults", searchResults);
         model.addAttribute("paging", paging);
+        model.addAttribute("searchCondition", searchCondition);
         return "search/type";
     }
 
@@ -241,6 +282,7 @@ public class SearchController{
             searchCondition.getBlockSize());
         model.addAttribute("searchResults", searchResults);
         model.addAttribute("paging", paging);
+        model.addAttribute("searchCondition", searchCondition);
         return "search/type";
     }
   

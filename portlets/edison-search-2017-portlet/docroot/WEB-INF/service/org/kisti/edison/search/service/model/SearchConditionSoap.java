@@ -46,6 +46,8 @@ public class SearchConditionSoap implements Serializable {
 		soapModel.setManual(model.getManual());
 		soapModel.setReference(model.getReference());
 		soapModel.setAdvanced(model.getAdvanced());
+		soapModel.setSortOrder(model.getSortOrder());
+		soapModel.setSortField(model.getSortField());
 		soapModel.setSolver(model.getSolver());
 		soapModel.setConverter(model.getConverter());
 		soapModel.setEditor(model.getEditor());
@@ -276,6 +278,22 @@ public class SearchConditionSoap implements Serializable {
 		_advanced = advanced;
 	}
 
+	public String getSortOrder() {
+		return _sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		_sortOrder = sortOrder;
+	}
+
+	public String getSortField() {
+		return _sortField;
+	}
+
+	public void setSortField(String sortField) {
+		_sortField = sortField;
+	}
+
 	public boolean getSolver() {
 		return _Solver;
 	}
@@ -341,6 +359,8 @@ public class SearchConditionSoap implements Serializable {
 	private boolean _manual;
 	private boolean _reference;
 	private boolean _advanced;
+	private String _sortOrder;
+	private String _sortField;
 	private boolean _Solver;
 	private boolean _Converter;
 	private boolean _Editor;

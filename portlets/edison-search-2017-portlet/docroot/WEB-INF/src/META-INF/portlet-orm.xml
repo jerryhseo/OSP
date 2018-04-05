@@ -38,6 +38,8 @@
 			<basic name="manual" />
 			<basic name="reference" />
 			<basic name="advanced" />
+			<basic name="sortOrder" />
+			<basic name="sortField" />
 			<basic name="Solver" />
 			<basic name="Converter" />
 			<basic name="Editor" />

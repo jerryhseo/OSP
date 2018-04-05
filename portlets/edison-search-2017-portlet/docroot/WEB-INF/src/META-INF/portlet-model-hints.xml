@@ -22,6 +22,8 @@
 		<field name="manual" type="boolean" />
 		<field name="reference" type="boolean" />
 		<field name="advanced" type="boolean" />
+		<field name="sortOrder" type="String" />
+		<field name="sortField" type="String" />
 		<field name="Solver" type="boolean" />
 		<field name="Converter" type="boolean" />
 		<field name="Editor" type="boolean" />

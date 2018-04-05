@@ -360,6 +360,36 @@ public interface SearchConditionModel extends BaseModel<SearchCondition> {
 	public void setAdvanced(boolean advanced);
 
 	/**
+	 * Returns the sort order of this search condition.
+	 *
+	 * @return the sort order of this search condition
+	 */
+	@AutoEscape
+	public String getSortOrder();
+
+	/**
+	 * Sets the sort order of this search condition.
+	 *
+	 * @param sortOrder the sort order of this search condition
+	 */
+	public void setSortOrder(String sortOrder);
+
+	/**
+	 * Returns the sort field of this search condition.
+	 *
+	 * @return the sort field of this search condition
+	 */
+	@AutoEscape
+	public String getSortField();
+
+	/**
+	 * Sets the sort field of this search condition.
+	 *
+	 * @param sortField the sort field of this search condition
+	 */
+	public void setSortField(String sortField);
+
+	/**
 	 * Returns the solver of this search condition.
 	 *
 	 * @return the solver of this search condition

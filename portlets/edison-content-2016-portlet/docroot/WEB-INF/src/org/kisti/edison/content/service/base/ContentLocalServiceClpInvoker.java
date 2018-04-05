@@ -152,43 +152,43 @@ public class ContentLocalServiceClpInvoker {
 				"java.util.Locale", "boolean", "boolean"
 			};
 
-		_methodName70 = "retrieveCountContent";
+		_methodName70 = "retrieveListContent";
 
 		_methodParameterTypes70 = new String[] {
-				"long", "long", "java.lang.String", "long[][]",
-				"java.lang.String", "boolean"
+				"long[][]", "java.lang.String", "long[][]", "int", "int",
+				"java.util.Locale", "boolean", "boolean", "java.lang.String",
+				"java.lang.String"
 			};
 
 		_methodName71 = "retrieveCountContent";
 
 		_methodParameterTypes71 = new String[] {
+				"long", "long", "java.lang.String", "long[][]",
+				"java.lang.String", "boolean"
+			};
+
+		_methodName72 = "retrieveCountContent";
+
+		_methodParameterTypes72 = new String[] {
 				"long[][]", "java.lang.String", "long[][]", "java.lang.String",
 				"boolean", "boolean"
 			};
 
-		_methodName72 = "retrieveListUserContent";
+		_methodName73 = "retrieveListUserContent";
 
-		_methodParameterTypes72 = new String[] {
+		_methodParameterTypes73 = new String[] {
 				"long", "long", "long", "java.lang.String", "int", "int",
 				"java.util.Locale", "long", "long"
 			};
 
-		_methodName73 = "retrieveCountUserContent";
+		_methodName74 = "retrieveCountUserContent";
 
-		_methodParameterTypes73 = new String[] {
+		_methodParameterTypes74 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"long", "long"
 			};
 
-		_methodName74 = "createContent";
-
-		_methodParameterTypes74 = new String[] {
-				"com.liferay.portal.kernel.upload.UploadPortletRequest",
-				"javax.portlet.PortletRequest", "long", "long", "long",
-				"java.util.Map"
-			};
-
-		_methodName75 = "updateContent";
+		_methodName75 = "createContent";
 
 		_methodParameterTypes75 = new String[] {
 				"com.liferay.portal.kernel.upload.UploadPortletRequest",
@@ -196,70 +196,78 @@ public class ContentLocalServiceClpInvoker {
 				"java.util.Map"
 			};
 
-		_methodName76 = "deleteContent";
+		_methodName76 = "updateContent";
 
-		_methodParameterTypes76 = new String[] { "long", "long", "java.util.Map" };
+		_methodParameterTypes76 = new String[] {
+				"com.liferay.portal.kernel.upload.UploadPortletRequest",
+				"javax.portlet.PortletRequest", "long", "long", "long",
+				"java.util.Map"
+			};
 
-		_methodName77 = "relatedAssetLinkedEntryContent";
+		_methodName77 = "deleteContent";
 
-		_methodParameterTypes77 = new String[] { "java.util.Map" };
+		_methodParameterTypes77 = new String[] { "long", "long", "java.util.Map" };
 
-		_methodName78 = "searchAssetEntryModelContent";
+		_methodName78 = "relatedAssetLinkedEntryContent";
 
 		_methodParameterTypes78 = new String[] { "java.util.Map" };
 
-		_methodName79 = "searchAssetEntryModelContentCount";
+		_methodName79 = "searchAssetEntryModelContent";
 
 		_methodParameterTypes79 = new String[] { "java.util.Map" };
 
-		_methodName80 = "contentAddAssetEntry";
+		_methodName80 = "searchAssetEntryModelContentCount";
 
-		_methodParameterTypes80 = new String[] {
+		_methodParameterTypes80 = new String[] { "java.util.Map" };
+
+		_methodName81 = "contentAddAssetEntry";
+
+		_methodParameterTypes81 = new String[] {
 				"long", "long", "org.kisti.edison.content.model.Content"
 			};
 
-		_methodName81 = "updateContentInsertId";
+		_methodName82 = "updateContentInsertId";
 
-		_methodParameterTypes81 = new String[] {
+		_methodParameterTypes82 = new String[] {
 				"long", "long", "long", "java.lang.String", "long"
 			};
 
-		_methodName82 = "makeCategoryEntryList";
+		_methodName83 = "makeCategoryEntryList";
 
-		_methodParameterTypes82 = new String[] { "long", "long" };
+		_methodParameterTypes83 = new String[] { "long", "long" };
 
-		_methodName83 = "getContentDatailListForProjectStatistics";
+		_methodName84 = "getContentDatailListForProjectStatistics";
 
-		_methodParameterTypes83 = new String[] {
+		_methodParameterTypes84 = new String[] {
 				"java.lang.String", "long", "long", "java.lang.String",
 				"java.util.Locale"
 			};
 
-		_methodName84 = "getContentForProjectList";
+		_methodName85 = "getContentForProjectList";
 
-		_methodParameterTypes84 = new String[] {
+		_methodParameterTypes85 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "int", "int", "java.util.Locale"
 			};
 
-		_methodName85 = "getContentCenterListForProjectStatistics";
+		_methodName86 = "getContentCenterListForProjectStatistics";
 
-		_methodParameterTypes85 = new String[] {
+		_methodParameterTypes86 = new String[] {
 				"java.lang.String", "java.lang.String", "java.util.Locale"
 			};
 
-		_methodName86 = "getGeneralContentCountByGroupIdForProjectList";
+		_methodName87 = "getGeneralContentCountByGroupIdForProjectList";
 
-		_methodParameterTypes86 = new String[] {
+		_methodParameterTypes87 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName87 = "migrationGeneralContentTable";
+		_methodName88 = "migrationGeneralContentTable";
 
-		_methodParameterTypes87 = new String[] { "long", "long" };
+		_methodParameterTypes88 = new String[] { "long", "long" };
 
-		_methodName89 = "migrationAdvancedContentTable";
+		_methodName90 = "migrationAdvancedContentTable";
 
 		_methodParameterTypes89 = new String[] { "long", "long" };
 
@@ -420,6 +428,18 @@ public class ContentLocalServiceClpInvoker {
 
 		if (_methodName70.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+			return ContentLocalServiceUtil.retrieveListContent((long[])arguments[0],
+				(java.lang.String)arguments[1], (long[])arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue(),
+				(java.util.Locale)arguments[5],
+				((Boolean)arguments[6]).booleanValue(),
+				((Boolean)arguments[7]).booleanValue(),
+				(java.lang.String)arguments[8], (java.lang.String)arguments[9]);
+		}
+
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
 			return ContentLocalServiceUtil.retrieveCountContent(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.lang.String)arguments[2], (long[])arguments[3],
@@ -427,8 +447,8 @@ public class ContentLocalServiceClpInvoker {
 				((Boolean)arguments[5]).booleanValue());
 		}
 
-		if (_methodName71.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+		if (_methodName72.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
 			return ContentLocalServiceUtil.retrieveCountContent((long[])arguments[0],
 				(java.lang.String)arguments[1], (long[])arguments[2],
 				(java.lang.String)arguments[3],
@@ -436,8 +456,8 @@ public class ContentLocalServiceClpInvoker {
 				((Boolean)arguments[5]).booleanValue());
 		}
 
-		if (_methodName72.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
+		if (_methodName73.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
 			return ContentLocalServiceUtil.retrieveListUserContent(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -449,8 +469,8 @@ public class ContentLocalServiceClpInvoker {
 				((Long)arguments[8]).longValue());
 		}
 
-		if (_methodName73.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
+		if (_methodName74.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
 			return ContentLocalServiceUtil.retrieveCountUserContent(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -459,19 +479,9 @@ public class ContentLocalServiceClpInvoker {
 				((Long)arguments[6]).longValue());
 		}
 
-		if (_methodName74.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
-			return ContentLocalServiceUtil.createContent((com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[0],
-				(javax.portlet.PortletRequest)arguments[1],
-				((Long)arguments[2]).longValue(),
-				((Long)arguments[3]).longValue(),
-				((Long)arguments[4]).longValue(),
-				(java.util.Map<java.lang.String, java.lang.Object>)arguments[5]);
-		}
-
 		if (_methodName75.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
-			return ContentLocalServiceUtil.updateContent((com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[0],
+			return ContentLocalServiceUtil.createContent((com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[0],
 				(javax.portlet.PortletRequest)arguments[1],
 				((Long)arguments[2]).longValue(),
 				((Long)arguments[3]).longValue(),
@@ -481,6 +491,16 @@ public class ContentLocalServiceClpInvoker {
 
 		if (_methodName76.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
+			return ContentLocalServiceUtil.updateContent((com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[0],
+				(javax.portlet.PortletRequest)arguments[1],
+				((Long)arguments[2]).longValue(),
+				((Long)arguments[3]).longValue(),
+				((Long)arguments[4]).longValue(),
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[5]);
+		}
+
+		if (_methodName77.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
 			ContentLocalServiceUtil.deleteContent(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[2]);
@@ -488,30 +508,30 @@ public class ContentLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName77.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
-			return ContentLocalServiceUtil.relatedAssetLinkedEntryContent((java.util.Map)arguments[0]);
-		}
-
 		if (_methodName78.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
-			return ContentLocalServiceUtil.searchAssetEntryModelContent((java.util.Map)arguments[0]);
+			return ContentLocalServiceUtil.relatedAssetLinkedEntryContent((java.util.Map)arguments[0]);
 		}
 
 		if (_methodName79.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
-			return ContentLocalServiceUtil.searchAssetEntryModelContentCount((java.util.Map)arguments[0]);
+			return ContentLocalServiceUtil.searchAssetEntryModelContent((java.util.Map)arguments[0]);
 		}
 
 		if (_methodName80.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
+			return ContentLocalServiceUtil.searchAssetEntryModelContentCount((java.util.Map)arguments[0]);
+		}
+
+		if (_methodName81.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
 			return ContentLocalServiceUtil.contentAddAssetEntry(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(org.kisti.edison.content.model.Content)arguments[2]);
 		}
 
-		if (_methodName81.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
+		if (_methodName82.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
 			ContentLocalServiceUtil.updateContentInsertId(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -520,22 +540,22 @@ public class ContentLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName82.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
+		if (_methodName83.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
 			return ContentLocalServiceUtil.makeCategoryEntryList(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName83.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
+		if (_methodName84.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
 			return ContentLocalServiceUtil.getContentDatailListForProjectStatistics((java.lang.String)arguments[0],
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
 				(java.lang.String)arguments[3], (java.util.Locale)arguments[4]);
 		}
 
-		if (_methodName84.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
 			return ContentLocalServiceUtil.getContentForProjectList(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3],
@@ -544,29 +564,29 @@ public class ContentLocalServiceClpInvoker {
 				(java.util.Locale)arguments[6]);
 		}
 
-		if (_methodName85.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+		if (_methodName86.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
 			return ContentLocalServiceUtil.getContentCenterListForProjectStatistics((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.util.Locale)arguments[2]);
 		}
 
-		if (_methodName86.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
+		if (_methodName87.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
 			return ContentLocalServiceUtil.getGeneralContentCountByGroupIdForProjectList(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
 		}
 
-		if (_methodName87.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
+		if (_methodName88.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes88, parameterTypes)) {
 			ContentLocalServiceUtil.migrationGeneralContentTable(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 
 			return null;
 		}
 
-		if (_methodName89.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes89, parameterTypes)) {
+		if (_methodName90.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			ContentLocalServiceUtil.migrationAdvancedContentTable(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 
@@ -665,8 +685,13 @@ public class ContentLocalServiceClpInvoker {
 	private String[] _methodParameterTypes86;
 	private String _methodName87;
 	private String[] _methodParameterTypes87;
+<<<<<<< HEAD
 	private String _methodName89;
 	private String[] _methodParameterTypes89;
+=======
+	private String _methodName88;
+	private String[] _methodParameterTypes88;
+>>>>>>> search-javantea
 	private String _methodName90;
 	private String[] _methodParameterTypes90;
 }

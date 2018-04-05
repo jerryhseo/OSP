@@ -1,6 +1,11 @@
 <%@page import="com.liferay.portal.service.PortletLocalServiceUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
+<style>
+.tab-sub-title{float: left; border-bottom: none !important;}
+.tab-sub-title-hr{clear: both; border-bottom: solid 1px #444;}
+.sort-order-div{float: right; margin-top: 18px; margin-bottom: 9px; width: 170px;}
+</style>
 
 <portlet:defineObjects />
 
@@ -12,7 +17,8 @@
 <liferay-portlet:resourceURL var="downloadManualURL" id="downloadManual" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="currentUrl" copyCurrentRenderParameters="false"/>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" 
+  portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
@@ -37,7 +43,7 @@
   <liferay-portlet:param name="action" value="collectionDetail"/>
 </liferay-portlet:renderURL>
 
-<div class="contabm">
+<div class="contabm" style="${isSingleSearch ? 'display:none;' : ''}">
   <ul id="<portlet:namespace/>search-tab-button">
     <li class="sel" onclick="<portlet:namespace/>toggleTab(this); return false;">
       <a id="total-tab-button" href="#total-tab"><liferay-ui:message key="edison-search-total"/>(${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount})</a>
@@ -64,6 +70,7 @@
     </c:if>
   </ul>
 </div>
+<c:if test="${!isSingleSearch}">
 <div id="<portlet:namespace/>total-search-tab" class="search-tab loaded conlist">
   <c:if test="${searchResults.appCount > 0}">
     <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
@@ -215,44 +222,148 @@
     </div>
   </c:if>
 </div>
+</c:if>
 <c:if test="${param.areaScienceApp}">
   <div id="<portlet:namespace/>app-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+    <div>
+      <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+      <div class="input-group sort-order-div">
+        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="app">
+          <option value="${SORT_FIELD_CREATED}">Latest</option>
+          <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
+          <option value="${SORT_FIELD_NAME}">Name</option>
+        </select>
+        <div class="input-group-btn">
+          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="app">
+            <i class="icon-sort-by-attributes-alt"> </i>
+          </button>
+          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="app"/>
+        </div>
+      </div>
+      <div class="tab-sub-title-hr"></div>
+    </div>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaContents}">
   <div id="<portlet:namespace/>content-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+  <div>
+    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+    <div class="input-group sort-order-div">
+        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="content">
+          <option value="${SORT_FIELD_CREATED}">Latest</option>
+          <option value="${SORT_FIELD_VIEW}">View</option>
+          <%-- <option value="${SORT_FIELD_NAME}">Name</option> --%>
+        </select>
+        <div class="input-group-btn">
+          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="content">
+            <i class="icon-sort-by-attributes-alt"> </i>
+          </button>
+          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="content"/>
+        </div>
+      </div>
+      <div class="tab-sub-title-hr"></div>
+      </div>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaSimulationProject}">
   <div id="<portlet:namespace/>project-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+  <div>
+    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+    <%-- <div class="input-group sort-order-div">
+        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="project">
+          <option value="${SORT_FIELD_CREATED}">Latest</option>
+          <option value="${SORT_FIELD_VIEW}">View</option>
+          <option value="${SORT_FIELD_NAME}">Name</option>
+        </select>
+        <div class="input-group-btn">
+          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="project">
+            <i class="icon-sort-by-attributes-alt"> </i>
+          </button>
+          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="project"/>
+        </div>
+      </div> --%>
+      <div class="tab-sub-title-hr"></div>
+      </div>
     <div class="search-results"></div>
   </div>
 </c:if>
 <c:if test="${param.areaScienceData}">
   <div id="<portlet:namespace/>data-search-tab" class="search-tab conlist" style="display: none;">
-    <h3 class="styleh3"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+  <div>
+    <h3 class="styleh3 tab-sub-title"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
+    <div class="input-group sort-order-div">
+        <select class="form-control" name="<portlet:namespace/>sort-field" tab-type="data">
+          <option value="${SORT_FIELD_CREATED}">Latest</option>
+          <%-- <option value="${SORT_FIELD_VIEW}">View</option> --%>
+          <option value="${SORT_FIELD_NAME}">Name</option>
+        </select>
+        <div class="input-group-btn">
+          <button class="btn btn-default sort-order" title="${SORT_ORDER_DESC}" tab-type="data">
+            <i class="icon-sort-by-attributes-alt"> </i>
+          </button>
+          <input type="hidden" name="<portlet:namespace/>sort-order" value="${SORT_ORDER_DESC}" tab-type="data"/>
+        </div>
+      </div>
+      <div class="tab-sub-title-hr"></div>
+      </div>
     <div class="search-results"></div>
   </div>
 </c:if>
 <script>
-
-$(document).ready(function(){
-  $("#<portlet:namespace/>search-tab-button a").click(function(e){
-    e.preventDefault();
-  });
-});
-
 var <portlet:namespace/>TAB_TYPE = {
   "APP": "app",  
   "CONTENT": "content",  
   "PROJECT": "project",  
   "DATA": "data"
 };
+
+
+$(document).ready(function(){
+  var <portlet:namespace/>searchTypes = {
+      areaScienceApp: "app",
+      areaContents: "content",
+      areaSimulationProject: "project",
+      areaScienceData: "data"
+  };
+  var isSingleSearch = ${isSingleSearch};
+    
+  $("#<portlet:namespace/>search-tab-button a").click(function(e){
+    e.preventDefault();
+  });
+
+  $(".sort-order").click(function(e){
+    e.preventDefault();
+    var jqChildI = $(this).children("i");
+    var tabType = $(this).attr("tab-type");
+    var jqSortOrderInput = $(this).siblings("input[name='<portlet:namespace/>sort-order']");
+    if(jqChildI.hasClass("icon-sort-by-attributes-alt")){
+      jqChildI.removeClass("icon-sort-by-attributes-alt");
+      jqChildI.addClass("icon-sort-by-attributes");
+      jqSortOrderInput.val("${SORT_ORDER_ASC}");
+      $(this).attr("title", "${SORT_ORDER_ASC}");
+    }else{
+      jqChildI.removeClass("icon-sort-by-attributes");
+      jqChildI.addClass("icon-sort-by-attributes-alt");
+      jqSortOrderInput.val("${SORT_ORDER_DESC}");
+      $(this).attr("title", "${SORT_ORDER_DESC}");
+    }
+    <portlet:namespace/>loadTab(tabType, 1);
+  });
+
+  $("select[name='<portlet:namespace/>sort-field']").on("change", function(){
+    var tabType = $(this).attr("tab-type");
+    <portlet:namespace/>loadTab(tabType, 1);
+  });
+  
+  if(isSingleSearch){
+    var tabId = <portlet:namespace/>getTabId(<portlet:namespace/>searchTypes['${singleSearchType}']);
+    <portlet:namespace/>loadTab(<portlet:namespace/>searchTypes['${singleSearchType}'], 1);
+    $("#" + tabId).show();
+  }
+  
+});
 
 function <portlet:namespace/>toggleTabByTabType(tabType){
   $("#<portlet:namespace/>search-tab-button > li").removeClass("sel");
@@ -303,8 +414,16 @@ function <portlet:namespace/>loadTab(tabType, currentPage){
   tabSearchUrl[<portlet:namespace/>TAB_TYPE.PROJECT] = "${projectSearchUrl}";
   tabSearchUrl[<portlet:namespace/>TAB_TYPE.DATA] = "${dataSearchUrl}";
   var postData = <portlet:namespace/>getPostData();
+  var sortOrder = $("input[name='<portlet:namespace/>sort-order'][tab-type='" + tabType + "']").val();
+  var sortField = $("select[name='<portlet:namespace/>sort-field'][tab-type='" + tabType + "']").val();
   if(currentPage){
     postData["<portlet:namespace/>currentPage"] = currentPage;
+  }
+  if(sortOrder){
+    postData["<portlet:namespace/>sortOrder"] = sortOrder;
+  }
+  if(sortField){
+    postData["<portlet:namespace/>sortField"] = sortField;
   }
   $("#" + tabId + " > .search-results").empty();
   $("#" + tabId + " > .search-results").load(tabSearchUrl[tabType], postData, 
@@ -377,6 +496,7 @@ function <portlet:namespace/>liferayScriptMove(redirectURL, portletURL){
 function <portlet:namespace/>fileDownload(manualId){
     location.href = "<%=downloadManualURL%>&<portlet:namespace/>manualId="+manualId;    
 }
+
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
     var URL = "<%=workbenchURL%>";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;

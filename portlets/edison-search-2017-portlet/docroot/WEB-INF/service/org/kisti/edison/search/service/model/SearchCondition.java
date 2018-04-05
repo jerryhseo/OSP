@@ -39,6 +39,16 @@ public interface SearchCondition extends SearchConditionModel, PersistedModel {
 
 	public long[] getContentDivisions();
 
+	public java.lang.String SORT_FIELD_CREATED();
+
+	public java.lang.String SORT_FIELD_NAME();
+
+	public java.lang.String SORT_FIELD_VIEW();
+
+	public java.lang.String SORT_ORDER_ASC();
+
+	public java.lang.String SORT_ORDER_DESC();
+
 	public java.lang.String[] getAppTypes();
 
 	public void setCustomModelAttributes(

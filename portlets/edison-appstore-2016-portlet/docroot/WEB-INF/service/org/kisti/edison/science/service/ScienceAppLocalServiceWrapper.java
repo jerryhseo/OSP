@@ -1016,6 +1016,19 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 			groupId, locale, appTypes, categoryIds, searchText, begin, end);
 	}
 
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppFromExplore(
+		long companyGroupId, long groupId, java.util.Locale locale,
+		java.lang.String[] appTypes, long[] categoryIds,
+		java.lang.String searchText, int begin, int end,
+		java.lang.String sortField, java.lang.String sortOrder)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.retrieveListScienceAppFromExplore(companyGroupId,
+			groupId, locale, appTypes, categoryIds, searchText, begin, end,
+			sortField, sortOrder);
+	}
+
 	/**
 	* 통합 검색 앱 카운트 서비스
 	*
