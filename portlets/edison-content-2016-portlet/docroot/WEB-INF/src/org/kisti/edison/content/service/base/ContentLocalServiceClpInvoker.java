@@ -269,11 +269,11 @@ public class ContentLocalServiceClpInvoker {
 
 		_methodName90 = "migrationAdvancedContentTable";
 
-		_methodParameterTypes89 = new String[] { "long", "long" };
+		_methodParameterTypes90 = new String[] { "long", "long" };
 
-		_methodName90 = "findByContentDiv";
+		_methodName91 = "findByContentDiv";
 
-		_methodParameterTypes90 = new String[] { "long" };
+		_methodParameterTypes91 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -593,8 +593,8 @@ public class ContentLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName90.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
+		if (_methodName91.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
 			return ContentLocalServiceUtil.findByContentDiv(((Long)arguments[0]).longValue());
 		}
 
@@ -685,13 +685,10 @@ public class ContentLocalServiceClpInvoker {
 	private String[] _methodParameterTypes86;
 	private String _methodName87;
 	private String[] _methodParameterTypes87;
-<<<<<<< HEAD
-	private String _methodName89;
-	private String[] _methodParameterTypes89;
-=======
 	private String _methodName88;
 	private String[] _methodParameterTypes88;
->>>>>>> search-javantea
 	private String _methodName90;
 	private String[] _methodParameterTypes90;
+	private String _methodName91;
+	private String[] _methodParameterTypes91;
 }

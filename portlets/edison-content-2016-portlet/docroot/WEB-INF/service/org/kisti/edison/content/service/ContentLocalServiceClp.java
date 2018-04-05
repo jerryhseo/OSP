@@ -269,11 +269,11 @@ public class ContentLocalServiceClp implements ContentLocalService {
 
 		_methodName44 = "migrationAdvancedContentTable";
 
-		_methodParameterTypes43 = new String[] { "long", "long" };
+		_methodParameterTypes44 = new String[] { "long", "long" };
 
-		_methodName44 = "findByContentDiv";
+		_methodName45 = "findByContentDiv";
 
-		_methodParameterTypes44 = new String[] { "long" };
+		_methodParameterTypes45 = new String[] { "long" };
 	}
 
 	@Override
@@ -1824,8 +1824,8 @@ public class ContentLocalServiceClp implements ContentLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName44,
-					_methodParameterTypes44, new Object[] { contentDiv });
+			returnObj = _invokableLocalService.invokeMethod(_methodName45,
+					_methodParameterTypes45, new Object[] { contentDiv });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1935,4 +1935,6 @@ public class ContentLocalServiceClp implements ContentLocalService {
 	private String[] _methodParameterTypes43;
 	private String _methodName44;
 	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
 }
