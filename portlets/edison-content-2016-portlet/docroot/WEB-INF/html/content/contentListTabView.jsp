@@ -69,6 +69,10 @@
 		font-size: 2em;
 	}
 	
+	.subtitlearea{
+		margin-left: 10px;
+	}
+	
 	#advanced-wrap {height: 72px; margin: 0 auto;}
 	#advanced-wrap .contarrleft { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
 	#advanced-wrap .contarrright { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
@@ -108,16 +112,22 @@
 
 <form method="post" name="searchParamForm" style="margin:0px;" onsubmit="return false;">
 	<div class="table-responsive panel edison-panel">
+		<!-- Title -->
+		<h2>
+			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+			<span class="subtitlearea">
+				<liferay-ui:message key="edison-content"/>
+			</span>
+		</h2>
+		
+		<div class="h20"></div>
+		
+		<!-- Tab -->
 		<c:if test="${not empty tabsValues}">
 			<div class="contabmenu">
 				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="150"/>
 			</div>
 		</c:if>
-	
-		<h1>
-			<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
-			<liferay-ui:message key="edison-content"/>
-		</h1>
 		
 		<div class="h10"></div>
 		
@@ -131,8 +141,6 @@
 			</div>
 		</div>
 		
-		<div class="h40"></div>
-		
 		<div class="panel-heading clearfix" style="padding-right: 0px;">
 			<c:if test="${addAdvancedContentAuth}">
 				<div style="float: right;margin: 5px;" id="<portlet:namespace/>addAdvancedContentDiv">
@@ -141,13 +149,13 @@
 			</c:if>
 			
 			<div class="clear"></div>
-			<div class="h40"></div>
+			<div class="h20"></div>
 			
 			<!--table view -->
 			<div class="input-group">
-				<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('','');" style="width: 50%; float: right; margin-left: 1%;" />
+				<input name="<portlet:namespace/>textfield" class="form-control" type="text" id="<portlet:namespace/>textfield" placeholder="<liferay-ui:message key="edison-table-list-header-title"/> or <liferay-ui:message key="edison-table-list-header-name"/>" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>generalContentSearch('','');" style="width: 40%; float: right; margin-left: 1%;" />
 				
-				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="form-control" style="width:20%; float: right;">
+				<select id="<portlet:namespace/>select_line" name="<portlet:namespace/>select_line" title="옵션" onchange="<portlet:namespace/>generalContentSearch('','');" class="form-control" style="width:12%; float: right;">
 					<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
 					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
