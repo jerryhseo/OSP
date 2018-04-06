@@ -319,39 +319,43 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
         if(searchResults == null){
             searchResults = this.createSearch(0);
         }
-        List<Long> categoryIds = getCategoryIds(searchCondition);
+        try{
+            List<Long> categoryIds = getCategoryIds(searchCondition);
 
-        DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
-        newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
-        newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
-        newRequest.setParameter("searchSelect", DATA_COLLECTION_SEARCH_SELECT);
-        newRequest.setParameter("delta", String.valueOf(searchCondition.getListSize()));
-        
-        if(searchCondition.SORT_FIELD_NAME().equals(searchCondition.getSortField())){
-            if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
-                newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
-            }else{
-                newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+            DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
+            newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
+            newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
+            newRequest.setParameter("searchSelect", DATA_COLLECTION_SEARCH_SELECT);
+            newRequest.setParameter("delta", String.valueOf(searchCondition.getListSize()));
+            
+            if(searchCondition.SORT_FIELD_NAME().equals(searchCondition.getSortField())){
+                if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
+                }else{
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+                }
+            }else if(searchCondition.SORT_FIELD_CREATED().equals(searchCondition.getSortField())){
+                if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
+                }else{
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+                }
             }
-        }else if(searchCondition.SORT_FIELD_CREATED().equals(searchCondition.getSortField())){
-            if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
-                newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
-            }else{
-                newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+            
+            if(categoryIds != null){
+                newRequest.setParameterValues("categories",
+                    Iterables.toArray(
+                        Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
             }
-        }
-        
-        if(categoryIds != null){
-            newRequest.setParameterValues("categories",
-                Iterables.toArray(
-                    Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
-        }
-        
-        Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
-        int count = GetterUtil.getInteger(result.get("total"));
-        if(count > 0){
-            searchResults.setDataCount(count);
-            searchResults.setDataResults((List<Map<String, Object>>) result.get("collectionList"));
+            
+            Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
+            int count = GetterUtil.getInteger(result.get("total"));
+            if(count > 0){
+                searchResults.setDataCount(count);
+                searchResults.setDataResults((List<Map<String, Object>>) result.get("collectionList"));
+            }
+        }catch(Exception e){
+            log.error("data search exception : ", e);
         }
         return searchResults;
     }  
