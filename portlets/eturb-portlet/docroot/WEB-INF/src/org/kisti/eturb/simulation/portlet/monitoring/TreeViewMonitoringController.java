@@ -3,6 +3,7 @@ package org.kisti.eturb.simulation.portlet.monitoring;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +48,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.google.gson.GsonBuilder;
+import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -128,14 +131,14 @@ public class TreeViewMonitoringController{
             .fromJson(wrapJobDataArray(simulationJobData), JobDataList.class);
         JobData portData = jobData.getPortData(portName);
         if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE)){
-            FileManagementLocalServiceUtil.download(
-                request, response, portData.getParent_(), new String[]{portData.getName_()}, false);
+            OSPFileUtil.downloadFile(request, response,
+                Paths.get(portData.getParent_(), portData.getName_()).toString(),
+                OSPRepositoryTypes.USER_JOBS.toString());
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_DL_ENTRY_ID)){
-            FileManagementLocalServiceUtil.download(request, response, Long.valueOf(portData.getId_()));
+            OSPFileUtil.downloadDLEntry(request, response, Long.valueOf(portData.getId_()));
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_CONTEXT)
             || ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE_CONTENT)){
-            FileManagementLocalServiceUtil.downloadFromText(
-                request, response, portName + ".txt", portData.getContext_());
+            OSPFileUtil.downloadFromText(request, response, portName + ".txt", portData.getContext_());
         }
     }
     
