@@ -106,6 +106,9 @@
 .categoriesDiv{
 	text-align: center;
 }
+.subtitlearea{
+	margin-left: 10px;
+}
 </style>
 
 
@@ -125,6 +128,18 @@
 			<form name="form" method="post" action="<%=exeURL%>">
 				<input name="<portlet:namespace/>id"    type="hidden"/>
 			</form>
+			
+			<!-- title -->
+			<h2>
+				<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
+				<span class="subtitlearea">
+					ScienceApp
+				</span>
+			</h2> 
+			
+			<div class="h20"></div>
+			
+			<!-- tab -->
 			<c:if test="${not empty tabsValues}">
 				<div class="contabmenu"> 
 					<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="150"/>
@@ -132,12 +147,6 @@
 				
 				<div class="h10"></div>
 			</c:if>
-			
-			<!--table view -->
-			<h1>
-				<img src="${pageContext.request.contextPath}/images/title_virtual.png"/>
-				ScienceApp
-			</h1> 
 			
 			<div class="h10"></div>
 			
@@ -151,7 +160,7 @@
 				</div>
 			</div>
 			
-			<div class="h40"></div>
+			<div class="h20"></div>
 				
 			<form method="post" name="searchParamForm" style="margin:0px;" onsubmit="return false;">
 				<input type="hidden" id="<portlet:namespace/>groupId" 			name="<portlet:namespace/>groupId"						value=""/>
