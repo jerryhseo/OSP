@@ -98,7 +98,11 @@ public class ContentListController{
 			long parentGroupId = GroupLocalServiceUtil.getGroup(groupId).getParentGroupId();
 
 			
-			String portalYn = request.getPreferences().getValue("portalYn", "Y");
+			String portalYn = request.getPreferences().getValue("portalYn", "N");
+			if(themeDisplay.getSiteGroupName().toUpperCase().equals("EDISON")){
+				// 2018.04.06. EDISON Portal인 경우 Y
+				portalYn = "Y";
+			}
 
 			model.addAttribute("groupId", groupId);
 
