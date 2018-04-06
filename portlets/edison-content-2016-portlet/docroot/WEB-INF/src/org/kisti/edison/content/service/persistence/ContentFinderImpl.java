@@ -149,6 +149,7 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 			Map<String, Object> params = new HashMap<String, Object>();
 
 			params.put("isAdmin", false);
+			params.put("categoryJoin", true); //2018.04.06, AssetEntries_AssetCategories 테이블 조인 : 일반회원이 전문분야별 사이트에서 자신의 콘텐츠 조회 시 필요
 
 			params.put("roleId", roleId);
 			params.put("classNameId", classNameId);
@@ -198,6 +199,7 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 			Map<String, Object> params = new HashMap<String, Object>();
 
 			params.put("isAdmin", false); //CUSTOM AUTH 테이블 조인.
+			params.put("categoryJoin", true); //2018.04.06, AssetEntries_AssetCategories 테이블 조인 : 일반회원이 전문분야별 사이트에서 자신의 콘텐츠 조회 시 필요 
 
 			params.put("roleId", roleId); //CONTENT_MANAGER ROLE
 			params.put("classNameId", classNameId);
