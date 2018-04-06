@@ -425,7 +425,7 @@
 	
 						
 						//메뉴얼
-						if(typeof dataMap.dataList[i].manualId == "undefined"){
+						if(typeof dataMap.dataList[i].manualId != "number"){
 							$("<td/>").css("text-align","center").append(
 								$("<img/>").attr("align","center")
 										   .attr("id","manualLinkBtn")
