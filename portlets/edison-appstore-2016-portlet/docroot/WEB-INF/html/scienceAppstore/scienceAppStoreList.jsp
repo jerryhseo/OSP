@@ -444,31 +444,39 @@
 											   .hover(
 												  function(){
 												  	$(this).attr("src","${contextPath}/images/btn_manual.jpg");
-												  },
-												  function(){
-												  	$(this).attr("src","${contextPath}/images/btn_manual.jpg");
 												  }
 												)
 								).appendTo($vRow);
 						}
 						
 						//실행
-						$("<td/>").css("text-align","center").append(
-								$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
-											.attr("id","manualLinkBtn")
-											.attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveSimulation('" + dataMap.dataList[i].scienceAppId + "','" + currentTabGroupId + "');")
-											.css("height", "28px")
-											.css("cursor","pointer")
-											.css("vertical-align","middle")
-											.hover(
-											  function(){
-											  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
-											  },
-											  function(){
-											  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
-											  }
-											)
-						).appendTo($vRow);
+						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver"){
+							$("<td/>").css("text-align","center").append(
+									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
+												.attr("id","manualLinkBtn")
+												.attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveSimulation('" + dataMap.dataList[i].scienceAppId + "','" + currentTabGroupId + "');")
+												.css("height", "28px")
+												.css("cursor","pointer")
+												.css("vertical-align","middle")
+												.hover(
+												  function(){
+												  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
+												  }
+												)
+							).appendTo($vRow);
+						} else if(dataMap.dataList[i].openLevel == "DOWNLOAD_ONLY"){
+							$("<td/>").css("text-align","center").append(
+									$("<button/>").addClass("btn btn-default")
+												  .attr("id","manualLinkBtn")
+												  .attr("onClick", "<portlet:namespace/>fileDownload('"+dataMap.dataList[i].scienceAppId.srcFileName+"')")
+												  .css("cursor","pointer")
+												  .css("height", "24px")
+												  .css("padding","4px 6px")
+												  .append( $("<i/>").addClass("icon-download-alt").text(" Download") )
+							).appendTo($vRow);
+						}else {
+							$("<td/>").css("text-align","center").appendTo($vRow);
+						}
 						
 						
 						$("#<portlet:namespace/>summaryListBody").append($vRow);
