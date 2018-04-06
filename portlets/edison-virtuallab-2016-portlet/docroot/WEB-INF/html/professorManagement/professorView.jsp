@@ -57,7 +57,20 @@
 		</c:if>
 		<c:if test="${!empty professor.homepage }">
 			<li class="professorSubTitle">Homepage : </li>
-			<li class="professorDescription"><a href="http://${professor.homepage }"  target="_blank" style="color : #666;">${professor.homepage }</a></li>
+			<li class="professorDescription">
+				<!-- 2018.04.06, 교수 이력정보 Homepage '작성 시 http://' 또는 'https://'의 엽력 여부에 따른 링크 연결 수정-->
+				<c:choose>
+					<c:when test="${fn:contains(fn:toUpperCase(professor.homepage), 'HTTP://')}">
+						<a href="${professor.homepage }"  target="_blank" style="color : #666;">${professor.homepage }</a>
+					</c:when>
+					<c:when test="${fn:contains(fn:toUpperCase(professor.homepage), 'HTTPS://')}">
+						<a href="${professor.homepage }"  target="_blank" style="color : #666;">${professor.homepage }</a>
+					</c:when>
+					<c:otherwise>
+						<a href="http://${professor.homepage }"  target="_blank" style="color : #666;">${professor.homepage }</a>
+					</c:otherwise>
+				</c:choose>
+			</li>
 		</c:if>
 	</ul>
 	<c:if test="${!empty record }">
