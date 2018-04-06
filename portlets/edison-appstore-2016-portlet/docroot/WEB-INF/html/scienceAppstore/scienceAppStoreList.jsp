@@ -127,7 +127,7 @@
 			</form>
 			<c:if test="${not empty tabsValues}">
 				<div class="contabmenu"> 
-					<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+					<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="150"/>
 				</div>
 				
 				<div class="h10"></div>
