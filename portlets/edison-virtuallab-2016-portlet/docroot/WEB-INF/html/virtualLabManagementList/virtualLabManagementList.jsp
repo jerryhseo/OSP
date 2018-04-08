@@ -242,76 +242,108 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 				$("#<portlet:namespace/>virtualLabListBody").append($rowResult);
 			} else {
 				
-					$rowResult = $("<div/>").addClass("boxlist");
+				$rowResult = $("<div/>").addClass("boxlist");
 				for(var i = 0; i < virtualLabManagementList.length; i++) {
-   					if(virtualLabManagementList[i].groupName == 'CFD'){
-   						groupField = "<liferay-ui:message key='edison-course-CFD' />";
-   						groupClass = "label_cfd";
-   						siteClass = "cfd";
-   					}else if(virtualLabManagementList[i].groupName == 'NANO'){
-   						groupField = "<liferay-ui:message key='edison-course-NANO' />";
-   						groupClass = "label_nano";
-   						siteClass = "nano";
-   					}else if(virtualLabManagementList[i].groupName == 'CHEM'){
-   						groupField = "<liferay-ui:message key='edison-course-CHEM' />";
-   						groupClass = "label_chem";
-   						siteClass = "chem";
-   					}else if(virtualLabManagementList[i].groupName == 'CSD'){
-   						groupField = "<liferay-ui:message key='edison-course-CSD' />";
-   						groupClass = "label_csd";
-   						siteClass = "csd";
-   					}else if(virtualLabManagementList[i].groupName == 'DESIGN'){
-   						groupField = "<liferay-ui:message key='edison-course-DESIGN' />";
-   						groupClass = "label_design";
-   						siteClass = "design";
-   					}else if(virtualLabManagementList[i].groupName == 'CMED'){
-   						groupField = "<liferay-ui:message key='edison-course-CMED' />";
-   						groupClass = "label_cmed";
-   						siteClass = "cmed";
-   					}else if(virtualLabManagementList[i].groupName == 'UE'){
-   						groupField = "<liferay-ui:message key='edison-course-UE' />";
-   						groupClass = "label_ue";
-   						siteClass = "ue";
-   					}else if(virtualLabManagementList[i].groupName == 'CEm'){
-   						groupField = "<liferay-ui:message key='edison-course-CEM' />";
-   						groupClass = "label_cem";
-   						siteClass = "cem";
-   					}  					
+					if(virtualLabManagementList[i].groupName == 'CFD'){
+						groupField = "<liferay-ui:message key='edison-course-CFD' />";
+						groupClass = "label_cfd";
+						siteClass = "cfd";
+					}else if(virtualLabManagementList[i].groupName == 'NANO'){
+						groupField = "<liferay-ui:message key='edison-course-NANO' />";
+						groupClass = "label_nano";
+						siteClass = "nano";
+					}else if(virtualLabManagementList[i].groupName == 'CHEM'){
+						groupField = "<liferay-ui:message key='edison-course-CHEM' />";
+						groupClass = "label_chem";
+						siteClass = "chem";
+					}else if(virtualLabManagementList[i].groupName == 'CSD'){
+						groupField = "<liferay-ui:message key='edison-course-CSD' />";
+						groupClass = "label_csd";
+						siteClass = "csd";
+					}else if(virtualLabManagementList[i].groupName == 'DESIGN'){
+						groupField = "<liferay-ui:message key='edison-course-DESIGN' />";
+						groupClass = "label_design";
+						siteClass = "design";
+					}else if(virtualLabManagementList[i].groupName == 'CMED'){
+						groupField = "<liferay-ui:message key='edison-course-CMED' />";
+						groupClass = "label_cmed";
+						siteClass = "cmed";
+					}else if(virtualLabManagementList[i].groupName == 'UE'){
+						groupField = "<liferay-ui:message key='edison-course-UE' />";
+						groupClass = "label_ue";
+						siteClass = "ue";
+					}else if(virtualLabManagementList[i].groupName == 'CEm'){
+						groupField = "<liferay-ui:message key='edison-course-CEM' />";
+						groupClass = "label_cem";
+						siteClass = "cem";
+					}
+					
 					if(virtualLabCount % 2 != 0){
 						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
-							$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" ).attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'").css("width","110px").css("height","110px")).appendTo($rowUl);
+							$("<li/>").append(
+									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
+											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("width", "100")
+											   .attr("height", "98")
+								 ).appendTo($rowUl);
 						}else{														
-							$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2").css("width","110px").css("height","110px")).appendTo($rowUl);
+							$("<li/>").append(
+									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
+											   .attr("width", "100")
+											   .attr("height", "98")
+								 ).appendTo($rowUl);
 						}
-						$("<div/>").addClass("infoDiv").append($("<li/>").addClass("box").css("margin","6px 5px 0 0")
-																		 .append($("<input/>").addClass(siteClass+"box").attr("type","button").attr("value",groupField)))
-													   .append($("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","15px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
-													   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
-													   .appendTo($rowUl);
-						$rowUl.appendTo($rowResult);						
+													   
+						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle)
+								  .css("color","#000000").css("font-size","24px").css("padding-top","15px")
+								  .css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap")
+								  .css("overflow","hidden").appendTo($rowUl);
+						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName)
+								  .css("color","#000000").appendTo($rowUl);
+						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
+								  .append(
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+										 ).appendTo($rowUl);
+						
+						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}else{
 						$rowUl = $("<ul/>").css("width","46%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
-								if(virtualLabManagementList[i].iconId != 0){
-									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2" )
-																					 .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")																					 .css("width","110px").css("height","110px")).appendTo($rowUl);
-								}else{
-									$("<div/>").addClass("imgDiv").append($("<img/>").attr("src","${contextPath}/images/noimage.png?imageThumbnail=2")
-																					 .css("width","110px").css("height","110px")).appendTo($rowUl);
-								}
-								$("<div/>").addClass("infoDiv").append($("<li/>").addClass("box").css("margin","6px 6px 0 0")
-																				 .append($("<input/>").addClass(siteClass+"box").attr("type","button").attr("value",groupField)))
-															   .append($("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle).css("color","#000000").css("font-size","24px").css("padding-top","15px").css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap").css("overflow","hidden"))
-															   .append($("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).css("color","#000000"))
-															   .appendTo($rowUl);
-						$rowUl.appendTo($rowResult);						
+						if(virtualLabManagementList[i].iconId != 0){
+							$("<li/>").append(
+									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
+											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("width", "100")
+											   .attr("height", "98")
+								 ).appendTo($rowUl);
+						}else{
+							$("<li/>").append(
+									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
+											   .attr("width", "100")
+											   .attr("height", "98")
+								 ).appendTo($rowUl);
+						}
+						
+						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle)
+								  .css("color","#000000").css("font-size","24px").css("padding-top","15px")
+								  .css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap")
+								  .css("overflow","hidden").appendTo($rowUl);
+						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName)
+								  .css("color","#000000").appendTo($rowUl);
+						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
+								  .append(
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+										 ).appendTo($rowUl);
+						
+						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}
+					
 					$("#<portlet:namespace/>virtualLabListBody").append($rowResult);
 				}
 			}
