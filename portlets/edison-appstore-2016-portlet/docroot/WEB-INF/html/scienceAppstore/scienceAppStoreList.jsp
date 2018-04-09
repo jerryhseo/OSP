@@ -60,6 +60,11 @@
   <liferay-portlet:param name="myaction" value="detailView" />
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" 
+  portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
+    <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
+</liferay-portlet:renderURL>
+
 <style type="text/css">
 #solverTypeBody .portalClass:hover ,.onClass{
 	background-color:#e5eff8;
@@ -224,7 +229,7 @@
 	</div>
 </body>
 <script>
-	//선택한 Tab Id
+	/* 선택한 Tab Id */
 	var selectedTabId = "";
 	
 	$(document).ready(function(){
@@ -251,12 +256,12 @@
 		solverTypeList();
 	});
 	
-	//liferay-ui 탭 이벤트 return Script
+	/* liferay-ui 탭 이벤트 return Script */
 	function <portlet:namespace/>tagScript(tabUrl,tabNames,value,scriptName){
 		window.location.href = "<%= saveClickTabURL.toString() %>"+"&<portlet:namespace/>groupId=" + value;
  	}
 	
-	//필터 조회
+	/* 필터 조회 */
 	function solverTypeList(){
 		var searchData = {
 				"<portlet:namespace/>groupId":selectedTabId
@@ -371,7 +376,6 @@
 		document.searchParamForm.<portlet:namespace/>p_curPage.value = p_curPage;
 		var searchForm = $("form[name=searchParamForm]").serialize();
 		
-		// bStart();
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=resorceSearchURL%>",
@@ -398,6 +402,7 @@
 						
 						$vRow = $("<tr/>");
 						
+						console.log("pageNum : " + pageNum + " / dataMap.dataList["+i+"].appType : " +  dataMap.dataList[i].appType);
 						$("<td/>").text(pageNum--).addClass("TC").appendTo($vRow);
 						
 						var vSolverIconId = 0;
@@ -433,7 +438,7 @@
 						$("<td/>").text(formatDate(statusDate) ).addClass("TC").appendTo($vRow);
 	
 						
-						//메뉴얼
+						/* 메뉴얼 */
 						if(typeof dataMap.dataList[i].manualId != "number"){
 							$("<td/>").css("text-align","center").append(
 								$("<img/>").attr("align","center")
@@ -458,12 +463,12 @@
 								).appendTo($vRow);
 						}
 						
-						//실행
-						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver"){
+						/* 실행 */
+						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0){
 							$("<td/>").css("text-align","center").append(
 									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
 												.attr("id","manualLinkBtn")
-												.attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveSimulation('" + dataMap.dataList[i].scienceAppId + "','" + currentTabGroupId + "');")
+												.attr("onClick", "<portlet:namespace/>moveWorkbenchFromList('" + dataMap.dataList[i].scienceAppId + "')")
 												.css("height", "28px")
 												.css("cursor","pointer")
 												.css("vertical-align","middle")
@@ -477,7 +482,7 @@
 							$("<td/>").css("text-align","center").append(
 									$("<button/>").addClass("btn btn-default")
 												  .attr("id","manualLinkBtn")
-												  .attr("onClick", "<portlet:namespace/>fileDownload('"+dataMap.dataList[i].scienceAppId.srcFileName+"')")
+												  .attr("onClick", "<portlet:namespace/>fileDownload('"+dataMap.dataList[i].srcFileName+"')")
 												  .css("cursor","pointer")
 												  .css("height", "24px")
 												  .css("padding","4px 6px")
@@ -492,7 +497,7 @@
 					}
 					
 					
-					//즐겨 찿기 솔버 추가 후에 검색한 솔버가 없을 경우 no-data 표시
+					/* 즐겨 찿기 솔버 추가 후에 검색한 솔버가 없을 경우 no-data 표시 */
 					if(dataMap.totalCnt==0){
 						$vRow = $("<tr/>");
 						$("<td/>").attr("colSpan","9")
@@ -504,13 +509,12 @@
 					}
 					
 				}
-				//페이징 초기화pageListDiv
+				/* 페이징 초기화pageListDiv */
 				document.getElementById("pageListDiv").innerHTML = dataMap.pageList;
 			},
 			error:function(msg){
 				alert("System Exception : " + msg);
 			},complete: function(){
-				//bEnd();
 			}
 		});
 	}
@@ -536,7 +540,7 @@
 	};
 	
 	
-	//초기화
+	/* 초기화 */
 	 function filterInit (){
 		
 		var searchForm = document.searchParamForm;
@@ -555,29 +559,29 @@
 			$(".onClass2").removeClass("onClass2");
 		}
 		
-		//form 초기화 적용
+		/* form 초기화 적용 */
 		searchForm.submit();
 	};
 	
 	
-	//검색
+	/* 검색 */
 	$(document).on( "click", "#keyWordB", function(){
 		<portlet:namespace/>dataSearchList();
 	});
 	
-	//전체보기(clear)
+	/* 전체보기(clear) */
 	$(document).on( "click", "#initB", function(){
 		filterInit();
 	});
 	
 	
 	$(function() {
-		//매뉴얼 Event
+		/* 매뉴얼 Event */
 		$("img[id=manualLinkBtn]").on("click", function(){
 			var url = spaceDelete($(this).attr("manual-link"));
 			window.open(url,"_blank");
 		}),
-		//실행 Event
+		/* 실행 Event */
 		$("img[id=exeLinkBtn]").on("click", function(){
 			var form = document.form;
 			form.id.value = $(this).attr("exe-id");
@@ -587,12 +591,12 @@
 			}
 			form.submit();
 		}),
-		//세부화면
+		/* 세부화면 */
 		$("#simulationView").on("click",function(){
 			detailView('goView', $(this).attr("data-id"));
 		}),
 		
-		//문제필터
+		/* 문제필터 */
 		$("#configFilter").find("td").on("click",function(event){
 			alert("click configFilter")
 			if(!$(event.target).is("input")){
@@ -618,17 +622,23 @@
 		}
 	});
 	
-	// Manual Download
+	/* Manual Download */
 	function <portlet:namespace/>fileDownload(p_fileEntryId){
 		location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
 	}
 	
-	// scienceApp 상세보기
+	/* scienceApp 상세보기 */
 	function <portlet:namespace/>moveScienceAppDetail(groupId, scienceAppId) {
 		var thisPortletNamespace = "_edisonscienceAppstore_WAR_edisonappstore2016portlet_";
 		var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
 		params += "&" + thisPortletNamespace + "groupId=" + groupId;
 		location.href = "<%=scienceAppDetailUrl%>" + params;
+	}
+	
+	function <portlet:namespace/>moveWorkbenchFromList(targetScienceAppId) {
+		var URL = "<%=workbenchURL%>";
+		URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+		window.open(URL);
 	}
 </script>
 
@@ -643,4 +653,5 @@ function <portlet:namespace/>moveSimulation(solverId, groupId) {
 		window.location.href = portletURL.toString();
 	});
 }
+
 </aui:script>

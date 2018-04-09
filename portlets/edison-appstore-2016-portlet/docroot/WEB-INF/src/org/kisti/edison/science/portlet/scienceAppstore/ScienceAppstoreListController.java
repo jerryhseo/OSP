@@ -162,8 +162,8 @@ public class ScienceAppstoreListController {
 			model.addAttribute("groupMap", json.toString());
 			
 			String searchField = ParamUtil.get(request, "searchField", "");
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "edisonbestsimulation_WAR_edisonsimulationportlet");
-			model.addAttribute("simulationPlid", plid);
+			long plid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
+			model.addAttribute("workBenchPlid", plid);
 			params.put("solverStatus", "1901004");
 			params.put("recommandation_flag", "true");
 			
