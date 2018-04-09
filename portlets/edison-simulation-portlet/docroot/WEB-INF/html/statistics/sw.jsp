@@ -91,8 +91,9 @@
 					<thead>
 						<tr> 
 							<th width="10%"><liferay-ui:message key="edison-table-list-header-index" /></th>
-							<th ><liferay-ui:message key="edison-create-account-field-title-university" /></th>
+							<th width="30%"><liferay-ui:message key="edison-create-account-field-title-university" /></th>
 							<th width="20%"><liferay-ui:message key="edison-science-appstore-view-regist-count" /></th>
+							<th><liferay-ui:message key="edison-appstore-solver-name" /></th>
 						</tr> 
 					</thead>
 					<tbody id="<portlet:namespace/>userTableBody">
@@ -149,6 +150,7 @@ function setTable(dataList){
 				$("<td/>").addClass("center").html(++rownum).appendTo($userTableTr);
 				$("<td/>").addClass("center").html(dataList[a].universityNm).appendTo($userTableTr);
 				$("<td/>").addClass("center").html(dataList[a].cnt).appendTo($userTableTr);
+				$("<td/>").css("white-space","pre-line").html(dataList[a].appNames.trim()).appendTo($userTableTr);
 				
 				$("#<portlet:namespace/>userTableBody").append($userTableTr);
 				
@@ -159,7 +161,7 @@ function setTable(dataList){
 	}else{
 		$("#totalSpan").html("<b>0 <liferay-ui:message key='edison-search-article'/></b>");
 		$("<tr/>").append(
-							$("<td/>").addClass("center").attr("colspan","3").html('<liferay-ui:message key="edison-there-are-no-data" />')
+							$("<td/>").addClass("center").attr("colspan","4").html('<liferay-ui:message key="edison-there-are-no-data" />')
 						).appendTo("#<portlet:namespace/>userTableBody");
 	}
 }

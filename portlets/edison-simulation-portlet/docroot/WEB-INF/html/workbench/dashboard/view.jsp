@@ -464,16 +464,6 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 									};
 									
 									Liferay.fire(OSP.Event.OSP_JOB_SELECTED, eventData);
-								
-// 								var eventData = {
-<%-- 										portletId: '<%=portletDisplay.getId()%>', --%>
-// 										targetPortlet:<portlet:namespace/>connector,
-// 										data: {
-// 											jobUuid:selectJobId,
-// 											jobStatus:jobStatus
-// 										}
-// 								};
-// 								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
 							}
 						}
 					}
