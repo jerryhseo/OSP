@@ -148,7 +148,6 @@ function <portlet:namespace/>closeDialog ( data ){
 	
 	
 		<div class="commleft panel edison-panel">
-		
 			<!-- 파일 목록 -->
 			<c:choose>
 				<c:when test="${content.contentDiv eq 2001004 && content.advancedStartFileNm ne ''}">
@@ -168,7 +167,7 @@ function <portlet:namespace/>closeDialog ( data ){
 					</c:if>
 				</c:when>
 				<c:otherwise>
-					<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
+					<%-- <c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}"> --%>
 						<div>
 							<div class="panel-heading clearfix detailViewSubTitle" style="border-bottom: 0px;">
 								<h3 class="panel-title pull-left">
@@ -203,13 +202,15 @@ function <portlet:namespace/>closeDialog ( data ){
 											<%} %>
 										</c:when>
 										<c:otherwise><!-- 메뉴얼이 아닐때 -->
+										  <c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
 											<li class="txtnum"><span style="cursor:pointer" onclick="<portlet:namespace/>contentFileDownload('${content.contentSeq }', '${content.contentDiv}', '')">${content.contentFileNm }</span></li>
+										  </c:if>
 										</c:otherwise>
 									</c:choose>
 								</ul>
 							</div>
 						</div>
-					</c:if>
+					<%-- </c:if> --%>
 				</c:otherwise>
 			</c:choose>
 			
