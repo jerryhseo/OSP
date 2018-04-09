@@ -70,7 +70,7 @@ i .test{
 	font-family: Arial, Nanum Barun Gothic, NanumGothic;
 }
 
-#<portlet:namespace>solver-selection{
+#<portlet:namespace/>solver-selection{
 	text-align: center;
 }
 
@@ -1232,7 +1232,7 @@ function <portlet:namespace/>removeSimulation(executeId){
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h4 class="modal-title">Solver Selection</h4>
 	            </div>
-	            <div class="modal-body table-responsive panel edison-panel" id="<portlet:namespace>solver-selection">
+	            <div class="modal-body table-responsive panel edison-panel" id="<portlet:namespace/>solver-selection">
 	                
 	            </div>
 	        </div>
