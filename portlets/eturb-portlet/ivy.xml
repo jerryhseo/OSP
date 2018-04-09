@@ -15,6 +15,5 @@
 		<dependency conf="test->default" name="arquillian-tomcat-remote-7" org="org.jboss.arquillian.container" rev="1.0.0.CR6" />
 		<dependency conf="test->default" name="com.liferay.ant.arquillian" org="com.liferay" rev="1.0.0-SNAPSHOT" />
 		<dependency org="com.google.code.gson" name="gson" rev="2.5"/>
-        <dependency org="org.apache.commons" name="commons-exec" rev="1.1" />
 	</dependencies>
 </ivy-module>
