@@ -466,9 +466,12 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
             modalBody.html("");
             var ul = $("<ul/>").addClass("panel-body sortable-ui ui-sortable");
             for(var i=0; i<appIdList.length; i++){
-                $("<li/>").addClass("airfoil").attr("appId", appIdList[i])
-                          .attr("onclick", "<portlet:namespace/>moveWorkBench(\'"+appIdList[i]+"\',\'"+meshFileId+"\')").text(appNames[i])
-                          .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer").appendTo(ul);
+                $li = $("<li/>").addClass("airfoil btn btn-default").attr("appId", appIdList[i])
+	                            .attr("onclick", "<portlet:namespace/>moveWorkBench(\'"+appIdList[i]+"\',\'"+meshFileId+"\')")
+	                            .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer");
+                $("<button/>").text(appNames[i]).css("width", "100%").appendTo($li);
+                $li.appendTo(ul);
+                
             }
             ul.appendTo(modalBody);
             
@@ -494,7 +497,7 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
 // Workbench로 이동
 function <portlet:namespace/>moveWorkBench(targetScienceAppId, meshFileId) {
     var URL = "<%=workbenchURL%>";
-    URL += "&_Workbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ_scienceAppId="+targetScienceAppId;
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ_scienceAppId="+targetScienceAppId;
 //     URL += "&_Workbench_WAR_OSPWorkbenchportlet_meshFileId="+meshFileId;
     
     location.href= URL;
@@ -1224,7 +1227,7 @@ function <portlet:namespace/>removeSimulation(executeId){
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
 	        <!-- Modal content-->
-	        <div class="modal-content">
+	        <div class="modal-content table-responsive panel edison-panel">
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h4 class="modal-title">Solver Selection</h4>
