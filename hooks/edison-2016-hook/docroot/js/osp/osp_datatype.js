@@ -562,10 +562,16 @@
 						}
 					}
 				};
+				
+				LAC.deserialize = function( jsonObject ){
+					for( var key in jsonObject )
+						LAC._deserialize( key, jsonObject[key] );
+				};
 
 				if( arguments.length === 1 )
 					LAC.deserialize(jsonObject);
 			}; // End of ListItemActivateCondition
+			
 			DS.newListItemActivateCondition = function( jsonObject ){
 				switch( arguments.length ){
 					case 0:
@@ -1214,11 +1220,13 @@
 						for( var index in jsonConditions ){
 							var jsonCondition = jsonConditions[index];
 							var condition;
-							if( jsonCondition[type] === OSP.Constants.VARIABLE_TYPE_LIST )
-								condition = _Param.newListItemActivateCondition( jsonCondition );
+							if( jsonCondition[OSP.Constants.TYPE] === OSP.Constants.LIST )
+//								condition = _Param.newListItemActivateCondition( jsonCondition );
+								condition = new ListItemActivateCondition(jsonCondition)
 							else
-								condition = _Param.newNumericActivateCondition( jsonCondition );
-
+//								condition = _Param.newNumericActivateCondition( jsonCondition );
+								condition = new NumericActivateCondition(jsonCondition)
+							
 							_Param.addActivateCondition(condition);
 						}
 						break;
@@ -4095,6 +4103,7 @@
 			};
 
 			var parameterRow = function( parameter, eventFlag){
+				console.log(JSON.stringify(parameter, null, 4));
 				var div;
 				switch(parameter.type()){
 				case OSP.Constants.GROUP:

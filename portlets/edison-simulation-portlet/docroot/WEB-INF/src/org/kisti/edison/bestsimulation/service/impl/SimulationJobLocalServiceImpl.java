@@ -98,6 +98,8 @@ import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -642,28 +644,35 @@ public class SimulationJobLocalServiceImpl
 							logPort = scienceAppLogPorts.getLogPorts();
 							
 							if(logPort != null && !logPort.equals("")){
-								JSONObject logPortJson = JSONObject.fromObject(JSONSerializer.toJSON(logPort));
-								Iterator<String> itr = logPortJson.keys();
-								
-								int analyzerCount = 0;
-								while (itr.hasNext()) {
-									String names = itr.next();
-									JSONObject jsonPort = logPortJson.getJSONObject(names);
-									String analyzerId = GetterUtil.get(jsonPort.get("defaultAnalyzer_"), names);
-									String dataType_ = GetterUtil.get(jsonPort.get("dataType_"), names);
-								
-									JSONObject dataTypeJson = JSONObject.fromObject(JSONSerializer.toJSON(jsonPort.get("dataType_")));
-									String dataTypeName = GetterUtil.get(dataTypeJson.get("name"), names);
-									String dataTypeVersion = GetterUtil.get(dataTypeJson.get("version"), names);
-									
-									DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
-									if(analyzerId != null && !analyzerId.equals("")) {
-										analyzerCount++;
-									}
-								}
-								if(analyzerCount > 0) {
-									resultRow.put("jobLogFileProcessorYn","Y");
-								}
+							    try{
+							        JSONObject logPortJson = JSONObject.fromObject(JSONSerializer.toJSON(logPort));
+							        Iterator<String> itr = logPortJson.keys();
+							        
+							        int analyzerCount = 0;
+							        while (itr.hasNext()) {
+							            String names = itr.next();
+							            JSONObject jsonPort = logPortJson.getJSONObject(names);
+							            String analyzerId = GetterUtil.get(jsonPort.get("defaultAnalyzer_"), names);
+							            String dataType_ = GetterUtil.get(jsonPort.get("dataType_"), names);
+							            
+							            JSONObject dataTypeJson = JSONObject.fromObject(JSONSerializer.toJSON(jsonPort.get("dataType_")));
+							            String dataTypeName = GetterUtil.get(dataTypeJson.get("name"), names);
+							            String dataTypeVersion = GetterUtil.get(dataTypeJson.get("version"), names);
+							            
+							            DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+							            if(analyzerId != null && !analyzerId.equals("")) {
+							                analyzerCount++;
+							            }
+							        }
+							        if(analyzerCount > 0) {
+							            resultRow.put("jobLogFileProcessorYn","Y");
+							        }
+							    }catch(JSONException je){
+							        log.error("logport json exception");
+							        log.error("logport json \n" + logPort + "\n");
+							        log.error("exception", je);
+							        resultRow.put("jobLogFileProcessorYn","N");
+							    }
 							}
 						} else {
 							resultRow.put("jobLogFileProcessorYn","N");
@@ -1119,6 +1128,7 @@ public class SimulationJobLocalServiceImpl
 					String universityNm = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(objs[0]), EdisonExpando.CDNM, locale);
 					map.put("universityNm",		universityNm);
 					map.put("cnt",		objs[1]);
+					map.put("appNames",		objs[2].toString().trim());
 					resultList.add(map);
 				}
 				

@@ -160,11 +160,11 @@ if(areaScienceData){
   <div id="search-content" class="rightcon search-content-wrapper">
     <div class="path connav">
       <ul>
-        <li>Categories</li>
+        <li></li>
       </ul>
     </div>
     <div class="content boxlist">
-      <ul>
+      <%-- <ul>
         <c:forEach items="${lv1Categories}" var="rootCategory">
           <li class="category-card" id="content-${rootCategory.categoryId}" category-id="${rootCategory.categoryId}">
             <div class="block left">
@@ -186,7 +186,7 @@ if(areaScienceData){
             </div>
           </li>
         </c:forEach>
-      </ul>
+      </ul> --%>
     </div>
   </div>
 </div>
@@ -356,16 +356,20 @@ if(areaScienceData){
 
   function categoryCardClickHandler(e) {
     e.preventDefault();
-    var categoryData = getCategory($(this).attr("category-id"));
-    if(categoryData.type === "category") {
-      var categories = getSubCategories(categoryData.categoryId);
-      var ulFrag = getContentCategoryFragment(categories);
-      var jsTreeNode = getJsTreeNodeById(categoryData.categoryId);
-      drawContentCategory(ulFrag);
-      drawPaths(categoryData.id);
-      jsTreeNode["data"]["isParentCardClick"] = true;
-    }
-    selectJstreeNode(categoryData.categoryId);
+    selectCategory($(this).attr("category-id"));
+  }
+  
+  function selectCategory(categoryId){
+      var categoryData = getCategory(categoryId);
+      if(categoryData.type === "category") {
+        var categories = getSubCategories(categoryData.categoryId);
+        var ulFrag = getContentCategoryFragment(categories);
+        var jsTreeNode = getJsTreeNodeById(categoryData.categoryId);
+        drawContentCategory(ulFrag);
+        drawPaths(categoryData.id);
+        jsTreeNode["data"]["isParentCardClick"] = true;
+      }
+      selectJstreeNode(categoryData.categoryId);  
   }
   
   function categorySelectHandler(e, jstreeData){
@@ -400,6 +404,10 @@ if(areaScienceData){
       if(parameterCategoryId){
         selectJstreeNode(parameterCategoryId);
       }
+      if(${isSingleCategory}){
+        selectJstreeNode(${singleCategoryId});
+      }
+      
     }).bind("select_node.jstree", function(event, data) {
       var nodeId = data.node.id;
       var node = data.node;
@@ -451,9 +459,10 @@ if(areaScienceData){
         <portlet:namespace/>totalSearchSubmit(e);
       }
     });
-    
-    if($("#<portlet:namespace/>searchKeyword").val()){
+    if(!${isSingleCategory}){
       <portlet:namespace/>searchSubmit();
     }
+    /* if($("#<portlet:namespace/>searchKeyword").val()){
+    } */
   });
 </script>

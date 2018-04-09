@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
+import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.model.User;
@@ -50,12 +50,14 @@ public class EturbAppHelper{
     private static final String SYMBOLIC_APP_EXECUTE_SCRIPT="direct-script";
     
     
-    public boolean exeAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
-    	return exeAnalyzer(projectId, inputFileName, fileId, fileContent, false, themeDisplay, analyzerJob, user);
+    public boolean exeAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,
+        ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+        return exeAnalyzer(projectId, inputFileName, fileId, fileContent, false, themeDisplay, analyzerJob, user);
     }
     
-    public boolean exeSymbolicAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
-    	return exeAnalyzer(projectId, inputFileName, fileId, fileContent, true, themeDisplay, analyzerJob, user);
+    public boolean exeSymbolicAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,
+        ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+        return exeAnalyzer(projectId, inputFileName, fileId, fileContent, true, themeDisplay, analyzerJob, user);
     }
     /**
      * APP Direct 실행
@@ -70,7 +72,8 @@ public class EturbAppHelper{
      * @return
      * @throws Exception
      */
-    private boolean exeAnalyzer(long projectId, String inputFileName, String fileId, String fileContent, boolean isSymbolic, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+    private boolean exeAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,
+        boolean isSymbolic, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
     	Path appPath = null;
     	Path exeFile = null;
     	
@@ -164,7 +167,7 @@ public class EturbAppHelper{
         }
     
     protected String readTextFile(Path path) throws IOException {
-		return FileManagementLocalServiceUtil.readTextFile(path);
+		return OSPFileUtil.readTextFile(path);
 	}
     
     public AnalyzerJob prepareAnalyzer(String appName, String appVersion, String userScreenName)

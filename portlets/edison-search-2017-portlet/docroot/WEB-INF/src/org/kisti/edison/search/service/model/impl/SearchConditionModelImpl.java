@@ -75,12 +75,14 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 			{ "manual", Types.BOOLEAN },
 			{ "reference", Types.BOOLEAN },
 			{ "advanced", Types.BOOLEAN },
+			{ "sortOrder", Types.VARCHAR },
+			{ "sortField", Types.VARCHAR },
 			{ "Solver", Types.BOOLEAN },
 			{ "Converter", Types.BOOLEAN },
 			{ "Editor", Types.BOOLEAN },
 			{ "Analyzer", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDSEARCH_SearchCondition (id_ LONG not null primary key,searchKeyword VARCHAR(75) null,areaScienceApp BOOLEAN,areaContents BOOLEAN,areaSimulationProject BOOLEAN,areaScienceData BOOLEAN,parentCategory BOOLEAN,categoryId LONG,companyGroupId LONG,groupId LONG,currentPage INTEGER,listSize INTEGER,blockSize INTEGER,classnote BOOLEAN,manual BOOLEAN,reference BOOLEAN,advanced BOOLEAN,Solver BOOLEAN,Converter BOOLEAN,Editor BOOLEAN,Analyzer BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table EDSEARCH_SearchCondition (id_ LONG not null primary key,searchKeyword VARCHAR(75) null,areaScienceApp BOOLEAN,areaContents BOOLEAN,areaSimulationProject BOOLEAN,areaScienceData BOOLEAN,parentCategory BOOLEAN,categoryId LONG,companyGroupId LONG,groupId LONG,currentPage INTEGER,listSize INTEGER,blockSize INTEGER,classnote BOOLEAN,manual BOOLEAN,reference BOOLEAN,advanced BOOLEAN,sortOrder VARCHAR(75) null,sortField VARCHAR(75) null,Solver BOOLEAN,Converter BOOLEAN,Editor BOOLEAN,Analyzer BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table EDSEARCH_SearchCondition";
 	public static final String ORDER_BY_JPQL = " ORDER BY searchCondition.id ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDSEARCH_SearchCondition.id_ ASC";
@@ -151,6 +153,8 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 		attributes.put("manual", getManual());
 		attributes.put("reference", getReference());
 		attributes.put("advanced", getAdvanced());
+		attributes.put("sortOrder", getSortOrder());
+		attributes.put("sortField", getSortField());
 		attributes.put("Solver", getSolver());
 		attributes.put("Converter", getConverter());
 		attributes.put("Editor", getEditor());
@@ -262,6 +266,18 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 
 		if (advanced != null) {
 			setAdvanced(advanced);
+		}
+
+		String sortOrder = (String)attributes.get("sortOrder");
+
+		if (sortOrder != null) {
+			setSortOrder(sortOrder);
+		}
+
+		String sortField = (String)attributes.get("sortField");
+
+		if (sortField != null) {
+			setSortField(sortField);
 		}
 
 		Boolean Solver = (Boolean)attributes.get("Solver");
@@ -510,6 +526,36 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 	}
 
 	@Override
+	public String getSortOrder() {
+		if (_sortOrder == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _sortOrder;
+		}
+	}
+
+	@Override
+	public void setSortOrder(String sortOrder) {
+		_sortOrder = sortOrder;
+	}
+
+	@Override
+	public String getSortField() {
+		if (_sortField == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _sortField;
+		}
+	}
+
+	@Override
+	public void setSortField(String sortField) {
+		_sortField = sortField;
+	}
+
+	@Override
 	public boolean getSolver() {
 		return _Solver;
 	}
@@ -613,6 +659,8 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 		searchConditionImpl.setManual(getManual());
 		searchConditionImpl.setReference(getReference());
 		searchConditionImpl.setAdvanced(getAdvanced());
+		searchConditionImpl.setSortOrder(getSortOrder());
+		searchConditionImpl.setSortField(getSortField());
 		searchConditionImpl.setSolver(getSolver());
 		searchConditionImpl.setConverter(getConverter());
 		searchConditionImpl.setEditor(getEditor());
@@ -713,6 +761,22 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 
 		searchConditionCacheModel.advanced = getAdvanced();
 
+		searchConditionCacheModel.sortOrder = getSortOrder();
+
+		String sortOrder = searchConditionCacheModel.sortOrder;
+
+		if ((sortOrder != null) && (sortOrder.length() == 0)) {
+			searchConditionCacheModel.sortOrder = null;
+		}
+
+		searchConditionCacheModel.sortField = getSortField();
+
+		String sortField = searchConditionCacheModel.sortField;
+
+		if ((sortField != null) && (sortField.length() == 0)) {
+			searchConditionCacheModel.sortField = null;
+		}
+
 		searchConditionCacheModel.Solver = getSolver();
 
 		searchConditionCacheModel.Converter = getConverter();
@@ -726,7 +790,7 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(47);
 
 		sb.append("{id=");
 		sb.append(getId());
@@ -762,6 +826,10 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 		sb.append(getReference());
 		sb.append(", advanced=");
 		sb.append(getAdvanced());
+		sb.append(", sortOrder=");
+		sb.append(getSortOrder());
+		sb.append(", sortField=");
+		sb.append(getSortField());
 		sb.append(", Solver=");
 		sb.append(getSolver());
 		sb.append(", Converter=");
@@ -777,7 +845,7 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(73);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.search.service.model.SearchCondition");
@@ -852,6 +920,14 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 		sb.append(getAdvanced());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>sortOrder</column-name><column-value><![CDATA[");
+		sb.append(getSortOrder());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>sortField</column-name><column-value><![CDATA[");
+		sb.append(getSortField());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>Solver</column-name><column-value><![CDATA[");
 		sb.append(getSolver());
 		sb.append("]]></column-value></column>");
@@ -894,6 +970,8 @@ public class SearchConditionModelImpl extends BaseModelImpl<SearchCondition>
 	private boolean _manual;
 	private boolean _reference;
 	private boolean _advanced;
+	private String _sortOrder;
+	private String _sortField;
 	private boolean _Solver;
 	private boolean _Converter;
 	private boolean _Editor;

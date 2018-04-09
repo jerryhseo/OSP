@@ -21,7 +21,6 @@ import javax.portlet.WindowStateException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
-import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.ExcelUtil;
@@ -49,8 +48,6 @@ import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
-import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
-import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoTable;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
@@ -263,15 +260,16 @@ public class EdisonStatisticsAppController {
 			
 			String university = LanguageUtil.get(themeDisplay.getLocale(), "edison-create-account-field-title-university");
 			String regCnt = LanguageUtil.get(themeDisplay.getLocale(), "edison-science-appstore-view-regist-count");
+			String appNames = LanguageUtil.get(themeDisplay.getLocale(), "edison-appstore-solver-name");
 			
 			String[] logical_names = {
-					university,		regCnt
+					university,		regCnt,		appNames
 			};
 			int[] widths = {
-					50,								20
+					50,								20,			50
 			};
 			String[] physical_names = {
-					"universityNm",	"cnt"
+					"universityNm",	"cnt", "appNames"
 			};
 
 			String downFileName = "SWStatistics_"+CustomUtil.dateToStringFormat(new Date(), "yyyy.MM.dd");		

@@ -29,10 +29,9 @@ String portletId= portletDisplay.getId();
 }
 .viewerStyle {
 	height:670px;
-	width: 98%;
+	width: 100%;
 	margin-top: 13.2px;
 	border: 1px solid #d3d3d3;
-	margin-left:-30px;
 }
 </style>
 

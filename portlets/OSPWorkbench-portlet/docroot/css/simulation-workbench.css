@@ -245,3 +245,13 @@
 	opacity: 0;
 }
 
+.simulation-workbench #workbench-layout-area .moving{
+	background-color: #ebeff4;
+	background-image: url('../images/simulation-workbench/loding.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.simulation-workbench #workbench-layout-area .moving div{
+	display: none;
+}

@@ -31,6 +31,8 @@
 		<property name="manual" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="reference" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="advanced" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="sortOrder" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="sortField" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="Solver" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="Converter" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="Editor" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />

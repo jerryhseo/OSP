@@ -21,8 +21,8 @@
 	
 	$theme.include($body_top_include)
 	
-	<div id="wrap">
-		<header id="banner">
+	<div id="wrap" class="container-fluid">
+		<header id="banner" class="row-fluid">
 			<div class="logo">
 				<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" usemap="#Map"/>
 				
@@ -38,7 +38,7 @@
 		#parse ("$full_templates_path/edison_side_menu.vm")
 		
 		#if($show_breadcrumbs)
-			<div id="nsubtopwrap">
+			<div id="nsubtopwrap" class="row-fluid">
 				<div class="container">
 					<div class="row" style="padding: 30px 0;height:120px;">
 						<div class="col-md-8" id="nsubtoplefttxt">
@@ -64,11 +64,10 @@
 			#end
 			
 		</div>
-		
-		<footer class="footerwrap">
-			#parse ("$full_templates_path/footer.vm")
-		</footer>
 	</div>
+	<footer id="footer" role="contentinfo">
+		#parse ("$full_templates_path/footer.vm")
+	</footer>
 	
 	$theme.include($body_bottom_include)
 

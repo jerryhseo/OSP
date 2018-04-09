@@ -114,7 +114,7 @@ public class VirtualLabClassScienceAppListController {
 				model.addAttribute("role", "member");
 			}
 			
-			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			model.addAttribute("workBenchPlid", plid);
 			
 			List<Map<String, Object>> virtualLabScienceAppList = null;

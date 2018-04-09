@@ -24,10 +24,6 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 .edison {
 	h1, h2, h3, h4, h5, h6{font-weight:normal;}
 	
-	h1{font-size:27px; color:#000; padding:22px 0px 12px 0px; font-family:Tahoma,Arial, Nanum Barun Gothic, NanumGothic;margin: 0px;}
-	h2{font-size:27px; color:#000; padding:0px 0px 12px 0px; font-family:Tahoma,Arial, Nanum Barun Gothic, NanumGothic;margin: 0px;}
-	h4{font-size:17px; color:#000; padding:20px 0px 12px 0px; font-family:Tahoma,Arial, Nanum Barun Gothic, NanumGothic;margin: 0px;}
-	
 	a {outline: none; select-dummy: expression(this.hideFocus=true);}
 	a:link{color:#000; text-decoration:none;outline:none;}
 	a:visited{color:#000; text-decoration:none;outline:none;}
@@ -40,11 +36,15 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 	}
 	
 	#wrap{
-		width:100%;
+		padding: 0 30px;
 		overflow-y:hidden;
+		
+		.portlet-column{
+			padding : 0px;
+		}
+		
 		/*header*/
 		#banner{
-			width:100%; 
 			border-bottom:solid 1px #e6e6e6;
 			position:relative;
 			background-color:rgba(255, 255, 255, 0.9);
@@ -56,6 +56,7 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 			}
 		}
 		#banner.move-banner{
+			width:100%; 
 			position:fixed;
 			z-index:100;
 			top:0;
@@ -65,7 +66,6 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 				
 		/*breadcrumbs*/
 		#nsubtopwrap{
-			width: 100%;
 			background-image:url(@theme_image_path@/custom/navigation/sub_top_visual.jpg);
 			background-position: center;
 			background-repeat: no-repeat;
@@ -250,8 +250,6 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 		
 		.content{
 			min-height:630px;
-			margin-left:30px;
-			margin-right:30px;
 			form{margin:0px;}
 		}
 		
@@ -259,7 +257,6 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 			width: 1220px;
 			margin: 0 auto;
 			clear: both;
-			padding: 37px 0 50px 0;
 			overflow: hidden;
 			min-height:630px;
 			
@@ -273,53 +270,28 @@ ul, ol{list-style-type:none; margin:0; padding:0;}
 	.popupbtnGroup input{float:right;margin-right: 5px;}
 	
 	/*footer*/
-	.footerwrap{
-		background:#fff;
+	#footer{ 
+		width:100%; 
+		background-color:#fafafa; 
+		border-top:solid 1px #e5e5e9; 
 		border-bottom:solid 1px #e5e5e9;
-		border-top:solid 1px #e5e5e9;
-		height: 80px;
 		
-		.footertxt{
-			width:1220px; 
-			height:45px; 
-			margin:0 auto; 
-			color:#666; 
-			font-weight:600;
-			padding-top: 20px;
-			position: relative;
-			line-height: 1.5em;
+		.footer{ 
+			max-width:1220px;
+			margin:0 auto;
+			overflow:hidden;
+			position:relative;
 			
-			.lefttxt{
-				float: left;
-				width: 820px;
-				
-				span {
-					color: #666;
-				}
-				
-				.fr {
-					float: left;
-				}
+			span{
+				margin-right: 12px;
+			    padding-left: 12px;
+			    border-left: solid 1px #666;
+			    font-size: 12px;
+			    color: #666;
 			}
-			
-			.rightbanner{
-				position: absolute;
-				top: 25px;
-				right: 0;
-				
-				span.ci{
-					float: right;
-					margin-left: 30px;
-					margin-top: -10px;
-				}
+			span:first-child{
+				border: 0;
 			}
-			
 		}
-		
 	}
-	
-	.footertxt span{color:#666;}
-	.footertxt span a{color:#357db4;}
-	.footertxt span a:hover{text-decoration:underline;}
-	.footertxt span.ci{float:right;margin-left:30px;margin-top:-10px;}
 }

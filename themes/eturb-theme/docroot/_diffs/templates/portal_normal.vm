@@ -21,8 +21,8 @@
 	
 	$theme.include($body_top_include)
 	
-	<div id="wrap">
-		<header id="banner">
+	<div id="wrap" class="container-fluid">
+		<header id="banner" class="row-fluid">
 			<div class="logo">
 				<a href="$site_main_url"><img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width"/></a>
 			</div>
@@ -32,28 +32,22 @@
 		
 		#parse ("$full_templates_path/edison_side_menu.vm")
 		
-		#if($show_breadcrumbs)
-			<nav id="breadcrumbs">
-			
-			</nav>
-		#end
-		<article>
-			<div class="$content_class">
-				#if ($selectable)
-					$theme.include($content_include)
-				#else
-					$portletDisplay.recycle()
-		
-					$portletDisplay.setTitle($the_title)
-		
-					$theme.wrapPortlet("portlet.vm", $content_include)
-				#end
-			</div>
-		</article>
-		<footer class="footerwrap">
-			#parse ("$full_templates_path/footer.vm")
-		</footer>
+		<div class="$content_class">
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+	
+				$portletDisplay.setTitle($the_title)
+	
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
 	</div>
+	
+	<footer id="footer" role="contentinfo">
+		#parse ("$full_templates_path/footer.vm")
+	</footer>
 	
 	$theme.include($body_bottom_include)
 

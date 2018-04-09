@@ -27,6 +27,12 @@ public interface ContentFinder {
 		int start, int end, java.lang.String languageId, long classNameId,
 		boolean categoryJoin, boolean isTotalSearch);
 
+	public java.util.List<java.lang.Object[]> getContentList(
+		long[] categoryIds, java.lang.String searchText, long[] contentDiv,
+		int start, int end, java.lang.String languageId, long classNameId,
+		boolean categoryJoin, boolean isTotalSearch,
+		java.lang.String sortField, java.lang.String sortOrder);
+
 	public int getContentUserCount(long[] categoryIds,
 		java.lang.String searchText, java.lang.String languageId,
 		long classNameId, long userId, long roleId);

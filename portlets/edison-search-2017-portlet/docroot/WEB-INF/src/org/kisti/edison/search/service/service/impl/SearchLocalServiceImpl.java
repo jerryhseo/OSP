@@ -36,7 +36,6 @@ import org.kisti.edison.search.service.model.Search;
 import org.kisti.edison.search.service.model.SearchCondition;
 import org.kisti.edison.search.service.service.base.SearchLocalServiceBaseImpl;
 import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
-import org.springframework.util.StringUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -90,7 +89,11 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
    */
   
   private static Log log = LogFactory.getLog(SearchLocalServiceImpl.class);
-  private static final String COLLECTION_SEARCH_SELECT = "titleDescription";
+  private static final String DATA_COLLECTION_SEARCH_SELECT = "titleDescription";
+  private static final String DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC = "asc";
+  private static final String DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC = "desc";
+  private static final String DATA_COLLECTION_SEARCH_SORT_ORDER_LATEST = "lastest";
+  private static final String DATA_COLLECTION_SEARCH_SORT_ORDER_OLDEST = "oldest";
   
   /** deep copy cloner **/
   private Cloner cloner = new Cloner();
@@ -230,7 +233,8 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
     List<Map<String, Object>> apps = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
         searchCondition.getCompanyGroupId(), searchCondition.getGroupId(),
         searchCondition.getLocale(), appTypes, categoryIds, searchCondition.getSearchKeyword(),
-        searchCondition.getStart(), searchCondition.getListSize());
+        searchCondition.getStart(), searchCondition.getListSize(),
+        searchCondition.getSortField(), searchCondition.getSortOrder());
     if(count > 0){
       searchResults.setAppCount(count);
       searchResults.setAppResults(apps);
@@ -258,7 +262,8 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
       List<Map<String, Object>> contents = ContentLocalServiceUtil.retrieveListContent(categoryIds,
           searchCondition.getSearchKeyword(), contentDiv,
           searchCondition.getStart(), searchCondition.getListSize(),
-          searchCondition.getLocale(), categoryJoinFlag, true);
+          searchCondition.getLocale(), categoryJoinFlag, true,
+          searchCondition.getSortField(), searchCondition.getSortOrder());
       if(count > 0){
         searchResults.setContentCount(count);
         searchResults.setContentResults(contents);
@@ -314,25 +319,44 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
         if(searchResults == null){
             searchResults = this.createSearch(0);
         }
-        List<Long> categoryIds = getCategoryIds(searchCondition);
+        try{
+            List<Long> categoryIds = getCategoryIds(searchCondition);
 
-        DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
-        newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
-        newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
-        newRequest.setParameter("searchSelect", COLLECTION_SEARCH_SELECT);
-        if(categoryIds != null){
-            newRequest.setParameterValues("categories",
-                Iterables.toArray(
-                    Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
+            DynamicResourceRequest newRequest = new DynamicResourceRequest(request);
+            newRequest.setParameter("keywords", searchCondition.getSearchKeyword());
+            newRequest.setParameter("cur", String.valueOf(searchCondition.getCurrentPage()));
+            newRequest.setParameter("searchSelect", DATA_COLLECTION_SEARCH_SELECT);
+            newRequest.setParameter("delta", String.valueOf(searchCondition.getListSize()));
+            
+            if(searchCondition.SORT_FIELD_NAME().equals(searchCondition.getSortField())){
+                if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
+                }else{
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+                }
+            }else if(searchCondition.SORT_FIELD_CREATED().equals(searchCondition.getSortField())){
+                if(searchCondition.SORT_ORDER_ASC().equals(searchCondition.getSortOrder())){
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_ASC);
+                }else{
+                    newRequest.setParameter("sort", DATA_COLLECTION_SEARCH_SORT_ORDER_TITLE_DESC);
+                }
+            }
+            
+            if(categoryIds != null){
+                newRequest.setParameterValues("categories",
+                    Iterables.toArray(
+                        Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
+            }
+            
+            Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
+            int count = GetterUtil.getInteger(result.get("total"));
+            if(count > 0){
+                searchResults.setDataCount(count);
+                searchResults.setDataResults((List<Map<String, Object>>) result.get("collectionList"));
+            }
+        }catch(Exception e){
+            log.error("data search exception : ", e);
         }
-        
-        Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
-        int count = GetterUtil.getInteger(result.get("total"));
-        if(count > 0){
-            searchResults.setDataCount(count);
-            searchResults.setDataResults((List<Map<String, Object>>) result.get("collectionList"));
-        }
-        
         return searchResults;
     }  
   

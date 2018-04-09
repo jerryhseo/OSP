@@ -9,7 +9,7 @@
 </liferay-portlet:resourceURL>
 
 <style type="text/css">
-#_StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric_choicePanel{
+#p_p_id_StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric_ .osp-editor .header{
 	display: none;
 }
 #<portlet:namespace/>progress-bound{margin-top: 10px; margin-left: 13px;}
@@ -17,9 +17,12 @@
 </style>
 
 
+
 <div class="dashboard-content span12" style="margin-left: 0px !important;height: 304px; overflow-y:auto;">
 	<div id="<portlet:namespace/>inputdeck-editor" style="display: none;">
-		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group">
+		<div class="h10"></div>
+		
+		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group pull-right">
 	        <button type="button" class="btn btn-primary" id="saveBtn" onclick="<portlet:namespace/>parameterDraw();" title="DRAW">
 	            <i class='icon-large icon-spinner'> Draw</i>
 	        </button>
@@ -31,7 +34,7 @@
 		
 	</div>
     
-    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;">
+    <div id="<portlet:namespace/>progress-bound" class="progress progress-striped active span11"  style="display: none;height: 30px;">
       <div class="bar" style="width: 50%;"></div>
       <span id="<portlet:namespace/>progress-percent" class="progress-percent">0%</span>
     </div>
@@ -264,7 +267,12 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	        },
 	        success : function(analyzerJob){
 	        	var parentNode = tree.get_node(node.parent);
-	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+	        	var dataType = new OSP.DataType();
+	        	dataType.deserializeStructure(e.data.context_);
+	        	var dataStructure = dataType.structure();
+				var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+	        	
+// 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	        },error:function(jqXHR, textStatus, errorThrown){
 				if(jqXHR.responseText !== ''){
@@ -276,7 +284,10 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 		});
 	}else{
 		var parentNode = tree.get_node(node.parent);
-    	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		var dataType = new OSP.DataType();
+		dataType.deserializeStructure(e.data.context_);
+    	var dataStructure = dataType.structure(); 
+    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
     	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	}
 });

@@ -26,7 +26,7 @@
 <ul class="sidebar-menu top" data-widget="tree" id="<portlet:namespace/>sidebar-menu">
 	<li class="header">
 		<div class="header-inner" id="<portlet:namespace/>appInfoHeader">
-			<h2 id="<portlet:namespace/>appName"></h2>
+			<h2 id="<portlet:namespace/>appName" data-toggle="tooltip" data-placement="bottom" style="cursor: pointer;"></h2>
 			<h4 id="<portlet:namespace/>appVersion"></h4>
 		</div>
 	</li>
@@ -84,7 +84,11 @@ var <portlet:namespace/>prevStatus = (function(){
 			thisCheck.push(jobUuid);
 		},
 		getJobStatus: function(jobUuid){
-			return jobStatus[jobUuid];
+			if(jobStatus.hasOwnProperty(jobUuid)){
+				return jobStatus[jobUuid];
+			}else{
+				return 0;
+			}
 		},
 		clearStatusCache: function(){
 			if(thisCheck.length > 0){
@@ -98,6 +102,7 @@ var <portlet:namespace/>prevStatus = (function(){
 		}
 	};
 })();
+
 var <portlet:namespace/>refreshTimer;
 /***********************************************************************
  * Initailization section and handling Liferay events
@@ -201,8 +206,15 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		if(e.data.status){
+			console.log('OSP_RESPONSE_SUBMIT_JOB_RESULT: ['+e.portletId+', '+new Date()+']', e.data);
 			toastr["success"]("", Liferay.Language.get('edison-job-submit-success'));
-			<portlet:namespace/>searchSimulationJob(e.data.simulationUuid,e.data.jobId);
+			//Global workSimulationJobId Setting
+			<portlet:namespace/>workSimulationJobId = e.data.jobUuid;
+			
+			/*SUBMIT JOB ID CHANGE*/
+			<portlet:namespace/>prevStatus.setJobStatus(e.data.jobUuid, <portlet:namespace/>prevStatus.getJobStatus(e.data.tempJobUuid));
+			
+			<portlet:namespace/>searchSimulationJob(e.data.simulationUuid,e.data.jobUuid);
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-job-submit-error'));
 		}
@@ -225,12 +237,11 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
 		<portlet:namespace/>searchSimulationModalOpen(1,e.data);
 	}
 });
-
 /***********************************************************************
  * Portlet AJAX Function
  ***********************************************************************/
 function <portlet:namespace/>drawAppInfomation(data){
-	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12));
+	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12)).attr("title",data.name());
 	$("#<portlet:namespace/>appVersion").html(data.version());
 	
 	if(data.currentManualId()!=0){
@@ -311,6 +322,10 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid,currentPage
 			}else{
 				<portlet:namespace/>searchSimulationModalOpen(1,'');
 			}
+			
+			/*Job Prestatus Init*/
+			<portlet:namespace/>prevStatus.clearStatusCache();
+			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
 				alert("<portlet:namespace/>searchSimulation-->"+textStatus+": "+jqXHR.responseText);
@@ -381,6 +396,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 				
 				$("<button/>").addClass("btn btn-default btn-sm sidebar-btn").attr("type","button").attr("title","Job Create")
 							  .attr("data-simulation-uuid",simulationUuid)
+							  .attr("job-count",length)
 							  .attr("data-btn-type","new-simulation-job")
 							  .html("<i class=\"fa fa-plus-circle\"></i>")
 							  .appendTo($editSpan);
@@ -411,10 +427,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 					...상태 UPDATE를 통하여 OSP_JOB_STATUS_CHANGED 가 중복 발생 되지 않음.
 					*/
 					if(jobStatus == 0 || jobStatus == 1701005 || jobStatus == 1701006){
-						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 						isUncompletedJobExist = true;
-					}else if(jobStatus == 1701011 || jobStatus == 1701012){
-						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 					}
 					
 					var jobStatusCss = "fa fa-circle init";
@@ -441,22 +454,24 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 							$topLi.addClass("active");
 							
 							if(<portlet:namespace/>prevStatus.isExist(selectJobId)&&<portlet:namespace/>prevStatus.getJobStatus(selectJobId)!=jobStatus){
-								/*JOB Sync Status UPDATE*/
-								<portlet:namespace/>prevStatus.setJobStatus(selectJobId, jobStatus);
-								
-								var eventData = {
+									var eventData = {
 										portletId: '<%=portletDisplay.getId()%>',
-										targetPortlet:<portlet:namespace/>connector,
+										targetPortlet: <portlet:namespace/>connector,
 										data: {
-											jobUuid:selectJobId,
-											jobStatus:jobStatus
+											simulationUuid : simulationUuid,
+											jobUuid : jobUuid
 										}
-								};
-								Liferay.fire( OSP.Event.OSP_JOB_STATUS_CHANGED, eventData);
+									};
+									
+									Liferay.fire(OSP.Event.OSP_JOB_SELECTED, eventData);
 							}
 						}
 					}
-						
+					
+					if(<portlet:namespace/>prevStatus.getJobStatus(jobUuid)!=jobStatus){
+						<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
+					}
+					
 				}
 				
 				if(<portlet:namespace/>refreshTimer){
@@ -482,17 +497,9 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid,selectJobId){
 	});
 }
 
-var <portlet:namespace/>syncPreSimulationUuid = ''; 
 function <portlet:namespace/>syncJobStatusList(simulationUuid){
-	<portlet:namespace/>syncPreSimulationUuid = simulationUuid;
-	
 	if(<portlet:namespace/>prevStatus.isCheckExist()){
 		<portlet:namespace/>searchSimulationJob(simulationUuid,<portlet:namespace/>workSimulationJobId);
-	}
-	
-	if(<portlet:namespace/>syncPreSimulationUuid!=''&&<portlet:namespace/>syncPreSimulationUuid != simulationUuid){
-		//<portlet:namespace/>prevStatus init
-		<portlet:namespace/>prevStatus.clearStatusCache();
 	}
 }
 
@@ -1176,7 +1183,8 @@ function <portlet:namespace/>init(){
 		$('[data-widget="tree"]').tree();
 	}
 	
-	
+	/*tooltip*/
+	$('[data-toggle="tooltip"]').tooltip(); 
 	//Job System Log modal close event
 	$("#"+<portlet:namespace/>parentNamespace+"job-log-modal").on('hidden.bs.modal', function () {
 		<portlet:namespace/>clearReadOutLogTimer();
@@ -1218,6 +1226,8 @@ function <portlet:namespace/>init(){
 					templateData.form.simulationUuid = simulationUuid;
 				}else if(btnType=="new-simulation-job"){
 					var simulationUuid = $(this).attr("data-simulation-uuid");
+					var jobCnt = $(this).attr("job-count");
+					templateData.form.title = "#"+<portlet:namespace/>alpad(String(Number(jobCnt)+1),4,0);
 					templateData.form.simulationUuid = simulationUuid;
 				}
 				
@@ -1250,6 +1260,12 @@ function <portlet:namespace/>init(){
 			$(".menu-panel").show('slide', {direction:'left'}, 500);
 		}
 	});
+}
+
+function <portlet:namespace/>alpad(s, padLength, padString){
+	while(s.length < padLength)
+		s = padString + s;
+	return s;
 }
 
 function <portlet:namespace/>activateLi(jqLink){

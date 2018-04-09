@@ -25,12 +25,6 @@
 
 	
 <style type="text/css">
-.edison #wrap article { 
-	background-color:white; 
-}
-.edison #wrap .content-sub { 
-	width: 95%; 
-}
 .project-active {
 	background-color: #ddd;
 }

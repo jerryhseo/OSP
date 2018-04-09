@@ -171,6 +171,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_FLOW_LAYOUT_CODE_UPDATE, function( e ){
 		<portlet:namespace/>flowPortChange(e.data.flowLayoutCode);
 	}
 });
+
 /***********************************************************************
  * Golbal functions
  ***********************************************************************/

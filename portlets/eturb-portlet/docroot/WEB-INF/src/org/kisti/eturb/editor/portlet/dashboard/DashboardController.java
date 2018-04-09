@@ -134,7 +134,7 @@ public class DashboardController{
                 model.addAttribute("openProjectModal", true);
             }
             
-            long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
+            long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
             System.out.println("workBenchPlid--------------->"+plid);
 			model.addAttribute("workBenchPlid", plid);
 			model.addAttribute("bcUse", GetterUtil.getBoolean(request.getPreferences().getValue("bcUse", "false"),false));

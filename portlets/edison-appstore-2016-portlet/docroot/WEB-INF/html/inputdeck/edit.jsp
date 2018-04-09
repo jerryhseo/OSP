@@ -50,11 +50,11 @@
 	}
 	
 	.inputdeck-portlet .parameter{
-		display: none;
+ 		display: none;
 	}
 	
 	.inputdeck-portlet .actieveBtn{
-		display: none;
+ 		display: none;
 	}
 	
 	.aui .checkbox{
@@ -131,7 +131,7 @@
 			
 			<th><liferay-ui:message key='preview' /></th>
 			<td align="center">
-				<input type="text" id="linePreview" class="field" style="font-size: 13px;font-weight: bold;width: 120px;" readonly="readonly" disabled="disabled"/>
+				<input type="text" id="linePreview" class="field" style="font-size: 13px;font-weight: bold;width: 120px;" readonly="readonly" disabled="disabled" value="KEY = VALUE ;"/>
 			</td>
 		</tr>
 		<tr>
@@ -155,7 +155,7 @@
 			
 			<th><liferay-ui:message key='preview' /></th>
 			<td colspan="3">
-				<input type="text" id="vectorPreview" class="field" style="font-size: 13px;font-weight: bold;" readonly="readonly" disabled="disabled"/>
+				<input type="text" id="vectorPreview" class="field" style="font-size: 13px;font-weight: bold;" readonly="readonly" disabled="disabled" value="[A B C]"/>
 			</td>
 		</tr>
 	</table>
@@ -178,8 +178,8 @@
 			</tbody>
 		</table>
 		<div id="btnGroupBottom">
-			<input type="button" class="button0801" onclick="<portlet:namespace/>closeActivateDiv();" value="<liferay-ui:message key='cancel' />" />
-			<input type="button" class="button0801" id="inputDeckAcivateSave" value="<liferay-ui:message key='add' />" />
+			<button class="btn btn-default"onclick="<portlet:namespace/>closeActivateDiv();"><span class="icon-remove"> <liferay-ui:message key='cancel' /></span></button>
+			<button class="btn btn-default" id="inputDeckAcivateSave"><span class="icon-edit"> <liferay-ui:message key='update' /></span></button>
 		</div>
 	</div>
 	
@@ -507,15 +507,15 @@
 			</table>
 		</div>
 		<div id="btnGroupBottom" class="addBtnGroup">
-			<button class="btn btn-default parameter" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>addActivateOpen(true);"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
-			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
-			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraSave(true,false);"><span class="icon-search">   <liferay-ui:message key='add' /></span></button>
+			<button class="btn btn-default parameter" id="variableActivationInsertBtn" type="button" onclick="<portlet:namespace/>addActivateOpen(true,true);"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
+			<button class="btn btn-default actieveBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
+			<button class="btn btn-default actieveBtn" type="button" onclick="<portlet:namespace/>paraSave(true,false);"><span class="icon-search">   <liferay-ui:message key='add' /></span></button>
 		</div>
 		<div id="btnGroupBottom" class="updateBtnGroup">
-			<button class="btn btn-default parameter" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>activateSearchOpen();"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
-			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
-			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraSave(true,true);"><span class="icon-edit">   <liferay-ui:message key='update' /></span></button>
-			<button class="btn btn-default actieveBtn" id="variableActivationBtn" type="button" onclick="<portlet:namespace/>paraDelete();"><span class="icon-trash">   <liferay-ui:message key='edison-button-board-delete' /></span></button>
+			<button class="btn btn-default parameter" id="variableActivationUpdateBtn" type="button" onclick="<portlet:namespace/>activateSearchOpen(false,false);"><span class="icon-check">   <liferay-ui:message key='edison-science-appstore-inputdeck-variable-activation-conditions' /></span></button>
+			<button class="btn btn-default actieveBtn" type="button" onclick="<portlet:namespace/>changeType('','add');"><span class="icon-remove">   <liferay-ui:message key='cancel' /></span></button>
+			<button class="btn btn-default actieveBtn" type="button" onclick="<portlet:namespace/>paraSave(true,true);"><span class="icon-edit">   <liferay-ui:message key='update' /></span></button>
+			<button class="btn btn-default actieveBtn" type="button" onclick="<portlet:namespace/>paraDelete();"><span class="icon-trash">   <liferay-ui:message key='edison-button-board-delete' /></span></button>
 		</div>
 	</div>
 	</aui:form>
@@ -596,6 +596,9 @@
 			$("#vectorBracket").val(dataType.structure().vectorFormBraceChar()).prop("selected",true);
 			$("#vectorDelimiter").val(dataType.structure().vectorFormDelimiter()).prop("selected",true);
 			$("#vectorPreview").val(dataType.structure().vectorFormSample());
+		}else{
+			dataType.structure().setParameterForm(" = "," ;","",'');
+			dataType.structure().setVectorForm(OSP.Constants.SQUARE," ","[A B C]");
 		}
 	}
 	
@@ -807,9 +810,14 @@
 		
 		if(type!=""){
 			$(".actieveBtn").show();
-			
 			if(json["variableActive"]){
-				$("#variableActivationBtn").show();
+				
+				if(activeType=="add"){
+					$("#variableActivationInsertBtn").show();
+				}else{
+					$("#variableActivationUpdateBtn").show();
+				}
+				
 			}
 			
 			$("#inputDeckType option:eq(0)").removeAttr("selected");
@@ -912,6 +920,9 @@
 			$("#inputDeckName").prop("disabled",true);
 			$(".addBtnGroup").hide();
 			$(".updateBtnGroup").show();
+			
+			
+// 			$("#variableActivationBtn").show();
 		}
 	}
 	
@@ -1212,8 +1223,8 @@
 	
 	
 	//활성화 조건 DIV open
-	function <portlet:namespace/>activateSearchOpen(){
-		<portlet:namespace/>addActivateOpen(false);
+	function <portlet:namespace/>activateSearchOpen(showMsg,isEdit){
+		<portlet:namespace/>addActivateOpen(showMsg,isEdit);
 		<portlet:namespace/>drowActivateSearchOption();
 	}
 	
@@ -1224,7 +1235,7 @@
 	}
 	
 	
-	function <portlet:namespace/>addActivateOpen(showMsg){
+	function <portlet:namespace/>addActivateOpen(showMsg,isEdit){
 		var addActiave = false;
 		if(!$('#activateDiv').is(":visible")){
 			var paraName = $("#inputDeckName").val().trim();
@@ -1239,14 +1250,8 @@
 			
 			if(addActiave){
 	 			<portlet:namespace/>drowActivateOption(paraName);
-	 			
-	 			if(showMsg){
-	 				//저장 버튼 이벤트 정의
-		 			$("#inputDeckAcivateSave").attr("onclick","<portlet:namespace/>inputDeckActivate('"+paraName+"',false)");
-	 			}else{
-	 				//저장 버튼 이벤트 정의
-		 			$("#inputDeckAcivateSave").attr("onclick","<portlet:namespace/>inputDeckActivate('"+paraName+"',true)");
-	 			}
+		 		$("#inputDeckAcivateSave").attr("onclick","<portlet:namespace/>inputDeckActivate('"+paraName+"','"+isEdit+"')");
+		 		
 				$('#activateDiv').show('slide', {direction: 'left'}, 700);
 				$('#inputDeckParameterLeft').hide(600);
 			}
@@ -1281,7 +1286,7 @@
 		var upperLimit = <portlet:namespace/>nullToStr(variable.rangeUpperBoundary());
 		var name = variable.name();
 		
-		$tr = $("<tr/>").attr("activateType",OSP.Constants.NUMERIC).attr("activateName",variable.name());
+		$tr = $("<tr/>").attr("activateType",OSP.Constants.NUMERIC).attr("activateName",variable.name()).appendTo($tbody);
 		
 		$("<td/>").append(
 				$("<input/>").attr("type","checkbox").css("margin","0px").attr("id",name+"_active_checkbox")
@@ -1291,46 +1296,75 @@
 				$("<label>").attr("for",name+"_active_checkbox").css("display","inline").html(name)
 				).appendTo($tr);
 		
-		$numericTd = $("<td/>").attr("colspan","3").addClass("center");
+		$numericTd = $("<td/>").attr("colspan","4").addClass("center").appendTo($tr);
+		$numericDiv = $("<div/>").addClass("form-inline").appendTo($numericTd);
+		$numericFormGroup = $("<div/>").addClass("input-group").appendTo($numericDiv);
 		
-		$("<input/>").attr("type","text").addClass("to_short_field")
+		$("<input/>").attr("type","text").addClass("form-control")
 					 .attr("onkeydown","return onlyNumber(event)")
 					 .attr("onkeyup","removeChar(event)")
 					 .attr("id","inputDeckActivateMinValue")
 					 .val(lowerLimit)
-					 .css("ime-mode","disabled").appendTo($numericTd);
+					 .css("ime-mode","disabled").css("width","70px").appendTo($numericFormGroup);
+		
+		$("<span/>").addClass("input-group-addon")
+					.css("width","0px")
+					.css("padding-left","0px")
+					.css("padding-right","0px")
+					.css("border","none").appendTo($numericFormGroup);
 		
 		$("<select/>").append(
 					$("<option/>").val("=").html("<=")
 					 ).append(
 					$("<option/>").val("<").html("<")
-					 ).attr("id","inputDeckActivateMinSelect").css("margin","5px").appendTo($numericTd);
-
-		$("<span/>").html("value").appendTo($numericTd);
+					 ).attr("id","inputDeckActivateMinSelect").addClass("form-control").appendTo($numericFormGroup);
 		
+		$("<span/>").addClass("input-group-addon")
+					.css("width","0px")
+					.css("padding-left","0px")
+					.css("padding-right","0px")
+					.css("border","none").appendTo($numericFormGroup);
+		
+		$("<input/>").attr("type","text").addClass("form-control")
+					 .attr("onkeydown","return onlyNumber(event)")
+					 .attr("onkeyup","removeChar(event)")
+					 .attr("id","assignValue")
+					 .attr("placeholder","value")
+					 .css("ime-mode","disabled").css("width","70px").appendTo($numericFormGroup);
+		
+		$("<span/>").addClass("input-group-addon")
+					.css("width","0px")
+					.css("padding-left","0px")
+					.css("padding-right","0px")
+					.css("border","none").appendTo($numericFormGroup);
+
 		$("<select/>").append(
 					$("<option/>").val("=").html(">=")
 					 ).append(
 					$("<option/>").val(">").html(">")
-					 ).attr("id","inputDeckActivateMaxSelect").css("margin","5px").appendTo($numericTd);
+					 ).attr("id","inputDeckActivateMaxSelect").addClass("form-control").appendTo($numericFormGroup);
+		
+		$("<span/>").addClass("input-group-addon")
+					.css("width","0px")
+					.css("padding-left","0px")
+					.css("padding-right","0px")
+					.css("border","none").appendTo($numericFormGroup);
 		
 		
-		$("<input/>").attr("type","text").addClass("to_short_field")
+		$("<input/>").attr("type","text").addClass("form-control")
 					 .attr("onkeydown","return onlyNumber(event)")
 					 .attr("onkeyup","removeChar(event)")
 					 .attr("id","inputDeckActivateMaxValue")
 					 .val(upperLimit)
-					 .css("ime-mode","disabled").appendTo($numericTd);
+					 .css("ime-mode","disabled").css("width","70px").appendTo($numericFormGroup);
 		
 		
-		$numericTd.appendTo($tr);
+// 		$("<td/>").append(
+// 				$("<input/>").attr("type","text").addClass("to_short_field")
+// 				.attr("id","assignValue")
+// 				).addClass("center").appendTo($tr);
 		
-		$("<td/>").append(
-				$("<input/>").attr("type","text").addClass("to_short_field")
-				.attr("id","assignValue")
-				).addClass("center").appendTo($tr);
-		
-		$tr.appendTo($tbody);
+// 		$tr.appendTo($tbody);
 	}
 	
 	
@@ -1348,7 +1382,7 @@
 				$("<label>").attr("for",name+"_active_checkbox").css("display","inline").html(name)
 				).appendTo($tr);
 		
-		$select = $("<select/>").attr("id","inputDeckActivateListFrom_"+name).css("width","120px");
+		$select = $("<select/>").attr("id","inputDeckActivateListFrom_"+name).addClass("form-control");
 		
 		var listMap = variable.localizedListItems('${defaultLanguageId}');
 		
@@ -1359,23 +1393,25 @@
 		$("<td/>").append($select).addClass("center").appendTo($tr);
 		
 		$("<td/>").append(
-					$("<input/>").val(Liferay.Language.get('add')).attr("type","button")
+					$("<button/>").addClass("btn btn-primary btn-xs")
+					.html(Liferay.Language.get('add'))
 					.attr("onClick","<portlet:namespace/>activateListMove('add','"+name+"')")
 				).append(
 					$("<br/>")
 				).append(
-					$("<input/>").val(Liferay.Language.get('delete')).attr("type","button")
+					$("<button/>").addClass("btn btn-primary btn-xs")
+					.html(Liferay.Language.get('delete'))
 					.attr("onClick","<portlet:namespace/>activateListMove('remove','"+name+"')")
 				).addClass("center").appendTo($tr);
 		
 		$("<td/>").addClass("center").append(
-							$("<select/>").attr("id","inputDeckActivateListTarget_"+name).css("width","120px")
+							$("<select/>").attr("id","inputDeckActivateListTarget_"+name).addClass("form-control")
 							              .attr("onChange","<portlet:namespace/>addActivateListValue('"+name+"',this.value)")
 				  ).appendTo($tr);
 		
 		
 		$("<td/>").append(
-				$("<input/>").attr("type","text").addClass("to_short_field")
+				$("<input/>").attr("type","text").addClass("to_short_field form-control")
 				.attr("id","assignValue")
 				.focusout(function(){
 					var selectedVal = $("#inputDeckActivateListTarget_"+name).find("option:selected").val();
@@ -1445,9 +1481,9 @@
 	}
 	
 	//활성화 변수 저장
-	function <portlet:namespace/>inputDeckActivate(paraName,deleteActivate){
+	function <portlet:namespace/>inputDeckActivate(paraName,isEdit){
 		var targetVariable = dataType.structure().parameter(paraName);
-		if(deleteActivate){
+		if(isEdit){
 			targetVariable.cleanActivateConditions();
 		}
 		
