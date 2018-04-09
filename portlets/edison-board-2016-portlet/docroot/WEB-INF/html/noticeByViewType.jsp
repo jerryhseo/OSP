@@ -153,7 +153,7 @@
 	.notice-mtitle p a,.notice-mtitle p a:visited, .notice-mtitle p a:link{color:#666;}
 	.notice-mtitle p a:hover{color:#000;}
 </style>
-
+	
 	<!-- Popup -->
 	<c:if test="${popState ne 'NO'}">
 			<c:forEach items="${popupList}" var="model"> 
@@ -213,6 +213,8 @@
 		<input type="hidden" id="<portlet:namespace/>searchValue" name="<portlet:namespace/>searchValue" value="">
 		<input type="hidden" id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" value="4">
 	</form>
+	
+	<div style="margin-top: 70px;"></div>
 	
 	<div class="table-responsive panel edison-panel">
 	
