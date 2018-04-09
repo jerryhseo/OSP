@@ -9,7 +9,7 @@
 </liferay-portlet:resourceURL>
 
 <style type="text/css">
-#_StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric_choicePanel{
+#p_p_id_StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric_ .osp-editor .header{
 	display: none;
 }
 #<portlet:namespace/>progress-bound{margin-top: 10px; margin-left: 13px;}
@@ -20,7 +20,9 @@
 
 <div class="dashboard-content span12" style="margin-left: 0px !important;height: 304px; overflow-y:auto;">
 	<div id="<portlet:namespace/>inputdeck-editor" style="display: none;">
-		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group">
+		<div class="h10"></div>
+		
+		<div id="<portlet:namespace/>inputdeck-editor"  class="btn-group pull-right">
 	        <button type="button" class="btn btn-primary" id="saveBtn" onclick="<portlet:namespace/>parameterDraw();" title="DRAW">
 	            <i class='icon-large icon-spinner'> Draw</i>
 	        </button>
@@ -264,6 +266,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	            "<portlet:namespace/>analyzerJob" : JSON.stringify(node.data.analyzerJob) 
 	        },
 	        success : function(analyzerJob){
+	        	consol.log(e);
+	        	consol.log(analyzerJob);
 	        	var parentNode = tree.get_node(node.parent);
 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
