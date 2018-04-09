@@ -214,7 +214,7 @@
 		<input type="hidden" id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" value="4">
 	</form>
 	
-	<div style="margin-top: 70px;"></div>
+	<div style="margin-top: 50px;"></div>
 	
 	<div class="table-responsive panel edison-panel">
 	
