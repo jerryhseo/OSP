@@ -267,9 +267,12 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	        },
 	        success : function(analyzerJob){
 	        	var parentNode = tree.get_node(node.parent);
+	        	console.log(e);
 	        	var dataType = new OSP.DataType();
 	        	dataType.deserializeStructure(e.data.context);
-	        	var dataStructure = dataType.structure(); 
+	        	console.log(dataType);
+	        	var dataStructure = dataType.structure();
+	        	console.log(dataStructure);
 				var fileContent = dataStructure.activeParameterFormattedInputs();
 	        	console.log(fileContent);
 	        	
