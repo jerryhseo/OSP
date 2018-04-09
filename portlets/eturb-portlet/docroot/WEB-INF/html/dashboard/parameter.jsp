@@ -285,7 +285,11 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 		});
 	}else{
 		var parentNode = tree.get_node(node.parent);
-    	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		var dataType = new OSP.DataType();
+    	dataType.deserializeStructure(e.data.context);
+    	var dataStructure = dataType.structure(); 
+		var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+    	console.log(fileContent);
     	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	}
 });
