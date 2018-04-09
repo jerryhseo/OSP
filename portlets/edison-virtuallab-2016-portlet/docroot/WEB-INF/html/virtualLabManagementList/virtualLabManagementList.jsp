@@ -62,8 +62,8 @@
 
 <body>
 	<div style="border-top: 1px solid #e5e5e9;">
+		<div class="h40"></div>
 		<div class="container">
-			
 			<h2>
 				<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />
 				<span class="subtitlearea">
@@ -297,15 +297,11 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 								 ).appendTo($rowUl);
 						}
 													   
-						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle)
-								  .css("color","#000000").css("font-size","24px").css("padding-top","15px")
-								  .css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap")
-								  .css("overflow","hidden").appendTo($rowUl);
-						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName)
-								  .css("color","#000000").appendTo($rowUl);
+						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle).appendTo($rowUl);
+						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).appendTo($rowUl);
 						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
 								  .append(
-											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val(groupField)
 										 ).appendTo($rowUl);
 						
 						$rowUl.appendTo($rowResult);
@@ -329,15 +325,11 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 								 ).appendTo($rowUl);
 						}
 						
-						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle)
-								  .css("color","#000000").css("font-size","24px").css("padding-top","15px")
-								  .css("padding-bottom","10px").css("text-overflow","ellipsis").css("white-space","nowrap")
-								  .css("overflow","hidden").appendTo($rowUl);
-						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName)
-								  .css("color","#000000").appendTo($rowUl);
+						$("<li/>").addClass("tit").text(virtualLabManagementList[i].virtualLabTitle).appendTo($rowUl);
+						$("<li/>").text(virtualLabManagementList[i].virtualLabUniversityName  + " Prof. " + virtualLabManagementList[i].virtualLabPersonName).appendTo($rowUl);
 						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
 								  .append(
-											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val(groupField)
 										 ).appendTo($rowUl);
 						
 						$rowUl.appendTo($rowResult);

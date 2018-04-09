@@ -67,16 +67,16 @@
                             <div class="span12" style="margin-top: 30px; margin-bottom: 20px; min-height: 220px;">
                                 <div class="row-fluid">
                                     <div class="span5 panel panel-default panel-airfoil" style="padding-top: 15px; padding-botom: 15px;">
-                                        <div class="span1">
+                                        <%-- <div class="span1">
                                             <ul id="<portlet:namespace/>mesh-drag-source-dummy" class="dummy-ui">
                                             </ul>
-                                        </div>
+                                        </div> --%>
                                         <div class="span11">
                                             <ul id="<portlet:namespace/>mesh-drag-source" class="panel-body sortable-ui">
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="span1" style="min-height: 225px; padding-top: 90px; padding-left: 10px;">
+                                    <div class="span1" style="min-height: 225px; padding-top: 90px;">
                                         <i class="icon-arrow-right icon-3x"></i>
                                     </div>
                                     <div class="span6 panel panel-primary panel-airfoil" style="margin-left: 15px; width: 45%;">

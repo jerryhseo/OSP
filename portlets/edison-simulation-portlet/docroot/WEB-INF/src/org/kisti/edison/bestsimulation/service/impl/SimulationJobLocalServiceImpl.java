@@ -1128,6 +1128,7 @@ public class SimulationJobLocalServiceImpl
 					String universityNm = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(objs[0]), EdisonExpando.CDNM, locale);
 					map.put("universityNm",		universityNm);
 					map.put("cnt",		objs[1]);
+					map.put("appNames",		objs[2].toString().trim());
 					resultList.add(map);
 				}
 				

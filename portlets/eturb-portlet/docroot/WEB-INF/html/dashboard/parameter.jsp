@@ -266,10 +266,13 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	            "<portlet:namespace/>analyzerJob" : JSON.stringify(node.data.analyzerJob) 
 	        },
 	        success : function(analyzerJob){
-	        	console.log(e);
-	        	console.log(analyzerJob);
 	        	var parentNode = tree.get_node(node.parent);
-	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+	        	var dataType = new OSP.DataType();
+	        	dataType.deserializeStructure(e.data.context_);
+	        	var dataStructure = dataType.structure();
+				var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+	        	
+// 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	        },error:function(jqXHR, textStatus, errorThrown){
 				if(jqXHR.responseText !== ''){
@@ -281,7 +284,10 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 		});
 	}else{
 		var parentNode = tree.get_node(node.parent);
-    	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		var dataType = new OSP.DataType();
+		dataType.deserializeStructure(e.data.context_);
+    	var dataStructure = dataType.structure(); 
+    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
     	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	}
 });
