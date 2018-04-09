@@ -305,7 +305,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 								  .css("color","#000000").appendTo($rowUl);
 						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
 								  .append(
-											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val(groupField)
 										 ).appendTo($rowUl);
 						
 						$rowUl.appendTo($rowResult);
@@ -337,7 +337,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 								  .css("color","#000000").appendTo($rowUl);
 						$("<li/>").addClass("box").css("margin","6px 5px 0 0")
 								  .append(
-											$("<input/>").addClass(siteClass+"box").attr("type", "button").val("groupField")
+											$("<input/>").addClass(siteClass+"box").attr("type", "button").val(groupField)
 										 ).appendTo($rowUl);
 						
 						$rowUl.appendTo($rowResult);
