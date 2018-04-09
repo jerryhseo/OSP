@@ -640,6 +640,8 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			
 			query.addScalar("universityId", Type.BIG_INTEGER);
 			query.addScalar("cnt", Type.INTEGER);
+			query.addScalar("APP_NAMES", Type.STRING);
+			
 			
 			return (List<Object[]>) query.list();
 		}catch (Exception e) {

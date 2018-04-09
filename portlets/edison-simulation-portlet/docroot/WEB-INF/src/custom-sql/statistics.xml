@@ -84,19 +84,15 @@
 	<![CDATA[
 		SELECT 
 		  AC.universityId, 
-		  COUNT(*) AS cnt 
+		  COUNT(*) AS cnt,
+		  GROUP_CONCAT('\n',AC.APP_NAME) AS APP_NAMES
 		FROM 
 		  ( 
 		  SELECT 
-		    BB.universityId 
+		    BB.universityId,CONCAT_WS('_',BB.name,BB.version) AS APP_NAME
 		  FROM 
 		    (SELECT
-		      E.version,  E.uuid_,  E.userId,  E.title,  E.targetLanguage,  E.statusDate,
-		      E.status,  E.stage,  E.srcFileName,  E.scienceAppId,  E.runType,  E.recentModifierId,
-		      E.projectCategoryId,  E.previousVersionId,  E.parallelModule,  E.openLevel,  E.name,
-		      E.modifiedDate,  E.manualId,  E.license,  E.iconId,  E.groupId,  E.exeFileName,
-		      E.developers,  E.descriptionId,  E.createDate,  E.companyId,  E.authorId,
-		      E.appType, F.data_ universityId
+		      E.*, F.data_ universityId
 		    FROM
 		      EDAPP_ScienceApp E
 		      INNER JOIN (
