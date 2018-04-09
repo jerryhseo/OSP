@@ -270,7 +270,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	        	var dataType = new OSP.DataType();
 	        	dataType.deserializeStructure(e.data.context);
 	        	var dataStructure = dataType.structure(); 
-				var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+				var fileContent = dataStructure.activeParameterFormattedInputs();
 	        	console.log(fileContent);
 	        	
 // 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
@@ -288,7 +288,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 		var dataType = new OSP.DataType();
     	dataType.deserializeStructure(e.data.context);
     	var dataStructure = dataType.structure(); 
-		var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		var fileContent = dataStructure.activeParameterFormattedInputs();
     	console.log(fileContent);
     	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	}
