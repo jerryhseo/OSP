@@ -12,7 +12,7 @@
 
 <liferay-portlet:resourceURL var="getWorkbenchAppListURL" id="getWorkbenchAppList" escapeXml="false" copyCurrentRenderParameters="false" />
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
@@ -503,7 +503,7 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
 // Workbench로 이동
 function <portlet:namespace/>moveWorkBench(targetScienceAppId, meshFileId) {
     var URL = "<%=workbenchURL%>";
-    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ_scienceAppId="+targetScienceAppId;
+    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
 //     URL += "&_Workbench_WAR_OSPWorkbenchportlet_meshFileId="+meshFileId;
     
     location.href= URL;
