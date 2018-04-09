@@ -266,8 +266,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	            "<portlet:namespace/>analyzerJob" : JSON.stringify(node.data.analyzerJob) 
 	        },
 	        success : function(analyzerJob){
-	        	consol.log(e);
-	        	consol.log(analyzerJob);
+	        	console.log(e);
+	        	console.log(analyzerJob);
 	        	var parentNode = tree.get_node(node.parent);
 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
