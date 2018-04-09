@@ -81,7 +81,7 @@
 .connav ul li:first-child{ color:#000; font-weight:600;}
 
 .boxlist{ }
-.boxlist ul{margin:0; padding:0; width:447px; height:118px; float:left; border-radius:5px; margin-top:15px; padding-right:7px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); position: relative; }
+.boxlist ul{margin:0; padding:0; width:447px; height:118px; float:left; margin-right:12px; border:solid 1px #edebeb; border-radius:5px; margin-top:15px; padding-right:7px; box-shadow: 1px 1px 0px #ddd; position:relative;}
 .boxlist ul li{ line-height:1.3em; font-size: 15px; color: #647f8d; font-weight: 500;}
 .boxlist ul li a:link{color:#647f8d;}
 .boxlist ul li a:hover{ text-decoration:underline;}
