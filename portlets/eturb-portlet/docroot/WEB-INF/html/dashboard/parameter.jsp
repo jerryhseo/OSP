@@ -267,14 +267,10 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	        },
 	        success : function(analyzerJob){
 	        	var parentNode = tree.get_node(node.parent);
-	        	console.log(e);
 	        	var dataType = new OSP.DataType();
 	        	dataType.deserializeStructure(e.data.context_);
-	        	console.log(dataType);
 	        	var dataStructure = dataType.structure();
-	        	console.log(dataStructure);
-				var fileContent = dataStructure.activeParameterFormattedInputs();
-	        	console.log(fileContent);
+				var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	
 // 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
@@ -291,7 +287,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 		var dataType = new OSP.DataType();
 		dataType.deserializeStructure(e.data.context_);
     	var dataStructure = dataType.structure(); 
-		var fileContent = dataStructure.activeParameterFormattedInputs();
+    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
     	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
 	}
 });
