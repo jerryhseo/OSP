@@ -267,13 +267,16 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 			<c:choose>
 					<c:when test="${role eq 'admin' }">
 						<%-- <img src="${contextPath}/images/title_virtual.png" width="20" height="20" /> --%> 
-						<div class="classtitle">
 							<c:choose>
 								<c:when test="${empty classId || classId == 0}">
-									<liferay-ui:message key='edison-virtuallab-scienceapp' />
+									<div class="h40"></div>
+									
+									<div class="classtitle" style="width: 100%;">
+										<liferay-ui:message key='edison-virtuallab-scienceapp' />
 								</c:when>
 								<c:otherwise>
-									<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
+									<div class="classtitle">
+										<liferay-ui:message key='edison-virtuallab-class-scienceapp' />
 								</c:otherwise>
 							</c:choose>
 							<div class="adminbtn">
