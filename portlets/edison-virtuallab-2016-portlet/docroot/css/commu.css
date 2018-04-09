@@ -85,7 +85,7 @@
 .boxlist ul li{ line-height:1.3em; font-size: 15px; color: #647f8d; font-weight: 500;}
 .boxlist ul li a:link{color:#647f8d;}
 .boxlist ul li a:hover{ text-decoration:underline;}
-.boxlist ul li.tit{ font-size:19px; color:#0084ad; line-height:2.0em; padding-top:10px;}
+.boxlist ul li.tit{ font-size:19px; color:#0084ad; line-height:2.0em; padding-top:25px;}
 .boxlist ul li.tit a:link{color:#0084ad;}
 .boxlist ul li.tit a:hover{text-decoration:underline;}
 .boxlist ul li.box{

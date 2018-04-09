@@ -59,6 +59,8 @@
 
 </style>
 
+<div class="h40"></div>
+
 <c:choose>
 	<c:when test="${labInfo.iconId != 0}">
 		<div class="mainImage">
