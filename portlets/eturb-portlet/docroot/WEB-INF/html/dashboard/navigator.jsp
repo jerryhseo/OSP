@@ -462,8 +462,9 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
             for(var i=0; i<appIdList.length; i++){
                 $li = $("<li/>").addClass("airfoil btn btn-default").attr("appId", appIdList[i])
 	                            .attr("onclick", "<portlet:namespace/>moveWorkBench(\'"+appIdList[i]+"\',\'"+meshFileId+"\')")
-	                            .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer");
-                $("<button/>").text(appNames[i]).css("width", "100%").appendTo($li);
+	                            .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer")
+	                            .css("background","none").css("border", "none");
+                $("<button/>").addClass("btn btn-default").text(appNames[i]).css("width", "100%").appendTo($li);
                 $li.appendTo(ul);
                 
             }
@@ -1226,7 +1227,7 @@ function <portlet:namespace/>removeSimulation(executeId){
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h4 class="modal-title">Solver Selection</h4>
 	            </div>
-	            <div class="modal-body">
+	            <div class="modal-body table-responsive panel edison-panel">
 	                
 	            </div>
 	        </div>
