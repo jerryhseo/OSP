@@ -12,7 +12,7 @@
 
 <liferay-portlet:resourceURL var="getWorkbenchAppListURL" id="getWorkbenchAppList" escapeXml="false" copyCurrentRenderParameters="false" />
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet_INSTANCE_pEhDhPfYftLJ">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
