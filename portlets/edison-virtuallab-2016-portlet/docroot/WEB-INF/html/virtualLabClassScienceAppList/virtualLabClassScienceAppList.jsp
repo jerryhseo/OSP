@@ -107,6 +107,9 @@ function <portlet:namespace/>dataSearchList() {
 											   .css("cursor", "pointer");
 					
 					$("<li/>").addClass("scienceappTitle")
+							  .attr("title", virtualLabScienceAppList[i].scienceAppName)
+							  .css("overflow", "hidden")
+							  .css("text-overflow","ellipsis")
 							  .append(scienceAppTitle)
 							  .appendTo(scienceappUl);
 					
