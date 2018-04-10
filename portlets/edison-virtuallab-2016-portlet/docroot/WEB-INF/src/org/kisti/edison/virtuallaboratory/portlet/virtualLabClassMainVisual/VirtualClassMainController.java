@@ -139,6 +139,7 @@ public class VirtualClassMainController {
 				model.addAttribute("role", "ADMIN");
 				model.addAttribute("classInfo", classInfo);
 				model.addAttribute("groupId", groupId);
+				model.addAttribute("isCustomAdmin", true);
 
 				return classVisualJSP;
 			}
