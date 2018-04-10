@@ -14,6 +14,11 @@
 <liferay-portlet:resourceURL var="classStatisticsListURL" 	escapeXml="false"	 id="classStatisticsList"  copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="classStatisticsExcelDownLoadURL"		id="classStatisticsExcelDownLoad"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-more.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-3d.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/modules/exporting.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/themes/gray.js"></script>
 
 <script type="text/javascript">
 

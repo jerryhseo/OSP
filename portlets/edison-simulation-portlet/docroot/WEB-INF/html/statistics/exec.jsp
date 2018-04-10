@@ -6,6 +6,11 @@
 <liferay-portlet:resourceURL var="excelDownURL"		id="excelDown"	escapeXml="false" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="searchSelect"		id="searchSelect"	escapeXml="false" copyCurrentRenderParameters="false"/>
 
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-more.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-3d.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/modules/exporting.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/themes/gray.js"></script>
 <script type="text/javascript" src="${contextPath}/js/main.js"></script>
 
 <% 
