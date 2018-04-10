@@ -343,9 +343,10 @@ public class SearchLocalServiceImpl extends SearchLocalServiceBaseImpl{
             }
             
             if(categoryIds != null){
-                newRequest.setParameterValues("categories",
-                    Iterables.toArray(
-                        Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
+                newRequest.setAttribute("categories", categoryIds);
+//                newRequest.setParameterValues("categories",
+//                    Iterables.toArray(
+//                        Lists.transform(categoryIds, Functions.toStringFunction()), String.class));
             }
             
             Map<String, Object> result = CollectionLocalServiceUtil.search(newRequest, response);
