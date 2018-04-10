@@ -464,7 +464,7 @@
 						}
 						
 						/* 실행 */
-						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0 && isSignedIn){
+						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0){
 							$("<td/>").css("text-align","center").append(
 									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
 												.attr("id","manualLinkBtn")
