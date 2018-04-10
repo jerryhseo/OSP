@@ -98,7 +98,6 @@ import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
@@ -643,7 +642,7 @@ public class SimulationJobLocalServiceImpl
 						if(scienceAppLogPorts != null){
 							logPort = scienceAppLogPorts.getLogPorts();
 							
-							if(logPort != null && !logPort.equals("")){
+							if(logPort != null && !logPort.equals("") && !logPort.equals("false")){
 							    try{
 							        JSONObject logPortJson = JSONObject.fromObject(JSONSerializer.toJSON(logPort));
 							        Iterator<String> itr = logPortJson.keys();
