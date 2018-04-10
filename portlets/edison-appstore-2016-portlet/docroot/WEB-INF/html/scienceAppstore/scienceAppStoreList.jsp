@@ -402,7 +402,6 @@
 						
 						$vRow = $("<tr/>");
 						
-						console.log("pageNum : " + pageNum + " / dataMap.dataList["+i+"].appType : " +  dataMap.dataList[i].appType);
 						$("<td/>").text(pageNum--).addClass("TC").appendTo($vRow);
 						
 						var vSolverIconId = 0;
