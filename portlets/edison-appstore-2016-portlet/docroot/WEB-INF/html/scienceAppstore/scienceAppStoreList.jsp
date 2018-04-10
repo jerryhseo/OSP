@@ -464,7 +464,7 @@
 						}
 						
 						/* 실행 */
-						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0){
+						if(dataMap.dataList[i].openLevel != "DOWNLOAD_ONLY" && dataMap.dataList[i].appType == "Solver" && ${workBenchPlid} != 0 && isSignedIn){
 							$("<td/>").css("text-align","center").append(
 									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
 												.attr("id","manualLinkBtn")
@@ -480,13 +480,11 @@
 							).appendTo($vRow);
 						} else if(dataMap.dataList[i].openLevel == "DOWNLOAD_ONLY"){
 							$("<td/>").css("text-align","center").append(
-									$("<button/>").addClass("btn btn-default")
+									$("<img/>").attr("src","${contextPath}/images/download_btn.gif")
 												  .attr("id","manualLinkBtn")
 												  .attr("onClick", "<portlet:namespace/>fileDownload('"+dataMap.dataList[i].srcFileName+"')")
+												  .css("height", "28px")
 												  .css("cursor","pointer")
-												  .css("height", "24px")
-												  .css("padding","4px 6px")
-												  .append( $("<i/>").addClass("icon-download-alt").text(" Download") )
 							).appendTo($vRow);
 						}else {
 							$("<td/>").css("text-align","center").appendTo($vRow);
