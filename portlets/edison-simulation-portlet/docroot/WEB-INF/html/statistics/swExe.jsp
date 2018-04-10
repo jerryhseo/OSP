@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp" %>
-
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-more.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/highcharts-3d.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/modules/exporting.js"></script>
+<script src="${contextPath}/js/Highcharts-4.2.7/js/themes/gray.js"></script>
 <script type="text/javascript" src="${contextPath}/js/main.js"></script>
 
 <liferay-portlet:renderURL var="statisticsViewURL" portletMode='view'></liferay-portlet:renderURL>

@@ -27,12 +27,6 @@
 <script src="/edison-2016-hook/js/osp/osp_simulation.js"></script>
 <script src="/edison-2016-hook/js/osp/osp_workbench_layout.js"></script>
 
-<script src="/edison-2016-hook/js/Highcharts-4.2.7/js/highcharts.js"></script>
-<script src="/edison-2016-hook/js/Highcharts-4.2.7/js/highcharts-more.js"></script>
-<script src="/edison-2016-hook/js/Highcharts-4.2.7/js/highcharts-3d.js"></script>
-<script src="/edison-2016-hook/js/Highcharts-4.2.7/js/modules/exporting.js"></script>
-<script src="/edison-2016-hook/js/Highcharts-4.2.7/js/themes/gray.js"></script>
-
 <script src="/edison-2016-hook/js/bootstrap/3.3.7/bootstrap.min.js"></script>
 
 
