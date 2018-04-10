@@ -309,7 +309,7 @@
 										<!-- 중간 확인 -->
 										<td id="middle_check" class="center" logFileProcess-state="${model.jobLogFileProcessorYn }">
 											<c:if test="${model.jobStatus eq '1701011' }">
-												<button class="btn btn-default icon-bar-chart" onclick="<portlet:namespace/>jobSystemLog('${model.simulationUuid}','${model.jobUuid}',0,'out');"></button>
+												<img src="${contextPath}/images/monitoring/chart_icon.png" style="cursor: pointer;" onclick="<portlet:namespace/>jobSystemLog('${model.simulationUuid}','${model.jobUuid}',0,'out');" alt="Log" title="Log">
 											</c:if>
 										</td>
 										
@@ -600,9 +600,12 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 		// 2018.04.04. log Port가 존재할 때 중간확인 서비스 제공
 		if(jobStatus=="<%=MonitoringStatusConstatns.RUNNING%>"){
 			if($middleCheckArea.attr("logFileProcess-state")=="Y"){
-				$("<button></button>").addClass("btn btn-default icon-bar-chart")
-									  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
-									  .appendTo($middleCheckArea);
+				$("<img/>").attr("src", "${contextPath}/images/monitoring/chart_icon.png")
+							.attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
+							.attr("alt", "Log")
+							.attr("title", "Log")
+							.css("cursor", "pointer")
+							.appendTo($middleCheckArea);
 			}
 			
 			if($resultViewArea.attr("middleFileprocess-state")=="Y"){
@@ -650,9 +653,12 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 		
 		// success인 경우 log Port가 존재할 때 중간확인 서비스 제공
 		if($middleCheckArea.attr("logfileprocess-state")=="Y"){
-			$("<button></button>").addClass("btn btn-default icon-bar-chart")
-								  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
-								  .appendTo($middleCheckArea);
+			$("<img/>").attr("src", "${contextPath}/images/monitoring/chart_icon.png")
+						.attr("onclick", "<portlet:namespace/>jobSystemLog('"+simulationUuid+"','"+jobUuid+"',0,'out')")
+						.attr("alt", "Log")
+						.attr("title", "Log")
+						.css("cursor", "pointer")
+						.appendTo($middleCheckArea);
 		}
 		
 	}else if(jobStatus=="<%=MonitoringStatusConstatns.FAILED%>"){
@@ -974,9 +980,12 @@ $(function(){
 					// 중간 확인
 					middleCheck = $("<td></td>").addClass("center").attr("id","middle_check").attr("logFileProcess-state",data.jobLogFileProcessorYn).appendTo($hideJobTr);
 					if(data.jobStatus == "1701011"){
-						$("<button></button>").addClass("btn btn-default icon-bar-chart")
-											  .attr("onclick", "<portlet:namespace/>jobSystemLog('"+data.simulationUuid+"','"+data.jobUuid+"',0,'out')")
-											  .appendTo(middleCheck);
+						$("<img/>").attr("src", "${contextPath}/images/monitoring/chart_icon.png")
+									.attr("onclick", "<portlet:namespace/>jobSystemLog('"+data.simulationUuid+"','"+data.jobUuid+"',0,'out')")
+									.attr("alt", "Log")
+									.attr("title", "Log")
+									.css("cursor", "pointer")
+									.appendTo(middleCheck);
 					}
 					
 					// 작업 관리
