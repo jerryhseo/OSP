@@ -77,6 +77,7 @@ console.log("[YEJIN] my test path3 : " + "<%=request.getRemoteAddr()%>");
 console.log("[YEJIN] my test path4 : " + "<%=request.getRemoteHost()%>");
 console.log("[YEJIN] my test path5 : " + "<%=request.getRequestURI()%>");
 console.log("[YEJIN] my test path6 : " + "<%=request.getRequestURL()%>");
+console.log("[YEJIN] my test path7 : " + "<%=request.getRealPath(request.getContextPath())%>");
 
 
 var stage;
