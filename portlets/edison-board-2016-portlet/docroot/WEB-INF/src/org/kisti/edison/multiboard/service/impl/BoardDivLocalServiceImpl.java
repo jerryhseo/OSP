@@ -72,10 +72,11 @@ public class BoardDivLocalServiceImpl extends BoardDivLocalServiceBaseImpl {
 				map.put("boardSeq", String.valueOf(board.getBoardSeq()));
 				map.put("content", board.getContent(locale));
 				
-				contentMain = board.getContent(locale).replaceAll("<[^>]*>", "").replaceAll("\n", "");
-				if(contentMain.length() > 200){
-					contentMain = contentMain.substring(0, 200)+"...";
+				contentMain = board.getContent(locale).replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("\n", "");
+				if(contentMain.length() > 100){
+					contentMain = contentMain.substring(0, 100)+"...";
 				}
+				
 				map.put("customId", board.getCustomId());
 				map.put("contentMain", contentMain);
 				map.put("groupBoardSeq", String.valueOf(board.getGroupBoardSeq()));
