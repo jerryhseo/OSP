@@ -61,6 +61,12 @@
 	}
 	.noticeContent{
 		margin: 0 0 5px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		min-height: 80px;
+		max-height: 80px;
+		word-break: break-word;
+		line-height: 1.2em;
 	}
 	
 	/* Popup CSS */
@@ -152,6 +158,7 @@
 	.notice-mtitle p {margin:0px; padding:0px;}
 	.notice-mtitle p a,.notice-mtitle p a:visited, .notice-mtitle p a:link{color:#666;}
 	.notice-mtitle p a:hover{color:#000;}
+	
 </style>
 	
 	<!-- Popup -->
@@ -214,7 +221,6 @@
 		<input type="hidden" id="<portlet:namespace/>listSize" name="<portlet:namespace/>listSize" value="4">
 	</form>
 	
-	<div style="margin-top: 50px;"></div>
 	
 	<div class="table-responsive panel edison-panel">
 	
@@ -222,11 +228,15 @@
 		<!-- Title -->
 		<c:choose>
 			<c:when test="${fn:toUpperCase(siteName) eq 'EDISON'}">
+				<div class="h50"></div>
+				
 				<h2 class="h2title" style="padding-top: 12px; font-family: 'Nanum Gothic', sans-serif;">
 					NEWS & EVENT
 				</h2>
 			</c:when>
 			<c:otherwise>
+				<div class="h20"></div>
+				
 				<h2 class="h2title" style="padding-top: 15px; font-family: 'Nanum Gothic', sans-serif;">
 					<c:out value="${fn:toUpperCase(siteName)}" /> NEWS
 				</h2>
@@ -318,12 +328,7 @@
 					noticeDiv.appendTo(noticeContentsListDiv);
 					
 				}else{
-					/* var boardLength = 0;
-					if(4 < boardList.length){
-						boardLength = 4;
-					} else {
-						boardLength = boardList.length;
-					} */
+					
 					for(var i=0 ; i < boardList.length; i++){
 						noticeDiv = $("<div/>").addClass("newslist col-md-3 col-sm-12")
 											   .css("padding-left", "7px")
@@ -339,13 +344,9 @@
 												.css("line-height", "1.5em")
 												.css("height", "3em")
 												.css("margin-bottom", "35px");
-						noticeContent = $("<li/>").html(boardList[i].content)
-												  .addClass("noticeContent")
-												  .css("text-overflow", "ellipsis")
-												  .css("overflow", "hidden")
-												  .css("white-space", "nowrap")
-												  .css("max-height", "80px")
-												  .css("line-height", "13px");
+						
+						noticeContent = $("<li/>").html(boardList[i].contentMain)
+												  .addClass("noticeContent");
 						noticeDetailBtn = $("<a/>").addClass("btn_line")
 												   .text("더보기 > ")
 												   .attr("href", "#")
