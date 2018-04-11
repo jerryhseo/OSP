@@ -171,7 +171,7 @@ NGL.Preferences.prototype = {
 NGL.StageWidget = function (stage, id) {
 	var viewport = new NGL.ViewportWidget(stage).setId('viewport')
 	var parentDomElement = document.getElementById(id);
-	
+	var myElement = $('#'+id);
 	parentDomElement.appendChild(viewport.dom)
   // ensure initial focus on viewer canvas for key-stroke listening
   stage.viewer.renderer.domElement.focus()
@@ -245,8 +245,10 @@ NGL.StageWidget = function (stage, id) {
 
   var handleResizeLeft = function (clientX) {
 	  //var contentWidth = parseFloat($(".content-sub").width());
-	  var elementOffset = parseFloat(jqueryElement.offset().left);
-	  var elementWidth = parseFloat(jqueryElement.width());
+	  
+	  
+	  var elementOffset = parseFloat(myElement.offset().left);
+	  var elementWidth = parseFloat(myElement.width());
 	  var endElementX = elementOffset +elementWidth;
 	  var rightOffset = window.innerWidth - endElementX;
 	  rightOffset = parseFloat(rightOffset) - parseFloat(elementWidth);

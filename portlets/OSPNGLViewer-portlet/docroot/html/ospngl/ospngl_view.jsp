@@ -5,6 +5,11 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
+<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
@@ -32,7 +37,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 <div class="container-fluid osp-analyzer">
 	<div class="row-fluid canvas" id="<portlet:namespace/>canvasFrame">
-		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" style="border:0">
+		<iframe style="height:700px" class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" style="border:0">
 		</iframe>
 	</div>
 </div>

@@ -7,7 +7,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
@@ -50,7 +49,8 @@ var serveResourceURL;
 function setNamespace( ns, parentServeResourceURL ){
 	namespace = ns;
 	serveResourceURL = parentServeResourceURL;
-	console.log('[NGLViewer] Set namespace ' + namespace);
+	console.log('[NGLViewer] Set namespace : ' + namespace);
+	console.log('[NGLViewer] Set serveResourceURL : ' + serveResourceURL);
 }
 
 
@@ -70,6 +70,15 @@ if (mdsrv) {
 //Plugins
 NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.dat");
 
+console.log("[YEJIN] my test path0 : " + "<%=request.getContextPath()%>");
+console.log("[YEJIN] my test path1 : " + "<%=request.getLocalAddr()%>");
+console.log("[YEJIN] my test path2 : " + "<%=request.getPathTranslated()%>");
+console.log("[YEJIN] my test path3 : " + "<%=request.getRemoteAddr()%>");
+console.log("[YEJIN] my test path4 : " + "<%=request.getRemoteHost()%>");
+console.log("[YEJIN] my test path5 : " + "<%=request.getRequestURI()%>");
+console.log("[YEJIN] my test path6 : " + "<%=request.getRequestURL()%>");
+
+
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
 	
@@ -88,9 +97,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	
 	var plugin = NGL.getQuery("plugin");
-	console.log('[NGLViewer] set plugin test 1 : ', plugin);
 	if (plugin) NGL.PluginRegistry.load(plugin, stage);
-
+	console.log('[NGLViewer] set plugin test 1 : ', plugin);
 	
 	var struc = NGL.getQuery("struc");
 	var traj = NGL.getQuery("traj");
