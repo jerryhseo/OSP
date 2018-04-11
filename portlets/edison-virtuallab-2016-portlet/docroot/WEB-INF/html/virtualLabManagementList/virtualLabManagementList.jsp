@@ -133,6 +133,10 @@
 											<option value="attending" <c:if test="${searchType == 'attending' }"> selected</c:if> ><liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-take-class' /></option>
 										</select>
 									</c:if>
+									<c:if test="${isLogin == 'N' }">
+										<!-- 2018.04.11. Logout 상태에서도 수강신청 중인 강좌목록 출력 -->
+										<input type="hidden" name="<portlet:namespace/>searchType" id="<portlet:namespace/>searchType" value="${searchType}" />
+									</c:if>
 									
 									<div class="input-group-btn">
 										<button class="btn btn-default" onClick="<portlet:namespace/>dataAndTabSearchList('1','');"><liferay-ui:message key='edison-button-search' /></button>
