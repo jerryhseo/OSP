@@ -145,6 +145,7 @@ public class MyFileController {
 						}
 					}
 				}else{//icebreaker 계정은 있으나 포털에 expando가 없는 경우 expando 추가 생성
+					log.debug("GROUP_ID--->"+groupId);
 					icebreakerVcToken = MyFileIcebreakerTokenUtil.createExpandoUserVctoken(user, groupId, userScreenName, userPassword);
 				}
 			}else{ // Icebreaker 계정이 없는경우
