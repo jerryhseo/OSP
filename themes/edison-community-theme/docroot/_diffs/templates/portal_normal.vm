@@ -52,7 +52,7 @@
 			</div>
 		#end
 		
-		<div class="$content_class">
+		<div class="$content_class" id="contentbody">
 			#if ($selectable)
 				$theme.include($content_include)
 			#else

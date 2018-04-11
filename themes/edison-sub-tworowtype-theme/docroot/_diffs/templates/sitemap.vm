@@ -58,7 +58,7 @@
 	</form>
 </div>
 
-<div id="mySidenav" class="sidenav">
+<div id="mySidenav" class="sidenav" style="display:none;">
 	<button type="button" class="closebtn" onclick="closeNav()">×</button>
 	<a href="/web${edisongroup.friendlyURL}">
 		EDISON
