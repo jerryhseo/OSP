@@ -289,14 +289,14 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						if(virtualLabManagementList[i].iconId != 0){
 							$("<li/>").append(
 									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
-											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("onerror","this.src='${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2'")
 											   .attr("width", "100")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}else{														
 							$("<li/>").append(
-									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
-											   .attr("width", "100")
+									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
+											   .attr("width", "98")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}
@@ -312,19 +312,19 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						virtualLabCount--;
 					}else{
 						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[is].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
 							$("<li/>").append(
 									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
-											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("onerror","this.src='${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2'")
 											   .attr("width", "100")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}else{
 							$("<li/>").append(
-									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
-											   .attr("width", "100")
+									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
+											   .attr("width", "98")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}

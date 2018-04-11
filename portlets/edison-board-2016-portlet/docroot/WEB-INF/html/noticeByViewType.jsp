@@ -66,7 +66,7 @@
 		min-height: 80px;
 		max-height: 80px;
 		word-break: break-word;
-		line-height: 1.2em;
+		line-height: 1.5em;
 	}
 	
 	/* Popup CSS */
