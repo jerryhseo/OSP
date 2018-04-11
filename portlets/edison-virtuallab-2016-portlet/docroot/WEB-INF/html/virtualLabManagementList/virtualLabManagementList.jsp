@@ -283,7 +283,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 					}
 					
 					if(virtualLabCount % 2 != 0){
-						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+						$rowUl = $("<ul/>").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
@@ -296,8 +296,8 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						}else{														
 							$("<li/>").append(
 									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
-											   .attr("width", "98")
-											   .attr("height", "98")
+											   .attr("width", "89")
+											   .attr("height", "89")
 								 ).appendTo($rowUl);
 						}
 													   
@@ -311,7 +311,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}else{
-						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+						$rowUl = $("<ul/>").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
@@ -324,8 +324,8 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						}else{
 							$("<li/>").append(
 									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
-											   .attr("width", "98")
-											   .attr("height", "98")
+											   .attr("width", "89")
+											   .attr("height", "89")
 								 ).appendTo($rowUl);
 						}
 						
