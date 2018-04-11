@@ -312,7 +312,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						virtualLabCount--;
 					}else{
 						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
-										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[is].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
+										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
 							$("<li/>").append(
