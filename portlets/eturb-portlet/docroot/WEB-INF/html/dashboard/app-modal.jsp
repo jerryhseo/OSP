@@ -54,7 +54,7 @@
 </style>
 
 <div class="modal fade" id="<portlet:namespace/>app-export-modal" role="dialog" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width: 100%;">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -139,10 +139,8 @@
 function <portlet:namespace/>exportApp(){
     $("#<portlet:namespace/>app-export-modal").modal("toggle")
     .css({
-            "width":  "850px",
-            "margin-left": function () {
-                return -($(this).width() / 2);
-            }
+            "width":  "1020px",
+            "margin": "30px auto"
     });
     
     var geoNode = $("#navigatorTree").jstree(true).get_node("<portlet:namespace/>"+DASH.Constants.GEOMETRIES_PARENT_FOLDER_ID, false);
