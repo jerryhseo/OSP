@@ -633,9 +633,14 @@
 	}
 	
 	function <portlet:namespace/>moveWorkbenchFromList(targetScienceAppId) {
-		var URL = "<%=workbenchURL%>";
-		URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-		window.open(URL);
+		var isSignedIn = ${isSignedIn};
+		if(isSignedIn){
+			var URL = "<%=workbenchURL%>";
+			URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+			window.open(URL);
+		} else {
+			window.open("${signedInUrl}", "_self");
+		}
 	}
 </script>
 

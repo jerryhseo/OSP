@@ -352,7 +352,7 @@
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
 					</c:if>
-					<!-- DOWNLOAD 이미지 요청하기 -->
+					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel eq downloadOnly}">
 						<button class="btn btn-default" style="cursor:pointer; width: 80px; height: 25px; padding: 0px;" 
 							onclick="<portlet:namespace/>fileDownload('${solver.srcFileId }')">
@@ -410,7 +410,7 @@
 								<img src="${contextPath}/images/btn_manual_none.jpg" width="75" height="30" />
 							</c:if>
 							<c:if test="${historyApp.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
-								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${historyApp.scienceAppId}');"/>
+								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkBench('${historyApp.scienceAppId}');"/>
 							</c:if>
 							<%-- <c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor('${historyApp.scienceAppId}', ${historyApp.exeFileNm});"/>
