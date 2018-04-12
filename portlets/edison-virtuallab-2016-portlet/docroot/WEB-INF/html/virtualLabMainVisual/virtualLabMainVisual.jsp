@@ -69,7 +69,7 @@
 	</c:when>
 	<c:otherwise>
 		<div class="mainImage">
-			<img src="${contextPath }/images/noimage_110.png?imageThumbnail=2" style="margin:0 10px 0 0;width:150px; height:150px;"/>
+			<img src="${contextPath }/images/edu_${groupName}.png?imageThumbnail=2" style="margin:0 10px 0 0;width:150px; height:150px;"/>
 		</div>
 	</c:otherwise>
 </c:choose>
