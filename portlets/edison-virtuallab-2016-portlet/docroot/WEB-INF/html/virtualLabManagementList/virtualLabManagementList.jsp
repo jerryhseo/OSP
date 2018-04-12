@@ -276,7 +276,7 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						groupField = "<liferay-ui:message key='edison-course-UE' />";
 						groupClass = "label_ue";
 						siteClass = "ue";
-					}else if(virtualLabManagementList[i].groupName == 'CEm'){
+					}else if(virtualLabManagementList[i].groupName == 'CEM'){
 						groupField = "<liferay-ui:message key='edison-course-CEM' />";
 						groupClass = "label_cem";
 						siteClass = "cem";
