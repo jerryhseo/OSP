@@ -55,7 +55,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var btnType = $(this).attr("data-btn-type");
         console.log(PANEL_DATA.setting.form.workflowInstanceId);
         if(!PANEL_DATA.setting.form.workflowInstanceId){
-            toastr["error"]("", var_create_first_message);
+            toastr["info"]("", "Create Simulation First.");
+            $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn[data-btn-type='new']").click();
             return false;
         }
         if (btnType === "run") { run(); }
