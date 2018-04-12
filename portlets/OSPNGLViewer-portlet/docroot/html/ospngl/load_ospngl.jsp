@@ -68,17 +68,7 @@ if (mdsrv) {
 
 
 //Plugins
-NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.dat");
-
-console.log("[YEJIN] my test path0 : " + "<%=request.getContextPath()%>");
-console.log("[YEJIN] my test path1 : " + "<%=request.getLocalAddr()%>");
-console.log("[YEJIN] my test path2 : " + "<%=request.getPathTranslated()%>");
-console.log("[YEJIN] my test path3 : " + "<%=request.getRemoteAddr()%>");
-console.log("[YEJIN] my test path4 : " + "<%=request.getRemoteHost()%>");
-console.log("[YEJIN] my test path5 : " + "<%=request.getRequestURI()%>");
-console.log("[YEJIN] my test path6 : " + "<%=request.getRequestURL()%>");
-console.log("[YEJIN] my test path7 : " + "<%=request.getRealPath(request.getContextPath())%>");
-
+NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.txt");
 
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
