@@ -169,6 +169,8 @@ public class ScienceAppstoreListController {
 			
 			model.addAttribute("searchField",searchField);
 			model.addAttribute("params", params);
+			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
+			model.addAttribute("signedInUrl", themeDisplay.getURLSignIn());
 			
 		} catch (Exception e) {
 			log.error(e);
