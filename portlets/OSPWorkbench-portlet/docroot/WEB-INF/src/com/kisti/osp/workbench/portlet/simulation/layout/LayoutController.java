@@ -1060,7 +1060,7 @@ public class LayoutController {
 					progArgs,
 					cluster, 
 					mpiAttributes, 
-					this.getJobStatusCallbackURL( portletRequest, simulationUuid, job.getJobSeqNo())
+					this.getJobStatusCallbackURL( portletRequest, simulationUuid, job.getJobSeqNo(), job.getGroupId())
 			);
 			
 			this.jsonObjectPrint(result);
@@ -1120,7 +1120,7 @@ public class LayoutController {
 		}
 	}
 	
-	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo ){
+	protected String getJobStatusCallbackURL( PortletRequest portletRequest, String simulationUuid, long jobSeqNo, long jobGroupId){
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		String portalUrl = "";
 		
@@ -1140,7 +1140,7 @@ public class LayoutController {
 		}
 		
 		String url = portalUrl +_callbackAPI;
-		url = HttpUtil.addParameter(url, "gid", themeDisplay.getScopeGroupId());
+		url = HttpUtil.addParameter(url, "gid", jobGroupId);
 		url = HttpUtil.addParameter(url, "simulationUuid", simulationUuid); 
 		url = HttpUtil.addParameter(url, "jobSeqNo", jobSeqNo); 
 		

@@ -276,28 +276,28 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						groupField = "<liferay-ui:message key='edison-course-UE' />";
 						groupClass = "label_ue";
 						siteClass = "ue";
-					}else if(virtualLabManagementList[i].groupName == 'CEm'){
+					}else if(virtualLabManagementList[i].groupName == 'CEM'){
 						groupField = "<liferay-ui:message key='edison-course-CEM' />";
 						groupClass = "label_cem";
 						siteClass = "cem";
 					}
 					
 					if(virtualLabCount % 2 != 0){
-						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+						$rowUl = $("<ul/>").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
 							$("<li/>").append(
 									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
-											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("onerror","this.src='${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2'")
 											   .attr("width", "100")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}else{														
 							$("<li/>").append(
-									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
-											   .attr("width", "100")
-											   .attr("height", "98")
+									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
+											   .attr("width", "89")
+											   .attr("height", "89")
 								 ).appendTo($rowUl);
 						}
 													   
@@ -311,21 +311,21 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						$rowUl.appendTo($rowResult);
 						virtualLabCount--;
 					}else{
-						$rowUl = $("<ul/>").css("width","47%").css("padding","0px 8px 8px 8px").css("margin-left","10px").css("margin-right","10px").addClass("onHover").css("cursor","pointer")
+						$rowUl = $("<ul/>").addClass("onHover").css("cursor","pointer")
 										   .attr("onClick","<portlet:namespace/>moveVirtualLab('" + virtualLabManagementList[i].virtualLabId  +"', '"+ virtualLabManagementList[i].groupId +  "')")
 										   .attr("title",virtualLabManagementList[i].virtualLabTitle);
 						if(virtualLabManagementList[i].iconId != 0){
 							$("<li/>").append(
 									$("<img/>").attr("src", "/documents/" + virtualLabManagementList[i].iconRepositoryId  + "/" + virtualLabManagementList[i].iconUuid + "?imageThumbnail=2")
-											   .attr("onerror","this.src='${contextPath}/images/noimage.png?imageThumbnail=2'")
+											   .attr("onerror","this.src='${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2'")
 											   .attr("width", "100")
 											   .attr("height", "98")
 								 ).appendTo($rowUl);
 						}else{
 							$("<li/>").append(
-									$("<img/>").attr("src", "${contextPath}/images/noimage.png?imageThumbnail=2")
-											   .attr("width", "100")
-											   .attr("height", "98")
+									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
+											   .attr("width", "89")
+											   .attr("height", "89")
 								 ).appendTo($rowUl);
 						}
 						

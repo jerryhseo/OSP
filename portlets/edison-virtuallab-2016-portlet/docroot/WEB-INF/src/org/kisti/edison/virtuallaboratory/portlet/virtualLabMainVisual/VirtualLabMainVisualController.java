@@ -122,24 +122,40 @@ public class VirtualLabMainVisualController {
 			
 			String groupField = "";
 			String groupClass = "";
+			String groupName = "";
+			
 			if(groupId == 23212){
 				groupField = "edison-course-CFD";
 				groupClass = "label_cfd";
+				groupName = "cfd";
 			}else if(groupId == 23318){
 				groupField = "edison-course-NANO";
 				groupClass = "label_nano";
+				groupName = "nano";
 			}else if(groupId == 23563){
 				groupField = "edison-course-CHEM";
 				groupClass = "label_chem";
+				groupName = "chem";
 			}else if(groupId == 23706){
 				groupField = "edison-course-CSD";
 				groupClass = "label_csd";
+				groupName = "csd";
 			}else if(groupId == 23849){
 				groupField = "edison-course-DESIGN";
 				groupClass = "label_design";
+				groupName = "design";
 			}else if(groupId == 284513){
 				groupField = "edison-course-CMED";
 				groupClass = "label_cmed";
+				groupName = "cmed";
+			} else if(group.getName().toUpperCase().equals("UE")){
+				groupField = "edison-course-UE";
+				groupClass = "label_ue";
+				groupName = "ue";
+			} else if(group.getName().toUpperCase().equals("CEM")){
+				groupField = "edison-course-CEM";
+				groupClass = "label_cem";
+				groupName = "cem";
 			}
 			labInfo = VirtualLabLocalServiceUtil.getVirtualLabInfomation(Long.parseLong(virtualLabId), locale);
 			
@@ -152,7 +168,8 @@ public class VirtualLabMainVisualController {
 			model.addAttribute("groupId", groupId);
 			model.addAttribute("groupClass", groupClass);
 			model.addAttribute("groupField", groupField);
-				
+			model.addAttribute("groupName", groupName);
+			
 		} catch (Exception e) {
 			return labExcpetionJSP;
 		}

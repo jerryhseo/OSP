@@ -36,7 +36,7 @@
 <liferay-portlet:resourceURL var="scienceAppCategoryURL" id="scienceAppCategory" copyCurrentRenderParameters="false" />
 
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 	<liferay-portlet:param name="classId" value="${classId}"/>
 	<liferay-portlet:param name="customId" value="${customId}"/>
@@ -352,7 +352,7 @@
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
 						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
 					</c:if>
-					<!-- DOWNLOAD 이미지 요청하기 -->
+					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel eq downloadOnly}">
 						<button class="btn btn-default" style="cursor:pointer; width: 80px; height: 25px; padding: 0px;" 
 							onclick="<portlet:namespace/>fileDownload('${solver.srcFileId }')">
@@ -412,13 +412,13 @@
 							<c:if test="${historyApp.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${historyApp.scienceAppId}');"/>
 							</c:if>
-							<c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
+							<%-- <c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor('${historyApp.scienceAppId}', ${historyApp.exeFileNm});"/>
 							</c:if>
 							<c:if test="${historyApp.appType eq 'Analyzer' and isSignedIn}">
 							${historyApp}
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer(('${historyApp.scienceAppId}');"/>
-							</c:if>
+							</c:if> --%>
 						</li>
 					</ul>
 				</c:forEach>
@@ -715,11 +715,28 @@ function <portlet:namespace/>goWorkbench(targetScienceAppId){
 </script>
 
 <aui:script>
-function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
+/* function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
 	var URL = "<%=workbenchURL%>";
-	URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+	URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
 	window.open(URL);
 	//location.href= URL;
+} */
+
+function <portlet:namespace/>moveWorkBench(targetScienceAppId){
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
+		portletURL.setPlid("${workBenchPlid}");
+		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
+		portletURL.setParameter("scienceAppId", targetScienceAppId);
+		
+		portletURL.setParameter("redirectName", "My Project");
+		portletURL.setParameter("redirectURL", "${redirectURL}");
+		window.open(portletURL);
+		//window.location.href = portletURL;
+	});
 }
 
 function <portlet:namespace/>moveScienceAppExecStatistice(solverName, groupId) {
