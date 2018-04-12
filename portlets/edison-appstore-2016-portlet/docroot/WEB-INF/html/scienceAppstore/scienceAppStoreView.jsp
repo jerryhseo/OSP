@@ -36,7 +36,7 @@
 <liferay-portlet:resourceURL var="scienceAppCategoryURL" id="scienceAppCategory" copyCurrentRenderParameters="false" />
 
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="Workbench_WAR_OSPWorkbenchportlet">
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 	<liferay-portlet:param name="classId" value="${classId}"/>
 	<liferay-portlet:param name="customId" value="${customId}"/>
@@ -717,7 +717,7 @@ function <portlet:namespace/>goWorkbench(targetScienceAppId){
 <aui:script>
 function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
 	var URL = "<%=workbenchURL%>";
-	URL += "&_Workbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+	URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
 	window.open(URL);
 	//location.href= URL;
 }
