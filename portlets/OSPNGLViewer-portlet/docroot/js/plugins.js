@@ -30,7 +30,10 @@ NGL.PluginRegistry = {
 
     load: function( name, stage ){
         var path = this.get( name );
+        
+        console.log(name);
         console.log(path);
+        
         stage.loadFile( path, { name: name + " plugin" } );
     }
 
