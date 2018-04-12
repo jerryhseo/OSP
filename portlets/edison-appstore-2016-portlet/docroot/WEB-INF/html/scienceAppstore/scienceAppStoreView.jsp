@@ -412,13 +412,13 @@
 							<c:if test="${historyApp.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn}">
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkBench('${historyApp.scienceAppId}');"/>
 							</c:if>
-							<c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
+							<%-- <c:if test="${historyApp.appType eq 'Editor' and isSignedIn}">							
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runEditor('${historyApp.scienceAppId}', ${historyApp.exeFileNm});"/>
 							</c:if>
 							<c:if test="${historyApp.appType eq 'Analyzer' and isSignedIn}">
 							${historyApp}
 								<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="30" style="cursor:pointer;" onClick="<portlet:namespace/>runAnalizer(('${historyApp.scienceAppId}');"/>
-							</c:if>
+							</c:if> --%>
 						</li>
 					</ul>
 				</c:forEach>
