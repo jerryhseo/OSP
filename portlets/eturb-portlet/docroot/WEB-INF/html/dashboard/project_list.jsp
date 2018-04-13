@@ -7,6 +7,14 @@
 .eturb-editor-dashboard .table-project td{
 	vertical-align: middle;
 }
+
+	.eturb-editor-dashboard .paging{overflow:hidden; width:100%; height:80px; background:#fff; position:relative; text-align:center;}
+	.eturb-editor-dashboard .paging ul{margin:0; padding:0; margin-top:25px; display: inline-block; zoom: 1; *display: inline;}
+	.eturb-editor-dashboard .paging ul li{width:30px; height:30px; font-size:17px; float:left; margin:4px 5px; text-align:center;}
+	.eturb-editor-dashboard .paging ul li img{color:#4d545b; margin:-4px 0px;}
+	.eturb-editor-dashboard .paging ul li a{color:#4d545b;}
+	.eturb-editor-dashboard .paging ul li a:hover{color:#ff4200;}
+	.eturb-editor-dashboard .paging ul li.select{color:#ff4200;}
 </style>
 
 <div class="modal-header">

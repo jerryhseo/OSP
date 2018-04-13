@@ -119,6 +119,15 @@
     border: 1px solid #d3d3d3;
 /*     background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x; */
 }
+
+
+.paging{overflow:hidden; width:100%; height:80px; background:#fff; position:relative; text-align:center;}
+.paging ul{margin:0; padding:0; margin-top:25px; display: inline-block; zoom: 1; *display: inline;}
+.paging ul li{width:30px; height:30px; font-size:17px; float:left; margin:4px 5px; text-align:center;}
+.paging ul li img{color:#4d545b; margin:-4px 0px;}
+.paging ul li a{color:#4d545b;}
+.paging ul li a:hover{color:#ff4200;}
+.paging ul li.select{color:#ff4200;}
 </style>
 
 <script type="text/javascript">
