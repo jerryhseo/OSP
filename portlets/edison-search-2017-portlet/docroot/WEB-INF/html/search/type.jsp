@@ -20,6 +20,11 @@
                 <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;" 
                     onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
             </c:if>
+            
+            <c:if test="${workBenchPlid ne 0 and element.openLevel eq downloadOnly}">
+                <img src="${contextPath}/images/download_btn.gif"style="cursor:pointer; height: 24px;"
+                    onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')"/>
+            </c:if>
         </div>
         <div>
           <c:if test="${!empty element.title}">
