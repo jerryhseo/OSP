@@ -74,7 +74,7 @@
 <div id="<portlet:namespace/>total-search-tab" class="search-tab loaded conlist">
   <c:if test="${searchResults.appCount > 0}">
     <h3 class="styleh3"><liferay-ui:message key="edison-search-science-app"/>(${searchResults.appCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
+    <div class="search-results table-responsive panel edison-panel">
       <ul>
         <c:forEach items="${searchResults.appResults}" var="element">
           <li>
@@ -116,7 +116,7 @@
   </c:if>
   <c:if test="${searchResults.contentCount > 0}">
     <h3 class="styleh3"><liferay-ui:message key="edison-search-contents"/>(${searchResults.contentCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
+    <div class="search-results table-responsive panel edison-panel">
       <ul>
         <c:forEach items="${searchResults.contentResults}" var="element">
           <li>
@@ -139,7 +139,7 @@
   </c:if>
   <c:if test="${searchResults.projectCount > 0}">
     <h3 class="styleh3"><liferay-ui:message key="edison-search-simulation-project"/>(${searchResults.projectCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
+    <div class="search-results table-responsive panel edison-panel">
       <ul>
         <c:forEach items="${searchResults.projectResults}" var="element">
           <li>
@@ -162,7 +162,7 @@
   </c:if>
   <c:if test="${searchResults.dataCount > 0}">
     <h3 class="styleh3"><liferay-ui:message key="edison-search-science-data"/>(${searchResults.dataCount} <liferay-ui:message key="edison-search-cnt"/>)</h3>
-    <div class="search-results">
+    <div class="search-results table-responsive panel edison-panel">
       <ul>
         <c:forEach items="${searchResults.dataResults}" var="element">
           <li>
@@ -213,7 +213,7 @@
     </div>
   </c:if>
   <c:if test="${searchResults.appCount + searchResults.contentCount + searchResults.projectCount + searchResults.dataCount eq 0}">
-    <div class="search-results">
+    <div class="search-results table-responsive panel edison-panel">
       <ul>
         <li><span class="result-none"><liferay-ui:message key="edison-search-no-result"/></span></li>
       </ul>
@@ -240,7 +240,7 @@
       </div>
       <div class="tab-sub-title-hr"></div>
     </div>
-    <div class="search-results"></div>
+    <div class="search-results table-responsive panel edison-panel"></div>
   </div>
 </c:if>
 <c:if test="${param.areaContents}">
@@ -262,7 +262,7 @@
       </div>
       <div class="tab-sub-title-hr"></div>
       </div>
-    <div class="search-results"></div>
+    <div class="search-results table-responsive panel edison-panel"></div>
   </div>
 </c:if>
 <c:if test="${param.areaSimulationProject}">
@@ -284,7 +284,7 @@
       </div> --%>
       <div class="tab-sub-title-hr"></div>
       </div>
-    <div class="search-results"></div>
+    <div class="search-results table-responsive panel edison-panel"></div>
   </div>
 </c:if>
 <c:if test="${param.areaScienceData}">
@@ -306,7 +306,7 @@
       </div>
       <div class="tab-sub-title-hr"></div>
       </div>
-    <div class="search-results"></div>
+    <div class="search-results table-responsive panel edison-panel"></div>
   </div>
 </c:if>
 <script>
