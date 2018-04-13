@@ -68,7 +68,7 @@ if (mdsrv) {
 
 
 //Plugins
-NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.txt");
+NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.plugin");
 
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
@@ -107,7 +107,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	openServerMenu.click(function(){
 		parent.iframeClickServerOpen();
 	});
-	//stage.loadFile("<%= request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
+
+	//stage.loadFile("<%=request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
 });
 
 function drawNglViewer(inputData, serveResourceURL){
@@ -123,7 +124,6 @@ function drawNglViewer(inputData, serveResourceURL){
 	data[namespace+'fileName'] = inputData.name_;
 	data[namespace+'relative'] = true;
 
-	
 	//stage.removeAllComponents();
 	
 	var xhr = new XMLHttpRequest();
