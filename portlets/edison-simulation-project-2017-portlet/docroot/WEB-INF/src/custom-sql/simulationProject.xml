@@ -27,8 +27,10 @@
               FROM 
                 EDSIMPRO_SimulationProject SIMPRO, 
                 AssetEntry AE, 
-                AssetEntries_AssetCategories AE_AC,
-                EDSIMPRO_RequestMember REQ_MEM
+                AssetEntries_AssetCategories AE_AC
+                <isNotEmpty property="ownerId">
+                ,EDSIMPRO_RequestMember REQ_MEM
+                </isNotEmpty>
               WHERE
                 SIMPRO.simulationProjectId = AE.classPK
                 AND AE.entryId = AE_AC.entryId
@@ -69,8 +71,10 @@
               FROM 
                 EDSIMPRO_SimulationProject SIMPRO, 
                 AssetEntry AE, 
-                AssetEntries_AssetCategories AE_AC,
-                EDSIMPRO_RequestMember REQ_MEM
+                AssetEntries_AssetCategories AE_AC
+                <isNotEmpty property="ownerId">
+                ,EDSIMPRO_RequestMember REQ_MEM
+                </isNotEmpty>
               WHERE
                 SIMPRO.simulationProjectId = AE.classPK
                 AND AE.entryId = AE_AC.entryId
