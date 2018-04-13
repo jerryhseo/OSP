@@ -686,6 +686,12 @@ public class SimulationJobLocalServiceUtil {
 		getService().deleteJob(jobUuid);
 	}
 
+	public static void cancleJob(
+		org.kisti.edison.bestsimulation.model.SimulationJob job)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().cancleJob(job);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

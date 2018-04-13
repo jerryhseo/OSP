@@ -730,6 +730,13 @@ public class SimulationJobLocalServiceWrapper
 		_simulationJobLocalService.deleteJob(jobUuid);
 	}
 
+	@Override
+	public void cancleJob(
+		org.kisti.edison.bestsimulation.model.SimulationJob job)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationJobLocalService.cancleJob(job);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

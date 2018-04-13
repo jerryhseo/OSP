@@ -371,6 +371,12 @@ public class SimulationJobLocalServiceClpInvoker {
 		_methodName141 = "deleteJob";
 
 		_methodParameterTypes141 = new String[] { "java.lang.String" };
+
+		_methodName142 = "cancleJob";
+
+		_methodParameterTypes142 = new String[] {
+				"org.kisti.edison.bestsimulation.model.SimulationJob"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -795,6 +801,13 @@ public class SimulationJobLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName142.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes142, parameterTypes)) {
+			SimulationJobLocalServiceUtil.cancleJob((org.kisti.edison.bestsimulation.model.SimulationJob)arguments[0]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -930,4 +943,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes140;
 	private String _methodName141;
 	private String[] _methodParameterTypes141;
+	private String _methodName142;
+	private String[] _methodParameterTypes142;
 }

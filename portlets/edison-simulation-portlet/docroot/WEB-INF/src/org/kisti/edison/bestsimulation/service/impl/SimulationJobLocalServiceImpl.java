@@ -1559,6 +1559,7 @@ public class SimulationJobLocalServiceImpl
 		List<SimulationJob> jobs = super.simulationJobLocalService.getJobsBySimulationUuid(simulationUuid);
 		for( SimulationJob job : jobs ){
 			try {
+				cancleJob(job);
 				super.simulationJobDataPersistence.remove(job.getJobUuid());
 			} catch (NoSuchSimulationJobDataException e) {
 				//no throw SystmeException 20180202
@@ -1578,12 +1579,30 @@ public class SimulationJobLocalServiceImpl
 	}
 	
 	public void deleteJob( String jobUuid ) throws NoSuchSimulationJobException, SystemException{
-		super.simulationJobPersistence.removeByUuid(jobUuid);
+		SimulationJob job = super.simulationJobPersistence.removeByUuid(jobUuid);
+		cancleJob(job);
 		try {
 			super.simulationJobDataPersistence.remove(jobUuid);
 		} catch (NoSuchSimulationJobDataException e) {
 			log.info("Job has no input data: "+jobUuid);
 		}
+	}
+	
+	public void cancleJob(SimulationJob job) throws SystemException{
+		if(job.getJobStatus()==1701006){
+			try{
+				long userId = SimulationLocalServiceUtil.getSimulationByUUID(job.getSimulationUuid()).getUserId();
+				long groupId = job.getGroupId();
+				User user = UserLocalServiceUtil.getUser(userId);
+				String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
+				IcebreakerVcToken vcToken = SimulationLocalServiceUtil.getOrCreateToken(groupId, user);
+				SimulationLocalServiceUtil.cancleJob(icebreakerUrl, vcToken.getVcToken(), job.getSimulationUuid(), job.getJobUuid());
+			}catch(Exception e){
+				e.printStackTrace();
+				throw new SystemException(e);
+			}
+		}
+		
 	}
 	
 }
