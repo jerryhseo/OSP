@@ -81,7 +81,7 @@
             <a href="#appdetail" onclick="<portlet:namespace/>moveScienceAppDetail(${element.groupId}, ${element.scienceAppId}); return false;">${element.name}</a>
             <div style="float: right; line-height: 2.3em !important;">
                 <c:if test="${!empty element.current_manualId and element.current_manualId ne 0}">
-                    <img src="${contextPath}/images/search/btn_manual.jpg" style="height: 24px; cursor: pointer;" 
+                    <img src="${contextPath}/images/search/btn_manual.jpg" style="height: 24px; cursor: pointer;"
                         onClick="<portlet:namespace/>fileDownload('${element.current_manualId}')" />
                 </c:if>
                 <c:if test="${empty element.current_manualId or element.current_manualId eq 0}">
@@ -91,11 +91,9 @@
                     <img src="${contextPath}/images/search/btn_run.jpg"style="cursor:pointer; height: 24px;"
                         onClick="<portlet:namespace/>moveWorkBench('${element.scienceAppId}');"/>
                 </c:if>
-                <c:if test="${workBenchPlid ne 0 and isSignedIn and element.openLevel eq downloadOnly}">
-                    <button class="btn btn-default" style="cursor:pointer; height: 24px; padding: 4px 6px;" 
-                    		onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')">
-                    	<i class="icon-download-alt"></i> Download
-                    </button>
+                <c:if test="${workBenchPlid ne 0 and element.openLevel eq downloadOnly}">
+                    <img src="${contextPath}/images/download_btn.gif"style="cursor:pointer; height: 24px;"
+                        onClick="<portlet:namespace/>fileDownload('${element.srcFileName}')"/>
                 </c:if>
             </div>
             <div>
