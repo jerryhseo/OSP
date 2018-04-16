@@ -248,7 +248,6 @@
         		types.push(['Turbine_ROM','1.0.0']);
         	} else if(meshFileExt == 'p2d.zip') {
         		// 공력해석
-        		types.push(['Mesher','1.0.0']);
         		types.push(['KFLOW_Turbine_2D','1.0.0']);
         	} else if(meshFileExt == 'p3d.zip') {
         		// 공력해석
