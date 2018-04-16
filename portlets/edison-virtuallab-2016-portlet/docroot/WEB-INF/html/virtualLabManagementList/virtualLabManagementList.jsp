@@ -296,8 +296,8 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						}else{														
 							$("<li/>").append(
 									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
-											   .attr("width", "89")
-											   .attr("height", "89")
+											   .attr("width", "86")
+											   .attr("height", "86")
 								 ).appendTo($rowUl);
 						}
 													   
@@ -324,8 +324,8 @@ function <portlet:namespace/>dataSearchList(pageNumber, groupId, universityField
 						}else{
 							$("<li/>").append(
 									$("<img/>").attr("src", "${contextPath}/images/edu_"+siteClass+".png?imageThumbnail=2")
-											   .attr("width", "89")
-											   .attr("height", "89")
+											   .attr("width", "86")
+											   .attr("height", "86")
 								 ).appendTo($rowUl);
 						}
 						
