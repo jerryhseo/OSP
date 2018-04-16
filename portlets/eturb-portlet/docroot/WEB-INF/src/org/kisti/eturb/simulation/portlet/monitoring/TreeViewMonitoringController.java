@@ -133,7 +133,7 @@ public class TreeViewMonitoringController{
         if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE)){
             OSPFileUtil.downloadFile(request, response,
                 Paths.get(portData.getParent_(), portData.getName_()).toString(),
-                OSPRepositoryTypes.USER_JOBS.toString());
+                OSPRepositoryTypes.USER_HOME.toString());
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_DL_ENTRY_ID)){
             OSPFileUtil.downloadDLEntry(request, response, Long.valueOf(portData.getId_()));
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_CONTEXT)
@@ -233,7 +233,7 @@ public class TreeViewMonitoringController{
         request.setAttribute("myPagePlid", PortalUtil.getPlidFromPortletId(
             themeDisplay.getScopeGroupId(), "edisonmypage_WAR_edisondefault2016portlet"));
         request.setAttribute("workBenchPlid", PortalUtil.getPlidFromPortletId(
-            themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet"));
+            themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet"));
         request.setAttribute("icebreakerUrl", publicIceBreakerUrl);
         
         if(job.getJobStatus() == MonitoringStatusConstatns.SUCCESS){

@@ -16,13 +16,13 @@
 <liferay-portlet:resourceURL var="transferJobDataUrl" escapeXml="false" id="transferJobData" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false"
  plid="${workBenchPlid}" 
- portletName="Workbench_WAR_OSPWorkbenchportlet"
+ portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet"
  windowState="<%=LiferayWindowState.NORMAL.toString()%>" 
  portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
     <liferay-portlet:param name="workbenchType" value="SIMULATION_RERUN" />
 </liferay-portlet:renderURL>
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}"
-    portletName="Workbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
+    portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
     <liferay-portlet:param name="workbenchType" value="MORANALYSIS" />
 </liferay-portlet:renderURL>
 <liferay-portlet:renderURL var="collectionPopupURL" portletName="sdrcommon_WAR_SDR_baseportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
@@ -80,41 +80,21 @@
     <thead>
       <tr>
         <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
-        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail" /></th> --%>
         <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
-        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle" /></th> --%>
         <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate" /></th>
         <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage" /></th>
-        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
-          <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual" /></th>
-        </c:if>
       </tr>
     </thead>
     <tbody id="mtbody">
       <tr id="<portlet:namespace/>monitoring-tr">
         <td>${job.jobTitle}</td>
-        <%-- <td class="center"><img src="${contextPath}/images/monitoring/bnt_info.png"
-          onclick="<portlet:namespace/>searchSimulationParam('${job.simulationUuid}','${job.jobSeqNo}','${job.jobUuid}');"
-          style="cursor: pointer;" /></td> --%>
         <td class="center"><img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${job.jobStatusImg}" /></td>
-        <!-- <td id="job_controll" class="center"></td> -->
         <td id="middle_check" class="center" logFileProcess-state="${job.jobLogFileProcessorYn }"></td>
-        <td class="center"><c:set value="<%=themeDisplay.getUserId()%>" var="thisUser" /> <c:if
-            test="${deleteMonitoring || job.userId eq thisUser}">
-            <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;"
-              onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete"
-              title="delete">
-          </c:if> 
-          	<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
-		          onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
-		          title="rerun">
-          	<%-- <img src="${contextPath}/images/monitoring/btn_monitor_visual.png" style="cursor: pointer;"
-          		onclick="<portlet:namespace/>moveWorkBench('${job.scienceAppId}');" alt="workbench"
-          		title="workbench"> --%>
-        	</td>
-        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
-          <td class="center" id="result_view">view</td>
-        </c:if>
+        <td class="center"> 
+        	<img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
+              onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
+              title="rerun">
+      	</td>
       </tr>
     </tbody>
   </table>

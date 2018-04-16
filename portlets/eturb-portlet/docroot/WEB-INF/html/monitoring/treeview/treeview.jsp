@@ -5,7 +5,6 @@
 <liferay-portlet:resourceURL var="jobInfoUrl" id="jobInfo" copyCurrentRenderParameters="false"/>
 <style>
 .mflefttree{padding-top: 15px; width: 300px;}
-.rightcontent{width: 840px;}
 .simulation-tree{overflow-y: auto; height: 570px;}
 .tree-view-monitoring-portlet .jstree-clicked {color: white !important;}
 .tree-view-monitoring-portlet .searchbox{

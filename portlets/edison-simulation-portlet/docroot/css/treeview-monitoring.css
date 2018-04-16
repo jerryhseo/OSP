@@ -27,9 +27,11 @@
 
 /*우측컨텐츠*/
 .rightcontent {
-	width: 890px;
+	width: 640px;
 	float: right;
 	padding: 25px;
+	height: 600px;
+    overflow-y: scroll;
 }
 
 /*popup*/
