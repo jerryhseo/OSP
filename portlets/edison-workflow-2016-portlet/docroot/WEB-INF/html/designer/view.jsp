@@ -190,7 +190,7 @@ var contextPath = '${contextPath}';
 </style>
 <div class="container-fluid">
   <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
-    <div class="wrapper">
+    <div class="wrapper" style="border-top: 1px solid #e5e5e9;">
       <aside class="main-sidebar">
         <section class="sidebar">
           <ul class="sidebar-menu top" data-widget="tree">
