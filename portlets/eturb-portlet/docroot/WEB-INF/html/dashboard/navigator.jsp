@@ -459,21 +459,29 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
         success : function(data) {
             var appIdList = data.appIdList;
             var appNames = data.appNames;
-            //app id 추출해서 popup(dialog)에 출력
+            var isAppListNull = data.isAppListNull;
             
+            //app id 추출해서 popup(dialog)에 출력
             var modalBody = $("#<portlet:namespace/>appListModal .modal-body");
             modalBody.html("");
-            var ul = $("<ul/>").addClass("panel-body sortable-ui ui-sortable");
-            for(var i=0; i<appIdList.length; i++){
-                $li = $("<li/>").addClass("airfoil btn btn-default").attr("appId", appIdList[i])
-	                            .attr("onclick", "<portlet:namespace/>moveWorkBench(\'"+appIdList[i]+"\',\'"+meshFileId+"\')")
-	                            .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer")
-	                            .css("background","none").css("border", "none");
-                $("<button/>").addClass("btn btn-default").text(appNames[i]).css("width", "100%").appendTo($li);
-                $li.appendTo(ul);
-                
+            var $ul = $("<ul/>").addClass("panel-body sortable-ui ui-sortable");
+            
+            // 2018.04.16, workbench로 이동할 App List가 존재할 경우 App List 출력
+            if(isAppListNull){
+            	$li = $("<li/>").css("width", "100%")
+            					.css("text-align", "center")
+            					.text("Workbench App 리스트가 존재하지 않습니다.").appendTo($ul);
+            } else {
+	            for(var i=0; i<appIdList.length; i++){
+	                $li = $("<li/>").addClass("airfoil btn btn-default").attr("appId", appIdList[i])
+		                            .attr("onclick", "<portlet:namespace/>moveWorkBench(\'"+appIdList[i]+"\',\'"+meshFileId+"\')")
+		                            .css("height", "25px").css("padding-top", "5px").css("cursor", "pointer")
+		                            .css("background","none").css("border", "none");
+	                $("<button/>").addClass("btn btn-default").text(appNames[i]).css("width", "100%").appendTo($li);
+	                $li.appendTo($ul);
+	            }
             }
-            ul.appendTo(modalBody);
+            $ul.appendTo(modalBody);
             
         }, //end Success
         error : function(data) {
