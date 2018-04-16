@@ -18,7 +18,7 @@
  portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet"
  windowState="<%=LiferayWindowState.NORMAL.toString()%>" 
  portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
-    <liferay-portlet:param name="workbenchType" value="SIMULATION_RERUN" />
+    <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP" />
 </liferay-portlet:renderURL>
 <liferay-portlet:renderURL var="monitoringAnalysisURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}"
     portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%= LiferayWindowState.POP_UP.toString()%>">
@@ -75,8 +75,8 @@
         <td id="middle_check" class="center" logFileProcess-state="${job.jobLogFileProcessorYn }"></td>
         <td class="center"> 
           <img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
-            onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
-            title="rerun">
+            onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="Workbench"
+            title="Workbench">
         </td>
       </tr>
     </tbody>
@@ -456,7 +456,7 @@ function <portlet:namespace/>inputFileDownload(ospInputData, jobUuid){
 
 //재실행
 function <portlet:namespace/>restartSimulation(p_scienceAppId, p_jobUuid){
-    var thisPortletNamespace = "_Workbench_WAR_OSPWorkbenchportlet_";
+    var thisPortletNamespace = "_SimulationWorkbench_WAR_OSPWorkbenchportlet_";
 
     var URL = "<%=workbenchURL%>";
     var params = "&" +thisPortletNamespace+ "scienceAppId=" + p_scienceAppId;
