@@ -21,8 +21,10 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.model.IcebreakerVcToken;
+import org.kisti.edison.model.WorkflowInstance;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.service.WorkflowInstanceLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -70,9 +72,11 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             ScienceApp fileEditor = ScienceAppLocalServiceUtil.getFileEditorScienceApp();
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
             String workflowId = ParamUtil.get(request, "workflowId", "7608414");
-            
             if(StringUtils.hasText(workflowId)){
                 model.addAttribute("workflowId", workflowId);
+                List<WorkflowInstance> instances = WorkflowInstanceLocalServiceUtil
+                    .getWorkflowWorkflowInstancesByWorkflowId(Long.valueOf(workflowId));
+                model.addAttribute("workflowCount", instances != null ? instances.size() : 0);
             }
             model.addAttribute("workflowId", workflowId);
             model.addAttribute("textEditor", textEditor);
