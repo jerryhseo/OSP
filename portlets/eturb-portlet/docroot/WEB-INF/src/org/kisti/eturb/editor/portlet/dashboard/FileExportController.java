@@ -184,17 +184,22 @@ public class FileExportController{
             List<Long> appIdList = new ArrayList<Long>();
             List<String> appNames = new ArrayList<String>();
             
-            for(int i=0; i<appList.length; i++){
-                String[] appInfo = appList[i].split(",");
-                ScienceApp scienceAppParam = ScienceAppLocalServiceUtil.getScienceApp(appInfo[0], appInfo[1]);
-                
-                appNames.add(appInfo[0]);
-                appIdList.add(scienceAppParam.getScienceAppId());
+            boolean isAppListNull = true;
+            if(appList != null && !appList.equals("")){
+	            for(int i=0; i<appList.length; i++){
+	                String[] appInfo = appList[i].split(",");
+	                ScienceApp scienceAppParam = ScienceAppLocalServiceUtil.getScienceApp(appInfo[0], appInfo[1]);
+	                
+	                appNames.add(appInfo[0]);
+	                appIdList.add(scienceAppParam.getScienceAppId());
+	            }
+	            isAppListNull = false;
             }
             
             JSONObject json = new JSONObject();
             json.put("appIdList", appIdList);
             json.put("appNames", appNames);
+            json.put("isAppListNull", isAppListNull);
             response.setContentType("application/json; charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.write(json.toString());
