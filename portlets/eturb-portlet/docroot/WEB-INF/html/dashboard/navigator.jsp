@@ -445,7 +445,7 @@ function n_indexOf(str, searchValue, nth){
 
 // show workbench App List
 function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt){
-    var appList = DASH.meshApp(fileExt);
+    var appList = DASH.meshApp(fileExt, "${bcUse}");
     
     var sendData = {
         "<portlet:namespace/>appList" : appList
