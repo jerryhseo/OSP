@@ -442,6 +442,7 @@ $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
   var jqPortletBoundaryId = "#p_p_id" + namespace;
   var workflowId = "${workflowId}";
+  var workflowCount = ${workflowCount};
   $.Mustache.addFromDom();
   toastr.options = {
       "closeButton": true,
@@ -480,6 +481,18 @@ $(document).ready(function(){
         $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
         - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
   }, 3000);
+  _delay(function(){
+    if(workflowId){
+      if(console){
+          console.log("workflow instance count : ", workflowCount);
+      }
+      if(workflowCount > 0){
+        $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='open']").click();
+      }else{
+        $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
+      }
+    }
+  }, 1000);
 });
 
 function <portlet:namespace/>moveToDesigner(){
