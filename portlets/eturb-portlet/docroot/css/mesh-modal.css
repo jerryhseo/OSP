@@ -73,7 +73,7 @@
       -webkit-box-shadow: none;
       -moz-box-shadow: none;
       box-shadow: none; }
-      .airfoil{margin: 5px 5px 5px 5px !important; width: 200px;}
+      .airfoil{margin: 5px 5px 5px 5px !important;}
       .sortable-ui{min-height: 200px; margin-bottom: 5px !important;}
       .airfoil-order{margin-left: 0px !important;}
       .airfoil-order > li{
