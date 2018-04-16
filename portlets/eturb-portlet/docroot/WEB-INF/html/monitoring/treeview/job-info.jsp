@@ -41,7 +41,73 @@
 .modal-body{height: 500px;}
 .name-word-wrap{text-overflow:ellipsis; white-space:nowrap; word-wrap:normal; width: 70px; overflow:hidden;}
 </style>
-<div class="virtitlebox">
+<div class="table-responsive panel edison-panel">
+  <div class="panel-heading clearfix">
+    <h3 class="panel-title pull-left">
+      <img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img">
+      <liferay-ui:message key="edison-simulation-monitoring-job-info" />
+    </h3>
+    <c:if test="${job.jobStatus eq 1701011}">
+    <div class="btn-group pull-right">
+      <button class="btn btn-primary" onclick="<portlet:namespace/>fn_collectionPopup();"><liferay-ui:message key="edison-simulation-monitoring-export-job-info" /></button>
+    </div>
+    </c:if>
+  </div>
+  <table class="table table-bordered table-hover edison-table">
+    <colgroup>
+      <col width="*">
+      <!-- <col width="13%"> -->
+      <col width="10%">
+      <!-- <col width="14%"> -->
+      <col width="14%">
+      <col width="20%">
+      <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+        <col width="20%">
+      </c:if>
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-job-name" /></th>
+        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-detail" /></th> --%>
+        <th scope="col"><liferay-ui:message key="edison-simulation-execute-job-create-list-state" /></th>
+        <%-- <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-cancle" /></th> --%>
+        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-check-moderate" /></th>
+        <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-job-manage" /></th>
+        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+          <th scope="col"><liferay-ui:message key="edison-simulation-monitoring-table-header-result-visual" /></th>
+        </c:if>
+      </tr>
+    </thead>
+    <tbody id="mtbody">
+      <tr id="<portlet:namespace/>monitoring-tr">
+        <td>${job.jobTitle}</td>
+        <%-- <td class="center"><img src="${contextPath}/images/monitoring/bnt_info.png"
+          onclick="<portlet:namespace/>searchSimulationParam('${job.simulationUuid}','${job.jobSeqNo}','${job.jobUuid}');"
+          style="cursor: pointer;" /></td> --%>
+        <td class="center"><img src="${contextPath}/images/monitoring/<%=themeDisplay.getLanguageId()%>/${job.jobStatusImg}" /></td>
+        <!-- <td id="job_controll" class="center"></td> -->
+        <td id="middle_check" class="center" logFileProcess-state="${job.jobLogFileProcessorYn }"></td>
+        <td class="center"><c:set value="<%=themeDisplay.getUserId()%>" var="thisUser" /> <c:if
+            test="${deleteMonitoring || job.userId eq thisUser}">
+            <img src="${contextPath}/images/monitoring/btn_monitor_delete.png" style="cursor: pointer;"
+              onclick="<portlet:namespace/>deleteMonitoring('${job.simulationUuid}','${job.jobSeqNo}');" alt="delete"
+              title="delete">
+          </c:if> 
+            <img src="${contextPath}/images/monitoring/btn_monitor_rerun.png" style="cursor: pointer;"
+                  onclick="<portlet:namespace/>restartSimulation('${job.scienceAppId}', '${job.jobUuid}');" alt="rerun"
+                  title="rerun">
+            <%-- <img src="${contextPath}/images/monitoring/btn_monitor_visual.png" style="cursor: pointer;"
+                onclick="<portlet:namespace/>moveWorkBench('${job.scienceAppId}');" alt="workbench"
+                title="workbench"> --%>
+            </td>
+        <c:if test="${job.jobStatus eq jobStatusSuccess and !empty outputPortJson }">
+          <td class="center" id="result_view">view</td>
+        </c:if>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%-- <div class="virtitlebox">
     <img src="${contextPath}/images/title_virtual.png" height="20" width="20">
     <div class="virtitle">작업상태</div>
 </div>
@@ -102,7 +168,7 @@
             </tr>
         </tbody>
     </table>
-</div>
+</div> --%>
 
 </div>
 <div class="virtitlebox">
