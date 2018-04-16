@@ -269,7 +269,7 @@ function <portlet:namespace/>operExport(){
         success : function(data) {
             bEnd();
             var fileName = data.fileName;
-            <portlet:namespace/>confirmMoveWorkbench(fileName, meshFileName, meshFileId);
+            return <portlet:namespace/>confirmMoveWorkbench(fileName, meshFileName, meshFileId);
         }, //end Success
         error : function(data) {
             $.alert({
@@ -287,12 +287,39 @@ function <portlet:namespace/>confirmMoveWorkbench(fileName, meshFileName, meshFi
         boxWidth: '30%',
         useBootstrap: false,
         title: 'Confirm!',
-        content: fileName + ' 파일이 생성되었습니다.',
+        content: fileName + ' 파일이 생성되었습니다.' + '<br>' + '워크벤치로 이동하시겠습니까?',
         buttons: {
             confirm: function () {
-            }
+            	
+            	// \.개수 추출
+                var dotCnt = meshFileName.match(/\./g).length;
+                
+                if(dotCnt <= 1){
+                    index = meshFileName.lastIndexOf("\.");
+                } else {
+                    index = n_indexOf(meshFileName, "\.", dotCnt-1);
+                }
+                
+            	fileExt = meshFileName.substr(index+1, meshFileName.length);
+            	// 2018.04.16, 파일 생성 후 워크벤치로 이동
+            	<portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt);
+            },
+			cancel: function () {
+            	return true;
+			}
         }
     });
+}
+
+//\.이 여러개인 경우 Index 추출
+function n_indexOf(str, searchValue, nth){
+    var times=0, num=null;
+    
+    while(times < nth && num !==-1){
+        num = str.indexOf(searchValue, num+1);
+        times++;
+    }
+    return num;
 }
 
 function <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId){
