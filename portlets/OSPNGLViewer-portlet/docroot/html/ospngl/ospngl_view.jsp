@@ -37,7 +37,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 <div class="container-fluid osp-analyzer">
 	<div class="row-fluid canvas" id="<portlet:namespace/>canvasFrame">
-		<iframe style="height:550px" class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" style="border:0">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas"  src="<%=request.getContextPath()%>/html/ospngl/load_ospngl.jsp" style="border:0">
 		</iframe>
 	</div>
 </div>
