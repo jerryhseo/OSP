@@ -180,7 +180,14 @@ public class FileExportController{
         Group group = themeDisplay.getScopeGroup();
         
         try{
-            String[] appList = (String[]) params.get("appList");
+            String[] appList = null; // (String[]) params.get("appList");
+            
+            if(params.get("appList") instanceof String){
+            	appList = new String[]{(String) params.get("appList")};
+            } else {
+            	appList = (String[]) params.get("appList");
+            }
+            
             List<Long> appIdList = new ArrayList<Long>();
             List<String> appNames = new ArrayList<String>();
             
