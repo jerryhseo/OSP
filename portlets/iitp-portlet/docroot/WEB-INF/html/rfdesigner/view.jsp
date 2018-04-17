@@ -266,11 +266,11 @@
 <div class="modal fade" id="<portlet:namespace/>filter-design-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>filter-design-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">POP UP</h4>
-			</div>
 			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">POP UP</h4>
+				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
 						<div class="row" id="<portlet:namespace/>simulation-area">
