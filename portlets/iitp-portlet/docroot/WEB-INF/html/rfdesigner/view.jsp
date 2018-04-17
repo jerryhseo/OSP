@@ -19,7 +19,17 @@
 		padding-right: 0px;
 	}
 	
-	.rf-designer .panel-body .form-group,.rf-designer .panel-body .row{
+	
+	
+	.rf-designer .panel-body .my-form-row{
+ 		margin-bottom: 10px;
+	}
+	
+	.rf-designer .panel-body .my-form-row .form-control{
+ 		width:100%;
+	}
+	
+	.rf-designer .panel-body .row{
  		margin-left: -15px;
  		margin-right: -15px;
 	}
@@ -35,6 +45,10 @@
 		line-height: normal;
 		padding-bottom: 8px;
 		font-weight: 600;
+		margin-top: 0;
+		margin-bottom: 0;
+		font-size: 15px;
+		color: inherit;
 	}
 	
 	.rf-designer option:disabled{
@@ -48,6 +62,27 @@
 	.rf-designer .border-grid{
 /* 		border: 1px solid #337ab7; */
 /* 		padding-top: 5px; */
+	}
+	
+	.rf-designer .vertical-alignment-helper {
+	    display:table;
+	    height: 100%;
+	    width: 100%;
+	}
+	.rf-designer .vertical-align-center {
+	    /* To center vertically */
+	    display: table-cell;
+	    vertical-align: middle;
+	    pointer-events:none;
+	}
+	.rf-designer .modal-content {
+	    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+	    width:inherit;
+	    max-width:inherit; /* For Bootstrap 4 - to avoid the modal window stretching full width */
+	    height:inherit;
+	    /* To center horizontally */
+	    margin: 0 auto;
+	    pointer-events: all;
 	}
 </style>
 <div class="h20"></div>
@@ -153,12 +188,23 @@
 				<h2 class="panel-title">Line Calculator</h2>
 			</div>
 			<div class="panel-body">
-				<label class="radio-inline">
-					<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Single Microstrip Line
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Coupied Microstrip Line
-				</label>
+				<div class="row">
+					<div class="col-md-12">
+						<label class="radio-inline">
+							<input type="radio" name="filter-design-option" id="inlineRadio1" value="option1" onchange="<portlet:namespace/>filterDesignChange('type1');"> Single Microstrip Line
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="filter-design-option" id="inlineRadio2" value="option2" onchange="<portlet:namespace/>filterDesignChange('type2');"> Coupied Microstrip Line
+						</label>
+					</div>
+				</div>
+				<div class="h10"></div>
+				<div id='<portlet:namespace/>line-calculator-mustache'>
+					
+				</div>
+				
+				
+				
 			</div>
 		</div>
 	</div>
@@ -209,8 +255,54 @@
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">Filter Design</h2>
 			</div>
-			<div class="panel-body" id='<portlet:namespace/>filter-design'>
+			<div class="panel-body" id='<portlet:namespace/>filter-design-mustache'>
 				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="<portlet:namespace/>filter-design-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>filter-design-modal" style="display: none;">
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">POP UP</h4>
+			</div>
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row" id="<portlet:namespace/>simulation-area">
+							<div class="col-md-12" style="min-height: 300px;">
+								<table class ="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="text-center"><liferay-ui:message key="edison-simulation-execute-simulation-name" /></th>
+											<th class="text-center"><liferay-ui:message key="edison-virtuallab-tablerow-confirm-date" /></th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
+								
+								<div class="text-center" id="<portlet:namespace/>pagin">${pagingStr}</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
+									<div class="form-group">
+										<label for="New Simulation">New Simulation</label>
+										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required maxlength="20">
+									</div>
+									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -230,7 +322,7 @@ var layout = {
 /***********************************************************************
  * Mustache Data
  ***********************************************************************/
-var <portlet:namespace/>PANEL_DATA = {
+var <portlet:namespace/>SPEC_PANEL_DATA = {
 	"tpl-filter-lowpass": {
 		"boxtitle":"LPF",
 		"body": "specification-type-low-high",
@@ -243,16 +335,66 @@ var <portlet:namespace/>PANEL_DATA = {
 		"option": "",
 		"form": {}
 	},
-	"tpl-band-bandpass": {
+	"tpl-filter-bandpass": {
 		"boxtitle":"BPF",
 		"body": "specification-filter-type-band",
 		"option": "",
 		"form": {}
 	},
-	"tpl-band-bandstop": {
+	"tpl-filter-bandstop": {
 		"boxtitle":"BSF",
 		"body": "specification-filter-type-band",
 		"option": "",
+		"form": {}
+	}
+};
+
+var <portlet:namespace/>FILTER_PANEL_DATA = {
+	"tpl-filter-lowpass": {
+		"img":"cktLPF.png",
+		"body": "filter-design-type-1",
+		"option": "",
+		"form": {}
+	},
+	"tpl-filter-highpass": {
+		"img":"cktHPF.png",
+		"body": "filter-design-type-1",
+		"option": "",
+		"form": {}
+	},
+	"tpl-filter-bandpass": {
+		"img":"cktBPF.png",
+		"body": "filter-design-type-1",
+		"option": "",
+		"form": {}
+	},
+	"tpl-filter-bandstop": {
+		"img":"cktBSF.png",
+		"body": "filter-design-type-1",
+		"option": "",
+		"form": {}
+	},
+	"tpl-transmission-lowpass": {
+		"img":"stepped.png",
+		"body": "filter-design-type-2",
+		"option": "",
+		"form": {}
+	},
+	"tpl-transmission-bandpass": {
+		"img":"coupled.png",
+		"body": "filter-design-type-3",
+		"option": "",
+		"form": {}
+	}
+};
+
+var <portlet:namespace/>LINE_PANEL_DATA = {
+	"tpl-single": {
+		"body": "line-calculator-type-1",
+		"form": {}
+	},
+	"tpl-coupied": {
+		"body": "line-calculator-type-2",
 		"form": {}
 	}
 };
@@ -276,14 +418,14 @@ $(document).ready(function(){
 		if(resposeType!=""&&filterType!=""){
 			var disabledOption = false;
 			if(filterType==="LOWPASS"){
-				<portlet:namespace/>templateData = <portlet:namespace/>PANEL_DATA["tpl-filter-lowpass"];
+				<portlet:namespace/>templateData = <portlet:namespace/>SPEC_PANEL_DATA["tpl-filter-lowpass"];
 			}else if(filterType==="HIGHPASS"){
-				<portlet:namespace/>templateData = <portlet:namespace/>PANEL_DATA["tpl-filter-highpass"];
-			}else if(filterType==="BANDPASS"){
-				<portlet:namespace/>templateData = <portlet:namespace/>PANEL_DATA["tpl-band-bandpass"];
+				<portlet:namespace/>templateData = <portlet:namespace/>SPEC_PANEL_DATA["tpl-filter-highpass"];
 				disabledOption = true;
+			}else if(filterType==="BANDPASS"){
+				<portlet:namespace/>templateData = <portlet:namespace/>SPEC_PANEL_DATA["tpl-filter-bandpass"];
 			}else if(filterType==="BANDSTOP"){
-				<portlet:namespace/>templateData = <portlet:namespace/>PANEL_DATA["tpl-band-bandstop"];
+				<portlet:namespace/>templateData = <portlet:namespace/>SPEC_PANEL_DATA["tpl-filter-bandstop"];
 				disabledOption = true;
 			}
 			
@@ -295,13 +437,13 @@ $(document).ready(function(){
 			
 			/*SELECT BOX EVENT*/
 			if(disabledOption){
-				$("#filter-type option[value='LUMPED-FILTER']").prop("selected", true);;
-				$("#filter-type").css("cursor", "not-allowed");
+				$("#<portlet:namespace/>filter-type option[value='LUMPED-FILTER']").prop("selected", true);;
+				$("#<portlet:namespace/>filter-type").css("cursor", "not-allowed");
 			}else{
-				$("#filter-type").css("cursor", "pointer");
+				$("#<portlet:namespace/>filter-type").css("cursor", "pointer");
 			}
 			
-			$("#filter-type option[value='TRANSMIATION-FILTER']").attr('disabled', disabledOption);
+			$("#<portlet:namespace/>filter-type option[value='TRANSMIATION-FILTER']").attr('disabled', disabledOption);
 			
 			$("#<portlet:namespace/>mustache-panel-box").empty().mustache(<portlet:namespace/>templateData["body"], <portlet:namespace/>templateData);
 			
@@ -335,40 +477,54 @@ function <portlet:namespace/>gridFilter(){
 				return false;
 			}
 		});
+		<portlet:namespace/>gridFilterDesign();
 	}
+	
 	console.log(filterData);
-	<portlet:namespace/>gridFilterDesign();
 }
 
 
 function <portlet:namespace/>gridFilterDesign(){
 	var selectFilterType = $("#<portlet:namespace/>filter-type option:selected").val();
-	var $filterDiv = $("#<portlet:namespace/>filter-design");
-	$filterDiv.empty();
+	var $filterDiv = $("#<portlet:namespace/>filter-design-mustache");
+	var <portlet:namespace/>filterTemplateData;
 	
+	var radioFilterType = $("#<portlet:namespace/>radioFilterType:checked").val();
 	if(selectFilterType==="LUMPED-FILTER"){
-		var imageName = "";
-		var radioFilterType = $("#<portlet:namespace/>radioFilterType:checked").val();
 		if(radioFilterType==="LOWPASS"){
-			imageName = "cktLPF";
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-filter-lowpass"];
 		}else if(radioFilterType==="HIGHPASS"){
-			imageName = "cktHPF";
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-filter-highpass"];
 		}else if(radioFilterType==="BANDPASS"){
-			imageName = "cktBPF";
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-filter-bandpass"];
 		}else if(radioFilterType==="BANDSTOP"){
-			imageName = "cktBSF";
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-filter-bandstop"];
 		}
-		
-		var $firstRow = $("<div/>").addClass("row").appendTo($filterDiv);
-		var $firstDiv = $("<div/>").addClass("col-md-12").appendTo($firstRow);
-		$("<img/>").attr("src","${contextPath}/images/rfdesigner/filter-design/"+imageName+".png").addClass("img-responsive").appendTo($firstDiv);
-		
-		var $secondRow = $("<div/>").addClass("row").appendTo($filterDiv);
-		var $secondDiv = $("<div/>").addClass("col-md-12 form-group").appendTo($secondRow);
-		$("<textarea/>").attr("rows","18").addClass("form-control").css("resize","none").appendTo($secondDiv);
 	}else{
-		
+		if(radioFilterType==="LOWPASS"){
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-transmission-lowpass"];
+		}else if(radioFilterType==="BANDPASS"){
+			<portlet:namespace/>filterTemplateData = <portlet:namespace/>FILTER_PANEL_DATA["tpl-transmission-bandpass"];
+		}
 	}
+	
+	$filterDiv.empty().mustache(<portlet:namespace/>filterTemplateData["body"], <portlet:namespace/>filterTemplateData);
+}
+
+function <portlet:namespace/>filterDesignPopup(){
+	var modal = $("#<portlet:namespace/>filter-design-modal");
+	modal.modal({ "backdrop": "static", "keyboard": false });
+}
+
+function <portlet:namespace/>filterDesignChange(type){
+	var <portlet:namespace/>lintTemplateData;
+	if(type==="type1"){
+		<portlet:namespace/>lintTemplateData = <portlet:namespace/>LINE_PANEL_DATA["tpl-single"];
+	}else{
+		<portlet:namespace/>lintTemplateData = <portlet:namespace/>LINE_PANEL_DATA["tpl-coupied"];
+	}
+	
+	$("#<portlet:namespace/>line-calculator-mustache").empty().mustache(<portlet:namespace/>lintTemplateData["body"], <portlet:namespace/>lintTemplateData);
 }
 </script>
 
@@ -476,7 +632,7 @@ function <portlet:namespace/>gridFilterDesign(){
             <label class="form-control-static">Passband Freq (H)</label>
         </div>
         <div class="form-group col-md-3 my-group">
-            <input type="text" name="passband-freq-H" class="form-control data-binded" value="{{form.passband-freq}}" required>
+            <input type="text" name="passband-freq-H" class="form-control data-binded" value="{{form.passband-freq-H}}" required>
         </div>
         <div class="form-group col-md-3">
             <select class="form-control" name="passband-freq-H-addon">
@@ -492,7 +648,7 @@ function <portlet:namespace/>gridFilterDesign(){
             <label class="form-control-static">Stopband Freq (H)</label>
         </div>
         <div class="form-group col-md-3 my-group">
-            <input type="text" name="stopband-freq-H" class="form-control data-binded" value="{{form.stopband-freq}}" required>
+            <input type="text" name="stopband-freq-H" class="form-control data-binded" value="{{form.stopband-freq-H}}" required>
         </div>
         <div class="form-group col-md-3">
             <select class="form-control" name="stopband-freq-H-addon">
@@ -527,4 +683,238 @@ function <portlet:namespace/>gridFilterDesign(){
     </div>
 </div>
 </form>
+</script>
+<script id="filter-design-type-1" type="text/html">
+<div class="row"><div class="col-md-12"><button class="btn btn-default pull-right" onClick="<portlet:namespace/>filterDesignPopup();"><span class="icon-file">  Analyze Prototype Design Procedure</span<</button></div></div>
+<div class="row"><div class="col-md-12"><img src="${contextPath}/images/rfdesigner/filter-design/{{img}}" class="img-responsive"></div></div>
+<div class="row"><div class="col-md-12 form-group"><textarea rows="18" class="form-control" style="resize: none;"></textarea></div></div>
+</script>
+<script id="filter-design-type-2" type="text/html">
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Stepped-impedance implementation </h3>
+        <img src="${contextPath}/images/rfdesigner/filter-design/{{img}}" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (er) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Lowest Impedance (Zl) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="lowest-impedance" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Height Impedance(Zl) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="row my-form-row">
+    <div class="col-md-12 text-center">
+        <button class="btn-primary btn">Apply</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 text-center">
+        <label>Z(impedance)</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Phase(Degree)</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Width(mm)</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Length(mm)</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 form-group">
+        <textarea rows="4" class="form-control" style="resize: none;"></textarea>
+    </div>
+</div>
+</script>
+<script id="filter-design-type-3" type="text/html">
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Coupled Microstrip Line </h3>
+        <img src="${contextPath}/images/rfdesigner/filter-design/{{img}}" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (er) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="row my-form-row">
+    <div class="col-md-12 text-center">
+        <button class="btn-primary btn">Apply</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Synthesis of Coupled Microstrip Line </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 text-center">
+        <label>Section</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Phase(Degree)</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Width(mm)</label>
+    </div>
+    <div class="col-md-3 text-center">
+        <label>Length(mm)</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 form-group">
+        <textarea rows="4" class="form-control" style="resize: none;"></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Even/Odd impedance Calculation Process </h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-center">
+        <label>Section</label>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>g(n)</label>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>Zojn</label>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>Zoeven</label>
+    </div>
+    <div class="col-md-2 text-center">
+        <label>Zodd</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 form-group">
+        <textarea rows="4" class="form-control" style="resize: none;"></textarea>
+    </div>
+</div>
+</script>
+<script id="line-calculator-type-1" type="text/html">
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Input Parameters </h3>
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Z0 : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Freqency (GHz) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Zoeven : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Zoodd : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Substrate Er : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Substrate Height (mm) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="row my-form-row">
+    <div class="col-md-12 text-center">
+        <button class="btn-primary btn">Calulator</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        Width (mm) : <br/>
+        Length (mm) : <br/>
+        Spacing (mm) : <br/>
+    </div>
+    <div class="col-md-7">
+        <img src="/iitp-portlet/images/rfdesigner/line-calculator/coupled2.png" class="img-responsive">
+    </div>
+</div>
+</script>
+<script id="line-calculator-type-2" type="text/html">
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (Er) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="h30"></div>
+        <div class="row form-inline my-form-row">
+            <label class="col-md-6">Characteristic Impedance (Za) : </label>
+            <div class=" col-md-6">
+                <input type="text" name="height" class="form-control" style="width: 100%">
+            </div>
+        </div>
+        <div class="row my-form-row">
+            <button class="btn btn-default col-md-6">Synthesize<br/><i class="icon-sort-down"></i></button>
+            <button class="btn btn-default col-md-6"><i class="icon-sort-up"></i><br/>Analyze</button>
+        </div>
+        <div class="row form-inline my-form-row">
+            <label class="col-md-6">Width (mm) : </label>
+            <div class=" col-md-6">
+                <input type="text" name="height" class="form-control" style="width: 100%">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <img src="/iitp-portlet/images/rfdesigner/line-calculator/single.png" class="img-responsive">
+    </div>
+</div>
 </script>
