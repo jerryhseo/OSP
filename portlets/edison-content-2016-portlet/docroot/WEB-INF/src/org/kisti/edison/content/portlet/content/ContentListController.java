@@ -449,13 +449,13 @@ public class ContentListController{
 			model.addAttribute("contentDiv", String.valueOf(contentDiv));
 			
 			// 2018.04.18, 콘텐츠의 대표이미지는 Portal의 DL에 저장 --> 분야사이트에서도 Portal의 경로에 있는 대표이미지 사용
-			long contentImageGroupId = groupId;
+			/*long contentImageGroupId = groupId;
 			long parentGroupId = group.getParentGroupId();
 			if(parentGroupId != 0){
 				contentImageGroupId = parentGroupId;
-			}
+			}*/
 			
-			List fileList = EdisonFileUtil.getListEdisonFile(contentImageGroupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
+			List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
 
 			model.addAttribute("fileList", fileList);
 
