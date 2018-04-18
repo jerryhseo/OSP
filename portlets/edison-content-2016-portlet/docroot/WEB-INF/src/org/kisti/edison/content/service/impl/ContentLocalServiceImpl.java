@@ -572,13 +572,13 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 		}
 
 		// 2018.04.18, 콘텐츠의 대표이미지는 Portal의 DL에 저장 --> 분야사이트에서도 Portal의 경로에 있는 대표이미지 사용
-		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		/*Group group = GroupLocalServiceUtil.getGroup(groupId);
 		long parentGroupId = group.getParentGroupId();
 		long contentImageGroupId = groupId;
 		if(parentGroupId != 0){
 			contentImageGroupId = parentGroupId;
-		}
-		EdisonFileUtil.insertEdisonFile(request, upload, userId, contentImageGroupId, "", String.valueOf(contentSeq),
+		}*/
+		EdisonFileUtil.insertEdisonFile(request, upload, userId, groupId, "", String.valueOf(contentSeq),
 			"mainImage", contentFilePreFix);
 
 		/**************************************************************************************************************************************/
