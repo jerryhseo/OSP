@@ -44,8 +44,6 @@ import org.kisti.edison.content.model.GeneralContent;
 import org.kisti.edison.content.portlet.util.AdvancedFileUtil;
 import org.kisti.edison.content.service.ContentLocalServiceUtil;
 import org.kisti.edison.content.service.base.ContentLocalServiceBaseImpl;
-import org.kisti.edison.content.service.persistence.ContentFinderImpl;
-import org.kisti.edison.content.service.persistence.ContentFinderUtil;
 import org.kisti.edison.customauthmanager.service.UserGroupRoleCustomLocalServiceUtil;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
@@ -75,11 +73,9 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetLink;
@@ -88,7 +84,6 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetLinkLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
-import com.liferay.util.ContentUtil;
 
 /**
  * The implementation of the content local service.
@@ -576,7 +571,13 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 			content.setContentFileNm(fileName, locale);
 		}
 
-		// dl 대표이미지 등록
+		// 2018.04.18, 콘텐츠의 대표이미지는 Portal의 DL에 저장 --> 분야사이트에서도 Portal의 경로에 있는 대표이미지 사용
+		/*Group group = GroupLocalServiceUtil.getGroup(groupId);
+		long parentGroupId = group.getParentGroupId();
+		long contentImageGroupId = groupId;
+		if(parentGroupId != 0){
+			contentImageGroupId = parentGroupId;
+		}*/
 		EdisonFileUtil.insertEdisonFile(request, upload, userId, groupId, "", String.valueOf(contentSeq),
 			"mainImage", contentFilePreFix);
 
