@@ -29,6 +29,7 @@
 			DATA.updateDate,
 			DATA.version, 
 			DATA.openYn,
+			DATA.coverImageFileEntryId,
 			(SELECT user.screenName FROM User_ user WHERE user.userId=DATA.insertId) screenName
 		]]>
 	</sql>

@@ -340,23 +340,20 @@
 						<div id="fileListDiv">
 						<c:choose>
 							<c:when test="${mode eq 'update' }">
-								<c:if test="${fn:length(fileList) < 1}"><input type="file" name="<portlet:namespace/>mainImage" id="<portlet:namespace/>mainImage"  style ="border:1px solid #CCCCCC;"></c:if>
+								<c:if test="${coverImageFile eq null}"><input type="file" name="<portlet:namespace/>mainImage" id="<portlet:namespace/>mainImage"  style ="border:1px solid #CCCCCC;"></c:if>
 								
-								<c:forEach items="${fileList}" var="fileMap">
-								<div id="fileListDiv">
-										<span style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
-											${fileMap.fileTitle}
-											<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
-										</span>
-											&nbsp;&nbsp;
-										<%-- <span style="cursor:pointer" onclick="<portlet:namespace/>deleteSingleEdisonFile('${fileMap.fileEntryId}')">
-											<u>[delete]</u>
-										</span> --%>
-										
-										<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" onclick="<portlet:namespace/>deleteSingleEdisonFile('${fileMap.fileEntryId}', '<%=contentSeq%>')"/>
-										<br>
-								</div>
-								</c:forEach>
+								<c:if test="${coverImageFile ne null}">
+									<div id="fileListDiv">
+											<span style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${coverImageFile.fileEntryId }')" class="onMouseHover">
+												${coverImageFile.title}
+												<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+											</span>
+												&nbsp;&nbsp;
+											
+											<img src='${contextPath}/images/icon_dustbin.png' width='13' height='14' style="cursor:pointer" onclick="<portlet:namespace/>deleteSingleEdisonFile('${coverImageFile.fileEntryId}', '<%=contentSeq%>')"/>
+											<br>
+									</div>
+								</c:if>
 							</c:when>
 							<c:otherwise>
 								<input type="file" name="<portlet:namespace/>mainImage" id="<portlet:namespace/>mainImage"  style ="border:1px solid #CCCCCC;">

@@ -124,10 +124,8 @@ function <portlet:namespace/>closeDialog ( data ){
 		<div class="topvisual">
 			<div class="visualimg">
 				<c:choose>
-					<c:when test="${fn:length(fileList) > 0}">
-						<c:forEach var="file" items="${fileList }">
-							<img src="/documents/${file.fileRepositoryId }/${file.fileEntryId }/${file.fileTitle }/${file.fileUuid }?imageThumbnail=2" style="width:104px;height:78px;" onerror="this.src='${contextPath }/images/noimage.png'">
-						</c:forEach> 
+					<c:when test="${coverImageFile ne null}">
+						<img src="/documents/${coverImageFile.repositoryId }/${coverImageFile.fileEntryId }/${coverImageFile.title }/${coverImageFile.uuid }?imageThumbnail=2" style="width:104px;height:78px;" onerror="this.src='${contextPath }/images/noimage.png'">
 					</c:when>
 					<c:otherwise>
 						<img src="${contextPath }/images/noimage.png">

@@ -60,6 +60,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -187,6 +188,7 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 
 			contentMap.put("insertNm", contentUser.getScreenName());
 			contentMap.put("viewCnt", content.getViewCnt());
+			contentMap.put("CoverImageFileEntryId", content.getCoverImageFileEntryId());
 		}
 
 		return contentMap;
@@ -570,19 +572,14 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 			}
 			content.setContentFileNm(fileName, locale);
 		}
-
-		// 2018.04.18, 콘텐츠의 대표이미지는 Portal의 DL에 저장 --> 분야사이트에서도 Portal의 경로에 있는 대표이미지 사용
-		/*Group group = GroupLocalServiceUtil.getGroup(groupId);
-		long parentGroupId = group.getParentGroupId();
-		long contentImageGroupId = groupId;
-		if(parentGroupId != 0){
-			contentImageGroupId = parentGroupId;
-		}*/
-		EdisonFileUtil.insertEdisonFile(request, upload, userId, groupId, "", String.valueOf(contentSeq),
+		
+		List<FileEntry> fileEntryList = EdisonFileUtil.insertEdisonFile(request, upload, userId, 20181, "", String.valueOf(contentSeq),
 			"mainImage", contentFilePreFix);
+		
 
 		/**************************************************************************************************************************************/
-
+		//DL에 등록된 파일의 FileEntryId를 Content Table에 적용
+		content.setCoverImageFileEntryId(fileEntryList.get(0).getFileEntryId());
 		contentPersistence.update(content);
 
 		// asset 등록
@@ -713,10 +710,11 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 
 		// ********************************************************************************************************************************
 
-		// 파일등록
+		// DL에 등록된 파일의 FileEntryId를 Content Table에 적용
 		if(upload.getFileNames("mainImage") != null){
-			EdisonFileUtil.insertEdisonFile(request, upload, userId, groupId, "", String.valueOf(contentSeq),
+			List<FileEntry> fileEntryList = EdisonFileUtil.insertEdisonFile(request, upload, userId, groupId, "", String.valueOf(contentSeq),
 				"mainImage", contentFilePreFix);
+			content.setCoverImageFileEntryId(fileEntryList.get(0).getFileEntryId());
 		}
 
 		ContentLocalServiceUtil.updateContent(content);

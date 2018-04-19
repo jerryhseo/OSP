@@ -77,6 +77,8 @@ import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 import net.sf.json.JSONObject;
 
@@ -403,7 +405,7 @@ public class ContentListController{
 	}
 
 	/**
-	 * 콘텐츠 등록/수정 페이지
+	 * 콘텐츠 상세 페이지
 	 * 
 	 * @param request
 	 * @param model
@@ -440,7 +442,7 @@ public class ContentListController{
 
 			AssetEntry contentEntry = AssetEntryLocalServiceUtil.getEntry(Content.class.getName(), contentSeq);
 			model.addAttribute("entryId", String.valueOf(contentEntry.getEntryId()));
-
+			
 			Map<String, Object> content = ContentLocalServiceUtil.retrieveMapContent(companyId, themeDisplay.getLocale(),
 				contentSeq);
 			model.addAttribute("content", content);
@@ -448,16 +450,14 @@ public class ContentListController{
 			model.addAttribute("contentSeq", String.valueOf(contentSeq));
 			model.addAttribute("contentDiv", String.valueOf(contentDiv));
 			
-			// 2018.04.18, 콘텐츠의 대표이미지는 Portal의 DL에 저장 --> 분야사이트에서도 Portal의 경로에 있는 대표이미지 사용
-			/*long contentImageGroupId = groupId;
-			long parentGroupId = group.getParentGroupId();
-			if(parentGroupId != 0){
-				contentImageGroupId = parentGroupId;
-			}*/
+//			List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
+//			model.addAttribute("fileList", fileList);
 			
-			List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
-
-			model.addAttribute("fileList", fileList);
+			// Content Table에 FileEntry Id 추가 -> FileEntryId로 대표이미지 출력
+			if((long)content.get("CoverImageFileEntryId") != 0 && content.get("CoverImageFileEntryId") != null && !content.get("CoverImageFileEntryId").equals("")){
+				DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry((long) content.get("CoverImageFileEntryId"));
+				model.addAttribute("coverImageFile", dlFileEntry);
+			}
 
 			Role managerRole = RoleLocalServiceUtil.getRole(companyId, EdisonRoleConstants.CONTENT_MANAGER);
 
@@ -619,8 +619,14 @@ public class ContentListController{
 				model.addAttribute("contentSeq", String.valueOf(contentSeq));
 				model.addAttribute("contentDiv", String.valueOf(contentDiv));
 
-				List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
-				model.addAttribute("fileList", fileList);
+//				List fileList = EdisonFileUtil.getListEdisonFile(groupId, "", contentSeq + "", contentFilePreFix); // 대표이미지
+//				model.addAttribute("fileList", fileList);
+				
+				// Content Table에 FileEntry Id 추가 -> FileEntryId로 대표이미지 출력
+				if((long)content.get("CoverImageFileEntryId") != 0 && content.get("CoverImageFileEntryId") != null && !content.get("CoverImageFileEntryId").equals("")){
+					DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry((long) content.get("CoverImageFileEntryId"));
+					model.addAttribute("coverImageFile", dlFileEntry);
+				}
 
 				String codeOption = HtmlFormUtils.makeCombo(codeList, String.valueOf(contentDiv));
 				model.addAttribute("codeOption", String.valueOf(codeOption));
