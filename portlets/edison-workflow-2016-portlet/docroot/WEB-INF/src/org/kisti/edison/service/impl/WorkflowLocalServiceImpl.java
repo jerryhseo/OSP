@@ -750,6 +750,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         job.setTitle(scienceApp.getName());
         job.setDescription(scienceApp.getTitle());
         job.setSolverName(scienceApp.getName());
+        job.setSolverId(String.valueOf(scienceApp.getScienceAppId()));
 
         if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
             job.setExecutable(exec_path + "DCExcution/1.0.0/bin/DCExcution.sh");
