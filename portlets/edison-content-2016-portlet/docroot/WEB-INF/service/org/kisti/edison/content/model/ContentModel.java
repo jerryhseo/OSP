@@ -563,6 +563,20 @@ public interface ContentModel extends BaseModel<Content> {
 	 */
 	public void setOpenYn(String openYn);
 
+	/**
+	 * Returns the cover image file entry ID of this content.
+	 *
+	 * @return the cover image file entry ID of this content
+	 */
+	public long getCoverImageFileEntryId();
+
+	/**
+	 * Sets the cover image file entry ID of this content.
+	 *
+	 * @param coverImageFileEntryId the cover image file entry ID of this content
+	 */
+	public void setCoverImageFileEntryId(long coverImageFileEntryId);
+
 	@Override
 	public boolean isNew();
 

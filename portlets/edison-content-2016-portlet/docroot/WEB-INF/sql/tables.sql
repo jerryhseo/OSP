@@ -32,7 +32,8 @@ create table EDMED_Content (
 	updateId LONG,
 	updateDate DATE null,
 	version VARCHAR(75) null,
-	openYn VARCHAR(75) null
+	openYn VARCHAR(75) null,
+	coverImageFileEntryId LONG
 );
 
 create table EDMED_GeneralContent (

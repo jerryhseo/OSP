@@ -66,6 +66,7 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 		attributes.put("updateDate", getUpdateDate());
 		attributes.put("version", getVersion());
 		attributes.put("openYn", getOpenYn());
+		attributes.put("coverImageFileEntryId", getCoverImageFileEntryId());
 
 		return attributes;
 	}
@@ -173,6 +174,13 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 
 		if (openYn != null) {
 			setOpenYn(openYn);
+		}
+
+		Long coverImageFileEntryId = (Long)attributes.get(
+				"coverImageFileEntryId");
+
+		if (coverImageFileEntryId != null) {
+			setCoverImageFileEntryId(coverImageFileEntryId);
 		}
 	}
 
@@ -897,6 +905,26 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 	@Override
 	public void setOpenYn(java.lang.String openYn) {
 		_content.setOpenYn(openYn);
+	}
+
+	/**
+	* Returns the cover image file entry ID of this content.
+	*
+	* @return the cover image file entry ID of this content
+	*/
+	@Override
+	public long getCoverImageFileEntryId() {
+		return _content.getCoverImageFileEntryId();
+	}
+
+	/**
+	* Sets the cover image file entry ID of this content.
+	*
+	* @param coverImageFileEntryId the cover image file entry ID of this content
+	*/
+	@Override
+	public void setCoverImageFileEntryId(long coverImageFileEntryId) {
+		_content.setCoverImageFileEntryId(coverImageFileEntryId);
 	}
 
 	@Override

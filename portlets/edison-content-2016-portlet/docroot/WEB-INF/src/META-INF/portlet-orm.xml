@@ -57,6 +57,7 @@
 			</basic>
 			<basic name="version" />
 			<basic name="openYn" />
+			<basic name="coverImageFileEntryId" />
 			<transient name="contentFileNmCurrentLanguageId" />
 			<transient name="contentFileNmMap" />
 			<transient name="modelAttributes" />

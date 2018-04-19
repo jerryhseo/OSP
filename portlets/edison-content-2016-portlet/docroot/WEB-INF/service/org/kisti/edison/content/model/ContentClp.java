@@ -99,6 +99,7 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 		attributes.put("updateDate", getUpdateDate());
 		attributes.put("version", getVersion());
 		attributes.put("openYn", getOpenYn());
+		attributes.put("coverImageFileEntryId", getCoverImageFileEntryId());
 
 		return attributes;
 	}
@@ -206,6 +207,13 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 
 		if (openYn != null) {
 			setOpenYn(openYn);
+		}
+
+		Long coverImageFileEntryId = (Long)attributes.get(
+				"coverImageFileEntryId");
+
+		if (coverImageFileEntryId != null) {
+			setCoverImageFileEntryId(coverImageFileEntryId);
 		}
 	}
 
@@ -904,6 +912,30 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 		}
 	}
 
+	@Override
+	public long getCoverImageFileEntryId() {
+		return _coverImageFileEntryId;
+	}
+
+	@Override
+	public void setCoverImageFileEntryId(long coverImageFileEntryId) {
+		_coverImageFileEntryId = coverImageFileEntryId;
+
+		if (_contentRemoteModel != null) {
+			try {
+				Class<?> clazz = _contentRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCoverImageFileEntryId",
+						long.class);
+
+				method.invoke(_contentRemoteModel, coverImageFileEntryId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getContentRemoteModel() {
 		return _contentRemoteModel;
 	}
@@ -1086,6 +1118,7 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 		clone.setUpdateDate(getUpdateDate());
 		clone.setVersion(getVersion());
 		clone.setOpenYn(getOpenYn());
+		clone.setCoverImageFileEntryId(getCoverImageFileEntryId());
 
 		return clone;
 	}
@@ -1138,7 +1171,7 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1174,6 +1207,8 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 		sb.append(getVersion());
 		sb.append(", openYn=");
 		sb.append(getOpenYn());
+		sb.append(", coverImageFileEntryId=");
+		sb.append(getCoverImageFileEntryId());
 		sb.append("}");
 
 		return sb.toString();
@@ -1181,7 +1216,7 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(58);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.content.model.Content");
@@ -1255,6 +1290,10 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 			"<column><column-name>openYn</column-name><column-value><![CDATA[");
 		sb.append(getOpenYn());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>coverImageFileEntryId</column-name><column-value><![CDATA[");
+		sb.append(getCoverImageFileEntryId());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1281,6 +1320,7 @@ public class ContentClp extends BaseModelImpl<Content> implements Content {
 	private Date _updateDate;
 	private String _version;
 	private String _openYn;
+	private long _coverImageFileEntryId;
 	private BaseModel<?> _contentRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.content.service.ClpSerializer.class;
 }
