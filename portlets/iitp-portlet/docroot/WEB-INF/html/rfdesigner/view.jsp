@@ -84,7 +84,69 @@
 	    margin: 0 auto;
 	    pointer-events: all;
 	}
+
+/* The Modal (background) */
+.rf-designer .image-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.rf-designer .image-modal .modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    max-height: 50%;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+.rf-designer .image-modal #caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+/* The Close Button */
+.rf-designer .image-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.rf-designer .image-modal .close:hover,
+.rf-designer .image-modal .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .rf-designer .image-modal .modal-content {
+        width: 100%;
+    }
+}
 </style>
+
 <div class="h20"></div>
 <div class="row">
 	<div class="col-md-6 border-grid">
@@ -218,7 +280,7 @@
 			<div class="panel-body form-horizontal">
 				<div class="row">
 					<div class="col-md-12">
-						<div id="plot-content" style="height: 450px;">
+						<div id="graph-plot-content" style="height: 450px;">
 						
 						</div>
 					</div>
@@ -265,52 +327,91 @@
 
 <div class="modal fade" id="<portlet:namespace/>filter-design-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>filter-design-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
-		<div class="modal-dialog vertical-align-center" role="document">
+		<div class="modal-dialog vertical-align-center" role="document" style="width: 1250px;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">POP UP</h4>
+					<h4 class="modal-title">Analyze Prototype Design Procedure</h4>
 				</div>
-				<div class="modal-body">
-					<div class="container-fluid">
-						<div class="row" id="<portlet:namespace/>simulation-area">
-							<div class="col-md-12" style="min-height: 300px;">
-								<table class ="table table-bordered table-hover">
-									<thead>
-										<tr>
-											<th class="text-center"><liferay-ui:message key="edison-simulation-execute-simulation-name" /></th>
-											<th class="text-center"><liferay-ui:message key="edison-virtuallab-tablerow-confirm-date" /></th>
-										</tr>
-									</thead>
-									<tbody>
-										
-									</tbody>
-								</table>
-								
-								<div class="text-center" id="<portlet:namespace/>pagin">${pagingStr}</div>
-							</div>
-						</div>
+				<div class="modal-body" style="padding-left: 30px;padding-right: 30px;">
 						<div class="row">
-							<div class="col-md-12">
-								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
-									<div class="form-group">
-										<label for="New Simulation">New Simulation</label>
-										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required maxlength="20">
+							<div class="col-md-6">
+								<div class="panel panel-default" style="min-height: 390px">
+									<div class="panel-heading clearfix ">
+										<h2 class="panel-title">Detemine Filter Order</h2>
 									</div>
-									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
-								</form>
+									<div class="panel-body form-horizontal">
+										<div id="popup-plot-content" style="height: 350px;width: 540px;">
+						
+										</div>
+										<span class="text-center">
+											Optimum Order (N) : <br/>
+											Optimum Order-1 (N-1) : <br/>
+											Optimum Order+1 (N+1) : <br/>
+										</span>
+										
+									</div>
+								</div>
+								<div class="panel panel-default" style="min-height: 285px">
+									<div class="panel-heading clearfix ">
+										<h2 class="panel-title">Element Values Table of prototype</h2>
+									</div>
+									<div class="panel-body form-horizontal">
+										<textarea rows="11" class="form-control" style="resize: none;"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="panel panel-default" style="min-height: 390px">
+									<div class="panel-heading clearfix ">
+										<h2 class="panel-title">Prototype - <span id="popupTitle">LPF</span></h2>
+									</div>
+									<div class="panel-body form-horizontal">
+										<div class="row">
+											<div class="col-md-12">
+												<button class="btn btn-default pull-right" onclick="<portlet:namespace/>viewImage();">Transformation Figure</button>
+												<img src="${contextPath}/images/rfdesigner/popup/proto_LPF.png" id="protoImg" class="img-responsive">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Frequency Scaling </h3>
+												<img src="${contextPath}/images/rfdesigner/popup/freq_LPF.png" id="freqImg" class="img-responsive" style="height: 200px;">
+												<div class="h10"></div>
+												<textarea rows="12" class="form-control" style="resize: none;"></textarea>
+											</div>
+											<div class="col-md-6">
+												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Impedance Scaling </h3>
+												<img src="${contextPath}/images/rfdesigner/popup/impe.png" class="img-responsive" style="height: 200px;">
+												<div class="h10"></div>
+												<textarea rows="12" class="form-control" style="resize: none;"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<!-- The Modal -->
+<div id="imageModal" class="image-modal modal">
+
+  <!-- The Close Button -->
+  <span class="close" onclick="<portlet:namespace/>closeImageModal();">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01" src="${contextPath}/images/rfdesigner/popup/freqScailngFigure.png">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption">Freq Scailng Figure</div>
+</div>
 
 <script type="text/javascript">
-var layout = {
+var graphLayout = {
 	xaxis: {
 		title :'log(w/wc)'
 	},
@@ -318,6 +419,17 @@ var layout = {
 		title :'Attenuation (db)'
 	}
 };
+
+var popupLayout = {
+		xaxis: {
+			title :'(w/wc)'
+		},
+		yaxis: {
+			title :'Attenuation (db)'
+		}
+	};
+
+
 
 /***********************************************************************
  * Mustache Data
@@ -352,24 +464,28 @@ var <portlet:namespace/>SPEC_PANEL_DATA = {
 var <portlet:namespace/>FILTER_PANEL_DATA = {
 	"tpl-filter-lowpass": {
 		"img":"cktLPF.png",
+		"title":"LPF",
 		"body": "filter-design-type-1",
 		"option": "",
 		"form": {}
 	},
 	"tpl-filter-highpass": {
 		"img":"cktHPF.png",
+		"title":"HPF",
 		"body": "filter-design-type-1",
 		"option": "",
 		"form": {}
 	},
 	"tpl-filter-bandpass": {
 		"img":"cktBPF.png",
+		"title":"BPF",
 		"body": "filter-design-type-1",
 		"option": "",
 		"form": {}
 	},
 	"tpl-filter-bandstop": {
 		"img":"cktBSF.png",
+		"title":"BSF",
 		"body": "filter-design-type-1",
 		"option": "",
 		"form": {}
@@ -405,7 +521,8 @@ var <portlet:namespace/>LINE_PANEL_DATA = {
 var <portlet:namespace/>templateData;
 
 $(document).ready(function(){
-	Plotly.newPlot('plot-content', null, layout, {scrollZoom: true});
+	
+	Plotly.newPlot('graph-plot-content', null, graphLayout, {scrollZoom: true});
 	
 	$.Mustache.addFromDom();
 	
@@ -511,9 +628,15 @@ function <portlet:namespace/>gridFilterDesign(){
 	$filterDiv.empty().mustache(<portlet:namespace/>filterTemplateData["body"], <portlet:namespace/>filterTemplateData);
 }
 
-function <portlet:namespace/>filterDesignPopup(){
+function <portlet:namespace/>filterDesignPopup(title){
 	var modal = $("#<portlet:namespace/>filter-design-modal");
 	modal.modal({ "backdrop": "static", "keyboard": false });
+	
+	modal.find("span#popupTitle").html(title);
+	modal.find("img#protoImg").attr("src","${contextPath}/images/rfdesigner/popup/proto_"+title+".png");
+	modal.find("img#freqImg").attr("src","${contextPath}/images/rfdesigner/popup/freq_"+title+".png");
+	
+	Plotly.newPlot('popup-plot-content', null, popupLayout, {scrollZoom: true});
 }
 
 function <portlet:namespace/>filterDesignChange(type){
@@ -525,6 +648,21 @@ function <portlet:namespace/>filterDesignChange(type){
 	}
 	
 	$("#<portlet:namespace/>line-calculator-mustache").empty().mustache(<portlet:namespace/>lintTemplateData["body"], <portlet:namespace/>lintTemplateData);
+}
+
+function <portlet:namespace/>viewImage(){
+	// Get the modal
+	$("#imageModal").css("display","block");
+	
+	var modal = $("#<portlet:namespace/>filter-design-modal");
+	modal.modal('toggle');
+}
+
+function <portlet:namespace/>closeImageModal(){
+	$("#imageModal").css("display","none");
+	
+	var modal = $("#<portlet:namespace/>filter-design-modal");
+	modal.modal({ "backdrop": "static", "keyboard": false });
 }
 </script>
 
@@ -685,7 +823,7 @@ function <portlet:namespace/>filterDesignChange(type){
 </form>
 </script>
 <script id="filter-design-type-1" type="text/html">
-<div class="row"><div class="col-md-12"><button class="btn btn-default pull-right" onClick="<portlet:namespace/>filterDesignPopup();"><span class="icon-file">  Analyze Prototype Design Procedure</span<</button></div></div>
+<div class="row"><div class="col-md-12"><button class="btn btn-default pull-right" onClick="<portlet:namespace/>filterDesignPopup('{{title}}');"><span class="icon-file">  Analyze Prototype Design Procedure</span<</button></div></div>
 <div class="row"><div class="col-md-12"><img src="${contextPath}/images/rfdesigner/filter-design/{{img}}" class="img-responsive"></div></div>
 <div class="row"><div class="col-md-12 form-group"><textarea rows="18" class="form-control" style="resize: none;"></textarea></div></div>
 </script>
