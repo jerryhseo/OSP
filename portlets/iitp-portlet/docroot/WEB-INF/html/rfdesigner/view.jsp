@@ -106,7 +106,7 @@
     display: block;
     width: 80%;
     max-width: 700px;
-    max-height: 50%;
+    max-height: 60%;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -124,7 +124,7 @@
 /* The Close Button */
 .rf-designer .image-modal .close {
     position: absolute;
-    top: 15px;
+    top: 60px;
     right: 35px;
     color: #f1f1f1;
     font-size: 40px;
