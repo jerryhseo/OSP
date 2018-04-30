@@ -78,7 +78,8 @@ public List<Map<String, Object>> getVirtualLabScienceAppList (long companyId, lo
 		resultRow.put("userId", CustomUtil.strNull(resultArray[4]));
 		resultRow.put("virtualLabId", CustomUtil.strNull(resultArray[6]));
 		resultRow.put("scienceAppSeqNo", CustomUtil.strNull(resultArray[7]));
-		resultRow.put("groupId", CustomUtil.strNull(resultArray[9]));
+		resultRow.put("appType", CustomUtil.strNull(resultArray[9]));
+		resultRow.put("groupId", CustomUtil.strNull(resultArray[10]));
 		
 		if(classId != 0){
 			resultRow.put("scienceAppCheck", CustomUtil.strNull(resultArray[10]));
@@ -134,7 +135,8 @@ public List<Map<String, Object>> getVirtualLabClassScienceAppList (long companyI
 		resultRow.put("scienceAppVersion", CustomUtil.strNull(resultArray[3]));
 		resultRow.put("userId", CustomUtil.strNull(resultArray[4]));
 		resultRow.put("classId", CustomUtil.strNull(resultArray[8]));
-		resultRow.put("groupId", CustomUtil.strNull(resultArray[10]));
+		resultRow.put("appType", CustomUtil.strNull(resultArray[10]));
+		resultRow.put("groupId", CustomUtil.strNull(resultArray[11]));
 		
 		String scienceAppUniversityNm = EdisonExpndoUtil.getCommonCdSearchFieldValue(CustomUtil.strNull(resultArray[5]), EdisonExpando.CDNM, locale);
 		resultRow.put("scienceAppUniversityNm", scienceAppUniversityNm);

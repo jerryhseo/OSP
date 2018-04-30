@@ -123,26 +123,30 @@ function <portlet:namespace/>dataSearchList() {
 													.attr("width", "9")
 													.attr("height", "12");
 					var runBtnClassName = "run-btn";
-					if(virtualScienceAppManualList[i].fileEntryId != undefined) {
+					
+					// virtualScienceAppManualList[i].fileEntryId --> virtualLabScienceAppList[i].manualId
+					if(virtualLabScienceAppList[i].manualId != undefined) {
 						$("<div/>").addClass("manualdnbtn")
 								   .text("MANUAL ")
 								   .append(manualDownloadIcon)
-								   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualScienceAppManualList[i].fileEntryId + "');")
+								   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualLabScienceAppList[i].manualId + "');")
 								   .css("cursor", "pointer")
 								   .appendTo(scienceappUl);
 					} else {
 						runBtnClassName += " no-manual";
 						$("<div/>").addClass("manualdnbtn")
-						   .text("NO MANUAL")
-						   .appendTo(scienceappUl);
+								   .text("NO MANUAL")
+								   .appendTo(scienceappUl);
 					}
 					/* TODO Run button 만들기 */
 					
-					$("<div/>").addClass("manualdnbtn " + runBtnClassName)
+					if(virtualLabScienceAppList[i].appType.toUpperCase() == 'SOLVER'){
+						$("<div/>").addClass("manualdnbtn " + runBtnClassName)
 							   .attr("onclick", "<portlet:namespace/>moveWorkBench('"+virtualLabScienceAppList[i].scienceAppId+"');")
 							   .text("RUN")
 							   .append($("<i/>").addClass("icon-play-circle").css("margin-left","3px"))
 							   .appendTo(scienceappUl);
+					}
 					
 					scienceappUl.appendTo(scienceApp);
 					scienceApp.appendTo(scienceAppList);

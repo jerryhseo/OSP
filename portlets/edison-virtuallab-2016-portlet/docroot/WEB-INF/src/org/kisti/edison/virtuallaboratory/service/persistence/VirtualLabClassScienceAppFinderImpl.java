@@ -48,6 +48,7 @@ public class VirtualLabClassScienceAppFinderImpl extends BasePersistenceImpl<Vir
 			query.addScalar("scienceAppSeqNo", Type.LONG);
 			query.addScalar("virtualLabId", Type.LONG);
 			query.addScalar("manualId", Type.STRING);
+			query.addScalar("appType", Type.STRING);
 			query.addScalar("groupId", Type.LONG);
 			if(classId != 0){
 				query.addScalar("scienceAppCheck", Type.INTEGER);
@@ -93,6 +94,7 @@ public class VirtualLabClassScienceAppFinderImpl extends BasePersistenceImpl<Vir
 			query.addScalar("scienceAppClassSeqNo", Type.LONG);
 			query.addScalar("classId", Type.LONG);
 			query.addScalar("manualId", Type.STRING);
+			query.addScalar("appType", Type.STRING);
 			query.addScalar("groupId", Type.LONG);
 			return (List<Object[]>) query.list();
 		}  catch (Exception e) {
