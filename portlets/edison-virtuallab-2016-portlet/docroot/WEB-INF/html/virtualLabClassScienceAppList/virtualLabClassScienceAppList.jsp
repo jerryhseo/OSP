@@ -141,11 +141,23 @@ function <portlet:namespace/>dataSearchList() {
 					/* TODO Run button 만들기 */
 					
 					if(virtualLabScienceAppList[i].appType.toUpperCase() == 'SOLVER'){
-						$("<div/>").addClass("manualdnbtn " + runBtnClassName)
-							   .attr("onclick", "<portlet:namespace/>moveWorkBench('"+virtualLabScienceAppList[i].scienceAppId+"');")
-							   .text("RUN")
-							   .append($("<i/>").addClass("icon-play-circle").css("margin-left","3px"))
-							   .appendTo(scienceappUl);
+						if(virtualLabScienceAppList[i].openLevel.toUpperCase() == 'DOWNLOAD_ONLY' && virtualScienceAppManualList[i].fileEntryId != undefined){
+							$("<div/>").addClass("manualdnbtn " + runBtnClassName)
+									   .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>fileDownload('" + virtualScienceAppManualList[i].fileEntryId + "');")
+									   .text("DOWNLOAD")
+									   .append($("<img/>").attr("src", "${contextPath}/images/download_icon.png")
+												.attr("width", "9")
+												.attr("height", "12")
+												.css("margin-left", "2px"))
+									   /* .append($("<i/>").addClass("icon-download-alt").css("margin-left","3px")) */
+									   .appendTo(scienceappUl);
+						} else {
+							$("<div/>").addClass("manualdnbtn " + runBtnClassName)
+								   .attr("onclick", "<portlet:namespace/>moveWorkBench('"+virtualLabScienceAppList[i].scienceAppId+"');")
+								   .text("RUN")
+								   .append($("<i/>").addClass("icon-play-circle").css("margin-left","3px"))
+								   .appendTo(scienceappUl);
+						}
 					}
 					
 					scienceappUl.appendTo(scienceApp);
