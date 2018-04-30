@@ -214,3 +214,23 @@
 	background-color: #000 !important;
 	text-decoration: none !important;
 }
+
+.btn_delete {
+	width: 128px;
+	height: 41px;
+	text-align: center;
+	line-height: 3.1em;
+	background-color: #666 !important;
+	color: #ddd !important;
+	display: block;
+	font-weight: 600;
+}
+
+.btn_delete a:link {
+	color: #ddd;
+}
+
+.btn_delete:hover {
+	background-color: #000 !important;
+	text-decoration: none !important;
+}

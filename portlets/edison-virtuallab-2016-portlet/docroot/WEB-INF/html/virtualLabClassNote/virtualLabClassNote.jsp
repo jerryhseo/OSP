@@ -23,7 +23,7 @@
 </liferay-portlet:renderURL>
 
 <style type="text/css">
-	.btn_dn, .btn_view{cursor: pointer;}
+	.btn_dn, .btn_view, .btn_delete{cursor: pointer;}
 	.<portlet:namespace/>isMoreBtn{
 		cursor: pointer;
 		text-decoration: none;
@@ -67,7 +67,7 @@ function <portlet:namespace/>dataSearchList() {
 		"<portlet:namespace/>groupId" : "${groupId}"
 	};
 	
-	var admin = "${role}";
+	var role = "${role}";
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=virtualLabClassNoteListURL%>",
@@ -99,19 +99,48 @@ function <portlet:namespace/>dataSearchList() {
 							   .appendTo(classNoteFileList);
 					
 					var fileBtnBox = $("<div/>").addClass("btnbox");
-					if(isContent == "false"){
-						$("<span/>").addClass("btn_dn")
-								 .attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
-								 .css("height", "80px").css("padding-top", "15%")
-								 .text("DOWNLOAD")
-								 .appendTo(fileBtnBox);
-					}
-					if(isContent == "true"){
-						$("<span/>").addClass("btn_view")
-									.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
-									.css("height", "80px").css("padding-top", "15%")
-									.text("VIEW")
-									.appendTo(fileBtnBox);
+					
+					if(role == "admin"){
+						if(isContent == "false"){
+							$("<span/>").addClass("btn_dn")
+										.attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
+										.css("height", "40px")
+										.text("DOWNLOAD")
+										.appendTo(fileBtnBox);
+							$("<span/>").addClass("btn_delete")
+										.attr("onclick", "<portlet:namespace/>classNoteDelete('"+getVirtualLabClassNoteList[i].classNoteSeq+"')")
+										.css("height", "40px")
+										.text("DELETE")
+										.appendTo(fileBtnBox);
+							
+						}
+						if(isContent == "true"){
+							$("<span/>").addClass("btn_view")
+										.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
+										.css("height", "40px")
+										.text("VIEW")
+										.appendTo(fileBtnBox);
+							$("<span/>").addClass("btn_delete")
+										.attr("onclick", "<portlet:namespace/>classNoteDelete('"+getVirtualLabClassNoteList[i].classNoteSeq+"')")
+										.css("height", "40px")
+										.text("DELETE")
+										.appendTo(fileBtnBox);
+						}						
+					} else if(role == "member"){
+						if(isContent == "false"){
+							$("<span/>").addClass("btn_dn")
+									 .attr("onclick", "<portlet:namespace/>fileDownload('"+getVirtualLabClassNoteList[i].fileEntryId+"')")
+									 .css("height", "80px").css("padding-top", "15%")
+									 .text("DOWNLOAD")
+									 .appendTo(fileBtnBox);
+						}
+						if(isContent == "true"){
+							$("<span/>").addClass("btn_view")
+										.attr("onclick", "<portlet:namespace/>moveContentDetail('"+getVirtualLabClassNoteList[i].contentSeq+"', '0');")
+										.css("height", "80px").css("padding-top", "15%")
+										.text("VIEW")
+										.appendTo(fileBtnBox);
+						}
 					}
 					
 					classNoteFileList.append(fileBtnBox);
