@@ -73,6 +73,10 @@
 		margin-left: 10px;
 	}
 	
+	#solverTypeBody .siteClass:hover , .onClass2{
+		background-color:#f2efeb;
+	}
+	
 	#advanced-wrap {height: 72px; margin: 0 auto;}
 	#advanced-wrap .contarrleft { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
 	#advanced-wrap .contarrright { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
