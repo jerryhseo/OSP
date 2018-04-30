@@ -1060,7 +1060,7 @@ function <portlet:namespace/>dataSearchList(p_curPage){
 					$tdRow = $("<td/>").css("word-break", "break-all")
 									   .css("text-align","left")
 									   .text(dataList[i].title)
-									   .attr("onclick","javascript:detailView('goView','"+dataList[i].scienceAppId+"', '"+currentTabGroupId+"')")
+									   .attr("onclick", "<portlet:namespace/>moveContentDetail('"+dataList[i].contentSeq+"', '"+dataList[i].contentDiv+"')")
 									   .attr("colspan", "3")
 									   .css("cursor", "pointer")
 					$tdRow.appendTo($vRow);
