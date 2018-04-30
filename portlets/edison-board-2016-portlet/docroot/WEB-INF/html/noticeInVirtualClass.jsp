@@ -6,6 +6,10 @@
 	<liferay-portlet:param name="customId" value="${customId}" />
 </liferay-portlet:resourceURL>
 
+<liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false">
+	<liferay-portlet:param name="boardGroupId" value="${boardGroupId}" />
+</liferay-portlet:resourceURL>
+
 <style>
 .conwrap2left {
 	width: 100%;
@@ -367,7 +371,7 @@
 					<c:forEach items="${model.fileList}" var="fileModel">
 						<div style="cursor:pointer" onclick="<portlet:namespace/>fileDownload('${fileModel.fileEntryId }')" class="onMouseHover">
 							${fileModel.fileTitle }
-							<img src="<%=themeDisplay.getPathThemeImages() %>/custom/portlet/fileicon2.png" width="16" height="16" />
+							<i class="icon-save"></i>
 						</div>
 					</c:forEach>
 				</div>
@@ -420,5 +424,9 @@
 		
 		popupCreate("${popState}");
 		
+		
+		function <portlet:namespace/>fileDownload(p_fileEntryId){
+			location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
+		}
 	</script>		
 <%--### Main Board List Start ######################################################################################################################  --%>
