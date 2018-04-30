@@ -306,28 +306,12 @@ public class CategoryContentListController{
 				}
 			}
 			
-			if(tabViewYn.equals("Y")){
-				long[] categoryIds = new long[aCategoryList.size()];
-				for(int i=0; i<aCategoryList.size(); i++){
-					categoryIds[i] = aCategoryList.get(i).getCategoryId();
-				}
-				dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, start, searchLine, locale, true, true);
-				totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, locale.toString(), true, true);
-			} else {
-				if(!isAdmin){
-					long roleId = 0;
-					if(listTabValue.equals("owner_content")){ // owner 인것
-						roleId = ownerRole.getRoleId();
-					}else if(listTabValue.equals("manager_content")){ // manager 인것
-						roleId = managerRole.getRoleId();
-					}
-					
-					dataList = ContentLocalServiceUtil.retrieveListUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, start, searchLine, locale, themeDisplay.getUserId(), roleId);
-					totalCount = ContentLocalServiceUtil.retrieveCountUserContent(companyGroupId, parentGroupId, groupId,
-							searchText, locale.toString(), themeDisplay.getUserId(), roleId);
-				}
+			long[] categoryIds = new long[aCategoryList.size()];
+			for(int i=0; i<aCategoryList.size(); i++){
+				categoryIds[i] = aCategoryList.get(i).getCategoryId();
 			}
+			dataList = ContentLocalServiceUtil.retrieveListContent(categoryIds, searchText, null, start, searchLine, locale, true, true);
+			totalCount = ContentLocalServiceUtil.retrieveCountContent(categoryIds, searchText, null, locale.toString(), true, true);
 			
 			String portletNameSpace = themeDisplay.getPortletDisplay().getNamespace();
 			String paging = PagingUtil.getPaging(request.getContextPath(), portletNameSpace
