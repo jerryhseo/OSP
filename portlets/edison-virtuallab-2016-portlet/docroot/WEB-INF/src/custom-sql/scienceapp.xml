@@ -12,6 +12,7 @@
 				B.scienceAppSeqNo,
 				B.virtualLabId,
 				A.manualId,
+				A.appType,
 				A.groupId
 				<isNotEmpty property="classId">
 				,
@@ -53,6 +54,7 @@
 				C.scienceAppClassSeqNo,
 				C.classId,
 				A.manualId,
+				A.appType,
 				A.groupId
 			FROM
 				EDAPP_ScienceApp A,
