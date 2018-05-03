@@ -177,7 +177,7 @@ if(selUser != null){
 
 		<%@ include file="/html/portlet/users_admin/user/details_user_name.jspf" %>
 		
-		<liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%=(selUser != null) ? selUser.getUserId() : 0%>" editable="<%= true %>" label="<%= false %>" name="universityField"/>
+		<liferay-ui:custom-attribute className="<%= User.class.getName() %>" classPK="<%=(selUser != null) ? selUser.getUserId() : 0%>" editable="<%= true %>" label="<%= false %>" name="universityField" />
 		<b><liferay-ui:message key="edison-create-account-field-title-university" /></b><br>
 		<input type="text" id="com_cd_nm" id="com_cd_nm" name="com_cd_nm" size="50" type="text" value="<%=universityNm %>" readonly="readonly"/>		
 		<input type="button" onclick="syscommoncdPopup()" value='<liferay-ui:message key="edison-button-search"/>' style="height: 30px;margin-bottom: 6px;"/>	
@@ -253,7 +253,7 @@ if(selUser != null){
 </div>
 <script type="text/javascript">
 	$("input[name*=universityField]").css("display","none");
-	
+
 	function syscommoncdPopup(){
 		var URL = "<%=syscommoncdURL%>";
 		w = 850;
