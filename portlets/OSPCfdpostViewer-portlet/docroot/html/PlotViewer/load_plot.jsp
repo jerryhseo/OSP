@@ -182,7 +182,7 @@
         });
       }
       for (var i = 0; i < readFileList.length; i++) {
-        $('#'+readFileList[i].tabID).click( function() {
+        $(readFileList[i].tabID).click( function() {
           var clickTagNum =this.id.slice(-1);
           subTapControll(clickTagNum);
           resizeLayout(clickTagNum);
