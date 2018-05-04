@@ -17,6 +17,7 @@
 			<portlet id="edison-migration-datatype" />
 			<portlet id="edison-migration-port-app-id" />
 			<portlet id="edison-convertor-content-file-name" />
+			<portlet id="edison-migration-job-data" />
 		</category>
 	</category>
 </display>  
