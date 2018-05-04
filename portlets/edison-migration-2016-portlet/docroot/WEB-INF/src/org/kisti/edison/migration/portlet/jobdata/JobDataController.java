@@ -190,7 +190,7 @@ public class JobDataController {
 						returnOBJ.put("order_", i++);
 						returnArray.put(returnOBJ);
 					}else if(portType.equals("File")){
-						String portFileId = portJson.getJSONObject(portNameStr).getString("fileId");
+						String portFileId = orignJsonOBJ.getJSONObject(portNameStr).getString("fileId");
 						
 						if(portFileId.equals("SAMPLE")){
 							JSONObject returnOBJ = JSONFactoryUtil.createJSONObject();
