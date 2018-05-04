@@ -84,9 +84,16 @@ public class JobDataController {
 				for(SimulationJob simulationJob:jobs){
 					if(simulationJob.getJobSubmit()){
 						JSONObject returnObject = JSONFactoryUtil.createJSONObject();
-						returnObject.put("jobUuid", simulationJob.getJobUuid());
-						returnObject.put("appId", simulation.getScienceAppId());
-						returnJobsUuids.put(returnObject);
+						
+						SimulationJobData simulationJobData =  SimulationJobDataLocalServiceUtil.getSimulationJobData(simulationJob.getJobUuid());
+						
+						try {
+							JSONArray optionArr = JSONFactoryUtil.createJSONArray(simulationJobData.getJobData());
+						} catch (JSONException e) {
+							returnObject.put("jobUuid", simulationJob.getJobUuid());
+							returnObject.put("appId", simulation.getScienceAppId());
+							returnJobsUuids.put(returnObject);
+						}
 					}
 				}
 			}

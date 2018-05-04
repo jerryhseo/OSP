@@ -38,7 +38,7 @@ function search(){
 			$jobs = $("#jobs");
 			$jobs.empty();
 			for(var i = 0; i < result.length; i++) {
-				$panel = $("<div/>").addClass("panel panel-default").appendTo($jobs);
+				$panel = $("<div/>").attr("id",result[i].jobUuid).addClass("panel panel-default").appendTo($jobs);
 				$("<div/>").addClass("panel-body").css("cursor","pointer")
 				.attr("onclick","convertor('"+result[i].jobUuid+"','"+result[i].appId+"')")
 				.html(cutStr(result[i].jobUuid,15)).appendTo($panel);
@@ -58,6 +58,8 @@ function convertor(jobUuid,appId){
 		dataType: 'json',
 		data :  {"<portlet:namespace/>jobUuid" : jobUuid,"<portlet:namespace/>appId" : appId},
 		success: function(result) {
+			$(".panel-primary").removeClass("panel-primary");
+			$("#"+jobUuid).addClass("panel-primary");
 			$("#<portlet:namespace/>oldJson").empty();
 			$("#<portlet:namespace/>oldJson").html(JSON.stringify(JSON.parse(result.oldJSON), undefined, 2));
 			
