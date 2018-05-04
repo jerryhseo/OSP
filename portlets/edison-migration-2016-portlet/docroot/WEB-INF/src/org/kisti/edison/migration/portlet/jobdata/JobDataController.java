@@ -177,7 +177,6 @@ public class JobDataController {
 				//APP 정보 조회
 				ScienceAppInputPorts appInputPorts =  ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPorts(appId);
 				net.sf.json.JSONObject portJson = net.sf.json.JSONObject.fromObject(appInputPorts.getInputPorts());
-				net.sf.json.JSONObject portSampleJson = net.sf.json.JSONObject.fromObject(CustomUtil.strNull(appInputPorts.getInputPortsSampleFile(),"{}"));
 				
 				Set<String> set = portJson.keySet();
 				int i=1;
@@ -191,23 +190,38 @@ public class JobDataController {
 						returnOBJ.put("order_", i++);
 						returnArray.put(returnOBJ);
 					}else if(portType.equals("File")){
-						JSONObject returnOBJ = JSONFactoryUtil.createJSONObject();
-						returnOBJ.put("type_", "dlEntryId");
-						returnOBJ.put("dirty_", true);
-						String fileId = "";
-						if(portJson.getJSONObject(portNameStr).get("sample")==null){
-							net.sf.json.JSONObject dataTypeData = portJson.getJSONObject(portNameStr).getJSONObject("dataType_");
-							String dtName = dataTypeData.getString("name");
-							String dtVersion = dataTypeData.getString("version");
-							DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dtName, dtVersion);
-							fileId = dataType.getSamplePath();
+						String portFileId = portJson.getJSONObject(portNameStr).getString("fileId");
+						
+						if(portFileId.equals("SAMPLE")){
+							JSONObject returnOBJ = JSONFactoryUtil.createJSONObject();
+							returnOBJ.put("type_", "dlEntryId");
+							returnOBJ.put("dirty_", true);
+							String fileId = "";
+							if(portJson.getJSONObject(portNameStr).get("sample")==null){
+								net.sf.json.JSONObject dataTypeData = portJson.getJSONObject(portNameStr).getJSONObject("dataType_");
+								String dtName = dataTypeData.getString("name");
+								String dtVersion = dataTypeData.getString("version");
+								DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(dtName, dtVersion);
+								fileId = dataType.getSamplePath();
+							}else{
+								fileId = portJson.getJSONObject(portNameStr).getString("sample_");
+							}
+							returnOBJ.put("id_", fileId);
+							returnOBJ.put("portName_", portNameStr);
+							returnOBJ.put("order_", i++);
+							returnArray.put(returnOBJ);
 						}else{
-							fileId = portJson.getJSONObject(portNameStr).getString("sample_");
+							JSONObject returnOBJ = JSONFactoryUtil.createJSONObject();
+							returnOBJ.put("type_", "file");
+							returnOBJ.put("parent_", "FILE_PARENT");
+							returnOBJ.put("dirty_", false);
+							returnOBJ.put("relative_", true);
+							returnOBJ.put("portName_", portNameStr);
+							returnOBJ.put("name_", "FILE_NAME");
+							returnOBJ.put("order_", i++);
+							returnArray.put(returnOBJ);
 						}
-						returnOBJ.put("id_", fileId);
-						returnOBJ.put("portName_", portNameStr);
-						returnOBJ.put("order_", i++);
-						returnArray.put(returnOBJ);
+						
 					}
 				}
 				
