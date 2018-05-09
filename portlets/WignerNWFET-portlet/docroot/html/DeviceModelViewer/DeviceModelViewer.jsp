@@ -1,5 +1,5 @@
 <!DOCTYPE script PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html style="height:100%;">
+<html style="height:90%;">
 	<head>
 		<script src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
 		<script src="<%=request.getContextPath()%>/js/three.js"></script>
@@ -228,14 +228,14 @@ function initialize() {
 	
 </script>
 		
-	</head>
-	<body style="height:100%;">
-		<div class="wrapper" >
-		<b>Device model</b>
-		</div>
-		
-		<div style="width:100%;height:100%" id='WebGL-output'>
-		</div>
-	</body>
+</head>
+<body style="height:100%;">
+	<div class="wrapper" >
+	<b>Device model</b>
+	</div>
+	
+	<div style="width:100%;height:100%" id='WebGL-output'>
+	</div>
+</body>
 
 </html>

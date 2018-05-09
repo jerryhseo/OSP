@@ -10,7 +10,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/wwfeditor/view.jsp</value>
+			<value>/html/WWFEditor/wrapper.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -44,7 +44,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/devicemodelviwer/view.jsp</value>
+			<value>/html/DeviceModelViewer/wrapper.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -78,7 +78,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/csvplotter/view.jsp</value>
+			<value>/html/CSVPlotter/wrapper.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

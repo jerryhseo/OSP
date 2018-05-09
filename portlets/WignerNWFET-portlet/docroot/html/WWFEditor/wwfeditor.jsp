@@ -79,6 +79,7 @@ function initialize(){
 	$('#Text4').val(0.02);
 	
 	fireOnChangeEvent();
+	Read_Parameters_for_Draw_Device();
 }
 
 function loadParametersDrawDevice( data ){

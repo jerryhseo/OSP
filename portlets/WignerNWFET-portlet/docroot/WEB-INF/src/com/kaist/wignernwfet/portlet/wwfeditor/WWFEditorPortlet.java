@@ -1,6 +1,7 @@
 package com.kaist.wignernwfet.portlet.wwfeditor;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -39,7 +40,10 @@ public class WWFEditorPortlet extends MVCPortlet {
     @Override
     public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
         throws IOException, PortletException{
-        String filePath = ParamUtil.getString(resourceRequest, "filePath");
+    	
+    	String parentPath = ParamUtil.getString(resourceRequest, "parentPath", "");
+    	String fileName = ParamUtil.getString(resourceRequest, "fileName", "");
+        String filePath = Paths.get(parentPath, fileName).toString();
 
         String command = ParamUtil.getString(resourceRequest, "command");
         String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_JOBS.toString());
