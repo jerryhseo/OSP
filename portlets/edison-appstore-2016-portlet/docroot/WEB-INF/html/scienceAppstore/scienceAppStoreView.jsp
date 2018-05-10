@@ -35,13 +35,13 @@
 <liferay-portlet:resourceURL var="deleteFavoriteAppURL" id="deleteFavoriteApp" copyCurrentRenderParameters="false" />
 <liferay-portlet:resourceURL var="scienceAppCategoryURL" id="scienceAppCategory" copyCurrentRenderParameters="false" />
 
+<liferay-portlet:renderURL var="swStatisticsURL" copyCurrentRenderParameters="false" plid="${scienceAppExecPlid}" 
+  portletName="edisonstatisticsappexec_WAR_edisonsimulationportlet">
+</liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
-	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
-	<liferay-portlet:param name="classId" value="${classId}"/>
-	<liferay-portlet:param name="customId" value="${customId}"/>
-	<liferay-portlet:param name="jobUuid" value="0"/>
-	<liferay-portlet:param name="testYn" value="false"/>
+<liferay-portlet:renderURL var="workbenchURL" copyCurrentRenderParameters="false" plid="${workBenchPlid}" 
+  portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet">
+    <liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
 
@@ -350,7 +350,7 @@
 					</c:if>
 					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel ne downloadOnly}">
-						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>goWorkbench('${params.solverId}');"/>
+						<img src="${contextPath}/images/scienceappstorelist/btn_run.jpg" width="75" height="25" style="cursor:pointer;" onClick="<portlet:namespace/>moveWorkbench('${params.solverId}');"/>
 					</c:if>
 					
 					<c:if test="${solver.appType eq 'Solver' and workBenchPlid ne 0 and isSignedIn and solver.openLevel eq downloadOnly}">
@@ -695,8 +695,13 @@ function <portlet:namespace/>historyBack(){
 }
 
 
-function <portlet:namespace/>goWorkbench(targetScienceAppId){
-	AUI().use("liferay-portlet-url", function(a) {
+function <portlet:namespace/>moveWorkbench(targetScienceAppId){
+	
+	var URL = "<%=workbenchURL%>";
+	URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+	window.open(URL);
+	
+	<%-- AUI().use("liferay-portlet-url", function(a) {
 		var portletURL = Liferay.PortletURL.createRenderURL();
 		portletURL.setPortletMode("view");
 		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
@@ -709,45 +714,28 @@ function <portlet:namespace/>goWorkbench(targetScienceAppId){
 		portletURL.setParameter("redirectURL", "${redirectURL}");
 		window.open(portletURL);
 		//window.location.href = portletURL;
-	});
+	}); --%>
 }
 
 </script>
 
 <aui:script>
-/* function <portlet:namespace/>moveWorkBench(targetScienceAppId) {
-	var URL = "<%=workbenchURL%>";
-	URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-	window.open(URL);
-	//location.href= URL;
-} */
-
-function <portlet:namespace/>moveWorkBench(targetScienceAppId){
-	AUI().use("liferay-portlet-url", function(a) {
-		var portletURL = Liferay.PortletURL.createRenderURL();
-		portletURL.setPortletMode("view");
-		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
-		portletURL.setPlid("${workBenchPlid}");
-		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
-		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
-		portletURL.setParameter("scienceAppId", targetScienceAppId);
-		
-		portletURL.setParameter("redirectName", "My Project");
-		portletURL.setParameter("redirectURL", "${redirectURL}");
-		window.open(portletURL);
-		//window.location.href = portletURL;
-	});
-}
 
 function <portlet:namespace/>moveScienceAppExecStatistice(solverName, groupId) {
-	AUI().use("liferay-portlet-url", function(a) {
+	
+	var URL = "<%=swStatisticsURL%>";
+	URL += "&_edisonstatisticsappexec_WAR_edisonsimulationportlet_scienceAppName="+solverName;
+	URL += "&_edisonstatisticsappexec_WAR_edisonsimulationportlet_appExecGroupId="+groupId;
+	window.open(URL);
+	
+	/* AUI().use("liferay-portlet-url", function(a) {
 		var portletURL = Liferay.PortletURL.createRenderURL();
 		portletURL.setPlid("${scienceAppExecPlid}");  
 		portletURL.setPortletId("edisonstatisticsappexec_WAR_edisonsimulationportlet");
 		portletURL.setParameter("scienceAppName", solverName);
 		portletURL.setParameter("appExecGroupId", groupId);
 		window.open(portletURL.toString(), '_blank');
-	});
+	}); */
 }
 
 function <portlet:namespace/>runAnalizer() {
