@@ -184,7 +184,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( myId !== e.targetPortlet )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
+		console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
 			
 		<portlet:namespace/>connector = e.portletId;
 		if( e.action )
@@ -213,7 +213,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( myId !== e.targetPortlet )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
+		console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
 	}
 );
 
@@ -223,7 +223,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet !== myId )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_RESPONSE_DATA: ['+e.portletId+']', e);
+		console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_RESPONSE_DATA: ['+e.portletId+']', e);
 		
 		<portlet:namespace/>initialize( e.data );
 	
@@ -238,7 +238,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( myId !== e.targetPortlet )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_RESPONSE_DATA: ['+e.portletId+']', e);
+		console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_RESPONSE_DATA: ['+e.portletId+']', e);
 			
 		if( e.portletId === <portlet:namespace/>fileExplorerId ){
 			var inputData = e.data;
@@ -261,7 +261,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( myId !== e.targetPortlet )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_REFRESH_OUTPUT_VIEW: ['+e.portletId+']', e);
+		console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_REFRESH_OUTPUT_VIEW: ['+e.portletId+']', e);
 		var eventData = {
 				portletId: '<%=portletDisplay.getId()%>',
 				targetPortlet: <portlet:namespace/>connector
@@ -277,7 +277,7 @@ Liferay.on(
 			var myId = '<%=portletDisplay.getId()%>';
 			if( myId !== e.targetPortlet )	return;
 			
-			console.log(e.targetPortlet+'>> OSP_INITIALIZE: ['+e.portletId+']', e);
+			console.log('[CSVPlotter]'+e.targetPortlet+'>> OSP_INITIALIZE: ['+e.portletId+']', e);
 			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/CSVPlotter/csvplotter.jsp');
 			if( $.isEmptyObject(<portlet:namespace/>initData) )	return;
    			
@@ -360,7 +360,7 @@ function <portlet:namespace/>getFirstFileName( inputData ){
 			<portlet:namespace/>loadDeviceModelViewer( inputData );
 		},
 		error:function(data,e){
-			console.log('AJAX ERROR getFirstFileName()', inputData);
+			console.log('[CSVPlotter]'+'AJAX ERROR getFirstFileName()', inputData);
 		}
 	});
 }
@@ -444,7 +444,7 @@ function <portlet:namespace/>initialize( inputData ){
 			case 'url':
 				break;
 			default:
-				console.log('OSPProteinViewer: Un-expected type: ' + <portlet:namespace/>initData.type_);
+				console.log('[CSVPlotter]'+'OSPProteinViewer: Un-expected type: ' + <portlet:namespace/>initData.type_);
 				<portlet:namespace/>initData = {};
 				<portlet:namespace/>initData.parent_ = '';
 				<portlet:namespace/>initData.name_ = '';

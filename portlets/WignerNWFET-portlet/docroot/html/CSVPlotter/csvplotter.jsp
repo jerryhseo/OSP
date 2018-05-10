@@ -24,7 +24,7 @@
            }
                                 
            function setNamespace( ns ){
-           	console.log( ' Set Namespace: '+ns);
+           	console.log('[CSVPlotter]iframe'+ ' Set Namespace: '+ns);
            	namespace = ns;
            }
            

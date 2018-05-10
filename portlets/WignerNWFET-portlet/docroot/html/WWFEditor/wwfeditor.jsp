@@ -9,7 +9,7 @@ var modelViewer;
 var IV_mod=0;
 
 function setNamespace( ns ){
-	console.log( '[wwfeditor.jsp] Set Namespace: '+ns);
+	console.log( '[WWFEditor]'+'[wwfeditor.jsp] Set Namespace: '+ns);
 	namespace = ns;
 }
 
@@ -50,7 +50,7 @@ function Read_Parameters_for_Draw_Device(){
 			Text4  : $('#Text4').val()
 		};	
 
-	console.log( namespace+'fireLocalWignerFETEvent' );	
+	console.log('[WWFEditor]'+ namespace+'fireLocalWignerFETEvent' );	
 	window.parent[namespace+'fireLocalWignerFETEvent'](data);
 } 
 
@@ -138,7 +138,7 @@ function loadParametersDrawDevice( data ){
 		    $('#Text4').val( value );
 		    break;
 		default:
-		    console.log('Un-recognizable parameter: '+key);
+		    console.log('[WWFEditor]'+'Un-recognizable parameter: '+key);
 			return;
 		}
 	}
@@ -181,7 +181,7 @@ function fireOnChangeEvent(){
 		   	    		                 type_: 'fileContent',
 		   	    		                 context_: getParametersFromDrawDevice()
 		   	    		};
-		   	    		console.log( 'fireOnChangeEvent', inputData );
+		   	    		console.log( '[WWFEditor]'+'fireOnChangeEvent', inputData );
 		   	    		
 		   	    		window.parent[namespace+'fireOnChangeEvent'](inputData);
 		   	    		

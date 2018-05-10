@@ -121,7 +121,7 @@ function initialize() {
 	//----------------------------------------------------------------------------------------------------------------    
 	function Draw_Device(data) 
 	{
-		console.log( 'Draw_Device', data );
+		console.log('[DeviceModelViewer.jsp]+ 'Draw_Device', data );
 			
 		var ReR=1;   
 		

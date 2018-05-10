@@ -57,7 +57,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet !== myId )	return;
 	
-		console.log(myId+' >> OSP_HANDSHAKE: ['+e.portletId+']', e);
+		console.log('[WWFEditor wrapper]'+myId+' >> OSP_HANDSHAKE: ['+e.portletId+']', e);
 		
 		<portlet:namespace/>connector = e.portletId;		
 				
@@ -85,7 +85,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet !== myId )	return;
 	
-		console.log(myId+' >> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
+		console.log('[WWFEditor wrapper]'+myId+' >> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
 	}
 );
 
@@ -112,7 +112,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet !== myId )	return;
 	
-		console.log(myId+' >> OSP_LOAD_DATA: ['+e.portletId+']', e);
+		console.log('[WWFEditor wrapper]'+myId+' >> OSP_LOAD_DATA: ['+e.portletId+']', e);
 		
 		var <portlet:namespace/>initData = e.data;
 		if( ! <portlet:namespace/>initData.repositoryType_){
@@ -141,7 +141,7 @@ function <portlet:namespace/>loadWWFEditor( inputData ){
 			alert.log('Un-supported data type: '+inputData.type() );
 			break;
 		default:
-			console.log('InputData not available: ', inputData );
+			console.log('[WWFEditor wrapper]'+'InputData not available: ', inputData );
 			break;
 	}
 }
@@ -167,8 +167,8 @@ function <portlet:namespace/>readFileContent( inputData ){
 			<portlet:namespace/>loadParametersDrawDevice(result.context_);
 		},
 		error:function(result,e){
-			console.log(result);
-			console.log('AJAX ERROR-->', inputData);
+			console.log('[WWFEditor wrapper]'+result);
+			console.log('[WWFEditor wrapper]'+'AJAX ERROR-->', inputData);
 		}
 	});
 }
@@ -200,7 +200,7 @@ Liferay.on(
 		
 		if( e.targetPortlet !== myId )	return;
 		
-		console.log(myId+' >> OSP_REQUEST_DATA: ['+e.portletId+']', e);
+		console.log('[WWFEditor wrapper]'+myId+' >> OSP_REQUEST_DATA: ['+e.portletId+']', e);
 
 		var content = $('#<portlet:namespace/>canvas').prop('contentWindow').getParametersFromDrawDevice();
 		
@@ -227,7 +227,7 @@ Liferay.on(
 		
 		if( e.targetPortlet !== myId )	return;
 		
-		console.log(myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
+		console.log('[WWFEditor wrapper]'+myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
 		
 		<portlet:namespace/>initialize();
 	}
@@ -252,7 +252,7 @@ function <portlet:namespace/>initialize(){
 }
 
 function <portlet:namespace/>fireLocalWignerFETEvent( data ){
-	console.log('fireLocalWignerFETEvent', data );
+	console.log('[WWFEditor wrapper]'+'fireLocalWignerFETEvent', data );
 	
 	//alert(data.input1);
 	var eventData = {
@@ -266,7 +266,7 @@ function <portlet:namespace/>fireLocalWignerFETEvent( data ){
 }
 
 function <portlet:namespace/>fireOnChangeEvent( data ){
-	console.log('fireOnChangeEvent', data );
+	console.log('[WWFEditor wrapper]'+'fireOnChangeEvent', data );
 	var inputData = {};
 	inputData.type_ = 'fileContent';
 	

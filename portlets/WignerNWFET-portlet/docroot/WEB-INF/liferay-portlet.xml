@@ -2,33 +2,29 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
-	
-	<portlet>
-		<portlet-name>WWFEditor</portlet-name>
-		<icon>/icon.png</icon>
-		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<header-portlet-css>/css/style.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
-		<css-class-wrapper>wwfeditor-portlet</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
 	<portlet>
 		<portlet-name>DeviceModel</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<header-portlet-javascript>/js/three.js</header-portlet-javascript>
-		<header-portlet-javascript>	/js/ThreeBSP.js	</header-portlet-javascript>
-		<header-portlet-javascript>	/js/TrackballControls.js </header-portlet-javascript>	
+        <header-portlet-javascript>/js/three.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/ThreeBSP.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/TrackballControls.js</header-portlet-javascript>
 		<footer-portlet-javascript>
 			/js/main.js
 		</footer-portlet-javascript>
 		<css-class-wrapper>devicemodel-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+    <portlet>
+        <portlet-name>WWFEditor</portlet-name>
+        <icon>/icon.png</icon>
+        <instanceable>true</instanceable>
+        <header-portlet-css>/css/main.css</header-portlet-css>
+        <header-portlet-css>/css/style.css</header-portlet-css>
+        <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+        <css-class-wrapper>wwfeditor-portlet</css-class-wrapper>
+    </portlet>
 	<portlet>
 		<portlet-name>CSVPlotter</portlet-name>
 		<icon>/icon.png</icon>
