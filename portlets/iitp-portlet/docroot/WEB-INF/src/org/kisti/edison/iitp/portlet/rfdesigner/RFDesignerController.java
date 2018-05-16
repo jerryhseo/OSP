@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RFDesignerController{
 	@RequestMapping
 	public String view(RenderRequest request, RenderResponse response, ModelMap model){
-	
 	return "view";
 	}
 }

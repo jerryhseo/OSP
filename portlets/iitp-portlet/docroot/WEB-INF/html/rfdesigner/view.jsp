@@ -3,11 +3,19 @@
 
 <!-- Plotly libs -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--Numeric JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<!--math JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.2.2/math.min.js"></script>
+<!--bootstrap validation JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
 <script src="${contextPath}/js/lib/jquery.mustache.js"></script>
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="${contextPath}/js/rfdesigner/designer.js"></script>
+<script src="${contextPath}/js/rfdesigner/fomular.js"></script>
+
 
 <style type="text/css">
 	
@@ -256,7 +264,7 @@
 							<input type="radio" name="filter-design-option" id="inlineRadio1" value="option1" onchange="<portlet:namespace/>filterDesignChange('type1');"> Single Microstrip Line
 						</label>
 						<label class="radio-inline">
-							<input type="radio" name="filter-design-option" id="inlineRadio2" value="option2" onchange="<portlet:namespace/>filterDesignChange('type2');"> Coupied Microstrip Line
+							<input type="radio" name="filter-design-option" id="inlineRadio2" value="option2" onchange="<portlet:namespace/>filterDesignChange('type2');"> Coupled Microstrip Line
 						</label>
 					</div>
 				</div>
@@ -289,15 +297,15 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label">Optimum Order (N)</label>
 						<div class="col-md-7">
-							<p class="form-control-static">0</p>
+							<p class="form-control-static" id="optimum-order">0</p>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-5 control-label">Selected Order (N)</label>
 						<div class="col-md-3 input-group">
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" id='<portlet:namespace/>selectedOrderText' value="0">
 							<div class="input-group-btn">
-								<button class="btn btn-primary">Update</button>
+								<button class="btn btn-primary disabled" id="design-update">Update</button>
 							</div>
 						</div>
 						<div class="col-md-3">
@@ -509,7 +517,7 @@ var <portlet:namespace/>LINE_PANEL_DATA = {
 		"body": "line-calculator-type-1",
 		"form": {}
 	},
-	"tpl-coupied": {
+	"tpl-coupled": {
 		"body": "line-calculator-type-2",
 		"form": {}
 	}
@@ -573,7 +581,12 @@ $(document).ready(function(){
 			if($("button#design-filter").hasClass("disabled")){
 				$("button#design-filter").removeClass("disabled");
 				$("button#design-filter").attr("onclick","<portlet:namespace/>gridFilter();return false;");
+				
+				$("button#design-update").removeClass("disabled");
+				$("button#design-update").attr("onclick","<portlet:namespace/>gridFilter();return false;");
 			}
+			
+			
 		}
 	});
 });
@@ -595,11 +608,18 @@ function <portlet:namespace/>gridFilter(){
 			}
 		});
 		<portlet:namespace/>gridFilterDesign();
+		<portlet:namespace/>gridGraph(filterData);
 	}
 	
 	console.log(filterData);
 }
 
+function <portlet:namespace/>gridGraph(filterData){
+	var radioFilterType = $("#<portlet:namespace/>radioFilterType:checked").val();
+	var selectedOrder = nullToStr($("#<portlet:namespace/>selectedOrderText").val(),0);
+	var data = getGraphData(filterData,radioFilterType,selectedOrder);
+	Plotly.newPlot('graph-plot-content', data, graphLayout, {scrollZoom: true});
+}
 
 function <portlet:namespace/>gridFilterDesign(){
 	var selectFilterType = $("#<portlet:namespace/>filter-type option:selected").val();
@@ -644,7 +664,7 @@ function <portlet:namespace/>filterDesignChange(type){
 	if(type==="type1"){
 		<portlet:namespace/>lintTemplateData = <portlet:namespace/>LINE_PANEL_DATA["tpl-single"];
 	}else{
-		<portlet:namespace/>lintTemplateData = <portlet:namespace/>LINE_PANEL_DATA["tpl-coupied"];
+		<portlet:namespace/>lintTemplateData = <portlet:namespace/>LINE_PANEL_DATA["tpl-coupled"];
 	}
 	
 	$("#<portlet:namespace/>line-calculator-mustache").empty().mustache(<portlet:namespace/>lintTemplateData["body"], <portlet:namespace/>lintTemplateData);
@@ -718,7 +738,7 @@ function <portlet:namespace/>closeImageModal(){
         </div>
     </div>
     <div class="form-group">
-        <label>Passband Ripple (Rp)</label>
+        <label>Stopband Attenuation</label>
         <div class="input-group">
             <input type="text" name="stopband-attenuation" class="form-control data-binded" value="{{form.stopband-attenuation}}" required>
             <span class="input-group-addon">dB</span>
@@ -966,6 +986,47 @@ function <portlet:namespace/>closeImageModal(){
 <script id="line-calculator-type-1" type="text/html">
 <div class="row">
     <div class="col-md-12">
+        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
+    </div>
+</div>
+<div class="form-inline row my-form-row">
+    <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (Er) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    </div>
+    <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
+    <div class="col-md-3">
+        <input type="text" name="height" class="form-control" style="width: 100%">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="h30"></div>
+        <div class="row form-inline my-form-row">
+            <label class="col-md-6">Characteristic Impedance (Za) : </label>
+            <div class=" col-md-6">
+                <input type="text" name="height" class="form-control" style="width: 100%">
+            </div>
+        </div>
+        <div class="row my-form-row">
+            <button class="btn btn-default col-md-6">Synthesize<br/><i class="icon-sort-down"></i></button>
+            <button class="btn btn-default col-md-6"><i class="icon-sort-up"></i><br/>Analyze</button>
+        </div>
+        <div class="row form-inline my-form-row">
+            <label class="col-md-6">Width (mm) : </label>
+            <div class=" col-md-6">
+                <input type="text" name="height" class="form-control" style="width: 100%">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <img src="/iitp-portlet/images/rfdesigner/line-calculator/single.png" class="img-responsive">
+    </div>
+</div>
+</script>
+<script id="line-calculator-type-2" type="text/html">
+<div class="row">
+    <div class="col-md-12">
         <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Input Parameters </h3>
     </div>
 </div>
@@ -1012,47 +1073,6 @@ function <portlet:namespace/>closeImageModal(){
     </div>
     <div class="col-md-7">
         <img src="/iitp-portlet/images/rfdesigner/line-calculator/coupled2.png" class="img-responsive">
-    </div>
-</div>
-</script>
-<script id="line-calculator-type-2" type="text/html">
-<div class="row">
-    <div class="col-md-12">
-        <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
-    </div>
-</div>
-<div class="form-inline row my-form-row">
-    <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (Er) : </label> </div>
-    <div class="col-md-3">
-        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
-    </div>
-    <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
-    <div class="col-md-3">
-        <input type="text" name="height" class="form-control" style="width: 100%">
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="h30"></div>
-        <div class="row form-inline my-form-row">
-            <label class="col-md-6">Characteristic Impedance (Za) : </label>
-            <div class=" col-md-6">
-                <input type="text" name="height" class="form-control" style="width: 100%">
-            </div>
-        </div>
-        <div class="row my-form-row">
-            <button class="btn btn-default col-md-6">Synthesize<br/><i class="icon-sort-down"></i></button>
-            <button class="btn btn-default col-md-6"><i class="icon-sort-up"></i><br/>Analyze</button>
-        </div>
-        <div class="row form-inline my-form-row">
-            <label class="col-md-6">Width (mm) : </label>
-            <div class=" col-md-6">
-                <input type="text" name="height" class="form-control" style="width: 100%">
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <img src="/iitp-portlet/images/rfdesigner/line-calculator/single.png" class="img-responsive">
     </div>
 </div>
 </script>
