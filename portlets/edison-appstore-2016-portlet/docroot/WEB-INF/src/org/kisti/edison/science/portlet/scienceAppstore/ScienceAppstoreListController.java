@@ -3,6 +3,7 @@ package org.kisti.edison.science.portlet.scienceAppstore;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -510,16 +511,24 @@ public class ScienceAppstoreListController {
 					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
 					begin, linePerPage);
 			
+			// ScienceApp Date List for ScienceApp Page
+			List<String> dateMapList = new ArrayList<String>();
+			for(int i=0; i<writeDataList.size(); i++){
+				dateMapList.add(new SimpleDateFormat("yyyy-MM-dd").format(writeDataList.get(i).get("modifiedDate")));
+			}
+			
 			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"dataSearchList", solverCount, curPage, linePerPage, pagePerBlock);
 			
 			int totalCnt = solverCount;
 			
 			JSONSerializer jsonSerializer = JSONFactoryUtil.createJSONSerializer();
 			com.liferay.portal.kernel.json.JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-			
 			String optionJson = jsonSerializer.serialize(writeDataList);
+			String dateJson = jsonSerializer.serialize(dateMapList);		// ScienceApp Date
 			JSONArray optionArr = JSONFactoryUtil.createJSONArray(optionJson);
+			JSONArray dateArr = JSONFactoryUtil.createJSONArray(dateJson);
 			jsonObj.put("dataList", optionArr);
+			jsonObj.put("dateList", dateArr);
 			jsonObj.put("pageList", pagingStr);
 			jsonObj.put("select_line", linePerPage);
 			jsonObj.put("totalCnt", totalCnt);
