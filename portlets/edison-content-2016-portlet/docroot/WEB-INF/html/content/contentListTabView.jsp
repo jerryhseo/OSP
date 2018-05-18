@@ -163,7 +163,7 @@
 					<option value="5">5<liferay-ui:message key="edison-search-views"/></option>
 					<option value="10">10<liferay-ui:message key="edison-search-views"/></option>
 					<option value="15">15<liferay-ui:message key="edison-search-views"/></option>
-					<option value="20">20<liferay-ui:message key="edison-search-views"/></option>
+					<option value="20" selected="selected">20<liferay-ui:message key="edison-search-views"/></option>
 				</select>
 				
 				<div class="input-group-btn">
