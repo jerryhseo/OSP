@@ -111,7 +111,11 @@
 <%-- 								<input type="text" class="form-control filter" placeholder="<liferay-ui:message key='edison-table-list-header-orgNm' />" disabled> --%>
 								<aui:input name="likeOrgName" type="text" placeholder="<%=searchOrgNm%>" label="" cssClass="form-control filter"/>
 							</th>
-							<th width="12%"><liferay-ui:message key='edison-appstore-last-modified' /></th>
+							<th width="12%">
+								<liferay-ui:message key='edison-appstore-regi-date' /> /
+								<br>
+								<liferay-ui:message key='edison-appstore-last-modified' />
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -134,9 +138,11 @@
 											
 											<span class="${statusClass}">${solverMap.statusName}</span>
 										</td>
-										<td>${solverMap.firstName}</td>
-										<td>${solverMap.affiliation}</td>
+										<td class="center">${solverMap.firstName}</td>
+										<td class="center">${solverMap.affiliation}</td>
 										<td class="center">
+											<fmt:formatDate pattern="yyyy-MM-dd"   value="${solverMap.createDate}" /> /
+											<br>
 											<fmt:formatDate pattern="yyyy-MM-dd"   value="${solverMap.modifiedDate}" />
 										</td>
 									</tr>

@@ -116,6 +116,8 @@
 }
 </style>
 
+<script src="${pageContext.request.contextPath}/js/jquery-dateFormat.js"></script>
+
 
 </head>
 <body>
@@ -433,8 +435,9 @@
 						$("<td/>").text(dataMap.dataList[i].affiliation).addClass("TC").appendTo($vRow);
 						
 						$("<td/>").text(dataMap.dataList[i].screenName).addClass("TC").appendTo($vRow);
-						var statusDate = new Date(dataMap.dataList[i].statusDate);
-						$("<td/>").text(formatDate(statusDate) ).addClass("TC").appendTo($vRow);
+						
+						var modifiedDate = new Date(dataMap.dateList[i]);
+						$("<td/>").text( $.format.date(modifiedDate, "yyyy-MM-dd") ).addClass("TC").attr("stateDate", new Date(dataMap.dataList[i].statusDate)).appendTo($vRow);
 	
 						
 						/* 메뉴얼 */
