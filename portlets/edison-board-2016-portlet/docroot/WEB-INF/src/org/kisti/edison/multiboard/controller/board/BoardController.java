@@ -177,9 +177,11 @@ public class BoardController {
 			}
 			
 			/*통합검색*/
-			long searchPlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/search").getPlid();
-			PortletURL searchUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", searchPlid, PortletRequest.RENDER_PHASE);
-			model.addAttribute("searchURL", searchUrl);
+			if(!themeDisplay.getSiteGroupName().equals("Challenge")){
+				long searchPlid = LayoutLocalServiceUtil.getFriendlyURLLayout(themeDisplay.getScopeGroupId(), false, "/search").getPlid();
+				PortletURL searchUrl = PortletURLFactoryUtil.create(request,"edisonsearch_WAR_edisonsearch2017portlet", searchPlid, PortletRequest.RENDER_PHASE);
+				model.addAttribute("searchURL", searchUrl);
+			}
 			
 			//parameter
 			model.addAttribute("isCustomAdmin", isCustomAdmin);
