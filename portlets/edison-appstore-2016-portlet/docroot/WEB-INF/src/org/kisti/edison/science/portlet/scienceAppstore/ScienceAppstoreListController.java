@@ -25,6 +25,7 @@ import javax.portlet.ResourceResponse;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
+import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.science.model.ScienceAppCategoryLink;
 import org.kisti.edison.science.model.ScienceAppDescription;
 import org.kisti.edison.science.service.ScienceAppCategoryLinkLocalServiceUtil;
@@ -33,6 +34,7 @@ import org.kisti.edison.science.service.ScienceAppFavoriteLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonFileUtil;
+import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
@@ -582,5 +584,22 @@ public class ScienceAppstoreListController {
 			//Session Error Message
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
+	}
+	
+	// 2018.05.28, Site Member 여부 확인
+	@ResourceMapping(value ="isSiteMember")
+	public void isSiteMember(ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		boolean isSiteMember = false;
+		if(EdisonUserUtil.isSiteRole(themeDisplay.getUser(), themeDisplay.getSiteGroupId(), EdisonRoleConstants.SITE_MEMBER)){
+			isSiteMember = true;
+		}
+		
+		JSONObject obj = new JSONObject();
+		obj.put("isSiteMember", isSiteMember);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
 	}
 }
