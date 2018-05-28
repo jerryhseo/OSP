@@ -73,7 +73,7 @@ public class DeveloperRequestLocalServiceImpl
 					resultRow.put("requestSeq", String.valueOf(developerRequest.getRequestSeq()));
 					resultRow.put("userId", String.valueOf(developerRequest.getUserId()));
 					resultRow.put("requestSort", developerRequest.getRequestSort());
-					resultRow.put("requestSortNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(developerRequest.getRequestSort(), EdisonExpando.CDNM , locale));	//임시
+					resultRow.put("requestSortNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(CustomUtil.strNull(developerRequest.getRequestSort(), "0"), EdisonExpando.CDNM , locale));	//임시
 					resultRow.put("requestNote", developerRequest.getRequestNote());
 					resultRow.put("requestStatus", developerRequest.getRequestStatus());
 					resultRow.put("requestStatusNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(developerRequest.getRequestStatus(), EdisonExpando.CDNM , locale)); //임시
