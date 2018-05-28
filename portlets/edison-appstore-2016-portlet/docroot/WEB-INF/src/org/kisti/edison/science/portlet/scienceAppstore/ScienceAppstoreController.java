@@ -757,4 +757,21 @@ public class ScienceAppstoreController {
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
 	}
+	
+	// 2018.05.28, Site Member 여부 확인
+	@ResourceMapping(value ="isSiteMember" )
+	public void isSiteMember(ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		boolean isSiteMember = false;
+		if(EdisonUserUtil.isSiteRole(themeDisplay.getUser(), themeDisplay.getSiteGroupId(), EdisonRoleConstants.SITE_MEMBER)){
+			isSiteMember = true;
+		}
+		
+		JSONObject obj = new JSONObject();
+		obj.put("isSiteMember", isSiteMember);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
 }
