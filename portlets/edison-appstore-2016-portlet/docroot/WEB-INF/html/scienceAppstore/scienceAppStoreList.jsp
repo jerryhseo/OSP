@@ -11,10 +11,11 @@
 %>
 <head>
 
-<liferay-portlet:resourceURL var="resorceSearchURL" 		escapeXml="false" id="searchList" 	 copyCurrentRenderParameters="false"/>
-<liferay-portlet:resourceURL var="resorceConfigURL" 		escapeXml="false" id="searchConfig"  copyCurrentRenderParameters="false"/>
-<liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
-<liferay-portlet:resourceURL var="solverTypeListURL" 		escapeXml="false" id="solverTypeList" 	 copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="resorceSearchURL" 		escapeXml="false" id="searchList" 			 copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="resorceConfigURL" 		escapeXml="false" id="searchConfig" 		 copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="edisonFileDownloadURL"	 escapeXml="false" id="edisonFileDownload"	 copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="solverTypeListURL" 		escapeXml="false" id="solverTypeList" 		 copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="isSiteMemberURL" 			escapeXml="false" id="isSiteMember" 		 copyCurrentRenderParameters="false"/>
 
 <liferay-portlet:renderURL plid="${simulationPlid}" portletName="_SIMULATION_WAR_edisonportlet_" portletMode="view" var="exeURL"/>
 
@@ -638,9 +639,34 @@
 	function <portlet:namespace/>moveWorkbenchFromList(targetScienceAppId) {
 		var isSignedIn = ${isSignedIn};
 		if(isSignedIn){
-			var URL = "<%=workbenchURL%>";
-			URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-			window.open(URL);
+			
+			// Site Member Check
+			jQuery.ajax({
+				type: "POST",
+				url: "<%=isSiteMemberURL%>",
+				success: function(msg) {
+					var isSiteMember = msg.isSiteMember;
+					if(isSiteMember){
+						var URL = "<%=workbenchURL%>";
+						URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
+						window.open(URL);
+					} else {
+						// Site Member가 아닌 경우 사이트 가입 여부 Confirm
+						if(confirm("<liferay-ui:message key='edison-default-site-no-user' />"+"\n"+"<liferay-ui:message key='edison-default-site-join-regist-confirm' />")){
+							
+							var URL = "<%=themeDisplay.getPortalURL()%>";
+							URL += "/my-edison?";
+							URL +=	"p_p_id=edisonmypage_WAR_edisondefault2016portlet";
+							URL +=	"&_edisonmypage_WAR_edisondefault2016portlet_clickTab=siteJoin";
+							window.open(URL, "_self"); 
+						}
+					}
+				},error:function(msg,e){ 
+					alert(e);
+					return false;
+				}
+			});
+			
 		} else {
 			window.open("${signedInUrl}", "_self");
 		}
