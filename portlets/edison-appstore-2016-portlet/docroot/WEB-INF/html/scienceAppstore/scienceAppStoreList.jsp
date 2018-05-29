@@ -115,6 +115,9 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+.tabWidth{
+	width: 1200px !important;
+}
 </style>
 
 <script src="${pageContext.request.contextPath}/js/jquery-dateFormat.js"></script>
@@ -131,7 +134,7 @@
 		String searchField = CustomUtil.strNull(request.getAttribute("searchField"));
 	%>
 	
-		<div class="table-responsive panel edison-panel">
+		<div class="table-responsive panel edison-panel tabWidth">
 		
 			<form name="form" method="post" action="<%=exeURL%>">
 				<input name="<portlet:namespace/>id"    type="hidden"/>

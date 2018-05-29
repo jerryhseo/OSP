@@ -68,6 +68,11 @@
 	margin-left: 10px;
 }
 .detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
+
+.tabWidth{
+	width: 1200px !important;
+}
+
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="stopSimulationAPI" escapeXml="false" id="stopAPICall" copyCurrentRenderParameters="false"/>
@@ -133,7 +138,7 @@
 
 <liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false"/>
 
-<div class="container">
+<div class="container tabWidth">
 	
 	<div>
 		<h2>
@@ -646,11 +651,6 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .appendTo($resultDownArea);
 		
 		
-		$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
-				  .css("cursor","pointer")
-				  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('"+scienceAppId+"','"+simulationUuid+"','"+jobUuid+"');")
-				  .appendTo($resultViewArea);
-		
 		// success인 경우 log Port가 존재할 때 중간확인 서비스 제공
 		if($middleCheckArea.attr("logfileprocess-state")=="Y"){
 			$("<img/>").attr("src", "${contextPath}/images/monitoring/chart_icon.png")
@@ -680,6 +680,12 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 				   .css("cursor","pointer")
 				   .appendTo($resultDownArea);
 	}
+	
+	// 모니터링 상태와 상관없이 Workbench Icon 출력
+	$("<img>").attr("src","${contextPath}/images/monitoring/btn_monitor_visual.png")
+			  .css("cursor","pointer")
+			  .attr("onClick", "event.cancelBubble=true; <portlet:namespace/>moveWorkBench('"+scienceAppId+"','"+simulationUuid+"','"+jobUuid+"');")
+			  .appendTo($resultViewArea);
 }
 
 //워크벤치 이동

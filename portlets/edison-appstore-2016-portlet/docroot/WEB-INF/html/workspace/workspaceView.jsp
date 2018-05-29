@@ -296,7 +296,7 @@ function <portlet:namespace/>historyBack(){
 			</td>
 		</tr>
 	</table>
-</div
+</div>
 
 <div id="addRequest_dialog" class="newWindow" style="background-color:#fff; padding:0px;">
 

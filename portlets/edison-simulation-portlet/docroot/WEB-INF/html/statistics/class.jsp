@@ -164,7 +164,7 @@ function <portlet:namespace/>excelDown(){
 }
 </style>
 
-	<div class="contabmenu"> 
+	<div class="contabmenu tabWidth"> 
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
 			tabsValues="<%=tabsValues%>" 

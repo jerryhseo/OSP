@@ -43,7 +43,13 @@ label.checkbox-label input[type=checkbox]{
 .subtitlearea{
 	margin-left: 10px;
 }
+
 .detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
+
+.tabWidth{
+	width: 1200px !important;
+}
+
 </style>
 
 <body>
@@ -57,7 +63,7 @@ label.checkbox-label input[type=checkbox]{
 	%>
 	
 		<c:if test="${not empty tabsValues}">
-			<div class="contabmenu"> 
+			<div class="contabmenu tabWidth"> 
 				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
 			</div>
 		</c:if>
