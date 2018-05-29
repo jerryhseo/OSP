@@ -34,6 +34,10 @@
 	padding:3px 7px;
 }
 
+.tabWidth{
+	width: 1200px !important;
+}
+
 </style>
 	<%
 		//공통
@@ -50,7 +54,7 @@
 	%>
 	
 	<div style="padding-bottom: 0px;">
-		<div class="contabmenu">
+		<div class="contabmenu tabWidth">
 			<edison-ui:tabs names="<%=tabNames%>" url="<%=portletURL.toString()%>" tabsValues="<%=tabsValues%>" value="<%=tabs1%>" refresh="<%=true%>" minwidth="150">
 			</edison-ui:tabs>
 		</div>

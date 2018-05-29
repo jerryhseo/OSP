@@ -71,6 +71,10 @@
 		padding-right: 20px;
 	}
 	
+	#<portlet:namespace/>textfield{
+		width: 220px;
+	}
+	
 </style>
 <liferay-portlet:resourceURL var="retrieveGeneralURL" id="retrieveListGeneral" copyCurrentRenderParameters="false" escapeXml="false"/>
 
@@ -93,11 +97,6 @@
 <liferay-portlet:renderURL var="contentTabSearchURL" portletMode='view'/>
 
 
-<style>
-	#<portlet:namespace/>textfield{
-		width: 220px;
-	}
-</style>
 <!-- 페이지 타이틀 & 네비게이션 -->
 <c:if test="${isAdmin == false }">
 	<div class="h10"></div>

@@ -131,3 +131,7 @@ span.requiredField {color: red;}
 	padding-left: 10px;
 	margin-right: 10px;
 }
+
+.tabWidth{
+	width: 1200px !important;
+}

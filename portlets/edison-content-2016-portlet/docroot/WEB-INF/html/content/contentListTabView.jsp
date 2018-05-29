@@ -81,6 +81,11 @@
 	#advanced-wrap .contarrleft { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
 	#advanced-wrap .contarrright { width: 24px; height: 303px; display: table-cell; text-align: center; vertical-align: middle;}
 	#advanced-content-area{width: 1170px; float: left}
+	
+	.tabWidth{
+		width: 1200px !important;
+	}
+	
 </style>
 <liferay-portlet:resourceURL var="saveClickTab" id="cickTab" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="retrieveAdvancedURL" id="retrieveListAdvanced" copyCurrentRenderParameters="false" escapeXml="false"/>
@@ -115,7 +120,7 @@
 </liferay-portlet:renderURL>
 
 <form method="post" name="searchParamForm" style="margin:0px;" onsubmit="return false;">
-	<div class="table-responsive panel edison-panel">
+	<div class="table-responsive panel edison-panel tabWidth">
 		<!-- Title -->
 		<h2>
 			<img src="${pageContext.request.contextPath}/images/sub_tit_bl.png" />

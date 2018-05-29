@@ -24,7 +24,7 @@
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/main.css" media="screen"/>
 
-	<div class="contabmenu"> 
+	<div class="contabmenu tabWidth"> 
 		<edison-ui:tabs 
 			names="<%=tabNames%>" 
 			tabsValues="<%=tabsValues%>" 
