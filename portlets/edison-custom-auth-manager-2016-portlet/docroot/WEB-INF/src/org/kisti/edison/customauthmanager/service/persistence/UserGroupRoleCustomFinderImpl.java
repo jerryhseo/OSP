@@ -73,7 +73,7 @@ public class UserGroupRoleCustomFinderImpl extends BasePersistenceImpl<UserGroup
 		return null;
 	}
 	
-	
+	//Content Owner Check Custom Method
 	public List<Object[]> getContentOwnerList(long userId, long roleId, long groupId, String languageId){
 		Session session=openSession();
 		try{
@@ -179,5 +179,36 @@ public class UserGroupRoleCustomFinderImpl extends BasePersistenceImpl<UserGroup
 		return null;
 	}
 	
+	public List<Object[]> getContentOwnerListByUserIdRoleIdCustomId(long userId, long roleId, long customId){
+		Session session=openSession();
+		try{
+			String sqlQuerySelect = CustomSQLUtil.get("org.kisti.edison.service.persistence.getContentOwnerList");
+			
+			StringBuffer sql = new StringBuffer();
+			sql.append(sqlQuerySelect);
+			
+			Map params = new HashMap();
+			
+			params.put("userId", userId);
+			params.put("roleId", roleId);
+			params.put("customId", customId);
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sql.toString());
+
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			
+			query.addScalar("userId", Type.LONG);
+			query.addScalar("roleId", Type.LONG);
+			query.addScalar("customId", Type.LONG);
+			
+			return (List<Object[]>) query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			closeSession(session);
+		}
+		return null;
+		
+	}
 	
 }

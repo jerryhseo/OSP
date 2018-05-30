@@ -50,6 +50,13 @@ public class UserGroupRoleCustomFinderUtil {
 				   .getVirtaulClassOwnerList(userId, roleId, groupId, languageId);
 	}
 
+	public static java.util.List<java.lang.Object[]> getContentOwnerListByUserIdRoleIdCustomId(
+		long userId, long roleId, long customId) {
+		return getFinder()
+				   .getContentOwnerListByUserIdRoleIdCustomId(userId, roleId,
+			customId);
+	}
+
 	public static UserGroupRoleCustomFinder getFinder() {
 		if (_finder == null) {
 			_finder = (UserGroupRoleCustomFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.customauthmanager.service.ClpSerializer.getServletContextName(),
