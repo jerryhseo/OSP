@@ -91,7 +91,7 @@
 		<ul class="nav navbar-nav navbar-right">
 			#if ($is_signed_in)
 				#if(!$temp_user)
-					<li><a class="edison-use-dialog" data-controlpanelcategory="my" title="Manage My Account" href="$httpUtil.addParameter($my_account_url,"edison_myaccount","go")"><span class="icon-large icon-user"></span> My Account</a></li>
+					<li><a class="edison-use-dialog" data-controlpanelcategory="my" title="Manage My Account" href="$httpUtil.addParameter($my_account_url,"edison_myaccount","go")"><span class="icon-large icon-user"></span> $user.firstName</a></li>
 				#end
 				<li><a href="$sign_out_url"><span class="icon-large icon-signout"></span> $languageUtil.format($locale, "Sign-out","")</a></li>
 			#else
