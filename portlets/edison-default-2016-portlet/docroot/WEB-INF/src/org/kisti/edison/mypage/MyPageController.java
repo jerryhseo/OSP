@@ -210,7 +210,7 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 			}
 			
 			if(liClass.contains("select")){                 
-				tabString.append("<li class=\""+liClass+"\">"+tabName+ "&nbsp;&nbsp;&nbsp;&nbsp;<img src='/edison-default-2016-portlet/images/mypage/swarrow01.png' width='11' height='18'></li>");
+				tabString.append("<li class=\""+liClass+"\" onclick=\"javascript:tabAction('"+ tabValue+ "');\">"+tabName+ "&nbsp;&nbsp;&nbsp;&nbsp;<img src='/edison-default-2016-portlet/images/mypage/swarrow01.png' width='11' height='18'></li>");
 			}else{
 				tabString.append("<li class=\""+liClass+"\" onclick=\"javascript:tabAction('"+ tabValue+ "');\" >"+tabName+"</li>");
 			}

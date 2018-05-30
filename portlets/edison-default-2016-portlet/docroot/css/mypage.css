@@ -8,7 +8,7 @@
 .mpleft ul li a:link{color:#777777;}
 .mpleft ul li a:hover{color:#000;}/*가능하면 .select 와 같은 형태로 보여지길 원함*/
 .mpleft ul li.first{height:55px; line-height:3.5em; font-size:15px; color:#777777; font-weight:500;  padding-left:43px; border:solid 1px #d2d2d2; border-right:solid 1px #454545;}
-.mpleft ul li.select{width:101%;height:55px; font-size:15px; color:#000; font-weight:500; padding-left:43px; background-color:#fff; border:solid 1px #454545; border-right:solid 1px #ffffff; cursor: default;}
+.mpleft ul li.select{width:101%;height:55px; font-size:15px; color:#000; font-weight:500; padding-left:43px; background-color:#fff; border:solid 1px #454545; border-right:solid 1px #ffffff; cursor: pointer;}
 /*즐겨찾기 앱 */
 .mpleft ul li.favoriteApp{background:url(../images/mypage/icon01off.png) no-repeat 11px 17px;}
 .mpleft ul li.favoriteApp.select{background:url(../images/mypage/icon01.png) no-repeat 11px 17px;background-color: #ffffff}
