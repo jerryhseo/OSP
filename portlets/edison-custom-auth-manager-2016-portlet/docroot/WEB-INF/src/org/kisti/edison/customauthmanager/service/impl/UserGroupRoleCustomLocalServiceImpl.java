@@ -27,18 +27,13 @@ import org.kisti.edison.customauthmanager.service.base.UserGroupRoleCustomLocalS
 import org.kisti.edison.customauthmanager.service.persistence.UserGroupRoleCustomPK;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.util.CustomUtil;
-import org.kisti.edison.util.GBatisUtil;
 
-import com.liferay.portal.kernel.dao.orm.SQLQuery;
-import com.liferay.portal.kernel.dao.orm.Session;
-import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.util.dao.orm.CustomSQLUtil;
 
 /**
  * The implementation of the user group role custom local service.
@@ -62,15 +57,20 @@ public class UserGroupRoleCustomLocalServiceImpl
 	 * Never reference this interface directly. Always use {@link org.kisti.edison.customauthmanager.service.UserGroupRoleCustomLocalServiceUtil} to access the user group role custom local service.
 	 */
 	public boolean isRoleCustom(long userId, long groupId, long roleId, long customId) {
-		UserGroupRoleCustomPK userGroupRoleCustomPK = new UserGroupRoleCustomPK(userId, groupId, roleId, customId);
+		// 2018.05.30 : Role 체크 시 GroupId로 인해 콘텐츠 관리 불가(포털에서 콘텐츠 등록 -> 전문사이트에서 관리 불가, 전문사이트에서 콘텐츠 등록 -> 포털에서 관리 불가)
+		// GroupId 제외 후 Select하여 Role 체크하도록 수정
+		
+//		UserGroupRoleCustomPK userGroupRoleCustomPK = new UserGroupRoleCustomPK(userId, groupId, roleId, customId);
+		
 		UserGroupRoleCustom userGroupRoleCustom;
 		try {
-			userGroupRoleCustom = userGroupRoleCustomPersistence.fetchByPrimaryKey(userGroupRoleCustomPK);
-			if (userGroupRoleCustom == null) {
+//			userGroupRoleCustom = userGroupRoleCustomPersistence.fetchByPrimaryKey(userGroupRoleCustomPK);
+			List<Object[]> contentOwnerList = userGroupRoleCustomFinder.getContentOwnerListByUserIdRoleIdCustomId(userId, roleId, customId);
+//			if (userGroupRoleCustom == null) {
+			if (contentOwnerList.size() <= 0) {
 				return false;
 			}
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return true;

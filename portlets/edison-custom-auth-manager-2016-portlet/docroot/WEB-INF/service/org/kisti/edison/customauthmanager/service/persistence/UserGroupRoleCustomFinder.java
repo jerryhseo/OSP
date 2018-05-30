@@ -31,4 +31,7 @@ public interface UserGroupRoleCustomFinder {
 
 	public java.util.List<java.lang.Object[]> getVirtaulClassOwnerList(
 		long userId, long roleId, long groupId, java.lang.String languageId);
+
+	public java.util.List<java.lang.Object[]> getContentOwnerListByUserIdRoleIdCustomId(
+		long userId, long roleId, long customId);
 }

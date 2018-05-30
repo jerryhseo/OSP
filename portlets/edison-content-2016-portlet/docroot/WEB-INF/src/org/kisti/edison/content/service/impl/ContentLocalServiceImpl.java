@@ -815,7 +815,12 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 		AssetEntryLocalServiceUtil.deleteAssetEntry(entryId);
 
 		// dl file/folder 삭제
-		EdisonFileUtil.deleteGroupEdisonFile(groupId, contentFilePreFix, groupId + "_" + contentSeq);
+		// 2018.05.30 : DL Folder 또는 File이 존재하지 않아 일반 사용자의 콘텐츠 삭제 불가능한 문제 발생(포털에서 등록 -> 전문사이트에서 삭제 불가, 전문사이트에서 등록 -> 포털에서 삭제 불가) 
+		try {
+			EdisonFileUtil.deleteGroupEdisonFile(groupId, contentFilePreFix, groupId + "_" + contentSeq);
+		} catch (Exception e){
+			log.warn("DL FOLDER or FILE not exists."); 
+		}
 
 		// 실행파일 삭제
 		String contentFilePath = "/" + contentSeq;// +"/"+advancedContentPK.getContentSeq();

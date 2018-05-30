@@ -98,6 +98,21 @@
 			AND customRole.roleId = #roleId#
 			AND customRole.groupId = #groupId#
 	]]>
-	</sql>	
+	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.getContentOwnerList">
+		<![CDATA[
+			SELECT 
+				userId,
+				roleId,
+				customId
+			FROM
+				EDAUT_UserGroupRoleCustom
+			WHERE
+					userId	 = #userId#
+				AND roleId	 = #roleId#
+				AND customId = #customId#
+		]]>
+	</sql>
 
 </custom-sql>
