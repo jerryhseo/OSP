@@ -2802,7 +2802,7 @@
 					switch(parameter.type()){
         				case OSP.Constants.VECTOR:
         				    var vectorForm = DS.vectorForm();
-        				    parameterValue = parameterValue.replace(/\{|\[|\}|\]|,/g, ' ');
+        				    parameterValue = parameterValue.replace(/\{|\[|\(|\}|\)|\]|,/g, ' ');
         				    var form = [];
         				    var elements = parameterValue.split( ' ' );
         				    for( var index in elements ){
