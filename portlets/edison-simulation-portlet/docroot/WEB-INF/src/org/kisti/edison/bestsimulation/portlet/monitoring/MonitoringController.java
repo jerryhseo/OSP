@@ -616,7 +616,10 @@ public class MonitoringController {
 				root1:for (int i = 0; i < jsonArray.size(); i++) {
 					JSONObject comandObj = (JSONObject) jsonArray.get(i);
 					if( comandObj.getString("name").equals("result.zip")){
+						System.out.println("===================zipFileIdLog======================");
+						System.out.println(comandObj.getString("id"));
 						model.addAttribute("zipFileId",comandObj.getString("id"));
+						System.out.println("===========================================================");
 						break root1;
 					}
 				}
