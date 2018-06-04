@@ -10,9 +10,11 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonExpndoUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalService;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.NoSuchCategoryException;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -79,7 +84,22 @@ public class AppManualController {
 //    							System.out.println("SystemException==>"+scienceApp.getName());
 							}
     						
-    						System.out.println(scienceApp.getName()+","+scienceApp.getVersion()+","+category+","+locale.toString());
+    						User authorUser = UserLocalServiceUtil.getUser(scienceApp.getAuthorId());
+    						
+    						
+    						String universityField = (String)authorUser.getExpandoBridge().getAttribute(EdisonExpando.USER_UNIVERSITY);
+    						String univerFiledValue = EdisonExpndoUtil.getCommonCdSearchFieldValue(universityField, EdisonExpando.CDNM, themeDisplay.getLocale());
+    						
+    						String msg = "";
+    						msg = StringUtil.add(msg, scienceApp.getName());
+    						msg = StringUtil.add(msg, scienceApp.getVersion());
+    						msg = StringUtil.add(msg, authorUser.getScreenName());
+    						msg = StringUtil.add(msg, authorUser.getFirstName());
+    						msg = StringUtil.add(msg, univerFiledValue);
+    						msg = StringUtil.add(msg, category);
+    						msg = StringUtil.add(msg, locale.toString());
+    						System.out.println(msg);
+    						
     						errorCnt++;
     						isErrorApp = true;
     					}
