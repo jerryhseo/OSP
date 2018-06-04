@@ -23,8 +23,12 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.asset.NoSuchCategoryException;
+import com.liferay.portlet.asset.model.AssetCategory;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 import net.sf.json.JSONObject;
@@ -60,7 +64,22 @@ public class AppManualController {
     					try{
     						DLFileEntryLocalServiceUtil.isFileEntryCheckedOut(Long.getLong(manualId));
     					}catch(NullPointerException e){
-    						System.out.println(scienceApp.getName()+","+scienceApp.getVersion()+","+locale.toString());
+    						String category = "";
+    						try{
+    							List<AssetCategory> categoriList = AssetCategoryLocalServiceUtil.getCategories(ScienceApp.class.getName(), scienceApp.getScienceAppId());
+    							long preParentCategoryId = 0;
+        						for(AssetCategory assetCategory : categoriList){
+        							if(preParentCategoryId!=assetCategory.getParentCategoryId()){
+        								preParentCategoryId = assetCategory.getParentCategoryId();
+        								AssetCategory parentAssetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(preParentCategoryId);
+        								category = StringUtil.add(category, parentAssetCategory.getName(), "&&");
+        							}
+        						}
+    						}catch (SystemException e1) {
+//    							System.out.println("SystemException==>"+scienceApp.getName());
+							}
+    						
+    						System.out.println(scienceApp.getName()+","+scienceApp.getVersion()+","+category+","+locale.toString());
     						errorCnt++;
     						isErrorApp = true;
     					}
