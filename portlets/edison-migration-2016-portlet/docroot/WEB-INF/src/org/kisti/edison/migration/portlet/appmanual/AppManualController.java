@@ -46,8 +46,13 @@ public class AppManualController {
     	List<ScienceApp> appList = ScienceAppLocalServiceUtil.getAll();
     	ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
     	
+    	int totalCnt = appList.size();
+    	int successAppCnt = 0;
+    	int errorAppCnt = 0;
     	int errorCnt = 0;
+    	
     	for(ScienceApp scienceApp : appList){
+    		boolean isErrorApp = false;
     		if(!CustomUtil.strNull(scienceApp.getManualId()).equals("")){
     			for(Locale locale : LanguageUtil.getAvailableLocales()){
     				String manualId = scienceApp.getManualId(locale);
@@ -57,13 +62,24 @@ public class AppManualController {
     					}catch(NullPointerException e){
     						System.out.println(scienceApp.getName()+","+scienceApp.getVersion()+","+locale.toString());
     						errorCnt++;
+    						isErrorApp = true;
     					}
     				}
 				}
-    		} 
+    		}
+    		
+    		if(isErrorApp){
+    			errorAppCnt++;
+    		}else{
+    			successAppCnt++;
+    		}
     	}
     	
     	JSONObject json = new JSONObject();
+    	json.put("totalCnt", totalCnt);
+    	json.put("successAppCnt", successAppCnt);
+    	json.put("errorAppCnt", errorAppCnt);
+    	
     	json.put("errorCnt", errorCnt);
     	
     	response.setContentType("application/json; charset=UTF-8");

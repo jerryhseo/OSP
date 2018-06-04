@@ -18,7 +18,10 @@
 <div class="h30"></div>
 
 <h3>APP Manual Exist</h3>
-에러건수 : <p id="changeErrorCnt">0</p>
+총 앱 건수 : <p id="totalCnt">0</p>
+정상 앱 건수 : <p id="successAppCnt">0</p>
+Error 앱 건수 : <p id="errorAppCnt">0</p>
+존재 하지 않는 Manual 건수 : <p id="changeErrorCnt">0</p>
 <input type="button" class="btn btn-default" value="실행" onclick="execute();"/>
 
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
@@ -38,6 +41,9 @@
 			url: "<%=executeURL%>",
 			async : false,
 			success: function(msg) {
+				$("#totalCnt").html(msg.totalCnt);
+				$("#successAppCnt").html(msg.successAppCnt);
+				$("#errorAppCnt").html(msg.errorAppCnt);
 				$("#changeErrorCnt").html(msg.errorCnt);
 			},error:function(msg,e){
 			}
