@@ -197,6 +197,9 @@ public class VirtualLabClassListController {
 			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(userId, groupId, virtualClassManagerRole.getRoleId(), classId))) {	// Custom Role Check
 			obj.put("result", "ADMINISTRATOR");
 		} else {
+			if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.TEMP_USER)){
+				obj.put("result", "TEMP_USER");
+			}
 			Map<String, Object> virtualLabClassUserInfo = VirtualLabLocalServiceUtil.getVirtualLabClassRegisterInfo(classId, userId, groupId, locale);
 			Object[] userCountArray = VirtualLabUserLocalServiceUtil.getCountVirtualClassRegisterUserList(classId);
 			virtualLabClassUserInfo.put("totalUserCount", (Integer)userCountArray[0] + (Integer)userCountArray[1]);	// 현재 클래스 수강 인원

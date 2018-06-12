@@ -383,7 +383,13 @@ function <portlet:namespace/>registerCheck(virtualLabId, classId, groupId) {
 				$("#registerClassCount").text("(" + virtualLabClassUserInfo.totalUserCount + "/" + virtualLabClassUserInfo.classPersonnel + ")");
 				
 				if(virtualLabClassUserInfo.requestSort == "REQUEST") {
-					requestDialog(virtualLabClassUserInfo.virtualUserId);
+					if(msg.result == "TEMP_USER") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-tempUser-registration-not-allowed' />"
+								+"\n"
+								+"<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-tempUser-registration-allowed-process' />");
+					} else {
+						requestDialog(virtualLabClassUserInfo.virtualUserId);
+					}
 				} else if(virtualLabClassUserInfo.requestSort == "DENIED") {
 					var title = "<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-reason-denial' />";
 					<portlet:namespace/>openDeniedDialog(title, virtualLabClassUserInfo.processNote, virtualLabClassUserInfo.virtualUserId, virtualLabClassUserInfo.classId);
@@ -392,7 +398,13 @@ function <portlet:namespace/>registerCheck(virtualLabId, classId, groupId) {
 				} else if(virtualLabClassUserInfo.totalUserCount >= virtualLabClassUserInfo.classPersonnel){
 					alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-over-personnel' />");
 				} else {
-					requestDialog(virtualLabClassUserInfo.virtualUserId);
+					if(msg.result == "TEMP_USER") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-tempUser-registration-not-allowed' />"
+								+"\n"
+								+"<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-tempUser-registration-allowed-process' />");
+					} else {
+						requestDialog(virtualLabClassUserInfo.virtualUserId);
+					}
 				}
 			}
 		},error:function(msg,e){ 
