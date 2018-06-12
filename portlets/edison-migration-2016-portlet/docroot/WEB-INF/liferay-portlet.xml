@@ -95,6 +95,12 @@
 		<css-class-wrapper>edison-migration-job-data container</css-class-wrapper>
 	</portlet>
 	
+	<portlet>
+		<portlet-name>edison-app-manual-file-exist</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>edison-app-manual-file-exist container</css-class-wrapper>
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>
