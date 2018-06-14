@@ -153,6 +153,26 @@
         width: 100%;
     }
 }
+
+.rf-designer .table-fixed thead {
+  width: 97%;
+}
+
+.rf-designer .table-fixed thead th{
+  background-color:#e9eff7;
+}
+
+.rf-designer .table-fixed tbody {
+  overflow-y: auto;
+  width: 100%;
+}
+.rf-designer .table-fixed thead, .rf-designer .table-fixed tbody, .rf-designer .table-fixed tr, .rf-designer .table-fixed td, .rf-designer .table-fixed th {
+  display: block;
+}
+.rf-designer .table-fixed tbody td, .rf-designer .table-fixed thead > tr> th {
+	float: left;
+	border-bottom-width: 0;
+}
 </style>
 
 <div class="h20"></div>
@@ -166,24 +186,24 @@
 					</div>
 					<div class="panel-body form-horizontal">
 						<div class="form-group">
-							<label for="inputEmail3" class="col-md-5 control-label">Response Type</label>
+							<label class="col-md-5 control-label">Response Type</label>
 							<div class="col-md-7">
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionsRadios1" id="optionsRadios1" value="CHEBYSHEV" class="mustache-radio">
+										<input type="radio" name="optionsRadios1" id="<portlet:namespace/>radioResponseType" value="CHEBYSHEV" class="mustache-radio">
 										Chebyshev
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input type="radio" name="optionsRadios1" id="optionsRadios1" value="MAXIMALLY" class="mustache-radio">
+										<input type="radio" name="optionsRadios1" id="<portlet:namespace/>radioResponseType" value="MAXIMALLY" class="mustache-radio">
 										Maximally Flat
 									</label>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputEmail3" class="col-md-5 control-label">Filter Type</label>
+							<label class="col-md-5 control-label">Filter Type</label>
 							<div class="col-md-7">
 								<div class="radio">
 									<label>
@@ -214,7 +234,7 @@
 						<div class="form-group col-md-12">
 							<label for="inputEmail3">Characteristic Impedance</label>
 							<div class="input-group">
-								<input type="email" class="form-control" id="inputEmail3">
+								<input type="email" class="form-control" id="filter-characteristic-impedance">
 								<div class="input-group-addon">&#937;</div>
 							</div>
 						</div>
@@ -386,7 +406,20 @@
 												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Frequency Scaling </h3>
 												<img src="${contextPath}/images/rfdesigner/popup/freq_LPF.png" id="freqImg" class="img-responsive" style="height: 200px;">
 												<div class="h10"></div>
-												<textarea rows="12" class="form-control" style="resize: none;"></textarea>
+												<div class="panel panel-default edison-panel">
+													<table class="table table-fixed table-hover edison-table">
+														<thead>
+															<tr>
+																<th class="col-md-2">n</th>
+																<th class="col-md-5">Capacitor(C) [pF]</th>
+																<th class="col-md-5">Inductor(L) [nH]</th>
+															</tr>
+														</thead>
+														<tbody id="<portlet:namespace/>modal-filter-design-tbody" style="height:160px;">
+															
+														</tbody>
+													</table>
+												</div>
 											</div>
 											<div class="col-md-6">
 												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Impedance Scaling </h3>
@@ -560,7 +593,21 @@ $(document).ready(function(){
 				<portlet:namespace/>templateData.option = true;
 			}
 			
-			/*SELECT BOX EVENT*/
+			$("#<portlet:namespace/>mustache-panel-box").empty().mustache(<portlet:namespace/>templateData["body"], <portlet:namespace/>templateData);
+			
+			/*Mustache Select Box Selected EVENT*/
+			$("#<portlet:namespace/>mustache-panel-box").find("select").each(function(index){
+				var selectBoxName = $(this).attr("name");
+				var formValue = <portlet:namespace/>templateData.form[selectBoxName];
+				if(typeof formValue =="undefined"){
+					<portlet:namespace/>templateData.form[selectBoxName] = $(this).val();
+				}else{
+					$(this).val(<portlet:namespace/>templateData.form[selectBoxName]);
+				}
+			});
+			
+			
+			/*DESIGN-FILTER SELECT BOX EVENT*/
 			if(disabledOption){
 				$("#<portlet:namespace/>filter-type option[value='LUMPED-FILTER']").prop("selected", true);;
 				$("#<portlet:namespace/>filter-type").css("cursor", "not-allowed");
@@ -569,14 +616,6 @@ $(document).ready(function(){
 			}
 			
 			$("#<portlet:namespace/>filter-type option[value='TRANSMIATION-FILTER']").attr('disabled', disabledOption);
-			
-			$("#<portlet:namespace/>mustache-panel-box").empty().mustache(<portlet:namespace/>templateData["body"], <portlet:namespace/>templateData);
-			
-			$("#<portlet:namespace/>mustache-panel-box .data-binded").change(function (e) {
-				var thisValue = $(this).val();
-				var thisName = $(this).attr("name");
-				<portlet:namespace/>templateData.form[thisName] = thisValue;
-			});
 			
 			if($("button#design-filter").hasClass("disabled")){
 				$("button#design-filter").removeClass("disabled");
@@ -587,18 +626,26 @@ $(document).ready(function(){
 			}
 			
 			
+			/*data-binded EVENT*/
+			$("#<portlet:namespace/>mustache-panel-box .data-binded").change(function (e) {
+				var thisValue = $(this).val();
+				var thisName = $(this).attr("name");
+				<portlet:namespace/>templateData.form[thisName] = thisValue;
+			});
+			
+			
+			
 		}
 	});
 });
-
-function <portlet:namespace/>isValidate() {
-	$("#<portlet:namespace/>mustache-panel-box form").validator('validate');
-	return $("#<portlet:namespace/>mustache-panel-box form").find(".has-error").length === 0;
+function <portlet:namespace/>isValidate(formObject) {
+	formObject.validator('validate');
+	return formObject.find(".has-error").length === 0;
 }
 
 function <portlet:namespace/>gridFilter(){
 	var filterData = {};
-	if (<portlet:namespace/>isValidate()) {
+	if (<portlet:namespace/>isValidate($("#<portlet:namespace/>mustache-panel-box form"))) {
 		$("#<portlet:namespace/>mustache-panel-box .data-binded").each(function(e){
 			var name = $(this).attr("name");
 			if(typeof <portlet:namespace/>templateData.form[name] != "undefined"){
@@ -607,7 +654,7 @@ function <portlet:namespace/>gridFilter(){
 				return false;
 			}
 		});
-		<portlet:namespace/>gridFilterDesign();
+		<portlet:namespace/>gridFilterDesign(filterData);
 		<portlet:namespace/>gridGraph(filterData);
 	}
 	
@@ -615,13 +662,21 @@ function <portlet:namespace/>gridFilter(){
 }
 
 function <portlet:namespace/>gridGraph(filterData){
+	var radioResponseType = $("#<portlet:namespace/>radioResponseType:checked").val();
 	var radioFilterType = $("#<portlet:namespace/>radioFilterType:checked").val();
 	var selectedOrder = nullToStr($("#<portlet:namespace/>selectedOrderText").val(),0);
-	var data = getGraphData(filterData,radioFilterType,selectedOrder);
+	
+	var data;
+	if(radioResponseType==="CHEBYSHEV"){
+		data = getChebyshevGraphData(filterData,radioFilterType,selectedOrder);
+	}else{
+		data = getMaximallyGraphData(filterData,radioFilterType,selectedOrder);
+	}
+	
 	Plotly.newPlot('graph-plot-content', data, graphLayout, {scrollZoom: true});
 }
 
-function <portlet:namespace/>gridFilterDesign(){
+function <portlet:namespace/>gridFilterDesign(filterData){
 	var selectFilterType = $("#<portlet:namespace/>filter-type option:selected").val();
 	var $filterDiv = $("#<portlet:namespace/>filter-design-mustache");
 	var <portlet:namespace/>filterTemplateData;
@@ -646,6 +701,14 @@ function <portlet:namespace/>gridFilterDesign(){
 	}
 	
 	$filterDiv.empty().mustache(<portlet:namespace/>filterTemplateData["body"], <portlet:namespace/>filterTemplateData);
+	
+	var radioResponseType = $("#<portlet:namespace/>radioResponseType:checked").val();
+	var radioFilterType = $("#<portlet:namespace/>radioFilterType:checked").val();
+	var characteristicImpedance = $("#filter-characteristic-impedance").val();
+	
+	var retrunObject = getFilterDesignData(filterData, radioResponseType, radioFilterType, characteristicImpedance);
+	filterDesignTableGrid(retrunObject,$filterDiv.find('#'+<portlet:namespace/>filterTemplateData["body"]+'-tbody'),$("#<portlet:namespace/>modal-filter-design-tbody"));
+	
 }
 
 function <portlet:namespace/>filterDesignPopup(title){
@@ -684,6 +747,39 @@ function <portlet:namespace/>closeImageModal(){
 	var modal = $("#<portlet:namespace/>filter-design-modal");
 	modal.modal({ "backdrop": "static", "keyboard": false });
 }
+
+
+function <portlet:namespace/>lineCalculatorSingle(type){
+	var $form = $("#<portlet:namespace/>line-calculator-mustache form#singleForm");
+	if (<portlet:namespace/>isValidate($form)){
+		
+		var dielectricConstant = parseFloat($form.find('#dielectric-constant').val());
+		var height = parseFloat($form.find('#height').val());
+		
+		var $characteristicImpedance = $form.find('#characteristic-impedance');
+		var $width = $form.find('#width');
+		
+		if(type==="SYN"){
+			if($characteristicImpedance.val()===""){
+				alert(Liferay.Language.get('edison-create-account-description-message-first-line'));
+				$characteristicImpedance.focus();
+				return false;
+			}
+			var characteristicImpedance = parseFloat($characteristicImpedance.val());
+			var width = getLineCalculatorWidth(characteristicImpedance,dielectricConstant,height);
+			$width.val(width);
+		}else{
+			if($width.val()===""){
+				alert(Liferay.Language.get('edison-create-account-description-message-first-line'));
+				$width.focus();
+				return false;
+			}
+			var width = parseFloat($width.val());
+			var charImp = getLineCalculatorCharImp(dielectricConstant,height,width);
+			$characteristicImpedance.val(charImp);
+		}
+	}
+}
 </script>
 
 
@@ -700,11 +796,11 @@ function <portlet:namespace/>closeImageModal(){
                 <input type="text" name="center-frequency" class="form-control data-binded" value="{{form.center-frequency}}" required autofocus>
             </div>
             <div class="form-group col-sm-6">
-                <select class="form-control" name="center-frequency-addon">
-                    <option value="Hz">Hz</option>
-                    <option value="kHz">kHz</option>
-                    <option value="MHz">MHz</option>
-                    <option value="GHz">GHz</option>
+                <select class="form-control data-binded" name="center-frequency-addon">
+                    <option value="1">Hz</option>
+                	<option value="1000">kHz</option>
+                	<option value="1000000">MHz</option>
+                	<option value="1000000000">GHz</option>
                 </select>
             </div>
         </div>
@@ -716,11 +812,11 @@ function <portlet:namespace/>closeImageModal(){
                     <input type="text" name="stop-frequency" class="form-control data-binded" value="{{form.stop-frequency}}" required>
             </div>
             <div class="form-group col-sm-6">
-                <select class="form-control" name="stop-frequency-addon">
-                    <option value="Hz">Hz</option>
-                    <option value="kHz">kHz</option>
-                    <option value="MHz">MHz</option>
-                    <option value="GHz">GHz</option>
+                <select class="form-control data-binded" name="stop-frequency-addon">
+                    <option value="1">Hz</option>
+                	<option value="1000">kHz</option>
+                	<option value="1000000">MHz</option>
+                	<option value="1000000000">GHz</option>
                 </select>
             </div>
         </div>
@@ -729,10 +825,13 @@ function <portlet:namespace/>closeImageModal(){
         <label>Passband Ripple (Rp)</label>
         <div class="input-group">
             {{#option}}    
-                <input type="text" class="form-control" disabled> 
+                <input type="text data-binded" class="form-control" disabled> 
             {{/option}}
             {{^option}}
-                <input type="text" name="passband-ripple" class="form-control data-binded" value="{{form.passband-ripple}}" required>
+				<select class="form-control data-binded" name="passband-ripple">
+                    <option value="0.5">0.5</option>
+                    <option value="3">3</option>
+                </select>
             {{/option}}
             <span class="input-group-addon">dB</span>
         </div>
@@ -761,11 +860,11 @@ function <portlet:namespace/>closeImageModal(){
             <input type="text" name="passband-freq-L" class="form-control data-binded" value="{{form.passband-freq-L}}" autofocus required>
         </div>
         <div class="form-group col-md-3">
-            <select class="form-control" name="passband-freq-L-addon">
-                <option value="Hz">Hz</option>
-                <option value="kHz">kHz</option>
-                <option value="MHz">MHz</option>
-                <option value="GHz">GHz</option>
+            <select class="form-control data-binded" name="passband-freq-L-addon">
+                <option value="1">Hz</option>
+                <option value="1000">kHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000000000">GHz</option>
             </select>
         </div>
     </div>
@@ -776,12 +875,12 @@ function <portlet:namespace/>closeImageModal(){
         <div class="form-group col-md-3 my-group">
             <input type="text" name="stopband-freq-L" class="form-control data-binded" value="{{form.stopband-freq-L}}" required>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-3 data-binded">
             <select class="form-control" name="stopband-freq-L-addon">
-                <option value="Hz">Hz</option>
-                <option value="kHz">kHz</option>
-                <option value="MHz">MHz</option>
-                <option value="GHz">GHz</option>
+                <option value="1">Hz</option>
+                <option value="1000">kHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000000000">GHz</option>
             </select>
         </div>
     </div>
@@ -793,11 +892,11 @@ function <portlet:namespace/>closeImageModal(){
             <input type="text" name="passband-freq-H" class="form-control data-binded" value="{{form.passband-freq-H}}" required>
         </div>
         <div class="form-group col-md-3">
-            <select class="form-control" name="passband-freq-H-addon">
-                <option value="Hz">Hz</option>
-                <option value="kHz">kHz</option>
-                <option value="MHz">MHz</option>
-                <option value="GHz">GHz</option>
+            <select class="form-control data-binded" name="passband-freq-H-addon">
+                <option value="1">Hz</option>
+                <option value="1000">kHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000000000">GHz</option>
             </select>
         </div>
     </div>
@@ -808,12 +907,12 @@ function <portlet:namespace/>closeImageModal(){
         <div class="form-group col-md-3 my-group">
             <input type="text" name="stopband-freq-H" class="form-control data-binded" value="{{form.stopband-freq-H}}" required>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-3 data-binded">
             <select class="form-control" name="stopband-freq-H-addon">
-                <option value="Hz">Hz</option>
-                <option value="kHz">kHz</option>
-                <option value="MHz">MHz</option>
-                <option value="GHz">GHz</option>
+                <option value="1">Hz</option>
+                <option value="1000">kHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000000000">GHz</option>
             </select>
         </div>
     </div>
@@ -835,7 +934,7 @@ function <portlet:namespace/>closeImageModal(){
     <div class="form-group">
         <label>Stopband Attenuation</label>
         <div class="input-group">
-            <input type="text" name="stopband-attenuation" class="form-control data-binded" value="{{form.stopband-attenuation}}">
+            <input type="text" name="stopband-attenuation" class="form-control data-binded" value="{{form.stopband-attenuation}}" required>
             <div class="input-group-addon">dB</div>
         </div>
     </div>
@@ -845,9 +944,25 @@ function <portlet:namespace/>closeImageModal(){
 <script id="filter-design-type-1" type="text/html">
 <div class="row"><div class="col-md-12"><button class="btn btn-default pull-right" onClick="<portlet:namespace/>filterDesignPopup('{{title}}');"><span class="icon-file">  Analyze Prototype Design Procedure</span<</button></div></div>
 <div class="row"><div class="col-md-12"><img src="${contextPath}/images/rfdesigner/filter-design/{{img}}" class="img-responsive"></div></div>
-<div class="row"><div class="col-md-12 form-group"><textarea rows="18" class="form-control" style="resize: none;"></textarea></div></div>
+<div class="h30"></div>
+<div class="row">
+	<div class="panel panel-default edison-panel">
+	<table class="table table-fixed table-hover edison-table">
+		<thead>
+			<tr>
+				<th class="col-md-2">n</th>
+				<th class="col-md-5">Capacitor(C) [pF]</th>
+				<th class="col-md-5">Inductor(L) [nH]</th>
+			</tr>
+		</thead>
+		<tbody id="filter-design-type-1-tbody" style="height:260px;">
+		</tbody>
+	</table>
+	</div>
+</div>
 </script>
 <script id="filter-design-type-2" type="text/html">
+<form onsubmit="return false;">
 <div class="row">
     <div class="col-md-12">
         <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Stepped-impedance implementation </h3>
@@ -866,7 +981,7 @@ function <portlet:namespace/>closeImageModal(){
     </div>
     <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
     <div class="col-md-3">
-        <input type="text" name="height" class="form-control" style="width: 100%">
+        <input type="text" name="height" class="form-control" style="width: 100%" id="height">
     </div>
 </div>
 <div class="form-inline row my-form-row">
@@ -903,6 +1018,7 @@ function <portlet:namespace/>closeImageModal(){
         <textarea rows="4" class="form-control" style="resize: none;"></textarea>
     </div>
 </div>
+</form>
 </script>
 <script id="filter-design-type-3" type="text/html">
 <div class="row">
@@ -984,6 +1100,7 @@ function <portlet:namespace/>closeImageModal(){
 </div>
 </script>
 <script id="line-calculator-type-1" type="text/html">
+<form onsubmit="return false;" id="singleForm">
 <div class="row">
     <div class="col-md-12">
         <h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Substrate </h3>
@@ -991,38 +1108,40 @@ function <portlet:namespace/>closeImageModal(){
 </div>
 <div class="form-inline row my-form-row">
     <div class="col-md-3"> <label class="form-control-static">Dielectric Constant (Er) : </label> </div>
-    <div class="col-md-3">
-        <input type="text" name="dielectric-constant" class="form-control" style="width: 100%">
+    <div class="col-md-3 form-group">
+        <input type="text" id="dielectric-constant" name="dielectric-constant" class="form-control" style="width: 100%" required>
     </div>
     <div class="col-md-3"> <label class="form-control-static">Height (mm) : </label> </div>
-    <div class="col-md-3">
-        <input type="text" name="height" class="form-control" style="width: 100%">
+    <div class="col-md-3 form-group">
+        <input type="text" id="height" name="height" class="form-control" style="width: 100%" required>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="h30"></div>
         <div class="row form-inline my-form-row">
-            <label class="col-md-6">Characteristic Impedance (Za) : </label>
-            <div class=" col-md-6">
-                <input type="text" name="height" class="form-control" style="width: 100%">
-            </div>
+			<div class="col-md-12">
+            	<label>Characteristic Impedance (Za) : </label>
+            	<input type="text" name="characteristic-impedance" class="form-control" style="width: 100%" id="characteristic-impedance">
+			</div>
         </div>
+        <div class="h10"></div>
         <div class="row my-form-row">
-            <button class="btn btn-default col-md-6">Synthesize<br/><i class="icon-sort-down"></i></button>
-            <button class="btn btn-default col-md-6"><i class="icon-sort-up"></i><br/>Analyze</button>
+            <button class="btn btn-default col-md-6" onClick="<portlet:namespace/>lineCalculatorSingle('SYN');return false;">Synthesize<br/><i class="icon-sort-down"></i></button>
+            <button class="btn btn-default col-md-6" onClick="<portlet:namespace/>lineCalculatorSingle('ANA');return false;"><i class="icon-sort-up"></i><br/>Analyze</button>
         </div>
         <div class="row form-inline my-form-row">
-            <label class="col-md-6">Width (mm) : </label>
-            <div class=" col-md-6">
-                <input type="text" name="height" class="form-control" style="width: 100%">
-            </div>
+			<div class="col-md-12">
+	            <label>Width (mm) : </label>
+    	        <input type="text" name="width" class="form-control" style="width: 100%" id="width">
+			</div>
         </div>
     </div>
     <div class="col-md-6">
         <img src="/iitp-portlet/images/rfdesigner/line-calculator/single.png" class="img-responsive">
     </div>
 </div>
+</form>
 </script>
 <script id="line-calculator-type-2" type="text/html">
 <div class="row">
