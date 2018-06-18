@@ -10,12 +10,12 @@
 <!--bootstrap validation JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
+
 <script src="${contextPath}/js/lib/jquery.mustache.js"></script>
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 
 <script src="${contextPath}/js/rfdesigner/designer.js"></script>
 <script src="${contextPath}/js/rfdesigner/fomular.js"></script>
-
 
 <style type="text/css">
 	
@@ -158,10 +158,6 @@
   width: 97%;
 }
 
-.rf-designer .table-fixed thead th{
-  background-color:#e9eff7;
-}
-
 .rf-designer .table-fixed tbody {
   overflow-y: auto;
   width: 100%;
@@ -172,6 +168,14 @@
 .rf-designer .table-fixed tbody td, .rf-designer .table-fixed thead > tr> th {
 	float: left;
 	border-bottom-width: 0;
+}
+
+.rf-designer .table-sm > thead > tr > th, 
+.rf-designer .table-sm > thead > tr > td, 
+.rf-designer .table-sm > tbody > tr > th, 
+.rf-designer .table-sm > tbody > tr > td
+{
+	padding: 0px;
 }
 </style>
 
@@ -372,20 +376,37 @@
 										<div id="popup-plot-content" style="height: 350px;width: 540px;">
 						
 										</div>
-										<span class="text-center">
-											Optimum Order (N) : <br/>
-											Optimum Order-1 (N-1) : <br/>
-											Optimum Order+1 (N+1) : <br/>
-										</span>
-										
+										<p class="bg-primary">Optimum Order (N) : <b id="modal-optimum-order"></b></p>
+										<p class="bg-warning">Optimum Order-1 (N-1) : <b id="modal-pre-optimum-order"></b></p>
+										<p class="bg-success">Optimum Order+1 (N+1) : <b id="modal-next-optimum-order"></b></p>
 									</div>
 								</div>
 								<div class="panel panel-default" style="min-height: 285px">
 									<div class="panel-heading clearfix ">
 										<h2 class="panel-title">Element Values Table of prototype</h2>
 									</div>
-									<div class="panel-body form-horizontal">
-										<textarea rows="11" class="form-control" style="resize: none;"></textarea>
+									<div class="panel-body">
+										<table class="table table-hover table-bordered edison-table table-sm">
+											<thead>
+												<tr>
+													<th></th>
+													<th>g1</th>
+													<th>g2</th>
+													<th>g3</th>
+													<th>g4</th>
+													<th>g5</th>
+													<th>g6</th>
+													<th>g7</th>
+													<th>g8</th>
+													<th>g9</th>
+													<th>g10</th>
+													<th>g11</th>
+												</tr>
+											</thead>
+											<tbody id="<portlet:namespace/>modal-element-values-tbody">
+												
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -709,6 +730,13 @@ function <portlet:namespace/>gridFilterDesign(filterData){
 	var retrunObject = getFilterDesignData(filterData, radioResponseType, radioFilterType, characteristicImpedance);
 	filterDesignTableGrid(retrunObject,$filterDiv.find('#'+<portlet:namespace/>filterTemplateData["body"]+'-tbody'),$("#<portlet:namespace/>modal-filter-design-tbody"));
 	
+	
+	/*Modal Element Values Table of prototype Grid*/
+	elementValuesTableGrid(filterData, radioResponseType, retrunObject.optimumOrder,$("#<portlet:namespace/>modal-element-values-tbody"))
+	
+	/*Modal Detemine Filter Order Grid*/
+	var grapData = getDetemineFilterOrderGraphData(radioResponseType, filterData, radioFilterType, retrunObject.optimumOrder);
+	Plotly.newPlot('popup-plot-content', grapData, popupLayout, {scrollZoom: true});
 }
 
 function <portlet:namespace/>filterDesignPopup(title){
@@ -718,8 +746,6 @@ function <portlet:namespace/>filterDesignPopup(title){
 	modal.find("span#popupTitle").html(title);
 	modal.find("img#protoImg").attr("src","${contextPath}/images/rfdesigner/popup/proto_"+title+".png");
 	modal.find("img#freqImg").attr("src","${contextPath}/images/rfdesigner/popup/freq_"+title+".png");
-	
-	Plotly.newPlot('popup-plot-content', null, popupLayout, {scrollZoom: true});
 }
 
 function <portlet:namespace/>filterDesignChange(type){
