@@ -505,8 +505,8 @@ function filterDesignTableGrid(object,tbody1,tbody2){
 		$tr.appendTo(tbody1);
 	}
 	
-	tbody2.empty();
-	tbody1.children().clone().appendTo(tbody2);
+	
+	tbody2.empty().append(tbody1.children().clone(true));
 }
 
 /* Filter Design Fun End */
@@ -555,6 +555,8 @@ function elementValuesTableGrid(filterData, responseType,optimumOrder,tbody){
 	
 	var passbandRipple =  parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
 	var gtable = getGtableData(responseType, passbandRipple);
+	
+	tbody.empty();
 	
 	for (var i = 0; i < gtable.length; i++){
 		var num = i+1;
