@@ -49,23 +49,21 @@ function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var w2out = stopbandFreqH;
 	var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
-	
 	var z = numeric.linspace(math.pow(10, math.log10(woBPF) - 1.5 * math.log10(wdelta)), math.pow(10, math.log10(woBPF) + 1.5 * math.log10(wdelta)), 10000);
-	
 	for (var i = 0; i < 9999; i++) {
 		var k1 = z[i] / woBPF;
 		var k2 = woBPF / z[i];
-		var xtrans = filterType==="BANDPASS"?(1 / wdelta) * (k1 - k2):1/wdelta * 1/(k1 - k2);
+		var xtrans = filterType==="BANDPASS"?(1 / wdelta) * (k1 - k2):wdelta * 1/(k1 - k2);
 		var tn = math.cosh(2 * orderNum * math.re(math.acosh(xtrans))) + math.cos(2 * orderNum * math.im(math.acosh(xtrans)));
 		var gr = 1 + math.pow(10, (passbandRipple / 10) - 1) * math.pow(tn, 2)
-		
-		y[i] = (-10) * math.log10(gr);
 		x[i] = math.log10(z[i]);
+		y[i] = (-10) * math.log10(gr);
 	}
 	
 	returnData.push(x);
 	returnData.push(y);
 	
+	console.log(returnData);
 	return returnData;
 }
 
@@ -148,7 +146,6 @@ function getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRippl
 }
 
 function getChebyshevOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation,filterType){
-	
 	var wobpf = Math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta2 = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
 	var xtrans1 = filterType==="BANDPASS"?(1 / wdelta2) * ((stopbandFreqL / wobpf) - (wobpf / stopbandFreqL)):wdelta2 * 1 / ((stopbandFreqL / wobpf) - (wobpf / stopbandFreqL));
@@ -235,6 +232,7 @@ function getMaximallyGraphBandData(filterData, filterType,orderNum){
 }
 
 function getMaximallyGraphData(filterData,filterType,selectedOrder){
+	var data = [];
 	var trace1GraphData;
 	
 	if(filterType==="LOWPASS"||filterType==="HIGHPASS"){
@@ -246,7 +244,6 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 		$("p#optimum-order").html(optimumOrder);
 		
 		trace1GraphData = getMaximallyGraphPassData(filterData, filterType,optimumOrder);
-		
 	}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
 		var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 		var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
@@ -257,8 +254,6 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 		
 		var optimumOrder = getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL,stopbandFreqH,passbandAttenuation,stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
-		
-		
 		trace1GraphData = getMaximallyGraphBandData(filterData, filterType,optimumOrder);
 	}
 	data.push({
@@ -274,7 +269,7 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 		if(filterType==="LOWPASS"||filterType==="HIGHPASS"){
 			trace2GraphData = getMaximallyGraphPassData(filterData, filterType,selectedOrder);
 		}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
-			trace2GraphData = getMaximallyOrderNumberBand(filterData, filterType,selectedOrder);
+			trace2GraphData = getMaximallyGraphBandData(filterData, filterType,selectedOrder);
 		}
 		
 		data.push({
@@ -317,7 +312,7 @@ function getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL
 	var xtransmax = Math.max(xtrans1, xtrans2)
 	var order1 = Math.ceil(math.log10(Math.pow(10, (passatt / 10)) - 1) / (2 * math.log10(xtransmax)));
 	var order2 = Math.ceil(math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * math.log10(xtransmax)));
-	return Math.max(order1, order2)
+	return Math.max(order1, order2);
 }
 
 /* Response Type - Maximally Flat Fun End */
@@ -417,6 +412,7 @@ function getFilterDesignData(filterData, responseType, filterType, characteristi
 	var stopbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_SFH]*filterData[DESIGNER.Constants.SPEC_SFH_ADD]);
 	
 	var passbandRipple =  parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	var passbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_PA])
 	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
 	
 	var optimumOrder = 0;

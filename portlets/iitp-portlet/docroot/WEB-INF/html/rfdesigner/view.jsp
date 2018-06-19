@@ -675,11 +675,13 @@ function <portlet:namespace/>gridFilter(){
 				return false;
 			}
 		});
+		
+		console.log(filterData);
+		
 		<portlet:namespace/>gridFilterDesign(filterData);
 		<portlet:namespace/>gridGraph(filterData);
 	}
 	
-	console.log(filterData);
 }
 
 function <portlet:namespace/>gridGraph(filterData){
@@ -901,8 +903,8 @@ function <portlet:namespace/>lineCalculatorSingle(type){
         <div class="form-group col-md-3 my-group">
             <input type="text" name="stopband-freq-L" class="form-control data-binded" value="{{form.stopband-freq-L}}" required>
         </div>
-        <div class="form-group col-md-3 data-binded">
-            <select class="form-control" name="stopband-freq-L-addon">
+        <div class="form-group col-md-3">
+            <select class="form-control data-binded" name="stopband-freq-L-addon">
                 <option value="1">Hz</option>
                 <option value="1000">kHz</option>
                 <option value="1000000">MHz</option>
@@ -933,8 +935,8 @@ function <portlet:namespace/>lineCalculatorSingle(type){
         <div class="form-group col-md-3 my-group">
             <input type="text" name="stopband-freq-H" class="form-control data-binded" value="{{form.stopband-freq-H}}" required>
         </div>
-        <div class="form-group col-md-3 data-binded">
-            <select class="form-control" name="stopband-freq-H-addon">
+        <div class="form-group col-md-3">
+            <select class="form-control data-binded" name="stopband-freq-H-addon">
                 <option value="1">Hz</option>
                 <option value="1000">kHz</option>
                 <option value="1000000">MHz</option>
