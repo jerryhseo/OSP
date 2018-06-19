@@ -4615,6 +4615,9 @@ public class ChallengeTeamPersistenceImpl extends BasePersistenceImpl<ChallengeT
 		challengeTeamImpl.setPresentationModifyDay(challengeTeam.getPresentationModifyDay());
 		challengeTeamImpl.setPresentationStatus(challengeTeam.isPresentationStatus());
 		challengeTeamImpl.setFilepath(challengeTeam.getFilepath());
+		challengeTeamImpl.setCpuTime(challengeTeam.getCpuTime());
+		challengeTeamImpl.setAppList(challengeTeam.getAppList());
+		challengeTeamImpl.setSimulationNumber(challengeTeam.getSimulationNumber());
 		challengeTeamImpl.setAggrement(challengeTeam.isAggrement());
 		challengeTeamImpl.setChildChallengeId(challengeTeam.getChildChallengeId());
 

@@ -163,7 +163,10 @@
 		
 		<column name="filepath" type="String"></column>
 		
-		<!-- <column name="presentationOrder" type="long"></column> -->
+		<!-- Audit fields : simulation information -->
+		<column name="cpuTime" type="double"></column>
+		<column name="appList" type="String"></column>
+		<column name="simulationNumber" type="int"></column>
 		
 		<!-- FK Field -->
         <column name="aggrement" type="boolean"></column>

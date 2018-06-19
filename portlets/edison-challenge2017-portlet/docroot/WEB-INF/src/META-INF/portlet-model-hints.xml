@@ -95,6 +95,9 @@
 		<field name="filepath" type="String">
 			<hint name="max-length">6000</hint>
 		</field>
+		<field name="cpuTime" type="double" />
+		<field name="appList" type="String" />
+		<field name="simulationNumber" type="int" />
 		<field name="aggrement" type="boolean" />
 		<field name="childChallengeId" type="long" />
 	</model>

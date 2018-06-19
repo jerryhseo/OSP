@@ -61,6 +61,9 @@ public class ChallengeTeamSoap implements Serializable {
 		soapModel.setPresentationModifyDay(model.getPresentationModifyDay());
 		soapModel.setPresentationStatus(model.getPresentationStatus());
 		soapModel.setFilepath(model.getFilepath());
+		soapModel.setCpuTime(model.getCpuTime());
+		soapModel.setAppList(model.getAppList());
+		soapModel.setSimulationNumber(model.getSimulationNumber());
 		soapModel.setAggrement(model.getAggrement());
 		soapModel.setChildChallengeId(model.getChildChallengeId());
 
@@ -367,6 +370,30 @@ public class ChallengeTeamSoap implements Serializable {
 		_filepath = filepath;
 	}
 
+	public double getCpuTime() {
+		return _cpuTime;
+	}
+
+	public void setCpuTime(double cpuTime) {
+		_cpuTime = cpuTime;
+	}
+
+	public String getAppList() {
+		return _appList;
+	}
+
+	public void setAppList(String appList) {
+		_appList = appList;
+	}
+
+	public int getSimulationNumber() {
+		return _simulationNumber;
+	}
+
+	public void setSimulationNumber(int simulationNumber) {
+		_simulationNumber = simulationNumber;
+	}
+
 	public boolean getAggrement() {
 		return _aggrement;
 	}
@@ -417,6 +444,9 @@ public class ChallengeTeamSoap implements Serializable {
 	private Date _presentationModifyDay;
 	private boolean _presentationStatus;
 	private String _filepath;
+	private double _cpuTime;
+	private String _appList;
+	private int _simulationNumber;
 	private boolean _aggrement;
 	private long _childChallengeId;
 }

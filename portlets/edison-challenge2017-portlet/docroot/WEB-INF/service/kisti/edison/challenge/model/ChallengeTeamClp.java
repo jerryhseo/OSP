@@ -117,6 +117,9 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 		attributes.put("presentationModifyDay", getPresentationModifyDay());
 		attributes.put("presentationStatus", getPresentationStatus());
 		attributes.put("filepath", getFilepath());
+		attributes.put("cpuTime", getCpuTime());
+		attributes.put("appList", getAppList());
+		attributes.put("simulationNumber", getSimulationNumber());
 		attributes.put("aggrement", getAggrement());
 		attributes.put("childChallengeId", getChildChallengeId());
 
@@ -308,6 +311,24 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 
 		if (filepath != null) {
 			setFilepath(filepath);
+		}
+
+		Double cpuTime = (Double)attributes.get("cpuTime");
+
+		if (cpuTime != null) {
+			setCpuTime(cpuTime);
+		}
+
+		String appList = (String)attributes.get("appList");
+
+		if (appList != null) {
+			setAppList(appList);
+		}
+
+		Integer simulationNumber = (Integer)attributes.get("simulationNumber");
+
+		if (simulationNumber != null) {
+			setSimulationNumber(simulationNumber);
 		}
 
 		Boolean aggrement = (Boolean)attributes.get("aggrement");
@@ -1369,6 +1390,75 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 	}
 
 	@Override
+	public double getCpuTime() {
+		return _cpuTime;
+	}
+
+	@Override
+	public void setCpuTime(double cpuTime) {
+		_cpuTime = cpuTime;
+
+		if (_challengeTeamRemoteModel != null) {
+			try {
+				Class<?> clazz = _challengeTeamRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCpuTime", double.class);
+
+				method.invoke(_challengeTeamRemoteModel, cpuTime);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getAppList() {
+		return _appList;
+	}
+
+	@Override
+	public void setAppList(String appList) {
+		_appList = appList;
+
+		if (_challengeTeamRemoteModel != null) {
+			try {
+				Class<?> clazz = _challengeTeamRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setAppList", String.class);
+
+				method.invoke(_challengeTeamRemoteModel, appList);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public int getSimulationNumber() {
+		return _simulationNumber;
+	}
+
+	@Override
+	public void setSimulationNumber(int simulationNumber) {
+		_simulationNumber = simulationNumber;
+
+		if (_challengeTeamRemoteModel != null) {
+			try {
+				Class<?> clazz = _challengeTeamRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSimulationNumber", int.class);
+
+				method.invoke(_challengeTeamRemoteModel, simulationNumber);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public boolean getAggrement() {
 		return _aggrement;
 	}
@@ -1711,6 +1801,9 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 		clone.setPresentationModifyDay(getPresentationModifyDay());
 		clone.setPresentationStatus(getPresentationStatus());
 		clone.setFilepath(getFilepath());
+		clone.setCpuTime(getCpuTime());
+		clone.setAppList(getAppList());
+		clone.setSimulationNumber(getSimulationNumber());
 		clone.setAggrement(getAggrement());
 		clone.setChildChallengeId(getChildChallengeId());
 
@@ -1771,7 +1864,7 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(65);
+		StringBundler sb = new StringBundler(71);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1833,6 +1926,12 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 		sb.append(getPresentationStatus());
 		sb.append(", filepath=");
 		sb.append(getFilepath());
+		sb.append(", cpuTime=");
+		sb.append(getCpuTime());
+		sb.append(", appList=");
+		sb.append(getAppList());
+		sb.append(", simulationNumber=");
+		sb.append(getSimulationNumber());
 		sb.append(", aggrement=");
 		sb.append(getAggrement());
 		sb.append(", childChallengeId=");
@@ -1844,7 +1943,7 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(100);
+		StringBundler sb = new StringBundler(109);
 
 		sb.append("<model><model-name>");
 		sb.append("kisti.edison.challenge.model.ChallengeTeam");
@@ -1971,6 +2070,18 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 		sb.append(getFilepath());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>cpuTime</column-name><column-value><![CDATA[");
+		sb.append(getCpuTime());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>appList</column-name><column-value><![CDATA[");
+		sb.append(getAppList());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationNumber</column-name><column-value><![CDATA[");
+		sb.append(getSimulationNumber());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>aggrement</column-name><column-value><![CDATA[");
 		sb.append(getAggrement());
 		sb.append("]]></column-value></column>");
@@ -2019,6 +2130,9 @@ public class ChallengeTeamClp extends BaseModelImpl<ChallengeTeam>
 	private Date _presentationModifyDay;
 	private boolean _presentationStatus;
 	private String _filepath;
+	private double _cpuTime;
+	private String _appList;
+	private int _simulationNumber;
 	private boolean _aggrement;
 	private long _childChallengeId;
 	private BaseModel<?> _challengeTeamRemoteModel;

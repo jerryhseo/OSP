@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/three/libs/Three_R86.jss"></script>  
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/three/font/helvetiker_regular.typeface.jss"></script>    
+	<script type="text/javascript" src="<%=request.getContextPath()%>/js/three/libs/TrackballControls_R68.js"></script> 
+	
+	
+
+
+	
+    
+	<style>
+			body{ background-color: rgb(255,255,255); }
+			canvas{ background-color: white; float: left; }
+						          
+		</style>
+		
+		</head>
+
+		
+<body onLoad="main();">	
+
+
+<script type="text/javascript" src="./xyzfunc.jss"></script>
+    
+<script type="text/javascript">
+var um = 1e-6;
+var container;
+var container2;
+
+var scene_width =800;
+var scene_height=700;
+    
+var scene    = new THREE.Scene();
+//var camera   = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+var camera   = new THREE.PerspectiveCamera(45, scene_width / scene_height, 0.1, 1000);
+var renderer = new THREE.WebGLRenderer();
+
+var trackballControls ;
+
+var controls;
+
+var Viewer_geo = new Array();
+
+Viewer_geo[0] = new THREE.Geometry();Viewer_geo[1] = new THREE.Geometry();Viewer_geo[2] = new THREE.Geometry();
+
+var Viewer_mat = new Array();
+
+Viewer_mat[0]=new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors, transparent:true , opacity: 0.5} );
+Viewer_mat[1]=new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors, transparent:true , opacity: 0.5} );
+Viewer_mat[2]=new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors, transparent:true , opacity: 0.5} );
+
+var Viewer = new Array();
+Viewer[0]=new THREE.Mesh( Viewer_geo[0], Viewer_mat[0] );
+Viewer[1]=new THREE.Mesh( Viewer_geo[1], Viewer_mat[1] );
+Viewer[2]=new THREE.Mesh( Viewer_geo[2], Viewer_mat[2] );
+
+
+var LMx =[];
+
+var ti=0;
+
+var ti_dummy=0;
+//var x_scale=2, y_scale=0.5, z_scale=3;
+
+var x_rot=Math.PI*0/180, y_rot=Math.PI*0/180, z_rot=-Math.PI*30/180;
+var x_cam=1.5, y_cam=-1.5, z_cam=1.5;
+
+var N_Lx=0.1;
+var N_Ly=0.1;
+
+var color_f=1;
+var zz=0;
+
+var xi, yi, zi ;
+
+var ord_XYP=0;
+var ord_YZP=0;
+var ord_ZXP=0;
+
+var ord_data=0;
+
+var Vmode = [0,0,0];
+
+var W_x, W_y, W_z;
+
+
+var P_100=Nz*Ny*(Nx-1);
+var P_010=Nz*(Ny-1)   ;
+var P_001=(Nz-1)      ;
+
+var P_110=P_100+P_010 ;
+var P_101=P_100+P_001 ;
+var P_011=P_010+P_001 ;
+
+var P_111=P_100+P_010+P_001 ;
+
+//var Viewer = new Array();
+
+var Arrows_geo = new Array();
+var Arrow_mat ;
+
+var Arrows = new Array();
+
+var ang;
+
+var Nx_arr, Ny_arr, Nz_arr;
+var dx_arr, dy_arr, dz_arr;
+
+//var dx, dy, dz;
+
+var Is_obj = [0,0,0,0];
+
+var obj_mesh = new Array();
+var obj_Geo = new Array();
+var obj_Mat = new Array();
+
+
+
+
+var button_obj = new Array();
+
+var R_sphere = new Array();
+
+
+
+
+
+var sphere_color = new Array();
+//var sphere2_color;
+
+var sphereGeo ;
+
+var inputs = new Array();
+
+var P_textBox = [['aaa','aaa','aaa','aaa','aaa'],['aaa','aaa','aaa','aaa','aaa'],['aaa','aaa','aaa','aaa','aaa'],['aaa','aaa','aaa','aaa','aaa']];
+
+// From --- middle -----
+ var Nx, Ny, Nz, x_scal, y_scal, z_scal, N_nod, N_t;
+ var Norm_dx, Norm_dy, Norm_dz;
+ var xmx, ymx, zmx;
+ var xmn, ymn, zmn;
+ var  dx,  dy,  dz;
+ 
+ 
+
+//---------------------------------------------
+function main () 
+{ 
+
+container = document.getElementById( 'container' );
+
+container2 = document.getElementById( 'container2' );
+
+ renderer.setClearColor( 0xffffff, 1 );
+ renderer.setSize(scene_width, scene_height); 
+ renderer.shadowMapEnabled = true;
+ 
+ renderer.sortObjects = false;
+ 
+ camera.up = new THREE.Vector3(0,0,1);
+ camera.position.set(x_cam,y_cam,z_cam);
+ //camera.lookAt(scene.position);
+ camera.lookAt(new THREE.Vector3(0.,0., 0.));
+ //controls.update();
+  
+ //camera.up.set(1, 1, 1);
+  
+var ambientLight = new THREE.AmbientLight(0x1c1c1c); scene.add(ambientLight);
+ 
+var spotLight = new THREE.SpotLight( 0xffffff );  
+spotLight.position.set( 5, 5, 5 );
+spotLight.castShadow = true;
+scene.add( spotLight );
+
+var spotLight2 = new THREE.SpotLight( 0xffffff );  
+spotLight2.position.set( -5, -5, -5 );
+spotLight2.castShadow = true;
+scene.add( spotLight2 );
+  
+container.appendChild( renderer.domElement );  
+ 
+scene.add(Viewer[0]); scene.add(Viewer[1]); scene.add(Viewer[2]);
+
+camera.rotation.z=Math.PI*0.5;
+
+ini_set() ;
+
+
+
+renderer.render(scene, camera); 
+ 
+animate();	
+  
+
+};
+//---------------------------------------------------------------------------------------------
+function animate () 
+{
+
+if(N_t!=0) 
+{
+//  ti++; if(ti==N_t) ti=0; 		 
+//  Set_viewer_shape(0); 
+//  Viewer_color(0,0); 
+//  Viewer[0].geometry.elementsNeedUpdate = true; 
+}
+
+ti_dummy++ ;
+		
+ trackballControls.update();
+ 
+  
+ //Arrows_geo[0].vertices[3]= new THREE.Vector3(1,1,1+Math.sin(ti_dummy*0.01) ) ;
+ //Arrows[0].updateMatrix(); 
+ 
+ //Arrows[0].geometry.verticesNeedUpdate = true;
+
+ requestAnimationFrame(animate); 
+ 
+ renderer.render(scene, camera); 
+ 
+}
+
+
+//------------  그리기  -----------------------------------------------------------------------------
+function ini_set() 
+{
+
+
+ trackballControls = new THREE.TrackballControls(camera,renderer.domElement);
+ 
+ trackballControls.rotateSpeed = 1.0;
+ trackballControls.zoomSpeed = 1.0;
+ trackballControls.panSpeed = 0;
+ 
+ //document.addEventListener("keydown", onDocumentKeyDown, false);
+ 
+
+ 
+ Viewer_mat[0].side    = THREE.DoubleSide; Viewer_mat[1].side    = THREE.DoubleSide; Viewer_mat[2].side    = THREE.DoubleSide;
+ 
+ xi=1; yi=Ny; zi=1; 
+ 
+ Viewer[0].position.z=0; Viewer[1].position.x=0; Viewer[2].position.y=0;
+  
+ Viewer[0].visible=false; Viewer[1].visible=false; Viewer[2].visible=false;
+ 
+//--------    화살표 표기-----------
+
+// 
+Arrow_mat = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 1, linewidth: 1 } );
+
+Arrows_geo[0] = new THREE.Geometry();
+Arrows[0] = new THREE.LineSegments( Arrows_geo[0], Arrow_mat );
+Arrows[0].position.z=0;
+scene.add( Arrows[0] );
+
+Arrows_geo[1] = new THREE.Geometry();
+Arrows[1] = new THREE.LineSegments( Arrows_geo[1], Arrow_mat );
+Arrows[1].position.x=0;
+scene.add( Arrows[1] );
+
+Arrows_geo[2] = new THREE.Geometry();
+Arrows[2] = new THREE.LineSegments( Arrows_geo[2], Arrow_mat );
+Arrows[2].position.y=0;
+scene.add( Arrows[2] );
+
+ang= Math.PI*15/180;
+
+Arrows_set(0); Arrows_set(1); Arrows_set(2);
+
+Arrows[0].visible=false; Arrows[1].visible=false; Arrows[2].visible=false; 
+
+ 
+ //-------------- 좌표 축----------------------------
+ 
+ W_x = Vertices[0][P_100][0] - Vertices[0][0][0];
+ W_y = Vertices[0][P_010][1] - Vertices[0][0][1];
+ W_z = Vertices[0][P_001][2] - Vertices[0][0][2];
+ 
+ //-------
+ sphere_color[0]=0xf77ff77;
+ sphere_color[1]=0xf77ff77;
+ sphere_color[2]=0xf77ff77;
+ sphere_color[3]=0xff7777;
+  
+
+
+
+
+
+Disable_Viewer();
+
+R_sphere[0] = Math.sqrt(Norm_dx*Norm_dx + Norm_dy*Norm_dy + Norm_dz*Norm_dz)/3; 
+R_sphere[1] = Math.sqrt(Norm_dx*Norm_dx + Norm_dy*Norm_dy + Norm_dz*Norm_dz)/3; 
+R_sphere[2] = P_textBox[2][3].value*um/z_scal; 
+R_sphere[3] = P_textBox[3][3].value*um/z_scal; 
+
+
+
+for(var i=0; i<=1;i++) obj_Geo[i] = new THREE.SphereGeometry(R_sphere[i],20,20);
+
+obj_Geo[2] = new THREE.SphereGeometry(R_sphere[2], 20, 20);
+obj_Geo[3] = new THREE.CubeGeometry(R_sphere[3], R_sphere[3], R_sphere[3]); 
+
+
+
+//------------------------------------------------------
+
+//document.getElementById(button_P1).value = ;
+
+button_obj[0]="button_obj0";
+button_obj[1]="button_obj1";
+button_obj[2]="button_obj2";
+button_obj[3]="button_obj3";
+
+document.getElementById(button_obj[0]).style="color:#aaaaaa"; 
+document.getElementById(button_obj[1]).style="color:#aaaaaa"; 
+document.getElementById(button_obj[2]).style="color:#aaaaaa"; 
+document.getElementById(button_obj[3]).style="color:#aaaaaa"; 
+
+
+ 
+ Set_viewer_shape(0);	
+ Set_viewer_shape(1);	
+ Set_viewer_shape(2);	
+
+Set_viewer_face();
+
+
+Draw_axis(); 
+
+// 각층에서 최소 값 찾기
+
+// for (var i=1; i<=Nz ; i++) 
+// { 
+//   if(Vertices[0][][])
+//   {
+//   }
+// 
+// }
+// 
+ //for (var i=1; i<=Nx ; i++)
+
+ 
+}
+
+//------------  좌표축 그리기  -----------------------------------------------------------------------------
+function Draw_axis () 
+{
+
+var axis_geo = new Array();
+var axis_mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+var axis     = new Array();
+var axis_pos = [[,],[,],[,],[,],[,],[,],[,],[,],[,]];
+
+var N_axis = 9;
+
+var Label_Px = new Array();
+var Label_Py = new Array();
+var Label_Pz = new Array();
+
+for(var i=0;i<=N_axis-1; i++) {axis_geo[i]=new THREE.Geometry(); axis[i]=new THREE.Line( axis_geo[i], axis_mat );  }
+
+//(zi-1) + Nz*(j-1) + Nz*Ny*(i-1);
+
+axis_pos[0][0]=0      ; axis_pos[0][1]=P_100 ;
+axis_pos[1][0]=P_100  ; axis_pos[1][1]=P_110 ;
+axis_pos[2][0]=0      ; axis_pos[2][1]=P_001 ;
+axis_pos[3][0]=P_011  ; axis_pos[3][1]=P_111 ;
+axis_pos[4][0]=P_001  ; axis_pos[4][1]=P_011 ;
+axis_pos[5][0]=P_110  ; axis_pos[5][1]=P_111 ;
+axis_pos[6][0]=0      ; axis_pos[6][1]=P_010 ;
+axis_pos[7][0]=P_011  ; axis_pos[7][1]=P_010 ;
+axis_pos[8][0]=P_110  ; axis_pos[8][1]=P_010 ;
+
+for(var i=0;i<=N_axis-1;i++) 
+{
+  axis_geo[i].vertices.push( new THREE.Vector3( Vertices[ti][axis_pos[i][0]][0], Vertices[ti][axis_pos[i][0]][1], Vertices[ti][axis_pos[i][0]][2]) ); 
+  axis_geo[i].vertices.push( new THREE.Vector3( Vertices[ti][axis_pos[i][1]][0], Vertices[ti][axis_pos[i][1]][1], Vertices[ti][axis_pos[i][1]][2]) ); 
+
+  scene.add( axis[i] ); 
+}
+
+//----------------------- x tick ---------------------------------------
+var N_tick_X=4 ;
+
+var tick_X     = new Array();
+var tick_X_geo = new Array();
+var tick_mat   = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+var tick_Lx    = W_x * 0.05;
+var tick_X_p   = new Array();
+
+for(var i=0;i<=N_tick_X; i++) {tick_X_geo[i]=new THREE.Geometry(); tick_X[i]=new THREE.Line( tick_X_geo[i], tick_mat );  }
+
+for(var i=1;i<=N_tick_X-1;i++) 
+{
+  tick_X_p[i]=Number((i*W_x/N_tick_X+Vertices[0][0][0]).toFixed(2)) ;
+  
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]        , Vertices[0][0][2]) ); 
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]-tick_Lx, Vertices[0][0][2]) ); 
+
+  scene.add( tick_X[i] ); 
+}
+  
+  
+  i = 0 ;
+  
+  tick_X_p[i]=Vertices[0][0][0];
+
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]        , Vertices[0][0][2]) ); 
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]-tick_Lx, Vertices[0][0][2]) ); 
+  
+  scene.add( tick_X[i] ); 
+  
+  i = N_tick_X ;     
+  
+  tick_X_p[i]=Vertices[ti][P_100][0];
+  
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]        , Vertices[0][0][2]) ); 
+  tick_X_geo[i].vertices.push( new THREE.Vector3( tick_X_p[i], Vertices[0][0][1]-tick_Lx, Vertices[0][0][2]) ); 
+  
+  scene.add( tick_X[i] ); 
+
+ 
+var Label_X = new THREE.FontLoader();
+
+  Label_X.load( 'font/helvetiker_regular.typeface.json', function ( font ) {
+
+		var text = new Array();		
+		
+		var Label_mat = new THREE.MeshBasicMaterial( {color: 0x000000,  side: THREE.DoubleSide	} );
+		var textShape = new Array();	
+
+        var text_size = W_x * .05;
+		
+		var fine_1= text_size * 0.5, fine_2=-W_y*0.2;
+		
+		for(var i=0;i<=N_tick_X;i++) { textShape[i] = new THREE.BufferGeometry();}		 
+		
+		for(var i=0;i<=N_tick_X;i++) { textShape[i].fromGeometry( new THREE.ShapeGeometry( font.generateShapes( (tick_X_p[i]*x_scal*1e6).toFixed(2)  , text_size, 1 ) ) );}		 
+										
+	    for(var i=0;i<=N_tick_X;i++) 
+		{
+     		text[i] = new THREE.Mesh( textShape[i], Label_mat );					
+	    	text[i].position.set(tick_X_p[i]+fine_1, Vertices[0][0][1]+fine_2, Vertices[0][0][2]);
+		    scene.add( text[i] );
+		
+		    text[i].rotation.z= Math.PI*0.5;						
+		}		
+		
+		var T_text_Shape = new THREE.BufferGeometry();		
+		var T_text= new THREE.Mesh( T_text_Shape, Label_mat );					
+		
+		var T_text_size = W_x * .07;
+		
+		var fine_1= T_text_size * 1, fine_2=-W_y*0.3;
+		
+		T_text_Shape.fromGeometry( new THREE.ShapeGeometry( font.generateShapes( 'x(um)' , T_text_size, 1 ) ) );				    	
+		
+		T_text.position.set(W_x*0.5+Vertices[0][0][0]-fine_1, Vertices[0][0][1]+fine_2,Vertices[0][0][2]);
+	    scene.add(T_text );	
+		
+	} ); //end load function
+  
+  //----------------------- y tick ---------------------------------------
+    
+var N_tick_Y=4 ;
+
+var tick_Y     = new Array();
+var tick_Y_geo = new Array();
+var tick_Ly= W_y * 0.05;
+var tick_Y_p   = new Array();
+
+for(var i=0;i<=N_tick_Y; i++) {tick_Y_geo[i]=new THREE.Geometry(); tick_Y[i]=new THREE.Line( tick_Y_geo[i], tick_mat );  }
+
+for(var i=1;i<=N_tick_Y-1;i++) 
+{
+
+  tick_Y_p[i]=Number((i*W_y/N_tick_Y+Vertices[0][0][0]).toFixed(2)) ;
+  
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]        , i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]+tick_Ly, i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+
+  scene.add( tick_Y[i] ); 
+}
+  
+  i = 0 ;
+  tick_Y_p[i]=Vertices[0][0][0];
+
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]        , i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]+tick_Ly, i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+
+  scene.add( tick_Y[i] ); 
+  
+  i = N_tick_Y ;     
+  tick_Y_p[i]=Vertices[0][P_110][0];
+  
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]        , i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+  tick_Y_geo[i].vertices.push( new THREE.Vector3( Vertices[0][P_010][1]+tick_Ly, i*(Vertices[0][P_110][0]-Vertices[0][P_010][0])/N_tick_Y+Vertices[0][P_010][0], Vertices[0][0][2]) ); 
+  
+  scene.add( tick_Y[i] );  
+  
+  var Label_Y = new THREE.FontLoader();
+
+  Label_Y.load( 'font/helvetiker_regular.typeface.json', function ( font ) {
+
+		var text = new Array();		
+		var Label_mat = new THREE.MeshBasicMaterial( {color: 0x000000,  side: THREE.DoubleSide	} );
+		var textShape = new Array();	
+
+        var text_size = W_x * .05;		
+		
+		var fine_1= -text_size * 0.5, fine_2=W_x*0.07;
+	
+		for(var i=0;i<=N_tick_Y;i++) { textShape[i] = new THREE.BufferGeometry();}		 	
+		
+		for(var i=0;i<=N_tick_Y;i++) { textShape[i].fromGeometry( new THREE.ShapeGeometry( font.generateShapes( (tick_Y_p[i]*y_scal*1e6).toFixed(2)  , text_size, 1 ) ) );		}		 
+	
+	    for(var i=0;i<=N_tick_Y;i++) 
+		{
+     		text[i] = new THREE.Mesh( textShape[i], Label_mat );					
+	    	text[i].position.set(Vertices[0][P_010][1]+fine_2, tick_Y_p[i]+fine_1, Vertices[0][0][2]);
+		    scene.add( text[i] );
+		
+		    text[i].rotation.z= Math.PI*0;			
+		}
+		
+		var T_text_Shape = new THREE.BufferGeometry();		
+		var T_text= new THREE.Mesh( T_text_Shape, Label_mat );					
+		
+		var T_text_size = W_y * .07;
+		
+		var fine_1= T_text_size *4, fine_2=-W_y*0.1;
+		
+		T_text_Shape.fromGeometry( new THREE.ShapeGeometry( font.generateShapes( 'y(um)' , T_text_size, 1 ) ) );				    	
+		
+		T_text.position.set(Vertices[0][P_100][0]+fine_1, W_y*0.5 + Vertices[0][0][1]+fine_2, Vertices[0][0][2]);
+		
+	    scene.add(T_text );	
+		
+		T_text.rotation.z=Math.PI*0.5;
+		
+	} ); //end load function
+  
+    //----------------------- z tick ---------------------------------------
+  
+ var N_tick_Z=4 ;
+
+var tick_Z     = new Array();
+var tick_Z_geo = new Array();
+var tick_mat   = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+
+var tick_Z_p   = new Array();
+
+var tick_Lz= W_z * 0.05;
+
+for(var i=0;i<=N_tick_Z; i++) {tick_Z_geo[i]=new THREE.Geometry(); tick_Z[i]=new THREE.Line( tick_Z_geo[i], tick_mat );  }
+
+for(var i=1;i<=N_tick_Z-1;i++) 
+{
+
+  tick_Z_p[i]=Number((i*W_z/N_tick_Z+Vertices[0][0][0]).toFixed(2)) ;
+  
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]        , i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]-tick_Ly, i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+
+  scene.add( tick_Z[i] ); 
+}
+  
+  i = 0 ;
+  tick_Z_p[i]=Vertices[0][0][0];
+
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]        , i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]-tick_Ly, i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+
+  scene.add( tick_Z[i] ); 
+  
+  i = N_tick_Z ;     
+  tick_Z_p[i]=Vertices[0][P_001][2];
+  
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]        , i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+  tick_Z_geo[i].vertices.push( new THREE.Vector3(Vertices[0][0][1], Vertices[0][0][2]-tick_Ly, i*(Vertices[0][P_100][0]-Vertices[0][0][0])/N_tick_Z+Vertices[0][0][0]) ); 
+
+  scene.add( tick_Z[i] ); 
+  
+  var Label_Z = new THREE.FontLoader();
+
+  Label_Z.load( 'font/helvetiker_regular.typeface.json', function ( font ) {
+
+		var text = new Array();		
+		var Label_mat = new THREE.MeshBasicMaterial( {color: 0x000000,  side: THREE.DoubleSide	} );
+		var textShape = new Array();	
+
+        var text_size = W_x * .05;		
+		
+		var fine_1= -text_size * 0.5, fine_2=-W_y*0.2;
+		
+		for(var i=0;i<=N_tick_Z;i++) { textShape[i] = new THREE.BufferGeometry();}		 	
+		
+		for(var i=0;i<=N_tick_Z;i++) { textShape[i].fromGeometry( new THREE.ShapeGeometry( font.generateShapes( (tick_Z_p[i]*z_scal*1e6).toFixed(2)  , text_size, 1 ) ) );		}		 
+	
+	    for(var i=0;i<=N_tick_Z;i++) 
+		{
+     		text[i] = new THREE.Mesh( textShape[i], Label_mat );					
+	    	text[i].position.set(Vertices[0][0][1], Vertices[0][0][2]+fine_2, tick_Z_p[i]+fine_1);
+		    scene.add( text[i] );
+		
+		    text[i].rotation.x= Math.PI*0.5;			
+			text[i].rotation.y= Math.PI*0.5;			
+			
+		}
+		
+		var T_text_Shape = new THREE.BufferGeometry();		
+		var T_text= new THREE.Mesh( T_text_Shape, Label_mat );					
+		
+		var T_text_size = W_z * .07;
+		
+		var fine_1= T_text_size * 1 , fine_2=-W_z*0.3;
+		
+		T_text_Shape.fromGeometry( new THREE.ShapeGeometry( font.generateShapes( 'z(um)' , T_text_size, 1 ) ) );				    	
+		
+		T_text.position.set(Vertices[0][0][0], Vertices[0][0][1]+fine_2, W_z*0.5 + Vertices[0][0][2]+fine_1);
+		
+	    scene.add(T_text );			
+		
+		T_text.rotation.z = Math.PI*0.5;
+		T_text.rotation.y = Math.PI*0.5;
+		T_text.rotation.x =-Math.PI*0.5;
+
+	} ); //end load function
+}
+
+
+//---------------------------------------------------------------------------------------------
+function Set_viewer_shape(Viewer_i)
+{
+
+    if (Viewer_i==0)
+    {
+      for (var i=1; i<=Nx ; i++) { 
+      for (var j=1; j<=Ny ; j++) {
+      
+      ord_data = (zi-1) + Nz*(j-1) + Nz*Ny*(i-1);
+      ord_XYP  = (j-1 ) + Ny*(i-1);
+
+      Viewer_geo[0].vertices[ord_XYP]=new THREE.Vector3(Vertices[ti][ord_data][0], Vertices[ti][ord_data][1], Vertices[ti][ord_data][2]+ Vertices[ti][ord_data][6]*Vmode[0] ) ;
+      
+        //if(i==1 && j==1) alert(Vertices[ti][ord_data][2]+" "+Vertices[ti][ord_data][2]);
+
+      }
+      }
+    }
+    else if(Viewer_i==1)
+    {
+      for (var j=1; j<=Ny ; j++) { 
+      for (var k=1; k<=Nz ; k++) {
+
+      ord_data = (k-1) + Nz*(j-1) + Nz*Ny*(xi-1);
+      ord_YZP  = (k-1) + Nz*(j-1);
+
+      Viewer_geo[1].vertices[ord_YZP]=new THREE.Vector3(Vertices[ti][ord_data][0]+ Vertices[ti][ord_data][6]*Vmode[1], Vertices[ti][ord_data][1], Vertices[ti][ord_data][2]) ;
+
+      }
+      }
+
+    }
+    else if(Viewer_i==2)
+    {
+
+      for (var k=1; k<=Nz ; k++) { 
+      for (var i=1; i<=Nx ; i++) {
+
+      ord_data = (k-1) + Nz*(yi-1) + Nz*Ny*(i-1);
+      ord_ZXP  = (i-1) + Nx*(k-1);
+
+
+      Viewer_geo[2].vertices[ord_ZXP]=new THREE.Vector3(Vertices[ti][ord_data][0], Vertices[ti][ord_data][1]- Vertices[ti][ord_data][6]*Vmode[2], Vertices[ti][ord_data][2]) ;
+
+      }
+      }
+    }
+
+
+}
+
+
+//---------------------------------------------------------------------------------------------
+function Set_viewer_face()
+{
+
+
+    for (var i=1; i<=Nx-1; i++) { 
+    for (var j=1; j<=Ny-1; j++) {
+
+    ord_XYP  = (j-1) + Ny*(i-1);
+
+     Viewer_geo[0].faces.push( new THREE.Face3(ord_XYP     , ord_XYP+1, ord_XYP + Ny  ) );   
+     Viewer_geo[0].faces.push( new THREE.Face3(ord_XYP + Ny, ord_XYP+1, ord_XYP + Ny+1) );  
+     
+    } 
+    }
+
+    //--------------------------------------- YZ 면 ---------------------------
+
+    for (var j=1; j<=Ny-1; j++) { 
+    for (var k=1; k<=Nz-1; k++) {
+
+    ord_YZP  = (k-1) + Nz*(j-1);
+
+     Viewer_geo[1].faces.push( new THREE.Face3(ord_YZP     , ord_YZP+1, ord_YZP + Nz  ) );   
+     Viewer_geo[1].faces.push( new THREE.Face3(ord_YZP + Nz, ord_YZP+1, ord_YZP + Nz+1) );  
+     
+    } 
+    }
+
+    //--------------------------------------- ZX 면 ---------------------------
+
+
+    for (var k=1; k<=Nz-1; k++) { 
+    for (var i=1; i<=Nx-1; i++) {
+
+    ord_ZXP  = (i-1) + Nx*(k-1);
+
+     Viewer_geo[2].faces.push( new THREE.Face3(ord_ZXP     , ord_ZXP+1, ord_ZXP + Nx  ) );   
+     Viewer_geo[2].faces.push( new THREE.Face3(ord_ZXP + Nx, ord_ZXP+1, ord_ZXP + Nx+1) );  
+     
+    } 
+    }
+
+}
+
+//---------------------------------------------------------------------------------------------
+function Viewer_color(Viewer_i, V_mod)
+{
+
+var ord_XYP=0;
+var ord_YZP=0;
+var ord_ZXP=0;
+
+var ord_data=0;
+
+var f = 0;
+
+//var ord_ii=[zi,];
+
+var Vf_i = [[[0    , Nz, Nz*Ny   ], [ 0, 1, Nz  ], [0, Nz*Ny, 1       ]],[[Nz*Ny, Nz, Nz*Ny+Nz], [Nz, 1, Nz+1], [1, Nz*Ny, 1+ Nz*Ny]]];
+
+var Lim_i = [[Nx-1,Ny-1], [Ny-1,Nz-1], [Nz-1,Nx-1]];
+
+//V_mod=1;
+
+switch(V_mod) 
+{
+     	 case 0:
+	     { 
+
+              f = 0;
+
+              for (var i=1; i<=Lim_i[Viewer_i][0]; i++) { 
+              for (var j=1; j<=Lim_i[Viewer_i][1]; j++) {
+              
+                 switch(Viewer_i) 
+              	 {
+              	   	 case 0: ord_data = (zi-1) + Nz*(j -1) + Nz*Ny*(i -1); break;		 
+              	     case 1: ord_data = (j -1) + Nz*(i -1) + Nz*Ny*(xi-1); break;                      
+              	     case 2: ord_data = (i -1) + Nz*(yi-1) + Nz*Ny*(j -1); break;
+                 }
+                 
+              for (var k=0; k<=1; k++) 
+              {
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[0] = new THREE.Color(Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][3], Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][4], Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][5]);
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[1] = new THREE.Color(Vertices[ti][ord_data + Vf_i[k][Viewer_i][1]][3], Vertices[ti][ord_data + Vf_i[k][Viewer_i][1]][4], Vertices[ti][ord_data + Vf_i[k][Viewer_i][1]][5]);
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[2] = new THREE.Color(Vertices[ti][ord_data + Vf_i[k][Viewer_i][2]][3], Vertices[ti][ord_data + Vf_i[k][Viewer_i][2]][4], Vertices[ti][ord_data + Vf_i[k][Viewer_i][2]][5]);
+
+              f++;
+             
+
+
+              }
+
+              } 
+              }
+
+
+		 
+			 break;
+		 }   
+		 case 1:
+         {
+         
+              f = 0;
+
+              for (var i=1; i<=Lim_i[Viewer_i][0]; i++) { 
+              for (var j=1; j<=Lim_i[Viewer_i][1]; j++) {
+              
+                 switch(Viewer_i) 
+              	 {
+              	   	 case 0: ord_data = (zi-1) + Nz*(j -1) + Nz*Ny*(i -1); break;		 
+              	     case 1: ord_data = (j -1) + Nz*(i -1) + Nz*Ny*(xi-1); break;                      
+              	     case 2: ord_data = (i -1) + Nz*(yi-1) + Nz*Ny*(j -1); break;
+                 }
+                 
+              for (var k=0; k<=1; k++) 
+              {
+                 //var fsec_color = new THREE.Color(Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][3], Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][4], Vertices[ti][ord_data + Vf_i[k][Viewer_i][0]][5])
+                 
+                   var fsec_color = (Vertices[ti][ord_data+Vf_i[k][Viewer_i][0]][6] + Vertices[ti][ord_data+Vf_i[k][Viewer_i][1]][6] + Vertices[ti][ord_data+Vf_i[k][Viewer_i][2]][6])/3;
+                   
+                   //fsec_color=fsec_color.toFixed(1);
+                   fsec_color=Math.round(fsec_color*20)/20;
+                 
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[0] = new THREE.Color(fsec_color,fsec_color,fsec_color);
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[1] = new THREE.Color(fsec_color,fsec_color,fsec_color);
+                   Viewer_geo[Viewer_i].faces[f].vertexColors[2] = new THREE.Color(fsec_color,fsec_color,fsec_color);
+
+              f++;
+             
+
+
+              }
+
+              } 
+              }
+              
+              
+		    
+			 break; 
+		 } 
+}
+	
+
+
+
+
+
+}
+
+//---------------------------------------------------------------------------------------------
+function Arrows_set(Arrows_i)
+{
+
+var i_arr=0;
+var arrow_L = 0.5; 
+var s_L=0.4;
+var expan=2;
+
+if(Arrows_i==0)
+{
+
+   console.log(zi);
+
+  for(var i=0; i<Nx; i=i+expan)
+  for(var j=0; j<Ny; j=j+expan)
+  {
+    var ord_data = (zi-1) + Nz*j + Nz*Ny*i ;	  
+    
+    	 //var x0=Vertices[ti][ord_data][0]- grad_fx*arrow_L;//, y0=Vertices[ti][ord_data][1]- grad_fy*arrow_L;
+    	 
+       var x0=Vertices[ti][ord_data][0]- Grad[ord_data][0]*arrow_L*expan, y0=Vertices[ti][ord_data][1]- Grad[ord_data][1]*arrow_L*expan;
+       var x1=Vertices[ti][ord_data][0]+ Grad[ord_data][0]*arrow_L*expan, y1=Vertices[ti][ord_data][1]+ Grad[ord_data][1]*arrow_L*expan;	
+
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x0, y0, Vertices[ti][ord_data][2]) ;
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x1, y1, Vertices[ti][ord_data][2]) ;
+
+	 var x2 = ((x0-x1)*Math.cos(ang)-(y0-y1)*Math.sin(ang))*s_L+x1, y2 = ((x0-x1)*Math.sin(ang)+(y0-y1)*Math.cos(ang))*s_L+y1;
+
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x1, y1, Vertices[ti][ord_data][2]) ;
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x2, y2, Vertices[ti][ord_data][2]) ;
+
+	 var x3 = ((x0-x1)*Math.cos(-ang)-(y0-y1)*Math.sin(-ang))*s_L+x1, y3 = ((x0-x1)*Math.sin(-ang)+(y0-y1)*Math.cos(-ang))*s_L+y1;
+
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x1, y1, Vertices[ti][ord_data][2]) ;
+		 Arrows_geo[0].vertices[i_arr++]= new THREE.Vector3(x3, y3, Vertices[ti][ord_data][2]) ; 
+
+  }
+	
+	Arrows[0].geometry.verticesNeedUpdate = true;
+}
+else if(Arrows_i==1)
+{
+
+
+for(var j=0; j<Ny; j=j+expan)
+{	
+  for(var k=0; k<Nz; k=k+expan)
+  {
+	 var ord_data = k + Nz*j + Nz*Ny*(xi-1) ;	  	 
+		 
+		 var y0=Vertices[ti][ord_data][1]- Grad[ord_data][1]*arrow_L*expan, z0=Vertices[ti][ord_data][2]- Grad[ord_data][2]*arrow_L*expan;
+		 var y1=Vertices[ti][ord_data][1]+ Grad[ord_data][1]*arrow_L*expan, z1=Vertices[ti][ord_data][2]+ Grad[ord_data][2]*arrow_L*expan;	
+
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y0, z0) ;
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y1, z1) ;
+
+		 var y2 = ((y0-y1)*Math.cos(ang)-(z0-z1)*Math.sin(ang))*s_L+y1;
+		 var z2 = ((y0-y1)*Math.sin(ang)+(z0-z1)*Math.cos(ang))*s_L+z1;
+
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y1, z1) ;
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y2, z2) ;
+
+		 var y3 = ((y0-y1)*Math.cos(-ang)-(z0-z1)*Math.sin(-ang))*s_L+y1;
+		 var z3 = ((y0-y1)*Math.sin(-ang)+(z0-z1)*Math.cos(-ang))*s_L+z1;
+
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y1, z1) ;
+		 Arrows_geo[1].vertices[i_arr++]= new THREE.Vector3(Vertices[ti][ord_data][0], y3, z3) ; 
+//		 
+//		 
+//	
+	}
+	}
+	Arrows[1].geometry.verticesNeedUpdate = true;
+
+}
+else if(Arrows_i==2)
+{
+
+  
+ for(var i=0; i<Nx ; i=i+expan)
+ {	
+
+   for(var k=0; k<Nz ; k=k+expan)
+   {
+	
+	 var ord_data = k + Nz*(yi-1) + Nz*Ny*i;	  	 
+		 
+		 var x0=Vertices[ti][ord_data][0]- Grad[ord_data][0]*arrow_L*expan, z0=Vertices[ti][ord_data][2]- Grad[ord_data][2]*arrow_L*expan;
+		 var x1=Vertices[ti][ord_data][0]+ Grad[ord_data][0]*arrow_L*expan, z1=Vertices[ti][ord_data][2]+ Grad[ord_data][2]*arrow_L*expan;	
+
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x0, Vertices[ti][ord_data][1], z0) ;
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x1, Vertices[ti][ord_data][1], z1) ;
+
+		 var x2 = ((x0-x1)*Math.cos(ang)-(z0-z1)*Math.sin(ang))*s_L+x1;
+		 var z2 = ((x0-x1)*Math.sin(ang)+(z0-z1)*Math.cos(ang))*s_L+z1;
+
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x1, Vertices[ti][ord_data][1], z1) ;
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x2, Vertices[ti][ord_data][1], z2) ;
+
+		 var x3 = ((x0-x1)*Math.cos(-ang)-(z0-z1)*Math.sin(-ang))*s_L+x1;
+		 var y3 = ((x0-x1)*Math.sin(-ang)+(z0-z1)*Math.cos(-ang))*s_L+z1;
+
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x1, Vertices[ti][ord_data][1], z1) ;
+		 Arrows_geo[2].vertices[i_arr++]= new THREE.Vector3(x3, Vertices[ti][ord_data][1], y3) ; 
+	}
+  }
+	
+	Arrows[2].geometry.verticesNeedUpdate = true;
+}
+	
+	
+	
+}
+
+//---------------------------------------------------------------------------------------------
+function Disable_Viewer() 
+{
+
+  
+document.getElementById("PxyRange").disabled = true;
+document.getElementById("PyzRange").disabled = true;
+document.getElementById("PzxRange").disabled = true;
+
+document.getElementById("PxyOpacity").disabled = true;
+document.getElementById("PyzOpacity").disabled = true;
+document.getElementById("PzxOpacity").disabled = true;
+
+document.getElementById("Pxy_visible"    ).disabled = true;
+document.getElementById("Pxy_equ_visible").disabled = true;
+document.getElementById("Pxy_mode"       ).disabled = true;
+document.getElementById("Pxy_arr_visible").disabled = true;
+document.getElementById("PxyInput1"      ).disabled = true;
+
+document.getElementById("Pyz_visible"    ).disabled = true;
+document.getElementById("Pyz_equ_visible").disabled = true;
+document.getElementById("Pyz_mode"       ).disabled = true;
+document.getElementById("Pyz_arr_visible").disabled = true;
+document.getElementById("PyzInput1"      ).disabled = true;
+
+document.getElementById("Pzx_visible"    ).disabled = true;
+document.getElementById("Pzx_equ_visible").disabled = true;
+document.getElementById("Pzx_mode"       ).disabled = true;
+document.getElementById("Pzx_arr_visible").disabled = true;
+document.getElementById("PzxInput1"      ).disabled = true;
+  
+   
+}
+
+//---------------------------------------------------------------------------------------------
+function Enable_Viewer() 
+{
+
+  
+document.getElementById("PxyRange").disabled = false;
+document.getElementById("PyzRange").disabled = false;
+document.getElementById("PzxRange").disabled = false;
+
+document.getElementById("PxyOpacity").disabled = false;
+document.getElementById("PyzOpacity").disabled = false;
+document.getElementById("PzxOpacity").disabled = false;
+
+document.getElementById("Pxy_visible"    ).disabled = false;
+document.getElementById("Pxy_equ_visible").disabled = false;
+document.getElementById("Pxy_mode"       ).disabled = false;
+document.getElementById("Pxy_arr_visible").disabled = false;
+document.getElementById("PxyInput1"      ).disabled = false;
+
+document.getElementById("Pyz_visible"    ).disabled = false;
+document.getElementById("Pyz_equ_visible").disabled = false;
+document.getElementById("Pyz_mode"       ).disabled = false;
+document.getElementById("Pyz_arr_visible").disabled = false;
+document.getElementById("PyzInput1"      ).disabled = false;
+
+document.getElementById("Pzx_visible"    ).disabled = false;
+document.getElementById("Pzx_equ_visible").disabled = false;
+document.getElementById("Pzx_mode"       ).disabled = false;
+document.getElementById("Pzx_arr_visible").disabled = false;
+document.getElementById("PzxInput1"      ).disabled = false;
+  
+   
+}
+
+
+//---------------------------------------------------------------------------------------------
+function Disable_obj() 
+{
+
+  document.getElementById("cont_obj0_x").disabled = true;
+  document.getElementById("cont_obj0_y").disabled = true;
+  document.getElementById("cont_obj0_z").disabled = true;
+
+  document.getElementById("cont_obj1_x").disabled = true;
+  document.getElementById("cont_obj1_y").disabled = true;
+  document.getElementById("cont_obj1_z").disabled = true;
+
+  document.getElementById("cont_obj2_x").disabled = true;
+  document.getElementById("cont_obj2_y").disabled = true;
+  document.getElementById("cont_obj2_z").disabled = true;
+
+  document.getElementById("cont_obj3_x").disabled = true;
+  document.getElementById("cont_obj3_y").disabled = true;
+  document.getElementById("cont_obj3_z").disabled = true;
+  
+   
+}
+//---------------------------------------------------------------------------------------------
+function Enable_obj() 
+{
+
+  document.getElementById("cont_obj0_x").disabled = false;
+  document.getElementById("cont_obj0_y").disabled = false;
+  document.getElementById("cont_obj0_z").disabled = false;
+
+  document.getElementById("cont_obj1_x").disabled = false;
+  document.getElementById("cont_obj1_y").disabled = false;
+  document.getElementById("cont_obj1_z").disabled = false;
+
+  document.getElementById("cont_obj2_x").disabled = false;
+  document.getElementById("cont_obj2_y").disabled = false;
+  document.getElementById("cont_obj2_z").disabled = false;
+
+  document.getElementById("cont_obj3_x").disabled = false;
+  document.getElementById("cont_obj3_y").disabled = false;
+  document.getElementById("cont_obj3_z").disabled = false;
+  
+   
+}
+
+
+</script>
+
+<script type="text/javascript">
+var table_string="  <div id='container'> ";
+
+document.open();
+document.write(table_string);
+document.close();
+
+
+
+// Display functions
+//------------------------------------------------------------------------
+
+function Get_Info( data )
+{
+
+    var lines =data.split('\n');
+
+    var N_nod;
+
+    for( var index in lines ) // for( var index=0; index < lines.length; index++ )
+    { 
+           var line = lines[index].trim();
+
+           var keyVal = line.split('=');
+
+           switch( keyVal[0] )
+           {
+ 
+                case 'Nx'     : Nx      = Number(keyVal[1]); break;
+                case 'Ny'     : Ny      = Number(keyVal[1]); break;
+                case 'Nz'     : Nz      = Number(keyVal[1]); break;
+                case 'x_scal' : x_scal  = Number(keyVal[1]); break;
+                case 'y_scal' : y_scal  = Number(keyVal[1]); break;
+                case 'z_scal' : z_scal  = Number(keyVal[1]); break;
+                case 'N_nod'  : N_nod   = Number(keyVal[1]); break;
+                case 'N_t'    : N_t     = Number(keyVal[1]); break;
+                case 'Norm_dx': Norm_dx = Number(keyVal[1]); break;
+                case 'Norm_dy': Norm_dy = Number(keyVal[1]); break;
+                case 'Norm_dz': Norm_dz = Number(keyVal[1]); break;
+                case 'xmx'    : xmx     = Number(keyVal[1]); break;
+                case 'ymx'    : ymx     = Number(keyVal[1]); break;
+                case 'zmx'    : zmx     = Number(keyVal[1]); break;
+                case 'xmn'    : xmn     = Number(keyVal[1]); break;
+                case 'ymn'    : ymn     = Number(keyVal[1]); break;
+                case 'zmn'    : zmn     = Number(keyVal[1]); break;
+                case 'dx'     : dx      = Number(keyVal[1]); break;
+                case 'dy'     : dy      = Number(keyVal[1]); break;
+                case 'dz'     : dz      = Number(keyVal[1]); break;
+                
+                case 'EP_data': load_EP_data( index+1, N_nod, data ); break;
+
+                case 'EF_data': load_EF_data( index+1, N_nod, data ); break;
+                
+
+           }
+
+    }
+
+   
+
+}
+
+//------------------------------------------------------------------------ 
+function load_EP_data( startLine, size, EP_Data )
+{
+
+    for( var index=startLine; index< startLine+size; index++)
+    {
+
+         var line = EP_Data[index];
+
+         var values = line.split(',');
+
+         if( values.length !== 7 ) return;
+
+         for(var j=0 ; j<=6; j++)
+         {
+
+           Vertices[0][index-startLine][j]  = parseFloat(values[j]);
+
+         }
+
+    }
+
+}
+
+//------------------------------------------------------------------------ 
+function load_EF_data( startLine, size, EF_Data )
+{
+
+    for( var index=startLine; index< startLine+size; index++)
+    {
+
+         var line = EF_Data[index];
+
+         var values = line.split(',');
+
+         if( values.length !== 3 ) return;
+
+         for(var j=0 ; j<=2; j++)
+         {
+
+           Grad[index-startLine][j] = parseFloat(values[j]);
+
+         }
+
+    }
+
+}
+
+  
+</script>  
+
+
+</body>
+</html>

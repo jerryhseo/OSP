@@ -6,4 +6,7 @@
 	<category name="OSP Analyzers">
 		<portlet id="OSPJSMol"></portlet>
 	</category>
+	<category name="category.sample">
+		<portlet id="osp-paraview-glance"></portlet>
+	</category>
 </display>

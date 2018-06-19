@@ -677,8 +677,9 @@ public class ChallengeTeamLocalServiceImpl
 		
 		List<String> appList = null;
 		appList = getTeamAppList(companyId, challengeTeamId);
-		if(appList == null)
+		if(appList == null && challengeTeam.getAppList() == null){
 			return "";
+		}
 		HashSet hs = new HashSet(appList);
 		List<String> appList2 = new ArrayList<String>(hs);
 		String appListToString = "";
@@ -687,7 +688,8 @@ public class ChallengeTeamLocalServiceImpl
 			appListToString += appName;
 			appListToString +=", ";
 		}
-		return appListToString;
+		challengeTeam.setAppList(appListToString);
+		return challengeTeam.getAppList();
 	}
 	
 	public String getTeamAppListStringForWeb(long companyId, long challengeTeamId) 
@@ -715,10 +717,10 @@ public class ChallengeTeamLocalServiceImpl
 	public int getTeamSimulationNumber(long companyId, long challengeTeamId) throws PortalException, SystemException{
 		List<String> appList = null;
 		appList = getTeamAppList(companyId, challengeTeamId);
-		if(appList != null)
-			return appList.size();
-		else
-			return 0;
+		if(appList != null){
+			ChallengeTeamLocalServiceUtil.getChallengeTeam(challengeTeamId).setSimulationNumber(appList.size());
+		}
+		return ChallengeTeamLocalServiceUtil.getChallengeTeam(challengeTeamId).getSimulationNumber();
 	}
 	
 	public String getCPUUseage(long companyId, long challengeTeamId) 
@@ -734,13 +736,17 @@ public class ChallengeTeamLocalServiceImpl
 		String startDay = dateFormat.format(childChallenge.getChallengeStartDay());
 		String endDay = dateFormat.format(childChallenge.getPaperEndDay());
 		String returnResult = ChallengeTeamFinderUtil.getCPUUseage(String.valueOf(challengeTeamId), startDay, endDay);
+		
+		
 		if(!(returnResult.equals(null)||returnResult.equals("")||returnResult.equals("null")))
 		{	
 			CPUUseage += Double.parseDouble(returnResult);
-			return String.valueOf(CPUUseage);
+			ChallengeTeamLocalServiceUtil.getChallengeTeam(challengeTeamId).setCpuTime(CPUUseage);
+			
+			return String.valueOf(ChallengeTeamLocalServiceUtil.getChallengeTeam(challengeTeamId).getCpuTime());
 		}
 		
-		return String.valueOf(CPUUseage);
+		return String.valueOf(ChallengeTeamLocalServiceUtil.getChallengeTeam(challengeTeamId).getCpuTime());
 	}
 	
 	public boolean isChallengeTeamMember(long groupId, long challengeTeamId, long userId) throws SystemException{

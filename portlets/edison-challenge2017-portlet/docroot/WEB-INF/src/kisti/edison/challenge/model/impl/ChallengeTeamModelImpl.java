@@ -105,10 +105,13 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 			{ "presentationModifyDay", Types.TIMESTAMP },
 			{ "presentationStatus", Types.BOOLEAN },
 			{ "filepath", Types.VARCHAR },
+			{ "cpuTime", Types.DOUBLE },
+			{ "appList", Types.VARCHAR },
+			{ "simulationNumber", Types.INTEGER },
 			{ "aggrement", Types.BOOLEAN },
 			{ "childChallengeId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table challenge_ChallengeTeam (uuid_ VARCHAR(75) null,challengeTeamId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null,teamName VARCHAR(75) null,subject STRING null,paperName STRING null,paperAbstract STRING null,paperFileName VARCHAR(2000) null,paperSubmissionDay DATE null,paperModifyDay DATE null,paperStatusDOC BOOLEAN,paperPDFFileName VARCHAR(75) null,paperPDFSubmissionDay DATE null,paperPDFModifyDay DATE null,paperStatusPDF BOOLEAN,presentationName VARCHAR(2000) null,presentationFileName VARCHAR(2000) null,presentationSubmissionDay DATE null,presentationModifyDay DATE null,presentationStatus BOOLEAN,filepath TEXT null,aggrement BOOLEAN,childChallengeId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table challenge_ChallengeTeam (uuid_ VARCHAR(75) null,challengeTeamId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null,teamName VARCHAR(75) null,subject STRING null,paperName STRING null,paperAbstract STRING null,paperFileName VARCHAR(2000) null,paperSubmissionDay DATE null,paperModifyDay DATE null,paperStatusDOC BOOLEAN,paperPDFFileName VARCHAR(75) null,paperPDFSubmissionDay DATE null,paperPDFModifyDay DATE null,paperStatusPDF BOOLEAN,presentationName VARCHAR(2000) null,presentationFileName VARCHAR(2000) null,presentationSubmissionDay DATE null,presentationModifyDay DATE null,presentationStatus BOOLEAN,filepath TEXT null,cpuTime DOUBLE,appList VARCHAR(75) null,simulationNumber INTEGER,aggrement BOOLEAN,childChallengeId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table challenge_ChallengeTeam";
 	public static final String ORDER_BY_JPQL = " ORDER BY challengeTeam.challengeTeamId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY challenge_ChallengeTeam.challengeTeamId ASC";
@@ -174,6 +177,9 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 		model.setPresentationModifyDay(soapModel.getPresentationModifyDay());
 		model.setPresentationStatus(soapModel.getPresentationStatus());
 		model.setFilepath(soapModel.getFilepath());
+		model.setCpuTime(soapModel.getCpuTime());
+		model.setAppList(soapModel.getAppList());
+		model.setSimulationNumber(soapModel.getSimulationNumber());
 		model.setAggrement(soapModel.getAggrement());
 		model.setChildChallengeId(soapModel.getChildChallengeId());
 
@@ -271,6 +277,9 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 		attributes.put("presentationModifyDay", getPresentationModifyDay());
 		attributes.put("presentationStatus", getPresentationStatus());
 		attributes.put("filepath", getFilepath());
+		attributes.put("cpuTime", getCpuTime());
+		attributes.put("appList", getAppList());
+		attributes.put("simulationNumber", getSimulationNumber());
 		attributes.put("aggrement", getAggrement());
 		attributes.put("childChallengeId", getChildChallengeId());
 
@@ -462,6 +471,24 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 
 		if (filepath != null) {
 			setFilepath(filepath);
+		}
+
+		Double cpuTime = (Double)attributes.get("cpuTime");
+
+		if (cpuTime != null) {
+			setCpuTime(cpuTime);
+		}
+
+		String appList = (String)attributes.get("appList");
+
+		if (appList != null) {
+			setAppList(appList);
+		}
+
+		Integer simulationNumber = (Integer)attributes.get("simulationNumber");
+
+		if (simulationNumber != null) {
+			setSimulationNumber(simulationNumber);
 		}
 
 		Boolean aggrement = (Boolean)attributes.get("aggrement");
@@ -1208,6 +1235,44 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 
 	@JSON
 	@Override
+	public double getCpuTime() {
+		return _cpuTime;
+	}
+
+	@Override
+	public void setCpuTime(double cpuTime) {
+		_cpuTime = cpuTime;
+	}
+
+	@JSON
+	@Override
+	public String getAppList() {
+		if (_appList == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _appList;
+		}
+	}
+
+	@Override
+	public void setAppList(String appList) {
+		_appList = appList;
+	}
+
+	@JSON
+	@Override
+	public int getSimulationNumber() {
+		return _simulationNumber;
+	}
+
+	@Override
+	public void setSimulationNumber(int simulationNumber) {
+		_simulationNumber = simulationNumber;
+	}
+
+	@JSON
+	@Override
 	public boolean getAggrement() {
 		return _aggrement;
 	}
@@ -1497,6 +1562,9 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 		challengeTeamImpl.setPresentationModifyDay(getPresentationModifyDay());
 		challengeTeamImpl.setPresentationStatus(getPresentationStatus());
 		challengeTeamImpl.setFilepath(getFilepath());
+		challengeTeamImpl.setCpuTime(getCpuTime());
+		challengeTeamImpl.setAppList(getAppList());
+		challengeTeamImpl.setSimulationNumber(getSimulationNumber());
 		challengeTeamImpl.setAggrement(getAggrement());
 		challengeTeamImpl.setChildChallengeId(getChildChallengeId());
 
@@ -1778,6 +1846,18 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 			challengeTeamCacheModel.filepath = null;
 		}
 
+		challengeTeamCacheModel.cpuTime = getCpuTime();
+
+		challengeTeamCacheModel.appList = getAppList();
+
+		String appList = challengeTeamCacheModel.appList;
+
+		if ((appList != null) && (appList.length() == 0)) {
+			challengeTeamCacheModel.appList = null;
+		}
+
+		challengeTeamCacheModel.simulationNumber = getSimulationNumber();
+
 		challengeTeamCacheModel.aggrement = getAggrement();
 
 		challengeTeamCacheModel.childChallengeId = getChildChallengeId();
@@ -1787,7 +1867,7 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(65);
+		StringBundler sb = new StringBundler(71);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1849,6 +1929,12 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 		sb.append(getPresentationStatus());
 		sb.append(", filepath=");
 		sb.append(getFilepath());
+		sb.append(", cpuTime=");
+		sb.append(getCpuTime());
+		sb.append(", appList=");
+		sb.append(getAppList());
+		sb.append(", simulationNumber=");
+		sb.append(getSimulationNumber());
 		sb.append(", aggrement=");
 		sb.append(getAggrement());
 		sb.append(", childChallengeId=");
@@ -1860,7 +1946,7 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(100);
+		StringBundler sb = new StringBundler(109);
 
 		sb.append("<model><model-name>");
 		sb.append("kisti.edison.challenge.model.ChallengeTeam");
@@ -1987,6 +2073,18 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 		sb.append(getFilepath());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>cpuTime</column-name><column-value><![CDATA[");
+		sb.append(getCpuTime());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>appList</column-name><column-value><![CDATA[");
+		sb.append(getAppList());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationNumber</column-name><column-value><![CDATA[");
+		sb.append(getSimulationNumber());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>aggrement</column-name><column-value><![CDATA[");
 		sb.append(getAggrement());
 		sb.append("]]></column-value></column>");
@@ -2046,6 +2144,9 @@ public class ChallengeTeamModelImpl extends BaseModelImpl<ChallengeTeam>
 	private Date _presentationModifyDay;
 	private boolean _presentationStatus;
 	private String _filepath;
+	private double _cpuTime;
+	private String _appList;
+	private int _simulationNumber;
 	private boolean _aggrement;
 	private long _childChallengeId;
 	private long _originalChildChallengeId;

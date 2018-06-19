@@ -833,6 +833,49 @@ public interface ChallengeTeamModel extends BaseModel<ChallengeTeam>,
 	public void setFilepath(String filepath);
 
 	/**
+	 * Returns the cpu time of this challenge team.
+	 *
+	 * @return the cpu time of this challenge team
+	 */
+	public double getCpuTime();
+
+	/**
+	 * Sets the cpu time of this challenge team.
+	 *
+	 * @param cpuTime the cpu time of this challenge team
+	 */
+	public void setCpuTime(double cpuTime);
+
+	/**
+	 * Returns the app list of this challenge team.
+	 *
+	 * @return the app list of this challenge team
+	 */
+	@AutoEscape
+	public String getAppList();
+
+	/**
+	 * Sets the app list of this challenge team.
+	 *
+	 * @param appList the app list of this challenge team
+	 */
+	public void setAppList(String appList);
+
+	/**
+	 * Returns the simulation number of this challenge team.
+	 *
+	 * @return the simulation number of this challenge team
+	 */
+	public int getSimulationNumber();
+
+	/**
+	 * Sets the simulation number of this challenge team.
+	 *
+	 * @param simulationNumber the simulation number of this challenge team
+	 */
+	public void setSimulationNumber(int simulationNumber);
+
+	/**
 	 * Returns the aggrement of this challenge team.
 	 *
 	 * @return the aggrement of this challenge team

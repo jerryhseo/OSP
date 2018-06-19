@@ -102,6 +102,9 @@
 		<property name="presentationModifyDay" type="org.hibernate.type.TimestampType" />
 		<property name="presentationStatus" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="filepath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="cpuTime" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
+		<property name="appList" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="simulationNumber" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="aggrement" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="childChallengeId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>

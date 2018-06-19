@@ -82,6 +82,9 @@ public class ChallengeTeamWrapper implements ChallengeTeam,
 		attributes.put("presentationModifyDay", getPresentationModifyDay());
 		attributes.put("presentationStatus", getPresentationStatus());
 		attributes.put("filepath", getFilepath());
+		attributes.put("cpuTime", getCpuTime());
+		attributes.put("appList", getAppList());
+		attributes.put("simulationNumber", getSimulationNumber());
 		attributes.put("aggrement", getAggrement());
 		attributes.put("childChallengeId", getChildChallengeId());
 
@@ -273,6 +276,24 @@ public class ChallengeTeamWrapper implements ChallengeTeam,
 
 		if (filepath != null) {
 			setFilepath(filepath);
+		}
+
+		Double cpuTime = (Double)attributes.get("cpuTime");
+
+		if (cpuTime != null) {
+			setCpuTime(cpuTime);
+		}
+
+		String appList = (String)attributes.get("appList");
+
+		if (appList != null) {
+			setAppList(appList);
+		}
+
+		Integer simulationNumber = (Integer)attributes.get("simulationNumber");
+
+		if (simulationNumber != null) {
+			setSimulationNumber(simulationNumber);
 		}
 
 		Boolean aggrement = (Boolean)attributes.get("aggrement");
@@ -1345,6 +1366,66 @@ public class ChallengeTeamWrapper implements ChallengeTeam,
 	@Override
 	public void setFilepath(java.lang.String filepath) {
 		_challengeTeam.setFilepath(filepath);
+	}
+
+	/**
+	* Returns the cpu time of this challenge team.
+	*
+	* @return the cpu time of this challenge team
+	*/
+	@Override
+	public double getCpuTime() {
+		return _challengeTeam.getCpuTime();
+	}
+
+	/**
+	* Sets the cpu time of this challenge team.
+	*
+	* @param cpuTime the cpu time of this challenge team
+	*/
+	@Override
+	public void setCpuTime(double cpuTime) {
+		_challengeTeam.setCpuTime(cpuTime);
+	}
+
+	/**
+	* Returns the app list of this challenge team.
+	*
+	* @return the app list of this challenge team
+	*/
+	@Override
+	public java.lang.String getAppList() {
+		return _challengeTeam.getAppList();
+	}
+
+	/**
+	* Sets the app list of this challenge team.
+	*
+	* @param appList the app list of this challenge team
+	*/
+	@Override
+	public void setAppList(java.lang.String appList) {
+		_challengeTeam.setAppList(appList);
+	}
+
+	/**
+	* Returns the simulation number of this challenge team.
+	*
+	* @return the simulation number of this challenge team
+	*/
+	@Override
+	public int getSimulationNumber() {
+		return _challengeTeam.getSimulationNumber();
+	}
+
+	/**
+	* Sets the simulation number of this challenge team.
+	*
+	* @param simulationNumber the simulation number of this challenge team
+	*/
+	@Override
+	public void setSimulationNumber(int simulationNumber) {
+		_challengeTeam.setSimulationNumber(simulationNumber);
 	}
 
 	/**

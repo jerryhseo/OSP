@@ -163,6 +163,9 @@
 			</basic>
 			<basic name="presentationStatus" />
 			<basic name="filepath" />
+			<basic name="cpuTime" />
+			<basic name="appList" />
+			<basic name="simulationNumber" />
 			<basic name="aggrement" />
 			<basic name="childChallengeId" />
 			<transient name="modelAttributes" />

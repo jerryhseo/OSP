@@ -38,7 +38,7 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(65);
+		StringBundler sb = new StringBundler(71);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -100,6 +100,12 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 		sb.append(presentationStatus);
 		sb.append(", filepath=");
 		sb.append(filepath);
+		sb.append(", cpuTime=");
+		sb.append(cpuTime);
+		sb.append(", appList=");
+		sb.append(appList);
+		sb.append(", simulationNumber=");
+		sb.append(simulationNumber);
 		sb.append(", aggrement=");
 		sb.append(aggrement);
 		sb.append(", childChallengeId=");
@@ -277,6 +283,16 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 			challengeTeamImpl.setFilepath(filepath);
 		}
 
+		challengeTeamImpl.setCpuTime(cpuTime);
+
+		if (appList == null) {
+			challengeTeamImpl.setAppList(StringPool.BLANK);
+		}
+		else {
+			challengeTeamImpl.setAppList(appList);
+		}
+
+		challengeTeamImpl.setSimulationNumber(simulationNumber);
 		challengeTeamImpl.setAggrement(aggrement);
 		challengeTeamImpl.setChildChallengeId(childChallengeId);
 
@@ -317,6 +333,9 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 		presentationModifyDay = objectInput.readLong();
 		presentationStatus = objectInput.readBoolean();
 		filepath = objectInput.readUTF();
+		cpuTime = objectInput.readDouble();
+		appList = objectInput.readUTF();
+		simulationNumber = objectInput.readInt();
 		aggrement = objectInput.readBoolean();
 		childChallengeId = objectInput.readLong();
 	}
@@ -432,6 +451,16 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 			objectOutput.writeUTF(filepath);
 		}
 
+		objectOutput.writeDouble(cpuTime);
+
+		if (appList == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(appList);
+		}
+
+		objectOutput.writeInt(simulationNumber);
 		objectOutput.writeBoolean(aggrement);
 		objectOutput.writeLong(childChallengeId);
 	}
@@ -466,6 +495,9 @@ public class ChallengeTeamCacheModel implements CacheModel<ChallengeTeam>,
 	public long presentationModifyDay;
 	public boolean presentationStatus;
 	public String filepath;
+	public double cpuTime;
+	public String appList;
+	public int simulationNumber;
 	public boolean aggrement;
 	public long childChallengeId;
 }
