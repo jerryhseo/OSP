@@ -91,11 +91,10 @@
 
 <%@ page import="javax.portlet.PortletURL" %>
 
-<!-- script, jquery -->
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
-<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
-
+<!-- JQuery -->
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
+<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
 <!-- edison utils -->
 <%@ page import="com.liferay.portal.service.CompanyLocalServiceUtil" %>
 <%@ page import="com.liferay.portlet.expando.model.ExpandoTable" %>
