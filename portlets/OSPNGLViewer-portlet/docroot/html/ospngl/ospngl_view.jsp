@@ -71,7 +71,7 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
-<portlet:namespace/>passNamespace();
+//<portlet:namespace/>passNamespace();
 var <portlet:namespace/>canvas = $('#<portlet:namespace/>canvas');
 var <portlet:namespace/>connector = '<%=connector%>';
 var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
@@ -141,7 +141,7 @@ $(".ui-dialog-titlebar").remove();
 
 
 $("#<portlet:namespace/>closeDialog").click(function() {
-	$("#<portlet:namespace/>fileExplorer").dialog("close");
+	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
 
