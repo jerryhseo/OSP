@@ -63,7 +63,6 @@ function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	returnData.push(x);
 	returnData.push(y);
 	
-	console.log(returnData);
 	return returnData;
 }
 
@@ -358,6 +357,8 @@ function getLineCalculatorCharImp(dielectricConstant,height,width){
      return Z0;
 }
 /* line calculator Fun End */
+
+
 /* Filter Design Fun Start */
 function getGtableVar(responseType,passbandRipple){
 	var gtable;
@@ -400,6 +401,7 @@ function getGtableVar(responseType,passbandRipple){
 	}
 	return gtable;
 }
+
 
 function getFilterDesignData(filterData, responseType, filterType, characteristicImpedance){
 	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
@@ -491,6 +493,7 @@ function filterDesignTableGrid(object,tbody1,tbody2){
 	var capacitor = object.capacitor;
 	var inductor = object.inductor;
 	tbody1.empty();
+	console.log(tbody1);
 	
 	for (var i = 0; i < optimumOrder; i++){
 		var $tr = $("<tr/>");
@@ -505,7 +508,312 @@ function filterDesignTableGrid(object,tbody1,tbody2){
 	tbody2.empty().append(tbody1.children().clone(true));
 }
 
+/*Filter Design lowpass Transmission Line Filter Func Start*/
+function getSteppedImpedanceGtableVar(responseType,passbandRipple){
+	var gtable;
+	if(responseType==="MAXIMALLY"){
+		gtable=[[0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,2,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,1.4142,	1.4142,	1,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0, 1,	2,	1,	1,	0,	0,	0,	0,	0,	0,	0],
+            [0, 0.7654,	1.8478,	1.8478,	0.7654,	1,	0,	0,	0,	0,	0,	0],
+            [0, 0.618,	1.618,	2,	1.618,	0.618,	1,	0,	0,	0,	0,	0],
+            [0, 0.5176,	1.4142,	1.9318,	1.9318,	1.4142,	0.5176,	1,	0,	0,	0,	0],
+            [0, 0.445,	1.247,	1.8019,	2,	1.8019,	1.247,	0.445,	1,	0,	0,	0],
+            [0, 0.3902,	1.1111,	1.6629,	1.9615,	1.9615,	1.6629,	1.1111,	0.3902,	1,	0,	0],
+            [0, 0.3473,	1,	1.5321,	1.8794,	2,	1.8794,	1.5321,	1,	0.3473,	1,	0],
+            [0, 0.3129,	0.908,	1.4142,	1.782,	1.9754,	1.9754,	1.782,	1.4142, 0.908,	0.3129,	1]];
+	}else if(responseType==="CHEBYSHEV"&&passbandRipple===3){
+		gtable=[[0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,1.9953,	1,	0,	0	,0	,0	,0	,0	,0	,0	,0],
+            [0, 3.1013,	0.5339,	5.8095,	0,	0,	0,	0,	0,	0,	0,0],
+            [0, 3.3487	,0.7117,	3.3487,	1	,0	,0	,0	,0	,0	,0	,0],
+            [0, 3.4289	,0.7483	,4.3471	,0.592,	5.8095	,0,	0,	0,	0,	0,	0],
+            [0, 3.4817	,0.7618	,4.5381	,0.7618	,3.4817	,1,	0,	0	,0	,0	,0],
+            [0, 3.5045	,0.7685	,4.6061	,0.7929	,4.4641	,0.6033,	5.8095,	0,	0,	0,	0],
+            [0, 3.5182	,0.7723	,4.6386	,0.8039	,4.6386	,0.7723	,3.5182,	1	,0	,0	,0],
+            [0, 3.5277	,0.7745	,4.6575	,0.8089	,4.699	,0.8018	,4.499,	0.6073,	5.8095	,0,	0],
+            [0, 3.534	,0.776	,4.6692	,0.8118	,4.7272	,0.8118	,4.6692,	0.776	,3.534	,1,	0],
+            [0, 3.5384	,0.7771,	4.6768,	0.8136,	4.7425	,0.8164,	4.726	,0.8051,	4.5142	,0.6091,	5.8095 ]];
+	}else if(responseType==="CHEBYSHEV"&&passbandRipple===0.5){
+		gtable=[[0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,0.6986,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,1.4029,	0.7071,	1.9841,	0,	0,	0,	0,	0,	0,	0,	0],
+            [0,1.5963,	1.0967,	1.5963,	1,	0,	0,	0,	0,	0,	0,	0],
+            [0,1.6703,	1.1926,	2.3661,	0.8419,	1.9841,	0,	0,	0,	0,	0,	0],
+            [0,1.7058,	1.2296,	2.5408,	1.2296,	1.7058,	1,	0,	0,	0,	0,	0],
+            [0,1.7254,	1.2479,	2.6064,	1.3137,	2.4758,	0.8696,	1.9841,	0,	0,	0,	0],
+            [0,1.7372,	1.2583,	2.6381,	1.3444,	2.6381,	1.2583,	1.7372,	1,	0,	0,	0],
+            [0,1.7451,	1.2647,	2.6564,	1.359,	2.6964,	1.3389,	2.5093,	0.8796,	1.9841,	0,	0],
+            [0,1.7504,	1.269,	2.6678,	1.3673,	2.7239,	1.3673,	2.6678,	1.269,	1.7504,	1,	0],
+            [0,1.7543,	1.2721,	2.6754,	1.3725,	2.7392,	1.3806,	2.7231,	1.3485,	2.5239,	0.8842,	1.9841]];
+	}
+	return gtable;
+}
+
+function getFilterDesignSteppedImpedanceData(filterData, responseType, filterType , characteristicImpedance, dielectricConstant, highest,lowestImpedance,heightImpedance){
+	
+	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
+	var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
+	var passbandRipple = parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+
+	
+	var substrateH = parseFloat(highest);
+	var er = parseFloat(dielectricConstant);
+	var Zh = parseFloat(heightImpedance);
+	var Zl = parseFloat(lowestImpedance);
+	
+	var Zo = parseFloat(characteristicImpedance);
+	
+	
+	var gtable = getSteppedImpedanceGtableVar(responseType, passbandRipple);
+	
+	var optimumOrder = 0;
+	if(responseType==="MAXIMALLY"){
+		optimumOrder = getMaximallyOrderNumberLH(centerFrequency, stopFrequency, stopbandAttenuation,filterType);
+	}else{
+		optimumOrder = getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRipple, stopbandAttenuation,filterType);
+	}
+	
+	 var inductor_bl = [];
+     var capacitor_bl = [];
+ 
+     
+     for (var i=0; i < optimumOrder; i++){
+         if (i % 2 == 0)
+         {
+             inductor_bl[i] = ((gtable[optimumOrder][i+1])*Zo/Zh)*180/math.pi;
+             capacitor_bl[i]=0;
+         }
+         else
+         {
+             capacitor_bl[i]=((gtable[optimumOrder][i+1])*Zl/Zo)*180/math.pi;
+             inductor_bl[i]=0;
+         }
+     }
+     
+     var l = [];
+     var bl = [];
+     var bl_r = [];
+
+     for (var i=0; i<optimumOrder; i++){
+         if (i % 2 == 0)
+         {
+             bl[i] = inductor_bl[i];
+            // l[i] = 1000*bl[i] / 360 * ((3 * math.pow(10, 8) / (Center_Frequency)) / math.sqrt(er));
+         }
+         else
+         {
+             bl[i] = capacitor_bl[i];
+             //l[i] = 1000*bl[i] / 360 * ((3 * math.pow(10, 8) / (Center_Frequency)) / math.sqrt(er));
+         }
+         
+         
+     }
+     
+
+     for (var i = 0; i < optimumOrder; i++)
+     {
+         bl_r[i] = bl[optimumOrder-i-1]
+         l[i] = 1000 * bl_r[i] / 360 * ((3 * math.pow(10, 8) / (centerFrequency)) / math.sqrt(er));
+     }
+     
+         
+     var A=Zh/60*math.sqrt((er+1)/2)+(er-1)/(er+1)*(0.23+0.11/er);
+     var w2_1=8*math.exp(A)/(math.exp(2*A)-2);
+     var B=377*math.pi/2/Zl/math.sqrt(er);
+         
+
+     var w1_1=2/math.pi*(B-1-math.log(2*B-1)+(er-1)/2/er*(math.log(B-1)+0.39-0.61/er));
+     var w1=w1_1*substrateH;
+     var w2=w2_1*substrateH;
+
+
+     var w = [];
+     var z = [];
+
+     for (var i = 0; i < optimumOrder; i++) {
+         if (i % 2 == 0) {
+             w[i] = w1;
+             z[i] = Zl;
+         }
+         else {
+             w[i] = w2;
+             z[i] = Zh;
+         }
+
+    }
+     
+     
+     var returnObject = {
+ 		"optimumOrder":optimumOrder,
+ 		"z":z,
+ 		"phase":bl_r,
+ 		"width":w,
+ 		"length":l
+ 	};
+ 
+	return returnObject;
+}
+
+function getFilterDesignSteppedImpedanceGrid(object,tbody1){
+	var optimumOrder = object.optimumOrder;
+	var z = object.z;
+	var phase = object.phase;
+	var width = object.width;
+	var length = object.length;
+	tbody1.empty();
+	
+	for (var i = 0; i < optimumOrder; i++){
+		var $tr = $("<tr/>");
+		$("<td/>").addClass("col-md-3 text-center").html(z[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-3 text-center").html(phase[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-3 text-center").html(width[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-3 text-center").html(length[i]).appendTo($tr);
+		$tr.appendTo(tbody1);
+	}
+}
+
+
+/*Filter Design lowpass Transmission Line Filter Func End*/
+
+/*Filter Design BandPass Transmission Line Filter Func Start*/
+function getFilterDesignEndCoupeldData(filterData, responseType, filterType , characteristicImpedance, dielectricConstant, height){
+	
+	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
+	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
+	var stopbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_SFL]*filterData[DESIGNER.Constants.SPEC_SFL_ADD]);
+	var stopbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_SFH]*filterData[DESIGNER.Constants.SPEC_SFH_ADD]);
+	
+	var passbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_PA])
+	var passbandRipple =  parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+	
+	var Width = getFilterDesignEndCoupeldOrderN(characteristicImpedance, dielectricConstant, height);
+	
+	var gtable = getGtableVar(responseType, passbandRipple);
+	
+	var optimumOrder = 0;
+	if(responseType==="MAXIMALLY"){
+		optimumOrder = getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL,stopbandFreqH,passbandAttenuation,stopbandAttenuation,filterType);
+	}else{
+		optimumOrder = getChebyshevOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL,stopbandFreqH,passbandRipple,stopbandAttenuation,filterType);
+	}
+	
+	var j = [];
+	var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
+	
+	for (var i = 0; i < optimumOrder+1; i++){
+        if (i == 0){
+            j[i] = math.sqrt(math.pi / 2 * wdelta / (gtable[optimumOrder][i] * gtable[optimumOrder][i+1]))
+        }else if (i >= 1 && i < optimumOrder ){
+            j[i] = math.pi*wdelta/2/math.sqrt(gtable[optimumOrder][i] * gtable[optimumOrder][i+1])
+        }else if (i == optimumOrder){
+            j[i] = math.sqrt(math.pi / 2 * wdelta / (gtable[optimumOrder][i] * gtable[optimumOrder][i+1]))
+        }
+    }
+	
+	var b = [];
+    var bp = [];
+    var theta = [];
+    var c_g = [];
+    var c_p = [];
+    var spacing = [];
+    var deltaL1 = [];
+    var deltaL2 = [];
+    var lamda_g = 1000*(3 * math.pow(10,8) / Math.sqrt(passbandFreqL * passbandFreqH))/ math.sqrt(dielectricConstant);
+    var l = [];
+    var L = [];
+	
+    for (var i =0; i<optimumOrder+1; i++)
+    {
+        b[i] = j[i] / (1 - math.pow(j[i], 2));
+        c_g[i] = 1/50 * b[i] / (2*math.pi*math.sqrt(passbandFreqL * passbandFreqH));
+        spacing[i] = math.acoth(math.exp(b[i] * lamda_g / height)) * 2 * height / math.pi;
+        bp[i] = -2 * height / lamda_g * math.log(math.cosh(math.pi * spacing[i] / height));
+        c_p[i] = 1 / 50 * bp[i] / (2 * math.pi * math.sqrt(passbandFreqL * passbandFreqH));
+    }
+
+    for (var i = 1; i < optimumOrder + 1; i++)
+    {
+        deltaL1[i] = Math.sqrt(passbandFreqL * passbandFreqH) * c_p[i - 1] * lamda_g;
+        deltaL2[i] = Math.sqrt(passbandFreqL * passbandFreqH) * c_p[i] * lamda_g;
+    }
+     
+    for (var i = 1; i < optimumOrder + 1; i++)
+    {
+        theta[i] = math.pi - 1 / 2 * (math.atan(2 * b[i - 1]) + math.atan(2 * b[i]));
+        l[i] = lamda_g/(2*math.pi)*theta[i]-deltaL1[i]-deltaL2[i];
+    }
+     
+    
+    for (var i = 0; i < optimumOrder; i++)
+    {
+        L[i] = l[i+1];
+    }
+
+    var W_r = [];
+
+    for (var i = 0; i < optimumOrder; i++) {
+
+        W_r[i]  = Width;
+    }
+    
+    var returnObject = {
+    		"optimumOrder":optimumOrder,
+    		"width":W_r,
+    		"lenth":L,
+    		"spacing":spacing
+    	};
+    
+   	return returnObject;
+}
+
+function getFilterDesignEndCoupeldGrid(object,tbody1){
+	var optimumOrder = object.optimumOrder;
+	var width = object.width;
+	var spacing = object.spacing;
+	var lenth = object.lenth;
+	tbody1.empty();
+	
+	for (var i = 0; i < optimumOrder; i++){
+		var $tr = $("<tr/>");
+		$("<td/>").addClass("col-md-4 text-center").html(width[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(spacing[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(lenth[i]).appendTo($tr);
+		$tr.appendTo(tbody1);
+	}
+}
+
+function getFilterDesignEndCoupeldOrderN(characteristicImpedance,dielectricConstant,height){
+	var Zo = characteristicImpedance;
+	var er = dielectricConstant;
+	var substrateH = height;
+	
+	var A = Zo / 60 * math.sqrt((er + 1) / 2) + (er - 1) / (er + 1) * (0.23 + 0.11 / er);
+    var B = 377 * math.pi / 2 / Zo / math.sqrt(er);
+
+    var Wh_slim = 8 * math.exp(A) / (math.exp(2 * A) - 2);
+    var Wh_wide = 2 / math.pi * (B - 1 - math.log(2 * B - 1) + (er - 1) / 2 / er * (math.log(B - 1) + 0.39 - 0.61 / er));
+
+    if (Wh_slim <= 2 && Wh_wide <= 2) {
+        var W = Wh_slim * substrateH;
+
+    } else if (Wh_slim >= 2 && Wh_wide >= 2) {
+        var W = Wh_wide * substrateH;
+
+    } else {
+        var W = 0; // it means errors
+    }
+
+    return W;
+}
+
+
+/*Filter Design BandPass Transmission Line Filter Func End*/
 /* Filter Design Fun End */
+
 /* Modal Gtable Grid Fun Start */
 function getGtableData(responseType,passbandRipple){
 	var gtable;
