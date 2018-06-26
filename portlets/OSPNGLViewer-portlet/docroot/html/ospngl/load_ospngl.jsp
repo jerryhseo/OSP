@@ -8,9 +8,9 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
 <!-- JQuery -->
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
-<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
+<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
 
 <!-- NGL -->
 <script src="<%=request.getContextPath()%>/build/js/ngl.dev.js"></script>
@@ -49,8 +49,8 @@ var serveResourceURL;
 function setNamespace( ns, parentServeResourceURL ){
 	namespace = ns;
 	serveResourceURL = parentServeResourceURL;
-	console.log('[NGLViewer] Set namespace : ' + namespace);
-	console.log('[NGLViewer] Set serveResourceURL : ' + serveResourceURL);
+	console.log('[NGLViewerLoad] Set namespace : ' + namespace);
+	console.log('[NGLViewerLoad] Set serveResourceURL : ' + serveResourceURL);
 }
 
 
@@ -74,9 +74,9 @@ var stage;
 document.addEventListener("DOMContentLoaded", function(){
 	
 	stage = new NGL.Stage();
-	console.log('[NGLViewer] Set gui1 ');
+	console.log('[NGLViewerLoad] Set gui1 ');
 	NGL.StageWidget(stage, 'nglViewer');
-	console.log('[NGLViewer] Set gui2 ');
+	console.log('[NGLViewerLoad] Set gui2 ');
 
 	var load = NGL.getQuery("load");
 	if(load)
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	
 	var plugin = NGL.getQuery("plugin");
 	if (plugin) NGL.PluginRegistry.load(plugin, stage);
-	console.log('[NGLViewer] set plugin test 1 : ', plugin);
+	console.log('[NGLViewerLoad] set plugin test 1 : ', plugin);
 	
 	var struc = NGL.getQuery("struc");
 	var traj = NGL.getQuery("traj");
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 	
 	var fileMenu = $("#menubar").children().first().find(".options");
-	console.log("[NGLViewer] find menu test ", fileMenu);
+	console.log("[NGLViewerLoad] find menu test ", fileMenu);
 	fileMenu.append('<div class="option" id="openServerMenu">Open Server</div>');
 
 	var openServerMenu = $("#openServerMenu");
@@ -112,8 +112,8 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function drawNglViewer(inputData, serveResourceURL){
-	console.log("[NGLViewer] Draw NGL Viewer URL : ", serveResourceURL);
-	console.log('[NGLViewer] input data : ', inputData);
+	console.log("[NGLViewerLoad] Draw NGL Viewer URL : ", serveResourceURL);
+	console.log('[NGLViewerLoad] input data : ', inputData);
 	var result;
 	
 	var data ={};
@@ -127,10 +127,10 @@ function drawNglViewer(inputData, serveResourceURL){
 	//stage.removeAllComponents();
 	
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", serveResourceURL);
+	xhr.open("POST", serveResourceURL);
 	xhr.responseType = "blob";
 	xhr.addEventListener('load', function(){
-		console.log('[NGLViewer] test xmlhttprequest ', xhr.response);
+		console.log('[NGLViewerLoad] test xmlhttprequest ', xhr.response);
 		var blob = new Blob([xhr.response]);
 		var file = new File([blob], inputData.name_);
 		stage.loadFile(file, {defaultRepresentation: true});
