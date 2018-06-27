@@ -482,7 +482,7 @@
 			WHERE 
 				parentGroupId = 20181
 			AND
-				name IN('CFD', 'NANO', 'CHEM', 'CSD', 'DESIGN', 'CMED', 'UE, 'CEM')
+				name IN('CFD', 'NANO', 'CHEM', 'CSD', 'DESIGN', 'CMED')
 		]]>
 	</sql>
 	
