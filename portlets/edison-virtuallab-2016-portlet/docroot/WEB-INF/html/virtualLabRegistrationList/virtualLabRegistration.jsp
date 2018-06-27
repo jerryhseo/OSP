@@ -142,7 +142,7 @@ function <portlet:namespace/>cancelButton(){
 								<input id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" type="hidden" value="23212"/>
 								<select name="labGroup" onChange="checkGroup(this.value);" class="btn btn-default">
 									<c:forEach items="${virtualLabGroup}" var="map">
-										   <option id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${map.groupId}">${map.name}</option>
+										   <option id="<portlet:namespace/>groupId" name="<portlet:namespace/>groupId" value="${map.groupId}"><liferay-ui:message key='${map.name}' /></option>
 									</c:forEach>
 								</select>
 							</td>
