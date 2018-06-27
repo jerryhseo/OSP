@@ -253,9 +253,9 @@ NGL.StageWidget = function (stage, id) {
 	  var rightOffset = window.innerWidth - endElementX;
 	  rightOffset = parseFloat(rightOffset) - parseFloat(elementWidth);
 	  
-	  var clientX = parseFloat(clientX);
+	  var clientXX = parseFloat(clientX);
 	  
-    if (clientX >= 50 && clientX <= endElementX - 10) {
+    if (clientXX >= 50 && clientXX <= endElementX - 10) {
 
     	console.log("test111");
     	console.log("changed");
@@ -263,7 +263,7 @@ NGL.StageWidget = function (stage, id) {
   	  console.log("Element Offset : ", elementOffset);
   	  console.log("Element Width : ", elementWidth);
   	  console.log("Element end X : ", endElementX);
-  	  console.log("Mouse X : "+clientX);
+  	  console.log("Mouse X : "+clientXX);
 
     	//console.log("test111");
     	//console.log("changed");
@@ -274,20 +274,28 @@ NGL.StageWidget = function (stage, id) {
   	 // console.log("Mouse X : "+clientX);
 
     	
-    	var sidbarWidth = endElementX - clientX;
-    	var viewWidth = clientX - elementOffset;
+    	var sidbarWidth = endElementX - clientXX;
+    	var viewWidth = clientXX - elementOffset;
     	
     	sidebar.setWidth(sidbarWidth + 'px')
         viewport.setWidth(viewWidth + 'px')
         toolbar.setWidth(viewWidth + 'px')
+        
 //    	sidebar.setWidth(window.innerWidth - clientX + 'px')
 //      viewport.setWidth(clientX + 'px')
 //      toolbar.setWidth(clientX + 'px')
       stage.handleResize()
     }
     var sidebarWidth = sidebar.dom.getBoundingClientRect().width
+    console.log("[NGL View GUI ] test 0", clientX);
     if (clientX === undefined) {
-      var mainWidth = parseint(window.innerWidth - sidebarWidth);
+    	console.log("[NGL View GUI ] test 1", $(window).width());
+    	console.log("[NGL View GUI ] test 2", window.innerWidth);
+    	console.log("[NGL View GUI ] test 3", sidebarWidth);
+    	var claculateWidth = window.innerWidth - sidebarWidth;
+    	console.log("[NGL View GUI ] test 4", claculateWidth);
+      
+      
       viewport.setWidth(mainWidth + 'px')
       toolbar.setWidth(mainWidth + 'px')
       stage.handleResize()

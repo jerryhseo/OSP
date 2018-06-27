@@ -10,7 +10,18 @@
 <!-- JQuery -->
 <script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js" ></script>
 <link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.js"></script>
+
+<!-- bootstrap -->
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
+
+
 
 <!-- NGL -->
 <script src="<%=request.getContextPath()%>/build/js/ngl.dev.js"></script>
@@ -34,7 +45,7 @@
 
 </head>
 
-<body style="width:100%; height:100%">
+<body style="width:100%; height:90%">
 <%@include file="/html/init.jsp"%>
 
 
@@ -108,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function(){
 		parent.iframeClickServerOpen();
 	});
 
-	//stage.loadFile("<%=request.getContextPath()%>/data/4opj.pdb", {defaultRepresentation: true});
 });
 
 function drawNglViewer(inputData, serveResourceURL){
