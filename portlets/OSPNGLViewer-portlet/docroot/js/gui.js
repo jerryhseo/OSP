@@ -296,8 +296,8 @@ NGL.StageWidget = function (stage, id) {
     	console.log("[NGL View GUI ] test 4", claculateWidth);
       
       
-      viewport.setWidth(mainWidth + 'px')
-      toolbar.setWidth(mainWidth + 'px')
+      viewport.setWidth(claculateWidth + 'px')
+      toolbar.setWidth(claculateWidth + 'px')
       stage.handleResize()
     }
     if (sidebarWidth <= 10) {

@@ -7,12 +7,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
+<%@include file="../init.jsp"%>
+
 <!-- JQuery -->
 <script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js" ></script>
-<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
 
+
+<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.js"></script>
@@ -46,7 +49,7 @@
 </head>
 
 <body style="width:100%; height:90%">
-<%@include file="/html/init.jsp"%>
+
 
 
 
