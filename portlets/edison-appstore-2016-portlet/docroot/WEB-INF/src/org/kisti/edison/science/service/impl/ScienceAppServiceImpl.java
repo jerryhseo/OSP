@@ -35,6 +35,7 @@ import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.model.ExpandoTable;
@@ -80,6 +81,17 @@ public class ScienceAppServiceImpl extends ScienceAppServiceBaseImpl {
 		List<Object[]> scienceAppApiList = scienceAppFinder.retrieveApiAppList(params);
 		
 		List<Map<String,Object>> dataList = new ArrayList<Map<String,Object>>();
+		
+		//Parent Category Setting
+		long companyGroupId = CompanyLocalServiceUtil.getCompanies().get(0).getGroupId();
+		AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+		List<AssetCategory> rootCategoryList = AssetCategoryLocalServiceUtil.getVocabularyRootCategories(aVocabulary.getVocabularyId(), -1, -1,null);
+		Map<Long,String> rootCategoryMap = new HashMap<Long,String>();
+		for(AssetCategory rootCatogory : rootCategoryList){
+			rootCategoryMap.put(rootCatogory.getCategoryId(), rootCatogory.getTitle(Locale.KOREAN));
+		}
+		
+		
 		for(int i=0; i<scienceAppApiList.size();i++){
 			Object[] resultArray = scienceAppApiList.get(i);
 			ScienceApp scienceApp = (ScienceApp) resultArray[0];
@@ -91,16 +103,20 @@ public class ScienceAppServiceImpl extends ScienceAppServiceBaseImpl {
 			
 			long scienceAppId = scienceApp.getScienceAppId();
 			
-			map.put("scienceAppId", scienceAppId);
-			List<Object[]> scienceAppCategories = scienceAppFinder.retrieveApiAppCategories(map);
-
-			for(int j=0; j<scienceAppCategories.size();j++){
-				Object[] resultCategory = scienceAppCategories.get(j);
-				Map<String, Object> categoryMap = new HashMap<String, Object>();
-				categoryMap.put("ChildCategory", resultCategory[0]);
-				categoryMap.put("ParentCategory", resultCategory[1]);
+			// Category
+			try{
+				long entryId = AssetEntryLocalServiceUtil.getEntry(ScienceApp.class.getName(), scienceAppId).getEntryId();
+				List<AssetCategory> aCategoryList = AssetCategoryLocalServiceUtil.getAssetEntryAssetCategories(entryId);
 				
-				categoryList.add(categoryMap);
+				for(AssetCategory categoryLink : aCategoryList){
+					Map<String, Object> categoryMap = new HashMap<String, Object>();
+					categoryMap.put("ParentCategory", rootCategoryMap.get(categoryLink.getParentCategoryId()));
+					categoryMap.put("ChildCategory", categoryLink.getTitle(Locale.KOREAN));
+					
+					categoryList.add(categoryMap);
+				}
+			}catch (Exception NoSuchEntryException) {
+				
 			}
 			dataRow.put("Categorys", categoryList);
 			
