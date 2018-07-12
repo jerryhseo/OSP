@@ -64,7 +64,7 @@ label.checkbox-label input[type=checkbox]{
 	
 		<c:if test="${not empty tabsValues}">
 			<div class="contabmenu tabWidth"> 
-				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="195"/>
+				<edison-ui:tabs names="<%=tabNames%>" tabsValues="<%=tabsValues%>" value="<%=visitSite%>" refresh="<%=false%>" onClick="<%=portletNameSpace%>" minwidth="150"/>
 			</div>
 		</c:if>
 	
