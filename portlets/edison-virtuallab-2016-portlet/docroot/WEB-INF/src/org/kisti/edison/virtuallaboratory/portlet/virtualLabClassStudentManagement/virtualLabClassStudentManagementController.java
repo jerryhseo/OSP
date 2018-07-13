@@ -105,8 +105,10 @@ public class virtualLabClassStudentManagementController {
 			Map<String, Object> params = RequestUtil.getParameterMap(httpRequest);
 	
 			if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.TEMP_USER)) {
+				log.info("isTempUser");
 				classId = (String) user.getExpandoBridge().getAttribute(EdisonExpando.USER_CLASS_ID);
 			} else {
+				log.info("isNotTempUser");
 				for (Map.Entry<String,Object> str : params.entrySet()) {
 					if(str.getKey().contains("classId")) {
 						classId =  (String) str.getValue();
@@ -135,6 +137,7 @@ public class virtualLabClassStudentManagementController {
 					|| UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwner.getRoleId(), Long.parseLong(classId))
 					|| UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManager.getRoleId(), Long.parseLong(classId))) // VIRTUAL LAB OWNER CHECK
 			{
+				log.info("isAdmin!!");
 				// 설문조사 maxQuestionSeqNo 가져오기
 				long maxQuestionSeqNo = SurveyLocalServiceUtil.getMaxQuestionSeq(GetterUtil.get(virtualLabClassInfo.get("virtualLabId"),0L));
 				model.addAttribute("maxQuestionSeqNo", maxQuestionSeqNo);
@@ -159,6 +162,7 @@ public class virtualLabClassStudentManagementController {
 				
 				return "virtualLabClassStudentManagement/virtualClassStudentList";
 			} else {
+				log.info("isNotAdmin!!");
 				model.addAttribute("userId", PortalUtil.getUserId(request));
 				return "virtualLabClassStudentManagement/virtualClassStudentListNonePage";
 			}
