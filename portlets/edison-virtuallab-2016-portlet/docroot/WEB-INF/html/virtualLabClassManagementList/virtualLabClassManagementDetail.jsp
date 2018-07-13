@@ -6,19 +6,19 @@
 	<div class="columns-1-2-1" id="main-content" role="main">
 	
 	<!-- Virtual Lab Class > main visual -->
-	<div class="row">
+	<div>
 	    <div class="portlet-column portlet-column-only span12" id="column-1">
 	        <liferay-portlet:runtime portletName="edisonvirtuallabclassmainvisual_WAR_edisonvirtuallab2016portlet_INSTANCE_44oBtU3CyBWo"  queryString="&classId=${classId}&groupId=${groupId}&redirectName=${classTitle}&redirectURL=${redirectURL}&isDefaultUserWrite=${isDefaultUserWrite}&isCustomAdmin=${isCustomAdmin }" />
 	    </div>
 	</div>
 	
-	<div class="row">
+	<div>
 	    <div class="portlet-column portlet-column-only span12" id="column-2">
 	        <liferay-portlet:runtime portletName="edisonvirtuallabclassscienceapplist_WAR_edisonvirtuallab2016portlet"  queryString="&classId=${classId}&groupId=${groupId}" />
 	    </div>
 	</div>
 	
-	<div class="row">
+	<div>
 		<div class="scienceappwrap">
 		    <div class="portlet-column portlet-column-first span6" id="column-4" style="width: 580px; margin-right: 30px;">
 		    	<liferay-portlet:runtime portletName="edisonvirtuallabclassnote_WAR_edisonvirtuallab2016portlet"  queryString="&classId=${classId}&groupId=${groupId}" />
