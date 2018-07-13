@@ -158,7 +158,6 @@ public class VirtualClassMainController {
 			}
 			model.addAttribute("backURL", themeDisplay.getPortalURL() + themeDisplay.getPathFriendlyURLPublic() + group.getFriendlyURL() + "/home");
 			
-			log.info("----> isAdmin? " + model.get("admin") + " / role? " + model.get("role"));
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
