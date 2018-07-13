@@ -202,6 +202,7 @@ function <portlet:namespace/>openStudentManagement(){
 		portletURL.setPortletId("edisonvirtuallabclassstudentmanagement_WAR_edisonvirtuallab2016portlet"); 
 		portletURL.setParameter("classId", "${classInfo.classId}");
 		portletURL.setParameter("groupId", "${classInfo.groupId}");
+		console.log("portletURL : " + portletURL.toString());
 		Liferay.Util.openWindow(
 			{
 				dialog: {
@@ -222,7 +223,7 @@ function <portlet:namespace/>openStudentManagement(){
 				},
 			id: "studentManagementDialog",
 			uri: portletURL.toString(),
-			title: "<liferay-ui:message key='edison-virtuallab-student-infomation' />",
+			title: "<liferay-ui:message key='edison-virtuallab-student-infomation' />"
 			}
 		);
 		

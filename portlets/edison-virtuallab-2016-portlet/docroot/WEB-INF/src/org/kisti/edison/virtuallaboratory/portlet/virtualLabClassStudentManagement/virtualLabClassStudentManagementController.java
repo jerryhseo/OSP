@@ -87,6 +87,7 @@ public class virtualLabClassStudentManagementController {
 	// default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) {
 		try {
+			log.info("start view");
 			HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(request);
 			httpRequest = PortalUtil.getOriginalServletRequest(httpRequest);
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
