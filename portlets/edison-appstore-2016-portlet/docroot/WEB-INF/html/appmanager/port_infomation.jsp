@@ -388,7 +388,6 @@ AUI().ready(function() {
 			draw = true;
 		}
 		
-		
 		if(portChangeCheck&&'${data.portExist}'=='true'&&!<portlet:namespace/>portChange){
 			<portlet:namespace/>portChange = true;
 		}

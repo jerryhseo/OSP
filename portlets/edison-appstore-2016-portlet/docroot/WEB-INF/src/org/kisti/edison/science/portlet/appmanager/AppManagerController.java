@@ -618,7 +618,7 @@ public class AppManagerController{
 							ports.setLogPorts(logPorts);
 							ScienceAppLogPortsLocalServiceUtil.updateScienceAppLogPorts(ports);
 						}else{
-							ScienceAppLogPortsLocalServiceUtil.create(scienceAppId, outputPorts);
+							ScienceAppLogPortsLocalServiceUtil.create(scienceAppId, logPorts);
 						}
 					}
 					
