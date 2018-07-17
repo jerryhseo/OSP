@@ -7,15 +7,10 @@
 
 
 <!-- JQuery -->
-<script src="<%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js" ></script>
-<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
-<script src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js" ></script>
-
-
-<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
-<link href="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 
 <!-- bootstrap -->
 <link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +20,7 @@
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 <portlet:renderURL var="renderURL">
-    <portlet:param name="jspPage" value="/html/ospngl/nglViewer.jsp"/>
+    <portlet:param name="jspPage" value="/html/ospngl/load_ospngl.jsp"/>
 </portlet:renderURL>
 
 <%
@@ -103,6 +98,8 @@ if(<portlet:namespace/>eventEnable === false){
 	<portlet:namespace/>loadNGLFile( <portlet:namespace/>initData.clone() );
 	<portlet:namespace/>initializeFileExplorer();
 }
+
+
 
 /***********************************************************************
  * Initailization section using parameters
@@ -246,6 +243,10 @@ Liferay.on(
 		};
   			
 		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
+		//if($('#<portlet:namespace/>canvasFrame').height() < 600){
+		//	console.log("[NGLViewer]Check height and set 600 px.", $('#<portlet:namespace/>canvasFrame').height());
+		//	$('#<portlet:namespace/>canvasFrame').height(600);
+		//}
 	}
 );
 
@@ -265,7 +266,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( e.targetPortlet !== myId )
 			return;
-		
+		console.log('[NGLViewer]OSP_LOAD_DATA: ['+e.targetPortlet+', '+new Date()+']', e);
 		console.log('[NGLViewer]OSP_LOAD_DATA: ['+e.portletId+', '+new Date()+']', e.data);
 			
 		<portlet:namespace/>initialize(e.data);

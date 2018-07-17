@@ -6,20 +6,18 @@
 <%@include file="../init.jsp"%>
 
 <!-- JQuery -->
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
-<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
-
-
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 
+<!-- bootstrap -->
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 <portlet:renderURL var="renderURL">
-    <portlet:param name="jspPage" value="/html/JSMol/load_jsmol.jsp"/>
+    <portlet:param name="jspPage" value="/html/JSMol/load_paraviewglance.jsp"/>
 </portlet:renderURL>
 
 <%
@@ -35,11 +33,12 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 
 
 <div class="container-fluid osp-analyzer">
-	<div class="row-fluid frame">
-		<iframe style="height:600px" class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ospparaviewglance/load_paraviewglance.jsp">
+	<div class="row-fluid canvas" id="<portlet:namespace/>canvasFrame">
+		<iframe class ="col-sm-12 iframe-canvas" id="<portlet:namespace/>canvas" src="<%=request.getContextPath()%>/html/ospparaviewglance/load_paraviewglance.jsp">
 		</iframe>
 	</div>
 </div>
+
 
 <div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
 	<div id="<portlet:namespace/>fileExplorer" class="panel panel-primary ui-draggable" style="padding:0px;margin-bottom:0px;">
@@ -90,6 +89,8 @@ var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
+
+
 
 /***********************************************************************
  * Initailization section using parameters
@@ -498,6 +499,8 @@ function <portlet:namespace/>initialize( inputData ){
 				break;
 		}
 	}
+	
+	
 }
 
 </script>

@@ -59,6 +59,7 @@
 <script>
 var namespace;
 var serveResourceURL;
+var fullPath;
 
 function setNamespace( ns, parentServeResourceURL ){
 	namespace = ns;
@@ -82,7 +83,7 @@ if (mdsrv) {
 
 
 //Plugins
-NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.plugin");
+//NGL.PluginRegistry.add("apbs", "<%=request.getContextPath()%>/plugins/apbs.plugin");
 
 var stage;
 document.addEventListener("DOMContentLoaded", function(){
@@ -101,9 +102,9 @@ document.addEventListener("DOMContentLoaded", function(){
 	if (script) stage.loadFile("<%=request.getContextPath()%>/scripts/" + script + ".js");
 	
 	
-	var plugin = NGL.getQuery("plugin");
-	if (plugin) NGL.PluginRegistry.load(plugin, stage);
-	console.log('[NGLViewerLoad] set plugin test 1 : ', plugin);
+	//var plugin = NGL.getQuery("plugin");
+	//if (plugin) NGL.PluginRegistry.load(plugin, stage);
+	//console.log('[NGLViewerLoad] set plugin test 1 : ', plugin);
 	
 	var struc = NGL.getQuery("struc");
 	var traj = NGL.getQuery("traj");
@@ -122,6 +123,8 @@ document.addEventListener("DOMContentLoaded", function(){
 		parent.iframeClickServerOpen();
 	});
 
+	console.log("[NGLViewerLoad] stage test1: ", stage);
+	console.log("[NGLViewerLoad] stage test1: ", stage.compList);
 });
 
 function drawNglViewer(inputData, serveResourceURL){
@@ -137,7 +140,15 @@ function drawNglViewer(inputData, serveResourceURL){
 	data[namespace+'fileName'] = inputData.name_;
 	data[namespace+'relative'] = true;
 
+	var currentfullPath = inputData.parent+inputData.name_;
+	console.log("[NGLViewerLoad] full path test ", fullPath);
 	//stage.removeAllComponents();
+	console.log("[NGLViewerLoad] stage test1: ", stage.compList);
+	$.each(stage.compList, function(i, element){
+		if($.inArray(inputData.name_, stage.compList.name) === -1){
+			return;
+		}
+	});
 	
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", serveResourceURL);

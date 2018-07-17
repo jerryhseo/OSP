@@ -1,33 +1,43 @@
 {
   "_args": [
     [
-      "itk@9.0.0",
-      "/home/travis/build/Kitware/pv-web-viewer"
+      "itk@9.1.1",
+      "/media/k1714p2/d/PARAVIEWGLANCE_GIT/paraview-glance"
     ]
   ],
-  "_development": true,
-  "_from": "itk@9.0.0",
-  "_id": "itk@9.0.0",
-  "_inBundle": false,
-  "_integrity": "sha512-l+P/elWjeqsac8Q6ATmTcnvFdLl2SKEvRKnLeeR8PZlY+4vgvTr6RUPdoianPkvDNIXE3cTSC41JCrtsVrXtVg==",
+  "_from": "itk@9.1.1",
+  "_id": "itk@9.1.1",
+  "_inCache": true,
+  "_installable": true,
   "_location": "/itk",
+  "_nodeVersion": "10.4.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/itk_9.1.1_1528913899312_0.9443830938104969"
+  },
+  "_npmUser": {
+    "email": "matt@mmmccormick.com",
+    "name": "thewtex"
+  },
+  "_npmVersion": "6.1.0",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "itk@9.0.0",
     "name": "itk",
-    "escapedName": "itk",
-    "rawSpec": "9.0.0",
-    "saveSpec": null,
-    "fetchSpec": "9.0.0"
+    "raw": "itk@9.1.1",
+    "rawSpec": "9.1.1",
+    "scope": null,
+    "spec": "9.1.1",
+    "type": "version"
   },
   "_requiredBy": [
-    "#DEV:/"
+    "/",
+    "/paraview-glance"
   ],
-  "_resolved": "https://registry.npmjs.org/itk/-/itk-9.0.0.tgz",
-  "_spec": "9.0.0",
-  "_where": "/home/travis/build/Kitware/pv-web-viewer",
+  "_resolved": "https://registry.npmjs.org/itk/-/itk-9.1.1.tgz",
+  "_shasum": "e215ccc8f66e00e1d29c1659d3ed807ea1b5fbdc",
+  "_shrinkwrap": null,
+  "_spec": "itk@9.1.1",
+  "_where": "/media/k1714p2/d/PARAVIEWGLANCE_GIT/paraview-glance",
   "author": {
     "name": "Insight Software Consortium"
   },
@@ -43,6 +53,7 @@
     }
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "commander": "^2.15.1",
     "mime-types": "^2.1.15",
     "promise-file-reader": "^0.3.1",
@@ -52,7 +63,6 @@
   "devDependencies": {
     "async": "^2.6.0",
     "ava": "^0.22.0",
-    "axios": "^0.17.1",
     "babel-core": "^6.24.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -84,17 +94,37 @@
     "doc": "doc",
     "test": "test"
   },
+  "dist": {
+    "fileCount": 114,
+    "integrity": "sha512-y3WjO6YL0TNkoqhwz/0zY6yn9kfua1DhjqyFIxydHlTjK914GLJzo+rTXhbVNyF4gtFLTkGkunY4SN9JdFgbyw==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbIV/tCRA9TVsSAnZWagAAGUwP/1GixE+/uuEjI2JmdSOx\nrbR89/uy4M327FsTd25SCmmgO51lVAuOGZRQ2GicP+tQ91S+WciINEFY5T8u\nqE553MCaCfdWyWIT3158FDpMBFfx7kwJLlX1mym5CRGzictZx0yJG5dCVocb\n9sJRb313NyN4CVSddzqOCGGmkl0vtfGfpOrtzj+NYsVDtJ8DAaQbMrjT9GCQ\nMUPK/Y8ZkG0D/kdSuTG3DyZM4lpQqewmDN/xyJUWdu2OWzwrzwKit7D927Mf\n/pUOHBdlUG2AZtHaXyq3Fs1kr/msmlUH3Mi2GPsPvN3e2bM4eYgPtJQhznqx\nIbdDek2Z6nmhcdmwF1LSfieMYbqTe5RuGAhb0vF3s3d7t94xoIOsicHUp29F\nK2oZ1wgxjtAZ9p2/i9ymphmhU+tUVNPHV7NqbN0llKmYBspjyD+wqmNwHukI\nYjM/F8CaMdhwfzg6XrQnj7h6pKq/r0ISVRFWsJISDZS1Vc8WJvsVkvDkeFV7\niHvnAdfRNUyOqbiLtrxRsj42DwjJsJZBROLlEBZiWzgX34LJBKs1FBm0qN6Z\nMsmJFW3u9t6U7eH5VZWeMhaziJPDICErJSO+rbR5yJbM8S1jOsfRi2eWQaN4\nqlw5rUtOaL8hjzxdStu3ykyq7B3MjQCnvEUt+tXDAMZ/KT9ovFhzfOtOSS7I\nj9pF\r\n=Y40y\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "e215ccc8f66e00e1d29c1659d3ed807ea1b5fbdc",
+    "tarball": "https://registry.npmjs.org/itk/-/itk-9.1.1.tgz",
+    "unpackedSize": 99371609
+  },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "keywords": [
-    "itk",
     "imaging",
     "io",
+    "itk",
     "medical",
     "scientific"
   ],
   "license": "Apache-2.0",
   "main": "./dist/itk.js",
+  "maintainers": [
+    {
+      "name": "sebastien.jourdain",
+      "email": "sebastien.jourdain@kitware.com"
+    },
+    {
+      "name": "thewtex",
+      "email": "matt@mmmccormick.com"
+    }
+  ],
   "name": "itk",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/InsightSoftwareConsortium/itk-js.git"
@@ -111,11 +141,11 @@
   },
   "standard": {
     "ignore": [
-      "src/loadEmscriptenModuleBrowser.js",
-      "src/itk-js-cli.js",
       "itkJSImageIOPost.js",
+      "src/itk-js-cli.js",
+      "src/loadEmscriptenModuleBrowser.js",
       "test/Browser/tests.js"
     ]
   },
-  "version": "9.0.0"
+  "version": "9.1.1"
 }
