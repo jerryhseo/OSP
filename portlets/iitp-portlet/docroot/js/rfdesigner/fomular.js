@@ -3,25 +3,32 @@ function getChebyshevGraphPassData(filterData, filterType,orderNum){
 	var returnData = [];
 	var x = [];
 	var y = [];
+	var tn = [];
+	var gr = [];
+	var xtrans= [];
 	
 	var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
 	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
 	var passbandRipple = parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
 	
-	var farbitary = stopFrequency * 10
-	var z = numeric.linspace((stopFrequency)/1000, (centerFrequency) * 1000, 10000);
+	var farbitary = centerFrequency * 1;
+	var z;
+	if(filterType==="LOWPASS"){
+		z = numeric.linspace(1, (stopFrequency) * 3 / 2, 10000);
+	}else{
+		z = numeric.linspace((stopFrequency) * 1 / 3, (centerFrequency) * 2, 10000);
+	}
 	for (var i = 0; i < 9999; i++) {
-		var xtrans = 0;
 		if(filterType==="LOWPASS"){
-			xtrans = z[i] / farbitary;
+			xtrans[i] = z[i] / farbitary;
 		}else{
-			xtrans = farbitary / z[i];
+			xtrans[i] = farbitary / z[i];
 		}
 		
-		var tn = math.cosh(2 * orderNum * math.re(math.acosh(xtrans))) + math.cos(2 * orderNum * math.im(math.acosh(xtrans)));
-		var gr = 1 + math.pow(10, (passbandRipple / 10) - 1) * math.pow(tn, 2)
-		y[i] = (-10) * math.log10(gr);
-		x[i] = math.log10(z[i]);
+		tn[i] = math.cosh(orderNum * math.re(math.acosh(xtrans[i]))) * math.cos(orderNum * math.im(math.acosh(xtrans[i])));
+		gr[i] = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(tn[i], 2);
+		y[i] = (10) * math.log10(gr[i]);
+		x[i] = z[i];
 	}
 	
 	returnData.push(x);
@@ -32,9 +39,6 @@ function getChebyshevGraphPassData(filterData, filterType,orderNum){
 
 function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var returnData = [];
-	var x = [];
-	var y = [];
-	
 	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
 	var stopbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_SFL]*filterData[DESIGNER.Constants.SPEC_SFL_ADD]);
@@ -49,15 +53,24 @@ function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var w2out = stopbandFreqH;
 	var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
-	var z = numeric.linspace(math.pow(10, math.log10(woBPF) - 1.5 * math.log10(wdelta)), math.pow(10, math.log10(woBPF) + 1.5 * math.log10(wdelta)), 10000);
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,10000);
+	
+	var xtrans = [];
+	var x = [];
+	var y = [];
+	var k1 = [];
+	var k2 = [];
+	var tn = [];
+	 var gr = [];
+	 
 	for (var i = 0; i < 9999; i++) {
-		var k1 = z[i] / woBPF;
-		var k2 = woBPF / z[i];
-		var xtrans = filterType==="BANDPASS"?(1 / wdelta) * (k1 - k2):wdelta * 1/(k1 - k2);
-		var tn = math.cosh(2 * orderNum * math.re(math.acosh(xtrans))) + math.cos(2 * orderNum * math.im(math.acosh(xtrans)));
-		var gr = 1 + math.pow(10, (passbandRipple / 10) - 1) * math.pow(tn, 2)
-		x[i] = math.log10(z[i]);
-		y[i] = (-10) * math.log10(gr);
+		k1[i] = z[i] / woBPF;
+		k2[i] = woBPF / z[i];
+		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
+		tn[i] = math.cosh(orderNum * math.re(math.acosh(xtrans[i]))) * math.cos(orderNum * math.im(math.acosh(xtrans[i])));
+		gr[i] = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(tn[i], 2)
+		x[i] = z[i];
+		y[i] = (10) * math.log10(gr[i]);
 	}
 	
 	returnData.push(x);
@@ -76,6 +89,7 @@ function getChebyshevGraphData(filterData,filterType,selectedOrder){
 		var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
 		var passbandRipple = parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
 		var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+		
 		
 		optimumOrder = getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRipple, stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
@@ -137,56 +151,78 @@ function getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRippl
 	var A = stopbandAttenuation;
 	var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10 - 1) / (math.pow(10, Lar / 10 - 1)))));
 	var numerator1 = math.acosh(xtransmin);
-	var a = math.re(numerator1);
-	var b = math.im(numerator1);
 	
-	
-	return math.ceil(denominator1 * math.sqrt(a + b) / (math.pow(a, 2) + math.pow(b, 2)));
+	return math.ceil(denominator1 / numerator1);
 }
 
 function getChebyshevOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation,filterType){
-	var wobpf = Math.sqrt(passbandFreqL * passbandFreqH);
-	var wdelta2 = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
-	var xtrans1 = filterType==="BANDPASS"?(1 / wdelta2) * ((stopbandFreqL / wobpf) - (wobpf / stopbandFreqL)):wdelta2 * 1 / ((stopbandFreqL / wobpf) - (wobpf / stopbandFreqL));
-	var xtrans2 = filterType==="BANDPASS"?(1 / wdelta2) * ((stopbandFreqH / wobpf) - (wobpf / stopbandFreqH)):wdelta2 * 1 / ((stopbandFreqH / wobpf) - (wobpf / stopbandFreqH));
-	
-	var xtransmin = math.min(math.abs(xtrans1), math.abs(xtrans2));
-	var Lar = passbandRipple;
-	var A = stopbandAttenuation;
-	var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10 - 1) / (math.pow(10, Lar / 10 - 1)))));
-	var numerator1 = math.acosh(xtransmin);
-	
 	if(filterType==="BANDPASS"){
-		return math.ceil(denominator1 / numerator1);
+		return getChebyshevOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation);
 	}else{
-		var a = math.re(numerator1);
-		var b = math.im(numerator1);
-		return math.ceil(denominator1 * math.sqrt(a + b) / (math.pow(a, 2) + math.pow(b, 2)));
+		return getChebyshevOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation);
 	}
 }
 
+function getChebyshevOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation){
+	 var wbp1 = passbandFreqL;
+     var wbp2 = passbandFreqH;
+     var ws1 = stopbandFreqL;
+     var ws2 = stopbandFreqH;
+     var wobpf = Math.sqrt(wbp1 * wbp2);
+     var wdelta2 = (wbp2 - wbp1) / Math.sqrt(wbp1 * wbp2);
+     var xtrans1 = (1 / wdelta2) * ((ws1 / wobpf) - (wobpf / ws1));
+     var xtrans2 = (1 / wdelta2) * ((ws2 / wobpf) - (wobpf / ws2));
+     var xtransmin = math.min(math.abs(xtrans1), math.abs(xtrans2));
+     var Lar = passbandRipple;
+     var A = stopbandAttenuation;
+     var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10) - 1) / (math.pow(10, Lar / 10) - 1)));
+     var numerator1 = math.acosh(xtransmin);
+     return math.ceil(denominator1 / numerator1);
+}
+
+function getChebyshevOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation){
+	var wbs1 = passbandFreqL;
+    var wbs2 = passbandFreqH;
+    var wp1 = stopbandFreqL;
+    var wp2 = stopbandFreqH;
+    var stopatt = passbandRipple;
+    var outatt = stopbandAttenuation;
+    var wobpf = Math.sqrt(wbs1 * wbs2);
+    var wdelta2 = (wbs2 - wbs1) / Math.sqrt(wbs1 * wbs2);
+    var xtrans1 = wdelta2 * 1 / ((wp1 / wobpf) - (wobpf / wp1));
+    var xtrans2 = wdelta2 * 1 / ((wp2 / wobpf) - (wobpf / wp2));
+    var xtransmin = math.min(math.abs(xtrans1), math.abs(xtrans2));
+    var Lar = passbandRipple;
+    var A = stopbandAttenuation;
+    var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10) - 1) / (math.pow(10, Lar / 10) - 1)));
+    var numerator1 = math.acosh(xtransmin);
+    var a = math.re(numerator1);
+    var b = math.im(numerator1);
+    return math.ceil(denominator1 * math.sqrt(a + b) / (math.pow(a, 2) + math.pow(b, 2))); 
+}
 
 /* Response Type - Chebyshev Flat Fun End */
 
 
 /* Response Type - Maximally Flat Fun Start */
 function getMaximallyGraphPassData(filterData, filterType,orderNum){
+	var returnData = [];
+	
 	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
 	var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
 	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
 	
-	
-	var firstVar = filterType==="LOWPASS"?centerFrequency:stopFrequency;
-	var secondVar = filterType==="LOWPASS"?stopFrequency:centerFrequency;
-	
-	var returnData = [];
+	var farbitary = centerFrequency * 1;
+	var z = filterType==="LOWPASS"?numeric.linspace(1, (stopFrequency) * 3 / 2, 10000):numeric.linspace((stopFrequency) * 1 / 3, (centerFrequency) * 2, 10000);
+	var xtrans = [];
+	var gr = [];
 	var x = [];
 	var y = [];
-	
-	for (var i = 1; i < 1000; i++) {
-		x[i] = math.log10(i * firstVar / (secondVar * 10));
-		var xtrans = filterType==="LOWPASS"?(i * centerFrequency) / (stopFrequency * 10):1/((i * stopFrequency) / (centerFrequency * 10));
-		y[i] = (-10) * math.log10(1 + Math.pow(xtrans, 2 * orderNum));
+	for (var i = 0; i < 9999; i++) {
+		xtrans[i] = filterType==="LOWPASS"?z[i]/farbitary:farbitary/z[i];
+		gr[i] = 1 + math.pow(xtrans[i], 2 * orderNum);
+		x[i] = z[i];
+		y[i] = (10) * math.log10(gr[i]);
 	}
 	
 	returnData.push(x);
@@ -433,67 +469,17 @@ function getFilterDesignData(filterData, responseType, filterType, characteristi
 	}
 	
 	var gtable = getGtableVar(responseType, passbandRipple);
-	var Zo = characteristicImpedance;
 	
-	
-	
-	var inductor = [];
-	var capacitor = [];
-	var wobpf_f = Math.sqrt(passbandFreqH * passbandFreqL);
-	var wdelta_f = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqH * passbandFreqL);
-	
-	for (var i = 0; i < optimumOrder; i++){
-		if(filterType==="LOWPASS"){
-			if(i % 2 ==0){
-				capacitor[i] = math.pow(10,12)*((gtable[optimumOrder][i + 1]) / Zo / (2 * math.pi * centerFrequency));
-				inductor[i] = 0;
-			}else if(i % 2 == 1){
-				inductor[i] = math.pow(10, 9) * ((gtable[optimumOrder][i + 1]) * Zo / (2 * math.pi * centerFrequency));
-				capacitor[i] = 0;
-			}
-		}else if(filterType==="HIGHPASS"){
-			if(i % 2 ==0){
-				capacitor[i] = math.pow(10,12)*1 / ((gtable[optimumOrder][i + 1]) * Zo * (2 * math.pi * centerFrequency));
-				inductor[i] = 0;
-			}else if(i % 2 == 1){
-				inductor[i] = math.pow(10, 9) * Zo / ((gtable[optimumOrder][i + 1]) * (2 * math.pi * centerFrequency));
-				capacitor[i] = 0;  
-			}
-		}else if(filterType==="BANDPASS"){
-			if(i % 2 ==0){
-				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f);
-				capacitor[i] = math.pow(10, 12) * wdelta_f / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f));
-			}else if(i % 2 == 1){
-				capacitor[i] = math.pow(10, 12) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f);
-				inductor[i] = math.pow(10, 9) * wdelta_f / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f));
-			}
-		}else if(filterType==="BANDSTOP"){
-			if(i % 2 ==0){
-				inductor[i] = math.pow(10, 9) * 1 / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f));
-				capacitor[i] = math.pow(10, 12) * wdelta_f * gtable[optimumOrder][i + 1] / (2 * math.pi * wobpf_f);
-			}else if(i % 2 == 1){
-				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) * wdelta_f / (2 * math.pi * wobpf_f);
-				capacitor[i] = math.pow(10, 12) * 1 / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f));
-			}
-		}
-	}
-	
-	var returnObject = {
-		"optimumOrder":optimumOrder,
-		"capacitor":capacitor,
-		"inductor":inductor
-	};
-	
-	return returnObject;
+	//Frequency impedance scaling 수식 동일 - 20180718
+	return getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,characteristicImpedance,gtable);
 }
 
 /* Filter Design Table Grid */
-function filterDesignTableGrid(object,tbody1,tbody2){
+function filterDesignTableGrid(object,tbody){
 	var optimumOrder = object.optimumOrder;
 	var capacitor = object.capacitor;
 	var inductor = object.inductor;
-	tbody1.empty();
-	console.log(tbody1);
+	tbody.empty();
 	
 	for (var i = 0; i < optimumOrder; i++){
 		var $tr = $("<tr/>");
@@ -501,11 +487,8 @@ function filterDesignTableGrid(object,tbody1,tbody2){
 		$("<td/>").addClass("col-md-2 text-center").html(num).appendTo($tr);
 		$("<td/>").addClass("col-md-5 text-center").html(capacitor[i]).appendTo($tr);
 		$("<td/>").addClass("col-md-5 text-center").html(inductor[i]).appendTo($tr);
-		$tr.appendTo(tbody1);
+		$tr.appendTo(tbody);
 	}
-	
-	
-	tbody2.empty().append(tbody1.children().clone(true));
 }
 
 /*Filter Design lowpass Transmission Line Filter Func Start*/
@@ -777,11 +760,11 @@ function getFilterDesignEndCoupeldGrid(object,tbody1){
 	var lenth = object.lenth;
 	tbody1.empty();
 	
-	for (var i = 0; i < optimumOrder; i++){
+	for (var i = 0; i <= optimumOrder; i++){
 		var $tr = $("<tr/>");
-		$("<td/>").addClass("col-md-4 text-center").html(width[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(width[i])).appendTo($tr);
 		$("<td/>").addClass("col-md-4 text-center").html(spacing[i]).appendTo($tr);
-		$("<td/>").addClass("col-md-4 text-center").html(lenth[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(lenth[i])).appendTo($tr);
 		$tr.appendTo(tbody1);
 	}
 }
@@ -935,4 +918,188 @@ function getDetemineFilterOrderGraphData(responseType, filterData,filterType,opt
 	return data;
 }
 /*Modal Detemine Filter Order Grid Fun End*/
+
+/*Modal Prototype Grid Fun Start*/
+function getProtoTypeData(filterData, responseType, filterType, optimumOrder, characteristicImpedance){
+	var passbandRipple = parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	
+	var gtable = getGtableVar(responseType, passbandRipple);
+	
+	var returnObject = {
+		"protoType":getProtoTypeScaling(filterType,optimumOrder,gtable),
+		"frequencyScaling":getFrequencyScaling(filterData,filterType,optimumOrder,gtable),
+		"frequencyImpedance":getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,characteristicImpedance,gtable)
+	};
+		
+	return returnObject;
+}
+
+function getFrequencyScaling(filterData,filterType,optimumOrder,gtable){
+	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
+	
+	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
+	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
+	
+	var wobpf_f = Math.sqrt(passbandFreqH * passbandFreqL);
+	var wdelta_f = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqH * passbandFreqL);
+	
+	var inductor = [];
+	var capacitor = [];
+	
+	for (var i = 0; i < optimumOrder; i++){
+		if(filterType==="LOWPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = math.pow(10,12)*((gtable[optimumOrder][i + 1])  / (2 * math.pi * centerFrequency));
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * ((gtable[optimumOrder][i + 1])  / (2 * math.pi * centerFrequency));
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="HIGHPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = math.pow(10,12)*1 / ((gtable[optimumOrder][i + 1])  * (2 * math.pi * centerFrequency));
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) / ((gtable[optimumOrder][i + 1]) * (2 * math.pi * centerFrequency));
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="BANDPASS"){
+			if(i % 2 ==0){
+				inductor[i] = math.pow(10, 9) * wdelta_f / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f));
+				capacitor[i] = math.pow(10, 12) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f);
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f) ;
+				capacitor[i] = math.pow(10, 12) * wdelta_f / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f));
+			}
+		}else if(filterType==="BANDSTOP"){
+			if(i % 2 ==0){
+				inductor[i] = math.pow(10, 9) * 1 / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f));
+				capacitor[i] = math.pow(10, 12) * wdelta_f * gtable[optimumOrder][i + 1] / (2 * math.pi * wobpf_f);
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) * wdelta_f / (2 * math.pi * wobpf_f);
+				capacitor[i] = math.pow(10, 12) * 1 / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f));
+			}
+		}
+	}
+	
+	var returnObject = {
+		"optimumOrder":optimumOrder,
+		"capacitor":capacitor,
+		"inductor":inductor
+		};
+		
+	return returnObject;
+}
+
+function getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,characteristicImpedance,gtable){
+	var Zo = parseFloat(characteristicImpedance);
+	
+	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
+	
+	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
+	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
+	
+	var wobpf_f = Math.sqrt(passbandFreqH * passbandFreqL);
+	var wdelta_f = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqH * passbandFreqL);
+	
+	var inductor = [];
+	var capacitor = [];
+	
+	for (var i = 0; i < optimumOrder; i++){
+		if(filterType==="LOWPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = math.pow(10,12)*((gtable[optimumOrder][i + 1]) / Zo / (2 * math.pi * centerFrequency));
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * ((gtable[optimumOrder][i + 1]) * Zo / (2 * math.pi * centerFrequency));
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="HIGHPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = math.pow(10,12)* 1 / ((gtable[optimumOrder][i + 1]) * Zo * (2 * math.pi * centerFrequency));
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * Zo / ((gtable[optimumOrder][i + 1]) * (2 * math.pi * centerFrequency));
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="BANDPASS"){
+			if(i % 2 ==0){
+				inductor[i] = math.pow(10, 9) * wdelta_f * Zo / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f));
+				capacitor[i] = math.pow(10, 12) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f) / Zo;
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) / (2 * math.pi * wobpf_f * wdelta_f) * Zo;
+				capacitor[i] = math.pow(10, 12) * wdelta_f / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f) * Zo);
+			}
+		}else if(filterType==="BANDSTOP"){
+			if(i % 2 ==0){
+				inductor[i] = math.pow(10, 9) * Zo / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f));
+				capacitor[i] = math.pow(10, 12) * wdelta_f * gtable[optimumOrder][i + 1] / (2 * math.pi * wobpf_f * Zo);
+			}else if(i % 2 == 1){
+				inductor[i] = math.pow(10, 9) * (gtable[optimumOrder][i + 1]) * wdelta_f * Zo / (2 * math.pi * wobpf_f);
+                capacitor[i] = math.pow(10, 12) * 1 / (gtable[optimumOrder][i + 1] * (2 * math.pi * wobpf_f * wdelta_f) * Zo);
+			}
+		}
+	}
+	
+	var returnObject = {
+		"optimumOrder":optimumOrder,
+		"capacitor":capacitor,
+		"inductor":inductor
+		};
+		
+	return returnObject;
+}
+
+function getProtoTypeScaling(filterType,optimumOrder,gtable){
+	var inductor = [];
+	var capacitor = [];
+	
+	for (var i = 0; i < optimumOrder; i++){
+		if(filterType==="LOWPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = gtable[optimumOrder][i + 1];
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = gtable[optimumOrder][i + 1] ;
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="HIGHPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = gtable[optimumOrder][i + 1];
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = gtable[optimumOrder][i + 1];
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="BANDPASS"){
+			if(i % 2 ==0){
+				capacitor[i] = gtable[optimumOrder][i + 1];
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = gtable[optimumOrder][i + 1];
+				capacitor[i] = 0;
+			}
+		}else if(filterType==="BANDSTOP"){
+			if(i % 2 ==0){
+				capacitor[i] = gtable[optimumOrder][i + 1];
+				inductor[i] = 0;
+			}else if(i % 2 == 1){
+				inductor[i] = gtable[optimumOrder][i + 1];
+				capacitor[i] = 0;
+			}
+		}
+	}
+	
+	var returnObject = {
+		"optimumOrder":optimumOrder,
+		"capacitor":capacitor,
+		"inductor":inductor
+		};
+		
+	return returnObject;
+}
+
+
+
+/*Modal Prototype Grid Fun End*/
 

@@ -113,8 +113,7 @@
     margin: auto;
     display: block;
     width: 80%;
-    max-width: 700px;
-    max-height: 60%;
+    max-height: 90%;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -173,6 +172,12 @@
 .rf-designer .table-sm > tbody > tr > td
 {
 	padding: 0px;
+}
+
+/*bootstrap col padding*/
+.rf-designer .row div.full-col{
+	padding-left: 5px;
+	padding-right: 5px;
 }
 </style>
 
@@ -284,7 +289,7 @@
 						<label class="radio-inline">
 							<input type="radio" name="filter-design-option" id="inlineRadio1" value="option1" onchange="<portlet:namespace/>filterDesignChange('type1');"> Single Microstrip Line
 						</label>
-						<label class="radio-inline">
+						<label class="radio-inline"  style="display: none;">
 							<input type="radio" name="filter-design-option" id="inlineRadio2" value="option2" onchange="<portlet:namespace/>filterDesignChange('type2');"> Coupled Microstrip Line
 						</label>
 					</div>
@@ -356,7 +361,7 @@
 
 <div class="modal fade" id="<portlet:namespace/>filter-design-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>filter-design-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
-		<div class="modal-dialog vertical-align-center" role="document" style="width: 1250px;">
+		<div class="modal-dialog vertical-align-center" role="document" style="width: 90%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -365,17 +370,25 @@
 				<div class="modal-body" style="padding-left: 30px;padding-right: 30px;">
 						<div class="row">
 							<div class="col-md-6">
-								<div class="panel panel-default" style="min-height: 390px">
+								<div class="panel panel-default" style="min-height: 385px">
 									<div class="panel-heading clearfix ">
 										<h2 class="panel-title">Detemine Filter Order</h2>
 									</div>
 									<div class="panel-body form-horizontal">
-										<div id="popup-plot-content" style="height: 350px;width: 540px;">
-						
+										<div class="row">
+											<div class="col-md-12 full-col">
+												<div  id="popup-plot-content" style="height: 380px;">
+													
+												</div>
+											</div>
 										</div>
-										<p class="bg-primary">Optimum Order (N) : <b id="modal-optimum-order"></b></p>
-										<p class="bg-warning">Optimum Order-1 (N-1) : <b id="modal-pre-optimum-order"></b></p>
-										<p class="bg-success">Optimum Order+1 (N+1) : <b id="modal-next-optimum-order"></b></p>
+										<div class="row">
+											<div class="col-md-12">
+												<p class="bg-primary">Optimum Order (N) : <b id="modal-optimum-order"></b></p>
+												<p class="bg-warning">Optimum Order-1 (N-1) : <b id="modal-pre-optimum-order"></b></p>
+												<p class="bg-success">Optimum Order+1 (N+1) : <b id="modal-next-optimum-order"></b></p>
+											</div>
+										</div>
 									</div>
 								</div>
 								<div class="panel panel-default" style="min-height: 285px">
@@ -420,10 +433,30 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4 full-col">
+												
+											</div>
+											<div class="col-md-4 full-col">
 												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Frequency Scaling </h3>
-												<img src="${contextPath}/images/rfdesigner/popup/freq_LPF.png" id="freqImg" class="img-responsive" style="height: 200px;">
-												<div class="h10"></div>
+											</div>
+											<div class="col-md-4 full-col">
+												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Frequency & Impedance Scaling </h3>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4 full-col">
+												<img src="${contextPath}/images/rfdesigner/popup/LPF_prototype.png" id="protoTypeImg" class="img-responsive" style="height: 200px;">
+											</div>
+											<div class="col-md-4 full-col">
+												<img src="${contextPath}/images/rfdesigner/popup/LPF_frequency.png" id="freqImg" class="img-responsive" style="height: 200px;">
+											</div>
+											<div class="col-md-4 full-col">
+												<img src="${contextPath}/images/rfdesigner/popup/LPF_frequency_impedance.png" id="impeImg" class="img-responsive" style="height: 200px;">
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="col-md-4 full-col">
 												<div class="panel panel-default edison-panel">
 													<table class="table table-fixed table-hover edison-table">
 														<thead>
@@ -433,17 +466,43 @@
 																<th class="col-md-5">Inductor(L) [nH]</th>
 															</tr>
 														</thead>
-														<tbody id="<portlet:namespace/>modal-filter-design-tbody" style="height:160px;">
+														<tbody id="<portlet:namespace/>modal-proto-tbody" style="height:160px;">
 															
 														</tbody>
 													</table>
 												</div>
 											</div>
-											<div class="col-md-6">
-												<h3 class="my-title"> <img src="/iitp-portlet/images/title.png" width="20" height="20"> Impedance Scaling </h3>
-												<img src="${contextPath}/images/rfdesigner/popup/impe.png" class="img-responsive" style="height: 200px;">
-												<div class="h10"></div>
-												<textarea rows="12" class="form-control" style="resize: none;"></textarea>
+											<div class="col-md-4  full-col">
+												<div class="panel panel-default edison-panel">
+													<table class="table table-fixed table-hover edison-table">
+														<thead>
+															<tr>
+																<th class="col-md-2">n</th>
+																<th class="col-md-5">Capacitor(C) [pF]</th>
+																<th class="col-md-5">Inductor(L) [nH]</th>
+															</tr>
+														</thead>
+														<tbody id="<portlet:namespace/>modal-frequency-scaling-tbody" style="height:160px;">
+															
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<div class="col-md-4  full-col">
+												<div class="panel panel-default edison-panel">
+													<table class="table table-fixed table-hover edison-table">
+														<thead>
+															<tr>
+																<th class="col-md-2">n</th>
+																<th class="col-md-5">Capacitor(C) [pF]</th>
+																<th class="col-md-5">Inductor(L) [nH]</th>
+															</tr>
+														</thead>
+														<tbody id="<portlet:namespace/>modal-frequency-impedance-tbody" style="height:160px;">
+															
+														</tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -472,19 +531,19 @@
 <script type="text/javascript">
 var graphLayout = {
 	xaxis: {
-		title :'log(w/wc)'
+		title :'Frequency(Hz)'
 	},
 	yaxis: {
-		title :'Attenuation (db)'
+		title :'Attenuation (dB)'
 	}
 };
 
 var popupLayout = {
 		xaxis: {
-			title :'(w/wc)'
+			title :'Frequency(Hz)'
 		},
 		yaxis: {
-			title :'Attenuation (db)'
+			title :'Attenuation (dB)'
 		}
 	};
 
@@ -725,10 +784,18 @@ function <portlet:namespace/>gridFilterDesign(filterData){
 		$filterDiv.empty().mustache(<portlet:namespace/>filterTemplateData["body"], <portlet:namespace/>filterTemplateData);
 		
 		var retrunObject = getFilterDesignData(filterData, radioResponseType, radioFilterType, characteristicImpedance);
-		filterDesignTableGrid(retrunObject,$filterDiv.find('#'+<portlet:namespace/>filterTemplateData["body"]+'-tbody'),$("#<portlet:namespace/>modal-filter-design-tbody"));
+		filterDesignTableGrid(retrunObject,$filterDiv.find('#'+<portlet:namespace/>filterTemplateData["body"]+'-tbody'));
+		
+		
 		
 		/*Modal Element Values Table of prototype Grid*/
 		elementValuesTableGrid(filterData, radioResponseType, retrunObject.optimumOrder,$("#<portlet:namespace/>modal-element-values-tbody"))
+		
+		/*Modal prototype Grid*/
+		var protoTypeObject = getProtoTypeData(filterData, radioResponseType, radioFilterType, retrunObject.optimumOrder, characteristicImpedance)
+		filterDesignTableGrid(protoTypeObject.protoType,$("#<portlet:namespace/>modal-proto-tbody"));
+		filterDesignTableGrid(protoTypeObject.frequencyScaling,$("#<portlet:namespace/>modal-frequency-scaling-tbody"));
+		filterDesignTableGrid(protoTypeObject.frequencyImpedance,$("#<portlet:namespace/>modal-frequency-impedance-tbody"));
 		
 		/*Modal Detemine Filter Order Grid*/
 		var grapData = getDetemineFilterOrderGraphData(radioResponseType, filterData, radioFilterType, retrunObject.optimumOrder);
@@ -752,7 +819,10 @@ function <portlet:namespace/>filterDesignPopup(title){
 	
 	modal.find("span#popupTitle").html(title);
 	modal.find("img#protoImg").attr("src","${contextPath}/images/rfdesigner/popup/proto_"+title+".png");
-	modal.find("img#freqImg").attr("src","${contextPath}/images/rfdesigner/popup/freq_"+title+".png");
+	
+	modal.find("img#protoTypeImg").attr("src","${contextPath}/images/rfdesigner/popup/"+title+"_prototype.png");
+	modal.find("img#freqImg").attr("src","${contextPath}/images/rfdesigner/popup/"+title+"_frequency.png");
+	modal.find("img#impeImg").attr("src","${contextPath}/images/rfdesigner/popup/"+title+"_frequency_impedance.png");
 }
 
 function <portlet:namespace/>filterDesignChange(type){
