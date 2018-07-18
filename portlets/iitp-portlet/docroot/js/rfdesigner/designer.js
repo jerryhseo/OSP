@@ -22,7 +22,15 @@
 		SPEC_SFH_ADD:'stopband-freq-H-addon',
 		SPEC_SA:'stopband-attenuation',
 		SPEC_PR:'passband-ripple',
-		SPEC_PA:'passband-attenuation'
+		SPEC_PA:'passband-attenuation',
+		getNullToZero : function(value){
+			if(value == null||typeof value =="undefined"){
+				return 0;
+			}else{
+				return value;
+			}
+		}
 	}
+	
 	
 })(window);
