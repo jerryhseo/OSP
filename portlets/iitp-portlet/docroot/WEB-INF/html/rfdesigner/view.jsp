@@ -1,21 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<!-- Plotly libs -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<!--Numeric JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
-<!--math JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.2.2/math.min.js"></script>
-<!--bootstrap validation JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<liferay-portlet:resourceURL var="graphFileActionURL" id="graphFileAction" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
 
+<link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
 
-<script src="${contextPath}/js/lib/jquery.mustache.js"></script>
-<script src="${contextPath}/js/lib/mustache.min.js"></script>
-
-<script src="${contextPath}/js/rfdesigner/designer.js"></script>
-<script src="${contextPath}/js/rfdesigner/fomular.js"></script>
 
 <style type="text/css">
 	
@@ -179,6 +169,9 @@
 	padding-left: 5px;
 	padding-right: 5px;
 }
+
+.toast-designer-pos { top: 120px; right: 12px; }
+
 </style>
 
 <div class="h20"></div>
@@ -309,7 +302,23 @@
 	<div class="col-md-6  border-grid">
 		<div class="panel panel-default" style="min-height: 500px;">
 			<div class="panel-heading clearfix ">
-				<h2 class="panel-title">Graph</h2>
+				<h2 class="panel-title pull-left" style="padding-top: 7px;">
+					Graph
+				</h2>
+				<div class="btn-group pull-right" id="<portlet:namespace/>file-buttons">
+					<button class="btn btn-sm btn-success disabled" id="<portlet:namespace/>graph-file-download">
+						<span class="icon-download-alt">
+							Download
+						</span>
+					</button>
+					<c:if test="<%=themeDisplay.isSignedIn()%>">
+						<button class="btn btn-sm btn-success disabled" id="<portlet:namespace/>graph-file-upload">
+							<span class="icon-cloud-upload">
+								Upload
+							</span>
+						</button>
+					</c:if>
+				</div>
 			</div>
 			<div class="panel-body form-horizontal">
 				<div class="row">
@@ -457,13 +466,13 @@
 										
 										<div class="row">
 											<div class="col-md-4 full-col">
-												<div class="panel panel-default edison-panel">
-													<table class="table table-fixed table-hover edison-table">
+												<div class="table-responsive edison-panel">
+													<table class="table table-bordered edison-table">
 														<thead>
 															<tr>
 																<th class="col-md-2">n</th>
-																<th class="col-md-5">Capacitor(C) [pF]</th>
-																<th class="col-md-5">Inductor(L) [nH]</th>
+																<th class="col-md-5">Capacitor(C)<br/>[pF]</th>
+																<th class="col-md-5">Inductor(L)<br/>[nH]</th>
 															</tr>
 														</thead>
 														<tbody id="<portlet:namespace/>modal-proto-tbody" style="height:160px;">
@@ -473,13 +482,13 @@
 												</div>
 											</div>
 											<div class="col-md-4  full-col">
-												<div class="panel panel-default edison-panel">
-													<table class="table table-fixed table-hover edison-table">
+												<div class="table-responsive edison-panel">
+													<table class="table table-bordered edison-table">
 														<thead>
 															<tr>
 																<th class="col-md-2">n</th>
-																<th class="col-md-5">Capacitor(C) [pF]</th>
-																<th class="col-md-5">Inductor(L) [nH]</th>
+																<th class="col-md-5">Capacitor(C)<br/>[pF]</th>
+																<th class="col-md-5">Inductor(L)<br/>[nH]</th>
 															</tr>
 														</thead>
 														<tbody id="<portlet:namespace/>modal-frequency-scaling-tbody" style="height:160px;">
@@ -489,13 +498,13 @@
 												</div>
 											</div>
 											<div class="col-md-4  full-col">
-												<div class="panel panel-default edison-panel">
-													<table class="table table-fixed table-hover edison-table">
+												<div class="table-responsive edison-panel">
+													<table class="table table-bordered edison-table">
 														<thead>
 															<tr>
 																<th class="col-md-2">n</th>
-																<th class="col-md-5">Capacitor(C) [pF]</th>
-																<th class="col-md-5">Inductor(L) [nH]</th>
+																<th class="col-md-5">Capacitor(C)<br/>[pF]</th>
+																<th class="col-md-5">Inductor(L)<br/>[nH]</th>
 															</tr>
 														</thead>
 														<tbody id="<portlet:namespace/>modal-frequency-impedance-tbody" style="height:160px;">
@@ -528,10 +537,35 @@
   <div id="caption">Freq Scailng Figure</div>
 </div>
 
+
+<img id="loadingBox" src="${contextPath}/images/processing.gif" width="700px" style="display: none;"/>
+
+
+<!-- Plotly libs -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--Numeric JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<!--math JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.2.2/math.min.js"></script>
+<!--bootstrap validation JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
+
+
+<script src="${contextPath}/js/lib/toastr.min.js"></script>
+
+<script src="${contextPath}/js/lib/jquery.mustache.js"></script>
+<script src="${contextPath}/js/lib/mustache.min.js"></script>
+
+<script src="${contextPath}/js/rfdesigner/designer.js"></script>
+<script src="${contextPath}/js/rfdesigner/fomular.js"></script>
+
+
 <script type="text/javascript">
 var graphLayout = {
 	xaxis: {
-		title :'Frequency(Hz)'
+		title :'Frequency(Hz)',
+		exponentformat :'SI'
 	},
 	yaxis: {
 		title :'Attenuation (dB)'
@@ -638,13 +672,31 @@ var <portlet:namespace/>LINE_PANEL_DATA = {
 ***********************************************************************/
 var <portlet:namespace/>templateData;
 var <portlet:namespace/>filterData;
-
+var toastr;
 
 $(document).ready(function(){
 	
 	Plotly.newPlot('graph-plot-content', null, graphLayout, {scrollZoom: true});
 	
 	$.Mustache.addFromDom();
+	
+	toastr.options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": false,
+		"positionClass": "toast-designer-pos",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "1000",
+// 		"timeOut": "5000",
+// 		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "slideDown",
+		"hideMethod": "slideUp"
+	};
 	
 	$("#p_p_id<portlet:namespace/>").on("change",".mustache-radio",function(e){
 		e.preventDefault();
@@ -741,6 +793,15 @@ function <portlet:namespace/>gridFilter(){
 		
 		<portlet:namespace/>gridFilterDesign(filterData);
 		<portlet:namespace/>gridGraph(filterData);
+		
+		/*File Function Setting*/
+		if($("button#<portlet:namespace/>graph-file-download").hasClass("disabled")){
+			$("button#<portlet:namespace/>graph-file-download").removeClass("disabled");
+			$("button#<portlet:namespace/>graph-file-download").attr("onclick","<portlet:namespace/>graphFileCreate('download');return false;");
+			
+			$("button#<portlet:namespace/>graph-file-upload").removeClass("disabled");
+			$("button#<portlet:namespace/>graph-file-upload").attr("onclick","<portlet:namespace/>graphFileCreate('upload');return false;");
+		}
 	}
 	
 }
@@ -787,7 +848,6 @@ function <portlet:namespace/>gridFilterDesign(filterData){
 		filterDesignTableGrid(retrunObject,$filterDiv.find('#'+<portlet:namespace/>filterTemplateData["body"]+'-tbody'));
 		
 		
-		
 		/*Modal Element Values Table of prototype Grid*/
 		elementValuesTableGrid(filterData, radioResponseType, retrunObject.optimumOrder,$("#<portlet:namespace/>modal-element-values-tbody"))
 		
@@ -799,7 +859,7 @@ function <portlet:namespace/>gridFilterDesign(filterData){
 		
 		/*Modal Detemine Filter Order Grid*/
 		var grapData = getDetemineFilterOrderGraphData(radioResponseType, filterData, radioFilterType, retrunObject.optimumOrder);
-		Plotly.newPlot('popup-plot-content', grapData, popupLayout, {scrollZoom: true});
+		Plotly.newPlot('popup-plot-content', grapData, graphLayout, {scrollZoom: true});
 		
 	}else{
 		if(radioFilterType==="LOWPASS"){
@@ -918,6 +978,48 @@ function <portlet:namespace/>filterDesignEndCoupeldApply(){
 		var $filterDiv = $("#<portlet:namespace/>filter-design-mustache");
 		getFilterDesignEndCoupeldGrid(object,$filterDiv.find('#filter-design-type-3-tbody'));
 	}
+}
+
+
+function <portlet:namespace/>graphFileCreate(mode){
+	bStart();
+	setTimeout(function(){
+		var dataForm = {
+				"<portlet:namespace/>fileActionType" : mode,
+				"<portlet:namespace/>content" : JSON.stringify(document.getElementById('graph-plot-content').data)
+		};
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=graphFileActionURL%>",
+			async : false,
+			data : dataForm,
+			dataType: 'json',
+			success: function(msg) {
+				bEnd();
+				
+				if(mode=="download"){
+					<portlet:namespace/>graphFileDownload(msg.fileName);
+				}else if(mode=="upload"){
+					toastr["success"](msg.filePath,"EDISON Upload Success");
+				}
+			},error:function(jqXHR, textStatus, errorThrown){
+				bEnd();
+				var msg;
+				if(jqXHR.responseText !== ''){
+					msg = textStatus+": "+jqXHR.responseText;
+				}else{
+					msg = textStatus+": "+errorThrown;
+				}
+				
+				toastr["error"]("", msg);
+			}
+		});
+	}, 2000);
+}
+/*Graph File Download*/
+function <portlet:namespace/>graphFileDownload(fileName){
+	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileName="+fileName;
 }
 </script>
 

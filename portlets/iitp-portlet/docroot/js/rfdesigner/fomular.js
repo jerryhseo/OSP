@@ -1,4 +1,46 @@
 /* Response Type - Chebyshev Flat Fun Start */
+/* Main Graph Data*/
+function getChebyshevGraphDataLH(filterData, filterType,orderNum){
+	var returnData = [];
+	
+	var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
+	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
+	var passbandRipple = parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	
+	var x = [];
+	var y = [];
+	var tn = [];
+	var gr = [];
+	var xtrans= [];
+	
+	var farbitary = centerFrequency * 1;
+	var z;
+	if(filterType==="LOWPASS"){
+		z = numeric.linspace(1, (stopFrequency) * 3 / 2, 10000);
+	}else{
+		z = numeric.linspace((stopFrequency) * 1 / 3, (centerFrequency) * 2, 10000);
+	}
+	
+	for (var i = 0; i < 9999; i++) {
+		if(filterType==="LOWPASS"){
+			xtrans[i] = z[i] / farbitary;
+		}else{
+			xtrans[i] = farbitary / z[i];
+		}
+		
+		tn[i] = math.cosh(orderNum * math.re(math.acosh(xtrans[i]))) * math.cos(orderNum * math.im(math.acosh(xtrans[i])));
+		gr[i] = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(tn[i], 2);
+		y[i] = (-10) * math.log10(gr[i]);
+		x[i] = z[i];
+	}
+	
+	returnData.push(x);
+	returnData.push(y);
+	
+	return returnData;
+}
+
+/* PopUp Graph Data*/
 function getChebyshevGraphPassData(filterData, filterType,orderNum){
 	var returnData = [];
 	var x = [];
@@ -37,6 +79,50 @@ function getChebyshevGraphPassData(filterData, filterType,orderNum){
 	return returnData;
 }
 
+/* Main Graph Data*/
+function getChebyshevGraphDataBAND(filterData, filterType,orderNum){
+	var returnData = [];
+	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
+	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
+	var stopbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_SFL]*filterData[DESIGNER.Constants.SPEC_SFL_ADD]);
+	var stopbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_SFH]*filterData[DESIGNER.Constants.SPEC_SFH_ADD]);
+	
+	var passbandRipple =  parseFloat(filterData[DESIGNER.Constants.SPEC_PR]);
+	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+	
+	var w1BPF = passbandFreqL;
+	var w2BPF = passbandFreqH;
+	var w1out = stopbandFreqL;
+	var w2out = stopbandFreqH;
+	var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
+	var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,10000);
+	
+	var xtrans = [];
+	var x = [];
+	var y = [];
+	var k1 = [];
+	var k2 = [];
+	var tn = [];
+	 var gr = [];
+	 
+	for (var i = 0; i < 9999; i++) {
+		k1[i] = z[i] / woBPF;
+		k2[i] = woBPF / z[i];
+		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
+		tn[i] = math.cosh(orderNum * math.re(math.acosh(xtrans[i]))) * math.cos(orderNum * math.im(math.acosh(xtrans[i])));
+		gr[i] = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(tn[i], 2)
+		x[i] = z[i];
+		y[i] = (-10) * math.log10(gr[i]);
+	}
+	
+	returnData.push(x);
+	returnData.push(y);
+	
+	return returnData;
+}
+
+/* PopUp Graph Data*/
 function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var returnData = [];
 	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
@@ -94,7 +180,7 @@ function getChebyshevGraphData(filterData,filterType,selectedOrder){
 		optimumOrder = getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRipple, stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
 		
-		trace1GraphData = getChebyshevGraphPassData(filterData, filterType,optimumOrder);
+		trace1GraphData = getChebyshevGraphDataLH(filterData, filterType,optimumOrder);
 	}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
 		var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 		var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
@@ -107,7 +193,7 @@ function getChebyshevGraphData(filterData,filterType,selectedOrder){
 		optimumOrder = getChebyshevOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL,stopbandFreqH,passbandRipple,stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
 		
-		trace1GraphData = getChebyshevGraphBandData(filterData, filterType,optimumOrder);
+		trace1GraphData = getChebyshevGraphDataBAND(filterData, filterType,optimumOrder);
 	}
 	
 	data.push({
@@ -121,9 +207,9 @@ function getChebyshevGraphData(filterData,filterType,selectedOrder){
 	if(selectedOrder!=0){
 		var trace2GraphData;
 		if(filterType==="LOWPASS"||filterType==="HIGHPASS"){
-			trace2GraphData = getChebyshevGraphPassData(filterData, filterType,selectedOrder);
+			trace2GraphData = getChebyshevGraphDataLH(filterData, filterType,selectedOrder);
 		}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
-			trace2GraphData = getChebyshevGraphBandData(filterData, filterType,selectedOrder);
+			trace2GraphData = getChebyshevGraphDataBAND(filterData, filterType,selectedOrder);
 		}
 		
 		data.push({
@@ -137,6 +223,7 @@ function getChebyshevGraphData(filterData,filterType,selectedOrder){
 	return data;
 }
 
+/* Get Chebyshev Order Number (Lowpass,Highpass)*/
 function getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRipple, stopbandAttenuation,filterType){
 	var wc = centerFrequency;
 	var w = stopFrequency;
@@ -155,6 +242,7 @@ function getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRippl
 	return math.ceil(denominator1 / numerator1);
 }
 
+/* Get Chebyshev Order Number (Bandpass,Bandstop)*/
 function getChebyshevOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation,filterType){
 	if(filterType==="BANDPASS"){
 		return getChebyshevOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation);
@@ -205,6 +293,36 @@ function getChebyshevOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandF
 
 
 /* Response Type - Maximally Flat Fun Start */
+/* Main Graph Data*/
+function getMaximallyGraphDataLH(filterData, filterType,orderNum){
+	var returnData = [];
+	
+	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
+	var stopFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_SF]*filterData[DESIGNER.Constants.SPEC_SF_ADD]);
+	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+	
+	var farbitary = centerFrequency * 1;
+	var z = filterType==="LOWPASS"?numeric.linspace(1, (stopFrequency) * 3 / 2, 10000):numeric.linspace((stopFrequency) * 1 / 3, (centerFrequency) * 2, 10000);
+	var xtrans = [];
+	var gr = [];
+	var x = [];
+	var y = [];
+	for (var i = 0; i < 9999; i++) {
+		xtrans[i] = filterType==="LOWPASS"?z[i]/farbitary:farbitary/z[i];
+		gr[i] = 1 + math.pow(xtrans[i], 2 * orderNum);
+		x[i] = z[i];
+		y[i] = (-10) * math.log10(gr[i]);
+	}
+	
+	returnData.push(x);
+	returnData.push(y);
+	
+	
+	
+	return returnData;
+}
+
+/* PopUp Graph Data*/
 function getMaximallyGraphPassData(filterData, filterType,orderNum){
 	var returnData = [];
 	
@@ -230,7 +348,48 @@ function getMaximallyGraphPassData(filterData, filterType,orderNum){
 	
 	return returnData;
 }
+	
+/* Main Graph Data*/
+function getMaximallyGraphDataBAND(filterData, filterType,orderNum){
+	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
+	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
+	var stopbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_SFL]*filterData[DESIGNER.Constants.SPEC_SFL_ADD]);
+	var stopbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_SFH]*filterData[DESIGNER.Constants.SPEC_SFH_ADD]);
+	var passbandAttenuation =  parseFloat(filterData[DESIGNER.Constants.SPEC_PA]);
+	var stopbandAttenuation = parseFloat(filterData[DESIGNER.Constants.SPEC_SA]);
+	
+	var w1BPF = passbandFreqL;
+	var w2BPF = passbandFreqH;
+	var w1out = stopbandFreqL;
+	var w2out = stopbandFreqH;
+	var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
+	var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
+	 
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 10000)
+	
+	var returnData = [];
+	
+	var x = [];
+	var y = [];
+	var xtrans = [];
+	var k1 = [];
+	var k2 = [];
+	
+	for (var i = 0; i < 9999; i++) {
+		k1[i] = z[i] / woBPF;
+		k2[i] = woBPF / z[i];
+		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
+		x[i] = filterType==="BANDPASS"?z[i]:(z[i]);
+		y[i] = (-10) * Math.log10(1 + Math.pow(xtrans[i], 2 * orderNum));
+	}
+	
+	returnData.push(x);
+	returnData.push(y);
+	
+	return returnData;
+}
 
+/* PopUp Graph Data*/
 function getMaximallyGraphBandData(filterData, filterType,orderNum){
 	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
@@ -246,18 +405,22 @@ function getMaximallyGraphBandData(filterData, filterType,orderNum){
 	var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
 	 
-	var z = numeric.linspace(Math.pow(10, math.log10(woBPF) - 1.5 * math.log10(wdelta)), Math.pow(10, math.log10(woBPF) + 1.5 * math.log10(wdelta)), 10000);
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 10000)
 	
 	var returnData = [];
+	
 	var x = [];
 	var y = [];
+	var xtrans = [];
+	var k1 = [];
+	var k2 = [];
 	
 	for (var i = 0; i < 9999; i++) {
-		var k1 = z[i] / woBPF
-		var k2 = woBPF / z[i]
-		var xtrans = filterType==="BANDPASS"?(1 / wdelta) * (k1 - k2):1/wdelta * 1 / (k1 - k2);
-		x[i] = math.log10(z[i])
-		y[i] = (-10) * math.log10(1 + Math.pow(xtrans, 2 * orderNum));
+		k1[i] = z[i] / woBPF;
+		k2[i] = woBPF / z[i];
+		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
+		x[i] = filterType==="BANDPASS"?z[i]:(z[i]);
+		y[i] = (10) * Math.log10(1 + Math.pow(xtrans[i], 2 * orderNum));
 	}
 	
 	returnData.push(x);
@@ -278,7 +441,7 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 		var optimumOrder = getMaximallyOrderNumberLH(centerFrequency, stopFrequency, stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
 		
-		trace1GraphData = getMaximallyGraphPassData(filterData, filterType,optimumOrder);
+		trace1GraphData = getMaximallyGraphDataLH(filterData, filterType,optimumOrder);
 	}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
 		var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 		var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
@@ -289,7 +452,7 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 		
 		var optimumOrder = getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL,stopbandFreqH,passbandAttenuation,stopbandAttenuation,filterType);
 		$("p#optimum-order").html(optimumOrder);
-		trace1GraphData = getMaximallyGraphBandData(filterData, filterType,optimumOrder);
+		trace1GraphData = getMaximallyGraphDataBAND(filterData, filterType,optimumOrder);
 	}
 	data.push({
 		x: trace1GraphData[0],
@@ -302,9 +465,9 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 	if(selectedOrder!=0){
 		var trace2GraphData;
 		if(filterType==="LOWPASS"||filterType==="HIGHPASS"){
-			trace2GraphData = getMaximallyGraphPassData(filterData, filterType,selectedOrder);
+			trace2GraphData = getMaximallyGraphDataLH(filterData, filterType,selectedOrder);
 		}else if(filterType==="BANDPASS"||filterType==="BANDSTOP"){
-			trace2GraphData = getMaximallyGraphBandData(filterData, filterType,selectedOrder);
+			trace2GraphData = getMaximallyGraphDataBAND(filterData, filterType,selectedOrder);
 		}
 		
 		data.push({
@@ -318,6 +481,7 @@ function getMaximallyGraphData(filterData,filterType,selectedOrder){
 	return data;
 }
 
+/* Get Maximally Order Number (Lowpass,Highpass)*/
 function getMaximallyOrderNumberLH(centerFrequency, stopFrequency, stopbandAttenuation,filterType){
 	var wc = centerFrequency;
 	var w = stopFrequency;
@@ -333,20 +497,46 @@ function getMaximallyOrderNumberLH(centerFrequency, stopFrequency, stopbandAtten
 	return Math.ceil(math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * math.log10(k)));
 }
 
+/* Get Maximally Order Number (Bandpass,Bandstop)*/
 function getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation,filterType){
-	var wbs1 = filterType==="BANDPASS"?passbandFreqL:stopbandFreqL;
-	var wbs2 = filterType==="BANDPASS"?passbandFreqH:stopbandFreqH;
-	var wp1 = filterType==="BANDPASS"?stopbandFreqL:passbandFreqL;
-	var wp2 = filterType==="BANDPASS"?stopbandFreqH:passbandFreqH;
+	if(filterType==="BANDPASS"){
+		return getMaximallyOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation);
+	}else{
+		return getMaximallyOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation);
+	}
+}
+
+function getMaximallyOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation){
+	var wbp1 = passbandFreqL;
+	var wbp2 = passbandFreqH;
+	var ws1 = stopbandFreqL;
+	var ws2 = stopbandFreqH;
 	var passatt = passbandAttenuation;
+	var outatt = stopbandAttenuation;
+	var wobpf = Math.sqrt(wbp1 * wbp2);
+	var wdelta2 = (wbp2 - wbp1) / Math.sqrt(wbp1 * wbp2);
+	var xtrans1 = (1 / wdelta2) * ((ws1 / wobpf) - (wobpf / ws1));
+	var xtrans2 = (1 / wdelta2) * ((ws2 / wobpf) - (wobpf / ws2));
+	var xtransmax = Math.max(xtrans1, xtrans2)
+	var order1 = Math.ceil(Math.log10(Math.pow(10, (passatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
+	var order2 = Math.ceil(Math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
+	return Math.max(order1, order2);
+}
+
+function getMaximallyOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation){
+	var wbs1 = stopbandFreqL;
+	var wbs2 = stopbandFreqH;
+	var wp1 = passbandFreqL;
+	var wp2 = passbandFreqH;
+	var stopatt = passbandAttenuation;
 	var outatt = stopbandAttenuation;
 	var wobpf = Math.sqrt(wbs1 * wbs2);
 	var wdelta2 = (wbs2 - wbs1) / Math.sqrt(wbs1 * wbs2);
-	var xtrans1 = filterType==="BANDPASS"?(1 / wdelta2) * ((wp1 / wobpf) - (wobpf / wp1)):wdelta2 * 1/((wp1 / wobpf) - (wobpf / wp1));
-	var xtrans2 = filterType==="BANDPASS"?(1 / wdelta2) * ((wp2 / wobpf) - (wobpf / wp2)):wdelta2 * 1/((wp2 / wobpf) - (wobpf / wp2));
+	var xtrans1 = wdelta2 * 1/((wp1 / wobpf) - (wobpf / wp1));
+	var xtrans2 = wdelta2 * 1/((wp2 / wobpf) - (wobpf / wp2));
 	var xtransmax = Math.max(xtrans1, xtrans2)
-	var order1 = Math.ceil(math.log10(Math.pow(10, (passatt / 10)) - 1) / (2 * math.log10(xtransmax)));
-	var order2 = Math.ceil(math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * math.log10(xtransmax)));
+	var order1 = Math.ceil(Math.log10(Math.pow(10, (stopatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
+	var order2 = Math.ceil(Math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
 	return Math.max(order1, order2);
 }
 
@@ -472,23 +662,6 @@ function getFilterDesignData(filterData, responseType, filterType, characteristi
 	
 	//Frequency impedance scaling 수식 동일 - 20180718
 	return getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,characteristicImpedance,gtable);
-}
-
-/* Filter Design Table Grid */
-function filterDesignTableGrid(object,tbody){
-	var optimumOrder = object.optimumOrder;
-	var capacitor = object.capacitor;
-	var inductor = object.inductor;
-	tbody.empty();
-	
-	for (var i = 0; i < optimumOrder; i++){
-		var $tr = $("<tr/>");
-		var num = i+1;
-		$("<td/>").addClass("col-md-2 text-center").html(num).appendTo($tr);
-		$("<td/>").addClass("col-md-5 text-center").html(capacitor[i]).appendTo($tr);
-		$("<td/>").addClass("col-md-5 text-center").html(inductor[i]).appendTo($tr);
-		$tr.appendTo(tbody);
-	}
 }
 
 /*Filter Design lowpass Transmission Line Filter Func Start*/
@@ -753,21 +926,6 @@ function getFilterDesignEndCoupeldData(filterData, responseType, filterType , ch
    	return returnObject;
 }
 
-function getFilterDesignEndCoupeldGrid(object,tbody1){
-	var optimumOrder = object.optimumOrder;
-	var width = object.width;
-	var spacing = object.spacing;
-	var lenth = object.lenth;
-	tbody1.empty();
-	
-	for (var i = 0; i <= optimumOrder; i++){
-		var $tr = $("<tr/>");
-		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(width[i])).appendTo($tr);
-		$("<td/>").addClass("col-md-4 text-center").html(spacing[i]).appendTo($tr);
-		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(lenth[i])).appendTo($tr);
-		$tr.appendTo(tbody1);
-	}
-}
 
 function getFilterDesignEndCoupeldOrderN(characteristicImpedance,dielectricConstant,height){
 	var Zo = characteristicImpedance;
@@ -995,7 +1153,6 @@ function getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,charact
 	var Zo = parseFloat(characteristicImpedance);
 	
 	var centerFrequency = parseFloat(filterData[DESIGNER.Constants.SPEC_CF]*filterData[DESIGNER.Constants.SPEC_CF_ADD]);
-	
 	var passbandFreqL = parseFloat(filterData[DESIGNER.Constants.SPEC_PFL]*filterData[DESIGNER.Constants.SPEC_PFL_ADD]);
 	var passbandFreqH = parseFloat(filterData[DESIGNER.Constants.SPEC_PFH]*filterData[DESIGNER.Constants.SPEC_PFH_ADD]);
 	
@@ -1047,6 +1204,7 @@ function getFrequencyImpedanceScaling(filterData,filterType,optimumOrder,charact
 		"inductor":inductor
 		};
 		
+	console.log(returnObject);
 	return returnObject;
 }
 
@@ -1098,8 +1256,42 @@ function getProtoTypeScaling(filterType,optimumOrder,gtable){
 		
 	return returnObject;
 }
-
-
-
 /*Modal Prototype Grid Fun End*/
 
+
+
+/* Filter Design Table Grid */
+function filterDesignTableGrid(object,tbody){
+	var optimumOrder = object.optimumOrder;
+	var capacitor = object.capacitor;
+	var inductor = object.inductor;
+	tbody.empty();
+	
+	for (var i = 0; i < optimumOrder; i++){
+		var $tr = $("<tr/>");
+		var num = i+1;
+		var capacitorVal = DESIGNER.Constants.getNullToZero(capacitor[i]);
+		var inductorVal = DESIGNER.Constants.getNullToZero(inductor[i]);
+		
+		$("<td/>").addClass("col-md-2 text-center").html(num).appendTo($tr);
+		$("<td/>").addClass("col-md-5 text-center").html(capacitorVal).appendTo($tr);
+		$("<td/>").addClass("col-md-5 text-center").html(inductorVal).appendTo($tr);
+		$tr.appendTo(tbody);
+	}
+}
+
+function getFilterDesignEndCoupeldGrid(object,tbody){
+	var optimumOrder = object.optimumOrder;
+	var width = object.width;
+	var spacing = object.spacing;
+	var lenth = object.lenth;
+	tbody.empty();
+
+	for (var i = 0; i <= optimumOrder; i++){
+		var $tr = $("<tr/>");
+		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(width[i])).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(spacing[i]).appendTo($tr);
+		$("<td/>").addClass("col-md-4 text-center").html(DESIGNER.Constants.getNullToZero(lenth[i])).appendTo($tr);
+		$tr.appendTo(tbody);
+	}
+}

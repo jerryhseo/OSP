@@ -27,7 +27,11 @@
 			if(value == null||typeof value =="undefined"){
 				return 0;
 			}else{
-				return value;
+				if(isNaN(value)){
+					return "NaN";
+				}else{
+					return value;
+				}
 			}
 		}
 	}
