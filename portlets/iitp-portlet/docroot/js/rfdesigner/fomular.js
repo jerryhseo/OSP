@@ -233,12 +233,10 @@ function getChebyshevOrderNumberLH(centerFrequency, stopFrequency, passbandRippl
 	}else if(filterType==="HIGHPASS"){
 		xtransmin = wc / w;
 	}
-	
 	var Lar = passbandRipple;
 	var A = stopbandAttenuation;
-	var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10 - 1) / (math.pow(10, Lar / 10 - 1)))));
+	var denominator1 = math.acosh(math.sqrt((math.pow(10, A / 10) - 1) / (math.pow(10, Lar / 10) - 1)));
 	var numerator1 = math.acosh(xtransmin);
-	
 	return math.ceil(denominator1 / numerator1);
 }
 
@@ -1270,8 +1268,8 @@ function filterDesignTableGrid(object,tbody){
 	for (var i = 0; i < optimumOrder; i++){
 		var $tr = $("<tr/>");
 		var num = i+1;
-		var capacitorVal = DESIGNER.Constants.getNullToZero(capacitor[i]);
-		var inductorVal = DESIGNER.Constants.getNullToZero(inductor[i]);
+		var capacitorVal = DESIGNER.Constants.getNullToZero(capacitor[i],4);
+		var inductorVal = DESIGNER.Constants.getNullToZero(inductor[i],4);
 		
 		$("<td/>").addClass("col-md-2 text-center").html(num).appendTo($tr);
 		$("<td/>").addClass("col-md-5 text-center").html(capacitorVal).appendTo($tr);

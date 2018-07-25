@@ -34,10 +34,11 @@ public class IBFiltUtil {
 				String fileId = json.get("id").toString();
 				String fileName = json.get("name").toString();
 				
-				createFolder(icebreakerUrl, vcToken, "RF-DESIGNER");
-				moveFile(icebreakerUrl, vcToken, userScreenName, fileId, "RF-DESIGNER/"+file.getName());
-				path = "/RF-DESIGNER/"+file.getName();
+//				createFolder(icebreakerUrl, vcToken, "RF-DESIGNER");
+//				moveFile(icebreakerUrl, vcToken, userScreenName, fileId, "RF-DESIGNER/"+file.getName());
+//				path = "/RF-DESIGNER/"+file.getName();
 				
+				path = "/"+file.getName();
 			}
 			return path;
 		}catch (Exception e) {

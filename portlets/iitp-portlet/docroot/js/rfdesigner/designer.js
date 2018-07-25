@@ -23,14 +23,20 @@
 		SPEC_SA:'stopband-attenuation',
 		SPEC_PR:'passband-ripple',
 		SPEC_PA:'passband-attenuation',
-		getNullToZero : function(value){
+		getNullToZero : function(value,digit){
+			var num_check=/^([0-9]*)[\.]?([0-9])?$/;
+			
 			if(value == null||typeof value =="undefined"){
 				return 0;
 			}else{
 				if(isNaN(value)){
 					return "NaN";
 				}else{
-					return value;
+					if(arguments.length>1&&!num_check.test(value)){
+						return value.toFixed(digit);
+					}else{
+						return value;
+					}
 				}
 			}
 		}

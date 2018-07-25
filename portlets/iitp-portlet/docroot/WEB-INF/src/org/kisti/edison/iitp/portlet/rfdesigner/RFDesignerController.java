@@ -67,18 +67,21 @@ public class RFDesignerController{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		File file = null;
 		try{
-			file = createFile(content);
 			
 			if(fileActionType.equals("download")){
+				file = createFile(content,"");
 				response.setContentType("application/json; charset=UTF-8");
 				PrintWriter out = response.getWriter();
 				JsonObject data = new JsonObject();
 				data.addProperty("fileName", file.getName());
 				out.write(data.toString());
 			}else if(fileActionType.equals("upload")){
+				String fileName = CustomUtil.strNull(param.get("fileName"));
+				file = createFile(content,fileName);
+				
 				User user = PortalUtil.getUser(request);
 				Group group = themeDisplay.getScopeGroup();
-				String filePath = ibFileUpload(file, group, user);
+				String filePath = ibFileUpload(file, group, user, fileName);
 				
 				response.setContentType("application/json; charset=UTF-8");
 				PrintWriter out = response.getWriter();
@@ -198,8 +201,14 @@ public class RFDesignerController{
 		return row;
 	}
 	
-	private static File createFile(String fileContent) throws SystemException, IOException {
-		File tempFile = FileUtil.createTempFile("dat");
+	private static File createFile(String fileContent,String fileName) throws SystemException, IOException {
+		File tempFile = null;
+		if(fileName.equals("")){
+			tempFile = FileUtil.createTempFile("dat");
+		}else{
+			tempFile = FileUtil.createTempFile(fileName+"_","dat");
+		}
+		
 		BufferedWriter out = null;
 		try{
 			JsonArray contnets = new JsonParser().parse(fileContent).getAsJsonArray();
@@ -250,7 +259,7 @@ public class RFDesignerController{
 		return tempFile;
 	}
 	
-	private static String ibFileUpload(File file, Group group, User user) throws MalformedURLException, PortalException, SystemException, IOException, ParseException{
+	private static String ibFileUpload(File file, Group group, User user,String fileName) throws MalformedURLException, PortalException, SystemException, IOException, ParseException{
 		String userScreenName = user.getScreenName();
 		String vcToken = IBUserTokenUtil.getOrCreateToken(group.getGroupId(), user).getVcToken();
         String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));

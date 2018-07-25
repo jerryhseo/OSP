@@ -5,6 +5,7 @@
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
 
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 
 
 <style type="text/css">
@@ -550,6 +551,8 @@
 <!--bootstrap validation JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
 
 
 <script src="${contextPath}/js/lib/toastr.min.js"></script>
@@ -800,7 +803,7 @@ function <portlet:namespace/>gridFilter(){
 			$("button#<portlet:namespace/>graph-file-download").attr("onclick","<portlet:namespace/>graphFileCreate('download');return false;");
 			
 			$("button#<portlet:namespace/>graph-file-upload").removeClass("disabled");
-			$("button#<portlet:namespace/>graph-file-upload").attr("onclick","<portlet:namespace/>graphFileCreate('upload');return false;");
+			$("button#<portlet:namespace/>graph-file-upload").attr("onclick","<portlet:namespace/>fileNamePrompt();return false;");
 		}
 	}
 	
@@ -980,13 +983,42 @@ function <portlet:namespace/>filterDesignEndCoupeldApply(){
 	}
 }
 
+function <portlet:namespace/>fileNamePrompt(){
+	$.confirm({
+		title: 'EDISON File Upload',
+		content: '' +
+	    '<div class="form-group">' +
+	    '<label>Enter File Name here</label>' +
+	    '<input type="text" placeholder="File name" class="name form-control" required />' +
+	    '</div>',
+		buttons: {
+			formSubmit: {
+				text: 'Upload',
+				btnClass: 'btn-blue',
+				action: function () {
+					var name = this.$content.find('.name').val();
+					if(!name){
+						$.alert('provide a valid name');
+						return false;
+					}
+					<portlet:namespace/>graphFileCreate("upload",name)
+				}
+			},
+			cancel: function () {
+				
+			}
+		}
+	});
+}
 
-function <portlet:namespace/>graphFileCreate(mode){
+
+function <portlet:namespace/>graphFileCreate(mode,fileName){
 	bStart();
 	setTimeout(function(){
 		var dataForm = {
 				"<portlet:namespace/>fileActionType" : mode,
-				"<portlet:namespace/>content" : JSON.stringify(document.getElementById('graph-plot-content').data)
+				"<portlet:namespace/>content" : JSON.stringify(document.getElementById('graph-plot-content').data),
+				"<portlet:namespace/>fileName" : fileName
 		};
 		
 		jQuery.ajax({
@@ -1263,6 +1295,11 @@ function <portlet:namespace/>graphFileDownload(fileName){
 	</table>
 	</div>
 </div>
+<div class="row text-center">
+	<span>
+		*Thickness is 1 [oz]    (=0.035 [mm])
+	</span>
+</div>
 </form>
 </script>
 <script id="filter-design-type-3" type="text/html">
@@ -1309,6 +1346,11 @@ function <portlet:namespace/>graphFileDownload(fileName){
 	</table>
 	</div>
 </div>
+<div class="row text-center">
+	<span>
+		*Thickness is 1 [oz]    (=0.035 [mm])
+	</span>
+</div>
 </form>
 </script>
 <script id="line-calculator-type-1" type="text/html">
@@ -1351,6 +1393,11 @@ function <portlet:namespace/>graphFileDownload(fileName){
     </div>
     <div class="col-md-6">
         <img src="/iitp-portlet/images/rfdesigner/line-calculator/single.png" class="img-responsive">
+		<div class="text-center">
+			<span>
+				*〖∗T〗_met=1 [oz]=0.035 [mm]
+			</span>
+		</div>
     </div>
 </div>
 </form>
