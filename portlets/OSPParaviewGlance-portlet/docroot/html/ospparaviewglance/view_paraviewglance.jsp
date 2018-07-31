@@ -5,15 +5,9 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
-<!-- JQuery -->
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
-
-<!-- bootstrap -->
-<link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
-<script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 <portlet:renderURL var="renderURL">

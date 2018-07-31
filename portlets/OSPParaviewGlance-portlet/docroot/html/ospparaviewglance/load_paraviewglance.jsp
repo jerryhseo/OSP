@@ -82,9 +82,17 @@ $('#GlanceViewerserverFileOpen').click(function(){
 
 
 function loadFileOnParaviewGlance(inputData, serveResourceURL){
-	console.log("[GlanceViewer] laod data Input Data ", inputData);
-	console.log("[GlanceViewer] laod data from URL ", url);
-	console.log("[GlanceViewer] load view method check ", viewer);
+	//console.log("[GlanceViewer] laod data Input Data ", inputData);
+	//console.log("[GlanceViewer] laod data from URL ", serveResourceURL);
+	console.log("[GlanceViewer] Glance method check Glance ", Glance);
+	//console.log("[GlanceViewer] Glance method check 1 ", Glance.listReaders());
+	//console.log("[GlanceViewer] Glance method check 2 ", Glance.listSupportedExtensions());
+	//console.log("[GlanceViewer] Glance method check 3 ", viewer.setActiveProxyConfiguration(serveResourceURL));
+	//console.log("[GlanceViewer] Glance method check 4 ", Glance.setActiveProxyConfiguration(serveResourceURL));
+	console.log("[GlanceViewer] test glance load data");
+	Glance.loadURL(serveResourceURL, inputData.inputData.name_);
+	console.log("[GlanceViewer] test glance load data2");
+	//listSupportedExtensions
 	//viewer.loadURL(inputData.inputData.name_, serveResourceURL);
 }
 </script>
