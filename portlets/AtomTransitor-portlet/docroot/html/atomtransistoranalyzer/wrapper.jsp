@@ -7,11 +7,10 @@
 
 
 <!-- JQuery -->
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/osp-analyzer.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
-
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -318,7 +317,7 @@ Liferay.on(
 			if( myId !== e.targetPortlet )	return;
 			
 			console.log(e.targetPortlet+'>> OSP_INITIALIZE: ['+e.portletId+']', e);
-			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/epdviewer/epdviewer.jsp');
+			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/atomtransistoranalyzer/AtomTransistor_Viewer.jsp');
 			if( $.isEmptyObject(<portlet:namespace/>initData) )	return;
    			
    			<portlet:namespace/>initializeFileExplorer();
@@ -344,7 +343,7 @@ Liferay.on(
 			function(){
 				var iframe = document.getElementById('<portlet:namespace/>canvas');
 				var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-				if ( iframeDoc.readyState  == 'complete' && iframe.contentWindow.setNamespace ) {
+				if ( <portlet:namespace/>iframeReady() && iframe.contentWindow.setNamespace ) {
 					console.log("set");
 					iframe.contentWindow.setNamespace( '<portlet:namespace/>');
 				}
@@ -356,6 +355,19 @@ Liferay.on(
 			10
 		);
 	}
+ 
+ function <portlet:namespace/>iframeReady(){
+		var iframe = document.getElementById('<portlet:namespace/>canvas');
+		var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+		if ( iframeDoc.readyState  == 'complete' ) {
+			return true;
+		} 
+		else{
+			return false;
+		}
+	}
+
  
  function <portlet:namespace/>loadEPDViewer( inputData ){
 		switch( inputData.type_ ){
@@ -428,7 +440,7 @@ function <portlet:namespace/>Send_Struc_to_S( data )
 
 function <portlet:namespace/>fireReceiveStrucEvent( data )//??
 {
-	alert("me---"+data);
+	
 	
 	/*
 	setTimeout(

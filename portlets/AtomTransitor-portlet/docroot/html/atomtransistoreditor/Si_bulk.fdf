@@ -1,0 +1,140 @@
+# Bulk Si sample fdf file-----
+#(1) General system descriptors
+
+SystemName       Bulk Si     # Descriptive name of the system
+SystemLabel      bulkSi      # Short name for naming files
+
+NumberOfAtoms    8           # Number of atoms
+NumberOfSpecies  1           # Number of species
+
+%block ChemicalSpeciesLabel
+ 1 14 Si
+%endblock ChemicalSpeciesLabel
+
+LatticeConstant   5.43 Ang
+
+%block LatticeVectors
+    	 1.000000    0.000000    0.000000
+         0.000000    1.000000    0.000000
+         0.000000    0.000000    1.000000
+%endblock LatticeVectors
+
+AtomicCoordinatesFormat ScaledCartesian 
+
+%block AtomicCoordinatesAndAtomicSpecies
+0.00    0.00    0.00  1
+0.50    0.50    0.00  1
+0.50    0.00    0.50  1
+0.00    0.50    0.50  1
+0.25    0.25    0.25  1
+0.25    0.75    0.75  1
+0.75    0.25    0.75  1
+0.75    0.75    0.25  1
+%endblock AtomicCoordinatesAndAtomicSpecies
+
+%block SuperCell
+1 0 0
+0 2 0
+0 0 1
+%endblock SuperCell
+
+#Real space grid
+MeshCutoff 200.0 Ry
+%block kgrid_Monkhorst_Pack
+  4  0  0  0.5
+  0  4  0  0.5
+  0  0  4  0.5
+%endblock kgrid_Monkhorst_Pack
+
+XC.functional GGA
+XC.Authors PBE
+#(1) Basis definition
+PAO.EnergyShift   0.01 Ry       # default: 0.02 Ry
+PAO.BasisSizes DZP
+
+#%include TS.fdf # for transiesta calculation
+
+#(4) DFT, Grid, SCF
+
+XC.functional         GGA         # LDA or GGA (default = LDA)
+XC.authors            PBE         # CA (Ceperley-Aldr) = PZ
+                                  #    (Perdew-Zunger) - LDA - Default
+                                  # PW92 (Perdew-Wang-92) - LDA
+                                  # PBE (Perdew-Burke-Ernzerhof) - GGA
+MeshCutoff            100.000000  Ry   # Default: 50.0 Ry ~ 0.444 Bohr
+                                  #         100.0 Ry ~ 0.314 Bohr
+MaxSCFIterations      300         # Default: 50
+DM.MixingWeight       0.5         # Default: 0.25
+DM.NumberPulay        3           # Default: 0
+DM.UseSaveDM          .true.      # because of the bug
+
+# Eigenvalue problem: order-N or diagonalization
+
+SolutionMethod        Diagon      # or Transiesta
+ElectronicTemperature 300.0 K     # Default: 300.0 K
+
+
+# Molecular dynamics and relaxations
+
+MD.TypeOfRun          CG          # Type of dynamics:
+MD.VariableCell       F
+MD.NumCGsteps         0         # 0 for single-point / 100 for gopt
+MD.MaxCGDispl         0.1 Bohr    # Default: 0.2 Bohr
+MD.MaxForceTol        0.04 eV/Ang # Default: 0.04 eV/Ang
+MD.UseSaveXV		  F
+MD.UseSaveCG		  F
+
+# PDOS option
+
+%block PDOS.kgrid_Monkhorst_Pack
+12   0   0  0.0
+0   12   0  0.0
+0   0   12  0.0
+%endblock PDOS.kgrid_Monkhorst_Pack
+
+%block ProjectedDensityOfStates
+   -10.00  10.00  0.03  500 eV
+%endblock ProjectedDensityOfStates
+
+# LDOS option
+#%block LocalDensityOfStates
+# -3.9661 -3.8661 eV              # Around E_F
+#%endblock LocalDensityOfStates
+# Check the output first, and find out where E_F is located.
+# Then, put small window around E_F above.
+
+# Band option
+BandLinesScale	ReciprocalLatticeVectors
+%block BandLines
+1	0.5	0.5	0.5	L
+100	0.0	0.0	0.0	G
+100	0.5	0.0	0.5	X
+%endblock BandLines
+
+# Output options
+WriteCoorStep  		 T
+WriteCoorInitial     T      # SystemLabel.out
+#WriteKpoints        T      # SystemLabel.out
+#WriteEigenvalues    T      # SystemLabel.out [otherwise ~.EIG]
+#WriteKbands         T      # SystemLabel.out, band structure
+WriteBands           T      # SystemLabel.bands, band structure
+WriteMDXmol          T      # SystemLabel.ANI
+WriteCoorXmol       .true.  
+#WriteDM.NetCDF      T      # for Eigenchannel analysis later...
+WriteDMHS.NetCDF    T      # for Eigenchannel analysis later...
+#AllocReportLevel    0      # SystemLabel.alloc, Default: 0
+#WriteMDhistory       T
+
+# Options for saving/reading information
+
+#SpinPolarized	yes
+SaveHS	                   T   #SystemLabel.HS
+SaveRho	                   T   #SystemLabel.RHO
+SaveElectrostaticPotential T
+
+#WriteMullikenPop	1
+
+
+
+
+

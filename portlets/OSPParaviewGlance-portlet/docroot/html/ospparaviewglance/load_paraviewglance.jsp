@@ -90,7 +90,8 @@ function loadFileOnParaviewGlance(inputData, serveResourceURL){
 	//console.log("[GlanceViewer] Glance method check 3 ", viewer.setActiveProxyConfiguration(serveResourceURL));
 	//console.log("[GlanceViewer] Glance method check 4 ", Glance.setActiveProxyConfiguration(serveResourceURL));
 	console.log("[GlanceViewer] test glance load data");
-	Glance.loadURL(serveResourceURL, inputData.inputData.name_);
+	//viewer.processURLArgs(serveResourceURL, inputData.name_);
+	//Glance.loadURL(serveResourceURL, inputData.name_);
 	console.log("[GlanceViewer] test glance load data2");
 	//listSupportedExtensions
 	//viewer.loadURL(inputData.inputData.name_, serveResourceURL);

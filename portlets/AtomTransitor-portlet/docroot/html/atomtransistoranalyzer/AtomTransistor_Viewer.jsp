@@ -8,15 +8,27 @@
 	<!-- 
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/three/font/helvetiker_regular.typeface.js"></script>    
 	 -->
-<!-- JQuery -->	 
-	 <script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
-     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
-     <link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
+
+<!-- JQuery -->
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js" ></script>
+
+
+<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.js"></script>
+
+<!-- bootstrap -->
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
 	
-	<style>
-			body{ background-color: rgb(255,255,255); }
-			canvas{ background-color: white; float: left; }
-	</style>
+<style>
+	body{ background-color: rgb(255,255,255); }
+	canvas{ background-color: white; float: left; }
+</style>
+
 </head>
 
 <body style="height:100%;">
@@ -69,6 +81,7 @@ scene.add( pointLight2 );
 var mouse = new THREE.Vector2(), INTERSECTED;
 
 var Nx, Ny, Nz;
+var Nzy;
 var xmx, ymx, zmx;
 var xmn, ymn, zmn;
 
@@ -79,6 +92,8 @@ var Pallet_P =new Array(11);
 var Pallet_R =new Array(11);
 
 var Dxx, Dyy, Dzz;
+
+var dx_g, dy_g, dz_g;
 
 var Real_N_Atoms ;
 var N_Atoms ;
@@ -130,7 +145,7 @@ var LatticeVector = new Array(3);
 
 var nonz_i = new Array();
 
-var text_Atom_Type; 
+//var text_Atom_Type; 
 var text_Atom_Name ;
 var text_x ;
 var text_y ;
@@ -433,7 +448,7 @@ function loadEPData( data ){
 	Draw_VR = document.getElementsByName('Draw_VR');
 
 	
-	text_Atom_Type = document.getElementById("Atom_Type");
+	//text_Atom_Type = document.getElementById("Atom_Type");
 	text_Atom_Name = document.getElementById("Atom_Name");
 	text_x = document.getElementById("position_x");
 	text_y = document.getElementById("position_y");
@@ -619,7 +634,7 @@ function load_AtomCoor(data)
 	addition_y=document.getElementById('Addition_atom_y');
 	addition_z=document.getElementById('Addition_atom_z');
 	
-	text_Atom_Type = document.getElementById("Atom_Type");
+	//text_Atom_Type = document.getElementById("Atom_Type");
 	text_Atom_Name = document.getElementById("Atom_Name");
 	text_x = document.getElementById("position_x");
 	text_y = document.getElementById("position_y");
@@ -1226,20 +1241,37 @@ function setArrows( plateId )
 		if(ON_save_P===0) return;
 			
 		var time = '0';
+		var xi, yi, zi, md;
+		var c1=0.25, c2=0.50, c3=0.75;
+		var R_col, G_col, B_col;
+		var Norm_func;
+		
 		Vertices[time] = [];
 		
 		for( var i=0; i<dataLines.length; i++ ){
 			var line = dataLines[i];
-			var values = line.split(',');
+		//	var values = line.split(',');
+			
+			xi = i/Nzy; md = i%Nzy ; 
+			yi = md/Nz; 
+			zi = md%Nz; 
+		
+			Norm_func=parseFloat(line);			
+		
+			if(Norm_func>c3 && Norm_func<=1.0) { R_col= 1.0                    ; G_col= (1.0-Norm_func)/(1.0-c3) ; B_col= 0.0                    ; }
+       else if(Norm_func>c2 && Norm_func<=c3 ) { R_col= (Norm_func-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
+       else if(Norm_func>c1 && Norm_func<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-Norm_func)/(c2-c1) ; }
+       else if(Norm_func>=0 && Norm_func<=c1 ) { R_col= 0.0                    ; G_col= (Norm_func-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
+    		
 			
 			var vertex = {};
-			vertex.x = parseFloat(values[0]);
-			vertex.y = parseFloat(values[1]);
-			vertex.z = parseFloat(values[2]);
-			vertex.cr = Number(values[3]);
-			vertex.cg = Number(values[4]);
-			vertex.cb = Number(values[5]);
-			vertex.p = parseFloat(values[6]);   
+			vertex.x = xi*dx_g;
+			vertex.y = yi*dy_g;
+			vertex.z = zi*dz_g;
+			vertex.cr = R_col;
+			vertex.cg = G_col;
+			vertex.cb = B_col;
+			vertex.p = Norm_func;   
 			
 			Vertices[time].push( vertex );			
 			
@@ -1267,23 +1299,45 @@ function setArrows( plateId )
 		 if(ON_save_R===0) return;
 		 
 		var time = '0';
-		Rhos[time] = [];
-		//Vertices[time] = [];
+		var xi, yi, zi, md;
+		var c1=0.25, c2=0.50, c3=0.75;
+		var R_col, G_col, B_col;
+		var Norm_func;
+
 		
+		Rhos[time] = [];
+				
 		for( var i=0; i<dataLines.length; i++ ){
 			var line = dataLines[i];
-			var rhos = line.split(',');
-						
+			
+			xi = i/Nzy; md = i%Nzy ; 
+			yi = md/Nz; 
+			zi = md%Nz; 
+		
+			Norm_func=parseFloat(line);			
+		
+			if(Norm_func>c3 && Norm_func<=1.0) { R_col= 1.0                    ; G_col= (1.0-Norm_func)/(1.0-c3) ; B_col= 0.0                    ; }
+       else if(Norm_func>c2 && Norm_func<=c3 ) { R_col= (Norm_func-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
+       else if(Norm_func>c1 && Norm_func<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-Norm_func)/(c2-c1) ; }
+       else if(Norm_func>=0 && Norm_func<=c1 ) { R_col= 0.0                    ; G_col= (Norm_func-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
+			
+			//var rhos = line.split(',');	
+			
+			xi = i/Nzy; md = i%Nzy ; 
+			yi = md/Nz; 
+			zi = md%Nz; 
+			//XYZ[i][0]=xi*dx; XYZ[i][1]=yi*dy; XYZ[i][2]=zi*dz; 
+			
 			var vertex = {};
-			vertex.x = parseFloat(rhos[0]);
-			vertex.y = parseFloat(rhos[1]);
-			vertex.z = parseFloat(rhos[2]);
-			vertex.cr = Number(rhos[3]);
-			vertex.cg = Number(rhos[4]);
-			vertex.cb = Number(rhos[5]);
-			vertex.p = parseFloat(rhos[6]); 
+			vertex.x = xi*dx_g;
+			vertex.y = yi*dy_g;
+			vertex.z = zi*dz_g;
+			
+			vertex.cr = R_col;
+			vertex.cg = G_col;
+			vertex.cb = B_col;
+			vertex.p = Norm_func; 
 			Rhos[time].push( vertex );			
-			//Vertices[time].push( vertex );
 			
 		}
 		
@@ -1309,6 +1363,9 @@ function setArrows( plateId )
 				case 'xmn'     :xmn     =Number(values[1]); break;				
 				case 'ymn'     :ymn     =Number(values[1]); break;				
 				case 'zmn'     :zmn     =Number(values[1]); break;
+				case 'dx'      :dx_g    =Number(values[1]); break;				
+				case 'dy'      :dy_g    =Number(values[1]); break;				
+				case 'dz'      :dz_g    =Number(values[1]); break;
 				case 'P_max'   :P_max   =Number(values[1]); break;		
 				case 'P_min'   :P_min   =Number(values[1]); break;		
 				case 'R_max'   :R_max   =Number(values[1]); break;		
@@ -1316,6 +1373,8 @@ function setArrows( plateId )
 				default: alert('Un-recognizable parameter: '+values[0].trim()); return;
 			}
 		};
+		
+		Nzy=Nz*Ny;
 		
 		for(var i=0;i<11;i++) Pallet_P[i]=P_min + (P_max-P_min)/10*i;
 		for(var i=0;i<11;i++) Pallet_R[i]=R_min + (R_max-R_min)/10*i;
@@ -1635,7 +1694,7 @@ function onDocumentMouseMove( event )
 			
 
 			
-			text_Atom_Type.value = INTERSECTED.name;
+			//text_Atom_Type.value = INTERSECTED.name;
 		
 		
 			text_Atom_Name.value = Atom_Name[P_Atoms[0][nonz_i[insec_name]][1]];
@@ -1670,7 +1729,7 @@ function onDocumentMouseMove( event )
 	{
 			if ( INTERSECTED ) INTERSECTED.material.color.setHex( INTERSECTED.currentHex );
 			
-			text_Atom_Type.value = "";
+			//text_Atom_Type.value = "";
 			text_Atom_Name.value = "";
 
 			text_x.value = "";
@@ -1830,7 +1889,7 @@ function onDocumentMouseClick()
 		fireSendStrucEvent(struc_string);
 		
 
-		text_Atom_Type.value = P_Atoms[0][nonz_i[insec_name]][0];
+		//text_Atom_Type.value = P_Atoms[0][nonz_i[insec_name]][0];
 		text_Atom_Name.value = Atom_Name[P_Atoms[0][nonz_i[insec_name]][1]];
 		text_x.value         = P_Atoms[0][nonz_i[insec_name]][2];
 		text_y.value         = P_Atoms[0][nonz_i[insec_name]][3];
@@ -2156,12 +2215,10 @@ function Write_ouput()
 	
 	document_string +=String_Atom_spe_P();
 	document_string +="<div id='Draw_V_Rho' style=\"border:1px solid #aaaaaa;\">";
-	document_string +="<input type='radio' id='Draw_V'   name='Draw_VR' checked='checked' onclick=\"Sel_Draw_VR(0)\"> Potential";
-	document_string +="<input type='radio' id='Draw_Rho' name='Draw_VR'                   onclick=\"Sel_Draw_VR(1)\"> Charge density";
+//	document_string +="<input type='radio' id='Draw_V'   name='Draw_VR' checked='checked' onclick=\"Sel_Draw_VR(0)\"> Potential";
+	//document_string +="<input type='radio' id='Draw_Rho' name='Draw_VR'                   onclick=\"Sel_Draw_VR(1)\"> Charge density";
 	document_string +="</div>";
-	
-	
-	
+		
 	document_string +="<table style=\"width:100%;\" >	";
 	document_string +="<tr bgcolor='#eeeeee'  >  ";
 	document_string +="<td > <SPAN style='font-size: 10pt'> Viewer </SPAN>  </td>"; 
@@ -2220,8 +2277,13 @@ function Write_ouput()
 	document_string +="<table>	";
 	document_string +="<tr>";
 	document_string +="<td>Color</td>";
-	if(ON_save_P==1) document_string +="<td>Potential(V)</td>";
-	if(ON_save_R==1) document_string +="<td>Charge density(C/m^3)</td>";
+	if(ON_save_P==1) document_string +="<td><input type='radio' id='Draw_V'   name='Draw_VR' checked='checked' onclick=\"Sel_Draw_VR(0)\"> Potential(V)</td>"; 
+		
+//		document_string +="<td>Potential(V)</td>";
+	if(ON_save_R==1) document_string +="<td><input type='radio' id='Draw_Rho' name='Draw_VR'                   onclick=\"Sel_Draw_VR(1)\"> Charge density(C/m^3)</td>";
+
+		
+//		document_string +="<td>Charge density(C/m^3)</td>";
 	document_string +="</tr>";
 	document_string +="<tr>";
 	document_string +="<td rowspan='11'><img src="+imagePath+" width='50' height='231'></td>";
@@ -2329,15 +2391,12 @@ function String_Atom_spe_P()
 	document_string +="<div style=\"border:1px solid #aaaaaa;\">	";
 	document_string +="<table style='text-align:center;'>	";
 	document_string +="<tr>";
-	document_string +="<td>Species</td>";
-	document_string +="<td>Simbol</td>";
+	document_string +="<td>Atom</td>";
+	document_string +="<td></td>";
 	document_string +="<td>";
 	document_string +="</td>";
 	document_string +="</tr>";
 	document_string +="<tr>";
-	document_string +="<td>";
-	document_string +="<input id='Atom_Type' type='text' value='' size='5'  >";
-	document_string +="</td>";
 	document_string +="<td>";
 	document_string +="<input id='Atom_Name' type='text' value='' size='5'  >";
 	document_string +="</td>";
@@ -2368,19 +2427,16 @@ function String_Atom_spe_P()
 
 function setNamespace(ns) {
 	  namespace = ns;
-	  namespace = ns;
 	}
 	
 function fireSendStrucEvent(data){
-	
 	setTimeout(
 			function(){
-				if( namespace ){
-					
+				if( namespace ){				
 					window.parent[namespace+'Send_Struc_to_Editor']( data );
 				}
 				else{
-					fireSendStrucEvent(data);
+					//fireSendStrucEvent(data);
 				}
 			},
 			10

@@ -5,13 +5,11 @@
 <%@page import="javax.portlet.PortletPreferences"%>
 <%@include file="../init.jsp"%>
 
-
 <!-- JQuery -->
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/osp-editor.css"/>
 
 <portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
@@ -26,36 +24,34 @@ String mode = GetterUtil.getString(renderRequest.getAttribute("mode"), "VIEW");
 boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEnable"), true);
 %>
 
-<div class="container-fluid osp-analyzer">
+<div class="container-fluid osp-editor">
 	<div class="row-fluid header">
 		<div class="col-sm-10" id="<portlet:namespace/>title"></div>
 		<div class="col-sm-2" >
-			<div class="dropdown right">
+			<div class="dropdown text-right">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 					Sample FDF files<span class="caret"></span>
 				</button>
 				<!-- Link or button to toggle dropdown -->
 				<ul class="dropdown-menu dropdown-menu-right">
+					<li><a href="javascript:<portlet:namespace/>takeSample()"><i class="icon-file"> Sample</i></a></li>
 					<li><a href="javascript:$('#<portlet:namespace/>selectFile').click()"><i class="icon-folder-open"> Open local...</i></a></li>
 					<li><a href="javascript:<portlet:namespace/>openFileExplorer()"><i class="icon-folder-open"> Open server...</i></a></li>					 
 				</ul>				
-				<input type="button" id="CC_Struc" value=" View the input structure" onclick="<portlet:namespace/>fireTextChangedEvent()">	
-				    
 			</div>
-			
+			<div class="text-right">
+				<input type="checkbox" id="CC_Struc" value=" View the input structure" onclick="<portlet:namespace/>fireTextChangedEvent()">
+				View the input structure
+			</div>
 		</div>	
 	</div>
 	
-<div class="row-fluid frame">
-		<iframe 
-			class="col-sm-12 iframe-canvas"
-			id="<portlet:namespace/>TBox" style="height:900px; width:600px"
-			src="<%=request.getContextPath()%>/html/atomtransistoreditor/AtomTransistor_editor.jsp"
-		></iframe>
+	<div class="row-fluid" style="height:90%">
+		<iframe class="span12 canvas" id="<portlet:namespace/>TBox" src="<%=request.getContextPath()%>/html/atomtransistoreditor/AtomTransistor_editor.jsp"></iframe>
 	</div>
 </div>
 		
-<div id="<portlet:namespace/>hiddenSection" class="osp-analyzer hidden">
+<div id="<portlet:namespace/>hiddenSection" class="osp-editor hidden">
 	<div id="<portlet:namespace/>fileExplorer" title="Select a file" >
 		<div id="<portlet:namespace/>file-explorer-content" style="height: 95%"></div>
 		<div>
@@ -68,108 +64,427 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 </div>
 
 <script>
-<portlet:namespace/>passNamespace();
 
-var <portlet:namespace/>connector = '<%=connector%>';
+/***********************************************************************
+ * Global variables section
+ ***********************************************************************/
+ <portlet:namespace/>passNamespace()
+var <portlet:namespace/>connector = 'broadcast';
+var $<portlet:namespace/>fileExplorerDialogSection = $('#<portlet:namespace/>fileExplorer');
+var <portlet:namespace/>fileExplorerId = 'FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_at';
+if( '<portlet:namespace/>'.lastIndexOf('_INSTANCE_') > 0)
+	<portlet:namespace/>fileExplorerId += '<portlet:namespace/>'.substring('<portlet:namespace/>'.lastIndexOf('_INSTANCE_')+10);
+else
+	<portlet:namespace/>fileExplorerId += '001';
 var <portlet:namespace/>initData;
 var <portlet:namespace/>currentData;
 var <portlet:namespace/>mode = '<%=mode%>';
+var <portlet:namespace/>saveAction = false;
 var <portlet:namespace/>eventEnable = JSON.parse('<%=eventEnable%>');
 
 
-if( <portlet:namespace/>eventEnable === false ){
-	<portlet:namespace/>initData = JSON.parse('<%=inputData%>');
-	if( !<portlet:namespace/>initData.repositoryType_ ){
-		<portlet:namespace/>initData.repositoryType_ = '<%=OSPRepositoryTypes.USER_HOME.toString()%>';
-	}
-
-	<portlet:namespace/>loadEPDEditor( OSP.Util.toJSON(<portlet:namespace/>initData) );
+/***********************************************************************
+ * Initailization section using parameters
+ ***********************************************************************/
+ if( '<%=eventEnable%>' == false ){
+		<portlet:namespace/>connector = '<%=connector%>';
+		
+		<portlet:namespace/>initData = new OSP.InputData(JSON.parse('<%=inputData%>'));
+		if( !<portlet:namespace/>initData.repositoryType() )
+			<portlet:namespace/>initData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		
+		<portlet:namespace/>loadEPDEditor( OSP.Util.toJSON(<portlet:namespace/>initData.clone()) );
 }
+ 
+ 
 
-Liferay.on(
-	'OSP_HANDSHAKE', 
-	function( e ){
-		var myId = '<%=portletDisplay.getId()%>';
-		if( e.targetPortlet !== myId )	return;
-	
-		console.log(myId+' >> OSP_HANDSHAKE: ['+e.portletId+']', e);
-		
-		<portlet:namespace/>connector = e.portletId;		
-				
-		if( e.mode )
-			<portlet:namespace/>mode = e.mode;
-		else
-			<portlet:namespace/>mode = 'VIEW';
-			
-		var events = [
-			OSP.Event.OSP_EVENTS_REGISTERED,
-			OSP.Event.OSP_LOAD_DATA
-		];
-		var eventData = {
-			portletId: myId,
-			targetPortlet: <portlet:namespace/>connector,
-			data: events
-		};
-		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
-	}
-);
 
-Liferay.on(
-	'OSP_EVENTS_REGISTERED', 
-	function( e ){
-		var myId = '<%=portletDisplay.getId()%>';
-		if( e.targetPortlet !== myId )	return;
-		
-		console.log(myId+' >> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
-	}
-);
+/***********************************************************************
+ * Workbench global functions 
+ ***********************************************************************/
 
 function <portlet:namespace/>passNamespace(){
 	setTimeout(
 		function(){
 			var iframe = document.getElementById('<portlet:namespace/>TBox');
 			var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-			if ( iframeDoc.readyState  == 'complete' && iframe.contentWindow.setNamespace ) {
-				console.log("set");
+			if ( <portlet:namespace/>iframeReady() && iframe.contentWindow.setNamespace ) {
+				console.log("[ATOM EDITOR] set name space");
 				iframe.contentWindow.setNamespace( '<portlet:namespace/>');
 			}
 			else{
-				console.log("pass");
+				console.log("[ATOM EDITOR] pass name space");
 				<portlet:namespace/>passNamespace();
 			}
 		}, 
 		10
 	);
 }
+
+function <portlet:namespace/>iframeReady(){
+	console.log("[ATOM EDITOR] iframeReady() function");
+	var iframe = document.getElementById('<portlet:namespace/>TBox');
+	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+	if ( iframeDoc.readyState  == 'complete' ) {
+		return true;
+	} 
+	else{
+		return false;
+	}
+}
+
+function <portlet:namespace/>takeSample(){
+	var myId = '<%=portletDisplay.getId()%>';
+	var eventData = {
+			portletId: myId,
+			targetPortlet: <portlet:namespace/>connector
+	};
+	console.log("[ATOM EDITOR] take sample ", eventData);
+	Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, eventData);
+}
+
+function <portlet:namespace/>loadText( inputData, changeAlert ){
+	
+	if( inputData.type() === OSP.Enumeration.PathType.FILE){
+		<portlet:namespace/>currentData = inputData;
+		var data = {
+				<portlet:namespace/>command: 'READ_FILE',
+				<portlet:namespace/>mode: <portlet:namespace/>mode,
+				<portlet:namespace/>repositoryType: <portlet:namespace/>currentData.repositoryType(),
+				<portlet:namespace/>pathType: inputData.type(),
+				<portlet:namespace/>parentPath: inputData.parent(),
+				<portlet:namespace/>fileName: inputData.fileName()
+		};
+		
+		$.ajax({
+			type: 'POST',
+			url: '<%= serveResourceURL.toString()%>', 
+			async : false,
+			data  : data,
+			dataType : 'text',
+			success: function(data) {
+				$('#<portlet:namespace/>TBox').val( data );
+				if( changeAlert )
+					$('#<portlet:namespace/>TBox').trigger('change');
+			},
+			error:function(data,e){
+				console.log("[ATOM EDITOR] load text error :", data);
+				console.log("[ATOM EDITOR] load text error :", e);
+			},
+			complete: function( jqXHR, textStatus ){
+			}
+		});
+	}
+	else if( inputData.type() === OSP.Enumeration.PathType.FILE_CONTENT){
+		$('#<portlet:namespace/>TBox').val( inputData.context() );
+		if( changeAlert )
+			$('#<portlet:namespace/>TBox').trigger('change');
+	}
+	else if( inputData.type() === OSP.Enumeration.PathType.CONTEXT){
+		$('#<portlet:namespace/>TBox').text(Liferay.Util.unescapeHTML(inputData.context()));
+		if( changeAlert )
+			$('#<portlet:namespace/>TBox').trigger('change');
+	}
+	else if( inputData.type() === OSP.Enumeration.PathType.DLENTRY_ID){
+		$.ajax({
+			url: '<%=serveResourceURL.toString()%>',
+			type:'POST',
+			async: false,
+			dataType:'json',
+			data:{
+				<portlet:namespace/>command: 'READ_DLENTRY',
+				<portlet:namespace/>mode: <portlet:namespace/>mode,
+				<portlet:namespace/>dlEntryId: inputData.dlEntryId()
+			},
+			success:function(result){
+			    if( result.error ){
+			        console.log( '[ATOM EDITOR][ERROR] read sample: ' + inputData.dlEntryId());
+			        alert( '[ATOM EDITOR][ERROR] read sample: ' + inputData.dlEntryId() + '\nPlease contact site manager.');
+			    }
+			    else{
+			        var inputData = new OSP.InputData( result.success);
+	                $('#<portlet:namespace/>TBox').val( inputData.context() );
+	                if( changeAlert )
+						$('#<portlet:namespace/>TBox').trigger('change');
+			    }
+			},
+			error: function(){
+			    alert( '[ERROR] Site invalid. \nPlease contact site manager.');
+			},
+			complete: function( jqXHR, textStatus ){
+			}
+		});
+	}
+	else if( inputData.type() === OSP.Enumeration.PathType.URL ){
+		alert( 'Un-supported yet.');
+	}
+	else{
+		alert( 'Un-known dataType: '+inputData.type());
+	}
+}
+
+function <portlet:namespace/>saveAs(){
+	console.log("[ATOM EDITOR] test saveAS fuction")
+	var inputData = new OSP.InputData();
+	inputData.type( OSP.Enumeration.PathType.FOLDER);
+	inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+	inputData.parent( '' );
+	inputData.name( '' );
+	inputData.relative( true );
+	<portlet:namespace/>saveAction = true;
+	
+	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
+ }
+
+function <portlet:namespace/>openServerFile(){
+	console.log("[ATOM EDITOR] test openServerFile() fuction")
+	var inputData;
+	if(	<portlet:namespace/>initData && 
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FILE &&
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.FOLDER &&
+			<portlet:namespace/>initData.type() === OSP.Enumeration.PathType.EXT ){
+		inputData = <portlet:namespace/>initData.clone();
+	}
+	else{
+		inputData = new OSP.InputData();
+		inputData.repositoryType( '<%=OSPRepositoryTypes.USER_HOME.toString()%>' );
+		inputData.type( OSP.Enumeration.PathType.FOLDER );
+		inputData.parent('');
+		inputData.name('');
+	}
+	<portlet:namespace/>fileExplorerDialog( 'VIEW', inputData );
+ }
+
+function <portlet:namespace/>fileExplorerDialog( mode, inputData ){
+	console.log("[ATOM EDITOR] test <portlet:namespace/>fileExplorerDialog fuction")	
+
+	AUI().use('liferay-portlet-url', function(A){
+		var dialogURL = Liferay.PortletURL.createRenderURL();
+		dialogURL.setPortletId(<portlet:namespace/>fileExplorerId);
+		dialogURL.setParameter('inputData', JSON.stringify(inputData));
+		dialogURL.setParameter('mode', mode);
+		dialogURL.setParameter('eventEnable', false);
+		dialogURL.setParameter('connector', '<%=portletDisplay.getId()%>');
+		dialogURL.setWindowState('<%=LiferayWindowState.EXCLUSIVE%>');
+		
+		// $("#<portlet:namespace/>file-explorer-content").empty();
+		if($("#<portlet:namespace/>file-explorer-content").children().length > 0){
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}else{
+			$("#<portlet:namespace/>file-explorer-content").load( dialogURL.toString());
+			$<portlet:namespace/>fileExplorerDialogSection.dialog("open");
+		}
+	});
+} 
+
+
+function <portlet:namespace/>saveContentAs( inputData ){
+	console.log("[ATOM EDITOR] test <portlet:namespace/>saveContentAs fuction")
+
+	<portlet:namespace/>saveAction = false;
+	var data = {
+			<portlet:namespace/>command: 'SAVE_AS',
+			<portlet:namespace/>mode: <portlet:namespace/>mode,
+			<portlet:namespace/>pathType: inputData.type(),
+			<portlet:namespace/>repositoryType: inputData.repositoryType(),
+			<portlet:namespace/>parentPath: inputData.parent(),
+			<portlet:namespace/>fileName: inputData.name(),
+			<portlet:namespace/>context: inputData.context()
+	};
+	
+	$.ajax({
+		type: 'POST',
+		url: '<%= serveResourceURL.toString()%>', 
+		async : false,
+		data  : data,
+		dataType : 'text',
+		success: function(data) {
+			var eventData = {
+			                 portletId: '<%=portletDisplay.getId()%>', 
+			                 targetPortlet: <portlet:namespace/>fileExplorerId
+			}
+			
+			Liferay.fire( OSP.Event.OSP_INITIALIZE, eventData );
+			return true;
+		},
+		error:function(data,e){
+			console.log("[ATOM EDITOR] save contentsas function ", data);
+			console.log("[ATOM EDITOR] save contentsas function ", e);
+			return false;
+		}
+	});
+}
+
+/***********************************************************************
+ * Handling OSP Events
+ ***********************************************************************/
+Liferay.on(
+	OSP.Event.OSP_HANDSHAKE,
+	function( e ){
+		var myId = '<%=portletDisplay.getId()%>';
+		if( e.targetPortlet === myId ){
+			console.log("[ATOM EDITOR] OSP HANDSHAKE :", e );
+			<portlet:namespace/>connector = e.portletId;
+			if( e.mode )
+				<portlet:namespace/>mode = e.mode;
+			else
+				<portlet:namespace/>mode = 'VIEW';
+		
+			var events = [
+				OSP.Event.OSP_EVENTS_REGISTERED,
+				OSP.Event.OSP_LOAD_DATA,
+				OSP.Event.OSP_REQUEST_DATA
+			];
+			var eventData = {
+				portletId: myId,
+				targetPortlet: <portlet:namespace/>connector,
+				data: events
+			};
+			console.log("[ATOM EDITOR] OSP HANDSHAKE :", eventData );
+			Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
+		}
+});
+
+Liferay.on(
+	'OSP_EVENTS_REGISTERED', 
+	function( e ){
+		var myId = '<%=portletDisplay.getId()%>';
+		if( e.targetPortlet !== myId )	return;
+		console.log("[ATOM EDITOR] OSP EVENT REGISTERED :", e );
+	}
+);
+
+
+Liferay.on( 
+		OSP.Event.OSP_REQUEST_DATA, 
+		function(e){
+			var myId = '<%=portletDisplay.getId()%>';
+			if( e.targetPortlet === myId ){
+				var iframe = document.getElementById('<portlet:namespace/>TBox');
+				console.log("[ATOM EDITOR] OSP OSP_REQUEST_DATA :", e );
+				var eventData = {
+						portletId: myId,
+						targetPortlet: e.portletId,
+						data: {
+							type_: OSP.Enumeration.PathType.FILE_CONTENT,
+							context_: iframe.contentWindow.getParameters(),
+							params: e.params
+						}
+				}				
+				console.log("[ATOM EDITOR] OSP OSP_REQUEST_DATA :", eventData );
+				Liferay.fire(OSP.Event.OSP_RESPONSE_DATA, eventData);
+			}
+		}
+);
+
+Liferay.on(
+		OSP.Event.OSP_RESPONSE_DATA,
+		function( e ){
+			var myId = '<%=portletDisplay.getId()%>';
+			if( e.targetPortlet !== myId )	return;
+			console.log("[ATOM EDITOR] OSP OSP_RESPONSE_DATA :", e );
+			var iframe = document.getElementById('<portlet:namespace/>TBox');
+			var filePath = new OSP.InputData( e.data );
+			if( filePath.type() !== OSP.Enumeration.PathType.FILE ){
+				alert('File Name is not available. Choose another one.');
+				return;
+			}
+			
+			if( !<portlet:namespace/>saveAction ){
+				<portlet:namespace/>loadText( filePath, true );
+				$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
+			}
+			else{
+				$('#<portlet:namespace/>uploadFileName').val(filePath.name());
+				filePath.type( OSP.Enumeration.PathType.FILE_CONTENT );
+				filePath.context( iframe.contentWindow.getParameters() );
+				
+				$.ajax({
+					url: '<%=serveResourceURL.toString()%>',
+					type: 'POST',
+					dataType: 'json',
+					data:{
+						<portlet:namespace/>command: "CHECK_DUPLICATED",
+						<portlet:namespace/>repositoryType: filePath.repositoryType(),
+						<portlet:namespace/>parentPath: filePath.parent(),
+						<portlet:namespace/>fileName: filePath.name()
+					},
+					success: function(result){
+						var duplicated = result.duplicated;
+						if( duplicated ){
+							var confirmDialog = $('#<portlet:namespace/>confirmDialog');
+							confirmDialog.dialog(
+									{
+										resizable: false,
+										height: "auto",
+										width: 400,
+										modal: true,
+										buttons: {
+												'OK': function() {
+															$( this ).dialog( 'destroy' );
+															<portlet:namespace/>saveContentAs ( filePath );
+															$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
+												},
+												Cancel: function() {
+															$( this ).dialog( 'destroy' );
+												}
+										}
+									}
+							);
+						}
+						else{
+							<portlet:namespace/>saveContentAs ( filePath );
+							$<portlet:namespace/>fileExplorerDialogSection.dialog('close');
+						}
+					},
+					error: function( e, d ){
+						console.log(' [ATOM EDITOR] file save error', e, d);
+					}
+				});
+			}
+		}
+);
+
 		 
 Liferay.on( 
 	'OSP_LOAD_DATA', 
 	function(e){
 		var myId = '<%=portletDisplay.getId()%>';
+		console.log("[ATOM EDITOR] OSP LOAD DATA :", myId, e.targetPortlet );
 		if( e.targetPortlet !== myId )	return;
 	
-		console.log(myId+' >> OSP_LOAD_DATA: ['+e.portletId+']', e);
+		console.log("[ATOM EDITOR] OSP LOAD DATA :", e );
+		//console.log("Atom Editor Load Data : "+myId+' >> OSP_LOAD_DATA: ['+e.portletId+']', e);
 		
 		<portlet:namespace/>initData = e.data;
 		if( ! <portlet:namespace/>initData.repositoryType_){
 			<portlet:namespace/>initData.repositoryType_ = 'USER_HOME';
 		}
-		
+
 		<portlet:namespace/>loadEPDEditor( OSP.Util.toJSON(<portlet:namespace/>initData) );
 	}
 );
+
+////sample file get 
+//			<portlet:namespace/>takeSamPle();loadEPDEditor
 
 Liferay.on( 
 		'OSP_INITIALIZE', 
 		function(e){
 			var myId = '<%=portletDisplay.getId()%>';
 			if( e.targetPortlet !== myId )	return;
-		
-			console.log(myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
-			
-			<portlet:namespace/>displayEPData();
+			console.log("[ATOM EDITOR] OSP INITIALIZE Editor :", e );
+			//console.log(myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
 		}
 	);
+
+
+
+
+/***********************************************************************
+ * Liferay Workbench Draw functions 
+ ***********************************************************************/
 
 
 function <portlet:namespace/>loadEPDEditor( inputData ){
@@ -190,12 +505,14 @@ function <portlet:namespace/>loadEPDEditor( inputData ){
 			alert.log('Un-supported data type: '+inputData.type() );
 			break;
 		default:
-			console.log('InputData not available: ', inputData );
+			console.log('[ATOM EDITOR] InputData not available: ', inputData );
 			break;
 	}
 }
 
 function <portlet:namespace/>readFileContent( inputData ){
+	
+	console.log("[ATOM EDITOR] input data in read File Content:", inputData);
 	var data = Liferay.Util.ns( 
 			'<portlet:namespace/>',
 			{
@@ -211,28 +528,33 @@ function <portlet:namespace/>readFileContent( inputData ){
 		url: '<%= serveResourceURL.toString()%>', 
 		type: 'POST',
 		data  : data,
-		dataType : 'json',
+		dataType : 'text',
 		success: function(result) {
-			<portlet:namespace/>displayEPData(result.context_);
+			console.log("[ATOM EDITOR] file content load test : ", result);
+			<portlet:namespace/>displayEPData(result);
+			<portlet:namespace/>load_FDF_P( result );
 		},
 		error:function(result,e){
-			console.log(result);
-			console.log('AJAX ERROR-->', inputData);
+			console.log("[ATOM EDITOR] ajax error", result);
+			//console.log('AJAX ERROR-->', inputData);
 		}
 	});
 }
 
 function <portlet:namespace/>displayEPData( data ){
     // Get a handle to the iframe element
+    console.log("[ATOM EDITOR] Display EPDData1 : ", data);
     setTimeout(
     	function(){
     	    var iframe = document.getElementById('<portlet:namespace/>TBox');
     	    var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
     	    // Check if loading is complete
-    	    console.log( 'iframeDoc.readyState', iframeDoc.readyState);
-    	    if (  iframeDoc.readyState  == 'complete' && iframe.contentWindow.displayEPDEditor ) {
-   	        	iframe.contentWindow.displayEPDEditor( data );
+    	    console.log( '[ATOM EDITOR] iframeDoc.readyState', <portlet:namespace/>iframeReady());
+    	    if (  <portlet:namespace/>iframeReady() && iframe.contentWindow.load_struc_from_P ) {
+    	    	console.log("[ATOM EDITOR] Yejin in Display EPDData2 : ", data);
+   	        	iframe.contentWindow.load_struc_from_P( data );
+   	        	iframe.contentWindow.load_FDF_S( data );
     	    } 
     	    else{
     	    	<portlet:namespace/>displayEPData( data );
@@ -251,10 +573,10 @@ Liferay.on(
 		
 		if( e.targetPortlet !== myId )	return;
 		
-		console.log(myId+' >> OSP_REQUEST_DATA: ['+e.portletId+']', e);
-
+		//console.log(myId+' >> OSP_REQUEST_DATA: ['+e.portletId+']', e);
+		console.log("[ATOM EDITOR] osp request data ", e);
 		var content = $('#<portlet:namespace/>TBox').prop('contentWindow').getParameters();
-		console.log("EDP Editor : ", content);
+		console.log("[ATOM EDITOR] EDP Editor : ", content);
 		var eventData = {
 			portletId: myId,
 			targetPortlet: <portlet:namespace/>connector,
@@ -278,35 +600,52 @@ Liferay.on(
 		
 		if( e.targetPortlet !== myId )	return;
 		
-		console.log(myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
-		
+		//console.log(myId+' >> OSP_INITIALIZE: ['+e.portletId+']', e);
+		console.log("[ATOM EDITOR] OSP INITIALIZE ", e);
 	}
 );
 
 function <portlet:namespace/>fireTextChangedEvent( data ){
-	console.log('<portlet:namespace/>fireTextChangedEvent', data );
+	console.log('[ATOM EDITOR]test change event fire', data );
 	
 	//$('#<portlet:namespace/>').click();
-	
-	
-	<portlet:namespace/>ViewStructure();
-	
-	
+	//if(document.getElementById("CC_Struc").checked)	
+		<portlet:namespace/>ViewStructure();
 
+		var inputData = new OSP.InputData();
+		inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+		if( $.isEmptyObject(<portlet:namespace/>initData) ){
+			inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		}
+		else if( <portlet:namespace/>initData.repositoryType() ){
+			console.log("[ATOM EDITOR] test re[psotpry Type]]", <portlet:namespace/>initData);	
+			inputData.repositoryType(<portlet:namespace/>initData.repositoryType());
+		}
+		else{
+			inputData.repositoryType('<%=OSPRepositoryTypes.USER_HOME.toString()%>');
+		}
+		inputData.context( data );
+		
+		
+		var eventData = {
+		     			portletId: '<%=portletDisplay.getId()%>',
+		     			targetPortlet: <portlet:namespace/>connector,
+		     			data: OSP.Util.toJSON(inputData)
+		};
+		Liferay.fire( OSP.Event.OSP_DATA_CHANGED, eventData );
 }
 
 
 
 
 Liferay.on(
-       	'Receive_Struc_from_Viewer',
-       	function( e ){
-       		console.log('Receive_Struc_from_Viewer: ', e.data );
-       		var object = e.data;
-
-       		<portlet:namespace/>Send_Struc_to_S( object );
-       	}
-       );
+	'Receive_Struc_from_Viewer',
+	function( e ){
+		console.log('Receive_Struc_from_Viewer: ', e.data );
+		var object = e.data;
+		<portlet:namespace/>Send_Struc_to_S( object );
+	}
+);
 
 
 
@@ -372,6 +711,8 @@ $('#<portlet:namespace/>selectFile').bind(
 		//	if( iframe.contentWindow.get_CC_Struc() === false ) return;
 							
 			var data=iframe.contentWindow.getParameters();
+			
+			
 						
 			var N_atoms ;
 			var N_Species;
@@ -435,7 +776,7 @@ $('#<portlet:namespace/>selectFile').bind(
 			
 			for( var i=ChemicalSpeciesLabel_start_i; i<=ChemicalSpeciesLabel_end_i; i++ ) {	seldata += lines[i]+"\n";}
 			for( var i=LatticeVectors_start_i      ; i<=LatticeVectors_end_i      ; i++ ) {	seldata += lines[i]+"\n";}
-			for( var i=AtomCoor_start_i            ; i<=AtomCoor_end_i            ; i++ ) {	seldata += lines[i]+"\n";}
+			for( var i=AtomCoor_start_i            ; i<=AtomCoor_end_i            ; i++ ) {	seldata += lines[i]+"\n"; }
 			for( var i=SuperCell_start_i           ; i<=SuperCell_end_i           ; i++ ) {	seldata += lines[i]+"\n";}
 			
 			var eventData = {
@@ -515,7 +856,7 @@ function <portlet:namespace/>load_FDF_P( data ){
 		function(){
 			var iframe = document.getElementById('<portlet:namespace/>TBox');
 			var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-			if( iframeDoc.readyState  == 'complete' && iframe.contentWindow.load_FDF_S ){
+			if( <portlet:namespace/>iframeReady() && iframe.contentWindow.load_FDF_S ){
 				iframe.contentWindow.load_FDF_S( data ); 
 			}
 			else{
@@ -532,7 +873,7 @@ function <portlet:namespace/>Send_Struc_to_S( data )
 			function(){
 				var iframe = document.getElementById('<portlet:namespace/>TBox');
 				var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-				if( iframeDoc.readyState  == 'complete' && iframe.contentWindow.load_struc_from_P ){
+				if( <portlet:namespace/>iframeReady() && iframe.contentWindow.load_struc_from_P ){
 					iframe.contentWindow.load_struc_from_P( data ); 
 				}
 				else{

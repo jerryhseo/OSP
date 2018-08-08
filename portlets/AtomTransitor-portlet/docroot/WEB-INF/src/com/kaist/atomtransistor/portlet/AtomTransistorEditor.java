@@ -14,6 +14,8 @@ import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -21,16 +23,17 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class AtomTransistorEditor
  */
 public class AtomTransistorEditor extends MVCPortlet {
+	private static Log _log = LogFactoryUtil.getLog(AtomTransistorEditor.class);
 	@Override
 	public void doView(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
+		String inputData = ParamUtil.getString(renderRequest, "inputData");
 		boolean eventEnable = ParamUtil.getBoolean(renderRequest, "eventEnable", true);
-		String inputData = ParamUtil.getString(renderRequest, "inputData", "");
 		String connector = ParamUtil.getString(renderRequest, "connector", "broadcast");
 		String mode = ParamUtil.getString(renderRequest, "mode", "VIEW");
 
-		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("inputData", inputData);
+		renderRequest.setAttribute("eventEnable", eventEnable);
 		renderRequest.setAttribute("connector", connector);
 		renderRequest.setAttribute("mode", mode);
 		
@@ -40,34 +43,62 @@ public class AtomTransistorEditor extends MVCPortlet {
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException{
-		String parentPath = ParamUtil.getString(resourceRequest, "parentPath");
+		Path parentPath = Paths.get(ParamUtil.getString(resourceRequest, "parentPath"));
 		String fileName = ParamUtil.getString(resourceRequest, "fileName");
-
+		String target = parentPath.resolve(fileName).toString();
+		
 		String command = ParamUtil.getString(resourceRequest, "command");
 		String repositoryType = ParamUtil.getString(resourceRequest, "repositoryType", OSPRepositoryTypes.USER_HOME.toString());
-
-		System.out.println("command: "+command);
-
-		if(command.equalsIgnoreCase("READ_FILE")){
-			Path filePath = Paths.get(parentPath).resolve(fileName);
-			System.out.println("filePath: "+filePath.toString());
-			try{
-				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, filePath.toString(), repositoryType);
-			}catch (PortalException | SystemException e){
+		
+		if( command.equalsIgnoreCase("READ_FILE")){
+			try {
+				OSPFileUtil.readFileContent(resourceRequest, resourceResponse, target, repositoryType);
+			} catch (PortalException | SystemException e) {
+				_log.error("readFileContent(): "+target);
 				throw new PortletException();
 			}
 		}
-		else if(command.equalsIgnoreCase("GET_FIRST_FILE_NAME")){
-			try{
-				OSPFileUtil.getFirstFileName(resourceRequest, resourceResponse, parentPath,
-						fileName, repositoryType);
-			}catch (PortalException | SystemException e){
-				throw new PortletException( "GET_FIRST_FILE_NAME: " + parentPath + ", "+fileName );
+		else if( command.equalsIgnoreCase("SAVE_AS")){
+			String context = ParamUtil.getString(resourceRequest, "context");
+			try {
+				OSPFileUtil.saveFileContent(resourceRequest, target, context, repositoryType);
+			} catch (PortalException | SystemException e) {
+				_log.error("saveFileContent(): "+target);
+				throw new PortletException();
+			}
+		}
+		else if( command.equalsIgnoreCase("CHECK_VALID_FILE")){
+			try {
+				OSPFileUtil.checkValidFile(resourceRequest, resourceResponse, target, repositoryType);
+			} catch (PortalException | SystemException e) {
+				_log.error("checkValidFile(): "+target);
+				throw new PortletException();
+			}
+		}
+		else if( command.equalsIgnoreCase("CHECK_DUPLICATED") ){
+			try {
+				OSPFileUtil.duplicated(resourceRequest, resourceResponse, target, repositoryType);
+			} catch (PortalException | SystemException e) {
+				_log.error("duplicated(): "+target);
+				throw new PortletException();
+			}
+		}
+		else if( command.equalsIgnoreCase("READ_DLENTRY") ){
+			long entryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
+			
+			try {
+				OSPFileUtil.readDLAppEntry(resourceResponse, entryId);
+			} catch (SystemException e) {
+				_log.error("Read dlentry: "+entryId);
+				throw new PortletException();
 			}
 		}
 		else{
-			throw new PortletException(" Un-supported command: "+command);
+			_log.error("Un-known command: "+command);
+			throw new PortletException();
 		}
+		
+		super.serveResource(resourceRequest, resourceResponse);
 	} 
 
 }

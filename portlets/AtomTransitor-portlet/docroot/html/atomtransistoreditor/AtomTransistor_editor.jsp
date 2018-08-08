@@ -3,6 +3,23 @@
 <html>
 
 <head>
+<!-- JQuery -->
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-2.2.3.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery-ui.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery.blockUI.js" ></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/osp-editor.css"/>
+
+
+<link type="text/css" href="<%=request.getContextPath()%>/js/jquery/jquery-ui.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap-toggle.min.js"></script>
+
+<!-- bootstrap -->
+<link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
+	
+
 	<style>
 			body{ background-color: rgb(255,255,255); }
 			canvas{ background-color: white; float: left; }
@@ -10,13 +27,10 @@
 </head>
 
 		
-<body>
-<script src="https://code.jquery.com/jquery-2.2.3.min.js" ></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" ></script>
-<link type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css" rel="stylesheet" />
+<body style="width:100%; height:100%">
 
 
-<textarea id='fdf_file' rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" ></textarea>
+<textarea id='fdf_file' style="width:100%; height:100%"  rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" oninput="fireTextChangedEvent()" ></textarea>
 
 
 
@@ -33,11 +47,11 @@ var fdf_text="";
 //});
 
 
-/*
-$('#fdf_file').on('change',
-		function(){			alert( 'textarea changed');	fireTextChangedEvent();	}
-		);
-*/
+
+//$('#fdf_file').on('oninput',
+		//function(){			fireTextChangedEvent();	}
+		//);
+
 //document.getElementById('fdf_file').value=fdf_text;
 var namespace;
 
@@ -64,44 +78,22 @@ function setNamespace(ns) {
   namespace = ns;
 }
 
-function fireDataChangedEvent(){
-		setTimeout(
-				function(){
-					if( namespace ){
-						var data = getParameters();
-						console.log('fireDataChangedEvent() ', data);
-						window.parent[namespace+'fireDataChangedEvent']( data );
-					}
-					else{
-						fireDataChangedEvent();
-					}
-				},
-				10
-		);
-	}
-
-	function fireTextChangedEvent(){
-		setTimeout(
-				function(){
-					if( namespace ){
-						
-					
-						
-						var data = getParameters();
-						console.log('fireTextChangedEvent() ', data);
-						window.parent[namespace+'fireTextChangedEvent']( data );
-					}
-					else{
-						fireTextChangedEvent();
-					}
-				},
-				10
-		);
-	}
-
-	
-
-		
+function fireTextChangedEvent(){
+	console.log('[ATOM EDITOR] fireTextChangedEvent() ', namespace);
+	setTimeout(
+		function(){
+			if( namespace ){
+				var data = getParameters();
+				console.log('[ATOM EDITOR] fireTextChangedEvent() ', data);
+				window.parent[namespace+'fireTextChangedEvent']( data );
+			}
+			else{
+				fireTextChangedEvent();
+			}
+		},
+		10
+	);
+}
 	
 	function load_FDF_S( data ){
 				
@@ -109,14 +101,12 @@ function fireDataChangedEvent(){
 		
 	}
 	
-    function load_struc_from_P( data ){
-    	
-    	var replace_string = new Array();
-    	var replace_i=0;
-    	
-    	var N_atoms, N_Species;
-    	
-    	var lines = data.split('\n');
+function load_struc_from_P( data ){
+	var replace_string = new Array();
+	var replace_i=0;
+	var N_atoms, N_Species;
+	console.log("Yejin Test : ", data);
+	var lines = data.split('\n');
      	
      	for( var index=0; index<lines.length; index++ )
      	{
@@ -229,26 +219,16 @@ function fireDataChangedEvent(){
 	
 		
 	
-	  function getParameters()
-	  {	              
-	   	
-		
-	    return document.getElementById('fdf_file').value;
-
-	}
+function getParameters()
+{	              
+	console.log("[ATOM EDITOR] get parameter function :", document.getElementById('fdf_file').value);
+	return document.getElementById('fdf_file').value;
+}
 	  
-	  function get_CC_Struc()
-	  {	              
-	   	
-		
-	    return document.getElementById('CC_Struc').checked;
-
-	}
-	  
-	  
-	
-	  
-
+function get_CC_Struc()
+{	              
+	return document.getElementById('CC_Struc').checked;
+}
 
 </script>
 
