@@ -34,7 +34,7 @@
 <body style="height:100%;">
 
 <script type="text/javascript">
-var namespace;
+var atomAnalyzerNamespace;
 var imagePath = parent.atomTransitorAnalyzerImagePath;
 
 var scene_width =700;
@@ -1886,6 +1886,7 @@ function onDocumentMouseClick()
 		struc_string+="0 0 1\n";
 		struc_string+="%endblock SuperCell\n";
 		
+		console.log("[Atom Analyzer] mouse click event, befre fireSendStrucEvent : ");
 		fireSendStrucEvent(struc_string);
 		
 
@@ -2091,6 +2092,7 @@ function Button_Addition_Atom()
 			struc_string+="0 0 1\n";
 			struc_string+="%endblock SuperCell\n";
 			
+			console.log("[ATOM ANALYZER] file changed data :", struc_string);
 			fireSendStrucEvent(struc_string);
 			
 			
@@ -2426,17 +2428,20 @@ function String_Atom_spe_P()
 }
 
 function setNamespace(ns) {
-	  namespace = ns;
-	}
-	
+	atomAnalyzerNamespace = ns;
+	  console.log("[ATOM Analyzer] set namespace ", atomAnalyzerNamespace);
+}
+
 function fireSendStrucEvent(data){
+	console.log("[ATOM ANALYZER] fire send data in viewer ", atomAnalyzerNamespace);
 	setTimeout(
 			function(){
-				if( namespace ){				
-					window.parent[namespace+'Send_Struc_to_Editor']( data );
+				if( atomAnalyzerNamespace ){
+					console.log("[ATOM ANALYZER] fire event in click(viewer file) :" , data);
+					window.parent[atomAnalyzerNamespace+'Send_Struc_to_Editor']( data );
 				}
 				else{
-					//fireSendStrucEvent(data);
+					fireSendStrucEvent(data);
 				}
 			},
 			10

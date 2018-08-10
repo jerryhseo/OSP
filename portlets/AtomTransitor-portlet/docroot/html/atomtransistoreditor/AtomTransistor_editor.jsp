@@ -19,40 +19,21 @@
 <link href="<%=request.getContextPath()%>/js/jquery/bootstrap.min.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/jquery/bootstrap.min.js"></script>
 	
-
-	<style>
-			body{ background-color: rgb(255,255,255); }
-			canvas{ background-color: white; float: left; }
-		</style>
+<style>
+	body{ background-color: rgb(255,255,255); }
+	canvas{ background-color: white; float: left; }
+</style>
 </head>
 
 		
 <body style="width:100%; height:100%">
 
 
-<textarea id='fdf_file' style="width:100%; height:100%"  rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" oninput="fireTextChangedEvent()" ></textarea>
-
-
+<textarea id='fdf_file' style="width:100%; height:100%"  rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" oninput="javascript:fireTextChangedEvent()" ></textarea>
 
 <script>
-//DotumChe
-//oninput="fireTextChangedEvent()"
-//oninput="myFunction()"
-
-
 var fdf_text="";
 
-//$("body").on('change', '#fdf_file', function(){    // 2nd (B)
-//	alert( 'textarea changed');
-//});
-
-
-
-//$('#fdf_file').on('oninput',
-		//function(){			fireTextChangedEvent();	}
-		//);
-
-//document.getElementById('fdf_file').value=fdf_text;
 var namespace;
 
 var z_scal=9.400000e-05;
@@ -73,11 +54,9 @@ var inputs = new Array();
  var dx,  dy,  dz;
  
 
-
 function setNamespace(ns) {
   namespace = ns;
 }
-
 function fireTextChangedEvent(){
 	console.log('[ATOM EDITOR] fireTextChangedEvent() ', namespace);
 	setTimeout(
@@ -94,18 +73,15 @@ function fireTextChangedEvent(){
 		10
 	);
 }
-	
-	function load_FDF_S( data ){
-				
-		document.getElementById('fdf_file').value=data;		
-		
-	}
+
+function load_FDF_S( data ){
+	document.getElementById('fdf_file').value=data;
+}
 	
 function load_struc_from_P( data ){
 	var replace_string = new Array();
 	var replace_i=0;
 	var N_atoms, N_Species;
-	console.log("Yejin Test : ", data);
 	var lines = data.split('\n');
      	
      	for( var index=0; index<lines.length; index++ )
@@ -216,7 +192,6 @@ function load_struc_from_P( data ){
        
     	document.getElementById('fdf_file').value=modified_fdf;		
 	}
-	
 		
 	
 function getParameters()
@@ -231,6 +206,5 @@ function get_CC_Struc()
 }
 
 </script>
-
 </body>
 </html>
