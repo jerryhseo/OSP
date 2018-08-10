@@ -334,10 +334,13 @@
 			B.classTitle, 
 			IFNULL(B.virtualLabPersonName, '') virtualLabPersonName,
 			B.classId, 
+			B.classPersonnel,
+			B.classCreateDt,
 			sum(B.executeCount) AS executeCount, 
 			sum(B.executeStudentcount) AS executeStudentcount,
 			GROUP_CONCAT(distinct B.scienceAppId SEPARATOR ',') scienceAppId,  
-			sum(B.avgerageRuntime) AS avgerageRuntime
+			sum(B.avgerageRuntime) AS avgerageRuntime,
+			B.registerStudentCtn
 		FROM( 
 				select 
 					groupId,
@@ -345,12 +348,15 @@
 					virtualLabId,
 					virtualLabTitle,
 					classTitle,
+					classPersonnel,
+					classCreateDt,
 					virtualLabPersonName,
 					classId,
 					executeCount,
 					executeStudentcount,
 					scienceAppId,
-					avgerageRuntime
+					avgerageRuntime,
+					registerStudentCtn
 				  FROM(
 				  SELECT 
 					  A.groupId,
@@ -358,6 +364,8 @@
 					  A.virtualLabId,
 					  ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
 					  ExtractValue(A.classTitle,'root/ClassTitle[@language-id="@@languageId@@"]') AS  classTitle,
+					  A.classPersonnel AS classPersonnel,
+					  DATE_FORMAT(A.classCreateDt,'%Y-%m-%d') AS classCreateDt,
 					  /*ExtractValue(A.virtualLabPersonName,'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS  virtualLabPersonName,*/
 					  
 					  (
@@ -373,7 +381,20 @@
 					  SUM(CASE WHEN jobSubmit = 1 THEN 1 ELSE 0 END) executeCount,
 					  A.virtualClassCd as classId, 
 					  count(distinct(case when F.jobSubmit = 1 then B.userId end)) executeStudentcount,
-					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobSubmit = 1 then B.userId end))),0) as avgerageRuntime
+					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobSubmit = 1 then B.userId end))),0) as avgerageRuntime,
+					  (
+						SELECT COUNT(classesUsers.virtualLabUserId)
+						FROM EDVIR_VirtualLabClasses_VirtualLabUsers classesUsers
+								INNER JOIN (SELECT 
+												virtualLabUserId
+											FROM
+												EDVIR_VirtualLabUser
+											WHERE
+												requestSort = 'TEMP'
+												OR requestSort = 'CONFIRM') LabUesr 
+								ON LabUesr.virtualLabUserId = classesUsers.virtualLabUserId
+						WHERE classesUsers.classId = A.classId
+					  ) AS registerStudentCtn
 					FROM 
 					  (SELECT lab.*, class.*, (SELECT COUNT(*) FROM EDVIR_VirtualLabs_VirtualLabClasses B INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId WHERE B.virtualLabId = lab.virtualLabId AND C.classUseYn = 'Y' ) AS classCount
 			 FROM EDVIR_VirtualLab lab
@@ -416,13 +437,16 @@
 						mgr.universityField AS university,
 						mgr.virtualLabId,
 						ExtractValue(mgr.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
-						ExtractValue(mgr.classTitle,'root/ClassTitle[@language-id="@@languageId@@"]') AS  classTitle, 
+						ExtractValue(mgr.classTitle,'root/ClassTitle[@language-id="@@languageId@@"]') AS  classTitle,
+						mgr.registerStudentCnt AS classPersonnel,
+						DATE_FORMAT(mgr.classCreateDt, '%Y-%m-%d') AS classCreateDt, 
 						ExtractValue(mgr.virtualLabPersonName,'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS  virtualLabPersonName,
 						mgr.virtualClassCd as classId, 
 						mgr.executeCount,
 						mgr.executeStudentcount,
 						mgr.scienceAppId,
-						mgr.avgerageRuntime  
+						mgr.avgerageRuntime,
+						mgr.registerStudentCnt as registerStudentCtn  
 					FROM EDVIR_VirtualLabClassStsMigration mgr
 					WHERE mgr.groupId = #groupId# 
 					<isNotEmpty property="universityCode">    

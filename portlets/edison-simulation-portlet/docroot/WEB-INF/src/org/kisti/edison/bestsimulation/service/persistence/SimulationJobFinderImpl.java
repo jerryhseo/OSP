@@ -766,6 +766,9 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			query.addScalar("executeStudentcount", Type.INTEGER);//6
 			query.addScalar("scienceAppId", Type.STRING);//7
 			query.addScalar("avgerageRuntime", Type.INTEGER);//8
+			query.addScalar("classPersonnel", Type.STRING);//1
+			query.addScalar("classCreateDt", Type.STRING);//1
+			query.addScalar("registerStudentCtn", Type.STRING);//1
 			
 			return (List<Object[]>) query.list();
 		} catch (Exception e) {
