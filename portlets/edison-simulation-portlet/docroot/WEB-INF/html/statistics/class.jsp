@@ -117,13 +117,14 @@ function <portlet:namespace/>dataSearch(){
 					}
 					
 					$("<td/>").html(scienceAppTitle).appendTo($rowResult);
+					$("<td/>").addClass("center").text(statisticsList[i].registerStudentCtn).css("text-align","center").appendTo($rowResult);
 					$("<td/>").addClass("center").text(statisticsList[i].executeStudentcount).css("text-align","center").appendTo($rowResult);
 					
 					
 					$("<td/>").addClass("center").text(statisticsList[i].classId).css("text-align","center").appendTo($rowResult);
 					$("<td/>").addClass("center").text(statisticsList[i].executeCount).css("text-align","center").appendTo($rowResult);
 					$("<td/>").addClass("center").text(statisticsList[i].avgerageRuntime).css("text-align","center").appendTo($rowResult);
-					
+					$("<td/>").addClass("center").text(statisticsList[i].classCreateDt).css("text-align","center").appendTo($rowResult);
 
 					classCount++;
 					labCount++;
@@ -162,6 +163,10 @@ function <portlet:namespace/>excelDown(){
 #data_wrap{
 	margin: 10px 0px;
 }
+
+#classStatisticsListBody td{
+	word-wrap: break-word;
+}
 </style>
 
 	<div class="contabmenu tabWidth"> 
@@ -171,7 +176,7 @@ function <portlet:namespace/>excelDown(){
 			value="<%=selectedGroupId%>" 
 			refresh="<%=false%>" 
 			onClick="<%=portletNameSpace%>"
-			minwidth="195"
+			minwidth="170"
 		/>
 	</div>
 	
@@ -234,14 +239,16 @@ function <portlet:namespace/>excelDown(){
 		<div class="panel-heading clearfix"></div>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table" >
 			<colgroup>
-				<col width="10%" />
-				<col width="10%" />
-				<col width="10%" />
 				<col width="8%" />
-				<col width="25%" />
+				<col width="9%" />
+				<col width="9%" />
+				<col width="8%" />
+				<col width="24%" />
+				<col width="5%" />
 				<col width="7%" />
 				<col width="7%" />
 				<col width="7%" />
+				<col width="8%" />
 				<col width="8%" />
 			</colgroup>
 			<thead>
@@ -251,10 +258,12 @@ function <portlet:namespace/>excelDown(){
 					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-virtualclass' /></th>
 					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-professor' /></th>
 					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-sw-data' /></th><!-- 활용SW -->
+					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-student-count' /></th><!-- 학생수 -->
 					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-execute-student-count' /></th><!-- 실행학생수 -->
 					<th align="center" scope="col"><liferay-ui:message key='edison-class-statistics-class-code' /></th><!-- 수업코드 -->
 					<th align="center" scope="col"><liferay-ui:message key='edison-science-appstore-view-Execution-count' /></th> <!-- 실행수 -->
 					<th align="center" scope="col">CPU Time</th> <!-- CPU Time -->
+					<th align="center" scope="col"><liferay-ui:message key='edison-virtuallab-tablerow-request-date' /></th> <!-- 신청 일자 -->
 				</tr>
 			</thead>
 			<tbody id="classStatisticsListBody">

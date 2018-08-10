@@ -242,9 +242,6 @@ public class SimulationController {
 			model.addAttribute("preprocessorPopupRenderURL", preprocessorPopupRenderURL);
 			model.addAttribute("preprocessorPortletNamespace", PortalUtil.getPortletNamespace("edisonmyfile_WAR_edisonsimulation2016portlet"));
 			
-			if(tabViewYn.equals("Y")){
-				return "simulationTabView";
-			}
 		}catch(Exception e){
 			log.error(e);
 			e.printStackTrace();
