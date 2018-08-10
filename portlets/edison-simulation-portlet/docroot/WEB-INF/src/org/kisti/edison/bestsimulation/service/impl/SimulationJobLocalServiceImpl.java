@@ -736,7 +736,6 @@ public class SimulationJobLocalServiceImpl
 	//DELETE 모니터링
 	public String deleteMonitoring(String simulationUuid, long groupId,long jobSeqNo,User user) throws PortalException, SystemException{
 		String returnResult = "";
-		System.out.println("0. jobSeqNo --- > " + jobSeqNo);
 		if(jobSeqNo!=0){
 			SimulationJobPK simulationJobPK = new SimulationJobPK(jobSeqNo, simulationUuid, groupId);
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getSimulationJob(simulationJobPK);
@@ -755,15 +754,12 @@ public class SimulationJobLocalServiceImpl
 				throw new PortalException(e);
 			}
 			
-			System.out.println("1. returnResult --- > " + returnResult);
 			if(returnResult.equals("SUCCESS")){
 				//삭제 하고자 하는 데이터의 jobSeqNo가 1일 경우
 				//모니터링 목록에서 해당 job의 jobSeqNo가 1을 조회 하기 때문에 
 				//해당 simulationUuid에 해당하는 jobSeqNo를 -1을 하여 update한다.
-				System.out.println("2. jobSeqNo --- > " + jobSeqNo);
 				if(jobSeqNo==1){
 					List<Map<String,Object>> simulationJobList =  getListSimulationJob(groupId, simulationUuid, 1301003, 0, Locale.KOREA);
-					System.out.println("3. simulationJobList --- > " + simulationJobList);
 					if(simulationJobList.size()!=0){
 						for(Map<String,Object> simulationJobMap : simulationJobList){
 							long jobSeqNoModel = GetterUtil.getLong(simulationJobMap.get("jobSeqNo"),0);
@@ -1417,6 +1413,9 @@ public class SimulationJobLocalServiceImpl
 					int executeStudentcount = (Integer) resultArray[8];
 					String scienceAppIdObj = CustomUtil.strNull(resultArray[9]);
 					int avgerageRuntime = (Integer) resultArray[10];
+					String classPersonnel = CustomUtil.strNull(resultArray[11]);
+					String classCreateDt = CustomUtil.strNull(resultArray[12]);
+					String registerStudentCtn = CustomUtil.strNull(resultArray[13]);
 					
 					resultRow = new HashMap<String, Object>();
 					resultRow.put("groupId", groupId);
@@ -1435,6 +1434,9 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("classId", classId);
 					resultRow.put("executeCount", executeCount);
 					resultRow.put("executeStudentcount",executeStudentcount);
+					resultRow.put("classPersonnel",classPersonnel);
+					resultRow.put("classCreateDt",classCreateDt);
+					resultRow.put("registerStudentCtn",registerStudentCtn);
 					
 					List<String> scienceAppTitleList = new ArrayList<String>();
 
