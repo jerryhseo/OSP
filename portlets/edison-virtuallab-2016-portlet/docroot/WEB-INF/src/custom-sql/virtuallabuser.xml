@@ -34,13 +34,13 @@
 							AA.jobPhase = 1301003
 						AND 
 							BB.scienceAppId=DD.scienceAppId
-						AND 
-							BB.classId=#classId#
-						AND 
-							CC.classId=#classId#
 						<isNotEmpty property="classId">
+							AND 
+								BB.classId=#classId#
+							AND 
+								CC.classId=BB.classId
 							AND
-								A.classId = #classId#
+								A.classId = CC.classId
 						</isNotEmpty>
 				) AS executeCount
 			FROM
