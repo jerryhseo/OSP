@@ -20,18 +20,29 @@
 						D.classId = #classId# 
 					AND 
 						D.virtualLabId = #virtualLabId#) AS surveyCheck,
-				(SELECT IFNULL(CONCAT(COUNT(*), '(', SUM(if(AA.jobStatus = 1701011, 1, 0)), '/', SUM(if(AA.jobStatus = 1701012, 1, 0)), ')'), '0(0/0)') 
-				   FROM 
-						EDSIM_SimulationJob AA INNER JOIN EDSIM_Simulation BB ON AA.simulationUuid = BB.simulationUuid 
-				  WHERE 
-				  		BB.userId = B.userId
-				  	AND
-				  		BB.testYn = 0 
-				  	AND 
-				  		AA.jobPhase = 1301003 
-				  	AND 
-				  		AA.groupId = #groupId#
-					) AS executeCount
+				(SELECT IFNULL(CONCAT(COUNT(*), '(', SUM(if(AA.jobStatus = 1701011, 1, 0)), '/', SUM(if(AA.jobStatus = 1701012, 1, 0)), ')'), '0(0/0)')
+					FROM 
+						EDSIM_SimulationJob AA INNER JOIN EDSIM_Simulation BB ON AA.simulationUuid = BB.simulationUuid,
+						EDVIR_VirtualLabScienceAppLinkClass CC
+							INNER JOIN EDVIR_VirtualLabScienceAppLink DD
+								ON CC.scienceAppSeqNo = DD.scienceAppSeqNo 
+					WHERE 
+							BB.userId = B.userId
+						AND
+							BB.testYn = 0 
+						AND 
+							AA.jobPhase = 1301003
+						AND 
+							BB.scienceAppId=DD.scienceAppId
+						AND 
+							BB.classId=#classId#
+						AND 
+							CC.classId=#classId#
+						<isNotEmpty property="classId">
+							AND
+								A.classId = #classId#
+						</isNotEmpty>
+				) AS executeCount
 			FROM
 				EDVIR_VirtualLabClasses_VirtualLabUsers A
 				INNER JOIN EDVIR_VirtualLabUser B ON A.virtualLabUserId = B.virtualLabUserId

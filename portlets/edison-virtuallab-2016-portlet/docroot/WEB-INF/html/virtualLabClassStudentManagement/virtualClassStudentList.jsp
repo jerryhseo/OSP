@@ -522,6 +522,7 @@ function <portlet:namespace/>dataSearchList() {
 								  .css("text-align","center")
 								  .appendTo($rowResult);
 					}
+					/* SW 실행 결과 */
 					$("<td/>").text(virtualClassStudentList[i].executeCount)
 							  .css("text-align","center")
 							  .appendTo($rowResult);

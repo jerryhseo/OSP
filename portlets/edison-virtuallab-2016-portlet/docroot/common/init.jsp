@@ -17,7 +17,6 @@
 <%@ page import="javax.portlet.WindowState" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
-<%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.servlet.SessionMessages" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
 <%@ page import="org.kisti.edison.model.EdisonMessageConstants" %>
