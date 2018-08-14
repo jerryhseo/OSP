@@ -420,7 +420,7 @@
 					  LEFT OUTER JOIN EDVIR_VirtualLabClassScienceApp D on C.scienceAppSeqNo = D.scienceAppSeqNo
 					  LEFT OUTER JOIN EDAPP_ScienceApp E on D.scienceAppId = E.scienceAppId
 					  LEFT OUTER JOIN (SELECT 
-					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
+					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId,simulation.classId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
 					                      FROM EDSIM_Simulation simulation 
 					                      INNER JOIN EDSIM_SimulationJob job on simulation.simulationUuid = job.simulationUuid 
 					                      WHERE simulation.groupId = #groupId# AND (
@@ -428,7 +428,7 @@
 					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
 					                                                  )
 					                                                  AND simulation.testYn != true
-					  ) F ON F.userId = B.userId
+					  ) F ON F.userId = B.userId AND F.classId=B.classId
 					GROUP BY A.classId
 				)A
 				UNION
