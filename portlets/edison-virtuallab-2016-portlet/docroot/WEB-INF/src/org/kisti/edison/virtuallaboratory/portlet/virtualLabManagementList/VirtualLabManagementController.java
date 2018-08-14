@@ -28,6 +28,7 @@ import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonHttpUtil;
+import org.kisti.edison.util.EdisonPropsUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -50,6 +51,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
@@ -76,6 +78,8 @@ public class VirtualLabManagementController {
 			long companyId = PortalUtil.getCompanyId(request);
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 			Locale locale = themeDisplay.getLocale();
+			String appBasePath = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
+			System.out.println("app base path --> " + appBasePath);
 			
 			HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(request);
 			httpRequest = PortalUtil.getOriginalServletRequest(httpRequest);
