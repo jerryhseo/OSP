@@ -103,6 +103,7 @@ public class ScienceAppCompileModelImpl extends BaseModelImpl<ScienceAppCompile>
 		model.setScienceAppId(soapModel.getScienceAppId());
 		model.setUserId(soapModel.getUserId());
 		model.setCompileUrl(soapModel.getCompileUrl());
+		System.out.println("result -->> " + soapModel.getResult());
 		model.setResult(soapModel.getResult());
 		model.setCreateDate(soapModel.getCreateDate());
 

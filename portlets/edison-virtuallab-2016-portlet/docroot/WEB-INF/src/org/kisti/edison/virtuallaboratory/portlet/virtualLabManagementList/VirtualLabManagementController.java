@@ -78,8 +78,6 @@ public class VirtualLabManagementController {
 			long companyId = PortalUtil.getCompanyId(request);
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
 			Locale locale = themeDisplay.getLocale();
-			String appBasePath = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
-			System.out.println("app base path --> " + appBasePath);
 			
 			HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(request);
 			httpRequest = PortalUtil.getOriginalServletRequest(httpRequest);
