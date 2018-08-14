@@ -165,13 +165,14 @@ public class WorkflowController{
         @PathVariable("workflowId") long workflowId,
         @RequestParam(required = false, value="title") String newTitle,
         @RequestParam(required = false, value="description") String newDescription,
+        @RequestParam(required = false, value="screenLogic") String screenLogic,
         HttpServletRequest request) throws Exception{
         try{
             System.out.println("newTitle : " + newTitle);
             System.out.println("newDescription : " + newDescription);
             Workflow workflow = null;
             if(StringUtils.hasLength(newTitle)){
-                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, request);
+                workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, screenLogic, request);
             }else{
                 workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, request);
             }
@@ -224,6 +225,7 @@ public class WorkflowController{
     public @ResponseBody Map<String, Object> runWorkflow(@RequestParam Map<String, Object> params,
         @PathVariable("workflowId") long workflowId, HttpServletRequest request) throws Exception{
         try{
+            System.out.println(params.toString());
             WorkflowInstance instance = WorkflowLocalServiceUtil.runWorkflow(workflowId, params, request);
             return instance.getModelAttributes();
         }catch (Exception e){
@@ -275,6 +277,7 @@ public class WorkflowController{
         HttpServletRequest request) throws Exception{
         try{
             WorkflowInstance workflowInstance = WorkflowInstanceLocalServiceUtil.getWorkflowInstance(workflowInstanceId);
+            params.put("workflowInstanceTitle", workflowInstance.getTitle());
             if("CREATED".equals(workflowInstance.getStatus())){
                 workflowInstance = WorkflowLocalServiceUtil.runWorkflowInstance(workflowInstanceId, params, request);
             }
@@ -428,6 +431,7 @@ public class WorkflowController{
         try{
             Locale locale = PortalUtil.getLocale(request);
             Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+            System.out.println(workflowId);
             List<WorkflowInstance> workflowInstances = WorkflowInstanceLocalServiceUtil
                 .getWorkflowWorkflowInstancesByWorkflowId(workflowId);
             List<Map<String, Object>> jstreeIntances = WorkflowBeanUtil

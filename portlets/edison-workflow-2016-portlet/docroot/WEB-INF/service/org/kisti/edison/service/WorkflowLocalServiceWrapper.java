@@ -481,6 +481,17 @@ public class WorkflowLocalServiceWrapper implements WorkflowLocalService,
 
 	@Override
 	public org.kisti.edison.model.Workflow copyWorkflow(long sourceWorkflowId,
+		java.lang.String newTitle, java.lang.String descrption,
+		java.lang.String screenLogic,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _workflowLocalService.copyWorkflow(sourceWorkflowId, newTitle,
+			descrption, screenLogic, request);
+	}
+
+	@Override
+	public org.kisti.edison.model.Workflow copyWorkflow(long sourceWorkflowId,
 		java.lang.String newTitle, javax.servlet.http.HttpServletRequest request)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {

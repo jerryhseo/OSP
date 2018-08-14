@@ -488,7 +488,7 @@ var UIPanel = (function (namespace, $, designer, toastr) {
                 setMetaData({
                     "title": "Imported from " + workflow.title,
                     "description": workflow.description,
-                    "workflowId": workflowId
+                    "workflowId": workflow.workflowId
                 });
                 designer.drawWorkflowDefinition(workflow);
                 saveAsDesigner("setting");

@@ -188,12 +188,22 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     public Workflow copyWorkflow(
         long sourceWorkflowId, String newTitle, String descrption, HttpServletRequest request)
         throws SystemException, PortalException{
+      
+      return copyWorkflow(sourceWorkflowId, newTitle, descrption, null, request);
+  }
+    
+    public Workflow copyWorkflow(
+        long sourceWorkflowId, String newTitle, String descrption, String screenLogic, HttpServletRequest request)
+        throws SystemException, PortalException{
       User user = PortalUtil.getUser(request);
       //Locale locale = PortalUtil.getLocale(request);
       Workflow targetWorkflow = super.workflowLocalService.getWorkflow(sourceWorkflowId);
       targetWorkflow.setParentWorkflowId(sourceWorkflowId);
       targetWorkflow.setTitle(newTitle);
       targetWorkflow.setDescription(descrption);
+      if(screenLogic != null && StringUtils.hasText(screenLogic)){
+          targetWorkflow.setScreenLogic(screenLogic);
+      }
       targetWorkflow.setWorkflowId(super.counterLocalService.increment());
       targetWorkflow.setCreateDate(new Date());
       targetWorkflow.setUserId(user.getUserId());
@@ -206,9 +216,7 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     User user = PortalUtil.getUser(request);
     Locale locale = PortalUtil.getLocale(request);
     Workflow targetWorkflow = super.workflowLocalService.getWorkflow(sourceWorkflowId);
-    System.out.println(newTitle);
     newTitle = StringUtils.hasText(newTitle) ? newTitle :  "copied from " + targetWorkflow.getTitle(locale);
-    System.out.println(newTitle);
     targetWorkflow.setParentWorkflowId(sourceWorkflowId);
     targetWorkflow.setTitle(newTitle);
     targetWorkflow.setWorkflowId(super.counterLocalService.increment());
@@ -362,6 +370,9 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
   private String askForCreateWorkflow(JsonNode workflowJson) throws SystemException{
     String workflowUuid = null;
     HttpURLConnection conn = null;
+    log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
+    log.info(workflowJson.toString());
+    log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
     try{
       URL url = new URL(WORKFLOW_ENGINE_URL_PRIVATE+"/workflow/create");
       conn = (HttpURLConnection) url.openConnection();
@@ -400,9 +411,6 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
       if(conn != null){
         conn.disconnect();
       }
-      log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
-      log.info(workflowJson.toString());
-      log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
     }
     return workflowUuid;
   }
