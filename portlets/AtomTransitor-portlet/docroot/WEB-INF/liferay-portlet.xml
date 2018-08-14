@@ -13,6 +13,7 @@
 		<css-class-wrapper>
 			atom-transistor-editor-portlet
 		</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
 		<portlet-name>atom-transistor-analyzer</portlet-name>
@@ -24,6 +25,7 @@
 		<css-class-wrapper>
 			atom-transistor-analyzer-portlet
 		</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

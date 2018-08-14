@@ -207,7 +207,7 @@ Liferay.on(
 		var myId = '<%=portletDisplay.getId()%>';
 		if( myId !== e.targetPortlet )	return;
 		
-		console.log(e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
+		//console.log(e.targetPortlet+'>> OSP_EVENTS_REGISTERED: ['+e.portletId+']', e);
 			
 		<portlet:namespace/>connector = e.portletId;
 		if( e.action )
@@ -227,6 +227,7 @@ Liferay.on(
 			data: events
 		};
 		Liferay.fire( 'OSP_REGISTER_EVENTS', eventData );
+		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
 	}
 );
 
@@ -317,7 +318,7 @@ Liferay.on(
 			if( myId !== e.targetPortlet )	return;
 			
 			console.log(e.targetPortlet+'>> OSP_INITIALIZE: ['+e.portletId+']', e);
-			$("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/atomtransistoranalyzer/AtomTransistor_Viewer.jsp');
+			// $("#<portlet:namespace/>canvas").attr('src', '<%=request.getContextPath()%>/html/atomtransistoranalyzer/AtomTransistor_Viewer.jsp');
 			if( $.isEmptyObject(<portlet:namespace/>initData) )	return;
    			
    			<portlet:namespace/>initializeFileExplorer();
@@ -407,8 +408,8 @@ function <portlet:namespace/>displayEPDViewer( data ){
 
 
 function <portlet:namespace/>Send_Struc_to_Editor( data ){
-	console.log('<portlet:namespace/>Send_Struc_to_Editor', data );
-	
+	console.log('[ATOM ANALYZER] Send_Struc_to_Editor in wrapper', data );
+	console.log('[ATOM ANALYZER] Send_Struc_to_Editor in wrapper target :', <portlet:namespace/>connector);
 	var eventData = {
 			portletId: '<%=portletDisplay.getId()%>',
 			targetPortlet: <portlet:namespace/>connector,
