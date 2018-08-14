@@ -218,6 +218,7 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		if(!tartgetPath.exists()){
 			tartgetPath.mkdirs();
 		}
+		System.out.println("mkdir");
 
 		builder.directory(tartgetPath); // app path
 		Process process = builder.start();
@@ -226,6 +227,11 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		InputStream instd = process.getInputStream();
 		BufferedReader buf_reader = new BufferedReader(new InputStreamReader(instd));
 		String temp = "";
+		if((temp = buf_reader.readLine()) != null){
+			System.out.println("buf_reader null");
+		} else {
+			System.out.println("buf_reader not null");
+		}
 		while((temp = buf_reader.readLine()) != null){
 			report += temp + "\n";
 		}
