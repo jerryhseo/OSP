@@ -4,5 +4,6 @@
 <display>
 	<category name="IITP.EDISON">
 		<portlet id="RF-Designer" />
+		<portlet id="Smith-Chart" />
 	</category>
 </display>
