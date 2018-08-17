@@ -789,11 +789,13 @@ function changeUploadOption(val){
 	$("#<portlet:namespace/>gitUploadCaseSelect").val("url");
 	
 	if(val == ""){
-		if("${data.isCompile}" == "true"){
+		/* if("${data.isCompile}" == "true"){
 			val = "compile";	
 		}else{
 			val = "upload";
-		}
+		} */
+		// blocking github Upload function
+		val = "upload";
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
 		
