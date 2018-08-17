@@ -285,7 +285,7 @@
 					<td  colspan="3">
 						
 						<aui:select name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
-							<aui:option value="compile">With Compile</aui:option>
+							<%-- <aui:option value="compile">With Compile</aui:option> --%>
 							<aui:option value="upload">Upload</aui:option>
 						</aui:select>
 					</td>
