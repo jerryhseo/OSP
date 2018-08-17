@@ -1070,10 +1070,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
             </div>
             <div class="form-group col-sm-6">
                 <select class="form-control data-binded" name="center-frequency-addon">
-                    <option value="1">Hz</option>
-                	<option value="1000">kHz</option>
-                	<option value="1000000">MHz</option>
                 	<option value="1000000000">GHz</option>
+                	<option value="1000000">MHz</option>
+                	<option value="1000">kHz</option>
+                    <option value="1">Hz</option>
                 </select>
             </div>
         </div>
@@ -1086,10 +1086,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
             </div>
             <div class="form-group col-sm-6">
                 <select class="form-control data-binded" name="stop-frequency-addon">
-                    <option value="1">Hz</option>
-                	<option value="1000">kHz</option>
+                    <option value="1000000000">GHz</option>
                 	<option value="1000000">MHz</option>
-                	<option value="1000000000">GHz</option>
+                	<option value="1000">kHz</option>
+                    <option value="1">Hz</option>
                 </select>
             </div>
         </div>
@@ -1134,10 +1134,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
         </div>
         <div class="form-group col-md-3">
             <select class="form-control data-binded" name="passband-freq-L-addon">
-                <option value="1">Hz</option>
-                <option value="1000">kHz</option>
-                <option value="1000000">MHz</option>
                 <option value="1000000000">GHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000">kHz</option>
+                <option value="1">Hz</option>
             </select>
         </div>
     </div>
@@ -1150,10 +1150,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
         </div>
         <div class="form-group col-md-3">
             <select class="form-control data-binded" name="stopband-freq-L-addon">
-                <option value="1">Hz</option>
-                <option value="1000">kHz</option>
-                <option value="1000000">MHz</option>
                 <option value="1000000000">GHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000">kHz</option>
+                <option value="1">Hz</option>
             </select>
         </div>
     </div>
@@ -1166,10 +1166,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
         </div>
         <div class="form-group col-md-3">
             <select class="form-control data-binded" name="passband-freq-H-addon">
-                <option value="1">Hz</option>
-                <option value="1000">kHz</option>
-                <option value="1000000">MHz</option>
                 <option value="1000000000">GHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000">kHz</option>
+                <option value="1">Hz</option>
             </select>
         </div>
     </div>
@@ -1182,10 +1182,10 @@ function <portlet:namespace/>graphFileDownload(fileName){
         </div>
         <div class="form-group col-md-3">
             <select class="form-control data-binded" name="stopband-freq-H-addon">
-                <option value="1">Hz</option>
-                <option value="1000">kHz</option>
-                <option value="1000000">MHz</option>
                 <option value="1000000000">GHz</option>
+                <option value="1000000">MHz</option>
+                <option value="1000">kHz</option>
+                <option value="1">Hz</option>
             </select>
         </div>
     </div>

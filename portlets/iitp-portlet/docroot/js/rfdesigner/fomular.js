@@ -96,7 +96,7 @@ function getChebyshevGraphDataBAND(filterData, filterType,orderNum){
 	var w2out = stopbandFreqH;
 	var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
-	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,10000);
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,1002);
 	
 	var xtrans = [];
 	var x = [];
@@ -106,7 +106,7 @@ function getChebyshevGraphDataBAND(filterData, filterType,orderNum){
 	var tn = [];
 	 var gr = [];
 	 
-	for (var i = 0; i < 9999; i++) {
+	for (var i = 0; i < 1001; i++) {
 		k1[i] = z[i] / woBPF;
 		k2[i] = woBPF / z[i];
 		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
@@ -139,7 +139,7 @@ function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var w2out = stopbandFreqH;
 	var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
-	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,10000);
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2,1002);
 	
 	var xtrans = [];
 	var x = [];
@@ -149,7 +149,7 @@ function getChebyshevGraphBandData(filterData, filterType,orderNum){
 	var tn = [];
 	 var gr = [];
 	 
-	for (var i = 0; i < 9999; i++) {
+	for (var i = 0; i < 1001; i++) {
 		k1[i] = z[i] / woBPF;
 		k2[i] = woBPF / z[i];
 		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
@@ -267,6 +267,48 @@ function getChebyshevOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandF
 }
 
 function getChebyshevOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandRipple, stopbandAttenuation){
+	var OOptimum_Order = 1;
+    do {
+        var w1BSF = passbandFreqL;
+        var w2BSF = passbandFreqH;
+        var w1out = stopbandFreqL;
+        var w2out = stopbandFreqH;
+        var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
+        var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
+        var kk1 = stopbandFreqL / woBPF;
+        var kk2 = woBPF / stopbandFreqL;
+        var xxtrans = wdelta * 1 / (kk1 - kk2);
+        var ttn = math.cosh(OOptimum_Order * math.re(math.acosh(xxtrans))) * math.cos(OOptimum_Order * math.im(math.acosh(xxtrans)));
+        var ggr = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(ttn, 2)
+        var yy = (10) * math.log10(ggr);
+        OOptimum_Order++;
+    } while (yy < stopbandAttenuation)
+
+    var Optimum_Order1 = OOptimum_Order - 1;
+	
+    var OOOptimum_Order = 1;
+    do {
+        var w1BSF = passbandFreqL;
+        var w2BSF = passbandFreqH;
+        var w1out = stopbandFreqL;
+        var w2out = stopbandFreqH;
+        var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
+        var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
+        var kkk1 = stopbandFreqH / woBPF;
+        var kkk2 = woBPF / stopbandFreqH;
+        var xxxtrans = wdelta * 1 / (kkk1 - kkk2);
+        var tttn = math.cosh(OOOptimum_Order * math.re(math.acosh(xxxtrans))) * math.cos(OOOptimum_Order * math.im(math.acosh(xxxtrans)));
+        var gggr = 1 + (math.pow(10, (passbandRipple / 10)) - 1) * math.pow(tttn, 2)
+        var yyy = (10) * math.log10(gggr);
+        OOOptimum_Order++;
+    } while (yyy < stopbandAttenuation)
+
+    var Optimum_Order2 = OOOptimum_Order - 1;
+    var Optimum_Order = math.max(Optimum_Order2, Optimum_Order1);
+    
+    return 	Optimum_Order;
+	
+	/*
 	var wbs1 = passbandFreqL;
     var wbs2 = passbandFreqH;
     var wp1 = stopbandFreqL;
@@ -284,7 +326,8 @@ function getChebyshevOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandF
     var numerator1 = math.acosh(xtransmin);
     var a = math.re(numerator1);
     var b = math.im(numerator1);
-    return math.ceil(denominator1 * math.sqrt(a + b) / (math.pow(a, 2) + math.pow(b, 2))); 
+    return math.ceil(denominator1 * math.sqrt(a + b) / (math.pow(a, 2) + math.pow(b, 2)));
+    */ 
 }
 
 /* Response Type - Chebyshev Flat Fun End */
@@ -363,7 +406,7 @@ function getMaximallyGraphDataBAND(filterData, filterType,orderNum){
 	var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
 	 
-	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 10000)
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 1002)
 	
 	var returnData = [];
 	
@@ -373,7 +416,7 @@ function getMaximallyGraphDataBAND(filterData, filterType,orderNum){
 	var k1 = [];
 	var k2 = [];
 	
-	for (var i = 0; i < 9999; i++) {
+	for (var i = 0; i < 1001; i++) {
 		k1[i] = z[i] / woBPF;
 		k2[i] = woBPF / z[i];
 		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
@@ -403,7 +446,7 @@ function getMaximallyGraphBandData(filterData, filterType,orderNum){
 	var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
 	var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
 	 
-	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 10000)
+	var z = numeric.linspace(w1out / 2, w2out + w1out / 2, 1002)
 	
 	var returnData = [];
 	
@@ -413,7 +456,7 @@ function getMaximallyGraphBandData(filterData, filterType,orderNum){
 	var k1 = [];
 	var k2 = [];
 	
-	for (var i = 0; i < 9999; i++) {
+	for (var i = 0; i < 1001; i++) {
 		k1[i] = z[i] / woBPF;
 		k2[i] = woBPF / z[i];
 		xtrans[i] = filterType==="BANDPASS"?(1 / wdelta) * (k1[i] - k2[i]):wdelta * 1/(k1[i] - k2[i]);
@@ -505,6 +548,43 @@ function getMaximallyOrderNumberBand(passbandFreqL, passbandFreqH, stopbandFreqL
 }
 
 function getMaximallyOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation){
+	var OOptimum_Order = 1;
+    do {
+        var w1BSF = passbandFreqL;
+        var w2BSF = passbandFreqH;
+        var w1out = stopbandFreqL;
+        var w2out = stopbandFreqH;
+        var woBPF = math.sqrt(passbandFreqL * passbandFreqH);
+        var wdelta = (passbandFreqH - passbandFreqL) / math.sqrt(passbandFreqL * passbandFreqH);
+        var kk1 = stopbandFreqL / woBPF;
+        var kk2 = woBPF / stopbandFreqL;
+        var xxtrans = wdelta * 1 / (kk1 - kk2);
+        var yy = (10) * math.log10(1 + math.pow(xxtrans, 2 * OOptimum_Order));
+        OOptimum_Order++;
+    } while (yy < stopbandAttenuation)
+
+    var Optimum_Order1 = OOptimum_Order - 1;
+    
+    var OOOptimum_Order = 1;
+    do {
+        var w1BSF = passbandFreqL;
+        var w2BSF = passbandFreqH;
+        var w1out = stopbandFreqL;
+        var w2out = stopbandFreqH;
+        var woBPF = Math.sqrt(passbandFreqL * passbandFreqH);
+        var wdelta = (passbandFreqH - passbandFreqL) / Math.sqrt(passbandFreqL * passbandFreqH);
+        var kkk1 = stopbandFreqH / woBPF;
+        var kkk2 = woBPF / stopbandFreqH;
+        var xxxtrans = wdelta * 1 / (kkk1 - kkk2);
+        var yyy = (10) * math.log10(1 + math.pow(xxxtrans, 2 * OOOptimum_Order));
+        OOOptimum_Order++;
+    } while (yyy < stopbandAttenuation)
+
+    var Optimum_Order2 = OOOptimum_Order - 1;
+    var Optimum_Order = math.max(Optimum_Order2, Optimum_Order1);
+	
+    return Optimum_Order;
+	/*
 	var wbp1 = passbandFreqL;
 	var wbp2 = passbandFreqH;
 	var ws1 = stopbandFreqL;
@@ -519,6 +599,7 @@ function getMaximallyOrderNumberBandStop(passbandFreqL, passbandFreqH, stopbandF
 	var order1 = Math.ceil(Math.log10(Math.pow(10, (passatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
 	var order2 = Math.ceil(Math.log10(Math.pow(10, (outatt / 10)) - 1) / (2 * Math.log10(xtransmax)));
 	return Math.max(order1, order2);
+	*/
 }
 
 function getMaximallyOrderNumberBandPass(passbandFreqL, passbandFreqH, stopbandFreqL, stopbandFreqH, passbandAttenuation, stopbandAttenuation){
