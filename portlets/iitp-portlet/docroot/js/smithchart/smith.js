@@ -23,11 +23,11 @@ smith.chart = function(){
             .domain([-this.radius, this.radius])
             .range([pad, width-pad]);
 
-	var xyLScale = d3.scale.linear()
+  var xyLScale = d3.scale.linear()
             .domain([this.radius, -this.radius])
             .range([pad, width-pad]);
     
-	var rScale = d3.scale.linear()
+  var rScale = d3.scale.linear()
             .domain([0, this.radius])
             .range([0, (width-2*pad)/2]);
 	
@@ -47,30 +47,51 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
     var numerator4 = Math.pow(realA,2)+realB-Math.pow(this.center-pad,2);
     //𝑎^2+〖330〗^2−660×𝑎+𝑏
     var denominator = Math.pow(realA,2)+Math.pow(this.center-pad,2)-660*realA+realB;
-    var realValue = (-(numerator1)+Math.sqrt(numerator2-numerator3*numerator4))/denominator;
+    var realValue = parseFloat((-(numerator1)+Math.sqrt(numerator2-numerator3*numerator4))/denominator);
     var fixedRealValue = realValue.toFixed(2);
+    
  
 
     var imagA = Math.pow(Math.abs(mouseX-this.width),2);
     var imagB = mouseY-this.center;
     var imagValue = -(this.width-pad)*imagB/(imagA+Math.pow(imagB,2));
     var fixedImagValue = imagValue.toFixed(2);
-    var reverseImageValue = imagValue<0?Math.abs(imagValue):-imagValue;
+    var reverseImageValue = imagValue<0?parseFloat(Math.abs(imagValue)):parseFloat(-imagValue);
 
+    var leftReal = realValue / (math.pow(realValue, 2) + math.pow(reverseImageValue, 2));
+    var leftImag = -1 * reverseImageValue / (math.pow(realValue, 2) + math.pow(reverseImageValue, 2));
+    
+    
     return {
         real:{
             "value":fixedRealValue,
             "mouse_x_cx":xyScale(realValue/(1+realValue)),
-            "mouse_x_r":rScale(1/(1+realValue))
+            "mouse_x_r":rScale(1/(1+realValue)),
+            "mouse_l_x_cx":xyLScale(leftReal/(1+leftReal)),
+            "mouse_l_x_r":rScale(1/(1+leftReal))
         },
         imaginary:{
             "value":fixedImagValue,
             "mouse_y_cy":reverseImageValue==0?xyScale(1/ZERO):xyScale(1/reverseImageValue),
-            "mouse_y_r":reverseImageValue==0?rScale(Math.abs(1/ZERO)):rScale(Math.abs(1/reverseImageValue))
+            "mouse_y_r":reverseImageValue==0?rScale(Math.abs(1/ZERO)):rScale(Math.abs(1/reverseImageValue)),
+            "mouse_l_y_cy":leftImag==0?xyLScale(1/ZERO):xyLScale(1/leftImag),
+            "mouse_l_y_r":leftImag==0?rScale(Math.abs(1/ZERO)):rScale(Math.abs(1/leftImag))
         }
     };
 }
 
+  smith.chart.prototype.addMarkerFromMouse = function(svg, real,imag,mouseX,mouseY,id){
+	  svg.append('circle')
+	      .attr('fill','#2196F3')
+	      .attr('cx',mouseX)
+	      .attr('cy',mouseY)
+	      .attr('real',real)
+	      .attr('imaginary',imag)
+	      .attr('r',5)
+	      .attr('id',id)
+	      .attr("stroke-width", 2);
+  }
+	
   smith.chart.prototype.getPointPosition = function(real,imag){
     this.right = width-pad;
     this.left = pad;
@@ -230,29 +251,52 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
                   .attr("x2", Xcx)
                   .attr("y2", Rcy);
 
-    var mCircle = svg.selectAll('circle.mouse1')
+    var mCircle1 = svg.selectAll('circle.mouse1')
                   .data([0.7])
                   .enter()
                   .append('circle')
                   .attr('class','mouse_round')
-                  .attr('id','mouse_round')
-                  .attr("stroke-width", "4")
+                  .attr('id','mouse_round_r')
+                  .attr("stroke-width", "3")
                   .attr('stroke','Orange')
                   .attr('cx',Rcx)
                   .attr('cy',Rcy)
                   .attr('r',Rr);
+    var mCircle2 = svg.selectAll('circle.mouse2')
+			    .data([0.7])
+			    .enter()
+			    .append('circle')
+			    .attr('class','mouse_round')
+			    .attr('id','mouse_round_l')
+			    .attr("stroke-width", "3")
+			    .attr('stroke','green')
+			    .attr('cx',Lcx)
+			    .attr('cy',Rcy)
+			    .attr('r',Rr);
 
-    var mCurve = svg.selectAll('circle.mouse2')
+    var mCurve1 = svg.selectAll('circle.mouse3')
                   .data([-0.7])
                   .enter()
                   .append('circle')
                   .attr('class','mouse_curve')
-                  .attr('id','mouse_curve')
-                  .attr("stroke-width", "4")
+                  .attr('id','mouse_curve_r')
+                  .attr("stroke-width", "3")
                   .attr('stroke','Orange')
                   .attr('cx',Xcx)
                   .attr('cy',Xcy)
                   .attr('r',Xr);
+    
+    var mCurve1 = svg.selectAll('circle.mouse4')
+				    .data([-0.7])
+				    .enter()
+				    .append('circle')
+				    .attr('class','mouse_curve')
+				    .attr('id','mouse_curve_l')
+				    .attr("stroke-width", "3")
+				    .attr('stroke','green')
+				    .attr('cx',LXcx)
+				    .attr('cy',Xcy)
+				    .attr('r',Xr);
     
     var bCircle = svg.selectAll('circle.b')
                   .data(this.b)
@@ -264,7 +308,7 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
                   .attr('cx',Lcx)
                   .attr('cy',Rcy)
                   .attr('r',Rr)
-                  .attr("stroke-width", "2");
+                  .attr("stroke-width", "4");
   
         svg.selectAll(['.rL','.xL','.rR','.xR','.big','.mouse_round','.mouse_curve']).attr("clip-path", "url(#chart-area)");
 
