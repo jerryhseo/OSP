@@ -135,9 +135,7 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		String gitHubUrl) throws SystemException, IOException, InterruptedException{
 
 		String appBasePath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH) + appName;
-		System.out.println("appBasePath --> " + appBasePath);
 		String gitCloneFolerName = appBasePath + File.separator + appVersion;
-		System.out.println("gitCloneFolderName --> " + gitCloneFolerName);
 
 		deleteDirectory(new File(gitCloneFolerName));
 
@@ -146,7 +144,6 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		command.add("clone");
 		command.add(gitHubUrl);
 		command.add(appVersion);
-		System.out.println("command --> " + command.toString());
 
 		// git clone
 		return executeCommand(command, appBasePath);
@@ -211,14 +208,12 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 	
 	private String executeCommand(List<String> command, String tartgetFilePath) throws IOException,
 		InterruptedException{
-		System.out.println("executeCommand Start!!!");
 		ProcessBuilder builder = new ProcessBuilder(command);
 
 		File tartgetPath = new File(tartgetFilePath);
 		if(!tartgetPath.exists()){
 			tartgetPath.mkdirs();
 		}
-		System.out.println("mkdir");
 
 		builder.directory(tartgetPath); // app path
 		Process process = builder.start();
@@ -227,11 +222,6 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		InputStream instd = process.getInputStream();
 		BufferedReader buf_reader = new BufferedReader(new InputStreamReader(instd));
 		String temp = "";
-		if((temp = buf_reader.readLine()) != null){
-			System.out.println("buf_reader null");
-		} else {
-			System.out.println("buf_reader not null");
-		}
 		while((temp = buf_reader.readLine()) != null){
 			report += temp + "\n";
 		}
@@ -251,7 +241,6 @@ public class ScienceAppCompileLocalServiceImpl extends ScienceAppCompileLocalSer
 		process.getErrorStream().close();
 		instd.close();
 		process.waitFor();
-		System.out.println("executeCommand End!!!");
 
 		return report;
 	}
