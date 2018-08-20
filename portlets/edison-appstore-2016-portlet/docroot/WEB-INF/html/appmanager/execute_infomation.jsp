@@ -303,7 +303,7 @@
 				<tr id="selectByCompileSelect">
 					<th><liferay-ui:message key="edison-button-upload"/> <liferay-ui:icon-help message="edison-appstore-compiler-descriptive-message"/></th>
 					<td colspan="3" >
-						<aui:select name="gitUploadCaseSelect" label="" cssClass="noupdate" onChange="changeUploadCaseSelect(this.value);">
+						<aui:select name="gitUploadCaseSelect" label="" cssClass="noupdate" onChange="changeUploadCaseSelect('file');">
 							<%-- <aui:option value="url">URL</aui:option> --%>
 							<aui:option value="file">File</aui:option>
 						</aui:select>
@@ -786,16 +786,14 @@ function changeUploadOption(val){
 	$(".uploadOptionTr").hide();
 	$("#<portlet:namespace/>uploadGitHubInput").hide();
 	$("#<portlet:namespace/>uploadCaseSelect").val("update");
-	$("#<portlet:namespace/>gitUploadCaseSelect").val("file");
+	$("#<portlet:namespace/>gitUploadCaseSelect").val("url");
 	
 	if(val == ""){
-		/* if("${data.isCompile}" == "true"){
+		if("${data.isCompile}" == "true"){
 			val = "compile";	
 		}else{
 			val = "upload";
-		} */
-		// blocking github Upload function
-		val = "upload";
+		}
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
 		
