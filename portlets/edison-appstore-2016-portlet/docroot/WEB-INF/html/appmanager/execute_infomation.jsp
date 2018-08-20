@@ -786,7 +786,7 @@ function changeUploadOption(val){
 	$(".uploadOptionTr").hide();
 	$("#<portlet:namespace/>uploadGitHubInput").hide();
 	$("#<portlet:namespace/>uploadCaseSelect").val("update");
-	$("#<portlet:namespace/>gitUploadCaseSelect").val("url");
+	$("#<portlet:namespace/>gitUploadCaseSelect").val("file");
 	
 	if(val == ""){
 		/* if("${data.isCompile}" == "true"){
