@@ -786,7 +786,7 @@ function changeUploadOption(val){
 	$(".uploadOptionTr").hide();
 	$("#<portlet:namespace/>uploadGitHubInput").hide();
 	$("#<portlet:namespace/>uploadCaseSelect").val("update");
-	$("#<portlet:namespace/>gitUploadCaseSelect").val("url");
+	$("#<portlet:namespace/>gitUploadCaseSelect").val("file");
 	
 	if(val == ""){
 		if("${data.isCompile}" == "true"){
@@ -797,9 +797,10 @@ function changeUploadOption(val){
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
 		
-	$("#<portlet:namespace/>uploadOption_"+val).show();
+	// $("#<portlet:namespace/>uploadOption_"+val).show();
 	if(val == "compile"){
-		$("#<portlet:namespace/>uploadOption_"+val+"Url").show();
+		// $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
+		$("#<portlet:namespace/>uploadOption_upload").show();
 		
 		if('${!empty scienceAppCompile.result}' == 'true') $("#<portlet:namespace/>uploadGitHubInput").show();
 		$("#selectByuploadSelect").hide();
