@@ -285,7 +285,7 @@
 					<td  colspan="3">
 						
 						<aui:select name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
-							<aui:option value="compile">With Compile</aui:option>
+<%-- 							<aui:option value="compile">With Compile</aui:option> --%>
 							<aui:option value="upload">Upload</aui:option>
 						</aui:select>
 					</td>
@@ -797,7 +797,7 @@ function changeUploadOption(val){
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
 		
-	// $("#<portlet:namespace/>uploadOption_"+val).show();
+	$("#<portlet:namespace/>uploadOption_"+val).show();
 	if(val == "compile"){
 		// $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
 		$("#<portlet:namespace/>uploadOption_upload").show();
