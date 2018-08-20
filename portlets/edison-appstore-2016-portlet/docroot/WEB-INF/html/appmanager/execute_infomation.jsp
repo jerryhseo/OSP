@@ -285,7 +285,7 @@
 					<td  colspan="3">
 						
 						<aui:select name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
-							<%-- <aui:option value="compile">With Compile</aui:option> --%>
+							<aui:option value="compile">With Compile</aui:option>
 							<aui:option value="upload">Upload</aui:option>
 						</aui:select>
 					</td>
@@ -304,7 +304,7 @@
 					<th><liferay-ui:message key="edison-button-upload"/> <liferay-ui:icon-help message="edison-appstore-compiler-descriptive-message"/></th>
 					<td colspan="3" >
 						<aui:select name="gitUploadCaseSelect" label="" cssClass="noupdate" onChange="changeUploadCaseSelect(this.value);">
-							<aui:option value="url">URL</aui:option>
+							<%-- <aui:option value="url">URL</aui:option> --%>
 							<aui:option value="file">File</aui:option>
 						</aui:select>
 					</td>
