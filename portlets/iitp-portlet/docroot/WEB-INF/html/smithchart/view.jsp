@@ -443,7 +443,6 @@
 	}
 	
 	function <portlet:namespace/>elementsSetting(){
-		console.log("<portlet:namespace/>elementsSetting()");
 		if(<portlet:namespace/>stdPoint){
 			var elementSum = 0;
 			$(".<portlet:namespace/>elements-select-value").each(function(index,e){
@@ -458,7 +457,6 @@
 	}
 	
 	function <portlet:namespace/>elementsSettingText(){
-		console.log("<portlet:namespace/>elementsSettingText()");
 		if(<portlet:namespace/>stdPoint){
 			var elementText = $("#<portlet:namespace/>elements-select-value-text");
 			var elementValue = elementText.val();
