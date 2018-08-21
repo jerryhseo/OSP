@@ -186,11 +186,16 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
 	  }
 	
 	  var anticlockwise = false;
-	  if(elementType ==="ser_cap" ||elementType ==="sht_ind" ){
+	  if(elementType ==="ser_cap"||elementType ==="sht_ind"){
 //	  if(preMouseY<curMouseY){
+		  anticlockwise = true;
+	  }else if(elementType ==="ser_res"&&curMouseY<350){
+		  anticlockwise = true;
+	  }else if(elementType ==="sht_res"&&curMouseY>350){
 		  anticlockwise = true;
 	  }
 	  
+	  alert(elementType+"___"+anticlockwise);
 	  //Degree
 	  var getRedian = function(centetX,centerY,currentX,currentY){
 		  var x = currentX - centetX;
