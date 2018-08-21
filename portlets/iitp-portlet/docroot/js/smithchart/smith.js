@@ -195,7 +195,6 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
 		  anticlockwise = true;
 	  }
 	  
-	  alert(elementType+"___"+anticlockwise);
 	  //Degree
 	  var getRedian = function(centetX,centerY,currentX,currentY){
 		  var x = currentX - centetX;
