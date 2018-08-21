@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<liferay-portlet:resourceURL var="graphFileActionURL" id="graphFileAction" copyCurrentRenderParameters="false" />
-<liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
-
-<link rel="stylesheet" href="${contextPath}/css/rSlider.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 
 <style type="text/css">
 .smith-chart div.panel-body label.title{
@@ -73,6 +70,45 @@
 	background-image:url(/iitp-portlet/images/smithchart/buttons/sht_res.png);
 	background-size: 50px;
 }
+
+
+
+
+/* The slider itself */
+.smith-chart .slider {
+
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 30px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.smith-chart  .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.smith-chart  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.smith-chart  .slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
 </style>
 <div class="h20"></div>
 <div class="row">
@@ -90,9 +126,9 @@
 						<div class="form-inline form-group">
 							<label class="form-control-static title">Frequency</label>
 							<div class="input-group">
-								<input type="text" name="<portlet:namespace/>frequency" id="<portlet:namespace/>frequency" class="form-control" autofocus>
+								<input type="text" name="<portlet:namespace/>frequency" id="<portlet:namespace/>frequency" class="form-control" value="500000000" autofocus>
 								<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-								<select class="form-control" name="passband-freq-L-addon">
+								<select class="form-control" name="<portlet:namespace/>frequency-addon" id="<portlet:namespace/>frequency-addon">
 					                <option value="1">Hz</option>
 					                <option value="1000">kHz</option>
 					                <option value="1000000">MHz</option>
@@ -102,7 +138,7 @@
 						</div>
 						<div class="form-inline form-group">
 							<label class="form-control-static title">Characteristic Impedance(𝒁_𝟎)</label>
-							<input type="text" name="passband-freq-L" class="form-control">
+							<input type="number" name="<portlet:namespace/>impedance" id="<portlet:namespace/>impedance" class="form-control" value="50" required>
 						</div>
 						<form action="" id="<portlet:namespace/>settingsform" onsubmit="return false;">
 							<div class="form-inline form-group">
@@ -158,17 +194,37 @@
 							</label>
 						</div>
 					</div>
-					<div class="panel-footer text-center" id="<portlet:namespace/>elements-select">
-						<div class="row" style="margin-left: 0px;margin-right: 0px;margin-top: 15px">
-							<div class="col-md-10">
-								<input type="text" id="<portlet:namespace/>elements-select-value" class="slider"/>
+					<div class="panel-footer text-center" id="<portlet:namespace/>elements-select" style="display: none;">
+						<div class="row" style="margin-left: 0px;margin-right: 0px;">
+							<div class="col-md-9">
+								<div class="row">
+									<label class="form-control-static col-md-2">0 ~ 1</label>
+									<div class="col-md-7">
+										<input type="range" class="<portlet:namespace/>elements-select-value slider" id="<portlet:namespace/>elements-select-value1" min="0" max="1" step="0.01" value="0" onchange="<portlet:namespace/>elementsSetting()"/>
+									</div>
+									<div class="col-md-3">
+										<input type="text" id="<portlet:namespace/>elements-select-value1-text" value="0" class="form-control" disabled/>
+									</div>
+								</div>
+								<div class="row">
+									<label class="form-control-static col-md-2">1 ~ 999</label>
+									<div class="col-md-7">
+										<input type="range" class="<portlet:namespace/>elements-select-value slider" id="<portlet:namespace/>elements-select-value2" min="1" max="999" step="1" value="0" onchange="<portlet:namespace/>elementsSetting();"/>
+									</div>
+									<div class="col-md-3">
+										<input type="text" id="<portlet:namespace/>elements-select-value2-text" value="0" class="form-control" disabled/>
+									</div>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<button class="btn btn-primary" onclick="<portlet:namespace/>elementSelect();return false;">
-									<span class="icon-signal">
-										Select
-									</span>
-								</button>
+							<div class="input-group col-md-3" style="margin-top: 15px;">
+								<input type="number" id="<portlet:namespace/>elements-select-value-text" class="form-control" onkeyup="<portlet:namespace/>elementsSettingText();" min="0" max="1000" value="1"/>
+								<div class="input-group-btn">
+									<button class="btn btn-primary" onclick="<portlet:namespace/>elementSelect();return false;">
+										<span class="icon-signal">
+											Select
+										</span>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -184,7 +240,7 @@
 					<div class="panel-body">
 						<div class="row" style="margin-left: 0px;margin-right: 0px;" class="pull-left">
 							<ul id="SchematicArea">
-								<li><img alt="" src="${contextPath}/images/smithchart/schematic/load_impedance.png"/><p>aaaaaaaaa</p></li>
+								<li><img alt="" src="${contextPath}/images/smithchart/schematic/load_impedance.png"/></li>
 								<ol id="<portlet:namespace/>schematic-area-action">
 								</ol>
 								<li>
@@ -211,10 +267,10 @@
 				<thead>
 					<tr>
 						<th width="20%">Z</th>
-						<th width="20%">Y</th>
+						<th width="25%">Y</th>
 						<th width="20%">Q</th>
 						<th width="20%">Reflection Coefficient</th>
-						<th width="20%">Frequency</th>
+						<th width="15%">Frequency</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -241,10 +297,10 @@
 				<thead>
 					<tr>
 						<th width="20%">Z</th>
-						<th width="20%">Y</th>
+						<th width="25%">Y</th>
 						<th width="20%">Q</th>
 						<th width="20%">Reflection Coefficient</th>
-						<th width="20%">Frequency</th>
+						<th width="15%">Frequency</th>
 					</tr>
 				</thead>
 				<tbody id="<portlet:namespace/>data-point-tbody">
@@ -255,7 +311,7 @@
 
 <!--D3 JS-->
 <script src="${contextPath}/js/lib/d3.min.js"></script>
-
+<script src = "https://d3js.org/d3.v4.min.js"></script>
 <!--Smith JS-->
 <script src="${contextPath}/js/smithchart/smith.js"></script>
 
@@ -265,47 +321,33 @@
 <!--bootstrap validation JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
-<!--Slider JS-->
-<script src="${contextPath}/js/lib/rSlider.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
 <script type="text/javascript">
 	//기준점 Point 체크 여부
 	var <portlet:namespace/>stdPoint = false;
 	var chart = new smith.chart();
 	var svg;
-	var <portlet:namespace/>mySlider;
 	$(function() {
 		svg = d3.select("#chart").append('svg');
 		chart.draw(svg);
-		
-		<portlet:namespace/>mySlider = new rSlider({
-	        target: '#<portlet:namespace/>elements-select-value',
-	        values: {min:1,max:100},
-	        step: 1,
-	        range: false,
-	        tooltip: true,
-	        scale: false,
-	        labels: false,
-            onChange: function (vals) {
-                console.log(vals);
-            }
-	    });
-
-		$("#<portlet:namespace/>elements-select").css("display","none");
 		
 		svg.select("#svg_circle").on("mousemove",function(e){
 			var coords = d3.mouse(this);
 			var mouserData = chart.getPointValue(Math.floor(coords[0]),Math.floor(coords[1]));
 			<portlet:namespace/>guideCircleMove(mouserData);
 			
-			var data = chart.getData(mouserData.real["value"],mouserData.imaginary["value"],Math.floor(coords[0]),Math.floor(coords[1]));
+			var impedance = $("#<portlet:namespace/>impedance").val();
+			var data = chart.getData(mouserData.real["value"],mouserData.imaginary["value"],Math.floor(coords[0]),Math.floor(coords[1]),impedance);
+			
+			var frequency = $("#<portlet:namespace/>frequency").val()
+			var frequencyAddon = $("#<portlet:namespace/>frequency-addon option:selected").html();
 			
 			$("#<portlet:namespace/>cursor_z").html(data["Z"]);
 			$("#<portlet:namespace/>cursor_y").html(data["Y"]);
 			$("#<portlet:namespace/>cursor_q").html(data["Q"]);
 			$("#<portlet:namespace/>cursor_reflection").html(data["Reflection"]);
-// 			$("#<portlet:namespace/>cursor_frequency").html(data["Z"]);
+			$("#<portlet:namespace/>cursor_frequency").html(frequency+"  "+frequencyAddon);
 
 // 			e.stopPropagation();
 		});
@@ -316,21 +358,28 @@
 				var mouserData = chart.getPointValue(Math.floor(coords[0]),Math.floor(coords[1]));
 				
 				
-				chart.addMarkerFromMouse(svg,mouserData.real["value"],mouserData.imaginary["value"],Math.floor(coords[0]),Math.floor(coords[1]),"<portlet:namespace/>stdPoint");
+				chart.addMarkerFromMouse(svg,mouserData.real["value"],mouserData.imaginary["value"],Math.floor(coords[0]),Math.floor(coords[1]),"<portlet:namespace/>stdPoint","<portlet:namespace/>stdPoint");
 				
 				<portlet:namespace/>appendDataPoints("<portlet:namespace/>stdPoint");
 				
 				<portlet:namespace/>stdPoint = true;
+			}else{
+				<portlet:namespace/>clear();
 			}
 // 			e.stopPropagation();
 		});
 		
 		$(".elementMethod>input[name=<portlet:namespace/>element-type]").change(function(e){
-			if(!$("#<portlet:namespace/>elements-select").is(':visible')){
-				$("#<portlet:namespace/>elements-select" ).show();
+			if(<portlet:namespace/>stdPoint){
+				if(!$("#<portlet:namespace/>elements-select").is(':visible')){
+					$("#<portlet:namespace/>elements-select" ).show();
+				}
+				
+// 				$("#<portlet:namespace/>elements-select-value").val(1);
+// 				$("#<portlet:namespace/>elements-select-value-text").val(1);
+				<portlet:namespace/>virtualPoint();
 			}
 			
-			<portlet:namespace/>mySlider.setValues(1);
 			e.stopPropagation();
 		});
 	});
@@ -348,65 +397,219 @@
 	
 	/*Settings - plot*/
 	function <portlet:namespace/>plotSettings(){
-		if (<portlet:namespace/>isValidate($("#<portlet:namespace/>settingsform"))) {
-			var settingReal = $("#<portlet:namespace/>real").val();
-			var settingImg = $("#<portlet:namespace/>imaginary").val();
-			
-			var positionData = chart.getPointPosition(settingReal*1,settingImg*1);
-			var mouserData = chart.getPointValue(positionData.x,positionData.y);
-			
-			<portlet:namespace/>guideCircleMove(mouserData);
-			
-			chart.addMarkerFromMouse(svg,settingReal*1,settingImg*1,positionData.x,positionData.y,"<portlet:namespace/>stdPoint");
-			
-			<portlet:namespace/>appendDataPoints("<portlet:namespace/>stdPoint");
-			
-			<portlet:namespace/>stdPoint = true;
+		if(<portlet:namespace/>stdPoint){
+			<portlet:namespace/>clear();
+		}else{
+			if (<portlet:namespace/>isValidate($("#<portlet:namespace/>settingsform"))) {
+				var impedance = $("#<portlet:namespace/>impedance").val();
+				var settingReal = $("#<portlet:namespace/>real").val()/impedance;
+				var settingImg = $("#<portlet:namespace/>imaginary").val()/impedance;
+				
+				var positionData = chart.getPointPosition(settingReal,settingImg);
+				var mouserData = chart.getPointValue(positionData.x,positionData.y);
+				
+				<portlet:namespace/>guideCircleMove(mouserData);
+				
+				chart.addMarkerFromMouse(svg,settingReal*1,settingImg*1,positionData.x,positionData.y,"<portlet:namespace/>stdPoint","<portlet:namespace/>stdPoint");
+				
+				<portlet:namespace/>appendDataPoints("<portlet:namespace/>stdPoint");
+				
+				<portlet:namespace/>stdPoint = true;
+			}
 		}
-	}
-	
-	function <portlet:namespace/>virtualPoint(){
 		
 	}
 	
 	/*Schematic button select*/
 	function <portlet:namespace/>elementSelect(){
 		var type = $(".elementMethod>input[name=<portlet:namespace/>element-type]:checked").val();
-		var value = <portlet:namespace/>mySlider.getValue();
-		<portlet:namespace/>appendSchematicImage(type,value,"","");
+		var value = $("#<portlet:namespace/>elements-select-value").val();
+		
+		
+		var virtualPoint = $("#<portlet:namespace/>virtualPoint");
+		var real = virtualPoint.attr("real");
+		var imag = virtualPoint.attr("imaginary")
+		var mouseX = virtualPoint.attr("cx");
+		var mouseY = virtualPoint.attr("cy");
+		
+		var id = "<portlet:namespace/>point_"+virtualPoint.attr("index");
+		var className = "<portlet:namespace/>point";
+		chart.addMarkerFromMouse(svg,real,imag,mouseX,mouseY,id,className);
+		
+		
+		<portlet:namespace/>appendSchematicImage(virtualPoint.attr("pre_id"),id,type,value);
+		
+		virtualPoint.remove();
+		
+		<portlet:namespace/>appendLine(virtualPoint.attr("pre_id"),id,type);
+		
+		<portlet:namespace/>appendDataPoints(id);
+	}
+	
+	function <portlet:namespace/>elementsSetting(){
+		console.log("<portlet:namespace/>elementsSetting()");
+		if(<portlet:namespace/>stdPoint){
+			var elementSum = 0;
+			$(".<portlet:namespace/>elements-select-value").each(function(index,e){
+				elementSum += $(this).val()*1;
+				$("#"+$(this).attr("id")+"-text").val($(this).val());
+			})
+			
+			$("#<portlet:namespace/>elements-select-value-text").val(elementSum);
+			
+			<portlet:namespace/>virtualPoint();
+		}
+	}
+	
+	function <portlet:namespace/>elementsSettingText(){
+		console.log("<portlet:namespace/>elementsSettingText()");
+		if(<portlet:namespace/>stdPoint){
+			var elementText = $("#<portlet:namespace/>elements-select-value-text");
+			var elementValue = elementText.val();
+			
+			var elementStr = elementValue.toString();
+			
+			var index = elementStr.indexOf('.');
+			var floorValue = 0;
+			var intValue = 0;
+			if(index>0){
+				floorValue = "0."+elementStr.substring(index+1,index+3);
+				intValue = elementStr.substring(0,index);
+			}else{
+				intValue = elementStr;
+			}
+			
+			$("#<portlet:namespace/>elements-select-value1").val(floorValue);
+			$("#<portlet:namespace/>elements-select-value1-text").val(floorValue);
+			
+			$("#<portlet:namespace/>elements-select-value2").val(intValue);
+			$("#<portlet:namespace/>elements-select-value2-text").val(intValue);
+			
+			<portlet:namespace/>virtualPoint();
+		}
+	}
+	
+	function <portlet:namespace/>virtualPoint(){
+		if(<portlet:namespace/>stdPoint){
+			var frequency = $("#<portlet:namespace/>frequency").val()*$("#<portlet:namespace/>frequency-addon option:selected").val();
+			var impedance = $("#<portlet:namespace/>impedance").val();
+			var elementValue = $("#<portlet:namespace/>elements-select-value-text").val()*1;
+			var elementType = $(".elementMethod>input[name=<portlet:namespace/>element-type]:checked").val();
+			
+			var stdPoint;
+			var idSize = 1;
+			/*해당 Element의 최근 Point값 체크*/
+			var length = $(".<portlet:namespace/>point").length;
+			if(length >0){
+				stdPoint = $("#<portlet:namespace/>point_"+length);
+				idSize += length;
+			}else{
+				stdPoint = $("#<portlet:namespace/>stdPoint");
+			}
+			
+			var cReal = stdPoint.attr("real");
+			var cImag = stdPoint.attr("imaginary");
+			
+			var virtualPointData = chart.getElementPoint(frequency,impedance,cReal,cImag,elementValue,elementType);
+			
+			var positionData = chart.getPointPosition(virtualPointData["real"],virtualPointData["imaginary"]);
+			var mouserData = chart.getPointValue(positionData.x,positionData.y);
+			
+			if($("#<portlet:namespace/>virtualPoint").length>0){
+				$("#<portlet:namespace/>virtualPoint").attr('cx',positionData.x)
+			      .attr('cy',positionData.y)
+			      .attr('real',virtualPointData["real"])
+			      .attr('imaginary',virtualPointData["imaginary"])
+			      .attr('pre_id',stdPoint.attr("id"));
+			}else{
+				svg.append('circle')
+			      .attr('fill','#EE8888')
+			      .attr('cx',positionData.x)
+			      .attr('cy',positionData.y)
+			      .attr('real',virtualPointData["real"])
+			      .attr('imaginary',virtualPointData["imaginary"])
+			      .attr('index',idSize)
+			      .attr('pre_id',stdPoint.attr("id"))
+			      .attr('r',5)
+			      .attr('id',"<portlet:namespace/>virtualPoint")
+			      .attr("stroke-width", 2);
+			}
+			
+		}
 	}
 	
 	/*Schematic img add*/
-	function <portlet:namespace/>appendSchematicImage(schematicType,schematicValue,prePointId,currentPointId){
+	function <portlet:namespace/>appendSchematicImage(prePointId,currentPointId,elementType,elementValue){
 		
 		var ol = $("#<portlet:namespace/>schematic-area-action");
 		var li = $("<li/>").appendTo(ol);
-		$("<img/>").attr("src","${contextPath}/images/smithchart/schematic/"+schematicType+".png").appendTo(li);
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/ser_ind.png"/><p>aaaaaaaaa</p></li>
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/ser_res.png"/><p>aaaaaaaaa</p></li>
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/ser_cap.png"/><p>aaaaaaaaa</p></li>
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/sht_ind.png"/><p>aaaaaaaaa</p></li>
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/sht_res.png"/><p>aaaaaaaaa</p></li>
-// 		<li><img alt="" src="${contextPath}/images/smithchart/schematic/sht_cap.png"/><p>aaaaaaaaa</p></li>
+		
+		var prePoint = $("#"+prePointId);
+		var currentPoint = $("#"+currentPointId);
+		var preReal = prePoint.attr("real");
+		var preImag = prePoint.attr("imaginary");
+		var currentReal = currentPoint.attr("real");
+		var currentImag = currentPoint.attr("imaginary");
+		var fre = $("#<portlet:namespace/>frequency").val()*$("#<portlet:namespace/>frequency-addon option:selected").val();
+		
+		console.log(prePointId,currentPointId,preReal,preImag,currentReal,currentImag,elementType,fre);
+		var msgObject = chart.getSchematicText(elementType,elementValue);
+		
+		$("<img/>").attr("src","${contextPath}/images/smithchart/schematic/"+elementType+".png").appendTo(li);
+		$("<p/>").html(msgObject["msg"]).appendTo(li);
+	}
+	
+	
+	
+	function <portlet:namespace/>appendLine(prePointId,currentPointId,elementType){
+		var preMouseX = $("#"+prePointId).attr("cx");
+		var preMouseY = $("#"+prePointId).attr("cy");
+		var curMouserX = $("#"+currentPointId).attr("cx");
+		var cutMouseY = $("#"+currentPointId).attr("cy");
+		
+		var pointLineCircle = chart.addPointLine(preMouseX,preMouseY,curMouserX,cutMouseY,elementType);
+		
+		var path = d3.path();
+		console.log(pointLineCircle);
+		path.arc(pointLineCircle["cx"], pointLineCircle["cy"], pointLineCircle["r"],pointLineCircle["startAngle"],pointLineCircle["endAngle"],pointLineCircle["anticlockwise"]);
+		
+		svg.append("path").attr("d", path.toString()).attr("stroke", "firebrick")
+		.attr("stroke-width", 2)
+		.attr("fill", "none");
 	}
 	
 	/*DataPoints*/
 	function <portlet:namespace/>appendDataPoints(pointId){
 		var point = $("#"+pointId); 
-		var data = chart.getData(point.attr("real"),point.attr("imaginary"),point.attr("cx"),point.attr("cy"));
+		var impedance = $("#<portlet:namespace/>impedance").val();
+		var data = chart.getData(point.attr("real"),point.attr("imaginary"),point.attr("cx"),point.attr("cy"),impedance);
 		$tbody = $("#<portlet:namespace/>data-point-tbody");
+		
+		var frequency = $("#<portlet:namespace/>frequency").val()
+		var frequencyAddon = $("#<portlet:namespace/>frequency-addon option:selected").html();
 		
 		$tr = $("<tr/>").appendTo($tbody);
 		$("<td/>").html(data["Z"]).addClass("center").appendTo($tr);
 		$("<td/>").html(data["Y"]).addClass("center").appendTo($tr);
 		$("<td/>").html(data["Q"]).addClass("center").appendTo($tr);
 		$("<td/>").html(data["Reflection"]).addClass("center").appendTo($tr);
-		$("<td/>").html("").addClass("center").appendTo($tr);
+		$("<td/>").html(frequency+"  "+frequencyAddon).addClass("center").appendTo($tr);
 	}
 	
 	
 	function <portlet:namespace/>clear(){
-		
+		$.confirm({
+			title: 'Data Clear',
+			content: '새로운 기준점을 생성 하시겠습니까? <br/> 해당 정보는 저장되지 않습니다.',
+			buttons: {
+				confirm: function () {
+					location.reload();
+				},
+				cancel: function () {
+					
+				}
+			}
+		});
 	}
 	
 	

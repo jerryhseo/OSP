@@ -80,7 +80,144 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
     };
 }
 
-  smith.chart.prototype.addMarkerFromMouse = function(svg, real,imag,mouseX,mouseY,id){
+  smith.chart.prototype.getElementPoint = function(frequency,impedance,cReal,cImag,elementValue,elementType){
+	  var current_real = parseFloat(cReal);
+	  var current_imaginary = parseFloat(cImag);
+      var element_value = parseFloat(elementValue);
+      var frequency = parseFloat(frequency);
+      var Characteristic_Impedance = parseFloat(impedance);
+      
+      var admin_current_real = current_real / (math.pow(current_real, 2) + math.pow(current_imaginary, 2));
+      var admin_current_imaginary = -1 * current_imaginary / (math.pow(current_real, 2) + math.pow(current_imaginary, 2));
+      
+      
+      var modified_real = 0;
+      var modified_imaginary = 0;
+      switch (elementType) {
+      	case "ser_cap" :
+      		modified_real = current_real;
+      		modified_imaginary = (current_imaginary + (-1 / (2 * math.pi * frequency * element_value * math.pow(10, -12) * Characteristic_Impedance)));
+      		break;
+      	case "ser_ind" :
+      		modified_real = current_real;
+      		modified_imaginary = ((current_imaginary + (2 * math.pi * frequency * element_value * math.pow(10, -9)) / Characteristic_Impedance));
+      		break;
+      	case "ser_res" :
+      		modified_real = (current_real + element_value / Characteristic_Impedance);
+      		modified_imaginary = current_imaginary;
+      		break;
+      	case "sht_cap" :
+      		modified_real = admin_current_real / (math.pow(admin_current_real, 2) + math.pow((admin_current_imaginary + (2 * math.pi * frequency * element_value * math.pow(10, -12) * Characteristic_Impedance)), 2));
+      		modified_imaginary = -1 * (admin_current_imaginary + (2 * math.pi * frequency * element_value * math.pow(10, -12) * Characteristic_Impedance)) / (math.pow(admin_current_real, 2) + math.pow((admin_current_imaginary + (2 * math.pi * frequency * element_value * math.pow(10, -12) * Characteristic_Impedance)), 2));
+      		break;
+      	case "sht_ind" :
+      		modified_real = admin_current_real / (math.pow(admin_current_real, 2) + math.pow((admin_current_imaginary + (-Characteristic_Impedance / (2 * math.pi * frequency * element_value * math.pow(10, -9)))), 2));
+      		modified_imaginary = -1 * (admin_current_imaginary + (-Characteristic_Impedance / (2 * math.pi * frequency * element_value * math.pow(10, -9)))) / (math.pow(admin_current_real, 2) + math.pow((admin_current_imaginary + (-Characteristic_Impedance / (2 * math.pi * frequency * element_value * math.pow(10, -9)))), 2));
+      		break;
+      	case "sht_res" :
+      		var admin_re = admin_current_real + Characteristic_Impedance / element_value
+            var admin_im = admin_current_imaginary
+            
+            modified_real = admin_re / (math.pow(admin_re, 2) + math.pow(admin_im, 2));
+            modified_imaginary = -1 * admin_im / (math.pow(admin_re, 2) + math.pow(admin_im, 2));
+      		break;
+      }
+      
+      return {
+          "real":modified_real,
+          "imaginary":modified_imaginary
+      };
+  }
+  
+  smith.chart.prototype.getSchematicText = function(elementType,text){
+	  var msg = "";
+      
+      switch (elementType) {
+      	case "ser_cap" :
+      		msg = text + '𝑝𝐹';
+    		break;
+    	case "ser_ind" :
+    		msg = text + '𝑛𝐻';
+    		break;
+    	case "ser_res" :
+    		msg = text + 'Ω';
+    		break;
+    	case "sht_cap" :
+    		msg = text + '𝑝𝐹';
+    		break;
+    	case "sht_ind" :
+    		msg = text + '𝑛𝐻';
+    		break;
+    	case "sht_res" :
+    		msg = text + 'Ω';
+    		break;
+      }
+	  
+	  return {
+          "msg":msg
+      };
+  }
+  
+  smith.chart.prototype.addPointLine = function(preMouseX,preMouseY,curMouserX,curMouseY,elementType){
+	  var mouserData = chart.getPointValue(curMouserX,curMouseY);
+	  var x=0;
+	  var y=0;
+	  var r=0;
+	  
+	  //circle
+	  var center = width/2;
+	  var leftWideh = width-pad;
+	  if(elementType ==="ser_cap" ||elementType ==="ser_ind" ){
+		  x=mouserData.real["mouse_x_cx"];
+		  y=center;
+		  r=mouserData.real["mouse_x_r"];
+	  }else if(elementType ==="ser_res"){
+		  x=leftWideh;
+		  y=mouserData.imaginary["mouse_y_cy"];
+		  r=mouserData.imaginary["mouse_y_r"];
+	  }else if(elementType ==="sht_cap" ||elementType ==="sht_ind" ){
+		  x=mouserData.real["mouse_l_x_cx"];
+		  y=center;
+		  r=mouserData.real["mouse_l_x_r"];
+	  }else if(elementType ==="sht_res"){
+		  x=pad;
+		  y=mouserData.imaginary["mouse_l_y_cy"];
+		  r=mouserData.imaginary["mouse_l_y_r"];
+	  }
+	
+	  var anticlockwise = false;
+	  if(elementType ==="ser_cap" ||elementType ==="sht_ind" ){
+//	  if(preMouseY<curMouseY){
+		  anticlockwise = true;
+	  }
+	  
+	  //Degree
+	  var getRedian = function(centetX,centerY,currentX,currentY){
+		  var x = currentX - centetX;
+          var y = currentY - centerY;
+          var theta = 0;
+          if (y >= 0) {
+              var amplitude = math.sqrt(math.pow(x, 2) + math.pow(y, 2));
+              theta = math.acos(x / amplitude) * 180 / math.pi;
+          }else if (y < 0) {
+        	  var amplitude = math.sqrt(math.pow(x,2)+math.pow(y,2));
+        	  theta = 360-math.acos(x/amplitude)*180/math.pi;
+          }
+          
+          return theta * Math.PI / 180;
+	  };
+	  
+	  return {
+          "cx":x,
+          "cy":y,
+          "r":r,
+          "startAngle":getRedian(x,y,preMouseX,preMouseY),
+          "endAngle":getRedian(x,y,curMouserX,curMouseY),
+          "anticlockwise":anticlockwise
+      };
+  }
+
+  smith.chart.prototype.addMarkerFromMouse = function(svg, real,imag,mouseX,mouseY,id,className){
 	  svg.append('circle')
 	      .attr('fill','#2196F3')
 	      .attr('cx',mouseX)
@@ -89,6 +226,7 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
 	      .attr('imaginary',imag)
 	      .attr('r',5)
 	      .attr('id',id)
+	      .attr('class',className)
 	      .attr("stroke-width", 2);
   }
 	
@@ -120,7 +258,7 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
     };
   }
   
-  smith.chart.prototype.getData = function(real,imag,mouseX,mouseY){
+  smith.chart.prototype.getData = function(real,imag,mouseX,mouseY,impedance){
 	  var current_real = parseFloat(real);
 	  var current_imaginary = parseFloat(imag);
 	  var current_x = parseFloat(mouseX);
@@ -133,11 +271,16 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
       var amplitude = math.sqrt(math.pow(x,2)+math.pow(y,2));
       var theta = math.acos(x/amplitude)*180/math.pi;
 
+      
+      var floorFixed = function(value){
+          return Math.floor(value * 1000000)/1000000;
+	  };
+	  
       return {
-          "Z":'(' + current_real + ') + j  (' + current_imaginary + ') Ω',
-          "Y":'(' + admin_current_real + ') + j  (' + admin_current_imaginary + ') S',
-          "Q": Math.abs(current_imaginary / current_real),
-          "Reflection":amplitude + ' Z ' + theta + '⁰'
+          "Z":'(' + floorFixed(current_real*impedance) + ') + j  (' + floorFixed(current_imaginary*impedance) + ') Ω',
+          "Y":'(' + floorFixed(admin_current_real/impedance) + ') + j  (' + floorFixed(admin_current_imaginary/impedance) + ') S',
+          "Q": floorFixed(Math.abs(current_imaginary / current_real)),
+          "Reflection":floorFixed(amplitude) + ' ∠ ' + floorFixed(theta) + '⁰'
       };
   }
 
