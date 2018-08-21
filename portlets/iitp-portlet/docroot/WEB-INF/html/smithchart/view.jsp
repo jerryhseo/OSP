@@ -374,9 +374,6 @@
 				if(!$("#<portlet:namespace/>elements-select").is(':visible')){
 					$("#<portlet:namespace/>elements-select" ).show();
 				}
-				
-// 				$("#<portlet:namespace/>elements-select-value").val(1);
-// 				$("#<portlet:namespace/>elements-select-value-text").val(1);
 				<portlet:namespace/>virtualPoint();
 			}
 			
@@ -423,8 +420,7 @@
 	/*Schematic button select*/
 	function <portlet:namespace/>elementSelect(){
 		var type = $(".elementMethod>input[name=<portlet:namespace/>element-type]:checked").val();
-		var value = $("#<portlet:namespace/>elements-select-value").val();
-		
+		var value = $("#<portlet:namespace/>elements-select-value-text").val();
 		
 		var virtualPoint = $("#<portlet:namespace/>virtualPoint");
 		var real = virtualPoint.attr("real");
