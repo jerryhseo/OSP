@@ -2245,11 +2245,29 @@
             var simulation = Workbench.workingSimulation();
             var job = simulation.workingJob();
             
+            Workbench.handleJobRequiredValidation(scienceApp,job);
+            
             if( scienceApp.runType() === 'Sequential' ){
                 jobsToSubmitGetParameters(simulation,job, true, resourceURL );
             }else{
                 submitMPJobs(job,resourceURL);
             }
+        };
+        
+        
+        Workbench.handleJobRequiredValidation = function(scienceApp,job){
+        	var array = scienceApp.getMandatoryInputPortNames();
+        	if(array.length ==0){
+        		return true;
+        	}else{
+        		for(var property in array ){
+        			var inputData = job.inputData(array[property]);
+        			if(!inputData){
+        				$.alert(Liferay.Language.get('edison-this-field-is-required',[array[property]]));
+        				throw "stop"; 
+        			}
+        		}
+        	}
         };
         
         Workbench.handleJobSelected = function(simulationUuid, jobUuid, resourceURL ){

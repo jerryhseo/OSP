@@ -7,8 +7,7 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm/jquery-confirm.min.css">
 <link rel="stylesheet" href="${contextPath}/css/simulation-workbench.css">
 
 <style type="text/css">
@@ -620,5 +619,5 @@ function <portlet:namespace/>flowDisplayChange(flowLayoutCode){
 <script src="${contextPath}/js/adminlte/adminlte.js"></script>
 <script src="${contextPath}/js/lib/toastr.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="${contextPath}/js/jquery-confirm/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/validation/validator.min.js"></script>

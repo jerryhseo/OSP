@@ -144,7 +144,7 @@
 			IP.clone = function(){
 				return new InputPort( OSP.Util.toJSON(IP) );
 			};
-
+			
 			IP.deserialize = function( jsonObject ){
 				for( var key in jsonObject ){
 					switch( key ){
@@ -410,6 +410,20 @@
 			var namesArray = [];
 			for( var portName in ports ){
 				namesArray.push( portName );
+			}
+
+			return namesArray;
+		};
+		
+		ScienceApp.getMandatoryInputPortNames = function(){
+			var ports = ScienceApp.inputPorts();
+			if( !ports )	return [];
+
+			var namesArray = [];
+			for( var portName in ports ){
+				if(ports[portName][OSP.Constants.MANDATORY]){
+					namesArray.push(portName);
+				}
 			}
 
 			return namesArray;

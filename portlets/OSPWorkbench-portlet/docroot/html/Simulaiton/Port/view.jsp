@@ -13,9 +13,6 @@
 	}
 </style>
 
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
 <div class="panel panel-primary" id="<portlet:namespace/>port-remote" style="left: 80%;top: 150px;position: absolute;z-index: 8;">
 	<div class="panel-heading" style="z-index: 10;cursor: move;height: 40px;padding: 5px 10px;">
 		<h4>Port Selector</h4>
@@ -28,11 +25,6 @@
 	</div>
 	<div class="panel-footer" style="min-width: 200px;">
 		<div id="<portlet:namespace/>port-edit-btn-group">
-			<span class="<portlet:namespace/>provenance">
-				<liferay-ui:message key='edison-provenance-engin'/>
-				<liferay-ui:icon-help message="edison-science-appstore-provenance-connect-message"/>
-			</span>
-			<input type="checkbox" id="<portlet:namespace/>isProvenance" class="<portlet:namespace/>provenance" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled" id="<portlet:namespace/>provenance">
 			<button class="btn btn-primary btn-flat" id="<portlet:namespace/>jobSave"><span class="icon-save">  <liferay-ui:message key='save'/></span></button>
 			<button class="btn btn-success btn-flat" id="<portlet:namespace/>jobSubmit"><span class="icon-cloud-upload">  Submit</span></button>
 		</div>
@@ -181,11 +173,6 @@ function <portlet:namespace/>init(isProvenance){
 		cursor: "move",
 		opacity: 0.35
 	});
-	
-	var isTrueSet = (isProvenance == 'true');
-	if(!isTrueSet){
-		$(".<portlet:namespace/>provenance").remove();
-	}
 }
 
 function <portlet:namespace/>displayPorts( ports, portType ){
@@ -316,13 +303,12 @@ function <portlet:namespace/>updateJobPortStatus(data){
 		});
 		
 		$("#<portlet:namespace/>jobSubmit").click(function(){
-			var isProCheck = $("#<portlet:namespace/>isProvenance");
 			var myId = '<%=portletDisplay.getId()%>';
 			var eventData = {
 					portletId : myId,
 					targetPortlet : <portlet:namespace/>connector,
 					data:{
-						isProvenanceJob : isProCheck.is(":checked")
+						isProvenanceJob : false
 					}
 					
 			};
