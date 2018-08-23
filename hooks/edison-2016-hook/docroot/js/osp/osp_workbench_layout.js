@@ -2252,7 +2252,7 @@
             }else{
                 submitMPJobs(job,resourceURL);
             }
-        };
+        }; 
         
         
         Workbench.handleJobRequiredValidation = function(scienceApp,job){

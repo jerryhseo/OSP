@@ -235,10 +235,13 @@
 					var portName = portNames[index];
 					//console.log('portName: '+portName);
 					var inputData = J.inputData(portName);
-					if( !inputData ){
-						alert(portName+ ' should not be empty.');
-						return false;
-					}
+					
+					//osp_workbench_layout.js -> 2248 Line handleJobRequiredValidation
+					//input Validation check
+//					if( !inputData ){
+//						alert(portName+ ' should not be empty.');
+//						return false;
+//					}
 					
 					//console.log( 'proliferate: ', inputData );
 					if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){

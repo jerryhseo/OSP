@@ -896,7 +896,6 @@ public class LayoutController {
 		int jobCount = jobs.length();
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
-			boolean isProvenanceJob = GetterUtil.getBoolean(jsonJob.getBoolean("provenance_"),false);
 			SimulationJob job = null;
 			String jobUuid = jsonJob.getString("uuid_", "");
 			boolean isJobSubmitted = jsonJob.getBoolean("submit_");
