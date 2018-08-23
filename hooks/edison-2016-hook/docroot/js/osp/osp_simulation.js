@@ -235,58 +235,54 @@
 					var portName = portNames[index];
 					//console.log('portName: '+portName);
 					var inputData = J.inputData(portName);
-					
 					//osp_workbench_layout.js -> 2248 Line handleJobRequiredValidation
-					if( !inputData ){
-						alert(portName+ ' should not be empty.');
-						return false;
-					}
-					
-					//console.log( 'proliferate: ', inputData );
-					if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
-					  var dataType = new OSP.DataType();
-					  dataType.deserializeStructure(inputData.context());
-						var dataStructure = dataType.structure(); 
-						var fileContents = dataStructure.activeParameterFormattedInputs();
-						//console.log( 'fileContent: ', fileContents );
-						if( fileContents.length === 1 ){
-							for( var jobIndex in jobsToSubmit ){
-								var job = jobsToSubmit[jobIndex];
-								var data = new OSP.InputData();
-								data.portName( inputData.portName() );
-								data.order( inputData.order() );
-								data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-								data.context( fileContents[0].join('') );
-								job.inputData( portName, data );
-							}
-						}
-						else{
-							var proliferatedJobs = [];
-							for( var fileIndex = 0; fileIndex<fileContents.length; fileIndex++){
-								var jsonCloneJobs = JSON.parse(JSON.stringify(jobsToSubmit));
-								var cloneJobs = [];
-								for( var cloneIndex in jsonCloneJobs ){
-									var cloneJob = new Job( jsonCloneJobs[cloneIndex] );
+//					console.log( 'proliferate: ', inputData );
+					if(inputData){
+						if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
+							var dataType = new OSP.DataType();
+							dataType.deserializeStructure(inputData.context());
+							var dataStructure = dataType.structure(); 
+							var fileContents = dataStructure.activeParameterFormattedInputs();
+							//console.log( 'fileContent: ', fileContents );
+							if( fileContents.length === 1 ){
+								for( var jobIndex in jobsToSubmit ){
+									var job = jobsToSubmit[jobIndex];
 									var data = new OSP.InputData();
 									data.portName( inputData.portName() );
 									data.order( inputData.order() );
 									data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-									data.context( fileContents[fileIndex].join('') );
-									cloneJob.inputData( portName, data );
-									cloneJobs.push(cloneJob);
+									data.context( fileContents[0].join('') );
+									job.inputData( portName, data );
 								}
-								proliferatedJobs = proliferatedJobs.concat( cloneJobs );
 							}
-							
-							jobsToSubmit = proliferatedJobs;
+							else{
+								var proliferatedJobs = [];
+								for( var fileIndex = 0; fileIndex<fileContents.length; fileIndex++){
+									var jsonCloneJobs = JSON.parse(JSON.stringify(jobsToSubmit));
+									var cloneJobs = [];
+									for( var cloneIndex in jsonCloneJobs ){
+										var cloneJob = new Job( jsonCloneJobs[cloneIndex] );
+										var data = new OSP.InputData();
+										data.portName( inputData.portName() );
+										data.order( inputData.order() );
+										data.type( OSP.Enumeration.PathType.FILE_CONTENT );
+										data.context( fileContents[fileIndex].join('') );
+										cloneJob.inputData( portName, data );
+										cloneJobs.push(cloneJob);
+									}
+									proliferatedJobs = proliferatedJobs.concat( cloneJobs );
+								}
+								
+								jobsToSubmit = proliferatedJobs;
+							}
 						}
-					}
-					else{
-						//console.log('portName: '+portName);
-						for( var jobIndex in jobsToSubmit ){
-							//console.log('jobIndex: '+jobIndex);
-							var job = jobsToSubmit[jobIndex];
-							job.inputData( portName, inputData.clone() );
+						else{
+							//console.log('portName: '+portName);
+							for( var jobIndex in jobsToSubmit ){
+								//console.log('jobIndex: '+jobIndex);
+								var job = jobsToSubmit[jobIndex];
+								job.inputData( portName, inputData.clone() );
+							}
 						}
 					}
 				}
