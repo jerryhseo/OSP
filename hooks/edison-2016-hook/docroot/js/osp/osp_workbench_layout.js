@@ -1316,7 +1316,7 @@
                                     $.alert('only number');
                                     return false;
                                 }else{
-                                	if(cores=>maxCpu||cores<=1){
+                                	if(maxCpu<cores||cores<1){
                                 		$.alert('provide a valid cores');
                                         return false;
                                 	}
