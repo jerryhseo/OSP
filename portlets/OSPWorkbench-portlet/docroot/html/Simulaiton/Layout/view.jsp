@@ -212,6 +212,8 @@ var <portlet:namespace/>lodingPortlets = JSON.parse('<%=lodingPortlets.toString(
 $(function(e) {
 	//page block
 	bStart();
+
+	
 	
 	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
 	<portlet:namespace/>workbench.type ('${workbenchType}');
