@@ -19,6 +19,7 @@
 	  <portlet id="edison-workbench-job-status-and-result"></portlet>
 	  <portlet id="edison-tree-view-monitoring"></portlet>
 	  <portlet id="edison-tab"></portlet>
+	  <portlet id="edison-file-manager" />
 	</category>
 	<category name="OSP Workbench">
 		<portlet id="SimulationDashboard" />

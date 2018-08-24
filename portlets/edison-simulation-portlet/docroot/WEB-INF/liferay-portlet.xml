@@ -19,6 +19,12 @@
 		<css-class-wrapper>edison-myfile</css-class-wrapper>	
 	</portlet>
 	
+	<portlet>
+		<portlet-name>edison-file-manager</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>		
+		<css-class-wrapper>edison-file-manager</css-class-wrapper>	
+	</portlet>
 	
 	<portlet>
 		<portlet-name>edison-monitoring</portlet-name>
