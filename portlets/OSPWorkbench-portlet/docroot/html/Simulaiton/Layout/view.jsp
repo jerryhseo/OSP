@@ -230,6 +230,8 @@ $(function(e) {
 	scienceApp.currentManualId('${scienceApp.getManualIdCurrentValue()}');
 	scienceApp.templateId('${scienceApp.templetId}');
 	scienceApp.isProvenance('${isProvenance}');
+	scienceApp.maxCpus('${scienceApp.getMaxCpus()}');
+	scienceApp.defaultCpus('${scienceApp.getDefaultCpus()}');
 	
 	if( '<%=inputPorts%>' ) 
 		scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );

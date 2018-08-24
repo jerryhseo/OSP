@@ -1288,13 +1288,16 @@
         };
         
         var submitMPJobs = function(job,resourceURL){
+        	var scienceApp = Workbench.scienceApp();
+        	var maxCpu = scienceApp.maxCpus();
+        	var defaultCpu = scienceApp.defaultCpus();
             $.confirm({
                 title: 'CPU Cores',
                 content: '' +
                 '<form action="" class="formName">' +
                 '<div class="form-group">' +
-                '<label>Enter number of cores</label>' +
-                '<input type="text" placeholder="cores" class="cores form-control" required />' +
+                '<label>Enter number of cores (1 ~ '+maxCpu+')</label>' +
+                '<input type="text" value="'+defaultCpu+'" placeholder="cores" class="cores form-control" required />' +
                 '</div>' +
                 '</form>',
                 buttons: {
@@ -1311,6 +1314,11 @@
                                 if(!pattern.test(cores)){
                                     $.alert('only number');
                                     return false;
+                                }else{
+                                	if(cores=>maxCpu||cores<=1){
+                                		$.alert('provide a valid cores');
+                                        return false;
+                                	}
                                 }
                             }
                             

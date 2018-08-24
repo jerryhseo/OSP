@@ -112,6 +112,8 @@
 			WORKING_JOB_UUID: 'workingJobUuid_',
 			WORKING_SIMULATION: 'workingSimulation_',
 			WORKING_SIMULATION_UUID: 'workingSimulationUuid_',
+			MAX_CPU:'maxCpu_',
+			DEFAULT_CPU:'defaultCpu_',
 
 			//DataStructure
 			//Parameter types

@@ -359,6 +359,15 @@
 		ScienceApp.isProvenance = function(isProvenance){
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.IS_PROVENANCE, arguments));
 		};
+		
+		ScienceApp.maxCpus = function( cpus ){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.MAX_CPU, arguments));
+		};
+		
+		ScienceApp.defaultCpus = function( cpus ){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.DEFAULT_CPU, arguments));
+		};
+		
 
 		ScienceApp.deserializeInputPorts = function( portsJson ){
 			if( !portsJson )	return;

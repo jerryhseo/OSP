@@ -93,7 +93,6 @@ public class LayoutController {
 	private static final String _DEFAULT_JOB_TITLE = "job";
 	private static final String _DEFAULT_JOB_DESCRIPTION = " ";
 	
-	private static final HashMap<String,String> ProvenanceSupportApp = new HashMap<String,String>();
 	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model){
@@ -107,15 +106,6 @@ public class LayoutController {
 		
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		
-//		ProvenanceSupportApp.put("uChem", "4.0.1");
-//		ProvenanceSupportApp.put("pianostring", "1.0.0");
-//		ProvenanceSupportApp.put("PhaseDiagramSW", "1.0.0");
-//		ProvenanceSupportApp.put("gravityslingshot", "1.0.0");
-//		ProvenanceSupportApp.put("WaveSimulation", "1.0.0");
-//		ProvenanceSupportApp.put("Bowling", "1.0.0");
-//		ProvenanceSupportApp.put("acuteSTMtip", "1.0.0");
-//		ProvenanceSupportApp.put("roundSTMtip", "1.0.0");
 		
 		try{
 			model = this.evaluateScienceAppLayout(model, scienceAppId);
@@ -266,18 +256,10 @@ public class LayoutController {
 			}else{
 				model.addAttribute("isFlowLayout", false);
 			}
-			
-			boolean isProvenance = false;
-			String isProvenanceSupportApp = CustomUtil.strNull(ProvenanceSupportApp.get(scienceApp.getName().trim()));
-			if(!isProvenanceSupportApp.equals("")&&isProvenanceSupportApp.equals(scienceApp.getVersion().trim())){
-				isProvenance = true;
-			}
-			model.addAttribute("isProvenance", isProvenance);
-			
-			
 		}catch (Exception e) {
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_ID);
 		}
+		
 		
 		try{
 			JSONObject workbenchLayout = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
