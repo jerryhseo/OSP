@@ -1287,6 +1287,7 @@
             });
         };
         
+        
         var submitMPJobs = function(job,resourceURL){
         	var scienceApp = Workbench.scienceApp();
         	var maxCpu = scienceApp.maxCpus();

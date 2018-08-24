@@ -114,7 +114,6 @@
 			WORKING_SIMULATION_UUID: 'workingSimulationUuid_',
 			MAX_CPU:'maxCpu_',
 			DEFAULT_CPU:'defaultCpu_',
-
 			//DataStructure
 			//Parameter types
 			STRING : 'string',
