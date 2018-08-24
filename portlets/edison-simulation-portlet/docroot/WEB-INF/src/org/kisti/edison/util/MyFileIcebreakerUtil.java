@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -244,7 +245,6 @@ public class MyFileIcebreakerUtil {
                 conn.setRequestProperty("Accept", "text/plain");
                 conn.setRequestProperty("Content-Type", "application/xml");
              
-                System.out.println(conn.getResponseCode());
 	            if (conn.getResponseCode() == 200) {
 	                inputStream = conn.getInputStream();
 	                File file = new File(SystemProperties.get(SystemProperties.TMP_DIR) + "/" + fileName);
@@ -500,7 +500,6 @@ public class MyFileIcebreakerUtil {
 	                String fileName = json.getString("name");
 	                
 	                	URL fileMoveUrl = new URL(icebreakerUrl+"/api/file/move/"+fileId+ "/HOME");
-		                System.out.println("fileMoveUrl : " + fileMoveUrl.toString());
 		                
 		                HttpURLConnection conn = (HttpURLConnection) fileMoveUrl.openConnection();
 		                
@@ -548,7 +547,6 @@ public class MyFileIcebreakerUtil {
                 }else if(!parentFolderId.equals("HOME") && !parentpath.equals("")){
                     urlStr += "/api/folder/create?name="+parentpath+"/"+newFolderName+"&cluster=EDISON-CFD";
                 }
-                System.out.println("urlStr : " + urlStr);
                 URL url = new URL(urlStr);
                 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -635,6 +633,33 @@ public class MyFileIcebreakerUtil {
         
     }
 	
+	public static int deleteFile(String icebreakerUrl, String vcToken, Map<String, Object> requestParamMap) throws SystemException{
+        int responseStatus = 0;
+        try{
+            String deleteFileId = CustomUtil.strNull(requestParamMap.get("deletefileId"));
+            
+            if(!"".equals(icebreakerUrl)){
+                
+                URL url = new URL(icebreakerUrl + "/api/file/delete/"+deleteFileId);
+                
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                
+                conn.setDoOutput(true);
+                conn.setRequestMethod("DELETE");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setRequestProperty("Authorization", "Basic " + vcToken);
+                
+                responseStatus =  conn.getResponseCode();
+                conn.disconnect();
+            }
+            return responseStatus;
+        }catch (Exception e){
+            e.printStackTrace();
+            return responseStatus;
+        }
+        
+    }
+	
 	/* Move Folder or File */
 	public static JsonObject moveFileReturnJsonObject(String icebreakerUrl, String vcToken, Map<String, Object> requestParamMap, String userScreenName){
 		JsonObject element = new JsonObject();
@@ -660,13 +685,10 @@ public class MyFileIcebreakerUtil {
                 destPath = FILE_MOVE_PATH + userScreenName + "/repository/"+destPath;
                 
                 conn.setRequestMethod("POST");
-                System.out.println("destPath--->"+destPath);
                 bodyStr.append("{");
                 bodyStr.append("   \"fileId\" : \"" + sourceId + "\", ");
                 bodyStr.append("   \"destPath\" : \""+destPath+"\" ");
                 bodyStr.append("}");
-                
-                System.out.println("bodyStr : " + bodyStr.toString());
                 
                 OutputStream os = conn.getOutputStream();
                 os.write(bodyStr.toString().getBytes());
@@ -730,7 +752,6 @@ public class MyFileIcebreakerUtil {
 	                destPath = FILE_MOVE_PATH + userScreenName + "/repository/"+destPath;
 	                
 	                conn.setRequestMethod("POST");
-	                System.out.println("destPath--->"+destPath);
 	                bodyStr.append("{");
 	                bodyStr.append("   \"fileId\" : \"" + sourceId + "\", ");
 	                bodyStr.append("   \"destPath\" : \""+destPath+"\" ");
@@ -756,7 +777,7 @@ public class MyFileIcebreakerUtil {
 	}
 	
 	/* Copy or Update File */
-	public static int copyFile(String icebreakerUrl, String vcToken, Map<String, Object> requestParamMap, String userScreenName) throws SystemException{
+	public static int copyFile(String icebreakerUrl, String icebreakerToken, Map<String, Object> requestParamMap, String userScreenName) throws SystemException{
 	    
 	    int responseStatus = 0;
 	    
@@ -789,7 +810,7 @@ public class MyFileIcebreakerUtil {
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setRequestProperty("Content-Type", "application/json");
-                    conn.setRequestProperty("Authorization", "Basic " + vcToken);
+                    conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
                     
                     String destPath = CustomUtil.strNull(requestParamMap.get("destPath"));
                     
@@ -823,5 +844,199 @@ public class MyFileIcebreakerUtil {
             e.printStackTrace();
             return responseStatus;
         }
+	}
+	
+	// Folder or File Info
+	public static HashMap<String,Object> getItemInfo(String icebreakerUrl, String icebreakerToken, Map<String, Object> requestParamMap) throws SystemException{
+		
+		HashMap<String,Object> itemInfoMap = new HashMap<String,Object>();
+		
+		try {
+			String getInfoUrl = "";
+			String getFolderListUrl = "";
+			String getFileListUrl = "";
+			
+			String itemId = CustomUtil.strNull(requestParamMap.get("itemId"), "");
+			String itemType = CustomUtil.strNull(requestParamMap.get("itemType"), "");
+			
+			if(!"".equals(itemId)){
+				
+				if(itemType.equals("file")){
+					getInfoUrl = "/api/file/"+itemId;
+				} else if(itemType.equals("folder")){
+					getInfoUrl = "/api/folder/"+itemId;
+					getFolderListUrl = "/api/folder/" + itemId + "/list";
+					getFileListUrl = "/api/file/" + itemId + "/list";
+				}
+				
+				String getItemInfoIcebreakerUrl = icebreakerUrl + getInfoUrl;
+				URL url = new URL(getItemInfoIcebreakerUrl);
+				
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				
+				conn.setDoOutput(true);
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+				
+				if (conn.getResponseCode() == 200) {
+					
+					String  responseValue = "";
+					String  output = "";
+					BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+					while ((output = br.readLine()) != null) {
+						if(!CustomUtil.strNull(output).equals("null")){
+							responseValue += output;
+						}
+					}
+					br.close();
+					
+					JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+					itemInfoMap.put("name", jsonObj.get("name"));
+					itemInfoMap.put("size", jsonObj.get("size"));
+					itemInfoMap.put("lastModified", jsonObj.get("lastModified"));
+				}
+				
+				if(!"".equals(getFolderListUrl)){
+					
+					String  responseValue = "";
+					
+					String getFolderCountIcebreakerUrl = icebreakerUrl + getFolderListUrl;
+					URL getFolderUrl = new URL(getFolderCountIcebreakerUrl);
+					
+					HttpURLConnection getFolderConn = (HttpURLConnection) getFolderUrl.openConnection();
+					
+					getFolderConn.setDoOutput(true);
+					getFolderConn.setRequestMethod("GET");
+					getFolderConn.setRequestProperty("Accept", "application/json");
+					getFolderConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+					
+					if (getFolderConn.getResponseCode() == 200) {
+						String output = "";
+						BufferedReader br = new BufferedReader(new InputStreamReader((getFolderConn.getInputStream())));
+						while ((output = br.readLine()) != null) {
+							if(!CustomUtil.strNull(output).equals("null")){
+								responseValue += output;
+							}
+						}
+						br.close();
+						
+						JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+						JSONArray jsonArray = jsonObj.getJSONArray("files");
+						itemInfoMap.put("folderCount", jsonArray.size());
+					}
+						
+				}
+				
+				if(!"".equals(getFileListUrl)){
+					
+					String  responseValue = "";
+					
+					String getFileCountIcebreakerUrl = icebreakerUrl + getFileListUrl;
+					URL getFileUrl = new URL(getFileCountIcebreakerUrl);
+					
+					HttpURLConnection getFileConn = (HttpURLConnection) getFileUrl.openConnection();
+					
+					getFileConn.setDoOutput(true);
+					getFileConn.setRequestMethod("GET");
+					getFileConn.setRequestProperty("Accept", "application/json");
+					getFileConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+					
+					if (getFileConn.getResponseCode() == 200) {
+						String output = "";
+						BufferedReader br = new BufferedReader(new InputStreamReader((getFileConn.getInputStream())));
+						while ((output = br.readLine()) != null) {
+							if(!CustomUtil.strNull(output).equals("null")){
+								responseValue += output;
+							}
+						}
+						br.close();
+						
+						JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+						JSONArray jsonArray = jsonObj.getJSONArray("files");
+						itemInfoMap.put("fileCount", jsonArray.size());
+					}
+					
+				}
+				
+			} else {
+				if(itemType.equals("folder")){
+					itemInfoMap.put("name", "HOME");
+					
+					getFolderListUrl = "/api/folder/list";
+					getFileListUrl = "/api/file/list";
+					
+					if(!"".equals(getFolderListUrl)){
+						
+						String  responseValue = "";
+						
+						String getFolderCountIcebreakerUrl = icebreakerUrl + getFolderListUrl;
+						URL getFolderUrl = new URL(getFolderCountIcebreakerUrl);
+						
+						HttpURLConnection getFolderConn = (HttpURLConnection) getFolderUrl.openConnection();
+						
+						getFolderConn.setDoOutput(true);
+						getFolderConn.setRequestMethod("GET");
+						getFolderConn.setRequestProperty("Accept", "application/json");
+						getFolderConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+						
+						if (getFolderConn.getResponseCode() == 200) {
+							String output = "";
+							BufferedReader br = new BufferedReader(new InputStreamReader((getFolderConn.getInputStream())));
+							while ((output = br.readLine()) != null) {
+								if(!CustomUtil.strNull(output).equals("null")){
+									responseValue += output;
+								}
+							}
+							br.close();
+							
+							JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+							JSONArray jsonArray = jsonObj.getJSONArray("files");
+							itemInfoMap.put("folderCount", jsonArray.size());
+						}
+							
+					}
+					
+					if(!"".equals(getFileListUrl)){
+						
+						String  responseValue = "";
+						
+						String getFileCountIcebreakerUrl = icebreakerUrl + getFileListUrl;
+						URL getFileUrl = new URL(getFileCountIcebreakerUrl);
+						
+						HttpURLConnection getFileConn = (HttpURLConnection) getFileUrl.openConnection();
+						
+						getFileConn.setDoOutput(true);
+						getFileConn.setRequestMethod("GET");
+						getFileConn.setRequestProperty("Accept", "application/json");
+						getFileConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+						
+						if (getFileConn.getResponseCode() == 200) {
+							String output = "";
+							BufferedReader br = new BufferedReader(new InputStreamReader((getFileConn.getInputStream())));
+							while ((output = br.readLine()) != null) {
+								if(!CustomUtil.strNull(output).equals("null")){
+									responseValue += output;
+								}
+							}
+							br.close();
+							
+							JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+							JSONArray jsonArray = jsonObj.getJSONArray("files");
+							itemInfoMap.put("fileCount", jsonArray.size());
+						}
+						
+					}
+					
+				}
+			}
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		return itemInfoMap;
 	}
 }

@@ -1,0 +1,19 @@
+/* FILE MANAGER STYLES */
+
+.navbar {
+    margin-bottom: none;
+}
+
+.navbar-brand {
+    background-color: #e5e5e5;
+}
+
+.navbar-brand img {
+    width: 22px;
+    height: auto;
+}
+.breadcrumb{
+    margin-bottom: 0;
+}
+
+/* END OF FILE MANAGER STYLES */
