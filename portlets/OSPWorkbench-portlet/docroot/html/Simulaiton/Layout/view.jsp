@@ -321,14 +321,20 @@ $(function(e) {
 				$(equalDiv).css("width",objectLeftPositon+"%");
 				$(RemainderDiv).css("width",objectRightPositon+"%");
 			}else{
-				var offsetTop = e.clientY-container.offset().top;
-				var offsetBottom = container.height() - offsetTop;
-				$(object).css("top",offsetTop+"px");
-				$(equalDiv).find("div.sub-col").css("height",offsetTop+"px");
-				$(RemainderDiv).find("div.sub-col").css("height",offsetBottom+"px");
+				var offsetTop = e.pageY-container.offset().top;
+				var moveTop = Math.round(offsetTop / container.height() * 100);
 				
-// 				$(equalDiv).find("div.sub-col iframe").css("height",offsetTop - 74);
-// 				$(RemainderDiv).find("div.sub-col iframe").css("height",offsetBottom - 74);
+				var objectBottomPositon = 100-moveTop;
+				if(objectBottomPositon<20){
+					objectBottomPositon = 20;
+				}else if(objectBottomPositon>80){
+					objectBottomPositon = 80;
+				}
+				var objectTopPositon = 100-objectBottomPositon;
+				
+				$(equalDiv).css("height",objectTopPositon+"%");
+				$(RemainderDiv).css("height",objectBottomPositon+"%");
+				$(object).css("top",objectTopPositon+"%");
 			}
 			
 		}

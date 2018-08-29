@@ -631,26 +631,26 @@ throw new Error('AdminLTE requires jQuery')
     }
     
     //WorkBench Height Setting - GPLUS
-    var rowCnt = $('#workbench-layout-area  .layout-grid').length;
-    var contentWrapperHeight = $(Selector.contentWrapper).height();
-    var contentHeaderHeight = $('.content-header').outerHeight(true);
-    
-    if(rowCnt!=0){
-    	var $subCols = $('#workbench-layout-area div.sub-col');
-    	if($subCols.css("height")=='0px'){
-    		var $subCol = $('#workbench-layout-area div.sub-col');
-    		$subCol.each(function(e){
-    			if($(this).css('height')=="100%"){
-    				$(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
-    			}else{
-    				$(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight) / rowCnt));
-    			}
-    		});
-    	}
-    }
+//    var rowCnt = $('#workbench-layout-area  .layout-grid').length;
+//    var contentWrapperHeight = $(Selector.contentWrapper).height();
+//    var contentHeaderHeight = $('.content-header').outerHeight(true);
+//    
+//    if(rowCnt!=0){
+//    	var $subCols = $('#workbench-layout-area div.sub-col');
+//    	if($subCols.css("height")=='0px'){
+//    		var $subCol = $('#workbench-layout-area div.sub-col');
+//    		$subCol.each(function(e){
+//    			if($(this).css('height')=="100%"){
+//    				$(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
+//    			}else{
+//    				$(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight) / rowCnt));
+//    			}
+//    		});
+//    	}
+//    }
     
     //FLOW-GRID
-    $('#workbench-layout-area  .flow-grid div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
+//    $('#workbench-layout-area  .flow-grid div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
   };
 
   Layout.prototype.fixSidebar = function () {
