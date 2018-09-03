@@ -88,8 +88,8 @@ var xmn, ymn, zmn;
 var P_max=-1e1000, P_min=1e1000;  
 var R_max=-1e1000, R_min=1e1000;
 
-var Pallet_P =new Array(11);
-var Pallet_R =new Array(11);
+var Pallet_P =new Array(11);  // potential
+var Pallet_R =new Array(11);  // Rho
 
 var Dxx, Dyy, Dzz;
 
@@ -412,7 +412,7 @@ function loadEPData( data ){
 				
 					break;
 				case 'EP_data':	parseEPData( lines.slice(start, end));	break;
-				case 'EF_data':	parseEFData( lines.slice(start, end));	break;
+				//case 'EF_data':	parseEFData( lines.slice(start, end));	break;
 				case 'Rho_data': parseRhoData( lines.slice(start, end)); break;
 				case 'params': parseParams( lines.slice(start, end)); break;
 				default:	alert( 'File type mismatch......');
@@ -565,6 +565,7 @@ container_elem=document.getElementById("container");
 
 function load_AtomCoor(data)
 {
+	console.log("[YEJIN]Test Viewer load ", data);
 	removeAllObjects();
 	
 	//Define_P_Atoms(N_Atoms_max);
@@ -1238,13 +1239,15 @@ function setArrows( plateId )
 	};
 	function parseEPData ( dataLines ){
 		
+//--------------- to get V field  --------------
+		
 		if(ON_save_P===0) return;
 			
 		var time = '0';
-		var xi, yi, zi, md;
+		var xi_L, yi_L, zi_L, md;
 		var c1=0.25, c2=0.50, c3=0.75;
 		var R_col, G_col, B_col;
-		var Norm_func;
+		var func= new Array(N_nod);
 		
 		Vertices[time] = [];
 		
@@ -1252,30 +1255,108 @@ function setArrows( plateId )
 			var line = dataLines[i];
 		//	var values = line.split(',');
 			
-			xi = i/Nzy; md = i%Nzy ; 
-			yi = md/Nz; 
-			zi = md%Nz; 
+			xi_L = i/Nzy; md = i%Nzy ; 
+			yi_L = md/Nz; 
+			zi_L = md%Nz; 
 		
-			Norm_func=parseFloat(line);			
+			func[i]=parseFloat(line);			
 		
-			if(Norm_func>c3 && Norm_func<=1.0) { R_col= 1.0                    ; G_col= (1.0-Norm_func)/(1.0-c3) ; B_col= 0.0                    ; }
-       else if(Norm_func>c2 && Norm_func<=c3 ) { R_col= (Norm_func-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
-       else if(Norm_func>c1 && Norm_func<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-Norm_func)/(c2-c1) ; }
-       else if(Norm_func>=0 && Norm_func<=c1 ) { R_col= 0.0                    ; G_col= (Norm_func-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
-    		
+			if(func[i]>c3 && func[i]<=1.0) { R_col= 1.0                    ; G_col= (1.0-func[i])/(1.0-c3) ; B_col= 0.0                    ; }
+       else if(func[i]>c2 && func[i]<=c3 ) { R_col= (func[i]-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
+       else if(func[i]>c1 && func[i]<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-func[i])/(c2-c1) ; }
+       else if(func[i]>=0 && func[i]<=c1 ) { R_col= 0.0                    ; G_col= (func[i]-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
 			
 			var vertex = {};
-			vertex.x = xi*dx_g;
-			vertex.y = yi*dy_g;
-			vertex.z = zi*dz_g;
+			vertex.x = xi_L*dx_g;
+			vertex.y = yi_L*dy_g;
+			vertex.z = zi_L*dz_g;
 			vertex.cr = R_col;
 			vertex.cg = G_col;
 			vertex.cb = B_col;
-			vertex.p = Norm_func;   
+			vertex.p = func[i];   
 			
 			Vertices[time].push( vertex );			
 			
 		}
+		
+		//--------------- to get E field  --------------
+		
+		var ord = new Array(Nx);
+	
+		for(var i=0; i<Nx; i++) ord[i]    = new Array(Ny);
+		for(var i=0; i<Nx; i++)
+		for(var j=0; j<Ny; j++) ord[i][j] = new Array(Nz);
+		
+		var grad_fx = new Array(N_nod);
+		var grad_fy = new Array(N_nod);
+		var grad_fz = new Array(N_nod);
+		
+		var grad_fx_mx=-1e+100, grad_fy_mx=-1e+100, grad_fz_mx=-1e+100;
+		var grad_fx_mn= 1e+100, grad_fy_mn= 1e+100, grad_fz_mn= 1e+100;
+
+		for(var i=0;i<N_nod;i++)
+		{
+			var dummy;		
+			xi_L    = parseInt(i / (Ny*Nz)) ; dummy = i % (Ny*Nz);
+			yi_L    = parseInt(dummy / Nz)  ;   
+			zi_L    = dummy % Nz  ;
+			ord[xi_L][yi_L][zi_L] = zi_L + Nz*yi_L + Nz*Ny*xi_L ;	
+		}
+
+		var	Norm_dx = dx_g/(xmx-xmn) ;
+		var	Norm_dy = dy_g/(ymx-ymn) ;
+		var	Norm_dz = dz_g/(zmx-zmn) ;
+
+		for(var i=0;i<N_nod;i++)
+		{
+
+			var dummy;	
+
+			xi_L  = parseInt(i / (Ny*Nz)) ; dummy = i % (Ny*Nz);
+			yi_L  = parseInt(dummy / Nz)  ;   
+			zi_L  = dummy % Nz  ;
+
+	     	if (xi_L==0 || xi_L==Nx-1) grad_fx[i] = 0; else grad_fx[i] = ( func[ord[xi_L+1][yi_L][zi_L]] - func[ord[xi_L-1][yi_L][zi_L]] ) / dx_g;
+			if (yi_L==0 || yi_L==Ny-1) grad_fy[i] = 0; else grad_fy[i] = ( func[ord[xi_L][yi_L+1][zi_L]] - func[ord[xi_L][yi_L-1][zi_L]] ) / dy_g;
+			if (zi_L==0 || zi_L==Nz-1) grad_fz[i] = 0; else grad_fz[i] = ( func[ord[xi_L][yi_L][zi_L+1]] - func[ord[xi_L][yi_L][zi_L-1]] ) / dz_g;
+
+	    	if(grad_fx[i]> grad_fx_mx) grad_fx_mx = grad_fx[i]; if(grad_fx[i]< grad_fx_mn) grad_fx_mn = grad_fx[i];
+			if(grad_fy[i]> grad_fy_mx) grad_fy_mx = grad_fy[i]; if(grad_fy[i]< grad_fy_mn) grad_fy_mn = grad_fy[i];
+			if(grad_fz[i]> grad_fz_mx) grad_fz_mx = grad_fz[i]; if(grad_fz[i]< grad_fz_mn) grad_fz_mn = grad_fz[i];
+	
+		}
+
+		var	diffx_mx = grad_fx_mx - grad_fx_mn;
+		var	diffy_mx = grad_fy_mx - grad_fy_mn;
+		var	diffz_mx = grad_fz_mx - grad_fz_mn;
+
+		var	grad_lim=16.0;
+		
+		for(i=0;i<N_nod;i++)
+		{
+
+			var dummy;	
+		
+			var Norm_grad_x, Norm_grad_y, Norm_grad_z;
+
+			xi_L    = parseInt(i / (Ny*Nz)) ; dummy = i % (Ny*Nz);
+			yi_L    = parseInt(dummy / Nz)  ;   
+			zi_L    = dummy % Nz  ;	
+
+			Norm_grad_x = -grad_fx[i]/diffx_mx ; if (Math.abs(Norm_grad_x)>grad_lim*Norm_dx) Norm_grad_x = Norm_grad_x/Math.abs(Norm_grad_x)*grad_lim*Norm_dx ;
+			Norm_grad_y = -grad_fy[i]/diffy_mx ; if (Math.abs(Norm_grad_y)>grad_lim*Norm_dy) Norm_grad_y = Norm_grad_y/Math.abs(Norm_grad_y)*grad_lim*Norm_dy ;
+			Norm_grad_z = -grad_fz[i]/diffz_mx ; if (Math.abs(Norm_grad_z)>grad_lim*Norm_dz) Norm_grad_z = Norm_grad_z/Math.abs(Norm_grad_z)*grad_lim*Norm_dz ;
+				
+//				fprintf(fw, "%.2e, %.2e, %.2e\n",  Norm_grad_x, Norm_grad_y, Norm_grad_z );
+
+            var xyz = {
+				x: Norm_grad_x,
+				y: Norm_grad_y,
+				z: Norm_grad_z
+			};
+			Grad.push( xyz );			
+        }
+
 		
 	};
 	function parseEFData ( dataLines ){
@@ -1302,7 +1383,7 @@ function setArrows( plateId )
 		var xi, yi, zi, md;
 		var c1=0.25, c2=0.50, c3=0.75;
 		var R_col, G_col, B_col;
-		var Norm_func;
+		var func;
 
 		
 		Rhos[time] = [];
@@ -1314,12 +1395,12 @@ function setArrows( plateId )
 			yi = md/Nz; 
 			zi = md%Nz; 
 		
-			Norm_func=parseFloat(line);			
+			func=parseFloat(line);			
 		
-			if(Norm_func>c3 && Norm_func<=1.0) { R_col= 1.0                    ; G_col= (1.0-Norm_func)/(1.0-c3) ; B_col= 0.0                    ; }
-       else if(Norm_func>c2 && Norm_func<=c3 ) { R_col= (Norm_func-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
-       else if(Norm_func>c1 && Norm_func<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-Norm_func)/(c2-c1) ; }
-       else if(Norm_func>=0 && Norm_func<=c1 ) { R_col= 0.0                    ; G_col= (Norm_func-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
+			if(func>c3 && func<=1.0) { R_col= 1.0                    ; G_col= (1.0-func)/(1.0-c3) ; B_col= 0.0                    ; }
+       else if(func>c2 && func<=c3 ) { R_col= (func-c2)/(c3-c2) ; G_col=  1.0                     ; B_col= 0.0                    ; }
+       else if(func>c1 && func<=c2 ) { R_col= 0.0                    ; G_col=  1.0                     ; B_col= (c2-func)/(c2-c1) ; }
+       else if(func>=0 && func<=c1 ) { R_col= 0.0                    ; G_col= (func-0.0)/(c1-0.0) ; B_col= 1.0                    ; }
 			
 			//var rhos = line.split(',');	
 			
@@ -1336,7 +1417,7 @@ function setArrows( plateId )
 			vertex.cr = R_col;
 			vertex.cg = G_col;
 			vertex.cb = B_col;
-			vertex.p = Norm_func; 
+			vertex.p = func; 
 			Rhos[time].push( vertex );			
 			
 		}
@@ -1875,7 +1956,7 @@ function onDocumentMouseClick()
 		for( var i=0; i<N_Atoms; i++ )
 		{			
 			if(P_Atoms[0][i][5]==1) continue;
-			struc_string+=P_Atoms[0][i][2]/mmx +" "+P_Atoms[0][i][3]/mmx+" "+P_Atoms[0][i][4]/mmx+" "+spe_i[P_Atoms[0][i][1]]+"\n";	
+			struc_string+=(P_Atoms[0][i][2]/mmx).toFixed(5) +" "+(P_Atoms[0][i][3]/mmx).toFixed(5)+" "+(P_Atoms[0][i][4]/mmx).toFixed(5)+" "+spe_i[P_Atoms[0][i][1]]+"\n";
 		}
 				
 		struc_string+="%endblock AtomicCoordinatesAndAtomicSpecies\n";
@@ -1886,7 +1967,7 @@ function onDocumentMouseClick()
 		struc_string+="0 0 1\n";
 		struc_string+="%endblock SuperCell\n";
 		
-		console.log("[Atom Analyzer] mouse click event, befre fireSendStrucEvent : ");
+		console.log("[Atom Analyzer] mouse click event, befre fireSendStrucEvent : ", struc_string);
 		fireSendStrucEvent(struc_string);
 		
 
@@ -2081,7 +2162,7 @@ function Button_Addition_Atom()
 			for( var i=0; i<N_Atoms; i++ )
 			{			
 				if(P_Atoms[0][i][5]==1) continue;
-				struc_string+=P_Atoms[0][i][2]/mmx +" "+P_Atoms[0][i][3]/mmx+" "+P_Atoms[0][i][4]/mmx+" "+spe_i[P_Atoms[0][i][1]]+"\n";	
+				struc_string+=(P_Atoms[0][i][2]/mmx).toFixed(5) +" "+(P_Atoms[0][i][3]/mmx).toFixed(5)+" "+(P_Atoms[0][i][4]/mmx).toFixed(5)+" "+spe_i[P_Atoms[0][i][1]]+"\n";	
 			}
 					
 			struc_string+="%endblock AtomicCoordinatesAndAtomicSpecies\n";
@@ -2355,7 +2436,7 @@ function Write_input()
 	document_string +="<input type='checkbox' id='CBox_Addition_Atom' onclick='CBox_Addition_Atom()'> <button onclick=\"Button_Addition_Atom()\">Addition an atom</button> ";
 	document_string +="</td>";
 	document_string +="<td>";
-	document_string +="<input id='Addition_atom_Name' type='text' value='U' size='2' oninput=\"change_Addition_atom()\" >";
+	document_string +="<input id='Addition_atom_Name' type='text' value='H' size='2' oninput=\"change_Addition_atom()\" >";
 	document_string +="</td>";
 	document_string +="</tr>";
 	document_string +="<tr>";
@@ -2433,11 +2514,11 @@ function setNamespace(ns) {
 }
 
 function fireSendStrucEvent(data){
-	console.log("[ATOM ANALYZER] fire send data in viewer ", atomAnalyzerNamespace);
+	console.log("[ATOM ANALYZER] fire send data in viewer ", data);
 	setTimeout(
 			function(){
 				if( atomAnalyzerNamespace ){
-					console.log("[ATOM ANALYZER] fire event in click(viewer file) :" , data);
+					console.log("[ATOM EDITOR]Receive_Struc_from_Viewer:" , data);
 					window.parent[atomAnalyzerNamespace+'Send_Struc_to_Editor']( data );
 				}
 				else{

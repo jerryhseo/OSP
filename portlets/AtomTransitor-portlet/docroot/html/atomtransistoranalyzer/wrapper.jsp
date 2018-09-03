@@ -326,14 +326,13 @@ Liferay.on(
 );
 
 Liferay.on(
-       	'Receive_Struc_from_Editor',
-       	function( e ){
-       		console.log('Receive_Struc_from_Editor: ', e.data );
-       		var object = e.data;
-       		
-       		<portlet:namespace/>Send_Struc_to_S( object );
-       	}
-       );
+	'Receive_Struc_from_Editor',
+	function( e ){
+		console.log('Receive_Struc_from_Editor: ', e.data );
+		var object = e.data;
+		<portlet:namespace/>Send_Struc_to_S( object );
+     }
+);
 
 /*******************************************************************
  * Golbal functions
@@ -454,7 +453,7 @@ function <portlet:namespace/>fireReceiveStrucEvent( data )//??
 				else{
 					<portlet:namespace/>Send_Struc_to_S( data );
 				}
-			}, 
+			}, Send_Struc_to_Editor
 			10
 		);
 	*/

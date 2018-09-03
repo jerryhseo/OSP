@@ -29,7 +29,7 @@
 <body style="width:100%; height:100%">
 
 
-<textarea id='fdf_file' style="width:100%; height:100%"  rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" oninput="javascript:fireTextChangedEvent()" ></textarea>
+<textarea id='fdf_file' style="width:100%; height:100%"  rows="60" cols="80" style="font-family:Courier New;font-weight: bold; font-size: 14px;" ></textarea>
 
 <script>
 var fdf_text="";
@@ -57,6 +57,16 @@ var inputs = new Array();
 function setNamespace(ns) {
   namespace = ns;
 }
+
+
+$('#fdf_file').keyup(function(){
+	console.log("[ATOM EDITOR] fireTextChangedEvent() on change event ");
+	fireTextChangedEvent();
+});
+
+
+
+
 function fireTextChangedEvent(){
 	console.log('[ATOM EDITOR] fireTextChangedEvent() ', namespace);
 	setTimeout(
@@ -79,6 +89,7 @@ function load_FDF_S( data ){
 }
 	
 function load_struc_from_P( data ){
+	console.log("[Yejin Test]load structure :", data);
 	var replace_string = new Array();
 	var replace_i=0;
 	var N_atoms, N_Species;
@@ -191,7 +202,8 @@ function load_struc_from_P( data ){
     	
        
     	document.getElementById('fdf_file').value=modified_fdf;		
-	}
+
+}
 		
 	
 function getParameters()

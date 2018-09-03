@@ -35,12 +35,12 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 				<!-- Link or button to toggle dropdown -->
 				<ul class="dropdown-menu dropdown-menu-right">
 					<li><a href="javascript:<portlet:namespace/>takeSample();"><i class="icon-file"> Sample</i></a></li>
-					<li><a href="javascript:$('#<portlet:namespace/>selectFile').click();"><i class="icon-folder-open"> Open local...</i></a></li>
+					<li><a href="javascript:<portlet:namespace/>openLocalFile();"><i class="icon-folder-open"> Open local...</i></a></li>
 					<li><a href="javascript:<portlet:namespace/>openFileExplorer();"><i class="icon-folder-open"> Open server...</i></a></li>					 
 				</ul>				
 			</div>
 			<div class="text-right">
-				<input type="checkbox" id="CC_Struc" value=" View the input structure" onclick="<portlet:namespace/>fireTextChangedEvent()">
+				<input type="checkbox" id="CC_Struc" value=" View the input structure">
 				View the input structure
 			</div>
 		</div>	
@@ -67,7 +67,24 @@ boolean eventEnable = GetterUtil.getBoolean(renderRequest.getAttribute("eventEna
 /***********************************************************************
  * Global variables section
  ***********************************************************************/
+ $("#CC_Struc").click(function(){
+	 <portlet:namespace/>checkViewStructure();
+ });
+ $("#CC_Struc").change(function(){
+	 <portlet:namespace/>checkViewStructure();
+ });
 
+ 
+
+function <portlet:namespace/>checkViewStructure(){
+	console.log("Yejin Checkbox checked :", $("#CC_Struc").is(':checked'));
+
+	if($("#CC_Struc").is(':checked')){
+		<portlet:namespace/>ViewStructure();
+	}
+}
+
+ 
 <portlet:namespace/>passNamespace();
 
 var <portlet:namespace/>connector = 'broadcast';
@@ -131,6 +148,9 @@ $("#<portlet:namespace/>file-explorer-cancel").click(function(e){
 	$<portlet:namespace/>fileExplorerDialogSection.dialog( 'close' );
 });
 
+function <portlet:namespace/>openLocalFile(){
+	 $('#<portlet:namespace/>selectFile').click();
+}
 
 
 /***********************************************************************
@@ -683,16 +703,13 @@ function <portlet:namespace/>displayEPData( data ){
     );
 }
 
-
-
-
 function <portlet:namespace/>fireTextChangedEvent( data ){
 	console.log('[ATOM EDITOR]test change event fire1 ', data );
 	console.log('[ATOM EDITOR]test change event fire2 ', <portlet:namespace/>initData );
-	console.log('[ATOM EDITOR]test change event fire3 ', <portlet:namespace/>initData.repositoryType_ );
-	//$('#<portlet:namespace/>').click();
-	//if(document.getElementById("CC_Struc").checked)	
-		<portlet:namespace/>ViewStructure();
+	console.log('[ATOM EDITOR]test change event fire3 ', <portlet:namespace/>connector );
+	
+	
+	<portlet:namespace/>checkViewStructure();
 
 		var inputData = new OSP.InputData();
 		inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
@@ -714,123 +731,75 @@ function <portlet:namespace/>fireTextChangedEvent( data ){
 		     			targetPortlet: <portlet:namespace/>connector,
 		     			data: OSP.Util.toJSON(inputData)
 		};
+		console.log('[ATOM EDITOR]test change event fire4 ', data); 
 		Liferay.fire( OSP.Event.OSP_DATA_CHANGED, eventData );
+		<portlet:namespace/>checkViewStructure();
 }
 
+function <portlet:namespace/>ViewStructure(){
+	var iframe = document.getElementById('<portlet:namespace/>TBox');
+	var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+	var data=iframe.contentWindow.getParameters();
+	var N_atoms;
+	var N_Species;
+	var Lattice_C, unit ;
+	var ChemicalSpeciesLabel_start_i, ChemicalSpeciesLabel_end_i;	
+	var LatticeVectors_start_i, LatticeVectors_end_i ;
+	var AtomCoor_start_i, AtomCoor_end_i ;
+	var SuperCell_start_i, SuperCell_end_i ;		
+	var lines = data.split('\n');			
 
-
-
-
-
-
-
-
-
-		function <portlet:namespace/>ViewStructure(){
-			
-			/*
-			if( $(this).is(":checked") === true ){
-				//view
-			}
-			else{
-				
-			}
-			*/
-			
-			
-		//	if( $(this).is(":checked") === false ) return;
-		
-		
-		
-		
-			
-	        var iframe = document.getElementById('<portlet:namespace/>TBox');
-			
-			var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-			
-		//	if( iframe.contentWindow.get_CC_Struc() === false ) return;
-							
-			var data=iframe.contentWindow.getParameters();
-			
-			
-						
-			var N_atoms ;
-			var N_Species;
-			
-			var Lattice_C, unit ;
-			
-			var ChemicalSpeciesLabel_start_i, ChemicalSpeciesLabel_end_i;	
-			var LatticeVectors_start_i, LatticeVectors_end_i ;
-			var AtomCoor_start_i            , AtomCoor_end_i ;
-			var SuperCell_start_i           , SuperCell_end_i ;		
-						
-			var lines = data.split('\n');			
-			
-			for( var index=0; index<lines.length; index++ ){
-				var line = lines[index].trim();				
-				if( !line )	continue;
-				
-				line=line.replace(/ +/g, " ");
-				
-				var keyVal = line.split(' ');
-				
-				if(keyVal[0] === 'NumberOfAtoms'  ) N_atoms   = Number(keyVal[1]);
-				
-				if(keyVal[0] === 'NumberOfSpecies') N_Species   = Number(keyVal[1]);
-				
-				if(keyVal[0] === 'LatticeConstant') {Lattice_C = Number(keyVal[1]); unit = keyVal[2]; }
-				
-				if(keyVal[1] === 'ChemicalSpeciesLabel') 
-				{
-				          if(keyVal[0] === '%block'   ) ChemicalSpeciesLabel_start_i = index ;
-					 else if(keyVal[0] === '%endblock') ChemicalSpeciesLabel_end_i   = index ;				 
-				}
-				
-				if(keyVal[1] === 'LatticeVectors')
-				{
-					     if(keyVal[0] === '%block'   ) LatticeVectors_start_i = index ;
-					else if(keyVal[0] === '%endblock') LatticeVectors_end_i   = index ;					
-				}
-							
-				if(keyVal[1] === 'AtomicCoordinatesAndAtomicSpecies')
-				{
-					     if(keyVal[0] === '%block'   ) AtomCoor_start_i = index ;
-					else if(keyVal[0] === '%endblock') AtomCoor_end_i   = index ;					
-				}
-				
-				if(keyVal[1] === 'SuperCell')
-				{
-					     if(keyVal[0] === '%block'   ) SuperCell_start_i = index ;
-					else if(keyVal[0] === '%endblock') SuperCell_end_i   = index ;
-					
-				}
-				
-			}
-			
-			
-			
-			
-			var seldata= "";
-			
-			seldata += "NumberOfAtoms "  + N_atoms   +"\n";
-			seldata += "NumberOfSpecies "+ N_Species +"\n";
-			
-			seldata += "LatticeConstant "+Lattice_C  +" "+unit+"\n";			
-			
-			for( var i=ChemicalSpeciesLabel_start_i; i<=ChemicalSpeciesLabel_end_i; i++ ) {	seldata += lines[i]+"\n";}
-			for( var i=LatticeVectors_start_i      ; i<=LatticeVectors_end_i      ; i++ ) {	seldata += lines[i]+"\n";}
-			for( var i=AtomCoor_start_i            ; i<=AtomCoor_end_i            ; i++ ) {	seldata += lines[i]+"\n"; }
-			for( var i=SuperCell_start_i           ; i<=SuperCell_end_i           ; i++ ) {	seldata += lines[i]+"\n";}
-			
-			var eventData = {
-					portletId: '<%=portletDisplay.getId()%>',
-					targetPortlet: <portlet:namespace/>connector,
-					data: seldata
-			};
-					
-			Liferay.fire('Receive_Struc_from_Editor', eventData );
-			
+	for( var index=0; index<lines.length; index++ ){
+		var line = lines[index].trim();
+		if( !line )	continue;
+		line=line.replace(/ +/g, " ");
+		var keyVal = line.split(' ');
+		if(keyVal[0] === 'NumberOfAtoms'  ) N_atoms   = Number(keyVal[1]);
+		if(keyVal[0] === 'NumberOfSpecies') N_Species   = Number(keyVal[1]);
+		if(keyVal[0] === 'LatticeConstant'){
+			Lattice_C = Number(keyVal[1]); unit = keyVal[2]; 
 		}
+				
+		if(keyVal[1] === 'ChemicalSpeciesLabel') 
+		{
+			if(keyVal[0] === '%block'   ) ChemicalSpeciesLabel_start_i = index ;
+			else if(keyVal[0] === '%endblock') ChemicalSpeciesLabel_end_i   = index ;				 
+		}
+		if(keyVal[1] === 'LatticeVectors')
+		{
+			if(keyVal[0] === '%block'   ) LatticeVectors_start_i = index ;
+			else if(keyVal[0] === '%endblock') LatticeVectors_end_i   = index ;					
+		}					
+		if(keyVal[1] === 'AtomicCoordinatesAndAtomicSpecies')
+		{
+		    if(keyVal[0] === '%block'   ) AtomCoor_start_i = index ;
+			else if(keyVal[0] === '%endblock') AtomCoor_end_i   = index ;					
+		}
+		if(keyVal[1] === 'SuperCell')
+		{
+			if(keyVal[0] === '%block'   ) SuperCell_start_i = index ;
+			else if(keyVal[0] === '%endblock') SuperCell_end_i   = index ;	
+		}			
+	}
+					
+	var seldata= "";
+	seldata += "NumberOfAtoms "  + N_atoms   +"\n";
+	seldata += "NumberOfSpecies "+ N_Species +"\n";		
+	seldata += "LatticeConstant "+Lattice_C  +" "+unit+"\n";			
+			
+	for( var i=ChemicalSpeciesLabel_start_i; i<=ChemicalSpeciesLabel_end_i; i++ ) {	seldata += lines[i]+"\n";}
+	for( var i=LatticeVectors_start_i      ; i<=LatticeVectors_end_i      ; i++ ) {	seldata += lines[i]+"\n";}
+	for( var i=AtomCoor_start_i            ; i<=AtomCoor_end_i            ; i++ ) {	seldata += lines[i]+"\n"; }
+	for( var i=SuperCell_start_i           ; i<=SuperCell_end_i           ; i++ ) {	seldata += lines[i]+"\n";}
+			
+	var eventData = {
+		portletId: '<%=portletDisplay.getId()%>',
+		targetPortlet: <portlet:namespace/>connector,
+		data: seldata
+	};
+					
+	Liferay.fire('Receive_Struc_from_Editor', eventData );
+}
 
 
 
