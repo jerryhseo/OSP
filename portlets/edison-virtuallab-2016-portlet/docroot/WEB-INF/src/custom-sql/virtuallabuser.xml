@@ -31,8 +31,6 @@
 						AND
 							BB.testYn = 0 
 						AND 
-							AA.jobPhase = 1301003
-						AND 
 							BB.scienceAppId=DD.scienceAppId
 						<isNotEmpty property="classId">
 							AND 
