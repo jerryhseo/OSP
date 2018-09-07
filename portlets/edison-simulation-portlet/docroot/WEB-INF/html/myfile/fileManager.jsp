@@ -50,7 +50,7 @@
 <title>jQuery File Manager</title>
 
 <!-- File manager CSS & JS -->
-<link media="all" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.css" />
+<link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/bootstrap.css" />
 <link media="all" rel="stylesheet" href="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.css" />
 <link href="${contextPath}/css/fileManager/contextMenu.css" rel="stylesheet" type="text/css" />
 <link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/default.css" />
@@ -61,12 +61,11 @@
 <script src="${contextPath}/js/fileManager/jquery-1.10.2.min.js"></script>
 <script src="${contextPath}/js/fileManager/jquery-1.11.4-ui.min.js"></script>
 <script src="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="${contextPath}/js/fileManager/contextMenu.js"></script>
 <script src="${contextPath}/js/fileManager/services.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/fileManager/jquery-confirm.js"></script>
+<link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/jquery-confirm.css" />
 
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
 <script src="${contextPath}/js/toastr.min.js"></script>
@@ -185,7 +184,9 @@
 	</ol>
 	
 	<!-- Folder, File List -->
-	<div class="explorer file-manager-body"></div>
+	<div class="explorer file-manager-body">
+		
+	</div>
 	
 	<div id="fileDownloadIframe"> </div>
 	
@@ -801,9 +802,13 @@
 			$("#<portlet:namespace/>searchKeyword").val("");
 			$(".fileManager_searchNode").show();
 		} else {
+			var searchDataUpper = input.toUpperCase();
+			var searchDataLower = input.toLowerCase();
+			
 			$(".fileManager_searchNode").hide();
 			//Search된 값에 해당하는 File만 display
-			$(".fileManager_searchNode[node_name*="+input+"]").show();
+			$(".fileManager_searchNode[node_name*="+searchDataUpper+"]").show();
+			$(".fileManager_searchNode[node_name*="+searchDataLower+"]").show();
 		}
 	}
 	

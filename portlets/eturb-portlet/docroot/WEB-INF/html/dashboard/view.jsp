@@ -6,13 +6,13 @@
 
 <script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 <script src="${contextPath}/js/dashboard/dashboard.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/jquery-confirm.min.js"></script>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstree/themes/proton/style.css" media="screen"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/bootstrap-panel.css" media="screen"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="${contextPath}/css/font-awesome.min.css">
 
 <style>
 
