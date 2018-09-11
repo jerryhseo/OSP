@@ -423,7 +423,7 @@
 					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId,simulation.classId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
 					                      FROM EDSIM_Simulation simulation 
 					                      INNER JOIN EDSIM_SimulationJob job on simulation.simulationUuid = job.simulationUuid 
-					                      WHERE simulation.groupId = #groupId# AND (
+					                      WHERE (
 					                                                  	STR_TO_DATE(jobStartDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
 					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
 					                                                  )
