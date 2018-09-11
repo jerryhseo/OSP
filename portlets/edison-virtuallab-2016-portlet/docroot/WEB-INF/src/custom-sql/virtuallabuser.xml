@@ -6,6 +6,20 @@
 		<![CDATA[
 			SELECT
 				B.*,
+				(SELECT COUNT(*)
+					FROM   
+						EDVIR_SurveyQuestions_SurveyAnswers C, 
+						EDVIR_SurveyAnswer D
+					WHERE  
+						C.questionSeqNo = #questionSeqNo# 
+					AND 
+						C.SurveyAnswerId = D.SurveyAnswerId 
+					AND 
+						D.userId = B.userId 
+					AND 
+						D.classId = #classId# 
+					AND 
+						D.virtualLabId = #virtualLabId#) AS surveyCheck,
 				(SELECT IF(count(*) = 0,CONVERT('0(0/0)',char),CONVERT(CONCAT(COUNT(*),'(',SUM(if(AA.jobStatus = 1701011, 1, 0)),'/',SUM(if(AA.jobStatus = 1701012, 1, 0)),')'),char))
 					FROM 
 						EDSIM_SimulationJob AA INNER JOIN EDSIM_Simulation BB ON AA.simulationUuid = BB.simulationUuid,
