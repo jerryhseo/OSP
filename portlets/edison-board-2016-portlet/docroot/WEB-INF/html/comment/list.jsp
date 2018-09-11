@@ -336,7 +336,7 @@
 <script type="text/javascript" src="${contextPath}/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="${contextPath}/editor/ckeditor/ckeditor.js" charset="utf-8"></script> 
 <script type="text/javascript" src="${contextPath}/js/jquery.form.min.js" charset="utf-8"></script> 
-<script src="http://connect.facebook.net/en_US/all.js" language="JavaScript" type="text/javascript"></script>
+<!-- <script src="http://connect.facebook.net/en_US/all.js" language="JavaScript" type="text/javascript"></script> -->
 <link href="${contextPath}/css/comment.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript">

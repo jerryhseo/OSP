@@ -7,8 +7,8 @@
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil"%>
 
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link href="${contextPath}/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="${contextPath}/js/bootstrap-toggle.min.js"></script>
 
 <portlet:actionURL var="submitURL" copyCurrentRenderParameters="<%=false%>" name="appAction">
 	<portlet:param name="clickTab" value="${clickTab}"/>
