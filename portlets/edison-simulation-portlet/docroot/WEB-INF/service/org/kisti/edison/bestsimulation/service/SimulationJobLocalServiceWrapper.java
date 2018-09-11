@@ -622,6 +622,13 @@ public class SimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.Map<java.lang.String, java.lang.Object> getVirtualClassStatisticsSimulation(
+		java.lang.String scienceAppIdObj, java.lang.String virtualLabUsersIdObj) {
+		return _simulationJobLocalService.getVirtualClassStatisticsSimulation(scienceAppIdObj,
+			virtualLabUsersIdObj);
+	}
+
+	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStatisticsList(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale, boolean excelFile) {

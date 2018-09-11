@@ -483,6 +483,10 @@ public interface SimulationJobLocalService extends BaseLocalService,
 		throws java.lang.Exception;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.Map<java.lang.String, java.lang.Object> getVirtualClassStatisticsSimulation(
+		java.lang.String scienceAppIdObj, java.lang.String virtualLabUsersIdObj);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStatisticsList(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale, boolean excelFile);

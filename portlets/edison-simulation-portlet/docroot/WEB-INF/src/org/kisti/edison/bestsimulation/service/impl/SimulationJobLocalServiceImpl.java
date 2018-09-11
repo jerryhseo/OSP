@@ -1386,10 +1386,32 @@ public class SimulationJobLocalServiceImpl
 		return returnList;
 	}
 	
-	
-	
-	
-	
+	public Map<String, Object> getVirtualClassStatisticsSimulation(String scienceAppIdObj,String virtualLabUsersIdObj) {
+		
+		String[] scienceAppIds = StringUtil.split(scienceAppIdObj);
+		String[] userIds = StringUtil.split(virtualLabUsersIdObj);
+		
+		boolean searchList = false;
+		Map<String, Object> virtualClassStatisticsMap = new HashMap<String, Object>();
+		
+		if(scienceAppIds.length!=0&&userIds.length!=0){
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("userIds", userIds);
+			params.put("scienceAppIds", scienceAppIds);
+			
+			Object[] simulationMap = simulationJobFinder.getVirtualClassStatisticsSimulation(params);
+			
+			virtualClassStatisticsMap.put("executeUserCnt", simulationMap[0]);
+			virtualClassStatisticsMap.put("executeCnt", simulationMap[1]);
+			virtualClassStatisticsMap.put("cpuTime", simulationMap[2]);
+		}else{
+			virtualClassStatisticsMap.put("executeUserCnt", 0);
+			virtualClassStatisticsMap.put("executeCnt", 0);
+			virtualClassStatisticsMap.put("cpuTime", 0);
+		}
+		
+		return virtualClassStatisticsMap;
+	}
 	
 	public List<Map<String, Object>> getVirtualClassStatisticsList(Map<String, Object> params, Locale locale, boolean excelFile) {
 		List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassStatisticsList(params, locale);
@@ -1409,13 +1431,16 @@ public class SimulationJobLocalServiceImpl
 					String classTitle = (String) resultArray[4];
 					String virtualLabPersonName = (String) resultArray[5];
 					String classId = (String) resultArray[6];
-					int executeCount = (Integer) resultArray[7];
-					int executeStudentcount = (Integer) resultArray[8];
-					String scienceAppIdObj = CustomUtil.strNull(resultArray[9]);
-					int avgerageRuntime = (Integer) resultArray[10];
-					String classPersonnel = CustomUtil.strNull(resultArray[11]);
-					String classCreateDt = CustomUtil.strNull(resultArray[12]);
-					String registerStudentCtn = CustomUtil.strNull(resultArray[13]);
+					String scienceAppIdObj = CustomUtil.strNull(resultArray[7]);
+					String virtualLabUsersIdObj = CustomUtil.strNull(resultArray[8]);
+					String registerStudentCtn = CustomUtil.strNull(resultArray[9]);
+					String classCreateDt = CustomUtil.strNull(resultArray[10]);
+					
+					Map<String, Object> virtualClassStatisticsMap = SimulationJobLocalServiceUtil.getVirtualClassStatisticsSimulation(scienceAppIdObj, virtualLabUsersIdObj);
+					
+					String executeCount = CustomUtil.strNull(virtualClassStatisticsMap.get("executeCnt"),"0");
+					String executeStudentcount = CustomUtil.strNull(virtualClassStatisticsMap.get("executeUserCnt"),"0");
+					String avgerageRuntime = CustomUtil.strNull(virtualClassStatisticsMap.get("cpuTime"),"0");
 					
 					resultRow = new HashMap<String, Object>();
 					resultRow.put("groupId", groupId);
@@ -1434,7 +1459,7 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("classId", classId);
 					resultRow.put("executeCount", executeCount);
 					resultRow.put("executeStudentcount",executeStudentcount);
-					resultRow.put("classPersonnel",classPersonnel);
+//					resultRow.put("classPersonnel",classPersonnel);
 					resultRow.put("classCreateDt",classCreateDt);
 					resultRow.put("registerStudentCtn",registerStudentCtn);
 					
