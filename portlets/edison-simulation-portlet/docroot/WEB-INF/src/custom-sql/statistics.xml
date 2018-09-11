@@ -322,10 +322,55 @@
 	</sql>
 <!-- 5. User END -->
 
-
+	<sql id="org.kisti.edison.statistics.getVirtualClassStatisticsSimulation" >
+		SELECT 
+            COUNT(DISTINCT(SIM.userId)) AS executeUserCnt,
+            COUNT(SIMJOB.jobUuid) AS executeCnt,
+			ROUND(SUM(ROUND(UNIX_TIMESTAMP(SIMJOB.jobEndDt) - UNIX_TIMESTAMP(SIMJOB.jobStartDt),0))/COUNT(SIMJOB.jobUuid)) AS cpuTime
+        FROM
+			EDSIM_Simulation SIM,
+			EDSIM_SimulationJob SIMJOB
+        WHERE
+			SIM.userId IN (#userIds#)
+        AND
+			SIM.scienceAppId IN (#scienceAppIds#)
+        AND
+			SIM.simulationUuid = SIMJOB.simulationUuid
+		AND 
+			SIMJOB.jobSubmit = 1;
+	</sql>
 
 	<sql id="org.kisti.edison.statistics.getVirtualClassStatisticsList" >
-		<![CDATA[
+		
+		SELECT 
+			VL.groupId AS groupId,
+			VL.virtualLabUniversityField AS university,
+			VL.virtualLabId AS virtualLabId,
+			ExtractValue(VL.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
+			ExtractValue(VLC.classTitle, 'root/ClassTitle[@language-id="@@languageId@@"]') AS classTitle,
+			CONCAT(US.firstName, US.middleName, US.lastName) AS virtualLabPersonName,
+			VLC.virtualClassCd AS classId,
+			GROUP_CONCAT(distinct VLSAL.scienceAppId SEPARATOR ',') scienceAppId,
+			GROUP_CONCAT(distinct VLU.userId SEPARATOR ',') AS virtualLabUsersId,
+			COUNT(distinct VLU.userId) AS registerStudentCtn,
+			VLC.classCreateDt AS classCreateDt
+		FROM
+			EDVIR_VirtualLabs_VirtualLabClasses VLVLC
+			INNER JOIN EDVIR_VirtualLabClass VLC ON VLC.classId = VLVLC.classId
+			INNER JOIN EDVIR_VirtualLab VL ON VL.virtualLabId = VLVLC.virtualLabId
+			INNER JOIN EDVIR_Professor PF ON VL.professorSeq = PF.professorSeq
+			INNER JOIN User_ US ON PF.userId = US.userId
+			LEFT OUTER JOIN EDVIR_VirtualLabClasses_VirtualLabUsers VLCVLU ON VLVLC.classId = VLCVLU.classId
+			LEFT OUTER JOIN EDVIR_VirtualLabUser VLU ON VLCVLU.virtualLabUserId = VLU.virtualLabUserId
+			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLinkClass VLSALC ON VLVLC.classId = VLSALC.classId
+			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLink VLSAL on VLSALC.scienceAppSeqNo = VLSAL.scienceAppSeqNo
+		WHERE VLC.classUseYn = 'Y' AND VL.virtualLabUseYn='Y'
+		AND(
+				STR_TO_DATE(VLC.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+		)
+		GROUP BY university, virtualLabId, VLVLC.classId;
+		
+		<!-- <![CDATA[
 		SELECT 
 			B.groupId, 
 			B.university,
@@ -456,7 +501,7 @@
 			)B
 			GROUP BY B.university, B.virtualLabId ,B.classId
 			ORDER BY B.university, B.virtualLabId, B.classId			
-		]]>
+		]]> -->
 	</sql>
 	
 		

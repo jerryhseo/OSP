@@ -179,6 +179,11 @@ public class SimulationJobFinderUtil {
 		return getFinder().getVirtualClassStatisticsList(params, locale);
 	}
 
+	public static java.lang.Object[] getVirtualClassStatisticsSimulation(
+		java.util.Map params) {
+		return getFinder().getVirtualClassStatisticsSimulation(params);
+	}
+
 	public static int getCountVirtualClassStatistics(java.util.Map params,
 		java.util.Locale locale) {
 		return getFinder().getCountVirtualClassStatistics(params, locale);

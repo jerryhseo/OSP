@@ -591,6 +591,13 @@ public class SimulationJobLocalServiceUtil {
 			categoryId, languageId, locale);
 	}
 
+	public static java.util.Map<java.lang.String, java.lang.Object> getVirtualClassStatisticsSimulation(
+		java.lang.String scienceAppIdObj, java.lang.String virtualLabUsersIdObj) {
+		return getService()
+				   .getVirtualClassStatisticsSimulation(scienceAppIdObj,
+			virtualLabUsersIdObj);
+	}
+
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualClassStatisticsList(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		java.util.Locale locale, boolean excelFile) {
