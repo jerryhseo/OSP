@@ -428,7 +428,7 @@
 					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
 					                                                  )
 					                                                  AND simulation.testYn != true
-					  ) F ON F.userId = B.userId AND F.classId=B.classId
+					  ) F ON F.userId = B.userId
 					GROUP BY A.classId
 				)A
 				UNION
