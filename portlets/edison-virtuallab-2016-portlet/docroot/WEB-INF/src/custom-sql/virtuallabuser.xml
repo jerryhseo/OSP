@@ -29,7 +29,7 @@
 					WHERE 
 							BB.userId = B.userId
 						AND 
-							AA..jobSubmit = 1
+							AA.jobSubmit = 1
 						AND
 							BB.scienceAppId=DD.scienceAppId
 						<isNotEmpty property="classId">
