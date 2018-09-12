@@ -364,7 +364,7 @@
 			LEFT OUTER JOIN EDVIR_VirtualLabUser VLU ON VLCVLU.virtualLabUserId = VLU.virtualLabUserId
 			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLinkClass VLSALC ON VLVLC.classId = VLSALC.classId
 			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLink VLSAL on VLSALC.scienceAppSeqNo = VLSAL.scienceAppSeqNo
-		WHERE VLC.classUseYn = 'Y' AND VL.virtualLabUseYn='Y'
+		WHERE VL.groupId = #groupId# AND VLC.classUseYn = 'Y' AND VL.virtualLabUseYn='Y'
 		AND(
 				STR_TO_DATE(VLC.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
 		)
