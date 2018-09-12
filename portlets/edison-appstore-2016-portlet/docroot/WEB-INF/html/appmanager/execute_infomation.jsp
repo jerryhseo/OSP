@@ -284,13 +284,18 @@
 					<th><liferay-ui:message key="edison-appstore-compiler-upload-option"/> <liferay-ui:icon-help message="edison-appstore-compiler-upload-option-descriptive-message"/></th>
 					<td  colspan="3">
 						
+<<<<<<< HEAD
 						<aui:select name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
 <%-- 							<aui:option value="compile">With Compile</aui:option> --%>
+=======
+						<aui:select id="uploadSelect" name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
+							<aui:option value="compile">With Compile</aui:option>
+>>>>>>> work-local-imjeong
 							<aui:option value="upload">Upload</aui:option>
 						</aui:select>
 					</td>
 				</tr>
-				<tr id="selectByuploadSelect">
+				<tr id="selectByuploadSelect" style="display: none;">
 					<th><liferay-ui:message key="edison-appstore-compiler-upload-case"/> <liferay-ui:icon-help message="edison-appstore-compiler-upload-case-descriptive-message"/></th>
 					<td colspan="3" >
 						<aui:select name="uploadCaseSelect" label="" cssClass="noupdate">
@@ -300,7 +305,7 @@
 					</td>
 					
 				</tr>
-				<tr id="selectByCompileSelect">
+				<tr id="selectByCompileSelect" style="display: none;">
 					<th><liferay-ui:message key="edison-button-upload"/> <liferay-ui:icon-help message="edison-appstore-compiler-descriptive-message"/></th>
 					<td colspan="3" >
 						<aui:select name="gitUploadCaseSelect" label="" cssClass="noupdate" onChange="changeUploadCaseSelect('file');">
@@ -310,7 +315,7 @@
 					</td>
 					
 				</tr>
-				<tr id="<portlet:namespace/>uploadOption_upload" class="uploadOptionTr">
+				<tr id="<portlet:namespace/>uploadOption_upload" class="uploadOptionTr" style="display: none;">
 					<th><liferay-ui:message key='edison-science-appstore-exe-file' /></th>
 					<td>
 						<aui:input name="scienceAppFile" type="file" label="">
@@ -345,11 +350,11 @@
 						</span>
 					</td>
 				</tr>
-				<tr id="<portlet:namespace/>uploadOption_compile" class="uploadOptionTr">
+				<tr id="<portlet:namespace/>uploadOption_compile" class="uploadOptionTr" style="display: none;">
 					<th>EDISON GitHub URL</th>
 					<td colspan="3" ><a style="color:#00aaff" href="https://github.com/sp-edison" target="_blank">https://github.com/sp-edison</a></td>
 				</tr>
-				<tr id="<portlet:namespace/>uploadOption_compileUrl" class="uploadOptionTr">
+				<tr id="<portlet:namespace/>uploadOption_compileUrl" class="uploadOptionTr" style="display: none;">
 					<th>GitHub URL</th>
 					<td colspan="3">
 						<div class="input-group">
@@ -426,12 +431,15 @@ if(mode.equals(Constants.UPDATE)){
 		changeOpenLevel('${data.openLevel}');
 		changeRunType('${data.runType}');
 		changeAppType('${data.appType}');
-		changeUploadOption('');
 // 		<portlet:namespace/>noUpdateDisabled('${data.status}');
 	});
 <%}%>
 
 AUI().ready(function() {
+	
+	// Default 'With Compile' Selected
+	changeUploadOption('compile');
+		
 	<portlet:namespace/>searchRequestLib('1');
 	//파일 업로드 시  프로그래스바 설정
 	$("#progress_bar_wrap2").dialog({
@@ -781,7 +789,6 @@ function changeRunType(val){
 	}
 }
 
-
 function changeUploadOption(val){
 	$(".uploadOptionTr").hide();
 	$("#<portlet:namespace/>uploadGitHubInput").hide();
@@ -796,16 +803,23 @@ function changeUploadOption(val){
 		}
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
+<<<<<<< HEAD
 		
 	$("#<portlet:namespace/>uploadOption_"+val).show();
+=======
+	
+	$("#<portlet:namespace/>uploadOption_upload").show();
+>>>>>>> work-local-imjeong
 	if(val == "compile"){
 		// $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
-		$("#<portlet:namespace/>uploadOption_upload").show();
 		
-		if('${!empty scienceAppCompile.result}' == 'true') $("#<portlet:namespace/>uploadGitHubInput").show();
+		// Git Compile & URL Descrption Display None
+		//if('${!empty scienceAppCompile.result}' == 'true') $("#<portlet:namespace/>uploadGitHubInput").show();
+		
 		$("#selectByuploadSelect").hide();
 		$("#selectByCompileSelect").show();
 	}else{
+		// $("#<portlet:namespace/>uploadOption_"+val).show();
 		$("#selectByCompileSelect").hide();
 		$("#selectByuploadSelect").show();
 	}
