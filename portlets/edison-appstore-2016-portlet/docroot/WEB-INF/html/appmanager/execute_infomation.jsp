@@ -284,13 +284,8 @@
 					<th><liferay-ui:message key="edison-appstore-compiler-upload-option"/> <liferay-ui:icon-help message="edison-appstore-compiler-upload-option-descriptive-message"/></th>
 					<td  colspan="3">
 						
-<<<<<<< HEAD
-						<aui:select name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
-<%-- 							<aui:option value="compile">With Compile</aui:option> --%>
-=======
 						<aui:select id="uploadSelect" name="uploadSelect" label="" cssClass="noupdate" onChange="changeUploadOption(this.value);">
 							<aui:option value="compile">With Compile</aui:option>
->>>>>>> work-local-imjeong
 							<aui:option value="upload">Upload</aui:option>
 						</aui:select>
 					</td>
@@ -803,13 +798,8 @@ function changeUploadOption(val){
 		}
 		$("#<portlet:namespace/>uploadSelect").val(val);
 	}
-<<<<<<< HEAD
-		
-	$("#<portlet:namespace/>uploadOption_"+val).show();
-=======
 	
 	$("#<portlet:namespace/>uploadOption_upload").show();
->>>>>>> work-local-imjeong
 	if(val == "compile"){
 		// $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
 		
