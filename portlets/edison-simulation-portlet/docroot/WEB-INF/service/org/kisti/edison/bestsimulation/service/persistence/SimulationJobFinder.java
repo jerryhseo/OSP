@@ -100,6 +100,9 @@ public interface SimulationJobFinder {
 	public java.util.List<java.lang.Object[]> getVirtualClassStatisticsList(
 		java.util.Map params, java.util.Locale locale);
 
+	public java.lang.Object[] getVirtualClassStatisticsSimulation(
+		java.util.Map params);
+
 	public int getCountVirtualClassStatistics(java.util.Map params,
 		java.util.Locale locale);
 
