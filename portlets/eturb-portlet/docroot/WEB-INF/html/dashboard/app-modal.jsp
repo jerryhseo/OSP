@@ -134,8 +134,7 @@
 	</div>
 </div>
         
-<script>
-
+<script type="text/javascript">
 function <portlet:namespace/>exportApp(){
     $("#<portlet:namespace/>app-export-modal").modal("toggle")
     .css({

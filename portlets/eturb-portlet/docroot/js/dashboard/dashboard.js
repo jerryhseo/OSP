@@ -51,11 +51,33 @@
 		BC_TYPE_GROUP_1:'group1',
 		BC_TYPE_GROUP_2:'group2',
 		BC_TYPE_GROUP_3:'group3',
-		SHAPE_ANALYSIS_PARAM_APP:'KFOIL_AirFoil_Para',
+		getShapeAnalysisParamApp:function(site){
+			switch (site) {
+				case 'KFLOW':
+					return 'KFOIL_AirFoil_Para_KFLOW';
+				case 'ETURB':
+					return 'KFOIL_AirFoil_Para';
+			}
+		},
 		SHAPE_ANALYSIS_PARAM_VERSION:'1.0.0',
 		SHAPE_ANALYSIS_APP:'KFOIL_AirFoil_Para_parin',
+		getShapeAnalysisApp:function(site){
+			switch (site) {
+				case 'KFLOW':
+					return 'KFOIL_AirFoil_Para_parin_kflow';
+				case 'ETURB':
+					return 'KFOIL_AirFoil_Para_parin';
+			}
+		},
 		SHAPE_ANALYSIS_VERSION:'1.0.0',
-		MAKE_MESH_AERO_2D_APP:'Mesher',
+		getMakeMeshApp:function(site){
+			switch (site) {
+			case 'KFLOW':
+				return 'kflow_mesher';
+			case 'ETURB':
+				return 'Mesher';
+		}
+		},
 		MAKE_MESH_AERO_2D_VERSION:'1.0.0',
 		getControllTypes : function(nodeType){
 			var types = [];
