@@ -567,7 +567,7 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 	      query.addEntity("EDAPP_ScienceAppCategoryLink", ScienceAppCategoryLinkImpl.class);
 	      query.addEntity("EDAPP_ScienceApp", ScienceAppImpl.class);
 	      query.addScalar("appModifiedDate", Type.DATE);
-
+	      
 	      return (List<Object[]>) query.list();
 
 	    }catch (Exception e) {
