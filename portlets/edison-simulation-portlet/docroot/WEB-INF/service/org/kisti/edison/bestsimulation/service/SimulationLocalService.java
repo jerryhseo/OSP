@@ -291,8 +291,8 @@ public interface SimulationLocalService extends BaseLocalService,
 	/**
 	* New Simulation With SimulationJob
 	*
-	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
-	* @param groupId             - Portal 실행 일 경우 APP의 groupId를 참고, 그외 siteGroupId 셋팅
+	* @param user                - �꾩옱 �묒냽��User 媛앹껜, EX)User user = PortalUtil.getUser(request);
+	* @param groupId             - Portal �ㅽ뻾 ��寃쎌슦 APP��groupId瑜�李멸퀬, 洹몄쇅 siteGroupId �뗮똿
 	* @param simulationTitle
 	* @param scienceAppId
 	* @param scienceAppName
@@ -320,7 +320,7 @@ public interface SimulationLocalService extends BaseLocalService,
 			java.text.ParseException;
 
 	/**
-	* 시뮬레이션 수행
+	* �쒕��덉씠���섑뻾
 	*
 	* @simulationUuid
 	* @fileId
@@ -339,7 +339,7 @@ public interface SimulationLocalService extends BaseLocalService,
 			org.xml.sax.SAXException;
 
 	/**
-	* 시뮬레이션 수행
+	* �쒕��덉씠���섑뻾
 	*
 	* @simulationUuid
 	* @job_uuid
@@ -352,12 +352,11 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException, java.net.MalformedURLException;
 
 	/**
-	* 시뮬레이션 수정
+	* �쒕��덉씠���섏젙
 	*
 	* @throws JSONException
-	* @Token : 인증 토큰
-	* @uuid : 시뮬레이션 아이디
-	* @return int resultCode
+	* @Token : �몄쬆 �좏겙
+	* @uuid : �쒕��덉씠���꾩씠��     * @return int resultCode
 	*/
 	public int updateSimulation(java.lang.String icebreakerUrl,
 		java.lang.String simulationUuid, java.lang.String vcToken,
@@ -365,8 +364,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException, java.net.MalformedURLException;
 
 	/**
-	* 파일 업로드
-	*
+	* �뚯씪 �낅줈��     *
 	* @param params
 	String    Token
 	File        file
@@ -382,7 +380,7 @@ public interface SimulationLocalService extends BaseLocalService,
 			java.net.MalformedURLException;
 
 	/**
-	* 파일 삭제
+	* �뚯씪 ��젣
 	*
 	* @param icebreakerUrl
 	* @param vcToken
@@ -394,7 +392,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* serverFile 목록
+	* serverFile 紐⑸줉
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getServerFileList(java.lang.String icebreakerUrl,
@@ -403,7 +401,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException, java.net.MalformedURLException;
 
 	/**
-	* job별 결과 파일 zip형태로 다운로드
+	* job蹂�寃곌낵 �뚯씪 zip�뺥깭濡��ㅼ슫濡쒕뱶
 	*
 	* @simulationUuid
 	* @job_uuid
@@ -415,7 +413,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException, java.net.MalformedURLException;
 
 	/**
-	* job error 보기
+	* job error 蹂닿린
 	*
 	* @param params
 	* @throws IOException
@@ -426,7 +424,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* 파일 ID 확인
+	* �뚯씪 ID �뺤씤
 	*
 	* @throws IOException
 	*/
@@ -435,8 +433,8 @@ public interface SimulationLocalService extends BaseLocalService,
 		java.lang.String fileName) throws java.io.IOException;
 
 	/**
-	* 디렉토리 파일 조회
-	* 일반적인 후처리기 목록은 dir = result
+	* �붾젆�좊━ �뚯씪 議고쉶
+	* �쇰컲�곸씤 �꾩쿂由ш린 紐⑸줉��dir = result
 	*
 	* @throws IOException
 	*/
@@ -449,7 +447,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		java.lang.String dirPath) throws java.io.IOException;
 
 	/**
-	* simulation job 중지
+	* simulation job 以묒�
 	*
 	* @param params
 	* @return
@@ -460,7 +458,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		java.lang.String job_uuid) throws java.io.IOException;
 
 	/**
-	* Cluster List 조회
+	* Cluster List 議고쉶
 	*
 	* @param params
 	* @return
@@ -472,7 +470,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* job error 보기
+	* job error 蹂닿린
 	*
 	* @param params
 	* @throws IOException
@@ -484,7 +482,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* file 조회
+	* file 議고쉶
 	*
 	* @param params
 	* @throws IOException
@@ -496,7 +494,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* webgl을 위한 파일 생성 후 url 리턴(임시 사용-추후 수정 예정)
+	* webgl���꾪븳 �뚯씪 �앹꽦 ��url 由ы꽩(�꾩떆 �ъ슜-異뷀썑 �섏젙 �덉젙)
 	*
 	* @param params
 	* @throws IOException
@@ -519,7 +517,7 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws java.io.IOException;
 
 	/**
-	* getUserRepositorySize 조회
+	* getUserRepositorySize 議고쉶
 	*
 	* @param params
 	* @return
@@ -536,11 +534,10 @@ public interface SimulationLocalService extends BaseLocalService,
 		java.lang.String jobUuid) throws java.io.IOException;
 
 	/**
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* �졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚
+	* �졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚
+	* �졻뼚�졻뼚�졻뼚�졻뼚��Icebreaker Service End �졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚��     * �졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚
+	* �졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚�졻뼚
 	*/
 	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
 		long groupId, long userId)

@@ -384,6 +384,12 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 		_methodParameterTypes68 = new String[] {
 				"org.kisti.edison.bestsimulation.model.SimulationJob"
 			};
+
+		_methodName69 = "deleteJobFormIB";
+
+		_methodParameterTypes69 = new String[] {
+				"org.kisti.edison.bestsimulation.model.SimulationJob"
+			};
 	}
 
 	@Override
@@ -2729,6 +2735,32 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 		}
 	}
 
+	@Override
+	public void deleteJobFormIB(
+		org.kisti.edison.bestsimulation.model.SimulationJob job)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName69,
+				_methodParameterTypes69,
+				new Object[] { ClpSerializer.translateInput(job) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -2866,4 +2898,6 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	private String[] _methodParameterTypes67;
 	private String _methodName68;
 	private String[] _methodParameterTypes68;
+	private String _methodName69;
+	private String[] _methodParameterTypes69;
 }
