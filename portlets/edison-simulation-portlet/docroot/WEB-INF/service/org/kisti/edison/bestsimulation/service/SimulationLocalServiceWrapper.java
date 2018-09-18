@@ -365,6 +365,17 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	@Override
+	public java.util.Map<java.lang.String, java.lang.Object> createSimulationWithJob(
+		com.liferay.portal.model.User user, long groupId,
+		java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _simulationLocalService.createSimulationWithJob(user, groupId,
+			appName, appVersion, simulationTitle);
+	}
+
+	@Override
 	public org.kisti.edison.model.IcebreakerVcToken getOrCreateToken(
 		long thisGroupId, com.liferay.portal.model.User user)
 		throws com.liferay.portal.kernel.exception.PortalException,

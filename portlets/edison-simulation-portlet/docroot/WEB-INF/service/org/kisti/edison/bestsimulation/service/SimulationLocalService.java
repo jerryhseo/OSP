@@ -311,6 +311,13 @@ public interface SimulationLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public java.util.Map<java.lang.String, java.lang.Object> createSimulationWithJob(
+		com.liferay.portal.model.User user, long groupId,
+		java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public org.kisti.edison.model.IcebreakerVcToken getOrCreateToken(
 		long thisGroupId, com.liferay.portal.model.User user)

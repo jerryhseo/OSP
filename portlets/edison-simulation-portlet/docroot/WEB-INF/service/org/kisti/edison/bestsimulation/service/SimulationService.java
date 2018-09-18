@@ -63,4 +63,9 @@ public interface SimulationService extends BaseService, InvokableService {
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@com.liferay.portal.kernel.jsonwebservice.JSONWebService(method = "POST", value = "add-simulation")
+	public com.liferay.portal.kernel.json.JSONObject addSimulationWithJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle, java.lang.String jobData);
 }
