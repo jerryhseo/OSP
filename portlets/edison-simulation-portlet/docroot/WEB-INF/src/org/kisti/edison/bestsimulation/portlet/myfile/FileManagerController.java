@@ -340,7 +340,7 @@ public class FileManagerController {
 				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 
 				String output = "";
-				if (conn.getResponseCode() == 200) {
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 					while ((output = br.readLine()) != null) {
 						if (!CustomUtil.strNull(output).equals("null")) {

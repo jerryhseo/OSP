@@ -67,7 +67,7 @@ public class MyFileIcebreakerUtil {
 			conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 			
 			String  output = "";		
-			if (conn.getResponseCode() == 200) {
+			if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 
 				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 				while ((output = br.readLine()) != null) {
@@ -161,7 +161,7 @@ public class MyFileIcebreakerUtil {
 			conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 			
 			String  output = "";
-			if (conn.getResponseCode() == 200) {
+			if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 
 				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 				while ((output = br.readLine()) != null) {
@@ -245,7 +245,7 @@ public class MyFileIcebreakerUtil {
                 conn.setRequestProperty("Accept", "text/plain");
                 conn.setRequestProperty("Content-Type", "application/xml");
              
-	            if (conn.getResponseCode() == 200) {
+	            if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 	                inputStream = conn.getInputStream();
 	                File file = new File(SystemProperties.get(SystemProperties.TMP_DIR) + "/" + fileName);
 	                
@@ -694,7 +694,7 @@ public class MyFileIcebreakerUtil {
                 os.write(bodyStr.toString().getBytes());
                 os.flush();
                 
-                if (conn.getResponseCode() == 200) {
+                if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 	            	BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 	            	String line;
 	                StringBuilder sb = new StringBuilder();
@@ -879,7 +879,7 @@ public class MyFileIcebreakerUtil {
 				conn.setRequestProperty("Accept", "application/json");
 				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 				
-				if (conn.getResponseCode() == 200) {
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 					
 					String  responseValue = "";
 					String  output = "";
@@ -911,7 +911,7 @@ public class MyFileIcebreakerUtil {
 					getFolderConn.setRequestProperty("Accept", "application/json");
 					getFolderConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 					
-					if (getFolderConn.getResponseCode() == 200) {
+					if (getFolderConn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 						String output = "";
 						BufferedReader br = new BufferedReader(new InputStreamReader((getFolderConn.getInputStream())));
 						while ((output = br.readLine()) != null) {
@@ -942,7 +942,7 @@ public class MyFileIcebreakerUtil {
 					getFileConn.setRequestProperty("Accept", "application/json");
 					getFileConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 					
-					if (getFileConn.getResponseCode() == 200) {
+					if (getFileConn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 						String output = "";
 						BufferedReader br = new BufferedReader(new InputStreamReader((getFileConn.getInputStream())));
 						while ((output = br.readLine()) != null) {
@@ -1031,7 +1031,7 @@ public class MyFileIcebreakerUtil {
 				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 
 				String output = "";
-				if (conn.getResponseCode() == 200) {
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 					while ((output = br.readLine()) != null) {
 						if (!CustomUtil.strNull(output).equals("null")) {
@@ -1108,8 +1108,6 @@ public class MyFileIcebreakerUtil {
 				resultMap.put("folderCount", folderCount);
 				resultMap.put("jsonFileArray", jsonResultFileArray);
 				resultMap.put("fileCount", jsonResultFileArray.size());
-				/*resultMap.put("jsonFileArray", jsonFileArray);
-				resultMap.put("fileCount", fileCount);*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

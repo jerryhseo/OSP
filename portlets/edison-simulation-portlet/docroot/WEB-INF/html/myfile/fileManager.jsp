@@ -277,6 +277,7 @@
 		$.ajax({
 			// url: '${contextPath}/sample-data/root.json'
 			url: "<%=getRootDataURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
@@ -309,6 +310,7 @@
 		
 		$.ajax({
 			url: "<%=getSelectedFolderURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
@@ -402,6 +404,7 @@
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=createFolderURL%>",
+							cache: false,
 							data: {
 								"<portlet:namespace/>groupId" : groupId,
 								"<portlet:namespace/>vcToken" : vcToken,
@@ -460,6 +463,7 @@
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=renameFolderURL%>",
+							cache: false,
 							data: {
 								"<portlet:namespace/>groupId" : groupId,
 								"<portlet:namespace/>vcToken" : vcToken,
@@ -504,6 +508,7 @@
 					jQuery.ajax({
 						type: "POST",
 						url: "<%=deleteFolderURL%>",
+						cache: false,
 						data: {
 							"<portlet:namespace/>groupId" : groupId,
 							"<portlet:namespace/>vcToken" : vcToken,
@@ -583,6 +588,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=copyFileURL%>",
+				cache: false,
 				data : {
 					"<portlet:namespace/>copyFilesArray" : copyFilesArray,
 					"<portlet:namespace/>copyFilesArrayLength" : copyFilesArray.length,
@@ -630,6 +636,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=deleteFileURL%>",
+				cache: false,
 				data: {
 					"<portlet:namespace/>groupId" : groupId,
 					"<portlet:namespace/>vcToken" : vcToken,
@@ -637,7 +644,7 @@
 				},
 				async : true,
 				success: function(data) {
-					if(data.status == 200){
+					if(data.status == 200 || data.status == 201){
 						$(".breadcrumb_item.selected").click();
 					}else{
 						toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
@@ -674,6 +681,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=moveNodeURL%>",
+				cache: false,
 				data: {
 					"<portlet:namespace/>nodeType" : nodeType,
 					"<portlet:namespace/>destPath" : destPath,
@@ -743,6 +751,7 @@
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=getItemInfoURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
