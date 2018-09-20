@@ -16,6 +16,7 @@
   
   <bean class="org.kisti.eturb.editor.portlet.dashboard.DashboardController" />
   <bean class="org.kisti.eturb.editor.portlet.dashboard.CreateMeshController" />
+  <bean class="org.kisti.eturb.editor.portlet.dashboard.CreateKflowMeshController" />
   <bean class="org.kisti.eturb.editor.portlet.dashboard.ParameterController" />
   <bean class="org.kisti.eturb.editor.portlet.dashboard.FileExportController" />
   <bean class="org.kisti.eturb.editor.portlet.dashboard.helper.EturbAppHelper" />

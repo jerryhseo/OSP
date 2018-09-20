@@ -31,6 +31,13 @@ public class SimulationServiceClpInvoker {
 		_methodName69 = "setBeanIdentifier";
 
 		_methodParameterTypes69 = new String[] { "java.lang.String" };
+
+		_methodName74 = "addSimulationWithJob";
+
+		_methodParameterTypes74 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -47,6 +54,13 @@ public class SimulationServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName74.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
+			return SimulationServiceUtil.addSimulationWithJob(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,4 +68,6 @@ public class SimulationServiceClpInvoker {
 	private String[] _methodParameterTypes68;
 	private String _methodName69;
 	private String[] _methodParameterTypes69;
+	private String _methodName74;
+	private String[] _methodParameterTypes74;
 }

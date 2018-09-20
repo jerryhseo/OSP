@@ -128,6 +128,11 @@
 		background-size: 50px;
 	}
 	
+	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-9{
+		background-image:url(/edison-appstore-2016-portlet/images/appmanager/layout/layout09.png);
+		background-size: 50px;
+	}
+	
 	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method:hover {
 		border : solid 3px #ffffff;
 		outline: none !important;
@@ -452,6 +457,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				<div class="method layout-7"></div>
 				<input type="radio" name="templates" value="1-1-row-2-1-column"> 
 			</label>
+			<label class="btn layoutMethod">
+				<div class="method layout-9"></div>
+				<input type="radio" name="templates" value="1-1-row-1-2-column"> 
+			</label>
 		</div>
 		
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>flowLayoutArea" style="display: none;">
@@ -470,6 +479,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			<label class="btn layoutMethod">
 				<div class="method layout-5"></div>
 				<input type="radio" name="templates" value="flow-2-row-1-2-column"> 
+			</label>
+			<label class="btn layoutMethod">
+				<div class="method layout-9"></div>
+				<input type="radio" name="templates" value="flow-1-1-row-1-2-column"> 
 			</label>
 		</div>
 	</div>

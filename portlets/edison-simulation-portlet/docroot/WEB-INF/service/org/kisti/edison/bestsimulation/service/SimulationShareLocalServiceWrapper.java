@@ -344,11 +344,11 @@ public class SimulationShareLocalServiceWrapper
 	}
 
 	/**
-	* JobUUid를 통한 공유 항목 삭제 후 재정의
+	* JobUUid�쒙옙占쎈벏釉��⑤벊��占쏙옙��占쏙옙��占쏙옙占싼딆젟占쏙옙     *
 	*
 	* @param jobUuid
 	* @param classId
-	* @param customIds - 다수 일경우 delimeter는 ,
+	* @param customIds - 占썬끉��占쎌눊瑗랃옙占폻elimeter占쏙옙,
 	* @throws SystemException
 	*/
 	@Override

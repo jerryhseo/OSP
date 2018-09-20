@@ -14,6 +14,13 @@
 
 package org.kisti.edison.bestsimulation.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import org.kisti.edison.bestsimulation.service.SimulationServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * Provides the SOAP utility for the
  * {@link org.kisti.edison.bestsimulation.service.SimulationServiceUtil} service utility. The
@@ -55,4 +62,22 @@ package org.kisti.edison.bestsimulation.service.http;
  * @generated
  */
 public class SimulationServiceSoap {
+	public static java.lang.String addSimulationWithJob(long userId,
+		java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle, java.lang.String jobData)
+		throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONObject returnValue = SimulationServiceUtil.addSimulationWithJob(userId,
+					appName, appVersion, simulationTitle, jobData);
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(SimulationServiceSoap.class);
 }

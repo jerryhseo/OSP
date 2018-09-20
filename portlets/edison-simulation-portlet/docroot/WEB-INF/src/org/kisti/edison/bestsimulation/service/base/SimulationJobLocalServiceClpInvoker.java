@@ -383,6 +383,12 @@ public class SimulationJobLocalServiceClpInvoker {
 		_methodParameterTypes143 = new String[] {
 				"org.kisti.edison.bestsimulation.model.SimulationJob"
 			};
+
+		_methodName144 = "deleteJobFormIB";
+
+		_methodParameterTypes144 = new String[] {
+				"org.kisti.edison.bestsimulation.model.SimulationJob"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -820,6 +826,13 @@ public class SimulationJobLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName144.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes144, parameterTypes)) {
+			SimulationJobLocalServiceUtil.deleteJobFormIB((org.kisti.edison.bestsimulation.model.SimulationJob)arguments[0]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -959,4 +972,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes142;
 	private String _methodName143;
 	private String[] _methodParameterTypes143;
+	private String _methodName144;
+	private String[] _methodParameterTypes144;
 }

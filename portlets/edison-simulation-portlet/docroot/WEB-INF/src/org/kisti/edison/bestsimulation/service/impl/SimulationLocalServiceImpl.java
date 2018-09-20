@@ -251,6 +251,53 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		}
 	}
 	
+	
+	public Map<String,Object> createSimulationWithJob(User user, long groupId, String appName, String appVersion,String simulationTitle) throws SystemException, PortalException{
+		Map<String,Object> returnMap = new HashMap<String,Object>();
+		try {
+			Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
+			
+			if(!ScienceAppLocalServiceUtil.existApp(appName, appVersion)){
+				throw new PortalException("No Such ScienceApp is Primary Key ["+appName+","+appVersion+"]");
+			}
+			
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(appName, appVersion);
+			
+			String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+			String icebreakerZone = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ZONE));
+			IcebreakerVcToken tokenEntity = getOrCreateToken(thisGroup.getGroupId(), user);
+			
+			Map<String,Object> simulationMap = createSimulation(icebreakerUrl, icebreakerZone, tokenEntity.getVcToken(), scienceApp.getScienceAppId(), simulationTitle);
+			String simulationUuid = CustomUtil.strNull(simulationMap.get("uuid"));
+			
+			SimulationPK simulationPK = new SimulationPK(simulationUuid, groupId);
+			Simulation simulation = simulationPersistence.create(simulationPK);
+			simulation.setUserId(user.getUserId());
+			simulation.setSimulationTitle(simulationTitle);
+			simulation.setScienceAppId(String.valueOf(scienceApp.getScienceAppId()));
+			
+			
+			simulation.setScienceAppName(scienceApp.getName());
+			simulation.setScienceAppVersion(scienceApp.getVersion());
+			simulation.setSimulationCreateDt(new Date());
+			simulation.setTestYn(false);
+			simulationPersistence.update(simulation);
+			returnMap = simulation.getModelAttributes();
+			
+			SimulationJob simulationJob = SimulationJobLocalServiceUtil.createSimulationJob(simulationUuid, groupId, "#001  "+simulationTitle);
+			returnMap.put("jobUuid", simulationJob.getJobUuid());
+		} catch (Exception e) {
+			if(e instanceof PortalException){
+				throw e;
+			}else{
+				throw new SystemException(e);
+			}
+			
+		}finally{
+			return returnMap;
+		}
+	}
+	
 	/**
 	 * ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 	 * ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -260,8 +307,8 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	 */
 	private Map createSimulation(String icebreakerUrl,String icebreakerZone, String vcToken,long scienceAppId, String title) throws IOException, SystemException{
 		Map<String,Object> resultMap = new HashMap<String,Object>();
-		URL url = new URL(icebreakerUrl+"/api/simulation/create?zone="+icebreakerZone);
-		
+//		URL url = new URL(icebreakerUrl+"/api/simulation/create?zone="+icebreakerZone);
+		URL url = new URL(icebreakerUrl+"/api/simulation/create");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		
 		conn.setDoOutput(true);

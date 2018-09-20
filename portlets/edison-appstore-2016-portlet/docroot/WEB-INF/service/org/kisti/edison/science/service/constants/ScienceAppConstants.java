@@ -18,17 +18,13 @@ public class ScienceAppConstants {
 	public final static String APP_RUNTYPE_SEQUENTIAL= "Sequential";
 	public final static String APP_RUNTYPE_PARALLEL = "Parallel";
 	
-	public final static String PARALLER_MODULE_GAMESS_PARALLEL	= "Gamess_parallel";  
-	public final static String PARALLER_MODULE_GNU_OPENMP_MPI	= "Gnu_openmp_mpi";     
-	public final static String PARALLER_MODULE_GNU_MPICH_1		= "Gnu_mpich_1";        
-	public final static String PARALLER_MODULE_GNU_MPICH_2		= "Gnu_mpich_2";        
-	public final static String PARALLER_MODULE_GNU_OPENMPI_1_4	= "Gnu_openmpi_1_4";    
-	public final static String PARALLER_MODULE_GNU_OPENMP		= "Gnu_openmp";         
-	public final static String PARALLER_MODULE_INTEL_OPENMP_MPI	= "Intel_openmp_mpi";   
-	public final static String PARALLER_MODULE_INTEL_MPICH_1	= "Intel_mpich_1";      
-	public final static String PARALLER_MODULE_INTEL_MPICH_2	= "Intel_mpich_2";      
-	public final static String PARALLER_MODULE_INTEL_OPENMPI_1_4	= "Intel_openmpi_1_4";  
-	public final static String PARALLER_MODULE_INTEL_OPENMP		= "Intel_openmp";
+	public final static String PARALLER_MODULE_GNU_OPENMP			= "Gnu_openmp";
+	public final static String PARALLER_MODULE_GNU_OPENMPI_1_4		= "Gnu_openmpi_1_4";    
+	public final static String PARALLER_MODULE_GNU_OPENMPI_2_1_2	= "Gnu_openmpi_2_1_2";
+	public final static String PARALLER_MODULE_INTEL_OPENMP			= "Intel_openmp";
+	public final static String PARALLER_MODULE_INTEL_OPENMPI_1_4	= "Intel_openmpi_1_4";
+	public final static String PARALLER_MODULE_INTEL_MPICH_1		= "Intel_mpich_1";      
+	public final static String PARALLER_MODULE_INTEL2018_MPI		= "Intel2018_mpi";
 	
 	public final static String EMPTY= "EMPTY";
 	public final static String GENERAL_INFO_READY = "GENERAL_INFO_READY";
@@ -135,17 +131,13 @@ public class ScienceAppConstants {
 	
 	public final static String[] getScienceAppParallerModule(){
 		String[] parallerModules = {
-				PARALLER_MODULE_GAMESS_PARALLEL,
-				PARALLER_MODULE_GNU_OPENMP_MPI,	
-				PARALLER_MODULE_GNU_MPICH_1,		
-				PARALLER_MODULE_GNU_MPICH_2,		
-				PARALLER_MODULE_GNU_OPENMPI_1_4,	
-				PARALLER_MODULE_GNU_OPENMP,		
-				PARALLER_MODULE_INTEL_OPENMP_MPI,	
-				PARALLER_MODULE_INTEL_MPICH_1,	
-				PARALLER_MODULE_INTEL_MPICH_2,	
+				PARALLER_MODULE_GNU_OPENMP,			
+				PARALLER_MODULE_GNU_OPENMPI_1_4,		
+				PARALLER_MODULE_GNU_OPENMPI_2_1_2,	
+				PARALLER_MODULE_INTEL_OPENMP,		
 				PARALLER_MODULE_INTEL_OPENMPI_1_4,	
-				PARALLER_MODULE_INTEL_OPENMP
+				PARALLER_MODULE_INTEL_MPICH_1,		
+				PARALLER_MODULE_INTEL2018_MPI		
 		};
 		
 		return parallerModules;

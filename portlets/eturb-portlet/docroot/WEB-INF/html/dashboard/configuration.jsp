@@ -16,22 +16,22 @@
 	
 	String key = "";
 	String value = "";
-	String bcUse = "";
+	String site = "";
 	while (entries.hasNext()) {
 		Map.Entry<String, String[]> thisEntry = (Map.Entry) entries.next();
 		key = CustomUtil.strNull(thisEntry.getKey());
 		value = CustomUtil.strNull(thisEntry.getValue()[0]);
 		
-		if(key.equals("bcUse")){
-			bcUse=value;
+		if(key.equals("site")){
+			site=value;
 		}
 	}
 %> 
 <aui:form action="<%= configurationURL %>" method="post" name="configForm">
-	<h5>Boundary Condition Use</h5> 
-	<aui:select name="bcUse" label="">
-		<option value="true" <%if(bcUse.equals("true")){out.print("selected");}%>>사용</option>
-		<option value="false"<%if(bcUse.equals("false")){out.print("selected");}%>>미사용</option>
+	<h5>This Portlet User Site</h5> 
+	<aui:select name="site" label="">
+		<option value="ETURB" <%if(site.equals("ETURB")){out.print("selected");}%>>eTurb</option>
+		<option value="KFLOW"<%if(site.equals("KFLOW")){out.print("selected");}%>>Kflow</option>
 	</aui:select>
 	
 	<input type="button" value="<liferay-ui:message key='edison-button-save'/>"  onclick="<portlet:namespace/>doSubmit()"/>

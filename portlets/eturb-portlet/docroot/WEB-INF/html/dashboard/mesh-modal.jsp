@@ -353,7 +353,7 @@ function <portlet:namespace/>submitMeshData(meshData, analyzerUuid){
     setTimeout(function(){
         var stringMeshData = JSON.stringify(meshData);
         var postData = {
-            "<portlet:namespace/>appName" : DASH.Constants.MAKE_MESH_AERO_2D_APP,
+            "<portlet:namespace/>appName" : DASH.Constants.getMakeMeshApp('${site}'),
             "<portlet:namespace/>appVersion" : DASH.Constants.MAKE_MESH_AERO_2D_VERSION,
             "<portlet:namespace/>analyzerUuid" : analyzerUuid,
             "<portlet:namespace/>meshData" : stringMeshData
