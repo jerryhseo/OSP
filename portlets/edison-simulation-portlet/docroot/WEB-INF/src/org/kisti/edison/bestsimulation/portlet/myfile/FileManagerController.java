@@ -45,6 +45,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -576,7 +577,11 @@ public class FileManagerController {
 			Map param = RequestUtil.getParameterMap(upload);
 			User user = PortalUtil.getUser(request);
 			
+			List<File> uploadFileList = new ArrayList<File>();
 			File[] uploadFiles = upload.getFiles("addFile");
+			for(File file : uploadFiles){
+				uploadFileList.add(file);
+			}
 			String[] fileNames = upload.getFileNames("addFile");
 			
 			String vcToken = CustomUtil.strNull(param.get("vcToken"));
@@ -584,13 +589,18 @@ public class FileManagerController {
 			String destFolderParents = CustomUtil.strNull(param.get("destFolderParents"));
 			String destFolderPath = CustomUtil.strNull(param.get("destFolderPath"));
 			
+			boolean bcUse = Boolean.parseBoolean(CustomUtil.strNull(param.get("bcUse"),"false"));
+			
 			long groupId = Long.parseLong(
 					CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
 			Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
 			String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute("icebreakerUrl"));
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-
+			
+			MyFileIcebreakerUtil.ibFileUpload(icebreakerUrl, vcToken, uploadFileList, upload, user.getScreenName(), bcUse);
+			
+			/*
 			if (!"".equals(icebreakerUrl)) {
 				URL url = new URL(icebreakerUrl + "/api/file/upload?cluster=EDISON-CFD");
 				InputStream[] uploadInputStream = upload.getFilesAsStream("addFile", false);
@@ -616,14 +626,7 @@ public class FileManagerController {
 						}
 					}
 					
-					StringBuffer bodyStr = new StringBuffer();
-					String uploadPath = "/EDISON/./LDAP/DATA/"+user.getScreenName()+"/repository/" + destFolderPath + fileNames[i];
-					bodyStr.append("{");
-					bodyStr.append("\"destPath\" : \""+uploadPath+"\"");
-					bodyStr.append("}");
-					
 					FileOutputStream output = new FileOutputStream(ICEBREAKER_TEMP_PATH + File.separator + fileNames[i]);
-					output.write(bodyStr.toString().getBytes());
 					FileInputStream inputStream = new FileInputStream(tempFile);
 
 					byte[] buffer = new byte[2048];
@@ -644,7 +647,7 @@ public class FileManagerController {
 
 					String resultJson = httpFileUtil.sendMultipartPost();
 					if (!"".equals(CustomUtil.strNull(resultJson))) {
-						/*JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
+						JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
 						String fileId = json.getString("id");
 
 						if ((!"".equals(fileId)) && (!destFolderId.equals("HOME"))) {
@@ -672,7 +675,7 @@ public class FileManagerController {
 							SessionMessages.add(request, "edion-insert-success");
 						} else {
 							SessionErrors.add(request, "edion-insert-error");
-						}*/
+						}
 					} else {
 						SessionErrors.add(request, "edion-insert-error");
 					}
@@ -681,7 +684,7 @@ public class FileManagerController {
 						uploadfile.delete();
 					}
 				}
-			}
+			}*/
 		} catch (Exception e) {
 			SessionErrors.add(request, "edion-insert-error");
 			e.printStackTrace();
