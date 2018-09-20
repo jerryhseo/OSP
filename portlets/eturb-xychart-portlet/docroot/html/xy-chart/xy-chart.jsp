@@ -35,14 +35,14 @@
     <!-- <script src="https://code.highcharts.com/maps/modules/map.js"></script> -->
     <!-- <script src="https://rawgithub.com/paulo-raca/highcharts-contour/master/highcharts-contour.js"></script> -->
     <!-- <script src="https://rawgithub.com/ironwallaby/delaunay/master/delaunay.js"></script> -->
-    <script src="../js/highcharts.js"></script>
-    <script src="../js/highcharts-3d.js"></script>
-    <script src="../js/highcharts-more.js"></script>
-    <script src="../js/exporting.js"></script>
-    <script src="../js/map.js"></script>
-    <script src="../js/data.js"></script>
-    <script src="../js/highcharts-contour.js"></script>
-    <script src="../js/delaunay.js"></script>
+    <script src="${pageContext.request.contextPath}/js/highcharts.js"></script>
+    <script src="${pageContext.request.contextPath}/js/highcharts-3d.js"></script>
+    <script src="${pageContext.request.contextPath}/js/highcharts-more.js"></script>
+    <script src="${pageContext.request.contextPath}/js/exporting.js"></script>
+    <script src="${pageContext.request.contextPath}/js/map.js"></script>
+    <script src="${pageContext.request.contextPath}/js/data.js"></script>
+    <script src="${pageContext.request.contextPath}/js/highcharts-contour.js"></script>
+    <script src="${pageContext.request.contextPath}/js/delaunay.js"></script>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -50,7 +50,7 @@
 
 	<!-- TODO -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
-    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>	<!-- Modified Link -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui.min.js"></script>	<!-- Modified Link -->
     <script type="text/javascript" src="bower_components/paramquery-pro/pqgrid.min.js" ></script>
     <script type="text/javascript" src="bower_components/paramquery-pro/touch-punch/touch-punch.min.js" ></script>
     <script type="text/javascript" src="bower_components/paramquery-pro/jsZip-2.5.0/jszip.min.js" ></script>
