@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="styles/css/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="styles/css/angular-material/angular-material.css" />
     <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" /> -->
-    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>	<!-- Modified Link -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui.min.js"></script>	<!-- Modified Link -->
     <link rel="stylesheet" href="styles/css/paramquery-pro/pqgrid.min.css" />
     <link rel="stylesheet" href="styles/css/paramquery-pro/pqgrid.ui.min.css" />
     <link rel="stylesheet" href="styles/css/paramquery-pro/themes/gray/pqgrid.css" />
