@@ -220,8 +220,8 @@ public class FileManagerController {
 			Map<String, Object> getFolderAndFile = MyFileIcebreakerUtil.apiHomeFolderAndFileList(icebreakerUrl, icebreakerToken, fileExt, fileIdFilter);
 			JSONArray folderJsonArr = (JSONArray) getFolderAndFile.get("jsonFolderArray");
 			JSONArray fileJsonArr = (JSONArray) getFolderAndFile.get("jsonFileArray");
-			int folderCount = (int) getFolderAndFile.get("folderCount");
-			int fileCount = (int) getFolderAndFile.get("fileCount");
+			int folderCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("folderCount"), "0"));
+			int fileCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("fileCount"), "0"));
 			
 			JSONArray rootDataJsonArr = concatJsonArray(folderJsonArr, fileJsonArr);
 
@@ -269,8 +269,8 @@ public class FileManagerController {
 				
 			JSONArray folderJsonArr = (JSONArray) getFolderAndFile.get("jsonFolderArray");
 			JSONArray fileJsonArr = (JSONArray) getFolderAndFile.get("jsonFileArray");
-			int folderCount = (int) getFolderAndFile.get("folderCount");
-			int fileCount = (int) getFolderAndFile.get("fileCount");
+			int folderCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("folderCount"), "0"));
+			int fileCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("fileCount"), "0"));
 
 			JSONArray dataJsonArr = concatJsonArray(folderJsonArr, fileJsonArr);
 
