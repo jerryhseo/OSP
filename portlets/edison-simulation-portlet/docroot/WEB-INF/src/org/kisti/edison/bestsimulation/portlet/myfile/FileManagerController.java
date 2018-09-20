@@ -42,6 +42,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.gson.JsonParser;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -598,9 +599,6 @@ public class FileManagerController {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			
-			MyFileIcebreakerUtil.ibFileUpload(icebreakerUrl, vcToken, uploadFileList, upload, user.getScreenName(), bcUse);
-			
-			/*
 			if (!"".equals(icebreakerUrl)) {
 				URL url = new URL(icebreakerUrl + "/api/file/upload?cluster=EDISON-CFD");
 				InputStream[] uploadInputStream = upload.getFilesAsStream("addFile", false);
@@ -646,6 +644,15 @@ public class FileManagerController {
 					httpFileUtil.addFile("file", uploadfile);
 
 					String resultJson = httpFileUtil.sendMultipartPost();
+					
+					/*String bcUseFileLocation = "";
+					if(bcUse){
+						JsonParser parser = new JsonParser();
+						Object obj = parser.parse(resultJson);
+						moveFileReturnJsonObject(icebreakerUrl, vcToken, requestParamMap, userScreenName);
+						return;
+					}*/
+					
 					if (!"".equals(CustomUtil.strNull(resultJson))) {
 						JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
 						String fileId = json.getString("id");
@@ -684,7 +691,7 @@ public class FileManagerController {
 						uploadfile.delete();
 					}
 				}
-			}*/
+			}
 		} catch (Exception e) {
 			SessionErrors.add(request, "edion-insert-error");
 			e.printStackTrace();
