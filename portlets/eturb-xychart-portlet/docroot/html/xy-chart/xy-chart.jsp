@@ -9,7 +9,8 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="styles/css/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="styles/css/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" /> -->
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>	<!-- Modified Link -->
     <link rel="stylesheet" href="styles/css/paramquery-pro/pqgrid.min.css" />
     <link rel="stylesheet" href="styles/css/paramquery-pro/pqgrid.ui.min.css" />
     <link rel="stylesheet" href="styles/css/paramquery-pro/themes/gray/pqgrid.css" />
@@ -26,20 +27,30 @@
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
-    <script src="https://rawgithub.com/paulo-raca/highcharts-contour/master/highcharts-contour.js"></script>
-    <script src="https://rawgithub.com/ironwallaby/delaunay/master/delaunay.js"></script>
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/highcharts-3d.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/highcharts-more.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/modules/exporting.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/maps/modules/data.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/maps/modules/map.js"></script> -->
+    <!-- <script src="https://rawgithub.com/paulo-raca/highcharts-contour/master/highcharts-contour.js"></script> -->
+    <!-- <script src="https://rawgithub.com/ironwallaby/delaunay/master/delaunay.js"></script> -->
+    <script src="../js/highcharts.js"></script>
+    <script src="../js/highcharts-3d.js"></script>
+    <script src="../js/highcharts-more.js"></script>
+    <script src="../js/exporting.js"></script>
+    <script src="../js/map.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/highcharts-contour.js"></script>
+    <script src="../js/delaunay.js"></script>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/jquery.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<!-- TODO -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>	<!-- Modified Link -->
     <script type="text/javascript" src="bower_components/paramquery-pro/pqgrid.min.js" ></script>
     <script type="text/javascript" src="bower_components/paramquery-pro/touch-punch/touch-punch.min.js" ></script>
     <script type="text/javascript" src="bower_components/paramquery-pro/jsZip-2.5.0/jszip.min.js" ></script>
