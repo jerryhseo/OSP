@@ -6,13 +6,13 @@
 
 <script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 <script src="${contextPath}/js/dashboard/dashboard.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/jquery-confirm.min.js"></script>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/style.css" media="screen"/>
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstree/themes/proton/style.css" media="screen"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/bootstrap-panel.css" media="screen"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="${contextPath}/css/font-awesome.min.css">
 
 <style>
 
@@ -130,6 +130,43 @@
 .paging ul li.select{color:#ff4200;}
 </style>
 
+<div class="accordion" id="<portlet:namespace/>accordion">
+	<h2 style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">
+		Navigator - 
+		<c:choose>
+			<c:when test="${fn:length(project.name) > 14}">
+				<c:out value="${fn:substring(project.name,0,13)}"/>....
+			</c:when>
+			<c:otherwise>
+				<c:out value="${project.name}"/>
+			</c:otherwise> 
+		</c:choose>
+	</h2>
+	<div>
+		<%@ include file="./navigator.jsp" %>
+	</div>
+
+	<h2 id="<portlet:namespace/>acc-parameter" style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">Parametric Airfoil</h2>
+	<div>
+		<%@ include file="./parameter.jsp" %>
+	</div>
+	
+	<h2 id="<portlet:namespace/>acc-boundary" style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">Boundary Conditions</h2>
+	<div>
+		<%@ include file="./surface.jsp" %>
+	</div>
+</div>
+<c:choose>
+	<c:when test="${site eq 'KFLOW'}">
+		<%@ include file="./kflow-mesh-modal.jsp" %>
+	</c:when>
+	<c:otherwise>
+		<%@ include file="./mesh-modal.jsp" %>
+	</c:otherwise>
+</c:choose>
+
+<%@ include file="./app-modal.jsp" %>
+
 <script type="text/javascript">
 	$(function() {
 		$("#<portlet:namespace/>accordion").accordion({
@@ -146,7 +183,9 @@
 		
 		<portlet:namespace/>navigatorInitJstree();
 		
-		<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${paramStructure});
+		<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
+		
+		<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${meshparametric},'meshparametric');
 	});
 	
 	
@@ -185,32 +224,3 @@
 		}
 	}
 </script>
-<div class="accordion" id="<portlet:namespace/>accordion">
-	<h2 style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">
-		Navigator - 
-		<c:choose>
-			<c:when test="${fn:length(project.name) > 14}">
-				<c:out value="${fn:substring(project.name,0,13)}"/>....
-			</c:when>
-			<c:otherwise>
-				<c:out value="${project.name}"/>
-			</c:otherwise> 
-		</c:choose>
-	</h2>
-	<div>
-		<%@ include file="./navigator.jsp" %>
-	</div>
-
-	<h2 id="<portlet:namespace/>acc-parameter" style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">Parametric Airfoil</h2>
-	<div>
-		<%@ include file="./parameter.jsp" %>
-	</div>
-	
-	<h2 id="<portlet:namespace/>acc-boundary" style="font-family: Malgun Gothic;font-size:15px;border-radius: 0px;">Boundary Conditions</h2>
-	<div>
-		<%@ include file="./surface.jsp" %>
-	</div>
-</div>
-
-<%@ include file="./mesh-modal.jsp" %>
-<%@ include file="./app-modal.jsp" %>

@@ -24,6 +24,7 @@
 		<icon>/icon.png</icon>
 		<action-url-redirect>true</action-url-redirect>		
 		<css-class-wrapper>edison-file-manager</css-class-wrapper>	
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	
 	<portlet>

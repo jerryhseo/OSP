@@ -44,12 +44,12 @@
 <script type="text/javascript">
 var <portlet:namespace/>progressBarTimer;
 
-function <portlet:namespace/>parameterInitEditor(type,structure){
+function <portlet:namespace/>parameterInitEditor(type,structure,instance){
 	var srcData = new OSP.InputData();
 	srcData.type(type);
 	srcData.context(structure);
 	var eventData = {
-		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric',
+		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_'+instance,
 		data: OSP.Util.toJSON(srcData)
 	};
 	Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
@@ -103,7 +103,7 @@ function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
                     <portlet:namespace/>progressBarTimer = 
                         setTimeout(<portlet:namespace/>checkAnalyzerJob, 15000, analyzerJob);
                 }else{
-                	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.FILE_CONTENT,result.out);
+                	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.FILE_CONTENT,result.out,'parametric');
                 	clearTimeout(<portlet:namespace/>progressBarTimer);
                 }
             }
@@ -254,41 +254,44 @@ function <portlet:namespace/>parameterDraw(){
 }
 
 Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
-	var tree = $("#navigatorTree").jstree(true);
-	var selectNode = $("#navigatorTree").jstree("get_selected");
-	var node = tree.get_node(selectNode);
-	var node_data_appName = node.data.analyzerJob.appName;
-	if(node_data_appName!=DASH.Constants.SHAPE_ANALYSIS_APP){
-		$.ajax({
-	        url : '${removeRemoteFilePathURL}',
-	        type : 'POST',
-	        data : {
-	            "<portlet:namespace/>analyzerJob" : JSON.stringify(node.data.analyzerJob) 
-	        },
-	        success : function(analyzerJob){
-	        	var parentNode = tree.get_node(node.parent);
-	        	var dataType = new OSP.DataType();
-	        	dataType.deserializeStructure(e.data.context_);
-	        	var dataStructure = dataType.structure();
-				var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-	        	
-// 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-	        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
-	        },error:function(jqXHR, textStatus, errorThrown){
-				if(jqXHR.responseText !== ''){
-					alert("[ERROR] AJAX FAILED during removeRemoteFilePath -->"+textStatus+": "+jqXHR.responseText);
-				}else{
-					alert("[ERROR] AJAX FAILED during removeRemoteFilePath -->"+textStatus+": "+errorThrown);
+	
+	if(e.portletId == "StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric"){
+		var tree = $("#navigatorTree").jstree(true);
+		var selectNode = $("#navigatorTree").jstree("get_selected");
+		var node = tree.get_node(selectNode);
+		var node_data_appName = node.data.analyzerJob.appName;
+		if(node_data_appName!=DASH.Constants.SHAPE_ANALYSIS_APP){
+			$.ajax({
+		        url : '${removeRemoteFilePathURL}',
+		        type : 'POST',
+		        data : {
+		            "<portlet:namespace/>analyzerJob" : JSON.stringify(node.data.analyzerJob) 
+		        },
+		        success : function(analyzerJob){
+		        	var parentNode = tree.get_node(node.parent);
+		        	var dataType = new OSP.DataType();
+		        	dataType.deserializeStructure(e.data.context_);
+		        	var dataStructure = dataType.structure();
+					var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		        	
+	// 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+		        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
+		        },error:function(jqXHR, textStatus, errorThrown){
+					if(jqXHR.responseText !== ''){
+						alert("[ERROR] AJAX FAILED during removeRemoteFilePath -->"+textStatus+": "+jqXHR.responseText);
+					}else{
+						alert("[ERROR] AJAX FAILED during removeRemoteFilePath -->"+textStatus+": "+errorThrown);
+					}
 				}
-			}
-		});
-	}else{
-		var parentNode = tree.get_node(node.parent);
-		var dataType = new OSP.DataType();
-		dataType.deserializeStructure(e.data.context_);
-    	var dataStructure = dataType.structure(); 
-    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-    	<portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_APP,DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
+			});
+		}else{
+			var parentNode = tree.get_node(node.parent);
+			var dataType = new OSP.DataType();
+			dataType.deserializeStructure(e.data.context_);
+	    	var dataStructure = dataType.structure(); 
+	    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
+	    	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
+		}
 	}
 });
 
@@ -297,7 +300,7 @@ function <portlet:namespace/>runAnalyzer(){
 	bStart();
 	setTimeout(function(){
 		var geoNode = <portlet:namespace/>getSelectedGeometryNode();
-	    <portlet:namespace/>prepareAnalyzer(DASH.Constants.SHAPE_ANALYSIS_PARAM_APP,DASH.Constants.SHAPE_ANALYSIS_PARAM_VERSION,geoNode,'',false);
+	    <portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisParamApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_PARAM_VERSION,geoNode,'',false);
 	},1000);
 	
 	/*

@@ -32,7 +32,7 @@ public class ConfigurationController extends DefaultConfigurationAction {
 	public String render(PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
 		PortletConfig selPortletConfig = getSelPortletConfig(renderRequest);
 		
-		renderRequest.setAttribute("bcUse", "false");
+		renderRequest.setAttribute("site", "ETURB");
 		
 		String configTemplate = selPortletConfig.getInitParameter("config-template");
 		if (Validator.isNotNull(configTemplate)) {
@@ -89,7 +89,7 @@ public class ConfigurationController extends DefaultConfigurationAction {
 		}
 		
 		
-		prefs.setValue("bcUse", GetterUtil.getString(actionRequest.getParameter("bcUse"),"false"));
+		prefs.setValue("site", GetterUtil.getString(actionRequest.getParameter("site"),"ETURB"));
 		prefs.store();
 	}
 	

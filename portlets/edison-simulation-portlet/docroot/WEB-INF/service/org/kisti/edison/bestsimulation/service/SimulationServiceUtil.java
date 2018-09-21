@@ -63,6 +63,14 @@ public class SimulationServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.portal.kernel.json.JSONObject addSimulationWithJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle, java.lang.String jobData) {
+		return getService()
+				   .addSimulationWithJob(userId, appName, appVersion,
+			simulationTitle, jobData);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -50,7 +50,7 @@
 <title>jQuery File Manager</title>
 
 <!-- File manager CSS & JS -->
-<link media="all" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.css" />
+<link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/bootstrap.css" />
 <link media="all" rel="stylesheet" href="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.css" />
 <link href="${contextPath}/css/fileManager/contextMenu.css" rel="stylesheet" type="text/css" />
 <link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/default.css" />
@@ -61,12 +61,11 @@
 <script src="${contextPath}/js/fileManager/jquery-1.10.2.min.js"></script>
 <script src="${contextPath}/js/fileManager/jquery-1.11.4-ui.min.js"></script>
 <script src="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="${contextPath}/js/fileManager/contextMenu.js"></script>
 <script src="${contextPath}/js/fileManager/services.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/fileManager/jquery-confirm.js"></script>
+<link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/jquery-confirm.css" />
 
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
 <script src="${contextPath}/js/toastr.min.js"></script>
@@ -74,9 +73,6 @@
 <!-- END File manager -->
 
 <style>
-	.explorer{
-		padding-left: 30px;
-	}
 	.file-manager-body{
 		height: 530px;
 		overflow-y: auto;
@@ -108,6 +104,11 @@
 		text-align: right;
 	}
 	
+	.container.myfilebox{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	
 	.info-table{
 		margin : 10px 0px;
 		padding: 0px 10px;
@@ -136,6 +137,7 @@
 	<input type="hidden" name="vcToken" value="${icebreakerVcToken.vcToken}" />
 	<input type="hidden" id="destFolderId" name="destFolderId" value="" />
 	<input type="hidden" id="destFolderParents" name="destFolderParents" value="" />
+	<input type="hidden" id="destFolderPath" name="destFolderPath" value="" />
 	<input type="hidden" name="isPopUp" value="<%=popupState%>" />
 	<input id="<portlet:namespace/>filManagerUpload" name="<portlet:namespace/>addFile" type="file" multiple style="display: none;" onchange="_fileManager_uploadFile(this);" />
 </form>
@@ -145,6 +147,9 @@
 	<div class="h40"></div>
 	
 <div class="container myfilebox">
+	<input type="hidden" id="<portlet:namespace/>thisChildFolderCnt" value="">
+	<input type="hidden" id="<portlet:namespace/>thisChildFileCnt" value="">
+	
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -185,7 +190,9 @@
 	</ol>
 	
 	<!-- Folder, File List -->
-	<div class="explorer file-manager-body"></div>
+	<div class="explorer file-manager-body">
+		
+	</div>
 	
 	<div id="fileDownloadIframe"> </div>
 	
@@ -264,16 +271,26 @@
 		var vcToken = $("#<portlet:namespace/>vcToken").val();
 		var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 		
+		var fileExt = "${fileExt}";
+		var fileIdFilter = "${fileIdFilter}";
+		
 		$.ajax({
 			// url: '${contextPath}/sample-data/root.json'
 			url: "<%=getRootDataURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
 				"<portlet:namespace/>icebreakerUrl" : icebreakerUrl,
+				"<portlet:namespace/>fileExt" : fileExt,
+				"<portlet:namespace/>fileIdFilter" : fileIdFilter
 			},
 			success: function(response) {
 				$('.explorer').fileManager(response.dataArray);
+				var folderCnt = response.folderCount;
+				var fileCnt = response.fileCount;
+				$("#<portlet:namespace/>thisChildFolderCnt").val(folderCnt);
+				$("#<portlet:namespace/>thisChildFileCnt").val(fileCnt);
 			}, error:function(data,e){ 
 				toastr["error"]("", Liferay.Language.get('edison-data-search-error'));
 			},complete: function(){
@@ -288,13 +305,19 @@
 		var vcToken = $("#<portlet:namespace/>vcToken").val();
 		var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 		
+		var fileExt = "${fileExt}";
+		var fileIdFilter = "${fileIdFilter}";
+		
 		$.ajax({
 			url: "<%=getSelectedFolderURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
 				"<portlet:namespace/>icebreakerUrl" : icebreakerUrl,
-				"<portlet:namespace/>selectFolderId" : selectedFolderId
+				"<portlet:namespace/>selectFolderId" : selectedFolderId,
+				"<portlet:namespace/>fileExt" : fileExt,
+				"<portlet:namespace/>fileIdFilter" : fileIdFilter
 			},
 			success: function(response) {
 				$('.explorer').fileManager(response.dataArray);
@@ -381,6 +404,7 @@
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=createFolderURL%>",
+							cache: false,
 							data: {
 								"<portlet:namespace/>groupId" : groupId,
 								"<portlet:namespace/>vcToken" : vcToken,
@@ -416,7 +440,7 @@
 		$.confirm({
 			title: Liferay.Language.get('edison-simulation-myfile-rename-folder'),
 			content: "<div>Input New Folder Name</div>"+
-					 "<div><input type=\"text\" value=\"" + selectedItem.text() + "\" class=\"new-folder-name form-control\" /></div>"+
+					 "<div><input type=\"text\" value=\"" + selectedItem.attr("node_name") + "\" class=\"new-folder-name form-control\" /></div>"+
 					 "<div class=\"h10\"></div>",
 			buttons: {
 				formSubmit: {
@@ -439,6 +463,7 @@
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=renameFolderURL%>",
+							cache: false,
 							data: {
 								"<portlet:namespace/>groupId" : groupId,
 								"<portlet:namespace/>vcToken" : vcToken,
@@ -483,6 +508,7 @@
 					jQuery.ajax({
 						type: "POST",
 						url: "<%=deleteFolderURL%>",
+						cache: false,
 						data: {
 							"<portlet:namespace/>groupId" : groupId,
 							"<portlet:namespace/>vcToken" : vcToken,
@@ -537,7 +563,7 @@
 			var jsonNodeInfo = new Object();
 			
 			jsonNodeInfo.sourceId = selectCopyNode.attr("id");
-			jsonNodeInfo.sourceFileName = selectCopyNode.text();
+			jsonNodeInfo.sourceFileName = selectCopyNode.attr("node_name");
 			
 			copyFilesArray.push(JSON.stringify(jsonNodeInfo));
 		}
@@ -562,6 +588,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=copyFileURL%>",
+				cache: false,
 				data : {
 					"<portlet:namespace/>copyFilesArray" : copyFilesArray,
 					"<portlet:namespace/>copyFilesArrayLength" : copyFilesArray.length,
@@ -609,6 +636,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=deleteFileURL%>",
+				cache: false,
 				data: {
 					"<portlet:namespace/>groupId" : groupId,
 					"<portlet:namespace/>vcToken" : vcToken,
@@ -616,7 +644,7 @@
 				},
 				async : true,
 				success: function(data) {
-					if(data.status == 200){
+					if(data.status == 200 || data.status == 201){
 						$(".breadcrumb_item.selected").click();
 					}else{
 						toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
@@ -631,15 +659,17 @@
 	
 	function _fileManager_moveNode(sourceNode, targetNode){
 		var sourceNodeId = sourceNode.attr("id");
-		var sourceNodeName = sourceNode.text();
+		var sourceNodeName = sourceNode.attr("node_name");
 		var targetId = targetNode.attr("id");
-		var targetName = targetNode.text();
+		var targetName = targetNode.attr("node_name");
 		var nodeType = sourceNode.attr("nodeType");	// node type : directory, file
 		
 		var destPath = "";
 		$(".breadcrumb_item").each(function(index, item){
-			var value = $(item).text();
-			destPath += value + "/";
+			if(0<index){
+				var value = $(item).text();
+				destPath += value + "/";
+			}
 		})
 		destPath += targetName + "/" + sourceNodeName;
 		
@@ -651,6 +681,7 @@
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=moveNodeURL%>",
+				cache: false,
 				data: {
 					"<portlet:namespace/>nodeType" : nodeType,
 					"<portlet:namespace/>destPath" : destPath,
@@ -667,7 +698,7 @@
 					toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 				},complete: function(){
 				}
-			});	 
+			}); 
 		}
 	}
 	
@@ -676,7 +707,6 @@
 		
 		var filesLength = input.files.length;
 		
-		// 재사용이 안되는 원인은??
 		var selectNode = $('ol.breadcrumb .breadcrumb_item.selected').attr("id");		// 파일 업로드 할 폴더의 ID
 		
 		if(selectNode == "HOME" || selectNode == ""){//선택한 노드가 없거나 루트선택
@@ -684,6 +714,7 @@
 		}
 		
 		var nodeParents = "";		//destFolderParents		부모 폴더들의 ID
+		var destPath = "";			// Upload할 폴더 Path
 		$(".breadcrumb_item").each(function(index, item){
 			var value = $(item).attr("id");
 			if(index == 0){
@@ -691,9 +722,13 @@
 			} else {
 				nodeParents += ", " + value;
 			}
+			
+			var filePath = $(item).text();
+			destPath += filePath + "/";
 		});
 		
 		$("#destFolderParents").val(nodeParents);
+		$("#destFolderPath").val(destPath);
 		 
 		selectNode = selectNode.valueOf();  //destFolderId
 		$("#destFolderId").val(selectNode);
@@ -716,6 +751,7 @@
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=getItemInfoURL%>",
+			cache: false,
 			data: {
 				"<portlet:namespace/>groupId" : groupId,
 				"<portlet:namespace/>vcToken" : vcToken,
@@ -743,21 +779,20 @@
 					if(bg && index == $("span.breadcrumb_item").length-1){
 						return true;
 					}
-					if(index !== 0){
-						breadCrumbPath += "/";
-					}
-					breadCrumbPath += $(this).text();
+					breadCrumbPath += "/" + $(this).text();
 				});
 				
 				if(itemType == 'folder'){
 					if(selectedItemId == undefined || selectedItemId == null || selectedItemId == ''){
+						var homeFolderCnt = $("#<portlet:namespace/>thisChildFolderCnt").val()
+						var homeFileCnt = $("#<portlet:namespace/>thisChildFileCnt").val()
 						infoText = "<table class=\"info-table\">" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">NAME</td><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
+										"<tr class=\"info-tr\"><td class=\"info-key\">NAME</td><td class=\"info-value\">HOME</td></tr>" + 
 										"<tr class=\"info-tr\"><td class=\"info-key\">TYPE</td><td class=\"info-value\">FOLDER</td></tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">PATH</td><td class=\"info-value\">"+breadCrumbPath+"</td></tr>" + 
+										"<tr class=\"info-tr\"><td class=\"info-key\">PATH</td><td class=\"info-value\">/HOME</td></tr>" + 
 										"<tr class=\"info-tr\">" + 
 											"<td class=\"info-key\">Content</td>" + 
-											"<td class=\"info-value\">Folders : " + itemInfoMap.folderCount + ", files : " + itemInfoMap.fileCount + "</td>" + 
+											"<td class=\"info-value\">Folders : " + homeFolderCnt + ", files : " + homeFileCnt + "</td>" + 
 										"</tr>" + 
 									"</table>";
 					} else {
@@ -801,9 +836,13 @@
 			$("#<portlet:namespace/>searchKeyword").val("");
 			$(".fileManager_searchNode").show();
 		} else {
+			var searchDataUpper = input.toUpperCase();
+			var searchDataLower = input.toLowerCase();
+			
 			$(".fileManager_searchNode").hide();
 			//Search된 값에 해당하는 File만 display
-			$(".fileManager_searchNode[node_name*="+input+"]").show();
+			$(".fileManager_searchNode[node_name*="+searchDataUpper+"]").show();
+			$(".fileManager_searchNode[node_name*="+searchDataLower+"]").show();
 		}
 	}
 	
@@ -879,8 +918,8 @@
 	
 	// Open Popup Modal : 팝업 호출하는 portlet에서 작성되어야 할 내용
 	$("#openFileManagerPopup").click(function() {
-		fileExt = "";
-		type = "";
+		var type = "MESH";
+		var fileExt = DASH.Constants.getFileExtension(type);
 		fileIdFilter = "";
 		
 		AUI().use("liferay-portlet-url", function(a) {

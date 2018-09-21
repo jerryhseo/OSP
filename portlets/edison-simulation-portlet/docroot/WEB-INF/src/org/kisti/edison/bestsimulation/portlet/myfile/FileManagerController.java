@@ -42,6 +42,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.gson.JsonParser;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -73,6 +74,7 @@ public class FileManagerController {
 
 	@RequestMapping
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) {
+		
 		try {
 			Map param = RequestUtil.getParameterMap(request);
 
@@ -89,6 +91,21 @@ public class FileManagerController {
 			String virtualLabId = (String)user.getExpandoBridge().getAttribute(EdisonExpando.USER_LAB_ID);
 			String classId = (String)user.getExpandoBridge().getAttribute(EdisonExpando.USER_CLASS_ID);
 			String majorField = "";
+			
+			// popUpState
+			model.addAttribute("portletWindowState", request.getWindowState().toString());
+			
+			// extension value Param
+			String fileExt = CustomUtil.strNull(param.get("fileExt"),"");
+			model.addAttribute("fileExt", fileExt);
+			
+			// fileSearchType
+			String fileSearchType = CustomUtil.strNull(param.get("fileSearchType"), "");
+			model.addAttribute("fileSearchType", fileSearchType);
+			
+			// fileIdFilter
+			String fileIdFilter = CustomUtil.strNull(param.get("fileIdFilter"), "");
+			model.addAttribute("fileIdFilter", fileIdFilter);
 
 			if (thisGroup.getParentGroupId() == 0L) {
 				String visitSite = themeDisplay.getUser().getExpandoBridge().getAttribute(EdisonExpando.USER_VISIT_SITE).toString();
@@ -196,15 +213,25 @@ public class FileManagerController {
 
 			String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
 			String icebreakerToken = CustomUtil.strNull(param.get("vcToken"));
-
-			JSONArray folderJsonArr = getFolderList(icebreakerUrl, icebreakerToken, "HOME");
-			JSONArray fileJsonArr = getFileList(icebreakerUrl, icebreakerToken, "HOME");
-
+			
+			/* 팝업 출력 시 필터 */
+			String selectFolderId = CustomUtil.strNull(param.get("selectFolderId"),"");
+			String fileExt = CustomUtil.strNull(param.get("fileExt"),"");
+			String fileIdFilter = CustomUtil.strNull(param.get("fileIdFilter"),"");
+			
+			Map<String, Object> getFolderAndFile = MyFileIcebreakerUtil.apiHomeFolderAndFileList(icebreakerUrl, icebreakerToken, fileExt, fileIdFilter);
+			JSONArray folderJsonArr = (JSONArray) getFolderAndFile.get("jsonFolderArray");
+			JSONArray fileJsonArr = (JSONArray) getFolderAndFile.get("jsonFileArray");
+			int folderCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("folderCount"), "0"));
+			int fileCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("fileCount"), "0"));
+			
 			JSONArray rootDataJsonArr = concatJsonArray(folderJsonArr, fileJsonArr);
 
 			JSONObject json = new JSONObject();
 
 			json.put("dataArray", rootDataJsonArr);
+			json.put("folderCount", folderCount);
+			json.put("fileCount", fileCount);
 
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
@@ -230,15 +257,30 @@ public class FileManagerController {
 
 			int responseCode = 0;
 			String selectFolderId = CustomUtil.strNull(param.get("selectFolderId"));
+			
+			/* 팝업 출력 시 필터 */
+			String fileExt = CustomUtil.strNull(param.get("fileExt"),"");
+			String fileIdFilter = CustomUtil.strNull(param.get("fileIdFilter"),"");
 
-			JSONArray folderJsonArr = getFolderList(icebreakerUrl, icebreakerToken, selectFolderId);
-			JSONArray fileJsonArr = getFileList(icebreakerUrl, icebreakerToken, selectFolderId);
+			Map<String, Object> getFolderAndFile = new HashMap<String, Object>();
+			if(selectFolderId.toUpperCase().equals("HOME")){
+				getFolderAndFile = MyFileIcebreakerUtil.apiHomeFolderAndFileList(icebreakerUrl, icebreakerToken, fileExt, fileIdFilter);
+			} else {
+				getFolderAndFile = MyFileIcebreakerUtil.apiFolderAndFileList(icebreakerUrl, icebreakerToken, selectFolderId, fileExt, fileIdFilter);
+			}
+				
+			JSONArray folderJsonArr = (JSONArray) getFolderAndFile.get("jsonFolderArray");
+			JSONArray fileJsonArr = (JSONArray) getFolderAndFile.get("jsonFileArray");
+			int folderCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("folderCount"), "0"));
+			int fileCount = Integer.parseInt(CustomUtil.strNull(getFolderAndFile.get("fileCount"), "0"));
 
 			JSONArray dataJsonArr = concatJsonArray(folderJsonArr, fileJsonArr);
 
 			JSONObject json = new JSONObject();
 			json.put("responseCode", Integer.valueOf(responseCode));
 			json.put("dataArray", dataJsonArr);
+			json.put("folderCount", folderCount);
+			json.put("fileCount", fileCount);
 
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
@@ -258,114 +300,6 @@ public class FileManagerController {
 			resultArray.element(fileArr.get(i));
 		}
 		return resultArray;
-	}
-
-	public JSONArray getFolderList(String icebreakerUrl, String icebreakerToken, String selectFolderId) {
-		try {
-			String responseValue = "";
-
-			if (!"".equals(icebreakerUrl)) {
-				String urlStr = "";
-				if (selectFolderId.equals("HOME")) {
-					urlStr = icebreakerUrl + "/api/folder/list";
-				} else {
-					urlStr = icebreakerUrl + "/api/folder/" + selectFolderId + "/list";
-				}
-
-				URL url = new URL(urlStr);
-
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-				conn.setDoOutput(true);
-				conn.setRequestMethod("GET");
-				conn.setRequestProperty("Accept", "application/json");
-				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
-
-				String output = "";
-				if (conn.getResponseCode() == 200) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-					while ((output = br.readLine()) != null) {
-						if (!CustomUtil.strNull(output).equals("null")) {
-							responseValue = responseValue + output;
-						}
-					}
-				}
-
-				conn.disconnect();
-			}
-
-			JSONArray jsonArray = new JSONArray();
-			if (!CustomUtil.strNull(responseValue).equals("")) {
-				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
-				jsonArray = jsonObj.getJSONArray("files");
-
-				for (int i = 0; i < jsonArray.size(); i++) {
-					JSONObject comandObj = (JSONObject) jsonArray.get(i);
-
-					comandObj.put("type", "directory");
-					comandObj.put("extension", "");
-				}
-			}
-
-			return jsonArray;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public JSONArray getFileList(String icebreakerUrl, String icebreakerToken, String selectFolderId) {
-		try {
-			String responseValue = "";
-
-			if (!"".equals(icebreakerUrl)) {
-				String urlStr = "";
-				if (selectFolderId.equals("HOME")) {
-					urlStr = icebreakerUrl + "/api/file/list";
-				} else {
-					urlStr = icebreakerUrl + "/api/file/" + selectFolderId + "/list";
-				}
-
-				URL url = new URL(urlStr);
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-				conn.setDoOutput(true);
-				conn.setRequestMethod("GET");
-				conn.setRequestProperty("Accept", "application/json");
-				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
-
-				String output = "";
-				if (conn.getResponseCode() == 200) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-					while ((output = br.readLine()) != null) {
-						if (!CustomUtil.strNull(output).equals("null")) {
-							responseValue = responseValue + output;
-						}
-					}
-				}
-				conn.disconnect();
-			}
-
-			JSONArray jsonArray = new JSONArray();
-			if (!CustomUtil.strNull(responseValue).equals("")) {
-				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
-				jsonArray = jsonObj.getJSONArray("files");
-
-				for (int i = 0; i < jsonArray.size(); i++) {
-					JSONObject comandObj = (JSONObject) jsonArray.get(i);
-
-					comandObj.put("type", "file");
-					comandObj.put("extension", getFileExtension(comandObj.getString("name")));
-				}
-			}
-
-			return jsonArray;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	public String getFileExtension(String fileName) {
@@ -408,7 +342,7 @@ public class FileManagerController {
 				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 
 				String output = "";
-				if (conn.getResponseCode() == 200) {
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 					while ((output = br.readLine()) != null) {
 						if (!CustomUtil.strNull(output).equals("null")) {
@@ -638,24 +572,33 @@ public class FileManagerController {
 
 	@ActionMapping(params = { "myaction=fileIBUpload" })
 	public void fileIBUpload(ActionRequest request, ActionResponse response) {
-		UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(request);
-		Map param = RequestUtil.getParameterMap(upload);
-
-		File[] uploadFiles = upload.getFiles("addFile");
-		String[] fileNames = upload.getFileNames("addFile");
-
-		String vcToken = CustomUtil.strNull(param.get("vcToken"));
-		String destFolderId = CustomUtil.strNull(param.get("destFolderId"));
-		String destFolderParents = CustomUtil.strNull(param.get("destFolderParents"));
 
 		try {
+			UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(request);
+			Map param = RequestUtil.getParameterMap(upload);
+			User user = PortalUtil.getUser(request);
+			
+			List<File> uploadFileList = new ArrayList<File>();
+			File[] uploadFiles = upload.getFiles("addFile");
+			for(File file : uploadFiles){
+				uploadFileList.add(file);
+			}
+			String[] fileNames = upload.getFileNames("addFile");
+			
+			String vcToken = CustomUtil.strNull(param.get("vcToken"));
+			String destFolderId = CustomUtil.strNull(param.get("destFolderId"));
+			String destFolderParents = CustomUtil.strNull(param.get("destFolderParents"));
+			String destFolderPath = CustomUtil.strNull(param.get("destFolderPath"));
+			
+			boolean bcUse = Boolean.parseBoolean(CustomUtil.strNull(param.get("bcUse"),"false"));
+			
 			long groupId = Long.parseLong(
 					CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
 			Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
 			String icebreakerUrl = CustomUtil.strNull(thisGroup.getExpandoBridge().getAttribute("icebreakerUrl"));
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-
+			
 			if (!"".equals(icebreakerUrl)) {
 				URL url = new URL(icebreakerUrl + "/api/file/upload?cluster=EDISON-CFD");
 				InputStream[] uploadInputStream = upload.getFilesAsStream("addFile", false);
@@ -680,9 +623,8 @@ public class FileManagerController {
 							FileUtil.write(tempFile, "");
 						}
 					}
-
-					FileOutputStream output = new FileOutputStream(
-							ICEBREAKER_TEMP_PATH + File.separator + fileNames[i]);
+					
+					FileOutputStream output = new FileOutputStream(ICEBREAKER_TEMP_PATH + File.separator + fileNames[i]);
 					FileInputStream inputStream = new FileInputStream(tempFile);
 
 					byte[] buffer = new byte[2048];
@@ -702,6 +644,15 @@ public class FileManagerController {
 					httpFileUtil.addFile("file", uploadfile);
 
 					String resultJson = httpFileUtil.sendMultipartPost();
+					
+					/*String bcUseFileLocation = "";
+					if(bcUse){
+						JsonParser parser = new JsonParser();
+						Object obj = parser.parse(resultJson);
+						moveFileReturnJsonObject(icebreakerUrl, vcToken, requestParamMap, userScreenName);
+						return;
+					}*/
+					
 					if (!"".equals(CustomUtil.strNull(resultJson))) {
 						JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(resultJson));
 						String fileId = json.getString("id");

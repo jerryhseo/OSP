@@ -7,8 +7,8 @@
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil"%>
 
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link href="${contextPath}/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="${contextPath}/js/bootstrap-toggle.min.js"></script>
 
 <portlet:actionURL var="submitURL" copyCurrentRenderParameters="<%=false%>" name="appAction">
 	<portlet:param name="clickTab" value="${clickTab}"/>
@@ -125,6 +125,11 @@
 	
 	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-8{
 		background-image:url(/edison-appstore-2016-portlet/images/appmanager/layout/layout08.png);
+		background-size: 50px;
+	}
+	
+	.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-9{
+		background-image:url(/edison-appstore-2016-portlet/images/appmanager/layout/layout09.png);
 		background-size: 50px;
 	}
 	
@@ -452,6 +457,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				<div class="method layout-7"></div>
 				<input type="radio" name="templates" value="1-1-row-2-1-column"> 
 			</label>
+			<label class="btn layoutMethod">
+				<div class="method layout-9"></div>
+				<input type="radio" name="templates" value="1-1-row-1-2-column"> 
+			</label>
 		</div>
 		
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>flowLayoutArea" style="display: none;">
@@ -470,6 +479,10 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			<label class="btn layoutMethod">
 				<div class="method layout-5"></div>
 				<input type="radio" name="templates" value="flow-2-row-1-2-column"> 
+			</label>
+			<label class="btn layoutMethod">
+				<div class="method layout-9"></div>
+				<input type="radio" name="templates" value="flow-1-1-row-1-2-column"> 
 			</label>
 		</div>
 	</div>

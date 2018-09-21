@@ -56,6 +56,14 @@ public class SimulationServiceWrapper implements SimulationService,
 		return _simulationService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject addSimulationWithJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationTitle, java.lang.String jobData) {
+		return _simulationService.addSimulationWithJob(userId, appName,
+			appVersion, simulationTitle, jobData);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

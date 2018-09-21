@@ -762,15 +762,40 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			query.addScalar("classTitle", Type.STRING);//1
 			query.addScalar("virtualLabPersonName", Type.STRING);//2
 			query.addScalar("classId", Type.STRING);//4
-			query.addScalar("executeCount", Type.INTEGER);//5
-			query.addScalar("executeStudentcount", Type.INTEGER);//6
 			query.addScalar("scienceAppId", Type.STRING);//7
-			query.addScalar("avgerageRuntime", Type.INTEGER);//8
-			query.addScalar("classPersonnel", Type.STRING);//1
-			query.addScalar("classCreateDt", Type.STRING);//1
+			query.addScalar("virtualLabUsersId", Type.STRING);//1
 			query.addScalar("registerStudentCtn", Type.STRING);//1
+			query.addScalar("classCreateDt", Type.STRING);//1
 			
 			return (List<Object[]>) query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeSession(session);
+		}
+		return null;
+	}
+	
+	public Object[] getVirtualClassStatisticsSimulation(Map params) {
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try {
+			String sqlQuery = CustomSQLUtil.get("org.kisti.edison.statistics.getVirtualClassStatisticsSimulation");
+			
+			sqlSb.append(sqlQuery);
+			
+			String sql = sqlSb.toString();
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			
+			query.addScalar("executeUserCnt", Type.INTEGER);//0
+			query.addScalar("executeCnt", Type.INTEGER);//0
+			query.addScalar("cpuTime", Type.INTEGER);//1
+			
+			return (Object[]) query.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

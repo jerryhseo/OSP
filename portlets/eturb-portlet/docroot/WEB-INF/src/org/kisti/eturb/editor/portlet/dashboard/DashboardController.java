@@ -4,6 +4,7 @@ package org.kisti.eturb.editor.portlet.dashboard;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -82,25 +83,46 @@ public class DashboardController{
             User user = PortalUtil.getUser(request);
             long groupId = PortalUtil.getScopeGroupId(request);
             
-            ScienceApp scienceAppParam = ScienceAppLocalServiceUtil.getScienceApp("KFOIL_AirFoil_Para_parin", "1.0.0");
-            String paramInputPorts = ScienceAppLocalServiceUtil.getScienceAppInputPorts(scienceAppParam.getScienceAppId());
-
-            long paramTypeId = 0;
-            JSONObject paramJSON = (JSONObject) JSONSerializer.toJSON(paramInputPorts);
-            Map paramJsonMap = paramJSON;
-            Iterator paramItr = paramJsonMap.keySet().iterator();
-            while(paramItr.hasNext()) {
-                String key = (String) paramItr.next();
-                Map paramMap = (Map)paramJsonMap.get(key);
-                Map dataTypeMap = (Map) paramMap.get("dataType_");
-                String dataTypeName = (String) dataTypeMap.get("name");
-                String dataTypeVersion = (String) dataTypeMap.get("version");
-                DataType paramDataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
-                paramTypeId = paramDataType.getTypeId();
-                break;
+            
+            /*Program Use Site*/
+            String useSite =  GetterUtil.getString(request.getPreferences().getValue("site", "ETURB"),"ETURB");
+            model.addAttribute("site", useSite);
+            
+            List<String[]> dataStructurAppList = new ArrayList<String[]>();;
+            if(useSite.equals("ETURB")){
+            	dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.0", "parametric"});
+            }else{
+            	dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin_kflow", "1.0.0", "parametric"});
+            	dataStructurAppList.add(new String[]{"kflow_mesher", "1.0.0", "meshparametric"});
             }
-            DataTypeStructure paramStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(paramTypeId);
-            model.addAttribute("paramStructure", paramStructure.getStructure());
+            
+            for(String[] appList : dataStructurAppList){
+            	String appName = appList[0];
+            	String appVersion = appList[1];
+            	String parameterName = appList[2];
+            	
+            	ScienceApp scienceAppParam = ScienceAppLocalServiceUtil.getScienceApp(appName, appVersion);
+            	String paramInputPorts = ScienceAppLocalServiceUtil.getScienceAppInputPorts(scienceAppParam.getScienceAppId());
+            	
+            	long paramTypeId = 0;
+            	JSONObject paramJSON = (JSONObject) JSONSerializer.toJSON(paramInputPorts);
+            	Map paramJsonMap = paramJSON;
+            	Iterator paramItr = paramJsonMap.keySet().iterator();
+            	while(paramItr.hasNext()) {
+            		String key = (String) paramItr.next();
+            		Map paramMap = (Map)paramJsonMap.get(key);
+            		Map dataTypeMap = (Map) paramMap.get("dataType_");
+            		String dataTypeName = (String) dataTypeMap.get("name");
+            		String dataTypeVersion = (String) dataTypeMap.get("version");
+            		DataType paramDataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+            		paramTypeId = paramDataType.getTypeId();
+            		break;
+            	}
+            	DataTypeStructure paramStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(paramTypeId);
+            	model.addAttribute(parameterName, paramStructure.getStructure());
+            	
+            }
+            
             
             
             /*vcToken*/
@@ -135,9 +157,9 @@ public class DashboardController{
             }
             
             long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
-            System.out.println("workBenchPlid--------------->"+plid);
 			model.addAttribute("workBenchPlid", plid);
 			model.addAttribute("bcUse", GetterUtil.getBoolean(request.getPreferences().getValue("bcUse", "false"),false));
+			
         }catch(Exception e){
             e.printStackTrace();
             SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);

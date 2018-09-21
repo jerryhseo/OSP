@@ -41,7 +41,7 @@ import net.sf.json.JSONSerializer;
 public class MyFileIcebreakerUtil {
 	
 	private static final String IB_FILE_CLUSTER = "EDISON-CFD";
-	private static final String FILE_MOVE_PATH = "/EDISON/LDAP/DATA/";
+	private static final String FILE_MOVE_PATH = "/EDISON/./LDAP/DATA/";
 	
 	public static List<HashMap<String,String>> apiHomeFolderList(String icebreakerUrl, String icebreakerToken) throws MalformedURLException, SystemException{
 		URL url = new URL(icebreakerUrl+"/api/folder/list");
@@ -67,7 +67,7 @@ public class MyFileIcebreakerUtil {
 			conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 			
 			String  output = "";		
-			if (conn.getResponseCode() == 200) {
+			if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 
 				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 				while ((output = br.readLine()) != null) {
@@ -161,7 +161,7 @@ public class MyFileIcebreakerUtil {
 			conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 			
 			String  output = "";
-			if (conn.getResponseCode() == 200) {
+			if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 
 				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 				while ((output = br.readLine()) != null) {
@@ -245,7 +245,7 @@ public class MyFileIcebreakerUtil {
                 conn.setRequestProperty("Accept", "text/plain");
                 conn.setRequestProperty("Content-Type", "application/xml");
              
-	            if (conn.getResponseCode() == 200) {
+	            if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 	                inputStream = conn.getInputStream();
 	                File file = new File(SystemProperties.get(SystemProperties.TMP_DIR) + "/" + fileName);
 	                
@@ -694,7 +694,7 @@ public class MyFileIcebreakerUtil {
                 os.write(bodyStr.toString().getBytes());
                 os.flush();
                 
-                if (conn.getResponseCode() == 200) {
+                if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 	            	BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 	            	String line;
 	                StringBuilder sb = new StringBuilder();
@@ -879,7 +879,7 @@ public class MyFileIcebreakerUtil {
 				conn.setRequestProperty("Accept", "application/json");
 				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 				
-				if (conn.getResponseCode() == 200) {
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 					
 					String  responseValue = "";
 					String  output = "";
@@ -911,7 +911,7 @@ public class MyFileIcebreakerUtil {
 					getFolderConn.setRequestProperty("Accept", "application/json");
 					getFolderConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 					
-					if (getFolderConn.getResponseCode() == 200) {
+					if (getFolderConn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 						String output = "";
 						BufferedReader br = new BufferedReader(new InputStreamReader((getFolderConn.getInputStream())));
 						while ((output = br.readLine()) != null) {
@@ -942,7 +942,7 @@ public class MyFileIcebreakerUtil {
 					getFileConn.setRequestProperty("Accept", "application/json");
 					getFileConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
 					
-					if (getFileConn.getResponseCode() == 200) {
+					if (getFileConn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
 						String output = "";
 						BufferedReader br = new BufferedReader(new InputStreamReader((getFileConn.getInputStream())));
 						while ((output = br.readLine()) != null) {
@@ -958,77 +958,6 @@ public class MyFileIcebreakerUtil {
 					}
 					
 				}
-				
-			} else {
-				if(itemType.equals("folder")){
-					itemInfoMap.put("name", "HOME");
-					
-					getFolderListUrl = "/api/folder/list";
-					getFileListUrl = "/api/file/list";
-					
-					if(!"".equals(getFolderListUrl)){
-						
-						String  responseValue = "";
-						
-						String getFolderCountIcebreakerUrl = icebreakerUrl + getFolderListUrl;
-						URL getFolderUrl = new URL(getFolderCountIcebreakerUrl);
-						
-						HttpURLConnection getFolderConn = (HttpURLConnection) getFolderUrl.openConnection();
-						
-						getFolderConn.setDoOutput(true);
-						getFolderConn.setRequestMethod("GET");
-						getFolderConn.setRequestProperty("Accept", "application/json");
-						getFolderConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
-						
-						if (getFolderConn.getResponseCode() == 200) {
-							String output = "";
-							BufferedReader br = new BufferedReader(new InputStreamReader((getFolderConn.getInputStream())));
-							while ((output = br.readLine()) != null) {
-								if(!CustomUtil.strNull(output).equals("null")){
-									responseValue += output;
-								}
-							}
-							br.close();
-							
-							JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
-							JSONArray jsonArray = jsonObj.getJSONArray("files");
-							itemInfoMap.put("folderCount", jsonArray.size());
-						}
-							
-					}
-					
-					if(!"".equals(getFileListUrl)){
-						
-						String  responseValue = "";
-						
-						String getFileCountIcebreakerUrl = icebreakerUrl + getFileListUrl;
-						URL getFileUrl = new URL(getFileCountIcebreakerUrl);
-						
-						HttpURLConnection getFileConn = (HttpURLConnection) getFileUrl.openConnection();
-						
-						getFileConn.setDoOutput(true);
-						getFileConn.setRequestMethod("GET");
-						getFileConn.setRequestProperty("Accept", "application/json");
-						getFileConn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
-						
-						if (getFileConn.getResponseCode() == 200) {
-							String output = "";
-							BufferedReader br = new BufferedReader(new InputStreamReader((getFileConn.getInputStream())));
-							while ((output = br.readLine()) != null) {
-								if(!CustomUtil.strNull(output).equals("null")){
-									responseValue += output;
-								}
-							}
-							br.close();
-							
-							JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
-							JSONArray jsonArray = jsonObj.getJSONArray("files");
-							itemInfoMap.put("fileCount", jsonArray.size());
-						}
-						
-					}
-					
-				}
 			}
 			
 		} catch (MalformedURLException e) {
@@ -1038,5 +967,162 @@ public class MyFileIcebreakerUtil {
 		}
 			
 		return itemInfoMap;
+	}
+	
+	
+	/**
+	 * Get Folder And File List by New API.
+	 * @since 2018.09.06
+	 */
+	public static HashMap<String, Object> apiHomeFolderAndFileList(String icebreakerUrl, String icebreakerToken) throws MalformedURLException, SystemException{
+		URL url = new URL(icebreakerUrl+"/api/file/all");
+		return apiFolderAndFileList(url,icebreakerUrl, icebreakerToken, true, null, null);
+	}
+	
+	public static HashMap<String, Object> apiFolderAndFileList(String icebreakerUrl, String icebreakerToken,String selectFolderId) throws SystemException, MalformedURLException{
+		URL url = new URL(icebreakerUrl+"/api/file/"+selectFolderId+"/all");
+		return apiFolderAndFileList(url, icebreakerUrl, icebreakerToken, false, null, null);
+	}
+	
+	public static HashMap<String, Object> apiFolderAndFileList(String icebreakerUrl, String icebreakerToken,String selectFolderId, String fileExt, String fileIdFilter) throws SystemException, MalformedURLException{
+		URL url = new URL(icebreakerUrl+"/api/file/"+selectFolderId+"/all");
+		
+		String[] fileExtArr = null;
+		String[] fileIdFilterArr = null;
+		if(fileExt != null && !fileExt.equals("")){
+			fileExtArr = fileExt.split(",");
+		}
+		if (fileIdFilter != null && !fileIdFilter.equals("")) {
+			fileIdFilterArr = fileIdFilter.split(",");
+		}
+		
+		return apiFolderAndFileList(url,icebreakerUrl, icebreakerToken, false, fileExtArr, fileIdFilterArr);
+	}
+	
+	public static HashMap<String, Object> apiHomeFolderAndFileList(String icebreakerUrl, String icebreakerToken, String fileExt, String fileIdFilter) throws SystemException, MalformedURLException{
+		URL url = new URL(icebreakerUrl+"/api/file/all");
+		
+		String[] fileExtArr = null;
+		String[] fileIdFilterArr = null;
+		if(fileExt != null && !fileExt.equals("")){
+			fileExtArr = fileExt.split(",");
+		}
+		if (fileIdFilter != null && !fileIdFilter.equals("")) {
+			fileIdFilterArr = fileIdFilter.split(",");
+		}
+		
+		return apiFolderAndFileList(url,icebreakerUrl, icebreakerToken, true, fileExtArr, fileIdFilterArr);
+	}
+	
+	protected static HashMap<String, Object> apiFolderAndFileList(URL url,String icebreakerUrl, String icebreakerToken, boolean isHome, String[] compareExt, String[] fileIdFilter) throws SystemException{
+		
+		String responseValue = "";
+		HttpURLConnection conn = null;
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try{
+			if (!"".equals(icebreakerUrl)) {
+
+				conn = (HttpURLConnection) url.openConnection();
+				
+				conn.setDoOutput(true);
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+				conn.setRequestProperty("Authorization", "Basic " + icebreakerToken);
+
+				String output = "";
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+					while ((output = br.readLine()) != null) {
+						if (!CustomUtil.strNull(output).equals("null")) {
+							responseValue = responseValue + output;
+						}
+					}
+				}
+
+				conn.disconnect();
+			}
+			
+			JSONArray jsonArray = new JSONArray();
+			if (!CustomUtil.strNull(responseValue).equals("")) {
+				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseValue));
+				
+				JSONObject jsonItemsObj = jsonObj.getJSONObject("files");
+				
+				// Get Folder List
+				JSONObject jsonFolderObj = jsonItemsObj.getJSONObject("folders");
+				JSONArray jsonFolderArray = jsonFolderObj.getJSONArray("files");
+				int folderCount = jsonFolderObj.getInt("count");
+				
+				for (int i = 0; i < jsonFolderArray.size(); i++) {
+					JSONObject comandObj = (JSONObject) jsonFolderArray.get(i);
+
+					comandObj.put("type", "directory");
+					comandObj.put("extension", "");
+				}
+				
+				// Get File List
+				JSONObject jsonFileObj = jsonItemsObj.getJSONObject("files");
+				JSONArray jsonFileArray = jsonFileObj.getJSONArray("files");
+				JSONArray jsonResultFileArray = new JSONArray();
+//				int fileCount = jsonFileObj.getInt("count");
+
+				for (int i = 0; i < jsonFileArray.size(); i++) {
+					JSONObject comandObj = (JSONObject) jsonFileArray.get(i);
+					
+					if(compareExt!=null){
+						if(!compareExt[0].equals("")){
+							
+							String fileName = comandObj.getString("name");
+							String fileExt = "";
+							
+							String[] splitFileName = fileName.split("\\.");
+							if(2 < splitFileName.length){
+								// 확장자가 .xxx.xxx 인 경우
+								fileExt = fileName.substring(fileName.indexOf(splitFileName[splitFileName.length-2]), fileName.length()); 
+							} else {
+								fileExt = fileName.substring(fileName.lastIndexOf(".")+1); 
+							}
+							if(!ArrayUtil.contains(compareExt, fileExt)){
+								continue;
+							}
+							
+							if(fileIdFilter!=null){
+								if(!fileIdFilter[0].equals("")){
+									String fileId =  comandObj.getString("id");
+									if(ArrayUtil.contains(fileIdFilter, fileId)){
+										continue;
+									}
+								}
+							}
+						}
+					}
+
+					comandObj.put("type", "file");
+					comandObj.put("extension", getFileExtension(comandObj.getString("name")));
+					
+					jsonResultFileArray.add(comandObj);
+				}
+				
+				resultMap.put("jsonFolderArray", jsonFolderArray);
+				resultMap.put("folderCount", folderCount);
+				resultMap.put("jsonFileArray", jsonResultFileArray);
+				resultMap.put("fileCount", jsonResultFileArray.size());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn!=null){conn.disconnect();}
+		}
+		
+		return resultMap;
+	}
+	
+	private static String getFileExtension(String fileName) {
+		if ((fileName.lastIndexOf(".") != -1) && (fileName.lastIndexOf(".") != 0)) {
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		}
+
+		return "";
 	}
 }

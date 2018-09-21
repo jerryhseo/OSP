@@ -322,140 +322,56 @@
 	</sql>
 <!-- 5. User END -->
 
-
+	<sql id="org.kisti.edison.statistics.getVirtualClassStatisticsSimulation" >
+		SELECT 
+            COUNT(DISTINCT(SIM.userId)) AS executeUserCnt,
+            COUNT(SIMJOB.jobUuid) AS executeCnt,
+			ROUND(SUM(ROUND(UNIX_TIMESTAMP(SIMJOB.jobEndDt) - UNIX_TIMESTAMP(SIMJOB.jobStartDt),0))/COUNT(SIMJOB.jobUuid)) AS cpuTime
+        FROM
+			EDSIM_Simulation SIM,
+			EDSIM_SimulationJob SIMJOB
+        WHERE
+			SIM.userId IN (#userIds#)
+        AND
+			SIM.scienceAppId IN (#scienceAppIds#)
+        AND
+			SIM.simulationUuid = SIMJOB.simulationUuid
+		AND 
+			SIMJOB.jobSubmit = 1;
+	</sql>
 
 	<sql id="org.kisti.edison.statistics.getVirtualClassStatisticsList" >
 		<![CDATA[
 		SELECT 
-			B.groupId, 
-			B.university,
-			B.virtualLabId as virtualLabId,
-			B.virtualLabTitle as virtualLabTitle,
-			B.classTitle, 
-			IFNULL(B.virtualLabPersonName, '') virtualLabPersonName,
-			B.classId, 
-			B.classPersonnel,
-			B.classCreateDt,
-			sum(B.executeCount) AS executeCount, 
-			sum(B.executeStudentcount) AS executeStudentcount,
-			GROUP_CONCAT(distinct B.scienceAppId SEPARATOR ',') scienceAppId,  
-			sum(B.avgerageRuntime) AS avgerageRuntime,
-			B.registerStudentCtn
-		FROM( 
-				select 
-					groupId,
-					university,
-					virtualLabId,
-					virtualLabTitle,
-					classTitle,
-					classPersonnel,
-					classCreateDt,
-					virtualLabPersonName,
-					classId,
-					executeCount,
-					executeStudentcount,
-					scienceAppId,
-					avgerageRuntime,
-					registerStudentCtn
-				  FROM(
-				  SELECT 
-					  A.groupId,
-					  A.virtualLabUniversityField AS university,
-					  A.virtualLabId,
-					  ExtractValue(A.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
-					  ExtractValue(A.classTitle,'root/ClassTitle[@language-id="@@languageId@@"]') AS  classTitle,
-					  A.classPersonnel AS classPersonnel,
-					  DATE_FORMAT(A.classCreateDt,'%Y-%m-%d') AS classCreateDt,
-					  /*ExtractValue(A.virtualLabPersonName,'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS  virtualLabPersonName,*/
-					  
-					  (
-							SELECT 
-								PU.professorName FROM (SELECT P.professorSeq,
-								CONCAT(U.firstName, U.middleName, U.lastName) professorName
-							FROM 
-								EDVIR_Professor P, User_ U
-							WHERE 
-								P.userId = U.userId
-						) PU WHERE A.professorSeq = PU.professorSeq) virtualLabPersonName,
-					  GROUP_CONCAT(DISTINCT(E.scienceAppId)) scienceAppId,
-					  SUM(CASE WHEN jobSubmit = 1 THEN 1 ELSE 0 END) executeCount,
-					  A.virtualClassCd as classId, 
-					  count(distinct(case when F.jobSubmit = 1 then B.userId end)) executeStudentcount,
-					  IFNULL(round(sum(F.runtime)/count(distinct(case when F.jobSubmit = 1 then B.userId end))),0) as avgerageRuntime,
-					  (
-						SELECT COUNT(classesUsers.virtualLabUserId)
-						FROM EDVIR_VirtualLabClasses_VirtualLabUsers classesUsers
-								INNER JOIN (SELECT 
-												virtualLabUserId
-											FROM
-												EDVIR_VirtualLabUser
-											WHERE
-												requestSort = 'TEMP'
-												OR requestSort = 'CONFIRM') LabUesr 
-								ON LabUesr.virtualLabUserId = classesUsers.virtualLabUserId
-						WHERE classesUsers.classId = A.classId
-					  ) AS registerStudentCtn
-					FROM 
-					  (SELECT lab.*, class.*, (SELECT COUNT(*) FROM EDVIR_VirtualLabs_VirtualLabClasses B INNER JOIN EDVIR_VirtualLabClass C ON B.classId = C.classId WHERE B.virtualLabId = lab.virtualLabId AND C.classUseYn = 'Y' ) AS classCount
-			 FROM EDVIR_VirtualLab lab
-					  INNER JOIN EDVIR_VirtualLabs_VirtualLabClasses labClasses on lab.virtualLabId = labClasses.virtualLabId
-					  INNER JOIN EDVIR_VirtualLabClass class on labClasses.classId = class.classId
-					  WHERE lab.groupId = #groupId#
-					  <isNotEmpty property="universityCode">    
-			            and lab.virtualLabUniversityField = #universityCode#
-			        </isNotEmpty>  
-					  and  lab.virtualLabUseYn = 'Y' AND  class.classUseYn = 'Y' 
-					    AND(
-					    	STR_TO_DATE(class.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
-					    )
-					  ) A
-					  LEFT OUTER JOIN(SELECT classesUsers.classId, LabUesr.userId, LabUesr.virtualLabUserId 
-					                  FROM EDVIR_VirtualLabClasses_VirtualLabUsers classesUsers
-					                  INNER JOIN (SELECT userId, virtualLabUserId 
-					                              FROM EDVIR_VirtualLabUser 
-					                              WHERE requestSort = 'TEMP' OR requestSort = 'CONFIRM'
-					                              ) LabUesr on LabUesr.virtualLabUserId = classesUsers.virtualLabUserId
-					  )B on A.classId = B.classId
-					  LEFT OUTER JOIN EDVIR_VirtualLabClasses_VirtualLabClassScienceApps C on A.classId = C.classId 
-					  LEFT OUTER JOIN EDVIR_VirtualLabClassScienceApp D on C.scienceAppSeqNo = D.scienceAppSeqNo
-					  LEFT OUTER JOIN EDAPP_ScienceApp E on D.scienceAppId = E.scienceAppId
-					  LEFT OUTER JOIN (SELECT 
-					                      simulation.userId, simulation.simulationTitle, job.jobSeqNo, job.jobSubmit, job.jobStartDt, job.jobEndDt,simulation.scienceAppId,simulation.classId, round(UNIX_TIMESTAMP(job.jobEndDt) - UNIX_TIMESTAMP(job.jobStartDt),0) runtime 
-					                      FROM EDSIM_Simulation simulation 
-					                      INNER JOIN EDSIM_SimulationJob job on simulation.simulationUuid = job.simulationUuid 
-					                      WHERE simulation.groupId = #groupId# AND (
-					                                                  	STR_TO_DATE(jobStartDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
-					                                                    OR STR_TO_DATE(jobEndDt , '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')
-					                                                  )
-					                                                  AND simulation.testYn != true
-					  ) F ON F.userId = B.userId AND F.classId=B.classId
-					GROUP BY A.classId
-				)A
-				UNION
-					SELECT 
-						mgr.groupId,
-						mgr.universityField AS university,
-						mgr.virtualLabId,
-						ExtractValue(mgr.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
-						ExtractValue(mgr.classTitle,'root/ClassTitle[@language-id="@@languageId@@"]') AS  classTitle,
-						mgr.registerStudentCnt AS classPersonnel,
-						DATE_FORMAT(mgr.classCreateDt, '%Y-%m-%d') AS classCreateDt, 
-						ExtractValue(mgr.virtualLabPersonName,'root/VirtualLabPersonName[@language-id="@@languageId@@"]') AS  virtualLabPersonName,
-						mgr.virtualClassCd as classId, 
-						mgr.executeCount,
-						mgr.executeStudentcount,
-						mgr.scienceAppId,
-						mgr.avgerageRuntime,
-						mgr.registerStudentCnt as registerStudentCtn  
-					FROM EDVIR_VirtualLabClassStsMigration mgr
-					WHERE mgr.groupId = #groupId# 
-					<isNotEmpty property="universityCode">    
-						AND mgr.universityField = #universityCode#
-					</isNotEmpty>
-					AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d')  
-			)B
-			GROUP BY B.university, B.virtualLabId ,B.classId
-			ORDER BY B.university, B.virtualLabId, B.classId			
+			VL.groupId AS groupId,
+			VL.virtualLabUniversityField AS university,
+			VL.virtualLabId AS virtualLabId,
+			ExtractValue(VL.virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
+			ExtractValue(VLC.classTitle, 'root/ClassTitle[@language-id="@@languageId@@"]') AS classTitle,
+			CONCAT(US.firstName, US.middleName, US.lastName) AS virtualLabPersonName,
+			VLC.virtualClassCd AS classId,
+			GROUP_CONCAT(distinct VLSAL.scienceAppId SEPARATOR ',') scienceAppId,
+			GROUP_CONCAT(distinct VLU.userId SEPARATOR ',') AS virtualLabUsersId,
+			COUNT(distinct VLU.userId) AS registerStudentCtn,
+			VLC.classCreateDt AS classCreateDt
+		FROM
+			EDVIR_VirtualLabs_VirtualLabClasses VLVLC
+			INNER JOIN EDVIR_VirtualLabClass VLC ON VLC.classId = VLVLC.classId
+			INNER JOIN EDVIR_VirtualLab VL ON VL.virtualLabId = VLVLC.virtualLabId
+			INNER JOIN EDVIR_Professor PF ON VL.professorSeq = PF.professorSeq
+			INNER JOIN User_ US ON PF.userId = US.userId
+			LEFT OUTER JOIN EDVIR_VirtualLabClasses_VirtualLabUsers VLCVLU ON VLVLC.classId = VLCVLU.classId
+			LEFT OUTER JOIN EDVIR_VirtualLabUser VLU ON VLCVLU.virtualLabUserId = VLU.virtualLabUserId
+			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLinkClass VLSALC ON VLVLC.classId = VLSALC.classId
+			LEFT OUTER JOIN EDVIR_VirtualLabScienceAppLink VLSAL on VLSALC.scienceAppSeqNo = VLSAL.scienceAppSeqNo
+		WHERE VL.groupId = #groupId# AND VLC.classUseYn = 'Y' AND VL.virtualLabUseYn='Y'
+		AND(
+				STR_TO_DATE(VLC.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+		)
+		<isNotEmpty property="universityCode">
+			AND VL.virtualLabUniversityField = #universityCode#
+		</isNotEmpty>
+		GROUP BY university, virtualLabId, VLVLC.classId;
 		]]>
 	</sql>
 	

@@ -6,6 +6,8 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -104,6 +106,46 @@ public class EturbAppHelper{
         return true;
     }
     
+    public boolean exeKflowMeshAnalyzer(long projectId,String datFilePath, String sdeFilePath, String textFilePath, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+        	Path appPath = null;
+        	Path exeFile = null;
+        	
+        	appPath = getAppPath(themeDisplay, analyzerJob);
+            exeFile = appPath.resolve(Paths.get(BIN_PATH, analyzerJob.getExeFileName()));
+        	
+            Path executePath = getAppExecutePath(themeDisplay, analyzerJob);
+            Path workingPath = executePath.resolve(Paths.get(user.getScreenName(), analyzerJob.getAnalyzerUuid()));
+            Path resultPath = workingPath.resolve(analyzerJob.getOutputData().getParent_());
+            
+            String resultPathString = resultPath.toString();
+            resultPathString = resultPathString.endsWith(FILESYSTEM_SEPARATOR) ? resultPathString
+                    : resultPathString + FILESYSTEM_SEPARATOR;
+                String[] command = new String[]{
+                    exeFile.toString(), "-inp1", datFilePath, 
+                    "-inp2", sdeFilePath,
+                    "-inp3", textFilePath,
+                    ANALYZER_DEFAULT_OUTPUT_NAME, resultPathString};
+                for(String cmd : command){
+                    log.info(cmd);
+                }
+//                ProcessBuilder builder = new ProcessBuilder(command);
+//                builder.redirectOutput(Redirect.INHERIT);
+//                builder.redirectError(Redirect.INHERIT);
+//                builder.start();
+                
+            return true;
+        }
+    
+    public String createInputFiles(long projectId,List<HashMap<String, String>> fileList,ThemeDisplay themeDisplay,AnalyzerJob analyzerJob, User user) throws SystemException{
+    	
+    	Path executePath = getAppExecutePath(themeDisplay, analyzerJob);
+        Path workingPath = executePath.resolve(Paths.get(user.getScreenName(), analyzerJob.getAnalyzerUuid()));
+        
+        SimulationLocalServiceUtil.simulationWithInputFiles(projectId, analyzerJob, fileList, workingPath);
+        
+        return workingPath.toString();
+    }
+    
     private void doAnalyzer(Path exeFile, Path inputFile, Path resultPath) throws IOException{
         String resultPathString = resultPath.toString();
         resultPathString = resultPathString.endsWith(FILESYSTEM_SEPARATOR) ? resultPathString
@@ -199,10 +241,13 @@ public class EturbAppHelper{
             analyzerUuid.toString(), appName,
             appVersion, exeFileName, outputDataJson, outputViewDataJson, executePath.toAbsolutePath().toString()+File.separator);
         String analyzerLog = ScienceAppLocalServiceUtil.getScienceAppLogPorts(analyzer.getScienceAppId());
+        
         if(StringUtils.hasText(analyzerLog)){
-            OutputData logFileJson = new Gson().fromJson(
-                getOutputData(ANALYZER_DEFAULT_LOG_NAME, analyzerLog), OutputData.class);
-            analyzerJob.setLogFile(logFileJson);
+        	if(!analyzerLog.equals("false")){
+        		OutputData logFileJson = new Gson().fromJson(
+        				getOutputData(ANALYZER_DEFAULT_LOG_NAME, analyzerLog), OutputData.class);
+        		analyzerJob.setLogFile(logFileJson);
+        	}
         }
         
         

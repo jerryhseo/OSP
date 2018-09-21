@@ -247,14 +247,45 @@ var print = function(param) {
 
             renderExplorer: function(explorer, filesArray) {
                 explorer.html('<div class="bg" style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:0;"></div>');
-
+                
+                var listTypeTitleTable = j("<table/>").addClass("list-view-file-info")
+                									  .css("display", "none").css("width", "100%")
+                									  .css("border-bottom", "1px solid #f0f0f0").css("font-size", "15px");
+                var titleTr = j("<tr/>");
+                j("<td/>").css("width", "26%").css("text-align","center").text("Name").appendTo(titleTr);
+                j("<td/>").css("width", "14%").css("text-align","center").text("Modified Date").appendTo(titleTr);
+                j("<td/>").css("width", "10%").css("text-align","center").text("Size").appendTo(titleTr);
+                j("<td/>").css("width", "26%").css("text-align","center").text("Name").appendTo(titleTr);
+                j("<td/>").css("width", "14%").css("text-align","center").text("Modified Date").appendTo(titleTr);
+                j("<td/>").css("width", "10%").css("text-align","center").text("Size").appendTo(titleTr);
+                
+                titleTr.appendTo(listTypeTitleTable);
+                
+                explorer.append(listTypeTitleTable);
+                explorer.append("<div class='h10'></div>");
+                
                 for (var i = 0; i < filesArray.length; i++) {
                     var file = filesArray[i];
                     if (file.type == 'directory') {
                         file_manager.tag = file_manager.folderTag.clone();
                         
                         file_manager.tag.attr("nodeType", "directory");
-                        file_manager.tag.html(file.name);
+                        
+                        var gridTypeFileView = j("<span/>").addClass("grid-view-file-info").css("display","block").text(file.name)
+                        var listTypeFileViewTable = j("<table/>").addClass("list-view-file-info").css("display", "none").css("width", "100%");
+                        var tr = j("<tr/>")
+                        j("<td/>").css("width", "50%").text(file.name).appendTo(tr);
+                        j("<td/>").css("width", "30%").css("text-align", "center").text(file.lastModified).appendTo(tr);
+                        j("<td/>").css("width", "20%").css("text-align", "center").text(file.size + " byte").appendTo(tr);
+                        
+                        tr.appendTo(listTypeFileViewTable);
+                        
+                        file_manager.tag
+                        			.append(gridTypeFileView)
+                        			.append(listTypeFileViewTable);
+                        
+                        /*file_manager.tag.html(file.name);*/
+                        
                     } else if (file.type == 'file') {
                         file_manager.tag = file_manager.fileTag.clone();
                         file_manager.tag.attr({
@@ -262,9 +293,24 @@ var print = function(param) {
                         });
                         
                         file_manager.tag.attr("nodeType", "file");
+                        
+                        var gridTypeFileView = j("<span/>").addClass("grid-view-file-info").css("display","block").text(file.name)
+                        var listTypeFileViewTable = j("<table/>").addClass("list-view-file-info").css("display", "none").css("width", "100%");
+                        var tr = j("<tr/>")
+                        j("<td/>").css("width", "50%").text(file.name).appendTo(tr);
+                        j("<td/>").css("width", "30%").css("text-align", "center").text(file.lastModified).appendTo(tr);
+                        j("<td/>").css("width", "20%").css("text-align", "center").text(file.size + " byte").appendTo(tr);
+                        
+                        tr.appendTo(listTypeFileViewTable);
+                        
                         file_manager.tag
+                        			.append(gridTypeFileView)
+                        			.append(listTypeFileViewTable)
+                					.attr('title', file.name);
+                        
+                        /*file_manager.tag
                             .html(file.name)
-                            .attr('title', file.name);
+                            .attr('title', file.name);*/
                     }
 
                     file_manager.tag.attr({
@@ -355,11 +401,15 @@ var print = function(param) {
                     // folder, file grid view
                     file_manager.viewport.delegate('.toolbar-gridview', 'click', function() {
                         file_manager.explorer.removeClass('list-view');
+                        j(".grid-view-file-info").show();
+                        j(".list-view-file-info").hide();
                     });
                     
                     // folder, file list view
                     file_manager.viewport.delegate('.toolbar-listview', 'click', function() {
                         file_manager.explorer.addClass('list-view');
+                        j(".grid-view-file-info").hide();
+                        j(".list-view-file-info").show();
                     });
                     
                     _fn.sort(file_manager.files, ['type', 'name'], true);

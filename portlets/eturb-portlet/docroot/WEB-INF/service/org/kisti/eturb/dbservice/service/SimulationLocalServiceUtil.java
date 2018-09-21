@@ -295,6 +295,16 @@ public class SimulationLocalServiceUtil {
 			inputFilePath);
 	}
 
+	public static void simulationWithInputFiles(long projectId,
+		org.kisti.eturb.dbservice.model.AnalyzerJob analyzerJob,
+		java.util.List<java.util.HashMap<java.lang.String, java.lang.String>> fileList,
+		java.nio.file.Path inputPath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.simulationWithInputFiles(projectId, analyzerJob, fileList,
+			inputPath);
+	}
+
 	public static void removeSimulationWithPath(long projectId,
 		java.lang.String executeId, java.lang.String userScreenName,
 		java.lang.String executeBasePath)
