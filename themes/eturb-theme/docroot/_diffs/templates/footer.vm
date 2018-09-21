@@ -10,9 +10,9 @@
 				<span>E-mail. $propsUtil.get("admin.email.from.address") </span>
 			</div>
 			<div class="col-md-4" style="margin-top: 20px;margin-bottom: 20px;">
-				<a href="http://www.msip.go.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner01.gif" width="106px" height="30px"/></a>
-				<a href="http://www.nrf.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner02.gif" width="79px" height="30px"/></a>
-				<a href="http://www.kisti.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner03.gif" width="117px" height="30px"/>
+				<a href="http://www.msip.go.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner01.gif" rel="noopener noreferrer" width="106px" height="30px"/></a>
+				<a href="http://www.nrf.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner02.gif" rel="noopener noreferrer" width="79px" height="30px"/></a>
+				<a href="http://www.kisti.re.kr/" target="_blank"><img src="$images_folder/custom/footer/fbanner03.gif" rel="noopener noreferrer" width="117px" height="30px"/>
 			</div>
 		</div>
 	</div>
