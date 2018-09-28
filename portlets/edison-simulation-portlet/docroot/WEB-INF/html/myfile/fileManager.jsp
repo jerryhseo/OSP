@@ -123,6 +123,12 @@
 	.info-key{
 		width: 45%;
 	}
+	
+	.breadcrumb > li+li:before{
+		content: "/\00a0" !important;
+		padding: 0 5px !important;
+		color: #ccc !important;
+	}
 </style>
 
 <aui:form name="form">
