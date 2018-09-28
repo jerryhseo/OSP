@@ -5,7 +5,7 @@
 
 <style type="text/css">
 	#<portlet:namespace/>create-mesh-modal{
-		width: 90% !important;
+		width: 50% !important;
 		margin: 30px auto !important;
 		padding-left: 0px !important;
 		overflow-y : hidden !important;
@@ -34,13 +34,9 @@
 					</div>
 					<div class="container col-md-12">
 						<div class="form-group">
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<label>SDE</label>
 								<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_meshparametric" queryString=""/>
-							</div>
-							<div class="col-md-6">
-								<label for="<portlet:namespace/>textSelect">TEXT</label>
-								<textarea class="form-control" id="<portlet:namespace/>textSelect" rows="25" draggable="false" style="resize: none;"></textarea>
 							</div>
 						</div>
 					</div>
@@ -58,23 +54,9 @@
 $(function(){
 	$("#<portlet:namespace/>save-mesh").click(function(e){
 		e.preventDefault();
-		if(!<portlet:namespace/>isEmptyAirfoliForm()){
-			return;
-		}
-		
 		<portlet:namespace/>getSDEData();
 	});
 });
-
-function <portlet:namespace/>isEmptyAirfoliForm(){
-	var textSelect = $("#<portlet:namespace/>textSelect");
-	var returnValue = true;
-	if(textSelect.val()==""){
-		textSelect.attr("placeholder", '<liferay-ui:message key="this-field-is-required"/>');
-		returnValue = false;
-	}
-	return returnValue;
-}
 
 function <portlet:namespace/>getSDEData(){
 	var eventData = {
@@ -102,8 +84,7 @@ function <portlet:namespace/>submitMeshData(sdeData){
 	            "<portlet:namespace/>appName" : DASH.Constants.getMakeMeshApp('${site}'),
 	            "<portlet:namespace/>appVersion" : DASH.Constants.MAKE_MESH_AERO_2D_VERSION,
 	            "<portlet:namespace/>datData" : $("#<portlet:namespace/>datFileSelect").val(),
-	            "<portlet:namespace/>sdeData" : sdeData,
-	            "<portlet:namespace/>textData" : $("#<portlet:namespace/>textSelect").val()
+	            "<portlet:namespace/>sdeData" : sdeData
 	        };
 		$.ajax({
 			url : '${kflowSaveMeshURL}',
@@ -168,7 +149,7 @@ function <portlet:namespace/>createMesh(){
 	$("#<portlet:namespace/>create-mesh-modal")
     .modal("toggle")
     .css({
-        "width":  "850px",
+        "width":  "650px",
         "margin-left": function () {
             return -($(this).width() / 2);
         }
@@ -177,29 +158,6 @@ function <portlet:namespace/>createMesh(){
 
 function <portlet:namespace/>resetAirfoilForm(){
 	$("#<portlet:namespace/>datFileSelect  option").remove();
-	
-	$("#<portlet:namespace/>textSelect").val("$dim = 2"
-			+"\r\n$nblock = 3"
-			+"\r\n$block-1 = Airfoil_01.x"
-			+"\r\n$block-2 = Airfoil_02.x"
-			+"\r\n$block-3 = Airfoil_03.x"
-			+"\r\n$form-1 = 0"
-			+"\r\n$form-2 = 0"
-			+"\r\n$form-3 = 0"
-			+"\r\n$bc-1-1 =   200    1  101"
-			+"\r\n$bc-1-4 =   200    1   51"
-			+"\r\n$bc-2-2 =   200    1  101"
-			+"\r\n$bc-2-4 =   200    1   51"
-			+"\r\n$bc-3-3 =   110    1  301"
-			+"\r\n$bc-3-4 =   200    1  301"
-			+"\r\n$decompose-1 = 0"
-			+"\r\n$decompose-2 = 0"
-			+"\r\n$decompose-3 = 0"
-			+"\r\n$ncpu-1 = 1 1 1"
-			+"\r\n$ncpu-2 = 1 1 1"
-			+"\r\n$ncpu-3 = 1 1 1"
-			+"\r\n$diswall = 1"
-			+"\r\n$output = air");
 	
 	var geoNode = $("#navigatorTree").jstree(true).get_node("<portlet:namespace/>" + DASH.Constants.GEOMETRIES_PARENT_FOLDER_ID, false);
 	$.each(geoNode.children, function (i){

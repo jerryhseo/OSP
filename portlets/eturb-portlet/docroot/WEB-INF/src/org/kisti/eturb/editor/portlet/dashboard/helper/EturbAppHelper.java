@@ -106,7 +106,7 @@ public class EturbAppHelper{
         return true;
     }
     
-    public boolean exeKflowMeshAnalyzer(long projectId,String datFilePath, String sdeFilePath, String textFilePath, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+    public boolean exeKflowMeshAnalyzer(long projectId,String datFilePath, String sdeFilePath, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
         	Path appPath = null;
         	Path exeFile = null;
         	
@@ -121,17 +121,17 @@ public class EturbAppHelper{
             resultPathString = resultPathString.endsWith(FILESYSTEM_SEPARATOR) ? resultPathString
                     : resultPathString + FILESYSTEM_SEPARATOR;
                 String[] command = new String[]{
-                    exeFile.toString(), "-inp1", datFilePath, 
-                    "-inp2", sdeFilePath,
-                    "-inp3", textFilePath,
+                    exeFile.toString(), "-inp", sdeFilePath, 
+                    "-grd", datFilePath,
                     ANALYZER_DEFAULT_OUTPUT_NAME, resultPathString};
+                
                 for(String cmd : command){
                     log.info(cmd);
                 }
-//                ProcessBuilder builder = new ProcessBuilder(command);
-//                builder.redirectOutput(Redirect.INHERIT);
-//                builder.redirectError(Redirect.INHERIT);
-//                builder.start();
+                ProcessBuilder builder = new ProcessBuilder(command);
+                builder.redirectOutput(Redirect.INHERIT);
+                builder.redirectError(Redirect.INHERIT);
+                builder.start();
                 
             return true;
         }

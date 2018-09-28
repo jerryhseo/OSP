@@ -54,26 +54,39 @@
 		getShapeAnalysisParamApp:function(site){
 			switch (site) {
 				case 'KFLOW':
-					return 'KFOIL_AirFoil_Para_KFLOW';
+					return 'KFOIL_AirFoil_Para';
 				case 'ETURB':
 					return 'KFOIL_AirFoil_Para';
 			}
 		},
-		SHAPE_ANALYSIS_PARAM_VERSION:'1.0.0',
-		SHAPE_ANALYSIS_APP:'KFOIL_AirFoil_Para_parin',
+		getShapeAnalysisParamAppVersion:function(site){
+			switch (site) {
+				case 'KFLOW':
+					return '1.0.1';
+				case 'ETURB':
+					return '1.0.0';
+			}
+		},
 		getShapeAnalysisApp:function(site){
 			switch (site) {
 				case 'KFLOW':
-					return 'KFOIL_AirFoil_Para_parin_kflow';
+					return 'KFOIL_AirFoil_Para_parin';
 				case 'ETURB':
 					return 'KFOIL_AirFoil_Para_parin';
 			}
 		},
-		SHAPE_ANALYSIS_VERSION:'1.0.0',
+		getShapeAnalysisAppVersion:function(site){
+			switch (site) {
+				case 'KFLOW':
+					return '1.0.1';
+				case 'ETURB':
+					return '1.0.0';
+			}
+		},
 		getMakeMeshApp:function(site){
 			switch (site) {
 			case 'KFLOW':
-				return 'kflow_mesher';
+				return 'KGRID';
 			case 'ETURB':
 				return 'Mesher';
 		}
@@ -258,6 +271,7 @@
 	};
 	
 	DASH.meshApp = function(meshFileExt,isBC){
+		alert(meshFileExt);
         var types = [];
         if(isBC){
         	types.push(['KFLOW_EDISON_Specialized','1.0.0']);
@@ -271,7 +285,9 @@
         	} else if(meshFileExt == 'p2d.zip') {
         		// 공력해석
         		types.push(['Aero_Turbine_2D','1.0.0']);
-        	} else if(meshFileExt == 'p3d.zip') {
+        	} else if(meshFileExt == 'kgrid.zip') {
+        		types.push(['PreFLOW_EDISON_Specialized','1.0.0']);
+        	}else if(meshFileExt == 'p3d.zip') {
         		// 공력해석
 //            types.push(['KFLOW_Turbine_3D','1.0.0']);
         	}

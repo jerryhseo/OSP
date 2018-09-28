@@ -17,9 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.model.EdisonExpando;
+import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.eturb.dbservice.model.AnalyzerJob;
 import org.kisti.eturb.editor.portlet.dashboard.helper.EturbAppHelper;
+import org.kisti.eturb.util.icebreaker.IBFileUtil;
+import org.kisti.eturb.util.icebreaker.IBUserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +36,8 @@ import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -52,7 +59,6 @@ public class CreateKflowMeshController {
 	        @RequestParam("appVersion") String appVersion,
 	        @RequestParam("datData") String datData,
 	        @RequestParam("sdeData") String sdeData,
-	        @RequestParam("textData") String textData,
 		    ResourceRequest request, ResourceResponse response) throws IOException{
 		Map params = RequestUtil.getParameterMap(request);
 		
@@ -60,6 +66,7 @@ public class CreateKflowMeshController {
 		String datFilePath = new String(decodedBytes);
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		Group group = themeDisplay.getScopeGroup();
 		
 		long projectId = GetterUtil.getLong(projectIdStr);
 		try{
@@ -68,41 +75,50 @@ public class CreateKflowMeshController {
 			
 			
 			String sdeFileName = "inp.inp";
-			String textFileName = "text.inp";
 			
 			List<HashMap<String, String>> fileList = new ArrayList<HashMap<String, String>>();
 			HashMap<String, String> sdeMap = new HashMap<String, String>();
 			sdeMap.put("fileName", sdeFileName);
 			sdeMap.put("fileContent", sdeData);
 			fileList.add(sdeMap);
-			HashMap<String, String> textMap = new HashMap<String, String>();
-			textMap.put("fileName", textFileName);
-			textMap.put("fileContent", textData);
-			fileList.add(textMap);
 			
 			
 			String workingPath = eturbAppHelper.createInputFiles(projectId, fileList, themeDisplay, analyzerJob, user);
 			
-			System.out.println(datFilePath);
-			System.out.println(workingPath);
-			
 			String sdeFilePath = workingPath+File.separator+sdeFileName;
-			String textFilePath = workingPath+File.separator+textFileName;
 			
-			boolean isComplete = eturbAppHelper.exeKflowMeshAnalyzer(projectId, datFilePath, sdeFilePath, textFilePath, themeDisplay, analyzerJob, user);
+			boolean isComplete = eturbAppHelper.exeKflowMeshAnalyzer(projectId, datFilePath, sdeFilePath, themeDisplay, analyzerJob, user);
+			SimpleDateFormat fileNameForm = new SimpleDateFormat("yyyyMMddHHmmss");
+			String zipFileName = fileNameForm.format(new Date())+"."+analyzerJob.getOutputData().getName_();
 			
-			Date today = new Date();
-            SimpleDateFormat fileNameForm = new SimpleDateFormat("yyyyMMddHHmmss");
-            String zipFileName = fileNameForm.format(today)+"."+analyzerJob.getOutputData().getName_();
-            
-            
+			String fileId = "";
+			if(isComplete){
+				long sleepTime = 5*1000;
+		    	Thread.sleep(sleepTime);
+		    	String vcToken = IBUserTokenUtil.getOrCreateToken(group.getGroupId(), user).getVcToken();
+	            String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+	            
+	            File resultPath = new File(analyzerJob.getResultPath());
+	            if(resultPath.isDirectory()){
+	            	File[] resultFileList = resultPath.listFiles();
+	            	String userScreenName = "";
+	                if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
+	                    userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
+	                }else{
+	                    userScreenName = String.valueOf(user.getScreenName());
+	                }
+	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, resultFileList, "KFLOW_Meshes", false,userScreenName);
+	            }else{
+	            	isComplete = false;
+	            }
+			}
+			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			JsonObject obj = new JsonObject();
-			//obj.addProperty("isComplete", isComplete);
-			obj.addProperty("isComplete", true);
+			obj.addProperty("isComplete", isComplete);
 			obj.addProperty("analyzerJob", new Gson().toJson(analyzerJob));
-			obj.addProperty("fileId", "test");
+			obj.addProperty("fileId", fileId);
 			obj.addProperty("fileName", zipFileName);
 			out.write(obj.toString());
 		}catch (Exception e) {

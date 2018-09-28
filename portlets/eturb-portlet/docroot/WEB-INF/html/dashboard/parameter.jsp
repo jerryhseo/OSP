@@ -275,7 +275,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 					var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 		        	
 	// 	        	var fileContent = e.data.data.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-		        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
+		        	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.getShapeAnalysisAppVersion('${site}'), parentNode, fileContent,true);
 		        },error:function(jqXHR, textStatus, errorThrown){
 					if(jqXHR.responseText !== ''){
 						alert("[ERROR] AJAX FAILED during removeRemoteFilePath -->"+textStatus+": "+jqXHR.responseText);
@@ -290,7 +290,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 			dataType.deserializeStructure(e.data.context_);
 	    	var dataStructure = dataType.structure(); 
 	    	var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-	    	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_VERSION, parentNode, fileContent,true);
+	    	<portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisApp('${site}'),DASH.Constants.getShapeAnalysisAppVersion('${site}'), parentNode, fileContent,true);
 		}
 	}
 });
@@ -300,7 +300,7 @@ function <portlet:namespace/>runAnalyzer(){
 	bStart();
 	setTimeout(function(){
 		var geoNode = <portlet:namespace/>getSelectedGeometryNode();
-	    <portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisParamApp('${site}'),DASH.Constants.SHAPE_ANALYSIS_PARAM_VERSION,geoNode,'',false);
+	    <portlet:namespace/>prepareAnalyzer(DASH.Constants.getShapeAnalysisParamApp('${site}'),DASH.Constants.getShapeAnalysisParamAppVersion('${site}'),geoNode,'',false);
 	},1000);
 	
 	/*
