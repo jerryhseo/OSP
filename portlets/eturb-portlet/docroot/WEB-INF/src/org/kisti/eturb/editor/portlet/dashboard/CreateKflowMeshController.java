@@ -93,7 +93,7 @@ public class CreateKflowMeshController {
 			
 			String fileId = "";
 			if(isComplete){
-				long sleepTime = 5*1000;
+				long sleepTime = 30*1000;
 		    	Thread.sleep(sleepTime);
 		    	String vcToken = IBUserTokenUtil.getOrCreateToken(group.getGroupId(), user).getVcToken();
 	            String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
