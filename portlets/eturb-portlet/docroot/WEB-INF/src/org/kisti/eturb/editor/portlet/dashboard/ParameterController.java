@@ -90,6 +90,11 @@ public class ParameterController{
 	        boolean isCompleteAnalyzer = eturbAppHelper.exeAnalyzer(GetterUtil.getLong(projectId), inputFileName, fileId, fileContent, themeDisplay, analyzerJob, user);
 	        response.setContentType("application/json; charset=UTF-8");
             PrintWriter out = response.getWriter();
+            
+            long sleepTime = 2*1000;
+            Thread.sleep(sleepTime);
+            
+            
             out.write("{\"isComplete\": " + isCompleteAnalyzer + "}");
 	    }catch (Exception e) {
 	    	e.printStackTrace();
