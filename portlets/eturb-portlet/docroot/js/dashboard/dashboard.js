@@ -271,7 +271,6 @@
 	};
 	
 	DASH.meshApp = function(meshFileExt,isBC){
-		alert(meshFileExt);
         var types = [];
         if(isBC){
         	types.push(['KFLOW_EDISON_Specialized','1.0.0']);
