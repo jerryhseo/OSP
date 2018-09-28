@@ -107,7 +107,7 @@ public class TreeViewMonitoringController{
             String result = SimulationLocalServiceUtil.retrievePostProcessor(
                 icebreakerUrl, vcToken.getVcToken(), jobUuid);
             response.getWriter().write(result);
-        }catch (IOException | ParseException e){
+        }catch (Exception e){
             String msg = TreeViewMonitoringController.class.getName() + ".getResultFiles error";
             handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), msg);
         }
