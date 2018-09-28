@@ -91,6 +91,7 @@ public class DashboardController{
             List<String[]> dataStructurAppList = new ArrayList<String[]>();;
             if(useSite.equals("ETURB")){
             	dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.0", "parametric"});
+            	model.addAttribute("meshparametric", "null");
             }else{
             	dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.1", "parametric"});
             	dataStructurAppList.add(new String[]{"KGRID", "1.0.0", "meshparametric"});
