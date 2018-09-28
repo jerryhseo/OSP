@@ -183,9 +183,12 @@
 		
 		<portlet:namespace/>navigatorInitJstree();
 		
-		<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
-		
-		<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${meshparametric},'meshparametric');
+		if('${site}' == 'ETURB'){
+			<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
+		}else{
+			<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
+			<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${meshparametric},'meshparametric');
+		}
 	});
 	
 	
