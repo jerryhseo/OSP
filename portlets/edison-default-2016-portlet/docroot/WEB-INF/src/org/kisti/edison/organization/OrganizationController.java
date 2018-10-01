@@ -23,10 +23,12 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoValue;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
@@ -57,13 +59,14 @@ public class OrganizationController{
 		
 		try {
 			User user = themeDisplay.getUser();
-			System.out.println("test --->>>" + user.getExpandoBridge().toString());
-			System.out.println("test ->> " + user.getExpandoBridge().getAttribute("universityField").toString());
 			
 			long nextCd = 0l;
 			String upCode = "1501";		//기관 upCode
 			List<Map<String,String>> sendOrganList = new ArrayList(); 
 			List<Map<String,String>> organList = EdisonExpndoUtil.getCodeListByUpCode(upCode, themeDisplay.getLocale());
+			
+			UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(request);
+			String fileName = uploadPortletRequest.getFileName("fileName");
 			
 			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("curPage"), "1"));
 			int linePerPage = 10;

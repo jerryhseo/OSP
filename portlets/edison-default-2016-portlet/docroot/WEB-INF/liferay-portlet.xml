@@ -85,6 +85,12 @@
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<css-class-wrapper>edison-workbench-template container-fluid</css-class-wrapper>
+	</portlet>	
+	
+	<portlet>
+		<portlet-name>edison-organization-manager</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>false</instanceable>
 	</portlet>		
 	
 	
