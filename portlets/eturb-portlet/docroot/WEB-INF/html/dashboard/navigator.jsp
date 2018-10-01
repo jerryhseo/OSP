@@ -450,7 +450,7 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
 		isBcUse = true;
 	}
 	
-    var appList = DASH.meshApp(fileExt, isBcUse);
+    var appList = DASH.meshApp(fileExt, '${site}');
     
     var sendData = {
         "<portlet:namespace/>appList" : appList
