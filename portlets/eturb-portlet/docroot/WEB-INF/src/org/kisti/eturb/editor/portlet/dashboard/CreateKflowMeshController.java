@@ -89,7 +89,7 @@ public class CreateKflowMeshController {
 			
 			boolean isComplete = eturbAppHelper.exeKflowMeshAnalyzer(projectId, datFilePath, sdeFilePath, themeDisplay, analyzerJob, user);
 			SimpleDateFormat fileNameForm = new SimpleDateFormat("yyyyMMddHHmmss");
-			String zipFileName = fileNameForm.format(new Date())+"."+analyzerJob.getOutputData().getName_();
+			String gridFileName = "";
 			
 			String fileId = "";
 			if(isComplete){
@@ -99,15 +99,29 @@ public class CreateKflowMeshController {
 	            String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
 	            
 	            File resultPath = new File(analyzerJob.getResultPath());
+	            String getFileIdFromExt = "p2d";
+	            
 	            if(resultPath.isDirectory()){
 	            	File[] resultFileList = resultPath.listFiles();
+	            	for(File file : resultFileList){
+	            		String strFileName = file.getName();
+	        			int pos = strFileName.lastIndexOf(".");
+	        			String ext = strFileName.substring(pos+1);
+	        			
+	            		file.renameTo(new File(file.getAbsolutePath()+File.separator+fileNameForm.format(new Date())+"_"+strFileName));
+	            		if(ext.equals(getFileIdFromExt)){
+	            			gridFileName = file.getName();
+	            		}
+	            	}
+	            	
 	            	String userScreenName = "";
 	                if(EdisonUserUtil.isRegularRole(user, RoleConstants.ADMINISTRATOR)){
 	                    userScreenName = (String)group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ADMIN_ID);
 	                }else{
 	                    userScreenName = String.valueOf(user.getScreenName());
 	                }
-	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, resultFileList, "KFLOW_Meshes", false,userScreenName);
+//	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, resultFileList, "KFLOW_Meshes", false,userScreenName);
+	                fileId = IBFileUtil.kflowMeshFileListUpload(icebreakerUrl, vcToken, resultFileList, "KFLOW_Meshes", getFileIdFromExt,userScreenName);
 	            }else{
 	            	isComplete = false;
 	            }
@@ -119,7 +133,7 @@ public class CreateKflowMeshController {
 			obj.addProperty("isComplete", isComplete);
 			obj.addProperty("analyzerJob", new Gson().toJson(analyzerJob));
 			obj.addProperty("fileId", fileId);
-			obj.addProperty("fileName", zipFileName);
+			obj.addProperty("fileName", gridFileName);
 			out.write(obj.toString());
 		}catch (Exception e) {
             handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),
