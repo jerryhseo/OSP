@@ -219,6 +219,7 @@
 						A.name LIKE '%@@likeSwNameAndSwTitle@@%'
 					OR
 						EXTRACTVALUE(A.title, 'root/Title[@language-id="@@targetLanguage@@"]') LIKE '%@@likeSwNameAndSwTitle@@%'
+					OR U.screenName LIKE '%@@likeSwNameAndSwTitle@@%'
 				)
 			</isNotEmpty>
 			

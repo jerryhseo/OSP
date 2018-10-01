@@ -28,6 +28,12 @@
 	    min-height:50px;
 	}
 	
+	#<portlet:namespace/>infoMsg{
+		margin-bottom: 20px;
+		color: red;
+		font-size: 15px;
+		font-weight: bold;
+	}
 
 </style>
 
@@ -270,6 +276,18 @@ function <portlet:namespace/>selectEntryChecked(modelSeq){
 
 <form id="scienceAppForm" name="scienceAppForm" method="post" onsubmit="return false;" style="margin:0px;">
 	<input type="hidden" id="<portlet:namespace/>virtualLabId" name="<portlet:namespace/>virtualLabId" value=${virtualLabId}>
+	
+	<c:if test="${classId <= 0}">
+		<div id="<portlet:namespace/>infoMsg">
+			※ <liferay-ui:message key='edison-virtuallab-science-app-regist-message' />
+			
+		</div>
+	</c:if>
+	<c:if test="${0 < classId}">
+		<div id="<portlet:namespace/>infoMsg">
+			※ <liferay-ui:message key='edison-virtuallab-science-app-regist-message' />
+		</div>
+	</c:if>
 	
 	<div id="selectInfo">
 	</div>
