@@ -120,14 +120,24 @@
 		padding: 5px 0px;
 	}
 	
-	.info-key{
-		width: 45%;
-	}
-	
 	.breadcrumb > li+li:before{
 		content: "/\00a0" !important;
 		padding: 0 5px !important;
 		color: #ccc !important;
+	}
+	
+	#<portlet:namespace/>nodeTitle{
+		font-size: 20px;
+	}
+	
+	#<portlet:namespace/>nodeInfoTable th{
+		padding-left: 15px;
+		border-right: 1px solid #e5e5e9;
+	}
+	
+	#<portlet:namespace/>nodeInfoTable td{
+		padding: 5px 0px 5px 15px;
+		font-size: 12px;
 	}
 </style>
 
@@ -204,6 +214,31 @@
 
 <div class="container popup select-btn">
 	<input class="addIp button08_1" id="<portlet:namespace/>selectBtn" onclick="_fileManager_selectBtn('btn');" value="<liferay-ui:message key='edison-table-list-header-select'/>" type="button" />
+</div>
+
+<button id="<portlet:namespace/>nodeInfoModalBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#<portlet:namespace/>nodeInfoModal" style="display: none;">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="<portlet:namespace/>nodeInfoModal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>nodeInfoModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="modal-title" id="<portlet:namespace/>nodeTitle">
+					<liferay-ui:message key="edison-science-appstore-view-tab-detail-view"/>
+				</span>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+			
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- File Manager Script -->
@@ -786,47 +821,53 @@
 					breadCrumbPath += "/" + $(this).text();
 				});
 				
+				var tableColgroup = "<colgroup> <col width=\"30%\"> <col width=\"70%\"> </colgroup>"
+				
 				if(itemType == 'folder'){
 					if(selectedItemId == undefined || selectedItemId == null || selectedItemId == ''){
 						var homeFolderCnt = $("#<portlet:namespace/>thisChildFolderCnt").val()
 						var homeFileCnt = $("#<portlet:namespace/>thisChildFileCnt").val()
-						infoText = "<table class=\"info-table\">" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">NAME</td><td class=\"info-value\">HOME</td></tr>" + 
-										"<tr class=\"info-tr\"><td class=\"info-key\">TYPE</td><td class=\"info-value\">FOLDER</td></tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">PATH</td><td class=\"info-value\">/HOME</td></tr>" + 
+						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">HOME</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
+										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">/HOME</td></tr>" + 
 										"<tr class=\"info-tr\">" + 
-											"<td class=\"info-key\">Content</td>" + 
+											"<th class=\"info-key\">Content</th>" + 
 											"<td class=\"info-value\">Folders : " + homeFolderCnt + ", files : " + homeFileCnt + "</td>" + 
 										"</tr>" + 
 									"</table>";
 					} else {
-						infoText = "<table class=\"info-table\">" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">NAME</td><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
-										"<tr class=\"info-tr\"><td class=\"info-key\">TYPE</td><td class=\"info-value\">FOLDER</td></tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">PATH</td><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
+						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
+										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
 										"<tr class=\"info-tr\">" + 
-											"<td class=\"info-key\">Content</td>" + 
+											"<th class=\"info-key\">Content</th>" + 
 											"<td class=\"info-value\">Folders : " + itemInfoMap.folderCount + ", files : " + itemInfoMap.fileCount + "</td>" + 
 										"</tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">SIZE</td><td class=\"info-value\">"+itemSize+"</td></tr>" + 
-										"<tr class=\"info-tr\"><td class=\"info-key\">Last Modified</td><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
 									"</table>";
 					}
 				} else if(itemType == 'file'){
-					infoText = "<table class=\"info-table\">" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">NAME</td><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
-										"<tr class=\"info-tr\"><td class=\"info-key\">TYPE</td><td class=\"info-value\">FILE</td></tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">PATH</td><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
-										"<tr class=\"info-tr\"><td class=\"info-key\">SIZE</td><td class=\"info-value\">"+itemSize+"</td></tr>" + 
-										"<tr class=\"info-tr\"><td class=\"info-key\">Last Modified</td><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
+					infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FILE</td></tr>" +
+										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
+										"<tr class=\"info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
+										"<tr class=\"info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
 									"</table>";
 				}
 				
-				$.dialog({
+				$("#<portlet:namespace/>nodeInfoModal div.modal-body").html("");
+				$("#<portlet:namespace/>nodeInfoModal div.modal-body").append(infoText);
+				$("#<portlet:namespace/>nodeInfoModalBtn").click();
+				
+				/* $.dialog({
 					title : "Information",
 					content: infoText,
 					columnClass: 'col-md-6 col-md-offset-3'
-				});
+				}); */
 			},error:function(){
 				toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 			},complete: function(){
