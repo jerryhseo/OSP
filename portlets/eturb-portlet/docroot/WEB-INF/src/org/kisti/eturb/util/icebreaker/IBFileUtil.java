@@ -352,6 +352,25 @@ public class IBFileUtil {
         }
     }
     
+    public static String kflowMeshFileListUpload(String icebreakerUrl, String vcToken, File[] fileList, String folderName, String getFileIdFromExt, String userScreenName) throws SystemException{
+    	String fileId = "";
+    	try{
+    		for(File file : fileList){
+    			String strFileName = file.getName();
+    			int pos = strFileName.lastIndexOf(".");
+    			String ext = strFileName.substring(pos+1);
+    			if(ext.equals(getFileIdFromExt)){
+    				fileId = ibFileUpload(icebreakerUrl, vcToken, file,folderName,userScreenName);
+    			}else{
+    				ibFileUpload(icebreakerUrl, vcToken, file,folderName,userScreenName);
+    			}
+    		}
+    	}catch (Exception e) {
+    		throw new SystemException(e);
+		}
+    	return fileId;
+    }
+    
     
     private static String ibFileUpload(String icebreakerUrl, String vcToken, File file, String parentFilePath, String userScreenName) throws SystemException{
 	    
