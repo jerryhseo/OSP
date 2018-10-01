@@ -493,7 +493,7 @@
 					<portlet:namespace/>getOrganizationList(1);
 					alert('<liferay-ui:message key="edison-data-delete-success"/>');
 				} else {
-					alert('<liferay-ui:message key="edison-data-delete-success"/>');
+					alert('<liferay-ui:message key="edison-organization-delete-failed-massage"/>');
 				}
 			},error: function(){
 				alert('<liferay-ui:message key="edison-data-delete-error"/>');
