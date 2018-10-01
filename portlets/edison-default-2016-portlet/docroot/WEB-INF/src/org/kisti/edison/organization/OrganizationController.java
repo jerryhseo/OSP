@@ -28,6 +28,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoValue;
+import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoRowLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.expando.service.persistence.ExpandoValueUtil;
@@ -108,8 +109,8 @@ public class OrganizationController{
 		try {
 			
 			Long organCd = Long.parseLong(CustomUtil.strNull(request.getParameter("organCd"), "0"));
-			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(79401, 7653530, organCd);
-			ExpandoValue expandoRegionValue = ExpandoValueLocalServiceUtil.getValue(79401, 7653531, organCd);
+			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(79401, 13812115, organCd);
+			ExpandoValue expandoRegionValue = ExpandoValueLocalServiceUtil.getValue(79401, 13812116, organCd);
 			
 			Map<String, Object> expandoValueMap = new HashMap<String, Object>();
 			expandoValueMap.put("valueId", expandoValue.getValueId());
@@ -145,10 +146,11 @@ public class OrganizationController{
 			
 			// tableId = 79401		companyId = 20154		classNameId = 20107
 			// columnId = 7653530(기관 명), 7653531(지역), 7653532(option1), 7653533(option2), 7653534(option3)
+			// 실서버 columnId = 13812115(기관 명), 13812116(지역), 13812117(option1), 13812118(option2), 13812119(option3)
 			
 			long tableId = 79401l;
-			long columnId = 7653530l;
-			long regionColumnId = 7653531l;
+			long columnId = 13812115l;
+			long regionColumnId = 13812116l;
 			long companyId = 20154l;
 			long classNameId = 20107l;
 			long classPk = Long.parseLong(CustomUtil.strNull(params.get("nextCd"), "0"));
@@ -165,9 +167,9 @@ public class OrganizationController{
 			// Add ExpandoValue
 			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, columnId, classPk, data);										// 기관명
 			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, regionColumnId, classPk, CustomUtil.strNull(organRegion));		// 지역
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 7653532, classPk, "");											// Option 1
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 7653533, classPk, "");											// Option 2
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 7653534, classPk, "");											// Option 3
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812117, classPk, "");											// Option 1
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812118, classPk, "");											// Option 2
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812119, classPk, "");											// Option 3
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -242,7 +244,6 @@ public class OrganizationController{
 		try {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
-			
 			
 			long valueId = Long.parseLong(CustomUtil.strNull(params.get("valueId"), "0"));
 			long classPk = Long.parseLong(CustomUtil.strNull(params.get("classPk"), "0"));
