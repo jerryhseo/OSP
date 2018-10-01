@@ -149,8 +149,6 @@
 </form>
 	
 	<div class="h10"></div>
-	<!-- <button id="openFileManagerPopup" class="file-manager-popup">File Manager Popup</button> -->
-	<div class="h40"></div>
 	
 <div class="container myfilebox">
 	<input type="hidden" id="<portlet:namespace/>thisChildFolderCnt" value="">
