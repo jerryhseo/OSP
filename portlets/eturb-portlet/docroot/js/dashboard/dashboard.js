@@ -270,11 +270,10 @@
 		}
 	};
 	
-	DASH.meshApp = function(meshFileExt,isBC){
+	DASH.meshApp = function(meshFileExt,site){
         var types = [];
-        if(isBC){
-        	types.push(['KFLOW_EDISON_Specialized','1.0.0']);
-    		types.push(['PreFLOW_EDISON_Specialized','1.0.0']);
+        if(site =='KFLOW'){
+        	types.push(['PreFLOW_EDISON_Specialized','1.0.0']);
         }else{
         	if(meshFileExt == 'bdf'){
         		// 진동해석
@@ -284,12 +283,11 @@
         	} else if(meshFileExt == 'p2d.zip') {
         		// 공력해석
         		types.push(['Aero_Turbine_2D','1.0.0']);
-        	} else if(meshFileExt == 'kgrid.zip') {
-        		types.push(['PreFLOW_EDISON_Specialized','1.0.0']);
         	}else if(meshFileExt == 'p3d.zip') {
         		// 공력해석
 //            types.push(['KFLOW_Turbine_3D','1.0.0']);
         	}
+        	
         }
         return types;
     }

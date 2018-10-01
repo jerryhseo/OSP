@@ -322,7 +322,7 @@ function n_indexOf(str, searchValue, nth){
 }
 
 function <portlet:namespace/>oepnMoveWorkbench(meshFileName, meshFileId){
-    var appList = DASH.meshApp(meshFileName);
+    var appList = DASH.meshApp(meshFileName,'${site}');
     
     var sendData = {
         "<portlet:namespace/>appList" : appList
