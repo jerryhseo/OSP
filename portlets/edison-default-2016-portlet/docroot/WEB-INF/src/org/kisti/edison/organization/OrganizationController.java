@@ -30,8 +30,8 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoValue;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoRowLocalServiceUtil;
+import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
-import com.liferay.portlet.expando.service.persistence.ExpandoValueUtil;
 
 import net.sf.json.JSONObject;
 
@@ -109,8 +109,12 @@ public class OrganizationController{
 		try {
 			
 			Long organCd = Long.parseLong(CustomUtil.strNull(request.getParameter("organCd"), "0"));
-			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(79401, 13812115, organCd);
-			ExpandoValue expandoRegionValue = ExpandoValueLocalServiceUtil.getValue(79401, 13812116, organCd);
+			
+			long cdNmColumnId = ExpandoColumnLocalServiceUtil.getColumn(79401, "cdNm").getColumnId();
+			long regionColumnId = ExpandoColumnLocalServiceUtil.getColumn(79401, "region").getColumnId();
+			
+			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(79401, cdNmColumnId, organCd);
+			ExpandoValue expandoRegionValue = ExpandoValueLocalServiceUtil.getValue(79401, regionColumnId, organCd);
 			
 			Map<String, Object> expandoValueMap = new HashMap<String, Object>();
 			expandoValueMap.put("valueId", expandoValue.getValueId());
@@ -149,13 +153,18 @@ public class OrganizationController{
 			// 실서버 columnId = 13812115(기관 명), 13812116(지역), 13812117(option1), 13812118(option2), 13812119(option3)
 			
 			long tableId = 79401l;
-			long columnId = 13812115l;
-			long regionColumnId = 13812116l;
+			
+			long cdNmColumnId = ExpandoColumnLocalServiceUtil.getColumn(tableId, "cdNm").getColumnId();
+			long regionColumnId = ExpandoColumnLocalServiceUtil.getColumn(tableId, "region").getColumnId();
+			long option1ColumnId = ExpandoColumnLocalServiceUtil.getColumn(tableId, "option1").getColumnId();
+			long option2ColumnId = ExpandoColumnLocalServiceUtil.getColumn(tableId, "option2").getColumnId();
+			long option3ColumnId = ExpandoColumnLocalServiceUtil.getColumn(tableId, "option3").getColumnId();
+			
 			long companyId = 20154l;
 			long classNameId = 20107l;
 			long classPk = Long.parseLong(CustomUtil.strNull(params.get("nextCd"), "0"));
 			
-			String organRegion = CustomUtil.strNull(params.get("organRegionNm"), "0");
+			String organRegion = CustomUtil.strNull(params.get("organRegionNm"));
 			String orgnaCdNm_ko_KR = CustomUtil.strNull(params.get("organCdNm_ko_KR"), "");
 			String orgnaCdNm_en_US = CustomUtil.strNull(params.get("organCdNm_en_US"), "");
 			
@@ -165,11 +174,11 @@ public class OrganizationController{
 							+ orgnaCdNm_ko_KR + "</Data></root>";
 			
 			// Add ExpandoValue
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, columnId, classPk, data);										// 기관명
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, cdNmColumnId, classPk, data);									// 기관명
 			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, regionColumnId, classPk, CustomUtil.strNull(organRegion));		// 지역
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812117, classPk, "");											// Option 1
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812118, classPk, "");											// Option 2
-			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, 13812119, classPk, "");											// Option 3
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, option1ColumnId, classPk, "");									// Option 1
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, option2ColumnId, classPk, "");									// Option 2
+			ExpandoValueLocalServiceUtil.addValue(classNameId, tableId, option3ColumnId, classPk, "");									// Option 3
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,9 +197,9 @@ public class OrganizationController{
 			long valueId = Long.parseLong(CustomUtil.strNull(params.get("valueId"), "0"));
 			long classNameId = Long.parseLong(CustomUtil.strNull(params.get("classNameId"), "0"));
 			long classPk = Long.parseLong(CustomUtil.strNull(params.get("classPk"), "0"));
-			String organRegionNm = CustomUtil.strNull(params.get("organRegionNm"), "0");
+			String organRegionNm = CustomUtil.strNull(params.get("organRegionNm"));
 			long regionColumnId = Long.parseLong(CustomUtil.strNull(params.get("regionColumnId"), "0"));
-			long regionValueId = Long.parseLong(CustomUtil.strNull(params.get("regionValueId"), "0"));
+			long regionValueId = Long.parseLong(CustomUtil.strNull(params.get("regionValueId")));
 			
 			String orgnaCdNm_ko_KR = CustomUtil.strNull(params.get("organCdNm_ko_KR"), "");
 			String orgnaCdNm_en_US = CustomUtil.strNull(params.get("organCdNm_en_US"), "");
@@ -252,7 +261,8 @@ public class OrganizationController{
 			long rowId = expandoValue.getRowId();
 			
 			// 기관코드를 사용하는 유저 Count		tableId : 23206, columnId : 50187
-			int useCount = ExpandoValueUtil.countByT_C_D(23206, 50187, classPk+"");
+			//int useCount = ExpandoValueUtil.countByT_C_D(23206, 50187, classPk+"");
+			int useCount = ExpandoValueLocalServiceUtil.getColumnValuesCount(20154, 20005, ExpandoTableLocalServiceUtil.getExpandoTable(23206).getName(), ExpandoColumnLocalServiceUtil.getColumn(50187).getName(), classPk+"");
 			
 			// 삭제할 기관과 관련된 ExpandoValue 삭제
 			boolean deleteSuccess = false;
