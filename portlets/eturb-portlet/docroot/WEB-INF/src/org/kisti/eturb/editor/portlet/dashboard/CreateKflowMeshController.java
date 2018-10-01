@@ -108,7 +108,6 @@ public class CreateKflowMeshController {
 	        			int pos = strFileName.lastIndexOf(".");
 	        			String ext = strFileName.substring(pos+1);
 	        			
-	            		file.renameTo(new File(file.getAbsolutePath()+File.separator+fileNameForm.format(new Date())+"_"+strFileName));
 	            		if(ext.equals(getFileIdFromExt)){
 	            			gridFileName = file.getName();
 	            		}
@@ -121,7 +120,7 @@ public class CreateKflowMeshController {
 	                    userScreenName = String.valueOf(user.getScreenName());
 	                }
 //	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, resultFileList, "KFLOW_Meshes", false,userScreenName);
-	                fileId = IBFileUtil.kflowMeshFileListUpload(icebreakerUrl, vcToken, resultFileList, "KFLOW_Meshes", getFileIdFromExt,userScreenName);
+	                fileId = IBFileUtil.kflowMeshFileListUpload(icebreakerUrl, vcToken, resultFileList, "KFLOW_Meshes/"+fileNameForm.format(new Date()), getFileIdFromExt,userScreenName);
 	            }else{
 	            	isComplete = false;
 	            }
