@@ -111,7 +111,7 @@ public class OrganizationController{
 			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(79401, 7653530, organCd);
 			ExpandoValue expandoRegionValue = ExpandoValueLocalServiceUtil.getValue(79401, 7653531, organCd);
 			
-			Map<String, Object> expandoValueMap = new HashMap<>();
+			Map<String, Object> expandoValueMap = new HashMap<String, Object>();
 			expandoValueMap.put("valueId", expandoValue.getValueId());
 			expandoValueMap.put("companyId", expandoValue.getCompanyId());
 			expandoValueMap.put("tableId", expandoValue.getTableId());
@@ -120,7 +120,7 @@ public class OrganizationController{
 			expandoValueMap.put("classNameId", expandoValue.getClassNameId());
 			expandoValueMap.put("data", expandoValue.getData());
 			
-			Map<String, Object> expandoRegionValueMap = new HashMap<>();
+			Map<String, Object> expandoRegionValueMap = new HashMap<String, Object>();
 			expandoRegionValueMap.put("valueId", expandoRegionValue.getValueId());
 			expandoRegionValueMap.put("columnId", expandoRegionValue.getColumnId());
 			expandoRegionValueMap.put("data", expandoRegionValue.getData());
