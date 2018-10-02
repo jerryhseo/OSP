@@ -310,6 +310,9 @@
 				$(".text-center").append(pagingStr);
 				
 				selector = $("#<portlet:namespace/>organRegionNm");
+				
+				selector.html("");
+				
 				$("<option/>").val("").text("<liferay-ui:message key='full' />").appendTo(selector);
 				for(var i=0; i<regionList.length; i++){
 					$("<option/>").val(regionList[i].cd).text(regionList[i].cdNm).appendTo(selector);
