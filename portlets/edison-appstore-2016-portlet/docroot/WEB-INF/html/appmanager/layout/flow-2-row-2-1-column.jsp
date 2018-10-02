@@ -10,22 +10,27 @@
 			</ul>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-md-12 col">
+	<div class="row" style="height:100%">
+		<div class="col-md-12"  style="height:100%;width:50%;" id="col-column-6">
+			<div class="row" style="height:50%" id="row-column-6">
+				<div class="col-md-12 col sub-col" style="height:100%">
 					<ul class="sortable-list ui-sortable list-group" id="column-6">
 						
 					</ul>
-				</div>
-				<div class="col-md-12 col">
-					<ul class="sortable-list ui-sortable list-group" id="column-7" >
+				</div>  
+			</div>
+			<div class="devider horizontal" data-equal-id="row-column-6" data-remainder-id="row-column-7" set-equal-ids="column-6" set-remainder-ids="column-7"></div>
+			<div class="row" style="height:50%" id="row-column-7">
+				<div class="col-md-12 col sub-col"style="height:100%">
+					<ul class="sortable-list ui-sortable list-group" id="column-7">
+					
 					</ul>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8 col" style="min-height: 289px;">
-			<ul class="sortable-list ui-sortable list-group" id="column-8" data-init-area="output">
+		<div class="devider vertical" data-equal-id="col-column-6" data-remainder-id="col-column-8" set-equal-ids="column-6|column-7" set-remainder-ids="column-8"></div>
+		<div class="col-md-12 col"  style="height:100%;width:50%;" id="col-column-8">
+			<ul class="sortable-list ui-sortable list-group" id="column-8" data-init-area="output" style="height:100%">
 			</ul>
 		</div>
 	</div>
