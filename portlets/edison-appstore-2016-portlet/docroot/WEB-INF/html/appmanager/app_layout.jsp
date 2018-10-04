@@ -411,6 +411,7 @@ $(document).ready(function(){
 				var objectRightPositon = 100-objectLeftPositon;
 				
 				$(object).css("left",objectLeftPositon+"%");
+				$(object).attr("left-per",objectLeftPositon+"%");
 				$(equalDiv).css("width",objectLeftPositon+"%");
 				$(remainderDiv).css("width",objectRightPositon+"%");
 				
@@ -431,6 +432,7 @@ $(document).ready(function(){
 				$(equalDiv).css("height",objectTopPositon+"%");
 				$(remainderDiv).css("height",objectBottomPositon+"%");
 				$(object).css("top",objectTopPositon+"%");
+				$(object).attr("top-per",objectTopPositon+"%");
 				
 				$(equalDiv).find("div.sub-col").attr("height-per",objectTopPositon+"%");
 				$(remainderDiv).find("div.sub-col").attr("height-per",objectBottomPositon+"%");
@@ -566,10 +568,15 @@ function <portlet:namespace/>actionCall(mode){
 			}else{
 				Layout.addPortlet(columnId,'','','','',columnHeight,columnWidth);
 			}
-			
 		});
 		
 		
+		/*devider 정보 Layout Setting - GPLUS - 20181004*/
+		$(".devider").each(function(){
+			Layout.addDeviderObject($(this).attr('id'),$(this).attr('left-per'),$(this).attr('top-per'));
+		});
+		
+
 		$("#<portlet:namespace/>layout").val(JSON.stringify(Layout));
 		$("#<portlet:namespace/>templetId").val(templateId);
 // 		console.log(JSON.stringify(Layout));
@@ -611,13 +618,12 @@ function <portlet:namespace/>drawLayout(layout){
 	var columns = Layout.getColumnIds();
 	for(var i=0;i<columns.length;i++){
 		var column = Layout.getColumn(columns[i]);
-// 		alert(column.width()+'__'+column.height())
+		
 		if(column.width()){
 			var movingDiv = $("div#col-"+column.id());
 			movingDiv.css('width',column.width());
 			
 			$("#"+column.id()).attr("width-per",column.width());
-			<portlet:namespace/>mobeDeviderPosition("col-"+column.id(),'left',column.width());
 		}
 	
 		if(column.height()){
@@ -625,7 +631,6 @@ function <portlet:namespace/>drawLayout(layout){
 			movingDiv.css('height',column.height());
 			
 			$("#"+column.id()).attr("height-per",column.height());
-			<portlet:namespace/>mobeDeviderPosition("row-"+column.id(),'top',column.height());
 		}
 		
 		$targetUL = $(".gridLayoutArea ul[id='"+column.id()+"']");
@@ -640,15 +645,27 @@ function <portlet:namespace/>drawLayout(layout){
 			}
 		}
 	}
+	
+	<portlet:namespace/>moveDeviderPosition(Layout);
 }
 
 /*Layout 데이터 width,height 값에 따른 devider Position 값 변경*/
-function <portlet:namespace/>mobeDeviderPosition(columnId,attribute,percent){
-	var deviders = $('div.devider[data-equal-id='+'"'+columnId+'"]');
-	if(deviders.length!=0){
-		deviders.each(function(){
-			$(this).css(attribute,percent);
-		});
+function <portlet:namespace/>moveDeviderPosition(Layout){
+	var deviders = Layout.getDeviderIds();
+	for(var i=0;i<deviders.length;i++){
+		var devider = Layout.getDevider(deviders[i]);
+		
+		var deviderObj = $("div#"+devider.id());
+		if(devider.left()){
+			deviderObj.css('left',devider.left());
+			deviderObj.attr('left-per',devider.left());
+		}
+		
+		if(devider.top()){
+			deviderObj.css('top',devider.top());
+			deviderObj.css('top-per',devider.top());
+		}
+		
 	}
 }
 
@@ -889,6 +906,7 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				</c:if>
 			</div>
 			<div class="col-md-8" id="<portlet:namespace/>layoutCol">
+				<%=templateJSP%>
 				<liferay-util:include
 					page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>'
 					servletContext="<%=this.getServletContext()%>">

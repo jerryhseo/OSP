@@ -7,19 +7,19 @@
 			<ul class="sortable-list ui-sortable list-group" id="column-4" data-init-area="input">
 			</ul>
 		</div>
-		<div class="devider vertical" data-equal-id="col-column-4" data-remainder-id="col-column-5" set-equal-ids="column-4" set-remainder-ids="column-5"></div>
+		<div class="devider vertical" id="devider-1" data-equal-id="col-column-4" data-remainder-id="col-column-5" set-equal-ids="column-4" set-remainder-ids="column-5"></div>
 		<div class="col-md-12 col sub-col" style="height: 100%;width: 50%;"id="col-column-5">
 			<ul class="sortable-list ui-sortable list-group" id="column-5" data-init-area="log">
 			</ul>
 		</div>
 	</div>
-	<div class="devider horizontal" data-equal-id="row-column-4" data-remainder-id="row-column-6" set-equal-ids="column-4|column-5" set-remainder-ids="column-6|column-7"></div>
+	<div class="devider horizontal" id="devider-2" data-equal-id="row-column-4" data-remainder-id="row-column-6" set-equal-ids="column-4|column-5" set-remainder-ids="column-6|column-7"></div>
 	<div class="row" style="height: 50%;" id="row-column-6">
 		<div class="col-md-12 col sub-col" style="height: 100%;width: 50%;" id="col-column-6">
 			<ul class="sortable-list ui-sortable list-group" id="column-6" data-init-area="output">
 			</ul>
 		</div>
-		<div class="devider vertical" data-equal-id="col-column-6" data-remainder-id="col-column-7" set-equal-ids="column-6" set-remainder-ids="column-7"></div>
+		<div class="devider vertical" id="devider-3" data-equal-id="col-column-6" data-remainder-id="col-column-7" set-equal-ids="column-6" set-remainder-ids="column-7"></div>
 		<div class="col-md-12 col sub-col" style="height: 100%;width: 50%;"id="col-column-7">
 			<ul class="sortable-list ui-sortable list-group" id="column-7">
 			</ul>

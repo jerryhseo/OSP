@@ -7,7 +7,7 @@
 			</ul>
 		</div>
 	</div>
-	<div class="devider horizontal" data-equal-id="row-column-4" data-remainder-id="row-column-5" set-equal-ids="column-4" set-remainder-ids="column-5"></div>
+	<div class="devider horizontal" id="devider-1" data-equal-id="row-column-4" data-remainder-id="row-column-5" set-equal-ids="column-4" set-remainder-ids="column-5"></div>
 	<div class="row" style="height: 50%;" id="row-column-5">
 		<div class="col-md-12 col sub-col" style="height: 100%;">
 			<ul class="sortable-list ui-sortable list-group" id="column-5" data-init-area="output">

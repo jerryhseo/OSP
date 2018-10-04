@@ -51,7 +51,8 @@
 
 		String currentPortlet = jsonColumn.getString("currentPortlet_");
 		column.put("id", jsonColumn.getString("id_"));
-		column.put("height", jsonColumn.getDouble("height_"));
+		column.put("height", jsonColumn.getString("height_"));
+		column.put("width", jsonColumn.getString("width_"));
 		column.put("portletId", currentPortlet);
 		columns.put(column);
 		
@@ -258,7 +259,8 @@ $(function(e) {
 			<portlet:namespace/>columns: '<%=columns.toString()%>'
 		},
 		success: function( result ){
-			$('#<portlet:namespace/>canvas').html( result );
+			$('#<portlet:namespace/>canvas').html(result);
+			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
 			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
 		}
 	});
@@ -582,24 +584,6 @@ function <portlet:namespace/>displayInit(){
 			
 		// Dashboard Portlet
 		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
-		
-		
-		//iframe resize
-// 		if(<portlet:namespace/>workbench.isFlowLayout()){
-// 			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;
-			
-// 			$("section#workbench-layout-area div[id*=<portlet:namespace/>]").each(function(i){
-// 				if($(this).hasClass("sub-col")){
-// 					$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-// 				}else{
-// 					$(this).find("iframe").css("height",contentHeight);
-// 				}
-// 			});
-// 		}else{
-// 			$("section#workbench-layout-area .sub-col").each(function(i){
-// 				$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-// 			});
-// 		}
 	}
 	bEnd();
 }

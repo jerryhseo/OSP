@@ -33,15 +33,13 @@
 					</div>
 				</div>
 				
-				<div class="flow-grid" style="display:none;height: 100%;" id="OUTPUT">
-					<div class="row layout-grid" id="${namespace}row-1" style="height: 100%;">
-						<div class="col-md-6 sub-col" id="${namespace}column-6" style="height: 100%;">
-							
-						</div>
-						<div class="devider vertical" data-equal-id="${namespace}column-6" data-remainder-id="${namespace}column-7"></div>
-						<div class="col-md-6 sub-col" id="${namespace}column-7" style="height: 100%;">
-							
-						</div>
+				<div class="row flow-grid" style="display:none;height: 100%;" id="OUTPUT">
+					<div class="col-md-12 col" id="${namespace}column-6" style="width: 50%;height: 100%;">
+					
+					</div>
+					<div class="devider vertical" id="${namespace}devider-1" data-equal-id="${namespace}column-6" data-remainder-id="${namespace}column-7"></div>
+					<div class="col-md-12 col" id="${namespace}column-7" style="width: 50%;height: 100%;">
+					
 					</div>
 				</div>
 			</section>

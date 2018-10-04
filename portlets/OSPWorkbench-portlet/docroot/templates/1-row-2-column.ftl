@@ -22,13 +22,11 @@
 			</section>
 			
 			<section class="content" id="workbench-layout-area" style="display:none;height:94%;">
-				<div class="row layout-grid" id="${namespace}row-1" style="height: 100%;">
-					<div class="col-md-6 sub-col" id="${namespace}column-4"  style="height: 100%;">
-						
+				<div class="row" style="height: 100%;">
+					<div class="col-md-12 col" id="${namespace}column-4" style="width: 50%;height: 100%;">
 					</div>
-					<div class="devider vertical" data-equal-id="${namespace}column-4" data-remainder-id="${namespace}column-5"></div>
-					<div class="col-md-6 sub-col" id="${namespace}column-5" style="height: 100%;">
-						
+					<div class="devider vertical" id="${namespace}devider-1" data-equal-id="${namespace}column-4" data-remainder-id="${namespace}column-5"></div>
+					<div class="col-md-12 col" id="${namespace}column-5" style="width: 50%;height: 100%;">
 					</div>
 				</div>
 			</section>

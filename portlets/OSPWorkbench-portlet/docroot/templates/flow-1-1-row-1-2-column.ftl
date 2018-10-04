@@ -34,20 +34,20 @@
 				</div>
 				<div class="flow-grid" style="display:none;height: 100%;" id="OUTPUT">
 					<div class="row" style="height:100%">
-						<div class="col-md-6 sub-col" id="${namespace}column-6" style="height:100%">
-							
+						<div class="col-md-12 col" style="height:100%;width:50%;" id="${namespace}column-6">
+						
 						</div>
-						<div class="devider vertical" data-equal-id="${namespace}column-6" data-remainder-id="2-row-column-6"></div>
-						<div class="col-md-6" style="height: 100%" id="2-row-column-6">
-							<div class="row layout-grid" style="height:50%" id="${namespace}row-1">
-								<div class="col-md-12 sub-col" id="${namespace}column-7" style="height: 100%">
-							
+						<div class="devider vertical" id="${namespace}devider-1" data-equal-id="${namespace}column-6" data-remainder-id="${namespace}col-column-7"></div>
+						<div class="col-md-12" style="height:100%;width:50%;" id="${namespace}col-column-7">
+							<div class="row" style="height: 50%;" id="${namespace}row-column-7">
+								<div class="col-md-12 col sub-col" style="height: 100%;" id="${namespace}column-7" set-width="false" set-width-id="${namespace}col-column-7">
+									
 								</div>
 							</div>
-							<div class="devider horizontal" data-equal-id="${namespace}row-1" data-remainder-id="${namespace}row-2"></div>
-							<div class="row layout-grid" style="height:50%" id="${namespace}row-2">
-								<div class="col-md-12 sub-col" id="${namespace}column-8" style="height: 100%">
-							
+							<div class="devider horizontal" id="${namespace}devider-2" data-equal-id="${namespace}row-column-7" data-remainder-id="${namespace}row-column-8"></div>
+							<div class="row" style="height: 50%;" id="${namespace}row-column-8">
+								<div class="col-md-12 col sub-col" style="height: 100%;" id="${namespace}column-8" set-width="false">
+									
 								</div>
 							</div>
 						</div>
