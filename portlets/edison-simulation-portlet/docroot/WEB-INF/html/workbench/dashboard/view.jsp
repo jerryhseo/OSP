@@ -1032,7 +1032,7 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,inputs) {
 					var simulation = result.simulaitons[i];
 // 					console.log(simulation);
 					$tr = $("<tr></tr>").css("cursor","pointer")
-						  .attr("onclick","<portlet:namespace/>copyJobAndAddJob('"+simulation._simulationUuid+"','');")
+						  .attr("onclick","<portlet:namespace/>copyJobAndAddJob('"+simulation._simulationUuid+"','"+inputs+"');")
 						  .appendTo($simulationTbody);
 					$("<td></td>").html(simulation._simulationTitle).appendTo($tr)
 					$("<td></td>").addClass("text-center").html(simulation._simulationCreateDt).appendTo($tr)
@@ -1107,7 +1107,12 @@ function <portlet:namespace/>copyJobAndAddJob(simulationUuid,inputs) {
 				var myId = '<%=portletDisplay.getId()%>';
 				if(inputs===''){
 					inputs = JSON.stringify(job.copyInputs());
+				}else{
+					inputs = JSON.stringify(job.inputs());
 				}
+				
+// 				console.log(JSON.stringify(inputs));
+				
 				var eventData = {
 					portletId : myId,
 					targetPortlet : <portlet:namespace/>connector,
