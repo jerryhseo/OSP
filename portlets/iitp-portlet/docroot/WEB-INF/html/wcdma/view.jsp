@@ -211,7 +211,7 @@
 							</td>
 							<td id="<portlet:namespace/>data-area-rx-mixer">
 							</td>
-							<td id="<portlet:namespace/>data-area-rx-ldf">
+							<td id="<portlet:namespace/>data-area-rx-lpf">
 							</td>
 							<td id="<portlet:namespace/>data-area-rx-bba">
 							</td>
