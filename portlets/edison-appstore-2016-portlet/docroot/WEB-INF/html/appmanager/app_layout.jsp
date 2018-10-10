@@ -906,7 +906,6 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				</c:if>
 			</div>
 			<div class="col-md-8" id="<portlet:namespace/>layoutCol">
-				<%=templateJSP%>
 				<liferay-util:include
 					page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>'
 					servletContext="<%=this.getServletContext()%>">
