@@ -5,7 +5,17 @@
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm/jquery-confirm.min.css">
 
 <style type="text/css">
-	
+
+div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_power-input-area .form-group{
+	margin-top: 5px;
+}
+
+div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parameter .form-group label{
+	font-size: 7px;
+}
+div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parameter .form-group .form-control{
+	text-align: center;
+}
 </style>
 <div class="h20"></div>
 <div class="row">
@@ -263,9 +273,32 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-		<div class="panel panel-default" style="min-height: 390px">
+		<div class="panel panel-default">
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">BER</h2>
+			</div>
+			<div class="panel-body">
+				
+			</div>
+			<div class="panel-footer">
+				<div class="row" style="margin-left: -15px;margin-right: -15px;">
+					<div class="col-md-3">
+						SNR Range : 
+					</div>
+					<div class="col-md-3">
+						<label>From(dB)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="col-md-3">
+						<label>To(dB)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="col-md-3">
+						<button class="btn btn-primary"> 
+							<span class="icon-bar-chart"> Plot </span> 
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -277,12 +310,75 @@
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">Power Level Diagram</h2>
 			</div>
+			<div class="panel-body form-inline">
+				<div class="form-group">
+					<label>P_in(dBm)</label>
+					<input class="form-control" type="text"/>
+				</div>
+				<div class="form-group">
+					<label>Channel</label>
+					<select class="form-control" id="<portlet:namespace/>power-select" onchange="<portlet:namespace/>powerChannelChange(this);return false;">
+						<option value="LOG-DISTANCE">Log Distance</option>
+						<option value="HATA">Hata</option>
+						<option value="EGLI">EGLI'S</option>
+						<option value="COST">COST231</option>
+					</select>
+				</div>
+				<button class="btn btn-primary"> 
+					<span class="icon-bar-chart"> Plot </span> 
+				</button>
+				
+				<section id="<portlet:namespace/>power-input-area" style="display: none;">
+					<div class="form-group">
+						<label>Distance(km)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="form-group">
+						<label>Hb(m)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="form-group">
+						<label>Hm(m)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="form-group">
+						<label>F_in(MHz)</label>
+						<input class="form-control" type="text"/>
+					</div>
+					<div class="form-group" id="<portlet:namespace/>hata-select-area">
+						<label>Enviroment</label>
+						<select class="form-control" onchange="<portlet:namespace/>channelInfomationGrid(this);return false;">
+							<option value="URBAN">Urban</option>
+							<option value="SUBURBS">Suburbs</option>
+							<option value="RURAL">Rural</option>
+						</select>
+					</div>
+					<div class="form-group" id="<portlet:namespace/>cost-select-area">
+						<label>Enviroment</label>
+						<select class="form-control" onchange="<portlet:namespace/>channelInfomationGrid(this);return false;">
+							<option value="RURAL">Rural</option>
+							<option value="URBAN">Urban</option>
+						</select>
+					</div>
+				</section>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="panel panel-default" style="min-height: 390px">
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">Channel Infomation</h2>
+			</div>
+			<div class="panel-body">
+				<pre id="<portlet:namespace/>channel-infomation-pre">
+L_unit : Loss at Unit Distance
+L_dec : Loss in dB/decade
+G_Tx : Tx Antenna Gain
+G_Rx : Rx Antenna Gain
+D : Normalized Distance
+
+L(dB) = L_unit + [L_dec*log(D)] - G_Tx - G_Rx
+				</pre>
 			</div>
 		</div>
 	</div>
@@ -452,4 +548,133 @@ function <portlet:namespace/>rfDesignerParameterDataChange(id,key) {
 	}
 	<portlet:namespace/>RF_DESIGN_PARAMETER.data[key] = data;
 }
+
+function <portlet:namespace/>powerChannelChange(sel){
+	var value = sel.value;
+	
+	$powerInputArea = $("#<portlet:namespace/>power-input-area");
+	if(value === "LOG-DISTANCE"){
+		$powerInputArea.css("display","none");
+	}else{
+		$powerInputArea.css("display","block");
+		
+		$hataSelectArea = $powerInputArea.find("div#<portlet:namespace/>hata-select-area");
+		$costSelectArea = $powerInputArea.find("div#<portlet:namespace/>cost-select-area");
+		
+		$hataSelectArea.css("display","none");
+		$costSelectArea.css("display","none");
+		
+		if(value ==="HATA"){
+			$hataSelectArea.css("display","block");
+		}else if(value ==="EGLI"){
+			
+		}else if(value ==="COST"){
+			$costSelectArea.css("display","block");
+		}
+	}
+	
+	<portlet:namespace/>channelInfomationGrid();
+}
+var <portlet:namespace/>CHANNEL_INFOMATION_TEXT = {
+	"LOG-DISTANCE":{
+		"text":[
+			"L_unit : Loss at Unit Distance"
+			+"\nL_dec : Loss in dB/decade"
+			+"\nG_Tx : Tx Antenna Gain"
+			+"\nG_Rx : Rx Antenna Gain"
+			+"\nD : Normalized Distance"
+			+"\n "
+			+"\nL(dB) = L_unit + [L_dec*log(D)] - G_Tx - G_Rx"
+		]
+	},
+	"HATA":{
+		"text":[
+			"D : Distance ( Base station to Mobile )"
+			+"\nf : F_in + Fc"
+			+"\nHb : Height of a Base station"
+			+"\nHm : Height of a Mobile station"
+		],
+		"URBAN":[
+			"Lu = 69.55+26.16log(f)-13.82log(Hb)-C+[44.9-6.55log(Hb)]*log(D)"
+			+"\nC = 8.29(log(1.54Hm))^2 -1.1        (150<=f<=200)"
+			+"\nC = 3.2(log(11.75Hm))^2 -4.97      (200<=f<=1500)"
+		],
+		"SUBURBS":[
+			"Lsu = Lu -2(log(f/28))^2 -5.4"
+			+"\nLu = 69.55+26.16log(f)-13.82log(Hb)+[44.9-6.55log(Hb)]*log(D)"
+		],
+		"RURAL":[
+			"Lr = Lu -4.78(log(f))^2 +18.33log(f) – 40.94"
+			+"\nLu = 69.55+26.16log(f)-13.82log(Hb)+[44.9-6.55log(Hb)]*log(D)"
+		]
+	},
+	"EGLI":{
+		"text":[
+			"D : Distance ( Base station to Mobile )"
+			+"\nf : F_in + Fc"
+			+"\nHb : Height of a Base station"
+			+"\nHm : Height of a Mobile station"
+			+"\n "
+			+"\n1) Hm <= 10m"
+			+"\nL = 76.3+40log(D)-20log(Hb)-10log(Hm)+20log(f)"
+			+"\n "
+			+"\n2) Hm > 10m"
+			+"\nL = 85.9+40log(D)-20log(Hb)-10log(Hm)+20log(f)"
+		],
+		"RURAL":[
+			"Lr = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)"
+			+"\nA = (1.1log(f)-0.7)*Hm-(1.56log(f)-0.8)"
+		],
+		"URBAN":[
+			"Lu = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)+3"
+			+"\nA = 8.29(log(1.54Hm))^2-1.1             (150<=f<=200)"
+			+"\nA = 3.2(log(11.75Hm))^2-4.97           (200<=f<=1500)"
+		]
+	},
+	"COST":{
+		"text":[
+			"D : Distance ( Base station to Mobile )"
+			+"\nf : F_in + Fc"
+			+"\nHb : Height of a Base station"
+			+"\nHm : Height of a Mobile station"
+		],
+		"RURAL":[
+			"Lr = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)"
+			+"\nA = (1.1log(f)-0.7)*Hm-(1.56log(f)-0.8)"
+		],
+		"URBAN":[
+			"Lu = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)+3"
+			+"\nA = 8.29(log(1.54Hm))^2-1.1             (150<=f<=200)"
+			+"\nA = 3.2(log(11.75Hm))^2-4.97           (200<=f<=1500)"
+		]
+	}
+};
+
+function <portlet:namespace/>channelInfomationGrid(sel){
+	var channelValue = $("#<portlet:namespace/>power-select").val();
+	var value;
+	if(typeof sel == "undefined"){
+		if(channelValue ==="HATA"){
+			value = $("#<portlet:namespace/>hata-select-area select").val();
+		}else if(channelValue ==="COST"){
+			value = $("#<portlet:namespace/>cost-select-area select").val();
+		}
+	}else{
+		value = sel.value;
+	}
+	
+	$pre = $("#<portlet:namespace/>channel-infomation-pre");
+	
+	$pre.empty();
+	
+	var result = <portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue].text;
+	
+	if(typeof <portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue][value] != "undefined"){
+		result = result.concat("\n\n",<portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue][value]);
+	}
+	
+	$pre.html(result);
+}
+
+
 </script>
