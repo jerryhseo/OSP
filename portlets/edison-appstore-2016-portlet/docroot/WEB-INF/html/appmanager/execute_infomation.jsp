@@ -801,15 +801,15 @@ function changeUploadOption(val){
 	
 	$("#<portlet:namespace/>uploadOption_upload").show();
 	if(val == "compile"){
-		// $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
+		/* $("#<portlet:namespace/>uploadOption_"+val+"Url").show();
 		
-		// Git Compile & URL Descrption Display None
-		//if('${!empty scienceAppCompile.result}' == 'true') $("#<portlet:namespace/>uploadGitHubInput").show();
+		Git Compile & URL Descrption Display None
+		if('${!empty scienceAppCompile.result}' == 'true') $("#<portlet:namespace/>uploadGitHubInput").show(); */
 		
 		$("#selectByuploadSelect").hide();
 		$("#selectByCompileSelect").show();
 	}else{
-		// $("#<portlet:namespace/>uploadOption_"+val).show();
+		/* $("#<portlet:namespace/>uploadOption_"+val).show(); */
 		$("#selectByCompileSelect").hide();
 		$("#selectByuploadSelect").show();
 	}
