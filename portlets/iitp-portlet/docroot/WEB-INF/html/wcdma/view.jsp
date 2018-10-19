@@ -11,7 +11,7 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_power-input-area .form-g
 }
 
 div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parameter .form-group label{
-	font-size: 7px;
+	font-size: 11px;
 }
 div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parameter .form-group .form-control{
 	text-align: center;
@@ -310,10 +310,10 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 			<div class="panel-heading clearfix ">
 				<h2 class="panel-title">Power Level Diagram</h2>
 			</div>
-			<div class="panel-body form-inline">
+			<div class="panel-body form-inline" id="<portlet:namespace/>power-levem-diagram-body">
 				<div class="form-group">
 					<label>P_in(dBm)</label>
-					<input class="form-control" type="text"/>
+					<input class="form-control" type="text" id="<portlet:namespace/>power-input-pin"/>
 				</div>
 				<div class="form-group">
 					<label>Channel</label>
@@ -324,30 +324,30 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 						<option value="COST">COST231</option>
 					</select>
 				</div>
-				<button class="btn btn-primary"> 
+				<button class="btn btn-primary" onClick="<portlet:namespace/>powerLevelGrid();"> 
 					<span class="icon-bar-chart"> Plot </span> 
 				</button>
 				
 				<section id="<portlet:namespace/>power-input-area" style="display: none;">
 					<div class="form-group">
 						<label>Distance(km)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" name="distance" type="text"/>
 					</div>
 					<div class="form-group">
 						<label>Hb(m)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" name=hb type="text"/>
 					</div>
 					<div class="form-group">
 						<label>Hm(m)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" name="hm" type="text"/>
 					</div>
 					<div class="form-group">
 						<label>F_in(MHz)</label>
-						<input class="form-control" type="text"/>
+						<input class="form-control" name="f-in" type="text"/>
 					</div>
 					<div class="form-group" id="<portlet:namespace/>hata-select-area">
 						<label>Enviroment</label>
-						<select class="form-control" onchange="<portlet:namespace/>channelInfomationGrid(this);return false;">
+						<select class="form-control" name="environment1">
 							<option value="URBAN">Urban</option>
 							<option value="SUBURBS">Suburbs</option>
 							<option value="RURAL">Rural</option>
@@ -355,12 +355,15 @@ div.wcdma-rf-designer #_WCDMARFDesigner_WAR_iitpportlet_table-rf-designer-parame
 					</div>
 					<div class="form-group" id="<portlet:namespace/>cost-select-area">
 						<label>Enviroment</label>
-						<select class="form-control" onchange="<portlet:namespace/>channelInfomationGrid(this);return false;">
+						<select class="form-control" name="environment2">
 							<option value="RURAL">Rural</option>
 							<option value="URBAN">Urban</option>
 						</select>
 					</div>
 				</section>
+				<div id="power-plot-content" style="height: 450px;">
+						
+				</div>
 			</div>
 		</div>
 	</div>
@@ -387,6 +390,13 @@ L(dB) = L_unit + [L_dec*log(D)] - G_Tx - G_Rx
 
 <!-- Plotly libs -->
 <script src="${contextPath}/js/plotly/plotly-latest.min.js"></script>
+
+<!--math JS-->
+<script src="${contextPath}/js/mathjs/math.min.js"></script>
+
+
+<script src="${contextPath}/js/wcdma/designer.js"></script>
+<script src="${contextPath}/js/wcdma/fomular.js"></script>
 
 <script type="text/javascript">
 var <portlet:namespace/>RF_DESIGN_PARAMETER = {
@@ -504,13 +514,15 @@ $(document).ready(function(){
 	/*select EVENT*/
 	$("#<portlet:namespace/>table-rf-designer-parameter thead select").change(function (e) {
 		var key = $(this).val();
-		var id=$(this).attr("id");
+		var id = $(this).attr("id");
 		<portlet:namespace/>rfDesignerParameterImageChange(id,key);
 		<portlet:namespace/>rfDesignerParameterDataChange(id,key);
 	});
 
 	/*data-binded EVENT*/
-	$("#<portlet:namespace/>table-rf-designer-parameter input.data-binded").change(function (e) {
+	$(document).on("change","#<portlet:namespace/>table-rf-designer-parameter input.data-binded",function (e) {
+		event.stopPropagation();
+		e.preventDefault();
 		var thisValue = $(this).val();
 		var thisName = $(this).attr("name");
 		var parentKey = $(this).attr("parent-key");
@@ -521,6 +533,7 @@ $(document).ready(function(){
 
 function <portlet:namespace/>init() {
 	$("#<portlet:namespace/>table-rf-designer-parameter thead input").each(function(){
+		/*초기 화면 Data 생성*/
 		<portlet:namespace/>rfDesignerParameterDataChange($(this).attr("id"),$(this).attr("id").toUpperCase());
 	});
 }
@@ -541,12 +554,14 @@ function <portlet:namespace/>rfDesignerParameterDataChange(id,key) {
 		for(var i=0;i<input.length;i++){
 			$div = $("<div/>").addClass("form-group").appendTo($dataArea);
 			$("<label/>").html(input[i].label).appendTo($div);
-			$("<input/>").addClass("form-control data-binded").attr("id",input[i].id).attr("name",input[i].id).attr("parent-key",id)
+			$("<input/>").addClass("form-control data-binded").attr("id",input[i].id).attr("name",input[i].id)
+						 .attr("parent-key",id.toUpperCase())
 						 .attr("type","text").val(0).appendTo($div);
 			data[input[i].id] = "0";
 		}
+		data["type"] = key;
 	}
-	<portlet:namespace/>RF_DESIGN_PARAMETER.data[key] = data;
+	<portlet:namespace/>RF_DESIGN_PARAMETER.data[id.toUpperCase()] = data;
 }
 
 function <portlet:namespace/>powerChannelChange(sel){
@@ -593,18 +608,15 @@ var <portlet:namespace/>CHANNEL_INFOMATION_TEXT = {
 			+"\nf : F_in + Fc"
 			+"\nHb : Height of a Base station"
 			+"\nHm : Height of a Mobile station"
-		],
-		"URBAN":[
-			"Lu = 69.55+26.16log(f)-13.82log(Hb)-C+[44.9-6.55log(Hb)]*log(D)"
+			+"\n\n1) Urban"
+			+"\nLu = 69.55+26.16log(f)-13.82log(Hb)-C+[44.9-6.55log(Hb)]*log(D)"
 			+"\nC = 8.29(log(1.54Hm))^2 -1.1        (150<=f<=200)"
 			+"\nC = 3.2(log(11.75Hm))^2 -4.97      (200<=f<=1500)"
-		],
-		"SUBURBS":[
-			"Lsu = Lu -2(log(f/28))^2 -5.4"
+			+"\n\n2) Suburbs"
+			+"\nLsu = Lu -2(log(f/28))^2 -5.4"
 			+"\nLu = 69.55+26.16log(f)-13.82log(Hb)+[44.9-6.55log(Hb)]*log(D)"
-		],
-		"RURAL":[
-			"Lr = Lu -4.78(log(f))^2 +18.33log(f) – 40.94"
+			+"\n\n3) Rural"
+			+"Lr = Lu -4.78(log(f))^2 +18.33log(f) – 40.94"
 			+"\nLu = 69.55+26.16log(f)-13.82log(Hb)+[44.9-6.55log(Hb)]*log(D)"
 		]
 	},
@@ -620,15 +632,6 @@ var <portlet:namespace/>CHANNEL_INFOMATION_TEXT = {
 			+"\n "
 			+"\n2) Hm > 10m"
 			+"\nL = 85.9+40log(D)-20log(Hb)-10log(Hm)+20log(f)"
-		],
-		"RURAL":[
-			"Lr = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)"
-			+"\nA = (1.1log(f)-0.7)*Hm-(1.56log(f)-0.8)"
-		],
-		"URBAN":[
-			"Lu = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)+3"
-			+"\nA = 8.29(log(1.54Hm))^2-1.1             (150<=f<=200)"
-			+"\nA = 3.2(log(11.75Hm))^2-4.97           (200<=f<=1500)"
 		]
 	},
 	"COST":{
@@ -637,44 +640,64 @@ var <portlet:namespace/>CHANNEL_INFOMATION_TEXT = {
 			+"\nf : F_in + Fc"
 			+"\nHb : Height of a Base station"
 			+"\nHm : Height of a Mobile station"
-		],
-		"RURAL":[
-			"Lr = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)"
+			+"\n\n1) Rural"
+			+"\nLr = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)"
 			+"\nA = (1.1log(f)-0.7)*Hm-(1.56log(f)-0.8)"
-		],
-		"URBAN":[
-			"Lu = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)+3"
+			+"\n\n2) Urban"
+			+"\nLu = 46.3+33.9log(f)-13.82log(Hb)-A+[44.9-6.55log(Hb)]*log(D)+3"
 			+"\nA = 8.29(log(1.54Hm))^2-1.1             (150<=f<=200)"
 			+"\nA = 3.2(log(11.75Hm))^2-4.97           (200<=f<=1500)"
 		]
 	}
 };
 
-function <portlet:namespace/>channelInfomationGrid(sel){
+function <portlet:namespace/>channelInfomationGrid(){
 	var channelValue = $("#<portlet:namespace/>power-select").val();
-	var value;
-	if(typeof sel == "undefined"){
-		if(channelValue ==="HATA"){
-			value = $("#<portlet:namespace/>hata-select-area select").val();
-		}else if(channelValue ==="COST"){
-			value = $("#<portlet:namespace/>cost-select-area select").val();
-		}
-	}else{
-		value = sel.value;
-	}
-	
 	$pre = $("#<portlet:namespace/>channel-infomation-pre");
 	
 	$pre.empty();
 	
 	var result = <portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue].text;
-	
-	if(typeof <portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue][value] != "undefined"){
-		result = result.concat("\n\n",<portlet:namespace/>CHANNEL_INFOMATION_TEXT[channelValue][value]);
-	}
-	
 	$pre.html(result);
 }
 
+
+function <portlet:namespace/>powerLevelGrid(){
+	var pIn = DESIGNER.Constants.getNullToZero($("#<portlet:namespace/>power-input-pin").val());
+	var channel = $("#<portlet:namespace/>power-select").val();
+	
+	$powerInputArea = $("#<portlet:namespace/>power-levem-diagram-body #<portlet:namespace/>power-input-area");
+	var inputData = {};
+	$powerInputArea.find("input[type='text'], select").each(function(){
+		var key = $(this).attr("name");
+		var value;
+		if($(this).get(0).tagName =="INPUT"){
+			value = parseFloat(DESIGNER.Constants.getNullToZero($(this).val()));
+		}else{
+			value = $(this).val();
+		}
+		inputData[key] = value;
+	});
+	
+	
+	var plotlyData = getPowerLevelDiagramData(<portlet:namespace/>RF_DESIGN_PARAMETER.data,pIn,channel,inputData);
+	
+	<portlet:namespace/>plotlyGrid('power-plot-content','No. of Stage','Power Level (dBm)',plotlyData);
+}
+
+function <portlet:namespace/>plotlyGrid(idStr,xTitle,yTitle,data){
+	var layout = {
+            xaxis: {
+                title: xTitle
+            },
+            yaxis: {
+                title: yTitle
+            }
+        };
+	
+	Plotly.newPlot(idStr, data, layout, {
+        scrollZoom: false
+    });
+}
 
 </script>
