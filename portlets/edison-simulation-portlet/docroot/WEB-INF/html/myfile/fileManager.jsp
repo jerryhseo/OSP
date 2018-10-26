@@ -50,7 +50,6 @@
 <title>jQuery File Manager</title>
 
 <!-- File manager CSS & JS -->
-<link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/bootstrap.css" />
 <link media="all" rel="stylesheet" href="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.css" />
 <link href="${contextPath}/css/fileManager/contextMenu.css" rel="stylesheet" type="text/css" />
 <link media="all" rel="stylesheet" href="${contextPath}/css/fileManager/default.css" />
@@ -58,8 +57,6 @@
 
 <link href="${contextPath}/css/treeview-monitoring.css" rel="stylesheet" type="text/css">	<!-- Out Side Border -->
 
-<script src="${contextPath}/js/fileManager/jquery-1.10.2.min.js"></script>
-<script src="${contextPath}/js/fileManager/jquery-1.11.4-ui.min.js"></script>
 <script src="${contextPath}/js/fileManager/jquery.file-manager/jquery.file-manager.js"></script>
 <script src="${contextPath}/js/fileManager/contextMenu.js"></script>
 <script src="${contextPath}/js/fileManager/services.js"></script>
@@ -165,25 +162,16 @@
 	<input type="hidden" id="<portlet:namespace/>thisChildFileCnt" value="">
 	
 	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
+		<div>
 			
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-left: 15px; padding-right: 15px;">
 				<ul class="nav navbar-nav">
-					<li title="Level up" class="toolbar toolbar-level-up"><a class="glyphicon glyphicon-level-up"></a></li>
-					<li title="Upload" class="toolbar toolbar-upload"><a class="glyphicon glyphicon-upload"></a></li>
-					<li title="New folder" class="toolbar toolbar-new-folder"><a class="glyphicon glyphicon-folder-open"></a></li>
-					<li title="Grid view" class="toolbar toolbar-gridview"><a class="glyphicon glyphicon-th"></a></li>
-					<li title="List view" class="toolbar toolbar-listview"><a class="glyphicon glyphicon-th-list"></a></li>
+					<li title="Level up" class="toolbar toolbar-level-up"><a class="icon-fb-file-upload" style="font-size: 18px;"></a></li>
+					<li title="Upload" class="toolbar toolbar-upload"><a class="icon-upload" style="font-size: 18px;"></a></li>
+					<li title="New folder" class="toolbar toolbar-new-folder"><a class="icon-folder-open" style="font-size: 18px;"></a></li>
+					<li title="Grid view" class="toolbar toolbar-gridview"><a class="icon-th" style="font-size: 18px;"></a></li>
+					<li title="List view" class="toolbar toolbar-listview"><a class="icon-th-list" style="font-size: 18px;"></a></li>
 				</ul>
 				
 				<form class="navbar-form navbar-right" role="search">
@@ -240,6 +228,8 @@
 		</div>
 	</div>
 </div>
+
+<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
 <!-- File Manager Script -->
 <script>
@@ -313,6 +303,7 @@
 		var fileExt = "${fileExt}";
 		var fileIdFilter = "${fileIdFilter}";
 		
+		bStart();
 		$.ajax({
 			// url: '${contextPath}/sample-data/root.json'
 			url: "<%=getRootDataURL%>",
@@ -333,6 +324,7 @@
 			}, error:function(data,e){ 
 				toastr["error"]("", Liferay.Language.get('edison-data-search-error'));
 			},complete: function(){
+				bEnd();
 			}
 		});
 	}
@@ -347,6 +339,7 @@
 		var fileExt = "${fileExt}";
 		var fileIdFilter = "${fileIdFilter}";
 		
+		bStart();
 		$.ajax({
 			url: "<%=getSelectedFolderURL%>",
 			cache: false,
@@ -363,6 +356,7 @@
 			}, error:function(data,e){ 
 				toastr["error"]("", Liferay.Language.get('edison-data-search-error'));
 			},complete: function(){
+				bEnd();
 			}
 		});
 	}
@@ -440,6 +434,7 @@
 						var groupId = $("#<portlet:namespace/>groupId").val();
 						var vcToken = $("#<portlet:namespace/>vcToken").val();
 						
+						bStart();
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=createFolderURL%>",
@@ -462,6 +457,7 @@
 							},error: function(){
 								toastr["error"]("", Liferay.Language.get('edison-data-insert-error'));
 							},complete: function(){
+								bEnd();
 							}
 						});
 						
@@ -499,6 +495,7 @@
 						var groupId = $("#<portlet:namespace/>groupId").val();
 						var vcToken = $("#<portlet:namespace/>vcToken").val();
 						
+						bStart();
 						jQuery.ajax({
 							type: "POST",
 							url: "<%=renameFolderURL%>",
@@ -520,6 +517,7 @@
 							},error: function(){
 								toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 							},complete:function(){
+								bEnd();
 							}
 						});
 						
@@ -544,6 +542,7 @@
 					var groupId = $("#<portlet:namespace/>groupId").val();
 					var vcToken = $("#<portlet:namespace/>vcToken").val();
 					
+					bStart();
 					jQuery.ajax({
 						type: "POST",
 						url: "<%=deleteFolderURL%>",
@@ -563,6 +562,7 @@
 						},error:function(){
 							toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
 						},complete: function(){
+							bEnd();
 						}
 					});	
 					
@@ -624,6 +624,8 @@
 		if(0 < copyFilesArray.length && targetId != ""){
 			var groupId = $("#<portlet:namespace/>groupId").val();
 			var vcToken = $("#<portlet:namespace/>vcToken").val();
+			
+			bStart();
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=copyFileURL%>",
@@ -647,6 +649,7 @@
 					toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 				},complete: function(){
 					// 붙여넣기 기능 동작 후 Copy된 파일이 없도록 null 초기화
+					bEnd();
 					selectCopyNode=null;
 				}
 			});
@@ -672,6 +675,7 @@
 			var vcToken = $("#<portlet:namespace/>vcToken").val();
 			var deleteFileId = selectedItem.attr("id");
 			
+			bStart();
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=deleteFileURL%>",
@@ -691,6 +695,7 @@
 				},error: function(){
 					toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
 				},complete: function(){
+					bEnd();
 				}
 			});	
 		}
@@ -717,6 +722,7 @@
 			var vcToken = $("#<portlet:namespace/>vcToken").val();
 			var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 			
+			bStart();
 			jQuery.ajax({
 				type: "POST",
 				url: "<%=moveNodeURL%>",
@@ -736,6 +742,7 @@
 				},error:function(){
 					toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 				},complete: function(){
+					bEnd();
 				}
 			}); 
 		}
@@ -787,6 +794,7 @@
 		var vcToken = $("#<portlet:namespace/>vcToken").val();
 		var icebreakerUrl = $("#<portlet:namespace/>icebreakerUrl").val();
 		
+		bStart();
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=getItemInfoURL%>",
@@ -871,6 +879,7 @@
 			},error:function(){
 				toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 			},complete: function(){
+				bEnd();
 			}
 		});	
 	}
