@@ -460,9 +460,38 @@ public class TreeViewMonitoringController{
             String scienceAppName = scienceApp.getName() + "_" + scienceApp.getVersion();
             log.info("scienceAppName : " + scienceAppName);
             try{
-                Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, REPO_ID, sc);
-                DatasetLocalServiceUtil.curate(ds, sc);
-                resultMap.put("isComplete", ds != null);
+                /*
+                  Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, REPO_ID, sc);
+                  DatasetLocalServiceUtil.curate(ds, sc);
+                */
+                
+                com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
+                SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
+                saveInfo = DatasetServiceUtil.save(
+                			GetterUtil.getLong(collectionId),
+                			jobUuid,
+                			scienceApp.getName(),
+                			scienceApp.getVersion(),
+                			jobTitle,
+                			GetterUtil.getLong(scienceAppId, 0),
+                			REPO_ID,
+                			simulationJobData.getJobData(),  // EDISON jobData 테이블
+                			scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
+                			sc );
+                
+                
+                if(saveInfo.getBoolean("isValid")){
+                	com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
+                	curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
+                	
+                	if(curateInfo.getBoolean("isValid")){
+                		resultMap.put("isCompleteMsg", "Successed Transfer JobData To SDR");
+                	} else {
+                		resultMap.put("isCompleteMsg", "Failed Transfer JobData To SDR");
+                	}
+                }
+                
+//                resultMap.put("isComplete", ds != null);
             }catch(Exception e){
                 resultMap.put("isComplete", false);
                 resultMap.put("msg", e.getMessage());
