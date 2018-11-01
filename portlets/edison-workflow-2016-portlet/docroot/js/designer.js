@@ -723,17 +723,23 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         }
     }
 
-    function saveAsWorkflowDefinition(workflowMetaData) {
+    function saveAsWorkflowDefinition(workflowMetaData, callback) {
         if (!modifyingWorkflow) {
             saveOrUpdateWorkflowDefinition(workflowMetaData, false);
             return false;
         }else{
             var currentWorkflowId = modifyingWorkflow["workflowId"];
+            var wfData = getWorkflowDefinition(currentJsPlumbInstance);
+            var wfDataJsonString = JSON.stringify(wfData);
             aSyncAjaxHelper
                 .post("/delegate/services/workflows/" + currentWorkflowId + "/saveas", {
                     title: workflowMetaData.title,
-                    description: workflowMetaData.description
+                    description: workflowMetaData.description,
+                    screenLogic: wfDataJsonString
                 }, function (workflowData) {
+                    if(callback){
+                        callback(workflowData.workflowId);
+                    }
                     toastr["success"]("", var_save_success_message);
                     modifyingWorkflow = workflowData;
                 }, function (msg) {

@@ -315,7 +315,7 @@ public class IBFileUtil {
      * @param isFileDelete - 압축 수행 후 기존 파일 삭제 여부(true:삭제/false:미삭제)
      * @throws SystemException 
      */
-    public static String createZipFileWithIbUpload(String icebreakerUrl, String vcToken, String zipFileName, File[] fileList, boolean isFileDelete,String userScreenName) throws SystemException{
+    public static String createZipFileWithIbUpload(String icebreakerUrl, String vcToken, String zipFileName, File[] fileList, String folderName,boolean isFileDelete,String userScreenName) throws SystemException{
     	try{
             File zipFile = new File(SystemProperties.get(SystemProperties.TMP_DIR) + FileSystems.getDefault().getSeparator() + zipFileName);
             
@@ -346,10 +346,29 @@ public class IBFileUtil {
             zipFile.setExecutable(true);
             zipFile.setWritable(true);
 			
-            return ibFileUpload(icebreakerUrl, vcToken, zipFile,"eTURB_Meshes",userScreenName);
+            return ibFileUpload(icebreakerUrl, vcToken, zipFile,folderName,userScreenName);
         }catch (Exception e){
             throw new SystemException(e);
         }
+    }
+    
+    public static String kflowMeshFileListUpload(String icebreakerUrl, String vcToken, File[] fileList, String folderName, String getFileIdFromExt, String userScreenName) throws SystemException{
+    	String fileId = "";
+    	try{
+    		for(File file : fileList){
+    			String strFileName = file.getName();
+    			int pos = strFileName.lastIndexOf(".");
+    			String ext = strFileName.substring(pos+1);
+    			if(ext.equals(getFileIdFromExt)){
+    				fileId = ibFileUpload(icebreakerUrl, vcToken, file,folderName,userScreenName);
+    			}else{
+    				ibFileUpload(icebreakerUrl, vcToken, file,folderName,userScreenName);
+    			}
+    		}
+    	}catch (Exception e) {
+    		throw new SystemException(e);
+		}
+    	return fileId;
     }
     
     

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm/jquery-confirm.min.css">
 
 <style type="text/css">
 .smith-chart div.panel-body label.title{
@@ -311,17 +311,17 @@
 
 <!--D3 JS-->
 <script src="${contextPath}/js/lib/d3.min.js"></script>
-<script src = "https://d3js.org/d3.v4.min.js"></script>
+<script src="${contextPath}/js/lib/d3.v4.min.js"></script>
 <!--Smith JS-->
 <script src="${contextPath}/js/smithchart/smith.js"></script>
 
 <!--math JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.2.2/math.min.js"></script>
+<script src="${contextPath}/js/mathjs/math.min.js"></script>
 
 <!--bootstrap validation JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="${contextPath}/js/validation/validator.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/jquery-confirm/jquery-confirm.min.js"></script>
 
 <script type="text/javascript">
 	//기준점 Point 체크 여부

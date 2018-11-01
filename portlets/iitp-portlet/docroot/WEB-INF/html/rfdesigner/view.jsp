@@ -5,7 +5,7 @@
 <liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
 
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm/jquery-confirm.min.css">
 
 
 <style type="text/css">
@@ -543,15 +543,15 @@
 
 
 <!-- Plotly libs -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="${contextPath}/js/plotly/plotly-latest.min.js"></script>
 <!--Numeric JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<script src="${contextPath}/js/numeric/numeric.min.js"></script>
 <!--math JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.2.2/math.min.js"></script>
+<script src="${contextPath}/js/mathjs/math.min.js"></script>
 <!--bootstrap validation JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script src="${contextPath}/js/validation/validator.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/jquery-confirm/jquery-confirm.min.js"></script>
 
 
 

@@ -450,7 +450,7 @@ function <portlet:namespace/>openWorkbenchApp(meshFileName, meshFileId, fileExt)
 		isBcUse = true;
 	}
 	
-    var appList = DASH.meshApp(fileExt, isBcUse);
+    var appList = DASH.meshApp(fileExt, '${site}');
     
     var sendData = {
         "<portlet:namespace/>appList" : appList
@@ -1065,7 +1065,7 @@ function <portlet:namespace/>removeSimulation(executeId){
 		<li class="con-button" id="<portlet:namespace/>con-analyzer" onclick="<portlet:namespace/>runAnalyzer();">
 			<a class='btn btn-small' href='#'>
 				<i class='icon-large icon-play-circle'> 
-					<span class="font">Analyzer</span>
+					<span class="font">Analyze</span>
 				</i>
 			</a>
 		</li>

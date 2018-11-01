@@ -71,7 +71,7 @@
 	<portlet:param name="redirectURL" 	value="${redirectURL}" />
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="appTestURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
+<liferay-portlet:renderURL var="appTestURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 	<liferay-portlet:param name="scienceAppId" value="${scienceAppId}"/>
 	

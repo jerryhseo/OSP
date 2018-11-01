@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
@@ -332,7 +332,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/adminlte/adminlte.js"></script>
 <script src="${contextPath}/js/lib/jquery.mustache.js"></script>
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
-<script src="${contextPath}/js/validator.min.js"></script>
+<script src="${contextPath}/js/lib/validator.min.js"></script>
 
 <script id="tpl-menu-panel-box" type="text/html">
 <div class="{{panel-type}} col-md-{{col}}">
@@ -426,7 +426,7 @@ $.widget.bridge('uibutton', $.ui.button);
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
 </script>
-<script src="${contextPath}/js/jquery-confirm.min.js"></script>
+<script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
 $(document).ready(function(){
   consoleLog.setLoggingLevel({

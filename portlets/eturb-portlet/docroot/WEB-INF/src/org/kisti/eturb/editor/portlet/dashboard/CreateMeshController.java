@@ -118,7 +118,7 @@ public class CreateMeshController{
 	                }else{
 	                    userScreenName = String.valueOf(user.getScreenName());
 	                }
-	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, fileList, false,userScreenName);
+	            	fileId = IBFileUtil.createZipFileWithIbUpload(icebreakerUrl, vcToken, zipFileName, fileList, "eTURB_Meshes",false,userScreenName);
 	            }else{
 	            	isComplete = false;
 	            }

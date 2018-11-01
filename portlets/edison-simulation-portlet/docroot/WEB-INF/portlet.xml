@@ -535,6 +535,7 @@
 	    <role-name>user</role-name>
 	  </security-role-ref>
 	</portlet>
+	
 	<portlet>
 	  <portlet-name>edison-workbench-job-status-and-result</portlet-name>
 	  <display-name>Edison Workbench Job Status And Result</display-name>
@@ -585,6 +586,70 @@
 			<title>Simulation workbench Dashboard</title>
 			<short-title>Simulation workbench Dashboard</short-title>
 			<keywords>Simulation workbench Dashboard</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>SimulationJobController</portlet-name>
+		<display-name>SimulationJobController</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+      <name>contextConfigLocation</name>
+      <value>classpath:org/kisti/edison/bestsimulation/portlet/workbench/jobcontroller/edison-workbench-jobcontroller.xml</value>
+    </init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Simulation workbench Job Controller</title>
+			<short-title>Simulation workbench Job Controller</short-title>
+			<keywords>Simulation workbench Job Controller</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
+		<portlet-name>SimulationResultFileViewer</portlet-name>
+		<display-name>SimulationResultFileViewer</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+      <name>contextConfigLocation</name>
+      <value>classpath:org/kisti/edison/bestsimulation/portlet/workbench/resultfile/edison-workbench-result-file.xml</value>
+    </init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Simulation workbench Result File Viewer</title>
+			<short-title>Simulation workbench Result File Viewer</short-title>
+			<keywords>Simulation workbench Result File Viewer</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>

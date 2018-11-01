@@ -207,6 +207,10 @@
                 return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.HEIGHT, arguments));
             };
             
+            C.width = function( width ){
+                return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.WIDTH, arguments));
+            };
+            
             C.currentPortletId = function( instanceId ){
                 return C.property.apply(C, OSP.Util.addFirstArgument(OSP.Constants.CURRENT_PORTLET, arguments));
             };
@@ -354,6 +358,7 @@
                 for( var key in jsonColumn ){
                     switch( key ){
                     case OSP.Constants.ID:
+                    case OSP.Constants.WIDTH:
                     case OSP.Constants.HEIGHT:
                     case OSP.Constants.CURRENT_PORTLET:
                         C.property( key, jsonColumn[key] );
@@ -376,27 +381,119 @@
         }; /* End of Column */
         
         Layout.newColumn = function( jsonColumn ){
-            return new Column( jsonColumn );
+        	return new Column( jsonColumn );
         };
         
         Layout.templateId = function( templateId ){
-            return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
+        	return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
         };
         
         Layout.columns = function( columns ){
-            return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.COLUMNS, arguments));
+        	return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.COLUMNS, arguments));
         };
-
+        
         Layout.getColumnIds = function(){
-            var columns = Layout.columns();
-            if( !columns )  return [];
+        	var columns = Layout.columns();
+        	if( !columns )  return [];
+        	
+        	var columnIds = [];
+        	for( var index in columns ){
+        		var column = columns[index];
+        		columnIds.push( column.id() );
+        	}
+        	return columnIds;
+        };
+        
+        var Devider = function( jsonDevider ){
+            var D = this;
+            OSP._MapObject.apply(D);
             
-            var columnIds = [];
-            for( var index in columns ){
-                var column = columns[index];
-                columnIds.push( column.id() );
+            D.id = function( id ){
+                return D.property.apply(D, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments));
+            };
+            
+            D.left = function( left ){
+                return D.property.apply(D, OSP.Util.addFirstArgument(OSP.Constants.LEFT, arguments));
+            };
+            
+            D.top = function( top ){
+                return D.property.apply(D, OSP.Util.addFirstArgument(OSP.Constants.TOP, arguments));
+            };
+            
+            D.deserialize = function( jsonDevider ){
+            	for( var key in jsonDevider ){
+            		switch( key ){
+        				case OSP.Constants.ID:
+        				case OSP.Constants.LEFT:
+        				case OSP.Constants.TOP:
+        					D.property( key, jsonDevider[key] );
+                            break;
+        			default:
+                        console.log( 'Un-recognizable Devider property: '+key);
+                    }
+        		}
+        	};
+            
+            if( arguments.length === 1 ){
+            	D.deserialize( jsonDevider );
+            };
+        };
+        
+        Layout.newDevider = function( jsonDevider ){
+        	return new Devider( jsonDevider );
+        };
+        
+
+        Layout.deviders = function( deviders ){
+        	return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.DEVIDER, arguments));
+        };
+        
+        Layout.addDevider = function( devider ){
+            var deviders = Layout.deviders();
+            if( !deviders ){
+            	deviders = [];
+                Layout.deviders(deviders);
+            } 
+            
+            deviders.push(devider);
+            return deviders;
+        };
+        
+        Layout.getDevider = function( deviderId ){
+        	var deviders = Layout.deviders();
+            if( !deviders )  return false;
+            
+            for( var index in deviders ){
+                var devider = deviders[index];
+                if( devider.id() === deviderId )
+                    return devider;
             }
-            return columnIds;
+            
+            return false;
+        };
+        
+        Layout.addDeviderObject = function( deviderId, left, top){
+            var devider = Layout.getDevider(deviderId);
+            if( !devider ){
+            	devider = new Devider();
+            	devider.id(deviderId);
+                if(left!=''){devider.left(left);}
+                if(top!=''){devider.top(top);}
+                
+                Layout.addDevider(devider);
+            }
+        };
+        
+        Layout.getDeviderIds = function(){
+        	var deviders = Layout.deviders();
+        	if( !deviders )  return [];
+        	
+        	var deviderIds = [];
+        	for( var index in deviders ){
+        		var devider = deviders[index];
+        		deviderIds.push( devider.id() );
+        	}
+        	return deviderIds;
         };
 
         Layout.getPortlet = function( instanceId ){
@@ -543,11 +640,16 @@
             return retrieved;
         };
         
-        Layout.addPortlet = function( columnId, rootId, display, portName, preferences ){
+        /*Add Column-Height,width logic add - GPLUS 20181002*/
+        Layout.addPortlet = function( columnId, rootId, display, portName, preferences, columnHeight, columnWidth){
             var column = Layout.getColumn(columnId);
             if( !column ){
                 column = new Column();
                 column.id(columnId);
+                /*Add Column-Height,width*/
+                if(columnHeight!=''){column.height(columnHeight);}
+                if(columnWidth!=''){column.width(columnWidth);}
+                
                 Layout.addColumn(column);
             }
             
@@ -644,12 +746,13 @@
                 
             for( var index in columns ){
                 var column = columns[index];
-                //console.log('current column: ', column);
+//                console.log('current column: ', column);
+                console.log('current column: ', JSON.stringify(column));
                 var portletId = column.currentPortletId();
                 var targetPortlet;
                 if( !portletId ){
-                    targetPortlet = column.getPortlets('_DOWNLOAD_')[0];
-                    column.currentPortletId( targetPortlet.instanceId() );
+//                    targetPortlet = column.getPortlets('_DOWNLOAD_')[0];
+//                    column.currentPortletId( targetPortlet.instanceId() );
                 }
                 else{
                     targetPortlet = column.getPortlet(portletId);
@@ -709,6 +812,15 @@
                         }
                         Layout.columns(columns);
                         break;
+                    case OSP.Constants.DEVIDER:
+                    	var devidersJson = jsonLayout[key];
+                    	var deviders = [];
+                    	for( var index in devidersJson ){
+                            var devider = new Devider( devidersJson[index] );
+                            deviders.push(devider);
+                        }
+                        Layout.deviders(deviders);
+                    	break;
                     case OSP.Constants.HEIGHT:
                         break;
                     default:
@@ -1422,6 +1534,7 @@
                             simulationUuid: simulation.uuid(),
                             jobUuid: submittedJob.jobUuid,
                             tempJobUuid: submittedJob.tempJobUuid,
+                            jobSubmitCnt: submittedJob.jobSubmitCnt,
                             status: true
                         };
 
@@ -1431,7 +1544,6 @@
                     },
                     error:function(jqXHR, textStatus, errorThrown){
                         bEnd();
-                        
                         fireSubmitJobResult({status:false});
                     }
                 });
@@ -1439,7 +1551,7 @@
             
             setTimeout(function(){
                 bEnd()
-            },1000*5);
+            },1000*7);
         };
         
         var loadJobData = function ( job ){
@@ -1455,7 +1567,6 @@
 
         var resetPortlets = function( job, ports, portType ){
             var layout = Workbench.layout();
-            
             var fireLoadOutputData = function( ports, resultFolder ){
                 for( var portName in ports ){
                     var portlets = layout.getPortlets( portName );
@@ -1469,7 +1580,6 @@
                     inputData.parent( parentPath );
                     inputData.name( portData.name() );
                     inputData.relative( true );
-                    console.log(inputData);
                     for( var index in portlets ){
                         var portlet = portlets[index];
                         fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
@@ -1724,6 +1834,58 @@
         
         Workbench.redirectURL = function( redirectURL ){
             return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_URL, arguments));
+        };
+        
+        /*Workbench Layout Resize Event - GPLUS - 20181004*/
+        Workbench.resizeLayout = function(namespace){
+        	var layout = Workbench.layout();
+        	var columns = layout.columns();
+            if( !columns )  return false;
+             
+            /*Layout*/
+             for( var index in columns ){
+                 var column = columns[index];
+                 
+                 if(column.width()){
+                	var layoutDomId = namespace+column.id();
+                    var dom = document.getElementById(layoutDomId);
+                	if(dom!= null){
+                		var setWidth = dom.getAttribute('set-width');
+                		if(setWidth!=null&&setWidth=="false"){
+                			var setWidthId = dom.getAttribute('set-width-id');
+                			var setDom = document.getElementById(setWidthId)
+                			if(setDom!= null){
+                				setDom.style.width = column.width();
+                			}
+                		}else{
+                			dom.style.width = column.width();
+                		}
+                	}
+                 }
+                 
+                 if(column.height()){
+                	var layoutDomId = namespace+'row-'+column.id();
+                    var dom = document.getElementById(layoutDomId);
+                 	if(dom!= null){dom.style.height = column.height();}
+                  }
+             }
+             
+             /*devider*/
+             var deviders = layout.deviders();
+             if(deviders){
+            	 for( var index in deviders ){
+                     var devider = deviders[index];
+                     var deviderDomId = namespace+devider.id();
+                     var dom = document.getElementById(deviderDomId);
+                     if(devider.left()&&dom!= null){
+                    	dom.style.left = devider.left();
+                     }
+                     
+                     if(devider.top()&&dom!= null){
+                     	dom.style.top = devider.top();
+                      }
+                 }
+             }
         };
         
         Workbench.loadPortlets = function( windowState ){
@@ -2139,8 +2301,9 @@
                                     
                                     console.log("Copy inputs: ", inputs);
                                     console.log("Passed InputData: ", changedData);
-                                    
-                                    fireSimulationModal( JSON.stringify( inputs ) );
+                                    var result = getJobInitDataFromInputData(job,inputs);
+//                                    fireSimulationModal(JSON.stringify(changeInputs));
+                                    fireSimulationModal(result);
                                 },
                                 cancel: function () {
                                     
@@ -2150,11 +2313,46 @@
                     }
                     else{
                         job.inputData( portName, changedData );
+//                        console.log(JSON.stringify(job));
                         firePortStatusChanged( portName, OSP.Enumeration.PortStatus.READY );
                     }
                 },
                10
             );
+        };
+        
+        /*Job initData Converter From InputData */
+        var getJobInitDataFromInputData = function(copyJob,inputs){
+        	console.log(copyJob);
+//        	var copyJob = simulation.workingJob();
+        	for( var index in inputs ){
+        		var inputData = inputs[index];
+        		if(inputData){
+        			if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
+        				var dataType = new OSP.DataType();
+        				dataType.deserializeStructure(inputData.context());
+        				var dataStructure = dataType.structure(); 
+						var fileContents = dataStructure.activeParameterFormattedInputs();
+						
+						var data = new OSP.InputData();
+						data.portName( inputData.portName() );
+						data.order( inputData.order() );
+						data.type( OSP.Enumeration.PathType.FILE_CONTENT );
+						data.context( fileContents[0].join('') );
+						
+						copyJob.inputData(inputData.portName(), data );
+        			}else{
+        				copyJob.inputData(inputData.portName(),inputData);
+        			}
+        		}else{
+        			return false;
+        		}
+        	}
+        	
+        	return true;
+//        	return copyJob.inputs();
+//        	console.log(JSON.stringify(copyJob.inputs()));
+//        	console.log(copyJob.inputs());
         };
 
         Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
@@ -2213,40 +2411,6 @@
                             };
                 fireRequestWorkingJobInfo( data ); 
             }
-        };
-        
-        Workbench.handleCheckProvenance = function(resourceURL){
-            var simulation = Workbench.workingSimulation();
-            var job = simulation.workingJob();
-            
-            var jobParameter = jobsToSubmitGetParameters(simulation,job, false,'');
-            
-            var data = Liferay.Util.ns(
-                                       Workbench.namespace(),
-                                       {
-                                           command: 'CHECK_PROVENANCE',
-                                           jobParameter: JSON.stringify(jobParameter)
-                                       });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: resourceURL, 
-                        async : false,
-                        data  : data,
-                        dataType : 'json',
-                        success: function(aa) {
-                            
-                        },
-                        error:function(data,e){
-                            if(jqXHR.responseText !== ''){
-                                alert("CHECK_PROVENANCE-->"+textStatus+": "+jqXHR.responseText);
-                            }else{
-                                alert("CHECK_PROVENANCE-->"+textStatus+": "+errorThrown);
-                            }
-                        }
-                    });
-                    
-                    
         };
         
         Workbench.handleSubmitJob = function(resourceURL){

@@ -27,7 +27,12 @@
 		background: url(${contextPath}/images/simulation-workbench/arrow_tb.png) center no-repeat;
 	}
 	
-	.toast-designer-pos {top: 155px; left: 80%;}
+	.toast-designer-pos {top: 70px; left: 80%;}
+	
+	.portal-popup div.simulation-workbench{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
 </style>
 
 <liferay-portlet:resourceURL var="serveResourceURL"	id="serveResource" copyCurrentRenderParameters="false">
@@ -51,7 +56,8 @@
 
 		String currentPortlet = jsonColumn.getString("currentPortlet_");
 		column.put("id", jsonColumn.getString("id_"));
-		column.put("height", jsonColumn.getDouble("height_"));
+		column.put("height", jsonColumn.getString("height_"));
+		column.put("width", jsonColumn.getString("width_"));
 		column.put("portletId", currentPortlet);
 		columns.put(column);
 		
@@ -69,6 +75,8 @@
 	String logPorts = (String) renderRequest.getAttribute("logPorts");
 	String outputPorts = (String) renderRequest.getAttribute("outputPorts");
 %>
+
+
 <div class="row" id="<portlet:namespace/>canvas">
 	
 </div>
@@ -117,13 +125,23 @@
 <div class="modal fade" id="<portlet:namespace/>simulation-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>simulation-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
-			<div class="modal-content">
+			<div class="modal-content" style="width: 35%;">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Simulation List</h4>
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
+						<form class="form-horizontal" onsubmit="return false;" role="form" data-toggle="validator" >
+							<div class="form-group" style="border-bottom: 2px solid #3c8dbc;padding-bottom: 15px;">
+								<div class="col-md-6">
+									<input type="text" class="form-control" id="title" name="title" placeholder="New Simulation title" required maxlength="20">
+								</div>
+								<div class="col-md-6">
+									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
+								</div>
+							</div>
+						</form>
 						<div class="row" id="<portlet:namespace/>simulation-area">
 							<div class="col-md-12" style="min-height: 300px;">
 								<table class ="table table-bordered table-hover">
@@ -131,6 +149,7 @@
 										<tr>
 											<th class="text-center"><liferay-ui:message key="edison-simulation-execute-simulation-name" /></th>
 											<th class="text-center"><liferay-ui:message key="edison-virtuallab-tablerow-confirm-date" /></th>
+											<th class="text-center"></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -139,17 +158,6 @@
 								</table>
 								
 								<div class="text-center" id="<portlet:namespace/>pagin">${pagingStr}</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<form class="form-inline" onsubmit="return false;" role="form" data-toggle="validator">
-									<div class="form-group">
-										<label for="New Simulation">New Simulation</label>
-										<input type="text" class="form-control" id="title" name="title" placeholder="Title" required maxlength="20">
-									</div>
-									<button class="btn btn-secondary" type="button" id="<portlet:namespace/>create">Create</button>
-								</form>
 							</div>
 						</div>
 					</div>
@@ -258,7 +266,8 @@ $(function(e) {
 			<portlet:namespace/>columns: '<%=columns.toString()%>'
 		},
 		success: function( result ){
-			$('#<portlet:namespace/>canvas').html( result );
+			$('#<portlet:namespace/>canvas').html(result);
+			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
 			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
 		}
 	});
@@ -395,6 +404,7 @@ Liferay.on(OSP.Event.OSP_REQUEST_PORT_INFO,function( e ){
 Liferay.on(OSP.Event.OSP_JOB_SELECTED,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_JOB_SELECTED: ['+e.portletId+', '+new Date()+']');
+		
 		//System portlet Loading check
 		<portlet:namespace/>workbench.handleJobSelected(e.data.simulationUuid,e.data.jobUuid,'<%=serveResourceURL.toString()%>');
 		<portlet:namespace/>activeBlockLayout(false);
@@ -478,6 +488,26 @@ Liferay.on(OSP.Event.OSP_REQUEST_SIMULATION_MODAL,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REQUEST_SIMULATION_MODAL: ['+e.portletId+', '+new Date()+']');
 		
+		var isCopy = false;
+		if(typeof e.isCopy !='undefined'){
+			isCopy = e.isCopy;
+		}
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				isCopy : isCopy
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_SIMULATION_EDIT_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_SIMULATION_MODAL: ['+e.portletId+', '+new Date()+']');
+		
 		var eventData = {
 			targetPortlet: 'BROADCAST',
 			data : {
@@ -485,9 +515,95 @@ Liferay.on(OSP.Event.OSP_REQUEST_SIMULATION_MODAL,function( e ){
 			}
 		};
 		
-		Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, eventData);
+		Liferay.fire(OSP.Event.OSP_RESPONSE_SIMULATION_EDIT_VIEW, eventData);
 	}
 });
+
+Liferay.on(OSP.Event.OSP_REQUEST_NEW_JOB_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_NEW_JOB_VIEW: ['+e.portletId+', '+new Date()+']');
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				data : e.data
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_RESPONSE_NEW_JOB_VIEW, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_DELETE_JOB_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_DELETE_JOB_VIEW: ['+e.portletId+', '+new Date()+']');
+		
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		var simulationUuid = simulation.uuid();
+		var jobUuid = job.uuid();
+		var jobTitle = job.title();
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				simulationUuid : simulationUuid,
+				jobUuid : jobUuid,
+				jobTitle : jobTitle
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_REPONSE_DELETE_JOB_VIEW, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_JOB_LOG_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_JOB_LOG_VIEW: ['+e.portletId+', '+new Date()+']');
+		
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		var simulationUuid = simulation.uuid();
+		var jobUuid = job.uuid();
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				simulationUuid : simulationUuid,
+				jobUuid : jobUuid
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_LOG_VIEW, eventData);
+	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_JOB_RESULT_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REQUEST_JOB_RESULT_VIEW: ['+e.portletId+', '+new Date()+']');
+		
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		var simulationUuid = simulation.uuid();
+		var jobUuid = job.uuid();
+		
+		var eventData = {
+			targetPortlet: 'BROADCAST',
+			data : {
+				simulationUuid : simulationUuid,
+				jobUuid : jobUuid
+			}
+		};
+		
+		Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_RESULT_VIEW, eventData);
+	}
+});
+
+
+
+
 
 Liferay.on(OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
@@ -514,12 +630,7 @@ Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 Liferay.on(OSP.Event.OSP_SUBMIT_JOB,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_SUBMIT_JOB: ['+e.portletId+', '+new Date()+']', e.data);
-		var isProvenanceJob = e.data.isProvenanceJob;
-		if(isProvenanceJob){
-			<portlet:namespace/>workbench.handleCheckProvenance('<%=serveResourceURL.toString()%>');
-		}else{
-			<portlet:namespace/>workbench.handleSubmitJob('<%=serveResourceURL.toString()%>');
-		}
+		<portlet:namespace/>workbench.handleSubmitJob('<%=serveResourceURL.toString()%>');
 	}
 });
 
@@ -547,7 +658,6 @@ Liferay.on(OSP.Event.OSP_SAMPLE_SELECTED,function( e ){
 		console.log('OSP_SAMPLE_SELECTED: ['+e.portletId+', '+new Date()+']');
 		<portlet:namespace/>workbench.handleSampleSelected(e.portletId,'<%=serveResourceURL%>');
 });
-
 /***********************************************************************
  * Global Function section
  ***********************************************************************/
@@ -582,24 +692,6 @@ function <portlet:namespace/>displayInit(){
 			
 		// Dashboard Portlet
 		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
-		
-		
-		//iframe resize
-// 		if(<portlet:namespace/>workbench.isFlowLayout()){
-// 			var contentHeight = $("#<portlet:namespace/>content-wrapper").outerHeight()-134;
-			
-// 			$("section#workbench-layout-area div[id*=<portlet:namespace/>]").each(function(i){
-// 				if($(this).hasClass("sub-col")){
-// 					$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-// 				}else{
-// 					$(this).find("iframe").css("height",contentHeight);
-// 				}
-// 			});
-// 		}else{
-// 			$("section#workbench-layout-area .sub-col").each(function(i){
-// 				$(this).find("iframe").css("height",$(this).outerHeight() - 74);
-// 			});
-// 		}
 	}
 	bEnd();
 }

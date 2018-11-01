@@ -20,6 +20,15 @@
 		<css-class-wrapper>smith-chart container-fluid</css-class-wrapper>		
 	</portlet>
 	
+	<portlet>
+		<portlet-name>WCDMA-RF-Designer</portlet-name>
+		<icon>/icon.png</icon>
+		<action-url-redirect>true</action-url-redirect>		
+		<instanceable>false</instanceable>
+		<private-session-attributes>false</private-session-attributes>
+		<css-class-wrapper>wcdma-rf-designer container-fluid</css-class-wrapper>		
+	</portlet>
+	
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

@@ -28,17 +28,14 @@
 
 .sidebar-menu li.header {
  padding: 10px 25px 10px 15px;
- color: #000000;
 }
 
 .skin-black-light .sidebar-menu>li.header {
  color: #000000;
  background: #f9fafc;
- padding: 0px;
 }
 
 .skin-black-light .sidebar-menu>li.active>a, .skin-black-light .sidebar-menu>li>a {
- font-weight: 400;
  text-decoration: none;
 }
 
@@ -130,13 +127,18 @@ a#mobile-toggle:hover, a#mobile-toggle:focus {
     display: none;
 }
 
+.menu-panel, .menu-panel div.row, .menu-panel div.col-md-4, .menu-panel div.col-md-3{
+	height: inherit;
+}
+
 .menu-panel .form-group{
     margin-left: 0px !important;
     margin-right: 0px !important;
 }
 .menu-panel .box{
     border-radius: 0;
-    height: calc(100vh - 103px);
+/*     height: calc(100vh - 172px); */
+    height: inherit;
     margin-bottom: 0px;
 }
 .menu-panel .box > .box-header > .box-tools {
@@ -168,7 +170,68 @@ a#mobile-toggle:hover, a#mobile-toggle:focus {
 }
 
 .skin-black-light .sidebar-menu > li:hover > a,
-.skin-black-light .sidebar-menu > li.active > a {
+.skin-black-light .sidebar-menu > li.action > a {
   color: #ff5454;
+}
+
+.skin-black-light .sidebar-menu > li.action{
   background: #f4f4f5;
 }
+
+
+
+
+
+
+header.main-header{
+	z-index: 500;
+}
+.main-header div.logo{
+	height: 70px;
+	line-height: 70px;
+	padding: 0px;
+	display: block;
+	
+	background-color: #ffffff;
+    color: #333333;
+    border-bottom: 0 solid transparent;
+    border-right: 1px solid #d2d6de;
+}
+
+.main-header div.logo .logo-lg{
+	display: block;
+}
+
+.main-header div.logo .logo-sm{
+	display: none;
+}
+
+.sidebar-collapse .main-header div.logo .logo-lg{
+	display: none;
+}
+
+.sidebar-collapse .main-header div.logo .logo-sm{
+	display: block;
+}
+
+
+
+.main-header nav.workbench-custom-nav{
+	min-height: 70px;
+}
+
+nav.workbench-custom-nav ul > li:not(.divider-vertical){
+	text-align: center;
+	padding: 12px;
+	cursor: pointer;
+}
+
+nav.workbench-custom-nav .divider-vertical {
+	height: 50px;
+	margin: 9px;
+	border-left: 2px solid #f2f2f2;
+	border-right: 1px solid #ffffff;
+}
+
+
+
