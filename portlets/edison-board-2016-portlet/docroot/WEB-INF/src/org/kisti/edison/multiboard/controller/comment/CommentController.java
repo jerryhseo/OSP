@@ -129,9 +129,9 @@ public class CommentController {
         String searchValue = "";
         String customId = CustomUtil.strNull(params.get("customId"), "");
         
-        String divSort = request.getPreferences().getValue("divSort", "COMMENT");
+        String divSort = request.getPreferences().getValue("divSort", "");
         
-        long divCd = 700;
+        long divCd = Long.parseLong(CustomUtil.strNull(params.get("divCd"), "0"));
         
         int start = ((currentPage - 1) * listSize);
         Locale locale = themeDisplay.getLocale();
@@ -212,8 +212,8 @@ public class CommentController {
         
         long userId = themeDisplay.getUserId();
         long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
-        String divSort = request.getPreferences().getValue("divSort", "COMMENT");
-        long divCd = 700;
+        String divSort = request.getPreferences().getValue("divSort", "");
+        long divCd = Long.parseLong(CustomUtil.strNull(params.get("divCd"), "0"));
         String siteGroup = "";
         
         Locale locale = themeDisplay.getLocale();
@@ -263,7 +263,7 @@ public class CommentController {
     }
     
     @ResourceMapping(value="updateCommentList")
-    public void updateCommentList(ResourceRequest request, ResourceResponse response, @RequestParam(value="updateData") String updateData){
+    public void updateCommentList(ResourceRequest request, ResourceResponse response){
         
         try{
             UploadPortletRequest upload = com.liferay.portal.util.PortalUtil.getUploadPortletRequest(request);
@@ -271,34 +271,31 @@ public class CommentController {
             Map params = RequestUtil.getParameterMap(request);
             ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
             
-            /*수정할 comment 내용과 해당 comment의 seq*/
-            JSONObject requestJson = JSONObject.fromObject(updateData);
-            String comment = (String) requestJson.get("comment");
-            String boardSequence = (String) requestJson.get("boardSeq");
+            String title = CustomUtil.strNull(params.get("title"),"");
+            String content = CustomUtil.strNull(params.get("content"),"");
             
+            long boardSeq = Long.parseLong(CustomUtil.strNull(params.get("boardSeq"),""));
+            long boardGroupId = Long.parseLong(CustomUtil.strNull(params.get("boardGroupId"),themeDisplay.getSiteGroupId()+""));
+            
+            String customId = CustomUtil.strNull(params.get("customId"), "");
+            String divSort = request.getPreferences().getValue("divSort", "");
             
             long userId = themeDisplay.getUserId();
-            long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
-            Long boardSeq = Long.parseLong(boardSequence);
-            String divSort = request.getPreferences().getValue("divSort", "COMMENT");
-            long divCd = 700;
-            String siteGroup = "";
             
+            String siteGroup = "";
             Locale locale = themeDisplay.getLocale();
-            String customId = CustomUtil.strNull(params.get("customId"), "");
-            boolean popupYn = false;
             
             /* 전달받은 데이터 저장 */ 
             params.put("customId", customId);
             params.put("userId", themeDisplay.getUserId());
             params.put("boardSeq", boardSeq);
-            params.put("locale", CustomUtil.stringToLocale(CustomUtil.strNull(params.get("current_languageId"), CustomUtil.strNull(params.get("select_languageId")))));
+            params.put("locale", locale);
             params.put("allNoticeYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("allNoticeYn"), "0")));
             params.put("popupYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("popupYn"), "0")));
             params.put("popupStartDt", CustomUtil.strNull(params.get("popupStartDt")));
             params.put("popupEndDt", CustomUtil.strNull(params.get("popupEndDt")));
-            params.put("title", CustomUtil.strNull(params.get("boardSeq"),"test"));
-            params.put("content", comment);
+            params.put("title", title);
+            params.put("content", content);
             params.put("siteGroup", siteGroup);
             
             Board brd = BoardLocalServiceUtil.updateBoard(params);
@@ -309,7 +306,7 @@ public class CommentController {
             
             //JSON
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("result", "update true");
+            jsonObj.put("result", "true");
             
             response.setContentType("application/json; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -321,23 +318,20 @@ public class CommentController {
     }
     
     @ResourceMapping(value="deleteCommentList")
-    public void deleteCommentList(ResourceRequest request, ResourceResponse response, @RequestParam(value="sendData") String sendData){
+    public void deleteCommentList(ResourceRequest request, ResourceResponse response){
         
         try {
             Map params = RequestUtil.getParameterMap(request);
+            long boardSeq = Long.parseLong(CustomUtil.strNull(params.get("boardSeq"),"0"));
             ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
             
-            //parameter
-            String customId = CustomUtil.strNull(params.get("customId"), "");
-            long boardGroupId = ParamUtil.get(request, "boardGroupId", themeDisplay.getSiteGroupId());
-            
-            
-            String divSort = request.getPreferences().getValue("divSort", "COMMENT");
-            Board brd = BoardLocalServiceUtil.deleteBoard(Long.parseLong(sendData));
+            if(boardSeq != 0){
+            	Board brd = BoardLocalServiceUtil.deleteBoard(boardSeq);
+            }
             
             //JSON
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("result", "delete true");
+            jsonObj.put("result", "true");
             
             response.setContentType("application/json; charset=UTF-8");
             PrintWriter out = response.getWriter();
@@ -502,4 +496,68 @@ public class CommentController {
 		}
     }
     
+    	
+	@ResourceMapping(value="insertDefaultTypeBoard")
+	public void insertBoard(ResourceRequest request, ResourceResponse response){
+		try {
+			UploadPortletRequest upload = com.liferay.portal.util.PortalUtil.getUploadPortletRequest(request);
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (WebKeys.THEME_DISPLAY);
+			Map params = RequestUtil.getParameterMap(upload);
+			
+			/* Board Data */
+			String title =  CustomUtil.strNull(ParamUtil.getString(request, "title"), "");
+			String content =  CustomUtil.strNull(ParamUtil.getString(request, "content"), "");
+			long boardGroupId = GetterUtil.get(params.get("boardGroupId"), themeDisplay.getScopeGroupId());
+			String customId = ParamUtil.getString(request, "customId");
+			String groupBoardSeq = CustomUtil.strNull(ParamUtil.getString(request, "groupBoardSeq"), "0");
+			long userId = themeDisplay.getUserId();
+			
+			Locale locale = themeDisplay.getLocale();
+//			boolean maxWindowStatus = GetterUtil.get(params.get("maxWindowStatus"), false);
+			
+			String divSort = request.getPreferences().getValue("divSort", "");
+			Long divCd = Long.parseLong(((PortletRequest) request).getPreferences().getValue("divCd", "0"));
+			
+			System.out.println("content : " + content);
+			System.out.println("customId : " + customId);
+			System.out.println("groupBoardSeq : " + groupBoardSeq);
+			
+			String[] siteGroups = request.getParameterValues("siteGroup");
+			String siteGroup = "";
+			if(siteGroups != null){
+				for(String siteGroupId : siteGroups){
+					if(!siteGroup.equals("")){
+						siteGroup+=",";
+					}
+					siteGroup+= siteGroupId;
+				}
+				params.put("siteGroup", siteGroup);
+			}
+			
+			params.put("groupId", boardGroupId);
+			params.put("divCd", divCd);
+			params.put("userId", userId);
+			params.put("title", title);
+			params.put("content", content);
+			params.put("customId", customId);
+			params.put("locale", locale);
+			params.put("allNoticeYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("allNoticeYn"), "0")));
+			params.put("popupYn", Boolean.parseBoolean(CustomUtil.strNull(params.get("popupYn"), "0")));
+			params.put("popupStartDt", CustomUtil.strNull(params.get("popupStartDt")));
+			params.put("popupEndDt", CustomUtil.strNull(params.get("popupEndDt")));
+			params.put("groupBoardSeq", groupBoardSeq);
+			params.put("groupBoardTurn", "0");
+			params.put("replyDepth", 0);
+			
+			/* Insert Board Table */
+			Board brd = BoardLocalServiceUtil.addBoard(params);
+			
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+			
+			//Session Error Message
+			SessionErrors.add(request, EdisonMessageConstants.INSERT_ERROR);
+		}
+	}
 }

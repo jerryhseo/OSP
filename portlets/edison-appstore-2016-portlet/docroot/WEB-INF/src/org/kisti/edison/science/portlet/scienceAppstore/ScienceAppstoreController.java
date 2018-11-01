@@ -30,11 +30,16 @@ import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.model.ScienceAppCategoryLink;
 import org.kisti.edison.science.model.ScienceAppDescription;
+import org.kisti.edison.science.model.ScienceAppRatingsEntry;
+import org.kisti.edison.science.portlet.scienceAppProLink.LinktCustomModelConstants;
 import org.kisti.edison.science.service.ScienceAppCategoryLinkLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppDescriptionLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppFavoriteLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
@@ -49,6 +54,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.icecap.model.DataType;
+import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 /*import com.kisti.osp.workbench.service.WorkbenchLayoutLocalServiceUtil;*/
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -69,6 +76,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -85,11 +93,14 @@ import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.ratings.model.RatingsStats;
 
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("VIEW")   
+@RequestMapping("VIEW")
 public class ScienceAppstoreController {
 	private static Log log = LogFactoryUtil.getLog(ScienceAppstoreController.class);
 	
@@ -144,6 +155,11 @@ public class ScienceAppstoreController {
 			}
 			Map<String, Object> solver = ScienceAppLocalServiceUtil.getScienceAppReturnObject(Long.parseLong(CustomUtil.strNull(params.get("solverId"))), selectLocale);
 			
+			String selectLocaleId = CustomUtil.strNull(solver.get("selectLocaleId"), "ko_KR");
+			Map<String, Object> description = (Map<String, Object>) solver.get("description");
+			System.out.println("description : " + description.get("description_" + selectLocaleId).toString().replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", ""));
+			solver.put("descriptionStr", description.get("description_" + selectLocaleId).toString().replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", ""));
+			
 			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Date transDate = transFormat.parse(CustomUtil.strNull(solver.get("createDate")));
@@ -169,6 +185,7 @@ public class ScienceAppstoreController {
 			String contentCheckAuth = "FALSE";
 			long authorId = Long.parseLong(CustomUtil.strNull(solver.get("authorId")));
 			User user = UserLocalServiceUtil.getUser(themeDisplay.getUserId());
+			model.addAttribute("thisUserId", user.getUserId());
 			if(themeDisplay.isSignedIn()){
 				if(EdisonUserUtil.isPowerUserThan(user)){
 					contentCheckAuth = "TRUE";
@@ -354,6 +371,71 @@ public class ScienceAppstoreController {
 			String viewStatus = ParamUtil.getString(request, "viewStatus", "");
 			model.addAttribute("viewStatus", viewStatus);
 			model.addAttribute("downloadOnly", ScienceAppConstants.OPENLEVEL_DWN);
+			
+			/* Get ScienceApp Rating */
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			String scienceAppClassName = scienceApp.getModelClassName();
+			long classNameId = ClassNameLocalServiceUtil.getClassNameId(scienceAppClassName);
+			RatingsStats ratingsStats = ScienceAppLocalServiceUtil.getScienceAppRatingsStats(scienceAppId, classNameId, scienceAppClassName);
+			ScienceAppRatingsEntry ratingsEntry = ScienceAppLocalServiceUtil.getScienceAppMyRatingsEntry(scienceAppId, scienceAppClassName, user);
+			if(ratingsEntry == null){
+				model.addAttribute("myRatingsEntryIsEmpty", "true");
+			} else {
+				model.addAttribute("myRatingsEntryIsEmpty", "false");
+				model.addAttribute("myRatingsScore", (int)ratingsEntry.getScore());
+				model.addAttribute("myRatingsModifiedDate", new SimpleDateFormat("yyyy-MM-dd").format(ratingsEntry.getModifiedDate()));
+			}
+			model.addAttribute("averageScore", ratingsStats.getAverageScore());
+			model.addAttribute("totalEntries", ratingsStats.getTotalEntries());
+			
+			
+			long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
+			long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
+			long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+			
+			/* Get ScienceApp Ports */
+			boolean isPortEmpty = false;
+			String inputPorts = "";
+			if(inputCnt!=0){
+				inputPorts = ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+			}
+			
+			String outputPorts = "";
+			if(outputCnt!=0){
+				outputPorts = ScienceAppOutputPortsLocalServiceUtil.getOutputPortsJsonString(scienceAppId);
+			}
+			
+			String logPorts = "";
+			if(logCnt!=0){
+				logPorts = ScienceAppLocalServiceUtil.getScienceAppLogPorts(scienceAppId);
+			}
+			
+			if(inputCnt!=0 && outputCnt!=0 && logCnt!=0){
+				isPortEmpty = true;
+			}
+			model.addAttribute("isPortEmpty", isPortEmpty);
+			model.addAttribute("inputPorts", inputPorts);
+			model.addAttribute("outputPorts", outputPorts);
+			model.addAttribute("logPorts", logPorts);
+			
+			/* Get ScienceApp Execute Statistics */
+			Map<String, Object> scienceAppExecuteStatisticsMap = ScienceAppLocalServiceUtil.getScienceAppExecuteStatistics(scienceAppId);
+			model.addAttribute("userCnt", scienceAppExecuteStatisticsMap.get("userCnt"));
+			model.addAttribute("exeCnt", scienceAppExecuteStatisticsMap.get("exeCnt"));
+			model.addAttribute("avgExeTime", scienceAppExecuteStatisticsMap.get("avgExeTime"));
+			
+			model.addAttribute("scienceAppModelName", LinktCustomModelConstants.SCIENCE_APP);
+			model.addAttribute("contentModelName", LinktCustomModelConstants.SCIENCE_INFORMATION);
+			model.addAttribute("openDataModelName", LinktCustomModelConstants.OPEN_DATA);
+			model.addAttribute("simulationProjectModelName", LinktCustomModelConstants.SIMULATION_PROJECT);
+			
+			/* Statistics Search Date */
+			String startDt = CustomUtil.dateToStringFormat(new Date(), "yyyy-MM-dd");
+			int preYear = Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyy"));
+			String endDt = (preYear-1)+"-01-01";
+			
+			model.addAttribute("startDt", startDt);
+			model.addAttribute("endDt", endDt);
 			
 		} catch (Exception e) {
 			log.error(e);
@@ -612,7 +694,6 @@ public class ScienceAppstoreController {
 			String sessionId = request.getPortletSession().getId();
 			
 			try {
-				/*WorkbenchLayoutLocalServiceUtil.saveWorkbenchLayout(sessionId, workbenchLayout);*/
 				
 				JSONObject obj = new JSONObject();
 				obj.put("msg", "success");
@@ -774,4 +855,198 @@ public class ScienceAppstoreController {
 		PrintWriter out = response.getWriter();
 		out.write(obj.toString());
 	}
+	
+	// 2018.09.23, ScienceApp 평점 등록
+	@ResourceMapping(value="setMyRatingsEntry")
+	public void setScienceAppRating(ResourceRequest request, ResourceResponse response) throws SystemException, JSONException, IOException, PortalException, ParseException, PortletModeException{
+		
+		try {
+			Map paramsMap = RequestUtil.getParameterMap(request);
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
+			
+			User user = themeDisplay.getUser();
+			long scienceAppId = Long.parseLong(CustomUtil.strNull(paramsMap.get("scienceAppId"),"0"));
+			long ratingScore = Long.parseLong(CustomUtil.strNull(paramsMap.get("ratingScore"),"0"));
+			
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			String scienceAppClassName = scienceApp.getModelClassName();
+			ScienceAppRatingsEntry ratingsEntry = ScienceAppLocalServiceUtil.setScienceAppMyRatingsEntry(scienceAppId, scienceAppClassName, user, ratingScore);
+			
+			boolean result = false;
+			if(ratingsEntry != null){
+				result = true;
+			}
+			
+			// Response setRatingsEntry Result
+			net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
+			obj.put("result", result);
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	// 2018.10.04, ScienceApp 관련 논문 리스트
+	@ResourceMapping(value="getScienceAppPaperList")
+	public void getScienceAppPaperList(ResourceRequest request, ResourceResponse response){
+		try {
+			Map params = RequestUtil.getParameterMap(request);
+			
+			long scienceAppId = Long.parseLong(CustomUtil.strNull(params.get("scienceAppId"), "0"));
+			
+			/* ScienceAppPaperList */
+			List<Map<String, Object>> scienceAppPaperList = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> getScienceAppPaperList = ScienceAppLocalServiceUtil.getScienceAppPaperList(scienceAppId);
+			
+			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("curPage"), "1"));
+			int linePerPage = 5;
+			int pagePerBlock = 5;
+			int begin = (curPage - 1) * linePerPage;
+			int end = begin+linePerPage;
+			end = end < getScienceAppPaperList.size() ? end : getScienceAppPaperList.size();
+			
+			for(int i=begin; i<end; i++){
+				scienceAppPaperList.add(getScienceAppPaperList.get(i));
+			}
+			
+			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+"searchScienceAppPaper", getScienceAppPaperList.size(), curPage, linePerPage, pagePerBlock);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("scienceAppPaperList", scienceAppPaperList);
+			obj.put("pagingStr", pagingStr);
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="getDataTypeId")
+	public void getScienceAppPorts(ResourceRequest request, ResourceResponse response){
+		try {
+			
+			Map params = RequestUtil.getParameterMap(request);
+			long typeId = 0l;
+			
+			String portName = CustomUtil.strNull(params.get("dataTypeName"),"");
+			String portVersion = CustomUtil.strNull(params.get("dataTypeVersion") ,"");
+			
+			DataType selectDataType = DataTypeLocalServiceUtil.findDataTypeObject(portName, portVersion);
+			typeId = selectDataType.getTypeId();
+			
+			JSONObject obj = new JSONObject();
+			obj.put("typeId", typeId);
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out;
+			out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="getPortSampleFile")
+	public void getPortSampleFile(ResourceRequest request, ResourceResponse response){
+		try {
+			Map params = RequestUtil.getParameterMap(request);
+			long typeId = 0l;
+			
+			long sampleFileId = Long.parseLong(CustomUtil.strNull(params.get("sampleFileId")));
+			DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(sampleFileId);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("fileName", dlFileEntry.getDescription());
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out;
+			out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="getScienceAppHistoryList")
+	public void getScienceAppHistoryList(ResourceRequest request, ResourceResponse response){
+		
+		try {
+			Map params = RequestUtil.getParameterMap(request);
+			long companyId = Long.parseLong(CustomUtil.strNull(params.get("companyId")));
+			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"), "0"));
+			String name = CustomUtil.strNull(params.get("name"), "");
+			
+			Map<String, Object> searchParamMap = new HashMap<String, Object>();
+			searchParamMap.put("companyId", companyId);
+			searchParamMap.put("groupId", groupId);
+			searchParamMap.put("name", name);
+			
+			List<Map<String, Object>> getScienceAppHistoryList = ScienceAppLocalServiceUtil.getScienceAppHistoryList(searchParamMap);
+			System.out.println("getScienceAppHistoryList --> " + getScienceAppHistoryList.toString());
+			
+			JSONObject obj = new JSONObject();
+			obj.put("getScienceAppHistoryList", getScienceAppHistoryList);
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out;
+			out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@ResourceMapping(value="getScienceAppReviewList")
+	public void getScienceAppReviewList(ResourceRequest request, ResourceResponse response){
+		
+		try {
+			Map params = RequestUtil.getParameterMap(request);
+			long scienceAppId = Long.parseLong(CustomUtil.strNull(params.get("scienceAppId")));
+			long groupBoardSeq = Long.parseLong(CustomUtil.strNull(params.get("groupBoardSeq"), "0"));
+			long divCd = Long.parseLong(CustomUtil.strNull(params.get("divCd"), "0"));
+			
+			Map<String, Object> searchParamMap = new HashMap<String, Object>();
+			searchParamMap.put("customId", "app_"+scienceAppId);
+			searchParamMap.put("groupBoardSeq", groupBoardSeq);
+			searchParamMap.put("divCd", divCd);
+			
+			List<Map<String, Object>> getScienceAppReviewList = ScienceAppLocalServiceUtil.getScienceAppReviewList(searchParamMap);
+			
+			JSONObject obj = new JSONObject();
+			obj.put("getScienceAppReviewList", getScienceAppReviewList);
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out;
+			out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

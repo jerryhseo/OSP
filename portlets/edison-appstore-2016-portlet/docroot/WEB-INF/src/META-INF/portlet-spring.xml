@@ -69,4 +69,10 @@
 	<bean id="org.kisti.edison.science.service.persistence.ScienceAppManagerFinder" class="org.kisti.edison.science.service.persistence.ScienceAppManagerFinderImpl" parent="basePersistence" />
 	<bean id="org.kisti.edison.science.service.ScienceAppOutputPortsLocalService" class="org.kisti.edison.science.service.impl.ScienceAppOutputPortsLocalServiceImpl" />
 	<bean id="org.kisti.edison.science.service.persistence.ScienceAppOutputPortsPersistence" class="org.kisti.edison.science.service.persistence.ScienceAppOutputPortsPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.science.service.ScienceAppPaperLocalService" class="org.kisti.edison.science.service.impl.ScienceAppPaperLocalServiceImpl" />
+	<bean id="org.kisti.edison.science.service.ScienceAppPaperService" class="org.kisti.edison.science.service.impl.ScienceAppPaperServiceImpl" />
+	<bean id="org.kisti.edison.science.service.persistence.ScienceAppPaperPersistence" class="org.kisti.edison.science.service.persistence.ScienceAppPaperPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.science.service.ScienceAppRatingsEntryLocalService" class="org.kisti.edison.science.service.impl.ScienceAppRatingsEntryLocalServiceImpl" />
+	<bean id="org.kisti.edison.science.service.ScienceAppRatingsEntryService" class="org.kisti.edison.science.service.impl.ScienceAppRatingsEntryServiceImpl" />
+	<bean id="org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPersistence" class="org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPersistenceImpl" parent="basePersistence" />
 </beans>

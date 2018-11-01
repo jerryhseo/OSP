@@ -46,5 +46,19 @@
 			)AS MONTH_DATA
 	]]>		
 	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppExecuteStatistics">
+	<![CDATA[	
+		SELECT 
+			E.scienceAppId AS scienceAppId,
+			ifnull(SUM(E.userCnt),0) AS userCnt,
+			ifnull(SUM(E.exeCnt),0)  AS exeCnt,
+			ifnull(ROUND(AVG(E.avgExeTime)),0) AS avgExeTime
+		FROM
+			EDSIM_ScienceAppExecute E
+		GROUP BY E.scienceAppId
+		HAVING E.scienceAppId = #scienceAppId#
+	]]>
+	</sql>
 
 </custom-sql>

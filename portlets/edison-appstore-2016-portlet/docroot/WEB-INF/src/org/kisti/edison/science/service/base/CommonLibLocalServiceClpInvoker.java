@@ -114,21 +114,21 @@ public class CommonLibLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.CommonLib"
 			};
 
-		_methodName164 = "getBeanIdentifier";
+		_methodName176 = "getBeanIdentifier";
 
-		_methodParameterTypes164 = new String[] {  };
+		_methodParameterTypes176 = new String[] {  };
 
-		_methodName165 = "setBeanIdentifier";
+		_methodName177 = "setBeanIdentifier";
 
-		_methodParameterTypes165 = new String[] { "java.lang.String" };
+		_methodParameterTypes177 = new String[] { "java.lang.String" };
 
-		_methodName171 = "countCommonLib";
+		_methodName183 = "countCommonLib";
 
-		_methodParameterTypes171 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes183 = new String[] { "long", "java.lang.String" };
 
-		_methodName172 = "retrieveListCommonLib";
+		_methodName184 = "retrieveListCommonLib";
 
-		_methodParameterTypes172 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes184 = new String[] { "java.lang.String", "int", "int" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -220,26 +220,26 @@ public class CommonLibLocalServiceClpInvoker {
 			return CommonLibLocalServiceUtil.updateCommonLib((org.kisti.edison.science.model.CommonLib)arguments[0]);
 		}
 
-		if (_methodName164.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes164, parameterTypes)) {
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return CommonLibLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName165.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes165, parameterTypes)) {
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
 			CommonLibLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName171.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes171, parameterTypes)) {
+		if (_methodName183.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes183, parameterTypes)) {
 			return CommonLibLocalServiceUtil.countCommonLib(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return CommonLibLocalServiceUtil.retrieveListCommonLib((java.lang.String)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
@@ -280,12 +280,12 @@ public class CommonLibLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName164;
-	private String[] _methodParameterTypes164;
-	private String _methodName165;
-	private String[] _methodParameterTypes165;
-	private String _methodName171;
-	private String[] _methodParameterTypes171;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
+	private String _methodName176;
+	private String[] _methodParameterTypes176;
+	private String _methodName177;
+	private String[] _methodParameterTypes177;
+	private String _methodName183;
+	private String[] _methodParameterTypes183;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
 }

@@ -61,7 +61,7 @@ public class ScienceAppOutputPortsModelImpl extends BaseModelImpl<ScienceAppOutp
 			{ "scienceAppId", Types.BIGINT },
 			{ "outputPorts", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppOutputPorts (scienceAppId LONG not null primary key,outputPorts TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppOutputPorts (scienceAppId LONG not null primary key,outputPorts VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppOutputPorts";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppOutputPorts.scienceAppId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppOutputPorts.scienceAppId ASC";

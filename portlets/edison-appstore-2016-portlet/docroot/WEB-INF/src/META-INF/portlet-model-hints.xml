@@ -108,9 +108,7 @@
 	</model>
 	<model name="org.kisti.edison.science.model.PortTypeInputdeckForm">
 		<field name="portTypeId" type="long" />
-		<field name="inputdeckForm" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="inputdeckForm" type="String" />
 	</model>
 	<model name="org.kisti.edison.science.model.RequiredLib">
 		<field name="requiredLibId" type="long" />
@@ -119,15 +117,11 @@
 		<field name="userId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="libraryName" type="String">
-			<hint name="max-length">256</hint>
-		</field>
+		<field name="libraryName" type="String" />
 		<field name="libraryVersion" type="String" />
 		<field name="libraryType" type="String" />
 		<field name="librarySrcPath" type="String" />
-		<field name="installScript" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="installScript" type="String" />
 	</model>
 	<model name="org.kisti.edison.science.model.RequiredLibConfirm">
 		<field name="requiredLibId" type="long" />
@@ -162,17 +156,12 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="name" type="String" />
 		<field name="version" type="String" />
-		<field name="title" type="String" localized="true">
-			<hint name="display-width">800</hint>
-			<hint name="max-length">512</hint>
-		</field>
+		<field name="title" type="String" localized="true" />
 		<field name="descriptionId" type="long" />
 		<field name="previousVersionId" type="long" />
 		<field name="iconId" type="long" />
 		<field name="manualId" type="String" localized="true" />
-		<field name="exeFileName" type="String">
-			<hint name="max-length">256</hint>
-		</field>
+		<field name="exeFileName" type="String" />
 		<field name="appType" type="String" />
 		<field name="runType" type="String" />
 		<field name="authorId" type="long" />
@@ -180,24 +169,22 @@
 		<field name="status" type="int" />
 		<field name="recentModifierId" type="long" />
 		<field name="parallelModule" type="String" />
+		<field name="minCpus" type="int" />
 		<field name="maxCpus" type="int" />
 		<field name="defaultCpus" type="int" />
 		<field name="statusDate" type="Date" />
 		<field name="openLevel" type="String" />
 		<field name="license" type="String" />
-		<field name="srcFileName" type="String">
-			<hint name="max-length">256</hint>
-		</field>
+		<field name="srcFileName" type="String" />
 		<field name="targetLanguage" type="String" />
 		<field name="templetId" type="String" />
-		<field name="layout" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="layout" type="String" />
 		<field name="developers" type="String" localized="true" />
 		<field name="editorType" type="String" />
 		<field name="isPort" type="boolean" />
 		<field name="isCompile" type="boolean" />
 		<field name="projectCategoryId" type="long" />
+		<field name="execute" type="long" />
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppCategoryLink">
 		<field name="uuid" type="String" />
@@ -215,9 +202,7 @@
 		<field name="scienceAppId" type="long" />
 		<field name="userId" type="long" />
 		<field name="compileUrl" type="String" />
-		<field name="result" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="result" type="String" />
 		<field name="createDate" type="Date" />
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppDescription">
@@ -235,18 +220,12 @@
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppInputPorts">
 		<field name="scienceAppId" type="long" />
-		<field name="inputPortsSampleFile" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
-		<field name="inputPorts" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="inputPortsSampleFile" type="String" />
+		<field name="inputPorts" type="String" />
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppLogPorts">
 		<field name="scienceAppId" type="long" />
-		<field name="logPorts" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="logPorts" type="String" />
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppManager">
 		<field name="scienceAppManagerId" type="long" />
@@ -257,8 +236,22 @@
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppOutputPorts">
 		<field name="scienceAppId" type="long" />
-		<field name="outputPorts" type="String">
-			<hint name="max-length">4096</hint>
-		</field>
+		<field name="outputPorts" type="String" />
+	</model>
+	<model name="org.kisti.edison.science.model.ScienceAppPaper">
+		<field name="scienceAppId" type="long" />
+		<field name="paperSeq" type="long" />
+		<field name="paperType" type="String" />
+		<field name="paperValue" type="String" />
+	</model>
+	<model name="org.kisti.edison.science.model.ScienceAppRatingsEntry">
+		<field name="userId" type="long" />
+		<field name="scienceAppId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="classNameId" type="long" />
+		<field name="score" type="long" />
 	</model>
 </model-hints>

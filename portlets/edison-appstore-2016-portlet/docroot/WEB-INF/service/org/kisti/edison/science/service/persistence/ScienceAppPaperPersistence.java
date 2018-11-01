@@ -151,8 +151,7 @@ public interface ScienceAppPaperPersistence extends BasePersistence<ScienceAppPa
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppPaper[] findByScienceAppId_PrevAndNext(
-		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK,
-		long scienceAppId,
+		ScienceAppPaperPK scienceAppPaperPK, long scienceAppId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException;
@@ -199,7 +198,7 @@ public interface ScienceAppPaperPersistence extends BasePersistence<ScienceAppPa
 	* @return the new science app paper
 	*/
 	public org.kisti.edison.science.model.ScienceAppPaper create(
-		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK);
+		ScienceAppPaperPK scienceAppPaperPK);
 
 	/**
 	* Removes the science app paper with the primary key from the database. Also notifies the appropriate model listeners.
@@ -210,7 +209,7 @@ public interface ScienceAppPaperPersistence extends BasePersistence<ScienceAppPa
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppPaper remove(
-		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
+		ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException;
 
@@ -227,7 +226,7 @@ public interface ScienceAppPaperPersistence extends BasePersistence<ScienceAppPa
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppPaper findByPrimaryKey(
-		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
+		ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException;
 
@@ -239,7 +238,7 @@ public interface ScienceAppPaperPersistence extends BasePersistence<ScienceAppPa
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppPaper fetchByPrimaryKey(
-		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
+		ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

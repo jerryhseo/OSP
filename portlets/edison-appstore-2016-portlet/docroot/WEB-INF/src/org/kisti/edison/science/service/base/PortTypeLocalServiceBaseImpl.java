@@ -62,7 +62,9 @@ import org.kisti.edison.science.service.persistence.ScienceAppLogPortsPersistenc
 import org.kisti.edison.science.service.persistence.ScienceAppManagerFinder;
 import org.kisti.edison.science.service.persistence.ScienceAppManagerPersistence;
 import org.kisti.edison.science.service.persistence.ScienceAppOutputPortsPersistence;
+import org.kisti.edison.science.service.persistence.ScienceAppPaperPersistence;
 import org.kisti.edison.science.service.persistence.ScienceAppPersistence;
+import org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPersistence;
 
 import java.io.Serializable;
 
@@ -1621,6 +1623,120 @@ public abstract class PortTypeLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the science app paper local service.
+	 *
+	 * @return the science app paper local service
+	 */
+	public org.kisti.edison.science.service.ScienceAppPaperLocalService getScienceAppPaperLocalService() {
+		return scienceAppPaperLocalService;
+	}
+
+	/**
+	 * Sets the science app paper local service.
+	 *
+	 * @param scienceAppPaperLocalService the science app paper local service
+	 */
+	public void setScienceAppPaperLocalService(
+		org.kisti.edison.science.service.ScienceAppPaperLocalService scienceAppPaperLocalService) {
+		this.scienceAppPaperLocalService = scienceAppPaperLocalService;
+	}
+
+	/**
+	 * Returns the science app paper remote service.
+	 *
+	 * @return the science app paper remote service
+	 */
+	public org.kisti.edison.science.service.ScienceAppPaperService getScienceAppPaperService() {
+		return scienceAppPaperService;
+	}
+
+	/**
+	 * Sets the science app paper remote service.
+	 *
+	 * @param scienceAppPaperService the science app paper remote service
+	 */
+	public void setScienceAppPaperService(
+		org.kisti.edison.science.service.ScienceAppPaperService scienceAppPaperService) {
+		this.scienceAppPaperService = scienceAppPaperService;
+	}
+
+	/**
+	 * Returns the science app paper persistence.
+	 *
+	 * @return the science app paper persistence
+	 */
+	public ScienceAppPaperPersistence getScienceAppPaperPersistence() {
+		return scienceAppPaperPersistence;
+	}
+
+	/**
+	 * Sets the science app paper persistence.
+	 *
+	 * @param scienceAppPaperPersistence the science app paper persistence
+	 */
+	public void setScienceAppPaperPersistence(
+		ScienceAppPaperPersistence scienceAppPaperPersistence) {
+		this.scienceAppPaperPersistence = scienceAppPaperPersistence;
+	}
+
+	/**
+	 * Returns the science app ratings entry local service.
+	 *
+	 * @return the science app ratings entry local service
+	 */
+	public org.kisti.edison.science.service.ScienceAppRatingsEntryLocalService getScienceAppRatingsEntryLocalService() {
+		return scienceAppRatingsEntryLocalService;
+	}
+
+	/**
+	 * Sets the science app ratings entry local service.
+	 *
+	 * @param scienceAppRatingsEntryLocalService the science app ratings entry local service
+	 */
+	public void setScienceAppRatingsEntryLocalService(
+		org.kisti.edison.science.service.ScienceAppRatingsEntryLocalService scienceAppRatingsEntryLocalService) {
+		this.scienceAppRatingsEntryLocalService = scienceAppRatingsEntryLocalService;
+	}
+
+	/**
+	 * Returns the science app ratings entry remote service.
+	 *
+	 * @return the science app ratings entry remote service
+	 */
+	public org.kisti.edison.science.service.ScienceAppRatingsEntryService getScienceAppRatingsEntryService() {
+		return scienceAppRatingsEntryService;
+	}
+
+	/**
+	 * Sets the science app ratings entry remote service.
+	 *
+	 * @param scienceAppRatingsEntryService the science app ratings entry remote service
+	 */
+	public void setScienceAppRatingsEntryService(
+		org.kisti.edison.science.service.ScienceAppRatingsEntryService scienceAppRatingsEntryService) {
+		this.scienceAppRatingsEntryService = scienceAppRatingsEntryService;
+	}
+
+	/**
+	 * Returns the science app ratings entry persistence.
+	 *
+	 * @return the science app ratings entry persistence
+	 */
+	public ScienceAppRatingsEntryPersistence getScienceAppRatingsEntryPersistence() {
+		return scienceAppRatingsEntryPersistence;
+	}
+
+	/**
+	 * Sets the science app ratings entry persistence.
+	 *
+	 * @param scienceAppRatingsEntryPersistence the science app ratings entry persistence
+	 */
+	public void setScienceAppRatingsEntryPersistence(
+		ScienceAppRatingsEntryPersistence scienceAppRatingsEntryPersistence) {
+		this.scienceAppRatingsEntryPersistence = scienceAppRatingsEntryPersistence;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -1932,6 +2048,18 @@ public abstract class PortTypeLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected org.kisti.edison.science.service.ScienceAppOutputPortsLocalService scienceAppOutputPortsLocalService;
 	@BeanReference(type = ScienceAppOutputPortsPersistence.class)
 	protected ScienceAppOutputPortsPersistence scienceAppOutputPortsPersistence;
+	@BeanReference(type = org.kisti.edison.science.service.ScienceAppPaperLocalService.class)
+	protected org.kisti.edison.science.service.ScienceAppPaperLocalService scienceAppPaperLocalService;
+	@BeanReference(type = org.kisti.edison.science.service.ScienceAppPaperService.class)
+	protected org.kisti.edison.science.service.ScienceAppPaperService scienceAppPaperService;
+	@BeanReference(type = ScienceAppPaperPersistence.class)
+	protected ScienceAppPaperPersistence scienceAppPaperPersistence;
+	@BeanReference(type = org.kisti.edison.science.service.ScienceAppRatingsEntryLocalService.class)
+	protected org.kisti.edison.science.service.ScienceAppRatingsEntryLocalService scienceAppRatingsEntryLocalService;
+	@BeanReference(type = org.kisti.edison.science.service.ScienceAppRatingsEntryService.class)
+	protected org.kisti.edison.science.service.ScienceAppRatingsEntryService scienceAppRatingsEntryService;
+	@BeanReference(type = ScienceAppRatingsEntryPersistence.class)
+	protected ScienceAppRatingsEntryPersistence scienceAppRatingsEntryPersistence;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

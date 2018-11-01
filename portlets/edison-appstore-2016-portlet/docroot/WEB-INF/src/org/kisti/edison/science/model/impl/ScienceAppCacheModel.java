@@ -38,7 +38,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(73);
+		StringBundler sb = new StringBundler(77);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -84,6 +84,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(recentModifierId);
 		sb.append(", parallelModule=");
 		sb.append(parallelModule);
+		sb.append(", minCpus=");
+		sb.append(minCpus);
 		sb.append(", maxCpus=");
 		sb.append(maxCpus);
 		sb.append(", defaultCpus=");
@@ -112,6 +114,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(isCompile);
 		sb.append(", projectCategoryId=");
 		sb.append(projectCategoryId);
+		sb.append(", execute=");
+		sb.append(execute);
 		sb.append("}");
 
 		return sb.toString();
@@ -219,6 +223,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 			scienceAppImpl.setParallelModule(parallelModule);
 		}
 
+		scienceAppImpl.setMinCpus(minCpus);
 		scienceAppImpl.setMaxCpus(maxCpus);
 		scienceAppImpl.setDefaultCpus(defaultCpus);
 
@@ -288,6 +293,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		scienceAppImpl.setIsPort(isPort);
 		scienceAppImpl.setIsCompile(isCompile);
 		scienceAppImpl.setProjectCategoryId(projectCategoryId);
+		scienceAppImpl.setExecute(execute);
 
 		scienceAppImpl.resetOriginalValues();
 
@@ -318,6 +324,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		status = objectInput.readInt();
 		recentModifierId = objectInput.readLong();
 		parallelModule = objectInput.readUTF();
+		minCpus = objectInput.readInt();
 		maxCpus = objectInput.readInt();
 		defaultCpus = objectInput.readInt();
 		statusDate = objectInput.readLong();
@@ -332,6 +339,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		isPort = objectInput.readBoolean();
 		isCompile = objectInput.readBoolean();
 		projectCategoryId = objectInput.readLong();
+		execute = objectInput.readLong();
 	}
 
 	@Override
@@ -423,6 +431,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 			objectOutput.writeUTF(parallelModule);
 		}
 
+		objectOutput.writeInt(minCpus);
 		objectOutput.writeInt(maxCpus);
 		objectOutput.writeInt(defaultCpus);
 		objectOutput.writeLong(statusDate);
@@ -486,6 +495,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		objectOutput.writeBoolean(isPort);
 		objectOutput.writeBoolean(isCompile);
 		objectOutput.writeLong(projectCategoryId);
+		objectOutput.writeLong(execute);
 	}
 
 	public String uuid;
@@ -510,6 +520,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public int status;
 	public long recentModifierId;
 	public String parallelModule;
+	public int minCpus;
 	public int maxCpus;
 	public int defaultCpus;
 	public long statusDate;
@@ -524,4 +535,5 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public boolean isPort;
 	public boolean isCompile;
 	public long projectCategoryId;
+	public long execute;
 }

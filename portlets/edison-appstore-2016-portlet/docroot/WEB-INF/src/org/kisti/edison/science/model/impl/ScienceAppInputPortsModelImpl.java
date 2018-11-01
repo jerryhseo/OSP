@@ -62,7 +62,7 @@ public class ScienceAppInputPortsModelImpl extends BaseModelImpl<ScienceAppInput
 			{ "inputPortsSampleFile", Types.VARCHAR },
 			{ "inputPorts", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppInputPorts (scienceAppId LONG not null primary key,inputPortsSampleFile TEXT null,inputPorts TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppInputPorts (scienceAppId LONG not null primary key,inputPortsSampleFile VARCHAR(75) null,inputPorts VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppInputPorts";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppInputPorts.scienceAppId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppInputPorts.scienceAppId ASC";

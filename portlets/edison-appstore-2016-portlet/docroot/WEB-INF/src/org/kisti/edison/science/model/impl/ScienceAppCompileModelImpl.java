@@ -72,7 +72,7 @@ public class ScienceAppCompileModelImpl extends BaseModelImpl<ScienceAppCompile>
 			{ "result", Types.VARCHAR },
 			{ "createDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppCompile (scienceAppId LONG not null primary key,userId LONG,compileUrl VARCHAR(75) null,result TEXT null,createDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppCompile (scienceAppId LONG not null primary key,userId LONG,compileUrl VARCHAR(75) null,result VARCHAR(75) null,createDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppCompile";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppCompile.scienceAppId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppCompile.scienceAppId ASC";

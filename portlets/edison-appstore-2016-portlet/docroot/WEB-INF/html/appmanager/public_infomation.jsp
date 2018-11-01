@@ -33,6 +33,17 @@
 	<portlet:param name="redirectURL" 	value="${redirectURL}" />
 </portlet:actionURL>
 
+<liferay-portlet:resourceURL var="deletePaperFileInDLURL" id="deletePaperFileInDL" copyCurrentRenderParameters="false" escapeXml="false"/>
+
+<liferay-portlet:resourceURL var="appManagerListURL" id="appManagerList" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="deleteAppAuthURL" id="deleteAppAuth" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="appUserInfoURL" id="appUserInfo" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="appManagerAddURL" id="appManagerAdd" copyCurrentRenderParameters="false" />
+<liferay-portlet:resourceURL var="appOwnerUpdateURL" id="appOwnerUpdate" copyCurrentRenderParameters="false" />
+
+<link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
+<script src="${contextPath}/js/toastr.min.js"></script>
+
 <%
 	Locale[] locales = LanguageUtil.getAvailableLocales();
 	String localesStr = "";
@@ -104,6 +115,34 @@
 	
 	.aui .swrightcont .alert{
 		margin-top: 10px;
+	}
+	
+	#<portlet:namespace/>paperFileTd .evt-btn, #<portlet:namespace/>paperLinkTd .evt-btn{
+		cursor: pointer;
+	}
+	
+	.paper-field.<portlet:namespace/>paper-file-input, .paper-field.<portlet:namespace/>paper-link-input{
+		width: 90% !important;
+		margin-right: 5%;
+		float: left;
+	}
+	
+	.icon-plus.evt-btn, .icon-minus.evt-btn{
+		margin-left: 1%;
+	}
+	
+	.<portlet:namespace/>appPaperFileIcon{
+		margin-right: 1%;
+	}
+	
+	.<portlet:namespace/>appPaperLinkClass{
+		cursor: pointer;
+		margin-right: 5%;
+		width: 90%;
+	}
+	
+	.<portlet:namespace/>appPaperLinkClass input:HOVER{
+		text-decoration: underline;
 	}
 </style>
 <!-- ckeditor  -->
@@ -194,6 +233,32 @@ public String marshallParams(Map<String, String> params) {
 				<col width="15%">
 				<col width="25%">
 			</colgroup>
+			
+			<tr>
+				<th><liferay-ui:message key='edison-content-service-language' /><span class="requiredField"> *</span></th>
+				<td colspan="3">
+				
+					<aui:select name="targetLanguage" label="" >
+						<option value=""><liferay-ui:message key='full' /></option>
+						<%
+						String siteDefaultLanuageId = LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale());
+						
+						for(Locale aLocale : locales){
+							String languageId = LocaleUtil.toLanguageId(aLocale);
+							if(localesStr.equals("")){
+								localesStr += languageId;
+							}else{
+								localesStr += ","+languageId;
+							}
+							
+							String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
+						%>
+							<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
+						<%} %>
+					</aui:select>
+				</td>
+			</tr>
+			
 			<tr>
 				<th>
 					<liferay-ui:message key='descriptive'/>
@@ -214,19 +279,43 @@ public String marshallParams(Map<String, String> params) {
 							}else{
 								localesStr += ","+languageId;
 							}
-				    %>
-				    	
-				    	<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
-				    	<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>" style="display: none;">
-				    		<textarea id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" style="width:100%;height:300px;">
-				    			${data.description[descriptionKey] }
-				    		</textarea>
-				    	</div>
-				    <%
+					%>
+						
+						<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
+						<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>" style="display: none;">
+							<textarea id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" style="width:100%;height:300px;">
+								${data.description[descriptionKey] }
+							</textarea>
+						</div>
+					<%
 						}
-				    %>
+					%>
 				</td>
 			</tr>
+			
+			<tr>
+				<th rowspan="${fn:length(parentCategoryList)+1}">
+					<liferay-ui:message key='edison-science-appstore-view-tab-category' /><span class="requiredField"> *</span>
+					
+				</th>
+				
+			</tr>
+			<c:forEach items="${parentCategoryList}" var="parentCategory">
+				<tr>
+					<td id="<portlet:namespace/>${parentCategory.value}_parentTd" colspan="3">
+						<span id="<portlet:namespace/>${parentCategory.value}_parent_open" style="cursor: pointer;" onclick="<portlet:namespace/>openRootCategory('OPEN','${parentCategory.value}');">${parentCategory.name}(OPEN)</span>
+						<span id="<portlet:namespace/>${parentCategory.value}_parent_close" style="cursor: pointer;display: none;" onclick="<portlet:namespace/>openRootCategory('CLOSE','${parentCategory.value}');">${parentCategory.name}(CLOSE)</span>
+					</td>
+					<td colspan="2" id="<portlet:namespace/>${parentCategory.value}_childrenTd" style="display: none;">
+						<c:set value="${parentCategory.value}" var="parentCategoryValue"/>
+						<c:forEach items="${childrenCategoryGroupMap[parentCategoryValue]}" var="childrenCategory">
+							<c:set value="${parentCategory.value}_${childrenCategory.value}_Children_Category" var="childrenCategoryName"/>
+							<aui:input name="childrenCategory" id="${childrenCategoryName}" label="${childrenCategory.name}" value="${parentCategory.value}_${childrenCategory.value}" type="checkbox"/>
+						</c:forEach>
+					</td>
+				</tr>
+			</c:forEach>
+			
 			<tr>
 				<th rowspan="<%=locales.length+1%>"><liferay-ui:message key='edison-table-list-header-manual' /><span class="requiredField"> *</span></th>
 			</tr>
@@ -266,6 +355,71 @@ public String marshallParams(Map<String, String> params) {
 					<div id="clear"></div>
 				</td>
 			</tr>
+			
+			<!-- 논문 등록 필드 -->
+			<tr>
+				<th rowspan="3">
+					<liferay-ui:message key='edison-professor-paper' />
+				</th>
+			</tr>
+			<span>
+				<input type="hidden" id="<portlet:namespace/>paperFileCount" name="<portlet:namespace/>paperFileCount" value="1"/>
+				
+				<tr>
+					<td colspan="3">
+						<div id="<portlet:namespace/>paperFileTd">
+							<div class="<portlet:namespace/>paper-file">
+								<input type="file" class="paper-field <portlet:namespace/>paper-file-input" name="<portlet:namespace/>paperFile_0">
+								<i class="icon-plus evt-btn" onclick="<portlet:namespace/>addPaperField('file')"></i>
+							</div>
+						</div>
+						
+						<c:if test="${data.scienceAppPaperList ne null}">
+							<c:forEach var="scienceAppPaper" items="${data.scienceAppPaperList}">
+								<c:if test="${scienceAppPaper.paperType eq 'file'}">
+									<div>
+										<div class="down_date appPaperFileClass"  onclick="<portlet:namespace/>fileDownload('${scienceAppPaper.paperValue}')" style="cursor: pointer;display: inline-block;">
+											<i class="icon-file-2 <portlet:namespace/>appPaperFileIcon"></i>
+											${scienceAppPaper.paperFileTitle}
+										</div>
+										<img src='${contextPath}/images/icon_dustbin.png' class="appPaperFileClass" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deletePaperItem('${scienceAppPaper.scienceAppId}','${scienceAppPaper.paperSeq}','${scienceAppPaper.paperType}');" />
+									</div>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td colspan="3">
+						<div id="<portlet:namespace/>paperLinkTd">
+							<div class="<portlet:namespace/>paper-link">
+								<input type="text" class="field paper-field <portlet:namespace/>paper-link-input" placeholder="http(s)://논문 링크 URL 형식으로 입력해주세요." name="<portlet:namespace/>paperLink">
+								<i class="icon-plus evt-btn" onclick="<portlet:namespace/>addPaperField('link')"></i>
+							</div>
+						</div>
+						
+						<c:if test="${data.scienceAppPaperList ne null}">
+							<c:forEach var="scienceAppPaper" items="${data.scienceAppPaperList}">
+								<c:if test="${scienceAppPaper.paperType eq 'link'}">
+									<div style="width: 100%; margin-top: 1%;">
+										<div class="<portlet:namespace/>appPaperLinkClass" title="${scienceAppPaper.paperValue}" style="cursor: pointer;display: inline-block;" onclick="window.open('${scienceAppPaper.paperValue}', '_blank');">
+											<input type="text" class="field" name="<portlet:namespace/>paperLink" style="cursor: pointer;" disabled="disabled" value="${scienceAppPaper.paperValue}">
+										</div>
+										<img src='${contextPath}/images/icon_dustbin.png' class="appPaperLinkClass" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deletePaperItem('${scienceAppPaper.scienceAppId}','${scienceAppPaper.paperSeq}','${scienceAppPaper.paperType}');" />
+									</div>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						
+					</td>
+				</tr>
+				
+			</span>
+			<!-- End 논문 등록 필드 -->
+			
 			<tr>
 				<th><liferay-ui:message key='developer' /><span class="requiredField"> *</span></th>
 				<td colspan="3">
@@ -278,16 +432,250 @@ public String marshallParams(Map<String, String> params) {
 					<aui:input name="license" type="text" value="${data.license}" label="" cssClass="long_field" size="40"/>
 				</td>
 			</tr>
+			
+			<!-- App Owner -->
+			<tr>
+				<th><liferay-ui:message key='edison-virtuallab-owner' /></th>
+				<td colspan="3">
+					<div class="input-group">
+					<c:choose>
+						<c:when test="${mode == 'add'}">
+							<aui:input name="now_userScreenName" type="text" value="${userScreenName}" label="" cssClass="field short_field" readonly="readonly"/>
+						</c:when>
+						<c:otherwise>
+							<input id="<portlet:namespace/>now_userScreenName" name="<portlet:namespace/>now_userScreenName" type="text" value="${data.userScreenName}" class="field short_field" readonly="readonly"/>
+							
+							<c:if test="${mode eq 'update' && ownerThan }">
+								<input id="<portlet:namespace/>userScreenName_owner" name="<portlet:namespace/>userScreenName_owner" type="text" maxlength="15" placeholder="<liferay-ui:message key='edison-table-list-header-userid' />" onkeypress="<portlet:namespace/>onKeyDown('owner');" class="field long_field"/>
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" onClick="<portlet:namespace/>getUserInfo('owner');"><span class="icon-user"> <liferay-ui:message key='edison-appstore-solver-transfer' /></span></button>
+								</span>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+					</div>
+				</td>
+			</tr>
 		</table>
 	</aui:form>
 	
+	<div class="h20"></div>
+	
+	<c:if test="${!empty scienceAppId && ownerThan }">
+		<form id="userSearchManagerForm" name="userSearchManagerForm" method="post" onsubmit="return false;">
+			<div class="table-responsive panel edison-panel">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">
+						<img src="${pageContext.request.contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
+						<liferay-ui:message key='edison-appstore-solver-manager' />
+					</h3>
+					
+					<div class="input-group">
+						<input id="<portlet:namespace/>userScreenName_manager" name="<portlet:namespace/>userScreenName_manager" type="text" maxlength="15" class="form-control" placeholder="<liferay-ui:message key='edison-table-list-header-userid'/>" onKeydown="if(event.keyCode ==13)<portlet:namespace/>getUserInfo('manager');">
+						<span class="input-group-btn">
+							<input id="<portlet:namespace/>type" name="<portlet:namespace/>type" type="hidden" value="manager"  />
+							<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}" />
+							<button class="btn btn-default" type="button" onclick="<portlet:namespace/>getUserInfo('manager');"><i class="icon-search"></i></button>
+						</span>
+					</div>
+				</div>
+				<table class = "table table-bordered table-hover edison-table">
+					<thead>
+						<tr>
+							<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-userid' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-usernm' /></th>
+							<th width="20%"><liferay-ui:message key='edison-table-list-header-email' /></th>
+							<th width=15%""><liferay-ui:message key='edison-table-list-header-date' /></th>
+							<th width="15%"><liferay-ui:message key='edison-button-board-delete' /></th>
+						</tr>
+					</thead>
+					<tbody id="<portlet:namespace/>appManagerListBody">
+					</tbody>
+				</table>
+			</div>
+		</form>
+	</c:if>
+</div>
+
+<div id="<portlet:namespace/>app-owner-add-dialog" title="<liferay-ui:message key='edison-appstore-solver-owner-change' />" class="newWindow" style="display:none; background-color:white; padding:0px;">
+	<div class="newWheader">
+		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+			<div class="newWtitle"><liferay-ui:message key="edison-appstore-solver-owner-change"/></div>
+		</div>
+		<div class="newWclose" style="cursor: pointer;">
+			<img id="app-owner-add-dialog-close-btn" name="app-owner-add-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="25" height="25" style="cursor:pointer; float: right;"/>
+		</div>
+	</div>
+	<div style="padding: 30px;" class="newWcont01">
+		<form id="ownerUpdateForm" name="ownerUpdateForm" method="post" action="<%=appOwnerUpdateURL%>" > 
+			<div class="table1_list" style="width:85%; padding:15px; margin:0 auto;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-userid' /></td>
+							<td id="ownerId"></td>
+						</tr>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-usernm' /></td>
+							<td id="ownerFullName"></td>
+						</tr>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-email' /></td>
+							<td id="ownerEmail"></td>
+						</tr>
+						<tr>
+							<td colspan="2"  style="text-align: center; color:#f03030;"><liferay-ui:message key='edison-appstore-solver-owner-register-confirm' /></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<input id="<portlet:namespace/>ownerUserId" name="<portlet:namespace/>ownerUserId" type="hidden">
+			<input id="<portlet:namespace/>pre_userScreenName" name="<portlet:namespace/>pre_userScreenName" type="hidden">
+			<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}">
+			<div style="text-align:center;">
+				<button class="btn btn-success" type="button" onclick="<portlet:namespace/>updateAppOwner();"><span class="icon-ok"> <liferay-ui:message key='edison-button-register' /></span></button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div id="<portlet:namespace/>app-manager-add-dialog" title="<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-manager-register' />" class="newWindow" style="display:none; background-color:white; padding:0px;">
+	<div class="newWheader">
+		<div class="newWtitlebox"><img src="<%=renderRequest.getContextPath()%>/images/title_newWindow.png" width="34" height="34">
+			<div class="newWtitle"><liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-manager-register' /></div>
+		</div>
+		<div class="newWclose" style="cursor: pointer;">
+			<img id="app-manager-add-dialog-close-btn" name="app-manager-add-dialog-close-btn" src="<%=renderRequest.getContextPath()%>/images/btn_closeWindow.png" width="25" height="25" style="cursor:pointer; float: right;"/>
+		</div>
+	</div>
+	<div style="padding: 30px;" class="newWcont01">
+		<form id="managerAddForm" name="managerAddForm" method="post" action="<%=appManagerAddURL%>" > 
+			<div class="table1_list" style="width:85%; padding:15px; margin:0 auto;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<colgroup>
+						<col width="30%" />
+						<col width="70%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-userid' /></td>
+							<td id="managerId"></td>
+						</tr>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-usernm' /></td>
+							<td id="managerFullName"></td>
+						</tr>
+						<tr>
+							<td><liferay-ui:message key='edison-table-list-header-email' /></td>
+							<td id="managerEmail"></td>
+						</tr>
+						<tr>
+							<td colspan="2"  style="text-align: center; color:#f03030;"><liferay-ui:message key='edison-appstore-solver-manager-register-confirm' /></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<input id="<portlet:namespace/>managerUserId" name="<portlet:namespace/>managerUserId" type="hidden">
+			<input id="<portlet:namespace/>scienceAppId" name="<portlet:namespace/>scienceAppId" type="hidden" value="${scienceAppId}">
+			<div style="text-align:center;">
+				<button class="btn btn-success" type="button" onclick="<portlet:namespace/>addAppManager();"><span class="icon-ok"> <liferay-ui:message key='edison-button-register' /></span></button>
+			</div>
+		</form>
+	</div>
+</div>
+
 	<liferay-portlet:runtime portletName="edisonrelateasset_WAR_edisondefault2016portlet" defaultPreferences="" 
 		queryString="&entryId=${data.entryId}&isMgrBtn=true&isVirTitle=true&redirectURL=<%=assetRedirectURL%>&redirectName=<%=assetRedirectName%>"/>
 	
 
 
 <script type="text/javascript">
+	
+	var toastr;
+	
+	toastr.options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": false,
+		"positionClass": "toast-designer-pos",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "slideDown",
+		"hideMethod": "slideUp"
+	};
+	
 	$(document).ready(function () {
+		<portlet:namespace/>appManagerList();
+		
+		/* App Owner Dialog */
+		$("#<portlet:namespace/>app-owner-add-dialog").dialog({
+			autoOpen: false,
+			width: 450,
+			height: 'auto',
+			modal: true,
+			resizable: false,
+			show: {effect:'fade', speed: 800}, 
+			hide: {effect:'fade', speed: 800},
+			open: function(event, ui) {
+				$(this).css('overflow', 'hidden');
+				$(this).css("padding", "0px");
+				$(this).css("width", "450px");
+				$(this).parent().removeClass("ui-widget-content");
+				$(this).parent().removeClass("ui-widget");
+				$(this).removeClass("ui-widget-content");
+				$(this).removeClass("ui-dialog-content");
+			},
+			close: function() {
+			
+			}
+		}).dialog("widget").find(".ui-dialog-titlebar").remove();
+		
+		$("#app-owner-add-dialog-close-btn").click(function() {
+			$("#<portlet:namespace/>app-owner-add-dialog").dialog("close");
+		});
+		
+		/* App Manager Dialog */
+		$("#<portlet:namespace/>app-manager-add-dialog").dialog({
+			autoOpen: false,
+			width: 450,
+			height: 'auto',
+			modal: true,
+			resizable: false,
+			show: {effect:'fade', speed: 800}, 
+			hide: {effect:'fade', speed: 800},
+			open: function(event, ui) {
+				$(this).css('overflow', 'hidden');
+				$(this).css("padding", "0px");
+				$(this).css("width", "450px");
+				$(this).parent().removeClass("ui-widget-content");
+				$(this).parent().removeClass("ui-widget");
+				$(this).removeClass("ui-widget-content");
+				$(this).removeClass("ui-dialog-content");
+			},
+			close: function() {
+	
+			}
+		}).dialog("widget").find(".ui-dialog-titlebar").remove();
+		
+		$("#app-manager-add-dialog-close-btn").click(function() {
+			$("#<portlet:namespace/>app-manager-add-dialog").dialog("close");
+		});
+		
+		/* set Category */
+		changeCategory('${data.parentCategory}','${data.childrenCategory}');
+		
 		<portlet:namespace/>setCKeditor();
 		
 	});
@@ -368,6 +756,19 @@ public String marshallParams(Map<String, String> params) {
 				}
 			}
 			
+			// scienceAppPaper URL validation Check
+			if(!<portlet:namespace/>scienceAppPaperValidationCheck()){
+				return;
+			}
+			
+			// scienceAppCategory Check
+			if( $(":checkbox[name*='childrenCategoryCheckbox']:checked").length==0 ){
+				alert(Liferay.Language.get('edison-science-appstore-category-error'));
+				return false;
+			}
+			
+			$("input[name=<portlet:namespace/>childrenCategory]").prop("disabled",true);
+			
 			submitForm(<portlet:namespace/>frm);
 		}else{
 			if(confirm(Liferay.Language.get('edison-appstore-delete-data-alert'))){
@@ -375,6 +776,7 @@ public String marshallParams(Map<String, String> params) {
 			}else{
 				return false;
 			}
+			
 			submitForm(<portlet:namespace/>frm);
 		}
 		
@@ -430,4 +832,370 @@ public String marshallParams(Map<String, String> params) {
 		$("#<portlet:namespace/>descriptionDiv_"+selectLocaleId).show();
 	}
 	
+	/* 논문 파일 또는 링크 입력 항목 추가 */
+	function <portlet:namespace/>addPaperField(paperType){
+		
+		var paperTd = null;
+		var inputType = '';
+		var inputName = '';
+		var placeHolder = '';
+		var paperDivSeq = $(".<portlet:namespace/>paper-" + paperType).length;
+		
+		if(paperType == 'file'){
+			paperTd = $("#<portlet:namespace/>paperFileTd");
+			inputType = 'file';
+			inputName = '<portlet:namespace/>paperFile_'+paperDivSeq;
+		} else if(paperType == 'link'){
+			paperTd = $("#<portlet:namespace/>paperLinkTd");
+			inputType = 'text';
+			inputName = '<portlet:namespace/>paperLink';
+			placeHolder = "http(s)://논문 링크 URL 형식으로 입력해주세요.";
+		}
+		
+		
+		var paperDiv = $("<div/>").addClass("<portlet:namespace/>paper-" + paperType)
+								  .attr("paper-" + paperType + "-field-seq", paperDivSeq)
+								  .css("margin-top", "1%");
+		
+		var paperInput = $("<input/>").addClass("field paper-field <portlet:namespace/>paper-" + paperType + "-input")
+									  .attr("type", inputType)
+									  .attr("name", inputName)
+									  .attr("placeholder", placeHolder);
+		
+		var paperPlusBtn = $("<i/>").addClass("icon-plus evt-btn")
+									.attr("onclick", "<portlet:namespace/>addPaperField('" + paperType + "')");
+		
+		var paperMinusBtn = $("<i/>").addClass("icon-minus evt-btn")
+									 .attr("onclick", "<portlet:namespace/>deletePaperField('"+ paperDivSeq +"', '" + paperType + "')");
+		
+		paperInput.appendTo(paperDiv);
+		paperPlusBtn.appendTo(paperDiv);
+		paperMinusBtn.appendTo(paperDiv);
+		
+		paperDiv.appendTo(paperTd);
+		
+		$("#<portlet:namespace/>paperFileCount").val($(".<portlet:namespace/>paper-file").length);
+	}
+	
+	
+	/* 논문 파일 또는 링크 입력 항목 제거 */
+	function <portlet:namespace/>deletePaperField(paperFeildSeq, paperType){
+		$("div[paper-" + paperType + "-field-seq="+paperFeildSeq+"]").remove();
+		
+		$("#<portlet:namespace/>paperFileCount").val($(".<portlet:namespace/>paper-file").length);
+	}
+	
+	function <portlet:namespace/>scienceAppPaperValidationCheck(){
+		
+		// URL 정규식
+		var urlValid = true;
+		var urlRegex = /^http(s)?:\/\/(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+		$(".<portlet:namespace/>paper-link-input").each(function(idx, elem){
+			var paperLinkUrl = $(this).val();
+			if(paperLinkUrl !== null && paperLinkUrl !== '' && paperLinkUrl !== undefined){
+				if(!urlRegex.test(paperLinkUrl)){
+					alert(Liferay.Language.get('edison-science-app-paper-link-invalid'));
+					urlValid = false;
+					$(this).focus();
+					return;
+				}
+			}
+		});
+		
+		return urlValid;
+		
+	}
+	
+	function <portlet:namespace/>deletePaperItem(scienceAppId, paperSeq, paperType){
+		
+		// ScienceAppPaper에서 데이터 삭제
+		$.ajax({
+			url: "<%=deletePaperFileInDLURL%>",
+			cache: false,
+			data: {
+				"<portlet:namespace/>scienceAppId" : scienceAppId,
+				"<portlet:namespace/>paperSeq" : paperSeq,
+				"<portlet:namespace/>paperType" : paperType
+			},
+			success: function(response) {
+				var successFileDelte = response.successFileDelte;
+				
+				if(successFileDelte){
+					alert(Liferay.Language.get('edison-science-app-paper-delete-successed'));
+					//toastr["success"]("", Liferay.Language.get('edison-science-app-paper-delete-successed'));
+				} else{
+					alert(Liferay.Language.get('edison-science-app-paper-delete-failed'));
+					//toastr["error"]("", Liferay.Language.get('edison-science-app-paper-delete-failed'));
+				}
+			}, error:function(response,e){ 
+				alert(Liferay.Language.get('edison-science-app-paper-delete-failed'));
+				//toastr["error"]("", Liferay.Language.get('edison-science-app-paper-delete-failed'));
+			},complete: function(response){
+			}
+		});
+		
+		location.reload();
+	}
+	
+	/* Get App Manager List */
+	function <portlet:namespace/>appManagerList() {
+		
+		var dataForm = {
+				"<portlet:namespace/>scienceAppId" : "${scienceAppId}"
+		};
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=appManagerListURL%>",
+			async : false,
+			data : dataForm,
+			success: function(msg) {
+				var appManagerList = msg.appManagerList;
+				
+				var rowResult;
+				$("#<portlet:namespace/>appManagerListBody tr:not(:has(#1))").remove();
+				
+				if(appManagerList.length == 0) {
+					$rowResult = $("<tr/>");
+					$("<td/>").attr("colspan", "6")
+							  .css("text-align","center")
+							  .text(Liferay.Language.get('edison-there-are-no-data'))
+							  .appendTo($rowResult);
+					$("#<portlet:namespace/>appManagerListBody").append($rowResult);
+				} else {
+					for(var i = 0; i < appManagerList.length; i++) {
+						$rowResult = $("<tr/>");
+						
+						$("<td/>").text(i+1)
+								  .css("text-align","center")
+								  .appendTo($rowResult);
+						$("<td/>").text(appManagerList[i].userScreenName)
+								  .css("text-align","center")
+								  .appendTo($rowResult);
+						$("<td/>").text(appManagerList[i].userFullName)
+								  .css("text-align","center")
+								  .appendTo($rowResult);
+						$("<td/>").text(appManagerList[i].userEmailAddress)
+								  .css("text-align","center")
+								  .appendTo($rowResult);
+						$("<td/>").text(appManagerList[i].createDate)
+								  .css("text-align","center")
+								  .appendTo($rowResult);
+						
+							$("<td/>").html("<input type='button' class='btn btn-default' value='<liferay-ui:message key='edison-button-board-delete' />' onClick='<portlet:namespace/>deleteAppManager("+appManagerList[i].scienceAppManagerId+");' class='button01b' />")
+									  .addClass("TC")
+									  .appendTo($rowResult);
+						
+						$("#<portlet:namespace/>appManagerListBody").append($rowResult);
+					}
+				}
+			},error:function(msg,e){ 
+				alert("function appManagerList "+e);
+				return false;
+			}
+		});
+	}
+	
+	/* Delete App Manager */
+	function <portlet:namespace/>deleteAppManager(scienceAppManagerId) {
+		var con = confirm('<liferay-ui:message key="edison-science-appstore-toolkit-delete-solver-manager" />');
+		
+		if(con){
+			var dataForm = {
+					"<portlet:namespace/>scienceAppManagerId" : scienceAppManagerId
+				};
+				
+				jQuery.ajax({
+					type: "POST",
+					url: "<%=deleteAppAuthURL%>",
+					async : false,
+					data : dataForm,
+					success: function(msg) {
+						<portlet:namespace/>appManagerList();
+					},error:function(msg,e){ 
+						alert("function deleteAppManager "+e);
+						return false;
+					}
+				});
+		}else{
+		return;
+		}
+	}
+	
+	/* Add App Manager */
+	function <portlet:namespace/>addAppManager(){
+		
+		var dataForm = $("form[name=managerAddForm]").serialize();
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%= appManagerAddURL %>",
+			async : false,
+			data : dataForm,
+			success: function(msg) {
+				<portlet:namespace/>appManagerList();
+			},error:function(msg,e){ 
+				alert("function addAppManager "+e);
+				return false;
+			}
+		});
+		$("#<portlet:namespace/>userScreenName_manager").val("");
+		$("#<portlet:namespace/>app-manager-add-dialog").dialog("close");
+	}
+	
+	/* Get User Info */
+	function <portlet:namespace/>getUserInfo(role) {
+		
+		if(role == 'owner'){
+			var pre = $("#<portlet:namespace/>now_userScreenName").val();
+			var post = $("#<portlet:namespace/>userScreenName_owner").val();
+			if( pre == post ){
+				alert(Liferay.Language.get('edison-appstore-fail-owner'));
+				return false;
+			}
+			
+			/*현재아이디와 입력아이디가 같은경우 제외*/
+			var data = {
+					<portlet:namespace/>type : "owner",
+					<portlet:namespace/>scienceAppId : "${scienceAppId}",
+					<portlet:namespace/>now_userScreenName : "${data.userScreenName}",
+					<portlet:namespace/>userScreenName_owner : post
+			};
+			
+			jQuery.ajax({
+				type: "POST",
+				url: "<%=appUserInfoURL%>",
+				async : false,
+				data :  data,
+				success: function(msg) {
+					var result = msg.result;
+					var appUserInfo = msg.appUserInfo;
+					if(result === undefined) {
+						alert("user not found");
+					} else if(result == "none") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-user-notfound' />");
+					}else{
+						$("#ownerId").text(appUserInfo.userScreenName);
+						$("#ownerFullName").text(appUserInfo.userFullName);
+						$("#ownerEmail").text(appUserInfo.userEmailAddress);
+						$("#<portlet:namespace/>ownerUserId").val(appUserInfo.userId);
+						$("#<portlet:namespace/>pre_userScreenName").val("${data.userId}");
+						$("#<portlet:namespace/>app-owner-add-dialog").dialog("open");
+					}
+				},error:function(msg,e){ 
+					alert("function getUserInfo "+e);
+					return false;
+				}
+			});
+		}else if(role == 'manager'){
+			jQuery.ajax({
+				type: "POST",
+				url: "<%=appUserInfoURL%>",
+				async : false,
+				dataType: 'json',
+				data : $("#userSearchManagerForm").serialize(),
+				success: function(msg) {
+					var result = msg.result;
+					var appUserInfo = msg.appUserInfo;
+					if(result === undefined) {
+						alert("user not found");
+					} else if(result == "admin") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-admin-alert' />");
+					} else if(result == "owner" || result == "manager") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-admin-already' />");
+					} else if(result == "none") {
+						alert("<liferay-ui:message key='edison-virtuallab-virtualLabClassManagement-user-notfound' />");
+					} else if(result == "notdeveloper") {
+						alert("<liferay-ui:message key='edison-appstore-workspace-permission-alert' />");
+					} else if(result == "user") {
+						$("#managerId").text(appUserInfo.userScreenName);
+						$("#managerFullName").text(privateTextConverter2(appUserInfo.userFullName));
+						$("#managerEmail").text(privateEmailConverter2(appUserInfo.userEmailAddress));
+						$("#<portlet:namespace/>managerUserId").val(appUserInfo.userId);
+						$("#<portlet:namespace/>app-manager-add-dialog").dialog("open");
+					}
+				},error:function(msg,e){ 
+					alert("function getUserInfo "+e);
+					return false;
+				}
+			});
+		}
+	}
+	
+	/* Update App Owner */
+	function <portlet:namespace/>updateAppOwner(){
+		var dataForm = $("form[name=ownerUpdateForm]").serialize();
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%= appOwnerUpdateURL%>",
+			async : false,
+			data : dataForm,
+			success: function(msg) {
+				<portlet:namespace/>goList();
+			},error:function(msg,e){ 
+				alert("function updateAppOwner "+e);
+			}
+		});
+	}
+	
+	/* Change Category */
+	function changeCategory(parentCategory,childrenCategory){
+		var childrenArray = childrenCategory.split(',');
+		var parentCategoryId = "";
+		var parentCategoryArray = new Array();
+		for(var i=0; i< childrenArray.length; i++){
+			$("input:checkbox[value="+childrenArray[i]+"]").attr("checked",true);
+		}
+		
+		var parentArray = parentCategory.split(',');
+		for(var i=0; i< parentArray.length; i++){
+			<portlet:namespace/>openRootCategory("OPEN",parentArray[i]);
+		}
+	}
+	
+	/* Open Category */
+	function <portlet:namespace/>openRootCategory(status,rootCatogoryId) {
+		$parentTd = $("#<portlet:namespace/>"+rootCatogoryId+"_parentTd");
+		$childrenTd = $("#<portlet:namespace/>"+rootCatogoryId+"_childrenTd");
+		
+		var hiddenSpan;
+		var showSpan;
+		if(status=="OPEN"){
+			hiddenSpan = $("#<portlet:namespace/>"+rootCatogoryId+"_parent_open");
+			showSpan 	= $("#<portlet:namespace/>"+rootCatogoryId+"_parent_close");
+			
+			$parentTd.removeAttr("colspan");
+			$childrenTd.show();
+		}else{
+			hiddenSpan = $("#<portlet:namespace/>"+rootCatogoryId+"_parent_close");
+			showSpan 	= $("#<portlet:namespace/>"+rootCatogoryId+"_parent_open");
+			
+			$parentTd.attr("colspan","3");
+			$childrenTd.hide();
+		}
+		
+		hiddenSpan.hide();
+		showSpan.show();
+	}
+	
 </script>
+
+<aui:script>
+	AUI().ready('aui-module', function(A){
+		/* Selected Service Language */
+		var targetLanguage = "${data.targetLanguage}";
+		if(targetLanguage != null && targetLanguage != '' && targetLanguage != 'undefined'){
+			if(targetLanguage.indexOf(",") == -1){
+				// targetLanguage 1개
+				$("#<portlet:namespace/>targetLanguage option").prop("selected", false);
+				$("#<portlet:namespace/>targetLanguage option[value="+targetLanguage+"]").prop("selected", true);
+			} else {
+				$("#<portlet:namespace/>targetLanguage option").prop("selected", false);
+			}
+		}
+	});
+
+</aui:script>
+
+

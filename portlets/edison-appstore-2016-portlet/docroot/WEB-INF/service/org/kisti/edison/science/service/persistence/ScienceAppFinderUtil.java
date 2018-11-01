@@ -114,6 +114,24 @@ public class ScienceAppFinderUtil {
 		return getFinder().retrieveListScienceApp(searchParam);
 	}
 
+	public static java.util.List<java.lang.Object[]> getScienceAppExecuteStatistics(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().getScienceAppExecuteStatistics(searchParam);
+	}
+
+	public static java.util.List<java.lang.Object[]> getScienceAppHistoryList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().getScienceAppHistoryList(searchParam);
+	}
+
+	public static java.util.List<java.lang.Object[]> getScienceAppReviewList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().getScienceAppReviewList(searchParam);
+	}
+
 	public static ScienceAppFinder getFinder() {
 		if (_finder == null) {
 			_finder = (ScienceAppFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.science.service.ClpSerializer.getServletContextName(),

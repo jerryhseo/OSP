@@ -134,6 +134,7 @@
 		String searchField = CustomUtil.strNull(request.getAttribute("searchField"));
 	%>
 	
+	<div class="edison-scienceAppstore container">
 		<div class="table-responsive panel edison-panel tabWidth">
 		
 			<form name="form" method="post" action="<%=exeURL%>">
@@ -183,13 +184,19 @@
 					</h3>
 					
 					<div class="input-group">
-						<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 25%;">
+						<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 24%;">
 							<option value="10" <c:if test="${params.linePerPage == '10' }"> selected="selected"</c:if> >10<liferay-ui:message key='edison-search-views' /></option>
 							<option value="20" <c:if test="${params.linePerPage == '20' }"> selected="selected"</c:if>>20<liferay-ui:message key='edison-search-views' /></option>
 							<option value="30" <c:if test="${params.linePerPage == '30' }"> selected="selected"</c:if>>30<liferay-ui:message key='edison-search-views' /></option>
 							<option value="40" <c:if test="${params.linePerPage == '40' }"> selected="selected"</c:if>>40<liferay-ui:message key='edison-search-views' /></option>
 						</select>
-						<input name="<portlet:namespace/>searchValue" class="form-control" type="text" id="<portlet:namespace/>searchValue" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" value ="${params.searchValue}" autocomplete="off" style="width: 74%; margin-left:1%; float: right;" />
+						<select id="<portlet:namespace/>searchOrgCode" name="<portlet:namespace/>searchOrgCode" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 25%;">
+							<option value="" ><liferay-ui:message key='edison-create-account-field-title-university' /></option>
+							<c:forEach var="orgMap" items="${organList}">
+								<option value="${orgMap.cd}" >${orgMap.cdNm}</option>
+							</c:forEach>
+						</select>
+						<input name="<portlet:namespace/>searchValue" class="form-control" type="text" id="<portlet:namespace/>searchValue" size="40" onKeydown="if(event.keyCode ==13)<portlet:namespace/>dataSearchList();" value ="${params.searchValue}" autocomplete="off" style="width: 50%; margin-left:1%; float: right;" />
 						<div class="input-group-btn"> 
 							<button class="btn btn-default" id="keyWordB" type="button">
 								<i class="icon-search"></i>
@@ -228,10 +235,11 @@
 				</thead>
 				<tbody id="<portlet:namespace/>summaryListBody">
 				</tbody>
-		  </table>
+			</table>
 		
-		<div id="pageListDiv" class="text-center"></div>
-		
+			<div id="pageListDiv" class="text-center"></div>
+			
+		</div>
 	</div>
 </body>
 <script>

@@ -575,6 +575,20 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 	public void setParallelModule(String parallelModule);
 
 	/**
+	 * Returns the min cpus of this science app.
+	 *
+	 * @return the min cpus of this science app
+	 */
+	public int getMinCpus();
+
+	/**
+	 * Sets the min cpus of this science app.
+	 *
+	 * @param minCpus the min cpus of this science app
+	 */
+	public void setMinCpus(int minCpus);
+
+	/**
 	 * Returns the max cpus of this science app.
 	 *
 	 * @return the max cpus of this science app
@@ -877,6 +891,20 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 	 * @param projectCategoryId the project category ID of this science app
 	 */
 	public void setProjectCategoryId(long projectCategoryId);
+
+	/**
+	 * Returns the execute of this science app.
+	 *
+	 * @return the execute of this science app
+	 */
+	public long getExecute();
+
+	/**
+	 * Sets the execute of this science app.
+	 *
+	 * @param execute the execute of this science app
+	 */
+	public void setExecute(long execute);
 
 	@Override
 	public boolean isNew();

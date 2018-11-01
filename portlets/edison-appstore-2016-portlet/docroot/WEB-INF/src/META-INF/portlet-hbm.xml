@@ -23,6 +23,8 @@
 	<import class="org.kisti.edison.science.model.ScienceAppLogPorts" />
 	<import class="org.kisti.edison.science.model.ScienceAppManager" />
 	<import class="org.kisti.edison.science.model.ScienceAppOutputPorts" />
+	<import class="org.kisti.edison.science.model.ScienceAppPaper" />
+	<import class="org.kisti.edison.science.model.ScienceAppRatingsEntry" />
 	<class name="org.kisti.edison.science.model.impl.CommonLibImpl" table="EDAPP_CommonLib">
 		<cache usage="read-write" />
 		<composite-id name="primaryKey" class="org.kisti.edison.science.service.persistence.CommonLibPK">
@@ -230,6 +232,7 @@
 		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="recentModifierId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="parallelModule" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="minCpus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="maxCpus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="defaultCpus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="statusDate" type="org.hibernate.type.TimestampType" />
@@ -244,6 +247,7 @@
 		<property name="isPort" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="isCompile" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="projectCategoryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="execute" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="org.kisti.edison.science.model.impl.ScienceAppCategoryLinkImpl" table="EDAPP_ScienceAppCategoryLink">
 		<cache usage="read-write" />
@@ -320,5 +324,27 @@
 			<generator class="assigned" />
 		</id>
 		<property name="outputPorts" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.kisti.edison.science.model.impl.ScienceAppPaperImpl" table="EDAPP_ScienceAppPaper">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.science.service.persistence.ScienceAppPaperPK">
+			<key-property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="paperSeq" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="paperType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="paperValue" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="org.kisti.edison.science.model.impl.ScienceAppRatingsEntryImpl" table="EDAPP_ScienceAppRatingsEntry">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK">
+			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="classNameId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="score" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 </hibernate-mapping>

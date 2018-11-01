@@ -33,10 +33,12 @@ import org.kisti.edison.science.service.ScienceAppDescriptionLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppFavoriteLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,6 +75,11 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.portlet.ratings.NoSuchStatsException;
+import com.liferay.portlet.ratings.model.RatingsEntry;
+import com.liferay.portlet.ratings.model.RatingsStats;
+import com.liferay.portlet.ratings.service.RatingsEntryLocalServiceUtil;
+import com.liferay.portlet.ratings.service.RatingsStatsLocalServiceUtil;
 
 import net.sf.json.JSONObject;
 
@@ -170,8 +177,12 @@ public class ScienceAppstoreListController {
 			params.put("solverStatus", "1901004");
 			params.put("recommandation_flag", "true");
 			
+			String upCode = "1501";		//기관 upCode
+			List<Map<String,String>> organList = EdisonExpndoUtil.getCodeListByUpCode(upCode, themeDisplay.getLocale());
+			
 			model.addAttribute("searchField",searchField);
 			model.addAttribute("params", params);
+			model.addAttribute("organList", organList);
 			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
 			model.addAttribute("signedInUrl", themeDisplay.getURLSignIn());
 			
@@ -458,6 +469,9 @@ public class ScienceAppstoreListController {
 			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			long userId = PortalUtil.getUserId(request);
 			String searchValue = CustomUtil.strNull(params.get("searchValue"), "");
+			//String searchOrgCode = CustomUtil.strNull(params.get("searchOrgCode"), "");
+			//searchValue += "," + searchOrgCode;
+			//System.out.println("searchValue : " + searchValue);
 			
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");

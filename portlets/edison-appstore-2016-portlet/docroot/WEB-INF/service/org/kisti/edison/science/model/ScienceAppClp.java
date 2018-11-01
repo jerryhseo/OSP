@@ -108,6 +108,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		attributes.put("status", getStatus());
 		attributes.put("recentModifierId", getRecentModifierId());
 		attributes.put("parallelModule", getParallelModule());
+		attributes.put("minCpus", getMinCpus());
 		attributes.put("maxCpus", getMaxCpus());
 		attributes.put("defaultCpus", getDefaultCpus());
 		attributes.put("statusDate", getStatusDate());
@@ -122,6 +123,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		attributes.put("isPort", getIsPort());
 		attributes.put("isCompile", getIsCompile());
 		attributes.put("projectCategoryId", getProjectCategoryId());
+		attributes.put("execute", getExecute());
 
 		return attributes;
 	}
@@ -260,6 +262,12 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			setParallelModule(parallelModule);
 		}
 
+		Integer minCpus = (Integer)attributes.get("minCpus");
+
+		if (minCpus != null) {
+			setMinCpus(minCpus);
+		}
+
 		Integer maxCpus = (Integer)attributes.get("maxCpus");
 
 		if (maxCpus != null) {
@@ -342,6 +350,12 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 		if (projectCategoryId != null) {
 			setProjectCategoryId(projectCategoryId);
+		}
+
+		Long execute = (Long)attributes.get("execute");
+
+		if (execute != null) {
+			setExecute(execute);
 		}
 	}
 
@@ -1065,6 +1079,29 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	}
 
 	@Override
+	public int getMinCpus() {
+		return _minCpus;
+	}
+
+	@Override
+	public void setMinCpus(int minCpus) {
+		_minCpus = minCpus;
+
+		if (_scienceAppRemoteModel != null) {
+			try {
+				Class<?> clazz = _scienceAppRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setMinCpus", int.class);
+
+				method.invoke(_scienceAppRemoteModel, minCpus);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public int getMaxCpus() {
 		return _maxCpus;
 	}
@@ -1501,6 +1538,29 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	}
 
 	@Override
+	public long getExecute() {
+		return _execute;
+	}
+
+	@Override
+	public void setExecute(long execute) {
+		_execute = execute;
+
+		if (_scienceAppRemoteModel != null) {
+			try {
+				Class<?> clazz = _scienceAppRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setExecute", long.class);
+
+				method.invoke(_scienceAppRemoteModel, execute);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public boolean isApproved() {
 		try {
 			String methodName = "isApproved";
@@ -1749,6 +1809,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		clone.setStatus(getStatus());
 		clone.setRecentModifierId(getRecentModifierId());
 		clone.setParallelModule(getParallelModule());
+		clone.setMinCpus(getMinCpus());
 		clone.setMaxCpus(getMaxCpus());
 		clone.setDefaultCpus(getDefaultCpus());
 		clone.setStatusDate(getStatusDate());
@@ -1763,6 +1824,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		clone.setIsPort(getIsPort());
 		clone.setIsCompile(getIsCompile());
 		clone.setProjectCategoryId(getProjectCategoryId());
+		clone.setExecute(getExecute());
 
 		return clone;
 	}
@@ -1823,7 +1885,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(73);
+		StringBundler sb = new StringBundler(77);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1869,6 +1931,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getRecentModifierId());
 		sb.append(", parallelModule=");
 		sb.append(getParallelModule());
+		sb.append(", minCpus=");
+		sb.append(getMinCpus());
 		sb.append(", maxCpus=");
 		sb.append(getMaxCpus());
 		sb.append(", defaultCpus=");
@@ -1897,6 +1961,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getIsCompile());
 		sb.append(", projectCategoryId=");
 		sb.append(getProjectCategoryId());
+		sb.append(", execute=");
+		sb.append(getExecute());
 		sb.append("}");
 
 		return sb.toString();
@@ -1904,7 +1970,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(112);
+		StringBundler sb = new StringBundler(118);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -1999,6 +2065,10 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getParallelModule());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>minCpus</column-name><column-value><![CDATA[");
+		sb.append(getMinCpus());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>maxCpus</column-name><column-value><![CDATA[");
 		sb.append(getMaxCpus());
 		sb.append("]]></column-value></column>");
@@ -2054,6 +2124,10 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			"<column><column-name>projectCategoryId</column-name><column-value><![CDATA[");
 		sb.append(getProjectCategoryId());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>execute</column-name><column-value><![CDATA[");
+		sb.append(getExecute());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -2085,6 +2159,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	private int _status;
 	private long _recentModifierId;
 	private String _parallelModule;
+	private int _minCpus;
 	private int _maxCpus;
 	private int _defaultCpus;
 	private Date _statusDate;
@@ -2100,6 +2175,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	private boolean _isPort;
 	private boolean _isCompile;
 	private long _projectCategoryId;
+	private long _execute;
 	private BaseModel<?> _scienceAppRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.science.service.ClpSerializer.class;
 }

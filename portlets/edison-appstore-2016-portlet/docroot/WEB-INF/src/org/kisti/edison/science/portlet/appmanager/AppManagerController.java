@@ -286,36 +286,6 @@ public class AppManagerController{
 					model.addAttribute("userScreenName", themeDisplay.getUser().getScreenName());
 				}
 			
-				//Category 정보 조회
-				long companyGroupId = themeDisplay.getCompany().getGroupId();	
-				AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
-				
-				int rootCategoryCnt = AssetCategoryLocalServiceUtil.getVocabularyRootCategoriesCount(aVocabulary.getVocabularyId());
-				Map<Long,List<Map<String,Object>>> childrenCategoryGroupMap =  new HashMap<Long,List<Map<String,Object>>>();
-				List<Map<String,Object>> parentCategoryList = new ArrayList<Map<String,Object>>();
-				
-				if(rootCategoryCnt!=0){
-					List<AssetCategory> rootCategoryList = AssetCategoryLocalServiceUtil.getVocabularyRootCategories(aVocabulary.getVocabularyId(), -1, -1,null);
-					for(AssetCategory rootCatogory : rootCategoryList){
-						Map<String,Object> parentCategoryMap = new HashMap<String,Object>();
-						parentCategoryMap.put("value", rootCatogory.getCategoryId());
-						parentCategoryMap.put("name", rootCatogory.getTitle(themeDisplay.getLocale()));
-						parentCategoryList.add(parentCategoryMap);
-						
-						List<AssetCategory> childCategoryList =  AssetCategoryLocalServiceUtil.getChildCategories(rootCatogory.getCategoryId());
-						List<Map<String,Object>> childrenCategoryList = new ArrayList<Map<String,Object>>();
-						for(AssetCategory childCatogory : childCategoryList){
-							Map<String,Object> childrenCategoryMap = new HashMap<String,Object>();
-							childrenCategoryMap.put("value", childCatogory.getCategoryId());
-							childrenCategoryMap.put("name", childCatogory.getTitle(themeDisplay.getLocale()));
-							childrenCategoryList.add(childrenCategoryMap);
-						}
-						childrenCategoryGroupMap.put(rootCatogory.getCategoryId(),childrenCategoryList);
-					}
-				}
-				model.addAttribute("childrenCategoryGroupMap",childrenCategoryGroupMap);
-				model.addAttribute("parentCategoryList",parentCategoryList);
-			
 			}else if(clickTab.equals("m02")){
 				if(!scienceApp.getExeFileName().equals("")){
 					
@@ -482,6 +452,36 @@ public class AppManagerController{
 				String currunt_folder = "/" +portalGroupId+" - " +CompanyLocalServiceUtil.getCompany(PortalUtil.getCompanyId(request)).getName() + "/"+portalGroupId+"_EDISON_FILE"+"/"
 										+EdisonFileConstants.USER_IMAGE+"/"+themeDisplay.getUserId()+ "/";
 				model.addAttribute("currentFolder", currunt_folder);
+				
+				//Category 정보 조회
+				long companyGroupId = themeDisplay.getCompany().getGroupId();	
+				AssetVocabulary aVocabulary =  AssetVocabularyLocalServiceUtil.getGroupVocabulary(companyGroupId,EdisonAssetCategory.GLOBAL_DOMAIN);
+				
+				int rootCategoryCnt = AssetCategoryLocalServiceUtil.getVocabularyRootCategoriesCount(aVocabulary.getVocabularyId());
+				Map<Long,List<Map<String,Object>>> childrenCategoryGroupMap =  new HashMap<Long,List<Map<String,Object>>>();
+				List<Map<String,Object>> parentCategoryList = new ArrayList<Map<String,Object>>();
+				
+				if(rootCategoryCnt!=0){
+					List<AssetCategory> rootCategoryList = AssetCategoryLocalServiceUtil.getVocabularyRootCategories(aVocabulary.getVocabularyId(), -1, -1,null);
+					for(AssetCategory rootCatogory : rootCategoryList){
+						Map<String,Object> parentCategoryMap = new HashMap<String,Object>();
+						parentCategoryMap.put("value", rootCatogory.getCategoryId());
+						parentCategoryMap.put("name", rootCatogory.getTitle(themeDisplay.getLocale()));
+						parentCategoryList.add(parentCategoryMap);
+						
+						List<AssetCategory> childCategoryList =  AssetCategoryLocalServiceUtil.getChildCategories(rootCatogory.getCategoryId());
+						List<Map<String,Object>> childrenCategoryList = new ArrayList<Map<String,Object>>();
+						for(AssetCategory childCatogory : childCategoryList){
+							Map<String,Object> childrenCategoryMap = new HashMap<String,Object>();
+							childrenCategoryMap.put("value", childCatogory.getCategoryId());
+							childrenCategoryMap.put("name", childCatogory.getTitle(themeDisplay.getLocale()));
+							childrenCategoryList.add(childrenCategoryMap);
+						}
+						childrenCategoryGroupMap.put(rootCatogory.getCategoryId(),childrenCategoryList);
+					}
+				}
+				model.addAttribute("childrenCategoryGroupMap",childrenCategoryGroupMap);
+				model.addAttribute("parentCategoryList",parentCategoryList);
 			}
 			
 			if(scienceAppId!=0){
@@ -893,13 +893,26 @@ public class AppManagerController{
 		
 		try{
 			long scienceAppId = GetterUtil.getLong(params.get("scienceAppId"),0l);
+			String newVersion = CustomUtil.strNull(params.get("newVersion"), "");
 			ServiceContext sc = ServiceContextFactory.getInstance(PortType.class.getName(), request);
-			long newAppId = ScienceAppLocalServiceUtil.copyScienceApp(sc, scienceAppId);
+			System.out.println("newVersion : " + newVersion);
+			
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			boolean isDuplicated = ScienceAppLocalServiceUtil.existApp(scienceApp.getName(), newVersion);
+			System.out.println("isDuplicated : " + isDuplicated);
+			
 			net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
 			
-			ScienceApp newScienceApp =  ScienceAppLocalServiceUtil.getScienceApp(newAppId);
-			obj.put("newAppId", newScienceApp.getScienceAppId());
-			obj.put("newAppVersion", newScienceApp.getVersion());
+			if(isDuplicated){
+				obj.put("resultCopy", false);
+			} else {
+				long newAppId = ScienceAppLocalServiceUtil.copyScienceApp(sc, scienceAppId, newVersion);
+				ScienceApp newScienceApp =  ScienceAppLocalServiceUtil.getScienceApp(newAppId);
+				obj.put("newAppId", newScienceApp.getScienceAppId());
+				obj.put("newAppVersion", newScienceApp.getVersion());
+				obj.put("resultCopy", true);
+			}
+			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());

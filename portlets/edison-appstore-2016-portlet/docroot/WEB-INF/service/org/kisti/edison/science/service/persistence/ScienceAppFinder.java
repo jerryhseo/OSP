@@ -75,4 +75,16 @@ public interface ScienceAppFinder {
 	public java.util.List<java.lang.Object[]> retrieveListScienceApp(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> getScienceAppExecuteStatistics(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> getScienceAppHistoryList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> getScienceAppReviewList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

@@ -114,21 +114,21 @@ public class PortTypeAnalyzerLinkLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.PortTypeAnalyzerLink"
 			};
 
-		_methodName166 = "getBeanIdentifier";
+		_methodName178 = "getBeanIdentifier";
 
-		_methodParameterTypes166 = new String[] {  };
+		_methodParameterTypes178 = new String[] {  };
 
-		_methodName167 = "setBeanIdentifier";
+		_methodName179 = "setBeanIdentifier";
 
-		_methodParameterTypes167 = new String[] { "java.lang.String" };
+		_methodParameterTypes179 = new String[] { "java.lang.String" };
 
-		_methodName172 = "findByPortTypeId";
+		_methodName184 = "findByPortTypeId";
 
-		_methodParameterTypes172 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes184 = new String[] { "long", "java.util.Locale" };
 
-		_methodName173 = "findByPortTypeAnalyzerWithAppName";
+		_methodName185 = "findByPortTypeAnalyzerWithAppName";
 
-		_methodParameterTypes173 = new String[] { "long", "long" };
+		_methodParameterTypes185 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -232,26 +232,26 @@ public class PortTypeAnalyzerLinkLocalServiceClpInvoker {
 			return PortTypeAnalyzerLinkLocalServiceUtil.updatePortTypeAnalyzerLink((org.kisti.edison.science.model.PortTypeAnalyzerLink)arguments[0]);
 		}
 
-		if (_methodName166.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes166, parameterTypes)) {
+		if (_methodName178.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes178, parameterTypes)) {
 			return PortTypeAnalyzerLinkLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName167.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes167, parameterTypes)) {
+		if (_methodName179.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes179, parameterTypes)) {
 			PortTypeAnalyzerLinkLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return PortTypeAnalyzerLinkLocalServiceUtil.findByPortTypeId(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			return PortTypeAnalyzerLinkLocalServiceUtil.findByPortTypeAnalyzerWithAppName(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
@@ -295,12 +295,12 @@ public class PortTypeAnalyzerLinkLocalServiceClpInvoker {
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
-	private String _methodName166;
-	private String[] _methodParameterTypes166;
-	private String _methodName167;
-	private String[] _methodParameterTypes167;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
+	private String _methodName178;
+	private String[] _methodParameterTypes178;
+	private String _methodName179;
+	private String[] _methodParameterTypes179;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
 }

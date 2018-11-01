@@ -303,6 +303,7 @@
 			<basic name="status" />
 			<basic name="recentModifierId" />
 			<basic name="parallelModule" />
+			<basic name="minCpus" />
 			<basic name="maxCpus" />
 			<basic name="defaultCpus" />
 			<basic name="statusDate">
@@ -319,6 +320,7 @@
 			<basic name="isPort" />
 			<basic name="isCompile" />
 			<basic name="projectCategoryId" />
+			<basic name="execute" />
 			<transient name="developersCurrentLanguageId" />
 			<transient name="developersMap" />
 			<transient name="manualIdCurrentLanguageId" />
@@ -444,6 +446,40 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.science.model.impl.ScienceAppPaperModelImpl">
+		<id-class class="org.kisti.edison.science.service.persistence.ScienceAppPaperPK" />
+		<attributes>
+			<id name="scienceAppId" />
+			<id name="paperSeq" />
+			<basic name="paperType" />
+			<basic name="paperValue" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.science.model.impl.ScienceAppRatingsEntryModelImpl">
+		<id-class class="org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK" />
+		<attributes>
+			<id name="userId" />
+			<id name="scienceAppId" />
+			<basic name="companyId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="classNameId" />
+			<basic name="score" />
+			<transient name="className" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="org.kisti.edison.science.model.impl.CommonLibImpl" name="CommonLib">
 		<table name="EDAPP_CommonLib" />
 		<attributes />
@@ -526,6 +562,14 @@
 	</entity>
 	<entity class="org.kisti.edison.science.model.impl.ScienceAppOutputPortsImpl" name="ScienceAppOutputPorts">
 		<table name="EDAPP_ScienceAppOutputPorts" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.science.model.impl.ScienceAppPaperImpl" name="ScienceAppPaper">
+		<table name="EDAPP_ScienceAppPaper" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.science.model.impl.ScienceAppRatingsEntryImpl" name="ScienceAppRatingsEntry">
+		<table name="EDAPP_ScienceAppRatingsEntry" />
 		<attributes />
 	</entity>
 </entity-mappings>

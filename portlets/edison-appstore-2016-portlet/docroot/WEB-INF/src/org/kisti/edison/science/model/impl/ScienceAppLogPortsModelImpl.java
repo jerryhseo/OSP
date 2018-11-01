@@ -61,7 +61,7 @@ public class ScienceAppLogPortsModelImpl extends BaseModelImpl<ScienceAppLogPort
 			{ "scienceAppId", Types.BIGINT },
 			{ "logPorts", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppLogPorts (scienceAppId LONG not null primary key,logPorts TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppLogPorts (scienceAppId LONG not null primary key,logPorts VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppLogPorts";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppLogPorts.scienceAppId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppLogPorts.scienceAppId ASC";

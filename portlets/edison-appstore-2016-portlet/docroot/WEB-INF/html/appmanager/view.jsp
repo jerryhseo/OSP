@@ -96,6 +96,10 @@
 		</liferay-util:include>
 	</div>
 </div>
+
+<link media="all" rel="stylesheet" href="${contextPath}/css/jquery-confirm.css" />
+<script src="${contextPath}/js/jquery-confirm.js"></script>
+
 <script type="text/javascript">
 	function tabAction(tabValue){
 		var searchParameter = "";
@@ -191,28 +195,66 @@
 	}
 	
 	function <portlet:namespace/>copyScienceApp(){
-		if(!confirm(Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message'))) return;
 		
-		jQuery.ajax({
-			type: "POST",
-			url: "<%=copyScienceAppURL%>",
-			async : false,
-			dataType: 'json',
-			success: function(result) {
-				var confirmMsg = Liferay.Language.get('edison-science-appstore-toolkit-app-copy-success-message')+' '+result.newAppVersion;
-				if(confirm(confirmMsg)){
-					var searchParameter = "";
-					searchParameter += "&<portlet:namespace/>scienceAppId="+result.newAppId;
-					location.href="<%=newAppRenderURL%>"+searchParameter;
-				}else{
-					location.reload();
+		var confirmContent = '<p style="font-size: 15px;"> ' + Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message').replace("\n", "<br/>") + '</p>'
+							 + '<p style="font-size: 15px;">' + Liferay.Language.get('edison-science-appstore-update-new-version-massage').replace("\n", "<br/>") + '</p>'
+							 + '<p> <input type="text" class="field field-control" id="<portlet:namespace/>inputNewVersion" placeholder="ex) 1.0.0" val /> </p>';
+		
+		/* if(!confirm(Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message'))) return; */
+		
+		$.confirm({
+			boxWidth: '30%',
+			useBootstrap: false,
+			title: 'Version Upgrade!',
+			content: confirmContent,
+			buttons: {
+				confirm: function () {
+					
+					var regVersion = new RegExp('[0-9]+[.][0-9]+[.][0-9]');
+					var regVersionStr = new RegExp('[a-zA-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+');
+					var newVersion = $("#<portlet:namespace/>inputNewVersion").val();
+					
+					if(newVersion !=null && newVersion != '' && !regVersion.test(newVersion)){
+						alert(Liferay.Language.get('edison-data-collection-enter-version-alert'));
+						return;
+					} else if(newVersion !=null && newVersion != '' && regVersionStr.test(newVersion)){
+						alert(Liferay.Language.get('edison-data-collection-enter-version-alert'));
+						return;
+					}
+					
+					
+					jQuery.ajax({
+						type: "POST",
+						url: "<%=copyScienceAppURL%>",
+						data: {"<portlet:namespace/>newVersion" : newVersion},
+						async : false,
+						dataType: 'json',
+						success: function(result) {
+							resultCopy = result.resultCopy;
+							if(resultCopy){
+								var confirmMsg = Liferay.Language.get('edison-science-appstore-toolkit-app-copy-success-message')+' '+result.newAppVersion;
+								if(confirm(confirmMsg)){
+									var searchParameter = "";
+									searchParameter += "&<portlet:namespace/>scienceAppId="+result.newAppId;
+									location.href="<%=newAppRenderURL%>"+searchParameter;
+								}else{
+									location.reload();
+								}
+							} else {
+								alert(Liferay.Language.get('edison-science-appstore-update-new-version-duplicate-massage'));
+							}
+						},error:function(jqXHR, textStatus, errorThrown){
+							if(jqXHR.responseText !== ''){
+								alert(textStatus+": "+jqXHR.responseText);
+							}else{
+								alert(textStatus+": "+errorThrown);
+							}  
+						}
+					});
+					
+				},
+				cancel: function () {
 				}
-			},error:function(jqXHR, textStatus, errorThrown){
-				if(jqXHR.responseText !== ''){
-					alert(textStatus+": "+jqXHR.responseText);
-				}else{
-					alert(textStatus+": "+errorThrown);
-				}  
 			}
 		});
 	}

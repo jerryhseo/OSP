@@ -51,7 +51,6 @@
         <indexer-class>org.kisti.edison.science.search.ScienceAppIndexer</indexer-class>
 		<action-url-redirect>true</action-url-redirect>
 		<header-portlet-css>/css/style.css</header-portlet-css>
-		<css-class-wrapper>edison-scienceAppstore container</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	

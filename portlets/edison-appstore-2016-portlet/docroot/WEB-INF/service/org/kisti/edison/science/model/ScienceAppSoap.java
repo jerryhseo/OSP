@@ -53,6 +53,7 @@ public class ScienceAppSoap implements Serializable {
 		soapModel.setStatus(model.getStatus());
 		soapModel.setRecentModifierId(model.getRecentModifierId());
 		soapModel.setParallelModule(model.getParallelModule());
+		soapModel.setMinCpus(model.getMinCpus());
 		soapModel.setMaxCpus(model.getMaxCpus());
 		soapModel.setDefaultCpus(model.getDefaultCpus());
 		soapModel.setStatusDate(model.getStatusDate());
@@ -67,6 +68,7 @@ public class ScienceAppSoap implements Serializable {
 		soapModel.setIsPort(model.getIsPort());
 		soapModel.setIsCompile(model.getIsCompile());
 		soapModel.setProjectCategoryId(model.getProjectCategoryId());
+		soapModel.setExecute(model.getExecute());
 
 		return soapModel;
 	}
@@ -295,6 +297,14 @@ public class ScienceAppSoap implements Serializable {
 		_parallelModule = parallelModule;
 	}
 
+	public int getMinCpus() {
+		return _minCpus;
+	}
+
+	public void setMinCpus(int minCpus) {
+		_minCpus = minCpus;
+	}
+
 	public int getMaxCpus() {
 		return _maxCpus;
 	}
@@ -415,6 +425,14 @@ public class ScienceAppSoap implements Serializable {
 		_projectCategoryId = projectCategoryId;
 	}
 
+	public long getExecute() {
+		return _execute;
+	}
+
+	public void setExecute(long execute) {
+		_execute = execute;
+	}
+
 	private String _uuid;
 	private long _scienceAppId;
 	private long _groupId;
@@ -437,6 +455,7 @@ public class ScienceAppSoap implements Serializable {
 	private int _status;
 	private long _recentModifierId;
 	private String _parallelModule;
+	private int _minCpus;
 	private int _maxCpus;
 	private int _defaultCpus;
 	private Date _statusDate;
@@ -451,4 +470,5 @@ public class ScienceAppSoap implements Serializable {
 	private boolean _isPort;
 	private boolean _isCompile;
 	private long _projectCategoryId;
+	private long _execute;
 }

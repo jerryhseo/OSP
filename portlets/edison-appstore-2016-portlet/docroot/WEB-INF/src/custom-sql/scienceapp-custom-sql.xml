@@ -602,5 +602,65 @@
 		</isNotEmpty>
 		]]>
 	</sql>
-
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppHistoryList" >
+		<![CDATA[
+		SELECT
+			scienceAppId, 
+			name, 
+			version, 
+			DATE_FORMAT(modifiedDate, '%Y.%m.%d %H:%i') AS modifiedDate, 
+			status,
+			groupId
+		FROM
+			EDAPP_ScienceApp
+		WHERE
+			companyId = #companyId#
+			AND groupId = #groupId#
+			AND name = #name#
+			AND (
+				status = 1901003
+				OR status = 1901004
+			)
+		ORDER BY VERSION DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppReviewList" >
+		<![CDATA[
+		SELECT 
+			EB.boardSeq AS boardSeq,
+			EB.title AS title,
+			EB.content AS content,
+			EB.groupId AS groupId,
+			EB.customId AS customId,
+			EB.writerId AS writerId,
+			U.screenName AS screenName,
+			DATE_FORMAT(EB.writerDate, '%d. %b. %Y') AS writerDate,
+			DATE_FORMAT(EB.writerDate, '%H:%i') AS writerTime,
+			DATE_FORMAT(EB.writerDate, '%Y.%m.%d %H:%i') AS writerDateForReply,
+			EB.readCnt AS readCnt,
+			EB.groupBoardSeq AS groupBoardSeq,
+			(	SELECT
+					COUNT(*)
+				FROM
+					EDCON_Board EB_SUB
+				WHERE
+					EB_SUB.customId = #customId#
+					AND EB_SUB.groupBoardSeq = EB.boardSeq
+			) AS replyCnt
+		FROM
+			EDCON_Board EB,
+			EDCON_BoardDiv_Board EBB,
+			User_ U
+		WHERE
+			EB.boardSeq = EBB.boardSeq
+			AND EB.writerId = U.userId
+			AND EBB.divCd= #divCd#
+			AND EB.customId = #customId#
+			AND EB.groupBoardSeq = #groupBoardSeq#
+		ORDER BY EB.writerDate DESC
+		]]>
+	</sql>
+	
 </custom-sql>

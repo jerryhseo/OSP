@@ -216,17 +216,27 @@
 						</td>
 					</tr>
 					<tr class="is-not-dwn-only">
-						<th>Max CPU</th>
+						<th>Min CPU</th>
 						<td>
-							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.maxCpus}">
+							<aui:input name="minCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.minCpus}">
 								<aui:validator name="number"/>
 								<aui:validator name="maxLength">2</aui:validator>
 								<aui:validator name="max">32</aui:validator>
 							</aui:input>
 						</td>
-						<th>Default CPU</th>
-						<td>
+						<th rowspan="2">Default CPU</th>
+						<td rowspan="2">
 							<aui:input name="defaultCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.defaultCpus}">
+								<aui:validator name="number"/>
+								<aui:validator name="maxLength">2</aui:validator>
+								<aui:validator name="max">32</aui:validator>
+							</aui:input>
+						</td>
+					</tr>
+					<tr class="is-not-dwn-only">
+						<th>Max CPU</th>
+						<td>
+							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.maxCpus}">
 								<aui:validator name="number"/>
 								<aui:validator name="maxLength">2</aui:validator>
 								<aui:validator name="max">32</aui:validator>

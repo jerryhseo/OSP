@@ -114,45 +114,45 @@ public class ScienceAppFavoriteLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.ScienceAppFavorite"
 			};
 
-		_methodName164 = "getBeanIdentifier";
+		_methodName176 = "getBeanIdentifier";
 
-		_methodParameterTypes164 = new String[] {  };
+		_methodParameterTypes176 = new String[] {  };
 
-		_methodName165 = "setBeanIdentifier";
+		_methodName177 = "setBeanIdentifier";
 
-		_methodParameterTypes165 = new String[] { "java.lang.String" };
+		_methodParameterTypes177 = new String[] { "java.lang.String" };
 
-		_methodName170 = "getScienceAppFavoriteCount";
+		_methodName182 = "getScienceAppFavoriteCount";
 
-		_methodParameterTypes170 = new String[] { "long", "long" };
+		_methodParameterTypes182 = new String[] { "long", "long" };
 
-		_methodName171 = "updateScienceAppFavorite";
+		_methodName183 = "updateScienceAppFavorite";
 
-		_methodParameterTypes171 = new String[] { "long", "long", "long" };
+		_methodParameterTypes183 = new String[] { "long", "long", "long" };
 
-		_methodName172 = "getFavoriteAppList";
+		_methodName184 = "getFavoriteAppList";
 
-		_methodParameterTypes172 = new String[] {
+		_methodParameterTypes184 = new String[] {
 				"long", "long", "java.util.Locale", "long"
 			};
 
-		_methodName173 = "getFavoriteAppList";
+		_methodName185 = "getFavoriteAppList";
 
-		_methodParameterTypes173 = new String[] {
+		_methodParameterTypes185 = new String[] {
 				"long[][]", "java.util.Locale", "long"
 			};
 
-		_methodName174 = "makeCategoryEntryList";
+		_methodName186 = "makeCategoryEntryList";
 
-		_methodParameterTypes174 = new String[] { "long", "long" };
+		_methodParameterTypes186 = new String[] { "long", "long" };
 
-		_methodName175 = "deleteFavoriteApp";
+		_methodName187 = "deleteFavoriteApp";
 
-		_methodParameterTypes175 = new String[] { "long", "long" };
+		_methodParameterTypes187 = new String[] { "long", "long" };
 
-		_methodName176 = "deleteFavoriteApp";
+		_methodName188 = "deleteFavoriteApp";
 
-		_methodParameterTypes176 = new String[] { "long" };
+		_methodParameterTypes188 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -244,58 +244,58 @@ public class ScienceAppFavoriteLocalServiceClpInvoker {
 			return ScienceAppFavoriteLocalServiceUtil.updateScienceAppFavorite((org.kisti.edison.science.model.ScienceAppFavorite)arguments[0]);
 		}
 
-		if (_methodName164.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes164, parameterTypes)) {
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName165.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes165, parameterTypes)) {
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
 			ScienceAppFavoriteLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName170.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes170, parameterTypes)) {
+		if (_methodName182.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes182, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.getScienceAppFavoriteCount(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName171.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes171, parameterTypes)) {
+		if (_methodName183.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes183, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.updateScienceAppFavorite(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.getFavoriteAppList(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2], ((Long)arguments[3]).longValue());
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.getFavoriteAppList((long[])arguments[0],
 				(java.util.Locale)arguments[1], ((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName174.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+		if (_methodName186.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.makeCategoryEntryList(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName175.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes175, parameterTypes)) {
+		if (_methodName187.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
 			return ScienceAppFavoriteLocalServiceUtil.deleteFavoriteApp(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName176.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
+		if (_methodName188.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes188, parameterTypes)) {
 			ScienceAppFavoriteLocalServiceUtil.deleteFavoriteApp(((Long)arguments[0]).longValue());
 
 			return null;
@@ -336,22 +336,22 @@ public class ScienceAppFavoriteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName164;
-	private String[] _methodParameterTypes164;
-	private String _methodName165;
-	private String[] _methodParameterTypes165;
-	private String _methodName170;
-	private String[] _methodParameterTypes170;
-	private String _methodName171;
-	private String[] _methodParameterTypes171;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
-	private String _methodName174;
-	private String[] _methodParameterTypes174;
-	private String _methodName175;
-	private String[] _methodParameterTypes175;
 	private String _methodName176;
 	private String[] _methodParameterTypes176;
+	private String _methodName177;
+	private String[] _methodParameterTypes177;
+	private String _methodName182;
+	private String[] _methodParameterTypes182;
+	private String _methodName183;
+	private String[] _methodParameterTypes183;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
+	private String _methodName186;
+	private String[] _methodParameterTypes186;
+	private String _methodName187;
+	private String[] _methodParameterTypes187;
+	private String _methodName188;
+	private String[] _methodParameterTypes188;
 }

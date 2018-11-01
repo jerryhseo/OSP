@@ -106,33 +106,33 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.ScienceAppLogPorts"
 			};
 
-		_methodName164 = "getBeanIdentifier";
+		_methodName176 = "getBeanIdentifier";
 
-		_methodParameterTypes164 = new String[] {  };
+		_methodParameterTypes176 = new String[] {  };
 
-		_methodName165 = "setBeanIdentifier";
+		_methodName177 = "setBeanIdentifier";
 
-		_methodParameterTypes165 = new String[] { "java.lang.String" };
+		_methodParameterTypes177 = new String[] { "java.lang.String" };
 
-		_methodName170 = "create";
+		_methodName182 = "create";
 
-		_methodParameterTypes170 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes182 = new String[] { "long", "java.lang.String" };
 
-		_methodName171 = "getLogPortsJsonString";
+		_methodName183 = "getLogPortsJsonString";
 
-		_methodParameterTypes171 = new String[] { "long" };
+		_methodParameterTypes183 = new String[] { "long" };
 
-		_methodName172 = "removeAllLogPorts";
+		_methodName184 = "removeAllLogPorts";
 
-		_methodParameterTypes172 = new String[] {  };
+		_methodParameterTypes184 = new String[] {  };
 
-		_methodName173 = "getScienceAppLogPortsesCount";
+		_methodName185 = "getScienceAppLogPortsesCount";
 
-		_methodParameterTypes173 = new String[] { "long" };
+		_methodParameterTypes185 = new String[] { "long" };
 
-		_methodName174 = "portAppList";
+		_methodName186 = "portAppList";
 
-		_methodParameterTypes174 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes186 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -224,43 +224,43 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 			return ScienceAppLogPortsLocalServiceUtil.updateScienceAppLogPorts((org.kisti.edison.science.model.ScienceAppLogPorts)arguments[0]);
 		}
 
-		if (_methodName164.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes164, parameterTypes)) {
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName165.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes165, parameterTypes)) {
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
 			ScienceAppLogPortsLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName170.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes170, parameterTypes)) {
+		if (_methodName182.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes182, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.create(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
 		}
 
-		if (_methodName171.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes171, parameterTypes)) {
+		if (_methodName183.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes183, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.getLogPortsJsonString(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			ScienceAppLogPortsLocalServiceUtil.removeAllLogPorts();
 
 			return null;
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName174.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+		if (_methodName186.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
@@ -300,18 +300,18 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName164;
-	private String[] _methodParameterTypes164;
-	private String _methodName165;
-	private String[] _methodParameterTypes165;
-	private String _methodName170;
-	private String[] _methodParameterTypes170;
-	private String _methodName171;
-	private String[] _methodParameterTypes171;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
-	private String _methodName174;
-	private String[] _methodParameterTypes174;
+	private String _methodName176;
+	private String[] _methodParameterTypes176;
+	private String _methodName177;
+	private String[] _methodParameterTypes177;
+	private String _methodName182;
+	private String[] _methodParameterTypes182;
+	private String _methodName183;
+	private String[] _methodParameterTypes183;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
+	private String _methodName186;
+	private String[] _methodParameterTypes186;
 }

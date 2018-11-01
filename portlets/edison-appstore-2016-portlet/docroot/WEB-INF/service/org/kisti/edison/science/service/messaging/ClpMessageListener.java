@@ -55,6 +55,10 @@ import org.kisti.edison.science.service.ScienceAppLogPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppPaperLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppPaperServiceUtil;
+import org.kisti.edison.science.service.ScienceAppRatingsEntryLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppRatingsEntryServiceUtil;
 import org.kisti.edison.science.service.ScienceAppServiceUtil;
 
 /**
@@ -130,6 +134,13 @@ public class ClpMessageListener extends BaseMessageListener {
 
 			ScienceAppManagerServiceUtil.clearService();
 			ScienceAppOutputPortsLocalServiceUtil.clearService();
+
+			ScienceAppPaperLocalServiceUtil.clearService();
+
+			ScienceAppPaperServiceUtil.clearService();
+			ScienceAppRatingsEntryLocalServiceUtil.clearService();
+
+			ScienceAppRatingsEntryServiceUtil.clearService();
 		}
 	}
 }

@@ -45,6 +45,8 @@ import org.kisti.edison.science.model.ScienceAppDescription;
 import org.kisti.edison.science.model.ScienceAppInputPorts;
 import org.kisti.edison.science.model.ScienceAppManager;
 import org.kisti.edison.science.model.ScienceAppOutputPorts;
+import org.kisti.edison.science.model.ScienceAppPaper;
+import org.kisti.edison.science.model.ScienceAppRatingsEntry;
 import org.kisti.edison.science.model.impl.ScienceAppImpl;
 import org.kisti.edison.science.service.ScienceAppCategoryLinkLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppDescriptionLocalServiceUtil;
@@ -52,8 +54,13 @@ import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppManagerLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
+import org.kisti.edison.science.service.ScienceAppPaperLocalServiceUtil;
 import org.kisti.edison.science.service.base.ScienceAppLocalServiceBaseImpl;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
+import org.kisti.edison.science.service.persistence.ScienceAppPaperPK;
+import org.kisti.edison.science.service.persistence.ScienceAppPaperUtil;
+import org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK;
+import org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.EdisonFileUtil;
@@ -111,6 +118,10 @@ import com.liferay.portlet.expando.model.ExpandoTable;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
+import com.liferay.portlet.ratings.model.RatingsEntry;
+import com.liferay.portlet.ratings.model.RatingsStats;
+import com.liferay.portlet.ratings.service.RatingsEntryLocalServiceUtil;
+import com.liferay.portlet.ratings.service.RatingsStatsLocalServiceUtil;
 
 /**
  * The implementation of the science app local service.
@@ -431,6 +442,12 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			.getScienceAppId());
 
 		assetLinkLocalService.deleteLinks(assetEntry.getEntryId());
+		
+		/* remove ScienceApp Ratings And Paper */
+		String scienceAppClassName = scienceApp.getModelClassName();
+		ScienceAppRatingsEntryUtil.removeByScienceAppId(scienceApp.getScienceAppId());
+		deleteScienceAppRatingsStats(scienceApp.getScienceAppId(), scienceAppClassName);
+		ScienceAppPaperUtil.removeByScienceAppId(scienceApp.getScienceAppId());
 
 		assetEntryLocalService.deleteEntry(ScienceApp.class.getName(), scienceApp.getScienceAppId());
 		super.deleteScienceApp(scienceApp);
@@ -1056,44 +1073,6 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			}
 			scienceApp.setRecentModifierId(sc.getUserId());
 	
-			if(CustomUtil.strNull(params.get("targetLanguage")).equals("")){
-				String localeStr = "";
-				for(Locale locale : LanguageUtil.getAvailableLocales()){
-					if(localeStr.equals("")){
-						localeStr = LocaleUtil.toLanguageId(locale);
-					}else{
-						localeStr += "," + LocaleUtil.toLanguageId(locale);
-					}
-				}
-				scienceApp.setTargetLanguage(localeStr);
-			}else{
-				scienceApp.setTargetLanguage(CustomUtil.strNull(params.get("targetLanguage")));
-			}
-		
-			// 카테고리 clean
-			AssetCategoryLocalServiceUtil.clearAssetEntryAssetCategories(entryId);
-			// 카테고리 등록
-			List<String[]> categoryList = new ArrayList<String[]>();
-			if(params.get("childrenCategoryCheckbox") instanceof String[]){
-				String[] childrenCategoryArray = (String[]) params.get("childrenCategoryCheckbox");
-				for(String childrenCategory : childrenCategoryArray){
-					String[] childrenCategoryValue = childrenCategory.split("_");
-					categoryList.add(childrenCategoryValue);
-				}
-			}else if(params.get("childrenCategoryCheckbox") instanceof String){
-				String[] childrenCategoryValue = CustomUtil.strNull(params.get("childrenCategoryCheckbox")).split("_");
-				categoryList.add(childrenCategoryValue);
-			}
-			
-			if(entryId != 0){
-				for(String[] categoryArray : categoryList){
-					long parentCategoryId = GetterUtil.getLong(categoryArray[0], 0l);
-					long categoryId = GetterUtil.getLong(categoryArray[1], 0l);
-					
-					AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, categoryId);
-					// AssetEntryLocalServiceUtil.addAssetCategoryAssetEntry(categoryId, entryId);
-				}
-			}
 		}else if(actionType.equals("publicData")){
 			
 			scienceApp.setDevelopersMap(CustomUtil.getLocalizationNotSetLocaleMap(params, "developers"));
@@ -1116,6 +1095,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 				ScienceAppDescriptionLocalServiceUtil.updateScienceAppDescription(scienceAppDescription);
 	
 				UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(sc.getLiferayPortletRequest());
+				
 				// icon 등록
 				String appIconStr = CustomUtil.strNull(upload.getFileName("app_icon"), "");
 				if(!appIconStr.equals("")){ // 아이콘이 있는경우
@@ -1162,10 +1142,149 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 						}
 					}
 				}
+				
+				// 서비스 언어 등록
+				if(CustomUtil.strNull(params.get("targetLanguage")).equals("")){
+					String localeStr = "";
+					for(Locale locale : LanguageUtil.getAvailableLocales()){
+						if(localeStr.equals("")){
+							localeStr = LocaleUtil.toLanguageId(locale);
+						}else{
+							localeStr += "," + LocaleUtil.toLanguageId(locale);
+						}
+					}
+					scienceApp.setTargetLanguage(localeStr);
+				}else{
+					scienceApp.setTargetLanguage(CustomUtil.strNull(params.get("targetLanguage")));
+				}
+				
+				/* 논문 파일 */
+				int paperFileCount = Integer.parseInt(CustomUtil.strNull(params.get("paperFileCount"), "0"));
+				
+				for(int fileIndex=0; fileIndex < paperFileCount; fileIndex++){
+					String PaperFileParamKey = "paperFile_" + fileIndex;
+					String paperFileName = CustomUtil.strNull(upload.getFileName(PaperFileParamKey), "");
+					
+					if(paperFileName.trim() == null || paperFileName.trim().equals("")){
+						continue;
+					}
+					
+					// DL-File Upload
+					List<FileEntry> paperFile = EdisonFileUtil.insertEdisonFile(sc.getLiferayPortletRequest(), upload, sc.getUserId(), scienceApp.getGroupId(), 
+							"", String.valueOf(scienceAppId), PaperFileParamKey, EdisonFileConstants.SCIENCE_APPS);
+					
+					FileEntry paperFileEntry = paperFile.get(0);
+					
+					long paperFileEntryId = paperFileEntry.getFileEntryId();
+					
+					// ScienceAppPaper Save
+					ScienceAppPaperPK scienceAppPaperPK = new ScienceAppPaperPK();
+					scienceAppPaperPK.setScienceAppId(scienceAppId);
+					
+					List<ScienceAppPaper> scienceAppPaperList = ScienceAppPaperUtil.findByScienceAppId(scienceAppId);
+					long newScienceAppPaperSeq = 0;
+					for(ScienceAppPaper appPaper : scienceAppPaperList){
+						long appPaperSeq = appPaper.getPaperSeq();
+						if(newScienceAppPaperSeq <= appPaperSeq){
+							newScienceAppPaperSeq = appPaperSeq;
+						}
+					}
+						
+					scienceAppPaperPK.setPaperSeq(newScienceAppPaperSeq+1);
+					
+					ScienceAppPaper scienceAppPaper = ScienceAppPaperLocalServiceUtil.createScienceAppPaper(scienceAppPaperPK);
+					scienceAppPaper.setPaperType("file");
+					scienceAppPaper.setPaperValue(CustomUtil.strNull(paperFileEntryId));
+					
+					ScienceAppPaperLocalServiceUtil.addScienceAppPaper(scienceAppPaper);
+					
+				}
+				
+				
+				/* 논문 링크 */
+				if(params.get("paperLink") instanceof String[]){
+					String[] paperLinkArr = (String[]) params.get("paperLink");
+					for(String paperLink : paperLinkArr){
+						
+						if(paperLink.trim() == null || paperLink.trim().equals("")){
+							continue;
+						}
+						
+						// ScienceAppPaper Save
+						ScienceAppPaperPK scienceAppPaperPK = new ScienceAppPaperPK();
+						scienceAppPaperPK.setScienceAppId(scienceAppId);
+						
+						List<ScienceAppPaper> scienceAppPaperList = ScienceAppPaperUtil.findByScienceAppId(scienceAppId);
+						long newScienceAppPaperSeq = 0;
+						for(ScienceAppPaper appPaper : scienceAppPaperList){
+							long appPaperSeq = appPaper.getPaperSeq();
+							if(newScienceAppPaperSeq <= appPaperSeq){
+								newScienceAppPaperSeq = appPaperSeq;
+							}
+						}
+						scienceAppPaperPK.setPaperSeq(newScienceAppPaperSeq+1);
+						
+						ScienceAppPaper scienceAppPaper = ScienceAppPaperLocalServiceUtil.createScienceAppPaper(scienceAppPaperPK);
+						scienceAppPaper.setPaperType("link");
+						scienceAppPaper.setPaperValue(paperLink);
+						
+						ScienceAppPaperLocalServiceUtil.addScienceAppPaper(scienceAppPaper);
+					}
+				}else if(params.get("paperLink") instanceof String){
+					String paperLink = CustomUtil.strNull(params.get("paperLink"));
+					
+					if(paperLink.trim() != null && !paperLink.trim().equals("")){
+						// ScienceAppPaper Save
+						ScienceAppPaperPK scienceAppPaperPK = new ScienceAppPaperPK();
+						scienceAppPaperPK.setScienceAppId(scienceAppId);
+						
+						List<ScienceAppPaper> scienceAppPaperList = ScienceAppPaperUtil.findByScienceAppId(scienceAppId);
+						long newScienceAppPaperSeq = 0;
+						for(ScienceAppPaper appPaper : scienceAppPaperList){
+							long appPaperSeq = appPaper.getPaperSeq();
+							if(newScienceAppPaperSeq <= appPaperSeq){
+								newScienceAppPaperSeq = appPaperSeq;
+							}
+						}
+						scienceAppPaperPK.setPaperSeq(newScienceAppPaperSeq+1);
+						
+						ScienceAppPaper scienceAppPaper = ScienceAppPaperLocalServiceUtil.createScienceAppPaper(scienceAppPaperPK);
+						scienceAppPaper.setPaperType("link");
+						scienceAppPaper.setPaperValue(paperLink);
+						
+						ScienceAppPaperLocalServiceUtil.addScienceAppPaper(scienceAppPaper);
+					}
+				}
+				
+				/* 카테고리 clean */
+				AssetCategoryLocalServiceUtil.clearAssetEntryAssetCategories(entryId);
+				/* 카테고리 등록 */
+				List<String[]> categoryList = new ArrayList<String[]>();
+				if(params.get("childrenCategoryCheckbox") instanceof String[]){
+					String[] childrenCategoryArray = (String[]) params.get("childrenCategoryCheckbox");
+					for(String childrenCategory : childrenCategoryArray){
+						String[] childrenCategoryValue = childrenCategory.split("_");
+						categoryList.add(childrenCategoryValue);
+					}
+				}else if(params.get("childrenCategoryCheckbox") instanceof String){
+					String[] childrenCategoryValue = CustomUtil.strNull(params.get("childrenCategoryCheckbox")).split("_");
+					categoryList.add(childrenCategoryValue);
+				}
+				
+				if(entryId != 0){
+					for(String[] categoryArray : categoryList){
+						long parentCategoryId = GetterUtil.getLong(categoryArray[0], 0l);
+						long categoryId = GetterUtil.getLong(categoryArray[1], 0l);
+						
+						AssetCategoryLocalServiceUtil.addAssetEntryAssetCategory(entryId, categoryId);
+					}
+				}
+				
 			}catch (Exception e){
 				throw new SystemException(e);
 			}
 		}
+		
 		scienceAppLocalService.updateScienceApp(scienceApp);
 	}
 	
@@ -1190,12 +1309,16 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
             categorySearch = true;
         }
         
+//        String swNameOrSwTitle = searchText; //.split(",")[0];
+//        String searchOrgCd = searchText.split(",")[1];
+        
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("begin", begin);
         param.put("end", end);
         param.put("status", 1901004);
         param.put("appTypes", appTypes);
         param.put("likeSwNameAndSwTitle", searchText);
+//        param.put("searchOrgCd", searchOrgCd);
         param.put("categoryIds", categoryIds);
         
         Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
@@ -1230,10 +1353,17 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			categorySearch = true;
 		}
 		
+//		String[] searchStrArr = searchText.split(",");
+//		String swNameOrSwTitle = searchText;
+//		CustomUtil.strNull(searchStrArr[0], "");
+//		String organCode = "";
+//		TODO if(searchStrArr.length)
+//		CustomUtil.strNull(searchStrArr[1], "");
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("status", 1901004);
 		param.put("appTypes", appTypes);
 		param.put("likeSwNameAndSwTitle", searchText);
+//		param.put("searchOrgCd", organCode);
 		param.put("categoryIds", categoryIds);
 		
 		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
@@ -1381,7 +1511,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		searchMap.put("likeSwName", GetterUtil.getString(param.get("likeSwName")));
 		searchMap.put("likeSwTitle", GetterUtil.getString(param.get("likeSwTitle")));
 		searchMap.put("likeUserName", GetterUtil.getString(param.get("likeUserName")));
-		searchMap.put("likeOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("likeOrgName"))));
+		// String[] searchOrgCd = new String[1];
+		// searchOrgCd[0] = GetterUtil.getString(param.get("searchOrgCd")); 
+		// if(!searchOrgCd[0].equals("") && searchOrgCd[0] != null){
+		// 	searchMap.put("likeOrgCode", searchOrgCd);
+		// } else {
+			searchMap.put("likeOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("likeOrgName"))));
+		// }
 		searchMap.put("likeDeveloper", GetterUtil.getString(param.get("likeDeveloper")));
 		
 		
@@ -1655,6 +1791,31 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			}
 
 			returnMap.put("managerList", managerList);
+			
+			// ScienceApp에 등록된 Paper(논문) 가져오기
+			List<ScienceAppPaper> scienceAppPaperList = ScienceAppPaperUtil.findByScienceAppId(scienceAppId);
+			List<Map<String, Object>> scienceAppPaperMapList = new ArrayList<Map<String, Object>>();
+			if(0 < scienceAppPaperList.size()){
+				for(ScienceAppPaper scienceAppPaper : scienceAppPaperList){
+					Map<String, Object> scienceAppPaperMap = new HashMap<String, Object>();
+					if((scienceAppPaper.getPaperType()).equals("file")){
+						scienceAppPaperMap.put("scienceAppId", scienceAppPaper.getScienceAppId());
+						scienceAppPaperMap.put("paperSeq", scienceAppPaper.getPaperSeq());
+						scienceAppPaperMap.put("paperType", scienceAppPaper.getPaperType());
+						scienceAppPaperMap.put("paperValue", scienceAppPaper.getPaperValue());
+						scienceAppPaperMap.put("paperFileTitle", DLFileEntryLocalServiceUtil.getFileEntry(Long.parseLong(CustomUtil.strNull(scienceAppPaper.getPaperValue(),"0"))).getTitle());
+					} else if((scienceAppPaper.getPaperType()).equals("link")){
+						scienceAppPaperMap.put("scienceAppId", scienceAppPaper.getScienceAppId());
+						scienceAppPaperMap.put("paperSeq", scienceAppPaper.getPaperSeq());
+						scienceAppPaperMap.put("paperType", scienceAppPaper.getPaperType());
+						scienceAppPaperMap.put("paperValue", scienceAppPaper.getPaperValue());
+					}
+					
+					scienceAppPaperMapList.add(scienceAppPaperMap);
+				}
+			}
+			
+			returnMap.put("scienceAppPaperList", scienceAppPaperMapList);
 
 			return returnMap;
 		}
@@ -1732,6 +1893,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		scienceApp.setRunType(CustomUtil.strNull(params.get("runType")));
 		scienceApp.setParallelModule(CustomUtil.strNull(params.get("parallelModule")));
 		scienceApp.setEditorType(CustomUtil.strNull(params.get("editorType")));
+		scienceApp.setMinCpus(GetterUtil.getInteger(params.get("minCpus"), 0));
 		scienceApp.setMaxCpus(GetterUtil.getInteger(params.get("maxCpus"), 0));
 		scienceApp.setDefaultCpus(GetterUtil.getInteger(params.get("defaultCpus"), 0));
 		scienceApp.setModifiedDate(new Date());
@@ -1770,7 +1932,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		return scienceApp;
 	}
 	
-	public long copyScienceApp(ServiceContext sc, long scienceAppId) throws SystemException{
+	public long copyScienceApp(ServiceContext sc, long scienceAppId, String newVersion) throws SystemException{
 		try{
 			// APP 정보 조회
 			ScienceApp scienceApp = scienceAppLocalService.getScienceApp(scienceAppId);
@@ -1803,16 +1965,21 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			String preVersion = scienceApp.getVersion();
 			String[] versions = preVersion.split("\\.");
 			int lastVersions = (Integer.parseInt(versions[versions.length - 1])) + 1;
-			String newVersion = versions[0] + "." + versions[1] + "." + lastVersions;
-
-			while1: while(true){
-				boolean isDuplicated = ScienceAppLocalServiceUtil.existApp(scienceApp.getName(), newVersion);
-				if(!isDuplicated){
-					newScienceApp.setVersion(newVersion);
-					break while1;
-				}else{
-					lastVersions += 1;
-					newVersion = versions[0] + "." + versions[1] + "." + lastVersions;
+			
+			if(!newVersion.equals("")){
+				newScienceApp.setVersion(newVersion);
+			} else {
+				newVersion = versions[0] + "." + versions[1] + "." + lastVersions;
+				
+				while1: while(true){
+					boolean isDuplicated = ScienceAppLocalServiceUtil.existApp(scienceApp.getName(), newVersion);
+					if(!isDuplicated){
+						newScienceApp.setVersion(newVersion);
+						break while1;
+					}else{
+						lastVersions += 1;
+						newVersion = versions[0] + "." + versions[1] + "." + lastVersions;
+					}
 				}
 			}
 
@@ -2490,4 +2657,280 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	    
 	    return resultRow;
 	}
+	
+	/* Get RatingsStats */
+	public RatingsStats getScienceAppRatingsStats(long scienceAppId, long classNameId, String className) throws SystemException{
+		RatingsStats ratingsStats = null;
+		
+		try {
+			ratingsStats = RatingsStatsLocalServiceUtil.getStats(className, scienceAppId);
+		} catch (Exception e) {
+			ratingsStats = RatingsStatsLocalServiceUtil.addStats(classNameId, scienceAppId);
+			ratingsStats.setClassPK(scienceAppId);
+			ratingsStats.setClassNameId(classNameId);
+			ratingsStats.setTotalEntries(0);
+			ratingsStats.setTotalScore(0);
+			ratingsStats.setAverageScore(0);
+			
+			ratingsStats = RatingsStatsLocalServiceUtil.addRatingsStats(ratingsStats);
+		}
+		
+		return ratingsStats;
+	}
+	
+	public boolean deleteScienceAppRatingsStats(long scienceAppId, String className) throws SystemException{
+		boolean deleteRatingsStats = false;
+		
+		try {
+			List<RatingsEntry> ratingsEntryList = RatingsEntryLocalServiceUtil.getEntries(className, scienceAppId);
+			for(RatingsEntry ratingsEntry : ratingsEntryList){
+				RatingsEntryLocalServiceUtil.deleteRatingsEntry(ratingsEntry.getEntryId());
+			}
+			
+			RatingsStatsLocalServiceUtil.deleteStats(className, scienceAppId);
+			deleteRatingsStats = true;
+		} catch (Exception e) {
+			deleteRatingsStats = false;
+		}
+		
+		return deleteRatingsStats;
+	}
+	
+	public ScienceAppRatingsEntry getScienceAppMyRatingsEntry(long scienceAppId, String className, User user) throws SystemException{
+		RatingsStats ratingsStats = null;
+		ScienceAppRatingsEntry scienceAppRatingsEntry = null;
+		
+		long userId = user.getUserId();
+		long companyId = user.getCompanyId();
+		String userName = user.getFullName();
+		
+		try {
+			ratingsStats = RatingsStatsLocalServiceUtil.getStats(className, scienceAppId);
+			
+			ScienceAppRatingsEntryPK scienceAppRatingsEntryPK = new ScienceAppRatingsEntryPK(userId, scienceAppId);
+			scienceAppRatingsEntry = ScienceAppRatingsEntryUtil.findByPrimaryKey(scienceAppRatingsEntryPK);
+		} catch (Exception e) {
+			scienceAppRatingsEntry = null;
+		}
+		
+		return scienceAppRatingsEntry;
+	}
+	
+	public ScienceAppRatingsEntry setScienceAppMyRatingsEntry(long scienceAppId, String className, User user, long score) throws SystemException{
+		RatingsStats ratingsStats = null;
+		ScienceAppRatingsEntry scienceAppRatingsEntry = null;
+		
+		long userId = user.getUserId();
+		long companyId = user.getCompanyId();
+		String userName = user.getFullName();
+		
+		Date nowDt = new Date();
+		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String nowDtStr = dateForm.format(nowDt);
+		try {
+			nowDt = dateForm.parse(nowDtStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			ratingsStats = RatingsStatsLocalServiceUtil.getStats(className, scienceAppId);
+			
+			/* find ScienceAppRatingsEntry */
+			ScienceAppRatingsEntryPK scienceAppRatingsEntryPK = new ScienceAppRatingsEntryPK(userId, scienceAppId);
+			scienceAppRatingsEntry = ScienceAppRatingsEntryUtil.findByPrimaryKey(scienceAppRatingsEntryPK);
+			
+			double beforeScore = scienceAppRatingsEntry.getScore();
+			scienceAppRatingsEntry.setModifiedDate(nowDt);
+			scienceAppRatingsEntry.setScore(score);
+			
+			ScienceAppRatingsEntryUtil.update(scienceAppRatingsEntry);
+			
+			/* Update RatingsStats */
+			ratingsStats.setTotalScore(ratingsStats.getTotalScore()-beforeScore+score);
+			ratingsStats.setAverageScore((ratingsStats.getTotalScore()/ratingsStats.getTotalEntries()));
+			
+			RatingsStatsLocalServiceUtil.updateRatingsStats(ratingsStats);
+			
+		} catch (Exception e) {
+			
+			ScienceAppRatingsEntryPK scienceAppRatingsEntryPK = new ScienceAppRatingsEntryPK(userId, scienceAppId);
+			scienceAppRatingsEntry = ScienceAppRatingsEntryUtil.create(scienceAppRatingsEntryPK);
+			
+			scienceAppRatingsEntry.setCompanyId(companyId);
+			scienceAppRatingsEntry.setUserName(userName);
+			scienceAppRatingsEntry.setCreateDate(nowDt);
+			scienceAppRatingsEntry.setModifiedDate(nowDt);
+			scienceAppRatingsEntry.setClassNameId(ratingsStats.getClassNameId());
+			scienceAppRatingsEntry.setScore(score);
+			
+			scienceAppRatingsEntry = ScienceAppRatingsEntryUtil.update(scienceAppRatingsEntry);
+			
+			/* Update RatingsStats */
+			ratingsStats.setTotalEntries(ratingsStats.getTotalEntries()+1);
+			ratingsStats.setTotalScore(ratingsStats.getTotalScore()+score);
+			ratingsStats.setAverageScore((ratingsStats.getTotalScore()/ratingsStats.getTotalEntries()));
+			
+			RatingsStatsLocalServiceUtil.updateRatingsStats(ratingsStats);
+		}
+		
+		return scienceAppRatingsEntry;
+	}
+	
+	public boolean deleteScienceAppMyRatingsEntry(long scienceAppId, User user) throws SystemException{
+		boolean deleteRatingsEntry = false;
+		
+		try {
+			ScienceAppRatingsEntryUtil.remove(new ScienceAppRatingsEntryPK(user.getUserId(), scienceAppId));
+			deleteRatingsEntry = true;
+		} catch (Exception e) {
+			deleteRatingsEntry = false;
+		}
+		
+		return deleteRatingsEntry;
+		
+	}
+	
+	public boolean deleteScienceAppPaperItem(long scienceAppId, long paperSeq, String paperType) throws SystemException{
+		
+		boolean successFileDelete = false;
+		
+		try {
+			
+			ScienceAppPaperPK scienceAppPaperPK = new ScienceAppPaperPK(scienceAppId, paperSeq);
+			
+			if(paperType.equals("file")){
+				
+				ScienceAppPaper scienceAppPaper = ScienceAppPaperLocalServiceUtil.getScienceAppPaper(scienceAppPaperPK);
+				long dlFileEntryId = Long.parseLong(scienceAppPaper.getPaperValue());
+				
+				DLFileEntryLocalServiceUtil.deleteDLFileEntry(dlFileEntryId);
+			}
+			
+			ScienceAppPaperLocalServiceUtil.deleteScienceAppPaper(scienceAppPaperPK);
+			
+			successFileDelete = true;
+		} catch (Exception e) {
+			successFileDelete = false;
+			e.printStackTrace();
+		}
+		
+		return successFileDelete;
+	}
+	
+	public List<Map<String, Object>> getScienceAppPaperList(long scienceAppId) throws SystemException{
+		
+		List<Map<String, Object>> scienceAppPaperMapList = new ArrayList<Map<String, Object>>();
+		
+		try{
+			List<ScienceAppPaper> scienceAppPaperList = ScienceAppPaperUtil.findByScienceAppId(scienceAppId);
+			if(0 < scienceAppPaperList.size()){
+				for(ScienceAppPaper scienceAppPaper : scienceAppPaperList){
+					Map<String, Object> scienceAppPaperMap = new HashMap<String, Object>();
+					if((scienceAppPaper.getPaperType()).equals("file")){
+						scienceAppPaperMap.put("scienceAppId", scienceAppPaper.getScienceAppId());
+						scienceAppPaperMap.put("paperSeq", scienceAppPaper.getPaperSeq());
+						scienceAppPaperMap.put("paperType", scienceAppPaper.getPaperType());
+						scienceAppPaperMap.put("paperValue", scienceAppPaper.getPaperValue());
+						scienceAppPaperMap.put("paperFileTitle", DLFileEntryLocalServiceUtil.getFileEntry(Long.parseLong(CustomUtil.strNull(scienceAppPaper.getPaperValue(),"0"))).getTitle());
+					} else if((scienceAppPaper.getPaperType()).equals("link")){
+						scienceAppPaperMap.put("scienceAppId", scienceAppPaper.getScienceAppId());
+						scienceAppPaperMap.put("paperSeq", scienceAppPaper.getPaperSeq());
+						scienceAppPaperMap.put("paperType", scienceAppPaper.getPaperType());
+						scienceAppPaperMap.put("paperValue", scienceAppPaper.getPaperValue());
+					}
+					
+					scienceAppPaperMapList.add(scienceAppPaperMap);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return scienceAppPaperMapList;
+	}
+	
+	public Map<String, Object> getScienceAppExecuteStatistics(long scienceAppId) throws SystemException{
+		
+		Map<String, Object> searchParam = new HashMap<String, Object>();
+		Map<String, Object> resultParam = new HashMap<String, Object>();
+		
+		searchParam.put("scienceAppId", scienceAppId);
+		
+		List<Object[]> scienceAppExcuteStatisticsList = scienceAppFinder.getScienceAppExecuteStatistics(searchParam);
+		
+		resultParam.put("scienceAppId", scienceAppId);
+		
+		if(scienceAppExcuteStatisticsList.size() <= 0){
+			resultParam.put("userCnt", 0);
+			resultParam.put("exeCnt", 0);
+			resultParam.put("avgExeTime", 0);
+		} else {
+			Object[] scienceAppExcuteStatisticsData = scienceAppExcuteStatisticsList.get(0);
+			
+			resultParam.put("userCnt", Long.parseLong(CustomUtil.strNull(scienceAppExcuteStatisticsData[1], "0")));
+			resultParam.put("exeCnt", Long.parseLong(CustomUtil.strNull(scienceAppExcuteStatisticsData[2], "0")));
+			resultParam.put("avgExeTime", Long.parseLong(CustomUtil.strNull(scienceAppExcuteStatisticsData[3], "0")));
+		}
+		
+		return resultParam;
+	}
+	
+	public List<Map<String, Object>> getScienceAppHistoryList(Map<String, Object> searchParamMap) throws SystemException{
+		
+		List<Map<String, Object>> scienceAppHistoryMapList = new ArrayList<Map<String, Object>>();
+		
+		List<Object[]> scienceAppHistoryList = scienceAppFinder.getScienceAppHistoryList(searchParamMap);
+		
+		if(scienceAppHistoryList != null && !scienceAppHistoryList.isEmpty()){
+			for(int i=0; i<scienceAppHistoryList.size(); i++){
+				Object[] scienceAppHistoryObj = scienceAppHistoryList.get(i);
+				Map<String, Object> scienceAppHistoryMap = new HashMap<String, Object>();
+				
+				scienceAppHistoryMap.put("scienceAppId", CustomUtil.strNull(scienceAppHistoryObj[0], "0"));
+				scienceAppHistoryMap.put("name", CustomUtil.strNull(scienceAppHistoryObj[1], ""));
+				scienceAppHistoryMap.put("version", CustomUtil.strNull(scienceAppHistoryObj[2], ""));
+				scienceAppHistoryMap.put("modifiedDate", CustomUtil.strNull(scienceAppHistoryObj[3], ""));
+				scienceAppHistoryMap.put("status", CustomUtil.strNull(scienceAppHistoryObj[4], "0"));
+				scienceAppHistoryMap.put("groupId", CustomUtil.strNull(scienceAppHistoryObj[5], "0"));
+				
+				scienceAppHistoryMapList.add(scienceAppHistoryMap);
+			}
+		}
+		
+		return scienceAppHistoryMapList;
+	}
+	
+	public List<Map<String, Object>> getScienceAppReviewList(Map<String, Object> searchParamMap) throws SystemException{
+		
+		List<Map<String, Object>> scienceAppReviewMapList = new ArrayList<Map<String, Object>>();
+		
+		List<Object[]> scienceAppReviewList = scienceAppFinder.getScienceAppReviewList(searchParamMap);
+		
+		if(scienceAppReviewList != null && !scienceAppReviewList.isEmpty()){
+			for(int i=0; i<scienceAppReviewList.size(); i++){
+				Object[] scienceAppReviewObj = scienceAppReviewList.get(i);
+				Map<String, Object> scienceAppReviewMap = new HashMap<String, Object>();
+				
+				scienceAppReviewMap.put("boardSeq", CustomUtil.strNull(scienceAppReviewObj[0], "0"));
+				scienceAppReviewMap.put("title", CustomUtil.strNull(scienceAppReviewObj[1], ""));
+				scienceAppReviewMap.put("content", CustomUtil.strNull(scienceAppReviewObj[2], ""));
+				scienceAppReviewMap.put("groupId", CustomUtil.strNull(scienceAppReviewObj[3], "0"));
+				scienceAppReviewMap.put("customId", CustomUtil.strNull(scienceAppReviewObj[4], ""));
+				scienceAppReviewMap.put("writerId", CustomUtil.strNull(scienceAppReviewObj[5], "0"));
+				scienceAppReviewMap.put("screenName", CustomUtil.strNull(scienceAppReviewObj[6], ""));
+				scienceAppReviewMap.put("writerDate", CustomUtil.strNull(scienceAppReviewObj[7], ""));
+				scienceAppReviewMap.put("writerTime", CustomUtil.strNull(scienceAppReviewObj[8], ""));
+				scienceAppReviewMap.put("writerDateForReply", CustomUtil.strNull(scienceAppReviewObj[9], ""));
+				scienceAppReviewMap.put("readCnt", CustomUtil.strNull(scienceAppReviewObj[10], "0"));
+				scienceAppReviewMap.put("groupBoardSeq", CustomUtil.strNull(scienceAppReviewObj[11], "0"));
+				scienceAppReviewMap.put("replyCnt", CustomUtil.strNull(scienceAppReviewObj[12], "0"));
+				
+				scienceAppReviewMapList.add(scienceAppReviewMap);
+			}
+		}
+		
+		return scienceAppReviewMapList;
+	}
+	
 }

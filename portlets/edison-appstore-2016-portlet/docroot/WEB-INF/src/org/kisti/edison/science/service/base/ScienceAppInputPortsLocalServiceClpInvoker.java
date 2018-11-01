@@ -106,49 +106,49 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.ScienceAppInputPorts"
 			};
 
-		_methodName164 = "getBeanIdentifier";
+		_methodName176 = "getBeanIdentifier";
 
-		_methodParameterTypes164 = new String[] {  };
+		_methodParameterTypes176 = new String[] {  };
 
-		_methodName165 = "setBeanIdentifier";
+		_methodName177 = "setBeanIdentifier";
 
-		_methodParameterTypes165 = new String[] { "java.lang.String" };
+		_methodParameterTypes177 = new String[] { "java.lang.String" };
 
-		_methodName170 = "create";
+		_methodName182 = "create";
 
-		_methodParameterTypes170 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes182 = new String[] { "long", "java.lang.String" };
 
-		_methodName171 = "getInputPortsJsonString";
+		_methodName183 = "getInputPortsJsonString";
 
-		_methodParameterTypes171 = new String[] { "long" };
+		_methodParameterTypes183 = new String[] { "long" };
 
-		_methodName172 = "getInputPortsJsonArray";
+		_methodName184 = "getInputPortsJsonArray";
 
-		_methodParameterTypes172 = new String[] { "long" };
+		_methodParameterTypes184 = new String[] { "long" };
 
-		_methodName173 = "removeAllInputPorts";
+		_methodName185 = "removeAllInputPorts";
 
-		_methodParameterTypes173 = new String[] {  };
+		_methodParameterTypes185 = new String[] {  };
 
-		_methodName174 = "getScienceAppInputPortsesCount";
+		_methodName186 = "getScienceAppInputPortsesCount";
 
-		_methodParameterTypes174 = new String[] { "long" };
+		_methodParameterTypes186 = new String[] { "long" };
 
-		_methodName175 = "getInputPortsCountByPotyTypeId";
+		_methodName187 = "getInputPortsCountByPotyTypeId";
 
-		_methodParameterTypes175 = new String[] { "long" };
+		_methodParameterTypes187 = new String[] { "long" };
 
-		_methodName176 = "addSampeFile";
+		_methodName188 = "addSampeFile";
 
-		_methodParameterTypes176 = new String[] {
+		_methodParameterTypes188 = new String[] {
 				"long", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext",
 				"com.liferay.portal.kernel.upload.UploadPortletRequest"
 			};
 
-		_methodName177 = "portAppList";
+		_methodName189 = "portAppList";
 
-		_methodParameterTypes177 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes189 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -240,61 +240,61 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 			return ScienceAppInputPortsLocalServiceUtil.updateScienceAppInputPorts((org.kisti.edison.science.model.ScienceAppInputPorts)arguments[0]);
 		}
 
-		if (_methodName164.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes164, parameterTypes)) {
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName165.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes165, parameterTypes)) {
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
 			ScienceAppInputPortsLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName170.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes170, parameterTypes)) {
+		if (_methodName182.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes182, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.create(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
 		}
 
-		if (_methodName171.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes171, parameterTypes)) {
+		if (_methodName183.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes183, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonArray(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			ScienceAppInputPortsLocalServiceUtil.removeAllInputPorts();
 
 			return null;
 		}
 
-		if (_methodName174.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+		if (_methodName186.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName175.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes175, parameterTypes)) {
+		if (_methodName187.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.getInputPortsCountByPotyTypeId(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName176.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
+		if (_methodName188.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes188, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.addSampeFile(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.service.ServiceContext)arguments[2],
 				(com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[3]);
 		}
 
-		if (_methodName177.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
+		if (_methodName189.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes189, parameterTypes)) {
 			return ScienceAppInputPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
@@ -334,24 +334,24 @@ public class ScienceAppInputPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName164;
-	private String[] _methodParameterTypes164;
-	private String _methodName165;
-	private String[] _methodParameterTypes165;
-	private String _methodName170;
-	private String[] _methodParameterTypes170;
-	private String _methodName171;
-	private String[] _methodParameterTypes171;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
-	private String _methodName174;
-	private String[] _methodParameterTypes174;
-	private String _methodName175;
-	private String[] _methodParameterTypes175;
 	private String _methodName176;
 	private String[] _methodParameterTypes176;
 	private String _methodName177;
 	private String[] _methodParameterTypes177;
+	private String _methodName182;
+	private String[] _methodParameterTypes182;
+	private String _methodName183;
+	private String[] _methodParameterTypes183;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
+	private String _methodName186;
+	private String[] _methodParameterTypes186;
+	private String _methodName187;
+	private String[] _methodParameterTypes187;
+	private String _methodName188;
+	private String[] _methodParameterTypes188;
+	private String _methodName189;
+	private String[] _methodParameterTypes189;
 }

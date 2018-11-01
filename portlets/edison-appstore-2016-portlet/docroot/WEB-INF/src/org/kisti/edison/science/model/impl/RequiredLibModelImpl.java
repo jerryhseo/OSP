@@ -78,7 +78,7 @@ public class RequiredLibModelImpl extends BaseModelImpl<RequiredLib>
 			{ "librarySrcPath", Types.VARCHAR },
 			{ "installScript", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_RequiredLib (requiredLibId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,libraryName VARCHAR(256) null,libraryVersion VARCHAR(75) null,libraryType VARCHAR(75) null,librarySrcPath VARCHAR(75) null,installScript TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_RequiredLib (requiredLibId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,libraryName VARCHAR(75) null,libraryVersion VARCHAR(75) null,libraryType VARCHAR(75) null,librarySrcPath VARCHAR(75) null,installScript VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_RequiredLib";
 	public static final String ORDER_BY_JPQL = " ORDER BY requiredLib.requiredLibId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_RequiredLib.requiredLibId ASC";

@@ -46,6 +46,8 @@ import org.kisti.edison.science.model.ScienceAppInputPortsClp;
 import org.kisti.edison.science.model.ScienceAppLogPortsClp;
 import org.kisti.edison.science.model.ScienceAppManagerClp;
 import org.kisti.edison.science.model.ScienceAppOutputPortsClp;
+import org.kisti.edison.science.model.ScienceAppPaperClp;
+import org.kisti.edison.science.model.ScienceAppRatingsEntryClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -204,6 +206,14 @@ public class ClpSerializer {
 
 		if (oldModelClassName.equals(ScienceAppOutputPortsClp.class.getName())) {
 			return translateInputScienceAppOutputPorts(oldModel);
+		}
+
+		if (oldModelClassName.equals(ScienceAppPaperClp.class.getName())) {
+			return translateInputScienceAppPaper(oldModel);
+		}
+
+		if (oldModelClassName.equals(ScienceAppRatingsEntryClp.class.getName())) {
+			return translateInputScienceAppRatingsEntry(oldModel);
 		}
 
 		return oldModel;
@@ -431,6 +441,27 @@ public class ClpSerializer {
 		ScienceAppOutputPortsClp oldClpModel = (ScienceAppOutputPortsClp)oldModel;
 
 		BaseModel<?> newModel = oldClpModel.getScienceAppOutputPortsRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputScienceAppPaper(BaseModel<?> oldModel) {
+		ScienceAppPaperClp oldClpModel = (ScienceAppPaperClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getScienceAppPaperRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputScienceAppRatingsEntry(
+		BaseModel<?> oldModel) {
+		ScienceAppRatingsEntryClp oldClpModel = (ScienceAppRatingsEntryClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getScienceAppRatingsEntryRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -1231,6 +1262,80 @@ public class ClpSerializer {
 			}
 		}
 
+		if (oldModelClassName.equals(
+					"org.kisti.edison.science.model.impl.ScienceAppPaperImpl")) {
+			return translateOutputScienceAppPaper(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
+		if (oldModelClassName.equals(
+					"org.kisti.edison.science.model.impl.ScienceAppRatingsEntryImpl")) {
+			return translateOutputScienceAppRatingsEntry(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
 		return oldModel;
 	}
 
@@ -1413,6 +1518,16 @@ public class ClpSerializer {
 		if (className.equals(
 					"org.kisti.edison.science.NoSuchScienceAppOutputPortsException")) {
 			return new org.kisti.edison.science.NoSuchScienceAppOutputPortsException();
+		}
+
+		if (className.equals(
+					"org.kisti.edison.science.NoSuchScienceAppPaperException")) {
+			return new org.kisti.edison.science.NoSuchScienceAppPaperException();
+		}
+
+		if (className.equals(
+					"org.kisti.edison.science.NoSuchScienceAppRatingsEntryException")) {
+			return new org.kisti.edison.science.NoSuchScienceAppRatingsEntryException();
 		}
 
 		return throwable;
@@ -1634,6 +1749,27 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setScienceAppOutputPortsRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputScienceAppPaper(BaseModel<?> oldModel) {
+		ScienceAppPaperClp newModel = new ScienceAppPaperClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setScienceAppPaperRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputScienceAppRatingsEntry(
+		BaseModel<?> oldModel) {
+		ScienceAppRatingsEntryClp newModel = new ScienceAppRatingsEntryClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setScienceAppRatingsEntryRemoteModel(oldModel);
 
 		return newModel;
 	}

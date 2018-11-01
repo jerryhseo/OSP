@@ -114,57 +114,57 @@ public class PortTypeLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.PortType"
 			};
 
-		_methodName166 = "getBeanIdentifier";
+		_methodName178 = "getBeanIdentifier";
 
-		_methodParameterTypes166 = new String[] {  };
+		_methodParameterTypes178 = new String[] {  };
 
-		_methodName167 = "setBeanIdentifier";
+		_methodName179 = "setBeanIdentifier";
 
-		_methodParameterTypes167 = new String[] { "java.lang.String" };
+		_methodParameterTypes179 = new String[] { "java.lang.String" };
 
-		_methodName172 = "createPortType";
+		_methodName184 = "createPortType";
 
-		_methodParameterTypes172 = new String[] {
+		_methodParameterTypes184 = new String[] {
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName173 = "existPortType";
+		_methodName185 = "existPortType";
 
-		_methodParameterTypes173 = new String[] { "java.lang.String" };
+		_methodParameterTypes185 = new String[] { "java.lang.String" };
 
-		_methodName174 = "setPortTypeInputdeckForm";
+		_methodName186 = "setPortTypeInputdeckForm";
 
-		_methodParameterTypes174 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes186 = new String[] { "long", "java.lang.String" };
 
-		_methodName175 = "deletePortType";
+		_methodName187 = "deletePortType";
 
-		_methodParameterTypes175 = new String[] { "long" };
+		_methodParameterTypes187 = new String[] { "long" };
 
-		_methodName176 = "deletePortType";
+		_methodName188 = "deletePortType";
 
-		_methodParameterTypes176 = new String[] {
+		_methodParameterTypes188 = new String[] {
 				"org.kisti.edison.science.model.PortType"
 			};
 
-		_methodName178 = "migrationPortType";
+		_methodName190 = "migrationPortType";
 
-		_methodParameterTypes178 = new String[] { "long" };
+		_methodParameterTypes190 = new String[] { "long" };
 
-		_methodName179 = "countPortType";
+		_methodName191 = "countPortType";
 
-		_methodParameterTypes179 = new String[] {
+		_methodParameterTypes191 = new String[] {
 				"long", "java.util.Locale", "java.util.Map"
 			};
 
-		_methodName180 = "retrieveListPortType";
+		_methodName192 = "retrieveListPortType";
 
-		_methodParameterTypes180 = new String[] {
+		_methodParameterTypes192 = new String[] {
 				"long", "java.util.Locale", "java.util.Map", "int", "int"
 			};
 
-		_methodName181 = "createPortType";
+		_methodName193 = "createPortType";
 
-		_methodParameterTypes181 = new String[] {
+		_methodParameterTypes193 = new String[] {
 				"com.liferay.portal.service.ServiceContext", "java.util.Map"
 			};
 	}
@@ -270,61 +270,61 @@ public class PortTypeLocalServiceClpInvoker {
 			return PortTypeLocalServiceUtil.updatePortType((org.kisti.edison.science.model.PortType)arguments[0]);
 		}
 
-		if (_methodName166.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes166, parameterTypes)) {
+		if (_methodName178.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes178, parameterTypes)) {
 			return PortTypeLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName167.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes167, parameterTypes)) {
+		if (_methodName179.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes179, parameterTypes)) {
 			PortTypeLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return PortTypeLocalServiceUtil.createPortType((java.lang.String)arguments[0],
 				(com.liferay.portal.service.ServiceContext)arguments[1]);
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			return PortTypeLocalServiceUtil.existPortType((java.lang.String)arguments[0]);
 		}
 
-		if (_methodName174.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+		if (_methodName186.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
 			PortTypeLocalServiceUtil.setPortTypeInputdeckForm(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
 
 			return null;
 		}
 
-		if (_methodName175.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes175, parameterTypes)) {
+		if (_methodName187.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
 			return PortTypeLocalServiceUtil.deletePortType(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName176.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
+		if (_methodName188.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes188, parameterTypes)) {
 			return PortTypeLocalServiceUtil.deletePortType((org.kisti.edison.science.model.PortType)arguments[0]);
 		}
 
-		if (_methodName178.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes178, parameterTypes)) {
+		if (_methodName190.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes190, parameterTypes)) {
 			return PortTypeLocalServiceUtil.migrationPortType(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName179.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes179, parameterTypes)) {
+		if (_methodName191.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes191, parameterTypes)) {
 			return PortTypeLocalServiceUtil.countPortType(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1],
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[2]);
 		}
 
-		if (_methodName180.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes180, parameterTypes)) {
+		if (_methodName192.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes192, parameterTypes)) {
 			return PortTypeLocalServiceUtil.retrieveListPortType(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1],
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[2],
@@ -332,8 +332,8 @@ public class PortTypeLocalServiceClpInvoker {
 				((Integer)arguments[4]).intValue());
 		}
 
-		if (_methodName181.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes181, parameterTypes)) {
+		if (_methodName193.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes193, parameterTypes)) {
 			PortTypeLocalServiceUtil.createPortType((com.liferay.portal.service.ServiceContext)arguments[0],
 				(java.util.Map)arguments[1]);
 
@@ -379,26 +379,26 @@ public class PortTypeLocalServiceClpInvoker {
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
-	private String _methodName166;
-	private String[] _methodParameterTypes166;
-	private String _methodName167;
-	private String[] _methodParameterTypes167;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
-	private String _methodName174;
-	private String[] _methodParameterTypes174;
-	private String _methodName175;
-	private String[] _methodParameterTypes175;
-	private String _methodName176;
-	private String[] _methodParameterTypes176;
 	private String _methodName178;
 	private String[] _methodParameterTypes178;
 	private String _methodName179;
 	private String[] _methodParameterTypes179;
-	private String _methodName180;
-	private String[] _methodParameterTypes180;
-	private String _methodName181;
-	private String[] _methodParameterTypes181;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
+	private String _methodName186;
+	private String[] _methodParameterTypes186;
+	private String _methodName187;
+	private String[] _methodParameterTypes187;
+	private String _methodName188;
+	private String[] _methodParameterTypes188;
+	private String _methodName190;
+	private String[] _methodParameterTypes190;
+	private String _methodName191;
+	private String[] _methodParameterTypes191;
+	private String _methodName192;
+	private String[] _methodParameterTypes192;
+	private String _methodName193;
+	private String[] _methodParameterTypes193;
 }

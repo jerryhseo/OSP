@@ -72,6 +72,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("status", getStatus());
 		attributes.put("recentModifierId", getRecentModifierId());
 		attributes.put("parallelModule", getParallelModule());
+		attributes.put("minCpus", getMinCpus());
 		attributes.put("maxCpus", getMaxCpus());
 		attributes.put("defaultCpus", getDefaultCpus());
 		attributes.put("statusDate", getStatusDate());
@@ -86,6 +87,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("isPort", getIsPort());
 		attributes.put("isCompile", getIsCompile());
 		attributes.put("projectCategoryId", getProjectCategoryId());
+		attributes.put("execute", getExecute());
 
 		return attributes;
 	}
@@ -224,6 +226,12 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 			setParallelModule(parallelModule);
 		}
 
+		Integer minCpus = (Integer)attributes.get("minCpus");
+
+		if (minCpus != null) {
+			setMinCpus(minCpus);
+		}
+
 		Integer maxCpus = (Integer)attributes.get("maxCpus");
 
 		if (maxCpus != null) {
@@ -306,6 +314,12 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 
 		if (projectCategoryId != null) {
 			setProjectCategoryId(projectCategoryId);
+		}
+
+		Long execute = (Long)attributes.get("execute");
+
+		if (execute != null) {
+			setExecute(execute);
 		}
 	}
 
@@ -1033,6 +1047,26 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 	}
 
 	/**
+	* Returns the min cpus of this science app.
+	*
+	* @return the min cpus of this science app
+	*/
+	@Override
+	public int getMinCpus() {
+		return _scienceApp.getMinCpus();
+	}
+
+	/**
+	* Sets the min cpus of this science app.
+	*
+	* @param minCpus the min cpus of this science app
+	*/
+	@Override
+	public void setMinCpus(int minCpus) {
+		_scienceApp.setMinCpus(minCpus);
+	}
+
+	/**
 	* Returns the max cpus of this science app.
 	*
 	* @return the max cpus of this science app
@@ -1452,6 +1486,26 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 	@Override
 	public void setProjectCategoryId(long projectCategoryId) {
 		_scienceApp.setProjectCategoryId(projectCategoryId);
+	}
+
+	/**
+	* Returns the execute of this science app.
+	*
+	* @return the execute of this science app
+	*/
+	@Override
+	public long getExecute() {
+		return _scienceApp.getExecute();
+	}
+
+	/**
+	* Sets the execute of this science app.
+	*
+	* @param execute the execute of this science app
+	*/
+	@Override
+	public void setExecute(long execute) {
+		_scienceApp.setExecute(execute);
 	}
 
 	@Override

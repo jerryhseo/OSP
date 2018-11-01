@@ -97,6 +97,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "status", Types.INTEGER },
 			{ "recentModifierId", Types.BIGINT },
 			{ "parallelModule", Types.VARCHAR },
+			{ "minCpus", Types.INTEGER },
 			{ "maxCpus", Types.INTEGER },
 			{ "defaultCpus", Types.INTEGER },
 			{ "statusDate", Types.TIMESTAMP },
@@ -110,9 +111,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "editorType", Types.VARCHAR },
 			{ "isPort", Types.BOOLEAN },
 			{ "isCompile", Types.BOOLEAN },
-			{ "projectCategoryId", Types.BIGINT }
+			{ "projectCategoryId", Types.BIGINT },
+			{ "execute", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(256) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(256) null,targetLanguage VARCHAR(75) null,templetId VARCHAR(75) null,layout TEXT null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,templetId VARCHAR(75) null,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceApp";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceApp.createDate DESC, scienceApp.version DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceApp.createDate DESC, EDAPP_ScienceApp.version DESC";
@@ -178,6 +180,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setStatus(soapModel.getStatus());
 		model.setRecentModifierId(soapModel.getRecentModifierId());
 		model.setParallelModule(soapModel.getParallelModule());
+		model.setMinCpus(soapModel.getMinCpus());
 		model.setMaxCpus(soapModel.getMaxCpus());
 		model.setDefaultCpus(soapModel.getDefaultCpus());
 		model.setStatusDate(soapModel.getStatusDate());
@@ -192,6 +195,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setIsPort(soapModel.getIsPort());
 		model.setIsCompile(soapModel.getIsCompile());
 		model.setProjectCategoryId(soapModel.getProjectCategoryId());
+		model.setExecute(soapModel.getExecute());
 
 		return model;
 	}
@@ -278,6 +282,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("status", getStatus());
 		attributes.put("recentModifierId", getRecentModifierId());
 		attributes.put("parallelModule", getParallelModule());
+		attributes.put("minCpus", getMinCpus());
 		attributes.put("maxCpus", getMaxCpus());
 		attributes.put("defaultCpus", getDefaultCpus());
 		attributes.put("statusDate", getStatusDate());
@@ -292,6 +297,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("isPort", getIsPort());
 		attributes.put("isCompile", getIsCompile());
 		attributes.put("projectCategoryId", getProjectCategoryId());
+		attributes.put("execute", getExecute());
 
 		return attributes;
 	}
@@ -430,6 +436,12 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			setParallelModule(parallelModule);
 		}
 
+		Integer minCpus = (Integer)attributes.get("minCpus");
+
+		if (minCpus != null) {
+			setMinCpus(minCpus);
+		}
+
 		Integer maxCpus = (Integer)attributes.get("maxCpus");
 
 		if (maxCpus != null) {
@@ -512,6 +524,12 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		if (projectCategoryId != null) {
 			setProjectCategoryId(projectCategoryId);
+		}
+
+		Long execute = (Long)attributes.get("execute");
+
+		if (execute != null) {
+			setExecute(execute);
 		}
 	}
 
@@ -1105,6 +1123,17 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@JSON
 	@Override
+	public int getMinCpus() {
+		return _minCpus;
+	}
+
+	@Override
+	public void setMinCpus(int minCpus) {
+		_minCpus = minCpus;
+	}
+
+	@JSON
+	@Override
 	public int getMaxCpus() {
 		return _maxCpus;
 	}
@@ -1413,6 +1442,17 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		_projectCategoryId = projectCategoryId;
 	}
 
+	@JSON
+	@Override
+	public long getExecute() {
+		return _execute;
+	}
+
+	@Override
+	public void setExecute(long execute) {
+		_execute = execute;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
@@ -1567,6 +1607,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setStatus(getStatus());
 		scienceAppImpl.setRecentModifierId(getRecentModifierId());
 		scienceAppImpl.setParallelModule(getParallelModule());
+		scienceAppImpl.setMinCpus(getMinCpus());
 		scienceAppImpl.setMaxCpus(getMaxCpus());
 		scienceAppImpl.setDefaultCpus(getDefaultCpus());
 		scienceAppImpl.setStatusDate(getStatusDate());
@@ -1581,6 +1622,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setIsPort(getIsPort());
 		scienceAppImpl.setIsCompile(getIsCompile());
 		scienceAppImpl.setProjectCategoryId(getProjectCategoryId());
+		scienceAppImpl.setExecute(getExecute());
 
 		scienceAppImpl.resetOriginalValues();
 
@@ -1800,6 +1842,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			scienceAppCacheModel.parallelModule = null;
 		}
 
+		scienceAppCacheModel.minCpus = getMinCpus();
+
 		scienceAppCacheModel.maxCpus = getMaxCpus();
 
 		scienceAppCacheModel.defaultCpus = getDefaultCpus();
@@ -1883,12 +1927,14 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		scienceAppCacheModel.projectCategoryId = getProjectCategoryId();
 
+		scienceAppCacheModel.execute = getExecute();
+
 		return scienceAppCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(73);
+		StringBundler sb = new StringBundler(77);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1934,6 +1980,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getRecentModifierId());
 		sb.append(", parallelModule=");
 		sb.append(getParallelModule());
+		sb.append(", minCpus=");
+		sb.append(getMinCpus());
 		sb.append(", maxCpus=");
 		sb.append(getMaxCpus());
 		sb.append(", defaultCpus=");
@@ -1962,6 +2010,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getIsCompile());
 		sb.append(", projectCategoryId=");
 		sb.append(getProjectCategoryId());
+		sb.append(", execute=");
+		sb.append(getExecute());
 		sb.append("}");
 
 		return sb.toString();
@@ -1969,7 +2019,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(112);
+		StringBundler sb = new StringBundler(118);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2064,6 +2114,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getParallelModule());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>minCpus</column-name><column-value><![CDATA[");
+		sb.append(getMinCpus());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>maxCpus</column-name><column-value><![CDATA[");
 		sb.append(getMaxCpus());
 		sb.append("]]></column-value></column>");
@@ -2119,6 +2173,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			"<column><column-name>projectCategoryId</column-name><column-value><![CDATA[");
 		sb.append(getProjectCategoryId());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>execute</column-name><column-value><![CDATA[");
+		sb.append(getExecute());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -2169,6 +2227,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private boolean _setOriginalStatus;
 	private long _recentModifierId;
 	private String _parallelModule;
+	private int _minCpus;
 	private int _maxCpus;
 	private int _defaultCpus;
 	private Date _statusDate;
@@ -2186,6 +2245,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private boolean _isPort;
 	private boolean _isCompile;
 	private long _projectCategoryId;
+	private long _execute;
 	private long _columnBitmask;
 	private ScienceApp _escapedModel;
 }

@@ -106,67 +106,67 @@ public class DeveloperInfoLocalServiceClpInvoker {
 				"org.kisti.edison.science.model.DeveloperInfo"
 			};
 
-		_methodName164 = "getBeanIdentifier";
+		_methodName176 = "getBeanIdentifier";
 
-		_methodParameterTypes164 = new String[] {  };
+		_methodParameterTypes176 = new String[] {  };
 
-		_methodName165 = "setBeanIdentifier";
+		_methodName177 = "setBeanIdentifier";
 
-		_methodParameterTypes165 = new String[] { "java.lang.String" };
+		_methodParameterTypes177 = new String[] { "java.lang.String" };
 
-		_methodName170 = "getScienceAppDeveloperInfoCount";
+		_methodName182 = "getScienceAppDeveloperInfoCount";
 
-		_methodParameterTypes170 = new String[] { "long" };
+		_methodParameterTypes182 = new String[] { "long" };
 
-		_methodName171 = "getListCustomDeveloperInfo";
+		_methodName183 = "getListCustomDeveloperInfo";
 
-		_methodParameterTypes171 = new String[] {
+		_methodParameterTypes183 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName172 = "getCountCustomDeveloperInfo";
+		_methodName184 = "getCountCustomDeveloperInfo";
 
-		_methodParameterTypes172 = new String[] { "java.util.Map" };
+		_methodParameterTypes184 = new String[] { "java.util.Map" };
 
-		_methodName173 = "getCustomDeveloperInfo";
+		_methodName185 = "getCustomDeveloperInfo";
 
-		_methodParameterTypes173 = new String[] {
+		_methodParameterTypes185 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName174 = "insertCustomDeveloperInfo";
+		_methodName186 = "insertCustomDeveloperInfo";
 
-		_methodParameterTypes174 = new String[] { "java.util.Map" };
+		_methodParameterTypes186 = new String[] { "java.util.Map" };
 
-		_methodName175 = "updateCustomDeveloperInfo";
+		_methodName187 = "updateCustomDeveloperInfo";
 
-		_methodParameterTypes175 = new String[] { "java.util.Map" };
+		_methodParameterTypes187 = new String[] { "java.util.Map" };
 
-		_methodName176 = "deleteCustomDeveloperInfo";
+		_methodName188 = "deleteCustomDeveloperInfo";
 
-		_methodParameterTypes176 = new String[] { "java.util.Map" };
+		_methodParameterTypes188 = new String[] { "java.util.Map" };
 
-		_methodName177 = "getDeveloperRequestStatus";
+		_methodName189 = "getDeveloperRequestStatus";
 
-		_methodParameterTypes177 = new String[] {
+		_methodParameterTypes189 = new String[] {
 				"long", "long", "java.lang.String[][]", "java.util.Locale",
 				"int", "int"
 			};
 
-		_methodName178 = "getCountDeveloperRequestStatus";
+		_methodName190 = "getCountDeveloperRequestStatus";
 
-		_methodParameterTypes178 = new String[] { "long", "java.lang.String[][]" };
+		_methodParameterTypes190 = new String[] { "long", "java.lang.String[][]" };
 
-		_methodName179 = "getCountRequestInfo";
+		_methodName191 = "getCountRequestInfo";
 
-		_methodParameterTypes179 = new String[] {
+		_methodParameterTypes191 = new String[] {
 				"long", "java.lang.String[][]", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName180 = "deleteWorkSpace";
+		_methodName192 = "deleteWorkSpace";
 
-		_methodParameterTypes180 = new String[] { "long", "long" };
+		_methodParameterTypes192 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -258,57 +258,57 @@ public class DeveloperInfoLocalServiceClpInvoker {
 			return DeveloperInfoLocalServiceUtil.updateDeveloperInfo((org.kisti.edison.science.model.DeveloperInfo)arguments[0]);
 		}
 
-		if (_methodName164.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes164, parameterTypes)) {
+		if (_methodName176.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName165.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes165, parameterTypes)) {
+		if (_methodName177.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
 			DeveloperInfoLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName170.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes170, parameterTypes)) {
+		if (_methodName182.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes182, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getScienceAppDeveloperInfoCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName171.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes171, parameterTypes)) {
+		if (_methodName183.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes183, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getListCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
 				(java.util.Locale)arguments[1]);
 		}
 
-		if (_methodName172.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes172, parameterTypes)) {
+		if (_methodName184.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes184, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getCountCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
-		if (_methodName173.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes173, parameterTypes)) {
+		if (_methodName185.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes185, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
 				(java.util.Locale)arguments[1]);
 		}
 
-		if (_methodName174.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes174, parameterTypes)) {
+		if (_methodName186.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.insertCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
-		if (_methodName175.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes175, parameterTypes)) {
+		if (_methodName187.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.updateCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
-		if (_methodName176.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes176, parameterTypes)) {
+		if (_methodName188.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes188, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.deleteCustomDeveloperInfo((java.util.Map<java.lang.String, java.lang.String>)arguments[0]);
 		}
 
-		if (_methodName177.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes177, parameterTypes)) {
+		if (_methodName189.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes189, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getDeveloperRequestStatus(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.lang.String[])arguments[2],
@@ -317,22 +317,22 @@ public class DeveloperInfoLocalServiceClpInvoker {
 				((Integer)arguments[5]).intValue());
 		}
 
-		if (_methodName178.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes178, parameterTypes)) {
+		if (_methodName190.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes190, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getCountDeveloperRequestStatus(((Long)arguments[0]).longValue(),
 				(java.lang.String[])arguments[1]);
 		}
 
-		if (_methodName179.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes179, parameterTypes)) {
+		if (_methodName191.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes191, parameterTypes)) {
 			return DeveloperInfoLocalServiceUtil.getCountRequestInfo(((Long)arguments[0]).longValue(),
 				(java.lang.String[])arguments[1],
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
 				(java.lang.String)arguments[4]);
 		}
 
-		if (_methodName180.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes180, parameterTypes)) {
+		if (_methodName192.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes192, parameterTypes)) {
 			DeveloperInfoLocalServiceUtil.deleteWorkSpace(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 
@@ -374,30 +374,30 @@ public class DeveloperInfoLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName164;
-	private String[] _methodParameterTypes164;
-	private String _methodName165;
-	private String[] _methodParameterTypes165;
-	private String _methodName170;
-	private String[] _methodParameterTypes170;
-	private String _methodName171;
-	private String[] _methodParameterTypes171;
-	private String _methodName172;
-	private String[] _methodParameterTypes172;
-	private String _methodName173;
-	private String[] _methodParameterTypes173;
-	private String _methodName174;
-	private String[] _methodParameterTypes174;
-	private String _methodName175;
-	private String[] _methodParameterTypes175;
 	private String _methodName176;
 	private String[] _methodParameterTypes176;
 	private String _methodName177;
 	private String[] _methodParameterTypes177;
-	private String _methodName178;
-	private String[] _methodParameterTypes178;
-	private String _methodName179;
-	private String[] _methodParameterTypes179;
-	private String _methodName180;
-	private String[] _methodParameterTypes180;
+	private String _methodName182;
+	private String[] _methodParameterTypes182;
+	private String _methodName183;
+	private String[] _methodParameterTypes183;
+	private String _methodName184;
+	private String[] _methodParameterTypes184;
+	private String _methodName185;
+	private String[] _methodParameterTypes185;
+	private String _methodName186;
+	private String[] _methodParameterTypes186;
+	private String _methodName187;
+	private String[] _methodParameterTypes187;
+	private String _methodName188;
+	private String[] _methodParameterTypes188;
+	private String _methodName189;
+	private String[] _methodParameterTypes189;
+	private String _methodName190;
+	private String[] _methodParameterTypes190;
+	private String _methodName191;
+	private String[] _methodParameterTypes191;
+	private String _methodName192;
+	private String[] _methodParameterTypes192;
 }

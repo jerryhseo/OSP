@@ -105,6 +105,7 @@
         	Parallel module name when runType is SOLVER_PARALLEL 
          -->
         <column name="parallelModule" type="String"></column><!-- OpenMP, MPICH1, MPICH2... -->
+        <column name="minCpus" type="int"></column>
         <column name="maxCpus" type="int"></column>
         <column name="defaultCpus" type="int"></column>
         
@@ -128,6 +129,8 @@
         <column name= "isPort" type="boolean"></column>
         <column name= "isCompile" type="boolean"></column>
         <column name= "projectCategoryId" type="long"></column>
+        
+        <column name= "execute" type="long"></column>
         
         
         
@@ -778,4 +781,48 @@
     	<column name="result" type="String"></column>
     	<column name="createDate" type="Date"></column>
 	</entity>
+	
+	<entity name="ScienceAppPaper" local-service="true">
+		<!-- PK fields -->
+		<column name="scienceAppId" type="long" primary="true"></column>
+		<column name="paperSeq" type="long" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="paperType" type="String"></column>
+		<column name="paperValue" type="String"></column>
+		
+		<finder name="ScienceAppId" return-type="Collection">
+			<finder-column name="scienceAppId" />
+		</finder>
+	</entity>
+	
+	<entity name="ScienceAppRatingsEntry" local-service="true">
+		<!-- PK fields -->
+		<column name="userId" type="long" primary="true"></column>
+		<column name="scienceAppId" type="long" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="companyId" type="long"></column>
+		<column name="userName" type="String"></column>
+		
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		
+		<column name="classNameId" type="long"></column>
+		<column name="score" type="long"></column>
+		
+		<finder name="userId" return-type="Collection">
+			<finder-column name="userId" />
+		</finder>
+		
+		<finder name="ScienceAppId" return-type="Collection">
+			<finder-column name="scienceAppId" />
+		</finder>
+		
+		<finder name="userIdAndScienceAppId" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="scienceAppId" />
+		</finder>
+	</entity>
+	
 </service-builder>

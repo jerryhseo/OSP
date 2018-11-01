@@ -150,8 +150,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry[] findByuserId_PrevAndNext(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK,
-		long userId,
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK, long userId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppRatingsEntryException;
@@ -289,8 +288,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry[] findByScienceAppId_PrevAndNext(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK,
-		long scienceAppId,
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK, long scienceAppId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppRatingsEntryException;
@@ -436,8 +434,8 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry[] findByuserIdAndScienceAppId_PrevAndNext(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK,
-		long userId, long scienceAppId,
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK, long userId,
+		long scienceAppId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppRatingsEntryException;
@@ -486,7 +484,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @return the new science app ratings entry
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry create(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK);
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK);
 
 	/**
 	* Removes the science app ratings entry with the primary key from the database. Also notifies the appropriate model listeners.
@@ -497,7 +495,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry remove(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppRatingsEntryException;
 
@@ -514,7 +512,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry findByPrimaryKey(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppRatingsEntryException;
 
@@ -526,7 +524,7 @@ public interface ScienceAppRatingsEntryPersistence extends BasePersistence<Scien
 	* @throws SystemException if a system exception occurred
 	*/
 	public org.kisti.edison.science.model.ScienceAppRatingsEntry fetchByPrimaryKey(
-		org.kisti.edison.science.service.persistence.ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
+		ScienceAppRatingsEntryPK scienceAppRatingsEntryPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

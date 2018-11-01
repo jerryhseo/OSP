@@ -514,7 +514,8 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		_methodName100 = "copyScienceApp";
 
 		_methodParameterTypes100 = new String[] {
-				"com.liferay.portal.service.ServiceContext", "long"
+				"com.liferay.portal.service.ServiceContext", "long",
+				"java.lang.String"
 			};
 
 		_methodName101 = "addScienceAppFile";
@@ -602,6 +603,57 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		_methodName116 = "retrieveListByTemplateId";
 
 		_methodParameterTypes116 = new String[] { "java.lang.String" };
+
+		_methodName117 = "getScienceAppRatingsStats";
+
+		_methodParameterTypes117 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName118 = "deleteScienceAppRatingsStats";
+
+		_methodParameterTypes118 = new String[] { "long", "java.lang.String" };
+
+		_methodName119 = "getScienceAppMyRatingsEntry";
+
+		_methodParameterTypes119 = new String[] {
+				"long", "java.lang.String", "com.liferay.portal.model.User"
+			};
+
+		_methodName120 = "setScienceAppMyRatingsEntry";
+
+		_methodParameterTypes120 = new String[] {
+				"long", "java.lang.String", "com.liferay.portal.model.User",
+				"long"
+			};
+
+		_methodName121 = "deleteScienceAppMyRatingsEntry";
+
+		_methodParameterTypes121 = new String[] {
+				"long", "com.liferay.portal.model.User"
+			};
+
+		_methodName122 = "deleteScienceAppPaperItem";
+
+		_methodParameterTypes122 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName123 = "getScienceAppPaperList";
+
+		_methodParameterTypes123 = new String[] { "long" };
+
+		_methodName124 = "getScienceAppExecuteStatistics";
+
+		_methodParameterTypes124 = new String[] { "long" };
+
+		_methodName125 = "getScienceAppHistoryList";
+
+		_methodParameterTypes125 = new String[] { "java.util.Map" };
+
+		_methodName126 = "getScienceAppReviewList";
+
+		_methodParameterTypes126 = new String[] { "java.util.Map" };
 	}
 
 	@Override
@@ -4019,14 +4071,20 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 
 	@Override
 	public long copyScienceApp(com.liferay.portal.service.ServiceContext sc,
-		long scienceAppId)
+		long scienceAppId, java.lang.String newVersion)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName100,
 					_methodParameterTypes100,
-					new Object[] { ClpSerializer.translateInput(sc), scienceAppId });
+					new Object[] {
+						ClpSerializer.translateInput(sc),
+						
+					scienceAppId,
+						
+					ClpSerializer.translateInput(newVersion)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -4595,6 +4653,340 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		return (java.util.List<org.kisti.edison.science.model.ScienceApp>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public com.liferay.portlet.ratings.model.RatingsStats getScienceAppRatingsStats(
+		long scienceAppId, long classNameId, java.lang.String className)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName117,
+					_methodParameterTypes117,
+					new Object[] {
+						scienceAppId,
+						
+					classNameId,
+						
+					ClpSerializer.translateInput(className)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portlet.ratings.model.RatingsStats)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public boolean deleteScienceAppRatingsStats(long scienceAppId,
+		java.lang.String className)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName118,
+					_methodParameterTypes118,
+					new Object[] {
+						scienceAppId,
+						
+					ClpSerializer.translateInput(className)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Boolean)returnObj).booleanValue();
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceAppRatingsEntry getScienceAppMyRatingsEntry(
+		long scienceAppId, java.lang.String className,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName119,
+					_methodParameterTypes119,
+					new Object[] {
+						scienceAppId,
+						
+					ClpSerializer.translateInput(className),
+						
+					ClpSerializer.translateInput(user)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceAppRatingsEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceAppRatingsEntry setScienceAppMyRatingsEntry(
+		long scienceAppId, java.lang.String className,
+		com.liferay.portal.model.User user, long score)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName120,
+					_methodParameterTypes120,
+					new Object[] {
+						scienceAppId,
+						
+					ClpSerializer.translateInput(className),
+						
+					ClpSerializer.translateInput(user),
+						
+					score
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceAppRatingsEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public boolean deleteScienceAppMyRatingsEntry(long scienceAppId,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName121,
+					_methodParameterTypes121,
+					new Object[] {
+						scienceAppId,
+						
+					ClpSerializer.translateInput(user)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Boolean)returnObj).booleanValue();
+	}
+
+	@Override
+	public boolean deleteScienceAppPaperItem(long scienceAppId, long paperSeq,
+		java.lang.String paperType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName122,
+					_methodParameterTypes122,
+					new Object[] {
+						scienceAppId,
+						
+					paperSeq,
+						
+					ClpSerializer.translateInput(paperType)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Boolean)returnObj).booleanValue();
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getScienceAppPaperList(
+		long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName123,
+					_methodParameterTypes123, new Object[] { scienceAppId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.Map<java.lang.String, java.lang.Object> getScienceAppExecuteStatistics(
+		long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName124,
+					_methodParameterTypes124, new Object[] { scienceAppId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getScienceAppHistoryList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParamMap)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName125,
+					_methodParameterTypes125,
+					new Object[] { ClpSerializer.translateInput(searchParamMap) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getScienceAppReviewList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParamMap)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName126,
+					_methodParameterTypes126,
+					new Object[] { ClpSerializer.translateInput(searchParamMap) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -4828,4 +5220,24 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes115;
 	private String _methodName116;
 	private String[] _methodParameterTypes116;
+	private String _methodName117;
+	private String[] _methodParameterTypes117;
+	private String _methodName118;
+	private String[] _methodParameterTypes118;
+	private String _methodName119;
+	private String[] _methodParameterTypes119;
+	private String _methodName120;
+	private String[] _methodParameterTypes120;
+	private String _methodName121;
+	private String[] _methodParameterTypes121;
+	private String _methodName122;
+	private String[] _methodParameterTypes122;
+	private String _methodName123;
+	private String[] _methodParameterTypes123;
+	private String _methodName124;
+	private String[] _methodParameterTypes124;
+	private String _methodName125;
+	private String[] _methodParameterTypes125;
+	private String _methodName126;
+	private String[] _methodParameterTypes126;
 }

@@ -124,7 +124,7 @@
 		<thead>
 			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
 			<th width="30%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-			<th width="*"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
+			<th width="*"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
 			<th width="15%">Sample File</th>
 			<th width="15%"><liferay-ui:message key='required' /></th>
 			<th width="5%">Default</th>
@@ -152,7 +152,7 @@
 		<thead>
 			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
 			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-			<th width="*"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
+			<th width="*"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
 			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
 			<th width="10%">File Path</th>
 			<th width="5%">Default</th>
@@ -179,11 +179,11 @@
 	<table class = "table table-bordered table-hover edison-table">
 		<thead>
 			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
-			<th width="*"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-			<th width="20%"><liferay-ui:message key='edison-table-list-header-data-type-name' /></th>
-			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
-			<th width="10%">File Path</th>
-			<th width="8%"><liferay-ui:message key='required' /></th>
+			<th width="25%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="25%"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
+			<th width="10%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
+			<th width="15%">File Path</th>
+			<%-- <th width="8%"><liferay-ui:message key='required' /></th> --%>
 			<th width="5%">Default</th>
 			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
 		</thead>
@@ -485,7 +485,7 @@ AUI().ready(function() {
 								  .appendTo($rowResult);
 					}
 					
-					if(portType!='LOG'){
+					if(portType =='INPUT'){
 						$select = $("<select/>").attr("onChange","<portlet:namespace/>changeMandatory('"+data[OSP.Constants.NAME]+"','"+portType+"',this.value)")
 												.addClass("aui-field-select noupdate");
 
@@ -517,9 +517,9 @@ AUI().ready(function() {
 									 			  .html("<span class='icon-trash'> "+Liferay.Language.get('edison-button-board-delete')+"</span>")
 									  ).appendTo($rowResult);
 					
-					if(data[OSP.Constants.MANDATORY]){
+					/* if(data[OSP.Constants.MANDATORY]){
 						$select.find("option[value=Y]").attr("selected","selected");
-					}
+					} */
 					
 					$body.append($rowResult);
 				}

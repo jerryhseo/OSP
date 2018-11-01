@@ -61,7 +61,7 @@ public class PortTypeInputdeckFormModelImpl extends BaseModelImpl<PortTypeInputd
 			{ "portTypeId", Types.BIGINT },
 			{ "inputdeckForm", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_PortTypeInputdeckForm (portTypeId LONG not null primary key,inputdeckForm TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_PortTypeInputdeckForm (portTypeId LONG not null primary key,inputdeckForm VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_PortTypeInputdeckForm";
 	public static final String ORDER_BY_JPQL = " ORDER BY portTypeInputdeckForm.portTypeId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_PortTypeInputdeckForm.portTypeId ASC";

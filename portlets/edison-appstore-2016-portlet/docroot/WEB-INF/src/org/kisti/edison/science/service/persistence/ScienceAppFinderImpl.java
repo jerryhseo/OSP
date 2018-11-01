@@ -577,4 +577,99 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 	      closeSession(session);
 	    }
 	  }
+	
+	public List<Object[]> getScienceAppExecuteStatistics(Map<String,Object> searchParam) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try{
+
+			String sqlSelect = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppExecuteStatistics");
+
+			sqlSb.append(sqlSelect);			
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+
+			query.addScalar("scienceAppId", Type.INTEGER);
+			query.addScalar("userCnt", Type.INTEGER);
+			query.addScalar("exeCnt", Type.INTEGER);
+			query.addScalar("avgExeTime", Type.INTEGER);
+			
+			return (List<Object[]>) query.list();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+		
+	}
+	
+	public List<Object[]> getScienceAppHistoryList(Map<String,Object> searchParam) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try{
+
+			String sqlSelect = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppHistoryList");
+
+			sqlSb.append(sqlSelect);			
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+
+			query.addScalar("scienceAppId", Type.LONG);
+			query.addScalar("name", Type.STRING);
+			query.addScalar("version", Type.STRING);
+			query.addScalar("modifiedDate", Type.STRING);
+			query.addScalar("status", Type.LONG);
+			query.addScalar("groupId", Type.LONG);
+			
+			return (List<Object[]>) query.list();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+		
+	}
+	
+	public List<Object[]> getScienceAppReviewList(Map<String,Object> searchParam) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try{
+
+			String sqlSelect = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppReviewList");
+
+			sqlSb.append(sqlSelect);			
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+
+			query.addScalar("boardSeq", Type.LONG);
+			query.addScalar("title", Type.STRING);
+			query.addScalar("content", Type.STRING);
+			query.addScalar("groupId", Type.LONG);
+			query.addScalar("customId", Type.STRING);
+			query.addScalar("writerId", Type.LONG);
+			query.addScalar("screenName", Type.STRING);
+			query.addScalar("writerDate", Type.STRING);
+			query.addScalar("writerTime", Type.STRING);
+			query.addScalar("writerDateForReply", Type.STRING);
+			query.addScalar("readCnt", Type.INTEGER);
+			query.addScalar("groupBoardSeq", Type.LONG);
+			query.addScalar("replyCnt", Type.INTEGER);
+			
+			return (List<Object[]>) query.list();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+		
+	}
 }

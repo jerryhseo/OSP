@@ -15392,6 +15392,7 @@ public class ScienceAppPersistenceImpl extends BasePersistenceImpl<ScienceApp>
 		scienceAppImpl.setStatus(scienceApp.getStatus());
 		scienceAppImpl.setRecentModifierId(scienceApp.getRecentModifierId());
 		scienceAppImpl.setParallelModule(scienceApp.getParallelModule());
+		scienceAppImpl.setMinCpus(scienceApp.getMinCpus());
 		scienceAppImpl.setMaxCpus(scienceApp.getMaxCpus());
 		scienceAppImpl.setDefaultCpus(scienceApp.getDefaultCpus());
 		scienceAppImpl.setStatusDate(scienceApp.getStatusDate());
@@ -15406,6 +15407,7 @@ public class ScienceAppPersistenceImpl extends BasePersistenceImpl<ScienceApp>
 		scienceAppImpl.setIsPort(scienceApp.isIsPort());
 		scienceAppImpl.setIsCompile(scienceApp.isIsCompile());
 		scienceAppImpl.setProjectCategoryId(scienceApp.getProjectCategoryId());
+		scienceAppImpl.setExecute(scienceApp.getExecute());
 
 		return scienceAppImpl;
 	}

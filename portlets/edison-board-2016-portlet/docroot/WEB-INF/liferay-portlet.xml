@@ -10,6 +10,7 @@
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>edison-multiboard container</css-class-wrapper>		
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
 		<portlet-name>edison-multitab</portlet-name>
