@@ -23,5 +23,7 @@
 	</category>
 	<category name="OSP Workbench">
 		<portlet id="SimulationDashboard" />
+		<portlet id="SimulationJobController" />
+		<portlet id="SimulationResultFileViewer" />
 	</category>
 </display>

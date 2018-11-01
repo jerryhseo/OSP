@@ -1,9 +1,6 @@
 package org.kisti.edison.bestsimulation.portlet.workbench.dashboard;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,8 +61,6 @@ import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -84,13 +79,54 @@ public class DashboardController {
 		model.addAttribute("icebreakerUrl", icebreakerUrl);
 		return "view";
 	}
+	@ResourceMapping(value="searchSimulationWithPage")
+	public void searchSimulationWithPage(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
+			@RequestParam(value = "paginFunction", required = true) String paginFunction,
+			@RequestParam(value = "searchLine", required = true) int searchLine,
+			@RequestParam(value = "currentPage", required = true) int currentPage,
+			@RequestParam(value = "testYn", required = false) String testYn
+			) throws IOException{
+		
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			User user = themeDisplay.getUser();
+			long userId = user.getUserId();
+			
+			long classId = 0;
+			long customId = 0;
+			boolean isTest = false;
+			if(testYn != null && !testYn.isEmpty()){
+				isTest = Boolean.valueOf(testYn);
+			}
+			
+			int blockSize = 3;
+			int begin = ((currentPage - 1) * searchLine);
+			int totalCount = 0;
+			List<Simulation> simulations = new ArrayList<Simulation>();
+			try{
+				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
+				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
+				 
+				String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
+				
+				JsonObject obj = new JsonObject();
+				obj.addProperty("pagingStr", pagingStr);
+				obj.add("simulaitons", new Gson().toJsonTree(simulations, new TypeToken<List<Simulation>>() {}.getType()));
+				
+				response.setContentType("application/json; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.write(obj.toString());
+			}catch (Exception e) {
+				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+				e.printStackTrace();
+			}
+		
+	}
 	
 	
 	@ResourceMapping(value="searchSimulation")
 	public void searchSimulation(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "scienceAppId", required = true) Long scienceAppId,
-			@RequestParam(value = "paginFunction", required = true) String paginFunction,
-			@RequestParam(value = "searchLine", required = true) int searchLine,
 			@RequestParam(value = "simulationUuid", required = false) String simulationUuid,
 			@RequestParam(value = "jobUuid", required = false) String jobUuid,
 			@RequestParam(value = "classId", required = false) String strClassId,
@@ -98,58 +134,42 @@ public class DashboardController {
 			@RequestParam(value = "testYn", required = false) String testYn
 			) throws IOException{
 		
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		User user = themeDisplay.getUser();
-		long userId = user.getUserId();
-		
-		long classId = parseLongWithOutException(strClassId);
-		long customId = parseLongWithOutException(strCustomId);
-		boolean isTest = false;
-		if(testYn != null && !testYn.isEmpty()){
-			isTest = Boolean.valueOf(testYn);
-		}
-		
-		int currentPage = ParamUtil.get(request, "currentPage", 1);
-		int blockSize = 3;
-		int begin = ((currentPage - 1) * searchLine);
-		int totalCount = 0;
-		List<Simulation> simulations = new ArrayList<Simulation>();
-		SimulationJob searchJob = null;
-		try{
-			 if(StringUtils.hasText(simulationUuid)){
-				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
-				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
-				
-				while(!this.containSimulationListFromUuid(simulations,simulationUuid)){
-					currentPage +=1;
-					begin = ((currentPage - 1) * searchLine);
-					simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
-					totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
-				}
-			}else{
-				simulations = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, begin, searchLine);
-				totalCount = (int) SimulationLocalServiceUtil.getSimulationsCountWithScienceAppId(scienceAppId, user.getUserId(), isTest, classId, customId);
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			User user = themeDisplay.getUser();
+			long userId = user.getUserId();
+			
+			long classId = parseLongWithOutException(strClassId);
+			long customId = parseLongWithOutException(strCustomId);
+			boolean isTest = false;
+			if(testYn != null && !testYn.isEmpty()){
+				isTest = Boolean.valueOf(testYn);
 			}
 			
-			 
-			if(StringUtils.hasText(jobUuid)){
-				searchJob = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
-			}			
-			
-			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
-			
-			JsonObject obj = new JsonObject();
-			obj.addProperty("pagingStr", pagingStr);
-			obj.add("searchJob", new Gson().toJsonTree(searchJob));
-			obj.add("simulaitons", new Gson().toJsonTree(simulations, new TypeToken<List<Simulation>>() {}.getType()));
-			
-			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.write(obj.toString());
-		}catch (Exception e) {
-			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
-			e.printStackTrace();
-		}
+			Simulation simulation = null;
+			SimulationJob searchJob = null;
+			try{
+				 if(StringUtils.hasText(simulationUuid)){
+					simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+				}else{
+					simulation = SimulationLocalServiceUtil.getSimulationsWithScienceAppId(scienceAppId, userId, isTest, classId, customId, 0, 1).get(0);
+				}
+				 
+				if(StringUtils.hasText(jobUuid)){
+					searchJob = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
+				}			
+				
+				JsonObject obj = new JsonObject();
+				obj.add("searchJob", new Gson().toJsonTree(searchJob));
+				obj.add("simulation", new Gson().toJsonTree(simulation));
+				
+				response.setContentType("application/json; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.write(obj.toString());
+			}catch (Exception e) {
+				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+				e.printStackTrace();
+			}
+		
 	}
 	
 	@ResourceMapping(value="updateSimulation")
@@ -192,9 +212,16 @@ public class DashboardController {
 	
 	@ResourceMapping(value="searchSimulationJob")
 	public void searchSimulationJob(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "simulationUuid", required = true) String simulationUuid
+			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
+			@RequestParam(value = "paginFunction", required = true) String paginFunction,
+			@RequestParam(value = "searchLine", required = true) int searchLine
 			) throws IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		int currentPage = ParamUtil.get(request, "currentPage", 1);
+		int blockSize = 3;
+		int begin = ((currentPage - 1) * searchLine);
+		int totalCount = 0;
 		
 		try{
 			Simulation simulation  = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
@@ -204,10 +231,16 @@ public class DashboardController {
 				isEdit = true;
 			}
 			
-			List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsWithSimulationUuid(simulationUuid,-1,0);
+			List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsWithSimulationUuid(simulationUuid,begin,searchLine);
+			totalCount = (int) SimulationJobLocalServiceUtil.getJobsCountWithSimulationUuid(simulationUuid);
+			
+			String pagingStr = PagingUtil.getPaging(request.getContextPath(), response.getNamespace()+paginFunction, totalCount, currentPage, searchLine, blockSize);
+			
 			JsonObject obj = new JsonObject();
 			obj.add("jobs", new Gson().toJsonTree(jobs));
+			obj.addProperty("pagingStr", pagingStr);
 			obj.addProperty("isEdit",isEdit);
+			obj.addProperty("totalCount",totalCount);
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
@@ -277,16 +310,6 @@ public class DashboardController {
 		}
 	}
 	
-	@ResourceMapping(value="downManualFile")
-	public void searchSimulationJobInfo(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "fileEntryId", required = true) long fileEntryId
-			){
-		try {
-			fileDownload(response, fileEntryId);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	@ResourceMapping(value="readOutLog")
 	public void readOutLog(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
@@ -492,31 +515,6 @@ public class DashboardController {
 		}
 	}
 	
-	
-	private void fileDownload(ResourceResponse response, long fileEntryId) throws Exception{
-		DLFileEntry dfe = DLFileEntryLocalServiceUtil.getDLFileEntry(fileEntryId);
-		String fileName = dfe.getTitle();
-		
-		InputStream inputStream = null;
-		inputStream = DLFileEntryLocalServiceUtil.getFileAsStream(dfe.getFileEntryId(), dfe.getVersion());
-		
-		BufferedInputStream bis = new BufferedInputStream(inputStream);
-		response.setContentType("application/octet-stream");
-		
-		fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
-		response.setProperty("Content-Disposition", "attachment;filename="+fileName);
-		
-		int readBytes = 0;
-		byte data[] = new byte[8192];
-		OutputStream out = response.getPortletOutputStream();
-		
-		while ((readBytes = bis.read(data)) != -1) {
-			out.write(data, 0, readBytes);
-		}
-		out.flush(); 
-		out.close();
-		bis.close();
-	}
 	private static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		response.getWriter().write(message);

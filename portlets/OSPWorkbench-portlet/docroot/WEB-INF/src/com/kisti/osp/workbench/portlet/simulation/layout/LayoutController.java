@@ -116,9 +116,11 @@ public class LayoutController {
 			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
+			model.addAttribute("connector", themeDisplay.getPortletDisplay().getId());
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
 			agent.ibAgentLog();
+			
 			
 			return "view";
 		}catch(Exception e){
@@ -221,6 +223,7 @@ public class LayoutController {
 		PrintWriter writer = resourceResponse.getWriter();
 		try {
 			template.process(params, writer);
+			template.getConfiguration();
 		} catch (TemplateException e) {
 			_log.error("[ERROR] template.process()");
 			throw new PortletException();
@@ -876,6 +879,7 @@ public class LayoutController {
 		_log.info("jobs.length()-->"+jobs.length());
 		
 		int jobCount = jobs.length();
+		int jobSubmitCnt = 0;
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
 			SimulationJob job = null;
@@ -906,6 +910,7 @@ public class LayoutController {
 			
 			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
 			this.jsonArrayPrint(jobData);
+			jobSubmitCnt += jobData.length();
 			
 			Date date = new Date();
 			for( int dataIndex = 0; dataIndex<jobData.length(); dataIndex++){
@@ -1080,12 +1085,15 @@ public class LayoutController {
 		JSONObject submittedJob = JSONFactoryUtil.createJSONObject();
 		submittedJob.put("tempJobUuid", tempJobUuid);
 		submittedJob.put("jobUuid", submittedJobUuid);
+		submittedJob.put("jobSubmitCnt", jobSubmitCnt);
+		
 		ServletResponseUtil.write(httpResponse, submittedJob.toString());
 	}
 	
 	protected void jsonObjectPrint( JSONObject jsonObject ){
 		try {
-			System.out.println(jsonObject.toString(4));
+			_log.info("+++++jsonObjectPrint+++++");
+			_log.info("\r\n"+jsonObject.toString(4));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1094,7 +1102,8 @@ public class LayoutController {
 	
 	protected void jsonArrayPrint( JSONArray jsonArray ){
 		try {
-			System.out.println(jsonArray.toString(4));
+			_log.info("+++++jsonArrayPrint+++++");
+			_log.info("\r\n"+jsonArray.toString(4));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

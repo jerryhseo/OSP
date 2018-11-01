@@ -133,9 +133,9 @@
 	color: #6b1ad2;
 }
 .simulation-workbench .sidebar-menu > li span.label{
-	margin-top: 5px;
+	margin-top: 13px;
 }
-.simulation-workbench .skin-black-light .sidebar-menu .treeview-menu > li > a{
+.simulation-workbench .skin-black-light .sidebar-menu .treeview.job-list > a{
 	width: 190px;
 }
 
@@ -154,26 +154,32 @@
 .simulation-workbench .sidebar .pagination{
 	display: inline-block;
 }
-.simulation-workbench .sidebar .treeview-menu i.init{
+.simulation-workbench .sidebar .treeview.job-list i.init{
 	color: #777777;
 }
-.simulation-workbench .sidebar .treeview-menu i.success{
+.simulation-workbench .sidebar .treeview.job-list i.success{
 	color: green;
 }
-.simulation-workbench .sidebar .treeview-menu i.running{
+.simulation-workbench .sidebar .treeview.job-list i.running{
 	color: blue;
 }
-.simulation-workbench .sidebar .treeview-menu i.fail{
+.simulation-workbench .sidebar .treeview.job-list i.fail{
 	color: red;
 }
 
 .simulation-workbench .sidebar .sidebar-menu li.menu-open ul.treeview-menu{
-	padding-left: 13px;
+	padding-left: 30px;
+}
+
+.simulation-workbench .sidebar .sidebar-menu ul.port-area li.SUCCESS a{
+	color: green;
+	font-weight: 600;
 }
 
 .simulation-workbench .col{
-	outline: 3px solid #dddddd;
+	outline: 2px solid #dddddd;
 	overflow: auto;
+	background-color: white;
 }
 
 .simulation-workbench #workbench-layout-area{
@@ -204,7 +210,8 @@
 
 
 .simulation-workbench .content-wrapper .content-header{
-	padding : 10px;
+	padding : 0px;
+	height: 33px;
 }
 
 

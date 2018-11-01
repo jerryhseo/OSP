@@ -5,9 +5,9 @@
 
 <div class="btn-group btn-breadcrumb" id="<portlet:namespace/>breadcrumb">
 	<button class="btn btn-default" type="button" onclick="<portlet:namespace/>historyBack();"><span class="fa fa-history" id="<portlet:namespace/>backTitle"></span></button>
-	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="icon-desktop" id="<portlet:namespace/>appName"></span></button>
-	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>simulationTitle"></span></button>
-	<button class="btn btn-primary" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>jobTitle"></span></button>
+	<button class="btn btn-default" type="button" style="cursor: not-allowed;"><span class="icon-desktop" id="<portlet:namespace/>appName"></span></button>
+	<button class="btn btn-default" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>simulationTitle"></span></button>
+	<button class="btn btn-default" type="button" style="cursor: not-allowed;"><span class="fa fa-folder" id="<portlet:namespace/>jobTitle"></span></button>
 	
 </div>
 <script type="text/javascript">

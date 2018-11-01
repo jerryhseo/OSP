@@ -113,6 +113,15 @@
 	background-size: 50px;
 }
 
+.science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-1-type-2
+	{
+	background-image:
+		url(/edison-appstore-2016-portlet/images/appmanager/layout/layout01-type-02.png);
+	background-size: 50px;
+}
+
+
+
 .science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-2
 	{
 	background-image:
@@ -543,8 +552,10 @@ function <portlet:namespace/>actionCall(mode){
 		
 		//System Default Portlet Set
 		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
-		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
-		Layout.addPortlet('column-3','ScienceAppPort_WAR_OSPWorkbenchportlet',true);
+// 		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
+// 		Layout.addPortlet('column-3','ScienceAppPort_WAR_OSPWorkbenchportlet',true);
+		Layout.addPortlet('column-9','SimulationJobController_WAR_edisonsimulationportlet',true);
+		
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
 			var columnId = $(this).attr("id");
@@ -775,6 +786,9 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			</label> <label class="btn layoutMethod">
 				<div class="method layout-1"></div> <input type="radio"
 				name="templates" value="2-row-2-2-column">
+			</label> <label class="btn layoutMethod">
+				<div class="method layout-1-type-2"></div> <input type="radio"
+				name="templates" value="2-row-2-2-column-type-2">
 			</label> <label class="btn layoutMethod">
 				<div class="method layout-2"></div> <input type="radio"
 				name="templates" value="2-row-1-1-column">

@@ -145,6 +145,19 @@
 		<css-class-wrapper>dashboard-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+	<portlet>
+		<portlet-name>SimulationJobController</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>controller-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	<portlet>
+		<portlet-name>SimulationResultFileViewer</portlet-name>
+		<icon>/icon.png</icon>
+		<css-class-wrapper>result-file-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
+	
     
     <portlet>
         <portlet-name>edison-tab</portlet-name>

@@ -1534,6 +1534,7 @@
                             simulationUuid: simulation.uuid(),
                             jobUuid: submittedJob.jobUuid,
                             tempJobUuid: submittedJob.tempJobUuid,
+                            jobSubmitCnt: submittedJob.jobSubmitCnt,
                             status: true
                         };
 
@@ -1543,7 +1544,6 @@
                     },
                     error:function(jqXHR, textStatus, errorThrown){
                         bEnd();
-                        
                         fireSubmitJobResult({status:false});
                     }
                 });
@@ -1551,7 +1551,7 @@
             
             setTimeout(function(){
                 bEnd()
-            },1000*5);
+            },1000*7);
         };
         
         var loadJobData = function ( job ){
@@ -1567,7 +1567,6 @@
 
         var resetPortlets = function( job, ports, portType ){
             var layout = Workbench.layout();
-            
             var fireLoadOutputData = function( ports, resultFolder ){
                 for( var portName in ports ){
                     var portlets = layout.getPortlets( portName );
@@ -1581,7 +1580,6 @@
                     inputData.parent( parentPath );
                     inputData.name( portData.name() );
                     inputData.relative( true );
-                    console.log(inputData);
                     for( var index in portlets ){
                         var portlet = portlets[index];
                         fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
@@ -2413,40 +2411,6 @@
                             };
                 fireRequestWorkingJobInfo( data ); 
             }
-        };
-        
-        Workbench.handleCheckProvenance = function(resourceURL){
-            var simulation = Workbench.workingSimulation();
-            var job = simulation.workingJob();
-            
-            var jobParameter = jobsToSubmitGetParameters(simulation,job, false,'');
-            
-            var data = Liferay.Util.ns(
-                                       Workbench.namespace(),
-                                       {
-                                           command: 'CHECK_PROVENANCE',
-                                           jobParameter: JSON.stringify(jobParameter)
-                                       });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: resourceURL, 
-                        async : false,
-                        data  : data,
-                        dataType : 'json',
-                        success: function(aa) {
-                            
-                        },
-                        error:function(data,e){
-                            if(jqXHR.responseText !== ''){
-                                alert("CHECK_PROVENANCE-->"+textStatus+": "+jqXHR.responseText);
-                            }else{
-                                alert("CHECK_PROVENANCE-->"+textStatus+": "+errorThrown);
-                            }
-                        }
-                    });
-                    
-                    
         };
         
         Workbench.handleSubmitJob = function(resourceURL){

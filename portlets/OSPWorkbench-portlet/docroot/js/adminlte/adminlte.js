@@ -601,9 +601,10 @@ throw new Error('AdminLTE requires jQuery')
     $(Selector.layoutBoxed + ' > ' + Selector.wrapper).css('overflow', 'hidden');
 
     // Get window height and the wrapper height
-    //var footerHeight  = $(Selector.mainFooter).outerHeight() || 0;
-    //var neg           = $(Selector.mainHeader).outerHeight() + footerHeight;
-    var windowHeight  = $(window).height() - 103;
+    var footerHeight = $(Selector.mainFooter).outerHeight() || 0;
+    var headerHeight  = $(Selector.mainHeader).outerHeight() || 0;
+    var neg           = headerHeight + footerHeight;
+    var windowHeight  = $(window).height()-$(Selector.mainHeader).offset().top;
     var sidebarHeight = $(Selector.sidebar).height() || 0;
 
     // Set the min-height of the content and sidebar based on
@@ -612,11 +613,13 @@ throw new Error('AdminLTE requires jQuery')
       $(Selector.contentWrapper).css('height', windowHeight);
     } else {
       var postSetHeight;
-
       if (windowHeight >= sidebarHeight) {
-        $(Selector.contentWrapper).css('height', windowHeight);
-        $(Selector.sidebar).css('min-height', windowHeight);
+        $(Selector.contentWrapper).css('height', windowHeight-neg);
+        $(Selector.sidebar).css('min-height', windowHeight-neg);
         postSetHeight = windowHeight;
+        
+        /*WorkBench Layout Area Full Height Setting - GPLUS*/
+        $("#workbench-layout-area").css('height', windowHeight-neg);
       } else {
         $(Selector.contentWrapper).css('height', sidebarHeight);
         postSetHeight = sidebarHeight;
@@ -1061,7 +1064,7 @@ throw new Error('AdminLTE requires jQuery')
   var Tree = function (element, options) {
     this.element = element;
     this.options = options;
-
+    
     $(this.element).addClass(ClassName.tree);
 
     $(Selector.treeview + Selector.active, this.element).addClass(ClassName.open);
@@ -1070,7 +1073,8 @@ throw new Error('AdminLTE requires jQuery')
   };
 
   Tree.prototype.toggle = function (link, event) {
-    var treeviewMenu = link.next(Selector.treeviewMenu);
+//    var treeviewMenu = link.next(Selector.treeviewMenu);
+    var treeviewMenu = link.parent().children(Selector.treeviewMenu);
     var parentLi     = link.parent();
     var isOpen       = parentLi.hasClass(ClassName.open);
 
@@ -1081,7 +1085,7 @@ throw new Error('AdminLTE requires jQuery')
     if (!this.options.followLink || link.attr('href') === '#') {
       event.preventDefault();
     }
-
+    
     if (isOpen) {
       this.collapse(treeviewMenu, parentLi);
     } else {
@@ -1091,7 +1095,7 @@ throw new Error('AdminLTE requires jQuery')
 
   Tree.prototype.expand = function (tree, parent) {
     var expandedEvent = $.Event(Event.expanded);
-
+    
     if (this.options.accordion) {
       var openMenuLi = parent.siblings(Selector.open);
       var openTree   = openMenuLi.children(Selector.treeviewMenu);
