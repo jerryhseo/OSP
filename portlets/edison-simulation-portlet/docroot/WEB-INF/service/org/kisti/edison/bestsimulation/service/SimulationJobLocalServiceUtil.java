@@ -693,6 +693,12 @@ public class SimulationJobLocalServiceUtil {
 		getService().deleteJob(jobUuid);
 	}
 
+	public static void cancleJobFromJobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
+		getService().cancleJobFromJobUuid(jobUuid);
+	}
+
 	public static void cancleJob(
 		org.kisti.edison.bestsimulation.model.SimulationJob job)
 		throws com.liferay.portal.kernel.exception.SystemException {

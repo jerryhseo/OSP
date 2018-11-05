@@ -1613,6 +1613,13 @@ public class SimulationJobLocalServiceImpl
 		}
 	}
 	
+	public void cancleJobFromJobUuid(String jobUuid) throws NoSuchSimulationJobException, SystemException{
+		SimulationJob job = super.simulationJobPersistence.findByUuid(jobUuid);
+		cancleJob(job);
+		job.setJobStatus(1701010);
+		super.simulationJobPersistence.update(job);
+	}
+	
 	public void cancleJob(SimulationJob job) throws SystemException{
 		if(job.getJobStatus()==1701006){
 			try{

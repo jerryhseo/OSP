@@ -1799,7 +1799,9 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	@Override
 	public int cancleJob(java.lang.String icebreakerUrl,
 		java.lang.String vcToken, java.lang.String simulationUuid,
-		java.lang.String job_uuid) throws java.io.IOException {
+		java.lang.String job_uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
 		Object returnObj = null;
 
 		try {
@@ -1817,6 +1819,10 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
 
 			if (t instanceof java.io.IOException) {
 				throw (java.io.IOException)t;

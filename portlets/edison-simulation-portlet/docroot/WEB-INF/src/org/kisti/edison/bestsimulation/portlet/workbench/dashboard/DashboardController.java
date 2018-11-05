@@ -2,6 +2,7 @@ package org.kisti.edison.bestsimulation.portlet.workbench.dashboard;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.NoSuchFileException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationShare;
@@ -47,6 +49,7 @@ import com.kisti.osp.util.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -314,27 +317,79 @@ public class DashboardController {
 	public void readOutLog(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
 		    @RequestParam(value = "jobUuid", required = true) String jobUuid ,
-		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion,
-		    @RequestParam(value = "type", required = false) String type
+		    @RequestParam(value = "lastPosition", required = false) String strLastPoistion
 			) throws IOException{
 			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
-		
-		try{
-			response.setContentType("application/json; charset=UTF-8");
-			String fileExt = CustomUtil.strNull(type).equals("")?"out":type;
-			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
-
-			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
-			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
-			log.put( "jobStatus", simulationJob.getJobStatus() );
+			com.liferay.portal.kernel.json.JSONObject result = JSONFactoryUtil.createJSONObject();
 			
-			HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
-			ServletResponseUtil.write(httpResponse, log.toString());
-		}catch (Exception e) {
-			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
-			e.printStackTrace();
+			long jobStatus = 0;
+			
+			SimulationJob simulationJob;
+			boolean isOutLogExist = true;
+			boolean isErrorLogExist = true;
+			
+			try {
+				simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+				jobStatus = simulationJob.getJobStatus();
+				try{
+					String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
+					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition);;
+					result.put("outLog", outLog);
+				}catch(Exception e){
+					if(e instanceof NoSuchFileException){
+						isOutLogExist = false;
+					}else{
+						throw new SystemException(e);
+					}
+				}
+				
+				if(jobStatus>=1701011){
+					try{
+						String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
+						com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
+						result.put("errLog", errLog);
+					}catch(Exception e){
+						if(e instanceof NoSuchFileException){
+							isErrorLogExist = false;
+						}else{
+							throw new SystemException(e);
+						}
+					}
+				}else{
+					isErrorLogExist = false;
+				}
+				
+				if(!isOutLogExist&&!isErrorLogExist){
+					throw new SystemException();
+				}
+				
+				
+				result.put( "jobStatus", simulationJob.getJobStatus() );
+				response.setContentType("application/json; charset=UTF-8");
+				HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);
+				ServletResponseUtil.write(httpResponse, result.toString());
+			} catch (Exception e1) {
+				handleRuntimeException(e1, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+				e1.printStackTrace();
+			}
+			
+	}
+	
+	private com.liferay.portal.kernel.json.JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition) throws Exception{
+		com.liferay.portal.kernel.json.JSONObject log = JSONFactoryUtil.createJSONObject();
+		try {
+			log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+		} catch (Exception e) {
+			if(e instanceof NoSuchFileException){
+				e.printStackTrace();
+				throw e;
+			}else{
+				throw new SystemException(e);
+			}
 		}
+		
+		return log;
 	}
 	
 	

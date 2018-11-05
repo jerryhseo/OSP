@@ -555,6 +555,10 @@ public interface SimulationJobLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 
+	public void cancleJobFromJobUuid(java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
+
 	public void cancleJob(
 		org.kisti.edison.bestsimulation.model.SimulationJob job)
 		throws com.liferay.portal.kernel.exception.SystemException;

@@ -553,7 +553,9 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	@Override
 	public int cancleJob(java.lang.String icebreakerUrl,
 		java.lang.String vcToken, java.lang.String simulationUuid,
-		java.lang.String job_uuid) throws java.io.IOException {
+		java.lang.String job_uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
 		return _simulationLocalService.cancleJob(icebreakerUrl, vcToken,
 			simulationUuid, job_uuid);
 	}

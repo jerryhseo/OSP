@@ -364,6 +364,10 @@
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.MAX_CPU, arguments));
 		};
 		
+		ScienceApp.minCpus = function( cpus ){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.MIN_CPU, arguments));
+		};
+		
 		ScienceApp.defaultCpus = function( cpus ){
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.DEFAULT_CPU, arguments));
 		};

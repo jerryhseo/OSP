@@ -1031,7 +1031,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	 * @return
 	 * @throws IOException
 	 */
-	public int cancleJob(String icebreakerUrl, String vcToken, String simulationUuid, String job_uuid) throws IOException {
+	public int cancleJob(String icebreakerUrl, String vcToken, String simulationUuid, String job_uuid) throws IOException,SystemException {
 		int resultStatus = 0;
 		if(!CustomUtil.strNull(vcToken).equals("")){
 			URL url = new URL(icebreakerUrl+"/api/simulation/"+CustomUtil.strNull(simulationUuid)+"/job/"+CustomUtil.strNull(job_uuid)+"/cancel");
@@ -1045,14 +1045,14 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			resultStatus = conn.getResponseCode();
 			
 			if (conn.getResponseCode() == 401) {
-				System.out.println("Failed IcebreakerService [ cancleJob ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());		
+				throw new SystemException("Failed IcebreakerService [ cancleJob ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());
 			}else if (conn.getResponseCode() == 404) {
-				System.out.println("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
 			}else if (conn.getResponseCode() == 405) {
-				System.out.println("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ cancleJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
 			}
 		}else{
-			System.out.println("Failed IcebreakerService [ cancleJob ] : Token is NOT NULL - Request error code : 999");
+			throw new SystemException("Failed IcebreakerService [ cancleJob ] : Token is NOT NULL - Request error code : 999");
 		}
 		return resultStatus;
 	}

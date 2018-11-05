@@ -378,15 +378,19 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		_methodParameterTypes142 = new String[] { "java.lang.String" };
 
-		_methodName143 = "cancleJob";
+		_methodName143 = "cancleJobFromJobUuid";
 
-		_methodParameterTypes143 = new String[] {
+		_methodParameterTypes143 = new String[] { "java.lang.String" };
+
+		_methodName144 = "cancleJob";
+
+		_methodParameterTypes144 = new String[] {
 				"org.kisti.edison.bestsimulation.model.SimulationJob"
 			};
 
-		_methodName144 = "deleteJobFormIB";
+		_methodName145 = "deleteJobFormIB";
 
-		_methodParameterTypes144 = new String[] {
+		_methodParameterTypes145 = new String[] {
 				"org.kisti.edison.bestsimulation.model.SimulationJob"
 			};
 	}
@@ -821,13 +825,20 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		if (_methodName143.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes143, parameterTypes)) {
-			SimulationJobLocalServiceUtil.cancleJob((org.kisti.edison.bestsimulation.model.SimulationJob)arguments[0]);
+			SimulationJobLocalServiceUtil.cancleJobFromJobUuid((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
 		if (_methodName144.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes144, parameterTypes)) {
+			SimulationJobLocalServiceUtil.cancleJob((org.kisti.edison.bestsimulation.model.SimulationJob)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName145.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes145, parameterTypes)) {
 			SimulationJobLocalServiceUtil.deleteJobFormIB((org.kisti.edison.bestsimulation.model.SimulationJob)arguments[0]);
 
 			return null;
@@ -974,4 +985,6 @@ public class SimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes143;
 	private String _methodName144;
 	private String[] _methodParameterTypes144;
+	private String _methodName145;
+	private String[] _methodParameterTypes145;
 }

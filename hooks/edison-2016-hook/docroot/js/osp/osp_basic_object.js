@@ -116,6 +116,7 @@
         WORKING_SIMULATION: 'workingSimulation_',
         WORKING_SIMULATION_UUID: 'workingSimulationUuid_',
         MAX_CPU: 'maxCpu_',
+        MIN_CPU: 'minCpu_',
         DEFAULT_CPU: 'defaultCpu_',
         //DataStructure
         //Parameter types
@@ -255,6 +256,7 @@
         OSP_CANCEL_JOB: 'OSP_CANCEL_JOB',
         OSP_CANCEL_SIMULATION: 'OSP_CANCEL_SIMULATION',
         OSP_COPY_JOB: 'OSP_COPY_JOB',
+        OSP_REFRESH_URL_CHANGE: 'OSP_REFRESH_URL_CHANGE',
         OSP_CREATE_JOB: 'OSP_CREATE_JOB',
         OSP_CREATE_SIMULATION: 'OSP_CREATE_SIMULATION',
         OSP_DATA_CHANGED: 'OSP_DATA_CHANGED',

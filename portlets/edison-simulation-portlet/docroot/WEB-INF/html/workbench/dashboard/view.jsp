@@ -216,6 +216,18 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_CANCLE_SIMULATION_JOB_RESULT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+// 	if(e.targetPortlet === myId){
+		if(e.data.status){
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+			<portlet:namespace/>syncJobStatusList(<portlet:namespace/>workSimulationId);
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+// 	}
+});
+
 Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
@@ -276,7 +288,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
 		if(typeof e.data.isCopy !='undefined'){
 			isCopy = e.data.isCopy;
 		}
-		<portlet:namespace/>searchSimulationModalOpen(1,isCopy);
+		<portlet:namespace/>searchSimulationModalOpen(1,isCopy,e.data.simulationUuid);
 	}
 });
 
@@ -350,6 +362,13 @@ Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
  * Portlet AJAX Function
  ***********************************************************************/
 function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
+	var eventData = {
+			targetPortlet: <portlet:namespace/>connector,
+			simulationUuid: simulationUuid
+		};
+	Liferay.fire( OSP.Event.OSP_REFRESH_URL_CHANGE, eventData );
+	
+	
 	var scienceAppId = <portlet:namespace/>scienceAppId;
 	var searchForm = {
 		"<portlet:namespace/>scienceAppId": scienceAppId,
@@ -400,7 +419,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 				<portlet:namespace/>searchSimulationJob(<portlet:namespace/>workSimulationId);
 				<portlet:namespace/>selectRow(<portlet:namespace/>workSimulationId,'');
 			}else{
-				<portlet:namespace/>searchSimulationModalOpen(1,false);
+				<portlet:namespace/>searchSimulationModalOpen(1,false,'');
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
@@ -506,7 +525,6 @@ function <portlet:namespace/>loadSimulationJobs(currentPage){
 }
 
 function <portlet:namespace/>searchSimulationJob(simulationUuid){
-	
 	/*Status Cache Clear*/
 	<portlet:namespace/>prevStatus.clearStatusCache();
 	
@@ -587,6 +605,8 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid){
 					var jobStatusCss = "fa fa-circle init";
 					if(jobStatus==1701005||jobStatus==1701006){
 						jobStatusCss = "fa fa-circle running";
+					}else if(jobStatus==1701010){
+						jobStatusCss = "fa fa-circle cancel";
 					}else if(jobStatus==1701011){
 						jobStatusCss = "fa fa-circle success";
 					}else if(jobStatus==1701012){
@@ -676,6 +696,8 @@ function <portlet:namespace/>syncJobStatusList(simulationUuid){
 							var jobStatusCss = "fa fa-circle init";
 							if(jobStatus==1701005||jobStatus==1701006){
 								jobStatusCss = "fa fa-circle running";
+							}else if(jobStatus==1701010){
+								jobStatusCss = "fa fa-circle cancel";
 							}else if(jobStatus==1701011){
 								jobStatusCss = "fa fa-circle success";
 							}else if(jobStatus==1701012){
@@ -1166,7 +1188,6 @@ function <portlet:namespace/>writeTimeLineAboutShare(customIds, jobTitle, writeT
 
 function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition, type) {
 	<portlet:namespace/>clearReadOutLogTimer();
-	
 	jQuery.ajax({
 		url: '<%=readOutLogURL.toString()%>',
 		type:'POST',
@@ -1177,23 +1198,41 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 			"<portlet:namespace/>lastPosition": lastPosition,
 			"<portlet:namespace/>type": type
 		},
-		success:function(outLog){
-			console.log(outLog);
+		success:function(result){
+// 			console.log(outLog);
 			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-log-modal");
 			var textarea = modal.find("textarea#"+<portlet:namespace/>parentNamespace+"log-text");
+			
+			var isScrollMove = false;
+			if(textarea[0].scrollTop==0){
+				isScrollMove = true;
+			}else if(textarea[0].scrollTop+textarea.outerHeight()>textarea.prop('scrollHeight')){
+				isScrollMove = true;
+			}
+			
 			var preTextareVal = textarea.text();
-			
 			textarea.empty();
-			if(lastPosition === 0){
-				textarea.text(outLog.outLog);
-			}else{
-				textarea.text(preTextareVal+outLog.outLog);
+			
+			if(typeof result.outLog!='undefined'){
+				if(lastPosition === 0){
+					textarea.text(result.outLog.outLog);
+				}else{
+					textarea.text(preTextareVal+result.outLog.outLog);
+				}
+				
+				if(result.jobStatus == '1701006'){
+					<portlet:namespace/>refreshJobLogTimer = setInterval(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,result.outLog.lastPosition,type);
+				}
 			}
 			
-			if(outLog.jobStatus === 1701006){
-				<portlet:namespace/>refreshJobLogTimer = setTimeout(<portlet:namespace/>jobSystemLog, 1000*3, simulationUuid,jobUuid,outLog.lastPosition,type);
+			if(typeof result.errLog!='undefined'){
+				var deviLog = '\n\n--------------------------ERROR LOG----------------------------\n';
+				textarea.text(textarea.text()+deviLog+result.errLog.outLog);
 			}
 			
+			if(isScrollMove){
+				textarea.scrollTop(textarea.prop('scrollHeight'));
+			}
 			modal.modal({ "backdrop": "static", "keyboard": false });
 		},error:function(jqXHR, textStatus, errorThrown){
 // 			if(jqXHR.responseText !== ''){
@@ -1202,6 +1241,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 // 				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
 // 			}
 			$.alert(Liferay.Language.get('edison-simulation-monitoring-log-file-is-not-exist'));
+			<portlet:namespace/>clearReadOutLogTimer();
 		}
 	});
 	
@@ -1209,7 +1249,7 @@ function <portlet:namespace/>jobSystemLog(simulationUuid, jobUuid, lastPosition,
 
 function <portlet:namespace/>clearReadOutLogTimer(){
 	if(<portlet:namespace/>refreshJobLogTimer){
-		clearTimeout(<portlet:namespace/>refreshJobLogTimer);
+		clearInterval(<portlet:namespace/>refreshJobLogTimer);
 	}
 }
 
@@ -1304,10 +1344,17 @@ function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
 
 
 function <portlet:namespace/>loadSimulationModal(currentPage) {
-	<portlet:namespace/>searchSimulationModalOpen(currentPage,<portlet:namespace/>simulationIsCopy);
+	<portlet:namespace/>searchSimulationModalOpen(currentPage,<portlet:namespace/>simulationIsCopy,'');
 }
 
-function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
+function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simulationUuid) {
+	var currentSimulationUuid;
+	if(simulationUuid === ''){
+		currentSimulationUuid = <portlet:namespace/>workSimulationId;
+	}else{
+		currentSimulationUuid = simulationUuid;
+	}
+	
 	<portlet:namespace/>simulationIsCopy = isCopy;
 	
 	var scienceAppId = <portlet:namespace/>scienceAppId;
@@ -1343,6 +1390,9 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 					var simulation = result.simulaitons[i];
 // 					console.log(simulation);
 					$tr = $("<tr></tr>").appendTo($simulationTbody);
+					if(simulation._simulationUuid===currentSimulationUuid){
+						$tr.css("background-color","bisque");
+					}
 					
 					$input = $("<input/>").attr("type","text").attr("maxlength","20")
 										  .addClass("form-control").val(simulation._simulationTitle)
@@ -1352,7 +1402,7 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 					$("<td></td>").addClass("text-center").css("vertical-align","middle").html(simulation._simulationCreateDt).appendTo($tr);
 					
 					$btnGroup = $("<div/>").addClass("btn-group");
-					$checkBtn = $("<button/>").addClass("btn btn-primary").html("<i class=\"fa fa-check\">"+" Check"+"</i>").appendTo($btnGroup);
+					$checkBtn = $("<button/>").addClass("btn btn-primary").html("<i class=\"fa fa-check\">"+" Select"+"</i>").appendTo($btnGroup);
 					$deleteBtn = $("<button/>").addClass("btn btn-primary").html("<i class=\"fa fa-trash\">"+" Delete"+"</i>").appendTo($btnGroup);
 					$("<td></td>").addClass("text-center").append($btnGroup).appendTo($tr);
 					

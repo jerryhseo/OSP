@@ -462,7 +462,9 @@ public interface SimulationLocalService extends BaseLocalService,
 	*/
 	public int cancleJob(java.lang.String icebreakerUrl,
 		java.lang.String vcToken, java.lang.String simulationUuid,
-		java.lang.String job_uuid) throws java.io.IOException;
+		java.lang.String job_uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
 	/**
 	* Cluster List 議고쉶

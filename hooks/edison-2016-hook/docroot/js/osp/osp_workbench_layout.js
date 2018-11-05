@@ -1019,6 +1019,16 @@
             Liferay.fire(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_JOB_RESULT, eventData );
         };
         
+        var fireCancelSimulationJobResult = function( targetPortId,data ){
+            var eventData = {
+                             portletId: Workbench.id(),
+                             targetPortlet: targetPortId,
+                             data: data
+            };
+            
+            Liferay.fire(OSP.Event.OSP_RESPONSE_CANCLE_SIMULATION_JOB_RESULT, eventData );
+        };
+        
         var fireDeleteSimulationJobResult = function( targetPortId,data ){
             var eventData = {
                              portletId: Workbench.id(),
@@ -1055,6 +1065,8 @@
                 
                 data.flowLayoutCode = flowLayoutCode;
             }
+            
+            data.workbenchType = Workbench.type();
             
             var eventData = {
                                 portletId: Workbench.id(),
@@ -1403,13 +1415,14 @@
         var submitMPJobs = function(job,resourceURL){
         	var scienceApp = Workbench.scienceApp();
         	var maxCpu = scienceApp.maxCpus();
+        	var minCpu = scienceApp.minCpus();
         	var defaultCpu = scienceApp.defaultCpus();
             $.confirm({
                 title: 'CPU Cores',
                 content: '' +
                 '<form action="" class="formName">' +
                 '<div class="form-group">' +
-                '<label>Enter number of cores (1 ~ '+maxCpu+')</label>' +
+                '<label>Enter number of cores ('+minCpu+' ~ '+maxCpu+')</label>' +
                 '<input type="text" value="'+defaultCpu+'" placeholder="cores" class="cores form-control" required />' +
                 '</div>' +
                 '</form>',
@@ -1428,7 +1441,7 @@
                                     $.alert('only number');
                                     return false;
                                 }else{
-                                	if(maxCpu*1<cores*1||cores*1<1){
+                                	if(maxCpu*1<cores*1||cores*1<minCpu*1){
                                 		$.alert('provide a valid cores');
                                         return false;
                                 	}
@@ -2818,6 +2831,39 @@
                 Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData);
             }
 
+        };
+        
+        Workbench.handleCancelJob = function(portletId, jobUuid, resourceURL){
+        	var ajaxData = Liferay.Util.ns(
+			                    Workbench.namespace(),
+			                    {
+			                        command: 'CANCEL_JOB',
+			                        jobUuid: jobUuid
+			                    }
+        					);
+        	
+        	 $.ajax({
+        		  type: 'POST',
+                  url: resourceURL, 
+                  async : false,
+                  data  : ajaxData,
+                  dataType : 'json',
+                  success: function() {
+                	  var data = {
+                              jobUuid: jobUuid,
+                              status:true
+                      };
+                	  fireCancelSimulationJobResult(portletId,data);
+                  },
+                  error:function(data,e){
+                      console.log(data);
+                      console.log('AJAX ERROR-->'+e);
+                      var data = {
+                               status:false
+                      };
+                      fireCancelSimulationJobResult(portletId,data);
+                  }
+        	 });
         };
         
         Workbench.handleCreateJob = function(portletId, simulationUuid, title, initData, resourceURL){

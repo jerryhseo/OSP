@@ -527,7 +527,9 @@ public class SimulationLocalServiceUtil {
 	*/
 	public static int cancleJob(java.lang.String icebreakerUrl,
 		java.lang.String vcToken, java.lang.String simulationUuid,
-		java.lang.String job_uuid) throws java.io.IOException {
+		java.lang.String job_uuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
 		return getService()
 				   .cancleJob(icebreakerUrl, vcToken, simulationUuid, job_uuid);
 	}
