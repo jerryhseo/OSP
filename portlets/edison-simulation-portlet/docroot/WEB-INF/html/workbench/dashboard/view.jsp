@@ -390,7 +390,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 // 			console.log(searchData);
 			if(searchData!=null){
 				$targetUL = $("#<portlet:namespace/>sidebar-menu");
-				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).appendTo($targetUL);
+				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).prependTo($targetUL);
 				$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",searchData._simulationUuid)
 							.attr("data-job-uuid",searchData._jobUuid)
 							.attr("onclick","<portlet:namespace/>jobSelect(this);return false;")

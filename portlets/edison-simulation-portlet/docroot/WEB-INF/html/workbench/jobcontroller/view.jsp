@@ -3,6 +3,13 @@
 
 <portlet:resourceURL var='downManualFileURL' id='downManualFile' escapeXml="false"></portlet:resourceURL>
 
+<liferay-portlet:resourceURL var="transferJobDataUrl" escapeXml="false" id="transferJobData" copyCurrentRenderParameters="false"/>
+<liferay-portlet:renderURL var="collectionPopupURL" portletName="sdrcommon_WAR_SDR_baseportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
+	<portlet:param name="action" value="collectionPopup" />
+	<portlet:param name="targetGroupId" value="${sdrGroupId}" />
+	<portlet:param name="allCollection" value="true" />
+</liferay-portlet:renderURL>
+
 <style type="text/css">
 
 </style>
@@ -129,7 +136,7 @@ var <portlet:namespace/>LI_EVENT = {
 		"event" : OSP.Event.OSP_REQUEST_JOB_RESULT_VIEW
 	},
 	"data":{
-		"event" : OSP.Event.OSP_REQUEST_NEW_JOB_VIEW
+		"event" : OSP.Event.OSP_REQUEST_COLLECTION_VIEW
 	}
 };
 
@@ -187,9 +194,19 @@ Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
 		console.log('OSP_REFRESH_JOB_STATUS: ['+e.portletId+', '+new Date()+']', e.data);
-		<portlet:namespace/>displayChange(nullToStr(e.data.jobStatus),e.data.workbenchType);
+		<portlet:namespace/>displayChange(nullToStr(e.data.jobStatus),e.data.workbenchType,e.data.isEdit);
 	} 
 });
+
+Liferay.on(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW,function(e){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
+		console.log('OSP_REQUEST_COLLECTION_VIEW: ['+e.portletId+', '+new Date()+']');
+		<portlet:namespace/>fn_collectionPopup();
+	} 
+});
+
+
 
 /***********************************************************************
 * Portlet AJAX Function
@@ -217,7 +234,7 @@ function <portlet:namespace/>manualDownLoad(manualId){
 	window.location.href="<%=downManualFileURL.toString()%>&<portlet:namespace/>fileEntryId="+manualId;
 }
 
-function <portlet:namespace/>displayChange(status,workBenchType){
+function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	var liObj;
 	if(status=="SUCCESS"){
 		liObj = <portlet:namespace/>successLiObj;
@@ -241,10 +258,19 @@ function <portlet:namespace/>displayChange(status,workBenchType){
 		$("#<portlet:namespace/>simulation-li-divider").remove();
 	}
 	
+	if(!isEdit){
+		liObj["delete"]=false;
+		liObj["data"]=false;
+	}else{
+		liObj["delete"]=true;
+		liObj["data"]=true;
+	}
+	
 	for(var key in liObj){
 		var element = $("#<portlet:namespace/>header-li-"+key);
 		if(liObj[key]){
 			element.css("display","block");
+			element.unbind('click');
 			element.bind("click",{key:key},function(e){
 				e.stopPropagation();
 				e.preventDefault();
@@ -298,6 +324,43 @@ function <portlet:namespace/>liEventFire(eventKey){
 		Liferay.fire(object.event, eventData);
 	}
 	
+}
+
+function <portlet:namespace/>fn_collectionPopup(){
+	AUI().use('aui-base','liferay-portlet-url','aui-node', function(A) {
+		Liferay.Util.openWindow({
+			dialog : {
+				constrain : true,
+				modal : true,
+				cache: false,
+				destroyOnClose: true,
+				width : '980px'
+			},
+			id : 'sdrcommon_collectionPopup',
+			title : 'Collection Popup',
+			uri : '${collectionPopupURL}'
+		});
+	});
+}
+
+function sdrcommon_collectionPopup(result){
+	$.ajax({
+		url: "${transferJobDataUrl}",
+		async: false,
+		data : {
+			"<portlet:namespace/>collectionId": result.value,
+		},
+		method: 'POST',
+		timeout: 10000,
+	}).done(function (result) {
+		if(result.isComplete){
+			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg"));
+		}else{
+			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
+		}
+	}).error(function (msg) {
+		console.log(msg);
+	});
 }
 </script>
 

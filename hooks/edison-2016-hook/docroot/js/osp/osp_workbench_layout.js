@@ -848,6 +848,71 @@
         var Workbench = this;
         OSP._MapObject.apply( Workbench );
         
+        var isBlockValid = function( outputType, jobStatus ){
+            switch( outputType ){
+            	case OSP.Enumeration.PortType.INPUT:
+            		switch( jobStatus ){
+	            		case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+	                    case OSP.Enumeration.JobStatus.INITIALIZED:
+	                    	return false;
+	                    case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+	                    case OSP.Enumeration.JobStatus.QUEUED:
+	                    case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+	                    case OSP.Enumeration.JobStatus.SUSPENDED:
+	                    case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+	                    case OSP.Enumeration.JobStatus.CANCELED:
+	                    case OSP.Enumeration.JobStatus.SUCCESS:
+	                    case OSP.Enumeration.JobStatus.RUNNING:
+	                    case OSP.Enumeration.JobStatus.FAILED:
+	                        return true;
+	                    default: 
+	                        console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+	                        return false;
+            		}
+            		break;
+                case OSP.Enumeration.PortType.LOG:
+                    switch( jobStatus ){
+                        case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+                        case OSP.Enumeration.JobStatus.INITIALIZED:
+                        case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+                        case OSP.Enumeration.JobStatus.QUEUED:
+                            return true;
+                        case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+                        case OSP.Enumeration.JobStatus.SUSPENDED:
+                        case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+                        case OSP.Enumeration.JobStatus.CANCELED:
+                        case OSP.Enumeration.JobStatus.SUCCESS:
+                        case OSP.Enumeration.JobStatus.RUNNING:
+                        case OSP.Enumeration.JobStatus.FAILED:
+                            return false;
+                        default: 
+                            console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+                            return false;
+                    }
+                    break;
+                case OSP.Enumeration.PortType.OUTPUT:
+                    switch( jobStatus ){
+                        case OSP.Enumeration.JobStatus.INITIALIZE_FAILED:
+                        case OSP.Enumeration.JobStatus.INITIALIZED:
+                        case OSP.Enumeration.JobStatus.SUBMISSION_FAILED:
+                        case OSP.Enumeration.JobStatus.QUEUED:
+                        case OSP.Enumeration.JobStatus.SUSPEND_REQUESTED:
+                        case OSP.Enumeration.JobStatus.SUSPENDED:
+                        case OSP.Enumeration.JobStatus.CANCEL_REQUESTED:
+                        case OSP.Enumeration.JobStatus.CANCELED:
+                        case OSP.Enumeration.JobStatus.RUNNING:
+                        case OSP.Enumeration.JobStatus.FAILED:
+                            return true;
+                        case OSP.Enumeration.JobStatus.SUCCESS:
+                            return false;
+                        default: 
+                            console.log('[ERROR] Unknown jobStatus - isInvalid(): '+jobStatus);
+                            return false;
+                    }
+                break;
+            }
+        };
+        
         var isValid = function( outputType, jobStatus ){
             switch( outputType ){
                 case OSP.Enumeration.PortType.LOG:
@@ -1567,6 +1632,50 @@
             },1000*7);
         };
         
+        var blockModule = function ( job ){
+        	var scienceApp = Workbench.scienceApp();
+        	var inputPorts = scienceApp.inputPorts();
+            var logPorts = scienceApp.logPorts();
+            var outputPorts = scienceApp.outputPorts();
+            
+            /*Input Port Check*/
+            for(var portName in inputPorts ){
+            	var portlets = Workbench.getPortlets( portName );
+            	if(Workbench.isBlockInputPort(portName)){
+            		fireBlockPortEvent(portName,true);
+            	}else{
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.INPUT, job.status()));
+            	}
+            }
+            
+            /*Log Port Check*/
+            for(var portName in logPorts ){
+            	var portlets = Workbench.getPortlets( portName );
+            	fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()));
+            }
+            
+            /*OUT Port Check*/
+            for(var portName in outputPorts ){
+            	var portlets = Workbench.getPortlets( portName );
+            	fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()));
+            }
+            
+            
+        }
+        
+        var fireBlockPortEvent = function(portName,isBlock){
+        	var portlets = Workbench.getPortlets( portName );
+        	var data = {
+                    isBlock: isBlock
+        	};
+        	
+        	for(var index in portlets ){
+        		var portlet = portlets[index];
+        		console.log('OSP_DISABLE_CONTROLL: ['+portlet.instanceId()+', '+new Date()+']', data);
+        		fire( OSP.Event.OSP_DISABLE_CONTROLL, portlet.instanceId(), data);
+        	}
+        }
+        
         var loadJobData = function ( job ){
             var scienceApp = Workbench.scienceApp();
             var inputPorts = scienceApp.inputPorts();
@@ -1847,6 +1956,26 @@
         
         Workbench.redirectURL = function( redirectURL ){
             return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.REDIRECT_URL, arguments));
+        };
+        
+        Workbench.blockInputPorts = function( blockInputPorts ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.BLOCK_INPUT_PORTS, arguments));
+        };
+        
+        Workbench.isBlockInputPort = function(portName){
+        	var blockPorts = Workbench.blockInputPorts();
+        	if(!blockPorts){return false;}
+        	if(blockPorts===''){return false;}
+        	
+        	var arrayBlockPorts = blockPorts.split(',');
+        	for(var index in arrayBlockPorts){
+        		var blockPortName = arrayBlockPorts[index];
+        		if(blockPortName===portName){
+        			return true;
+        		}else{
+        			return false;
+        		}
+        	}
         };
         
         /*Workbench Layout Resize Event - GPLUS - 20181004*/
@@ -2368,6 +2497,7 @@
 //        	console.log(copyJob.inputs());
         };
 
+        
         Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
             createSimulation(portletId, title, jobTitle, jobInitData, resourceURL );
         };
@@ -2456,7 +2586,7 @@
         	}
         };
         
-        Workbench.handleJobSelected = function(simulationUuid, jobUuid, resourceURL ){
+        Workbench.handleJobSelected = function(simulationUuid, jobUuid,resourceURL ){
             var searchSimulation = false;
             //init
             if(!Workbench.workingSimulation()){
@@ -2515,7 +2645,6 @@
                 }
             }
             
-            
             if(jobSearch){
                 $.ajax({
                     url : resourceURL,
@@ -2536,6 +2665,7 @@
                         }
                         
                         job = simulation.newJob( jsonJob );
+                        
                         if( job.isSubmit() ){
                             job.dirty( false );
                         }
@@ -2556,12 +2686,16 @@
             
             loadJobData( job );
             
+            /*Block Editor,Analyzer BL*/
+            blockModule( job );
+            
             var statusData = {
                     simulationTitle: simulation.title(),
                     jobTitle: job.title(),
                     simulationUuid: simulation.uuid(),
                     jobUuid: job.uuid(),
-                    jobStatus: job.status()
+                    jobStatus: job.status(),
+                    isEdit: job.isEdit()
             };
             
             fireRefreshJobStatus(statusData);
@@ -2616,7 +2750,8 @@
                     jobTitle: job.title(),
                     simulationUuid: simulation.uuid(),
                     jobUuid: job.uuid(),
-                    jobStatus: job.status()
+                    jobStatus: job.status(),
+                    isEdit: job.isEdit()
             };
             
             fireRefreshJobStatus(statusData);

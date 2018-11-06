@@ -25,6 +25,7 @@
         CUSTOM_ID: 'customId_',
         REDIRECT_URL: 'redirectURL_',
         REDIRECT_NAME: 'redirectName_',
+        BLOCK_INPUT_PORTS: 'blockInputPorts_',
         DASHBOARD_PORTLET: 'dashboardId_',
         DATA: 'data_',
         DATA_TYPE: 'dataType_',
@@ -52,6 +53,7 @@
         INPUT_DATA: 'inputData_',
         INPUT_PORTS: 'inputPorts_',
         INPUTS: 'inputs_',
+        ISEDIT: 'isEdit_',
         INSTANCE_ID: 'instanceId_',
         JOB_MONITOR_PORTLET: 'jobMonitorId_',
         JOB_STATUS_PORTLET: 'jobStatusId_',
@@ -277,6 +279,7 @@
         OSP_JOB_SELECTED: 'OSP_JOB_SELECTED',
         OSP_JOB_STATUS_CHANGED: 'OSP_JOB_STATUS_CHANGED',
         OSP_LOAD_DATA: 'OSP_LOAD_DATA',
+        OSP_DISABLE_CONTROLL: 'OSP_DISABLE_CONTROLL',
         OSP_LOAD_FILE: 'OSP_LOAD_FILE',
         OSP_LOAD_HTML: 'OSP_LOAD_HTML',
         OSP_OK_CLICKED: 'OSP_OK_CLICKED',
@@ -350,6 +353,8 @@
         OSP_RESPONSE_SUBMIT_JOB_RESULT: 'OSP_RESPONSE_SUBMIT_JOB_RESULT',
         OSP_REQUEST_JOB_LOG_VIEW: 'OSP_REQUEST_JOB_LOG_VIEW',
         OSP_RESPONSE_JOB_LOG_VIEW: 'OSP_RESPONSE_JOB_LOG_VIEW',
+        OSP_REQUEST_COLLECTION_VIEW: 'OSP_REQUEST_COLLECTION_VIEW',
+        OSP_RESPONSE_COLLECTION_VIEW: 'OSP_RESPONSE_COLLECTION_VIEW',
 
         reportProcessStatus: function(portletId, event, srcEvent, srcEventData, status) {
             var eventData = {

@@ -47,6 +47,10 @@
 				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.INPUTS, arguments));
 			};
 			
+			J.isEdit = function( isEdit ){
+				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.ISEDIT, arguments));
+			};
+			
 			J.copyInputs = function(){
 				var inputs = J.inputs();
 				if( !inputs ){
@@ -322,6 +326,7 @@
 						case OSP.Constants.END_TIME:
 						case OSP.Constants.STATUS:
 						case OSP.Constants.SUBMIT:
+						case OSP.Constants.ISEDIT:
 							J.property( key, jsonJob[key] );
 							break;
 						case OSP.Constants.INPUTS:
