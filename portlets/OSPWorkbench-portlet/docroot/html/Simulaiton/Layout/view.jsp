@@ -230,6 +230,7 @@ $(function(e) {
 	<portlet:namespace/>workbench.isFlowLayout('${isFlowLayout}');
 	<portlet:namespace/>workbench.redirectURL('${redirectURL}');
 	<portlet:namespace/>workbench.redirectName('${redirectName}');
+	<portlet:namespace/>workbench.blockInputPorts('${blockInputPorts}');
 	
 	
 	var scienceApp = new OSP.ScienceApp();
@@ -241,6 +242,7 @@ $(function(e) {
 	scienceApp.templateId('${scienceApp.templetId}');
 	scienceApp.isProvenance('${isProvenance}');
 	scienceApp.maxCpus('${scienceApp.getMaxCpus()}');
+	scienceApp.minCpus('${scienceApp.getMinCpus()}');
 	scienceApp.defaultCpus('${scienceApp.getDefaultCpus()}');
 	
 	if( '<%=inputPorts%>' ) 

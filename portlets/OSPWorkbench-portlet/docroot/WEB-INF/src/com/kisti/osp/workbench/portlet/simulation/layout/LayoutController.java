@@ -103,6 +103,7 @@ public class LayoutController {
 		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 		String redirectName = ParamUtil.getString(request, "redirectName", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
+		String blockInputPorts = ParamUtil.getString(request, "blockInputPorts", "");
 		
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
@@ -116,7 +117,7 @@ public class LayoutController {
 			model.addAttribute("redirectURL", HttpUtil.decodeURL(HttpUtil.decodeURL(redirectURL)));
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
-			model.addAttribute("connector", themeDisplay.getPortletDisplay().getId());
+			model.addAttribute("blockInputPorts", blockInputPorts);
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
 			agent.ibAgentLog();
