@@ -498,7 +498,7 @@ function <portlet:namespace/>readFile( inputData ){
 		},
 		error: function( data, e ){
 			console.log( '[ERROR] readFile: ', inputData );
-			console.log('command: '+command);
+// 			console.log('command: '+command);
 		}
 	});
 }
