@@ -318,7 +318,6 @@
 			success: function(response) {
 				$('.explorer').fileManager(response.dataArray);
 				
-				console.log(response.dataArray);
 				var folderCnt = response.folderCount;
 				var fileCnt = response.fileCount;
 				$("#<portlet:namespace/>thisChildFolderCnt").val(folderCnt);
