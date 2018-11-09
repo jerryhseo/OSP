@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.kisti.edison.osp.model.impl.ProjectModelImpl">
+		<id-class class="org.kisti.edison.osp.service.persistence.ProjectPK" />
+		<attributes>
+			<id name="simulationUuid" />
+			<id name="portletNamespace" />
+			<id name="jobSeqNo" />
+			<basic name="projectStructure" />
+			<basic name="analyzerStructure" />
+			<basic name="executeId" />
+			<basic name="executeDataStructure" />
+			<basic name="executeDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.kisti.edison.osp.model.impl.ProjectImpl" name="Project">
+		<table name="EDMESH_Project" />
+		<attributes />
+	</entity>
+</entity-mappings>

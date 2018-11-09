@@ -143,6 +143,14 @@
 	display: none;
 }
 
+.simulation-workbench .sidebar-collapse .sidebar .sidebar-btn{
+	display: none;
+}
+
+.simulation-workbench .sidebar-collapse .sidebar .sidebar-menu i{
+	text-align: center;
+}
+
 .simulation-workbench .sidebar-mini.sidebar-collapse .edit-btn-group{
 	margin-left: 0px;
 }

@@ -387,6 +387,7 @@ public class LayoutController {
 		
 		json.put("uuid_", job.getJobUuid());
 		json.put("title_", job.getJobTitle());
+		json.put("seqNo_", job.getJobSeqNo());
 		if(  job.getJobStartDt() != null )
 			json.put("startTime_", job.getJobStartDt());
 		if( job.getJobEndDt() != null )

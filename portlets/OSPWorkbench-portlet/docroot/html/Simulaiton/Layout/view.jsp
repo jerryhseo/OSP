@@ -660,6 +660,31 @@ Liferay.on(OSP.Event.OSP_SAMPLE_SELECTED,function( e ){
 		console.log('OSP_SAMPLE_SELECTED: ['+e.portletId+', '+new Date()+']');
 		<portlet:namespace/>workbench.handleSampleSelected(e.portletId,'<%=serveResourceURL%>');
 });
+
+Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	console.log('OSP_REQUEST_JOB_INFO: ['+e.portletId+', '+new Date()+']');
+	
+	var simulation = <portlet:namespace/>workbench.workingSimulation();
+	var job = simulation.workingJob();
+	
+	var simulationUuid = simulation.uuid();
+	var jobUuid = job.uuid();
+	var jobSeqNo = job.seqNo();
+	
+	var eventData = {
+		targetPortlet: e.portletId,
+		data : {
+			simulationUuid : simulationUuid,
+			jobUuid : jobUuid,
+			jobSeqNo : jobSeqNo
+		}
+	};
+	
+	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_KEY, eventData);
+});
+
+
 /***********************************************************************
  * Global Function section
  ***********************************************************************/

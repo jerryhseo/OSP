@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.osp.model.Project">
+		<field name="simulationUuid" type="String" />
+		<field name="portletNamespace" type="String" />
+		<field name="jobSeqNo" type="long" />
+		<field name="projectStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="analyzerStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="executeId" type="String" />
+		<field name="executeDataStructure" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
+		<field name="executeDate" type="Date" />
+	</model>
+</model-hints>

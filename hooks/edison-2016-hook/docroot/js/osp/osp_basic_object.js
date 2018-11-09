@@ -106,6 +106,7 @@
         TEMPLATE_ID: 'templateId_',
         IS_PROVENANCE: 'isProvenance_',
         TITLE: 'title_',
+        SEQ_NO: 'seqNo_',
         TWO: 'two_',
         TYPE: 'type_',
         VERSION: 'version_',
@@ -355,6 +356,8 @@
         OSP_RESPONSE_JOB_LOG_VIEW: 'OSP_RESPONSE_JOB_LOG_VIEW',
         OSP_REQUEST_COLLECTION_VIEW: 'OSP_REQUEST_COLLECTION_VIEW',
         OSP_RESPONSE_COLLECTION_VIEW: 'OSP_RESPONSE_COLLECTION_VIEW',
+        OSP_REQUEST_JOB_KEY: 'OSP_REQUEST_JOB_KEY',
+        OSP_RESPONSE_JOB_KEY: 'OSP_RESPONSE_JOB_KEY',
 
         reportProcessStatus: function(portletId, event, srcEvent, srcEventData, status) {
             var eventData = {

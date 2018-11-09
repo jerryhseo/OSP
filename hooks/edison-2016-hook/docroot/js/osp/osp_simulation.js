@@ -19,6 +19,10 @@
 				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.UUID, arguments));
 			};
 			
+			J.seqNo = function( seqNo ){
+				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.SEQ_NO, arguments));
+			};
+			
 			J.title = function( title ){
 				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.TITLE, arguments));
 			};
@@ -326,6 +330,7 @@
 						case OSP.Constants.END_TIME:
 						case OSP.Constants.STATUS:
 						case OSP.Constants.SUBMIT:
+						case OSP.Constants.SEQ_NO:
 						case OSP.Constants.ISEDIT:
 							J.property( key, jsonJob[key] );
 							break;

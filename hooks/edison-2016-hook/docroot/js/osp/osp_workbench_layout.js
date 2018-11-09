@@ -2663,7 +2663,6 @@
                         if(result.inputs_){
                             jsonJob.inputs_ = JSON.parse(result.inputs_);
                         }
-                        
                         job = simulation.newJob( jsonJob );
                         
                         if( job.isSubmit() ){

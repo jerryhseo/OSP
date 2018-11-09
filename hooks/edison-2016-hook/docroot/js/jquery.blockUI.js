@@ -124,15 +124,15 @@
 			// $.blockUI.defaults.css = {};
 			css: {
 				padding:	0,
-				margin:		0,
 				width:		'30%',
-				top:		'40%',
-				left:		'35%',
+				top:		'50%',
+				left:		'50%',
 				textAlign:	'center',
 				color:		'#000',
 				border:		'3px solid #aaa',
 				backgroundColor:'#fff',
-				cursor:		'wait'
+				cursor:		'wait',
+				margin:	'-135px 0 0 -350px'
 			},
 
 			// minimal style set used when themes are used

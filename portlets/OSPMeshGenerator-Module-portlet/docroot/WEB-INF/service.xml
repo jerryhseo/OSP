@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison.osp">
+	<author>edison</author>
+	<namespace>EDMESH</namespace>
+
+	<entity local-service="true" name="Project">
+
+		<!-- PK fields -->
+		<column name="simulationUuid" type="String" primary="true"></column>
+		<column name="portletNamespace" type="String" primary="true"></column>
+		<column name="jobSeqNo" type="long" primary="true"></column>
+
+		<!-- Other fields -->
+		<column name="projectStructure" type="String"></column>
+		<column name="analyzerStructure" type="String"></column>
+		<column name="executeId" type="String"></column>
+		<column name="executeDataStructure" type="String"></column>
+		<column name="executeDate" type="Date"></column> 
+	</entity>
+</service-builder>
