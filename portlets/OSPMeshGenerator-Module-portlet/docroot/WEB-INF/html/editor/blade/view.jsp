@@ -103,8 +103,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY,function(e) {
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>simulationUuid = e.data.simulationUuid;
 		<portlet:namespace/>jobSeqNo = e.data.jobSeqNo;
-		
-		<portlet:namespace/>searchNavigator(<portlet:namespace/>simulationUuid,<portlet:namespace/>jobSeqNo)
+// 		<portlet:namespace/>searchNavigator(<portlet:namespace/>simulationUuid,<portlet:namespace/>jobSeqNo);
+	}
 });
 /***********************************************************************
 * Portlet Function

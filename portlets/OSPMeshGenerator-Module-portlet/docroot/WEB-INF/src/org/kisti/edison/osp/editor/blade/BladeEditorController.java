@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.model.EdisonMessageConstants;
+import org.kisti.edison.osp.NoSuchProjectException;
 import org.kisti.edison.osp.model.Project;
 import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
 import org.kisti.edison.osp.service.persistence.ProjectPK;
@@ -28,10 +29,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.gson.JsonObject;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -91,24 +95,29 @@ public class BladeEditorController {
 	@ResourceMapping(value="getProject")
 	public void getProject(ResourceRequest request, ResourceResponse response,
 			@RequestParam("simulationUuid") String simulationUuid, 
-			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException{
+			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException, PortalException, SystemException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
 		ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
+		
+		JSONObject obj = new JSONObject();
 		try{
 			Project project = ProjectLocalServiceUtil.getProject(projectPK);
-			
-			JSONObject obj = new JSONObject();
 			obj.putAll(project.getModelAttributes());
-			
+		}catch (Exception e) {
+			if(e instanceof NoSuchProjectException){
+				ProjectLocalServiceUtil.createProject(projectPK);
+				Project project = ProjectLocalServiceUtil.getProject(projectPK);
+				obj.putAll(project.getModelAttributes());
+			}else{
+				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+			}
+		}finally {
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
-		}catch (Exception e) {
-			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 		}
-		
 	}
 	
 	protected static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {

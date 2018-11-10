@@ -58,6 +58,9 @@ var <portlet:namespace/>scienceApp = new OSP.ScienceApp();
 var <portlet:namespace/>searchJobLine = 5;
 var <portlet:namespace/>simulationIsCopy = false;
 
+var <portlet:namespace/>refreshTimer;
+var <portlet:namespace/>portOuterHtmlArray = new Array();
+
 
 var <portlet:namespace/>prevStatus = (function(){
 	var jobStatus = {};
@@ -109,7 +112,6 @@ var <portlet:namespace/>prevStatus = (function(){
 	};
 })();
 
-var <portlet:namespace/>refreshTimer;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -602,15 +604,15 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid){
 						isUncompletedJobExist = true;
 					}
 					
-					var jobStatusCss = "fa fa-circle init";
+					var jobStatusCss = "fa fa-sticky-note init";
 					if(jobStatus==1701005||jobStatus==1701006){
-						jobStatusCss = "fa fa-circle running";
+						jobStatusCss = "fa fa-sticky-note running";
 					}else if(jobStatus==1701010){
-						jobStatusCss = "fa fa-circle cancel";
+						jobStatusCss = "fa fa-sticky-note cancel";
 					}else if(jobStatus==1701011){
-						jobStatusCss = "fa fa-circle success";
+						jobStatusCss = "fa fa-sticky-note success";
 					}else if(jobStatus==1701012){
-						jobStatusCss = "fa fa-circle fail";
+						jobStatusCss = "fa fa-sticky-note fail";
 					}
 					
 					$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+job._jobUuid)
@@ -693,15 +695,15 @@ function <portlet:namespace/>syncJobStatusList(simulationUuid){
 							<portlet:namespace/>prevStatus.setJobStatus(jobUuid, jobStatus);
 							
 							/*View update*/
-							var jobStatusCss = "fa fa-circle init";
+							var jobStatusCss = "fa fa-sticky-note init";
 							if(jobStatus==1701005||jobStatus==1701006){
-								jobStatusCss = "fa fa-circle running";
+								jobStatusCss = "fa fa-sticky-note running";
 							}else if(jobStatus==1701010){
-								jobStatusCss = "fa fa-circle cancel";
+								jobStatusCss = "fa fa-sticky-note cancel";
 							}else if(jobStatus==1701011){
-								jobStatusCss = "fa fa-circle success";
+								jobStatusCss = "fa fa-sticky-note success";
 							}else if(jobStatus==1701012){
-								jobStatusCss = "fa fa-circle fail";
+								jobStatusCss = "fa fa-sticky-note fail";
 							}
 							
 							$jobLi = $("ul#<portlet:namespace/>sidebar-menu").find("li#<portlet:namespace/>job-"+jobUuid);
@@ -1495,7 +1497,6 @@ function <portlet:namespace/>iceBreakerFileDown(fileId){
 /*************************************************************************
  * Port Event
  *************************************************************************/
-var <portlet:namespace/>portOuterHtmlArray = new Array();
 function <portlet:namespace/>settingPorts( ports, portType ){
 	if( ports.length <=0 ){
 		return;
@@ -1514,8 +1515,7 @@ function <portlet:namespace/>settingPorts( ports, portType ){
 		break;
 	}
 	
-	$topUl = $("<ul/>").addClass("treeview-menu port-area");
-	$topA = $("<a/>").attr("href","#").appendTo($topUl);
+	$topA = $("<a/>").attr("href","#");
 	/*Add A tag element Objects*/
 	$("<i/>").addClass("fa fa-laptop").appendTo($topA);
 	$("<span/>").html(portType).appendTo($topA);
@@ -1527,24 +1527,25 @@ function <portlet:namespace/>settingPorts( ports, portType ){
 		var portStatus = port.status();
 		$li = $("<li/>").attr("onclick","<portlet:namespace/>selectPort(this,'"+port.name()+"','"+portType+"')")
 					    .attr("id","<portlet:namespace/>"+port.name())
-						.appendTo($topUl);
+						.appendTo($topA);
 		var $item = $("<a/>").attr("href","#").html(
 					"<i class=\""+css.IClass+"\"></i>"+port.name()+"</a>"
 				).appendTo($li);
 	}
 	
-// 	console.log($topUl);
-// 	console.log($topUl.get(0).outerHTML);
-	<portlet:namespace/>portOuterHtmlArray.push($topUl.get(0).outerHTML);
+// 	console.log($topA);
+// 	console.log($topA.get(0).outerHTML);
+	<portlet:namespace/>portOuterHtmlArray.push($topA.get(0).outerHTML);
 }
 
 function <portlet:namespace/>displayPort(object){
 	$targetElement = $(object).parent();
 	
 	if($targetElement.children("ul").length==0){
+		var topUl = $("<ul/>").addClass("treeview-menu port-area").appendTo($targetElement);
 		var arrary = <portlet:namespace/>portOuterHtmlArray;
 		for(var i=0;i<arrary.length;i++){
-			$targetElement.append(arrary[i]);
+			topUl.append(arrary[i]);
 		}
 	}
 }

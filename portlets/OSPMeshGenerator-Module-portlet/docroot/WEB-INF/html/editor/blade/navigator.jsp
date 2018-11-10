@@ -13,8 +13,8 @@ div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel {
 
 div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel ul{
 	list-style: none;
-	float: right;
 	margin: 0px;
+	padding: 0px;
 	width: 100%;
 	display: table;
 }
