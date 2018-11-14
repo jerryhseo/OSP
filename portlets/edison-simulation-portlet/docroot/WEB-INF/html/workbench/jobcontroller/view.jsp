@@ -206,8 +206,6 @@ Liferay.on(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW,function(e){
 	} 
 });
 
-
-
 /***********************************************************************
 * Portlet AJAX Function
 ***********************************************************************/
@@ -237,17 +235,17 @@ function <portlet:namespace/>manualDownLoad(manualId){
 function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	var liObj;
 	if(status=="SUCCESS"){
-		liObj = <portlet:namespace/>successLiObj;
+		liObj = $.extend({},<portlet:namespace/>successLiObj);
 	}else if(status=="FAILED"){
-		liObj = <portlet:namespace/>failLiObj;
+		liObj = $.extend({},<portlet:namespace/>failLiObj);
 	}else if(status=="QUEUED"){
-		liObj = <portlet:namespace/>submitLiObj;
+		liObj = $.extend({},<portlet:namespace/>submitLiObj);
 	}else if(status=="RUNNING"){
-		liObj = <portlet:namespace/>submitLiObj;
+		liObj = $.extend({},<portlet:namespace/>submitLiObj);
 	}else if(status=="CANCELED"){
-		liObj = <portlet:namespace/>cancelLiObj;
+		liObj = $.extend({},<portlet:namespace/>cancelLiObj);
 	}else{
-		liObj = <portlet:namespace/>defaultLiObj;
+		liObj = $.extend({},<portlet:namespace/>defaultLiObj);
 	}
 	
 	if(workBenchType==='SIMULATION_WITH_WORKFLOW'){
@@ -261,9 +259,6 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 	if(!isEdit){
 		liObj["delete"]=false;
 		liObj["data"]=false;
-	}else{
-		liObj["delete"]=true;
-		liObj["data"]=true;
 	}
 	
 	for(var key in liObj){

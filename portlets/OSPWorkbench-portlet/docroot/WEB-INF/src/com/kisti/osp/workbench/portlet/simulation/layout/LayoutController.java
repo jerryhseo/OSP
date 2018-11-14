@@ -34,7 +34,6 @@ import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -62,7 +61,6 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -353,7 +351,7 @@ public class LayoutController {
 
 	}
 	
-	private JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws JSONException, SystemException, NoSuchSimulationException, NoSuchSimulationJobException{
+	private JSONObject loadJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws SystemException, PortalException{
 		String jobUuid = ParamUtil.getString(resourceRequest, "jobUuid");
 		
 		SimulationJob job = SimulationJobLocalServiceUtil.getJob(jobUuid);
@@ -361,7 +359,15 @@ public class LayoutController {
 		SimulationJobData jobData = SimulationJobDataLocalServiceUtil.fetchSimulationJobData(job.getJobUuid());
 		
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-		jsonObj.put("job_", this.convertJobToJSON(job));
+		Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(job.getSimulationUuid());
+		long userId = PortalUtil.getUser(resourceRequest).getUserId();
+		
+		boolean isEdit = false;
+		if(simulation.getUserId()==userId){
+			isEdit=true;
+		}
+		jsonObj.put("job_", this.convertJobToJSON(job,isEdit));
+		
 		if( jobData != null ){
 			jsonObj.put("inputs_", jobData.getJobData());
 		}
@@ -382,10 +388,11 @@ public class LayoutController {
 		return json;
 	}
 	
-	private JSONObject convertJobToJSON( SimulationJob job ) throws SystemException, JSONException{
+	private JSONObject convertJobToJSON( SimulationJob job,boolean isEdit) throws SystemException, JSONException{
 		JSONObject json = JSONFactoryUtil.createJSONObject();
 		
 		json.put("uuid_", job.getJobUuid());
+		json.put("isEdit_", isEdit);
 		json.put("title_", job.getJobTitle());
 		json.put("seqNo_", job.getJobSeqNo());
 		if(  job.getJobStartDt() != null )
@@ -603,7 +610,7 @@ public class LayoutController {
 			_log.error("Adding New Job Failed For:  "+ simulationUuid);
 			throw new PortletException();
 		}
-		return this.convertJobToJSON(job);
+		return this.convertJobToJSON(job,true);
 	}
 	
 	private void deleteJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
@@ -660,7 +667,7 @@ public class LayoutController {
 		
 		JSONObject jsonJob = null;
 		try {
-			jsonJob = this.convertJobToJSON(job);
+			jsonJob = this.convertJobToJSON(job,true);
 		} catch (JSONException | SystemException e) {
 			_log.error("Converting job to JSON: "+e.getMessage());
 			throw new PortletException();

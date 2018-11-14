@@ -1651,28 +1651,39 @@
             /*Log Port Check*/
             for(var portName in logPorts ){
             	var portlets = Workbench.getPortlets( portName );
-            	fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()));
+            	if(job.status()===OSP.Enumeration.JobStatus.FAILED){
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()),true);
+            	}else{
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()),false);
+            	}
+            	
             }
             
             /*OUT Port Check*/
             for(var portName in outputPorts ){
             	var portlets = Workbench.getPortlets( portName );
-            	fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()));
+            	if(job.status()===OSP.Enumeration.JobStatus.FAILED){
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()),true);
+            	}else{
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()),false);
+            	}
             }
             
             
         }
         
-        var fireBlockPortEvent = function(portName,isBlock){
+        var fireBlockPortEvent = function(portName,isBlock,isError){
         	var portlets = Workbench.getPortlets( portName );
         	var data = {
                     isBlock: isBlock
         	};
         	
+        	if(typeof isError != 'undefined'){data.isError=isError;}
+        	
         	for(var index in portlets ){
         		var portlet = portlets[index];
-        		console.log('OSP_DISABLE_CONTROLL: ['+portlet.instanceId()+', '+new Date()+']', data);
-        		fire( OSP.Event.OSP_DISABLE_CONTROLL, portlet.instanceId(), data);
+        		console.log('OSP_DISABLE_CONTROLLS: ['+portlet.instanceId()+', '+new Date()+']', data);
+        		fire( OSP.Event.OSP_DISABLE_CONTROLLS, portlet.instanceId(), data);
         	}
         }
         
@@ -2663,6 +2674,8 @@
                         if(result.inputs_){
                             jsonJob.inputs_ = JSON.parse(result.inputs_);
                         }
+                        
+                        console.log(jsonJob);
                         job = simulation.newJob( jsonJob );
                         
                         if( job.isSubmit() ){

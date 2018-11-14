@@ -684,6 +684,19 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_KEY, eventData);
 });
 
+Liferay.on(OSP.Event.OSP_REQUEST_COLLECTION_VIEW,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	console.log('OSP_REQUEST_COLLECTION_VIEW: ['+e.portletId+', '+new Date()+']');
+	
+	var eventData = {
+			targetPortlet: e.portletId
+		};
+	
+	Liferay.fire(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW, eventData);
+});
+
+
+
 
 /***********************************************************************
  * Global Function section

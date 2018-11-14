@@ -392,7 +392,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 // 			console.log(searchData);
 			if(searchData!=null){
 				$targetUL = $("#<portlet:namespace/>sidebar-menu");
-				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).prependTo($targetUL);
+				$topLi = $("<li/>").attr("id","<portlet:namespace/>job-"+searchData._jobUuid).prependTo($targetUL).addClass("treeview");
 				$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",searchData._simulationUuid)
 							.attr("data-job-uuid",searchData._jobUuid)
 							.attr("onclick","<portlet:namespace/>jobSelect(this);return false;")
@@ -785,7 +785,8 @@ function <portlet:namespace/>jobSelect(object){
 	var simulationUuid = $(object).attr("data-simulation-uuid");
 	var jobUuid = $(object).attr("data-job-uuid");
 	
-	$("#<portlet:namespace/>sidebar-menu li.job-list.action").removeClass("action");
+ 	/*$("#<portlet:namespace/>sidebar-menu li.job-list.action").removeClass("action");*/
+	$("#<portlet:namespace/>sidebar-menu li.action").removeClass("action");
 	$("#<portlet:namespace/>job-"+jobUuid).addClass("action");
 	
 	var myId = '<%=portletDisplay.getId()%>';
