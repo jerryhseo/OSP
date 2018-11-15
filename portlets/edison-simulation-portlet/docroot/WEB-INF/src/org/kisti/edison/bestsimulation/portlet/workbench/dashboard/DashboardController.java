@@ -169,8 +169,17 @@ public class DashboardController {
 				PrintWriter out = response.getWriter();
 				out.write(obj.toString());
 			}catch (Exception e) {
-				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
-				e.printStackTrace();
+				if(e instanceof IndexOutOfBoundsException){
+					JsonObject obj = new JsonObject();
+					obj.add("simulation",null);
+					
+					response.setContentType("application/json; charset=UTF-8");
+					PrintWriter out = response.getWriter();
+					out.write(obj.toString());
+				}else{
+					handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
+					e.printStackTrace();
+				}
 			}
 		
 	}

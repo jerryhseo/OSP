@@ -11,7 +11,24 @@
 </liferay-portlet:renderURL>
 
 <style type="text/css">
+	nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
+		text-align: center;
+		padding: 12px;
+		cursor: pointer;
+	}
+	
+	nav.workbench-custom-nav .<portlet:namespace/>divider-vertical {
+		height: 50px;
+		margin: 9px;
+		border-left: 2px solid #f2f2f2;
+		border-right: 1px solid #ffffff;
+	}
 
+	.nav li.<portlet:namespace/>divider-vertical{
+		display: none;
+	}
+	
+	
 </style>
 <!-- App Name -->
 <div class="logo">
@@ -36,54 +53,54 @@
 				<i class="fa fa-cogs fa-2x"></i><br>
 				<span class="nav-icon-text">Edit</span>
 			</li>
-			<li class="divider-vertical" id="<portlet:namespace/>simulation-li-divider"></li>
-			<li id="<portlet:namespace/>header-li-new"  style="display: none;">
+			<li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider"></li>
+			<li id="<portlet:namespace/>header-li-new"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-plus-square-o fa-2x"></i><br>
 				<span class="nav-icon-text">New</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-save"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-save"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-save fa-2x"></i><br>
 				<span class="nav-icon-text">Save</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-wf-copy"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-wf-copy"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-copy fa-2x"></i><br>
 				<span class="nav-icon-text">Copy</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-copy"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-copy"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-copy fa-2x"></i><br>
 				<span class="nav-icon-text">Copy</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-delete"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-delete"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-trash-o fa-2x"></i><br>
 				<span class="nav-icon-text">Delete</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-select"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-select"  style="display: none;" data-divider="job-li-divider">
 				<i class="fa fa-check-square-o fa-2x"></i><br>
 				<span class="nav-icon-text">Select</span>
 			</li>
-			<li class="divider-vertical"></li>
-			<li id="<portlet:namespace/>header-li-submit"  style="display: none;">
+			<li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>ib-li-divider"></li>
+			<li id="<portlet:namespace/>header-li-submit"  style="display: none;" data-divider="ib-li-divider">
 				<i class="fa fa-cloud-upload fa-2x"></i><br>
 				<span class="nav-icon-text">Submit</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-cancel"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-cancel"  style="display: none;" data-divider="ib-li-divider">
 				<i class="fa fa-window-close-o fa-2x"></i><br>
 				<span class="nav-icon-text">cancel</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-log"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-log"  style="display: none;" data-divider="ib-li-divider">
 				<i class="fa fa-desktop fa-2x"></i><br>
 				<span class="nav-icon-text">Log</span>
 			</li>
-			<li id="<portlet:namespace/>header-li-download"  style="display: none;">
+			<li id="<portlet:namespace/>header-li-download"  style="display: none;" data-divider="ib-li-divider">
 				<i class="fa fa-cloud-download fa-2x"></i><br>
 				<span class="nav-icon-text">Download</span>
 			</li>
-			<li class="divider-vertical <portlet:namespace/>header-manual"></li>
-			<li id="<portlet:namespace/>header-li-data"  style="display: none;">
+			<li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>data-li-divider"></li>
+			<li id="<portlet:namespace/>header-li-data"  style="display: none;" data-divider="data-li-divider">
 				<i class="fa fa-share-square-o fa-2x"></i><br>
 				<span class="nav-icon-text">Open Data</span>
 			</li>
-			<li class="<portlet:namespace/>header-manual" id="<portlet:namespace/>header-li-manual">
+			<li class="<portlet:namespace/>header-manual" data-divider="data-li-divider">
 				<i class="fa fa-book fa-2x"></i><br>
 				<span class="nav-icon-text">Manual</span>
 			</li>
@@ -99,6 +116,7 @@
 var <portlet:namespace/>LI_EVENT = {
 	"simulation":{
 		"event" : OSP.Event.OSP_REQUEST_SIMULATION_MODAL
+		
 	},
 	"edit":{
 		"event" : OSP.Event.OSP_REQUEST_SIMULATION_EDIT_VIEW
@@ -147,6 +165,7 @@ var <portlet:namespace/>submitLiObj  = {"simulation":true,"edit":true,"new":true
 var <portlet:namespace/>cancelLiObj  = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
 var <portlet:namespace/>successLiObj = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":true};
 var <portlet:namespace/>failLiObj    = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
+
 
 var <portlet:namespace/>openDataTransSimulationIds = [];
 var <portlet:namespace/>openDataTransJobId = '';
@@ -225,6 +244,8 @@ function <portlet:namespace/>drawAppInfomation(data){
 	
 	if(data.currentManualId()!=0){
 		$(".<portlet:namespace/>header-manual").css("display","block");
+		$("#<portlet:namespace/>data-li-divider").css("display","block");
+		
 		$("#<portlet:namespace/>header-li-manual").bind("click",function(){
 			<portlet:namespace/>manualDownLoad(data.currentManualId());
 		});
@@ -239,6 +260,8 @@ function <portlet:namespace/>manualDownLoad(manualId){
 }
 
 function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
+	$("li.<portlet:namespace/>divider-vertical").css("display","none");
+	
 	var liObj;
 	if(status=="SUCCESS"){
 		liObj = $.extend({},<portlet:namespace/>successLiObj);
@@ -258,8 +281,6 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 		for(var key in <portlet:namespace/>wfLiObj){
 			liObj[key]=<portlet:namespace/>wfLiObj[key];
 		}
-		
-		$("#<portlet:namespace/>simulation-li-divider").remove();
 	}
 	
 	if(!isEdit){
@@ -277,6 +298,10 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 				e.preventDefault();
 				<portlet:namespace/>liEventFire(e.data.key);
 			});
+			
+			var dividerId = element.attr("data-divider");
+			$("#<portlet:namespace/>"+dividerId).css("display","block");
+			
 		}else{
 			element.off();
 			element.css("display","none");
@@ -286,9 +311,8 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 
 function <portlet:namespace/>liEventFire(eventKey){
 	var object = <portlet:namespace/>LI_EVENT[eventKey];
-	
-	
 	var isConfirm = object.isConfirm==null||typeof object.isConfirm =="undefined"?false:object.isConfirm;
+	
 	if(isConfirm){
 		$.confirm({
 			boxWidth: '30%',

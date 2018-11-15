@@ -220,18 +220,5 @@ header.main-header{
 	min-height: 70px;
 }
 
-nav.workbench-custom-nav ul > li:not(.divider-vertical){
-	text-align: center;
-	padding: 12px;
-	cursor: pointer;
-}
-
-nav.workbench-custom-nav .divider-vertical {
-	height: 50px;
-	margin: 9px;
-	border-left: 2px solid #f2f2f2;
-	border-right: 1px solid #ffffff;
-}
-
 
 

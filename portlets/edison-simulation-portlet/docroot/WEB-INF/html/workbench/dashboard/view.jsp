@@ -1489,6 +1489,7 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 			}else{
 				simulatinArea.find("#"+<portlet:namespace/>parentNamespace+"pagin").html("");
 				simulatinArea.css("display","none");
+				opendataArea.css("display","none");
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
