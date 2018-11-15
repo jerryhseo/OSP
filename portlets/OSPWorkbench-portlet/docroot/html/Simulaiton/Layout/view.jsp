@@ -133,7 +133,7 @@
 				<div class="modal-body">
 					<div class="container-fluid">
 						<form class="form-horizontal" onsubmit="return false;" role="form" data-toggle="validator" >
-							<div class="form-group" style="border-bottom: 2px solid #3c8dbc;padding-bottom: 15px;">
+							<div class="form-group" style="border-bottom: 2px solid #3c8dbc;padding-bottom: 10px;">
 								<div class="col-md-6">
 									<input type="text" class="form-control" id="title" name="title" placeholder="New Simulation title" required maxlength="20">
 								</div>
@@ -142,6 +142,11 @@
 								</div>
 							</div>
 						</form>
+						<div class="row" id="<portlet:namespace/>opendata-area" style="padding-bottom: 10px;">
+							<div class="col-md-12 ">
+								<button class="btn btn-info pull-right" id="<portlet:namespace/>data"><i class="fa fa-share-square-o"> Open Data</i></button>
+							</div>
+						</div>
 						<div class="row" id="<portlet:namespace/>simulation-area">
 							<div class="col-md-12" style="min-height: 300px;">
 								<table class ="table table-bordered table-hover">
@@ -687,10 +692,27 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 Liferay.on(OSP.Event.OSP_REQUEST_COLLECTION_VIEW,function( e ){
 	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
 	console.log('OSP_REQUEST_COLLECTION_VIEW: ['+e.portletId+', '+new Date()+']');
+	var isTransType = typeof e.isTransType !='undefined'?e.isTransType:'TRANS_JOB';
 	
 	var eventData = {
-			targetPortlet: e.portletId
+			targetPortlet: e.portletId,
+			isTransType: isTransType,
+			data:{}
 		};
+	
+	if(isTransType==='TRANS_JOB'){
+		var simulation = <portlet:namespace/>workbench.workingSimulation();
+		var job = simulation.workingJob();
+		
+		var simulationUuid = simulation.uuid();
+		var jobUuid = job.uuid();
+		
+		eventData.data.simulationUuid = simulationUuid;
+		eventData.data.jobUuid = jobUuid;
+	}else if(isTransType==='TRANS_SIMULATION'){
+		eventData.targetPortlet = "BROADCAST";
+		eventData.data.simulationIds = e.data.simulationIds;
+	}
 	
 	Liferay.fire(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW, eventData);
 });

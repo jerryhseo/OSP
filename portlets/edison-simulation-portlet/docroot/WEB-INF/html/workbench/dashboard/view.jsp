@@ -290,7 +290,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SIMULATION_MODAL, function( e ){
 		if(typeof e.data.isCopy !='undefined'){
 			isCopy = e.data.isCopy;
 		}
-		<portlet:namespace/>searchSimulationModalOpen(1,isCopy,e.data.simulationUuid);
+		<portlet:namespace/>searchSimulationModalOpen(1,isCopy);
 	}
 });
 
@@ -421,7 +421,7 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 				<portlet:namespace/>searchSimulationJob(<portlet:namespace/>workSimulationId);
 				<portlet:namespace/>selectRow(<portlet:namespace/>workSimulationId,'');
 			}else{
-				<portlet:namespace/>searchSimulationModalOpen(1,false,'');
+				<portlet:namespace/>searchSimulationModalOpen(1,false);
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
@@ -1347,16 +1347,11 @@ function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
 
 
 function <portlet:namespace/>loadSimulationModal(currentPage) {
-	<portlet:namespace/>searchSimulationModalOpen(currentPage,<portlet:namespace/>simulationIsCopy,'');
+	<portlet:namespace/>searchSimulationModalOpen(currentPage,<portlet:namespace/>simulationIsCopy);
 }
 
-function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simulationUuid) {
-	var currentSimulationUuid;
-	if(simulationUuid === ''){
-		currentSimulationUuid = <portlet:namespace/>workSimulationId;
-	}else{
-		currentSimulationUuid = simulationUuid;
-	}
+function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
+	var currentSimulationUuid = <portlet:namespace/>workSimulationId;
 	
 	<portlet:namespace/>simulationIsCopy = isCopy;
 	
@@ -1370,13 +1365,46 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simula
 	
 	var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
 	var simulatinArea = modal.find("#"+<portlet:namespace/>parentNamespace+"simulation-area");
+	var opendataArea = modal.find("#"+<portlet:namespace/>parentNamespace+"opendata-area");
+	var simulationTheadTr = simulatinArea.find("thead").children("tr");
+	
 	$simulationTbody = simulatinArea.find("tbody");
 	$simulationTbody.empty();
+	
 	
 	$createButton = modal.find("button#"+<portlet:namespace/>parentNamespace+"create");
 	if(isCopy){
 		$createButton.attr("onclick","<portlet:namespace/>copyJobAndAddSimulation()");
+		opendataArea.css("display","none");
 	}else{
+		/*Create OpenData ALL Checkbox*/
+		if(!simulationTheadTr.children('#'+<portlet:namespace/>parentNamespace+"checkbox-th").length){
+			var allCheckBox = $("<input/>").attr("type","checkbox");
+			var checkoutBoxTh = $("<th/>").attr("id",<portlet:namespace/>parentNamespace+"checkbox-th").addClass("text-center").append(allCheckBox);
+			simulationTheadTr.prepend(checkoutBoxTh);
+			
+			allCheckBox.bind("click",function(e){
+				if(allCheckBox.prop("checked")) {
+					$simulationTbody.find("input[type=checkbox]").prop("checked",true);
+				}else{
+					$simulationTbody.find("input[type=checkbox]").prop("checked",false);
+				}
+				e.stopPropagation();
+			});
+			
+			var openDataBtn = opendataArea.find("button#"+<portlet:namespace/>parentNamespace+"data");
+			openDataBtn.bind("click",{modalName:<portlet:namespace/>parentNamespace+"simulation-modal"},function(e){
+				<portlet:namespace/>openDataSimulation(e.data.modalName);
+				e.stopPropagation();
+				e.preventDefault(); 
+			});
+			opendataArea.css("display","block");
+		}else{
+			var checkoutBoxTh = modal.find("th#"+<portlet:namespace/>parentNamespace+"checkbox-th");
+			checkoutBoxTh.children("input[type=checkbox]").prop("checked",false);
+		}
+		
+		
 		$createButton.attr("onclick","<portlet:namespace/>addSimulation()");
 	}
 	
@@ -1395,6 +1423,12 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simula
 					$tr = $("<tr></tr>").appendTo($simulationTbody);
 					if(simulation._simulationUuid===currentSimulationUuid){
 						$tr.css("background-color","bisque");
+					}
+					
+					/*Create OpenData Checkbox*/
+					if(!isCopy){
+						$checkInput= $("<input/>").attr("type","checkbox").val(simulation._simulationUuid);
+						$("<td></td>").addClass("text-center").css("vertical-align","middle").append($checkInput).appendTo($tr);
 					}
 					
 					$input = $("<input/>").attr("type","text").attr("maxlength","20")
@@ -1434,13 +1468,16 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simula
 				simulatinArea.find("#"+<portlet:namespace/>parentNamespace+"pagin").html(result.pagingStr);
 				simulatinArea.css("display","block");
 				
-				modal.find("div#"+<portlet:namespace/>parentNamespace+"simulation-area input").focusout(function() {
+				modal.find("div#"+<portlet:namespace/>parentNamespace+"simulation-area input[type=text]").focusout(function() {
 					var title = spaceDelete($(this).val());
+					var initTitle = $(this).attr("data-init-val");
 					if(title===''){
-						$(this).val($(this).attr("data-init-val"));
+						$(this).val(initTitle);
 					}else{
-						var simulationUuid = $(this).attr("data-simulation-uuid");
-						<portlet:namespace/>updateSimulationAction(simulationUuid,title);
+						if(title != initTitle){
+							var simulationUuid = $(this).attr("data-simulation-uuid");
+							<portlet:namespace/>updateSimulationAction(simulationUuid,title);
+						}
 					}
 				});
 			}else{
@@ -1458,6 +1495,35 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy,simula
 	
 	modal.modal({ "backdrop": "static", "keyboard": false });
 }
+
+function <portlet:namespace/>openDataSimulation(modalName){
+	var modal = $("#"+modalName);
+	var simulatinArea = modal.find("#"+<portlet:namespace/>parentNamespace+"simulation-area");
+	
+	
+	var simulationTbody = simulatinArea.find("tbody");
+	
+	var simulationIds = [];
+	simulationTbody.find("input[type=checkbox]:checked").each(function(){
+		simulationIds.push($(this).val());
+	});
+	
+	if(simulationIds.length!=0){
+		modal.modal('hide');
+		
+		var myId = '<%=portletDisplay.getId()%>';
+		var eventData = {
+				portletId : myId,
+				targetPortlet : <portlet:namespace/>connector,
+				isTransType : 'TRANS_SIMULATION',
+				data :{
+					simulationIds : simulationIds
+				}
+		};
+		Liferay.fire(OSP.Event.OSP_REQUEST_COLLECTION_VIEW, eventData);
+	}
+}
+
 
 function <portlet:namespace/>copyJobAndAddJob(simulationUuid) {
 	var workbench = window[<portlet:namespace/>parentNamespace+"workbench"];

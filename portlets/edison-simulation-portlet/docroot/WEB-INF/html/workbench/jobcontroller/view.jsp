@@ -3,7 +3,7 @@
 
 <portlet:resourceURL var='downManualFileURL' id='downManualFile' escapeXml="false"></portlet:resourceURL>
 
-<liferay-portlet:resourceURL var="transferJobDataUrl" escapeXml="false" id="transferJobData" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="transferJobDataURL" escapeXml="false" id="transferJobData" copyCurrentRenderParameters="false"/>
 <liferay-portlet:renderURL var="collectionPopupURL" portletName="sdrcommon_WAR_SDR_baseportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
 	<portlet:param name="action" value="collectionPopup" />
 	<portlet:param name="targetGroupId" value="${sdrGroupId}" />
@@ -148,6 +148,9 @@ var <portlet:namespace/>cancelLiObj  = {"simulation":true,"edit":true,"new":true
 var <portlet:namespace/>successLiObj = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":true};
 var <portlet:namespace/>failLiObj    = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
 
+var <portlet:namespace/>openDataTransSimulationIds = [];
+var <portlet:namespace/>openDataTransJobId = '';
+var <portlet:namespace/>openDataTransMode = '';
 /***********************************************************************
 * Initailization section and handling Liferay events
 ***********************************************************************/
@@ -202,7 +205,10 @@ Liferay.on(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
 		console.log('OSP_REQUEST_COLLECTION_VIEW: ['+e.portletId+', '+new Date()+']');
-		<portlet:namespace/>fn_collectionPopup();
+		
+		var isTransType = typeof e.isTransType !='undefined'?e.isTransType:'TRANS_JOB';
+		
+		<portlet:namespace/>fn_collectionPopup(isTransType,e.data);
 	} 
 });
 
@@ -312,8 +318,9 @@ function <portlet:namespace/>liEventFire(eventKey){
 				targetPortlet : <portlet:namespace/>connector
 		};
 		
-		if(eventKey=='copy'){eventData.isCopy = true}
-		if(eventKey=='simulation'){eventData.isCopy = false}
+		if(eventKey=='copy'){eventData.isCopy = true;}
+		if(eventKey=='simulation'){eventData.isCopy = false;}
+		if(eventKey=='data'){eventData.isTransType = 'TRANS_JOB';}
 		
 		console.log(eventData);
 		Liferay.fire(object.event, eventData);
@@ -321,7 +328,18 @@ function <portlet:namespace/>liEventFire(eventKey){
 	
 }
 
-function <portlet:namespace/>fn_collectionPopup(){
+function <portlet:namespace/>fn_collectionPopup(isTransType,data){
+	/*global set*/
+	<portlet:namespace/>openDataTransMode = isTransType;
+	<portlet:namespace/>openDataTransSimulationIds = [];
+	
+	if(isTransType==='TRANS_JOB'){
+		<portlet:namespace/>openDataTransSimulationIds.push(data.simulationUuid);
+		<portlet:namespace/>openDataTransJobId = data.jobUuid;
+	}else if(isTransType==='TRANS_SIMULATION'){
+		<portlet:namespace/>openDataTransSimulationIds = data.simulationIds;
+	}
+	
 	AUI().use('aui-base','liferay-portlet-url','aui-node', function(A) {
 		Liferay.Util.openWindow({
 			dialog : {
@@ -340,10 +358,13 @@ function <portlet:namespace/>fn_collectionPopup(){
 
 function sdrcommon_collectionPopup(result){
 	$.ajax({
-		url: "${transferJobDataUrl}",
+		url: "${transferJobDataURL}",
 		async: false,
 		data : {
 			"<portlet:namespace/>collectionId": result.value,
+			"<portlet:namespace/>transMode": <portlet:namespace/>openDataTransMode,
+			"<portlet:namespace/>simulations": <portlet:namespace/>openDataTransSimulationIds,
+			"<portlet:namespace/>jobUuid":<portlet:namespace/>openDataTransJobId
 		},
 		method: 'POST',
 		timeout: 10000,
@@ -354,6 +375,7 @@ function sdrcommon_collectionPopup(result){
 			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
 		}
 	}).error(function (msg) {
+		$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
 		console.log(msg);
 	});
 }
