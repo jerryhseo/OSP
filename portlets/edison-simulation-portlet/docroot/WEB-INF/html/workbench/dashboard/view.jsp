@@ -1376,6 +1376,9 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 	if(isCopy){
 		$createButton.attr("onclick","<portlet:namespace/>copyJobAndAddSimulation()");
 		opendataArea.css("display","none");
+		
+		var checkoutBoxTh = modal.find("th#"+<portlet:namespace/>parentNamespace+"checkbox-th");
+		checkoutBoxTh.css("display","none");
 	}else{
 		/*Create OpenData ALL Checkbox*/
 		if(!simulationTheadTr.children('#'+<portlet:namespace/>parentNamespace+"checkbox-th").length){
@@ -1402,8 +1405,11 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 		}else{
 			var checkoutBoxTh = modal.find("th#"+<portlet:namespace/>parentNamespace+"checkbox-th");
 			checkoutBoxTh.children("input[type=checkbox]").prop("checked",false);
+
+			checkoutBoxTh.css("display","block");
+			
+			opendataArea.css("display","block");
 		}
-		
 		
 		$createButton.attr("onclick","<portlet:namespace/>addSimulation()");
 	}
