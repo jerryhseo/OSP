@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import java.util.Date;
-
 /**
  * The cache model class for representing Project in entity cache.
  *
@@ -37,7 +35,7 @@ import java.util.Date;
 public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{simulationUuid=");
 		sb.append(simulationUuid);
@@ -45,16 +43,12 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		sb.append(portletNamespace);
 		sb.append(", jobSeqNo=");
 		sb.append(jobSeqNo);
+		sb.append(", projectId=");
+		sb.append(projectId);
 		sb.append(", projectStructure=");
 		sb.append(projectStructure);
 		sb.append(", analyzerStructure=");
 		sb.append(analyzerStructure);
-		sb.append(", executeId=");
-		sb.append(executeId);
-		sb.append(", executeDataStructure=");
-		sb.append(executeDataStructure);
-		sb.append(", executeDate=");
-		sb.append(executeDate);
 		sb.append("}");
 
 		return sb.toString();
@@ -79,6 +73,7 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		}
 
 		projectImpl.setJobSeqNo(jobSeqNo);
+		projectImpl.setProjectId(projectId);
 
 		if (projectStructure == null) {
 			projectImpl.setProjectStructure(StringPool.BLANK);
@@ -94,27 +89,6 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 			projectImpl.setAnalyzerStructure(analyzerStructure);
 		}
 
-		if (executeId == null) {
-			projectImpl.setExecuteId(StringPool.BLANK);
-		}
-		else {
-			projectImpl.setExecuteId(executeId);
-		}
-
-		if (executeDataStructure == null) {
-			projectImpl.setExecuteDataStructure(StringPool.BLANK);
-		}
-		else {
-			projectImpl.setExecuteDataStructure(executeDataStructure);
-		}
-
-		if (executeDate == Long.MIN_VALUE) {
-			projectImpl.setExecuteDate(null);
-		}
-		else {
-			projectImpl.setExecuteDate(new Date(executeDate));
-		}
-
 		projectImpl.resetOriginalValues();
 
 		return projectImpl;
@@ -125,11 +99,9 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		simulationUuid = objectInput.readUTF();
 		portletNamespace = objectInput.readUTF();
 		jobSeqNo = objectInput.readLong();
+		projectId = objectInput.readLong();
 		projectStructure = objectInput.readUTF();
 		analyzerStructure = objectInput.readUTF();
-		executeId = objectInput.readUTF();
-		executeDataStructure = objectInput.readUTF();
-		executeDate = objectInput.readLong();
 	}
 
 	@Override
@@ -150,6 +122,7 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		}
 
 		objectOutput.writeLong(jobSeqNo);
+		objectOutput.writeLong(projectId);
 
 		if (projectStructure == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -164,30 +137,12 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		else {
 			objectOutput.writeUTF(analyzerStructure);
 		}
-
-		if (executeId == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(executeId);
-		}
-
-		if (executeDataStructure == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(executeDataStructure);
-		}
-
-		objectOutput.writeLong(executeDate);
 	}
 
 	public String simulationUuid;
 	public String portletNamespace;
 	public long jobSeqNo;
+	public long projectId;
 	public String projectStructure;
 	public String analyzerStructure;
-	public String executeId;
-	public String executeDataStructure;
-	public long executeDate;
 }

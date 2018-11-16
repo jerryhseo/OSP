@@ -29,7 +29,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.Method;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,11 +78,9 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("portletNamespace", getPortletNamespace());
 		attributes.put("jobSeqNo", getJobSeqNo());
+		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
-		attributes.put("executeId", getExecuteId());
-		attributes.put("executeDataStructure", getExecuteDataStructure());
-		attributes.put("executeDate", getExecuteDate());
 
 		return attributes;
 	}
@@ -108,6 +105,12 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 			setJobSeqNo(jobSeqNo);
 		}
 
+		Long projectId = (Long)attributes.get("projectId");
+
+		if (projectId != null) {
+			setProjectId(projectId);
+		}
+
 		String projectStructure = (String)attributes.get("projectStructure");
 
 		if (projectStructure != null) {
@@ -118,25 +121,6 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
-		}
-
-		String executeId = (String)attributes.get("executeId");
-
-		if (executeId != null) {
-			setExecuteId(executeId);
-		}
-
-		String executeDataStructure = (String)attributes.get(
-				"executeDataStructure");
-
-		if (executeDataStructure != null) {
-			setExecuteDataStructure(executeDataStructure);
-		}
-
-		Date executeDate = (Date)attributes.get("executeDate");
-
-		if (executeDate != null) {
-			setExecuteDate(executeDate);
 		}
 	}
 
@@ -212,6 +196,29 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 	}
 
 	@Override
+	public long getProjectId() {
+		return _projectId;
+	}
+
+	@Override
+	public void setProjectId(long projectId) {
+		_projectId = projectId;
+
+		if (_projectRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setProjectId", long.class);
+
+				method.invoke(_projectRemoteModel, projectId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public String getProjectStructure() {
 		return _projectStructure;
 	}
@@ -252,76 +259,6 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 						String.class);
 
 				method.invoke(_projectRemoteModel, analyzerStructure);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public String getExecuteId() {
-		return _executeId;
-	}
-
-	@Override
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
-
-		if (_projectRemoteModel != null) {
-			try {
-				Class<?> clazz = _projectRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setExecuteId", String.class);
-
-				method.invoke(_projectRemoteModel, executeId);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public String getExecuteDataStructure() {
-		return _executeDataStructure;
-	}
-
-	@Override
-	public void setExecuteDataStructure(String executeDataStructure) {
-		_executeDataStructure = executeDataStructure;
-
-		if (_projectRemoteModel != null) {
-			try {
-				Class<?> clazz = _projectRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setExecuteDataStructure",
-						String.class);
-
-				method.invoke(_projectRemoteModel, executeDataStructure);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public Date getExecuteDate() {
-		return _executeDate;
-	}
-
-	@Override
-	public void setExecuteDate(Date executeDate) {
-		_executeDate = executeDate;
-
-		if (_projectRemoteModel != null) {
-			try {
-				Class<?> clazz = _projectRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setExecuteDate", Date.class);
-
-				method.invoke(_projectRemoteModel, executeDate);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -401,11 +338,9 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		clone.setSimulationUuid(getSimulationUuid());
 		clone.setPortletNamespace(getPortletNamespace());
 		clone.setJobSeqNo(getJobSeqNo());
+		clone.setProjectId(getProjectId());
 		clone.setProjectStructure(getProjectStructure());
 		clone.setAnalyzerStructure(getAnalyzerStructure());
-		clone.setExecuteId(getExecuteId());
-		clone.setExecuteDataStructure(getExecuteDataStructure());
-		clone.setExecuteDate(getExecuteDate());
 
 		return clone;
 	}
@@ -450,7 +385,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -458,16 +393,12 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		sb.append(getPortletNamespace());
 		sb.append(", jobSeqNo=");
 		sb.append(getJobSeqNo());
+		sb.append(", projectId=");
+		sb.append(getProjectId());
 		sb.append(", projectStructure=");
 		sb.append(getProjectStructure());
 		sb.append(", analyzerStructure=");
 		sb.append(getAnalyzerStructure());
-		sb.append(", executeId=");
-		sb.append(getExecuteId());
-		sb.append(", executeDataStructure=");
-		sb.append(getExecuteDataStructure());
-		sb.append(", executeDate=");
-		sb.append(getExecuteDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -475,7 +406,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.osp.model.Project");
@@ -494,24 +425,16 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		sb.append(getJobSeqNo());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>projectId</column-name><column-value><![CDATA[");
+		sb.append(getProjectId());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>projectStructure</column-name><column-value><![CDATA[");
 		sb.append(getProjectStructure());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>analyzerStructure</column-name><column-value><![CDATA[");
 		sb.append(getAnalyzerStructure());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeId</column-name><column-value><![CDATA[");
-		sb.append(getExecuteId());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeDataStructure</column-name><column-value><![CDATA[");
-		sb.append(getExecuteDataStructure());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeDate</column-name><column-value><![CDATA[");
-		sb.append(getExecuteDate());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -522,11 +445,9 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 	private String _simulationUuid;
 	private String _portletNamespace;
 	private long _jobSeqNo;
+	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
-	private String _executeId;
-	private String _executeDataStructure;
-	private Date _executeDate;
 	private BaseModel<?> _projectRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.osp.service.ClpSerializer.class;
 }

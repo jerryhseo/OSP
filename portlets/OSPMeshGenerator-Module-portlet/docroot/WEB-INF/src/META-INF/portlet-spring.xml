@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.edison.osp.service.ExecuteLocalService" class="org.kisti.edison.osp.service.impl.ExecuteLocalServiceImpl" />
+	<bean id="org.kisti.edison.osp.service.ExecuteService" class="org.kisti.edison.osp.service.impl.ExecuteServiceImpl" />
+	<bean id="org.kisti.edison.osp.service.persistence.ExecutePersistence" class="org.kisti.edison.osp.service.persistence.ExecutePersistenceImpl" parent="basePersistence" />
 	<bean id="org.kisti.edison.osp.service.ProjectLocalService" class="org.kisti.edison.osp.service.impl.ProjectLocalServiceImpl" />
 	<bean id="org.kisti.edison.osp.service.ProjectService" class="org.kisti.edison.osp.service.impl.ProjectServiceImpl" />
 	<bean id="org.kisti.edison.osp.service.persistence.ProjectPersistence" class="org.kisti.edison.osp.service.persistence.ProjectPersistenceImpl" parent="basePersistence" />

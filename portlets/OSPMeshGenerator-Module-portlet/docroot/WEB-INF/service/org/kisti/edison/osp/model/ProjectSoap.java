@@ -19,7 +19,6 @@ import org.kisti.edison.osp.service.persistence.ProjectPK;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,11 +35,9 @@ public class ProjectSoap implements Serializable {
 		soapModel.setSimulationUuid(model.getSimulationUuid());
 		soapModel.setPortletNamespace(model.getPortletNamespace());
 		soapModel.setJobSeqNo(model.getJobSeqNo());
+		soapModel.setProjectId(model.getProjectId());
 		soapModel.setProjectStructure(model.getProjectStructure());
 		soapModel.setAnalyzerStructure(model.getAnalyzerStructure());
-		soapModel.setExecuteId(model.getExecuteId());
-		soapModel.setExecuteDataStructure(model.getExecuteDataStructure());
-		soapModel.setExecuteDate(model.getExecuteDate());
 
 		return soapModel;
 	}
@@ -119,6 +116,14 @@ public class ProjectSoap implements Serializable {
 		_jobSeqNo = jobSeqNo;
 	}
 
+	public long getProjectId() {
+		return _projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		_projectId = projectId;
+	}
+
 	public String getProjectStructure() {
 		return _projectStructure;
 	}
@@ -135,36 +140,10 @@ public class ProjectSoap implements Serializable {
 		_analyzerStructure = analyzerStructure;
 	}
 
-	public String getExecuteId() {
-		return _executeId;
-	}
-
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
-	}
-
-	public String getExecuteDataStructure() {
-		return _executeDataStructure;
-	}
-
-	public void setExecuteDataStructure(String executeDataStructure) {
-		_executeDataStructure = executeDataStructure;
-	}
-
-	public Date getExecuteDate() {
-		return _executeDate;
-	}
-
-	public void setExecuteDate(Date executeDate) {
-		_executeDate = executeDate;
-	}
-
 	private String _simulationUuid;
 	private String _portletNamespace;
 	private long _jobSeqNo;
+	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
-	private String _executeId;
-	private String _executeDataStructure;
-	private Date _executeDate;
 }

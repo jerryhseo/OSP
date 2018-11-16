@@ -2,7 +2,17 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.kisti.edison.osp.model.Execute" />
 	<import class="org.kisti.edison.osp.model.Project" />
+	<class name="org.kisti.edison.osp.model.impl.ExecuteImpl" table="EDMESH_Execute">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.osp.service.persistence.ExecutePK">
+			<key-property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="executeId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="executeDataStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="executeDate" type="org.hibernate.type.TimestampType" />
+	</class>
 	<class name="org.kisti.edison.osp.model.impl.ProjectImpl" table="EDMESH_Project">
 		<cache usage="read-write" />
 		<composite-id name="primaryKey" class="org.kisti.edison.osp.service.persistence.ProjectPK">
@@ -10,10 +20,8 @@
 			<key-property name="portletNamespace" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 			<key-property name="jobSeqNo" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		</composite-id>
+		<property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="projectStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="analyzerStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="executeId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="executeDataStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="executeDate" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

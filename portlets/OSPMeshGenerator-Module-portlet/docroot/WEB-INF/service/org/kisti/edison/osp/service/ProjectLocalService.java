@@ -253,4 +253,13 @@ public interface ProjectLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	public void removeProjectBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException;
+
+	public void removeProject(java.lang.String simulationUuid,
+		java.lang.String portletNamespace, long jobSeqNo)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException;
 }

@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 
 
+<liferay-portlet:resourceURL var="getProjectURL" id="getProject" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="updateProjectURL" id="updateProject" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="deleteProjectURL" id="deleteProject" copyCurrentRenderParameters="false" escapeXml="false"/>
+
+
+
 
 <style type="text/css">
 div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel {
@@ -25,10 +31,16 @@ div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel ul
 	vertical-align: middle;
 	background-color: #FFFFFF;
 }
+
+div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.title{
+	border-bottom: 1px solid #d3d3d3;
+	padding: 10px 0px;
+}
 </style>
 <div class="panel panel-default blade-full-height">
-	<div class="panel-heading blade-panel-heading">
-		<i class="icon-chevron-right"></i> Navigator
+	<div class="panel-heading blade-panel-heading clearfix">
+		<div class="panel-title pull-left"><span><i class="icon-chevron-right"></i> Selected File : <span>ssssssssss</span></span></div>
+		<div class="pull-right"><button class="btn btn-xs btn-primary">sample</button></div>
 	</div>
 	<div class="panel-body">
 		<div id="<portlet:namespace/>controllpanel" class="controllpanel">
@@ -91,7 +103,9 @@ div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel ul
 				</li>
 			</ul>
 		</div>
-		
+		<div class="title">
+			<i class="icon-ok"></i> Navigator</span>
+		</div>
 		<div id="<portlet:namespace/>navigatorTree">
 			
 		</div>
@@ -171,6 +185,9 @@ function <portlet:namespace/>navigatorInitJstree(){
 		
 		
 	}).bind("open_node.jstree", function(event, data) {
+		
+	}).bind("refresh.jstree",function(event, data){
+		$("#<portlet:namespace/>navigatorTree").jstree('open_all');
 	}).bind("select_node.jstree",function(event, data){
 		if(typeof data.event!= "undefined"){
 			if(data.event.target.tagName === "I"){
@@ -185,11 +202,103 @@ function <portlet:namespace/>navigatorInitJstree(){
 	});
 }
 
-function <portlet:namespace/>searchNavigator(simulationUuid, jobSeqNo){
+function <portlet:namespace/>searchNavigator(){
+	/*init Data*/
+	/*Key 값이 없을 경우 해당 초기 데이터 Setting을 위하여 */
+	var projectStructure = JSON.stringify(<portlet:namespace/>INIT_ROOT_DATA);
+	var analyzerStructure = JSON.stringify(<portlet:namespace/>INIT_DISPLAY_DATA);
 	
+	var searchData = {
+		"<portlet:namespace/>projectStructure":projectStructure,
+		"<portlet:namespace/>analyzerStructure":analyzerStructure,
+		"<portlet:namespace/>simulationUuid":<portlet:namespace/>simulationUuid,
+		"<portlet:namespace/>jobSeqNo":<portlet:namespace/>jobSeqNo
+	};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=getProjectURL%>",
+		async : false,
+		data  : searchData,
+		dataType: 'json',
+		success: function(data) {
+			var treeData  = data.projectStructure;
+			$("#<portlet:namespace/>navigatorTree").jstree(true).settings.core.data = treeData;
+			$("#<portlet:namespace/>navigatorTree").jstree(true).refresh();
+			
+			/*Global ProjectId Setting*/
+			<portlet:namespace/>projectId = data.projectId;
+			
+			/*View File Load Event 호출*/
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}  
+		}
+	});
 }
 
 
+function <portlet:namespace/>updateProject(display){
+	var v = $('#<portlet:namespace/>navigatorTree').jstree(true).get_json('#', {no_a_attr:true,no_li_attr:true,no_state:true})
+	var projectStructure = JSON.stringify(v);
+	var analyzerStructure = "";
+	if(display!="none"){
+		analyzerStructure = display==""?JSON.stringify(<portlet:namespace/>INIT_DISPLAY_DATA):JSON.stringify(display);
+	}
+	
+	var updateData = {
+		"<portlet:namespace/>projectStructure":projectStructure,
+		"<portlet:namespace/>analyzerStructure":analyzerStructure,
+		"<portlet:namespace/>simulationUuid":<portlet:namespace/>simulationUuid,
+		"<portlet:namespace/>jobSeqNo":<portlet:namespace/>jobSeqNo
+	};
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=updateProjectURL%>",
+		async : false,
+		data  : updateData,
+		success: function(data) {
+			
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}  
+		}
+	});
+}
+
+function <portlet:namespace/>removeProject(removeType){
+	var removeData = {
+			"<portlet:namespace/>simulationUuid":<portlet:namespace/>simulationUuid,
+			"<portlet:namespace/>jobSeqNo":<portlet:namespace/>jobSeqNo,
+			"<portlet:namespace/>removeType":removeType
+		};
+	
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=deleteProjectURL%>",
+			async : false,
+			data  : removeData,
+			success: function(data) {
+				
+			},error:function(jqXHR, textStatus, errorThrown){
+// 				if(jqXHR.responseText !== ''){
+// 					alert(textStatus+": "+jqXHR.responseText);
+// 				}else{
+// 					alert(textStatus+": "+errorThrown);
+// 				}  
+			}
+		});
+}
+
+/***********************************************************************
+ * Tree Event section
+ ***********************************************************************/
 function <portlet:namespace/>selectedNode(treeData){
 	var node_id = treeData.node.id;
 	var node_data_type = treeData.node.data[MESH.Constants.DATA_NODE_TYPE];
@@ -245,13 +354,11 @@ function <portlet:namespace/>selectedNode(treeData){
 	}
 	/* parameter event - end*/
 }
-
-/***********************************************************************
- * Tree Event section
- ***********************************************************************/
 function <portlet:namespace/>addNode(parentId, node){
-	$("#navigatorTree").jstree().create_node(parentId,OSP.Util.toJSON(node),"last",false);
-	$("#navigatorTree").jstree("open_node", parentId);
+	$("#<portlet:namespace/>navigatorTree").jstree().create_node(parentId,OSP.Util.toJSON(node),"last",false);
+	$("#<portlet:namespace/>navigatorTree").jstree("open_node", parentId);
+	
+	<portlet:namespace/>updateProject('none');
 }
 
 

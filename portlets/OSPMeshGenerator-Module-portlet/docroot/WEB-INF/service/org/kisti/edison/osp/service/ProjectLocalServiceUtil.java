@@ -275,6 +275,20 @@ public class ProjectLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static void removeProjectBySimulationUuid(
+		java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException {
+		getService().removeProjectBySimulationUuid(simulationUuid);
+	}
+
+	public static void removeProject(java.lang.String simulationUuid,
+		java.lang.String portletNamespace, long jobSeqNo)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException {
+		getService().removeProject(simulationUuid, portletNamespace, jobSeqNo);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

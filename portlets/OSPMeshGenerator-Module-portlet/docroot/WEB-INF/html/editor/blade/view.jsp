@@ -56,6 +56,7 @@ var <portlet:namespace/>connector = '';
 
 var <portlet:namespace/>simulationUuid = '';
 var <portlet:namespace/>jobSeqNo = '';
+var <portlet:namespace/>projectId = 0;
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
@@ -88,13 +89,15 @@ Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY,'');
+		console.log("OSP_INITIALIZE");
 	}
 });
 
 Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		
+		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY,'');
+		console.log("OSP_LOAD_DATA");
 	}
 });
 
@@ -103,7 +106,27 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY,function(e) {
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>simulationUuid = e.data.simulationUuid;
 		<portlet:namespace/>jobSeqNo = e.data.jobSeqNo;
-// 		<portlet:namespace/>searchNavigator(<portlet:namespace/>simulationUuid,<portlet:namespace/>jobSeqNo);
+		<portlet:namespace/>searchNavigator();
+	}
+});
+
+Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
+		var status = e.data.status;
+		var simulationUuid = e.data.simulationUuid;
+		if(status){
+			<portlet:namespace/>removeProject('SIMULATION');
+		}
+	}
+});
+
+Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
+		if(e.data.status){
+			<portlet:namespace/>removeProject('JOB');
+		}
 	}
 });
 /***********************************************************************

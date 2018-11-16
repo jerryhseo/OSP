@@ -33,6 +33,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import org.kisti.edison.osp.model.Project;
 import org.kisti.edison.osp.service.ProjectLocalService;
+import org.kisti.edison.osp.service.persistence.ExecutePersistence;
 import org.kisti.edison.osp.service.persistence.ProjectPK;
 import org.kisti.edison.osp.service.persistence.ProjectPersistence;
 
@@ -275,6 +276,62 @@ public abstract class ProjectLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the execute local service.
+	 *
+	 * @return the execute local service
+	 */
+	public org.kisti.edison.osp.service.ExecuteLocalService getExecuteLocalService() {
+		return executeLocalService;
+	}
+
+	/**
+	 * Sets the execute local service.
+	 *
+	 * @param executeLocalService the execute local service
+	 */
+	public void setExecuteLocalService(
+		org.kisti.edison.osp.service.ExecuteLocalService executeLocalService) {
+		this.executeLocalService = executeLocalService;
+	}
+
+	/**
+	 * Returns the execute remote service.
+	 *
+	 * @return the execute remote service
+	 */
+	public org.kisti.edison.osp.service.ExecuteService getExecuteService() {
+		return executeService;
+	}
+
+	/**
+	 * Sets the execute remote service.
+	 *
+	 * @param executeService the execute remote service
+	 */
+	public void setExecuteService(
+		org.kisti.edison.osp.service.ExecuteService executeService) {
+		this.executeService = executeService;
+	}
+
+	/**
+	 * Returns the execute persistence.
+	 *
+	 * @return the execute persistence
+	 */
+	public ExecutePersistence getExecutePersistence() {
+		return executePersistence;
+	}
+
+	/**
+	 * Sets the execute persistence.
+	 *
+	 * @param executePersistence the execute persistence
+	 */
+	public void setExecutePersistence(ExecutePersistence executePersistence) {
+		this.executePersistence = executePersistence;
+	}
+
+	/**
 	 * Returns the project local service.
 	 *
 	 * @return the project local service
@@ -506,6 +563,12 @@ public abstract class ProjectLocalServiceBaseImpl extends BaseLocalServiceImpl
 		}
 	}
 
+	@BeanReference(type = org.kisti.edison.osp.service.ExecuteLocalService.class)
+	protected org.kisti.edison.osp.service.ExecuteLocalService executeLocalService;
+	@BeanReference(type = org.kisti.edison.osp.service.ExecuteService.class)
+	protected org.kisti.edison.osp.service.ExecuteService executeService;
+	@BeanReference(type = ExecutePersistence.class)
+	protected ExecutePersistence executePersistence;
 	@BeanReference(type = org.kisti.edison.osp.service.ProjectLocalService.class)
 	protected org.kisti.edison.osp.service.ProjectLocalService projectLocalService;
 	@BeanReference(type = org.kisti.edison.osp.service.ProjectService.class)

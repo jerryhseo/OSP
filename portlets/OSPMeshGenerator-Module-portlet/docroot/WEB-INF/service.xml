@@ -12,10 +12,28 @@
 		<column name="jobSeqNo" type="long" primary="true"></column>
 
 		<!-- Other fields -->
+		<column name="projectId" type="long" ></column>
 		<column name="projectStructure" type="String"></column>
 		<column name="analyzerStructure" type="String"></column>
-		<column name="executeId" type="String"></column>
+		
+		<!-- Finders -->
+		<finder name="simulationUuid" return-type="Collection" unique="false">
+			<finder-column name="simulationUuid"></finder-column>
+		</finder>
+	</entity>
+	
+	<entity local-service="true" name="Execute">
+		<!-- PK fields -->
+		<column name="projectId" type="long" primary="true"></column>
+		<column name="executeId" type="String" primary="true"></column>
+		
+		<!-- Fields -->
 		<column name="executeDataStructure" type="String"></column>
-		<column name="executeDate" type="Date"></column> 
+		<column name="executeDate" type="Date"></column>
+		
+		<!-- Finders -->
+		<finder name="ProjectId" return-type="Collection" unique="false">
+			<finder-column name="projectId"></finder-column>
+		</finder>
 	</entity>
 </service-builder>

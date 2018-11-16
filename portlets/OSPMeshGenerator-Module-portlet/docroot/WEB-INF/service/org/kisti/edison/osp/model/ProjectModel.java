@@ -25,8 +25,6 @@ import org.kisti.edison.osp.service.persistence.ProjectPK;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * The base model interface for the Project service. Represents a row in the &quot;EDMESH_Project&quot; database table, with each column mapped to a property of this class.
  *
@@ -106,6 +104,20 @@ public interface ProjectModel extends BaseModel<Project> {
 	public void setJobSeqNo(long jobSeqNo);
 
 	/**
+	 * Returns the project ID of this project.
+	 *
+	 * @return the project ID of this project
+	 */
+	public long getProjectId();
+
+	/**
+	 * Sets the project ID of this project.
+	 *
+	 * @param projectId the project ID of this project
+	 */
+	public void setProjectId(long projectId);
+
+	/**
 	 * Returns the project structure of this project.
 	 *
 	 * @return the project structure of this project
@@ -134,50 +146,6 @@ public interface ProjectModel extends BaseModel<Project> {
 	 * @param analyzerStructure the analyzer structure of this project
 	 */
 	public void setAnalyzerStructure(String analyzerStructure);
-
-	/**
-	 * Returns the execute ID of this project.
-	 *
-	 * @return the execute ID of this project
-	 */
-	@AutoEscape
-	public String getExecuteId();
-
-	/**
-	 * Sets the execute ID of this project.
-	 *
-	 * @param executeId the execute ID of this project
-	 */
-	public void setExecuteId(String executeId);
-
-	/**
-	 * Returns the execute data structure of this project.
-	 *
-	 * @return the execute data structure of this project
-	 */
-	@AutoEscape
-	public String getExecuteDataStructure();
-
-	/**
-	 * Sets the execute data structure of this project.
-	 *
-	 * @param executeDataStructure the execute data structure of this project
-	 */
-	public void setExecuteDataStructure(String executeDataStructure);
-
-	/**
-	 * Returns the execute date of this project.
-	 *
-	 * @return the execute date of this project
-	 */
-	public Date getExecuteDate();
-
-	/**
-	 * Sets the execute date of this project.
-	 *
-	 * @param executeDate the execute date of this project
-	 */
-	public void setExecuteDate(Date executeDate);
 
 	@Override
 	public boolean isNew();

@@ -284,6 +284,22 @@ public class ProjectLocalServiceWrapper implements ProjectLocalService,
 		return _projectLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
+	public void removeProjectBySimulationUuid(java.lang.String simulationUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException {
+		_projectLocalService.removeProjectBySimulationUuid(simulationUuid);
+	}
+
+	@Override
+	public void removeProject(java.lang.String simulationUuid,
+		java.lang.String portletNamespace, long jobSeqNo)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchProjectException {
+		_projectLocalService.removeProject(simulationUuid, portletNamespace,
+			jobSeqNo);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

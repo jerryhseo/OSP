@@ -194,7 +194,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CREATE_SIMULATION_RESULT, function( e ){
 
 Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		var status = e.data.status;
 		var simulationUuid = e.data.simulationUuid;
 		if(status){
@@ -232,7 +232,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_CANCLE_SIMULATION_JOB_RESULT, function( e ){
 
 Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		if(e.data.status){
 			toastr["success"]("", Liferay.Language.get('edison-data-delete-success'));
 			$("li#<portlet:namespace/>job-"+e.data.jobUuid).remove();

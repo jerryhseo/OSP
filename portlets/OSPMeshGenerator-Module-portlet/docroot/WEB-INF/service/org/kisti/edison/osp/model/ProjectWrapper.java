@@ -17,7 +17,6 @@ package org.kisti.edison.osp.model;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,11 +51,9 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("portletNamespace", getPortletNamespace());
 		attributes.put("jobSeqNo", getJobSeqNo());
+		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
-		attributes.put("executeId", getExecuteId());
-		attributes.put("executeDataStructure", getExecuteDataStructure());
-		attributes.put("executeDate", getExecuteDate());
 
 		return attributes;
 	}
@@ -81,6 +78,12 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 			setJobSeqNo(jobSeqNo);
 		}
 
+		Long projectId = (Long)attributes.get("projectId");
+
+		if (projectId != null) {
+			setProjectId(projectId);
+		}
+
 		String projectStructure = (String)attributes.get("projectStructure");
 
 		if (projectStructure != null) {
@@ -91,25 +94,6 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
-		}
-
-		String executeId = (String)attributes.get("executeId");
-
-		if (executeId != null) {
-			setExecuteId(executeId);
-		}
-
-		String executeDataStructure = (String)attributes.get(
-				"executeDataStructure");
-
-		if (executeDataStructure != null) {
-			setExecuteDataStructure(executeDataStructure);
-		}
-
-		Date executeDate = (Date)attributes.get("executeDate");
-
-		if (executeDate != null) {
-			setExecuteDate(executeDate);
 		}
 	}
 
@@ -195,6 +179,26 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 	}
 
 	/**
+	* Returns the project ID of this project.
+	*
+	* @return the project ID of this project
+	*/
+	@Override
+	public long getProjectId() {
+		return _project.getProjectId();
+	}
+
+	/**
+	* Sets the project ID of this project.
+	*
+	* @param projectId the project ID of this project
+	*/
+	@Override
+	public void setProjectId(long projectId) {
+		_project.setProjectId(projectId);
+	}
+
+	/**
 	* Returns the project structure of this project.
 	*
 	* @return the project structure of this project
@@ -232,66 +236,6 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 	@Override
 	public void setAnalyzerStructure(java.lang.String analyzerStructure) {
 		_project.setAnalyzerStructure(analyzerStructure);
-	}
-
-	/**
-	* Returns the execute ID of this project.
-	*
-	* @return the execute ID of this project
-	*/
-	@Override
-	public java.lang.String getExecuteId() {
-		return _project.getExecuteId();
-	}
-
-	/**
-	* Sets the execute ID of this project.
-	*
-	* @param executeId the execute ID of this project
-	*/
-	@Override
-	public void setExecuteId(java.lang.String executeId) {
-		_project.setExecuteId(executeId);
-	}
-
-	/**
-	* Returns the execute data structure of this project.
-	*
-	* @return the execute data structure of this project
-	*/
-	@Override
-	public java.lang.String getExecuteDataStructure() {
-		return _project.getExecuteDataStructure();
-	}
-
-	/**
-	* Sets the execute data structure of this project.
-	*
-	* @param executeDataStructure the execute data structure of this project
-	*/
-	@Override
-	public void setExecuteDataStructure(java.lang.String executeDataStructure) {
-		_project.setExecuteDataStructure(executeDataStructure);
-	}
-
-	/**
-	* Returns the execute date of this project.
-	*
-	* @return the execute date of this project
-	*/
-	@Override
-	public java.util.Date getExecuteDate() {
-		return _project.getExecuteDate();
-	}
-
-	/**
-	* Sets the execute date of this project.
-	*
-	* @param executeDate the execute date of this project
-	*/
-	@Override
-	public void setExecuteDate(java.util.Date executeDate) {
-		_project.setExecuteDate(executeDate);
 	}
 
 	@Override

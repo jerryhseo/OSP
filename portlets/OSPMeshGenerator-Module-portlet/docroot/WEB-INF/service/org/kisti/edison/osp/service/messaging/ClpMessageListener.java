@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import org.kisti.edison.osp.service.ClpSerializer;
+import org.kisti.edison.osp.service.ExecuteLocalServiceUtil;
+import org.kisti.edison.osp.service.ExecuteServiceUtil;
 import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
 import org.kisti.edison.osp.service.ProjectServiceUtil;
 
@@ -36,6 +38,9 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
+			ExecuteLocalServiceUtil.clearService();
+
+			ExecuteServiceUtil.clearService();
 			ProjectLocalServiceUtil.clearService();
 
 			ProjectServiceUtil.clearService();

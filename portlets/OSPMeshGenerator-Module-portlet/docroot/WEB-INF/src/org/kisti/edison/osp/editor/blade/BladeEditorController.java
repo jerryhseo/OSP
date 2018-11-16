@@ -22,6 +22,7 @@ import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
 import org.kisti.edison.osp.service.persistence.ProjectPK;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,15 +30,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.google.gson.JsonObject;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -98,6 +100,8 @@ public class BladeEditorController {
 			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException, PortalException, SystemException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		Map params = RequestUtil.getParameterMap(request);
+		
 		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
 		ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
 		
@@ -107,8 +111,16 @@ public class BladeEditorController {
 			obj.putAll(project.getModelAttributes());
 		}catch (Exception e) {
 			if(e instanceof NoSuchProjectException){
-				ProjectLocalServiceUtil.createProject(projectPK);
-				Project project = ProjectLocalServiceUtil.getProject(projectPK);
+				String projectStructure = CustomUtil.strNull(params.get("projectStructure"));
+				String analyzerStructure = CustomUtil.strNull(params.get("analyzerStructure"));
+				
+				Project project = ProjectLocalServiceUtil.createProject(projectPK);
+				project.setProjectStructure(projectStructure);
+				project.setAnalyzerStructure(analyzerStructure);
+				
+				long projectId = CounterLocalServiceUtil.increment(Project.class.getName());
+				project.setProjectId(projectId);
+				ProjectLocalServiceUtil.addProject(project);
 				obj.putAll(project.getModelAttributes());
 			}else{
 				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -117,6 +129,55 @@ public class BladeEditorController {
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
+		}
+	}
+	
+	@ResourceMapping(value="updateProject")
+	public void updateProject(
+			@RequestParam("simulationUuid") String simulationUuid, 
+			@RequestParam("jobSeqNo") long jobSeqNo,
+			ResourceRequest request, ResourceResponse response) throws IOException{
+		
+		Map params = RequestUtil.getParameterMap(request);
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		String projectStructure = GetterUtil.getString(params.get("projectStructure"));
+		String analyzerStructure = GetterUtil.getString(params.get("analyzerStructure"));
+		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
+		try{
+			ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
+			Project project = ProjectLocalServiceUtil.getProject(projectPK);
+			
+			project.setProjectStructure(projectStructure);
+			project.setAnalyzerStructure(analyzerStructure);
+			
+			ProjectLocalServiceUtil.updateProject(project);
+		}catch (Exception e) {
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-update-error"));
+			e.printStackTrace();
+		}
+	}
+	
+	@ResourceMapping(value="deleteProject")
+	public void deleteProject(
+			@RequestParam("simulationUuid") String simulationUuid, 
+			@RequestParam("jobSeqNo") long jobSeqNo,
+			@RequestParam("removeType") String removeType,
+			ResourceRequest request, ResourceResponse response) throws IOException{
+		
+		Map params = RequestUtil.getParameterMap(request);
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
+		try{
+			if(removeType.equals("SIMULATION")){
+				ProjectLocalServiceUtil.removeProjectBySimulationUuid(simulationUuid);
+			}else if(removeType.equals("JOB")){
+				ProjectLocalServiceUtil.removeProject(simulationUuid, portletNamespace, jobSeqNo);
+			}
+		}catch (Exception e) {
+//			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-update-error"));
+			e.printStackTrace();
 		}
 	}
 	

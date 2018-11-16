@@ -33,7 +33,6 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,13 +63,11 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			{ "simulationUuid", Types.VARCHAR },
 			{ "portletNamespace", Types.VARCHAR },
 			{ "jobSeqNo", Types.BIGINT },
+			{ "projectId", Types.BIGINT },
 			{ "projectStructure", Types.VARCHAR },
-			{ "analyzerStructure", Types.VARCHAR },
-			{ "executeId", Types.VARCHAR },
-			{ "executeDataStructure", Types.VARCHAR },
-			{ "executeDate", Types.TIMESTAMP }
+			{ "analyzerStructure", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDMESH_Project (simulationUuid VARCHAR(75) not null,portletNamespace VARCHAR(75) not null,jobSeqNo LONG not null,projectStructure TEXT null,analyzerStructure TEXT null,executeId VARCHAR(75) null,executeDataStructure TEXT null,executeDate DATE null,primary key (simulationUuid, portletNamespace, jobSeqNo))";
+	public static final String TABLE_SQL_CREATE = "create table EDMESH_Project (simulationUuid VARCHAR(75) not null,portletNamespace VARCHAR(75) not null,jobSeqNo LONG not null,projectId LONG,projectStructure TEXT null,analyzerStructure TEXT null,primary key (simulationUuid, portletNamespace, jobSeqNo))";
 	public static final String TABLE_SQL_DROP = "drop table EDMESH_Project";
 	public static final String ORDER_BY_JPQL = " ORDER BY project.id.simulationUuid ASC, project.id.portletNamespace ASC, project.id.jobSeqNo ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDMESH_Project.simulationUuid ASC, EDMESH_Project.portletNamespace ASC, EDMESH_Project.jobSeqNo ASC";
@@ -83,7 +80,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.kisti.edison.osp.model.Project"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.kisti.edison.osp.model.Project"),
+			true);
+	public static long SIMULATIONUUID_COLUMN_BITMASK = 1L;
+	public static long PORTLETNAMESPACE_COLUMN_BITMASK = 2L;
+	public static long JOBSEQNO_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -101,11 +103,9 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		model.setSimulationUuid(soapModel.getSimulationUuid());
 		model.setPortletNamespace(soapModel.getPortletNamespace());
 		model.setJobSeqNo(soapModel.getJobSeqNo());
+		model.setProjectId(soapModel.getProjectId());
 		model.setProjectStructure(soapModel.getProjectStructure());
 		model.setAnalyzerStructure(soapModel.getAnalyzerStructure());
-		model.setExecuteId(soapModel.getExecuteId());
-		model.setExecuteDataStructure(soapModel.getExecuteDataStructure());
-		model.setExecuteDate(soapModel.getExecuteDate());
 
 		return model;
 	}
@@ -175,11 +175,9 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		attributes.put("simulationUuid", getSimulationUuid());
 		attributes.put("portletNamespace", getPortletNamespace());
 		attributes.put("jobSeqNo", getJobSeqNo());
+		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
-		attributes.put("executeId", getExecuteId());
-		attributes.put("executeDataStructure", getExecuteDataStructure());
-		attributes.put("executeDate", getExecuteDate());
 
 		return attributes;
 	}
@@ -204,6 +202,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			setJobSeqNo(jobSeqNo);
 		}
 
+		Long projectId = (Long)attributes.get("projectId");
+
+		if (projectId != null) {
+			setProjectId(projectId);
+		}
+
 		String projectStructure = (String)attributes.get("projectStructure");
 
 		if (projectStructure != null) {
@@ -214,25 +218,6 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
-		}
-
-		String executeId = (String)attributes.get("executeId");
-
-		if (executeId != null) {
-			setExecuteId(executeId);
-		}
-
-		String executeDataStructure = (String)attributes.get(
-				"executeDataStructure");
-
-		if (executeDataStructure != null) {
-			setExecuteDataStructure(executeDataStructure);
-		}
-
-		Date executeDate = (Date)attributes.get("executeDate");
-
-		if (executeDate != null) {
-			setExecuteDate(executeDate);
 		}
 	}
 
@@ -249,7 +234,17 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public void setSimulationUuid(String simulationUuid) {
+		_columnBitmask |= SIMULATIONUUID_COLUMN_BITMASK;
+
+		if (_originalSimulationUuid == null) {
+			_originalSimulationUuid = _simulationUuid;
+		}
+
 		_simulationUuid = simulationUuid;
+	}
+
+	public String getOriginalSimulationUuid() {
+		return GetterUtil.getString(_originalSimulationUuid);
 	}
 
 	@JSON
@@ -277,6 +272,17 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	@Override
 	public void setJobSeqNo(long jobSeqNo) {
 		_jobSeqNo = jobSeqNo;
+	}
+
+	@JSON
+	@Override
+	public long getProjectId() {
+		return _projectId;
+	}
+
+	@Override
+	public void setProjectId(long projectId) {
+		_projectId = projectId;
 	}
 
 	@JSON
@@ -311,47 +317,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		_analyzerStructure = analyzerStructure;
 	}
 
-	@JSON
-	@Override
-	public String getExecuteId() {
-		if (_executeId == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _executeId;
-		}
-	}
-
-	@Override
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
-	}
-
-	@JSON
-	@Override
-	public String getExecuteDataStructure() {
-		if (_executeDataStructure == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _executeDataStructure;
-		}
-	}
-
-	@Override
-	public void setExecuteDataStructure(String executeDataStructure) {
-		_executeDataStructure = executeDataStructure;
-	}
-
-	@JSON
-	@Override
-	public Date getExecuteDate() {
-		return _executeDate;
-	}
-
-	@Override
-	public void setExecuteDate(Date executeDate) {
-		_executeDate = executeDate;
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -371,11 +338,9 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		projectImpl.setSimulationUuid(getSimulationUuid());
 		projectImpl.setPortletNamespace(getPortletNamespace());
 		projectImpl.setJobSeqNo(getJobSeqNo());
+		projectImpl.setProjectId(getProjectId());
 		projectImpl.setProjectStructure(getProjectStructure());
 		projectImpl.setAnalyzerStructure(getAnalyzerStructure());
-		projectImpl.setExecuteId(getExecuteId());
-		projectImpl.setExecuteDataStructure(getExecuteDataStructure());
-		projectImpl.setExecuteDate(getExecuteDate());
 
 		projectImpl.resetOriginalValues();
 
@@ -418,6 +383,11 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public void resetOriginalValues() {
+		ProjectModelImpl projectModelImpl = this;
+
+		projectModelImpl._originalSimulationUuid = projectModelImpl._simulationUuid;
+
+		projectModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -442,6 +412,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		projectCacheModel.jobSeqNo = getJobSeqNo();
 
+		projectCacheModel.projectId = getProjectId();
+
 		projectCacheModel.projectStructure = getProjectStructure();
 
 		String projectStructure = projectCacheModel.projectStructure;
@@ -458,38 +430,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			projectCacheModel.analyzerStructure = null;
 		}
 
-		projectCacheModel.executeId = getExecuteId();
-
-		String executeId = projectCacheModel.executeId;
-
-		if ((executeId != null) && (executeId.length() == 0)) {
-			projectCacheModel.executeId = null;
-		}
-
-		projectCacheModel.executeDataStructure = getExecuteDataStructure();
-
-		String executeDataStructure = projectCacheModel.executeDataStructure;
-
-		if ((executeDataStructure != null) &&
-				(executeDataStructure.length() == 0)) {
-			projectCacheModel.executeDataStructure = null;
-		}
-
-		Date executeDate = getExecuteDate();
-
-		if (executeDate != null) {
-			projectCacheModel.executeDate = executeDate.getTime();
-		}
-		else {
-			projectCacheModel.executeDate = Long.MIN_VALUE;
-		}
-
 		return projectCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -497,16 +443,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		sb.append(getPortletNamespace());
 		sb.append(", jobSeqNo=");
 		sb.append(getJobSeqNo());
+		sb.append(", projectId=");
+		sb.append(getProjectId());
 		sb.append(", projectStructure=");
 		sb.append(getProjectStructure());
 		sb.append(", analyzerStructure=");
 		sb.append(getAnalyzerStructure());
-		sb.append(", executeId=");
-		sb.append(getExecuteId());
-		sb.append(", executeDataStructure=");
-		sb.append(getExecuteDataStructure());
-		sb.append(", executeDate=");
-		sb.append(getExecuteDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -514,7 +456,7 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.osp.model.Project");
@@ -533,24 +475,16 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		sb.append(getJobSeqNo());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>projectId</column-name><column-value><![CDATA[");
+		sb.append(getProjectId());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>projectStructure</column-name><column-value><![CDATA[");
 		sb.append(getProjectStructure());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>analyzerStructure</column-name><column-value><![CDATA[");
 		sb.append(getAnalyzerStructure());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeId</column-name><column-value><![CDATA[");
-		sb.append(getExecuteId());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeDataStructure</column-name><column-value><![CDATA[");
-		sb.append(getExecuteDataStructure());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>executeDate</column-name><column-value><![CDATA[");
-		sb.append(getExecuteDate());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -563,12 +497,12 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			Project.class
 		};
 	private String _simulationUuid;
+	private String _originalSimulationUuid;
 	private String _portletNamespace;
 	private long _jobSeqNo;
+	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
-	private String _executeId;
-	private String _executeDataStructure;
-	private Date _executeDate;
+	private long _columnBitmask;
 	private Project _escapedModel;
 }

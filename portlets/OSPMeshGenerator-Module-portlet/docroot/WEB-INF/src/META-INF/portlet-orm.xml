@@ -7,15 +7,11 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
-	<mapped-superclass class="org.kisti.edison.osp.model.impl.ProjectModelImpl">
-		<id-class class="org.kisti.edison.osp.service.persistence.ProjectPK" />
+	<mapped-superclass class="org.kisti.edison.osp.model.impl.ExecuteModelImpl">
+		<id-class class="org.kisti.edison.osp.service.persistence.ExecutePK" />
 		<attributes>
-			<id name="simulationUuid" />
-			<id name="portletNamespace" />
-			<id name="jobSeqNo" />
-			<basic name="projectStructure" />
-			<basic name="analyzerStructure" />
-			<basic name="executeId" />
+			<id name="projectId" />
+			<id name="executeId" />
 			<basic name="executeDataStructure" />
 			<basic name="executeDate">
 				<temporal>TIMESTAMP</temporal>
@@ -25,6 +21,24 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.osp.model.impl.ProjectModelImpl">
+		<id-class class="org.kisti.edison.osp.service.persistence.ProjectPK" />
+		<attributes>
+			<id name="simulationUuid" />
+			<id name="portletNamespace" />
+			<id name="jobSeqNo" />
+			<basic name="projectId" />
+			<basic name="projectStructure" />
+			<basic name="analyzerStructure" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.kisti.edison.osp.model.impl.ExecuteImpl" name="Execute">
+		<table name="EDMESH_Execute" />
+		<attributes />
+	</entity>
 	<entity class="org.kisti.edison.osp.model.impl.ProjectImpl" name="Project">
 		<table name="EDMESH_Project" />
 		<attributes />

@@ -1057,7 +1057,8 @@
         var fireDeleteSimulationResult = function( targetPortId,simulationUuid, status ){
             var eventData = {
                              portletId: Workbench.id(),
-                             targetPortlet: targetPortId,
+//                             targetPortlet: targetPortId,
+                             targetPortlet: 'BROADCAST',
                              data: {
                                 simulationUuid:simulationUuid,
                                 status : status
@@ -1097,7 +1098,8 @@
         var fireDeleteSimulationJobResult = function( targetPortId,data ){
             var eventData = {
                              portletId: Workbench.id(),
-                             targetPortlet: targetPortId,
+//                             targetPortlet: targetPortId,
+                             targetPortlet: 'BROADCAST',
                              data: data
             };
             Liferay.fire(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, eventData );

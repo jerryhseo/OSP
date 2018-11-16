@@ -14,7 +14,16 @@
 
 package org.kisti.edison.osp.service.impl;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.kisti.edison.osp.NoSuchProjectException;
+import org.kisti.edison.osp.model.Project;
+import org.kisti.edison.osp.service.ExecuteLocalServiceUtil;
 import org.kisti.edison.osp.service.base.ProjectLocalServiceBaseImpl;
+import org.kisti.edison.osp.service.persistence.ProjectPK;
+
+import com.liferay.portal.kernel.exception.SystemException;
 
 /**
  * The implementation of the project local service.
@@ -36,4 +45,22 @@ public class ProjectLocalServiceImpl extends ProjectLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link org.kisti.edison.osp.service.ProjectLocalServiceUtil} to access the project local service.
 	 */
+	public void removeProjectBySimulationUuid(String simulationUuid) throws SystemException, NoSuchProjectException, IOException{
+		List<Project> projectList = super.projectPersistence.findBysimulationUuid(simulationUuid);
+		for(Project project : projectList){
+			String portletNamespace = project.getPortletNamespace();
+			long jobSeqNo = project.getJobSeqNo();
+			this.removeProject(simulationUuid, portletNamespace, jobSeqNo);
+		}
+	}
+	
+	
+	public void removeProject(String simulationUuid, String portletNamespace, long jobSeqNo) throws SystemException,IOException,NoSuchProjectException{
+		ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
+		Project project = super.projectPersistence.fetchByPrimaryKey(projectPK);
+		
+		long projectId = project.getProjectId();
+		ExecuteLocalServiceUtil.removeExecuteByProjectId(projectId);
+		super.projectPersistence.remove(projectPK);
+	}
 }
