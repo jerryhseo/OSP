@@ -717,12 +717,40 @@ Liferay.on(OSP.Event.OSP_REQUEST_COLLECTION_VIEW,function( e ){
 	Liferay.fire(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW, eventData);
 });
 
-
+Liferay.on(OSP.Event.OSP_REFRESH_URL_CHANGE,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	if(typeof(history.pushState) == 'function'){
+		if(e.simulationUuid!=""){
+			var renewURL = <portlet:namespace/>updateURLParameter(location.href, "simulationUuid", e.simulationUuid);
+			history.pushState(null, null, renewURL);
+		}
+	}
+});
 
 
 /***********************************************************************
  * Global Function section
  ***********************************************************************/
+function <portlet:namespace/>updateURLParameter(url, param, paramVal){
+	var param  = "<portlet:namespace/>"+param;
+	var newAdditionalURL = "";
+	var tempArray = url.split("?");
+	var baseURL = tempArray[0];
+	var additionalURL = tempArray[1];
+	var temp = "";
+	if (additionalURL) {
+		tempArray = additionalURL.split("&");
+		for (var i=0; i<tempArray.length; i++){
+			if(tempArray[i].split('=')[0] != param){
+				newAdditionalURL += temp + tempArray[i];
+				temp = "&";
+			}
+		}
+	}
+
+	var rows_txt = temp + "" + param + "=" + paramVal;
+	return baseURL + "?" + newAdditionalURL + rows_txt;
+}
 function errlog(eventData, msg){
 	if(console){
 		console.log("Unknown event data: " + (msg ? msg : "") + "\n", eventData);
@@ -747,7 +775,7 @@ function <portlet:namespace/>displayInit(){
 		var eventData = {
 				targetPortlet: 'BROADCAST',
 				data : {
-					simulationUuid : '',
+					simulationUuid : '${simulationUuid}',
 					searchJobUuid : '${jobUuid}'
 				}
 			};

@@ -100,6 +100,7 @@ public class LayoutController {
 		long scienceAppId =  ParamUtil.getLong(request, "scienceAppId", 0);
 		String redirectURL = ParamUtil.getString(request, "redirectURL", "");
 		String redirectName = ParamUtil.getString(request, "redirectName", "");
+		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
 		String blockInputPorts = ParamUtil.getString(request, "blockInputPorts", "");
 		
@@ -116,6 +117,8 @@ public class LayoutController {
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
 			model.addAttribute("blockInputPorts", blockInputPorts);
+			model.addAttribute("simulationUuid", simulationUuid);
+			
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
 			agent.ibAgentLog();
