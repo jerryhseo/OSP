@@ -946,9 +946,9 @@ function sdrcommon_collectionPopup(result){
         timeout: 10000,
       }).done(function (result) {
           if(result.isComplete){
-              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg"));
+              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg") + "\n" + result.isCompleteMsg);
           }else{
-              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
+              alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg") + "\n" + result.msg);
           }
       }).error(function (msg) {
           console.log(msg);
