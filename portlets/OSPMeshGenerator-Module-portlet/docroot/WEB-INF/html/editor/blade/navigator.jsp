@@ -5,16 +5,19 @@
 <liferay-portlet:resourceURL var="updateProjectURL" id="updateProject" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteProjectURL" id="deleteProject" copyCurrentRenderParameters="false" escapeXml="false"/>
 
+<liferay-portlet:resourceURL var="prepareAnalyzerURL" id="prepareAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="executeAnalyzerURL" id="executeAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="checkAnalyzerURL" id="checkAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
+
 
 
 
 <style type="text/css">
 div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel {
-	height: 35px;
+	height: 45px;
 	border-bottom: 1px solid #d3d3d3;
 	width: 100%;
 	display: none;
-	margin-top: -9px;
 }
 
 div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content .controllpanel ul{
@@ -36,78 +39,97 @@ div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.title{
 	border-bottom: 1px solid #d3d3d3;
 	padding: 10px 0px;
 }
+
+div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_navigatorParameter .osp-editor .header{
+	display: none;
+}
+
+div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_navigatorParameter .container-fluid{
+	padding-left: 15px;
+	padding-right: 15px;
+}
 </style>
 <div class="panel panel-default blade-full-height">
 	<div class="panel-heading blade-panel-heading clearfix">
 		<div class="panel-title pull-left"><span><i class="icon-chevron-right"></i> Selected File : <span>ssssssssss</span></span></div>
 		<div class="pull-right"><button class="btn btn-xs btn-primary">sample</button></div>
 	</div>
-	<div class="panel-body">
-		<div id="<portlet:namespace/>controllpanel" class="controllpanel">
-			<ul>
-				<li class="con-button" id="<portlet:namespace/>con-file" onclick="<portlet:namespace/>openFile();return false;">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-file-text check-icon'> 
-							<span class="font">File</span>
-						</i>
-					</a>
-				</li>
+	<div class="panel-body" style="height: inherit;display: flex;flex-flow: column;">
+		<div style="flex:1;height: 50%; overflow-y:auto;">
+			<div id="<portlet:namespace/>controllpanel" class="controllpanel">
+				<ul>
+					<li class="con-button" id="<portlet:namespace/>con-file" onclick="<portlet:namespace/>openFile();return false;">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-file-text check-icon'> 
+								<span class="font">File</span>
+							</i>
+						</a>
+					</li>
+					
+					<li class="con-button" id="<portlet:namespace/>con-create" onclick="<portlet:namespace/>createMesh(); return false;">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-edit'> 
+								<span class="font">Create</span>
+							</i>
+						</a>
+					</li>
+					
+					<li class="con-button" id="<portlet:namespace/>con-solver">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-external-link'> 
+								<span class="font">Solver</span>
+							</i>
+						</a>
+					</li>
+					
+					<li class="con-button" id="<portlet:namespace/>con-analyzer" onclick="<portlet:namespace/>runAnalyzer();">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-play-circle'> 
+								<span class="font">Analyze</span>
+							</i>
+						</a>
+					</li>
+					
+					<li class="con-button" id="<portlet:namespace/>con-delete" onclick="<portlet:namespace/>removeNode();">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-trash'>
+								<span class="font">Delete</span> 
+							</i>
+						</a>
+					</li>
+					
+					
+					<li class="con-button" id="<portlet:namespace/>con-mesh-view">
+						<a class='btn btn-small' href='#'>
+							<i class='icon-large icon-edit'>
+								<span class="font">View</span> 
+							</i>
+						</a>
+					</li>
+					
+					<li>
+						<a class='btn btn-small' href='#' onclick="<portlet:namespace/>closePanel();return false;">
+							<i class='icon-large icon-collapse-top'> 
+								<span class="font">Close</span>
+							</i>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="title">
+				<i class="icon-ok"></i> Navigator</span>
+			</div>
+			<div id="<portlet:namespace/>navigatorTree">
 				
-				<li class="con-button" id="<portlet:namespace/>con-create" onclick="<portlet:namespace/>createMesh(); return false;">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-edit'> 
-							<span class="font">Create</span>
-						</i>
-					</a>
-				</li>
-				
-				<li class="con-button" id="<portlet:namespace/>con-solver">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-external-link'> 
-							<span class="font">Solver</span>
-						</i>
-					</a>
-				</li>
-				
-				<li class="con-button" id="<portlet:namespace/>con-analyzer" onclick="<portlet:namespace/>runAnalyzer();">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-play-circle'> 
-							<span class="font">Analyze</span>
-						</i>
-					</a>
-				</li>
-				
-				<li class="con-button" id="<portlet:namespace/>con-delete" onclick="<portlet:namespace/>removeNode();">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-trash'>
-							<span class="font">Delete</span> 
-						</i>
-					</a>
-				</li>
-				
-				
-				<li class="con-button" id="<portlet:namespace/>con-mesh-view">
-					<a class='btn btn-small' href='#'>
-						<i class='icon-large icon-edit'>
-							<span class="font">View</span> 
-						</i>
-					</a>
-				</li>
-				
-				<li>
-					<a class='btn btn-small' href='#' onclick="<portlet:namespace/>closePanel();return false;">
-						<i class='icon-large icon-collapse-top'> 
-							<span class="font">Close</span>
-						</i>
-					</a>
-				</li>
-			</ul>
+			</div>
 		</div>
-		<div class="title">
-			<i class="icon-ok"></i> Navigator</span>
+		<div id="<portlet:namespace/>navigatorParameter" style="height: 45%;padding-top: 5px;">
+		<div class="pull-left">
+			<i class="icon-ok"></i> Parametric Airfoil</span>
 		</div>
-		<div id="<portlet:namespace/>navigatorTree">
-			
+		<div class="pull-right"><button class="btn btn-xs btn-primary" onclick="<portlet:namespace/>parameterDraw();">Draw</button></div>
+		<div class="h2 clearfix" style="border-bottom: 1px solid #d3d3d3;padding: 5px 0px;"></div>
+			<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric" queryString=""/>
 		</div>
 	</div>
 </div>
@@ -296,6 +318,125 @@ function <portlet:namespace/>removeProject(removeType){
 		});
 }
 
+function <portlet:namespace/>createParameterNode(analyzerJob, geoNode, selectedNode){
+	if($("#<portlet:namespace/>navigatorTree").jstree(true).is_parent(geoNode)){
+		<portlet:namespace/>removeJstreeChildren(geoNode);
+	}
+	var outputData = new OSP.InputData(analyzerJob.outputData);
+	var nodeData = new MESH.data();
+	nodeData.executeId(analyzerJob.analyzerUuid);
+	nodeData.nodeType(MESH.Constants.TYPE_GEO_PARAMETER);
+	nodeData.analyzerJob = analyzerJob;
+	var paramNode = {
+			"id": analyzerJob.analyzerUuid,
+			"text": outputData.name(),
+			"type": MESH.Constants.NODE_CODE,
+			"data": nodeData
+	};
+	
+	$("#<portlet:namespace/>navigatorTree").jstree(true).create_node(geoNode.id, paramNode, "last");
+	$("#<portlet:namespace/>navigatorTree").jstree(true).open_node(geoNode);
+	if(selectedNode){
+		$("#<portlet:namespace/>navigatorTree").jstree(true).select_node(analyzerJob.analyzerUuid);
+	}
+	
+	<portlet:namespace/>updateProject('none');
+}
+
+function <portlet:namespace/>prepareAnalyzer(appName, appVersion, geoNode, fileContent, draw){
+	var geoNodeFileId = geoNode.data[MESH.Constants.DATA_FILE_ID];
+	var analyzerUuid = "";
+	if($("#<portlet:namespace/>navigatorTree").jstree(true).is_parent(geoNode)){
+		analyzerUuid = geoNode.children[0];
+	}
+	
+	$.ajax({
+		url : '${prepareAnalyzerURL}',
+		type : 'POST',
+		dataType : 'json',
+		data : {
+			"<portlet:namespace/>appName" : appName,
+			"<portlet:namespace/>appVersion" : appVersion,
+			"<portlet:namespace/>fileId" : geoNodeFileId,
+			"<portlet:namespace/>analyzerUuid" : analyzerUuid
+		},
+		success : function(analyzerJob){
+			if(draw){
+				<portlet:namespace/>createParameterNode(analyzerJob, geoNode, true);
+				<portlet:namespace/>executeAnalyzer(analyzerJob, "input.inp", geoNode.data[MESH.Constants.DATA_FILE_ID],fileContent);
+			}else{
+				<portlet:namespace/>createParameterNode(analyzerJob, geoNode, false);
+				<portlet:namespace/>executeAnalyzer(analyzerJob, geoNode.text, geoNode.data[MESH.Constants.DATA_FILE_ID],'');
+			}
+		},
+		error : function(){
+			if(console){
+				console.log('[ERROR] AJAX FAILED during prepareAnalyzer');
+			}
+		}
+	});
+}
+
+function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId, fileContent){
+	$.ajax({
+		url : '${executeAnalyzerURL}',
+		type : 'POST',
+		dataType : 'json',
+		data : {
+			"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob),
+			"<portlet:namespace/>inputFileName" : inputFileName,
+			"<portlet:namespace/>fileId" : fileId,
+			"<portlet:namespace/>fileContent" : fileContent,
+			"<portlet:namespace/>projectId" : <portlet:namespace/>projectId
+		},
+		success : function(result){
+			if(result.isComplete){
+// 				<portlet:namespace/>setXYPlotterResultPath(analyzerJob);
+				<portlet:namespace/>checkAnalyzerJob(analyzerJob);
+			}else{
+				alert("It did not run properly. Please contact your administrator.");
+			}
+		},
+		error : function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+errorThrown);
+			}
+		}
+	});
+}
+
+function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
+	/*parameter 프로그래스 필요*/
+	$.ajax({
+		url : '${checkAnalyzerURL}',
+		type : 'POST',
+		dataType : 'json',
+		data : {
+			"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob)
+		},
+		success : function(result){
+			<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.FILE_CONTENT,result.out,'parametric');
+		},
+		error : function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+jqXHR.responseText);
+			}else{
+				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+errorThrown);
+			}
+		}
+	});
+}
+
+function <portlet:namespace/>getSelectedGeometryNode(){
+	return  $("#<portlet:namespace/>navigatorTree").jstree("get_selected", true)[0];
+}
+
+function <portlet:namespace/>removeExecute(executeId){
+	
+}
+
 /***********************************************************************
  * Tree Event section
  ***********************************************************************/
@@ -349,7 +490,6 @@ function <portlet:namespace/>selectedNode(treeData){
 	
 	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER
 	    && <portlet:namespace/>setXYPlotterResultPath){
-		console.log("SETXY_PLOT");
 	    <portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
 	}
 	/* parameter event - end*/
@@ -361,6 +501,10 @@ function <portlet:namespace/>addNode(parentId, node){
 	<portlet:namespace/>updateProject('none');
 }
 
+function <portlet:namespace/>removeJstreeChildren(parentNode){
+	var children = $("#<portlet:namespace/>navigatorTree").jstree(true).get_children_dom(parentNode);
+	$("#<portlet:namespace/>navigatorTree").jstree(true).delete_node(children);
+}
 
 /***********************************************************************
  * Controll Panel Event section
@@ -418,9 +562,112 @@ function <portlet:namespace/>openFile(){
 	});
 }
 
+function <portlet:namespace/>removeNode(){
+	$.confirm({
+		boxWidth: '30%',
+		useBootstrap: false,
+		title: 'Confirm!',
+		content: Liferay.Language.get("file-delete-confirm"),
+		buttons: {
+			confirm: function () {
+				
+				try{
+					var tree = $("#<portlet:namespace/>navigatorTree").jstree(true);
+					
+					var selectNode = $("#<portlet:namespace/>navigatorTree").jstree("get_selected");
+					var node = tree.get_node(selectNode);
+					var node_data_type = node.data[MESH.Constants.DATA_NODE_TYPE];
+					
+					
+					if(node_data_type===MESH.Constants.TYPE_VIEW_SURFACE){
+						<portlet:namespace/>surfaceDraw();
+					}else{
+						var command = "";
+						if(node_data_type===MESH.Constants.TYPE_VIEW_FILE){
+// 							command = "remove.geometry";
+						}else if(node_data_type===MESH.Constants.TYPE_VIEW_DAT){
+// 							command = "remove.geometry";
+							if(tree.is_parent(node)){
+						    	var executeId = node.children[0];
+								<portlet:namespace/>removeExecute(executeId);
+						    }
+						}else if(node_data_type===MESH.Constants.TYPE_VIEW_MESH){
+// 							command = "remove.mesh";
+						}
+						
+						var fileArray = new Array();
+						fileArray.push({
+							'fileId': node.data[MESH.Constants.DATA_FILE_ID],
+							'name': node.text
+						});
+						
+						
+						$("#<portlet:namespace/>controllpanel").hide();
+					}
+					
+					<portlet:namespace/>updateProject('none');
+				}catch(exception){
+					
+				}finally{
+					tree.delete_node(selectNode);
+					
+					<portlet:namespace/>updateProject(false,"none");
+				}
+			},
+			cancel: function () {
+				
+			}
+		}
+	});
+}
+
+function <portlet:namespace/>runAnalyzer(){
+	var geoNode = <portlet:namespace/>getSelectedGeometryNode();
+	<portlet:namespace/>prepareAnalyzer(MESH.Constants.getShapeAnalysisParamApp('${type}'),MESH.Constants.getShapeAnalysisParamAppVersion('${type}'),geoNode,'',false);
+}
+
 function <portlet:namespace/>closePanel(){
 	$("#<portlet:namespace/>controllpanel").hide();
 }
+
+
+/***********************************************************************
+ * Parameter Event section
+ ***********************************************************************/
+function <portlet:namespace/>parameterInitEditor(type,structure,instance){
+	var srcData = new OSP.InputData();
+	srcData.type(type);
+	srcData.context(structure);
+	var eventData = {
+		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_'+instance,
+		data: OSP.Util.toJSON(srcData)
+	};
+	Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
+}
+
+function <portlet:namespace/>parameterDraw(){
+	var eventData = {
+		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric'
+	};
+	setTimeout(function(){
+	    Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData );
+	},1000);
+		
+}
+
+/*ParameterDraw befor Request Data after this function*/
+Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
+	if(e.portletId == "StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric"){
+		var tree = $("#<portlet:namespace/>navigatorTree").jstree(true);
+		var selectNode = $("#<portlet:namespace/>navigatorTree").jstree("get_selected");
+		var node = tree.get_node(selectNode);
+		var node_data_appName = node.data.analyzerJob.appName;
+		alert(node_data_appName);
+		if(node_data_appName!=MESH.Constants.SHAPE_ANALYSIS_APP){
+			
+		}
+	}
+});
 </script>
 <aui:script>
 Liferay.provide(window, "getFileIdAndName", function(fileSearchType,object){

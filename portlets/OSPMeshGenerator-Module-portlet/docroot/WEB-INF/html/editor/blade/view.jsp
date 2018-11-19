@@ -134,6 +134,8 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 ***********************************************************************/
 function <portlet:namespace/>init(){
 	<portlet:namespace/>navigatorInitJstree();
+	
+	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
 }
 
 function <portlet:namespace/>fireWorkbenchEvent(eventName,data){

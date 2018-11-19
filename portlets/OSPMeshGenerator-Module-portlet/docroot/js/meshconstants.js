@@ -47,19 +47,19 @@
 		BC_TYPE_GROUP_1:'group1',
 		BC_TYPE_GROUP_2:'group2',
 		BC_TYPE_GROUP_3:'group3',
-		getShapeAnalysisParamApp:function(site){
-			switch (site) {
-				case 'KFLOW':
+		getShapeAnalysisParamApp:function(type){
+			switch (type) {
+				case 'BLADE':
 					return 'KFOIL_AirFoil_Para';
-				case 'ETURB':
+				case 'MESH':
 					return 'KFOIL_AirFoil_Para';
 			}
 		},
-		getShapeAnalysisParamAppVersion:function(site){
-			switch (site) {
-				case 'KFLOW':
+		getShapeAnalysisParamAppVersion:function(type){
+			switch (type) {
+				case 'BLADE':
 					return '1.0.1';
-				case 'ETURB':
+				case 'MESH':
 					return '1.0.0';
 			}
 		},

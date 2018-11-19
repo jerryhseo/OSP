@@ -831,7 +831,7 @@ public class ExecutePersistenceImpl extends BasePersistenceImpl<Execute>
 		executeImpl.setPrimaryKey(execute.getPrimaryKey());
 
 		executeImpl.setProjectId(execute.getProjectId());
-		executeImpl.setExecuteId(execute.getExecuteId());
+		executeImpl.setAnalyzerId(execute.getAnalyzerId());
 		executeImpl.setExecuteDataStructure(execute.getExecuteDataStructure());
 		executeImpl.setExecuteDate(execute.getExecuteDate());
 

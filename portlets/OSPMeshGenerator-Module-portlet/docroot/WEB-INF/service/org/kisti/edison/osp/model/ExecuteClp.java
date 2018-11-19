@@ -52,18 +52,18 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 
 	@Override
 	public ExecutePK getPrimaryKey() {
-		return new ExecutePK(_projectId, _executeId);
+		return new ExecutePK(_projectId, _analyzerId);
 	}
 
 	@Override
 	public void setPrimaryKey(ExecutePK primaryKey) {
 		setProjectId(primaryKey.projectId);
-		setExecuteId(primaryKey.executeId);
+		setAnalyzerId(primaryKey.analyzerId);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new ExecutePK(_projectId, _executeId);
+		return new ExecutePK(_projectId, _analyzerId);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("projectId", getProjectId());
-		attributes.put("executeId", getExecuteId());
+		attributes.put("analyzerId", getAnalyzerId());
 		attributes.put("executeDataStructure", getExecuteDataStructure());
 		attributes.put("executeDate", getExecuteDate());
 
@@ -91,10 +91,10 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 			setProjectId(projectId);
 		}
 
-		String executeId = (String)attributes.get("executeId");
+		String analyzerId = (String)attributes.get("analyzerId");
 
-		if (executeId != null) {
-			setExecuteId(executeId);
+		if (analyzerId != null) {
+			setAnalyzerId(analyzerId);
 		}
 
 		String executeDataStructure = (String)attributes.get(
@@ -135,21 +135,21 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 	}
 
 	@Override
-	public String getExecuteId() {
-		return _executeId;
+	public String getAnalyzerId() {
+		return _analyzerId;
 	}
 
 	@Override
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
+	public void setAnalyzerId(String analyzerId) {
+		_analyzerId = analyzerId;
 
 		if (_executeRemoteModel != null) {
 			try {
 				Class<?> clazz = _executeRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setExecuteId", String.class);
+				Method method = clazz.getMethod("setAnalyzerId", String.class);
 
-				method.invoke(_executeRemoteModel, executeId);
+				method.invoke(_executeRemoteModel, analyzerId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -274,7 +274,7 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 		ExecuteClp clone = new ExecuteClp();
 
 		clone.setProjectId(getProjectId());
-		clone.setExecuteId(getExecuteId());
+		clone.setAnalyzerId(getAnalyzerId());
 		clone.setExecuteDataStructure(getExecuteDataStructure());
 		clone.setExecuteDate(getExecuteDate());
 
@@ -325,8 +325,8 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 
 		sb.append("{projectId=");
 		sb.append(getProjectId());
-		sb.append(", executeId=");
-		sb.append(getExecuteId());
+		sb.append(", analyzerId=");
+		sb.append(getAnalyzerId());
 		sb.append(", executeDataStructure=");
 		sb.append(getExecuteDataStructure());
 		sb.append(", executeDate=");
@@ -349,8 +349,8 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 		sb.append(getProjectId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>executeId</column-name><column-value><![CDATA[");
-		sb.append(getExecuteId());
+			"<column><column-name>analyzerId</column-name><column-value><![CDATA[");
+		sb.append(getAnalyzerId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>executeDataStructure</column-name><column-value><![CDATA[");
@@ -367,7 +367,7 @@ public class ExecuteClp extends BaseModelImpl<Execute> implements Execute {
 	}
 
 	private long _projectId;
-	private String _executeId;
+	private String _analyzerId;
 	private String _executeDataStructure;
 	private Date _executeDate;
 	private BaseModel<?> _executeRemoteModel;

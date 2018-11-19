@@ -25,14 +25,14 @@ import java.io.Serializable;
  */
 public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 	public long projectId;
-	public String executeId;
+	public String analyzerId;
 
 	public ExecutePK() {
 	}
 
-	public ExecutePK(long projectId, String executeId) {
+	public ExecutePK(long projectId, String analyzerId) {
 		this.projectId = projectId;
-		this.executeId = executeId;
+		this.analyzerId = analyzerId;
 	}
 
 	public long getProjectId() {
@@ -43,12 +43,12 @@ public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 		this.projectId = projectId;
 	}
 
-	public String getExecuteId() {
-		return executeId;
+	public String getAnalyzerId() {
+		return analyzerId;
 	}
 
-	public void setExecuteId(String executeId) {
-		this.executeId = executeId;
+	public void setAnalyzerId(String analyzerId) {
+		this.analyzerId = analyzerId;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 			return value;
 		}
 
-		value = executeId.compareTo(pk.executeId);
+		value = analyzerId.compareTo(pk.analyzerId);
 
 		if (value != 0) {
 			return value;
@@ -94,7 +94,7 @@ public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 
 		ExecutePK pk = (ExecutePK)obj;
 
-		if ((projectId == pk.projectId) && (executeId.equals(pk.executeId))) {
+		if ((projectId == pk.projectId) && (analyzerId.equals(pk.analyzerId))) {
 			return true;
 		}
 		else {
@@ -104,7 +104,7 @@ public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 
 	@Override
 	public int hashCode() {
-		return (String.valueOf(projectId) + String.valueOf(executeId)).hashCode();
+		return (String.valueOf(projectId) + String.valueOf(analyzerId)).hashCode();
 	}
 
 	@Override
@@ -119,9 +119,9 @@ public class ExecutePK implements Comparable<ExecutePK>, Serializable {
 
 		sb.append(StringPool.COMMA);
 		sb.append(StringPool.SPACE);
-		sb.append("executeId");
+		sb.append("analyzerId");
 		sb.append(StringPool.EQUAL);
-		sb.append(executeId);
+		sb.append(analyzerId);
 
 		sb.append(StringPool.CLOSE_CURLY_BRACE);
 

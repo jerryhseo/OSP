@@ -34,7 +34,7 @@ public class ExecuteSoap implements Serializable {
 		ExecuteSoap soapModel = new ExecuteSoap();
 
 		soapModel.setProjectId(model.getProjectId());
-		soapModel.setExecuteId(model.getExecuteId());
+		soapModel.setAnalyzerId(model.getAnalyzerId());
 		soapModel.setExecuteDataStructure(model.getExecuteDataStructure());
 		soapModel.setExecuteDate(model.getExecuteDate());
 
@@ -82,12 +82,12 @@ public class ExecuteSoap implements Serializable {
 	}
 
 	public ExecutePK getPrimaryKey() {
-		return new ExecutePK(_projectId, _executeId);
+		return new ExecutePK(_projectId, _analyzerId);
 	}
 
 	public void setPrimaryKey(ExecutePK pk) {
 		setProjectId(pk.projectId);
-		setExecuteId(pk.executeId);
+		setAnalyzerId(pk.analyzerId);
 	}
 
 	public long getProjectId() {
@@ -98,12 +98,12 @@ public class ExecuteSoap implements Serializable {
 		_projectId = projectId;
 	}
 
-	public String getExecuteId() {
-		return _executeId;
+	public String getAnalyzerId() {
+		return _analyzerId;
 	}
 
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
+	public void setAnalyzerId(String analyzerId) {
+		_analyzerId = analyzerId;
 	}
 
 	public String getExecuteDataStructure() {
@@ -123,7 +123,7 @@ public class ExecuteSoap implements Serializable {
 	}
 
 	private long _projectId;
-	private String _executeId;
+	private String _analyzerId;
 	private String _executeDataStructure;
 	private Date _executeDate;
 }

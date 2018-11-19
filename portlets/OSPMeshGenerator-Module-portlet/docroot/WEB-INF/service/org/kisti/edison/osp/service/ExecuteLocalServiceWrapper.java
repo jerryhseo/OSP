@@ -291,6 +291,26 @@ public class ExecuteLocalServiceWrapper implements ExecuteLocalService,
 		_executeLocalService.removeExecuteByProjectId(projectId);
 	}
 
+	@Override
+	public void simulationWithInputFile(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.lang.String fileContents, java.nio.file.Path inputFilePath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_executeLocalService.simulationWithInputFile(projectId, analyzerJob,
+			fileContents, inputFilePath);
+	}
+
+	@Override
+	public void simulationWithIBInputFile(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay, long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.nio.file.Path inputFilePath, java.lang.String inputFileName,
+		java.lang.String fileId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_executeLocalService.simulationWithIBInputFile(themeDisplay, projectId,
+			analyzerJob, inputFilePath, inputFileName, fileId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

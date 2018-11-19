@@ -125,6 +125,21 @@ public class ExecuteLocalServiceClpInvoker {
 		_methodName46 = "removeExecuteByProjectId";
 
 		_methodParameterTypes46 = new String[] { "long" };
+
+		_methodName47 = "simulationWithInputFile";
+
+		_methodParameterTypes47 = new String[] {
+				"long", "org.kisti.edison.osp.model.AnalyzerJob",
+				"java.lang.String", "java.nio.file.Path"
+			};
+
+		_methodName48 = "simulationWithIBInputFile";
+
+		_methodParameterTypes48 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "long",
+				"org.kisti.edison.osp.model.AnalyzerJob", "java.nio.file.Path",
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -235,6 +250,26 @@ public class ExecuteLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			ExecuteLocalServiceUtil.simulationWithInputFile(((Long)arguments[0]).longValue(),
+				(org.kisti.edison.osp.model.AnalyzerJob)arguments[1],
+				(java.lang.String)arguments[2], (java.nio.file.Path)arguments[3]);
+
+			return null;
+		}
+
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+			ExecuteLocalServiceUtil.simulationWithIBInputFile((com.liferay.portal.theme.ThemeDisplay)arguments[0],
+				((Long)arguments[1]).longValue(),
+				(org.kisti.edison.osp.model.AnalyzerJob)arguments[2],
+				(java.nio.file.Path)arguments[3],
+				(java.lang.String)arguments[4], (java.lang.String)arguments[5]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -276,4 +311,8 @@ public class ExecuteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes41;
 	private String _methodName46;
 	private String[] _methodParameterTypes46;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
 }

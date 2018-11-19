@@ -62,14 +62,14 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 	public static final String TABLE_NAME = "EDMESH_Execute";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "projectId", Types.BIGINT },
-			{ "executeId", Types.VARCHAR },
+			{ "analyzerId", Types.VARCHAR },
 			{ "executeDataStructure", Types.VARCHAR },
 			{ "executeDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDMESH_Execute (projectId LONG not null,executeId VARCHAR(75) not null,executeDataStructure TEXT null,executeDate DATE null,primary key (projectId, executeId))";
+	public static final String TABLE_SQL_CREATE = "create table EDMESH_Execute (projectId LONG not null,analyzerId VARCHAR(75) not null,executeDataStructure TEXT null,executeDate DATE null,primary key (projectId, analyzerId))";
 	public static final String TABLE_SQL_DROP = "drop table EDMESH_Execute";
-	public static final String ORDER_BY_JPQL = " ORDER BY execute.id.projectId ASC, execute.id.executeId ASC";
-	public static final String ORDER_BY_SQL = " ORDER BY EDMESH_Execute.projectId ASC, EDMESH_Execute.executeId ASC";
+	public static final String ORDER_BY_JPQL = " ORDER BY execute.id.projectId ASC, execute.id.analyzerId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY EDMESH_Execute.projectId ASC, EDMESH_Execute.analyzerId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -83,7 +83,7 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 				"value.object.column.bitmask.enabled.org.kisti.edison.osp.model.Execute"),
 			true);
 	public static long PROJECTID_COLUMN_BITMASK = 1L;
-	public static long EXECUTEID_COLUMN_BITMASK = 2L;
+	public static long ANALYZERID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -99,7 +99,7 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 		Execute model = new ExecuteImpl();
 
 		model.setProjectId(soapModel.getProjectId());
-		model.setExecuteId(soapModel.getExecuteId());
+		model.setAnalyzerId(soapModel.getAnalyzerId());
 		model.setExecuteDataStructure(soapModel.getExecuteDataStructure());
 		model.setExecuteDate(soapModel.getExecuteDate());
 
@@ -134,18 +134,18 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 
 	@Override
 	public ExecutePK getPrimaryKey() {
-		return new ExecutePK(_projectId, _executeId);
+		return new ExecutePK(_projectId, _analyzerId);
 	}
 
 	@Override
 	public void setPrimaryKey(ExecutePK primaryKey) {
 		setProjectId(primaryKey.projectId);
-		setExecuteId(primaryKey.executeId);
+		setAnalyzerId(primaryKey.analyzerId);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new ExecutePK(_projectId, _executeId);
+		return new ExecutePK(_projectId, _analyzerId);
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("projectId", getProjectId());
-		attributes.put("executeId", getExecuteId());
+		attributes.put("analyzerId", getAnalyzerId());
 		attributes.put("executeDataStructure", getExecuteDataStructure());
 		attributes.put("executeDate", getExecuteDate());
 
@@ -183,10 +183,10 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 			setProjectId(projectId);
 		}
 
-		String executeId = (String)attributes.get("executeId");
+		String analyzerId = (String)attributes.get("analyzerId");
 
-		if (executeId != null) {
-			setExecuteId(executeId);
+		if (analyzerId != null) {
+			setAnalyzerId(analyzerId);
 		}
 
 		String executeDataStructure = (String)attributes.get(
@@ -228,18 +228,18 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 
 	@JSON
 	@Override
-	public String getExecuteId() {
-		if (_executeId == null) {
+	public String getAnalyzerId() {
+		if (_analyzerId == null) {
 			return StringPool.BLANK;
 		}
 		else {
-			return _executeId;
+			return _analyzerId;
 		}
 	}
 
 	@Override
-	public void setExecuteId(String executeId) {
-		_executeId = executeId;
+	public void setAnalyzerId(String analyzerId) {
+		_analyzerId = analyzerId;
 	}
 
 	@JSON
@@ -288,7 +288,7 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 		ExecuteImpl executeImpl = new ExecuteImpl();
 
 		executeImpl.setProjectId(getProjectId());
-		executeImpl.setExecuteId(getExecuteId());
+		executeImpl.setAnalyzerId(getAnalyzerId());
 		executeImpl.setExecuteDataStructure(getExecuteDataStructure());
 		executeImpl.setExecuteDate(getExecuteDate());
 
@@ -348,12 +348,12 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 
 		executeCacheModel.projectId = getProjectId();
 
-		executeCacheModel.executeId = getExecuteId();
+		executeCacheModel.analyzerId = getAnalyzerId();
 
-		String executeId = executeCacheModel.executeId;
+		String analyzerId = executeCacheModel.analyzerId;
 
-		if ((executeId != null) && (executeId.length() == 0)) {
-			executeCacheModel.executeId = null;
+		if ((analyzerId != null) && (analyzerId.length() == 0)) {
+			executeCacheModel.analyzerId = null;
 		}
 
 		executeCacheModel.executeDataStructure = getExecuteDataStructure();
@@ -383,8 +383,8 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 
 		sb.append("{projectId=");
 		sb.append(getProjectId());
-		sb.append(", executeId=");
-		sb.append(getExecuteId());
+		sb.append(", analyzerId=");
+		sb.append(getAnalyzerId());
 		sb.append(", executeDataStructure=");
 		sb.append(getExecuteDataStructure());
 		sb.append(", executeDate=");
@@ -407,8 +407,8 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 		sb.append(getProjectId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>executeId</column-name><column-value><![CDATA[");
-		sb.append(getExecuteId());
+			"<column><column-name>analyzerId</column-name><column-value><![CDATA[");
+		sb.append(getAnalyzerId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>executeDataStructure</column-name><column-value><![CDATA[");
@@ -431,7 +431,7 @@ public class ExecuteModelImpl extends BaseModelImpl<Execute>
 	private long _projectId;
 	private long _originalProjectId;
 	private boolean _setOriginalProjectId;
-	private String _executeId;
+	private String _analyzerId;
 	private String _executeDataStructure;
 	private Date _executeDate;
 	private long _columnBitmask;

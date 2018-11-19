@@ -50,7 +50,7 @@ public class ExecuteWrapper implements Execute, ModelWrapper<Execute> {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("projectId", getProjectId());
-		attributes.put("executeId", getExecuteId());
+		attributes.put("analyzerId", getAnalyzerId());
 		attributes.put("executeDataStructure", getExecuteDataStructure());
 		attributes.put("executeDate", getExecuteDate());
 
@@ -65,10 +65,10 @@ public class ExecuteWrapper implements Execute, ModelWrapper<Execute> {
 			setProjectId(projectId);
 		}
 
-		String executeId = (String)attributes.get("executeId");
+		String analyzerId = (String)attributes.get("analyzerId");
 
-		if (executeId != null) {
-			setExecuteId(executeId);
+		if (analyzerId != null) {
+			setAnalyzerId(analyzerId);
 		}
 
 		String executeDataStructure = (String)attributes.get(
@@ -127,23 +127,23 @@ public class ExecuteWrapper implements Execute, ModelWrapper<Execute> {
 	}
 
 	/**
-	* Returns the execute ID of this execute.
+	* Returns the analyzer ID of this execute.
 	*
-	* @return the execute ID of this execute
+	* @return the analyzer ID of this execute
 	*/
 	@Override
-	public java.lang.String getExecuteId() {
-		return _execute.getExecuteId();
+	public java.lang.String getAnalyzerId() {
+		return _execute.getAnalyzerId();
 	}
 
 	/**
-	* Sets the execute ID of this execute.
+	* Sets the analyzer ID of this execute.
 	*
-	* @param executeId the execute ID of this execute
+	* @param analyzerId the analyzer ID of this execute
 	*/
 	@Override
-	public void setExecuteId(java.lang.String executeId) {
-		_execute.setExecuteId(executeId);
+	public void setAnalyzerId(java.lang.String analyzerId) {
+		_execute.setAnalyzerId(analyzerId);
 	}
 
 	/**

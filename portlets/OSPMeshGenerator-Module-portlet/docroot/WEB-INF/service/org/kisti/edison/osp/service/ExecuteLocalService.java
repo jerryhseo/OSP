@@ -257,4 +257,16 @@ public interface ExecuteLocalService extends BaseLocalService,
 	public void removeExecuteByProjectId(long projectId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException;
+
+	public void simulationWithInputFile(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.lang.String fileContents, java.nio.file.Path inputFilePath)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void simulationWithIBInputFile(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay, long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.nio.file.Path inputFilePath, java.lang.String inputFileName,
+		java.lang.String fileId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

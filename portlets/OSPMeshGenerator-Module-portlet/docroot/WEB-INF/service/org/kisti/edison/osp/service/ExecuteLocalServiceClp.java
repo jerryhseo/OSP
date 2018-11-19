@@ -125,6 +125,21 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 		_methodName19 = "removeExecuteByProjectId";
 
 		_methodParameterTypes19 = new String[] { "long" };
+
+		_methodName20 = "simulationWithInputFile";
+
+		_methodParameterTypes20 = new String[] {
+				"long", "org.kisti.edison.osp.model.AnalyzerJob",
+				"java.lang.String", "java.nio.file.Path"
+			};
+
+		_methodName21 = "simulationWithIBInputFile";
+
+		_methodParameterTypes21 = new String[] {
+				"com.liferay.portal.theme.ThemeDisplay", "long",
+				"org.kisti.edison.osp.model.AnalyzerJob", "java.nio.file.Path",
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	@Override
@@ -710,6 +725,82 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 		}
 	}
 
+	@Override
+	public void simulationWithInputFile(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.lang.String fileContents, java.nio.file.Path inputFilePath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20,
+				new Object[] {
+					projectId,
+					
+				ClpSerializer.translateInput(analyzerJob),
+					
+				ClpSerializer.translateInput(fileContents),
+					
+				ClpSerializer.translateInput(inputFilePath)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void simulationWithIBInputFile(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay, long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.nio.file.Path inputFilePath, java.lang.String inputFileName,
+		java.lang.String fileId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName21,
+				_methodParameterTypes21,
+				new Object[] {
+					ClpSerializer.translateInput(themeDisplay),
+					
+				projectId,
+					
+				ClpSerializer.translateInput(analyzerJob),
+					
+				ClpSerializer.translateInput(inputFilePath),
+					
+				ClpSerializer.translateInput(inputFileName),
+					
+				ClpSerializer.translateInput(fileId)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -749,4 +840,8 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 	private String[] _methodParameterTypes17;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
 }

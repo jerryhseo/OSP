@@ -91,6 +91,7 @@ public class BladeEditorController {
 			e.printStackTrace();
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
+		model.addAttribute("type", "BLADE");
 		return "view";
 	}
 	

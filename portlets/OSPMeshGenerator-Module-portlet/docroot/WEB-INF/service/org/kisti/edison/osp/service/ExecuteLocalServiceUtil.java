@@ -281,6 +281,26 @@ public class ExecuteLocalServiceUtil {
 		getService().removeExecuteByProjectId(projectId);
 	}
 
+	public static void simulationWithInputFile(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.lang.String fileContents, java.nio.file.Path inputFilePath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.simulationWithInputFile(projectId, analyzerJob, fileContents,
+			inputFilePath);
+	}
+
+	public static void simulationWithIBInputFile(
+		com.liferay.portal.theme.ThemeDisplay themeDisplay, long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.nio.file.Path inputFilePath, java.lang.String inputFileName,
+		java.lang.String fileId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.simulationWithIBInputFile(themeDisplay, projectId, analyzerJob,
+			inputFilePath, inputFileName, fileId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

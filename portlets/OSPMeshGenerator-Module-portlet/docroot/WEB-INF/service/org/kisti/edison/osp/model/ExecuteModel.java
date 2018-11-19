@@ -76,19 +76,19 @@ public interface ExecuteModel extends BaseModel<Execute> {
 	public void setProjectId(long projectId);
 
 	/**
-	 * Returns the execute ID of this execute.
+	 * Returns the analyzer ID of this execute.
 	 *
-	 * @return the execute ID of this execute
+	 * @return the analyzer ID of this execute
 	 */
 	@AutoEscape
-	public String getExecuteId();
+	public String getAnalyzerId();
 
 	/**
-	 * Sets the execute ID of this execute.
+	 * Sets the analyzer ID of this execute.
 	 *
-	 * @param executeId the execute ID of this execute
+	 * @param analyzerId the analyzer ID of this execute
 	 */
-	public void setExecuteId(String executeId);
+	public void setAnalyzerId(String analyzerId);
 
 	/**
 	 * Returns the execute data structure of this execute.

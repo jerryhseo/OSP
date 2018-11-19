@@ -3,7 +3,7 @@
 <model-hints>
 	<model name="org.kisti.edison.osp.model.Execute">
 		<field name="projectId" type="long" />
-		<field name="executeId" type="String" />
+		<field name="analyzerId" type="String" />
 		<field name="executeDataStructure" type="String">
 			<hint name="max-length">4096</hint>
 		</field>

@@ -11,7 +11,7 @@
 		<id-class class="org.kisti.edison.osp.service.persistence.ExecutePK" />
 		<attributes>
 			<id name="projectId" />
-			<id name="executeId" />
+			<id name="analyzerId" />
 			<basic name="executeDataStructure" />
 			<basic name="executeDate">
 				<temporal>TIMESTAMP</temporal>

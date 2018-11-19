@@ -41,8 +41,8 @@ public class ExecuteCacheModel implements CacheModel<Execute>, Externalizable {
 
 		sb.append("{projectId=");
 		sb.append(projectId);
-		sb.append(", executeId=");
-		sb.append(executeId);
+		sb.append(", analyzerId=");
+		sb.append(analyzerId);
 		sb.append(", executeDataStructure=");
 		sb.append(executeDataStructure);
 		sb.append(", executeDate=");
@@ -58,11 +58,11 @@ public class ExecuteCacheModel implements CacheModel<Execute>, Externalizable {
 
 		executeImpl.setProjectId(projectId);
 
-		if (executeId == null) {
-			executeImpl.setExecuteId(StringPool.BLANK);
+		if (analyzerId == null) {
+			executeImpl.setAnalyzerId(StringPool.BLANK);
 		}
 		else {
-			executeImpl.setExecuteId(executeId);
+			executeImpl.setAnalyzerId(analyzerId);
 		}
 
 		if (executeDataStructure == null) {
@@ -87,7 +87,7 @@ public class ExecuteCacheModel implements CacheModel<Execute>, Externalizable {
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		projectId = objectInput.readLong();
-		executeId = objectInput.readUTF();
+		analyzerId = objectInput.readUTF();
 		executeDataStructure = objectInput.readUTF();
 		executeDate = objectInput.readLong();
 	}
@@ -97,11 +97,11 @@ public class ExecuteCacheModel implements CacheModel<Execute>, Externalizable {
 		throws IOException {
 		objectOutput.writeLong(projectId);
 
-		if (executeId == null) {
+		if (analyzerId == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
 		else {
-			objectOutput.writeUTF(executeId);
+			objectOutput.writeUTF(analyzerId);
 		}
 
 		if (executeDataStructure == null) {
@@ -115,7 +115,7 @@ public class ExecuteCacheModel implements CacheModel<Execute>, Externalizable {
 	}
 
 	public long projectId;
-	public String executeId;
+	public String analyzerId;
 	public String executeDataStructure;
 	public long executeDate;
 }

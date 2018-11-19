@@ -8,7 +8,7 @@
 		<cache usage="read-write" />
 		<composite-id name="primaryKey" class="org.kisti.edison.osp.service.persistence.ExecutePK">
 			<key-property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-			<key-property name="executeId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="analyzerId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		</composite-id>
 		<property name="executeDataStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="executeDate" type="org.hibernate.type.TimestampType" />

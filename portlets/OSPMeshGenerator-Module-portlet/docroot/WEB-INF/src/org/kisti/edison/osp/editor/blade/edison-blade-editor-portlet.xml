@@ -15,6 +15,9 @@
   <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping" />  
   
   <bean class="org.kisti.edison.osp.editor.blade.BladeEditorController" />
+  <bean class="org.kisti.edison.osp.editor.util.ParameterController" />
+  
+  <bean class="org.kisti.edison.osp.editor.helper.MeshAppHelper" />
   
   
   <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  

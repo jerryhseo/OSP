@@ -16,7 +16,6 @@
   
   <bean class="org.kisti.edison.osp.analyzer.mesh.MeshViewerController" />
   
-  
   <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
 	<property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" />  
 	<property name="prefix" value="/WEB-INF/html/analyzer/mesh/" />  
