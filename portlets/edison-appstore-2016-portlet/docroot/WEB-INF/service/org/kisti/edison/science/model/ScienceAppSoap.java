@@ -69,6 +69,7 @@ public class ScienceAppSoap implements Serializable {
 		soapModel.setIsCompile(model.getIsCompile());
 		soapModel.setProjectCategoryId(model.getProjectCategoryId());
 		soapModel.setExecute(model.getExecute());
+		soapModel.setCluster(model.getCluster());
 
 		return soapModel;
 	}
@@ -433,6 +434,14 @@ public class ScienceAppSoap implements Serializable {
 		_execute = execute;
 	}
 
+	public String getCluster() {
+		return _cluster;
+	}
+
+	public void setCluster(String cluster) {
+		_cluster = cluster;
+	}
+
 	private String _uuid;
 	private long _scienceAppId;
 	private long _groupId;
@@ -471,4 +480,5 @@ public class ScienceAppSoap implements Serializable {
 	private boolean _isCompile;
 	private long _projectCategoryId;
 	private long _execute;
+	private String _cluster;
 }

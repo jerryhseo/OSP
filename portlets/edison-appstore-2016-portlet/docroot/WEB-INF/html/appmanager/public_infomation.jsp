@@ -676,6 +676,7 @@ public String marshallParams(Map<String, String> params) {
 		/* set Category */
 		changeCategory('${data.parentCategory}','${data.childrenCategory}');
 		
+		<portlet:namespace/>getScienceAppVersion();
 		<portlet:namespace/>setCKeditor();
 		
 	});

@@ -112,9 +112,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "isPort", Types.BOOLEAN },
 			{ "isCompile", Types.BOOLEAN },
 			{ "projectCategoryId", Types.BIGINT },
-			{ "execute", Types.BIGINT }
+			{ "execute", Types.BIGINT },
+			{ "cluster", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,templetId VARCHAR(75) null,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,templetId VARCHAR(75) null,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceApp";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceApp.createDate DESC, scienceApp.version DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceApp.createDate DESC, EDAPP_ScienceApp.version DESC";
@@ -196,6 +197,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setIsCompile(soapModel.getIsCompile());
 		model.setProjectCategoryId(soapModel.getProjectCategoryId());
 		model.setExecute(soapModel.getExecute());
+		model.setCluster(soapModel.getCluster());
 
 		return model;
 	}
@@ -298,6 +300,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("isCompile", getIsCompile());
 		attributes.put("projectCategoryId", getProjectCategoryId());
 		attributes.put("execute", getExecute());
+		attributes.put("cluster", getCluster());
 
 		return attributes;
 	}
@@ -530,6 +533,12 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		if (execute != null) {
 			setExecute(execute);
+		}
+
+		String cluster = (String)attributes.get("cluster");
+
+		if (cluster != null) {
+			setCluster(cluster);
 		}
 	}
 
@@ -1453,6 +1462,22 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		_execute = execute;
 	}
 
+	@JSON
+	@Override
+	public String getCluster() {
+		if (_cluster == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _cluster;
+		}
+	}
+
+	@Override
+	public void setCluster(String cluster) {
+		_cluster = cluster;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
@@ -1623,6 +1648,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setIsCompile(getIsCompile());
 		scienceAppImpl.setProjectCategoryId(getProjectCategoryId());
 		scienceAppImpl.setExecute(getExecute());
+		scienceAppImpl.setCluster(getCluster());
 
 		scienceAppImpl.resetOriginalValues();
 
@@ -1929,12 +1955,20 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		scienceAppCacheModel.execute = getExecute();
 
+		scienceAppCacheModel.cluster = getCluster();
+
+		String cluster = scienceAppCacheModel.cluster;
+
+		if ((cluster != null) && (cluster.length() == 0)) {
+			scienceAppCacheModel.cluster = null;
+		}
+
 		return scienceAppCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(77);
+		StringBundler sb = new StringBundler(79);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -2012,6 +2046,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getProjectCategoryId());
 		sb.append(", execute=");
 		sb.append(getExecute());
+		sb.append(", cluster=");
+		sb.append(getCluster());
 		sb.append("}");
 
 		return sb.toString();
@@ -2019,7 +2055,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(118);
+		StringBundler sb = new StringBundler(121);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2177,6 +2213,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			"<column><column-name>execute</column-name><column-value><![CDATA[");
 		sb.append(getExecute());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>cluster</column-name><column-value><![CDATA[");
+		sb.append(getCluster());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -2246,6 +2286,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private boolean _isCompile;
 	private long _projectCategoryId;
 	private long _execute;
+	private String _cluster;
 	private long _columnBitmask;
 	private ScienceApp _escapedModel;
 }

@@ -321,6 +321,7 @@
 			<basic name="isCompile" />
 			<basic name="projectCategoryId" />
 			<basic name="execute" />
+			<basic name="cluster" />
 			<transient name="developersCurrentLanguageId" />
 			<transient name="developersMap" />
 			<transient name="manualIdCurrentLanguageId" />

@@ -906,6 +906,21 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 	 */
 	public void setExecute(long execute);
 
+	/**
+	 * Returns the cluster of this science app.
+	 *
+	 * @return the cluster of this science app
+	 */
+	@AutoEscape
+	public String getCluster();
+
+	/**
+	 * Sets the cluster of this science app.
+	 *
+	 * @param cluster the cluster of this science app
+	 */
+	public void setCluster(String cluster);
+
 	@Override
 	public boolean isNew();
 

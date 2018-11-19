@@ -157,7 +157,6 @@ public class ScienceAppstoreController {
 			
 			String selectLocaleId = CustomUtil.strNull(solver.get("selectLocaleId"), "ko_KR");
 			Map<String, Object> description = (Map<String, Object>) solver.get("description");
-			System.out.println("description : " + description.get("description_" + selectLocaleId).toString().replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", ""));
 			solver.put("descriptionStr", description.get("description_" + selectLocaleId).toString().replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", ""));
 			
 			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -790,7 +789,6 @@ public class ScienceAppstoreController {
 			writer.write(jsonObj.toString());
 
 		}catch(Exception e){
-			System.out.println("searchList Exception");
 			e.printStackTrace();
 		}
 	}
@@ -999,7 +997,6 @@ public class ScienceAppstoreController {
 			searchParamMap.put("name", name);
 			
 			List<Map<String, Object>> getScienceAppHistoryList = ScienceAppLocalServiceUtil.getScienceAppHistoryList(searchParamMap);
-			System.out.println("getScienceAppHistoryList --> " + getScienceAppHistoryList.toString());
 			
 			JSONObject obj = new JSONObject();
 			obj.put("getScienceAppHistoryList", getScienceAppHistoryList);
