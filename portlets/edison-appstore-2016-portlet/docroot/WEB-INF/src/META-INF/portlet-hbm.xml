@@ -248,6 +248,7 @@
 		<property name="isCompile" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="projectCategoryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="execute" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="cluster" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="org.kisti.edison.science.model.impl.ScienceAppCategoryLinkImpl" table="EDAPP_ScienceAppCategoryLink">
 		<cache usage="read-write" />

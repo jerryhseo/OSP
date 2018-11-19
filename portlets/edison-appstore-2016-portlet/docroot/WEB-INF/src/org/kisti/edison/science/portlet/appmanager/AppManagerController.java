@@ -1,9 +1,13 @@
 
 package org.kisti.edison.science.portlet.appmanager;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.model.EdisonAssetCategory;
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonFileConstants;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
@@ -80,6 +85,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONObjectWrapper;
 import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -103,6 +109,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -330,6 +337,11 @@ public class AppManagerController{
 				String binFolderListToStr = ScienceAppCompileLocalServiceUtil.retrieveListTartgetDir(themeDisplay.getCompanyId(), scienceApp.getName(), scienceApp.getVersion());
 				model.addAttribute("binFolderListToStr",binFolderListToStr);
 				
+				long scienceAppExecute = scienceApp.getExecute();
+				String scienceAppCluster = scienceApp.getCluster();
+				model.addAttribute("execute",scienceAppExecute);
+				model.addAttribute("cluster",scienceAppCluster);
+				
 				if(scienceApp.getIsCompile()){
 					//git 
 					try{
@@ -342,16 +354,17 @@ public class AppManagerController{
 					}
 				}else{
   				//실행 파일 업로드 확인
-  				boolean exeFileUpload = false;
-  				
-  				String appBasePath = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), EdisonPropsUtil.SCIENCEAPP_BASE_PATH)
-  									+scienceApp.getName()+File.separator
-  									+scienceApp.getVersion();
-  				
-  				String targetPath = appBasePath+File.separator+"bin";
-  				
-  				exeFileUpload = ScienceAppLocalServiceUtil.existScienceAppPath(targetPath);
-  				model.addAttribute("exeFileUpload",exeFileUpload);
+					boolean exeFileUpload = false;
+					
+					String appBasePath = PrefsPropsUtil.getString(themeDisplay.getCompanyId(), EdisonPropsUtil.SCIENCEAPP_BASE_PATH)
+										+scienceApp.getName()+File.separator
+										+scienceApp.getVersion();
+					
+					String targetPath = appBasePath+File.separator+"bin";
+					
+					exeFileUpload = ScienceAppLocalServiceUtil.existScienceAppPath(targetPath);
+					model.addAttribute("exeFileUpload",exeFileUpload);
+				
 				}
 				
 			}else if(clickTab.equals("m03")){
@@ -895,11 +908,9 @@ public class AppManagerController{
 			long scienceAppId = GetterUtil.getLong(params.get("scienceAppId"),0l);
 			String newVersion = CustomUtil.strNull(params.get("newVersion"), "");
 			ServiceContext sc = ServiceContextFactory.getInstance(PortType.class.getName(), request);
-			System.out.println("newVersion : " + newVersion);
 			
 			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 			boolean isDuplicated = ScienceAppLocalServiceUtil.existApp(scienceApp.getName(), newVersion);
-			System.out.println("isDuplicated : " + isDuplicated);
 			
 			net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
 			
@@ -1826,4 +1837,82 @@ public class AppManagerController{
 			}
 		}
 	}
+	
+	@ResourceMapping(value="getScienceAppInfo")
+	public void getScienceAppInfo(ResourceRequest request, ResourceResponse response) throws IOException{
+		Map params = RequestUtil.getParameterMap(request);
+		String scienceAppVersion = "";
+		boolean hasScienceApp = false;
+		long scienceAppId = Long.parseLong(CustomUtil.strNull(params.get("scienceAppId"),"0"));
+		
+		
+		try {
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			
+			scienceAppVersion = scienceApp.getVersion();
+			hasScienceApp = true;
+		} catch (Exception e) {
+			hasScienceApp = false;
+		}
+		
+		JSONObject obj = JSONFactoryUtil.createJSONObject();
+		
+		obj.put("scienceAppVersion", scienceAppVersion);
+		obj.put("result", hasScienceApp);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
+	
+	@ResourceMapping(value="getClusterList")
+	public void getClusterList(ResourceRequest request, ResourceResponse response) throws IOException{
+		
+		try {
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			Map params = RequestUtil.getParameterMap(request);
+			StringBuffer responseBuffer = new StringBuffer();
+			
+			long groupId = themeDisplay.getScopeGroupId();
+			String cluster = CustomUtil.strNull(params.get("cluster"),"EDISON_CFD");
+			String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
+			
+			URL url = new URL(icebreakerUrl+"/api/cluster/list");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			conn.setDoOutput(true);
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+			
+			JSONObject obj = JSONFactoryUtil.createJSONObject();
+			
+			if (conn.getResponseCode() == 400) {
+				throw new PortalException("Failed IcebreakerService [ retrieveCluster ] : BAD REQUEST: bad parameters");
+			}else{
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+				String  output = "";		
+				while ((output = br.readLine()) != null) {			
+					responseBuffer.append(output);
+				}
+				
+				JSONObject clusterObj = JSONFactoryUtil.createJSONObject(responseBuffer.toString());
+				JSONArray clusterJsonArr =  clusterObj.getJSONArray("clusters");
+				String[] clusterName = new String[clusterJsonArr.length()];
+				for(int i=0; i<clusterJsonArr.length(); i++){
+					clusterName[i] = clusterJsonArr.getJSONObject(i).getString("name");
+				}
+				String clusterList = HtmlFormUtils.makeCombo(clusterName, cluster);
+				obj.put("clusterList", clusterList);
+			}
+			conn.disconnect();
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(obj.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

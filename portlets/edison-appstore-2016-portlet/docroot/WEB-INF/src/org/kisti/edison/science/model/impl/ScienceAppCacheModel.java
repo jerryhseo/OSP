@@ -38,7 +38,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(77);
+		StringBundler sb = new StringBundler(79);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -116,6 +116,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(projectCategoryId);
 		sb.append(", execute=");
 		sb.append(execute);
+		sb.append(", cluster=");
+		sb.append(cluster);
 		sb.append("}");
 
 		return sb.toString();
@@ -295,6 +297,13 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		scienceAppImpl.setProjectCategoryId(projectCategoryId);
 		scienceAppImpl.setExecute(execute);
 
+		if (cluster == null) {
+			scienceAppImpl.setCluster(StringPool.BLANK);
+		}
+		else {
+			scienceAppImpl.setCluster(cluster);
+		}
+
 		scienceAppImpl.resetOriginalValues();
 
 		return scienceAppImpl;
@@ -340,6 +349,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		isCompile = objectInput.readBoolean();
 		projectCategoryId = objectInput.readLong();
 		execute = objectInput.readLong();
+		cluster = objectInput.readUTF();
 	}
 
 	@Override
@@ -496,6 +506,13 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		objectOutput.writeBoolean(isCompile);
 		objectOutput.writeLong(projectCategoryId);
 		objectOutput.writeLong(execute);
+
+		if (cluster == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(cluster);
+		}
 	}
 
 	public String uuid;
@@ -536,4 +553,5 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public boolean isCompile;
 	public long projectCategoryId;
 	public long execute;
+	public String cluster;
 }

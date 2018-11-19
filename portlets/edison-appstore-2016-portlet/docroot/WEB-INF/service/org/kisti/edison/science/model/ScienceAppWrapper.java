@@ -88,6 +88,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("isCompile", getIsCompile());
 		attributes.put("projectCategoryId", getProjectCategoryId());
 		attributes.put("execute", getExecute());
+		attributes.put("cluster", getCluster());
 
 		return attributes;
 	}
@@ -320,6 +321,12 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 
 		if (execute != null) {
 			setExecute(execute);
+		}
+
+		String cluster = (String)attributes.get("cluster");
+
+		if (cluster != null) {
+			setCluster(cluster);
 		}
 	}
 
@@ -1506,6 +1513,26 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 	@Override
 	public void setExecute(long execute) {
 		_scienceApp.setExecute(execute);
+	}
+
+	/**
+	* Returns the cluster of this science app.
+	*
+	* @return the cluster of this science app
+	*/
+	@Override
+	public java.lang.String getCluster() {
+		return _scienceApp.getCluster();
+	}
+
+	/**
+	* Sets the cluster of this science app.
+	*
+	* @param cluster the cluster of this science app
+	*/
+	@Override
+	public void setCluster(java.lang.String cluster) {
+		_scienceApp.setCluster(cluster);
 	}
 
 	@Override

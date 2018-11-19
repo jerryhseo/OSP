@@ -78,6 +78,8 @@
 	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
 	<portlet:param name="redirectName" 	value="MY EDISON" />
 </liferay-portlet:renderURL>
+
+<liferay-portlet:resourceURL var="getScienceAppInfoURL" escapeXml="false" id="getScienceAppInfo" copyCurrentRenderParameters="false"/>
 	
 <%
     String renderUrl = HttpUtil.removeParameter(solverRenderURL, renderResponse.getNamespace()+"clickTab");
@@ -86,8 +88,39 @@
 	.no-dialog-padding .ui-dialog-content{
 		padding : 0px;
 	}
+	
+	.<portlet:namespace/>app-version{
+		width: 50px !important;
+		text-align: center;
+	}
+	
+	
+	.tooltips {
+		position: relative;
+		display: inline-block;
+	}
+
+	.tooltips .tooltiptext {
+		visibility: hidden;
+		background-color: #e7e7e7;
+		text-align: center;
+		border-radius: 10px;
+		padding: 6px 10px;
+		width: max-content;
+		
+		/* Position the tooltip */
+		position: absolute;
+		left: -290px;
+		top: 35px;
+		z-index: 1;
+	}
+	
+	.tooltips:hover .tooltiptext {
+		visibility: visible;
+	}
 </style>
 <div class="container">
+	<input type="hidden" id="<portlet:namespace/>currVersion" value="" />
 	<div class="swleft">
 		${tabStr}
 	</div>
@@ -101,6 +134,12 @@
 <script src="${contextPath}/js/jquery-confirm.js"></script>
 
 <script type="text/javascript">
+	
+	$(document).ready(function(){
+		<portlet:namespace/>getScienceAppVersion()
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+	
 	function tabAction(tabValue){
 		var searchParameter = "";
 		searchParameter += "&<portlet:namespace/>clickTab="+tabValue;
@@ -195,24 +234,76 @@
 	}
 	
 	function <portlet:namespace/>copyScienceApp(){
-		
-		var confirmContent = '<p style="font-size: 15px;"> ' + Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message').replace("\n", "<br/>") + '</p>'
-							 + '<p style="font-size: 15px;">' + Liferay.Language.get('edison-science-appstore-update-new-version-massage').replace("\n", "<br/>") + '</p>'
-							 + '<p> <input type="text" class="field field-control" id="<portlet:namespace/>inputNewVersion" placeholder="ex) 1.0.0" val /> </p>';
-		
-		/* if(!confirm(Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message'))) return; */
-		
+		/* <liferay-ui:icon-help message="edison-science-appstore-port-type-message"/> */
+		var confirmContent = '<div id="<portlet:namespace/>upgrageVersionBtn" style="width: 100%; margin: 10px 0px;" align="center">' + 
+									 '<div class="pull-left" style="font-size:20px;">'+
+										Liferay.Language.get('current-version') + ' : ${data.version}<br/><br/>' +
+									 '</div>' + 
+									 '<div class="pull-right">'+
+										 '<div class="tooltips">' + 
+											 '<button type="button" id="<portlet:namespace/>releaseUpgrade" class="btn btn-default"' + 
+											 		' data-toggle="tooltip" data-placement="top" ' +
+											 		' onclick="<portlet:namespace/>setNewUpgradeVersion(\'release\')" style="margin: 0px 5px;">' + 
+												 'Release'+
+											 '</button>' +
+											 '<span class="tooltiptext"><i class="icon-exclamation-sign"></i>&nbsp;' + 
+											 	Liferay.Language.get('edison-science-appstore-upgrade-version-description-release') + 
+											 '</span>' +
+										 '</div>' + 
+										 '<div class="tooltips">' +
+											 '<button type="button" id="<portlet:namespace/>majorUpgrade" class="btn btn-default"' +
+											 		' data-toggle="tooltip" data-placement="top" ' +
+											 		' onclick="<portlet:namespace/>setNewUpgradeVersion(\'major\')" style="margin: 0px 5px;">' + 
+												 'Major'+
+											 '</button>' +
+											 '<span class="tooltiptext"><i class="icon-exclamation-sign"></i>&nbsp;' + 
+											 	Liferay.Language.get('edison-science-appstore-upgrade-version-description-major') + 
+											 '</span>' +
+										 '</div>' + 
+										 '<div class="tooltips">' +
+											 '<button type="button" id="<portlet:namespace/>minorUpgrade" class="btn btn-default"' + 
+											 		' data-toggle="tooltip" data-placement="top" ' +
+											 		' onclick="<portlet:namespace/>setNewUpgradeVersion(\'minor\')" style="margin: 0px 5px;">' + 
+												 'Minor'+
+											 '</button>' +
+											 '<span class="tooltiptext"><i class="icon-exclamation-sign"></i>&nbsp;' + 
+											 	Liferay.Language.get('edison-science-appstore-upgrade-version-description-minor') + 
+											 '</span>' +
+										 '</div>' + 
+									 '</div>' +
+							 '</div>' +
+							 '<div id="<portlet:namespace/>defaultVersionDescription" style="display:inline-block; margin:10px 30px 0px; line-height:25px;">' +
+								 Liferay.Language.get('edison-science-appstore-upgrade-version-description-release') + '<br/>' + 
+								 Liferay.Language.get('edison-science-appstore-upgrade-version-description-major') + '<br/>' + 
+								 Liferay.Language.get('edison-science-appstore-upgrade-version-description-minor') + '<br/>' + 
+								 '<span style="color:blue;"><i class="icon-info-sign"></i>&nbsp;</span>' + Liferay.Language.get('edison-science-appstore-upgrade-version-description-button') + '<br/>' +
+							 '</div>' +
+							 '<div class="h10" ></div>' +
+							 '<div id="<portlet:namespace/>upgradeVersionForm" style="width: 100%; padding-top:20px; border-top:1px solid #efefef; display: none;">' + 
+							 '<div class="input-group" style="width:100%; text-align:center;">' + 
+								 '<input type="number" title="Release" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>releaseNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
+								 '.' +
+								 '<input type="number" title="Major" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>majorNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
+								 '.' +
+								 '<input type="number" title="Minor" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>minorNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
+							 '</div>' + 
+							 '<div class="h10" ></div>' + 
+								 Liferay.Language.get('edison-science-appstore-upgrade-new-version-massage') + '<br/>' +
+								 Liferay.Language.get('edison-science-appstore-toolkit-app-copy-message') + 
+							 '</div>';
+							 
 		$.confirm({
-			boxWidth: '30%',
+			boxWidth: '32%',
 			useBootstrap: false,
-			title: 'Version Upgrade!',
+			title: '',
 			content: confirmContent,
 			buttons: {
-				confirm: function () {
+				upgrade: function () {
 					
+					var currVersion = $("#<portlet:namespace/>currVersion").val();
 					var regVersion = new RegExp('[0-9]+[.][0-9]+[.][0-9]');
 					var regVersionStr = new RegExp('[a-zA-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+');
-					var newVersion = $("#<portlet:namespace/>inputNewVersion").val();
+					var newVersion = $("#<portlet:namespace/>releaseNumber").val() + "." + $("#<portlet:namespace/>majorNumber").val() + "." + $("#<portlet:namespace/>minorNumber").val();
 					
 					if(newVersion !=null && newVersion != '' && !regVersion.test(newVersion)){
 						alert(Liferay.Language.get('edison-data-collection-enter-version-alert'));
@@ -220,6 +311,11 @@
 					} else if(newVersion !=null && newVersion != '' && regVersionStr.test(newVersion)){
 						alert(Liferay.Language.get('edison-data-collection-enter-version-alert'));
 						return;
+					} else {
+						if(newVersion <= currVersion){
+							alert(Liferay.Language.get('edison-science-appstore-upgrade-new-version-duplicate-massage'));
+							return;
+						}
 					}
 					
 					
@@ -241,7 +337,7 @@
 									location.reload();
 								}
 							} else {
-								alert(Liferay.Language.get('edison-science-appstore-update-new-version-duplicate-massage'));
+								alert(Liferay.Language.get('edison-science-appstore-upgrade-new-version-duplicate-massage'));
 							}
 						},error:function(jqXHR, textStatus, errorThrown){
 							if(jqXHR.responseText !== ''){
@@ -259,7 +355,61 @@
 		});
 	}
 	
-	function <portlet:namespace/>appTest(){
-		window.location.href = "<%=appTestURL%>";
+	/* 2018.11.05 Version Upgrade를 위한 현재 버전 가져오기 */
+	function <portlet:namespace/>getScienceAppVersion(){
+		var dataForm = {	
+				"<portlet:namespace/>scienceAppId"	: "${scienceAppId}"
+			};
+		
+		jQuery.ajax({
+			type: "POST",
+			url: "<%=getScienceAppInfoURL%>",
+			async : false,
+			data  : dataForm,
+			success: function(data) {
+				if(data.result==true){
+					var scienceAppVersion = data.scienceAppVersion;
+					$("#<portlet:namespace/>currVersion").val(scienceAppVersion);
+				} else {
+					alert(Liferay.Language.get('edison-data-search-error'))
+				}
+			},error:function(jqXHR, textStatus, errorThrown){
+				if(jqXHR.responseText !== ''){
+					edison-data-search-error
+					alert(textStatus+": "+jqXHR.responseText);
+				}else{
+					alert(textStatus+": "+errorThrown);
+				}  
+			}
+		});
+	}
+	
+	/*  */
+	function <portlet:namespace/>setNewUpgradeVersion(type){
+		
+		var currVersion = $("#<portlet:namespace/>currVersion").val();
+		var appVersionArr = currVersion.split('.');
+		
+		$("#<portlet:namespace/>releaseNumber").attr("min", appVersionArr[0]);
+		$("#<portlet:namespace/>majorNumber").attr("min", appVersionArr[1]);
+		$("#<portlet:namespace/>minorNumber").attr("min", appVersionArr[2]);
+		
+		$("#<portlet:namespace/>defaultVersionDescription").hide();
+		
+		if(type == 'release'){
+			$("#<portlet:namespace/>releaseNumber").val(appVersionArr[0]*1+1).attr("disabled", false);
+			$("#<portlet:namespace/>majorNumber").val(0).attr("disabled", false);
+			$("#<portlet:namespace/>minorNumber").val(0).attr("disabled", false);
+		} else if(type == 'major'){
+			$("#<portlet:namespace/>releaseNumber").val(appVersionArr[0]).attr("disabled", true);
+			$("#<portlet:namespace/>majorNumber").val(appVersionArr[1]*1+1).attr("disabled", false);
+			$("#<portlet:namespace/>minorNumber").val(0).attr("disabled", false);
+		} else if(type == 'minor'){
+			$("#<portlet:namespace/>releaseNumber").val(appVersionArr[0]).attr("disabled", true);
+			$("#<portlet:namespace/>majorNumber").val(appVersionArr[1]).attr("disabled", true);
+			$("#<portlet:namespace/>minorNumber").val(appVersionArr[2]*1+1).attr("disabled", false);
+		}
+		
+		$("#<portlet:namespace/>upgradeVersionForm").show();
 	}
 </script>

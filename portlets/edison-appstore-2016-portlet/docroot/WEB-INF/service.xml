@@ -131,6 +131,7 @@
         <column name= "projectCategoryId" type="long"></column>
         
         <column name= "execute" type="long"></column>
+        <column name= "cluster" type="String"></column>
         
         
         

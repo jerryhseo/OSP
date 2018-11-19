@@ -15408,6 +15408,7 @@ public class ScienceAppPersistenceImpl extends BasePersistenceImpl<ScienceApp>
 		scienceAppImpl.setIsCompile(scienceApp.isIsCompile());
 		scienceAppImpl.setProjectCategoryId(scienceApp.getProjectCategoryId());
 		scienceAppImpl.setExecute(scienceApp.getExecute());
+		scienceAppImpl.setCluster(scienceApp.getCluster());
 
 		return scienceAppImpl;
 	}
