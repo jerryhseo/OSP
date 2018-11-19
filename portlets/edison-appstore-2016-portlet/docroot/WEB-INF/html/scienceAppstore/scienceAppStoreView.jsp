@@ -781,7 +781,7 @@
 									<liferay-ui:message key='statistics' />
 								</strong>
 								<p class="text-muted" style="margin-left: 10px;">
-									Simulation Users : 3,321 <br>
+									Simulation Users : <fmt:formatNumber value="${simulationUsersCnt}" pattern="#,###" /> <br>
 									SImulation Runs : <fmt:formatNumber value="${exeCnt}" pattern="#,###" />
 								</p>
 								
@@ -2787,6 +2787,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 	$("a[viewReply=" + boardSeq +"]").show();
 	$("a[closeReply=" + boardSeq +"]").hide();
 }
+	
 </script>
 
 <aui:script>

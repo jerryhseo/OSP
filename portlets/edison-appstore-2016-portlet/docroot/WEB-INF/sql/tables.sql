@@ -116,7 +116,7 @@ create table EDAPP_PortTypeEditorLink (
 
 create table EDAPP_PortTypeInputdeckForm (
 	portTypeId LONG not null primary key,
-	inputdeckForm TEXT null
+	inputdeckForm VARCHAR(75) null
 );
 
 create table EDAPP_RequiredLib (
@@ -126,11 +126,11 @@ create table EDAPP_RequiredLib (
 	userId LONG,
 	createDate DATE null,
 	modifiedDate DATE null,
-	libraryName VARCHAR(256) null,
+	libraryName VARCHAR(75) null,
 	libraryVersion VARCHAR(75) null,
 	libraryType VARCHAR(75) null,
 	librarySrcPath VARCHAR(75) null,
-	installScript TEXT null
+	installScript VARCHAR(75) null
 );
 
 create table EDAPP_RequiredLibConfirm (
@@ -174,7 +174,7 @@ create table EDAPP_ScienceApp (
 	previousVersionId LONG,
 	iconId LONG,
 	manualId STRING null,
-	exeFileName VARCHAR(256) null,
+	exeFileName VARCHAR(75) null,
 	appType VARCHAR(75) null,
 	runType VARCHAR(75) null,
 	authorId LONG,
@@ -182,20 +182,23 @@ create table EDAPP_ScienceApp (
 	status INTEGER,
 	recentModifierId LONG,
 	parallelModule VARCHAR(75) null,
+	minCpus INTEGER,
 	maxCpus INTEGER,
 	defaultCpus INTEGER,
 	statusDate DATE null,
 	openLevel VARCHAR(75) null,
 	license VARCHAR(75) null,
-	srcFileName VARCHAR(256) null,
+	srcFileName VARCHAR(75) null,
 	targetLanguage VARCHAR(75) null,
 	templetId VARCHAR(75) null,
-	layout TEXT null,
+	layout VARCHAR(75) null,
 	developers STRING null,
 	editorType VARCHAR(75) null,
 	isPort BOOLEAN,
 	isCompile BOOLEAN,
-	projectCategoryId LONG
+	projectCategoryId LONG,
+	execute LONG,
+	cluster VARCHAR(75) null
 );
 
 create table EDAPP_ScienceAppCategoryLink (
@@ -215,7 +218,7 @@ create table EDAPP_ScienceAppCompile (
 	scienceAppId LONG not null primary key,
 	userId LONG,
 	compileUrl VARCHAR(75) null,
-	result TEXT null,
+	result VARCHAR(75) null,
 	createDate DATE null
 );
 
@@ -237,13 +240,13 @@ create table EDAPP_ScienceAppFavorite (
 
 create table EDAPP_ScienceAppInputPorts (
 	scienceAppId LONG not null primary key,
-	inputPortsSampleFile TEXT null,
-	inputPorts TEXT null
+	inputPortsSampleFile VARCHAR(75) null,
+	inputPorts VARCHAR(75) null
 );
 
 create table EDAPP_ScienceAppLogPorts (
 	scienceAppId LONG not null primary key,
-	logPorts TEXT null
+	logPorts VARCHAR(75) null
 );
 
 create table EDAPP_ScienceAppManager (
@@ -256,5 +259,25 @@ create table EDAPP_ScienceAppManager (
 
 create table EDAPP_ScienceAppOutputPorts (
 	scienceAppId LONG not null primary key,
-	outputPorts TEXT null
+	outputPorts VARCHAR(75) null
+);
+
+create table EDAPP_ScienceAppPaper (
+	scienceAppId LONG not null,
+	paperSeq LONG not null,
+	paperType VARCHAR(75) null,
+	paperValue VARCHAR(75) null,
+	primary key (scienceAppId, paperSeq)
+);
+
+create table EDAPP_ScienceAppRatingsEntry (
+	userId LONG not null,
+	scienceAppId LONG not null,
+	companyId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	classNameId LONG,
+	score LONG,
+	primary key (userId, scienceAppId)
 );

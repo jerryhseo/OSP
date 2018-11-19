@@ -420,6 +420,7 @@ public class ScienceAppstoreController {
 			/* Get ScienceApp Execute Statistics */
 			Map<String, Object> scienceAppExecuteStatisticsMap = ScienceAppLocalServiceUtil.getScienceAppExecuteStatistics(scienceAppId);
 			model.addAttribute("userCnt", scienceAppExecuteStatisticsMap.get("userCnt"));
+			model.addAttribute("simulationUsersCnt", getSimulationUsersOfScienceApp(scienceAppId));
 			model.addAttribute("exeCnt", scienceAppExecuteStatisticsMap.get("exeCnt"));
 			model.addAttribute("avgExeTime", scienceAppExecuteStatisticsMap.get("avgExeTime"));
 			
@@ -1044,6 +1045,11 @@ public class ScienceAppstoreController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public int getSimulationUsersOfScienceApp(long scienceAppId) throws PortalException, SystemException, ParseException, IOException{
+		
+		return ScienceAppLocalServiceUtil.getSimulationUsersOfScienceApp(scienceAppId);
 	}
 	
 }

@@ -1087,4 +1087,8 @@ public interface ScienceAppLocalService extends BaseLocalService,
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getScienceAppReviewList(
 		java.util.Map<java.lang.String, java.lang.Object> searchParamMap)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getSimulationUsersOfScienceApp(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

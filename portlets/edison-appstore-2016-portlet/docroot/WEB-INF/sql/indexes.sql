@@ -61,3 +61,9 @@ create index IX_8A796C05 on EDAPP_ScienceAppManager (scienceAppId);
 create index IX_76420E33 on EDAPP_ScienceAppManager (scienceAppId, managerId);
 create index IX_EF60EF3F on EDAPP_ScienceAppManager (scienceAppId, userId);
 create index IX_5C715BF3 on EDAPP_ScienceAppManager (userId);
+
+create index IX_86D69964 on EDAPP_ScienceAppPaper (scienceAppId);
+
+create index IX_66F005A8 on EDAPP_ScienceAppRatingsEntry (scienceAppId);
+create index IX_95B8ABD6 on EDAPP_ScienceAppRatingsEntry (userId);
+create index IX_22CF1462 on EDAPP_ScienceAppRatingsEntry (userId, scienceAppId);

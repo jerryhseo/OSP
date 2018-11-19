@@ -672,4 +672,29 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 		}
 		
 	}
+	
+	public List<Object[]> getSimulationUsersOfScienceApp(Map<String,Object> searchParam) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try{
+
+			String sqlSelect = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.getSimulationUsersOfScienceApp");
+
+			sqlSb.append(sqlSelect);			
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+
+			query.addScalar("count", Type.LONG);
+			
+			return (List<Object[]>) query.list();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+	
 }

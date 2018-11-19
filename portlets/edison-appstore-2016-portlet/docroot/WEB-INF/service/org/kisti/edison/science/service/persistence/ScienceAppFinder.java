@@ -87,4 +87,8 @@ public interface ScienceAppFinder {
 	public java.util.List<java.lang.Object[]> getScienceAppReviewList(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> getSimulationUsersOfScienceApp(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }
