@@ -654,6 +654,10 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		_methodName126 = "getScienceAppReviewList";
 
 		_methodParameterTypes126 = new String[] { "java.util.Map" };
+
+		_methodName127 = "getSimulationUsersOfScienceApp";
+
+		_methodParameterTypes127 = new String[] { "long" };
 	}
 
 	@Override
@@ -4987,6 +4991,34 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public int getSimulationUsersOfScienceApp(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName127,
+					_methodParameterTypes127, new Object[] { scienceAppId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -5240,4 +5272,6 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes125;
 	private String _methodName126;
 	private String[] _methodParameterTypes126;
+	private String _methodName127;
+	private String[] _methodParameterTypes127;
 }

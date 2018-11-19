@@ -482,16 +482,20 @@ public class TreeViewMonitoringController{
                 
                 if(saveInfo.getBoolean("isValid")){
                 	com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
-                	curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
-                	
-                	if(curateInfo.getBoolean("isValid")){
-                		resultMap.put("isCompleteMsg", "Successed Transfer JobData To SDR");
-                	} else {
-                		resultMap.put("isCompleteMsg", "Failed Transfer JobData To SDR");
-                	}
+                    curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
+                    
+                    if(curateInfo.getBoolean("isValid")){
+                    	resultMap.put("isComplete", true);
+                    	resultMap.put("isCompleteMsg", "Successed Transfer JobData To SDR");
+                    } else {
+                    	resultMap.put("isComplete", false);
+                        resultMap.put("msg", curateInfo.getString("failMessage"));
+                        throw new PortalException(curateInfo.getString("failMessage"));
+                    }
+                } else {
+                    throw new PortalException(saveInfo.getString("failMessage"));
                 }
                 
-//                resultMap.put("isComplete", ds != null);
             }catch(Exception e){
                 resultMap.put("isComplete", false);
                 resultMap.put("msg", e.getMessage());

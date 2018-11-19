@@ -244,7 +244,8 @@ public class ScienceAppPaperUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.science.model.ScienceAppPaper[] findByScienceAppId_PrevAndNext(
-		ScienceAppPaperPK scienceAppPaperPK, long scienceAppId,
+		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK,
+		long scienceAppId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException {
@@ -303,7 +304,7 @@ public class ScienceAppPaperUtil {
 	* @return the new science app paper
 	*/
 	public static org.kisti.edison.science.model.ScienceAppPaper create(
-		ScienceAppPaperPK scienceAppPaperPK) {
+		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK) {
 		return getPersistence().create(scienceAppPaperPK);
 	}
 
@@ -316,7 +317,7 @@ public class ScienceAppPaperUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.science.model.ScienceAppPaper remove(
-		ScienceAppPaperPK scienceAppPaperPK)
+		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException {
 		return getPersistence().remove(scienceAppPaperPK);
@@ -337,7 +338,7 @@ public class ScienceAppPaperUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.science.model.ScienceAppPaper findByPrimaryKey(
-		ScienceAppPaperPK scienceAppPaperPK)
+		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.science.NoSuchScienceAppPaperException {
 		return getPersistence().findByPrimaryKey(scienceAppPaperPK);
@@ -351,7 +352,7 @@ public class ScienceAppPaperUtil {
 	* @throws SystemException if a system exception occurred
 	*/
 	public static org.kisti.edison.science.model.ScienceAppPaper fetchByPrimaryKey(
-		ScienceAppPaperPK scienceAppPaperPK)
+		org.kisti.edison.science.service.persistence.ScienceAppPaperPK scienceAppPaperPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().fetchByPrimaryKey(scienceAppPaperPK);
 	}

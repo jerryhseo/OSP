@@ -197,6 +197,25 @@
 			</tr>
 		</table>
 	</aui:form>
+	
+	<div id="<portlet:namespace/>upgradeVersionForm2" style="width: 100%; margin: 10px 0px; display: none;">	
+		
+		<liferay-ui:message key='current-version' /> : ${data.version}<br/>
+		<input type="number" title="Release" class="field field-control <portlet:namespace/>app-version" id="<portlet:namespace/>releaseNumber1" min="0" value="" >
+		.
+		<input type="number" title="Major" class="field field-control <portlet:namespace/>app-version" id="<portlet:namespace/>majorNumber1" min="0" value="" >
+		.
+		<input type="number" title="Minor" class="field field-control <portlet:namespace/>app-version" id="<portlet:namespace/>minorNumber1" min="0" value="" >
+		<br/>
+		<liferay-ui:message key='edison-science-appstore-upgrade-new-version-massage' />
+		
+		<br/>
+		<liferay-ui:message key='edison-science-appstore-toolkit-app-copy-message' />
+		
+		<script>
+			
+		</script>
+	</div>
 </div>
 
 
@@ -208,6 +227,7 @@
 	if(mode.equals(Constants.UPDATE)){
 	%>
 		$(document).ready(function () {
+			$("#<portlet:namespace/>currVersion").val('${data.version}');
 			changeLanguage('${data.targetLanguage}');
 			
 			$("#<portlet:namespace/>app-manager-add-dialog").dialog({

@@ -49,6 +49,7 @@
 	<portlet:param name="appVersion" value="${data.version}"/>
 </liferay-portlet:resourceURL>
 
+<liferay-portlet:resourceURL var="getClusterListURL" escapeXml="false" id="getClusterList" copyCurrentRenderParameters="false"/>
 
 <style type="text/css">
 	.aui .long_field{
@@ -202,23 +203,30 @@
 					</tr>
 					<tr class="is-not-dwn-only">
 						<th>Run Type</th>
-						<td>
-							<aui:select name="runType" label="" onChange="changeRunType(this.value);" cssClass="noupdate">
+						<td colspan="3">
+							<%-- <aui:select name="runType" label="" cssClass="noupdate">
 								${runTypeOptions}
-							</aui:select>
+								${parallelOptions}
+							</aui:select> --%>
+							<select id="<portlet:namespace/>runType" name="<portlet:namespace/>runType" class="aui-field-select noupdate">
+								${runTypeOptions}
+								<optgroup label="Parallel">
+									${parallelOptions}
+								</optgroup>
+							</select>
 						</td>
-						<th>PARALLEL_Module</th>
+						<%-- <th>PARALLEL_Module</th>
 						<td>
 							<aui:select name="parallelModule" label="" disabled="<%=true%>" cssClass="runTypeDisabled">
 								<option value=""><liferay-ui:message key='nobody' /></option>
 								${parallelOptions}
 							</aui:select>
-						</td>
+						</td> --%>
 					</tr>
 					<tr class="is-not-dwn-only">
 						<th>Min CPU</th>
 						<td>
-							<aui:input name="minCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.minCpus}">
+							<aui:input name="minCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.minCpus}">
 								<aui:validator name="number"/>
 								<aui:validator name="maxLength">2</aui:validator>
 								<aui:validator name="max">32</aui:validator>
@@ -226,7 +234,7 @@
 						</td>
 						<th rowspan="2">Default CPU</th>
 						<td rowspan="2">
-							<aui:input name="defaultCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.defaultCpus}">
+							<aui:input name="defaultCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.defaultCpus}">
 								<aui:validator name="number"/>
 								<aui:validator name="maxLength">2</aui:validator>
 								<aui:validator name="max">32</aui:validator>
@@ -236,11 +244,20 @@
 					<tr class="is-not-dwn-only">
 						<th>Max CPU</th>
 						<td>
-							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="<%=true%>" value="${data.maxCpus}">
+							<aui:input name="maxCpus" type="text" label="" cssClass="short_field runTypeDisabled" disabled="" value="${data.maxCpus}">
 								<aui:validator name="number"/>
 								<aui:validator name="maxLength">2</aui:validator>
 								<aui:validator name="max">32</aui:validator>
 							</aui:input>
+						</td>
+					</tr>
+					<tr class="is-not-dwn-only">
+						<th>Cluster</th>
+						<td colspan="3">
+							<%-- <select name="<portlet:namespace/>cluster" id="<portlet:namespace/>cluster" class="form-control filter">
+							</select> --%>
+							<aui:select name="cluster" label="" cssClass="noupdate">
+							</aui:select>
 						</td>
 					</tr>
 				</c:when>
@@ -434,11 +451,31 @@ if(mode.equals(Constants.UPDATE)){
 %>
 	$(document).ready(function () {
 		changeOpenLevel('${data.openLevel}');
-		changeRunType('${data.runType}');
+//		changeRunType('${data.runType}');
 		changeAppType('${data.appType}');
 // 		<portlet:namespace/>noUpdateDisabled('${data.status}');
+		<portlet:namespace/>getClusterList();
 	});
 <%}%>
+
+/* 클러스터 리스트 가져오기 */
+function <portlet:namespace/>getClusterList(){
+	$.ajax({
+		type: "POST",
+		url:"<%=getClusterListURL%>",
+		async : true,
+		data : {"<portlet:namespace/>cluster" : "${cluster}"},
+		dataType: 'json',
+		success: function(data) {
+			var clusterSelect = $("#<portlet:namespace/>cluster");
+			var clusterList = data.clusterList;
+			clusterSelect.append(clusterList);
+		},error:function(jqXHR, textStatus, errorThrown){
+			alert("Get Cluster Error");
+		},complete:function(){
+		}
+	});
+}
 
 AUI().ready(function() {
 	
@@ -599,9 +636,11 @@ function <portlet:namespace/>gitHubCompile(){
 function <portlet:namespace/>actionCall(mode){
 	if(mode=='<%=Constants.ADD%>'){
 		<portlet:namespace/>frm.encoding = "multipart/form-data";
-		if($("#<portlet:namespace/>runType").val()=="<%=ScienceAppConstants.APP_RUNTYPE_PARALLEL%>"){
-			$maxCpus = $("#<portlet:namespace/>maxCpus");
-			$defaultCpus = $("#<portlet:namespace/>defaultCpus");
+		
+		$minCpus = $("#<portlet:namespace/>minCpus");
+		$maxCpus = $("#<portlet:namespace/>maxCpus");
+		$defaultCpus = $("#<portlet:namespace/>defaultCpus");
+		if($("#<portlet:namespace/>runType").val()!="<%=ScienceAppConstants.APP_RUNTYPE_SEQUENTIAL%>"){
 			
 			if($maxCpus.val()==""){
 				alert(Liferay.Language.get('this-field-is-mandatory'));
@@ -620,7 +659,17 @@ function <portlet:namespace/>actionCall(mode){
 				$maxCpus.focus();
 				return false;
 			}
+			
+			if(Number($defaultCpus.val())<Number($minCpus.val())){
+				alert(Liferay.Language.get('edison-science-appstore-toolkit-execute-cpu-min-error'));
+				$minCpus.focus();
+				return false;
+			}
 		}
+		
+		$minCpus.attr("disabled", false);
+		$maxCpus.attr("disabled", false);
+		$defaultCpus.attr("disabled", false);
 		
 		submitForm(<portlet:namespace/>frm);
 	}else{
@@ -635,7 +684,6 @@ function <portlet:namespace/>actionCall(mode){
 
 function <portlet:namespace/>searchRequestLib(p_curPage){
 	
-	console.log("${data.isPort}");
 	if("${data.isPort}"=="true"){
 		var searchForm = {
 				"<portlet:namespace/>scienceAppId" : "${scienceAppId}",

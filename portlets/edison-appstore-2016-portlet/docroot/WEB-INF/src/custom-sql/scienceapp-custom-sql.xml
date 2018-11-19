@@ -663,4 +663,15 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getSimulationUsersOfScienceApp" >
+		<![CDATA[
+		SELECT 
+			COUNT(distinct userId) AS count 
+		FROM
+			EDSIM_Simulation
+		WHERE
+			scienceAppId = #scienceAppId#
+		]]>
+	</sql>
+	
 </custom-sql>

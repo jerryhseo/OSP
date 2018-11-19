@@ -151,10 +151,16 @@
 	<table class = "table table-bordered table-hover edison-table">
 		<thead>
 			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
-			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-			<th width="*"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
-			<th width="15%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
-			<th width="10%">File Path</th>
+			<th width="20%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="20%"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
+			<th width="15%">
+				<liferay-ui:message key='edison-table-list-header-port-type' />
+				<liferay-ui:icon-help message="edison-science-appstore-port-type-message"/>
+			</th>
+			<th width="20%">
+				File Path
+				<liferay-ui:icon-help message="edison-science-appstore-file-path-message"/>
+			</th>
 			<th width="5%">Default</th>
 			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
 		</thead>
@@ -179,10 +185,16 @@
 	<table class = "table table-bordered table-hover edison-table">
 		<thead>
 			<th width="10%"><liferay-ui:message key='edison-table-list-header-index' /></th>
-			<th width="25%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
-			<th width="25%"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
-			<th width="10%"><liferay-ui:message key='edison-table-list-header-port-type' /></th>
-			<th width="15%">File Path</th>
+			<th width="20%"><liferay-ui:message key='edison-table-list-header-port-name' /></th>
+			<th width="20%"><liferay-ui:message key='edison-data-collection-select-data-type-list' /></th>
+			<th width="15%">
+				<liferay-ui:message key='edison-table-list-header-port-type' /> 
+				<liferay-ui:icon-help message="edison-science-appstore-port-type-message"/>
+			</th>
+			<th width="20%">
+				File Path
+				<liferay-ui:icon-help message="edison-science-appstore-file-path-message"/>
+			</th>
 			<%-- <th width="8%"><liferay-ui:message key='required' /></th> --%>
 			<th width="5%">Default</th>
 			<th width="10%"><liferay-ui:message key='edison-button-board-delete' /></th>
@@ -549,7 +561,6 @@ AUI().ready(function() {
 		$("#port-app-selector-dialog").load(URL).dialog("open");
 	}
 	
-	
 	function <portlet:namespace/>changeDataType(portType,name,value){
 		var targetObejct = null;
 		if(portType=="OUTPUT"){
@@ -565,7 +576,6 @@ AUI().ready(function() {
 			var names = fileName.split("\/");
 			fileName = names[names.length-1];
 		}
-		
 		
 		var result = true;
 		
@@ -585,7 +595,7 @@ AUI().ready(function() {
 			}
 		}
 		
-		<portlet:namespace/>drawPort('OUTPUT','',false);
+		<portlet:namespace/>drawPort(portType,'',false);
 	}
 	
 	function <portlet:namespace/>changeFileName(portType,name,value){
@@ -744,9 +754,10 @@ AUI().ready(function() {
 				checkVal = false;
 				return false;
 			}
-		})
+		});
 		
 		if(checkVal){
+			
 			if(mode=='<%=Constants.ADD%>'){
 				if(<portlet:namespace/>portChange){
 					alert("Port 정보 변경으로 인하여 Layout을 새롭게 작성 해야 합니다.");
@@ -755,7 +766,39 @@ AUI().ready(function() {
 				
 				
 			}
+			
+			/* 2018.11.13 _ Set Default Parent File Path */
+			setDefaultParentFilePath("log");
+			setDefaultParentFilePath("output");
+			
 			submitForm(<portlet:namespace/>frm);
+		}
+	}
+	
+	function setDefaultParentFilePath(portType){
+		jsonData = JSON.parse($("#<portlet:namespace/>"+portType+"Ports").val());
+		
+		updatePortData = false;
+		for(var i=0; i<Object.keys(jsonData).length; i++){
+			mainKey = Object.keys(jsonData)[i];
+			
+			mainJsonData = jsonData[mainKey];
+			type = mainJsonData[OSP.Constants.OUTPUT_DATA][OSP.Constants.TYPE];
+			if(type != "file"){
+				portParent_ = mainJsonData[OSP.Constants.OUTPUT_DATA][OSP.Constants.PARENT];
+				
+				var stringRegx = /\//gi;
+				if(!stringRegx.test(portParent_)){
+					mainJsonData[OSP.Constants.OUTPUT_DATA][OSP.Constants.PARENT] = "result/";
+				}
+				updatePortData = true;
+			} else {
+				updatePortData = false;
+			}
+		}
+		
+		if(updatePortData){
+			$("#<portlet:namespace/>"+portType+"Ports").val(JSON.stringify(jsonData));
 		}
 	}
 </script>

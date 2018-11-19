@@ -1329,6 +1329,11 @@ public class ScienceAppLocalServiceUtil {
 		return getService().getScienceAppReviewList(searchParamMap);
 	}
 
+	public static int getSimulationUsersOfScienceApp(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getSimulationUsersOfScienceApp(scienceAppId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

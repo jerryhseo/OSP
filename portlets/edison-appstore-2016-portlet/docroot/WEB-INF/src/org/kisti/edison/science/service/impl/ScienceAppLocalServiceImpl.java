@@ -2933,4 +2933,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		return scienceAppReviewMapList;
 	}
 	
+	public int getSimulationUsersOfScienceApp(long scienceAppId) throws SystemException{
+		
+		Map<String, Object> searchParamMap = new HashMap<String, Object>();
+		searchParamMap.put("scienceAppId", scienceAppId);
+		
+		List<Object[]> simulationUsersMapList = scienceAppFinder.getSimulationUsersOfScienceApp(searchParamMap);
+		
+		return Integer.parseInt(CustomUtil.strNull(simulationUsersMapList.get(0), "0"));
+	}
 }

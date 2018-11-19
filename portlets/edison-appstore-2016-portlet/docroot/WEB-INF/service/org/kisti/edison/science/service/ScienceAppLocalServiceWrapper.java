@@ -1449,6 +1449,12 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 		return _scienceAppLocalService.getScienceAppReviewList(searchParamMap);
 	}
 
+	@Override
+	public int getSimulationUsersOfScienceApp(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.getSimulationUsersOfScienceApp(scienceAppId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

@@ -663,6 +663,10 @@ public class ScienceAppLocalServiceClpInvoker {
 		_methodName312 = "getScienceAppReviewList";
 
 		_methodParameterTypes312 = new String[] { "java.util.Map" };
+
+		_methodName313 = "getSimulationUsersOfScienceApp";
+
+		_methodParameterTypes313 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1503,6 +1507,11 @@ public class ScienceAppLocalServiceClpInvoker {
 			return ScienceAppLocalServiceUtil.getScienceAppReviewList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
+		if (_methodName313.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes313, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getSimulationUsersOfScienceApp(((Long)arguments[0]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1762,4 +1771,6 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes311;
 	private String _methodName312;
 	private String[] _methodParameterTypes312;
+	private String _methodName313;
+	private String[] _methodParameterTypes313;
 }
