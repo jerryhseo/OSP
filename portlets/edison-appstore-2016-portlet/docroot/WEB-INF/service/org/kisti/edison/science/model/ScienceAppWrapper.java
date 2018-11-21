@@ -80,7 +80,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("license", getLicense());
 		attributes.put("srcFileName", getSrcFileName());
 		attributes.put("targetLanguage", getTargetLanguage());
-		attributes.put("templetId", getTempletId());
+		attributes.put("isStepLayout", getIsStepLayout());
 		attributes.put("layout", getLayout());
 		attributes.put("developers", getDevelopers());
 		attributes.put("editorType", getEditorType());
@@ -275,10 +275,10 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 			setTargetLanguage(targetLanguage);
 		}
 
-		String templetId = (String)attributes.get("templetId");
+		Boolean isStepLayout = (Boolean)attributes.get("isStepLayout");
 
-		if (templetId != null) {
-			setTempletId(templetId);
+		if (isStepLayout != null) {
+			setIsStepLayout(isStepLayout);
 		}
 
 		String layout = (String)attributes.get("layout");
@@ -1214,23 +1214,23 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 	}
 
 	/**
-	* Returns the templet ID of this science app.
+	* Returns the is step layout of this science app.
 	*
-	* @return the templet ID of this science app
+	* @return the is step layout of this science app
 	*/
 	@Override
-	public java.lang.String getTempletId() {
-		return _scienceApp.getTempletId();
+	public java.lang.Boolean getIsStepLayout() {
+		return _scienceApp.getIsStepLayout();
 	}
 
 	/**
-	* Sets the templet ID of this science app.
+	* Sets the is step layout of this science app.
 	*
-	* @param templetId the templet ID of this science app
+	* @param isStepLayout the is step layout of this science app
 	*/
 	@Override
-	public void setTempletId(java.lang.String templetId) {
-		_scienceApp.setTempletId(templetId);
+	public void setIsStepLayout(java.lang.Boolean isStepLayout) {
+		_scienceApp.setIsStepLayout(isStepLayout);
 	}
 
 	/**

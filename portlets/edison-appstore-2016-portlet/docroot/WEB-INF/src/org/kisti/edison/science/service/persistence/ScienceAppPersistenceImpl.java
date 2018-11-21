@@ -15400,7 +15400,7 @@ public class ScienceAppPersistenceImpl extends BasePersistenceImpl<ScienceApp>
 		scienceAppImpl.setLicense(scienceApp.getLicense());
 		scienceAppImpl.setSrcFileName(scienceApp.getSrcFileName());
 		scienceAppImpl.setTargetLanguage(scienceApp.getTargetLanguage());
-		scienceAppImpl.setTempletId(scienceApp.getTempletId());
+		scienceAppImpl.setIsStepLayout(scienceApp.getIsStepLayout());
 		scienceAppImpl.setLayout(scienceApp.getLayout());
 		scienceAppImpl.setDevelopers(scienceApp.getDevelopers());
 		scienceAppImpl.setEditorType(scienceApp.getEditorType());

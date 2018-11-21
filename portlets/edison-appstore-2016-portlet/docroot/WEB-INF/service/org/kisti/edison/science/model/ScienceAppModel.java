@@ -691,19 +691,18 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 	public void setTargetLanguage(String targetLanguage);
 
 	/**
-	 * Returns the templet ID of this science app.
+	 * Returns the is step layout of this science app.
 	 *
-	 * @return the templet ID of this science app
+	 * @return the is step layout of this science app
 	 */
-	@AutoEscape
-	public String getTempletId();
+	public Boolean getIsStepLayout();
 
 	/**
-	 * Sets the templet ID of this science app.
+	 * Sets the is step layout of this science app.
 	 *
-	 * @param templetId the templet ID of this science app
+	 * @param isStepLayout the is step layout of this science app
 	 */
-	public void setTempletId(String templetId);
+	public void setIsStepLayout(Boolean isStepLayout);
 
 	/**
 	 * Returns the layout of this science app.

@@ -105,7 +105,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "license", Types.VARCHAR },
 			{ "srcFileName", Types.VARCHAR },
 			{ "targetLanguage", Types.VARCHAR },
-			{ "templetId", Types.VARCHAR },
+			{ "isStepLayout", Types.BOOLEAN },
 			{ "layout", Types.VARCHAR },
 			{ "developers", Types.VARCHAR },
 			{ "editorType", Types.VARCHAR },
@@ -115,7 +115,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "execute", Types.BIGINT },
 			{ "cluster", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,templetId VARCHAR(75) null,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,isStepLayout BOOLEAN,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceApp";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceApp.createDate DESC, scienceApp.version DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceApp.createDate DESC, EDAPP_ScienceApp.version DESC";
@@ -189,7 +189,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setLicense(soapModel.getLicense());
 		model.setSrcFileName(soapModel.getSrcFileName());
 		model.setTargetLanguage(soapModel.getTargetLanguage());
-		model.setTempletId(soapModel.getTempletId());
+		model.setIsStepLayout(soapModel.getIsStepLayout());
 		model.setLayout(soapModel.getLayout());
 		model.setDevelopers(soapModel.getDevelopers());
 		model.setEditorType(soapModel.getEditorType());
@@ -292,7 +292,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("license", getLicense());
 		attributes.put("srcFileName", getSrcFileName());
 		attributes.put("targetLanguage", getTargetLanguage());
-		attributes.put("templetId", getTempletId());
+		attributes.put("isStepLayout", getIsStepLayout());
 		attributes.put("layout", getLayout());
 		attributes.put("developers", getDevelopers());
 		attributes.put("editorType", getEditorType());
@@ -487,10 +487,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			setTargetLanguage(targetLanguage);
 		}
 
-		String templetId = (String)attributes.get("templetId");
+		Boolean isStepLayout = (Boolean)attributes.get("isStepLayout");
 
-		if (templetId != null) {
-			setTempletId(templetId);
+		if (isStepLayout != null) {
+			setIsStepLayout(isStepLayout);
 		}
 
 		String layout = (String)attributes.get("layout");
@@ -1260,18 +1260,13 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@JSON
 	@Override
-	public String getTempletId() {
-		if (_templetId == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _templetId;
-		}
+	public Boolean getIsStepLayout() {
+		return _isStepLayout;
 	}
 
 	@Override
-	public void setTempletId(String templetId) {
-		_templetId = templetId;
+	public void setIsStepLayout(Boolean isStepLayout) {
+		_isStepLayout = isStepLayout;
 	}
 
 	@JSON
@@ -1640,7 +1635,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setLicense(getLicense());
 		scienceAppImpl.setSrcFileName(getSrcFileName());
 		scienceAppImpl.setTargetLanguage(getTargetLanguage());
-		scienceAppImpl.setTempletId(getTempletId());
+		scienceAppImpl.setIsStepLayout(getIsStepLayout());
 		scienceAppImpl.setLayout(getLayout());
 		scienceAppImpl.setDevelopers(getDevelopers());
 		scienceAppImpl.setEditorType(getEditorType());
@@ -1915,13 +1910,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			scienceAppCacheModel.targetLanguage = null;
 		}
 
-		scienceAppCacheModel.templetId = getTempletId();
-
-		String templetId = scienceAppCacheModel.templetId;
-
-		if ((templetId != null) && (templetId.length() == 0)) {
-			scienceAppCacheModel.templetId = null;
-		}
+		scienceAppCacheModel.isStepLayout = getIsStepLayout();
 
 		scienceAppCacheModel.layout = getLayout();
 
@@ -2030,8 +2019,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getSrcFileName());
 		sb.append(", targetLanguage=");
 		sb.append(getTargetLanguage());
-		sb.append(", templetId=");
-		sb.append(getTempletId());
+		sb.append(", isStepLayout=");
+		sb.append(getIsStepLayout());
 		sb.append(", layout=");
 		sb.append(getLayout());
 		sb.append(", developers=");
@@ -2182,8 +2171,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getTargetLanguage());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>templetId</column-name><column-value><![CDATA[");
-		sb.append(getTempletId());
+			"<column><column-name>isStepLayout</column-name><column-value><![CDATA[");
+		sb.append(getIsStepLayout());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>layout</column-name><column-value><![CDATA[");
@@ -2277,7 +2266,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private String _srcFileName;
 	private String _targetLanguage;
 	private String _originalTargetLanguage;
-	private String _templetId;
+	private Boolean _isStepLayout;
 	private String _layout;
 	private String _developers;
 	private String _developersCurrentLanguageId;

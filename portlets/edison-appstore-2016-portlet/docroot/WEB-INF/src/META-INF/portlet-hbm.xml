@@ -240,7 +240,7 @@
 		<property name="license" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="srcFileName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="targetLanguage" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="templetId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="isStepLayout" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="layout" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="developers" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="editorType" type="com.liferay.portal.dao.orm.hibernate.StringType" />

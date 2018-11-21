@@ -116,7 +116,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		attributes.put("license", getLicense());
 		attributes.put("srcFileName", getSrcFileName());
 		attributes.put("targetLanguage", getTargetLanguage());
-		attributes.put("templetId", getTempletId());
+		attributes.put("isStepLayout", getIsStepLayout());
 		attributes.put("layout", getLayout());
 		attributes.put("developers", getDevelopers());
 		attributes.put("editorType", getEditorType());
@@ -311,10 +311,10 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			setTargetLanguage(targetLanguage);
 		}
 
-		String templetId = (String)attributes.get("templetId");
+		Boolean isStepLayout = (Boolean)attributes.get("isStepLayout");
 
-		if (templetId != null) {
-			setTempletId(templetId);
+		if (isStepLayout != null) {
+			setIsStepLayout(isStepLayout);
 		}
 
 		String layout = (String)attributes.get("layout");
@@ -1271,21 +1271,21 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	}
 
 	@Override
-	public String getTempletId() {
-		return _templetId;
+	public Boolean getIsStepLayout() {
+		return _isStepLayout;
 	}
 
 	@Override
-	public void setTempletId(String templetId) {
-		_templetId = templetId;
+	public void setIsStepLayout(Boolean isStepLayout) {
+		_isStepLayout = isStepLayout;
 
 		if (_scienceAppRemoteModel != null) {
 			try {
 				Class<?> clazz = _scienceAppRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setTempletId", String.class);
+				Method method = clazz.getMethod("setIsStepLayout", Boolean.class);
 
-				method.invoke(_scienceAppRemoteModel, templetId);
+				method.invoke(_scienceAppRemoteModel, isStepLayout);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -1847,7 +1847,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		clone.setLicense(getLicense());
 		clone.setSrcFileName(getSrcFileName());
 		clone.setTargetLanguage(getTargetLanguage());
-		clone.setTempletId(getTempletId());
+		clone.setIsStepLayout(getIsStepLayout());
 		clone.setLayout(getLayout());
 		clone.setDevelopers(getDevelopers());
 		clone.setEditorType(getEditorType());
@@ -1978,8 +1978,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getSrcFileName());
 		sb.append(", targetLanguage=");
 		sb.append(getTargetLanguage());
-		sb.append(", templetId=");
-		sb.append(getTempletId());
+		sb.append(", isStepLayout=");
+		sb.append(getIsStepLayout());
 		sb.append(", layout=");
 		sb.append(getLayout());
 		sb.append(", developers=");
@@ -2130,8 +2130,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getTargetLanguage());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>templetId</column-name><column-value><![CDATA[");
-		sb.append(getTempletId());
+			"<column><column-name>isStepLayout</column-name><column-value><![CDATA[");
+		sb.append(getIsStepLayout());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>layout</column-name><column-value><![CDATA[");
@@ -2204,7 +2204,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	private String _license;
 	private String _srcFileName;
 	private String _targetLanguage;
-	private String _templetId;
+	private Boolean _isStepLayout;
 	private String _layout;
 	private String _developers;
 	private String _developersCurrentLanguageId;

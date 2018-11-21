@@ -118,7 +118,7 @@
         <column name="license" type="String"></column>
         <column name="srcFileName" type="String"></column>
         <column name= "targetLanguage" type="String"></column>
-        <column name= "templetId" type="String"></column>
+        <column name= "isStepLayout" type="Boolean"></column>
         <column name= "layout" type="String"></column>
         
         <!--

@@ -177,7 +177,7 @@
 		<field name="license" type="String" />
 		<field name="srcFileName" type="String" />
 		<field name="targetLanguage" type="String" />
-		<field name="templetId" type="String" />
+		<field name="isStepLayout" type="Boolean" />
 		<field name="layout" type="String" />
 		<field name="developers" type="String" localized="true" />
 		<field name="editorType" type="String" />

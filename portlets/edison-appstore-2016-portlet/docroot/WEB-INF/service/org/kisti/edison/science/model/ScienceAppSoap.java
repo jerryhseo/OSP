@@ -61,7 +61,7 @@ public class ScienceAppSoap implements Serializable {
 		soapModel.setLicense(model.getLicense());
 		soapModel.setSrcFileName(model.getSrcFileName());
 		soapModel.setTargetLanguage(model.getTargetLanguage());
-		soapModel.setTempletId(model.getTempletId());
+		soapModel.setIsStepLayout(model.getIsStepLayout());
 		soapModel.setLayout(model.getLayout());
 		soapModel.setDevelopers(model.getDevelopers());
 		soapModel.setEditorType(model.getEditorType());
@@ -362,12 +362,12 @@ public class ScienceAppSoap implements Serializable {
 		_targetLanguage = targetLanguage;
 	}
 
-	public String getTempletId() {
-		return _templetId;
+	public Boolean getIsStepLayout() {
+		return _isStepLayout;
 	}
 
-	public void setTempletId(String templetId) {
-		_templetId = templetId;
+	public void setIsStepLayout(Boolean isStepLayout) {
+		_isStepLayout = isStepLayout;
 	}
 
 	public String getLayout() {
@@ -472,7 +472,7 @@ public class ScienceAppSoap implements Serializable {
 	private String _license;
 	private String _srcFileName;
 	private String _targetLanguage;
-	private String _templetId;
+	private Boolean _isStepLayout;
 	private String _layout;
 	private String _developers;
 	private String _editorType;

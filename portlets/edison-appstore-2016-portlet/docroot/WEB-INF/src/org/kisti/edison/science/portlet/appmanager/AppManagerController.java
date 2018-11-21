@@ -400,13 +400,30 @@ public class AppManagerController{
 				}
 				mode = Constants.UPDATE;
 			}else if(clickTab.equals("m04")){
-				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
+				Boolean isStepLayout = scienceApp.getIsStepLayout();
+				String stepTabsValue = CustomUtil.strNull(params.get("stepTabValue")).equals("")?"INPUT":params.get("stepTabValue").toString();
+				String appTemplateId = "";
+				
+				if(isStepLayout){
+					if(scienceApp.getLayout().equals("")){
+						appTemplateId = "1-row-2-column";
+					}else{
+						net.sf.json.JSONObject appLayout = net.sf.json.JSONObject.fromObject(scienceApp.getLayout());
+						net.sf.json.JSONObject stepLayout =appLayout.getJSONObject(stepTabsValue);
+						
+					}
+				}else{
+					
+				}
+				
+				
+//				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
 				String paramTemplateId = CustomUtil.strNull(params.get("templateId")).equals("")?appTemplateId:CustomUtil.strNull(params.get("templateId"));
 				
 				
-				boolean isPortDraw = true;
+				boolean isSamplePortPrint = true;
 				if(appTemplateId.equals(paramTemplateId)&&!scienceApp.getLayout().equals("")){
-					isPortDraw = false;
+					isSamplePortPrint = false;
 				}
 				
 				List<Map<String,Object>> portList = new ArrayList<Map<String,Object>>();
@@ -428,7 +445,7 @@ public class AppManagerController{
 				
 				data.put("portList", portList);
 				
-				if(isPortDraw){
+				if(isSamplePortPrint){
 					//port 조회
 					String inputPorts = "";
 					if(inputCnt!=0){
@@ -452,7 +469,7 @@ public class AppManagerController{
 					data.put("layout", scienceApp.getLayout());
 				}
 				
-				data.put("isPortDraw", isPortDraw);
+				data.put("isSamplePortPrint", isSamplePortPrint);
 				data.put("templateId", paramTemplateId);
 				model.addAttribute("templateJSP", paramTemplateId);
 				
@@ -648,7 +665,7 @@ public class AppManagerController{
 					if(!layout.equals("")){
 						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 						scienceApp.setLayout(layout);
-						scienceApp.setTempletId(templetId);
+//						scienceApp.setTempletId(templetId);
 						ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
 					}
 				}else if(actionType.equals("publicData")){

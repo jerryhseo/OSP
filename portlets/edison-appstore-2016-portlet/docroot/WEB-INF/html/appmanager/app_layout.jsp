@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
@@ -8,12 +7,10 @@
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil"%>
 
-<link href="${contextPath}/css/bootstrap-toggle.min.css"
-	rel="stylesheet">
+<link href="${contextPath}/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="${contextPath}/js/bootstrap-toggle.min.js"></script>
 
-<portlet:actionURL var="submitURL"
-	copyCurrentRenderParameters="<%=false%>" name="appAction">
+<portlet:actionURL var="submitURL" copyCurrentRenderParameters="<%=false%>" name="appAction">
 	<portlet:param name="clickTab" value="${clickTab}" />
 	<portlet:param name="actionType" value="appLayout" />
 	<portlet:param name="isPort" value="${isPort}" />
@@ -26,9 +23,7 @@
 	<portlet:param name="redirectURL" value="${redirectURL}" />
 </portlet:actionURL>
 
-<liferay-portlet:renderURL var="appLayoutRenderURL"
-	copyCurrentRenderParameters="<%=true%>"
-	windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>" />
+<liferay-portlet:renderURL var="appLayoutRenderURL" copyCurrentRenderParameters="<%=true%>" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>" />
 
 <%
 	String layoutURL = HttpUtil.removeParameter(appLayoutRenderURL,
@@ -119,8 +114,6 @@
 		url(/edison-appstore-2016-portlet/images/appmanager/layout/layout01-type-02.png);
 	background-size: 50px;
 }
-
-
 
 .science-app-manager-portlet .layout-wrap .layoutBtnGroup .method.layout-2
 	{
@@ -327,8 +320,18 @@
 	display: none;
 }
 
-.science-app-manager-portlet .gridLayoutArea .moving ul,.science-app-manager-portlet .gridLayoutArea .moving div {
+.science-app-manager-portlet .gridLayoutArea .moving ul,
+	.science-app-manager-portlet .gridLayoutArea .moving div {
 	display: none;
+}
+
+.science-app-manager-portlet div.edison-panel ul.custom-tabs {
+	margin-bottom: 5px;
+}
+
+.science-app-manager-portlet div.edison-panel ul.custom-tabs li a {
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 </style>
 <script type="text/javascript">
@@ -485,18 +488,18 @@ var scienceApp = new OSP.ScienceApp();
 function <portlet:namespace/>layoutAreaViewInit(){
 	if('${data.templateId}'!=""){
 		if('${data.templateId}'.indexOf("flow")>-1){
-			$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
-			$("#<portlet:namespace/>flowLayoutArea").css("display","block");
+// 			$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
+// 			$("#<portlet:namespace/>flowLayoutArea").css("display","block");
 		}else{
-			$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
-			$("#<portlet:namespace/>flowLayoutArea").css("display","none");
+// 			$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
+// 			$("#<portlet:namespace/>flowLayoutArea").css("display","none");
 		}
 		
 		$radioObject = $(".layoutMethod>input[name=templates][value="+'${data.templateId}'+"]");
 		$radioObject.prop('checked', true);
 		$radioObject.parent().addClass("active");
 		
-		if('${data.isPortDraw}'=='true'){
+		if('${data.isSamplePortPrint}'=='true'){
 			<portlet:namespace/>drawPortFromLayout('INPUT','${data.inputPorts}');
 			<portlet:namespace/>drawPortFromLayout('LOG','${data.logPorts}');
 			<portlet:namespace/>drawPortFromLayout('OUTPUT','${data.outputPorts}');
@@ -512,6 +515,7 @@ function <portlet:namespace/>layoutAreaViewInit(){
 				return false;
 			}
 		});
+		
 		if(portAreaDisplayNone){
 			$("#<portlet:namespace/>portCol").css("display","none");
 			$("#<portlet:namespace/>layoutCol").attr("class","col-md-12");
@@ -521,11 +525,17 @@ function <portlet:namespace/>layoutAreaViewInit(){
 
 function <portlet:namespace/>layoutAreaViewEvent(){
 	if($("#<portlet:namespace/>layoutAreaButton").prop("checked")){
-		$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
-		$("#<portlet:namespace/>flowLayoutArea").css("display","block");
+		$("#<portlet:namespace/>layoutTabs").css("display","block");
+		$("#<portlet:namespace/>saveBtn").css("display","none");
+		
+// 		$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
+// 		$("#<portlet:namespace/>flowLayoutArea").css("display","block");
 	}else{
-		$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
-		$("#<portlet:namespace/>flowLayoutArea").css("display","none");
+		$("#<portlet:namespace/>layoutTabs").css("display","none");
+		$("#<portlet:namespace/>saveBtn").css("display","inline-block");
+		
+// 		$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
+// 		$("#<portlet:namespace/>flowLayoutArea").css("display","none");
 	}
 }
 
@@ -700,148 +710,88 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 <div class="panel panel-default edison-panel">
 	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left" style="padding-top: 0px;">
-			<label class="checkbox-inline"> <c:if
-					test="${fn:indexOf(data.templateId, 'flow') > -1}">
+			<label class="checkbox-inline"> <c:if test="${fn:indexOf(data.templateId, 'flow') > -1}">
 					<c:set value="checked" var="layoutChecked" />
-				</c:if> <input id="<portlet:namespace/>layoutAreaButton" type="checkbox"
-				data-toggle="toggle" data-onstyle="success" data-offstyle="danger"
-				data-on="Enabled" data-off="Disabled"
-				onchange="<portlet:namespace/>layoutAreaViewEvent();"
-				${layoutChecked}> <span style="font-weight: 600;">
-					Flow WorkBench</span> <liferay-ui:icon-help
-					message="edison-science-appstore-toolkit-flow-message" />
+				</c:if> <input id="<portlet:namespace/>layoutAreaButton" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled" onchange="<portlet:namespace/>layoutAreaViewEvent();" ${layoutChecked}> <span style="font-weight: 600;">Flow WorkBench</span> <liferay-ui:icon-help message="edison-science-appstore-toolkit-flow-message" />
 			</label>
 		</h3>
 		<div class="btn-group pull-right">
-			<input class=" button02_2" onclick="<portlet:namespace/>goList();"
-				value="<liferay-ui:message key='edison-button-board-list'/>"
-				type="button">
+			<input class=" button02_2" onclick="<portlet:namespace/>goList();" value="<liferay-ui:message key='edison-button-board-list'/>" type="button">
 
 			<c:if test="${data.status gt 1901003}">
-				<input class=" button02_1"
-					onclick="<portlet:namespace/>copyScienceApp();"
-					value="<liferay-ui:message key='edison-appstore-copy'/>"
-					type="button">
+				<input class=" button02_1" onclick="<portlet:namespace/>copyScienceApp();" value="<liferay-ui:message key='edison-appstore-copy'/>" type="button">
 			</c:if>
 			<c:if test="${appStatusButtonView}">
 				<c:if test="${data.status eq '1901001'}">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901002');"
-						value="<liferay-ui:message key='edison-appstore-status-request'/>"
-						type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901002');" value="<liferay-ui:message key='edison-appstore-status-request'/>" type="button">
 				</c:if>
 				<c:if test="${data.status eq '1901002' && isAdmin}">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901001');"
-						value="<liferay-ui:message key='edison-appstore-status-denial'/>"
-						type="button">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901003');"
-						value="<liferay-ui:message key='edison-appstore-status-private'/>"
-						type="button">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901004');"
-						value="<liferay-ui:message key='edison-appstore-status-service'/>"
-						type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901001');" value="<liferay-ui:message key='edison-appstore-status-denial'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
 				</c:if>
 				<c:if test="${data.status eq '1901003'}">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901004');"
-						value="<liferay-ui:message key='edison-appstore-status-service'/>"
-						type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901004');" value="<liferay-ui:message key='edison-appstore-status-service'/>" type="button">
 				</c:if>
 
 				<c:if test="${data.status eq '1901004'}">
-					<input class=" button02_3"
-						onclick="<portlet:namespace/>statusSubmit('1901003');"
-						value="<liferay-ui:message key='edison-appstore-status-private'/>"
-						type="button">
+					<input class=" button02_3" onclick="<portlet:namespace/>statusSubmit('1901003');" value="<liferay-ui:message key='edison-appstore-status-private'/>" type="button">
 				</c:if>
 			</c:if>
 
-			<input class=" button02_1"
-				onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;"
-				value="<liferay-ui:message key='edison-button-save'/>" type="button">
+			<input class=" button02_1" id="<portlet:namespace/>saveBtn" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;" value="<liferay-ui:message key='edison-button-save'/>" type="button">
 
 			<c:if test="${ownerThan}">
-				<input class=" button02_1"
-					onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;"
-					value="<liferay-ui:message key='delete'/>" type="button">
+				<input class=" button02_1" onclick="<portlet:namespace/>actionCall('<%=Constants.DELETE%>');return false;" value="<liferay-ui:message key='delete'/>" type="button">
 				<c:if test="${workBenchPlid ne 0 && appTestButtonView}">
-					<input class=" button02_1"
-						onclick="<portlet:namespace/>appTest();return false;"
-						value="<liferay-ui:message key='edison-table-list-header-run'/>"
-						type="button">
+					<input class=" button02_1" onclick="<portlet:namespace/>appTest();return false;" value="<liferay-ui:message key='edison-table-list-header-run'/>" type="button">
 				</c:if>
 			</c:if>
 		</div>
 	</div>
 
 	<div class="panel-body layout-wrap">
-		<div class="btn-group layoutBtnGroup btn-group-justified"
-			data-toggle="buttons" id="<portlet:namespace/>noFlowLayoutArea">
-			<label class="btn layoutMethod">
-				<div class="method layout-3"></div> <input type="radio"
-				name="templates" value="1-row-2-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-1"></div> <input type="radio"
-				name="templates" value="2-row-2-2-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-1-type-2"></div> <input type="radio"
-				name="templates" value="2-row-2-2-column-type-2">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-2"></div> <input type="radio"
-				name="templates" value="2-row-1-1-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-4"></div> <input type="radio"
-				name="templates" value="2-row-2-1-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-5"></div> <input type="radio"
-				name="templates" value="2-row-1-2-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-7"></div> <input type="radio"
-				name="templates" value="1-1-row-2-1-column">
-			</label> <label class="btn layoutMethod">
-				<div class="method layout-9"></div> <input type="radio"
-				name="templates" value="1-1-row-1-2-column">
-			</label>
-		</div>
+		<ul class="nav nav-tabs custom-tabs" id="<portlet:namespace/>layoutTabs" style="display: none;">
+			<li class="active"><a href="#">INPUT</a></li>
+			<li><a href="#">LOG</a></li>
+			<li><a href="#">OUTPUT</a></li>
+			<li class="pull-right">
+				<button class="btn btn-primary"><liferay-ui:message key='edison-button-save'/></button>
+			</li>
+		</ul>
 
-		<div class="btn-group layoutBtnGroup btn-group-justified"
-			data-toggle="buttons" id="<portlet:namespace/>flowLayoutArea"
-			style="display: none;">
+
+		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>layoutArea">
 			<label class="btn layoutMethod">
-				<div class="method layout-8"></div> <input type="radio"
-				name="templates" value="flow-1-row-1-column">
+				<div class="method layout-3"></div> <input type="radio" name="templates" value="1-row-2-column">
 			</label> <label class="btn layoutMethod">
-				<div class="method layout-6"></div> <input type="radio"
-				name="templates" value="flow-1-row-2-column">
+				<div class="method layout-1"></div> <input type="radio" name="templates" value="2-row-2-2-column">
 			</label> <label class="btn layoutMethod">
-				<div class="method layout-7"></div> <input type="radio"
-				name="templates" value="flow-2-row-2-1-column">
+				<div class="method layout-1-type-2"></div> <input type="radio" name="templates" value="2-row-2-2-column-type-2">
 			</label> <label class="btn layoutMethod">
-				<div class="method layout-5"></div> <input type="radio"
-				name="templates" value="flow-2-row-1-2-column">
+				<div class="method layout-2"></div> <input type="radio" name="templates" value="2-row-1-1-column">
 			</label> <label class="btn layoutMethod">
-				<div class="method layout-9"></div> <input type="radio"
-				name="templates" value="flow-1-1-row-1-2-column">
+				<div class="method layout-4"></div> <input type="radio" name="templates" value="2-row-2-1-column">
+			</label> <label class="btn layoutMethod">
+				<div class="method layout-5"></div> <input type="radio" name="templates" value="2-row-1-2-column">
+			</label> <label class="btn layoutMethod">
+				<div class="method layout-7"></div> <input type="radio" name="templates" value="1-1-row-2-1-column">
+			</label> <label class="btn layoutMethod">
+				<div class="method layout-9"></div> <input type="radio" name="templates" value="1-1-row-1-2-column">
 			</label>
 		</div>
 	</div>
 	<div class="panel-footer">
 		<div class="row" style="margin: 0px;">
-			<div class="panel-group col-md-4" id="<portlet:namespace/>portCol"
-				style="margin-top: 15px;">
+			<div class="panel-group col-md-4" id="<portlet:namespace/>portCol" style="margin-top: 15px;">
 				<c:if test="${!empty data.portList}">
 					<c:set var="panelCss" value="panel panel-defalut"></c:set>
 					<c:set var="liCss" value="list-group-item-default"></c:set>
-					<c:forEach items="${data.portList}" var="portMap"
-						varStatus="status">
+					<c:forEach items="${data.portList}" var="portMap" varStatus="status">
 						<c:set var="panelStyle" value="display:none;"></c:set>
 						<c:choose>
 							<c:when test="${fn:indexOf(data.templateId, 'flow') ne -1}">
-								<c:if
-									test="${portMap.portType eq 'OUTPUT' && fn:length(portMap.appList) gt 1}">
+								<c:if test="${portMap.portType eq 'OUTPUT' && fn:length(portMap.appList) gt 1}">
 									<c:set var="panelStyle" value="display:block;"></c:set>
 								</c:if>
 							</c:when>
@@ -869,15 +819,12 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 						<div class="${panelCss}" style="${panelStyle}">
 							<div class="panel-heading">
 								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion"
-										href="#collapse_${status.index}"> ${portMap.portName} </a>
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_${status.index}"> ${portMap.portName} </a>
 								</h4>
 							</div>
-							<div id="collapse_${status.index}"
-								class="panel-collapse collapse">
+							<div id="collapse_${status.index}" class="panel-collapse collapse">
 								<div class="panel-body sortableLayout portLayoutArea">
-									<ul class="sortable-list ui-sortable list-group"
-										id="port_${portMap.portName}_ul">
+									<ul class="sortable-list ui-sortable list-group" id="port_${portMap.portName}_ul">
 										<c:forEach items="${portMap.appList}" var="portAppData">
 											<c:if test="${portAppData.type eq 'Editor' }">
 												<c:set var="icon" value="icon-edit"></c:set>
@@ -888,26 +835,11 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 
 											<c:choose>
 												<c:when test="${portAppData.isDefault}">
-													<li
-														class="sortable-item list-group-item list-group-item-default ${portMap.portType}"
-														id="${portMap.portName}_${portAppData.exeFileName}"
-														data-port-portlet="${portAppData.exeFileName}"
-														data-port-name="${portMap.portName}"><span
-														class="icon-move"> <i class="${icon}"></i>
-															${portMap.portName}_DEFAULT <liferay-ui:icon-help
-																message="${portAppData.title}" />
+													<li class="sortable-item list-group-item list-group-item-default ${portMap.portType}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_DEFAULT <liferay-ui:icon-help message="${portAppData.title}" />
 													</span></li>
 												</c:when>
 												<c:otherwise>
-													<li class="sortable-item list-group-item ${liCss}"
-														id="${portMap.portName}_${portAppData.exeFileName}"
-														data-port-portlet="${portAppData.exeFileName}"
-														data-port-name="${portMap.portName}"><span
-														class="icon-move"> <i class="${icon}"></i>
-															${portMap.portName}_${portAppData.name} <liferay-ui:icon-help
-																message="${portAppData.title}" /> <i
-															class="icon-remove sortRemove"
-															onClick="<portlet:namespace/>cancelSortable('port_${portMap.portName}_ul','${portMap.portName}_${portAppData.exeFileName}');"></i>
+													<li class="sortable-item list-group-item ${liCss}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_${portAppData.name} <liferay-ui:icon-help message="${portAppData.title}" /> <i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('port_${portMap.portName}_ul','${portMap.portName}_${portAppData.exeFileName}');"></i>
 													</span></li>
 												</c:otherwise>
 											</c:choose>
@@ -920,9 +852,7 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 				</c:if>
 			</div>
 			<div class="col-md-8" id="<portlet:namespace/>layoutCol">
-				<liferay-util:include
-					page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>'
-					servletContext="<%=this.getServletContext()%>">
+				<liferay-util:include page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext()%>">
 				</liferay-util:include>
 			</div>
 		</div>

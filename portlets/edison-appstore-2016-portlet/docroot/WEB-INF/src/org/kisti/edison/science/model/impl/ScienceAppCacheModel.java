@@ -100,8 +100,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(srcFileName);
 		sb.append(", targetLanguage=");
 		sb.append(targetLanguage);
-		sb.append(", templetId=");
-		sb.append(templetId);
+		sb.append(", isStepLayout=");
+		sb.append(isStepLayout);
 		sb.append(", layout=");
 		sb.append(layout);
 		sb.append(", developers=");
@@ -264,12 +264,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 			scienceAppImpl.setTargetLanguage(targetLanguage);
 		}
 
-		if (templetId == null) {
-			scienceAppImpl.setTempletId(StringPool.BLANK);
-		}
-		else {
-			scienceAppImpl.setTempletId(templetId);
-		}
+		scienceAppImpl.setIsStepLayout(isStepLayout);
 
 		if (layout == null) {
 			scienceAppImpl.setLayout(StringPool.BLANK);
@@ -341,7 +336,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		license = objectInput.readUTF();
 		srcFileName = objectInput.readUTF();
 		targetLanguage = objectInput.readUTF();
-		templetId = objectInput.readUTF();
+		isStepLayout = objectInput.readBoolean();
 		layout = objectInput.readUTF();
 		developers = objectInput.readUTF();
 		editorType = objectInput.readUTF();
@@ -474,12 +469,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 			objectOutput.writeUTF(targetLanguage);
 		}
 
-		if (templetId == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(templetId);
-		}
+		objectOutput.writeBoolean(isStepLayout);
 
 		if (layout == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -545,7 +535,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public String license;
 	public String srcFileName;
 	public String targetLanguage;
-	public String templetId;
+	public Boolean isStepLayout;
 	public String layout;
 	public String developers;
 	public String editorType;

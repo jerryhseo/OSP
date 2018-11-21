@@ -44,7 +44,6 @@ ivy.xml.MD5
 
 **/.sonar
 **/pmd-reports
-*-ext.properties
 *.bak
 *.iml
 *.ipr

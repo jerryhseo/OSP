@@ -313,7 +313,7 @@
 			<basic name="license" />
 			<basic name="srcFileName" />
 			<basic name="targetLanguage" />
-			<basic name="templetId" />
+			<basic name="isStepLayout" />
 			<basic name="layout" />
 			<basic name="developers" />
 			<basic name="editorType" />

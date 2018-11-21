@@ -190,7 +190,7 @@ create table EDAPP_ScienceApp (
 	license VARCHAR(75) null,
 	srcFileName VARCHAR(75) null,
 	targetLanguage VARCHAR(75) null,
-	templetId VARCHAR(75) null,
+	isStepLayout BOOLEAN,
 	layout VARCHAR(75) null,
 	developers STRING null,
 	editorType VARCHAR(75) null,
