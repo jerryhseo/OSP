@@ -663,7 +663,7 @@ function <portlet:namespace/>actionCall(mode){
 		if(isStepLayout){
 			Layouts.addLayout('${stepTabsValue}',Layout);
 		}else{
-			Layouts.addLayout('Layout',Layout);
+			Layouts.addLayout(OSP.Enumeration.LayoutKey.LAYOUT,Layout);
 		}
 
 		$("#<portlet:namespace/>layout").val(JSON.stringify(Layouts));

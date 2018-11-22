@@ -431,7 +431,7 @@ public class AppManagerController{
 							appTemplateId = stepLayout.getString("templateId_");
 						}
 					}else{
-						net.sf.json.JSONObject layout =appLayout.getJSONObject("Layout");
+						net.sf.json.JSONObject layout =appLayout.getJSONObject("LAYOUT");
 						if(!layout.isNullObject()){
 							appTemplateId = layout.getString("templateId_");
 						}

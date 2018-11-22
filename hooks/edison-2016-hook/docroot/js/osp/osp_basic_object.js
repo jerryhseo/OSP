@@ -450,7 +450,7 @@
             VIRTUAL_LAB: 'VIRTUAL_LAB',
         },
         LayoutKey: {
-        	LAYOUT: 'SIMULATION_WITH_APP',
+        	LAYOUT: 'LAYOUT',
         	INPUT: 'INPUT',
         	LOG: 'LOG',
         	OUTPUT: 'OUTPUT'
