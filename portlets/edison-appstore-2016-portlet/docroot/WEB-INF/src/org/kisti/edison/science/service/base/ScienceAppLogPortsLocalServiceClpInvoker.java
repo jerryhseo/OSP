@@ -130,9 +130,13 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 
 		_methodParameterTypes185 = new String[] { "long" };
 
-		_methodName186 = "portAppList";
+		_methodName186 = "isScienceAppLogPortsValus";
 
-		_methodParameterTypes186 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes186 = new String[] { "long" };
+
+		_methodName187 = "portAppList";
+
+		_methodParameterTypes187 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -261,6 +265,11 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 
 		if (_methodName186.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
+			return ScienceAppLogPortsLocalServiceUtil.isScienceAppLogPortsValus(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName187.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
 			return ScienceAppLogPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
@@ -314,4 +323,6 @@ public class ScienceAppLogPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes185;
 	private String _methodName186;
 	private String[] _methodParameterTypes186;
+	private String _methodName187;
+	private String[] _methodParameterTypes187;
 }

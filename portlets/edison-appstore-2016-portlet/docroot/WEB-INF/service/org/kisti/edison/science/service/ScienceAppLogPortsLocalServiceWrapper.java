@@ -317,6 +317,12 @@ public class ScienceAppLogPortsLocalServiceWrapper
 	}
 
 	@Override
+	public boolean isScienceAppLogPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLogPortsLocalService.isScienceAppLogPortsValus(scienceAppId);
+	}
+
+	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
 		long scienceAppId, java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.PortalException,

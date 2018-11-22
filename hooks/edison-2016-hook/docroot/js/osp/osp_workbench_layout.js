@@ -2,10 +2,79 @@
     'use strict';
 
     if( window.OSP ){
-        if( OSP.Layout )    return;
+        if( OSP.Layouts )    return;
     }
     else
         window.OSP = {};
+    
+    OSP.Layouts = function(jsonLayouts){
+    	var Layouts = this;
+        OSP._MapObject.apply( Layouts );
+        
+        Layouts.isStepLayout = function(type){
+        	return Layouts.property.apply(Layouts, OSP.Util.addFirstArgument(OSP.Constants.IS_STEP_LAYOUT, arguments));
+        };
+        
+        Layouts.arrayKeys = function(keys){
+        	return Layouts.property.apply(Layouts, OSP.Util.addFirstArgument(OSP.Constants.ARRAY_KEYS, arguments));
+        };
+        
+        Layouts.getLayoutFromKey = function(key){
+        	var Layout = new OSP.Layout(Layouts[key.toUpperCase()]);
+        	return Layout;
+        };
+        
+        Layouts.newLayout = function(jsonLayout){
+        	var Layout = new OSP.Layout(jsonLayout);
+        	return Layout;
+        };
+        
+        Layouts.addKey = function(key){
+        	var keys = Layouts.arrayKeys();
+        	if(!keys){
+        		keys = [];
+        		Layouts.arrayKeys(keys);
+        	}
+        	
+        	if(!Layouts.arrayExist(keys,key)){
+        		keys.push(key);
+        	}
+        };
+        
+        
+        Layouts.addLayout = function(key,jsonLayout){
+        	Layouts.addKey(key);
+        	
+        	Layouts[key] = jsonLayout;
+        	return Layouts;
+        };
+        
+        Layouts.deserialize = function( jsonLayouts ){
+        	for( var key in jsonLayouts ){
+        		var value = jsonLayouts[key];
+        		switch( key ){
+        			case OSP.Constants.IS_STEP_LAYOUT:
+        				Layouts.property( key, value );
+						break;
+        			case OSP.Constants.ARRAY_KEYS:
+        				Layouts.property( key, value );
+						break;
+        			case OSP.Enumeration.LayoutKey.LAYOUT:
+        			case OSP.Enumeration.LayoutKey.INPUT:
+        			case OSP.Enumeration.LayoutKey.LOG:
+        			case OSP.Enumeration.LayoutKey.OUTPUT:
+        				Layouts.property( key, value );
+						break;
+        			default:
+        				Layouts._deserialize( key, value );
+        		}
+        	}
+        };
+        
+        if( arguments.length === 1 ){
+        	Layouts.deserialize( jsonLayouts );
+        };
+    };
     
     OSP.Layout = function( jsonLayout ){
         var Layout = this;

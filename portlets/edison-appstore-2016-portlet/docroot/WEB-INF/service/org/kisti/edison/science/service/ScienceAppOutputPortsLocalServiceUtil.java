@@ -299,6 +299,11 @@ public class ScienceAppOutputPortsLocalServiceUtil {
 		return getService().getScienceAppOutputPortsesCount(scienceAppId);
 	}
 
+	public static java.lang.Boolean isScienceAppOutPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().isScienceAppOutPortsValus(scienceAppId);
+	}
+
 	public static long getOutPortsCountByPotyTypeId(long portTypeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getOutPortsCountByPotyTypeId(portTypeId);

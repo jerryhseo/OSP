@@ -8,6 +8,7 @@
 
     OSP.Constants = {
         ACTION: 'action_',
+        ARRAY_KEYS: 'arrayKeys_',
         ASSIGNED_PORTS: 'assignedPorts_',
         AVAILABLE_ANALYZERS: 'availableAnalyzers_',
         AVAILABLE_EDITORS: 'availableEditors_',
@@ -103,6 +104,7 @@
         TARGET_LANGUAGE: 'targetLanguage_',
         TASKS: 'tasks_',
         TASK_UUID: 'taskUuid_',
+        IS_STEP_LAYOUT: 'isStepLayout_',
         TEMPLATE_ID: 'templateId_',
         IS_PROVENANCE: 'isProvenance_',
         TITLE: 'title_',
@@ -446,7 +448,12 @@
             ANALYSYS: 'ANALYSYS',
             CURRICULUM: 'CURRICULUM',
             VIRTUAL_LAB: 'VIRTUAL_LAB',
-
+        },
+        LayoutKey: {
+        	LAYOUT: 'SIMULATION_WITH_APP',
+        	INPUT: 'INPUT',
+        	LOG: 'LOG',
+        	OUTPUT: 'OUTPUT'
         },
         Action: {
             SELECT: 'SELECT',

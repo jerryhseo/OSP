@@ -297,6 +297,11 @@ public class ScienceAppLogPortsLocalServiceUtil {
 		return getService().getScienceAppLogPortsesCount(scienceAppId);
 	}
 
+	public static boolean isScienceAppLogPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().isScienceAppLogPortsValus(scienceAppId);
+	}
+
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
 		long scienceAppId, java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.PortalException,

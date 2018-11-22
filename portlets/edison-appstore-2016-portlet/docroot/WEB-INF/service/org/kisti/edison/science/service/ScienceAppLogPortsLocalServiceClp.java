@@ -132,9 +132,13 @@ public class ScienceAppLogPortsLocalServiceClp
 
 		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "portAppList";
+		_methodName23 = "isScienceAppLogPortsValus";
 
-		_methodParameterTypes23 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes23 = new String[] { "long" };
+
+		_methodName24 = "portAppList";
+
+		_methodParameterTypes24 = new String[] { "long", "java.util.Locale" };
 	}
 
 	@Override
@@ -813,6 +817,34 @@ public class ScienceAppLogPortsLocalServiceClp
 	}
 
 	@Override
+	public boolean isScienceAppLogPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { scienceAppId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Boolean)returnObj).booleanValue();
+	}
+
+	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> portAppList(
 		long scienceAppId, java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -820,8 +852,8 @@ public class ScienceAppLogPortsLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
 					new Object[] {
 						scienceAppId,
 						
@@ -898,4 +930,6 @@ public class ScienceAppLogPortsLocalServiceClp
 	private String[] _methodParameterTypes22;
 	private String _methodName23;
 	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
 }

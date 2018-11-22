@@ -43,6 +43,12 @@
 		MapObject.toJsonObject = function(){
 			return JSON.parse( JSON.stringify(MapObject) );
 		};
+		
+		MapObject.arrayExist = function(arrayObject,key){
+			return arrayObject.some(function(arrVal) {
+				return key === arrVal;
+			});
+		};
 
 		MapObject._deserialize = function( key, value ){
 			if( typeof value === 'function')	return false;

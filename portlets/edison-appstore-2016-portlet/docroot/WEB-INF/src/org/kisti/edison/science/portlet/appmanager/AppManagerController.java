@@ -85,7 +85,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONObjectWrapper;
 import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -400,79 +399,133 @@ public class AppManagerController{
 				}
 				mode = Constants.UPDATE;
 			}else if(clickTab.equals("m04")){
+				/*Flow WorkBench 셋팅*/
 				Boolean isStepLayout = scienceApp.getIsStepLayout();
-				String stepTabsValue = CustomUtil.strNull(params.get("stepTabValue")).equals("")?"INPUT":params.get("stepTabValue").toString();
-				String appTemplateId = "";
-				
-				if(isStepLayout){
-					if(scienceApp.getLayout().equals("")){
-						appTemplateId = "1-row-2-column";
-					}else{
-						net.sf.json.JSONObject appLayout = net.sf.json.JSONObject.fromObject(scienceApp.getLayout());
-						net.sf.json.JSONObject stepLayout =appLayout.getJSONObject(stepTabsValue);
-						
-					}
+				if(!CustomUtil.strNull(params.get("isStepLayout")).equals("")){
+					isStepLayout = GetterUtil.getBoolean(params.get("isStepLayout"));
 				}else{
-					
+					if(scienceApp.getLayout().equals("")){
+						//Layout 값이 없을 경우 Default false 셋팅
+						//parameter도 없을 경우
+						isStepLayout = false;
+					}
+				}
+				model.addAttribute("isStepLayout", isStepLayout);
+				
+				/*Layout Key 셋팅*/
+				String stepTabsValue = "";
+				if(!isStepLayout){
+					stepTabsValue = "LAYOUT";
+				}else{
+					stepTabsValue = CustomUtil.strNull(params.get("stepTabsValue")).equals("")?"INPUT":params.get("stepTabsValue").toString();
 				}
 				
+				/*TemplateId Setting*/
+				String appTemplateId = "";
+				String paramTemplateId = CustomUtil.strNull(params.get("templateId"));
+				if(!scienceApp.getLayout().equals("")){
+					net.sf.json.JSONObject appLayout = (net.sf.json.JSONObject) net.sf.json.JSONSerializer.toJSON(scienceApp.getLayout());
+					if(isStepLayout){
+						net.sf.json.JSONObject stepLayout =appLayout.getJSONObject(stepTabsValue);
+						if(!stepLayout.isNullObject()){
+							appTemplateId = stepLayout.getString("templateId_");
+						}
+					}else{
+						net.sf.json.JSONObject layout =appLayout.getJSONObject("Layout");
+						if(!layout.isNullObject()){
+							appTemplateId = layout.getString("templateId_");
+						}
+					}
+				}
 				
-//				String appTemplateId = GetterUtil.getString(scienceApp.getTempletId(),"").equals("")?"1-row-2-column":GetterUtil.getString(scienceApp.getTempletId(),"");
-				String paramTemplateId = CustomUtil.strNull(params.get("templateId")).equals("")?appTemplateId:CustomUtil.strNull(params.get("templateId"));
-				
-				
+				if(paramTemplateId.equals("")&&!appTemplateId.equals("")){
+					paramTemplateId = appTemplateId;
+				}
+
+				/*Sample Port Print*/
 				boolean isSamplePortPrint = true;
-				if(appTemplateId.equals(paramTemplateId)&&!scienceApp.getLayout().equals("")){
+				if(appTemplateId.equals(paramTemplateId)){
 					isSamplePortPrint = false;
 				}
 				
-				List<Map<String,Object>> portList = new ArrayList<Map<String,Object>>();
 				long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
-				long outputCnt = ScienceAppOutputPortsLocalServiceUtil.getScienceAppOutputPortsesCount(scienceAppId);
-				long logCnt = ScienceAppLogPortsLocalServiceUtil.getScienceAppLogPortsesCount(scienceAppId);
+				boolean logExist = ScienceAppLogPortsLocalServiceUtil.isScienceAppLogPortsValus(scienceAppId);
+				boolean outputExist = ScienceAppOutputPortsLocalServiceUtil.isScienceAppOutPortsValus(scienceAppId);
 				
+				/*Tab Validation*/
+				List<Map<String,String>> tabList = new ArrayList<Map<String,String>>();
 				if(inputCnt!=0){
-					portList.addAll(ScienceAppInputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+					HashMap<String,String> tabMap = new HashMap<String,String>();
+					tabMap.put("name", "INPUT");
+					tabMap.put("className", getTabClassFromLayout("INPUT",scienceApp.getLayout()));
+					tabList.add(tabMap);
 				}
 				
-				if(logCnt!=0){
-					portList.addAll(ScienceAppLogPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				if(logExist){
+					HashMap<String,String> tabMap = new HashMap<String,String>();
+					tabMap.put("name", "LOG");
+					tabMap.put("className", getTabClassFromLayout("LOG",scienceApp.getLayout()));
+					tabList.add(tabMap);
 				}
 				
-				if(outputCnt!=0){
-					portList.addAll(ScienceAppOutputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+				if(outputExist){
+					HashMap<String,String> tabMap = new HashMap<String,String>();
+					tabMap.put("name", "OUTPUT");
+					tabMap.put("className", getTabClassFromLayout("OUTPUT",scienceApp.getLayout()));
+					tabList.add(tabMap);
 				}
+				model.addAttribute("tabList", tabList);
 				
-				data.put("portList", portList);
-				
-				if(isSamplePortPrint){
-					//port 조회
-					String inputPorts = "";
+				if(!paramTemplateId.equals("")){
+					List<Map<String,Object>> portList = new ArrayList<Map<String,Object>>();
 					if(inputCnt!=0){
-						inputPorts = ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+						portList.addAll(ScienceAppInputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+						
 					}
 					
-					String outputPorts = "";
-					if(outputCnt!=0){
-						outputPorts = ScienceAppOutputPortsLocalServiceUtil.getOutputPortsJsonString(scienceAppId);
+					if(logExist){
+						portList.addAll(ScienceAppLogPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+						
 					}
 					
-					String logPorts = "";
-					if(logCnt!=0){
-						logPorts = ScienceAppLocalServiceUtil.getScienceAppLogPorts(scienceAppId);
+					if(outputExist){
+						portList.addAll(ScienceAppOutputPortsLocalServiceUtil.portAppList(scienceAppId,themeDisplay.getLocale()));
+						
 					}
 					
-					data.put("inputPorts", inputPorts);
-					data.put("outputPorts", outputPorts);
-					data.put("logPorts", logPorts);
-				}else{
-					data.put("layout", scienceApp.getLayout());
+					data.put("portList", portList);
+					
+					if(isSamplePortPrint){
+						//port 조회
+						String inputPorts = "";
+						if(inputCnt!=0){
+							inputPorts = ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+						}
+						
+						String logPorts = "";
+						if(logExist){
+							logPorts = ScienceAppLocalServiceUtil.getScienceAppLogPorts(scienceAppId);
+						}
+						
+						String outputPorts = "";
+						if(outputExist){
+							outputPorts = ScienceAppOutputPortsLocalServiceUtil.getOutputPortsJsonString(scienceAppId);
+						}
+						
+						
+						data.put("inputPorts", inputPorts);
+						data.put("outputPorts", outputPorts);
+						data.put("logPorts", logPorts);
+					}
 				}
 				
+				
+				data.put("layouts", scienceApp.getLayout());
 				data.put("isSamplePortPrint", isSamplePortPrint);
 				data.put("templateId", paramTemplateId);
 				model.addAttribute("templateJSP", paramTemplateId);
 				
+				model.addAttribute("stepTabsValue", stepTabsValue);
 			}else if(clickTab.equals("m05")){
 				mode = Constants.UPDATE;
 				//CKEditor
@@ -556,7 +609,6 @@ public class AppManagerController{
 			if(!CustomUtil.strNull(params.get("searchStatus")).equals("")){redirectOrignURL=HttpUtil.addParameter(redirectOrignURL, "searchStatus", params.get("searchStatus").toString());}
 			if(!CustomUtil.strNull(params.get("p_curPage")).equals("")){redirectOrignURL=HttpUtil.addParameter(redirectOrignURL, "p_curPage", params.get("p_curPage").toString());}
 			
-			
 			model.addAttribute("redirectOrignURL", HttpUtil.decodeURL(redirectURL));
 			model.addAttribute("redirectURL", redirectURL);
 			model.addAttribute("redirectName", redirectName);
@@ -575,6 +627,56 @@ public class AppManagerController{
 			}
 		}
 		return "appmanager/view";
+	}
+	
+	private boolean appLayoutStepValidation(ScienceApp scienceApp) throws SystemException{
+		long scienceAppId = scienceApp.getScienceAppId();
+		
+		long inputCnt = ScienceAppInputPortsLocalServiceUtil.getScienceAppInputPortsesCount(scienceAppId);
+		boolean logExist = ScienceAppLogPortsLocalServiceUtil.isScienceAppLogPortsValus(scienceAppId);
+		boolean outputExist = ScienceAppOutputPortsLocalServiceUtil.isScienceAppOutPortsValus(scienceAppId);
+		
+		
+		boolean result = true;
+		if(inputCnt!=0&&result){
+			result = validationFromLayout("INPUT",scienceApp.getLayout());
+		}
+		
+		if(logExist&&result){
+			result = validationFromLayout("LOG",scienceApp.getLayout());
+		}
+		
+		if(outputExist&&result){
+			result = validationFromLayout("OUTPUT",scienceApp.getLayout());
+		}
+		
+		return result;
+	}
+	
+	private String getTabClassFromLayout(String key,String layout){
+		if(validationFromLayout(key,layout)){
+			return "";
+		}else{
+			return "isNULL";
+		}
+	}
+	
+	private boolean validationFromLayout(String key,String layout){
+		Boolean result = false;
+		if(!layout.equals("")){
+			net.sf.json.JSONObject appLayout = (net.sf.json.JSONObject) net.sf.json.JSONSerializer.toJSON(layout);
+			try{
+				net.sf.json.JSONArray keys = appLayout.getJSONArray("arrayKeys_");
+				if(!keys.isEmpty()){
+					if(keys.contains(key)){
+						result = true;
+					}
+				}
+			}catch (net.sf.json.JSONException e) {
+				result = false;
+			}
+		}
+		return result;
 	}
 	
 	@ActionMapping(value="appAction")
@@ -660,13 +762,15 @@ public class AppManagerController{
 					}
 				}else if(actionType.equals("appLayout")){
 					String layout = CustomUtil.strNull(params.get("layout"));
-					String templetId = CustomUtil.strNull(params.get("templetId"));
+					Boolean isStepLayout = GetterUtil.getBoolean(params.get("isStepLayout"),false);
+					String stepTabsValue = CustomUtil.strNull(params.get("stepTabsValue"),"LAYOUT");
 					
 					if(!layout.equals("")){
 						ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 						scienceApp.setLayout(layout);
-//						scienceApp.setTempletId(templetId);
+						scienceApp.setIsStepLayout(isStepLayout);
 						ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
+						response.setRenderParameter("stepTabsValue", stepTabsValue);
 					}
 				}else if(actionType.equals("publicData")){
 					ServiceContext sc = ServiceContextFactory.getInstance(ScienceApp.class.getName(), request);
@@ -806,18 +910,39 @@ public class AppManagerController{
 					activateTab++;
 				}
 				
-				if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
-					if(clickTab.equals("m04")){
-						tabsStr +=",m04over";
+				if(scienceApp.getIsStepLayout()){
+					if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
+						if(appLayoutStepValidation(scienceApp)){
+							if(clickTab.equals("m04")){
+								tabsStr +=",m04over";
+							}else{
+								tabsStr +=",m04out";
+							}
+							activateTab++;
+							
+							appTestButtonView = true;
+						}else{
+							tabsStr +=",m04fail";
+							appStatusButtonView = false;
+						}
 					}else{
-						tabsStr +=",m04out";
+						tabsStr +=",m04fail";
+						appStatusButtonView = false;
 					}
-					activateTab++;
-					
-					appTestButtonView = true;
 				}else{
-					tabsStr +=",m04fail";
-					appStatusButtonView = false;
+					if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
+						if(clickTab.equals("m04")){
+							tabsStr +=",m04over";
+						}else{
+							tabsStr +=",m04out";
+						}
+						activateTab++;
+						
+						appTestButtonView = true;
+					}else{
+						tabsStr +=",m04fail";
+						appStatusButtonView = false;
+					}
 				}
 			}
 			

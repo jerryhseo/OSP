@@ -90,6 +90,20 @@ public class ScienceAppLogPortsLocalServiceImpl
 		return scienceAppLogPortsPersistence.countWithDynamicQuery(query);
 	}
 	
+	
+	public boolean isScienceAppLogPortsValus(long scienceAppId) throws SystemException{
+		try {
+			ScienceAppLogPorts ports = super.getScienceAppLogPorts(scienceAppId);
+			if(ports.getLogPorts().equals("false")||ports.getLogPorts().equals("{}")){
+				return false;
+			}else{
+				return true;
+			}
+		} catch (PortalException e) {
+			return false;
+		}
+	}
+	
 	public List<Map<String,Object>> portAppList(long scienceAppId, Locale locale) throws SystemException, PortalException{
 		List<Map<String,Object>> portAppList = new ArrayList<Map<String, Object>>();
 		ScienceAppLogPorts ports = super.fetchScienceAppLogPorts(scienceAppId);

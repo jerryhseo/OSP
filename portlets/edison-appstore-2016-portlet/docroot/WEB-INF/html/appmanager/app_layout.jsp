@@ -23,11 +23,12 @@
 	<portlet:param name="redirectURL" value="${redirectURL}" />
 </portlet:actionURL>
 
-<liferay-portlet:renderURL var="appLayoutRenderURL" copyCurrentRenderParameters="<%=true%>" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>" />
+<liferay-portlet:renderURL var="appLayoutRenderURL" copyCurrentRenderParameters="<%=true%>" windowState="<%=LiferayWindowState.MAXIMIZED.toString()%>">
+	<portlet:param name="isStepLayout" value="${isStepLayout}" />
+</liferay-portlet:renderURL>
 
 <%
-	String layoutURL = HttpUtil.removeParameter(appLayoutRenderURL,
-			renderResponse.getNamespace() + "templateId");
+	String layoutURL = HttpUtil.removeParameter(appLayoutRenderURL,renderResponse.getNamespace() + "templateId");
 	String templateJSP = GetterUtil.get(request.getAttribute("templateJSP"), "");
 %>
 <style type="text/css">
@@ -333,6 +334,9 @@
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+.science-app-manager-portlet div.edison-panel ul.custom-tabs li.isNULL a {
+	color: #ff00009c;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -345,8 +349,10 @@ $(document).ready(function(){
 	
 	$(".layoutMethod>input[name=templates]").change(function() {
 		if('${data.templateId}'!= $(this).val()){
+			var isStepLayout = $("#<portlet:namespace/>layoutAreaButton").prop("checked");
 			var searchParameter = "&<portlet:namespace/>templateId="+$(this).val();
-			location.href="<%=layoutURL%>"+searchParameter;
+			var renewURL = <portlet:namespace/>updateURLParameter("<%=layoutURL%>", "isStepLayout", isStepLayout);
+			location.href=renewURL+searchParameter;
 		}
 	});
 	
@@ -456,6 +462,37 @@ $(document).ready(function(){
 	});
 });
 
+function <portlet:namespace/>updateURLParameter(url, param, paramVal){
+	var param  = "<portlet:namespace/>"+param;
+	var newAdditionalURL = "";
+	var tempArray = url.split("?");
+	var baseURL = tempArray[0];
+	var additionalURL = tempArray[1];
+	var temp = "";
+	if (additionalURL) {
+		tempArray = additionalURL.split("&");
+		for (var i=0; i<tempArray.length; i++){
+			if(tempArray[i].split('=')[0] != param){
+				newAdditionalURL += temp + tempArray[i];
+				temp = "&";
+			}
+		}
+	}
+
+	var rows_txt = temp + "" + param + "=" + paramVal;
+	return baseURL + "?" + newAdditionalURL + rows_txt;
+}
+
+
+function <portlet:namespace/>tabChange(tab){
+	var isStepLayout = $("#<portlet:namespace/>layoutAreaButton").prop("checked");
+	
+	var renewURL = "<%=layoutURL%>";
+	var renewURL1 = <portlet:namespace/>updateURLParameter(renewURL, "stepTabsValue", tab);
+	var renewURL2 = <portlet:namespace/>updateURLParameter(renewURL1, "isStepLayout", isStepLayout);
+	location.href=renewURL2;
+}
+
 function <portlet:namespace/>layoutAreaSetColData(targetTextIds,attribute,percent){
 	var targetIds = targetTextIds.split('|');
 	for(var i=0;i<targetIds.length;i++){
@@ -486,23 +523,31 @@ function <portlet:namespace/>layoutAreaMovingEvent(moveType){
 
 var scienceApp = new OSP.ScienceApp();
 function <portlet:namespace/>layoutAreaViewInit(){
+	if('${isStepLayout}' == 'true'){
+		$("#<portlet:namespace/>layoutAreaButton").bootstrapToggle('on');
+	}else{
+		$("#<portlet:namespace/>layoutAreaButton").bootstrapToggle('off');
+	}
+	
 	if('${data.templateId}'!=""){
-		if('${data.templateId}'.indexOf("flow")>-1){
-// 			$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
-// 			$("#<portlet:namespace/>flowLayoutArea").css("display","block");
-		}else{
-// 			$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
-// 			$("#<portlet:namespace/>flowLayoutArea").css("display","none");
-		}
-		
 		$radioObject = $(".layoutMethod>input[name=templates][value="+'${data.templateId}'+"]");
 		$radioObject.prop('checked', true);
 		$radioObject.parent().addClass("active");
 		
 		if('${data.isSamplePortPrint}'=='true'){
-			<portlet:namespace/>drawPortFromLayout('INPUT','${data.inputPorts}');
-			<portlet:namespace/>drawPortFromLayout('LOG','${data.logPorts}');
-			<portlet:namespace/>drawPortFromLayout('OUTPUT','${data.outputPorts}');
+			if('${isStepLayout}'=='true'){
+				if('${stepTabsValue}'=='INPUT'){
+					<portlet:namespace/>drawPortFromLayout('INPUT','${data.inputPorts}');
+				}else if('${stepTabsValue}'=='LOG'){
+					<portlet:namespace/>drawPortFromLayout('LOG','${data.logPorts}');
+				}else if('${stepTabsValue}'=='OUTPUT'){
+					<portlet:namespace/>drawPortFromLayout('OUTPUT','${data.outputPorts}');
+				}
+			}else{
+				<portlet:namespace/>drawPortFromLayout('INPUT','${data.inputPorts}');
+				<portlet:namespace/>drawPortFromLayout('LOG','${data.logPorts}');
+				<portlet:namespace/>drawPortFromLayout('OUTPUT','${data.outputPorts}');
+			}
 		}else{
 			<portlet:namespace/>drawLayout('${data.layout}');
 		}
@@ -524,18 +569,20 @@ function <portlet:namespace/>layoutAreaViewInit(){
 }
 
 function <portlet:namespace/>layoutAreaViewEvent(){
-	if($("#<portlet:namespace/>layoutAreaButton").prop("checked")){
+	var layoutAeaButtonStatus = $("#<portlet:namespace/>layoutAreaButton").prop("checked");
+	if(layoutAeaButtonStatus){
 		$("#<portlet:namespace/>layoutTabs").css("display","block");
 		$("#<portlet:namespace/>saveBtn").css("display","none");
-		
-// 		$("#<portlet:namespace/>noFlowLayoutArea").css("display","none");
-// 		$("#<portlet:namespace/>flowLayoutArea").css("display","block");
 	}else{
 		$("#<portlet:namespace/>layoutTabs").css("display","none");
 		$("#<portlet:namespace/>saveBtn").css("display","inline-block");
-		
-// 		$("#<portlet:namespace/>noFlowLayoutArea").css("display","block");
-// 		$("#<portlet:namespace/>flowLayoutArea").css("display","none");
+	}
+	
+	/*화면에서 Flow WorkBench를 변경 하였을 경우 Grid 영역을 숨김*/
+	if(layoutAeaButtonStatus.toString()!='${isStepLayout}'){
+		$("#<portlet:namespace/>layoutGrid").css("display","none");
+	}else{
+		$("#<portlet:namespace/>layoutGrid").css("display","block");
 	}
 }
 
@@ -557,14 +604,30 @@ function <portlet:namespace/>actionCall(mode){
 		alert(Liferay.Language.get('edison-this-field-is-required',['template']));
 		return false;
 	}else{
-		var Layout = new OSP.Layout();
+		/*template 작성 여부 체크*/
+		if($("div#<portlet:namespace/>layoutGrid").css('display')=='none'){
+			alert(Liferay.Language.get('edison-science-appstore-toolkit-template-write-error-message'));
+			return false;
+		}
+		
+		var Layouts;
+		var isStepLayout = $("#<portlet:namespace/>layoutAreaButton").prop("checked");
+		
+		/*현재 DB의 Layout 타입과 작성중인 Layout 타입(Flow Workbench 여부)가 변경이 되었을 경우 새로 작성*/
+		if(isStepLayout&&'${data.layouts}'!=""){
+			Layouts = new OSP.Layouts(JSON.parse('${data.layouts}'));
+		}else{
+			Layouts = new OSP.Layouts();
+		}
+		
+		Layouts.isStepLayout(isStepLayout);
+		var Layout = Layouts.newLayout();
+		var templateId = $(":input:radio[name=templates]:checked").val();
 		Layout.templateId(templateId);
 		
 		//System Default Portlet Set
 		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
-// 		Layout.addPortlet('column-2','SimulationBreadcrumb_WAR_OSPWorkbenchportlet',true);
-// 		Layout.addPortlet('column-3','ScienceAppPort_WAR_OSPWorkbenchportlet',true);
-		Layout.addPortlet('column-9','SimulationJobController_WAR_edisonsimulationportlet',true);
+		Layout.addPortlet('column-2','SimulationJobController_WAR_edisonsimulationportlet',true);
 		
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
@@ -597,11 +660,17 @@ function <portlet:namespace/>actionCall(mode){
 			Layout.addDeviderObject($(this).attr('id'),$(this).attr('left-per'),$(this).attr('top-per'));
 		});
 		
+		if(isStepLayout){
+			Layouts.addLayout('${stepTabsValue}',Layout);
+		}else{
+			Layouts.addLayout('Layout',Layout);
+		}
 
-		$("#<portlet:namespace/>layout").val(JSON.stringify(Layout));
-		$("#<portlet:namespace/>templetId").val(templateId);
-// 		console.log(JSON.stringify(Layout));
+		$("#<portlet:namespace/>layout").val(JSON.stringify(Layouts));
+		$("#<portlet:namespace/>isStepLayout").val(isStepLayout);
+// 		console.log(JSON.stringify(Layouts));
 	 	submitForm(<portlet:namespace/>frm);
+
 	}
 
 }
@@ -633,10 +702,11 @@ function <portlet:namespace/>drawPortFromLayout(portType,data){
 	}
 }
 
-function <portlet:namespace/>drawLayout(layout){
-	var Layout = new OSP.Layout();
-	Layout.deserialize(JSON.parse(layout));
+function <portlet:namespace/>drawLayout(layouts){
+	var Layouts = new OSP.Layouts(JSON.parse(layouts));
+	var Layout = Layouts.getLayoutFromKey('${stepTabsValue}');
 	var columns = Layout.getColumnIds();
+	
 	for(var i=0;i<columns.length;i++){
 		var column = Layout.getColumn(columns[i]);
 		
@@ -703,16 +773,17 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 
 <aui:form name="frm" method="POST" action="<%=submitURL%>">
 	<aui:input name="layout" type="hidden" value="" label="" />
-	<aui:input name="templetId" type="hidden" value="" label="" />
+	<aui:input name="isStepLayout" type="hidden" value="" label="" />
+	<aui:input name="stepTabsValue" type="hidden" value="${stepTabsValue}" label="" />
 	<aui:input name="actionMode" value="${mode}" type="hidden" />
 </aui:form>
 
 <div class="panel panel-default edison-panel">
 	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left" style="padding-top: 0px;">
-			<label class="checkbox-inline"> <c:if test="${fn:indexOf(data.templateId, 'flow') > -1}">
-					<c:set value="checked" var="layoutChecked" />
-				</c:if> <input id="<portlet:namespace/>layoutAreaButton" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled" onchange="<portlet:namespace/>layoutAreaViewEvent();" ${layoutChecked}> <span style="font-weight: 600;">Flow WorkBench</span> <liferay-ui:icon-help message="edison-science-appstore-toolkit-flow-message" />
+			<label class="checkbox-inline"> 
+				<input id="<portlet:namespace/>layoutAreaButton" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Enabled" data-off="Disabled" onchange="<portlet:namespace/>layoutAreaViewEvent();"> <span style="font-weight: 600;">Flow WorkBench</span>
+				<liferay-ui:icon-help message="edison-science-appstore-toolkit-flow-message" />
 			</label>
 		</h3>
 		<div class="btn-group pull-right">
@@ -749,14 +820,21 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			</c:if>
 		</div>
 	</div>
-
+	
 	<div class="panel-body layout-wrap">
 		<ul class="nav nav-tabs custom-tabs" id="<portlet:namespace/>layoutTabs" style="display: none;">
-			<li class="active"><a href="#">INPUT</a></li>
-			<li><a href="#">LOG</a></li>
-			<li><a href="#">OUTPUT</a></li>
+			<c:forEach var="tab" items="${tabList}">
+				<c:choose>
+					<c:when test="${tab.name eq stepTabsValue}">
+						<li class="active ${tab.className}"><a href="javascript:void(0);">${tab.name}</a></li>
+					</c:when>
+					<c:otherwise>
+						<li class="${tab.className}"><a href="#" onclick="<portlet:namespace/>tabChange('${tab.name}');">${tab.name}</a></li>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
 			<li class="pull-right">
-				<button class="btn btn-primary"><liferay-ui:message key='edison-button-save'/></button>
+				<button class="btn btn-primary" onclick="<portlet:namespace/>actionCall('<%=Constants.ADD%>');return false;"><liferay-ui:message key='edison-button-save'/></button>
 			</li>
 		</ul>
 
@@ -781,81 +859,83 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 			</label>
 		</div>
 	</div>
-	<div class="panel-footer">
-		<div class="row" style="margin: 0px;">
-			<div class="panel-group col-md-4" id="<portlet:namespace/>portCol" style="margin-top: 15px;">
-				<c:if test="${!empty data.portList}">
-					<c:set var="panelCss" value="panel panel-defalut"></c:set>
-					<c:set var="liCss" value="list-group-item-default"></c:set>
-					<c:forEach items="${data.portList}" var="portMap" varStatus="status">
-						<c:set var="panelStyle" value="display:none;"></c:set>
-						<c:choose>
-							<c:when test="${fn:indexOf(data.templateId, 'flow') ne -1}">
-								<c:if test="${portMap.portType eq 'OUTPUT' && fn:length(portMap.appList) gt 1}">
-									<c:set var="panelStyle" value="display:block;"></c:set>
-								</c:if>
-							</c:when>
-							<c:otherwise>
-								<c:if test="${fn:length(portMap.appList) gt 1}">
-									<c:set var="panelStyle" value="display:block;"></c:set>
-								</c:if>
-							</c:otherwise>
-						</c:choose>
-
-
-						<c:if test="${portMap.portType eq 'INPUT' }">
-							<c:set var="panelCss" value="panel  panel-success"></c:set>
-							<c:set var="liCss" value="list-group-item-success"></c:set>
-						</c:if>
-						<c:if test="${portMap.portType eq 'LOG' }">
-							<c:set var="panelCss" value="panel  panel-warning "></c:set>
-							<c:set var="liCss" value="list-group-item-warning "></c:set>
-						</c:if>
-						<c:if test="${portMap.portType eq 'OUTPUT' }">
-							<c:set var="panelCss" value="panel  panel-danger  "></c:set>
-							<c:set var="liCss" value="list-group-item-danger  "></c:set>
-						</c:if>
-
-						<div class="${panelCss}" style="${panelStyle}">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapse_${status.index}"> ${portMap.portName} </a>
-								</h4>
-							</div>
-							<div id="collapse_${status.index}" class="panel-collapse collapse">
-								<div class="panel-body sortableLayout portLayoutArea">
-									<ul class="sortable-list ui-sortable list-group" id="port_${portMap.portName}_ul">
-										<c:forEach items="${portMap.appList}" var="portAppData">
-											<c:if test="${portAppData.type eq 'Editor' }">
-												<c:set var="icon" value="icon-edit"></c:set>
-											</c:if>
-											<c:if test="${portAppData.type eq 'Analyzer' }">
-												<c:set var="icon" value="icon-picture"></c:set>
-											</c:if>
-
-											<c:choose>
-												<c:when test="${portAppData.isDefault}">
-													<li class="sortable-item list-group-item list-group-item-default ${portMap.portType}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_DEFAULT <liferay-ui:icon-help message="${portAppData.title}" />
-													</span></li>
-												</c:when>
-												<c:otherwise>
-													<li class="sortable-item list-group-item ${liCss}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_${portAppData.name} <liferay-ui:icon-help message="${portAppData.title}" /> <i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('port_${portMap.portName}_ul','${portMap.portName}_${portAppData.exeFileName}');"></i>
-													</span></li>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-									</ul>
+	<c:if test="${!empty data.templateId}">
+		<div class="panel-footer" id="<portlet:namespace/>layoutGrid">
+			<div class="row" style="margin: 0px;">
+				<div class="panel-group col-md-4" id="<portlet:namespace/>portCol" style="margin-top: 15px;">
+					<c:if test="${!empty data.portList}">
+						<c:set var="panelCss" value="panel panel-defalut"></c:set>
+						<c:set var="liCss" value="list-group-item-default"></c:set>
+						<c:forEach items="${data.portList}" var="portMap" varStatus="status">
+							<c:set var="panelStyle" value="display:none;"></c:set>
+							<c:choose>
+								<c:when test="${isStepLayout eq 'true'}">
+									<c:if test="${portMap.portType eq stepTabsValue && fn:length(portMap.appList) gt 1}">
+										<c:set var="panelStyle" value="display:block;"></c:set>
+									</c:if>
+								</c:when>
+								<c:otherwise>
+									<c:if test="${fn:length(portMap.appList) gt 1}">
+										<c:set var="panelStyle" value="display:block;"></c:set>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+	
+	
+							<c:if test="${portMap.portType eq 'INPUT' }">
+								<c:set var="panelCss" value="panel  panel-success"></c:set>
+								<c:set var="liCss" value="list-group-item-success"></c:set>
+							</c:if>
+							<c:if test="${portMap.portType eq 'LOG' }">
+								<c:set var="panelCss" value="panel  panel-warning "></c:set>
+								<c:set var="liCss" value="list-group-item-warning "></c:set>
+							</c:if>
+							<c:if test="${portMap.portType eq 'OUTPUT' }">
+								<c:set var="panelCss" value="panel  panel-danger  "></c:set>
+								<c:set var="liCss" value="list-group-item-danger  "></c:set>
+							</c:if>
+	
+							<div class="${panelCss}" style="${panelStyle}">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse_${status.index}"> ${portMap.portName} </a>
+									</h4>
+								</div>
+								<div id="collapse_${status.index}" class="panel-collapse collapse">
+									<div class="panel-body sortableLayout portLayoutArea">
+										<ul class="sortable-list ui-sortable list-group" id="port_${portMap.portName}_ul">
+											<c:forEach items="${portMap.appList}" var="portAppData">
+												<c:if test="${portAppData.type eq 'Editor' }">
+													<c:set var="icon" value="icon-edit"></c:set>
+												</c:if>
+												<c:if test="${portAppData.type eq 'Analyzer' }">
+													<c:set var="icon" value="icon-picture"></c:set>
+												</c:if>
+	
+												<c:choose>
+													<c:when test="${portAppData.isDefault}">
+														<li class="sortable-item list-group-item list-group-item-default ${portMap.portType}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_DEFAULT <liferay-ui:icon-help message="${portAppData.title}" />
+														</span></li>
+													</c:when>
+													<c:otherwise>
+														<li class="sortable-item list-group-item ${liCss}" id="${portMap.portName}_${portAppData.exeFileName}" data-port-portlet="${portAppData.exeFileName}" data-port-name="${portMap.portName}"><span class="icon-move"> <i class="${icon}"></i> ${portMap.portName}_${portAppData.name} <liferay-ui:icon-help message="${portAppData.title}" /> <i class="icon-remove sortRemove" onClick="<portlet:namespace/>cancelSortable('port_${portMap.portName}_ul','${portMap.portName}_${portAppData.exeFileName}');"></i>
+														</span></li>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
+										</ul>
+									</div>
 								</div>
 							</div>
-						</div>
-					</c:forEach>
-				</c:if>
-			</div>
-			<div class="col-md-8" id="<portlet:namespace/>layoutCol">
-				<liferay-util:include page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext()%>">
-				</liferay-util:include>
+						</c:forEach>
+					</c:if>
+				</div>
+				<div class="col-md-8" id="<portlet:namespace/>layoutCol">
+					<liferay-util:include page='<%="/WEB-INF/html/appmanager/layout/" + templateJSP + ".jsp"%>' servletContext="<%=this.getServletContext()%>">
+					</liferay-util:include>
+				</div>
 			</div>
 		</div>
-	</div>
+	</c:if>
 </div>
 

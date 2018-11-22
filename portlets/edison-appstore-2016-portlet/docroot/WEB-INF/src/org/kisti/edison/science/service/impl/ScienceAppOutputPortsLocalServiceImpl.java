@@ -92,6 +92,19 @@ public class ScienceAppOutputPortsLocalServiceImpl
 		return scienceAppOutputPortsPersistence.countWithDynamicQuery(query);
 	}
 	
+	public Boolean isScienceAppOutPortsValus(long scienceAppId) throws SystemException{
+		try {
+			ScienceAppOutputPorts ports = super.getScienceAppOutputPorts(scienceAppId);
+			if(ports.getOutputPorts().equals("false")||ports.getOutputPorts().equals("{}")){
+				return false;
+			}else{
+				return true;
+			}
+		}catch (PortalException e) {
+			return false;
+		}
+	}
+	
 	public long getOutPortsCountByPotyTypeId(long portTypeId) throws SystemException{
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(ScienceAppOutputPorts.class)
 				 .add(RestrictionsFactoryUtil.like("outputPorts", "%" + portTypeId + "%"));

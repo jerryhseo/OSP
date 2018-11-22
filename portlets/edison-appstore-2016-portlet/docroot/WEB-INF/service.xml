@@ -117,21 +117,21 @@
         <column name="openLevel" type="String"></column>
         <column name="license" type="String"></column>
         <column name="srcFileName" type="String"></column>
-        <column name= "targetLanguage" type="String"></column>
-        <column name= "isStepLayout" type="Boolean"></column>
-        <column name= "layout" type="String"></column>
+        <column name="targetLanguage" type="String"></column>
+        <column name="isStepLayout" type="Boolean"></column>
+        <column name="layout" type="String"></column>
         
         <!--
         	ADD gplus
          -->
-        <column name= "developers" type="String" localized="true"></column>
-        <column name= "editorType" type="String"></column>
-        <column name= "isPort" type="boolean"></column>
-        <column name= "isCompile" type="boolean"></column>
-        <column name= "projectCategoryId" type="long"></column>
+        <column name="developers" type="String" localized="true"></column>
+        <column name="editorType" type="String"></column>
+        <column name="isPort" type="boolean"></column>
+        <column name="isCompile" type="boolean"></column>
+        <column name="projectCategoryId" type="long"></column>
         
-        <column name= "execute" type="long"></column>
-        <column name= "cluster" type="String"></column>
+        <column name="execute" type="long"></column>
+        <column name="cluster" type="String"></column>
         
         
         

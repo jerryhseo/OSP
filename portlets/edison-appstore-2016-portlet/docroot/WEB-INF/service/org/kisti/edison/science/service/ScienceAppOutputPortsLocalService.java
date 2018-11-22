@@ -273,6 +273,10 @@ public interface ScienceAppOutputPortsLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.Boolean isScienceAppOutPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long getOutPortsCountByPotyTypeId(long portTypeId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 

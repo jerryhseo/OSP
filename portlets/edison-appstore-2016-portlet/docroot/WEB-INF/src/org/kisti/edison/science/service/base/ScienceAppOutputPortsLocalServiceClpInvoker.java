@@ -130,13 +130,17 @@ public class ScienceAppOutputPortsLocalServiceClpInvoker {
 
 		_methodParameterTypes185 = new String[] { "long" };
 
-		_methodName186 = "getOutPortsCountByPotyTypeId";
+		_methodName186 = "isScienceAppOutPortsValus";
 
 		_methodParameterTypes186 = new String[] { "long" };
 
-		_methodName187 = "portAppList";
+		_methodName187 = "getOutPortsCountByPotyTypeId";
 
-		_methodParameterTypes187 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes187 = new String[] { "long" };
+
+		_methodName188 = "portAppList";
+
+		_methodParameterTypes188 = new String[] { "long", "java.util.Locale" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -265,11 +269,16 @@ public class ScienceAppOutputPortsLocalServiceClpInvoker {
 
 		if (_methodName186.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes186, parameterTypes)) {
-			return ScienceAppOutputPortsLocalServiceUtil.getOutPortsCountByPotyTypeId(((Long)arguments[0]).longValue());
+			return ScienceAppOutputPortsLocalServiceUtil.isScienceAppOutPortsValus(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName187.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes187, parameterTypes)) {
+			return ScienceAppOutputPortsLocalServiceUtil.getOutPortsCountByPotyTypeId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName188.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes188, parameterTypes)) {
 			return ScienceAppOutputPortsLocalServiceUtil.portAppList(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
@@ -325,4 +334,6 @@ public class ScienceAppOutputPortsLocalServiceClpInvoker {
 	private String[] _methodParameterTypes186;
 	private String _methodName187;
 	private String[] _methodParameterTypes187;
+	private String _methodName188;
+	private String[] _methodParameterTypes188;
 }

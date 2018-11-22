@@ -320,6 +320,12 @@ public class ScienceAppOutputPortsLocalServiceWrapper
 	}
 
 	@Override
+	public java.lang.Boolean isScienceAppOutPortsValus(long scienceAppId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppOutputPortsLocalService.isScienceAppOutPortsValus(scienceAppId);
+	}
+
+	@Override
 	public long getOutPortsCountByPotyTypeId(long portTypeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _scienceAppOutputPortsLocalService.getOutPortsCountByPotyTypeId(portTypeId);

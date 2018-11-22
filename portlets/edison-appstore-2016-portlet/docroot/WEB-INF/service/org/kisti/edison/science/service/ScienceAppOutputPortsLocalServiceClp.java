@@ -132,13 +132,17 @@ public class ScienceAppOutputPortsLocalServiceClp
 
 		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "getOutPortsCountByPotyTypeId";
+		_methodName23 = "isScienceAppOutPortsValus";
 
 		_methodParameterTypes23 = new String[] { "long" };
 
-		_methodName24 = "portAppList";
+		_methodName24 = "getOutPortsCountByPotyTypeId";
 
-		_methodParameterTypes24 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "portAppList";
+
+		_methodParameterTypes25 = new String[] { "long", "java.util.Locale" };
 	}
 
 	@Override
@@ -812,13 +816,41 @@ public class ScienceAppOutputPortsLocalServiceClp
 	}
 
 	@Override
-	public long getOutPortsCountByPotyTypeId(long portTypeId)
+	public java.lang.Boolean isScienceAppOutPortsValus(long scienceAppId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23, new Object[] { portTypeId });
+					_methodParameterTypes23, new Object[] { scienceAppId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.Boolean)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public long getOutPortsCountByPotyTypeId(long portTypeId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { portTypeId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -847,8 +879,8 @@ public class ScienceAppOutputPortsLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] {
 						scienceAppId,
 						
@@ -927,4 +959,6 @@ public class ScienceAppOutputPortsLocalServiceClp
 	private String[] _methodParameterTypes23;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
 }
