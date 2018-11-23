@@ -117,6 +117,7 @@ public class LayoutController {
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
 			model.addAttribute("blockInputPorts", blockInputPorts);
+			System.out.println(simulationUuid);
 			model.addAttribute("simulationUuid", simulationUuid);
 			
 			
@@ -192,10 +193,24 @@ public class LayoutController {
 		response.flushBuffer();
 	}
 	
-	private void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
+	private void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException, PortalException, SystemException{
 		String templateDir = ParamUtil.getString(resourceRequest, "templateDir");
-		String templateFile = ParamUtil.getString(resourceRequest, "templateFile");
 		String namespace = ParamUtil.getString(resourceRequest, "namespace");
+		
+		long scienceAppId = ParamUtil.getLong(resourceRequest, "scienceAppId");
+		
+		ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+		JSONObject workbenchLayouts = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
+		JSONArray layoutKeys = workbenchLayouts.getJSONArray("arrayKeys_");
+		
+		String templateFile = ParamUtil.getString(resourceRequest, "templateFile");
+		String layoutKey = "";
+		for(int i=0;i<layoutKeys.length();i++){
+			String key = layoutKeys.getString(i);
+			JSONObject layout = workbenchLayouts.getJSONObject(key);
+			templateFile = layout.getString("templateId_")+".ftl";
+			layoutKey = key;
+		}
 		
 		String realTemplateDir = resourceRequest.getPortletSession().getPortletContext().getRealPath(templateDir);
 		
@@ -206,20 +221,11 @@ public class LayoutController {
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 		
 		Map<String, Object> params = new HashMap<>();
+		String layoutPrimaryKey = namespace+layoutKey+"_";
+//		params.put("layoutKey", layoutKey);
 		params.put("namespace", namespace);
-		JSONArray columns = null;
-		try {
-			columns = JSONFactoryUtil.createJSONArray(ParamUtil.getString(resourceRequest, "columns"));
-		} catch (JSONException e1) {
-			_log.error("Getting columns while resolving layout template");
-			throw new PortletException();
-		}
-		try {
-			params.put("columns", this.layoutJSONObject2Map(columns));
-		} catch (JSONException e1) {
-			_log.error("Getting columns while creating freemarker parameters");
-			throw new PortletException();
-		}
+		params.put("layoutPrimaryKey", layoutPrimaryKey);
+		
 		
 		Template template = cfg.getTemplate(templateFile);
 		PrintWriter writer = resourceResponse.getWriter();
@@ -255,8 +261,7 @@ public class LayoutController {
 		try{
 			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 			model.addAttribute("scienceApp", scienceApp);
-			
-			if(scienceApp.getTempletId().indexOf("flow")>-1){
+			if(scienceApp.getIsStepLayout()){
 				model.addAttribute("isFlowLayout", true);
 			}else{
 				model.addAttribute("isFlowLayout", false);
@@ -267,8 +272,24 @@ public class LayoutController {
 		
 		
 		try{
-			JSONObject workbenchLayout = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
-			model.addAttribute("workbenchLayout", workbenchLayout);
+			JSONObject workbenchLayouts = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
+			JSONArray layoutKeys = workbenchLayouts.getJSONArray("arrayKeys_");
+			
+			JSONObject lodingPortlets = JSONFactoryUtil.createJSONObject();
+			for(int i=0;i<layoutKeys.length();i++){
+				String key = layoutKeys.getString(i);
+				JSONObject layout = workbenchLayouts.getJSONObject(key);
+				JSONArray jsonColumns = layout.getJSONArray("columns_");
+				
+				for(int j=0;j<jsonColumns.length();j++){
+					JSONObject column = jsonColumns.getJSONObject(j);
+					if(!column.isNull("currentPortlet_")){
+						lodingPortlets.put(column.getString("currentPortlet_"), "view");
+					}
+				}
+			}
+			model.addAttribute("lodingPortlets", lodingPortlets.toString());
+			model.addAttribute("workbenchLayout", workbenchLayouts);
 		}catch (Exception e) {
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_LAYOUT_EXIST);
 		}

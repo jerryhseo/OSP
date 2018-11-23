@@ -621,13 +621,26 @@ function <portlet:namespace/>actionCall(mode){
 		}
 		
 		Layouts.isStepLayout(isStepLayout);
-		var Layout = Layouts.newLayout();
+		var Layout = new OSP.Layout();
 		var templateId = $(":input:radio[name=templates]:checked").val();
 		Layout.templateId(templateId);
 		
+		
+		var layoutName = "";
+		/*Step Workbench일 경우 Systme Portlet은 별도로 Layout으로 관리*/
+		if(isStepLayout){
+			var systmeLayout = new OSP.Layout();
+			systmeLayout.addPortlet(OSP.Enumeration.LayoutKey.SYSTEM,'column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
+			systmeLayout.addPortlet(OSP.Enumeration.LayoutKey.SYSTEM,'column-2','SimulationJobController_WAR_edisonsimulationportlet',true);
+			Layouts.addLayout(OSP.Enumeration.LayoutKey.SYSTEM,systmeLayout);
+			layoutName = '${stepTabsValue}';
+		}else{
+			layoutName = OSP.Enumeration.LayoutKey.LAYOUT;
+			Layout.addPortlet(layoutName,'column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
+			Layout.addPortlet(layoutName,'column-2','SimulationJobController_WAR_edisonsimulationportlet',true);
+		}
+		
 		//System Default Portlet Set
-		Layout.addPortlet('column-1','SimulationDashboard_WAR_edisonsimulationportlet',true);
-		Layout.addPortlet('column-2','SimulationJobController_WAR_edisonsimulationportlet',true);
 		
 		
 		$( ".gridLayoutArea .sortable-list" ).each(function() {
@@ -645,12 +658,13 @@ function <portlet:namespace/>actionCall(mode){
 					$liObject = $(".sortable-list li[id='"+sortedIDs[i]+"']");
 					var portName = $liObject.attr("data-port-name");
 					var portInstanceId = $liObject.attr("data-port-portlet");
-	// 				alert("columnId==>"+columnId+"___portInstanceId==>"+portInstanceId+"__portName==>"+portName+"__currentPortlet==>"+currentPortlet);
-					Layout.addPortlet(columnId,portInstanceId,currentPortlet,portName,'',columnHeight,columnWidth);
+// 					var portInstanceId = $liObject.attr("data-port-portlet");
+// 					alert("columnId==>"+columnId+"___portInstanceId==>"+portInstanceId+"__portName==>"+portName+"__currentPortlet==>"+currentPortlet);
+					Layout.addPortlet(layoutName,columnId,portInstanceId,currentPortlet,portName,'',columnHeight,columnWidth);
 					currentPortlet = false;
 				}
 			}else{
-				Layout.addPortlet(columnId,'','','','',columnHeight,columnWidth);
+				Layout.addPortlet(layoutName,columnId,'','','','',columnHeight,columnWidth);
 			}
 		});
 		
@@ -660,17 +674,12 @@ function <portlet:namespace/>actionCall(mode){
 			Layout.addDeviderObject($(this).attr('id'),$(this).attr('left-per'),$(this).attr('top-per'));
 		});
 		
-		if(isStepLayout){
-			Layouts.addLayout('${stepTabsValue}',Layout);
-		}else{
-			Layouts.addLayout(OSP.Enumeration.LayoutKey.LAYOUT,Layout);
-		}
+		Layouts.addLayout(layoutName,Layout);
 
 		$("#<portlet:namespace/>layout").val(JSON.stringify(Layouts));
 		$("#<portlet:namespace/>isStepLayout").val(isStepLayout);
 // 		console.log(JSON.stringify(Layouts));
 	 	submitForm(<portlet:namespace/>frm);
-
 	}
 
 }

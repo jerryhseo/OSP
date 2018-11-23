@@ -60,6 +60,8 @@
         JOB_STATUS_PORTLET: 'jobStatusId_',
         JOBS: 'jobs_',
         LAYOUT: 'layout_',
+        LAYOUTS: 'layouts_',
+        LAYOUT_NAME: 'layoutName_',
         LOCALIZED_TEXT: 'localizedText_',
         LOCATION: 'location_',
         LOG_DATA: 'logData_',
@@ -451,6 +453,7 @@
         },
         LayoutKey: {
         	LAYOUT: 'LAYOUT',
+        	SYSTEM: 'SYSTEM',
         	INPUT: 'INPUT',
         	LOG: 'LOG',
         	OUTPUT: 'OUTPUT'

@@ -195,6 +195,10 @@
 		location.href = "${redirectOrignURL}";
 	}
 	
+	function <portlet:namespace/>appTest(){
+		window.location.href = "<%=appTestURL%>";
+	}
+	
 	function <portlet:namespace/>deleteFile(p_fileEntryId,fileType,objectClass,language){
 		if(!confirm(Liferay.Language.get('file-delete-confirm'))) return;
 		var deleteForm = {

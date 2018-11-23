@@ -20,13 +20,8 @@
         };
         
         Layouts.getLayoutFromKey = function(key){
-        	var Layout = new OSP.Layout(Layouts[key.toUpperCase()]);
-        	return Layout;
-        };
-        
-        Layouts.newLayout = function(jsonLayout){
-        	var Layout = new OSP.Layout(jsonLayout);
-        	return Layout;
+        	var layout = new OSP.Layout(Layouts[key]);
+        	return layout;
         };
         
         Layouts.addKey = function(key){
@@ -42,11 +37,27 @@
         };
         
         
-        Layouts.addLayout = function(key,jsonLayout){
-        	Layouts.addKey(key);
+        Layouts.addLayout = function(key,layout){
+        	layout[OSP.Constants.LAYOUT_NAME] = key;
         	
-        	Layouts[key] = jsonLayout;
+        	Layouts.addKey(key);
+        	Layouts[key] = layout;
+        	
         	return Layouts;
+        };
+        
+        Layouts.getLayouts = function(){
+        	var keys = Layouts.arrayKeys();
+        	
+        	var layoutArray = [];
+        	for( var index in keys){
+        		var key = keys[index];
+        		var layout = Layouts.getLayoutFromKey(key);
+        		layoutArray.push(layout);
+        	}
+        	
+        	return layoutArray;
+        	
         };
         
         Layouts.deserialize = function( jsonLayouts ){
@@ -99,14 +110,18 @@
 
             P.generateInstanceId = function( instanceIndex ){
                 var instanceId = P.instanceId();
-                if( instanceId.indexOf('_INSTANCE_') > 0)
-                    instanceId = instanceId.slice(0, instanceId.indexOf('_INSTANCE_'));
-                
-                var instanceString;
-                var idStr = "" + instanceIndex;
-                var pad = "0000";
-                var instanceString = pad.substring(0, pad.length - idStr.length) + idStr;
-                P.instanceId(instanceId+'_INSTANCE_'+instanceString);
+                if( instanceId.indexOf('_INSTANCE_') > 0){
+                	var isNum = instanceId.replace(/[^0-9]/g, "");
+                	if(!isNaN(isNum)&&isNum!=""){
+                		instanceId = instanceId.slice(0,instanceId.length-5);
+                	}
+                	
+                	var instanceString;
+                	var idStr = "" + instanceIndex;
+                	var pad = "0000";
+                	var instanceString = pad.substring(0, pad.length - idStr.length) + idStr;
+                	P.instanceId(instanceId+'_'+instanceString);
+                }
                 
                 return P.instanceId();
             };
@@ -389,34 +404,32 @@
                 return false;
             };
             
-            C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
+            C.loadPortlet = function( targetPortlet, connector, layoutName, eventEnable, windowState, callback ){
                 if( targetPortlet.status() ){
                     targetPortlet.display( 'block' );
                     return true;
                 }
                 
                 targetPortlet.status( true );
-                
-                var $targetDiv = $('#'+C.getPortletSectionId(connector));
+                var $targetDiv = $('#'+C.getPortletSectionId(connector,layoutName));
                 targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
             };
             
-            C.switchPortlet = function( targetPortlet, connector, eventEnable, windowState, callback){
+            C.switchPortlet = function( targetPortlet, connector, layoutName, eventEnable, windowState, callback){
                 var currentPortletId = C.currentPortletId();
                 if( !currentPortletId ) return false;
                 
                 var currentPortlet = C.getPortlet( currentPortletId );
                 currentPortlet.display( 'none' );
 
-                var $targetDiv = $('#'+C.getPortletSectionId(connector));
+                var $targetDiv = $('#'+C.getPortletSectionId(connector,layoutName));
                 $targetDiv.effect("highlight", {color:"#F5F6CE"}, 2000);
                 C.loadPortlet( targetPortlet, connector, eventEnable, windowState, callback);
                 
                 C.currentPortletId(targetPortlet.instanceId());
             };
-            
-            C.getPortletSectionId = function( callerId ){
-                    return OSP.Event.getNamespace(callerId)+C.id();
+            C.getPortletSectionId = function( callerId ,layoutName){
+                    return OSP.Event.getNamespace(callerId)+layoutName+'_'+C.id();
             };
             
             C.clone = function(){
@@ -455,6 +468,10 @@
         
         Layout.templateId = function( templateId ){
         	return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.TEMPLATE_ID, arguments));
+        };
+        
+        Layout.layoutName = function( layoutName ){
+        	return Layout.property.apply(Layout, OSP.Util.addFirstArgument(OSP.Constants.LAYOUT_NAME, arguments));
         };
         
         Layout.columns = function( columns ){
@@ -710,7 +727,7 @@
         };
         
         /*Add Column-Height,width logic add - GPLUS 20181002*/
-        Layout.addPortlet = function( columnId, rootId, display, portName, preferences, columnHeight, columnWidth){
+        Layout.addPortlet = function(layoutName, columnId, rootId, display, portName, preferences, columnHeight, columnWidth){
             var column = Layout.getColumn(columnId);
             if( !column ){
                 column = new Column();
@@ -723,7 +740,8 @@
             }
             
             var portlet = new Portlet();
-            portlet.instanceId(rootId);
+            var portletId = rootId!=""?rootId+"_INSTANCE_"+layoutName:"";
+            portlet.instanceId(portletId);
             if( portName )  portlet.portName(portName);
             if( preferences )   portlet.preferences( preferences );
             var retrievedPortlets = retriveRootPortlets(rootId);
@@ -740,7 +758,7 @@
                     if( prevId === prevColumn.currentPortletId() )
                         prevColumn.currentPortletId( retrievedPortlets[0].instanceId() );
                     
-                    portlet.generateInstanceId( 2 );
+                    portlet.generateInstanceId(2);
                     column.addPortlet(portlet);
                     if( display )
                         column.currentPortletId(portlet.instanceId());
@@ -829,7 +847,8 @@
                 
                 column.loadPortlet( 
                             targetPortlet, 
-                            connectorId, 
+                            connectorId,
+                            Layout.layoutName(), 
                             eventEnable,
                             windowState,
                             callback 
@@ -841,7 +860,7 @@
             var column = Layout.getAssignedColumn(toPortletId );
             if( !column )   return false;
             
-            column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
+            column.switchPortlet(Layout.getPortlet(toPortletId), connector, Layout.layoutName(),eventEnable, windowState, callback);
             return true;
         };
         
@@ -852,7 +871,7 @@
                 return false;
             }
             
-            return column.getPortletSectionId(namespace);
+            return column.getPortletSectionId(namespace,Layout.layoutName());
         };
         
         Layout.registerPortletEvents = function( instanceId, events ){
@@ -870,6 +889,7 @@
             for( var key in jsonLayout ){
                 switch( key ){
                     case OSP.Constants.TEMPLATE_ID:
+                    case OSP.Constants.LAYOUT_NAME:
                         Layout.property( key, jsonLayout[key] );
                         break;
                     case OSP.Constants.COLUMNS:
@@ -1948,6 +1968,10 @@
             });
         };
         
+        Workbench.layouts = function( layouts ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.LAYOUTS, arguments));
+        };
+        
         Workbench.layout = function( layout ){
             return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.LAYOUT, arguments));
         };
@@ -2062,70 +2086,76 @@
         
         /*Workbench Layout Resize Event - GPLUS - 20181004*/
         Workbench.resizeLayout = function(namespace){
-        	var layout = Workbench.layout();
-        	var columns = layout.columns();
-            if( !columns )  return false;
-             
-            /*Layout*/
-             for( var index in columns ){
-                 var column = columns[index];
-                 
-                 if(column.width()){
-                	var layoutDomId = namespace+column.id();
-                    var dom = document.getElementById(layoutDomId);
-                	if(dom!= null){
-                		var setWidth = dom.getAttribute('set-width');
-                		if(setWidth!=null&&setWidth=="false"){
-                			var setWidthId = dom.getAttribute('set-width-id');
-                			var setDom = document.getElementById(setWidthId)
-                			if(setDom!= null){
-                				setDom.style.width = column.width();
-                			}
-                		}else{
-                			dom.style.width = column.width();
-                		}
-                	}
-                 }
-                 
-                 if(column.height()){
-                	var layoutDomId = namespace+'row-'+column.id();
-                    var dom = document.getElementById(layoutDomId);
-                 	if(dom!= null){dom.style.height = column.height();}
-                  }
-             }
-             
-             /*devider*/
-             var deviders = layout.deviders();
-             if(deviders){
-            	 for( var index in deviders ){
-                     var devider = deviders[index];
-                     var deviderDomId = namespace+devider.id();
-                     var dom = document.getElementById(deviderDomId);
-                     if(devider.left()&&dom!= null){
-                    	dom.style.left = devider.left();
-                     }
-                     
-                     if(devider.top()&&dom!= null){
-                     	dom.style.top = devider.top();
-                      }
-                 }
-             }
+        	var workbenchLayouts = Workbench.layouts();
+        	if( !workbenchLayouts )       return false;
+        	
+        	var layouts = workbenchLayouts.getLayouts();
+        	for( var index in layouts ){
+        		var layout = layouts[index];
+        		var layoutName = layout[OSP.Constants.LAYOUT_NAME];
+        		
+        		var columns = layout.columns();
+        		if( !columns )  return false;
+        		
+        		/*Layout*/
+        		for( var index in columns ){
+        			var column = columns[index];
+        			
+        			if(column.width()){
+        				var layoutDomId = layoutName+namespace+column.id();
+        				var dom = document.getElementById(layoutDomId);
+        				if(dom!= null){
+        					var setWidth = dom.getAttribute('set-width');
+        					if(setWidth!=null&&setWidth=="false"){
+        						var setWidthId = dom.getAttribute('set-width-id');
+        						var setDom = document.getElementById(setWidthId)
+        						if(setDom!= null){
+        							setDom.style.width = column.width();
+        						}
+        					}else{
+        						dom.style.width = column.width();
+        					}
+        				}
+        			}
+        			
+        			if(column.height()){
+        				var layoutDomId = layoutName+namespace+'row-'+column.id();
+        				var dom = document.getElementById(layoutDomId);
+        				if(dom!= null){dom.style.height = column.height();}
+        			}
+        		}
+        		
+        		/*devider*/
+        		var deviders = layout.deviders();
+        		if(deviders){
+        			for( var index in deviders ){
+        				var devider = deviders[index];
+        				var deviderDomId = layoutName+namespace+devider.id();
+        				var dom = document.getElementById(deviderDomId);
+        				if(devider.left()&&dom!= null){
+        					dom.style.left = devider.left();
+        				}
+        				
+        				if(devider.top()&&dom!= null){
+        					dom.style.top = devider.top();
+        				}
+        			}
+        		}
+        	}
         };
         
         Workbench.loadPortlets = function( windowState ){
-            var layout = Workbench.layout();
-            if( !layout )       return false;
-            //console.log('Workbench Layout: ', layout );
-            
-            //evaluatePortletType();
-            layout.loadPortlets( Workbench.id(), true, windowState, handShakeCallback );
+        	var layout = Workbench.layout();
+        	if( !layout )       return false;
+        		
+        	layout.loadPortlets( Workbench.id(), true, windowState, handShakeCallback );
         };
         
         Workbench.getPortlet = function( portletId ){
-            var layout = Workbench.layout();
-            if( !layout )       return false;
-            
-            return layout.getPortlet( portletId );
+        	var layout = Workbench.layout();
+        	if( !layout )       return false;
+        	
+        	return layout.getPortlet( portletId);
         };
         
         Workbench.getPortlets = function( portName ){

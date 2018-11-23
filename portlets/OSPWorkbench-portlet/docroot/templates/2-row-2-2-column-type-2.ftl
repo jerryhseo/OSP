@@ -23,29 +23,29 @@
 			
 			<section class="content" id="workbench-layout-area" style="display:none;height:94%;">
 				<div class="row" style="height:100%">
-					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="${namespace}col-column-4">
-						<div class="row" style="height:50%"  id="${namespace}row-column-4">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-4" set-width="false" set-width-id="${namespace}col-column-4">
+					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="${namespace}col-column-3">
+						<div class="row" style="height:50%"  id="${namespace}row-column-3">
+							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-3" set-width="false" set-width-id="${namespace}col-column-3">
 								
 							</div>
 						</div>
-						<div class="devider horizontal" id="${namespace}devider-1" data-equal-id="${namespace}row-column-4" data-remainder-id="${namespace}row-column-5"></div>
-						<div class="row" style="height:50%" id="${namespace}row-column-5">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-5"  set-width="false">
+						<div class="devider horizontal" id="${namespace}devider-1" data-equal-id="${namespace}row-column-3" data-remainder-id="${namespace}row-column-4"></div>
+						<div class="row" style="height:50%" id="${namespace}row-column-4">
+							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-4"  set-width="false">
 							
 							</div>
 						</div>
 					</div>
-					<div class="devider vertical" id="${namespace}devider-2" data-equal-id="${namespace}col-column-4" data-remainder-id="${namespace}col-column-6"></div>
-					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="${namespace}col-column-6">
-						<div class="row" style="height:50%" id="${namespace}row-column-6">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-6" set-width="false" set-width-id="${namespace}col-column-6">
+					<div class="devider vertical" id="${namespace}devider-2" data-equal-id="${namespace}col-column-3" data-remainder-id="${namespace}col-column-5"></div>
+					<div class="col-md-12 col" style="height: 100%;width: 50%;" id="${namespace}col-column-5">
+						<div class="row" style="height:50%" id="${namespace}row-column-5">
+							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-5" set-width="false" set-width-id="${namespace}col-column-5">
 							
 							</div>
 						</div>
-						<div class="devider horizontal" id="${namespace}devider-3" data-equal-id="${namespace}row-column-6" data-remainder-id="${namespace}row-column-7"></div>
-						<div class="row" style="height:50%" id="${namespace}row-column-7">
-							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-7"  set-width="false">
+						<div class="devider horizontal" id="${namespace}devider-3" data-equal-id="${namespace}row-column-5" data-remainder-id="${namespace}row-column-6"></div>
+						<div class="row" style="height:50%" id="${namespace}row-column-6">
+							<div class="col-md-12 col sub-col" style="height: 100%;width: 100%;" id="${namespace}column-6"  set-width="false">
 							
 							</div>
 						</div>

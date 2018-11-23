@@ -36,7 +36,7 @@
 </style>
 
 <liferay-portlet:resourceURL var="serveResourceURL"	id="serveResource" copyCurrentRenderParameters="false">
-	
+	<liferay-portlet:param name="scienceAppId" value="${scienceApp.getScienceAppId()}"/>
 </liferay-portlet:resourceURL>
 
 <%
@@ -46,37 +46,11 @@
 	
 	JSONObject workbenchLayout = (JSONObject) renderRequest.getAttribute("workbenchLayout");
 	
-	JSONArray jsonColumns = workbenchLayout.getJSONArray("columns_");
-	JSONArray columns = JSONFactoryUtil.createJSONArray();
-	
-	JSONObject lodingPortlets = JSONFactoryUtil.createJSONObject();
-	for (int i = 0; i < jsonColumns.length(); i++) {
-		JSONObject column = JSONFactoryUtil.createJSONObject();
-		JSONObject jsonColumn = jsonColumns.getJSONObject(i);
-
-		String currentPortlet = jsonColumn.getString("currentPortlet_");
-		column.put("id", jsonColumn.getString("id_"));
-		column.put("height", jsonColumn.getString("height_"));
-		column.put("width", jsonColumn.getString("width_"));
-		column.put("portletId", currentPortlet);
-		columns.put(column);
-		
-		JSONArray portlets = JSONFactoryUtil.createJSONArray(jsonColumn.getString("portlets_"));
-		for (int j = 0; j < portlets.length(); j++) {
-			JSONObject portlet = portlets.getJSONObject(j);
-			lodingPortlets.put(portlet.getString("instanceId_"), "view");
-		}
-		
-	}
-
-	String templateFile = workbenchLayout.getString("templateId_") + ".ftl";
 	
 	String inputPorts = (String) renderRequest.getAttribute("inputPorts");
 	String logPorts = (String) renderRequest.getAttribute("logPorts");
 	String outputPorts = (String) renderRequest.getAttribute("outputPorts");
 %>
-
-
 <div class="row" id="<portlet:namespace/>canvas">
 	
 </div>
@@ -218,17 +192,14 @@ var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 var toastr;
 <portlet:namespace/>workbench.id('<%=portletDisplay.getId()%>');
 
-var <portlet:namespace/>lodingPortlets = JSON.parse('<%=lodingPortlets.toString()%>');
+var <portlet:namespace/>lodingPortlets = JSON.parse('${lodingPortlets}');
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
 $(function(e) {
 	//page block
 	bStart();
-
-	
-	
-	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
+	<portlet:namespace/>workbench.layouts( new OSP.Layouts(JSON.parse('<%=workbenchLayout.toString()%>')));
 	<portlet:namespace/>workbench.type ('${workbenchType}');
 	<portlet:namespace/>workbench.classId('${classId}');
 	<portlet:namespace/>workbench.customId('${customId}');
@@ -244,7 +215,6 @@ $(function(e) {
 	scienceApp.version('${scienceApp.getVersion()}');
 	scienceApp.runType('${scienceApp.getRunType()}');
 	scienceApp.currentManualId('${scienceApp.getManualIdCurrentValue()}');
-	scienceApp.templateId('${scienceApp.templetId}');
 	scienceApp.isProvenance('${isProvenance}');
 	scienceApp.maxCpus('${scienceApp.getMaxCpus()}');
 	scienceApp.minCpus('${scienceApp.getMinCpus()}');
@@ -268,14 +238,22 @@ $(function(e) {
 		data:{
 			<portlet:namespace/>command:'RESOLVE_TEMPLATE',
 			<portlet:namespace/>namespace: '<portlet:namespace/>',
-			<portlet:namespace/>templateDir: '/templates',
-			<portlet:namespace/>templateFile:'<%=templateFile%>',
-			<portlet:namespace/>columns: '<%=columns.toString()%>'
+			<portlet:namespace/>templateDir: '/templates'
 		},
 		success: function( result ){
 			$('#<portlet:namespace/>canvas').html(result);
+			/*All Layout Grid*/
 			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
-			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
+			
+			var workbenchLayouts = <portlet:namespace/>workbench.layouts();
+			var layoutKeys = workbenchLayouts.arrayKeys();
+			for( var index in layoutKeys ){
+				var key = layoutKeys[index];
+				/*Layout 객체 Setting*/
+				var layout = <portlet:namespace/>workbench.layouts().getLayoutFromKey(key);
+				<portlet:namespace/>workbench.layout(layout);
+				<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
+			}
 		}
 	});
 	

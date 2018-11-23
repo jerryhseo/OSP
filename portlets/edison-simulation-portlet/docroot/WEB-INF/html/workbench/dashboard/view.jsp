@@ -32,7 +32,7 @@
 <ul class="sidebar-menu bottom" data-widget="tree">
 	<li>
 		<div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button"  >
-			<a href="#" class="sidebar-toggle" >
+			<a href="javascript:void(0);" class="sidebar-toggle" >
 				<i class="fa fa-angle-left fa-2x pull-right"></i>
 				<span class="sr-only">Toggle navigation</span>
 			</a>
@@ -624,7 +624,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid){
 								.append(
 										$("<i/>").addClass("icon-arrow-right")
 								).appendTo($topLi);
-					$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
+					$aWrapper = $("<a/>").attr("href","javascript:void(0)").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
 								.attr("onclick","<portlet:namespace/>jobSelect(this);return false;").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);
@@ -1589,7 +1589,7 @@ function <portlet:namespace/>settingPorts( ports, portType ){
 		break;
 	}
 	
-	$topA = $("<a/>").attr("href","#");
+	$topA = $("<a/>").attr("href","javascript:void(0)");
 	/*Add A tag element Objects*/
 	$("<i/>").addClass("fa fa-laptop").appendTo($topA);
 	$("<span/>").html(portType).appendTo($topA);
@@ -1602,7 +1602,7 @@ function <portlet:namespace/>settingPorts( ports, portType ){
 		$li = $("<li/>").attr("onclick","<portlet:namespace/>selectPort(this,'"+port.name()+"','"+portType+"')")
 					    .attr("id","<portlet:namespace/>"+port.name())
 						.appendTo($topA);
-		var $item = $("<a/>").attr("href","#").html(
+		var $item = $("<a/>").attr("href","javascript:void(0)").html(
 					"<i class=\""+css.IClass+"\"></i>"+port.name()+"</a>"
 				).appendTo($li);
 	}
@@ -1770,6 +1770,7 @@ function <portlet:namespace/>init(){
 				$(".menu-panel").hide('slide', {direction:'left'}, 500);
 				$(<portlet:namespace/>jqPortletBoundaryId + " .sidebar > .sidebar-menu li.view").removeClass("view");
 			});
+			
 			$(".menu-panel").show('slide', {direction:'left'}, 500);
 		}
 	});

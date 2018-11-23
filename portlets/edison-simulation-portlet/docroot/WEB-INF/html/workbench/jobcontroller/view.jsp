@@ -100,7 +100,7 @@
 				<i class="fa fa-share-square-o fa-2x"></i><br>
 				<span class="nav-icon-text">Open Data</span>
 			</li>
-			<li class="<portlet:namespace/>header-manual" data-divider="data-li-divider">
+			<li id="<portlet:namespace/>header-li-manual" data-divider="data-li-divider">
 				<i class="fa fa-book fa-2x"></i><br>
 				<span class="nav-icon-text">Manual</span>
 			</li>
@@ -148,7 +148,7 @@ var <portlet:namespace/>LI_EVENT = {
 		"title" : "Do you want to cancel the simulation job?"
 	},
 	"log":{
-		"event" : OSP.OSP_REQUEST_JOB_LOG_VIEW
+		"event" : OSP.Event.OSP_REQUEST_JOB_LOG_VIEW
 	},
 	"download":{
 		"event" : OSP.Event.OSP_REQUEST_JOB_RESULT_VIEW
@@ -241,16 +241,15 @@ function <portlet:namespace/>drawAppInfomation(data){
 	$("#<portlet:namespace/>appName").html(cutStr(data.name(),12)).attr("title",data.name());
 	$("#<portlet:namespace/>appVersion").html("Ver "+data.version());
 	
-	
 	if(data.currentManualId()!=0){
-		$(".<portlet:namespace/>header-manual").css("display","block");
+		$("#<portlet:namespace/>header-li-manual").css("display","block");
 		$("#<portlet:namespace/>data-li-divider").css("display","block");
 		
 		$("#<portlet:namespace/>header-li-manual").bind("click",function(){
 			<portlet:namespace/>manualDownLoad(data.currentManualId());
 		});
 	}else{
-		$(".<portlet:namespace/>header-manual").css("display","none");
+		$("#<portlet:namespace/>header-li-manual").css("display","none");
 	}
 }
 
@@ -346,7 +345,7 @@ function <portlet:namespace/>liEventFire(eventKey){
 		if(eventKey=='simulation'){eventData.isCopy = false;}
 		if(eventKey=='data'){eventData.isTransType = 'TRANS_JOB';}
 		
-		console.log(eventData);
+		console.log(object.event);
 		Liferay.fire(object.event, eventData);
 	}
 	
