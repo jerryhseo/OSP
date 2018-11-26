@@ -37,7 +37,7 @@ import java.util.Date;
 public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(41);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{boardSeq=");
 		sb.append(boardSeq);
@@ -77,8 +77,6 @@ public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 		sb.append(updateId);
 		sb.append(", updateDt=");
 		sb.append(updateDt);
-		sb.append(", contentMDE=");
-		sb.append(contentMDE);
 		sb.append("}");
 
 		return sb.toString();
@@ -168,13 +166,6 @@ public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 			boardImpl.setUpdateDt(new Date(updateDt));
 		}
 
-		if (contentMDE == null) {
-			boardImpl.setContentMDE(StringPool.BLANK);
-		}
-		else {
-			boardImpl.setContentMDE(contentMDE);
-		}
-
 		boardImpl.resetOriginalValues();
 
 		return boardImpl;
@@ -201,7 +192,6 @@ public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 		insertDt = objectInput.readLong();
 		updateId = objectInput.readLong();
 		updateDt = objectInput.readLong();
-		contentMDE = objectInput.readUTF();
 	}
 
 	@Override
@@ -253,13 +243,6 @@ public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 		objectOutput.writeLong(insertDt);
 		objectOutput.writeLong(updateId);
 		objectOutput.writeLong(updateDt);
-
-		if (contentMDE == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(contentMDE);
-		}
 	}
 
 	public long boardSeq;
@@ -281,5 +264,4 @@ public class BoardCacheModel implements CacheModel<Board>, Externalizable {
 	public long insertDt;
 	public long updateId;
 	public long updateDt;
-	public String contentMDE;
 }

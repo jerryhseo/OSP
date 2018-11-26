@@ -89,10 +89,9 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 			{ "insertId", Types.BIGINT },
 			{ "insertDt", Types.TIMESTAMP },
 			{ "updateId", Types.BIGINT },
-			{ "updateDt", Types.TIMESTAMP },
-			{ "contentMDE", Types.VARCHAR }
+			{ "updateDt", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDCON_Board (boardSeq LONG not null primary key,title STRING null,content STRING null,groupId LONG,customId VARCHAR(75) null,writerId LONG,writerDate DATE null,readCnt INTEGER,groupBoardSeq INTEGER,groupBoardTurn INTEGER,replyDepth INTEGER,siteGroup VARCHAR(512) null,popupYn BOOLEAN,popupStartDt DATE null,popupEndDt DATE null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null,contentMDE STRING null)";
+	public static final String TABLE_SQL_CREATE = "create table EDCON_Board (boardSeq LONG not null primary key,title STRING null,content STRING null,groupId LONG,customId VARCHAR(75) null,writerId LONG,writerDate DATE null,readCnt INTEGER,groupBoardSeq INTEGER,groupBoardTurn INTEGER,replyDepth INTEGER,siteGroup VARCHAR(512) null,popupYn BOOLEAN,popupStartDt DATE null,popupEndDt DATE null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table EDCON_Board";
 	public static final String ORDER_BY_JPQL = " ORDER BY board.writerDate ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDCON_Board.writerDate ASC";
@@ -139,7 +138,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		model.setInsertDt(soapModel.getInsertDt());
 		model.setUpdateId(soapModel.getUpdateId());
 		model.setUpdateDt(soapModel.getUpdateDt());
-		model.setContentMDE(soapModel.getContentMDE());
 
 		return model;
 	}
@@ -231,7 +229,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
 		attributes.put("updateDt", getUpdateDt());
-		attributes.put("contentMDE", getContentMDE());
 
 		return attributes;
 	}
@@ -350,12 +347,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 
 		if (updateDt != null) {
 			setUpdateDt(updateDt);
-		}
-
-		String contentMDE = (String)attributes.get("contentMDE");
-
-		if (contentMDE != null) {
-			setContentMDE(contentMDE);
 		}
 	}
 
@@ -760,108 +751,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		_updateDt = updateDt;
 	}
 
-	@JSON
-	@Override
-	public String getContentMDE() {
-		if (_contentMDE == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _contentMDE;
-		}
-	}
-
-	@Override
-	public String getContentMDE(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getContentMDE(languageId);
-	}
-
-	@Override
-	public String getContentMDE(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getContentMDE(languageId, useDefault);
-	}
-
-	@Override
-	public String getContentMDE(String languageId) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId);
-	}
-
-	@Override
-	public String getContentMDE(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId,
-			useDefault);
-	}
-
-	@Override
-	public String getContentMDECurrentLanguageId() {
-		return _contentMDECurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getContentMDECurrentValue() {
-		Locale locale = getLocale(_contentMDECurrentLanguageId);
-
-		return getContentMDE(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getContentMDEMap() {
-		return LocalizationUtil.getLocalizationMap(getContentMDE());
-	}
-
-	@Override
-	public void setContentMDE(String contentMDE) {
-		_contentMDE = contentMDE;
-	}
-
-	@Override
-	public void setContentMDE(String contentMDE, Locale locale) {
-		setContentMDE(contentMDE, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setContentMDE(String contentMDE, Locale locale,
-		Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(contentMDE)) {
-			setContentMDE(LocalizationUtil.updateLocalization(getContentMDE(),
-					"ContentMDE", contentMDE, languageId, defaultLanguageId));
-		}
-		else {
-			setContentMDE(LocalizationUtil.removeLocalization(getContentMDE(),
-					"ContentMDE", languageId));
-		}
-	}
-
-	@Override
-	public void setContentMDECurrentLanguageId(String languageId) {
-		_contentMDECurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap) {
-		setContentMDEMap(contentMDEMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
-		Locale defaultLocale) {
-		if (contentMDEMap == null) {
-			return;
-		}
-
-		setContentMDE(LocalizationUtil.updateLocalization(contentMDEMap,
-				getContentMDE(), "ContentMDE",
-				LocaleUtil.toLanguageId(defaultLocale)));
-	}
-
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
@@ -893,17 +782,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		Map<Locale, String> contentMap = getContentMap();
 
 		for (Map.Entry<Locale, String> entry : contentMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		Map<Locale, String> contentMDEMap = getContentMDEMap();
-
-		for (Map.Entry<Locale, String> entry : contentMDEMap.entrySet()) {
 			Locale locale = entry.getKey();
 			String value = entry.getValue();
 
@@ -958,16 +836,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		else {
 			setContent(getContent(defaultLocale), defaultLocale, defaultLocale);
 		}
-
-		String contentMDE = getContentMDE(defaultLocale);
-
-		if (Validator.isNull(contentMDE)) {
-			setContentMDE(getContentMDE(modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setContentMDE(getContentMDE(defaultLocale), defaultLocale,
-				defaultLocale);
-		}
 	}
 
 	@Override
@@ -1003,7 +871,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		boardImpl.setInsertDt(getInsertDt());
 		boardImpl.setUpdateId(getUpdateId());
 		boardImpl.setUpdateDt(getUpdateDt());
-		boardImpl.setContentMDE(getContentMDE());
 
 		boardImpl.resetOriginalValues();
 
@@ -1155,20 +1022,12 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 			boardCacheModel.updateDt = Long.MIN_VALUE;
 		}
 
-		boardCacheModel.contentMDE = getContentMDE();
-
-		String contentMDE = boardCacheModel.contentMDE;
-
-		if ((contentMDE != null) && (contentMDE.length() == 0)) {
-			boardCacheModel.contentMDE = null;
-		}
-
 		return boardCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(41);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{boardSeq=");
 		sb.append(getBoardSeq());
@@ -1208,8 +1067,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 		sb.append(getUpdateId());
 		sb.append(", updateDt=");
 		sb.append(getUpdateDt());
-		sb.append(", contentMDE=");
-		sb.append(getContentMDE());
 		sb.append("}");
 
 		return sb.toString();
@@ -1217,7 +1074,7 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(64);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.multiboard.model.Board");
@@ -1299,10 +1156,6 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 			"<column><column-name>updateDt</column-name><column-value><![CDATA[");
 		sb.append(getUpdateDt());
 		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>contentMDE</column-name><column-value><![CDATA[");
-		sb.append(getContentMDE());
-		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1332,7 +1185,5 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 	private Date _insertDt;
 	private long _updateId;
 	private Date _updateDt;
-	private String _contentMDE;
-	private String _contentMDECurrentLanguageId;
 	private Board _escapedModel;
 }

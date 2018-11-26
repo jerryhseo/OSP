@@ -23,7 +23,6 @@
 		<field name="insertDt" type="Date" />
 		<field name="updateId" type="long" />
 		<field name="updateDt" type="Date" />
-		<field name="contentMDE" type="String" localized="true" />
 	</model>
 	<model name="org.kisti.edison.multiboard.model.BoardDiv">
 		<field name="divCd" type="long" />

@@ -38,10 +38,7 @@
 			<basic name="updateDt">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
-			<basic name="contentMDE" />
 			<transient name="contentCurrentLanguageId" />
-			<transient name="contentMDECurrentLanguageId" />
-			<transient name="contentMDEMap" />
 			<transient name="contentMap" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
