@@ -1,9 +1,9 @@
 // Code goes here
 
 $(function() {
-  var $previewContainer = $('#comment-md-preview-container');
-  $previewContainer.show();
-  var $md = $("#comment-md").markdown({
+  var $previewContainerKr = $('.comment-md-preview-container_ko_KR');
+  /*$previewContainerKr.show();*/
+  var $md = $(".comment-md_ko_KR").markdown({
     autofocus: false,
     height: 270,
     iconlibrary: 'fa',
@@ -13,8 +13,11 @@ $(function() {
     },
     onChange: function(e) {
       var content = e.parseContent();
-      if (content === '') $previewContainer.show();
-      else $previewContainer.show().find('#comment-md-preview').html(content).find('table').addClass('table table-bordered table-striped table-hover');
+      if (content === '') {
+    	  /*$previewContainerKr.show();*/
+      } else {
+    	  $previewContainerKr.show().find('.comment-md-preview_ko_KR').html(content).find('table').addClass('table table-bordered table-striped table-hover');
+      }
     },
     footer: function(e) {
       return '\
@@ -22,14 +25,35 @@ $(function() {
 						<span data-md-footer-message="err">\
 						</span>\
 						<span data-md-footer-message="default">\
-							Add images by dragging & dropping or \
-							<a class="btn-input">\
-								selecting them\
-								<input type="file" multiple="" id="comment-images" />\
-							</a>\
 						</span>\
-						<span data-md-footer-message="loading">\
-							Uploading your images...\
+					</span>';
+    }
+  });
+  
+  var $previewContainerEn = $('.comment-md-preview-container_en_US');
+  /*$previewContainerEn.show();*/
+  var $md = $(".comment-md_en_US").markdown({
+    autofocus: false,
+    height: 270,
+    iconlibrary: 'fa',
+    onShow: function(e) {
+      //e.hideButtons('cmdPreview');
+      e.change(e);
+    },
+    onChange: function(e) {
+      var content = e.parseContent();
+      if (content === '') {
+    	  /*$previewContainerEn.show();*/
+      } else {
+    	  $previewContainerEn.show().find('.comment-md-preview_en_US').html(content).find('table').addClass('table table-bordered table-striped table-hover');
+      }
+    },
+    footer: function(e) {
+      return '\
+					<span class="text-muted">\
+						<span data-md-footer-message="err">\
+						</span>\
+						<span data-md-footer-message="default">\
 						</span>\
 					</span>';
     }

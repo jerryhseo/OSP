@@ -85,7 +85,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONObjectWrapper;
 import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -826,9 +825,15 @@ public class AppManagerController{
 			String[] targetLanguages = CustomUtil.strNull(data.get("targetLanguage")).split(",");
 			boolean DescroptionCheck = true;
 			Map<String, Object> descriptionMap = (Map<String, Object>) data.get("description");
+			Map<String, Object> descriptionMdeMap = (Map<String, Object>) data.get("descriptionMDE");
 			
 			for1:for(String targetLanguage:targetLanguages){
 				if(GetterUtil.getString(descriptionMap.get("description_"+targetLanguage)).equals("")){
+					DescroptionCheck = false;
+					break for1;
+				}
+				
+				if(GetterUtil.getString(descriptionMdeMap.get("descriptionMDE_"+targetLanguage)).equals("")){
 					DescroptionCheck = false;
 					break for1;
 				}

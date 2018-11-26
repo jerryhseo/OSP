@@ -377,6 +377,7 @@
 		<attributes>
 			<id name="descriptionId" />
 			<basic name="content" />
+			<basic name="contentMDE" />
 			<basic name="insertId" />
 			<basic name="insertDt">
 				<temporal>TIMESTAMP</temporal>
@@ -386,6 +387,8 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<transient name="contentCurrentLanguageId" />
+			<transient name="contentMDECurrentLanguageId" />
+			<transient name="contentMDEMap" />
 			<transient name="contentMap" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />

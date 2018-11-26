@@ -68,6 +68,7 @@ public class BoardWrapper implements Board, ModelWrapper<Board> {
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
 		attributes.put("updateDt", getUpdateDt());
+		attributes.put("contentMDE", getContentMDE());
 
 		return attributes;
 	}
@@ -186,6 +187,12 @@ public class BoardWrapper implements Board, ModelWrapper<Board> {
 
 		if (updateDt != null) {
 			setUpdateDt(updateDt);
+		}
+
+		String contentMDE = (String)attributes.get("contentMDE");
+
+		if (contentMDE != null) {
+			setContentMDE(contentMDE);
 		}
 	}
 
@@ -838,6 +845,148 @@ public class BoardWrapper implements Board, ModelWrapper<Board> {
 	@Override
 	public void setUpdateDt(java.util.Date updateDt) {
 		_board.setUpdateDt(updateDt);
+	}
+
+	/**
+	* Returns the content m d e of this board.
+	*
+	* @return the content m d e of this board
+	*/
+	@Override
+	public java.lang.String getContentMDE() {
+		return _board.getContentMDE();
+	}
+
+	/**
+	* Returns the localized content m d e of this board in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param locale the locale of the language
+	* @return the localized content m d e of this board
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.util.Locale locale) {
+		return _board.getContentMDE(locale);
+	}
+
+	/**
+	* Returns the localized content m d e of this board in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param locale the local of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized content m d e of this board. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.util.Locale locale,
+		boolean useDefault) {
+		return _board.getContentMDE(locale, useDefault);
+	}
+
+	/**
+	* Returns the localized content m d e of this board in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @return the localized content m d e of this board
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.lang.String languageId) {
+		return _board.getContentMDE(languageId);
+	}
+
+	/**
+	* Returns the localized content m d e of this board in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized content m d e of this board
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.lang.String languageId,
+		boolean useDefault) {
+		return _board.getContentMDE(languageId, useDefault);
+	}
+
+	@Override
+	public java.lang.String getContentMDECurrentLanguageId() {
+		return _board.getContentMDECurrentLanguageId();
+	}
+
+	@Override
+	public java.lang.String getContentMDECurrentValue() {
+		return _board.getContentMDECurrentValue();
+	}
+
+	/**
+	* Returns a map of the locales and localized content m d es of this board.
+	*
+	* @return the locales and localized content m d es of this board
+	*/
+	@Override
+	public java.util.Map<java.util.Locale, java.lang.String> getContentMDEMap() {
+		return _board.getContentMDEMap();
+	}
+
+	/**
+	* Sets the content m d e of this board.
+	*
+	* @param contentMDE the content m d e of this board
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE) {
+		_board.setContentMDE(contentMDE);
+	}
+
+	/**
+	* Sets the localized content m d e of this board in the language.
+	*
+	* @param contentMDE the localized content m d e of this board
+	* @param locale the locale of the language
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE,
+		java.util.Locale locale) {
+		_board.setContentMDE(contentMDE, locale);
+	}
+
+	/**
+	* Sets the localized content m d e of this board in the language, and sets the default locale.
+	*
+	* @param contentMDE the localized content m d e of this board
+	* @param locale the locale of the language
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE,
+		java.util.Locale locale, java.util.Locale defaultLocale) {
+		_board.setContentMDE(contentMDE, locale, defaultLocale);
+	}
+
+	@Override
+	public void setContentMDECurrentLanguageId(java.lang.String languageId) {
+		_board.setContentMDECurrentLanguageId(languageId);
+	}
+
+	/**
+	* Sets the localized content m d es of this board from the map of locales and localized content m d es.
+	*
+	* @param contentMDEMap the locales and localized content m d es of this board
+	*/
+	@Override
+	public void setContentMDEMap(
+		java.util.Map<java.util.Locale, java.lang.String> contentMDEMap) {
+		_board.setContentMDEMap(contentMDEMap);
+	}
+
+	/**
+	* Sets the localized content m d es of this board from the map of locales and localized content m d es, and sets the default locale.
+	*
+	* @param contentMDEMap the locales and localized content m d es of this board
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setContentMDEMap(
+		java.util.Map<java.util.Locale, java.lang.String> contentMDEMap,
+		java.util.Locale defaultLocale) {
+		_board.setContentMDEMap(contentMDEMap, defaultLocale);
 	}
 
 	@Override

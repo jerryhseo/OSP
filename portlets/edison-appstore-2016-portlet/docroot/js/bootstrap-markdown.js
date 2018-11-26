@@ -326,6 +326,14 @@
         }
 
         editor.append(editorHeader);
+        
+        /* 2018.11.22 GPLUS _ Markdown Help */
+        var markdownHelp = $("<div/>").addClass("md-how-to-use custom-md-help")
+        								.css("border-top", "1px dashed #ddd")
+        								.css("display", "none");
+        
+        $("<div/>").text("이곳에 마크다운 사용 방법을 입력합니다.").appendTo(markdownHelp);
+        editor.append(markdownHelp);
 
         // Wrap the textarea
         if (container.is('textarea')) {
@@ -1051,10 +1059,10 @@
         data: [{
           name: 'cmdBold',
           hotkey: 'Ctrl+B',
-          title: 'Bold',
+          title: 'Bold(Ctrl+B)',
           icon: {
             glyph: 'glyphicon glyphicon-bold',
-            fa: 'fa fa-bold',
+            fa: 'icon-bold',
             'fa-3': 'icon-bold',
             'fa-5': 'fas fa-bold',
             octicons: 'octicon octicon-bold'
@@ -1087,11 +1095,11 @@
           }
         }, {
           name: 'cmdItalic',
-          title: 'Italic',
+          title: 'Italic(Ctrl+I)',
           hotkey: 'Ctrl+I',
           icon: {
             glyph: 'glyphicon glyphicon-italic',
-            fa: 'fa fa-italic',
+            fa: 'icon-italic',
             'fa-3': 'icon-italic',
             'fa-5': 'fas fa-italic',
             octicons: 'octicon octicon-italic'
@@ -1124,11 +1132,11 @@
           }
         }, {
           name: 'cmdHeading',
-          title: 'Heading',
+          title: 'Heading(Ctrl+H)',
           hotkey: 'Ctrl+H',
           icon: {
             glyph: 'glyphicon glyphicon-header',
-            fa: 'fa fa-header',
+            fa: 'icon-font',
             'fa-3': 'icon-font',
             'fa-5': 'fas fa-heading',
             octicons: 'octicon octicon-text-size'
@@ -1169,11 +1177,11 @@
         name: 'groupLink',
         data: [{
           name: 'cmdUrl',
-          title: 'URL/Link',
+          title: 'URL/Link(Ctrl+L)',
           hotkey: 'Ctrl+L',
           icon: {
             glyph: 'glyphicon glyphicon-link',
-            fa: 'fa fa-link',
+            fa: 'icon-link',
             'fa-3': 'icon-link',
             'fa-5': 'fas fa-link',
             octicons: 'octicon octicon-link'
@@ -1207,18 +1215,18 @@
           }
         }, {
           name: 'cmdImage',
-          title: 'Image',
+          title: 'Image(Ctrl+G)',
           hotkey: 'Ctrl+G',
           icon: {
             glyph: 'glyphicon glyphicon-picture',
-            fa: 'fa fa-picture-o',
+            fa: 'icon-picture',
             'fa-3': 'icon-picture',
             'fa-5': 'far fa-image',
             octicons: 'octicon octicon-file-media'
           },
           callback: function(e) {
             // Give ![] surround the selection and prepend the image link
-            var chunk, cursor, selected = e.getSelection(),
+            /*var chunk, cursor, selected = e.getSelection(),
               content = e.getContent(),
               link;
 
@@ -1230,10 +1238,11 @@
             }
 
             link = prompt(e.__localize('Insert Image Hyperlink'), 'http://');
+            fileLink = _scienceappmanager_WAR_edisonappstore2016portlet_openScienceAppFilebrowser();
 
             var urlRegex = new RegExp('^((http|https)://|(//))[a-z0-9]', 'i');
-            if (link !== null && link !== '' && link !== 'http://' && urlRegex.test(link)) {
-              var sanitizedLink = $('<div>' + link + '</div>').text();
+            if (fileLink !== null && fileLink !== '' && fileLink !== 'http://' && urlRegex.test(fileLink)) {
+              var sanitizedLink = $('<div>' + fileLink + '</div>').text();
 
               // transform selection and set the cursor into chunked text
               e.replaceSelection('![' + chunk + '](' + sanitizedLink + ' "' + e.__localize('enter image title here') + '")');
@@ -1244,7 +1253,11 @@
 
               // Set the cursor
               e.setSelection(cursor, cursor + chunk.length);
-            }
+            }*/
+            
+        	/* 2018.11.22 GPLUS _ Get Image File Path */
+            _scienceappmanager_WAR_edisonappstore2016portlet_openScienceAppFilebrowser();
+        	
           }
         }]
       }, {
@@ -1252,10 +1265,10 @@
         data: [{
           name: 'cmdList',
           hotkey: 'Ctrl+U',
-          title: 'Unordered List',
+          title: 'Unordered List(Ctrl+U)',
           icon: {
             glyph: 'glyphicon glyphicon-list',
-            fa: 'fa fa-list',
+            fa: 'icon-list-ul',
             'fa-3': 'icon-list-ul',
             'fa-5': 'fas fa-list-ul',
             octicons: 'octicon octicon-list-unordered'
@@ -1304,10 +1317,10 @@
         }, {
           name: 'cmdListO',
           hotkey: 'Ctrl+O',
-          title: 'Ordered List',
+          title: 'Ordered List(Ctrl+O)',
           icon: {
             glyph: 'glyphicon glyphicon-th-list',
-            fa: 'fa fa-list-ol',
+            fa: 'icon-list-ol',
             'fa-3': 'icon-list-ol',
             'fa-5': 'fas fa-list-ol',
             octicons: 'octicon octicon-list-ordered'
@@ -1358,10 +1371,10 @@
         }, {
           name: 'cmdCode',
           hotkey: 'Ctrl+K',
-          title: 'Code',
+          title: 'Code(Ctrl+K)',
           icon: {
             glyph: 'glyphicon glyphicon-console',
-            fa: 'fa fa-code',
+            fa: 'icon-code',
             'fa-3': 'icon-code',
             'fa-5': 'fas fa-code',
             octicons: 'octicon octicon-code'
@@ -1403,10 +1416,10 @@
         }, {
           name: 'cmdQuote',
           hotkey: 'Ctrl+Q',
-          title: 'Quote',
+          title: 'Quote(Ctrl+Q)',
           icon: {
             glyph: 'glyphicon glyphicon-comment',
-            fa: 'fa fa-quote-left',
+            fa: 'icon-quote-left',
             'fa-3': 'icon-quote-left',
             'fa-5': 'fas fa-quote-left',
             octicons: 'octicon octicon-quote'
@@ -1465,7 +1478,7 @@
           btnClass: 'btn btn-primary btn-sm',
           icon: {
             glyph: 'glyphicon glyphicon-search',
-            fa: 'fa fa-search',
+            fa: 'icon-search',
             'fa-3': 'icon-search',
             'fa-5': 'fas fa-search',
             octicons: 'octicon octicon-search'
@@ -1483,7 +1496,29 @@
             }
           }
         }]
-      }]
+      }, {
+          name: 'helpMDE',
+          data: [{
+            name: 'cmdHelp',
+            toggle: true,
+            title: 'Help',
+            btnText: 'Help',
+            btnClass: 'btn btn-primary btn-sm',
+            icon: {
+              glyph: 'glyphicon glyphicon-search',
+              fa: 'icon-question',
+              'fa-3': 'icon-question',
+              'fa-5': 'fas fa-question',
+              octicons: 'octicon octicon-search'
+            },
+            callback: function(e) {
+            	
+            	console.log("title : " + $(this).attr("title"));
+            	
+            	$(".md-how-to-use.custom-md-help").show();
+            }
+          }]
+        }]
     ],
     customIcons: {},
     additionalButtons: [], // Place to hook more buttons by code
@@ -1497,8 +1532,8 @@
         fullscreenOn: {
           name: "fullscreenOn",
           icon: {
-            fa: 'fa fa-expand',
             glyph: 'glyphicon glyphicon-fullscreen',
+            fa: 'icon-resize-full',
             'fa-3': 'icon-resize-full',
             'fa-5': 'fas fa-expand-arrows-alt',
             octicons: 'octicon octicon-link-external'

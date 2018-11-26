@@ -38,12 +38,14 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{descriptionId=");
 		sb.append(descriptionId);
 		sb.append(", content=");
 		sb.append(content);
+		sb.append(", contentMDE=");
+		sb.append(contentMDE);
 		sb.append(", insertId=");
 		sb.append(insertId);
 		sb.append(", insertDt=");
@@ -68,6 +70,13 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 		}
 		else {
 			scienceAppDescriptionImpl.setContent(content);
+		}
+
+		if (contentMDE == null) {
+			scienceAppDescriptionImpl.setContentMDE(StringPool.BLANK);
+		}
+		else {
+			scienceAppDescriptionImpl.setContentMDE(contentMDE);
 		}
 
 		scienceAppDescriptionImpl.setInsertId(insertId);
@@ -97,6 +106,7 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		descriptionId = objectInput.readLong();
 		content = objectInput.readUTF();
+		contentMDE = objectInput.readUTF();
 		insertId = objectInput.readLong();
 		insertDt = objectInput.readLong();
 		updateId = objectInput.readLong();
@@ -115,6 +125,13 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 			objectOutput.writeUTF(content);
 		}
 
+		if (contentMDE == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(contentMDE);
+		}
+
 		objectOutput.writeLong(insertId);
 		objectOutput.writeLong(insertDt);
 		objectOutput.writeLong(updateId);
@@ -123,6 +140,7 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 
 	public long descriptionId;
 	public String content;
+	public String contentMDE;
 	public long insertId;
 	public long insertDt;
 	public long updateId;

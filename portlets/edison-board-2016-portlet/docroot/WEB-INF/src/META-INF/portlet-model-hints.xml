@@ -13,7 +13,7 @@
 		<field name="groupBoardSeq" type="int" />
 		<field name="groupBoardTurn" type="int" />
 		<field name="replyDepth" type="int" />
-		<field name="siteGroup" type="String" >
+		<field name="siteGroup" type="String">
 			<hint name="max-length">512</hint>
 		</field>
 		<field name="popupYn" type="boolean" />
@@ -23,6 +23,7 @@
 		<field name="insertDt" type="Date" />
 		<field name="updateId" type="long" />
 		<field name="updateDt" type="Date" />
+		<field name="contentMDE" type="String" localized="true" />
 	</model>
 	<model name="org.kisti.edison.multiboard.model.BoardDiv">
 		<field name="divCd" type="long" />

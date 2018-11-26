@@ -102,6 +102,7 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
 		attributes.put("updateDt", getUpdateDt());
+		attributes.put("contentMDE", getContentMDE());
 
 		return attributes;
 	}
@@ -220,6 +221,12 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 
 		if (updateDt != null) {
 			setUpdateDt(updateDt);
+		}
+
+		String contentMDE = (String)attributes.get("contentMDE");
+
+		if (contentMDE != null) {
+			setContentMDE(contentMDE);
 		}
 	}
 
@@ -865,6 +872,131 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 		}
 	}
 
+	@Override
+	public String getContentMDE() {
+		return _contentMDE;
+	}
+
+	@Override
+	public String getContentMDE(Locale locale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getContentMDE(languageId);
+	}
+
+	@Override
+	public String getContentMDE(Locale locale, boolean useDefault) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getContentMDE(languageId, useDefault);
+	}
+
+	@Override
+	public String getContentMDE(String languageId) {
+		return LocalizationUtil.getLocalization(getContentMDE(), languageId);
+	}
+
+	@Override
+	public String getContentMDE(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getContentMDE(), languageId,
+			useDefault);
+	}
+
+	@Override
+	public String getContentMDECurrentLanguageId() {
+		return _contentMDECurrentLanguageId;
+	}
+
+	@Override
+	public String getContentMDECurrentValue() {
+		Locale locale = getLocale(_contentMDECurrentLanguageId);
+
+		return getContentMDE(locale);
+	}
+
+	@Override
+	public Map<Locale, String> getContentMDEMap() {
+		return LocalizationUtil.getLocalizationMap(getContentMDE());
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE) {
+		_contentMDE = contentMDE;
+
+		if (_boardRemoteModel != null) {
+			try {
+				Class<?> clazz = _boardRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setContentMDE", String.class);
+
+				method.invoke(_boardRemoteModel, contentMDE);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE, Locale locale) {
+		setContentMDE(contentMDE, locale, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE, Locale locale,
+		Locale defaultLocale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
+
+		if (Validator.isNotNull(contentMDE)) {
+			setContentMDE(LocalizationUtil.updateLocalization(getContentMDE(),
+					"ContentMDE", contentMDE, languageId, defaultLanguageId));
+		}
+		else {
+			setContentMDE(LocalizationUtil.removeLocalization(getContentMDE(),
+					"ContentMDE", languageId));
+		}
+	}
+
+	@Override
+	public void setContentMDECurrentLanguageId(String languageId) {
+		_contentMDECurrentLanguageId = languageId;
+	}
+
+	@Override
+	public void setContentMDEMap(Map<Locale, String> contentMDEMap) {
+		setContentMDEMap(contentMDEMap, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
+		Locale defaultLocale) {
+		if (contentMDEMap == null) {
+			return;
+		}
+
+		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != portalClassLoader) {
+				currentThread.setContextClassLoader(portalClassLoader);
+			}
+
+			setContentMDE(LocalizationUtil.updateLocalization(contentMDEMap,
+					getContentMDE(), "ContentMDE",
+					LocaleUtil.toLanguageId(defaultLocale)));
+		}
+		finally {
+			if (contextClassLoader != portalClassLoader) {
+				currentThread.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
 	public BaseModel<?> getBoardRemoteModel() {
 		return _boardRemoteModel;
 	}
@@ -950,6 +1082,17 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 			}
 		}
 
+		Map<Locale, String> contentMDEMap = getContentMDEMap();
+
+		for (Map.Entry<Locale, String> entry : contentMDEMap.entrySet()) {
+			Locale locale = entry.getKey();
+			String value = entry.getValue();
+
+			if (Validator.isNotNull(value)) {
+				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
+			}
+		}
+
 		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
 	}
 
@@ -996,6 +1139,16 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 		else {
 			setContent(getContent(defaultLocale), defaultLocale, defaultLocale);
 		}
+
+		String contentMDE = getContentMDE(defaultLocale);
+
+		if (Validator.isNull(contentMDE)) {
+			setContentMDE(getContentMDE(modelDefaultLanguageId), defaultLocale);
+		}
+		else {
+			setContentMDE(getContentMDE(defaultLocale), defaultLocale,
+				defaultLocale);
+		}
 	}
 
 	@Override
@@ -1027,6 +1180,7 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 		clone.setInsertDt(getInsertDt());
 		clone.setUpdateId(getUpdateId());
 		clone.setUpdateDt(getUpdateDt());
+		clone.setContentMDE(getContentMDE());
 
 		return clone;
 	}
@@ -1077,7 +1231,7 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(39);
+		StringBundler sb = new StringBundler(41);
 
 		sb.append("{boardSeq=");
 		sb.append(getBoardSeq());
@@ -1117,6 +1271,8 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 		sb.append(getUpdateId());
 		sb.append(", updateDt=");
 		sb.append(getUpdateDt());
+		sb.append(", contentMDE=");
+		sb.append(getContentMDE());
 		sb.append("}");
 
 		return sb.toString();
@@ -1124,7 +1280,7 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(61);
+		StringBundler sb = new StringBundler(64);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.multiboard.model.Board");
@@ -1206,6 +1362,10 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 			"<column><column-name>updateDt</column-name><column-value><![CDATA[");
 		sb.append(getUpdateDt());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>contentMDE</column-name><column-value><![CDATA[");
+		sb.append(getContentMDE());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1233,6 +1393,8 @@ public class BoardClp extends BaseModelImpl<Board> implements Board {
 	private Date _insertDt;
 	private long _updateId;
 	private Date _updateDt;
+	private String _contentMDE;
+	private String _contentMDECurrentLanguageId;
 	private BaseModel<?> _boardRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.multiboard.service.ClpSerializer.class;
 }
