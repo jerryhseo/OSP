@@ -53,6 +53,7 @@ public class ScienceAppDescriptionWrapper implements ScienceAppDescription,
 
 		attributes.put("descriptionId", getDescriptionId());
 		attributes.put("content", getContent());
+		attributes.put("contentMDE", getContentMDE());
 		attributes.put("insertId", getInsertId());
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
@@ -73,6 +74,12 @@ public class ScienceAppDescriptionWrapper implements ScienceAppDescription,
 
 		if (content != null) {
 			setContent(content);
+		}
+
+		String contentMDE = (String)attributes.get("contentMDE");
+
+		if (contentMDE != null) {
+			setContentMDE(contentMDE);
 		}
 
 		Long insertId = (Long)attributes.get("insertId");
@@ -279,6 +286,148 @@ public class ScienceAppDescriptionWrapper implements ScienceAppDescription,
 		java.util.Map<java.util.Locale, java.lang.String> contentMap,
 		java.util.Locale defaultLocale) {
 		_scienceAppDescription.setContentMap(contentMap, defaultLocale);
+	}
+
+	/**
+	* Returns the content m d e of this science app description.
+	*
+	* @return the content m d e of this science app description
+	*/
+	@Override
+	public java.lang.String getContentMDE() {
+		return _scienceAppDescription.getContentMDE();
+	}
+
+	/**
+	* Returns the localized content m d e of this science app description in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param locale the locale of the language
+	* @return the localized content m d e of this science app description
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.util.Locale locale) {
+		return _scienceAppDescription.getContentMDE(locale);
+	}
+
+	/**
+	* Returns the localized content m d e of this science app description in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param locale the local of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized content m d e of this science app description. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.util.Locale locale,
+		boolean useDefault) {
+		return _scienceAppDescription.getContentMDE(locale, useDefault);
+	}
+
+	/**
+	* Returns the localized content m d e of this science app description in the language. Uses the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @return the localized content m d e of this science app description
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.lang.String languageId) {
+		return _scienceAppDescription.getContentMDE(languageId);
+	}
+
+	/**
+	* Returns the localized content m d e of this science app description in the language, optionally using the default language if no localization exists for the requested language.
+	*
+	* @param languageId the ID of the language
+	* @param useDefault whether to use the default language if no localization exists for the requested language
+	* @return the localized content m d e of this science app description
+	*/
+	@Override
+	public java.lang.String getContentMDE(java.lang.String languageId,
+		boolean useDefault) {
+		return _scienceAppDescription.getContentMDE(languageId, useDefault);
+	}
+
+	@Override
+	public java.lang.String getContentMDECurrentLanguageId() {
+		return _scienceAppDescription.getContentMDECurrentLanguageId();
+	}
+
+	@Override
+	public java.lang.String getContentMDECurrentValue() {
+		return _scienceAppDescription.getContentMDECurrentValue();
+	}
+
+	/**
+	* Returns a map of the locales and localized content m d es of this science app description.
+	*
+	* @return the locales and localized content m d es of this science app description
+	*/
+	@Override
+	public java.util.Map<java.util.Locale, java.lang.String> getContentMDEMap() {
+		return _scienceAppDescription.getContentMDEMap();
+	}
+
+	/**
+	* Sets the content m d e of this science app description.
+	*
+	* @param contentMDE the content m d e of this science app description
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE) {
+		_scienceAppDescription.setContentMDE(contentMDE);
+	}
+
+	/**
+	* Sets the localized content m d e of this science app description in the language.
+	*
+	* @param contentMDE the localized content m d e of this science app description
+	* @param locale the locale of the language
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE,
+		java.util.Locale locale) {
+		_scienceAppDescription.setContentMDE(contentMDE, locale);
+	}
+
+	/**
+	* Sets the localized content m d e of this science app description in the language, and sets the default locale.
+	*
+	* @param contentMDE the localized content m d e of this science app description
+	* @param locale the locale of the language
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setContentMDE(java.lang.String contentMDE,
+		java.util.Locale locale, java.util.Locale defaultLocale) {
+		_scienceAppDescription.setContentMDE(contentMDE, locale, defaultLocale);
+	}
+
+	@Override
+	public void setContentMDECurrentLanguageId(java.lang.String languageId) {
+		_scienceAppDescription.setContentMDECurrentLanguageId(languageId);
+	}
+
+	/**
+	* Sets the localized content m d es of this science app description from the map of locales and localized content m d es.
+	*
+	* @param contentMDEMap the locales and localized content m d es of this science app description
+	*/
+	@Override
+	public void setContentMDEMap(
+		java.util.Map<java.util.Locale, java.lang.String> contentMDEMap) {
+		_scienceAppDescription.setContentMDEMap(contentMDEMap);
+	}
+
+	/**
+	* Sets the localized content m d es of this science app description from the map of locales and localized content m d es, and sets the default locale.
+	*
+	* @param contentMDEMap the locales and localized content m d es of this science app description
+	* @param defaultLocale the default locale
+	*/
+	@Override
+	public void setContentMDEMap(
+		java.util.Map<java.util.Locale, java.lang.String> contentMDEMap,
+		java.util.Locale defaultLocale) {
+		_scienceAppDescription.setContentMDEMap(contentMDEMap, defaultLocale);
 	}
 
 	/**

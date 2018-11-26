@@ -1086,8 +1086,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 				for(Locale aLocale : locales){
 					String languageId = LocaleUtil.toLanguageId(aLocale);
 					String description = CustomUtil.strNull(params.get("description_" + languageId));
+					String contentMDE = CustomUtil.strNull(params.get("descriptionMDE_" + languageId));
 					if(!description.equals("")){
 						scienceAppDescription.setContent(description, aLocale);
+					}
+					
+					if(!contentMDE.equals("")){
+						scienceAppDescription.setContentMDE(contentMDE, aLocale);
 					}
 				}
 				scienceAppDescription.setUpdateDt(new Date());
@@ -1769,11 +1774,14 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 			Locale[] availableLocales = LanguageUtil.getAvailableLocales();
 			String selectLocaleId = LocaleUtil.toLanguageId(locale);
 			Map<String, Object> descriptionMap = new HashMap<String, Object>();
+			Map<String, Object> descriptionMDE_Map = new HashMap<String, Object>();
 			for(Locale alocale : availableLocales){
 				String languageId = LocaleUtil.toLanguageId(alocale);
 				descriptionMap.put("description_" + languageId, description.getContent(alocale));
+				descriptionMDE_Map.put("descriptionMDE_" + languageId, description.getContentMDE(alocale));
 			}
 			returnMap.put("description", descriptionMap);
+			returnMap.put("descriptionMDE", descriptionMDE_Map);
 			returnMap.put("selectLocaleId", selectLocaleId);
 
 			// ScienceApp 관리자

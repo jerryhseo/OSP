@@ -50,6 +50,7 @@ public class BoardSoap implements Serializable {
 		soapModel.setInsertDt(model.getInsertDt());
 		soapModel.setUpdateId(model.getUpdateId());
 		soapModel.setUpdateDt(model.getUpdateDt());
+		soapModel.setContentMDE(model.getContentMDE());
 
 		return soapModel;
 	}
@@ -258,6 +259,14 @@ public class BoardSoap implements Serializable {
 		_updateDt = updateDt;
 	}
 
+	public String getContentMDE() {
+		return _contentMDE;
+	}
+
+	public void setContentMDE(String contentMDE) {
+		_contentMDE = contentMDE;
+	}
+
 	private long _boardSeq;
 	private String _title;
 	private String _content;
@@ -277,4 +286,5 @@ public class BoardSoap implements Serializable {
 	private Date _insertDt;
 	private long _updateId;
 	private Date _updateDt;
+	private String _contentMDE;
 }

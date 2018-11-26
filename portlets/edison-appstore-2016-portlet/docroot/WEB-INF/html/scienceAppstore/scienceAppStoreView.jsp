@@ -529,8 +529,12 @@
 		}
 	}
 	
+	
 	@media all and (max-width: 1000px){
 		#<portlet:namespace/>scienceAppImage{
+			display: none;
+		}
+		#<portlet:namespace/>scienceAppTitle{
 			display: none;
 		}
 	}
@@ -623,6 +627,17 @@
 		background: linear-gradient(#272a2c,#232323);
 	}
 	
+	#<portlet:namespace/>contentArea,
+	#<portlet:namespace/>summaryInfoArea{
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.<portlet:namespace/>rating-box{
+		padding-left: 45px !important;
+		padding-right: 45px !important;
+	}
+	
 	</style>
 	
 	<!-- 2018. 11. 06 CSS 변경 -->
@@ -673,7 +688,7 @@
 			<section id="<portlet:namespace/>scienceAppContent" class="content <portlet:namespace/>science-app-content" style="max-width: 1200px;">
 				<div class="row">
 					<!-- ScienceApp Info -->
-					<div class="col-md-3">
+					<div id="<portlet:namespace/>summaryInfoArea" class="col-md-3">
 						<div class="box box-solid">
 							<div class="box-body box-profile">
 								<!-- <img  src="./img/sumnail.png" alt="2D Comp P"> -->
@@ -716,8 +731,8 @@
 											<b><liferay-ui:message key='edison-appstore-bookmark' /></b> 
 											<div class="pull-right">
 												<!-- 즐겨찾기 -->
-												<button id="<portlet:namespace/>appFavoriteBtn_on" class="btn btn-danger btn-xs" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>deleteFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
-													<i class="icon-star" style="color: yellow;"></i>
+												<button id="<portlet:namespace/>appFavoriteBtn_on" class="btn btn-default btn-xs" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>deleteFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
+													<i class="icon-star" style="color: blue;"></i>
 												</button>
 												
 												<button id="<portlet:namespace/>appFavoriteBtn_off" class="btn btn-default  btn-xs" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>addFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
@@ -813,7 +828,7 @@
 					</div>
 					
 					<!-- ScienceApp Content -->
-					<div class="col-md-9">
+					<div id="<portlet:namespace/>contentArea" class="col-md-9">
 						<div class="nav-tabs-custom edison">
 							<ul id="<portlet:namespace/>contentTabMenu" class="nav nav-tabs">
 								<li tab-type="detailInfo"><a href="#<portlet:namespace/>contentDetailInfo" data-toggle="tab">상세정보</a></li>
@@ -1160,6 +1175,9 @@ $(document).ready(function(){
 			/* $("body").css('overflow',''); */
 		}
 	})
+	
+	/* Default Content Area Height Setting */
+	$("#<portlet:namespace/>contentArea  > div.nav-tabs-custom").css("min-height", $("#<portlet:namespace/>summaryInfoArea").height()-20);
 	
 	/* Default Tab Click */
 	<portlet:namespace/>clickSicneceAppContentTab("detailInfo");
@@ -1895,7 +1913,8 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 		var myRating = $("<div/>").addClass("rating my-rating")
 								  .css("padding", "10px 20px")
 								  .css("height", "70px")
-								  .css("width", "70%")
+								  .css("width", "72%")
+								  .css("font-size", "13px")
 								  .css("text-align", "left")
 								  .css("display", "inline-block");
 		
@@ -1912,13 +1931,13 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 		var myScore = $("<div/>").css("width", "25%")
 								 .css("font-size", "20px")
 								 .css("position", "absolute")
-								 .css("top", "70%")
-								 .css("right", "8%")
+								 .css("top", "40%")
+								 .css("right", "0%")
 								 .attr("id", "<portlet:namespace/>myRatingsScore")
 								 .appendTo(myRating);
 		
 		
-		/*  평점 등록 여부에 따른 저장 버튼 Text 변경 및 Score Setting */
+		/* 평점 등록 여부에 따른 저장 버튼 Text 변경 및 Score Setting */
 		var regBtnTxt = 'SAVE';
 		if(myRatingsEntryIsEmpty === 'false'){
 			regBtnTxt = 'UPDATE';
@@ -1931,7 +1950,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 			title: "<liferay-ui:message key='edison-workflow-science-app' /> <liferay-ui:message key='edison-science-appstore-view-tab-rating' />",
 			titleClass: 'box-header with-border',
 			content: dialogBody,
-			columnClass: 'col-md-6 col-md-offset-3',
+			columnClass: 'col-md-6 col-md-offset-3 <portlet:namespace/>rating-box',
 			buttons: {
 				formSubmit: {
 					text: regBtnTxt,
@@ -1951,7 +1970,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 					var myRatingModifiedDt = $("<div/>").css("width", "40%")
 														.css("font-size", "14px")
 														.css("position", "absolute")
-														.css("top", "77%")
+														.css("top", "75%")
 														.css("right", "-15%")
 														.text("<liferay-ui:message key='date' /> : " + modifiedDt)
 														.appendTo(myRating);

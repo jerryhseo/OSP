@@ -342,6 +342,7 @@ public class BoardPersistenceImpl extends BasePersistenceImpl<Board>
 		boardImpl.setInsertDt(board.getInsertDt());
 		boardImpl.setUpdateId(board.getUpdateId());
 		boardImpl.setUpdateDt(board.getUpdateDt());
+		boardImpl.setContentMDE(board.getContentMDE());
 
 		return boardImpl;
 	}

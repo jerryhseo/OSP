@@ -74,12 +74,13 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "descriptionId", Types.BIGINT },
 			{ "content", Types.VARCHAR },
+			{ "contentMDE", Types.VARCHAR },
 			{ "insertId", Types.BIGINT },
 			{ "insertDt", Types.TIMESTAMP },
 			{ "updateId", Types.BIGINT },
 			{ "updateDt", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppDescription (descriptionId LONG not null primary key,content STRING null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppDescription (descriptionId LONG not null primary key,content STRING null,contentMDE STRING null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppDescription";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppDescription.insertDt ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppDescription.insertDt ASC";
@@ -110,6 +111,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		model.setDescriptionId(soapModel.getDescriptionId());
 		model.setContent(soapModel.getContent());
+		model.setContentMDE(soapModel.getContentMDE());
 		model.setInsertId(soapModel.getInsertId());
 		model.setInsertDt(soapModel.getInsertDt());
 		model.setUpdateId(soapModel.getUpdateId());
@@ -181,6 +183,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		attributes.put("descriptionId", getDescriptionId());
 		attributes.put("content", getContent());
+		attributes.put("contentMDE", getContentMDE());
 		attributes.put("insertId", getInsertId());
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
@@ -201,6 +204,12 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		if (content != null) {
 			setContent(content);
+		}
+
+		String contentMDE = (String)attributes.get("contentMDE");
+
+		if (contentMDE != null) {
+			setContentMDE(contentMDE);
 		}
 
 		Long insertId = (Long)attributes.get("insertId");
@@ -341,6 +350,108 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 	@JSON
 	@Override
+	public String getContentMDE() {
+		if (_contentMDE == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _contentMDE;
+		}
+	}
+
+	@Override
+	public String getContentMDE(Locale locale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getContentMDE(languageId);
+	}
+
+	@Override
+	public String getContentMDE(Locale locale, boolean useDefault) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+
+		return getContentMDE(languageId, useDefault);
+	}
+
+	@Override
+	public String getContentMDE(String languageId) {
+		return LocalizationUtil.getLocalization(getContentMDE(), languageId);
+	}
+
+	@Override
+	public String getContentMDE(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getContentMDE(), languageId,
+			useDefault);
+	}
+
+	@Override
+	public String getContentMDECurrentLanguageId() {
+		return _contentMDECurrentLanguageId;
+	}
+
+	@JSON
+	@Override
+	public String getContentMDECurrentValue() {
+		Locale locale = getLocale(_contentMDECurrentLanguageId);
+
+		return getContentMDE(locale);
+	}
+
+	@Override
+	public Map<Locale, String> getContentMDEMap() {
+		return LocalizationUtil.getLocalizationMap(getContentMDE());
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE) {
+		_contentMDE = contentMDE;
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE, Locale locale) {
+		setContentMDE(contentMDE, locale, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setContentMDE(String contentMDE, Locale locale,
+		Locale defaultLocale) {
+		String languageId = LocaleUtil.toLanguageId(locale);
+		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
+
+		if (Validator.isNotNull(contentMDE)) {
+			setContentMDE(LocalizationUtil.updateLocalization(getContentMDE(),
+					"ContentMDE", contentMDE, languageId, defaultLanguageId));
+		}
+		else {
+			setContentMDE(LocalizationUtil.removeLocalization(getContentMDE(),
+					"ContentMDE", languageId));
+		}
+	}
+
+	@Override
+	public void setContentMDECurrentLanguageId(String languageId) {
+		_contentMDECurrentLanguageId = languageId;
+	}
+
+	@Override
+	public void setContentMDEMap(Map<Locale, String> contentMDEMap) {
+		setContentMDEMap(contentMDEMap, LocaleUtil.getDefault());
+	}
+
+	@Override
+	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
+		Locale defaultLocale) {
+		if (contentMDEMap == null) {
+			return;
+		}
+
+		setContentMDE(LocalizationUtil.updateLocalization(contentMDEMap,
+				getContentMDE(), "ContentMDE",
+				LocaleUtil.toLanguageId(defaultLocale)));
+	}
+
+	@JSON
+	@Override
 	public long getInsertId() {
 		return _insertId;
 	}
@@ -411,6 +522,17 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			}
 		}
 
+		Map<Locale, String> contentMDEMap = getContentMDEMap();
+
+		for (Map.Entry<Locale, String> entry : contentMDEMap.entrySet()) {
+			Locale locale = entry.getKey();
+			String value = entry.getValue();
+
+			if (Validator.isNotNull(value)) {
+				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
+			}
+		}
+
 		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
 	}
 
@@ -448,6 +570,16 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 		else {
 			setContent(getContent(defaultLocale), defaultLocale, defaultLocale);
 		}
+
+		String contentMDE = getContentMDE(defaultLocale);
+
+		if (Validator.isNull(contentMDE)) {
+			setContentMDE(getContentMDE(modelDefaultLanguageId), defaultLocale);
+		}
+		else {
+			setContentMDE(getContentMDE(defaultLocale), defaultLocale,
+				defaultLocale);
+		}
 	}
 
 	@Override
@@ -466,6 +598,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		scienceAppDescriptionImpl.setDescriptionId(getDescriptionId());
 		scienceAppDescriptionImpl.setContent(getContent());
+		scienceAppDescriptionImpl.setContentMDE(getContentMDE());
 		scienceAppDescriptionImpl.setInsertId(getInsertId());
 		scienceAppDescriptionImpl.setInsertDt(getInsertDt());
 		scienceAppDescriptionImpl.setUpdateId(getUpdateId());
@@ -535,6 +668,14 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			scienceAppDescriptionCacheModel.content = null;
 		}
 
+		scienceAppDescriptionCacheModel.contentMDE = getContentMDE();
+
+		String contentMDE = scienceAppDescriptionCacheModel.contentMDE;
+
+		if ((contentMDE != null) && (contentMDE.length() == 0)) {
+			scienceAppDescriptionCacheModel.contentMDE = null;
+		}
+
 		scienceAppDescriptionCacheModel.insertId = getInsertId();
 
 		Date insertDt = getInsertDt();
@@ -562,12 +703,14 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{descriptionId=");
 		sb.append(getDescriptionId());
 		sb.append(", content=");
 		sb.append(getContent());
+		sb.append(", contentMDE=");
+		sb.append(getContentMDE());
 		sb.append(", insertId=");
 		sb.append(getInsertId());
 		sb.append(", insertDt=");
@@ -583,7 +726,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceAppDescription");
@@ -596,6 +739,10 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 		sb.append(
 			"<column><column-name>content</column-name><column-value><![CDATA[");
 		sb.append(getContent());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>contentMDE</column-name><column-value><![CDATA[");
+		sb.append(getContentMDE());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>insertId</column-name><column-value><![CDATA[");
@@ -626,6 +773,8 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 	private long _descriptionId;
 	private String _content;
 	private String _contentCurrentLanguageId;
+	private String _contentMDE;
+	private String _contentMDECurrentLanguageId;
 	private long _insertId;
 	private Date _insertDt;
 	private long _updateId;

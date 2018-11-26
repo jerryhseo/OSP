@@ -144,7 +144,27 @@
 	.<portlet:namespace/>appPaperLinkClass input:HOVER{
 		text-decoration: underline;
 	}
+	
+	.md-preview{
+		width: 100% !important;
+		padding: 10px;
+	}
+	
+	.md-editor textarea{
+		background-color: #fff !important;
+	}
 </style>
+
+	<!-- 2018.10.22 _ Markdown CSS -->
+	<link media="all" rel="stylesheet" href="${contextPath}/css/bootstrap-markdown.min.css" />
+	<link media="all" rel="stylesheet" href="${contextPath}/css/markdown-style.css" />
+	
+	<!-- 2018.10.22 _ Markdown JS -->
+	<script src="${contextPath}/js/marked.js"></script>
+	<script src="${contextPath}/js/bootstrap-markdown.js"></script>
+	<script src="${contextPath}/js/markdown-jquery.filedrop.js"></script>
+	<script src="${contextPath}/js/markdown-script.js"></script>
+
 <!-- ckeditor  -->
 <%!
 public String marshallParams(Map<String, String> params) {
@@ -245,12 +265,6 @@ public String marshallParams(Map<String, String> params) {
 						
 						for(Locale aLocale : locales){
 							String languageId = LocaleUtil.toLanguageId(aLocale);
-							if(localesStr.equals("")){
-								localesStr += languageId;
-							}else{
-								localesStr += ","+languageId;
-							}
-							
 							String languageNm = aLocale.getDisplayName(themeDisplay.getLocale());
 						%>
 							<aui:option label="<%=languageNm%>" value="<%=languageId%>" selected="<%=languageId.equals(siteDefaultLanuageId) %>"/>
@@ -273,6 +287,7 @@ public String marshallParams(Map<String, String> params) {
 						for(Locale aLocale : locales){
 							String languageId = LocaleUtil.toLanguageId(aLocale);
 							String descriptionKey = "description_"+languageId;
+							String descriptionMDEKey = "descriptionMDE_"+languageId;
 							
 							if(localesStr.equals("")){
 								localesStr += languageId;
@@ -281,15 +296,32 @@ public String marshallParams(Map<String, String> params) {
 							}
 					%>
 						
-						<c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
-						<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>" style="display: none;">
-							<textarea id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" style="width:100%;height:300px;">
+						<%-- <c:set var="descriptionKey" value="<%=descriptionKey%>"></c:set>
+						<div id="<portlet:namespace/>descriptionDiv_<%=languageId%>" style="display: block;">
+							<textarea id="<portlet:namespace/>descriptionCkEditor_<%=languageId%>" style="width:100%;height:300px;">
 								${data.description[descriptionKey] }
 							</textarea>
+						</div> --%>
+						
+						<c:set var="descriptionMDEKey" value="<%=descriptionMDEKey%>"></c:set>
+						<div id="<portlet:namespace/>descriptionMDEDiv_<%=languageId%>" style="margin-top: 10px; display: none;">
+							<textarea id="<portlet:namespace/>descriptionMDE_<%=languageId%>" class="comment-md_<%=languageId%>" name="<portlet:namespace/>descriptionMDE_<%=languageId%>" placeholder="Input Description...">${data.descriptionMDE[descriptionMDEKey] }</textarea>
+						</div>
+						
+						<!-- Form Data For Preview -->
+						<input type="hidden" id="<portlet:namespace/>description_<%=languageId%>" name="<portlet:namespace/>description_<%=languageId%>" value="" />
+						
+						<!-- Preview -->
+						<div style="display: none;">
+							<div id="<portlet:namespace/>descriptionMDEPreviewDiv_<%=languageId%>" class="comment-md-preview-container_<%=languageId%>" style="display: none;">
+								<div id="<portlet:namespace/>descriptionMDEPreview_<%=languageId%>" class="well well-sm well-light md-preview margin-top-10 comment-md-preview_<%=languageId%>">
+								</div>
+							</div>
 						</div>
 					<%
 						}
 					%>
+					
 				</td>
 			</tr>
 			
@@ -677,7 +709,8 @@ public String marshallParams(Map<String, String> params) {
 		changeCategory('${data.parentCategory}','${data.childrenCategory}');
 		
 		<portlet:namespace/>getScienceAppVersion();
-		<portlet:namespace/>setCKeditor();
+		<portlet:namespace/>setLanguageSelectList();
+		/* <portlet:namespace/>setCKeditor(); */
 		
 	});
 	
@@ -689,12 +722,20 @@ public String marshallParams(Map<String, String> params) {
 			if(targetLanguage != ""){
 				if(targetLanguage.indexOf(",") == -1){//1개
 					//description
-					/* var description = $("#<portlet:namespace/>description_"+targetLanguage).val(); */
-					var description = CKEDITOR.instances["<portlet:namespace/>description_"+targetLanguage].getData();
-						description = $.trim(description.replace(/&nbsp;/g, ''));
+					/* var description = $("#<portlet:namespace/>description_"+targetLanguage).val();
+					var description = CKEDITOR.instances["<portlet:namespace/>description_"+targetLanguage].getData(); */
+					
+					/* MarkDown */
+					var description = $("#<portlet:namespace/>descriptionMDE_"+targetLanguage).html();
+					var descriptionHtml = $("#<portlet:namespace/>descriptionMDEPreview_"+targetLanguage).html();
+					description = $.trim(description.replace(/&nbsp;/g, ''));
+					
 					if(description == ""){
+						$("#<portlet:namespace/>description_"+targetLanguage).val("");
 						alert(Liferay.Language.get("edison-appstore-solver-description-exception-alert") + "( "+Liferay.Language.get(targetLanguage)+" )");
 						return false;
+					} else {
+						$("#<portlet:namespace/>description_"+targetLanguage).val(descriptionHtml);
 					}
 					
 					//manual
@@ -716,15 +757,20 @@ public String marshallParams(Map<String, String> params) {
 					var languageArray = targetLanguage.split(",");
 					for(var i=0;i<languageArray.length;i++){
 						//description
-						/* var description = $("#<portlet:namespace/>description_"+languageArray[i]).val(); */
+						/* var description = $("#<portlet:namespace/>description_"+languageArray[i]).val();
+						var description = CKEDITOR.instances["<portlet:namespace/>description_"+languageArray[i]].getData(); */
 						
-						var description = CKEDITOR.instances["<portlet:namespace/>description_"+languageArray[i]].getData();
+						/* MarkDown */
+						var description = $("#<portlet:namespace/>descriptionMDE_"+languageArray[i]).val();
+						var descriptionHtml = $("#<portlet:namespace/>descriptionMDEPreview_"+languageArray[i]).html();
 						description = $.trim(description.replace(/&nbsp;/g, ''));
-			
-// 						console.log(description)
+						
 						if(description == ""){
+							$("#<portlet:namespace/>description_"+languageArray[i]).val("");
 							alert(Liferay.Language.get("edison-appstore-solver-description-exception-alert") + "( "+Liferay.Language.get(languageArray[i]) +" )");
 							return false;
+						} else {
+							$("#<portlet:namespace/>description_"+languageArray[i]).val(descriptionHtml);
 						}
 						
 						//manual
@@ -784,6 +830,26 @@ public String marshallParams(Map<String, String> params) {
 		
 	}
 	
+	var currDescriptionLanguage = "";
+	function <portlet:namespace/>setLanguageSelectList(){
+		var localeStr = "<%=localesStr%>";
+		var localeArray = localeStr.split(",");
+		$descriptionSelect = $("#<portlet:namespace/>descriptionLanuage");
+		
+		for(var i=0; i< localeArray.length; i++){
+			var locale = localeArray[i];
+			var option = $("<option/>").val(locale).text(Liferay.Language.get(locale)).appendTo($descriptionSelect);
+			
+			if(locale==Liferay.ThemeDisplay.getLanguageId()){
+				/* $("#<portlet:namespace/>descriptionDiv_"+locale).show(); */
+				$("#<portlet:namespace/>descriptionMDEDiv_"+locale).show();
+				option.prop("selected",true);
+				currDescriptionLanguage = locale;
+			}
+			
+			
+		}
+	}
 	
 	function <portlet:namespace/>setCKeditor(){
 		var fileBrowserConectorURL = "<%=connectorURL%>";
@@ -797,7 +863,7 @@ public String marshallParams(Map<String, String> params) {
 		
 		for(var i=0; i< localeArray.length; i++){
 			var locale = localeArray[i];
-			CKEDITOR.replace( '<portlet:namespace/>description_'+locale, {
+			CKEDITOR.replace( '<portlet:namespace/>descriptionCkEditor_'+locale, {
 				filebrowserImageBrowseUrl: "/edison-appstore-2016-portlet/editor/ckeditor/filemanger/browser.html?Connector="+fileBrowserConectorURL,
 				language: ckEditorLanguage,
 			    filebrowserUploadUrl: null,
@@ -818,19 +884,56 @@ public String marshallParams(Map<String, String> params) {
 			         	]
 			});
 			
-			var option = $("<option/>").val(locale).text(Liferay.Language.get(locale)).appendTo($descriptionSelect);
+			/* var option = $("<option/>").val(locale).text(Liferay.Language.get(locale)).appendTo($descriptionSelect);
 			
 			if(locale==Liferay.ThemeDisplay.getLanguageId()){
 				$("#<portlet:namespace/>descriptionDiv_"+locale).show();
 				option.prop("selected",true);
-			}
+			} */
 			
 			
 		}
 	}
+	
 	function changeDescriptionLocale(selectLocaleId){
-		$("div[id*=<portlet:namespace/>descriptionDiv_]").hide();
-		$("#<portlet:namespace/>descriptionDiv_"+selectLocaleId).show();
+		/* $("div[id*=<portlet:namespace/>descriptionDiv_]").hide();
+		$("#<portlet:namespace/>descriptionDiv_"+selectLocaleId).show(); */
+		$("div[id*=<portlet:namespace/>descriptionMDEDiv_]").hide();
+		$("#<portlet:namespace/>descriptionMDEDiv_"+selectLocaleId).show();
+		currDescriptionLanguage = selectLocaleId;
+	}
+	
+	function <portlet:namespace/>openScienceAppFilebrowser(){
+		var popupWidth = 1350; 
+		var popupHeight = 700;
+		var screenWidth = parent.screen.width;
+		var screenHeight = parent.screen.height;
+		var popupLeft = (screenWidth-popupWidth)/2;
+		var popupTop = (screenHeight-popupHeight)/4;
+		
+		var fileBrowserConectorURL = "<%=connectorURL%>";
+		fileBrowserConectorURL = fileBrowserConectorURL +"&currentFolder=${currentFolder}";
+		var filebrowserImageBrowseUrl = "/edison-appstore-2016-portlet/editor/ckeditor/filemanger/browser.html?Connector="+fileBrowserConectorURL;
+		/* window.open(filebrowserImageBrowseUrl, '_blank', 'width='+popupWidth+', height='+popupHeight+', left='+popupLeft+', top='+popupTop); */
+		window.open(filebrowserImageBrowseUrl, '_blank', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupLeft + ', top=' + popupTop);
+	}
+	
+	function <portlet:namespace/>getScienceAppFilePath(filePath){
+		var imgExtention = /\.(jpg|jpeg|png|gif|bmp|tiff)/i;
+		
+		alert("filePath : " + filePath)
+		if(filePath != null && filePath != ''){
+			if(!imgExtention.test(filePath.toLowerCase())){
+				alert("This is not an image file.");
+			} else {
+				var markdownImgTag = '![Image Description]('+filePath+' "title")';
+				
+				if(currDescriptionLanguage != null && currDescriptionLanguage != ''){
+					var descriptionMDE_Text= $("#<portlet:namespace/>descriptionMDE_"+currDescriptionLanguage);
+					descriptionMDE_Text.val(descriptionMDE_Text.text() + "\n\n" + markdownImgTag);
+				}
+			}
+		}
 	}
 	
 	/* 논문 파일 또는 링크 입력 항목 추가 */

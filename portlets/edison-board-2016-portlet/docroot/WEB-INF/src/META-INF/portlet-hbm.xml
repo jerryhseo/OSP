@@ -26,6 +26,7 @@
 		<property name="insertDt" type="org.hibernate.type.TimestampType" />
 		<property name="updateId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="updateDt" type="org.hibernate.type.TimestampType" />
+		<property name="contentMDE" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="org.kisti.edison.multiboard.model.impl.BoardDivImpl" table="EDCON_BoardDiv">
 		<id name="divCd" type="long">
