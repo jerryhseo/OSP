@@ -921,7 +921,6 @@ public String marshallParams(Map<String, String> params) {
 	function <portlet:namespace/>getScienceAppFilePath(filePath){
 		var imgExtention = /\.(jpg|jpeg|png|gif|bmp|tiff)/i;
 		
-		alert("filePath : " + filePath)
 		if(filePath != null && filePath != ''){
 			if(!imgExtention.test(filePath.toLowerCase())){
 				alert("This is not an image file.");
