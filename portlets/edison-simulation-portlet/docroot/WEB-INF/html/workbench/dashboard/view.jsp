@@ -1640,6 +1640,8 @@ function <portlet:namespace/>selectPort(object,name,portType){
 		}
 	}
 	
+	<portlet:namespace/>flowLayoutUpdate(portType);
+	
 	var objectId = $(object).attr("id");
 	$("#"+objectId).removeClass("active");
 	
@@ -1653,6 +1655,15 @@ function <portlet:namespace/>selectPort(object,name,portType){
 			portType: portType
 	};
 	Liferay.fire( OSP.Event.OSP_PORT_SELECTED, eventData);
+}
+
+function <portlet:namespace/>flowLayoutUpdate(portType){
+	var eventData = {
+			portletId: '<%=portletDisplay.getId()%>',
+			targetPortlet:<portlet:namespace/>connector,
+			flowLayoutCode :portType.toUpperCase()
+	};
+	Liferay.fire( OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE, eventData);
 }
 /***********************************************************************
  * Portlet Side btn event

@@ -117,7 +117,6 @@ public class LayoutController {
 			model.addAttribute("redirectName", redirectName);
 			model.addAttribute("jobUuid", jobUuid);
 			model.addAttribute("blockInputPorts", blockInputPorts);
-			System.out.println(simulationUuid);
 			model.addAttribute("simulationUuid", simulationUuid);
 			
 			
@@ -196,21 +195,39 @@ public class LayoutController {
 	private void resolveLayoutTemplate(  ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException, PortalException, SystemException{
 		String templateDir = ParamUtil.getString(resourceRequest, "templateDir");
 		String namespace = ParamUtil.getString(resourceRequest, "namespace");
-		
 		long scienceAppId = ParamUtil.getLong(resourceRequest, "scienceAppId");
 		
+		
 		ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+		Boolean isStepWorkbench  =  scienceApp.getIsStepLayout();
 		JSONObject workbenchLayouts = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
 		JSONArray layoutKeys = workbenchLayouts.getJSONArray("arrayKeys_");
 		
-		String templateFile = ParamUtil.getString(resourceRequest, "templateFile");
+		
+		/*FreeMaker Template Parameter Setting*/
+		Map<String, Object> params = new HashMap<>();
+		params.put("namespace", namespace);
+		params.put("isStepWorkbench", scienceApp.getIsStepLayout());
+		String templateFile = "";
 		String layoutKey = "";
-		for(int i=0;i<layoutKeys.length();i++){
-			String key = layoutKeys.getString(i);
-			JSONObject layout = workbenchLayouts.getJSONObject(key);
+		if(isStepWorkbench){
+			templateFile = "step-layout.ftl";
+			for(int i=0;i<layoutKeys.length();i++){
+				String key = layoutKeys.getString(i);
+				JSONObject layout = workbenchLayouts.getJSONObject(key);
+				String templateParameterKey = key+"_FILE_PATH";
+				String templateParameterValue = layout.getString("templateId_")+".ftl";
+				params.put(templateParameterKey, templateParameterValue);
+			}
+			layoutKey = "SYSTEM";
+		}else{
+			JSONObject layout = workbenchLayouts.getJSONObject("LAYOUT");
 			templateFile = layout.getString("templateId_")+".ftl";
-			layoutKey = key;
+			layoutKey = "LAYOUT";
 		}
+		params.put("layoutKey", layoutKey+"_");
+		
+		
 		
 		String realTemplateDir = resourceRequest.getPortletSession().getPortletContext().getRealPath(templateDir);
 		
@@ -220,11 +237,10 @@ public class LayoutController {
 		
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 		
-		Map<String, Object> params = new HashMap<>();
-		String layoutPrimaryKey = namespace+layoutKey+"_";
-//		params.put("layoutKey", layoutKey);
-		params.put("namespace", namespace);
-		params.put("layoutPrimaryKey", layoutPrimaryKey);
+		
+		
+		
+		
 		
 		
 		Template template = cfg.getTemplate(templateFile);
@@ -275,22 +291,35 @@ public class LayoutController {
 			JSONObject workbenchLayouts = JSONFactoryUtil.createJSONObject(scienceApp.getLayout());
 			JSONArray layoutKeys = workbenchLayouts.getJSONArray("arrayKeys_");
 			
+			
 			JSONObject lodingPortlets = JSONFactoryUtil.createJSONObject();
+			
+			JSONObject totalLayout = JSONFactoryUtil.createJSONObject();
+			JSONArray totalColumns = JSONFactoryUtil.createJSONArray();
 			for(int i=0;i<layoutKeys.length();i++){
 				String key = layoutKeys.getString(i);
 				JSONObject layout = workbenchLayouts.getJSONObject(key);
 				JSONArray jsonColumns = layout.getJSONArray("columns_");
-				
 				for(int j=0;j<jsonColumns.length();j++){
+					
 					JSONObject column = jsonColumns.getJSONObject(j);
+					//ID를 유니크 하게 변경
+					column.put("id_", key+"_"+column.getString("id_"));
+					totalColumns.put(column);
 					if(!column.isNull("currentPortlet_")){
 						lodingPortlets.put(column.getString("currentPortlet_"), "view");
 					}
 				}
 			}
+			
+			totalLayout.put("columns_", totalColumns);
+			model.addAttribute("totalLayout", totalLayout);
+			System.out.println(totalLayout);
+			
 			model.addAttribute("lodingPortlets", lodingPortlets.toString());
 			model.addAttribute("workbenchLayout", workbenchLayouts);
 		}catch (Exception e) {
+			e.printStackTrace();
 			throw new SimulationWorkbenchException(SimulationWorkbenchException.NO_SCIENCEAPP_LAYOUT_EXIST);
 		}
 		

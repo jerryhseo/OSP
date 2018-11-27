@@ -404,32 +404,32 @@
                 return false;
             };
             
-            C.loadPortlet = function( targetPortlet, connector, layoutName, eventEnable, windowState, callback ){
+            C.loadPortlet = function( targetPortlet, connector, eventEnable, windowState, callback ){
                 if( targetPortlet.status() ){
                     targetPortlet.display( 'block' );
                     return true;
                 }
                 
                 targetPortlet.status( true );
-                var $targetDiv = $('#'+C.getPortletSectionId(connector,layoutName));
+                var $targetDiv = $('#'+C.getPortletSectionId(connector));
                 targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
             };
             
-            C.switchPortlet = function( targetPortlet, connector, layoutName, eventEnable, windowState, callback){
+            C.switchPortlet = function( targetPortlet, connector, eventEnable, windowState, callback){
                 var currentPortletId = C.currentPortletId();
                 if( !currentPortletId ) return false;
                 
                 var currentPortlet = C.getPortlet( currentPortletId );
                 currentPortlet.display( 'none' );
 
-                var $targetDiv = $('#'+C.getPortletSectionId(connector,layoutName));
+                var $targetDiv = $('#'+C.getPortletSectionId(connector));
                 $targetDiv.effect("highlight", {color:"#F5F6CE"}, 2000);
                 C.loadPortlet( targetPortlet, connector, eventEnable, windowState, callback);
                 
                 C.currentPortletId(targetPortlet.instanceId());
             };
-            C.getPortletSectionId = function( callerId ,layoutName){
-                    return OSP.Event.getNamespace(callerId)+layoutName+'_'+C.id();
+            C.getPortletSectionId = function(callerId){
+                    return OSP.Event.getNamespace(callerId)+C.id();
             };
             
             C.clone = function(){
@@ -848,7 +848,6 @@
                 column.loadPortlet( 
                             targetPortlet, 
                             connectorId,
-                            Layout.layoutName(), 
                             eventEnable,
                             windowState,
                             callback 
@@ -860,7 +859,7 @@
             var column = Layout.getAssignedColumn(toPortletId );
             if( !column )   return false;
             
-            column.switchPortlet(Layout.getPortlet(toPortletId), connector, Layout.layoutName(),eventEnable, windowState, callback);
+            column.switchPortlet(Layout.getPortlet(toPortletId), connector, eventEnable, windowState, callback);
             return true;
         };
         
@@ -871,7 +870,7 @@
                 return false;
             }
             
-            return column.getPortletSectionId(namespace,Layout.layoutName());
+            return column.getPortletSectionId(namespace);
         };
         
         Layout.registerPortletEvents = function( instanceId, events ){
@@ -2102,7 +2101,7 @@
         			var column = columns[index];
         			
         			if(column.width()){
-        				var layoutDomId = layoutName+namespace+column.id();
+        				var layoutDomId = namespace+column.id();
         				var dom = document.getElementById(layoutDomId);
         				if(dom!= null){
         					var setWidth = dom.getAttribute('set-width');
@@ -2119,7 +2118,7 @@
         			}
         			
         			if(column.height()){
-        				var layoutDomId = layoutName+namespace+'row-'+column.id();
+        				var layoutDomId = 'row-'+namespace+column.id();
         				var dom = document.getElementById(layoutDomId);
         				if(dom!= null){dom.style.height = column.height();}
         			}
@@ -2130,7 +2129,7 @@
         		if(deviders){
         			for( var index in deviders ){
         				var devider = deviders[index];
-        				var deviderDomId = layoutName+namespace+devider.id();
+        				var deviderDomId = namespace+layoutName+'_'+devider.id();
         				var dom = document.getElementById(deviderDomId);
         				if(devider.left()&&dom!= null){
         					dom.style.left = devider.left();
@@ -2494,7 +2493,6 @@
                                 Workbench.handlePortSelected( portName, portletInstanceId );
                             }
                             else{
-                                console.log(Workbench.layout());
                                 if( portletInstanceId )
                                     Workbench.switchPortlet( portletInstanceId );
                                 else
@@ -2577,7 +2575,7 @@
         
         /*Job initData Converter From InputData */
         var getJobInitDataFromInputData = function(copyJob,inputs){
-        	console.log(copyJob);
+//        	console.log(copyJob);
 //        	var copyJob = simulation.workingJob();
         	for( var index in inputs ){
         		var inputData = inputs[index];

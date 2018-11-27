@@ -411,6 +411,7 @@ public class AppManagerController{
 					}
 				}
 				model.addAttribute("isStepLayout", isStepLayout);
+				model.addAttribute("appIsSteopLayout", scienceApp.getIsStepLayout());
 				
 				/*Layout Key 셋팅*/
 				String stepTabsValue = "";

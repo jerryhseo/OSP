@@ -614,8 +614,12 @@ function <portlet:namespace/>actionCall(mode){
 		var isStepLayout = $("#<portlet:namespace/>layoutAreaButton").prop("checked");
 		
 		/*현재 DB의 Layout 타입과 작성중인 Layout 타입(Flow Workbench 여부)가 변경이 되었을 경우 새로 작성*/
-		if(isStepLayout&&'${data.layouts}'!=""){
-			Layouts = new OSP.Layouts(JSON.parse('${data.layouts}'));
+		if('${data.layouts}'!=""){
+			if(isStepLayout.toString()!='${appIsSteopLayout}'){
+				Layouts = new OSP.Layouts();
+			}else{
+				Layouts = new OSP.Layouts(JSON.parse('${data.layouts}'));
+			}
 		}else{
 			Layouts = new OSP.Layouts();
 		}
@@ -850,6 +854,8 @@ function <portlet:namespace/>destroyInstanceId(instanceId){
 
 		<div class="btn-group layoutBtnGroup btn-group-justified" data-toggle="buttons" id="<portlet:namespace/>layoutArea">
 			<label class="btn layoutMethod">
+				<div class="method layout-8"></div> <input type="radio" name="templates" value="1-row-1-column">
+			</label><label class="btn layoutMethod">
 				<div class="method layout-3"></div> <input type="radio" name="templates" value="1-row-2-column">
 			</label> <label class="btn layoutMethod">
 				<div class="method layout-1"></div> <input type="radio" name="templates" value="2-row-2-2-column">

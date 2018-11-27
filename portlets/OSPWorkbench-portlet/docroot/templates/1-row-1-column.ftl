@@ -1,10 +1,7 @@
 <#if isStepWorkbench == true>
-<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 50%;height: 100%;">
-
-</div>
-<div class="devider vertical" id="${namespace}${layoutKey}devider-1" data-equal-id="${namespace}${layoutKey}column-3" data-remainder-id="${namespace}${layoutKey}column-4"></div>
-<div class="col-md-12 col" id="${namespace}${layoutKey}column-4" style="width: 50%;height: 100%;">
-
+<div class="row" style="height: 100%;">
+	<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
+	</div>
 </div>
 <#else>
 <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
@@ -33,10 +30,7 @@
 			
 			<section class="content" id="workbench-layout-area" style="display:none;">
 				<div class="row" style="height: 100%;">
-					<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 50%;height: 100%;">
-					</div>
-					<div class="devider vertical" id="${namespace}${layoutKey}devider-1" data-equal-id="${namespace}${layoutKey}column-3" data-remainder-id="${namespace}${layoutKey}column-4"></div>
-					<div class="col-md-12 col" id="${namespace}${layoutKey}column-4" style="width: 50%;height: 100%;">
+					<div class="col-md-12 col" id="${namespace}${layoutKey}column-3" style="width: 100%;height: 100%;">
 					</div>
 				</div>
 			</section>

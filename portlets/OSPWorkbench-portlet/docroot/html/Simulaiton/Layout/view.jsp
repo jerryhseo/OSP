@@ -45,6 +45,7 @@
 	preferences.store();
 	
 	JSONObject workbenchLayout = (JSONObject) renderRequest.getAttribute("workbenchLayout");
+	JSONObject totalLayout = (JSONObject) renderRequest.getAttribute("totalLayout");
 	
 	
 	String inputPorts = (String) renderRequest.getAttribute("inputPorts");
@@ -200,6 +201,7 @@ $(function(e) {
 	//page block
 	bStart();
 	<portlet:namespace/>workbench.layouts( new OSP.Layouts(JSON.parse('<%=workbenchLayout.toString()%>')));
+	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=totalLayout.toString()%>')));
 	<portlet:namespace/>workbench.type ('${workbenchType}');
 	<portlet:namespace/>workbench.classId('${classId}');
 	<portlet:namespace/>workbench.customId('${customId}');
@@ -244,16 +246,7 @@ $(function(e) {
 			$('#<portlet:namespace/>canvas').html(result);
 			/*All Layout Grid*/
 			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
-			
-			var workbenchLayouts = <portlet:namespace/>workbench.layouts();
-			var layoutKeys = workbenchLayouts.arrayKeys();
-			for( var index in layoutKeys ){
-				var key = layoutKeys[index];
-				/*Layout 객체 Setting*/
-				var layout = <portlet:namespace/>workbench.layouts().getLayoutFromKey(key);
-				<portlet:namespace/>workbench.layout(layout);
-				<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
-			}
+			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
 		}
 	});
 	
