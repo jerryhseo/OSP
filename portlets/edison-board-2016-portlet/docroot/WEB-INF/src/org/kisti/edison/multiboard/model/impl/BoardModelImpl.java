@@ -91,7 +91,7 @@ public class BoardModelImpl extends BaseModelImpl<Board> implements BoardModel {
 			{ "updateId", Types.BIGINT },
 			{ "updateDt", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDCON_Board (boardSeq LONG not null primary key,title STRING null,content STRING null,groupId LONG,customId VARCHAR(75) null,writerId LONG,writerDate DATE null,readCnt INTEGER,groupBoardSeq INTEGER,groupBoardTurn INTEGER,replyDepth INTEGER,siteGroup VARCHAR(75) null,popupYn BOOLEAN,popupStartDt DATE null,popupEndDt DATE null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table EDCON_Board (boardSeq LONG not null primary key,title STRING null,content STRING null,groupId LONG,customId VARCHAR(75) null,writerId LONG,writerDate DATE null,readCnt INTEGER,groupBoardSeq INTEGER,groupBoardTurn INTEGER,replyDepth INTEGER,siteGroup VARCHAR(512) null,popupYn BOOLEAN,popupStartDt DATE null,popupEndDt DATE null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table EDCON_Board";
 	public static final String ORDER_BY_JPQL = " ORDER BY board.writerDate ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDCON_Board.writerDate ASC";

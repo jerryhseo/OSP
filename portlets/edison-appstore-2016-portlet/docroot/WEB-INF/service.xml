@@ -602,6 +602,9 @@
 		<!-- Localized fields -->
 		<column name="content" type="String" localized="true"/>
 		
+		<!-- 2018.11.21. Add Markdown content -->
+		<column name="contentMDE" type="String" localized="true"/>
+		
 		<!-- Fields -->
 		<column name="insertId" type="long"/>
 		<column name="insertDt" type="Date"/>

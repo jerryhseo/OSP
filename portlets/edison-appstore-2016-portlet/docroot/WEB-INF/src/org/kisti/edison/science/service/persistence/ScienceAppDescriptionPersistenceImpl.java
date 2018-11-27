@@ -329,6 +329,7 @@ public class ScienceAppDescriptionPersistenceImpl extends BasePersistenceImpl<Sc
 
 		scienceAppDescriptionImpl.setDescriptionId(scienceAppDescription.getDescriptionId());
 		scienceAppDescriptionImpl.setContent(scienceAppDescription.getContent());
+		scienceAppDescriptionImpl.setContentMDE(scienceAppDescription.getContentMDE());
 		scienceAppDescriptionImpl.setInsertId(scienceAppDescription.getInsertId());
 		scienceAppDescriptionImpl.setInsertDt(scienceAppDescription.getInsertDt());
 		scienceAppDescriptionImpl.setUpdateId(scienceAppDescription.getUpdateId());
