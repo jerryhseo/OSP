@@ -374,8 +374,6 @@
 				if(data.result==true){
 					var scienceAppVersion = data.scienceAppVersion;
 					$("#<portlet:namespace/>currVersion").val(scienceAppVersion);
-				} else {
-					alert(Liferay.Language.get('edison-data-search-error'));
 				}
 			},error:function(jqXHR, textStatus, errorThrown){
 				if(jqXHR.responseText !== ''){
