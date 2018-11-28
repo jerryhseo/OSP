@@ -44,8 +44,8 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 		sb.append(descriptionId);
 		sb.append(", content=");
 		sb.append(content);
-		sb.append(", contentMDE=");
-		sb.append(contentMDE);
+		sb.append(", contentOriginal=");
+		sb.append(contentOriginal);
 		sb.append(", insertId=");
 		sb.append(insertId);
 		sb.append(", insertDt=");
@@ -72,11 +72,11 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 			scienceAppDescriptionImpl.setContent(content);
 		}
 
-		if (contentMDE == null) {
-			scienceAppDescriptionImpl.setContentMDE(StringPool.BLANK);
+		if (contentOriginal == null) {
+			scienceAppDescriptionImpl.setContentOriginal(StringPool.BLANK);
 		}
 		else {
-			scienceAppDescriptionImpl.setContentMDE(contentMDE);
+			scienceAppDescriptionImpl.setContentOriginal(contentOriginal);
 		}
 
 		scienceAppDescriptionImpl.setInsertId(insertId);
@@ -106,7 +106,7 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		descriptionId = objectInput.readLong();
 		content = objectInput.readUTF();
-		contentMDE = objectInput.readUTF();
+		contentOriginal = objectInput.readUTF();
 		insertId = objectInput.readLong();
 		insertDt = objectInput.readLong();
 		updateId = objectInput.readLong();
@@ -125,11 +125,11 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 			objectOutput.writeUTF(content);
 		}
 
-		if (contentMDE == null) {
+		if (contentOriginal == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
 		else {
-			objectOutput.writeUTF(contentMDE);
+			objectOutput.writeUTF(contentOriginal);
 		}
 
 		objectOutput.writeLong(insertId);
@@ -140,7 +140,7 @@ public class ScienceAppDescriptionCacheModel implements CacheModel<ScienceAppDes
 
 	public long descriptionId;
 	public String content;
-	public String contentMDE;
+	public String contentOriginal;
 	public long insertId;
 	public long insertDt;
 	public long updateId;

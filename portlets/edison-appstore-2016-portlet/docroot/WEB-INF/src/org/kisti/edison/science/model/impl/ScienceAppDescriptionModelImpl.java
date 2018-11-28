@@ -74,13 +74,13 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "descriptionId", Types.BIGINT },
 			{ "content", Types.VARCHAR },
-			{ "contentMDE", Types.VARCHAR },
+			{ "contentOriginal", Types.VARCHAR },
 			{ "insertId", Types.BIGINT },
 			{ "insertDt", Types.TIMESTAMP },
 			{ "updateId", Types.BIGINT },
 			{ "updateDt", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppDescription (descriptionId LONG not null primary key,content STRING null,contentMDE STRING null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceAppDescription (descriptionId LONG not null primary key,content STRING null,contentOriginal STRING null,insertId LONG,insertDt DATE null,updateId LONG,updateDt DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceAppDescription";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceAppDescription.insertDt ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceAppDescription.insertDt ASC";
@@ -111,7 +111,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		model.setDescriptionId(soapModel.getDescriptionId());
 		model.setContent(soapModel.getContent());
-		model.setContentMDE(soapModel.getContentMDE());
+		model.setContentOriginal(soapModel.getContentOriginal());
 		model.setInsertId(soapModel.getInsertId());
 		model.setInsertDt(soapModel.getInsertDt());
 		model.setUpdateId(soapModel.getUpdateId());
@@ -183,7 +183,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		attributes.put("descriptionId", getDescriptionId());
 		attributes.put("content", getContent());
-		attributes.put("contentMDE", getContentMDE());
+		attributes.put("contentOriginal", getContentOriginal());
 		attributes.put("insertId", getInsertId());
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
@@ -206,10 +206,10 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			setContent(content);
 		}
 
-		String contentMDE = (String)attributes.get("contentMDE");
+		String contentOriginal = (String)attributes.get("contentOriginal");
 
-		if (contentMDE != null) {
-			setContentMDE(contentMDE);
+		if (contentOriginal != null) {
+			setContentOriginal(contentOriginal);
 		}
 
 		Long insertId = (Long)attributes.get("insertId");
@@ -350,103 +350,104 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 	@JSON
 	@Override
-	public String getContentMDE() {
-		if (_contentMDE == null) {
+	public String getContentOriginal() {
+		if (_contentOriginal == null) {
 			return StringPool.BLANK;
 		}
 		else {
-			return _contentMDE;
+			return _contentOriginal;
 		}
 	}
 
 	@Override
-	public String getContentMDE(Locale locale) {
+	public String getContentOriginal(Locale locale) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 
-		return getContentMDE(languageId);
+		return getContentOriginal(languageId);
 	}
 
 	@Override
-	public String getContentMDE(Locale locale, boolean useDefault) {
+	public String getContentOriginal(Locale locale, boolean useDefault) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 
-		return getContentMDE(languageId, useDefault);
+		return getContentOriginal(languageId, useDefault);
 	}
 
 	@Override
-	public String getContentMDE(String languageId) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId);
+	public String getContentOriginal(String languageId) {
+		return LocalizationUtil.getLocalization(getContentOriginal(), languageId);
 	}
 
 	@Override
-	public String getContentMDE(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId,
-			useDefault);
+	public String getContentOriginal(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getContentOriginal(),
+			languageId, useDefault);
 	}
 
 	@Override
-	public String getContentMDECurrentLanguageId() {
-		return _contentMDECurrentLanguageId;
+	public String getContentOriginalCurrentLanguageId() {
+		return _contentOriginalCurrentLanguageId;
 	}
 
 	@JSON
 	@Override
-	public String getContentMDECurrentValue() {
-		Locale locale = getLocale(_contentMDECurrentLanguageId);
+	public String getContentOriginalCurrentValue() {
+		Locale locale = getLocale(_contentOriginalCurrentLanguageId);
 
-		return getContentMDE(locale);
+		return getContentOriginal(locale);
 	}
 
 	@Override
-	public Map<Locale, String> getContentMDEMap() {
-		return LocalizationUtil.getLocalizationMap(getContentMDE());
+	public Map<Locale, String> getContentOriginalMap() {
+		return LocalizationUtil.getLocalizationMap(getContentOriginal());
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE) {
-		_contentMDE = contentMDE;
+	public void setContentOriginal(String contentOriginal) {
+		_contentOriginal = contentOriginal;
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE, Locale locale) {
-		setContentMDE(contentMDE, locale, LocaleUtil.getDefault());
+	public void setContentOriginal(String contentOriginal, Locale locale) {
+		setContentOriginal(contentOriginal, locale, LocaleUtil.getDefault());
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE, Locale locale,
+	public void setContentOriginal(String contentOriginal, Locale locale,
 		Locale defaultLocale) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
 
-		if (Validator.isNotNull(contentMDE)) {
-			setContentMDE(LocalizationUtil.updateLocalization(getContentMDE(),
-					"ContentMDE", contentMDE, languageId, defaultLanguageId));
+		if (Validator.isNotNull(contentOriginal)) {
+			setContentOriginal(LocalizationUtil.updateLocalization(
+					getContentOriginal(), "ContentOriginal", contentOriginal,
+					languageId, defaultLanguageId));
 		}
 		else {
-			setContentMDE(LocalizationUtil.removeLocalization(getContentMDE(),
-					"ContentMDE", languageId));
+			setContentOriginal(LocalizationUtil.removeLocalization(
+					getContentOriginal(), "ContentOriginal", languageId));
 		}
 	}
 
 	@Override
-	public void setContentMDECurrentLanguageId(String languageId) {
-		_contentMDECurrentLanguageId = languageId;
+	public void setContentOriginalCurrentLanguageId(String languageId) {
+		_contentOriginalCurrentLanguageId = languageId;
 	}
 
 	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap) {
-		setContentMDEMap(contentMDEMap, LocaleUtil.getDefault());
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap) {
+		setContentOriginalMap(contentOriginalMap, LocaleUtil.getDefault());
 	}
 
 	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap,
 		Locale defaultLocale) {
-		if (contentMDEMap == null) {
+		if (contentOriginalMap == null) {
 			return;
 		}
 
-		setContentMDE(LocalizationUtil.updateLocalization(contentMDEMap,
-				getContentMDE(), "ContentMDE",
+		setContentOriginal(LocalizationUtil.updateLocalization(
+				contentOriginalMap, getContentOriginal(), "ContentOriginal",
 				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
@@ -522,9 +523,9 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			}
 		}
 
-		Map<Locale, String> contentMDEMap = getContentMDEMap();
+		Map<Locale, String> contentOriginalMap = getContentOriginalMap();
 
-		for (Map.Entry<Locale, String> entry : contentMDEMap.entrySet()) {
+		for (Map.Entry<Locale, String> entry : contentOriginalMap.entrySet()) {
 			Locale locale = entry.getKey();
 			String value = entry.getValue();
 
@@ -571,14 +572,15 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			setContent(getContent(defaultLocale), defaultLocale, defaultLocale);
 		}
 
-		String contentMDE = getContentMDE(defaultLocale);
+		String contentOriginal = getContentOriginal(defaultLocale);
 
-		if (Validator.isNull(contentMDE)) {
-			setContentMDE(getContentMDE(modelDefaultLanguageId), defaultLocale);
+		if (Validator.isNull(contentOriginal)) {
+			setContentOriginal(getContentOriginal(modelDefaultLanguageId),
+				defaultLocale);
 		}
 		else {
-			setContentMDE(getContentMDE(defaultLocale), defaultLocale,
-				defaultLocale);
+			setContentOriginal(getContentOriginal(defaultLocale),
+				defaultLocale, defaultLocale);
 		}
 	}
 
@@ -598,7 +600,7 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 
 		scienceAppDescriptionImpl.setDescriptionId(getDescriptionId());
 		scienceAppDescriptionImpl.setContent(getContent());
-		scienceAppDescriptionImpl.setContentMDE(getContentMDE());
+		scienceAppDescriptionImpl.setContentOriginal(getContentOriginal());
 		scienceAppDescriptionImpl.setInsertId(getInsertId());
 		scienceAppDescriptionImpl.setInsertDt(getInsertDt());
 		scienceAppDescriptionImpl.setUpdateId(getUpdateId());
@@ -668,12 +670,12 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 			scienceAppDescriptionCacheModel.content = null;
 		}
 
-		scienceAppDescriptionCacheModel.contentMDE = getContentMDE();
+		scienceAppDescriptionCacheModel.contentOriginal = getContentOriginal();
 
-		String contentMDE = scienceAppDescriptionCacheModel.contentMDE;
+		String contentOriginal = scienceAppDescriptionCacheModel.contentOriginal;
 
-		if ((contentMDE != null) && (contentMDE.length() == 0)) {
-			scienceAppDescriptionCacheModel.contentMDE = null;
+		if ((contentOriginal != null) && (contentOriginal.length() == 0)) {
+			scienceAppDescriptionCacheModel.contentOriginal = null;
 		}
 
 		scienceAppDescriptionCacheModel.insertId = getInsertId();
@@ -709,8 +711,8 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 		sb.append(getDescriptionId());
 		sb.append(", content=");
 		sb.append(getContent());
-		sb.append(", contentMDE=");
-		sb.append(getContentMDE());
+		sb.append(", contentOriginal=");
+		sb.append(getContentOriginal());
 		sb.append(", insertId=");
 		sb.append(getInsertId());
 		sb.append(", insertDt=");
@@ -741,8 +743,8 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 		sb.append(getContent());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>contentMDE</column-name><column-value><![CDATA[");
-		sb.append(getContentMDE());
+			"<column><column-name>contentOriginal</column-name><column-value><![CDATA[");
+		sb.append(getContentOriginal());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>insertId</column-name><column-value><![CDATA[");
@@ -773,8 +775,8 @@ public class ScienceAppDescriptionModelImpl extends BaseModelImpl<ScienceAppDesc
 	private long _descriptionId;
 	private String _content;
 	private String _contentCurrentLanguageId;
-	private String _contentMDE;
-	private String _contentMDECurrentLanguageId;
+	private String _contentOriginal;
+	private String _contentOriginalCurrentLanguageId;
 	private long _insertId;
 	private Date _insertDt;
 	private long _updateId;

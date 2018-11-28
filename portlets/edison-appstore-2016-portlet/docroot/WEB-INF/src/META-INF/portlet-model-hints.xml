@@ -209,7 +209,7 @@
 	<model name="org.kisti.edison.science.model.ScienceAppDescription">
 		<field name="descriptionId" type="long" />
 		<field name="content" type="String" localized="true" />
-		<field name="contentMDE" type="String" localized="true" />
+		<field name="contentOriginal" type="String" localized="true" />
 		<field name="insertId" type="long" />
 		<field name="insertDt" type="Date" />
 		<field name="updateId" type="long" />

@@ -177,104 +177,104 @@ public interface ScienceAppDescriptionModel extends BaseModel<ScienceAppDescript
 		Locale defaultLocale);
 
 	/**
-	 * Returns the content m d e of this science app description.
+	 * Returns the content original of this science app description.
 	 *
-	 * @return the content m d e of this science app description
+	 * @return the content original of this science app description
 	 */
-	public String getContentMDE();
+	public String getContentOriginal();
 
 	/**
-	 * Returns the localized content m d e of this science app description in the language. Uses the default language if no localization exists for the requested language.
+	 * Returns the localized content original of this science app description in the language. Uses the default language if no localization exists for the requested language.
 	 *
 	 * @param locale the locale of the language
-	 * @return the localized content m d e of this science app description
+	 * @return the localized content original of this science app description
 	 */
 	@AutoEscape
-	public String getContentMDE(Locale locale);
+	public String getContentOriginal(Locale locale);
 
 	/**
-	 * Returns the localized content m d e of this science app description in the language, optionally using the default language if no localization exists for the requested language.
+	 * Returns the localized content original of this science app description in the language, optionally using the default language if no localization exists for the requested language.
 	 *
 	 * @param locale the local of the language
 	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized content m d e of this science app description. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
+	 * @return the localized content original of this science app description. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
 	 */
 	@AutoEscape
-	public String getContentMDE(Locale locale, boolean useDefault);
+	public String getContentOriginal(Locale locale, boolean useDefault);
 
 	/**
-	 * Returns the localized content m d e of this science app description in the language. Uses the default language if no localization exists for the requested language.
+	 * Returns the localized content original of this science app description in the language. Uses the default language if no localization exists for the requested language.
 	 *
 	 * @param languageId the ID of the language
-	 * @return the localized content m d e of this science app description
+	 * @return the localized content original of this science app description
 	 */
 	@AutoEscape
-	public String getContentMDE(String languageId);
+	public String getContentOriginal(String languageId);
 
 	/**
-	 * Returns the localized content m d e of this science app description in the language, optionally using the default language if no localization exists for the requested language.
+	 * Returns the localized content original of this science app description in the language, optionally using the default language if no localization exists for the requested language.
 	 *
 	 * @param languageId the ID of the language
 	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized content m d e of this science app description
+	 * @return the localized content original of this science app description
 	 */
 	@AutoEscape
-	public String getContentMDE(String languageId, boolean useDefault);
+	public String getContentOriginal(String languageId, boolean useDefault);
 
 	@AutoEscape
-	public String getContentMDECurrentLanguageId();
+	public String getContentOriginalCurrentLanguageId();
 
 	@AutoEscape
-	public String getContentMDECurrentValue();
+	public String getContentOriginalCurrentValue();
 
 	/**
-	 * Returns a map of the locales and localized content m d es of this science app description.
+	 * Returns a map of the locales and localized content originals of this science app description.
 	 *
-	 * @return the locales and localized content m d es of this science app description
+	 * @return the locales and localized content originals of this science app description
 	 */
-	public Map<Locale, String> getContentMDEMap();
+	public Map<Locale, String> getContentOriginalMap();
 
 	/**
-	 * Sets the content m d e of this science app description.
+	 * Sets the content original of this science app description.
 	 *
-	 * @param contentMDE the content m d e of this science app description
+	 * @param contentOriginal the content original of this science app description
 	 */
-	public void setContentMDE(String contentMDE);
+	public void setContentOriginal(String contentOriginal);
 
 	/**
-	 * Sets the localized content m d e of this science app description in the language.
+	 * Sets the localized content original of this science app description in the language.
 	 *
-	 * @param contentMDE the localized content m d e of this science app description
+	 * @param contentOriginal the localized content original of this science app description
 	 * @param locale the locale of the language
 	 */
-	public void setContentMDE(String contentMDE, Locale locale);
+	public void setContentOriginal(String contentOriginal, Locale locale);
 
 	/**
-	 * Sets the localized content m d e of this science app description in the language, and sets the default locale.
+	 * Sets the localized content original of this science app description in the language, and sets the default locale.
 	 *
-	 * @param contentMDE the localized content m d e of this science app description
+	 * @param contentOriginal the localized content original of this science app description
 	 * @param locale the locale of the language
 	 * @param defaultLocale the default locale
 	 */
-	public void setContentMDE(String contentMDE, Locale locale,
+	public void setContentOriginal(String contentOriginal, Locale locale,
 		Locale defaultLocale);
 
-	public void setContentMDECurrentLanguageId(String languageId);
+	public void setContentOriginalCurrentLanguageId(String languageId);
 
 	/**
-	 * Sets the localized content m d es of this science app description from the map of locales and localized content m d es.
+	 * Sets the localized content originals of this science app description from the map of locales and localized content originals.
 	 *
-	 * @param contentMDEMap the locales and localized content m d es of this science app description
+	 * @param contentOriginalMap the locales and localized content originals of this science app description
 	 */
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap);
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap);
 
 	/**
-	 * Sets the localized content m d es of this science app description from the map of locales and localized content m d es, and sets the default locale.
+	 * Sets the localized content originals of this science app description from the map of locales and localized content originals, and sets the default locale.
 	 *
-	 * @param contentMDEMap the locales and localized content m d es of this science app description
+	 * @param contentOriginalMap the locales and localized content originals of this science app description
 	 * @param defaultLocale the default locale
 	 */
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap,
 		Locale defaultLocale);
 
 	/**
