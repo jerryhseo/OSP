@@ -86,7 +86,7 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 
 		attributes.put("descriptionId", getDescriptionId());
 		attributes.put("content", getContent());
-		attributes.put("contentMDE", getContentMDE());
+		attributes.put("contentOriginal", getContentOriginal());
 		attributes.put("insertId", getInsertId());
 		attributes.put("insertDt", getInsertDt());
 		attributes.put("updateId", getUpdateId());
@@ -109,10 +109,10 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 			setContent(content);
 		}
 
-		String contentMDE = (String)attributes.get("contentMDE");
+		String contentOriginal = (String)attributes.get("contentOriginal");
 
-		if (contentMDE != null) {
-			setContentMDE(contentMDE);
+		if (contentOriginal != null) {
+			setContentOriginal(contentOriginal);
 		}
 
 		Long insertId = (Long)attributes.get("insertId");
@@ -288,63 +288,64 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 	}
 
 	@Override
-	public String getContentMDE() {
-		return _contentMDE;
+	public String getContentOriginal() {
+		return _contentOriginal;
 	}
 
 	@Override
-	public String getContentMDE(Locale locale) {
+	public String getContentOriginal(Locale locale) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 
-		return getContentMDE(languageId);
+		return getContentOriginal(languageId);
 	}
 
 	@Override
-	public String getContentMDE(Locale locale, boolean useDefault) {
+	public String getContentOriginal(Locale locale, boolean useDefault) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 
-		return getContentMDE(languageId, useDefault);
+		return getContentOriginal(languageId, useDefault);
 	}
 
 	@Override
-	public String getContentMDE(String languageId) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId);
+	public String getContentOriginal(String languageId) {
+		return LocalizationUtil.getLocalization(getContentOriginal(), languageId);
 	}
 
 	@Override
-	public String getContentMDE(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getContentMDE(), languageId,
-			useDefault);
+	public String getContentOriginal(String languageId, boolean useDefault) {
+		return LocalizationUtil.getLocalization(getContentOriginal(),
+			languageId, useDefault);
 	}
 
 	@Override
-	public String getContentMDECurrentLanguageId() {
-		return _contentMDECurrentLanguageId;
+	public String getContentOriginalCurrentLanguageId() {
+		return _contentOriginalCurrentLanguageId;
 	}
 
 	@Override
-	public String getContentMDECurrentValue() {
-		Locale locale = getLocale(_contentMDECurrentLanguageId);
+	public String getContentOriginalCurrentValue() {
+		Locale locale = getLocale(_contentOriginalCurrentLanguageId);
 
-		return getContentMDE(locale);
+		return getContentOriginal(locale);
 	}
 
 	@Override
-	public Map<Locale, String> getContentMDEMap() {
-		return LocalizationUtil.getLocalizationMap(getContentMDE());
+	public Map<Locale, String> getContentOriginalMap() {
+		return LocalizationUtil.getLocalizationMap(getContentOriginal());
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE) {
-		_contentMDE = contentMDE;
+	public void setContentOriginal(String contentOriginal) {
+		_contentOriginal = contentOriginal;
 
 		if (_scienceAppDescriptionRemoteModel != null) {
 			try {
 				Class<?> clazz = _scienceAppDescriptionRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setContentMDE", String.class);
+				Method method = clazz.getMethod("setContentOriginal",
+						String.class);
 
-				method.invoke(_scienceAppDescriptionRemoteModel, contentMDE);
+				method.invoke(_scienceAppDescriptionRemoteModel, contentOriginal);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -353,40 +354,41 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE, Locale locale) {
-		setContentMDE(contentMDE, locale, LocaleUtil.getDefault());
+	public void setContentOriginal(String contentOriginal, Locale locale) {
+		setContentOriginal(contentOriginal, locale, LocaleUtil.getDefault());
 	}
 
 	@Override
-	public void setContentMDE(String contentMDE, Locale locale,
+	public void setContentOriginal(String contentOriginal, Locale locale,
 		Locale defaultLocale) {
 		String languageId = LocaleUtil.toLanguageId(locale);
 		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
 
-		if (Validator.isNotNull(contentMDE)) {
-			setContentMDE(LocalizationUtil.updateLocalization(getContentMDE(),
-					"ContentMDE", contentMDE, languageId, defaultLanguageId));
+		if (Validator.isNotNull(contentOriginal)) {
+			setContentOriginal(LocalizationUtil.updateLocalization(
+					getContentOriginal(), "ContentOriginal", contentOriginal,
+					languageId, defaultLanguageId));
 		}
 		else {
-			setContentMDE(LocalizationUtil.removeLocalization(getContentMDE(),
-					"ContentMDE", languageId));
+			setContentOriginal(LocalizationUtil.removeLocalization(
+					getContentOriginal(), "ContentOriginal", languageId));
 		}
 	}
 
 	@Override
-	public void setContentMDECurrentLanguageId(String languageId) {
-		_contentMDECurrentLanguageId = languageId;
+	public void setContentOriginalCurrentLanguageId(String languageId) {
+		_contentOriginalCurrentLanguageId = languageId;
 	}
 
 	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap) {
-		setContentMDEMap(contentMDEMap, LocaleUtil.getDefault());
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap) {
+		setContentOriginalMap(contentOriginalMap, LocaleUtil.getDefault());
 	}
 
 	@Override
-	public void setContentMDEMap(Map<Locale, String> contentMDEMap,
+	public void setContentOriginalMap(Map<Locale, String> contentOriginalMap,
 		Locale defaultLocale) {
-		if (contentMDEMap == null) {
+		if (contentOriginalMap == null) {
 			return;
 		}
 
@@ -401,9 +403,9 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 				currentThread.setContextClassLoader(portalClassLoader);
 			}
 
-			setContentMDE(LocalizationUtil.updateLocalization(contentMDEMap,
-					getContentMDE(), "ContentMDE",
-					LocaleUtil.toLanguageId(defaultLocale)));
+			setContentOriginal(LocalizationUtil.updateLocalization(
+					contentOriginalMap, getContentOriginal(),
+					"ContentOriginal", LocaleUtil.toLanguageId(defaultLocale)));
 		}
 		finally {
 			if (contextClassLoader != portalClassLoader) {
@@ -579,9 +581,9 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 			}
 		}
 
-		Map<Locale, String> contentMDEMap = getContentMDEMap();
+		Map<Locale, String> contentOriginalMap = getContentOriginalMap();
 
-		for (Map.Entry<Locale, String> entry : contentMDEMap.entrySet()) {
+		for (Map.Entry<Locale, String> entry : contentOriginalMap.entrySet()) {
 			Locale locale = entry.getKey();
 			String value = entry.getValue();
 
@@ -628,14 +630,15 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 			setContent(getContent(defaultLocale), defaultLocale, defaultLocale);
 		}
 
-		String contentMDE = getContentMDE(defaultLocale);
+		String contentOriginal = getContentOriginal(defaultLocale);
 
-		if (Validator.isNull(contentMDE)) {
-			setContentMDE(getContentMDE(modelDefaultLanguageId), defaultLocale);
+		if (Validator.isNull(contentOriginal)) {
+			setContentOriginal(getContentOriginal(modelDefaultLanguageId),
+				defaultLocale);
 		}
 		else {
-			setContentMDE(getContentMDE(defaultLocale), defaultLocale,
-				defaultLocale);
+			setContentOriginal(getContentOriginal(defaultLocale),
+				defaultLocale, defaultLocale);
 		}
 	}
 
@@ -652,7 +655,7 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 
 		clone.setDescriptionId(getDescriptionId());
 		clone.setContent(getContent());
-		clone.setContentMDE(getContentMDE());
+		clone.setContentOriginal(getContentOriginal());
 		clone.setInsertId(getInsertId());
 		clone.setInsertDt(getInsertDt());
 		clone.setUpdateId(getUpdateId());
@@ -714,8 +717,8 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 		sb.append(getDescriptionId());
 		sb.append(", content=");
 		sb.append(getContent());
-		sb.append(", contentMDE=");
-		sb.append(getContentMDE());
+		sb.append(", contentOriginal=");
+		sb.append(getContentOriginal());
 		sb.append(", insertId=");
 		sb.append(getInsertId());
 		sb.append(", insertDt=");
@@ -746,8 +749,8 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 		sb.append(getContent());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>contentMDE</column-name><column-value><![CDATA[");
-		sb.append(getContentMDE());
+			"<column><column-name>contentOriginal</column-name><column-value><![CDATA[");
+		sb.append(getContentOriginal());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>insertId</column-name><column-value><![CDATA[");
@@ -774,8 +777,8 @@ public class ScienceAppDescriptionClp extends BaseModelImpl<ScienceAppDescriptio
 	private long _descriptionId;
 	private String _content;
 	private String _contentCurrentLanguageId;
-	private String _contentMDE;
-	private String _contentMDECurrentLanguageId;
+	private String _contentOriginal;
+	private String _contentOriginalCurrentLanguageId;
 	private long _insertId;
 	private Date _insertDt;
 	private long _updateId;

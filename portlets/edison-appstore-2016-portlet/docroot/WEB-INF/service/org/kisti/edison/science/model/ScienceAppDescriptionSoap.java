@@ -34,7 +34,7 @@ public class ScienceAppDescriptionSoap implements Serializable {
 
 		soapModel.setDescriptionId(model.getDescriptionId());
 		soapModel.setContent(model.getContent());
-		soapModel.setContentMDE(model.getContentMDE());
+		soapModel.setContentOriginal(model.getContentOriginal());
 		soapModel.setInsertId(model.getInsertId());
 		soapModel.setInsertDt(model.getInsertDt());
 		soapModel.setUpdateId(model.getUpdateId());
@@ -110,12 +110,12 @@ public class ScienceAppDescriptionSoap implements Serializable {
 		_content = content;
 	}
 
-	public String getContentMDE() {
-		return _contentMDE;
+	public String getContentOriginal() {
+		return _contentOriginal;
 	}
 
-	public void setContentMDE(String contentMDE) {
-		_contentMDE = contentMDE;
+	public void setContentOriginal(String contentOriginal) {
+		_contentOriginal = contentOriginal;
 	}
 
 	public long getInsertId() {
@@ -152,7 +152,7 @@ public class ScienceAppDescriptionSoap implements Serializable {
 
 	private long _descriptionId;
 	private String _content;
-	private String _contentMDE;
+	private String _contentOriginal;
 	private long _insertId;
 	private Date _insertDt;
 	private long _updateId;
