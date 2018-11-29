@@ -15,6 +15,8 @@
 		<column name="projectId" type="long" ></column>
 		<column name="projectStructure" type="String"></column>
 		<column name="analyzerStructure" type="String"></column>
+		<column name="userId" type="long"></column>
+		<column name="createDate" type="Date"></column>
 		
 		<!-- Finders -->
 		<finder name="simulationUuid" return-type="Collection" unique="false">

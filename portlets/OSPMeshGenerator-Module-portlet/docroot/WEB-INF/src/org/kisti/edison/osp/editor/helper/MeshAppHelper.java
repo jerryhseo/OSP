@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.osp.model.AnalyzerJob;
@@ -74,7 +75,6 @@ public class MeshAppHelper {
 	
 	
 	public String getTimeLog(ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user,int time) throws IOException, InterruptedException{
-		System.out.println("CAAL getTimeLog");
 		Path path = Paths.get(
 				EXECUTE_BASE_PATH,
 				analyzerJob.getAppName(), analyzerJob.getAppVersion(), user.getScreenName(),
@@ -186,7 +186,7 @@ public class MeshAppHelper {
 			ExecuteLocalServiceUtil.simulationWithInputFile(projectId, analyzerJob, fileContent, inputFilePath);
 		}
 		
-		doAnalyzer(exeFile, inputFilePath, resultPath);
+//		doAnalyzer(exeFile, inputFilePath, resultPath);
 		return true;
 	}
 	
@@ -211,6 +211,14 @@ public class MeshAppHelper {
 	public String getOutputData(String portName, String analyzerOutput){
 		JSONObject outputPorts = (JSONObject) JSONSerializer.toJSON(analyzerOutput);
 		return outputPorts.getJSONObject(portName).getString("outputData_");
+	}
+	
+	public void removeRemoteFilePath(ThemeDisplay themeDisplay, AnalyzerJob analyzerJob,User user) throws SystemException, IOException{
+		Path executePath = getAppExecutePath(themeDisplay, analyzerJob);
+		Path workingPath = executePath.resolve(Paths.get(user.getScreenName(), analyzerJob.getAnalyzerUuid()));
+		
+		FileUtils.cleanDirectory(workingPath.toAbsolutePath().toFile());
+		workingPath.toAbsolutePath().toFile().delete();
 	}
 	
 }

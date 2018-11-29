@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import java.util.Date;
+
 /**
  * The cache model class for representing Project in entity cache.
  *
@@ -35,7 +37,7 @@ import java.io.ObjectOutput;
 public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{simulationUuid=");
 		sb.append(simulationUuid);
@@ -49,6 +51,10 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		sb.append(projectStructure);
 		sb.append(", analyzerStructure=");
 		sb.append(analyzerStructure);
+		sb.append(", userId=");
+		sb.append(userId);
+		sb.append(", createDate=");
+		sb.append(createDate);
 		sb.append("}");
 
 		return sb.toString();
@@ -89,6 +95,15 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 			projectImpl.setAnalyzerStructure(analyzerStructure);
 		}
 
+		projectImpl.setUserId(userId);
+
+		if (createDate == Long.MIN_VALUE) {
+			projectImpl.setCreateDate(null);
+		}
+		else {
+			projectImpl.setCreateDate(new Date(createDate));
+		}
+
 		projectImpl.resetOriginalValues();
 
 		return projectImpl;
@@ -102,6 +117,8 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		projectId = objectInput.readLong();
 		projectStructure = objectInput.readUTF();
 		analyzerStructure = objectInput.readUTF();
+		userId = objectInput.readLong();
+		createDate = objectInput.readLong();
 	}
 
 	@Override
@@ -137,6 +154,9 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 		else {
 			objectOutput.writeUTF(analyzerStructure);
 		}
+
+		objectOutput.writeLong(userId);
+		objectOutput.writeLong(createDate);
 	}
 
 	public String simulationUuid;
@@ -145,4 +165,6 @@ public class ProjectCacheModel implements CacheModel<Project>, Externalizable {
 	public long projectId;
 	public String projectStructure;
 	public String analyzerStructure;
+	public long userId;
+	public long createDate;
 }

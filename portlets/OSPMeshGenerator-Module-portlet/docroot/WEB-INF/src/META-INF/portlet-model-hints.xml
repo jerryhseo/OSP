@@ -20,5 +20,7 @@
 		<field name="analyzerStructure" type="String">
 			<hint name="max-length">4096</hint>
 		</field>
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
 	</model>
 </model-hints>

@@ -1,0 +1,9 @@
+<input type="file" name="file" id="file_input" ng-init="initFileInput()" ng-if="tabIdx == 6">
+<div class="grid_option">
+	<div>
+		<label for="grid_title">Grid Title</label>
+		<input type="text" name="grid_title" id="grid_title" ng-model="gridTitle">
+	</div>
+</div>
+
+<pq-grid id="grid" options="gridOptions" style="margin:auto;"></pq-grid>

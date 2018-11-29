@@ -19,6 +19,7 @@ import org.kisti.edison.osp.service.persistence.ProjectPK;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +39,8 @@ public class ProjectSoap implements Serializable {
 		soapModel.setProjectId(model.getProjectId());
 		soapModel.setProjectStructure(model.getProjectStructure());
 		soapModel.setAnalyzerStructure(model.getAnalyzerStructure());
+		soapModel.setUserId(model.getUserId());
+		soapModel.setCreateDate(model.getCreateDate());
 
 		return soapModel;
 	}
@@ -140,10 +143,28 @@ public class ProjectSoap implements Serializable {
 		_analyzerStructure = analyzerStructure;
 	}
 
+	public long getUserId() {
+		return _userId;
+	}
+
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	public Date getCreateDate() {
+		return _createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		_createDate = createDate;
+	}
+
 	private String _simulationUuid;
 	private String _portletNamespace;
 	private long _jobSeqNo;
 	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
+	private long _userId;
+	private Date _createDate;
 }

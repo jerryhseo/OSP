@@ -75,7 +75,7 @@ public class ParameterController {
 		try{
 			AnalyzerJob analyzerJob = new Gson().fromJson(analyzerJobJson, AnalyzerJob.class);
 			User user = PortalUtil.getUser(request);
-//			boolean isCompleteAnalyzer = meshAppHelper.exeAnalyzer(GetterUtil.getLong(projectId), inputFileName, fileId, fileContent, themeDisplay, analyzerJob, user);
+			boolean isCompleteAnalyzer = meshAppHelper.exeAnalyzer(GetterUtil.getLong(projectId), inputFileName, fileId, fileContent, themeDisplay, analyzerJob, user);
 			
 			long sleepTime = 2*1000;
 			Thread.sleep(sleepTime);
@@ -100,14 +100,18 @@ public class ParameterController {
 			AnalyzerJob analyzerJob = new Gson().fromJson(analyzerJobJson, AnalyzerJob.class);
 			
 			User user = PortalUtil.getUser(request);
-			String outText = meshAppHelper.getTimeLog(themeDisplay, analyzerJob, user,100).trim();
+			String time = meshAppHelper.getTimeLog(themeDisplay, analyzerJob, user,100).trim();
 			
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			JsonObject obj = new JsonObject();
-			obj.addProperty("out", outText);
-			out.write(obj.toString());
+			
+			if(time!=""){
+				String outText = meshAppHelper.getOutText(themeDisplay, analyzerJob, user).trim();
+				JsonObject obj = new JsonObject();
+				obj.addProperty("out", outText);
+				out.write(obj.toString());
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
@@ -115,6 +119,20 @@ public class ParameterController {
 	}
 	
 	
+	@ResourceMapping(value="removeRemoteFilePath")
+	public void removeRemoteFilePath(
+			@RequestParam("analyzerJob") String analyzerJobJson,
+			ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		try{
+			AnalyzerJob analyzerJob = new Gson().fromJson(analyzerJobJson, AnalyzerJob.class);
+			User user = PortalUtil.getUser(request);
+			meshAppHelper.removeRemoteFilePath(themeDisplay, analyzerJob, user);
+		}catch (Exception e) {
+			e.printStackTrace();
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),LanguageUtil.get(themeDisplay.getLocale(), "edison-data-delete-error"));
+		}
+	}
 	
 	protected static void handleRuntimeException(Exception ex, HttpServletResponse response, String message)
 	        throws IOException{

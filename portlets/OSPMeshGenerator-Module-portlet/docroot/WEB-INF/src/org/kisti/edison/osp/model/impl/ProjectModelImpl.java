@@ -15,6 +15,7 @@
 package org.kisti.edison.osp.model.impl;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -22,6 +23,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
+import com.liferay.portal.util.PortalUtil;
 
 import org.kisti.edison.osp.model.Project;
 import org.kisti.edison.osp.model.ProjectModel;
@@ -33,6 +35,7 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,9 +68,11 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			{ "jobSeqNo", Types.BIGINT },
 			{ "projectId", Types.BIGINT },
 			{ "projectStructure", Types.VARCHAR },
-			{ "analyzerStructure", Types.VARCHAR }
+			{ "analyzerStructure", Types.VARCHAR },
+			{ "userId", Types.BIGINT },
+			{ "createDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDMESH_Project (simulationUuid VARCHAR(75) not null,portletNamespace VARCHAR(75) not null,jobSeqNo LONG not null,projectId LONG,projectStructure TEXT null,analyzerStructure TEXT null,primary key (simulationUuid, portletNamespace, jobSeqNo))";
+	public static final String TABLE_SQL_CREATE = "create table EDMESH_Project (simulationUuid VARCHAR(75) not null,portletNamespace VARCHAR(75) not null,jobSeqNo LONG not null,projectId LONG,projectStructure TEXT null,analyzerStructure TEXT null,userId LONG,createDate DATE null,primary key (simulationUuid, portletNamespace, jobSeqNo))";
 	public static final String TABLE_SQL_DROP = "drop table EDMESH_Project";
 	public static final String ORDER_BY_JPQL = " ORDER BY project.id.simulationUuid ASC, project.id.portletNamespace ASC, project.id.jobSeqNo ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDMESH_Project.simulationUuid ASC, EDMESH_Project.portletNamespace ASC, EDMESH_Project.jobSeqNo ASC";
@@ -106,6 +111,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		model.setProjectId(soapModel.getProjectId());
 		model.setProjectStructure(soapModel.getProjectStructure());
 		model.setAnalyzerStructure(soapModel.getAnalyzerStructure());
+		model.setUserId(soapModel.getUserId());
+		model.setCreateDate(soapModel.getCreateDate());
 
 		return model;
 	}
@@ -178,6 +185,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
+		attributes.put("userId", getUserId());
+		attributes.put("createDate", getCreateDate());
 
 		return attributes;
 	}
@@ -218,6 +227,18 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
 		}
 	}
 
@@ -317,6 +338,38 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		_analyzerStructure = analyzerStructure;
 	}
 
+	@JSON
+	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	@Override
+	public String getUserUuid() throws SystemException {
+		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+		_userUuid = userUuid;
+	}
+
+	@JSON
+	@Override
+	public Date getCreateDate() {
+		return _createDate;
+	}
+
+	@Override
+	public void setCreateDate(Date createDate) {
+		_createDate = createDate;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -341,6 +394,8 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		projectImpl.setProjectId(getProjectId());
 		projectImpl.setProjectStructure(getProjectStructure());
 		projectImpl.setAnalyzerStructure(getAnalyzerStructure());
+		projectImpl.setUserId(getUserId());
+		projectImpl.setCreateDate(getCreateDate());
 
 		projectImpl.resetOriginalValues();
 
@@ -430,12 +485,23 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			projectCacheModel.analyzerStructure = null;
 		}
 
+		projectCacheModel.userId = getUserId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			projectCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			projectCacheModel.createDate = Long.MIN_VALUE;
+		}
+
 		return projectCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -449,6 +515,10 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 		sb.append(getProjectStructure());
 		sb.append(", analyzerStructure=");
 		sb.append(getAnalyzerStructure());
+		sb.append(", userId=");
+		sb.append(getUserId());
+		sb.append(", createDate=");
+		sb.append(getCreateDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -456,7 +526,7 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.osp.model.Project");
@@ -486,6 +556,14 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 			"<column><column-name>analyzerStructure</column-name><column-value><![CDATA[");
 		sb.append(getAnalyzerStructure());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>createDate</column-name><column-value><![CDATA[");
+		sb.append(getCreateDate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -503,6 +581,9 @@ public class ProjectModelImpl extends BaseModelImpl<Project>
 	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
+	private long _userId;
+	private String _userUuid;
+	private Date _createDate;
 	private long _columnBitmask;
 	private Project _escapedModel;
 }

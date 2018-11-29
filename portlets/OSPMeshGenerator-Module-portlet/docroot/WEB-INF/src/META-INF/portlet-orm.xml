@@ -30,9 +30,14 @@
 			<basic name="projectId" />
 			<basic name="projectStructure" />
 			<basic name="analyzerStructure" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<entity class="org.kisti.edison.osp.model.impl.ExecuteImpl" name="Execute">

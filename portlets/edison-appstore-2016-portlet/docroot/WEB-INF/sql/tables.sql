@@ -225,6 +225,7 @@ create table EDAPP_ScienceAppCompile (
 create table EDAPP_ScienceAppDescription (
 	descriptionId LONG not null primary key,
 	content STRING null,
+	contentOriginal STRING null,
 	insertId LONG,
 	insertDt DATE null,
 	updateId LONG,

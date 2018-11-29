@@ -891,6 +891,8 @@ public class ProjectPersistenceImpl extends BasePersistenceImpl<Project>
 		projectImpl.setProjectId(project.getProjectId());
 		projectImpl.setProjectStructure(project.getProjectStructure());
 		projectImpl.setAnalyzerStructure(project.getAnalyzerStructure());
+		projectImpl.setUserId(project.getUserId());
+		projectImpl.setCreateDate(project.getCreateDate());
 
 		return projectImpl;
 	}

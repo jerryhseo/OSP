@@ -15,6 +15,7 @@
 package org.kisti.edison.osp.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
@@ -24,6 +25,8 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 import org.kisti.edison.osp.service.persistence.ProjectPK;
 
 import java.io.Serializable;
+
+import java.util.Date;
 
 /**
  * The base model interface for the Project service. Represents a row in the &quot;EDMESH_Project&quot; database table, with each column mapped to a property of this class.
@@ -146,6 +149,49 @@ public interface ProjectModel extends BaseModel<Project> {
 	 * @param analyzerStructure the analyzer structure of this project
 	 */
 	public void setAnalyzerStructure(String analyzerStructure);
+
+	/**
+	 * Returns the user ID of this project.
+	 *
+	 * @return the user ID of this project
+	 */
+	public long getUserId();
+
+	/**
+	 * Sets the user ID of this project.
+	 *
+	 * @param userId the user ID of this project
+	 */
+	public void setUserId(long userId);
+
+	/**
+	 * Returns the user uuid of this project.
+	 *
+	 * @return the user uuid of this project
+	 * @throws SystemException if a system exception occurred
+	 */
+	public String getUserUuid() throws SystemException;
+
+	/**
+	 * Sets the user uuid of this project.
+	 *
+	 * @param userUuid the user uuid of this project
+	 */
+	public void setUserUuid(String userUuid);
+
+	/**
+	 * Returns the create date of this project.
+	 *
+	 * @return the create date of this project
+	 */
+	public Date getCreateDate();
+
+	/**
+	 * Sets the create date of this project.
+	 *
+	 * @param createDate the create date of this project
+	 */
+	public void setCreateDate(Date createDate);
 
 	@Override
 	public boolean isNew();

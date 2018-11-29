@@ -23,5 +23,7 @@
 		<property name="projectId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="projectStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="analyzerStructure" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

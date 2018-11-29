@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
+import com.liferay.portal.util.PortalUtil;
 
 import org.kisti.edison.osp.service.ClpSerializer;
 import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
@@ -29,6 +30,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.Method;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +83,8 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
+		attributes.put("userId", getUserId());
+		attributes.put("createDate", getCreateDate());
 
 		return attributes;
 	}
@@ -121,6 +125,18 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
 		}
 	}
 
@@ -266,6 +282,62 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		}
 	}
 
+	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+
+		if (_projectRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_projectRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getUserUuid() throws SystemException {
+		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+		_userUuid = userUuid;
+	}
+
+	@Override
+	public Date getCreateDate() {
+		return _createDate;
+	}
+
+	@Override
+	public void setCreateDate(Date createDate) {
+		_createDate = createDate;
+
+		if (_projectRemoteModel != null) {
+			try {
+				Class<?> clazz = _projectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCreateDate", Date.class);
+
+				method.invoke(_projectRemoteModel, createDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	public BaseModel<?> getProjectRemoteModel() {
 		return _projectRemoteModel;
 	}
@@ -341,6 +413,8 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		clone.setProjectId(getProjectId());
 		clone.setProjectStructure(getProjectStructure());
 		clone.setAnalyzerStructure(getAnalyzerStructure());
+		clone.setUserId(getUserId());
+		clone.setCreateDate(getCreateDate());
 
 		return clone;
 	}
@@ -385,7 +459,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{simulationUuid=");
 		sb.append(getSimulationUuid());
@@ -399,6 +473,10 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 		sb.append(getProjectStructure());
 		sb.append(", analyzerStructure=");
 		sb.append(getAnalyzerStructure());
+		sb.append(", userId=");
+		sb.append(getUserId());
+		sb.append(", createDate=");
+		sb.append(getCreateDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -406,7 +484,7 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.osp.model.Project");
@@ -436,6 +514,14 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 			"<column><column-name>analyzerStructure</column-name><column-value><![CDATA[");
 		sb.append(getAnalyzerStructure());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>createDate</column-name><column-value><![CDATA[");
+		sb.append(getCreateDate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -448,6 +534,9 @@ public class ProjectClp extends BaseModelImpl<Project> implements Project {
 	private long _projectId;
 	private String _projectStructure;
 	private String _analyzerStructure;
+	private long _userId;
+	private String _userUuid;
+	private Date _createDate;
 	private BaseModel<?> _projectRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.osp.service.ClpSerializer.class;
 }

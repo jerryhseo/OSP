@@ -1,0 +1,186 @@
+<div class="float_group" ng-class="{ open: toggle_float_group }">
+	<div class="btn btn-default toggle_btn" ng-click="toggle_float_group ? toggle_float_group = false : toggle_float_group = true">Options</div>
+	<div class="float_wrap">
+		<div ng-show="contour" class="contour_checks">
+			<fieldset>
+				<legend>
+					Contour curves
+				</legend>
+				<div>
+					<input type="checkbox" id="contour-value" data-axis="value">
+					<label for="contour-value">Value Axis</label>
+				</div>
+				<div>
+					<input type="checkbox" id="contour-x" data-axis="x">
+					<label for="contour-x">X Axis</label>
+				</div>
+				<div>
+					<input type="checkbox" id="contour-y" data-axis="y">
+					<label for="contour-y">Y Axis</label>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="chart_option" ng-init="optionFloater = false">
+			<fieldset ng-class="{ closed:optionFloater }">
+				<legend ng-click="optionFloater ? optionFloater = false : optionFloater = true">
+					Chart Options
+				</legend>
+				<div>
+					<label>Title Font Size</label>
+					<input type="number" ng-model="chartTitleFontSize" min="8" max="100" ng-change="rebuild(chartTitleFontSize, 'optionchartTitleFontSize', 0)">
+					<span class="supfix">px</span>
+				</div>
+				<div>
+					<label>Legend Font Size</label>
+					<input type="number" ng-model="chartLegendFontSize" min="8" max="50" ng-change="rebuild(chartLegendFontSize, 'optionchartLegendFontSize', 0)">
+					<span class="supfix">px</span>
+				</div>
+				<div>
+					<label>Label Font Size</label>
+					<input type="number" ng-model="chartXYFontSize" min="8" max="50" ng-change="rebuild(chartXYFontSize, 'optionchartXYFontSize', 0)">
+					<span class="supfix">px</span>
+				</div>
+				<div>
+					<label>Chart Height</label>
+					<input type="number" ng-model="chartHeight" min="100" ng-change="rebuild(chartHeight, 'height', 0)">
+					<span class="supfix">px</span>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="zoom_option" ng-init="zoomFloater = false" ng-class="{ hidden: tabIdx == 4 || chart3 || contour }">
+			<fieldset ng-class="{ closed:zoomFloater }">
+				<legend ng-click="zoomFloater ? zoomFloater = false : zoomFloater = true">
+					Zoom Options
+				</legend>
+				<div class="interface_X">
+					<label class="interface_label">X Interface</label>
+					<div class="interface_input">
+						<span class="label">X min</span>
+						<input type="number" min="{{chartInterfaceX.options.floor}}" max="{{chartInterfaceX.maxValue}}" step="0.00001" ng-model="chartInterfaceX.minValue" />
+					</div>
+					<div class="interface_input max">
+						<span class="label">X max</span>
+						<input type="number" min="{{chartInterfaceX.minValue}}" max="{{chartInterfaceX.options.ceil}}" step="0.00001" ng-model="chartInterfaceX.maxValue" />
+					</div>
+					<rzslider 
+						rz-slider-model="chartInterfaceX.minValue"
+						rz-slider-high="chartInterfaceX.maxValue"
+						rz-slider-options="chartInterfaceX.options">
+					</rzslider>
+				</div>
+				<div class="interface_Y">
+					<label class="interface_label">Y Interface</label>
+					<div class="interface_input">
+						<span class="label">Y min</span>
+						<input type="number" min="{{chartInterfaceY.options.floor}}" max="{{chartInterfaceY.maxValue}}" step="0.00001" ng-model="chartInterfaceY.minValue" />
+					</div>
+					<div class="interface_input max">
+						<span class="label">Y max</span>
+						<input type="number" min="{{chartInterfaceY.minValue}}" max="{{chartInterfaceY.options.ceil}}" step="0.00001" ng-model="chartInterfaceY.maxValue" />
+					</div>
+					<rzslider 
+						rz-slider-model="chartInterfaceY.minValue"
+						rz-slider-high="chartInterfaceY.maxValue"
+						rz-slider-options="chartInterfaceY.options">
+					</rzslider>
+				</div>
+				<div class="btn_group">
+					<button type="button" class="btn" ng-click="
+						chartInterfaceX.minValue = chartInterfaceX.options.floor;
+						chartInterfaceX.maxValue = chartInterfaceX.options.ceil;
+						chartInterfaceY.minValue = chartInterfaceY.options.floor;
+						chartInterfaceY.maxValue = chartInterfaceY.options.ceil;
+						rebuild(null, null, null);
+					">reset</button>
+					<button type="button" class="btn btn-default" ng-click="rebuild(null, null, null)">적용</button>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="xy_visible" ng-init="visibleFloater = false">
+			<fieldset ng-class="{ closed:visibleFloater }">
+				<legend ng-click="visibleFloater ? visibleFloater = false : visibleFloater = true">
+					Axis Visible
+				</legend>
+				<div>
+					<label>xAxis Visible</label>
+					<input type="checkbox" ng-model="xAxisVisible" ng-change="rebuild(xAxisVisible, 'xvisible', 0)">
+				</div>
+				<div>
+					<label>yAxis Visible</label>
+					<input type="checkbox" ng-model="yAxisVisible" ng-change="rebuild(yAxisVisible, 'yvisible', 0)">
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="line_color" ng-init="colorFloater = false" ng-hide="scatter || contour">
+			<fieldset ng-class="{ closed:colorFloater }">
+				<legend ng-click="colorFloater ? colorFloater = false : colorFloater = true">
+					Line Colors
+				</legend>
+				<div ng-repeat="color in graphColors">
+					<label>Color {{$index + 1}}</label>
+					<color-picker ng-model="color"></color-picker>
+					<button type="button" class="color_submit" ng-click="rebuild('#'+color, 'color', $index)">적용</button>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="line_width" ng-hide="scatter || contour" ng-init="widthFloater = false">
+			<fieldset ng-class="{ closed:widthFloater }">
+				<legend ng-click="widthFloater ? widthFloater = false : widthFloater = true">
+					Line Width
+				</legend>
+				<div ng-repeat="width in graphWidth track by $index">
+					<label>Width {{$index + 1}}</label>
+					<input type="text" ng-model="width" ng-blur="rebuild(width, 'width', $index)">
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>
+
+<div class="chart_title">
+	<label>Chart Title</label>
+	<input type="text" ng-model="title.chartTitle" ng-blur="rebuild(title, 'title', 0)">
+</div>
+
+<div class="xaxis_title">
+	<label>xAxis Title</label>
+	<input type="text" ng-model="title.xAxisTitle" ng-blur="rebuild(title, 'title', 0)">
+</div>
+
+<div class="yaxis_title">
+	<label>yAxis Title</label>
+	<input type="text" ng-model="title.yAxisTitle" ng-blur="rebuild(title, 'title', 0)">
+</div>
+<div ng-if="chart3" class="yaxis2_title">
+	<label>yAxis2 Title</label>
+	<input type="text" ng-model="title.yAxisTitle2" ng-blur="rebuild(title, 'title', 0)">
+</div>
+<div ng-if="chart3" class="yaxis3_title">
+	<label>yAxis3 Title</label>
+	<input type="text" ng-model="title.yAxisTitle3" ng-blur="rebuild(title, 'title', 0)">
+</div>
+<div ng-if="chart5" class="chart_type">
+	<span class="type_label">Chart Type</span>
+	<div class="type_group">
+		<input type="radio" name="type_spline" id="type_spline" ng-model="chartType" value="spline" ng-change="rebuild(chartType, 'optionchartType', 0)">
+		<label for="type_spline">Spline</label>
+		<input type="radio" name="type_poligon" id="type_poligon" ng-model="chartType" value="polygon" ng-change="rebuild(chartType, 'optionchartType', 0)">
+		<label for="type_poligon">Polygon</label>
+	</div>
+</div>
+
+<!-- <div class="chart1_graph_title" ng-if="chart1">
+	<label>Graph Title</label>
+	<input class="chart1_graph1_title" type="text" ng-model="title.graphTitle[0]" ng-blur="rebuild(title, 'title', 0)">
+	<input class="chart1_graph2_title" type="text" ng-model="title.graphTitle[1]" ng-blur="rebuild(title, 'title', 1)">
+	<input class="chart1_graph3_title" type="text" ng-model="title.graphTitle[2]" ng-blur="rebuild(title, 'title', 2)">
+	<input class="chart1_graph4_title" type="text" ng-model="title.graphTitle[3]" ng-blur="rebuild(title, 'title', 3)">
+	<input class="chart1_graph5_title" type="text" ng-model="title.graphTitle[4]" ng-blur="rebuild(title, 'title', 4)">
+</div> -->
+
+<div id="container" style="height: {{chartHeight}}px; margin: 0 auto"></div>

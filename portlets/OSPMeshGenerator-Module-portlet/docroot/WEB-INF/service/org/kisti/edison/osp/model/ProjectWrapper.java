@@ -17,6 +17,7 @@ package org.kisti.edison.osp.model;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +55,8 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 		attributes.put("projectId", getProjectId());
 		attributes.put("projectStructure", getProjectStructure());
 		attributes.put("analyzerStructure", getAnalyzerStructure());
+		attributes.put("userId", getUserId());
+		attributes.put("createDate", getCreateDate());
 
 		return attributes;
 	}
@@ -94,6 +97,18 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 
 		if (analyzerStructure != null) {
 			setAnalyzerStructure(analyzerStructure);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
 		}
 	}
 
@@ -236,6 +251,68 @@ public class ProjectWrapper implements Project, ModelWrapper<Project> {
 	@Override
 	public void setAnalyzerStructure(java.lang.String analyzerStructure) {
 		_project.setAnalyzerStructure(analyzerStructure);
+	}
+
+	/**
+	* Returns the user ID of this project.
+	*
+	* @return the user ID of this project
+	*/
+	@Override
+	public long getUserId() {
+		return _project.getUserId();
+	}
+
+	/**
+	* Sets the user ID of this project.
+	*
+	* @param userId the user ID of this project
+	*/
+	@Override
+	public void setUserId(long userId) {
+		_project.setUserId(userId);
+	}
+
+	/**
+	* Returns the user uuid of this project.
+	*
+	* @return the user uuid of this project
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.lang.String getUserUuid()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _project.getUserUuid();
+	}
+
+	/**
+	* Sets the user uuid of this project.
+	*
+	* @param userUuid the user uuid of this project
+	*/
+	@Override
+	public void setUserUuid(java.lang.String userUuid) {
+		_project.setUserUuid(userUuid);
+	}
+
+	/**
+	* Returns the create date of this project.
+	*
+	* @return the create date of this project
+	*/
+	@Override
+	public java.util.Date getCreateDate() {
+		return _project.getCreateDate();
+	}
+
+	/**
+	* Sets the create date of this project.
+	*
+	* @param createDate the create date of this project
+	*/
+	@Override
+	public void setCreateDate(java.util.Date createDate) {
+		_project.setCreateDate(createDate);
 	}
 
 	@Override

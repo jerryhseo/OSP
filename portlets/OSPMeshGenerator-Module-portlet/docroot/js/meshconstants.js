@@ -47,6 +47,8 @@
 		BC_TYPE_GROUP_1:'group1',
 		BC_TYPE_GROUP_2:'group2',
 		BC_TYPE_GROUP_3:'group3',
+		MESH_VIEWER_PORTLET:'BladeMeshViewer_WAR_OSPMeshGeneratorModuleportlet',
+		XY_VIEWER_PORTLET:'MeshXYChartViewer_WAR_OSPMeshGeneratorModuleportlet',
 		getShapeAnalysisParamApp:function(type){
 			switch (type) {
 				case 'BLADE':
@@ -63,27 +65,27 @@
 					return '1.0.0';
 			}
 		},
-		getShapeAnalysisApp:function(site){
-			switch (site) {
-				case 'KFLOW':
+		getShapeAnalysisApp:function(type){
+			switch (type) {
+				case 'BLADE':
 					return 'KFOIL_AirFoil_Para_parin';
-				case 'ETURB':
+				case 'MESH':
 					return 'KFOIL_AirFoil_Para_parin';
 			}
 		},
-		getShapeAnalysisAppVersion:function(site){
-			switch (site) {
-				case 'KFLOW':
+		getShapeAnalysisAppVersion:function(type){
+			switch (type) {
+				case 'BLADE':
 					return '1.0.1';
-				case 'ETURB':
+				case 'MESH':
 					return '1.0.0';
 			}
 		},
-		getMakeMeshApp:function(site){
-			switch (site) {
-			case 'KFLOW':
+		getMakeMeshApp:function(type){
+			switch (type) {
+			case 'BLADE':
 				return 'KGRID';
-			case 'ETURB':
+			case 'MESH':
 				return 'Mesher';
 		}
 		},

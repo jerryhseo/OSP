@@ -221,9 +221,8 @@
                                 $portletDiv.html( renderResult );
                                 $targetDiv.append( $portletDiv );
                             }
-                            
                             P.status(true);
-                            callback( connector, P.instanceId() );
+                            callback(connector,P.instanceId());
                         },
                         error: function(){
                             console.log('AJAX loading failed', P);

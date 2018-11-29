@@ -5,32 +5,39 @@
 
 <%
 	PortletPreferences preferences = portletDisplay.getPortletSetup();
-	preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE));
+	preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE)); 
 	preferences.store();
 %>
 
 <style type="text/css">
-div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content{
+div#<portlet:namespace/>content{
 	height: 100%;
-	padding: 20px 0px;
+	padding: 10px 15px;
+	overflow: hidden;
 }
 
-div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.blade-row{
+div#<portlet:namespace/>content div.blade-row{
 	margin-left: -5px;
 	margin-right: -5px;
 }
 
-div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.blade-col{
+div#<portlet:namespace/>content div.blade-col{
 	padding-left: 5px;
 	padding-right: 5px;
 }
 
-div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.blade-full-height{
+div#<portlet:namespace/>content div.blade-full-height{
 	height: inherit;
+	margin-bottom: 0px;
 }
 
-div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.blade-panel-heading{
+div#<portlet:namespace/>content div.blade-panel-heading{
 	background-color: white;
+}
+
+
+div#<portlet:namespace/>navigatorParameter{
+	display: none;
 }
 </style>
 
@@ -39,11 +46,17 @@ div#_BladeDataEditor_WAR_OSPMeshGeneratorModuleportlet_content div.blade-panel-h
 		<div class="col-md-4 blade-col blade-full-height">
 			<%@ include file="./navigator.jsp" %>
 		</div>
-		<div class="col-md-8 blade-col blade-full-height">
+		<div class="col-md-8 blade-col blade-full-height" id="<portlet:namespace/>BladeMeshViewerArea">
 			<liferay-portlet:runtime portletName="BladeMeshViewer_WAR_OSPMeshGeneratorModuleportlet" queryString=""/>
 		</div>
+		<div class="col-md-8 blade-col blade-full-height" id="<portlet:namespace/>ChartViewerArea" style="display: none;border: 1px solid #d3d3d3;">
+			<liferay-portlet:runtime portletName="MeshXYChartViewer_WAR_OSPMeshGeneratorModuleportlet" queryString=""/>
+		</div>
 	</div>
+	
+	<%@ include file="./mesh-modal.jsp" %>
 </div>
+
 
 <script type="text/javascript" src="${contextPath}/js/jstree.min.js"></script>
 <script src="${contextPath}/js/meshconstants.js"></script>
@@ -129,6 +142,54 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 		}
 	}
 });
+
+Liferay.on(OSP.Event.OSP_FROM_ANALYZER_EVENT, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		var command = e.command;
+		if (command == 'close.chart') {
+			$("#<portlet:namespace/>ChartViewerArea").css("display","none");
+			
+			if($("#<portlet:namespace/>BladeMeshViewerArea").is(":hidden")){
+				$("#<portlet:namespace/>BladeMeshViewerArea").slideDown("fast");
+			}
+		}
+	}
+});
+
+
+
+/***********************************************************************
+* Viewer Caller Function
+***********************************************************************/
+function <portlet:namespace/>setXYPlotterResultPath(analyzerJob){
+	
+	$("#<portlet:namespace/>BladeMeshViewerArea").css("display","none");
+	
+	if($("#<portlet:namespace/>ChartViewerArea").is(":hidden")){
+		$("#<portlet:namespace/>ChartViewerArea").slideDown("fast");
+	}
+	var targetPortlet = MESH.Constants.XY_VIEWER_PORTLET;
+	var cmd = "set.path"
+	var data = {
+		"resultPath":analyzerJob.resultPath
+	};
+	
+	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
+}
+
+function <portlet:namespace/>viewerEventFire(targetPortlet,cmd,data){
+	var myId = '<%=portletDisplay.getId()%>';
+	var eventData = {
+			portletId : myId,
+			targetPortlet : targetPortlet,
+			command : cmd,
+			data : data
+		};
+	
+	Liferay.fire(OSP.Event.OSP_FROM_EDITOR_EVENT, eventData);
+}
+
 /***********************************************************************
 * Portlet Function
 ***********************************************************************/

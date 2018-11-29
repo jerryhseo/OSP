@@ -362,6 +362,9 @@
         OSP_RESPONSE_COLLECTION_VIEW: 'OSP_RESPONSE_COLLECTION_VIEW',
         OSP_REQUEST_JOB_KEY: 'OSP_REQUEST_JOB_KEY',
         OSP_RESPONSE_JOB_KEY: 'OSP_RESPONSE_JOB_KEY',
+        OSP_FROM_EDITOR_EVENT: 'OSP_FROM_EDITOR_EVENT',
+        OSP_FROM_ANALYZER_EVENT: 'OSP_FROM_ANALYZER_EVENT',
+        
 
         reportProcessStatus: function(portletId, event, srcEvent, srcEventData, status) {
             var eventData = {

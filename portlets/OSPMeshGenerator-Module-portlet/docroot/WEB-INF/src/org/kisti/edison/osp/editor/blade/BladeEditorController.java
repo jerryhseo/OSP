@@ -3,6 +3,7 @@ package org.kisti.edison.osp.editor.blade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +98,7 @@ public class BladeEditorController {
 	
 	@ResourceMapping(value="getProject")
 	public void getProject(ResourceRequest request, ResourceResponse response,
-			@RequestParam("simulationUuid") String simulationUuid, 
+			@RequestParam("simulationUuid") String simulationUuid,
 			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException, PortalException, SystemException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
@@ -118,6 +119,8 @@ public class BladeEditorController {
 				Project project = ProjectLocalServiceUtil.createProject(projectPK);
 				project.setProjectStructure(projectStructure);
 				project.setAnalyzerStructure(analyzerStructure);
+				project.setUserId(themeDisplay.getUserId());
+				project.setCreateDate(new Date());
 				
 				long projectId = CounterLocalServiceUtil.increment(Project.class.getName());
 				project.setProjectId(projectId);
