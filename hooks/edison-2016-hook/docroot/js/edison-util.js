@@ -148,13 +148,17 @@ function strNull(str){
 	return str;
 }
 
+/* 2018.11.26 _ New Loading Image */
+var loadingImg = $("<img/>").attr("src", "/edison-2016-hook/images/loading.gif").css("display", "none");
 function bStart(){
 	$.blockUI({ 
-        message: $('#loadingBox'),
+		
+        /*message: $('#loadingBox'),*/
+		message: loadingImg,
         css: { 
         	color: '#FFF',
             width: '700px',
-            height: '270px',
+            height: '270px'
         } 
     });	
 }
