@@ -129,8 +129,8 @@
 				left:		'50%',
 				textAlign:	'center',
 				color:		'#000',
-				border:		'3px solid #aaa',
-				backgroundColor:'#fff',
+				/*border:		'3px solid #aaa',
+				backgroundColor:'#fff',*/
 				cursor:		'wait',
 				margin:	'-135px 0 0 -350px'
 			},
@@ -144,8 +144,8 @@
 
 			// styles for the overlay
 			overlayCSS:  {
-				backgroundColor:	'#000',
-				opacity:			0.6,
+				backgroundColor:	'#fff',
+				opacity:			0.7,
 				cursor:				'wait'
 			},
 
@@ -299,7 +299,7 @@
 			if (opts.theme)
 				lyr2 = $('<div class="blockUI blockOverlay ui-widget-overlay" style="z-index:'+ (z++) +';display:none"></div>');
 			else
-				lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
+				lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ (z++) +';display:none;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0;"></div>');
 
 			if (opts.theme && full) {
 				s = '<div class="blockUI ' + opts.blockMsgClass + ' blockPage ui-dialog ui-widget ui-corner-all" style="z-index:'+(z+10)+';display:none;position:fixed">';
