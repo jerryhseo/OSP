@@ -372,6 +372,10 @@
 			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.DEFAULT_CPU, arguments));
 		};
 		
+		ScienceApp.cluster = function( cluster ){
+			return ScienceApp.property.apply(ScienceApp, OSP.Util.addFirstArgument(OSP.Constants.CLUSTER, arguments));
+		};
+		
 
 		ScienceApp.deserializeInputPorts = function( portsJson ){
 			if( !portsJson )	return;

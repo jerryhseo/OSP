@@ -184,7 +184,6 @@
 	</div>
 </div>
 
-<img id="loadingBox" src="${contextPath}/images/processing.gif" width="300px" style="display: none;"/>
 <script type="text/javascript">
 /***********************************************************************
  * Global variables section
@@ -221,6 +220,7 @@ $(function(e) {
 	scienceApp.maxCpus('${scienceApp.getMaxCpus()}');
 	scienceApp.minCpus('${scienceApp.getMinCpus()}');
 	scienceApp.defaultCpus('${scienceApp.getDefaultCpus()}');
+	scienceApp.cluster('${scienceApp.getCluster()}');
 	
 	if( '<%=inputPorts%>' ) 
 		scienceApp.deserializeInputPorts( JSON.parse('<%=inputPorts%>') );
@@ -741,7 +741,7 @@ function <portlet:namespace/>activeBlockLayout(status){
 	
 }
 function <portlet:namespace/>displayInit(){
-	if($("#loadingBox").css("display") != "none"){
+	if($("#blockUI").css("display") != "none"){
 		var eventData = {
 				targetPortlet: 'BROADCAST',
 				data : {

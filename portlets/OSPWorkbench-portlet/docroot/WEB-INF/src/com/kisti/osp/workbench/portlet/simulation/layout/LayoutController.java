@@ -34,6 +34,7 @@ import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -61,6 +62,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -276,6 +278,8 @@ public class LayoutController {
 		ScienceApp scienceApp = null;
 		try{
 			scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			/*Cluster*/
+			scienceApp.setCluster(CustomUtil.strNull(scienceApp.getCluster(), _DEFAULT_CLUSTER));
 			model.addAttribute("scienceApp", scienceApp);
 			if(scienceApp.getIsStepLayout()){
 				model.addAttribute("isFlowLayout", true);
@@ -927,7 +931,7 @@ public class LayoutController {
 		
 		String mpiType = scienceApp.getParallelModule();
 		String[] dependencies = null;
-		String cluster = _DEFAULT_CLUSTER;
+		String cluster = CustomUtil.strNull(scienceApp.getCluster(), _DEFAULT_CLUSTER);
 		
 		//Set execution and files
 		Map<String, String> files = new LinkedHashMap<>();
@@ -975,6 +979,9 @@ public class LayoutController {
 			
 			Date date = new Date();
 			for( int dataIndex = 0; dataIndex<jobData.length(); dataIndex++){
+				/*App Execute Update*/
+				this.incrementAppExecute(scienceApp);
+				
 				JSONObject inputData = jobData.getJSONObject(dataIndex);
 				this.jsonObjectPrint(inputData);
 				String portName = inputData.getString("portName_");
@@ -1002,7 +1009,7 @@ public class LayoutController {
 							portletRequest, 
 							content, 
 							Paths.get(parentPath.toString(), 
-									inputFileName).toString(), _DEFAULT_CLUSTER);
+									inputFileName).toString(), cluster);
 					_log.info("File Id After IB Upload: "+fileId);
 					
 					JSONObject argVal = JSONFactoryUtil.createJSONObject();
@@ -1043,7 +1050,7 @@ public class LayoutController {
 							portletRequest, 
 							fileEntryId, 
 							parentPath.resolve(inputFileName).toString(), 
-							_DEFAULT_CLUSTER);
+							cluster);
 					
 					JSONObject argVal = JSONFactoryUtil.createJSONObject();
 					argVal.put("type", "FILE_ID");
@@ -1197,6 +1204,12 @@ public class LayoutController {
 		
 		System.out.println("Callback: "+url);
 		return url;
+	}
+	
+	private void incrementAppExecute(ScienceApp scienceApp) throws SystemException{
+		long preExecute = GetterUtil.getLong(scienceApp.getExecute(),0);
+		scienceApp.setExecute(preExecute+1);
+		ScienceAppLocalServiceUtil.updateScienceApp(scienceApp);
 	}
 	
 	public static boolean ip(String text) {

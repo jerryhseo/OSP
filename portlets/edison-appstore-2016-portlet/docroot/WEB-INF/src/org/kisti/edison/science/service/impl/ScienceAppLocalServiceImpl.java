@@ -2950,4 +2950,5 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		
 		return Integer.parseInt(CustomUtil.strNull(simulationUsersMapList.get(0), "0"));
 	}
+	
 }
