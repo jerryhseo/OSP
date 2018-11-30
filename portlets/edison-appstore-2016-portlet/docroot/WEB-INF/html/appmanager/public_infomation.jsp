@@ -929,7 +929,7 @@ public String marshallParams(Map<String, String> params) {
 				
 				if(currDescriptionLanguage != null && currDescriptionLanguage != ''){
 					var descriptionMDE_Text= $("#<portlet:namespace/>descriptionMDE_"+currDescriptionLanguage);
-					descriptionMDE_Text.val(descriptionMDE_Text.text() + "\n\n" + markdownImgTag);
+					descriptionMDE_Text.val(descriptionMDE_Text.val() + "\n\n" + markdownImgTag);
 				}
 			}
 		}
