@@ -269,4 +269,10 @@ public interface ExecuteLocalService extends BaseLocalService,
 		java.nio.file.Path inputFilePath, java.lang.String inputFileName,
 		java.lang.String fileId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void removeExecuteWithPath(long projectId,
+		java.lang.String executeId, java.lang.String userScreenName,
+		java.lang.String executeBasePath)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchExecuteException;
 }

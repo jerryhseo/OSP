@@ -18,6 +18,8 @@
   <bean class="org.kisti.edison.osp.editor.blade.CreateMeshController" />
   
   <bean class="org.kisti.edison.osp.editor.util.ParameterController" />
+  <bean class="org.kisti.edison.osp.editor.util.ProjectContoroller" />
+  <bean class="org.kisti.edison.osp.editor.util.ExecuteContoroller" />
   
   <bean class="org.kisti.edison.osp.editor.helper.MeshAppHelper" />
   

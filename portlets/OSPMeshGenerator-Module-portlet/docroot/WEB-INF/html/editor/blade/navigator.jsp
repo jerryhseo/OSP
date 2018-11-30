@@ -5,11 +5,16 @@
 <liferay-portlet:resourceURL var="updateProjectURL" id="updateProject" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteProjectURL" id="deleteProject" copyCurrentRenderParameters="false" escapeXml="false"/>
 
+<liferay-portlet:resourceURL var="removeExecuteWithPathURL" id="removeExecuteWithPath" copyCurrentRenderParameters="false" escapeXml="false"/>
+
+
 <liferay-portlet:resourceURL var="prepareAnalyzerURL" id="prepareAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="executeAnalyzerURL" id="executeAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="checkAnalyzerURL" id="checkAnalyzer" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 <liferay-portlet:resourceURL var="removeRemoteFilePathURL" id="removeRemoteFilePath" copyCurrentRenderParameters="false" escapeXml="false"/>
+
+<liferay-portlet:resourceURL var="getInputDataPathFromFileIdURL" id="getInputDataPathFromFileId" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 
 
@@ -58,8 +63,8 @@ div#<portlet:namespace/>navigatorParameter .container-fluid{
 </style>
 <div class="panel panel-default blade-full-height">
 	<div class="panel-heading blade-panel-heading clearfix">
-		<div class="panel-title pull-left"><span><i class="icon-chevron-right"></i> Selected File : <span>ssssssssss</span></span></div>
-		<div class="pull-right"><button class="btn btn-xs btn-primary">sample</button></div>
+		<div class="panel-title pull-left"><span><i class="icon-chevron-right"></i> Selected File : <span id="<portlet:namespace/>fileSelectedText"></span></span></div>
+		<div class="pull-right"><button class="btn btn-xs btn-primary" onClick="<portlet:namespace/>takeSample();">sample</button></div>
 	</div>
 	<div class="panel-body" style="height: 95%;display: flex;flex-flow: column;">
 		<div style="flex:1;height: 50%; overflow-y:auto;">
@@ -453,8 +458,50 @@ function <portlet:namespace/>getSelectedGeometryNode(){
 }
 
 function <portlet:namespace/>removeExecute(executeId){
-	
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=removeExecuteWithPathURL%>",
+		async : false,
+        data : {
+            "<portlet:namespace/>executeId" : executeId
+        },
+		success: function(data) {
+			
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}
+		}
+	});
 }
+
+function <portlet:namespace/>getInputDataPathFromFileId(fileId){
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=getInputDataPathFromFileIdURL%>",
+		async : false,
+		dataType : 'json',
+        data : {
+            "<portlet:namespace/>fileId" : fileId
+        },
+		success: function(data) {
+			
+			$("#<portlet:namespace/>fileSelectedText").html(data.fileName);
+			
+			<portlet:namespace/>fireDataChangeWorkbenchEvent(data.parentPath,data.fileName);
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}
+		}
+	});
+}
+
+
 
 /***********************************************************************
  * Tree Event section
@@ -500,7 +547,6 @@ function <portlet:namespace/>selectedNode(treeData){
 	}
 	/*Controll Panel EVENT - END*/
 	
-	
 	/* parameter event - start*/
 	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER
 	    && <portlet:namespace/>checkAnalyzerJob){
@@ -514,6 +560,16 @@ function <portlet:namespace/>selectedNode(treeData){
 	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
 		<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
 	}
+	
+	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
+		<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
+	}
+	
+	if(node_data_type == MESH.Constants.TYPE_VIEW_MESH){
+		var node_data_file_id = treeData.node.data[MESH.Constants.DATA_FILE_ID];
+		<portlet:namespace/>getInputDataPathFromFileId(node_data_file_id);
+	}
+	
 	/* parameter event - end*/
 }
 function <portlet:namespace/>addNode(parentId, node){
@@ -615,6 +671,13 @@ function <portlet:namespace/>removeNode(){
 						    }
 						}else if(node_data_type===MESH.Constants.TYPE_VIEW_MESH){
 // 							command = "remove.mesh";
+
+							var selectedFileName = $("#<portlet:namespace/>fileSelectedText").html();
+							var node_text  = node.text;
+							if(node_text==selectedFileName){
+								<portlet:namespace/>takeSample();
+							}
+							
 						}
 						
 						var fileArray = new Array();

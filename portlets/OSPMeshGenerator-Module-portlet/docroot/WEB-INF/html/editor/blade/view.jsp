@@ -101,7 +101,8 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e) {
 Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY,'');
+		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
+		/*초기화*/
 		console.log("OSP_INITIALIZE");
 	}
 });
@@ -109,8 +110,20 @@ Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
 Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
-		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY,'');
-		console.log("OSP_LOAD_DATA");
+		console.log('[<portlet:namespace/>] OSP_LOAD_DATA: ', e );
+		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
+		/*Workbench Data 존재*/
+		var inputData = new OSP.InputData( e.data );
+		switch( inputData.type() ){
+			case OSP.Enumeration.PathType.FILE:
+				
+				break;
+			case OSP.Enumeration.PathType.DLENTRY_ID:
+				$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
+				break;
+			default:
+			
+		}
 	}
 });
 
@@ -199,7 +212,7 @@ function <portlet:namespace/>init(){
 	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
 }
 
-function <portlet:namespace/>fireWorkbenchEvent(eventName,data){
+function <portlet:namespace/>fireWorkbenchEvent(eventName){
 	var myId = '<%=portletDisplay.getId()%>';
 	var eventData = {
 			portletId : myId,
@@ -207,5 +220,26 @@ function <portlet:namespace/>fireWorkbenchEvent(eventName,data){
 		};
 	
 	Liferay.fire(eventName, eventData);
+}
+
+function <portlet:namespace/>fireDataChangeWorkbenchEvent(parentPath,fileName){
+	var inputData = new OSP.InputData();
+	inputData.parent( parentPath );
+	inputData.name( fileName );
+	inputData.type( OSP.Enumeration.PathType.FILE );
+	
+	console.log(OSP.Util.toJSON(inputData));
+	var eventData = {
+			portletId: '<%=portletDisplay.getId()%>',
+ 			targetPortlet: <portlet:namespace/>connector,
+ 			data: OSP.Util.toJSON(inputData)
+	};
+	Liferay.fire(OSP.Event.OSP_DATA_CHANGED, eventData);
+}
+
+
+function <portlet:namespace/>takeSample(){
+	$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
+	<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_SAMPLE_SELECTED);
 }
 </script>

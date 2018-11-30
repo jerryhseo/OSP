@@ -301,6 +301,16 @@ public class ExecuteLocalServiceUtil {
 			inputFilePath, inputFileName, fileId);
 	}
 
+	public static void removeExecuteWithPath(long projectId,
+		java.lang.String executeId, java.lang.String userScreenName,
+		java.lang.String executeBasePath)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchExecuteException {
+		getService()
+			.removeExecuteWithPath(projectId, executeId, userScreenName,
+			executeBasePath);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

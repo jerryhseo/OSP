@@ -311,6 +311,16 @@ public class ExecuteLocalServiceWrapper implements ExecuteLocalService,
 			analyzerJob, inputFilePath, inputFileName, fileId);
 	}
 
+	@Override
+	public void removeExecuteWithPath(long projectId,
+		java.lang.String executeId, java.lang.String userScreenName,
+		java.lang.String executeBasePath)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchExecuteException {
+		_executeLocalService.removeExecuteWithPath(projectId, executeId,
+			userScreenName, executeBasePath);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

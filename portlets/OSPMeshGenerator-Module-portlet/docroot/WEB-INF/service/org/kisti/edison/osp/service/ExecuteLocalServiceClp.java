@@ -140,6 +140,13 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 				"org.kisti.edison.osp.model.AnalyzerJob", "java.nio.file.Path",
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName22 = "removeExecuteWithPath";
+
+		_methodParameterTypes22 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String"
+			};
 	}
 
 	@Override
@@ -801,6 +808,50 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 		}
 	}
 
+	@Override
+	public void removeExecuteWithPath(long projectId,
+		java.lang.String executeId, java.lang.String userScreenName,
+		java.lang.String executeBasePath)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, org.kisti.edison.osp.NoSuchExecuteException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22,
+				new Object[] {
+					projectId,
+					
+				ClpSerializer.translateInput(executeId),
+					
+				ClpSerializer.translateInput(userScreenName),
+					
+				ClpSerializer.translateInput(executeBasePath)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof org.kisti.edison.osp.NoSuchExecuteException) {
+				throw (org.kisti.edison.osp.NoSuchExecuteException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -844,4 +895,6 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 	private String[] _methodParameterTypes20;
 	private String _methodName21;
 	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
 }

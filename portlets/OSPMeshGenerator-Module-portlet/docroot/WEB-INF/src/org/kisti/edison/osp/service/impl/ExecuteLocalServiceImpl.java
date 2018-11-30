@@ -19,7 +19,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +34,6 @@ import org.kisti.edison.osp.util.IBUserTokenUtil;
 import org.kisti.edison.util.CustomUtil;
 
 import com.google.gson.Gson;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.model.Group;
@@ -153,6 +151,18 @@ public class ExecuteLocalServiceImpl extends ExecuteLocalServiceBaseImpl {
 		execute.setExecuteDataStructure(new Gson().toJson(analyzerJob).toString());
 		execute.setExecuteDate(new Date());
 		super.executePersistence.update(execute);
+	}
+	
+	public void removeExecuteWithPath(long projectId, String executeId, String userScreenName, String executeBasePath) throws SystemException, NoSuchExecuteException, IOException{
+		ExecutePK executePK = new ExecutePK(projectId, executeId);
+		Execute execute = super.executePersistence.findByPrimaryKey(executePK);
+		AnalyzerJob analyzerJob = new Gson().fromJson(execute.getExecuteDataStructure(), AnalyzerJob.class);
+		
+		Path path = Paths.get(executeBasePath,analyzerJob.getAppName(),analyzerJob.getAppVersion(),userScreenName,executeId);
+		FileUtils.cleanDirectory(path.toAbsolutePath().toFile());
+		path.toAbsolutePath().toFile().delete();
+		
+		super.executePersistence.remove(executePK);
 	}
 	
 }

@@ -231,6 +231,18 @@ Liferay.on(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW,function(e){
 	} 
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
+	console.log('OSP_RESPONSE_SAVE_SIMULATION_RESULT: ['+e.targetPortlet+', '+new Date()+']');
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		if(e.data){
+			toastr["success"]("", Liferay.Language.get('edison-data-update-success'));
+		}else{
+			toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
+		}
+	}
+});
+
 /***********************************************************************
 * Portlet AJAX Function
 ***********************************************************************/

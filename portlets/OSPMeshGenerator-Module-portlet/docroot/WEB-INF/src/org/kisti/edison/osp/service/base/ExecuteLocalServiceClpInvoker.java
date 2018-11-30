@@ -140,6 +140,13 @@ public class ExecuteLocalServiceClpInvoker {
 				"org.kisti.edison.osp.model.AnalyzerJob", "java.nio.file.Path",
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName50 = "removeExecuteWithPath";
+
+		_methodParameterTypes50 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -270,6 +277,15 @@ public class ExecuteLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			ExecuteLocalServiceUtil.removeExecuteWithPath(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3]);
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -315,4 +331,6 @@ public class ExecuteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes47;
 	private String _methodName48;
 	private String[] _methodParameterTypes48;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
 }
