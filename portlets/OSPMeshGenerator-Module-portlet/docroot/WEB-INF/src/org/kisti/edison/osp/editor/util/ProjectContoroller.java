@@ -88,15 +88,20 @@ public class ProjectContoroller {
 		Map params = RequestUtil.getParameterMap(request);
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		String projectStructure = GetterUtil.getString(params.get("projectStructure"));
-		String analyzerStructure = GetterUtil.getString(params.get("analyzerStructure"));
+		String projectStructure = GetterUtil.getString(params.get("projectStructure"),"");
+		String analyzerStructure = GetterUtil.getString(params.get("analyzerStructure"),"");
 		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
 		try{
 			ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
 			Project project = ProjectLocalServiceUtil.getProject(projectPK);
 			
-			project.setProjectStructure(projectStructure);
-			project.setAnalyzerStructure(analyzerStructure);
+			if(!projectStructure.equals("")){
+				project.setProjectStructure(projectStructure);
+			}
+			
+			if(!analyzerStructure.equals("")){
+				project.setAnalyzerStructure(analyzerStructure);
+			}
 			
 			ProjectLocalServiceUtil.updateProject(project);
 		}catch (Exception e) {

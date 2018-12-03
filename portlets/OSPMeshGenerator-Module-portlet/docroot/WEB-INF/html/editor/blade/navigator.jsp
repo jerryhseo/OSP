@@ -174,7 +174,58 @@ var <portlet:namespace/>INIT_DISPLAY_DATA = {
 			}
 		}
 	};
-	
+/***********************************************************************
+* READY Function
+***********************************************************************/
+$(function() {
+	/*eye onclick*/
+	$("#<portlet:namespace/>navigatorTree").on("click","i.<portlet:namespace/>node-click-icon", function(){
+		var tree = $("#<portlet:namespace/>navigatorTree").jstree(true);
+		var selectNode = $("#<portlet:namespace/>navigatorTree").jstree("get_selected");
+		
+		var node = tree.get_node(selectNode);
+		if(!node){return;}
+		var node_data_type = node.data[MESH.Constants.DATA_NODE_TYPE];
+		
+		var visible;
+		if($(this).hasClass("icon-eye-open")){
+			visible = false;
+		}else{
+			visible = true;
+		}
+		
+		var command = "";
+		if(node_data_type==MESH.Constants.TYPE_VIEW_DAT||node_data_type==MESH.Constants.TYPE_VIEW_FILE){
+			command = visible?"show.geometry":"hide.geometry";
+		}else if(node_data_type==MESH.Constants.TYPE_VIEW_MESH){
+			command = visible?"show.mesh":"hide.mesh";
+		}else if(node_data_type==MESH.Constants.TYPE_VIEW_SURFACE){
+			command = visible?"show.entity":"hide.entity";
+		}
+		
+		
+		var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
+		var data = {
+				"name": node.text,
+				"url": "",
+				"fileId": node.data[MESH.Constants.DATA_FILE_ID]
+		};
+		<portlet:namespace/>viewerEventFire(targetPortlet,command,data);
+		
+		
+		if(visible){
+			$(this).addClass("icon-eye-open");
+			$(this).removeClass("icon-eye-close");
+			node.type = MESH.Constants.NODE_VIEW_FILE;
+			node.icon = "icon-eye-open <portlet:namespace/>node-click-icon";
+		}else{
+			$(this).addClass("icon-eye-close");
+			$(this).removeClass("icon-eye-open");
+			node.type = MESH.Constants.NODE_UNVIEW_FILE;
+			node.icon = "icon-eye-close <portlet:namespace/>node-click-icon";
+		}
+	});
+});
 /***********************************************************************
 * Portlet Function
 ***********************************************************************/
@@ -216,12 +267,19 @@ function <portlet:namespace/>navigatorInitJstree(){
 		"plugins" : ["types","json_data"]
 	}).bind("loaded.jstree", function(event, data) {
 		$("#<portlet:namespace/>navigatorTree").jstree('open_all');
-		
-		
 	}).bind("open_node.jstree", function(event, data) {
 		
 	}).bind("refresh.jstree",function(event, data){
 		$("#<portlet:namespace/>navigatorTree").jstree('open_all');
+		
+		/*Viewer Load Project*/
+		var geoNode = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node("<portlet:namespace/>"+MESH.Constants.GEOMETRIES_PARENT_FOLDER_ID,false);
+		var geometryGroup = <portlet:namespace/>returnFileObject(geoNode.children);
+		
+		var meshNode = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node("<portlet:namespace/>"+MESH.Constants.MESHES_PARENT_FOLDER_ID,false);
+		var meshGroup = <portlet:namespace/>returnFileObject(meshNode.children);
+		
+		<portlet:namespace/>callMeshAnalyzerLoadProject(geometryGroup,meshGroup);
 	}).bind("select_node.jstree",function(event, data){
 		if(typeof data.event!= "undefined"){
 			if(data.event.target.tagName === "I"){
@@ -231,7 +289,7 @@ function <portlet:namespace/>navigatorInitJstree(){
 			return false;
 		}
 		
-		console.log(data);
+// 		console.log(data);
 		<portlet:namespace/>selectedNode(data);
 	});
 }
@@ -262,8 +320,6 @@ function <portlet:namespace/>searchNavigator(){
 			
 			/*Global ProjectId Setting*/
 			<portlet:namespace/>projectId = data.projectId;
-			
-			/*View File Load Event 호출*/
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
 				alert(textStatus+": "+jqXHR.responseText);
@@ -275,17 +331,14 @@ function <portlet:namespace/>searchNavigator(){
 }
 
 
-function <portlet:namespace/>updateProject(display){
+function <portlet:namespace/>updateProject(){
 	var v = $('#<portlet:namespace/>navigatorTree').jstree(true).get_json('#', {no_a_attr:true,no_li_attr:true,no_state:true})
 	var projectStructure = JSON.stringify(v);
-	var analyzerStructure = "";
-	if(display!="none"){
-		analyzerStructure = display==""?JSON.stringify(<portlet:namespace/>INIT_DISPLAY_DATA):JSON.stringify(display);
-	}
+	
+	
 	
 	var updateData = {
 		"<portlet:namespace/>projectStructure":projectStructure,
-		"<portlet:namespace/>analyzerStructure":analyzerStructure,
 		"<portlet:namespace/>simulationUuid":<portlet:namespace/>simulationUuid,
 		"<portlet:namespace/>jobSeqNo":<portlet:namespace/>jobSeqNo
 	};
@@ -501,7 +554,32 @@ function <portlet:namespace/>getInputDataPathFromFileId(fileId){
 	});
 }
 
-
+function <portlet:namespace/>returnFileObject(nodes){
+	var fileArray = new Array();
+	if (!nodes || nodes.length == 0){
+		var fileObject = new Object();
+		fileObject.entity = [];
+		fileObject.name = [];
+		fileObject.url = [];
+		fileArray.push(fileObject);
+		return JSON.stringify(fileArray);
+	}else{
+		for (var i = 0, x = nodes.length; i < x; i++) {
+			var fileObject = new Object();
+			var treeData = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node(nodes[i],false);
+			if(treeData.type==MESH.Constants.NODE_UNVIEW_FILE){
+				fileObject.visible = false;
+			}else{
+				fileObject.visible = true;
+			}
+			fileObject.fileId = treeData.data[MESH.Constants.DATA_FILE_ID];
+			fileObject.name = treeData.text;
+			fileArray.push(fileObject);
+		}
+		return JSON.stringify(fileArray);
+	}
+	
+}
 
 /***********************************************************************
  * Tree Event section
@@ -571,6 +649,18 @@ function <portlet:namespace/>selectedNode(treeData){
 	}
 	
 	/* parameter event - end*/
+	
+	if(node_data_type==MESH.Constants.TYPE_ROOT_GEO||node_data_type==MESH.Constants.TYPE_ROOT_MESH){
+		var command = "";
+		if(node_data_type==MESH.Constants.TYPE_ROOT_GEO){
+			command = 'select.geometry';
+		}else if(node_data_type==MESH.Constants.TYPE_ROOT_MESH){
+			command = 'select.mesh';
+		}
+		
+		var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
+		<portlet:namespace/>viewerEventFire(targetPortlet,command,{});
+	}
 }
 function <portlet:namespace/>addNode(parentId, node){
 	$("#<portlet:namespace/>navigatorTree").jstree().create_node(parentId,OSP.Util.toJSON(node),"last",false);
@@ -662,15 +752,15 @@ function <portlet:namespace/>removeNode(){
 					}else{
 						var command = "";
 						if(node_data_type===MESH.Constants.TYPE_VIEW_FILE){
-// 							command = "remove.geometry";
+							command = "remove.geometry";
 						}else if(node_data_type===MESH.Constants.TYPE_VIEW_DAT){
-// 							command = "remove.geometry";
+							command = "remove.geometry";
 							if(tree.is_parent(node)){
 						    	var executeId = node.children[0];
 								<portlet:namespace/>removeExecute(executeId);
 						    }
 						}else if(node_data_type===MESH.Constants.TYPE_VIEW_MESH){
-// 							command = "remove.mesh";
+							command = "remove.mesh";
 
 							var selectedFileName = $("#<portlet:namespace/>fileSelectedText").html();
 							var node_text  = node.text;
@@ -686,6 +776,7 @@ function <portlet:namespace/>removeNode(){
 							'name': node.text
 						});
 						
+						<portlet:namespace/>callMeshAnalyzerAddObject(command,fileArray);
 						
 						$("#<portlet:namespace/>controllpanel").hide();
 					}
@@ -696,7 +787,7 @@ function <portlet:namespace/>removeNode(){
 				}finally{
 					tree.delete_node(selectNode);
 					
-					<portlet:namespace/>updateProject(false,"none");
+					<portlet:namespace/>updateProject("none");
 				}
 			},
 			cancel: function () {
@@ -714,7 +805,6 @@ function <portlet:namespace/>runAnalyzer(){
 function <portlet:namespace/>closePanel(){
 	$("#<portlet:namespace/>controllpanel").hide();
 }
-
 
 /***********************************************************************
  * Parameter Event section
@@ -804,7 +894,7 @@ AUI().ready(['liferay-util-window'], function(){
 			fileObject.name = fileMap[1];
 			fileArray.push(fileObject);
 		}
-		
+		<portlet:namespace/>callMeshAnalyzerAddObject(command,fileArray)
 		$("body").css('overflow','');
 	});
 

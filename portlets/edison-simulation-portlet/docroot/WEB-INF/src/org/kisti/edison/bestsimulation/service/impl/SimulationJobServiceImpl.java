@@ -72,7 +72,7 @@ public class SimulationJobServiceImpl extends SimulationJobServiceBaseImpl {
 		
 		log.debug("==================================================================================================================");
 		log.debug("Icebreaker to Portal Sync Start, Info[(simulationUuid)/(jobUuid)/(jobStatus)]");
-		log.debug("Info : ("+simulationUuid+") / ("+jobUuid+") / ("+jobStatus+")");
+		log.debug("Info : ("+simulationUuid+") / ("+jobUuid+") / ("+jobStatus+") / ("+jobStartDt+")/ ("+jobEndDt+")");
 		log.debug("Sync Time : "+new Date());
 		log.debug("==================================================================================================================");
 		log.debug("jobSeqNo : " + jobSeqNo);

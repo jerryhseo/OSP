@@ -1,8 +1,6 @@
 package org.kisti.edison.osp.editor.blade;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -11,19 +9,14 @@ import java.util.Map;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
-import org.kisti.edison.osp.NoSuchProjectException;
 import org.kisti.edison.osp.editor.helper.MeshAppHelper;
-import org.kisti.edison.osp.model.Project;
-import org.kisti.edison.osp.service.ExecuteLocalServiceUtil;
-import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
-import org.kisti.edison.osp.service.persistence.ProjectPK;
+import org.kisti.edison.osp.util.IBUserTokenUtil;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -32,20 +25,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
-import com.liferay.counter.service.CounterLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
@@ -65,6 +53,10 @@ public class BladeEditorController {
 		Map params = RequestUtil.getParameterMap(request);
 		
 		try{
+			User user = themeDisplay.getUser();
+			long groupId = PortalUtil.getScopeGroupId(request);
+			
+			
 			List<String[]> dataStructurAppList = new ArrayList<String[]>();;
 			dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.0", "parametric"});
 			model.addAttribute("meshparametric", "null");
@@ -93,6 +85,24 @@ public class BladeEditorController {
 				}
 				DataTypeStructure paramStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(paramTypeId);
 				model.addAttribute(parameterName, paramStructure.getStructure());
+			}
+			
+			/*vcToken*/
+			if(!user.getExpandoBridge().hasAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId))){
+				model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+			}else{
+				String userVcToken = GetterUtil.getString(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId)),"");
+				
+				if(userVcToken.equals("")){
+					model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+				}else{
+					int userVcExpired = GetterUtil.getInteger(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN_EXPIRED+ String.valueOf(groupId)),0);
+					if(userVcExpired <= Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyyMMdd"))){
+						model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+					}else{
+						model.addAttribute("vcToken", userVcToken);
+					}
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();

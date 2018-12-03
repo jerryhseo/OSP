@@ -96,6 +96,7 @@ Liferay.on(OSP.Event.OSP_FROM_EDITOR_EVENT, function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		var command = e.command;
+		console.log('OSP_FROM_EDITOR_EVENT: ['+e.portletId+', '+myId+', '+command+', '+new Date()+']', e.data );
 		if (command == 'set.path') {
 			<portlet:namespace/>resultPath = e.data.resultPath;
 			<portlet:namespace/>setResultPath();

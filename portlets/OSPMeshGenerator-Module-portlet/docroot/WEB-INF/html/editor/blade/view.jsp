@@ -47,7 +47,7 @@ div#<portlet:namespace/>navigatorParameter{
 			<%@ include file="./navigator.jsp" %>
 		</div>
 		<div class="col-md-8 blade-col blade-full-height" id="<portlet:namespace/>BladeMeshViewerArea">
-			<liferay-portlet:runtime portletName="BladeMeshViewer_WAR_OSPMeshGeneratorModuleportlet" queryString=""/>
+			<liferay-portlet:runtime portletName="BladeMeshViewer_WAR_OSPMeshGeneratorModuleportlet" queryString="viewerFromType=editor"/>
 		</div>
 		<div class="col-md-8 blade-col blade-full-height" id="<portlet:namespace/>ChartViewerArea" style="display: none;border: 1px solid #d3d3d3;">
 			<liferay-portlet:runtime portletName="MeshXYChartViewer_WAR_OSPMeshGeneratorModuleportlet" queryString=""/>
@@ -132,7 +132,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY,function(e) {
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>simulationUuid = e.data.simulationUuid;
 		<portlet:namespace/>jobSeqNo = e.data.jobSeqNo;
-		<portlet:namespace/>searchNavigator();
+		<portlet:namespace/>searchNavigator(); 
 	}
 });
 
@@ -191,8 +191,36 @@ function <portlet:namespace/>setXYPlotterResultPath(analyzerJob){
 	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
 }
 
+function <portlet:namespace/>callMeshAnalyzerLoadProject(geometryGroup,meshGroup) {
+	var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
+	var cmd = "loadProject"
+	var data = {
+		"geometryGroup": geometryGroup,
+		"meshGroup": meshGroup,
+		"token": "${vcToken}"
+	};
+	
+	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
+}
+
+function <portlet:namespace/>callMeshAnalyzerAddObject(command, object) {
+	var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
+	var cmd = command;
+	var data = {
+			"data": JSON.stringify(object),
+			"token": "${vcToken}"
+		};
+	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
+}
+
+
+
 function <portlet:namespace/>viewerEventFire(targetPortlet,cmd,data){
 	var myId = '<%=portletDisplay.getId()%>';
+	if(targetPortlet===MESH.Constants.MESH_VIEWER_PORTLET){
+		data['command'] = cmd;
+	}
+	
 	var eventData = {
 			portletId : myId,
 			targetPortlet : targetPortlet,
