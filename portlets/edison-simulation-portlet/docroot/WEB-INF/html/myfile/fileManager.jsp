@@ -92,12 +92,12 @@
 	
 	.toast-designer-pos { top: 130px; right: 550px; }
 	
-	.container.popup{
+	.container.<portlet:namespace/>popup{
 		width: 100% !important;
 		padding-left: 0px !important;
 		padding-right: 0px !important;
 	}
-	.container.select-btn{
+	.container.<portlet:namespace/>select-btn{
 		text-align: right;
 	}
 	
@@ -106,13 +106,13 @@
 		padding-right: 0px;
 	}
 	
-	.info-table{
+	.<portlet:namespace/>info-table{
 		margin : 10px 0px;
 		padding: 0px 10px;
 		width: 100%;
 	}
 	
-	.info-tr{
+	.<portlet:namespace/>info-tr{
 		border-bottom: 1px solid #e5e5e9;
 		padding: 5px 0px;
 	}
@@ -123,6 +123,7 @@
 		color: #ccc !important;
 	}
 	
+	/* 폴더, 파일 Info 출력 시 */
 	#<portlet:namespace/>nodeTitle{
 		font-size: 20px;
 	}
@@ -200,7 +201,7 @@
 	
 </div>
 
-<div class="container popup select-btn">
+<div class="container <portlet:namespace/>popup <portlet:namespace/>select-btn">
 	<input class="addIp button08_1" id="<portlet:namespace/>selectBtn" onclick="_fileManager_selectBtn('btn');" value="<liferay-ui:message key='edison-table-list-header-select'/>" type="button" />
 </div>
 
@@ -229,7 +230,7 @@
 	</div>
 </div>
 
-<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
+<img id="loadingBox" src="${contextPath}/images/loading.gif" style="display: none;"/>
 
 <!-- File Manager Script -->
 <script>
@@ -255,15 +256,15 @@
 	
 	$(function(){
 		
-		// popup으로 출력할 경우 CSS 적용을 위한 class 추가, 선택버튼 View
+		/* popup으로 출력할 경우 CSS 적용을 위한 class 추가, 선택버튼 View */
 		if(<%=popupState%>){
 			$(".myfilebox").addClass("popup");
-			$(".select-btn").show();
+			$(".<portlet:namespace/>select-btn").show();
 		} else {
-			$(".select-btn").hide();
+			$(".<portlet:namespace/>select-btn").hide();
 		}
 		
-		// Init File Manager
+		/* Init File Manager */
 		initFileManager();
 		
 		$('.nav-inp').focusin(function() {
@@ -276,24 +277,24 @@
 			}, 700);
 		});
 		
-		// Level Up Icon Click Event
+		/* Level Up Icon Click Event */
 		$('.toolbar-level-up').click(function(){
 			folderLevelup();
 		});
 		
-		// Upload Icon Click Event 
+		/* Upload Icon Click Event  */
 		$('.toolbar-upload').click(function(){
 			$("#<portlet:namespace/>filManagerUpload").click();
 		});
 		
-		// New Folder Icon Click Event
+		/* New Folder Icon Click Event */
 		$('.toolbar-new-folder').click(function(){
 			_fileManager_createNewFolder();
 		});
 		
 	});
 	
-	// Init File Manager
+	/* Init File Manager */
 	function initFileManager(){
 		
 		var groupId = $("#<portlet:namespace/>groupId").val();
@@ -305,7 +306,6 @@
 		
 		bStart();
 		$.ajax({
-			// url: '${contextPath}/sample-data/root.json'
 			url: "<%=getRootDataURL%>",
 			cache: false,
 			data: {
@@ -330,7 +330,7 @@
 		});
 	}
 	
-	// Get Folder and File in Selected Folder
+	/* Get Folder and File in Selected Folder */
 	function viewSelectedFolder(selectedFolderId){
 		
 		var groupId = $("#<portlet:namespace/>groupId").val();
@@ -362,7 +362,7 @@
 		});
 	}
 	
-	// Chage breadcrumb
+	/* Chage breadcrumb */
 	function changeBreadCrumb(folder){
 		$('ol.breadcrumb .breadcrumb_item').removeClass("selected");
 		$('ol.breadcrumb .breadcrumb_item').addClass("unSelected");
@@ -376,7 +376,7 @@
 		breadcrumb_item_li.appendTo($('ol.breadcrumb'));
 	}
 	
-	// Level Up Event
+	/* Level Up Event */
 	function folderLevelup(){
 		if(1 < $('ol.breadcrumb li').length){
 			$('ol.breadcrumb li:last-child').remove();
@@ -389,7 +389,7 @@
 		}
 	}
 	
-	// breadcrumb text click event
+	/* breadcrumb text click event */
 	function moveFolder(selectedFolder){
 		var folder = $(selectedFolder);
 		folder.parent().nextAll("li").remove();
@@ -398,7 +398,7 @@
 		viewSelectedFolder(folder.attr("id"));
 	}
 	
-	// Create New Folder
+	/* Create New Folder */
 	function _fileManager_createNewFolder(){
 		
 		var parentPath = "/";
@@ -470,7 +470,7 @@
 		
 	}
 	
-	//folder rename event
+	/* folder rename event */
 	function _fileManager_renameFolder(selectedItem){
 		
 		$.confirm({
@@ -530,6 +530,7 @@
 		
 	}
 	
+	/* Folder Delete Event */
 	function _fileManager_deleteFolder(selectedItem){
 		
 		$.confirm({
@@ -575,14 +576,14 @@
 		
 	}
 	
-	// Copy Note Event
+	/* Copy Note Event */
 	var selectCopyNode = null;
 	var fileCut = false;
 	
 	function _fileManager_copyNode(selectedItem){
 		
 		
-		// selectCopyNode 초기화
+		/* selectCopyNode 초기화 */
 		selectCopyNode = null;
 		selectCopyNode = selectedItem;
 		
@@ -591,7 +592,7 @@
 		} 
 	}
 
-	//파일 붙여넣기
+	/* File Paste Event */
 	function _fileManager_pasteNode(selectedItem){
 		
 		var targetId = selectedItem.attr("id");
@@ -599,7 +600,7 @@
 		var copyFilesArray = new Array();
 		
 		for(var i=0; i<selectCopyNode.length; i++){
-			// JSON으로 데이터 만들어서 array에 Push
+			/* JSON으로 데이터 만들어서 array에 Push */
 			var jsonNodeInfo = new Object();
 			
 			jsonNodeInfo.sourceId = selectCopyNode.attr("id");
@@ -649,7 +650,7 @@
 				},error:function(){
 					toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 				},complete: function(){
-					// 붙여넣기 기능 동작 후 Copy된 파일이 없도록 null 초기화
+					/* 붙여넣기 기능 동작 후 Copy된 파일이 없도록 null 초기화 */
 					bEnd();
 					selectCopyNode=null;
 				}
@@ -657,7 +658,7 @@
 		}
 	}
 	
-	// file download
+	/* file download */
 	function _fileManager_fileDownload(selectedItem){
 		
 		$iframeDiv = $("#fileDownloadIframe");
@@ -667,7 +668,7 @@
 		$iframeDiv.append($iframe);
 	}
 	
-	// file delete
+	/* file delete */
 	function _fileManager_fileDelete(selectedItem){
 		
 		if(confirm(Liferay.Language.get('edison-simulation-myfile-delete-file-confirm-alert'))){
@@ -702,6 +703,7 @@
 		}
 	}
 	
+	/* Move File or Folder Event */
 	function _fileManager_moveNode(sourceNode, targetNode){
 		var sourceNodeId = sourceNode.attr("id");
 		var sourceNodeName = sourceNode.attr("node_name");
@@ -749,19 +751,20 @@
 		}
 	}
 	
-	// file upload
+	/* file upload */
 	function _fileManager_uploadFile(input){
 		
 		var filesLength = input.files.length;
 		
-		var selectNode = $('ol.breadcrumb .breadcrumb_item.selected').attr("id");		// 파일 업로드 할 폴더의 ID
+		var selectNode = $('ol.breadcrumb .breadcrumb_item.selected').attr("id");		/*  파일 업로드 할 폴더의 ID */
 		
-		if(selectNode == "HOME" || selectNode == ""){//선택한 노드가 없거나 루트선택
+		/* 선택한 노드가 없거나 루트선택 */
+		if(selectNode == "HOME" || selectNode == ""){
 			selectNode = "HOME";
 		}
 		
-		var nodeParents = "";		//destFolderParents		부모 폴더들의 ID
-		var destPath = "";			// Upload할 폴더 Path
+		var nodeParents = "";		/* destFolderParents		부모 폴더들의 ID */
+		var destPath = "";			/* Upload할 폴더 Path */
 		$(".breadcrumb_item").each(function(index, item){
 			var value = $(item).attr("id");
 			if(index == 0){
@@ -777,7 +780,7 @@
 		$("#destFolderParents").val(nodeParents);
 		$("#destFolderPath").val(destPath);
 		 
-		selectNode = selectNode.valueOf();  //destFolderId
+		selectNode = selectNode.valueOf();  /* destFolderId */
 		$("#destFolderId").val(selectNode);
 		
 		if(0 < filesLength){
@@ -788,7 +791,7 @@
 		}
 	}
 	
-	// View Info (getItemInfo)
+	/* View Info (getItemInfo) */
 	function _fileManager_viewInfo(selectedItemId, itemType, bg){
 		
 		var groupId = $("#<portlet:namespace/>groupId").val();
@@ -811,7 +814,7 @@
 			success: function(data) {
 				var itemInfoMap = data.itemInfoMap;
 				
-				// 1000 bytes 이상일 경우 KB 단위로 변환
+				/* 1000 bytes 이상일 경우 KB 단위로 변환 */
 				var itemSize = "";
 				if(1000 <= itemInfoMap.size){
 					itemSize = (itemInfoMap.size/1000).toFixed(3) + " KB";
@@ -836,35 +839,35 @@
 					if(selectedItemId == undefined || selectedItemId == null || selectedItemId == ''){
 						var homeFolderCnt = $("#<portlet:namespace/>thisChildFolderCnt").val()
 						var homeFileCnt = $("#<portlet:namespace/>thisChildFileCnt").val()
-						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
-										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">HOME</td></tr>" + 
-										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
-										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">/HOME</td></tr>" + 
-										"<tr class=\"info-tr\">" + 
+						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"<portlet:namespace/>info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">HOME</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">/HOME</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\">" + 
 											"<th class=\"info-key\">Content</th>" + 
 											"<td class=\"info-value\">Folders : " + homeFolderCnt + ", files : " + homeFileCnt + "</td>" + 
 										"</tr>" + 
 									"</table>";
 					} else {
-						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
-										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
-										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
-										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
-										"<tr class=\"info-tr\">" + 
+						infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"<portlet:namespace/>info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FOLDER</td></tr>" +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
+										"<tr class=\"<portlet:namespace/>info-tr\">" + 
 											"<th class=\"info-key\">Content</th>" + 
 											"<td class=\"info-value\">Folders : " + itemInfoMap.folderCount + ", files : " + itemInfoMap.fileCount + "</td>" + 
 										"</tr>" +
-										"<tr class=\"info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
-										"<tr class=\"info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
 									"</table>";
 					}
 				} else if(itemType == 'file'){
-					infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"info-table\" style=\"width:100%\">" + tableColgroup +
-										"<tr class=\"info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
-										"<tr class=\"info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FILE</td></tr>" +
-										"<tr class=\"info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
-										"<tr class=\"info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
-										"<tr class=\"info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
+					infoText = "<table id=\"<portlet:namespace/>nodeInfoTable\" class=\"<portlet:namespace/>info-table\" style=\"width:100%\">" + tableColgroup +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">NAME</th><td class=\"info-value\">"+itemInfoMap.name+"</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">TYPE</th><td class=\"info-value\">FILE</td></tr>" +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">PATH</th><td class=\"info-value\">"+breadCrumbPath+ "/" + itemInfoMap.name +"</td></tr>" +
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">SIZE</th><td class=\"info-value\">"+itemSize+"</td></tr>" + 
+										"<tr class=\"<portlet:namespace/>info-tr\"><th class=\"info-key\">Last Modified</th><td class=\"info-value\">"+itemInfoMap.lastModified+"</td></tr>" + 
 									"</table>";
 				}
 				
@@ -872,11 +875,6 @@
 				$("#<portlet:namespace/>nodeInfoModal div.modal-body").append(infoText);
 				$("#<portlet:namespace/>nodeInfoModalBtn").click();
 				
-				/* $.dialog({
-					title : "Information",
-					content: infoText,
-					columnClass: 'col-md-6 col-md-offset-3'
-				}); */
 			},error:function(){
 				toastr["error"]("", Liferay.Language.get('edison-data-update-error'));
 			},complete: function(){
@@ -885,7 +883,7 @@
 		});	
 	}
 	
-	// Search Function
+	/* Search Function */
 	function <portlet:namespace/>searchNode(input){
 		if(input === null || input === ""){
 			$("#<portlet:namespace/>searchKeyword").val("");
@@ -902,76 +900,7 @@
 	}
 	
 	
-	function <portlet:namespace/>fileDivWidthEvent(){
-		var maxWidth = 0;
-		
-		/*var ua = window.navigator.userAgent;
-		//익스플로러인경우는 width - 25 
-		if(ua.indexOf('MSIE') > 0 || ua.indexOf('Trident') > 0){
-			//rightWidth = rightWidth - 25;
-		}*/
-		
-		if(<%=popupState%>){
-			$("body").css("margin","5px");
-		}
-		
-		var fileboxWidth = $(".myfilebox").width();
-		var leftWidth = $(".leftcontent").width();
-		var rightWidth = fileboxWidth - leftWidth - 5;
-		
-		$(".myfilebox").css("width", fileboxWidth +"px");
-		$(".leftcontent").css("min-width", leftWidth +"px");
-		$(".leftcontent").css("width", leftWidth+"px");
-		$(".rightcontent").css("width", rightWidth+"px");	
-
-		maxWidth = rightWidth;
-		
-		//왼쪽div resize event
-		  $(".rightcontent").resizable({
-			maxWidth: maxWidth ,
-			minWidth: maxWidth - 200 ,
-			handles: 'w',
-	     	ghost: true,
-	    	handles: 'w',
-	     	css:{overflow:"hidden"},
-			stop: function(e, ui) {
-				var parent = ui.element.parent();    
-				
-				var current = ui.element;
-				
-				var pWidth = $(".myfilebox").width();//parent.width();       
-				var pHeight = parent.height();
-				var cWidth = ui.element.width();
-				var cHeight = ui.element.height();
-				
-				var resizeRightWidth = cWidth;
-				var resizeLeftWidth = pWidth-cWidth-100;
-				
-				if(leftWidth >= resizeLeftWidth){//245보다 작거나 같다.
-					$(".leftcontent").css("width", leftWidth+"px");
-					resizeRightWidth = pWidth-leftWidth-50;
-				}else if(leftWidth < resizeLeftWidth){//245보다 크다.
-					resizeRightWidth = pWidth-resizeLeftWidth-50;
-					$(".leftcontent").css("width", resizeLeftWidth+"px");
-				}
-				
-				current.css({
-					width: resizeRightWidth+"px",
-					height : "583px",
-					left: "0"
-				});
-				
-				
-				//helper 높이 변경
-				var fileTableHeight = $(".tablemf_list").height() + 50;
-				/* if(fileTableHeight > 584){
-					$("div.ui-resizable-handle.ui-resizable-w").css("height", fileTableHeight + "px");
-				}  */
-			}
-		});
-	}
-	
-	// Open Popup Modal : 팝업 호출하는 portlet에서 작성되어야 할 내용
+	/* Open Popup Modal : 팝업 호출하는 portlet에서 작성되어야 할 내용 */
 	$("#openFileManagerPopup").click(function() {
 		var type = "MESH";
 		var fileExt = DASH.Constants.getFileExtension(type);
@@ -1012,6 +941,7 @@
 		});
 	});
 	
+	/* 팝업 상태에서 파일 더블클릭 시 선택되도록 Event 구현 */
 	function _fileManager_selectBtn(eventType){
 		
 		var fileArray = new Array();
