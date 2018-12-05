@@ -5,9 +5,6 @@ import java.io.PrintWriter;
 import java.nio.file.NoSuchFileException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,7 +15,6 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationShare;
@@ -26,7 +22,6 @@ import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.model.EdisonExpando;
-import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.model.SimulationProject;
 import org.kisti.edison.service.SimulationProjectLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -61,13 +56,10 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 @Controller
 @RequestMapping("VIEW")
@@ -76,10 +68,6 @@ public class DashboardController {
 	
 	@RequestMapping
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws PortalException, SystemException{
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		long groupId = themeDisplay.getScopeGroupId();
-		String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
-		model.addAttribute("icebreakerUrl", icebreakerUrl);
 		return "view";
 	}
 	@ResourceMapping(value="searchSimulationWithPage")
@@ -401,75 +389,6 @@ public class DashboardController {
 		return log;
 	}
 	
-	
-	@ResourceMapping(value="jobResultFile")
-	public void jobResultFile(ResourceRequest request, ResourceResponse response,
-			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
-		    @RequestParam(value = "jobUuid", required = true) String jobUuid
-			) throws IOException{
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-			long groupId = themeDisplay.getScopeGroupId();
-			User user = themeDisplay.getUser();
-			
-		try{
-			IcebreakerVcToken vcToken = SimulationLocalServiceUtil.getOrCreateToken(groupId, user);
-			String icebreakerUrl = (String) GroupLocalServiceUtil.getGroup(groupId).getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL);
-			
-			String result = SimulationLocalServiceUtil.retrievePostProcessor(icebreakerUrl, vcToken.getVcToken(), jobUuid);
-			
-			List<Map<String, Object>> resultList = new ArrayList<>();
-			
-			if(!CustomUtil.strNull(result).equals("")){
-				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(result));
-				JSONArray jsonArray = jsonObj.getJSONArray("files");
-				
-				Map<String, Object> resultMap = null;
-				for(int i = 0; i < jsonArray.size(); i++){
-					resultMap = new HashMap<String, Object>();
-					JSONObject comandObj = (JSONObject) jsonArray.get(i);
-					
-					resultMap.put("fileName", comandObj.getString("name"));
-					resultMap.put("fileId", comandObj.getString("id"));
-					
-					resultMap.put("filePureSize", comandObj.getDouble("size"));
-					resultMap.put("fileSize",CustomUtil.fileVolumeCalc(String.valueOf(comandObj.getDouble("size"))));
-					
-					resultMap.put("jobUuid", jobUuid);
-					
-					resultList.add(resultMap);
-				}
-				Collections.sort(resultList, sortComp);
-			}
-			
-			// 임시 : Result.zip File ID
-			String resultFileStr = SimulationLocalServiceUtil.retrieveRemoteDir(icebreakerUrl, vcToken.getVcToken(), jobUuid, "/");
-			String zipFileId = "";
-			if(!CustomUtil.strNull(resultFileStr).equals("")){
-				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(resultFileStr));
-				JSONArray jsonArray = jsonObj.getJSONArray("files");
-				
-				root1: for(int i = 0; i < jsonArray.size(); i++){
-					JSONObject comandObj = (JSONObject) jsonArray.get(i);
-					if(comandObj.getString("name").equals("result.zip")){
-						zipFileId =  comandObj.getString("id");
-						break root1;
-					}
-				}
-			}
-			
-			JsonObject obj = new JsonObject();
-			obj.addProperty("zipFileId", zipFileId);
-			obj.add("resultList", new Gson().toJsonTree(resultList, new TypeToken<List<Map<String, Object>>>() {}.getType()));
-			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			out.write(obj.toString());
-		}catch (Exception e) {
-			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
-			e.printStackTrace();
-		}
-	}
-	
-	
 	@ResourceMapping(value="searchProject")
 	public void searchProject(ResourceRequest request, ResourceResponse response,
 			@RequestParam(value = "simulationUuid", required = true) String simulationUuid,
@@ -665,32 +584,6 @@ public class DashboardController {
 		}
 		return returnResult;
 	}
-	
-	private Comparator<Map<String, Object>> sortComp = new Comparator<Map<String, Object>>(){
-	    @Override
-	    public int compare(Map<String, Object> o1, Map<String, Object> o2){
-	      String s1 = o1.get("fileName").toString();
-	      String s2 = o2.get("fileName").toString();
-
-	      int n1 = s1.length(), n2 = s2.length();
-	      for(int i1 = 0, i2 = 0; i1 < n1 && i2 < n2; i1++, i2++){
-	        char c1 = s1.charAt(i1);
-	        char c2 = s2.charAt(i2);
-	        if(c1 != c2){
-	          c1 = Character.toUpperCase(c1);
-	          c2 = Character.toUpperCase(c2);
-	          if(c1 != c2){
-	            c1 = Character.toLowerCase(c1);
-	            c2 = Character.toLowerCase(c2);
-	            if(c1 != c2){
-	              return c1 - c2;
-	            }
-	          }
-	        }
-	      }
-	      return n1 - n2;
-	    }
-	  };
 }
 
 

@@ -10,7 +10,6 @@
 <liferay-portlet:resourceURL var="updateSimulationURL" id="updateSimulation" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="updateSimulationJobURL" id="updateSimulationJob" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="readOutLogURL" id="readOutLog" copyCurrentRenderParameters="false" escapeXml="false"/>
-<liferay-portlet:resourceURL var="jobResultFileURL" id="jobResultFile" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="searchProjectURL" id="searchProject" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="addProjectShareJobURL" id="addProjectShareJob" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="removeProjectShareURL" id="addProjectShareJob" copyCurrentRenderParameters="false" escapeXml="false"/>
@@ -320,8 +319,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_RESULT_VIEW, function( e ){
 	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		var simulationUuid = e.data.simulationUuid;
 		var jobUuid = e.data.jobUuid;
-// 		<portlet:namespace/>jobResultFileView(simulationUuid, jobUuid);
-		<portlet:namespace/>jobResultFileNewView(simulationUuid, jobUuid);
+		<portlet:namespace/>jobResultFileView(simulationUuid, jobUuid);
 	}
 });
 
@@ -1256,19 +1254,18 @@ function <portlet:namespace/>clearReadOutLogTimer(){
 	}
 }
 
-function <portlet:namespace/>jobResultFileNewView(simulationUuid, jobUuid) {
+function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
 	$("body").css('overflow','hidden');
 	AUI().use("liferay-portlet-url", function(a) {
 		var portletURL = Liferay.PortletURL.createRenderURL();
 		portletURL.setPortletMode("view");
 		portletURL.setWindowState("pop_up");
-		portletURL.setParameter("simulationUuid", simulationUuid);
 		portletURL.setParameter("jobUuid", jobUuid);
 		portletURL.setPortletId("SimulationResultFileViewer_WAR_edisonsimulationportlet");
 		Liferay.Util.openWindow({
 			dialog: {
-// 				width:1024,
-// 				height:800,
+				width:1024,
+				height:800,
 				cache: false,
 				draggable: false,
 				resizable: false,
@@ -1282,66 +1279,10 @@ function <portlet:namespace/>jobResultFileNewView(simulationUuid, jobUuid) {
 					}
 				}
 			},
-			id: "dataTypeSearchDialog",
+			id: "simulationResultFileViewDialog",
 			uri: portletURL.toString(),
 			title: "Result File View"
 		});
-	});
-}
-
-
-function <portlet:namespace/>jobResultFileView(simulationUuid, jobUuid) {
-	jQuery.ajax({
-		url: '<%=jobResultFileURL.toString()%>',
-		type:'POST',
-		dataType:'json',
-		data:{
-			"<portlet:namespace/>simulationUuid": simulationUuid,
-			"<portlet:namespace/>jobUuid": jobUuid
-		},
-		success:function(result){
-			console.log(result);
-			var modal = $("#"+<portlet:namespace/>parentNamespace+"job-result-file-modal");
-			$modalBody = modal.find(".modal-body");
-			$modalBody.empty();
-			var length = result.resultList.length;
-			if(length>0){
-				$table = $("<table></table>").addClass("table table-bordered table-hover").appendTo($modalBody);
-				$thead = $("<thead></thead>").appendTo($table);
-				$tr = $("<tr></tr>").appendTo($thead);
-				$("<th></th>").addClass("text-center").html(Liferay.Language.get('edison-table-list-header-file-nm')).appendTo($tr);
-				$("<th></th>").addClass("text-center").html(Liferay.Language.get('edison-table-list-header-file-size')).appendTo($tr);
-				$tbody = $("<tbody></tbody>").appendTo($table);
-				
-				
-				for(var i = 0; i < length; i++) {
-					var data = result.resultList[i];
-					$dataTr = $("<tr></tr>").css("cursor","pointer")
-											.attr("onclick","<portlet:namespace/>iceBreakerFileDown('"+data.fileId+"')")
-											.appendTo($tbody);
-					
-					$("<td></td>").html(data.fileName).appendTo($dataTr);
-					$("<td></td>").addClass("text-center").html(data.fileSize).appendTo($dataTr);
-				}
-			}
-			
-			if(result.zipFileId!=""){
-				modal.find(".modal-footer").css("display","block");
-				modal.find(".modal-footer #"+<portlet:namespace/>parentNamespace+"all-down-btn")
-					 .attr("onclick","<portlet:namespace/>iceBreakerFileDown('"+result.zipFileId+"')");
-			}else{
-				modal.find(".modal-footer").css("display","none");
-			}
-			
-			
-			modal.modal({ "backdrop": "static", "keyboard": false });
-		},error:function(jqXHR, textStatus, errorThrown){
-			if(jqXHR.responseText !== ''){
-				alert("jobSystemLog-->"+textStatus+": "+jqXHR.responseText);
-			}else{
-				alert("jobSystemLog-->"+textStatus+": "+errorThrown);
-			}
-		}
 	});
 }
 
@@ -1561,12 +1502,6 @@ function <portlet:namespace/>copyJobAndAddJob(simulationUuid) {
 	var modal = $("#"+<portlet:namespace/>parentNamespace+"simulation-modal");
 	modal.modal('hide');
 }
-function <portlet:namespace/>iceBreakerFileDown(fileId){
-	var url = '${icebreakerUrl}/api/file/download?id=' + fileId;
-	window.location.href = url;
-}
-
-
 
 /*************************************************************************
  * Port Event

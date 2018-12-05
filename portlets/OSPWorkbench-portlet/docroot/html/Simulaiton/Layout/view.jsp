@@ -74,29 +74,6 @@
 	</div>
 </div>
 
-<div class="modal fade" id="<portlet:namespace/>job-result-file-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>job-result-file-modal" style="display: none;">
-	<div class="vertical-alignment-helper">
-		<div class="modal-dialog vertical-align-center" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Job Result File</h4>
-				</div>
-				<div class="modal-body">
-					<table class="table table-bordered table-hover">
-					
-					</table>
-				</div>
-				<div class="modal-footer">
-					<div class="btn-group pull-right">
-						<button class="btn btn-primary" id="<portlet:namespace/>all-down-btn"><span class="icon-download-alt">  <liferay-ui:message key="edison-simulation-monitoring-result-file-all-down"/></span></button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <div class="modal fade" id="<portlet:namespace/>simulation-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>simulation-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">

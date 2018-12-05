@@ -395,6 +395,7 @@ function sdrcommon_collectionPopup(result){
 	$.ajax({
 		url: "${transferJobDataURL}",
 		async: false,
+		dataType: 'json',
 		data : {
 			"<portlet:namespace/>collectionId": result.value,
 			"<portlet:namespace/>transMode": <portlet:namespace/>openDataTransMode,
@@ -405,9 +406,9 @@ function sdrcommon_collectionPopup(result){
 		timeout: 10000,
 	}).done(function (result) {
 		if(result.isComplete){
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg"));
+			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-success-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
 		}else{
-			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
+			$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg")+ "<br/>" + result.msg.replace(/,/gi, ',<br/>'));
 		}
 	}).error(function (msg) {
 		$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));

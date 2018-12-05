@@ -340,9 +340,8 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	/**
 	* New Simulation With SimulationJob
 	*
-	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
-	* @param groupId             - Portal 실행 일 경우 APP의 groupId를 참고, 그외 siteGroupId 셋팅
-	* @param simulationTitle
+	* @param user                - 占쎄쑴��占쎈쵐�쏙옙占폱ser 揶쏆빘猿� EX)User user = PortalUtil.getUser(request);
+	* @param groupId             - Portal 占썬끋六�占쏙옙野껋럩��APP占쏙옙groupId�쒙옙筌〓㈇�� 域밸챷��siteGroupId 占쎈뿮��     * @param simulationTitle
 	* @param scienceAppId
 	* @param scienceAppName
 	* @param classId
@@ -387,8 +386,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 시뮬레이션 수행
-	*
+	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼹六�     *
 	* @simulationUuid
 	* @fileId
 	* @Token
@@ -409,8 +407,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 시뮬레이션 수행
-	*
+	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼹六�     *
 	* @simulationUuid
 	* @job_uuid
 	* @Token
@@ -426,12 +423,9 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 시뮬레이션 수정
-	*
+	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼷��     *
 	* @throws JSONException
-	* @Token : 인증 토큰
-	* @uuid : 시뮬레이션 아이디
-	* @return int resultCode
+	* @Token : 占쎈챷弛�占쎌쥚寃�     * @uuid : 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑴�좑옙占�    * @return int resultCode
 	*/
 	@Override
 	public int updateSimulation(java.lang.String icebreakerUrl,
@@ -443,7 +437,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 파일 업로드
+	* 占쎈슣��占쎈굝以덌옙占�    *
 	*
 	* @param params
 	String    Token
@@ -464,8 +458,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 파일 삭제
-	*
+	* 占쎈슣��占쏙옙��     *
 	* @param icebreakerUrl
 	* @param vcToken
 	* @param fileId
@@ -479,8 +472,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* serverFile 목록
-	*/
+	* serverFile 筌뤴뫖以�     */
 	@Override
 	public java.lang.String getServerFileList(java.lang.String icebreakerUrl,
 		java.lang.String cmd_directory, java.lang.String cluster,
@@ -491,8 +483,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* job별 결과 파일 zip형태로 다운로드
-	*
+	* job癰귨옙野껉퀗��占쎈슣��zip占쎈벤源�에占쏙옙�쇱뒲嚥≪뮆諭�     *
 	* @simulationUuid
 	* @job_uuid
 	* @Token
@@ -507,8 +498,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* job error 보기
-	*
+	* job error 癰귣떯由�     *
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -522,8 +512,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 파일 ID 확인
-	*
+	* 占쎈슣��ID 占쎈벡��     *
 	* @throws IOException
 	*/
 	@Override
@@ -535,8 +524,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* 디렉토리 파일 조회
-	* 일반적인 후처리기 목록은 dir = result
+	* 占쎈뗀�놅옙醫듼봺 占쎈슣��鈺곌퀬��     * 占쎌눖而뀐옙怨몄뵥 占쎄쑴荑귞뵳�由�筌뤴뫖以됵옙占폻ir = result
 	*
 	* @throws IOException
 	*/
@@ -556,9 +544,28 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 			vcToken, jobUuid, dirPath);
 	}
 
+	@Override
+	public java.lang.String retrieveAllPostProcessor(
+		java.lang.String icebreakerUrl, java.lang.String vcToken,
+		java.lang.String jobUuid)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _simulationLocalService.retrieveAllPostProcessor(icebreakerUrl,
+			vcToken, jobUuid);
+	}
+
+	@Override
+	public java.lang.String retrieveAllRemoteDir(
+		java.lang.String icebreakerUrl, java.lang.String vcToken,
+		java.lang.String jobUuid, java.lang.String dirPath)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _simulationLocalService.retrieveAllRemoteDir(icebreakerUrl,
+			vcToken, jobUuid, dirPath);
+	}
+
 	/**
-	* simulation job 중지
-	*
+	* simulation job 餓λ쵐占�     *
 	* @param params
 	* @return
 	* @throws IOException
@@ -574,8 +581,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* Cluster List 조회
-	*
+	* Cluster List 鈺곌퀬��     *
 	* @param params
 	* @return
 	* @throws IOException
@@ -589,8 +595,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* job error 보기
-	*
+	* job error 癰귣떯由�     *
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -604,8 +609,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* file 조회
-	*
+	* file 鈺곌퀬��     *
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -619,7 +623,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* webgl을 위한 파일 생성 후 url 리턴(임시 사용-추후 수정 예정)
+	* webgl占쏙옙占쎄쑵釉�占쎈슣��占쎌빘苑�占쏙옙url �귐뗪쉘(占쎄쑴��占싼딆뒠-�곕���占쎌꼷��占쎈뜆��
 	*
 	* @param params
 	* @throws IOException
@@ -648,8 +652,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* getUserRepositorySize 조회
-	*
+	* getUserRepositorySize 鈺곌퀬��     *
 	* @param params
 	* @return
 	* @throws IOException
@@ -672,12 +675,7 @@ public class SimulationLocalServiceWrapper implements SimulationLocalService,
 	}
 
 	/**
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	*/
+	* 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쏙옙Icebreaker Service End 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쏙옙     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     */
 	@Override
 	public java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
 		long groupId, long userId)

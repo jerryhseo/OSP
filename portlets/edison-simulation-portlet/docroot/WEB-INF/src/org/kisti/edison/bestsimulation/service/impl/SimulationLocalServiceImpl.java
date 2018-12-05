@@ -1025,6 +1025,61 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		return responseBuffer.toString();
 	}
 	
+	/*결과 파일의 폴더, 파일 모두 조회*/
+	public String retrieveAllPostProcessor(String icebreakerUrl, String vcToken, String jobUuid) throws IOException, SystemException{
+		return retrieveAllDir(icebreakerUrl,vcToken,jobUuid,"result");
+	}
+	
+	public String retrieveAllRemoteDir(String icebreakerUrl, String vcToken, String jobUuid,String dirPath) throws IOException, SystemException{
+		return retrieveAllDir(icebreakerUrl,vcToken,jobUuid,dirPath);
+	}
+	
+	private String retrieveAllDir(String icebreakerUrl, String vcToken, String job_uuid,String dirPath) throws IOException, SystemException{
+		StringBuffer responseBuffer = new StringBuffer();
+		if(!CustomUtil.strNull(vcToken).equals("")){
+			if(dirPath.equals("")){
+				dirPath = "result";
+			}
+			
+			URL url = new URL(icebreakerUrl+"/api/job/"+CustomUtil.strNull(job_uuid)+"/alloutput?dir="+dirPath);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			conn.setDoOutput(true);
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setRequestProperty("Authorization", "Basic "+CustomUtil.strNull(vcToken));
+			
+			if (conn.getResponseCode() == 200) {
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+				
+				String  output = "";		
+				while ((output = br.readLine()) != null) {			
+					responseBuffer.append(output);
+				}
+				
+			}else if (conn.getResponseCode() == 400) {
+				System.out.println("Failed IcebreakerService [ retrieveAllDir ] : BAD REQUEST : wrong body content - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ retrieveAllDir ] : BAD REQUEST : wrong body content - HTTP error code : " + conn.getResponseCode());
+			}else if (conn.getResponseCode() == 401) {
+				System.out.println("Failed IcebreakerService [ retrieveAllDir ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ retrieveAllDir ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());
+			}else if (conn.getResponseCode() == 404) {
+				System.out.println("Failed IcebreakerService [ retrieveAllDir ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ retrieveAllDir ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+			}else{			
+				System.out.println("Failed IcebreakerService [ retrieveAllDir ] : ETC : etc error - HTTP error code : " + conn.getResponseCode());
+				throw new SystemException("Failed IcebreakerService [ retrieveAllDir ] : ETC : etc error - HTTP error code : " + conn.getResponseCode());
+			}
+			
+			conn.disconnect();
+		}else{
+			System.out.println("Failed IcebreakerService [ retrieveAllDir ] : Token is NOT NULL - Request error code : 999");
+		}
+		
+		return responseBuffer.toString();
+	}
+	
 	/**
 	 * simulation job 중지
 	 * @param params

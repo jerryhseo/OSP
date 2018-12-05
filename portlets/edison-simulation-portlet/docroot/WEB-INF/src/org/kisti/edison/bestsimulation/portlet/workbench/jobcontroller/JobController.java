@@ -3,6 +3,8 @@ package org.kisti.edison.bestsimulation.portlet.workbench.jobcontroller;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.google.gson.Gson;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -98,7 +101,11 @@ public class JobController {
 			ResourceRequest request, ResourceResponse response){
 		
 		Map params = RequestUtil.getParameterMap(request);
+		Map<String, Object> resultMap  = new HashMap<String, Object>();
+		
 		try{
+			boolean isComplete = true;
+			String msg = "";
 			for(String simulationUuid : simulations){
 				Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
 				if(transMode.equals("TRANS_JOB")){
@@ -106,52 +113,80 @@ public class JobController {
 					
 					String jobTitle = simulation.getSimulationTitle()+" - "+simulationJob.getJobTitle();
 					long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
-					this.transferJobDataToSDR(request, collectionId, jobUuid, scienceAppId, jobTitle);
+					boolean isTrance = this.transferJobDataToSDR(request, collectionId, jobUuid, scienceAppId, jobTitle);
+					if(!isTrance){
+						if(isComplete){isComplete = false;}
+						if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
+					}
 				}else if(transMode.equals("TRANS_SIMULATION")){
 					List<SimulationJob> jobs = SimulationJobLocalServiceUtil.getJobsBySimulationUuid(simulationUuid);
 					for(SimulationJob job : jobs){
 						if(job.getJobStatus()==1701011){
 							String jobTitle = simulation.getSimulationTitle()+" - "+job.getJobTitle();
 							long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
-							this.transferJobDataToSDR(request, collectionId, job.getJobUuid(), scienceAppId, jobTitle);
+							boolean isTrance = this.transferJobDataToSDR(request, collectionId, job.getJobUuid(), scienceAppId, jobTitle);
+							if(!isTrance){
+								if(isComplete){isComplete = false;}
+								if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
+							}
 						}
 					}
 				}
 			}
+			
+			if(isComplete){
+				resultMap.put("isComplete", true);
+				resultMap.put("msg", "Successfully Transfer JobData To SDR");
+			}else{
+				resultMap.put("isComplete", false);
+				resultMap.put("msg", "Partially Failed: "+msg);
+			}
+			PrintWriter out = response.getWriter();
+			response.setContentType("application/json; charset=UTF-8");
+			out.write(new Gson().toJson(resultMap).toString());
+			out.flush();
+			out.close();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void transferJobDataToSDR(ResourceRequest request,String collectionId,String jobUuid,long scienceAppId, String jobTitle) throws PortalException, SystemException{
-		final int REPO_ID = 1;
-		ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
-		SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
-		ServiceContext sc = ServiceContextFactory.getInstance(request);
-		
-		JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
-		
-		saveInfo = DatasetServiceUtil.save(
+	private boolean transferJobDataToSDR(ResourceRequest request,String collectionId,String jobUuid,long scienceAppId, String jobTitle){
+		try{
+			final int REPO_ID = 1;
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
+			ServiceContext sc = ServiceContextFactory.getInstance(request);
+			
+			JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
+			
+			saveInfo = DatasetServiceUtil.save(
 					GetterUtil.getLong(collectionId),
 					jobUuid, 
 					scienceApp.getName(), 
 					scienceApp.getVersion(), 
 					jobTitle,
-					scienceAppId,
+					GetterUtil.getLong(scienceAppId, 0),
 					REPO_ID, 
 					simulationJobData.getJobData(),
 					scienceApp.getLayout(), 
 					sc);
-		
-		if(saveInfo.getBoolean("isValid")){
-			JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
-			curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
 			
-			if(!curateInfo.getBoolean("isValid")){
-				throw new PortalException("Failed Transfer JobData To SDR From Curate");
+			if(saveInfo.getBoolean("isValid")){
+				JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
+				curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
+				
+				if(!curateInfo.getBoolean("isValid")){
+					return false;
+				}else{
+					return true;
+				}
+			}else{
+				return false;
 			}
-		}else{
-			throw new PortalException("Failed Transfer JobData To SDR From Save");
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 }
