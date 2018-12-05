@@ -2532,6 +2532,9 @@
                     changedData.order(port.order() );
                     changedData.relative( true );
                     changedData.dirty( true );
+                    
+                    /*PortName Relation Portlets fire OSP_LOAD_DATA function*/
+                    Workbench.handleRelationPortletEventByPortName(portletId,port.name(),changedData);
                         
                     if( job.isSubmit() ){
                         $.confirm({
@@ -2570,6 +2573,35 @@
                 },
                10
             );
+        };
+        
+        
+        /*PortName Relation Portlets fire OSP_LOAD_DATA function*/
+        Workbench.handleRelationPortletEventByPortName = function(sourcePortId,portName,inputData){
+        	var portlets = Workbench.getPortlets(portName);
+        	for( var index in portlets ){
+        		var portlet = portlets[index];
+        		if(portlet.instanceId() != sourcePortId){
+        			if(inputData){
+        				if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
+        					var dataType = new OSP.DataType();
+            				dataType.deserializeStructure(inputData.context());
+            				var dataStructure = dataType.structure(); 
+    						var fileContents = dataStructure.activeParameterFormattedInputs();
+    						
+    						var data = new OSP.InputData();
+    						data.portName( inputData.portName() );
+    						data.order( inputData.order() );
+    						data.type( OSP.Enumeration.PathType.FILE_CONTENT );
+    						data.context( fileContents[0].join('') );
+    						fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(data) );
+        				}else{
+	        				fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(inputData) );
+        				}
+        			}
+        			
+        		}
+        	}
         };
         
         /*Job initData Converter From InputData */
