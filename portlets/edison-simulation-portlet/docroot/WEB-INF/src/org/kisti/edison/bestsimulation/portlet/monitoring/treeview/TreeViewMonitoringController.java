@@ -70,8 +70,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.sdr.metadata.model.Dataset;
-import com.sdr.metadata.service.DatasetLocalServiceUtil;
 import com.sdr.metadata.service.DatasetServiceUtil;
 
 import net.sf.json.JSONArray;
@@ -88,6 +86,7 @@ public class TreeViewMonitoringController{
     private static final String OSP_PATH_TYPE_FILE = "file";
     private static final String OSP_PATH_TYPE_FILE_CONTENT = "fileContent";
     private static final String OSP_PATH_TYPE_CONTEXT = "context";
+    private static final long JOB_STATUS_SUCCESS = 1701011;
     
 
     @RequestMapping
@@ -343,6 +342,114 @@ public class TreeViewMonitoringController{
         out.write(Integer.toString(result));
     }
     
+    @ResourceMapping(value = "transferSimulationData")
+    public void transferSimulationData(
+        @RequestParam(value = "collectionId", required=false) String collectionId,
+        @RequestParam(value = "simulationUuid", required=false) String simulationUuid,
+        ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
+        //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
+        //DatasetServiceUtil.curate(ds, sc);
+        //DatasetServiceUtil.s
+        // jobUuid
+        //        - solver(App) Name()
+        //        - collection ID
+        //        - simulation title - job title (optional)
+        //        - service context
+
+        final int REPO_ID = 1;
+        Gson result = new GsonBuilder().create();
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json; charset=UTF-8");
+        ServiceContext sc = ServiceContextFactory.getInstance(request);
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        Map<String, Object> resultMap  = new HashMap<String, Object>();
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        // Initialize variables
+        resultMap.put("isComplete", true);
+        resultMap.put("completeCount", 0);
+        resultMap.put("msg", "Partially Failed: ");
+        int successJob = 0;
+
+        try{
+            List<SimulationJob> jobs = SimulationJobLocalServiceUtil
+                .getJobsBySimulationUuidWithAdditionalCondition(simulationUuid);
+            Simulation simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
+
+            for(SimulationJob job : jobs){
+                Map<String, Object> eachResult = new HashMap<String, Object>();
+                String jobUuid = job.getJobUuid();
+                String scienceAppId = simulation.getScienceAppId();
+                String jobTitle = simulation.getSimulationTitle(themeDisplay.getLocale()) + " - "
+                    + job.getJobTitle(themeDisplay.getLocale());
+                log.info("collectionId : " + collectionId);
+                log.info("jobUuid : " + jobUuid);
+                log.info("scienceAppId : " + scienceAppId);
+                log.info("jobTitle : " + jobTitle);
+                
+                ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
+                if(scienceApp != null && job.getJobStatus() == JOB_STATUS_SUCCESS){
+                    successJob++;
+                    String scienceAppName = scienceApp.getName() + "_" + scienceApp.getVersion();
+                    log.info("scienceAppName : " + scienceAppName);
+
+                    com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
+                    SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil
+                        .getSimulationJobData(jobUuid);
+                    saveInfo = DatasetServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceApp.getName(),
+                        scienceApp.getVersion(), jobTitle, GetterUtil.getLong(scienceAppId, 0), REPO_ID,
+                        simulationJobData.getJobData(), // EDISON jobData 테이블
+                        scienceApp.getLayout(), // EDISON scienceApp 테이블의 layout 필드
+                        sc);
+
+                    if(saveInfo.getBoolean("isValid")){
+                        com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
+                        curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
+
+                        if(curateInfo.getBoolean("isValid")){ // success
+                            int completeCount = (int) resultMap.get("completeCount");
+                            resultMap.put("completeCount", ++completeCount);
+                        } else{ // fail
+                            resultMap.put("isComplete", false);
+                            String message = (String) resultMap.get("msg");
+                            message = message + ", " + jobTitle;
+                            resultMap.put("msg", message);
+                        }
+                    } else { // fail
+                        resultMap.put("isComplete", false);
+                        String message = (String) resultMap.get("msg");
+                        message = message + ", " + jobTitle;
+                        resultMap.put("msg", message);
+                    }
+
+                    // failed job doesn't need to be added
+                    results.add(eachResult);
+                } else{ // only success job is saved
+                    String msg = "No scienceAppId or failed job - scienceAppId : " + scienceAppId;
+                    //resultMap.put("isComplete", false);
+                    log.info(msg);
+                }
+                
+            }
+        } catch (Exception e){ // error
+            resultMap.put("isComplete", false);
+            resultMap.put("msg", "Error while saving the data");
+            log.error("transferSimulationData", e);
+        }
+
+        int jobCount = (int) resultMap.get("completeCount");
+        if(successJob == jobCount) {
+            resultMap.put("isComplete", true);
+            resultMap.put("msg", "Successfully Transfer JobData To SDR");
+        } else {
+            resultMap.put("isComplete", false);
+        }
+        resultMap.put("results", results);
+        out.write(result.toJson(resultMap));
+        out.flush();
+        out.close();
+    }
+    
     //시뮬레이션 조회
     @ResourceMapping(value = "searchJobList")
     public void searchJobList(ResourceRequest request, ResourceResponse response)
@@ -468,34 +575,33 @@ public class TreeViewMonitoringController{
                 com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
                 SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
                 saveInfo = DatasetServiceUtil.save(
-                			GetterUtil.getLong(collectionId),
-                			jobUuid,
-                			scienceApp.getName(),
-                			scienceApp.getVersion(),
-                			jobTitle,
-                			GetterUtil.getLong(scienceAppId, 0),
-                			REPO_ID,
-                			simulationJobData.getJobData(),  // EDISON jobData 테이블
-                			scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
-                			sc );
-                
+                            GetterUtil.getLong(collectionId),
+                            jobUuid,
+                            scienceApp.getName(),
+                            scienceApp.getVersion(),
+                            jobTitle,
+                            GetterUtil.getLong(scienceAppId, 0),
+                            REPO_ID,
+                            simulationJobData.getJobData(),  // EDISON jobData 테이블
+                            scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
+                            sc );
                 
                 if(saveInfo.getBoolean("isValid")){
-                	com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
+                    com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
                     curateInfo = DatasetServiceUtil.curate(saveInfo.getLong("datasetId"), sc);
                     
                     if(curateInfo.getBoolean("isValid")){
-                    	resultMap.put("isComplete", true);
-                    	resultMap.put("isCompleteMsg", "Successed Transfer JobData To SDR");
+                        resultMap.put("isCompleteMsg", "Successed Transfer JobData To SDR");
+                        resultMap.put("isComplete", true);
                     } else {
-                    	resultMap.put("isComplete", false);
-                        resultMap.put("msg", curateInfo.getString("failMessage"));
+                        resultMap.put("isCompleteMsg", "Failed Transfer JobData To SDR");
                         throw new PortalException(curateInfo.getString("failMessage"));
                     }
                 } else {
                     throw new PortalException(saveInfo.getString("failMessage"));
                 }
                 
+//                resultMap.put("isComplete", ds != null);
             }catch(Exception e){
                 resultMap.put("isComplete", false);
                 resultMap.put("msg", e.getMessage());
