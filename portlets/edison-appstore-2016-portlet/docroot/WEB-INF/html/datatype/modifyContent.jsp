@@ -263,28 +263,26 @@ AUI().ready(function() {
 	<portlet:namespace/>addStructuredDataEditor();
 });
 
-	Liferay.on( 'OSP_RESPONSE_DATA', function(eventData){
+	Liferay.on(OSP.Event.OSP_RESPONSE_DATA, function(eventData){
 		$("#<portlet:namespace/>structure").val(JSON.stringify(eventData.data));
 		document.<portlet:namespace/>modifyStructure.submit();
 	});
 	
 	function <portlet:namespace/>modify(){
 		if(<portlet:namespace/>fileCheck()){
-			var data = {
-					targetPortlet: 'BROADCAST',
-					sourcePortlet: '<portlet:namespace/>'
-			};
-			Liferay.fire('OSP_REQUEST_DATA',data);
+			Liferay.fire(OSP.Event.OSP_REQUEST_DATA,{});
 		}
 	}
 	
 	function <portlet:namespace/>addStructuredDataEditor(){
 		if('${inputdeckExist}'){
+			var dataType = new OSP.DataType();
+			dataType.deserializeStructure(JSON.parse('${dataTypeMap.structure}'));
 			AUI().use(function(A){
 				var data = {
 						targetPortlet: 'BROADCAST',
 						sourcePortlet: '<portlet:namespace/>',
-						strStructure: '${dataTypeMap.structure}'
+						strStructure: dataType.structure()
 				};
 				
 				Liferay.fire('OSP_SHOW_SDE',data);

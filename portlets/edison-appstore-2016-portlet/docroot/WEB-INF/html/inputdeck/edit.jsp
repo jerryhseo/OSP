@@ -524,13 +524,13 @@
 
 <script type="text/javascript">
 	
-	var dataType = new OSP.DataType();
+	var <portlet:namespace/>dataType = new OSP.DataType();
 	
 	function <portlet:namespace/>display(){
 		$('#<portlet:namespace/>variableTableTd').empty();
 // 		console.log(JSON.stringify(dataType,null,4));
 		
-		dataType.showStructuredDataEditor(
+		<portlet:namespace/>dataType.showStructuredDataEditor(
 				'<portlet:namespace/>', 
 				$('#<portlet:namespace/>variableTableTd'),
 				'<%=request.getContextPath()%>',
@@ -540,65 +540,66 @@
 	
 	Liferay.on( OSP.Event.OSP_REQUEST_DATA, function(eventData){
 		var structure = {
-			data: dataType.structure()
+			data: <portlet:namespace/>dataType.structure()
 		};
+		
 		Liferay.fire( OSP.Event.OSP_RESPONSE_DATA, structure );
 	});
 	
 	
-	Liferay.on( 'OSP_SHOW_SDE', function(eventData){
+	Liferay.on('OSP_SHOW_SDE', function(eventData){
 		if(eventData.targetPortlet === 'BROADCAST' ||
 		   eventData.targetPortlet === '<portlet:namespace/>' ){
 			if( eventData.strStructure!="" ){
-				dataType.structure(dataType.newDataStructure(JSON.parse( eventData.strStructure )));
-				console.log(dataType.structure());
+				<portlet:namespace/>dataType.deserializeStructure(eventData.strStructure);
 				<portlet:namespace/>init(true);
 			}else{
-				dataType.structure(dataType.newDataStructure(JSON.parse('{}')));
+				<portlet:namespace/>dataType.structure(<portlet:namespace/>dataType.newDataStructure(JSON.parse('{}')));
 				<portlet:namespace/>init(false);
 			}
+			
 			<portlet:namespace/>display();
 		}
 	});
 	
 	function <portlet:namespace/>init(isDataExist){
-		dataType.structure().parameterFormSpace(false);
-		dataType.structure().vectorFormSpace(false);
-		dataType.structure().sweepMax(1);
-		dataType.structure().defaultLanguageId('${defaultLanguageId}');
+		<portlet:namespace/>dataType.structure().parameterFormSpace(false);
+		<portlet:namespace/>dataType.structure().vectorFormSpace(false);
+		<portlet:namespace/>dataType.structure().sweepMax(1);
+		<portlet:namespace/>dataType.structure().defaultLanguageId('${defaultLanguageId}');
 		var availableLanguageIds = '${availableLanguageIds}'.split(",");
 		
 		for(var i=0;i<availableLanguageIds.length;i++){
-			dataType.structure().addLanuageId(availableLanguageIds[i]);
+			<portlet:namespace/>dataType.structure().addLanuageId(availableLanguageIds[i]);
 		}
 		
 // 		$(document).tooltip();
 // 		$("img[width='20']").tooltip();
 		
 		if(isDataExist){
-			$("#valueDelimiter").val(dataType.structure().parameterFormValueDelimiter()).prop("selected",true);
+			$("#valueDelimiter").val(<portlet:namespace/>dataType.structure().parameterFormValueDelimiter()).prop("selected",true);
 			var parameterDelimite = "";
-			if(dataType.structure().parameterFormParameterDelimiter()){
-				parameterDelimite = dataType.structure().parameterFormParameterDelimiter();
+			if(<portlet:namespace/>dataType.structure().parameterFormParameterDelimiter()){
+				parameterDelimite = <portlet:namespace/>dataType.structure().parameterFormParameterDelimiter();
 			}
 			$("#lineDelimiter").val(parameterDelimite).prop("selected",true);
 			
 			var commentChar = "";
-			if(dataType.structure().parameterFormCommentChar()){
-				commentChar = dataType.structure().parameterFormCommentChar();
+			if(<portlet:namespace/>dataType.structure().parameterFormCommentChar()){
+				commentChar = <portlet:namespace/>dataType.structure().parameterFormCommentChar();
 			}
 			$("#commentChar").val(commentChar);
 			
-			var text = commentChar+"KEY"+dataType.structure().parameterFormValueDelimiter()+"VALUE"+parameterDelimite;
+			var text = commentChar+"KEY"+<portlet:namespace/>dataType.structure().parameterFormValueDelimiter()+"VALUE"+parameterDelimite;
 			$("#linePreview").val(text);
 			
 			
-			$("#vectorBracket").val(dataType.structure().vectorFormBraceChar()).prop("selected",true);
-			$("#vectorDelimiter").val(dataType.structure().vectorFormDelimiter()).prop("selected",true);
-			$("#vectorPreview").val(dataType.structure().vectorFormSample());
+			$("#vectorBracket").val(<portlet:namespace/>dataType.structure().vectorFormBraceChar()).prop("selected",true);
+			$("#vectorDelimiter").val(<portlet:namespace/>dataType.structure().vectorFormDelimiter()).prop("selected",true);
+			$("#vectorPreview").val(<portlet:namespace/>dataType.structure().vectorFormSample());
 		}else{
-			dataType.structure().setParameterForm(" = "," ;","",'');
-			dataType.structure().setVectorForm(OSP.Constants.SQUARE," ","[A B C]");
+			<portlet:namespace/>dataType.structure().setParameterForm(" = "," ;","",'');
+			<portlet:namespace/>dataType.structure().setVectorForm(OSP.Constants.SQUARE," ","[A B C]");
 		}
 	}
 	
@@ -609,7 +610,7 @@
 		
 		var text = commentChar+"KEY"+valueDelimiter+"VALUE"+parameterDelimiter;
 		$("#linePreview").val(text);
-		dataType.structure().setParameterForm(valueDelimiter,parameterDelimiter,commentChar,'');
+		<portlet:namespace/>dataType.structure().setParameterForm(valueDelimiter,parameterDelimiter,commentChar,'');
 	}
 	
 	function <portlet:namespace/>vectorFormat(){
@@ -637,7 +638,7 @@
 		var text = vectorBracketStartValue+"A"+vectorDelimiter+"B"+vectorDelimiter+"C"+vectorBracketEndValue;
 		$("#vectorPreview").val(text);
 		
-		dataType.structure().setVectorForm(vectorBracket,vectorDelimiter,text);
+		<portlet:namespace/>dataType.structure().setVectorForm(vectorBracket,vectorDelimiter,text);
 		
 		//1|2|3
 		//기존 vector value 변경
@@ -658,7 +659,10 @@
 	
 	Liferay.on( 'parameterSelected', function(event){
 		var parameterObj = event.sourceParameter;
-		console.log("parameterSelected_fire"+JSON.stringify(parameterObj,null,4));
+		
+		console.log("===========parameterSelected_fire============");
+		console.log(JSON.stringify(parameterObj,null,4));
+		console.log("=============================================");
 		
 		<portlet:namespace/>changeType(parameterObj.type(),'update');
 		
@@ -689,12 +693,12 @@
 			var key = $(this).attr("id");
 			if($(this).is(":visible")&&searchJson[key]){
 				if(key=='nickName'){
-					var xml = parameterObj.localizedNameTextXML(dataType.structure().availableLanguageIds(),dataType.structure().defaultLanguageId());
+					var xml = parameterObj.localizedNameTextXML(<portlet:namespace/>dataType.structure().availableLanguageIds(),<portlet:namespace/>dataType.structure().defaultLanguageId());
 					<portlet:namespace/>localizedInputSet('inputDeckNickName',xml);
 				}else if(key=='active'){
 					$("#activeValue option[value='"+parameterObj.active()+"']").prop("selected",true);
 				}else if(key=='description'){
-					var xml = parameterObj.localizedDescriptionXML(dataType.structure().availableLanguageIds(),dataType.structure().defaultLanguageId());
+					var xml = parameterObj.localizedDescriptionXML(<portlet:namespace/>dataType.structure().availableLanguageIds(),<portlet:namespace/>dataType.structure().defaultLanguageId());
 					<portlet:namespace/>localizedInputSet('inputDeckDescription',xml);
 				}else if(key=='groupChoice'){
 					
@@ -704,7 +708,7 @@
 					var listMap = parameterObj.listItems();
 					$select  = $("#inputDeckListParemter");
 					
-					var availableLanguagesArray = dataType.structure().availableLanguageIds();
+					var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 					for (var val in listMap){
 						var listItem = parameterObj.listItem(val);
 						$listOption = $("<option/>").val(listItem.value()).html(listItem.localizedText('${defaultLanguageId}')).appendTo($select);
@@ -836,7 +840,7 @@
 					//group 조회 화면일 경우
 					if(key=="groupChoice"){
 						if(activeType=='add'){
-							var variableGroupArray = dataType.structure().parameterNames(OSP.Constants.GROUP);
+							var variableGroupArray = <portlet:namespace/>dataType.structure().parameterNames(OSP.Constants.GROUP);
 							$td = $("#"+key).children("td");
 							$td.empty();
 							
@@ -845,7 +849,7 @@
 								
 								$("<option/>").val("").html(Liferay.Language.get('--empty--')).appendTo($select);
 								for(var i=0;i<variableGroupArray.length;i++){
-									var variableGroup = dataType.structure().parameter(variableGroupArray[i]);
+									var variableGroup = <portlet:namespace/>dataType.structure().parameter(variableGroupArray[i]);
 									
 									$("<option/>").val(variableGroup.name()).html(variableGroup.localizedNameText('${defaultLanguageId}')).appendTo($select);
 								}
@@ -859,7 +863,7 @@
 					
 					//변수 선택 조회 화면일 경우
 					if(key=="variableChoice"){
-						var parameters = dataType.structure().parameters();
+						var parameters = <portlet:namespace/>dataType.structure().parameters();
 						$td = $("#variableChoiceTdArea");
 						$td.empty();
 						
@@ -1052,7 +1056,7 @@
 		var variable = null;
 		
 		if(isupdate){
-			variable = dataType.structure().parameter(paraName);
+			variable = <portlet:namespace/>dataType.structure().parameter(paraName);
 			//UPDATE 이면서 NUMERIC 객체 일경우 SWEEP 객체 초기화
 			if(paraType==OSP.Constants.NUMERIC){
 				variable.removeProperty(OSP.Constants.SWEEP);
@@ -1064,13 +1068,13 @@
 			if($("#inputDeckVarClone option:selected").val()!=""){
 				var cnt = $("#inputDeckVarClone option:selected").val();
 				if(variable.type()==OSP.Constants.GROUP){
-					dataType.structure().cloneParameterGroup(variable,cnt);
+					<portlet:namespace/>dataType.structure().cloneParameterGroup(variable,cnt);
 				}else{
-					dataType.structure().cloneParameter(variable,cnt);
+					<portlet:namespace/>dataType.structure().cloneParameter(variable,cnt);
 				}
 			}
 		}else{
-			variable = dataType.structure().newParameter(paraName,paraType)
+			variable = <portlet:namespace/>dataType.structure().newParameter(paraName,paraType)
 		}
 		
 		if(variable==false){
@@ -1113,7 +1117,7 @@
 				}else if(key=='groupChoice'){
 					var groupValue = <portlet:namespace/>nullToStr($("#inputDeckGroupChoiceSelect option:selected").val());
 					if(groupValue!=""){
-						var groupVariable = dataType.structure().parameter(groupValue);
+						var groupVariable = <portlet:namespace/>dataType.structure().parameter(groupValue);
 						groupVariable.attachParameter(variable.name());
 					}
 				}else if(key=='unit'){
@@ -1175,7 +1179,7 @@
 					}
 					variable.value(vectorValueArray);
 				}else if(key=='list'){
-					var availableLanguagesArray = dataType.structure().availableLanguageIds();
+					var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 					var defaultValue = "";
 					
 					$("#inputDeckListParemter option").each(function(){
@@ -1211,7 +1215,7 @@
 	function <portlet:namespace/>paraDelete(){
 		if(confirm(Liferay.Language.get('edison-science-appstore-inputdeck-delete-message'))){
 			var paraName = $("#inputDeckName").val().trim();
-			dataType.structure().removeParameter(paraName);
+			<portlet:namespace/>dataType.structure().removeParameter(paraName);
 			
 			<portlet:namespace/>changeType('','add');
 			
@@ -1261,10 +1265,10 @@
 	
 	//활성화 조건 변수 출력
 	function <portlet:namespace/>drowActivateOption(paraName){
-		var variableActivateArray = dataType.structure().parameterNames(OSP.Constants.NUMERIC,OSP.Constants.LIST);
+		var variableActivateArray = <portlet:namespace/>dataType.structure().parameterNames(OSP.Constants.NUMERIC,OSP.Constants.LIST);
 		if(variableActivateArray[0]!=""){
 			for(var i=0;i<variableActivateArray.length;i++){
-				var variable = dataType.structure().parameter(variableActivateArray[i])
+				var variable = <portlet:namespace/>dataType.structure().parameter(variableActivateArray[i])
 				if(variable.name()!=paraName){
 					switch( variable.type() ){
 					case OSP.Constants.NUMERIC:
@@ -1431,7 +1435,7 @@
 		var name = $("#inputDeckName").val().trim();
 		
 		//variable 객체 조회
-		var activateSearchVariable = dataType.structure().parameter(name);
+		var activateSearchVariable = <portlet:namespace/>dataType.structure().parameter(name);
 		var container = activateSearchVariable.activateConditions();
 		
 		if(container){
@@ -1482,7 +1486,7 @@
 	
 	//활성화 변수 저장
 	function <portlet:namespace/>inputDeckActivate(paraName,isEdit){
-		var targetVariable = dataType.structure().parameter(paraName);
+		var targetVariable = <portlet:namespace/>dataType.structure().parameter(paraName);
 		if(isEdit){
 			targetVariable.cleanActivateConditions();
 		}
@@ -1610,7 +1614,7 @@
 				}
 			}
 			
-			var availableLanguagesArray = dataType.structure().availableLanguageIds();
+			var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 			var size = availableLanguagesArray.length;
 			for(var i=0;i<size; i++){
 				var lanuage = availableLanguagesArray[i];
@@ -1656,14 +1660,14 @@
 		$option = $("#inputDeckListParemter option[value="+value+"]");
 		$("#para_listValue").val(value);
 		
-		var availableLanguagesArray = dataType.structure().availableLanguageIds();
+		var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 		
 		var data = new Object();
 		for(var i=0;i<availableLanguagesArray.length; i++){
 			data[availableLanguagesArray[i]] = <portlet:namespace/>nullToStr($option.attr(availableLanguagesArray[i]));
 		}
 		var jsonData = JSON.stringify(data);
-		var xml = OSP.Util.toLocalizedXml(JSON.parse(jsonData),dataType.structure().availableLanguageIds(),dataType.structure().defaultLanguageId());
+		var xml = OSP.Util.toLocalizedXml(JSON.parse(jsonData),<portlet:namespace/>dataType.structure().availableLanguageIds(),<portlet:namespace/>dataType.structure().defaultLanguageId());
 		<portlet:namespace/>localizedInputSet('inputDeckListName',xml);
 	}
 	
@@ -1674,7 +1678,7 @@
 		$input = $tr.children("td").find("input");
 		
 		if($tr.children("td").children("span").hasClass("input-localized-input")){
-			var availableLanguagesArray = dataType.structure().availableLanguageIds();
+			var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 			var size = availableLanguagesArray.length;
 			var id=$input.attr("id");
 			
@@ -1695,7 +1699,7 @@
 	
 	//다국어 필드 값 셋팅
 	function <portlet:namespace/>localizedInputSet(paramName,xmlData){
-		var availableLanguagesArray = dataType.structure().availableLanguageIds();
+		var availableLanguagesArray = <portlet:namespace/>dataType.structure().availableLanguageIds();
 		
 		var xml = $.parseXML( xmlData );
 		$("#<portlet:namespace/>"+paramName+"ContentBox div:last").click();

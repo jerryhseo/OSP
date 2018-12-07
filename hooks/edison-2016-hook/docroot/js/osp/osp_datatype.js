@@ -1917,7 +1917,7 @@
 				if( arguments.length === 1 )
 					CP.deserialize(jsonObject);
 			}; // End of CommentParameter
-			DS.newCommentParameter = function(){
+			DS.newCommentParameter = function(jsonObject){
 				switch( arguments.length ){
 					case 0:
 						return new CommentParameter();

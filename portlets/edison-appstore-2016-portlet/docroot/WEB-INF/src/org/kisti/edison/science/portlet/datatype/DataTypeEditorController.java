@@ -377,6 +377,8 @@ public class DataTypeEditorController{
 						dataTypeStructure = DataTypeStructureLocalServiceUtil.createDataTypeStructure(dataTypeId);
 					}
 					dataTypeStructure.setStructure(structure);
+					
+					System.out.println(dataTypeStructure);
 					DataTypeStructureLocalServiceUtil.updateDataTypeStructure(dataTypeStructure);
 //					DataTypeStructureLocalServiceUtil.createDataTypeStructureObject(dataTypeId, structure);
 					response.setRenderParameter("modifyMode", "modifyContent");
