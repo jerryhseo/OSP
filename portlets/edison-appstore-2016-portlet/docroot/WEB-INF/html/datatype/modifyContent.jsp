@@ -110,7 +110,7 @@
 			</colgroup>
 			<tr>
 				<th><liferay-ui:message key='name' /></th>
-				<td>
+				<td id="<portlet:namespace/>datyTypeName">
 					${dataTypeMap.name}
 				</td>
 				<th><liferay-ui:message key='version' /></th>
@@ -328,7 +328,6 @@ AUI().ready(function() {
 			$("#<portlet:namespace/>sampleFile").focus();
 			return false;
 		}
-		alert();
 	}
 	
 	function <portlet:namespace/>deleteFile(p_fileEntryId,objectClass){

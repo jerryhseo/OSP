@@ -86,12 +86,19 @@
 		margin-left:0px;
 	}
 </style>
+
 <div class="edison-panel">
 	<div class="panel-heading clearfix">
 		<h3 class="panel-title pull-left">
 			<img src="${contextPath}/images/title_virtual.png" width="18" height="18" class="title-img"/>
 			<liferay-ui:message key='edison-science-appstore-inputdeck-title' />
 		</h3>
+		
+		<div class="pull-right">
+			<button class="btn btn-default" onclick="<portlet:namespace/>viewDataStructure()">
+				View Structure
+			</button>
+		</div>
 	</div>
 </div>
 <div class="table1_list" >
@@ -521,6 +528,8 @@
 	</aui:form>
 </div>
 
+<link media="all" rel="stylesheet" href="${contextPath}/css/jquery-confirm.css" />
+<script src="${contextPath}/js/jquery-confirm.js"></script>
 
 <script type="text/javascript">
 	
@@ -656,13 +665,179 @@
 	var groupShowTrJson 	= '{"active":true,"nickName":true,"description":false,"groupChoice":false,"varRepet":false,"unit":false,"valueDomainMin":false,"valueDomainMax":false,"numericValue":false,"stringValue":false,"sweep":false,"dimension":false,"list":false,"comment":false,"variableActive":false,"variableChoice":true}';
 	var commentShowTrJson	= '{"active":true,"nickName":false,"description":false,"groupChoice":true,"varRepet":false,"unit":false,"valueDomainMin":false,"valueDomainMax":false,"numericValue":false,"stringValue":false,"sweep":false,"dimension":false,"list":false,"comment":true,"variableActive":false,"variableChoice":false}';
 	
+	function <portlet:namespace/>viewDataStructure(){
+		
+		var dataStructure = <portlet:namespace/>dataType.structure();
+		console.log(JSON.stringify(dataStructure));
+		var jsonDataStructure = JSON.stringify(dataStructure,null,4);
+		
+		var defaultDiv = $("<div/>").attr("id", "<portlet:namespace/>dataStructureForm");
+		
+		$("<pre/>").css("height", "500px").text(jsonDataStructure).appendTo(defaultDiv);
+		
+		var textFile = null;
+		var data = new Blob([jsonDataStructure], {type: 'text/plain'});
+		textFile = window.URL.createObjectURL(data);
+		
+		var downloadFileName = $("#_edisondatatypeeditor_WAR_edisonappstore2016portlet_datyTypeName").text().trim() + ".json";
+		
+		$("<input/>").addClass("pull-right").attr("type", "file").attr("name", "<portlet:namespace/>uploadDataStructureFile")
+					 .attr("title", "Please select a JSON file.")
+					 .attr("id", "<portlet:namespace/>uploadDataStructureFile")
+					 .css("padding", "3px").text("Upload").appendTo(defaultDiv);
+		
+		
+		$("<div/>").text("* " + Liferay.Language.get('edison-science-appstore-data-structure-upload-file-message', ['json', 'json']))
+					.css("width", "100%")
+					.css("text-align", "right")
+					.css("padding", "5px 5px 0px")
+					.css("display", "inline-block")
+					.appendTo(defaultDiv);
+		$("<div/>").text("* " + Liferay.Language.get('edison-science-appstore-data-structure-upload-update-message'))
+					.css("color", "red")
+					.css("width", "100%")
+					.css("text-align", "right")
+					.css("padding", "5px 5px 0px")
+					.css("display", "inline-block")
+					.appendTo(defaultDiv);
+		
+		$.confirm({
+			title : "Data Structure",
+			content: defaultDiv,
+			columnClass: 'col-md-6 col-md-offset-3',
+			buttons: {
+				update : {
+					text: 'Update',
+					action: function(){
+						return <portlet:namespace/>uploadDataStructure();
+					}
+				},
+				download : {
+					text: 'Download',
+					action: function(){
+						
+						var a = document.createElement('a');
+						a.href = textFile;
+						a.download = downloadFileName;
+						a.style.display == 'none';
+						document.body.appendChild(a);
+						a.click();
+						delete a;
+						
+						return false;
+					}
+				},
+				close : function (){
+				}
+			}
+		});
+	}
+	
+	
+	function <portlet:namespace/>uploadDataStructure(){
+		
+		var successedUpdate = false; 
+		
+		/* 선택된 파일이 존재하는지 확인 */
+		if($("#<portlet:namespace/>uploadDataStructureFile")[0].files[0] == null){
+			alert(Liferay.Language.get('please-select-a-file-to-use'));
+			return false;
+		}
+		
+		/* 파일 가져오기 */
+		/* var updateFile = $("#<portlet:namespace/>uploadDataStructureFile")[0].files[0].name; */
+		var updateFile = $("#<portlet:namespace/>uploadDataStructureFile")[0].files[0];
+		
+		/* 파일 확장자가 .json인지 확인 */
+		var imgExtention = /\.json/i;
+		
+		if(imgExtention.test(updateFile.name.toLowerCase())){
+			
+			var contentInUploadFile = "";
+			
+			/* json 형식의 파일인지 확인 */
+			var reader = new FileReader();
+			reader.readAsText(updateFile);
+			reader.onload = function(e){
+				contentInUploadFile = e.target.result;
+				
+				try{
+					jsonObj = JSON.parse(contentInUploadFile);
+					
+					/* JSON 형식의 파일인 경우 INPUTDECK 영역 세팅 */
+					<portlet:namespace/>setUploadFileToInputdeck(jsonObj);
+					
+					successedUpdate = true;
+				} catch (e) {
+					/* JSON 형식의 파일이 아닌 경우 */
+					alert(Liferay.Language.get('edison-science-appstore-data-structure-content-error', ['json']));
+					successedUpdate = false;
+				}
+			}
+			successedUpdate = true;
+		} else {
+			alert(Liferay.Language.get('edison-science-appstore-data-structure-file-error', ['json']));
+			successedUpdate = false;
+		}
+		
+		return successedUpdate;
+	}
+	
+	function <portlet:namespace/>setUploadFileToInputdeck(jsonObj){
+		
+		/* Value Delimiter 부분 값 가져오기 */
+		var valueDelimiter = jsonObj.parameterForm_.valueDelimiter_;
+		var lineDelimiter = jsonObj.parameterForm_.parameterDelimiter_;
+		var commentChar = jsonObj.parameterForm_.commentChar_;
+		
+		$("#valueDelimiter").val(valueDelimiter).prop("selected",true);
+		$("#lineDelimiter").val(lineDelimiter).prop("selected",true);
+		$("#commentChar").val(commentChar);
+		var valueText = commentChar+"KEY"+valueDelimiter+"VALUE"+lineDelimiter;
+		$("#linePreview").val(valueText);
+		
+		/* Vector bracket 부분 값 가져오기 */
+		var vectorBracket = jsonObj.vectorForm_.braceChar_;
+		var vectorDelimiter = jsonObj.vectorForm_.delimiter_;
+		var vectorSample = jsonObj.vectorForm_.sample_;
+		
+		$("#vectorBracket").val(vectorBracket).prop("selected",true);
+		$("#vectorDelimiter").val(vectorDelimiter).prop("selected",true);
+		
+		var vectorText = vectorSample;
+		if(vectorText == null || vectorText == "" || vectorText == "undefined"){
+			if(vectorBracket==OSP.Constants.SQUARE){
+				vectorBracketStartValue = "[";
+				vectorBracketEndValue = "]";
+			}else if(vectorBracket==OSP.Constants.SQUARE_SPACE){
+				vectorBracketStartValue = "[ ";
+				vectorBracketEndValue = " ]";
+			}else if(vectorBracket==OSP.Constants.ROUND){
+				vectorBracketStartValue = "(";
+				vectorBracketEndValue = ")";
+			}else if(vectorBracket==OSP.Constants.ROUND_SPACE){
+				vectorBracketStartValue = "( ";
+				vectorBracketEndValue = " )";
+			}
+			
+			vectorText = vectorBracketStartValue+"A"+vectorDelimiter+"B"+vectorDelimiter+"C"+vectorBracketEndValue;
+		}
+		$("#vectorPreview").val(vectorText);
+		
+		/* Variable 부분  */
+		<portlet:namespace/>dataType.deserializeStructure(jsonObj);
+		
+		<portlet:namespace/>dataType.showStructuredDataEditor(
+				'<portlet:namespace/>', 
+				$('#<portlet:namespace/>variableTableTd'),
+				'<%=request.getContextPath()%>',
+				'<%=themeDisplay.getLanguageId()%>');
+	}
 	
 	Liferay.on( 'parameterSelected', function(event){
 		var parameterObj = event.sourceParameter;
 		
-		console.log("===========parameterSelected_fire============");
-		console.log(JSON.stringify(parameterObj,null,4));
-		console.log("=============================================");
+		console.log("parameterSelected_fire"+JSON.stringify(parameterObj,null,4));
 		
 		<portlet:namespace/>changeType(parameterObj.type(),'update');
 		

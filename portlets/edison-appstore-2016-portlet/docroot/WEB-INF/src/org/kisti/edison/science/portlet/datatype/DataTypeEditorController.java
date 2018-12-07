@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -80,6 +81,8 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.layoutsadmin.util.Sitemap;
+import com.liferay.portlet.layoutsadmin.util.SitemapUtil;
 
 @Controller
 @RequestMapping("VIEW")
@@ -254,23 +257,23 @@ public class DataTypeEditorController{
 					model.addAttribute("analyzerName", analyzerName);
 				}
 				
-				if(returnJSP.equals("modifyContent")){
-					//SAMPLE FILE
-					long sampleFilePath = GetterUtil.getLong(dataTypeMap.get("samplePath"));
-					if(sampleFilePath!=0){
-						try{
-							DLFileEntry sampleFile =  DLFileEntryLocalServiceUtil.getDLFileEntry(sampleFilePath);
-							dataTypeMap.put("sampleRepositoryId", sampleFile.getRepositoryId());
-							dataTypeMap.put("sampleUuid", 		sampleFile.getUuid());
-							dataTypeMap.put("sampleTitle", 		sampleFile.getTitle());
-						}catch (Exception e) {
-							if(e instanceof NoSuchFileEntryException){
-								
-							}else{
-								throw e;
-							}
+				//SAMPLE FILE
+				long sampleFilePath = GetterUtil.getLong(dataTypeMap.get("samplePath"));
+				if(sampleFilePath!=0){
+					try{
+						DLFileEntry sampleFile =  DLFileEntryLocalServiceUtil.getDLFileEntry(sampleFilePath);
+						dataTypeMap.put("sampleRepositoryId", sampleFile.getRepositoryId());
+						dataTypeMap.put("sampleUuid", 		sampleFile.getUuid());
+						dataTypeMap.put("sampleTitle", 		sampleFile.getTitle());
+					}catch (Exception e) {
+						if(e instanceof NoSuchFileEntryException){
+							
+						}else{
+							throw e;
 						}
 					}
+				}
+				if(returnJSP.equals("modifyContent")){
 					//DataTypeStructure
 					if(GetterUtil.getBoolean(viewMap.get("isStructurePresent"),false)){
 						Map<String,Object> structureMap = DataTypeStructureLocalServiceUtil.retrieveDataTypeStructurePK(dataTypeId);
@@ -313,7 +316,29 @@ public class DataTypeEditorController{
 				dataTypeId = GetterUtil.getLong(copyedDataType.get("typeId"));
 			}else{
 				ServiceContext sc = ServiceContextFactory.getInstance(DataType.class.getName(), request);
+				
+				/* Editor 목록 전체 가져오기 */
+				String[] editorAppTypes = {ScienceAppConstants.APP_TYPE_EDITOR};
+				List<Map<String, Object>> allEditorList = ScienceAppLocalServiceUtil.retrieveListScienceApp(
+						themeDisplay.getScopeGroupId(), themeDisplay.getLocale(), 0, editorAppTypes, null, null, "1901004", 0, 0,true);
+				/* Datatype 작성 시 선택된 Editor 목록 가져오기 */
 				List<Map<String,Object>> editorList = returnParameterFormList(params.get("editorCheckbox"), GetterUtil.getString(params.get("defaultEditorSelect")),true);
+				boolean hasSDE_Editor = false;
+				long sdeEditorId = 0; 
+				// SDE Editor Id 가져오기
+				for(Map<String, Object> editorMap : allEditorList){
+					if( CustomUtil.strNull(editorMap.get("name"),"").toUpperCase().equals("SDE")){
+						sdeEditorId = Long.parseLong(CustomUtil.strNull(editorMap.get("scienceAppId"),"0"));
+					}
+				}
+				
+				// SDE Editor가 선택됬는지 체크
+				for(Map<String, Object> editorMap : editorList){
+					long editorId =  Long.parseLong(CustomUtil.strNull(editorMap.get("editorId"), "0"));
+					if(editorId == sdeEditorId){
+						hasSDE_Editor = true;
+					}
+				}
 				
 				boolean structureExist = false;
 				for(int i=0;i<editorList.size();i++){
@@ -326,7 +351,7 @@ public class DataTypeEditorController{
 					}
 				}
 				
-				
+
 				
 				List<Map<String,Object>> analyzerList = returnParameterFormList(params.get("analyzerCheckbox"), GetterUtil.getString(params.get("defaultAnalyzerSelect")),false);
 				
@@ -359,6 +384,13 @@ public class DataTypeEditorController{
 					Map<Locale,String> description = CustomUtil.getLocalizationNotSetLocaleMap(params, "description");
 					dataTypeId = DataTypeLocalServiceUtil.modifyDataTypeObjectForEditorAnalyzer(dtName,dtVersion,description,editorList,analyzerList, sc);
 					
+					
+					UploadPortletRequest upload = PortalUtil.getUploadPortletRequest(sc.getLiferayPortletRequest());
+					String sampleFileName = CustomUtil.strNull(upload.getFileName("sampleFile"), "");
+					if(sampleFileName != "" && sampleFileName != null){
+						Map<String,Object> sampleFileMap = DataTypeLocalServiceUtil.addSampleFilePath(dataTypeId,sc,upload);
+					}
+					
 					if(!structureExist){
 						try {
 							DataTypeStructureLocalServiceUtil.deleteDataTypeStructure(dataTypeId);
@@ -367,7 +399,10 @@ public class DataTypeEditorController{
 						}
 					}
 					
-					response.setRenderParameter("modifyMode", "modifyContent");
+					// SDE Editor가 존재할 경우
+					if(hasSDE_Editor){
+						response.setRenderParameter("modifyMode", "modifyContent");
+					}
 				}else{
 					String structure = GetterUtil.getString(params.get("structure"));
 					DataTypeStructure dataTypeStructure = null;
@@ -378,7 +413,6 @@ public class DataTypeEditorController{
 					}
 					dataTypeStructure.setStructure(structure);
 					
-					System.out.println(dataTypeStructure);
 					DataTypeStructureLocalServiceUtil.updateDataTypeStructure(dataTypeStructure);
 //					DataTypeStructureLocalServiceUtil.createDataTypeStructureObject(dataTypeId, structure);
 					response.setRenderParameter("modifyMode", "modifyContent");
@@ -709,6 +743,5 @@ public class DataTypeEditorController{
 		response.getWriter().write(message);
 		response.flushBuffer();
 	}
-	
 }
 
