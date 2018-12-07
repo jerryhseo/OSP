@@ -726,7 +726,7 @@ public String marshallParams(Map<String, String> params) {
 					var description = CKEDITOR.instances["<portlet:namespace/>description_"+targetLanguage].getData(); */
 					
 					/* MarkDown */
-					var description = $("#<portlet:namespace/>descriptionMDE_"+targetLanguage).html();
+					var description = $("#<portlet:namespace/>descriptionMDE_"+targetLanguage).val();
 					var descriptionHtml = $("#<portlet:namespace/>descriptionMDEPreview_"+targetLanguage).html();
 					description = $.trim(description.replace(/&nbsp;/g, ''));
 					

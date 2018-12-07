@@ -28,6 +28,12 @@
 	<liferay-portlet:param name="redirectURL" value="${redirectURL}" />
 </liferay-portlet:actionURL>
 
+<liferay-portlet:resourceURL var="edisonFileDownloadURL" escapeXml="false" id="edisonFileDownload" copyCurrentRenderParameters="false"/>
+
+<liferay-portlet:resourceURL var="deleteFileURL" escapeXml="false" id="deleteFile" copyCurrentRenderParameters="false">
+	<liferay-portlet:param name="dataTypeId" value="${dataTypeMap.typeId}" />
+</liferay-portlet:resourceURL>
+
 <%
 	String exceptionNameMsg = LanguageUtil.get(themeDisplay.getLocale(),"edison-app-validation-name-exception-msg");
 %>
@@ -82,7 +88,7 @@
 				</span>
 			</h2>
 		</div>
-		<aui:form name="frm" method="POST" action="<%=submitURL%>">
+		<form id="<portlet:namespace/>frm" name="<portlet:namespace/>frm" method="POST" action="<%=submitURL%>" enctype="multipart/form-data">
 			<div class="table1_list">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<colgroup>
@@ -131,6 +137,20 @@
 						</td>
 					</tr>
 					<tr>
+						<th><liferay-ui:message key='add-sample-data'/><span class="requiredField"> *</span></th>
+						<td colspan="2">
+							<input type="file" id="<portlet:namespace/>sampleFile" name="<portlet:namespace/>sampleFile"/>
+						</td>
+						<td id="<portlet:namespace/>sampleFileStatus">
+							<c:if test="${!empty dataTypeMap.sampleTitle}">
+								<div class="down_date dataTypeFileClass"  onclick="<portlet:namespace/>fileDownload('${dataTypeMap.samplePath}')" style="cursor: pointer;display: inline-block;">
+									${dataTypeMap.sampleTitle}
+								</div>
+								<img src='${contextPath}/images/icon_dustbin.png' class="dataTypeFileClass noUpdateHidden" width='13' height='14' style="cursor:pointer" onClick="<portlet:namespace/>deleteFile('${dataTypeMap.samplePath}','dataTypeFileClass');"/>
+							</c:if>
+						</td>
+					</tr>
+					<tr>
 						<th><liferay-ui:message key='edison-science-appstore-toolkit-editor-list' /></th>
 						<td>
 							<c:forEach var="data" items="${editorList}">
@@ -175,7 +195,7 @@
 					</tr>
 				</table>
 			</div>
-		</aui:form>
+		</form>
 	</div>
 	<div class="pull-right" style="margin: 18px 0px;">
 		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack();"><span class="icon-list-ul">  <liferay-ui:message key='edison-virtuallab-surveyResultList-list'/></span></button>
@@ -260,7 +280,9 @@ function <portlet:namespace/>modifyDataType() {
 
         var checkDefaultEditorVal = checkEditorItem.find("option:selected").val();
         var checkDefaultAnalyzerVal = checkAnalyzerItem.find("option:selected").val();
-
+        
+        var sampleFile = $("#<portlet:namespace/>sampleFile").val();
+        
         if ('${scienceAppId}' != '') {
             if ('${portType}' == 'INPUT') {
                 if (checkDefaultEditorVal == "") {
@@ -273,21 +295,71 @@ function <portlet:namespace/>modifyDataType() {
                     alert(Liferay.Language.get('this-field-is-mandatory'));
                     checkAnalyzerItem.focus();
                     return false;
+                } else {
+		            if(sampleFile == "" || sampleFile == null){
+		            	var sampleTitle = "${dataTypeMap.sampleTitle}";
+		            	if(sampleTitle == "" || sampleTitle == null || sampleTitle == "undefined"){
+			            	alert(Liferay.Language.get('edison-this-field-is-required',['Sample-Data']));
+			        		sampleFile.focus();
+			        		return false;
+		            	}
+		        	}
                 }
             }
+            
+            
             submitForm( <portlet:namespace/>frm);
         } else {
+        	
             if (checkDefaultEditorVal == "" && checkDefaultAnalyzerVal == "") {
                 alert(Liferay.Language.get('this-field-or-another-is-mandatory', ['Defaule Editor', 'Defaule Analyzer']));
                 checkDefaultItem.focus();
                 return false;
             } else {
-                submitForm( <portlet:namespace/>frm);
+	            if(sampleFile == "" || sampleFile == null){
+	            	var sampleTitle = "${dataTypeMap.sampleTitle}";
+	            	if(sampleTitle == "" || sampleTitle == null || sampleTitle == "undefined"){
+		            	alert(Liferay.Language.get('edison-this-field-is-required',['Sample-Data']));
+		        		sampleFile.focus();
+		        		return false;
+	            	} else {
+	            		submitForm( <portlet:namespace/>frm);
+	            	}
+	        	} else {
+	            	submitForm( <portlet:namespace/>frm);
+	        	}
             }
         }
     } else {
         return false;
     }
 
+}
+
+function <portlet:namespace/>fileDownload(p_fileEntryId){
+	location.href = "<%=edisonFileDownloadURL%>&<portlet:namespace/>fileEntryId="+p_fileEntryId;	
+}
+
+function <portlet:namespace/>deleteFile(p_fileEntryId,objectClass){
+	if(!confirm(Liferay.Language.get('file-delete-confirm'))) return;
+	var deleteForm = {
+			"<portlet:namespace/>fileEntryId" : p_fileEntryId
+			};
+	
+	jQuery.ajax({
+		type: "POST",
+			url: "<%=deleteFileURL%>",
+		data: deleteForm,
+  		async : false,
+		success: function(data) {
+			alert(Liferay.Language.get('edison-data-delete-success'));
+			$("."+objectClass).remove();
+			var percentVal = '0%';
+			$('.bar').width(percentVal);
+			$('.percent').html(percentVal);
+		},error:function(data,e){ 
+			alert("deleteFile System error!");	
+		}
+	});
 }
 </script>
