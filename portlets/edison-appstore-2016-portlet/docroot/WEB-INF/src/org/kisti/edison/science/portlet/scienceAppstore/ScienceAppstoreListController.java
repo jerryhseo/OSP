@@ -38,7 +38,6 @@ import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,11 +74,6 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
-import com.liferay.portlet.ratings.NoSuchStatsException;
-import com.liferay.portlet.ratings.model.RatingsEntry;
-import com.liferay.portlet.ratings.model.RatingsStats;
-import com.liferay.portlet.ratings.service.RatingsEntryLocalServiceUtil;
-import com.liferay.portlet.ratings.service.RatingsStatsLocalServiceUtil;
 
 import net.sf.json.JSONObject;
 
@@ -186,6 +180,12 @@ public class ScienceAppstoreListController {
 			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
 			model.addAttribute("signedInUrl", themeDisplay.getURLSignIn());
 			
+			model.addAttribute("SORT_FIELD_CREATED", "latest");
+			model.addAttribute("SORT_FIELD_EXECUTE", "execute");
+			model.addAttribute("SORT_FIELD_NAME", "name");
+			model.addAttribute("SORT_ORDER_ASC", "asc");
+			model.addAttribute("SORT_ORDER_DESC", "desc");
+			
 		} catch (Exception e) {
 			log.error(e);
 			e.printStackTrace();
@@ -194,6 +194,24 @@ public class ScienceAppstoreListController {
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
 		return "scienceAppstore/scienceAppStoreList";
+	}
+	
+	@ResourceMapping(value="viewScienceAppListBySort")
+	public void viewScienceAppListBySort(ResourceRequest request, ResourceResponse response) throws SystemException, JSONException, IOException, PortalException, ParseException, PortletModeException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute (com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
+		Map paramsMap = RequestUtil.getParameterMap(request);
+		long groupId = Long.parseLong(CustomUtil.strNull(paramsMap.get("groupId"), "20181"));
+		long listSize =  Long.parseLong(CustomUtil.strNull(paramsMap.get("listSize"), "10"));
+		String searchKeyword = CustomUtil.strNull(paramsMap.get("searchKeyword"), "");
+		String sortOrder = CustomUtil.strNull(paramsMap.get("sortOrder"), "");
+		
+		/*List<Map<String, Object>> apps = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(themeDisplay.getCompanyGroupId(), groupId, themeDisplay.getLocale(),
+				themeDisplay.
+											searchCondition.getCompanyGroupId(), searchCondition.getGroupId(),
+											searchCondition.getLocale(), appTypes, categoryIds, searchCondition.getSearchKeyword(),
+											searchCondition.getStart(), searchCondition.getListSize(),
+											searchCondition.getSortField(), searchCondition.getSortOrder());*/
 	}
 	
 	@ResourceMapping(value="edisonFileDownload")
@@ -479,6 +497,10 @@ public class ScienceAppstoreListController {
 
 			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("p_curPage"), "1"));
 			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "10"));
+			String sortField = CustomUtil.strNull(params.get("sortField"), "latest");
+			String sortOrder = CustomUtil.strNull(params.get("sortOrder"), "desc");
+			System.out.println("sortField : " + sortField);
+			System.out.println("sortOrder : " + sortOrder);
 			int pagePerBlock = 5;
 			
 			params.put("groupId", groupId);
@@ -525,7 +547,7 @@ public class ScienceAppstoreListController {
 			List<Map<String, Object>> writeDataList = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
 					companyGroupId, groupId,
 					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
-					begin, linePerPage);
+					begin, linePerPage, sortField, sortOrder);
 			
 			// ScienceApp Date List for ScienceApp Page
 			List<String> dateMapList = new ArrayList<String>();

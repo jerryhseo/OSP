@@ -1309,6 +1309,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
         final String SORT_ORDER_ASC = "asc";
         final String SORT_TYPE_VIEW = "view"; 
         final String SORT_TYPE_NAME = "name";
+        final String SORT_TYPE_EXECUTE = "execute";
         boolean categorySearch = false;
         if(categoryIds != null && categoryIds.length > 0){
             categorySearch = true;
@@ -1333,6 +1334,8 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
                 searchParam.put("sortField", "A.name");
             }else if(sortField.equals(SORT_TYPE_VIEW)){
                 searchParam.put("sortField", "A.viewCnt");
+            }else if(sortField.equals(SORT_TYPE_EXECUTE)){
+                searchParam.put("sortField", "A.execute");
             }else{
                 searchParam.put("sortField", "A.createDate");
             }

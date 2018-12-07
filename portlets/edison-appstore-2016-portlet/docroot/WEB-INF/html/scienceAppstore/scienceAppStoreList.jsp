@@ -180,8 +180,23 @@
 				<input type="hidden" id="<portlet:namespace/>categoryId"		name="<portlet:namespace/>categoryId"					 value="${params.categoryId}"/>
 				
 				<div class="panel-heading clearfix">
-					<h3 class="panel-title pull-left" style="width: 50%;">
-					</h3>
+					<!-- <h3 class="panel-title pull-left" style="width: 50%;">
+					</h3> -->
+					
+					<div class="input-group pull-left" style="width: 50%;">
+						<select id="<portlet:namespace/>sortField" name="<portlet:namespace/>sortField" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 24%;">
+							<option value="${SORT_FIELD_CREATED}">Latest</option>
+							<option value="${SORT_FIELD_EXECUTE}">Execute</option>
+							<option value="${SORT_FIELD_NAME}">Name</option>
+						</select>
+						
+						<div class="input-group-btn pull-left">
+							<button class="btn btn-default sort-order" title="desc" tab-type="app">
+								<i class="icon-sort-by-attributes-alt"> </i>
+							</button>
+							<input type="hidden" id="<portlet:namespace/>sortOrder" name="<portlet:namespace/>sortOrder" value="" />
+						</div>
+					</div>
 					
 					<div class="input-group">
 						<select id="<portlet:namespace/>linePerPage" name="<portlet:namespace/>linePerPage" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 24%;">
@@ -691,6 +706,50 @@
 		} else {
 			window.open("${signedInUrl}", "_self");
 		}
+	}
+	
+	$(".sort-order").click(function(e){
+		e.preventDefault();
+		var jqChildI = $(this).children("i");
+		var tabType = $(this).attr("tab-type");
+		var jqSortOrderInput = $(this).siblings("input[name='<portlet:namespace/>sortOrder']");
+		if(jqChildI.hasClass("icon-sort-by-attributes-alt")){
+			jqChildI.removeClass("icon-sort-by-attributes-alt");
+			jqChildI.addClass("icon-sort-by-attributes");
+			jqSortOrderInput.val("${SORT_ORDER_ASC}");
+			$(this).attr("title", "${SORT_ORDER_ASC}");
+		}else{
+			jqChildI.removeClass("icon-sort-by-attributes");
+			jqChildI.addClass("icon-sort-by-attributes-alt");
+			jqSortOrderInput.val("${SORT_ORDER_DESC}");
+			$(this).attr("title", "${SORT_ORDER_DESC}");
+		}
+		/* <portlet:namespace/>sortOrder */
+		<portlet:namespace/>dataSearchList();
+	});
+	
+	function <portlet:namespace/>loadTab(tabType, currentPage){
+		var tabId = <portlet:namespace/>getTabId(tabType);
+		var tabSearchUrl = {};
+		tabSearchUrl[<portlet:namespace/>TAB_TYPE.APP] = "${appSearchUrl}";
+		var postData = <portlet:namespace/>getPostData();
+		var sortOrder = $("input[name='<portlet:namespace/>sort-order'][tab-type='" + tabType + "']").val();
+		var sortField = $("select[name='<portlet:namespace/>sort-field'][tab-type='" + tabType + "']").val();
+		if(currentPage){
+			postData["<portlet:namespace/>currentPage"] = currentPage;
+		}
+		if(sortOrder){
+			postData["<portlet:namespace/>sortOrder"] = sortOrder;
+		}
+		if(sortField){
+			postData["<portlet:namespace/>sortField"] = sortField;
+		}
+		$("#" + tabId + " > .search-results").empty();
+		$("#" + tabId + " > .search-results").load(tabSearchUrl[tabType], postData, function(){
+			if(!$("#" + tabId).hasClass("loaded")){
+			  $("#" + tabId).addClass("loaded");
+			}
+		});
 	}
 </script>
 
