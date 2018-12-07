@@ -3,6 +3,7 @@
 <liferay-portlet:resourceURL var="getSimulationsUrl" id="getSimulations" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="getJobsUrl" id="getJobs" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="jobInfoUrl" id="jobInfo" copyCurrentRenderParameters="false"/>
+<liferay-portlet:resourceURL var="jobListUrl" id="jobList" copyCurrentRenderParameters="false"/>
 <style>
 .mflefttree{padding-top: 15px; width: 300px;}
 .rightcontent{width: 640px;}
@@ -99,6 +100,8 @@
             var nodeId = data.node.id;
             var node = data.node;
             if(node.type === SIMULATION_TYPE){
+              console.log(node);
+              <portlet:namespace/>displayJobList(node.id);
               if(!$("#" + nodeId).hasClass("jstree-open")){
                   <portlet:namespace/>openJstreeNode(nodeId, node);
               }else{
@@ -116,6 +119,13 @@
         $("#<portlet:namespace/>job-info-wrapper").load("${jobInfoUrl}", {
             <portlet:namespace/>jobUuid : jobUuid,
             <portlet:namespace/>scienceAppId : scienceAppId
+        }, function(){
+        });
+    }
+    
+    function <portlet:namespace/>displayJobList(simulationUuid){
+        $("#<portlet:namespace/>job-info-wrapper").load("${jobListUrl}", {
+            <portlet:namespace/>simulationUuid : simulationUuid
         }, function(){
         });
     }
@@ -158,6 +168,7 @@
                 <portlet:namespace/>simulationUuid : simulationUuid
             },
             success : function(jobs){
+                console.log(jobs);
                 callback(jobs, simulationUuid);
             },
             error : function(err){
