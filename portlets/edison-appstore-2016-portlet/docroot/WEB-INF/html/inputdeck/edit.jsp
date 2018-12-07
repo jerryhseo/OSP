@@ -551,7 +551,7 @@
 		if(eventData.targetPortlet === 'BROADCAST' ||
 		   eventData.targetPortlet === '<portlet:namespace/>' ){
 			if( eventData.strStructure!="" ){
-				<portlet:namespace/>dataType.deserializeStructure(eventData.strStructure);
+				<portlet:namespace/>dataType.deserializeStructure(JSON.parse(eventData.strStructure));
 				<portlet:namespace/>init(true);
 			}else{
 				<portlet:namespace/>dataType.structure(<portlet:namespace/>dataType.newDataStructure(JSON.parse('{}')));

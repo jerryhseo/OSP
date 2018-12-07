@@ -276,13 +276,11 @@ AUI().ready(function() {
 	
 	function <portlet:namespace/>addStructuredDataEditor(){
 		if('${inputdeckExist}'){
-			var dataType = new OSP.DataType();
-			dataType.deserializeStructure(JSON.parse('${dataTypeMap.structure}'));
 			AUI().use(function(A){
 				var data = {
 						targetPortlet: 'BROADCAST',
 						sourcePortlet: '<portlet:namespace/>',
-						strStructure: dataType.structure()
+						strStructure: '${dataTypeMap.structure}'
 				};
 				
 				Liferay.fire('OSP_SHOW_SDE',data);
