@@ -139,6 +139,32 @@ public class ParameterController {
 		}
 	}
 	
+	@ResourceMapping(value="getFileIdFromInputData")
+	public void getFileIdFromInputData(
+			@RequestParam("parentPath") String parentPath,
+			@RequestParam("fileName") String fileName,
+			ResourceRequest request, ResourceResponse response) throws IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		try{
+			Path ospPath = OSPFileUtil.getRepositoryPath(themeDisplay.getUser().getScreenName(), parentPath+"/"+fileName, OSPRepositoryTypes.USER_HOME.toString());
+			String ospPathStr = ospPath.toString();
+			String opsPathStrReplace = ospPathStr.replaceAll("\\\\", "/");
+			byte[] decodeFileId = Base64.encodeBase64(opsPathStrReplace.getBytes());
+			
+			String reconstitutedString = new String(decodeFileId);
+			
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			JsonObject obj = new JsonObject();
+			obj.addProperty("fileId", reconstitutedString);
+			out.write(obj.toString());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),LanguageUtil.get(themeDisplay.getLocale(), "edison-data-delete-error"));
+		}
+		
+	}
 	@ResourceMapping(value="getInputDataPathFromFileId")
 	public void getInputDataPathFromFileId(
 			@RequestParam("fileId") String fileId,
@@ -180,17 +206,6 @@ public class ParameterController {
 			obj.addProperty("fileName", fileName);
 			out.write(obj.toString());
 			
-			Path ospPath = OSPFileUtil.getRepositoryPath(themeDisplay.getUser().getScreenName(), parentPath+"/"+fileName, OSPRepositoryTypes.USER_HOME.toString());
-			String ospPathStr = ospPath.toString();
-			String opsPathStrReplace = ospPathStr.replaceAll("\\\\", "/");
-			
-			System.out.println("originPath-->"+filePath);
-			System.out.println("ospPath-->"+opsPathStrReplace);
-			byte[] decodeFileId = Base64.encodeBase64(opsPathStrReplace.getBytes());
-			System.out.println("orign-->"+fileId);
-			
-			String reconstitutedString = new String(decodeFileId);
-			System.out.println("path_to_decode-->"+reconstitutedString);
 		}catch (Exception e) {
 			e.printStackTrace();
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),LanguageUtil.get(themeDisplay.getLocale(), "edison-data-delete-error"));

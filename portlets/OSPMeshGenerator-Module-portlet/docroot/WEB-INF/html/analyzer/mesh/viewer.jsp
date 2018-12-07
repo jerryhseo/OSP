@@ -154,6 +154,7 @@ function <portlet:namespace/>loadProject(param) {
 	//console.dir(result);
 	
 	<portlet:namespace/>setProjectState(result);
+	$("#<portlet:namespace/>viewerDiv").empty();
 	$('<iframe id="<portlet:namespace/>viewerFrame" src="<%= url %>" class="viewerStyle" allowfullscreen></iframe>')
      .appendTo('#<portlet:namespace/>viewerDiv');
 }

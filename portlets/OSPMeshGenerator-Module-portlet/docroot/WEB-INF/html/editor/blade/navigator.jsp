@@ -15,6 +15,7 @@
 <liferay-portlet:resourceURL var="removeRemoteFilePathURL" id="removeRemoteFilePath" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 <liferay-portlet:resourceURL var="getInputDataPathFromFileIdURL" id="getInputDataPathFromFileId" copyCurrentRenderParameters="false" escapeXml="false"/>
+<liferay-portlet:resourceURL var="getFileIdFromInputDataURL" id="getFileIdFromInputData" copyCurrentRenderParameters="false" escapeXml="false"/>
 
 
 
@@ -290,7 +291,9 @@ function <portlet:namespace/>navigatorInitJstree(){
 		}
 		
 // 		console.log(data);
-		<portlet:namespace/>selectedNode(data);
+		if(!<portlet:namespace/>isBlock){
+			<portlet:namespace/>selectedNode(data);
+		}
 	});
 }
 
@@ -554,6 +557,28 @@ function <portlet:namespace/>getInputDataPathFromFileId(fileId){
 	});
 }
 
+function <portlet:namespace/>getFileIdFromInputData(parentPath,fileName){
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=getFileIdFromInputDataURL%>",
+		async : false,
+		dataType : 'json',
+        data : {
+            "<portlet:namespace/>parentPath" : parentPath,
+            "<portlet:namespace/>fileName" : fileName
+        },
+		success: function(data) {
+			return data.fileId;
+		},error:function(jqXHR, textStatus, errorThrown){
+			if(jqXHR.responseText !== ''){
+				alert(textStatus+": "+jqXHR.responseText);
+			}else{
+				alert(textStatus+": "+errorThrown);
+			}
+		}
+	});
+}
+
 function <portlet:namespace/>returnFileObject(nodes){
 	var fileArray = new Array();
 	if (!nodes || nodes.length == 0){
@@ -579,6 +604,13 @@ function <portlet:namespace/>returnFileObject(nodes){
 		return JSON.stringify(fileArray);
 	}
 	
+}
+
+function <portlet:namespace/>loadDataFile(parentPath,fileName){
+	$("#<portlet:namespace/>fileSelectedText").html(fileName);
+	/*Job Data의 파일 정보가 현재 Project에 포함 되어 있는지 체크*/
+// 	var fileId = <portlet:namespace/>getFileIdFromInputData(parentPath,fileName);
+// 	var meshNode = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node("<portlet:namespace/>"+MESH.Constants.MESHES_PARENT_FOLDER_ID,false);
 }
 
 /***********************************************************************

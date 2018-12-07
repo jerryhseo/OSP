@@ -82,7 +82,7 @@ public class WorkbenchJobMonitoringController {
     log.info("jobUuid : " + jobUuid);
     try{
       SimulationJobLocalServiceUtil.submitSimulationJob(simulationUuid, jobUuid, "");
-    }catch (PortalException | SystemException e){
+    }catch (Exception e){
       log.error(e);
     }
   }

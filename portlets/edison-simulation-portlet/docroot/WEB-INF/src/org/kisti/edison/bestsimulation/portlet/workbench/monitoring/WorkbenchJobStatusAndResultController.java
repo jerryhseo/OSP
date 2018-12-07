@@ -155,7 +155,7 @@ public class WorkbenchJobStatusAndResultController {
       JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(result));
       JSONArray jsonArray = jsonObj.getJSONArray("files");
       Map<String, Object> resultMap = null;
-      List<Map<String, Object>> resultList = new ArrayList<>();
+      List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 
       for(int i = 0; i < jsonArray.size(); i++){
         resultMap = new HashMap<String, Object>();

@@ -70,6 +70,8 @@ var <portlet:namespace/>connector = '';
 var <portlet:namespace/>simulationUuid = '';
 var <portlet:namespace/>jobSeqNo = '';
 var <portlet:namespace/>projectId = 0;
+
+var <portlet:namespace/>isBlock = false;
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
@@ -102,8 +104,7 @@ Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
-		/*초기화*/
-		console.log("OSP_INITIALIZE");
+		$("#<portlet:namespace/>fileSelectedText").html("");
 	}
 });
 
@@ -116,7 +117,7 @@ Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
 		var inputData = new OSP.InputData( e.data );
 		switch( inputData.type() ){
 			case OSP.Enumeration.PathType.FILE:
-				
+				<portlet:namespace/>loadDataFile(inputData.parent(),inputData.name());
 				break;
 			case OSP.Enumeration.PathType.DLENTRY_ID:
 				$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
@@ -156,6 +157,14 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_DISABLE_CONTROLLS, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		<portlet:namespace/>isBlock = e.data.isBlock;
+	}
+});
+
+
 Liferay.on(OSP.Event.OSP_FROM_ANALYZER_EVENT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
@@ -169,6 +178,8 @@ Liferay.on(OSP.Event.OSP_FROM_ANALYZER_EVENT, function( e ){
 		}
 	}
 });
+
+
 
 
 

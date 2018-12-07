@@ -105,7 +105,7 @@ public class ResultFileViewer {
 
 			String result = SimulationLocalServiceUtil.retrieveAllRemoteDir(icebreakerUrl, vcToken.getVcToken(), jobUuid,searchFolderPath);
 			
-			List<Map<String, Object>> resultList = new ArrayList<>();
+			List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 			
 			if(!CustomUtil.strNull(result).equals("")){
 				JSONObject jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(result)).getJSONObject("files");
