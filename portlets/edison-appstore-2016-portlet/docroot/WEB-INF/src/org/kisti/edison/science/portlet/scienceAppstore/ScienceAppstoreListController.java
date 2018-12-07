@@ -499,8 +499,6 @@ public class ScienceAppstoreListController {
 			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("linePerPage"), "10"));
 			String sortField = CustomUtil.strNull(params.get("sortField"), "latest");
 			String sortOrder = CustomUtil.strNull(params.get("sortOrder"), "desc");
-			System.out.println("sortField : " + sortField);
-			System.out.println("sortOrder : " + sortOrder);
 			int pagePerBlock = 5;
 			
 			params.put("groupId", groupId);
@@ -573,7 +571,7 @@ public class ScienceAppstoreListController {
 			writer.write(jsonObj.toString());
 
 		}catch(Exception e){
-			System.out.println("searchList Exception");
+			log.error("searchList Exception");
 			e.printStackTrace();
 		}
 	}
