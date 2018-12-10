@@ -172,6 +172,42 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+
+@media screen and (max-width:1000px) {
+	.<portlet:namespace/>popup-date-label{
+		display: block !important;
+	}
+	
+	#<portlet:namespace/>noticeFileAddBtn{
+		width: 25% !important;
+		display: inline-block !important;
+		margin-bottom: 10px !important;
+	}
+	
+	#<portlet:namespace/>fileTDArea input[type=file]{
+		width: 75% !important;
+	}
+	
+	#<portlet:namespace/>fileTDArea input[type=button]{
+		width: 20% !important;
+	}
+	
+	#<portlet:namespace/>fileListTitle{
+		margin-bottom: 10px !important;
+	}
+	
+	.dp_ib{
+		width: auto;
+		float: left;
+	}
+	
+	.boardbtnbox input[type=button]{
+		height: 40px !important;
+		padding: 0px 19px !important;
+		display: inline-block !important;
+	}
+	
+}
 </style>
 
 <c:choose>
@@ -196,19 +232,18 @@
 				</span>
 			</h2>
 		</div>
+		
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-hover edison-table">
 			<colgroup id="boardColgroup">
-				<col width="240px" />
-				<col width="240px" />
-				<col width="240px" />
-				<col width="*" />
+				<col width="15%" />
+				<col width="85%" />
 			</colgroup>
 			
 			<c:choose>
 				<c:when test="${boardDiv.divNm=='NOTICE' || boardDiv.divNm=='FAQ'}">
 					<tr>			
 						<th><liferay-ui:message key='edison-board-select-language' /></th>
-						<td colspan="3">
+						<td>
 								<%
 								Locale[] availLocales = LanguageUtil.getAvailableLocales();
 								for(int i=0;i<availLocales.length;i++){
@@ -231,34 +266,43 @@
 					<c:if test="${boardDiv.popupYn==true && virClassNotice eq 'N'}">	
 					<tr>
 						<th><liferay-ui:message key='edison-board-select-popup' /></th>
-						<td>
+						<td colspan="3">
 							<label for="<portlet:namespace/>popupYn">
 								<input type="checkbox" id="<portlet:namespace/>popupYn" name="<portlet:namespace/>popupYn" value="true" <c:if test="${boardMap.popupYn=='true'}">checked</c:if>> 
 								<liferay-ui:message key='edison-board-use-popup' />
 							</label>
 						</td>
+					</tr>	
+					<tr>
 						<th><liferay-ui:message key='edison-board-use-popup-date' /></th>
 						<td>
-							<input name="<portlet:namespace/>popupStartDt" id="<portlet:namespace/>popupStartDt" readonly="readonly" value="${boardMap.popupStartDt }"/> ~ <input name="<portlet:namespace/>popupEndDt" id="<portlet:namespace/>popupEndDt" readonly="readonly" value="${boardMap.popupEndDt }"/>
+							<label class="<portlet:namespace/>popup-date-label">
+								<input name="<portlet:namespace/>popupStartDt" id="<portlet:namespace/>popupStartDt" readonly="readonly" value="${boardMap.popupStartDt }"/> 
+							</label>
+							<label class="<portlet:namespace/>popup-date-label">
+								 ~ <input name="<portlet:namespace/>popupEndDt" id="<portlet:namespace/>popupEndDt" readonly="readonly" value="${boardMap.popupEndDt }"/>
+							</label>
 						</td>
-					</tr>	
+					</tr>
 					</c:if>
 					<c:if test="${boardDiv.divCd=='100' && isPortal == true && virClassNotice eq 'N'}">
 						<th><liferay-ui:message key='edison-virtuallab-tablerow-site' /></th>
-						<td colspan="2">
-							<input type="checkbox" id="<portlet:namespace/>allSite"><label class="dp_ib" for="<portlet:namespace/>allSite">&nbsp;<liferay-ui:message key='full' /></label>
-							<c:forEach var="group" items="${groupList}">
-								<c:set var="groupChecked" value=""></c:set>
-								<c:if test="${!empty siteGroups}">
-									<c:forEach var="siteGroup" items="${siteGroups}">
-										<c:if test="${group.groupId eq siteGroup}">
-											<c:set var="groupChecked" value="checked"></c:set>
-										</c:if>
-									</c:forEach>
-								</c:if>
-								&nbsp;<input type="checkbox" id="<portlet:namespace/>siteGroup_${group.groupId }" name= "<portlet:namespace/>siteGroup" value="${group.groupId }" ${groupChecked}>
-								<label class="dp_ib" for="<portlet:namespace/>siteGroup_${group.groupId }" >&nbsp;${group.name }</label>
-							</c:forEach>
+						<td>
+							<div>
+								<label class="dp_ib" for="<portlet:namespace/>allSite"><input type="checkbox" id="<portlet:namespace/>allSite">&nbsp;<liferay-ui:message key='full' /></label>
+								<c:forEach var="group" items="${groupList}">
+									<c:set var="groupChecked" value=""></c:set>
+									<c:if test="${!empty siteGroups}">
+										<c:forEach var="siteGroup" items="${siteGroups}">
+											<c:if test="${group.groupId eq siteGroup}">
+												<c:set var="groupChecked" value="checked"></c:set>
+											</c:if>
+										</c:forEach>
+									</c:if>
+									<label class="dp_ib" for="<portlet:namespace/>siteGroup_${group.groupId }" >&nbsp;<input type="checkbox" id="<portlet:namespace/>siteGroup_${group.groupId }" name= "<portlet:namespace/>siteGroup" value="${group.groupId }" ${groupChecked}>
+									&nbsp;${group.name }</label>
+								</c:forEach>
+							</div>
 						</td>
 					</c:if>
 				</c:when>
@@ -276,47 +320,50 @@
 						<th><liferay-ui:message key='title' /></th>
 					</c:otherwise>
 				</c:choose>
-				<td colspan="3"><input type="text" id="<portlet:namespace/>title" class="form-control" name="<portlet:namespace/>title" style="width:80%; margin:0px;" value="${boardMap.title }"> </td>
+				<td><input type="text" id="<portlet:namespace/>title" class="form-control" name="<portlet:namespace/>title" style="width:100%; margin:0px;" value="${boardMap.title }"> </td>
 			</tr>
 			<tr>
-				<td colspan="4" style="height:300px;">
+				<td colspan="2" style="height:300px;">
 					<textarea id="<portlet:namespace/>content" name="<portlet:namespace/>content" style="width:100%;height:300px;">${boardMap.content }</textarea>
 				</td>
 			</tr>
-			<c:choose>
-				<c:when test="${boardDiv.fileUpLoadUseYn == true}">
-				<tr>								
-					<th width="20%" rowspan="2" valign="top">
-						<liferay-ui:message key='edison-table-list-header-file' />&nbsp;
-						<input type="button" value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer; width: 30%;"/>	
-					</th>
-				</tr>	
-				<tr>
-					<td id="fileTDArea" colspan="3"></td>
-				</tr>
-				<tr>
-					<td class="center">
-							<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />
-					</td>
-					<td colspan="3">
-						<div id="fileListDiv">
-							<c:forEach items="${fileList}" var="fileMap">
-								<span style="cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
-									<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
-									${fileMap.fileTitle }
-								</span>
-								&nbsp;&nbsp;
-								<span style="cursor:pointer" onclick="deleteSingleEdisonFile<portlet:namespace/>('${fileMap.fileEntryId }', '${fileMap.fileUserId }')">
-									<u>[delete]</u>
-								</span>
-								<br>
-							</c:forEach>
-						</div>
-					</td>
-				</tr>
-				</c:when>
-			</c:choose>
 		</table>
+		
+		<c:choose>
+			<c:when test="${boardDiv.fileUpLoadUseYn == true}">
+			
+			<div style="border-bottom: 1px solid #dddddd; width: 100%; display: inline-block; padding: 5px 0px;">
+				<div class="col-md-2 col-sm-12" style="text-align: center; border-right: 1px solid #dddddd;">
+					<div style="font-size: 15px;">
+						<liferay-ui:message key='edison-table-list-header-file' />&nbsp;
+						<input type="button" id="<portlet:namespace/>noticeFileAddBtn"  value="<liferay-ui:message key='edison-button-file-add' />" class="btn btn-default" onClick="moreFileTag()" style="cursor:pointer;"/>	
+					</div>
+				</div>
+				
+				<div id="<portlet:namespace/>fileTDArea" class="col-md-10 col-sm-12" ></div>
+			</div>
+			
+			<div style="border-bottom: 1px solid #dddddd; width: 100%; display: inline-block; padding: 5px 0px;">
+				<div id="<portlet:namespace/>fileListTitle" class="col-md-2 col-sm-12" style="text-align: center; border-right: 1px solid #dddddd; color: #777">
+					<img src="${contextPath}/images/fileicon.png" width="19" height="21" />
+					&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />
+				</div>
+				<div id="<portlet:namespace/>fileListDiv" class="col-md-10 col-sm-12">
+					<c:forEach items="${fileList}" var="fileMap">
+						<span style="cursor: pointer;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
+							<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
+							${fileMap.fileTitle }
+						</span>
+						&nbsp;&nbsp;
+						<span style="cursor:pointer" onclick="deleteSingleEdisonFile<portlet:namespace/>('${fileMap.fileEntryId }', '${fileMap.fileUserId }')">
+							<u>[delete]</u>
+						</span>
+						<br>
+					</c:forEach>
+				</div>
+			</div>
+			</c:when>
+		</c:choose>
 	</div>
 <br> 
 	<div class="boardbtnbox" style="text-align: right;">
@@ -369,11 +416,11 @@ function moreFileTag()
 		marginTop = "1%";
 	}
 	var frmTag = "<div id=\"fileDiv"+fileIndex+"\">";
-	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:500px;border:1px solid #CCCCCC;margin:0% 1% 2% 0%; float:left;\">";
+	frmTag += "<input type=\"file\" name=\"addfile\" style =\"width:50%;border:1px solid #CCCCCC;margin:0% 1% 2% 0%; float:left;\">";
 	frmTag += "<input type=\"button\" value=\"delete\" style=\"cursor:pointer; margin:0% 1% 2% 0%;\" class=\"btn btn-default\" onClick=\"deleteFileTag(\'fileDiv"+fileIndex+"\')\"/>";
 	frmTag += "</div>";
 	
-	$("#fileTDArea").append(frmTag);
+	$("#<portlet:namespace/>fileTDArea").append(frmTag);
 }
 
 function deleteFileTag(objId){	
@@ -469,7 +516,7 @@ function deleteSingleEdisonFile<portlet:namespace/>(p_fileEntryId, p_fileUserId)
 			var resultMsg = data.resultMsg;
 			
 			if(resultMsg=="SUCCESS"){
-				$("#fileListDiv").html("");			
+				$("#<portlet:namespace/>fileListDiv").html("");			
 	
 				var fileHtml = "";
 				if(fileList.length == 0){				
@@ -483,7 +530,7 @@ function deleteSingleEdisonFile<portlet:namespace/>(p_fileEntryId, p_fileUserId)
 						fileHtml += "<span style=\"cursor:pointer\" onclick=\"deleteSingleEdisonFile<portlet:namespace/>(\'"+fileList[i].fileEntryId+"\', \'"+fileList[i].fileUserId+"\')\"><u>[delete]</u></span>";
 						fileHtml += "<br>";
 					}
-					$("#fileListDiv").html(fileHtml);
+					$("#<portlet:namespace/>fileListDiv").html(fileHtml);
 				}			
 			}else if(resultMsg=="DELETE_FAIL"){
 				alert("delete file error!");	
