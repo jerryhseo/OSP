@@ -150,6 +150,24 @@
 .subtitlearea{
 	margin-left: 10px;
 }
+
+@media screen and (max-width:767px) {
+	.boardbtnbox{
+		text-align: right;
+	}
+	
+	.boardbtnbox input[type=button]{
+		height: 40px;
+		padding: 5px 19px;
+		display: inline-block;
+	}
+}
+
+@media screen and (max-width:1000px) {
+	#<portlet:namespace/>noticeFileListTitle{
+		width: 22% !important;
+	}
+}
 </style>
 
 <c:choose>
@@ -210,13 +228,17 @@
 			<c:if test="${fn:length(fileList) > 0}">
 			<tr>
 				<td colspan="2">
-					<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;
-					<c:forEach items="${fileList}" var="fileMap">
-						<span style="cursor:pointer; margin-right:5px;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
-							<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
-							${fileMap.fileTitle }
-						</span>
-					</c:forEach>
+					<div id="<portlet:namespace/>noticeFileListTitle" style="float: left; width: 10%;">
+						<img src="${contextPath}/images/fileicon.png" width="19" height="21" />&nbsp;<liferay-ui:message key='edison-table-content-header-attachments' />&nbsp;&nbsp;｜&nbsp;&nbsp;
+					</div>
+					<div style="float: left; width: 78%;">
+						<c:forEach items="${fileList}" var="fileMap">
+							<span style="cursor:pointer; margin-right:10px; white-space: nowrap;" onclick="<portlet:namespace/>fileDownload('${fileMap.fileEntryId }')" class="onMouseHover">
+								<img src="${contextPath}/images/fileicon2.png" width="16" height="16" />
+								${fileMap.fileTitle }
+							</span>
+						</c:forEach>
+					</div>
 				</td>
 			</tr>	
 			</c:if>
