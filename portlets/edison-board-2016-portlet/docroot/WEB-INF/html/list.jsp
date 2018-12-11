@@ -60,6 +60,46 @@
 	}
 	
 	.detailViewSubTitle{padding-left: 0px !important; padding-right: 0px !important;}
+	
+	
+	@media screen and (max-width:767px) {
+		.topmenuwrap>ul {
+			display: none;
+		}
+		td.bold.TR {
+			display: none;
+		}
+		div#nsubtopwrap {
+			display: none;
+		}
+		.input-group {
+			display: none !important;
+		}
+		
+		input.btn.btn-default {
+			display: initial;
+			margin-top: 0px;
+		}
+		td.TL {
+			white-space: inherit !important;
+		}
+		th:nth-child(5), th:nth-child(4), th:nth-child(3),td:nth-child(5), td:nth-child(4), td:nth-child(3)  {
+			display: none ;
+		}
+		div.h4 {
+			display: none !important;
+		}
+		.boardbtnbox {
+			margin-bottom: 15px;
+		}
+	}
+	
+	@media (max-width: 767px) and (max-width: 979px) {
+		input.btn.btn-default {
+			display: initial;
+			margin-top: 0px;
+		}
+	}
 </style>
 <%--### Default Board List Start ######################################################################################################################  --%>	
 <% 	
