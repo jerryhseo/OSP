@@ -169,6 +169,7 @@ var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 var toastr;
 <portlet:namespace/>workbench.id('<%=portletDisplay.getId()%>');
 
+
 var <portlet:namespace/>lodingPortlets = JSON.parse('${lodingPortlets}');
 /***********************************************************************
  * Initailization section and handling Liferay events
@@ -185,7 +186,6 @@ $(function(e) {
 	<portlet:namespace/>workbench.redirectURL('${redirectURL}');
 	<portlet:namespace/>workbench.redirectName('${redirectName}');
 	<portlet:namespace/>workbench.blockInputPorts('${blockInputPorts}');
-	
 	
 	var scienceApp = new OSP.ScienceApp();
 	scienceApp.id('${scienceApp.getScienceAppId()}');

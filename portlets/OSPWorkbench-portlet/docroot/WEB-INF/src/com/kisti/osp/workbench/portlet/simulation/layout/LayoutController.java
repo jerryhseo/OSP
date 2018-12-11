@@ -71,6 +71,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -422,7 +423,9 @@ public class LayoutController {
 		if(simulation.getUserId()==userId){
 			isEdit=true;
 		}
-		jsonObj.put("job_", this.convertJobToJSON(job,isEdit));
+		
+		String userScreenName = UserLocalServiceUtil.getUser(simulation.getUserId()).getScreenName();
+		jsonObj.put("job_", this.convertJobToJSON(job,isEdit,userScreenName));
 		
 		if( jobData != null ){
 			jsonObj.put("inputs_", jobData.getJobData());
@@ -444,11 +447,12 @@ public class LayoutController {
 		return json;
 	}
 	
-	private JSONObject convertJobToJSON( SimulationJob job,boolean isEdit) throws SystemException, JSONException{
+	private JSONObject convertJobToJSON( SimulationJob job,boolean isEdit,String screenName) throws SystemException, JSONException{
 		JSONObject json = JSONFactoryUtil.createJSONObject();
 		
 		json.put("uuid_", job.getJobUuid());
 		json.put("isEdit_", isEdit);
+		json.put("user_", screenName);
 		json.put("title_", job.getJobTitle());
 		json.put("seqNo_", job.getJobSeqNo());
 		if(  job.getJobStartDt() != null )
@@ -623,8 +627,9 @@ public class LayoutController {
 		try {
 			String jobTitle = ParamUtil.getString(resourceRequest, "jobTitle");
 			String jobInitData = ParamUtil.getString(resourceRequest, "jobInitData");
+			String userScreenName = themeDisplay.getUser().getScreenName();
 			
-			this.createJob(simulation.getSimulationUuid(), scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
+			this.createJob(simulation.getSimulationUuid(), userScreenName, scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
 		} catch (JSONException | SystemException e1) {
 			_log.error("Creating job : "+simulation.getSimulationUuid());
 			throw new PortletException();
@@ -642,7 +647,7 @@ public class LayoutController {
 		}
 	}
 	
-	private JSONObject createJob( String simulationUuid, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
+	private JSONObject createJob( String simulationUuid, String userScreenName, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
 		SimulationJob job = null;
 		
 		try {
@@ -666,7 +671,7 @@ public class LayoutController {
 			_log.error("Adding New Job Failed For:  "+ simulationUuid);
 			throw new PortletException();
 		}
-		return this.convertJobToJSON(job,true);
+		return this.convertJobToJSON(job,true,userScreenName);
 	}
 	
 	private void deleteJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
@@ -723,7 +728,8 @@ public class LayoutController {
 		
 		JSONObject jsonJob = null;
 		try {
-			jsonJob = this.convertJobToJSON(job,true);
+			ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			jsonJob = this.convertJobToJSON(job,true,themeDisplay.getUser().getScreenName());
 		} catch (JSONException | SystemException e) {
 			_log.error("Converting job to JSON: "+e.getMessage());
 			throw new PortletException();

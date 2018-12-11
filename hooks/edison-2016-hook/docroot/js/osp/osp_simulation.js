@@ -55,6 +55,10 @@
 				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.ISEDIT, arguments));
 			};
 			
+			J.user = function( screenName ){
+				return J.property.apply(J, OSP.Util.addFirstArgument(OSP.Constants.USER, arguments));
+			};
+			
 			J.copyInputs = function(){
 				var inputs = J.inputs();
 				if( !inputs ){
@@ -332,6 +336,7 @@
 						case OSP.Constants.SUBMIT:
 						case OSP.Constants.SEQ_NO:
 						case OSP.Constants.ISEDIT:
+						case OSP.Constants.USER:
 							J.property( key, jsonJob[key] );
 							break;
 						case OSP.Constants.INPUTS:

@@ -116,6 +116,7 @@
         VERSION: 'version_',
         UPDATES: 'updates_',
         URI: 'uri_',
+        USER: 'user_',
         WINDOW_STATE: 'windowState_',
         WORKBENCH_ID: 'workbenchId_',
         WORKING_JOB: 'workingJob_',

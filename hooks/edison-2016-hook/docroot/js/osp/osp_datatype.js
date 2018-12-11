@@ -149,6 +149,10 @@
 			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.DIRTY, arguments) );
 		};
 		
+		InputData.user = function( dirty ){
+			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.USER, arguments) );
+		};
+		
 		InputData.deserialize = function( jsonInputData ){
 			//console.log( 'jsonInputData: ', jsonInputData );
 			for( var key in jsonInputData ){
@@ -166,6 +170,8 @@
 				case OSP.Constants.RELATIVE:
 				case OSP.Constants.ORDER:
 				case OSP.Constants.PORT_NAME:
+				case OSP.Constants.USER:
+				case OSP.Constants.DATA_TYPE:
 					InputData.property( key, jsonInputData[key] );
 					break;
 				default:

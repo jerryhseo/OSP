@@ -1045,12 +1045,50 @@
             }
         };
         
+        
+        var fireLoadData = function( event, targetPortletId, data ){
+        	
+        	/*InputData Add ScreenName*/
+        	var simulation = Workbench.workingSimulation();
+    		if(simulation){
+    			var job = simulation.workingJob();
+    			if(job){
+    				data[OSP.Constants.USER] = job.user();
+    			}
+    		}
+    		
+    		/*InputData Add dataType_*/
+    		var portlet = Workbench.getPortlet(targetPortletId);
+    		if(portlet){
+    			var scienceApp = Workbench.scienceApp();
+    			var port = scienceApp.getPort(portlet.portName());
+    			if(port){
+    				var dataType = port.dataType();
+    				if(dataType){
+    					data[OSP.Constants.DATA_TYPE] = dataType;
+    				}
+    			}
+    		}
+    		
+    		
+    		var eventData = {
+                    portletId: Workbench.id(),
+                    targetPortlet: targetPortletId,
+                    data: data 
+    			};
+    		
+    		console.log(event+"__________"+JSON.stringify(eventData));
+    		
+    		Liferay.fire( event, eventData );
+        };
+        
         var fire = function( event, targetPortletId, data ){
             var eventData = {
                              portletId: Workbench.id(),
                              targetPortlet: targetPortletId,
-                             data: data
+                             data: data 
             };
+            
             Liferay.fire( event, eventData );
         };
         
@@ -1804,7 +1842,7 @@
                     inputData.relative( true );
                     for( var index in portlets ){
                         var portlet = portlets[index];
-                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
+                        fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
                     }
                 }
             };
@@ -1821,7 +1859,7 @@
                                 fire( OSP.Event.OSP_INITIALIZE, portlet.instanceId(), {} );
                             }
                             else{
-                                fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
+                            	fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON( inputData ) );
                             }
                         }
                     }
@@ -2308,7 +2346,7 @@
                             return;
                     }
                     
-                    fire( 
+                    fireLoadData( 
                             OSP.Event.OSP_LOAD_DATA, 
                             portletId, 
                             OSP.Util.toJSON(inputData) );
@@ -2402,7 +2440,7 @@
                                 context_: OSP.Util.toJSON( dataType.structure() )
                     };
                     
-                    fire( OSP.Event.OSP_LOAD_DATA, portletId, data );
+                    fireLoadData( OSP.Event.OSP_LOAD_DATA, portletId, data );
                 },
                 error: function( data, e ){
                     console.log( '[ERROR] Getting data type sample: '+ portDataType.name );
@@ -2594,9 +2632,9 @@
     						data.order( inputData.order() );
     						data.type( OSP.Enumeration.PathType.FILE_CONTENT );
     						data.context( fileContents[0].join('') );
-    						fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(data) );
+    						fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(data) );
         				}else{
-	        				fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(inputData) );
+        					fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(inputData) );
         				}
         			}
         			
@@ -2915,7 +2953,7 @@
                     for( var index in portlets ){
                         var portlet = portlets[index];
                         console.log('Ooutput Data: ', port.outputData());
-                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
+                        fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
 //                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.OUTPUT_VALID );
@@ -2930,7 +2968,7 @@
                     var portlets = Workbench.getPortlets( portName );
                     for( var index in portlets ){
                         var portlet = portlets[index];
-                        fire( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
+                        fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(outputData) );
                     }
 
 //                    firePortStatusChanged( portName, OSP.Enumeration.PortStatus.LOG_VALID );
@@ -2975,7 +3013,7 @@
                                 }
                                 
                                 
-                                fire( 
+                                fireLoadData( 
                                         OSP.Event.OSP_LOAD_DATA, 
                                         targetPortlet, 
                                         OSP.Util.toJSON(inputData) );
@@ -3023,7 +3061,7 @@
                                 inputData.name(portData.name());
                                 inputData.relative(true);
                                 
-                                fire( 
+                                fireLoadData( 
                                         OSP.Event.OSP_LOAD_DATA, 
                                         targetPortlet, 
                                         OSP.Util.toJSON(inputData) );
@@ -3060,7 +3098,7 @@
                                 type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
                                 context_: jsonDataStructure
                             };
-                    fire( OSP.Event.OSP_LOAD_DATA, portletId, data );
+                    fireLoadData( OSP.Event.OSP_LOAD_DATA, portletId, data );
                 },
                 error:function(data,e){
                     console.log(data);
@@ -3105,7 +3143,7 @@
                                  targetPortlet: portlet.instanceId(),
                                  data: data
                 };
-                Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData);
+                fireLoadData( OSP.Event.OSP_LOAD_DATA, targetPortlet,eventData);
             }
 
         };
@@ -3266,7 +3304,7 @@
             }
             
             if( inputData ){
-                fire( OSP.Event.OSP_LOAD_DATA, portletInstanceId,  OSP.Util.toJSON( inputData ) );
+            	fireLoadData( OSP.Event.OSP_LOAD_DATA, portletInstanceId,  OSP.Util.toJSON( inputData ) );
             }
         };
                 
