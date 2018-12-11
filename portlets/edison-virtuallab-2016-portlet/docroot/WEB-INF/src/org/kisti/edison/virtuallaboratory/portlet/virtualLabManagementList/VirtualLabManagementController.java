@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -28,7 +30,6 @@ import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonHttpUtil;
-import org.kisti.edison.util.EdisonPropsUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.PagingUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -49,9 +50,10 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
@@ -59,7 +61,10 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -427,7 +432,7 @@ public class VirtualLabManagementController {
 		Role virtualLabClassOwnerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_OWNER);
 		Role virtualLabClassManagerRole = RoleLocalServiceUtil.fetchRole(companyId, EdisonRoleConstants.VIRTUAL_CLASS_MANAGER);
 		
-		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| //
+		if (UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
 			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(virtualLabId)))	|| 
 			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassOwnerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))	||
 			UserGroupRoleCustomLocalServiceUtil.isRoleCustom(user.getUserId(), groupId, virtualLabClassManagerRole.getRoleId(), Long.parseLong(CustomUtil.strNull(classId)))) {
@@ -502,5 +507,71 @@ public class VirtualLabManagementController {
 		model.addAttribute("authYn", authYn);
 		
 		return "virtualLabClassManagementList/virtualLabClassManagementDetail";
+	}
+	
+	@ResourceMapping(value="checkSiteRole")
+	public void checkSiteRole(ResourceRequest request, ResourceResponse response) throws Exception {
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = PortalUtil.getUser(request);
+		Map params = RequestUtil.getParameterMap(request);
+		
+		long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"), "0"));
+		
+		// 사이트 관리자, owner, member가 아닌 경우 false return
+		boolean isSiteMember = false;
+		if(EdisonUserUtil.isSiteRole(user, groupId, EdisonRoleConstants.SITE_ADMINISTRATOR) || EdisonUserUtil.isSiteRole(user, groupId, EdisonRoleConstants.SITE_OWNER)
+				|| EdisonUserUtil.isSiteRole(user, groupId, EdisonRoleConstants.SITE_MEMBER)){
+			isSiteMember = true;
+		} else {
+			isSiteMember = false;
+		}
+		
+		JSONObject obj = new JSONObject();
+		obj.put("isSiteMember", isSiteMember);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+		
+	}
+	
+	@ResourceMapping(value="userSiteJoin")
+	public void userSiteJoin(ResourceRequest request, ResourceResponse response) throws Exception {
+		boolean isSiteMember = false; 
+		try {
+			long groupId = ParamUtil.getLong(request, "groupId");
+			long[] addUserIds = StringUtil.split(ParamUtil.getString(request, "addUserIds"), 0L);
+			addUserIds = filterAddUserIds(groupId, addUserIds);
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(request);
+			UserServiceUtil.addGroupUsers(groupId, addUserIds, serviceContext);
+			
+			if(addUserIds != null && addUserIds.length == 1){
+				User user = UserLocalServiceUtil.getUser(addUserIds[0]);
+				EdisonUserUtil.addSiteRole(user, groupId, EdisonRoleConstants.SITE_MEMBER);
+			}
+			
+			isSiteMember = true;
+		} catch (Exception e) {
+			isSiteMember = false;
+			log.error("Failed Site Join!");
+		}
+		
+		JSONObject obj = new JSONObject();
+		obj.put("isSiteMember", isSiteMember);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(obj.toString());
+	}
+	
+	protected long[] filterAddUserIds(long groupId, long[] userIds)throws Exception {
+
+		Set<Long> filteredUserIds = new HashSet<Long>(userIds.length);
+	
+		for (long userId : userIds) {
+			if (!UserLocalServiceUtil.hasGroupUser(groupId, userId)) {
+				filteredUserIds.add(userId);
+			}
+		}
+	
+		return ArrayUtil.toArray(filteredUserIds.toArray(new Long[filteredUserIds.size()]));
 	}
 }

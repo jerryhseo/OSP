@@ -266,6 +266,7 @@ function <portlet:namespace/>moveWorkBench(scienceAppId) {
 		var classId = '${classId}'===''?0:'${classId}';
 		
 		portletURL.setPlid("${workBenchPlid}"); /* workBench Plid */ 
+		portletURL.setWindowState("POP_UP"); /* workBench Window Status */
 		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");  
 		portletURL.setParameter("scienceAppId", scienceAppId);
 		if(classId != 0){
