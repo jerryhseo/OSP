@@ -291,9 +291,7 @@ function <portlet:namespace/>navigatorInitJstree(){
 		}
 		
 // 		console.log(data);
-		if(!<portlet:namespace/>isBlock){
-			<portlet:namespace/>selectedNode(data);
-		}
+		<portlet:namespace/>selectedNode(data);
 	});
 }
 
@@ -317,17 +315,21 @@ function <portlet:namespace/>searchNavigator(){
 		data  : searchData,
 		dataType: 'json',
 		success: function(data) {
+			console.log(data);
 			var treeData  = data.projectStructure;
 			$("#<portlet:namespace/>navigatorTree").jstree(true).settings.core.data = treeData;
 			$("#<portlet:namespace/>navigatorTree").jstree(true).refresh();
 			
 			/*Global ProjectId Setting*/
 			<portlet:namespace/>projectId = data.projectId;
+			
+			/*Global vcToken Setting*/
+			<portlet:namespace/>vcToken = data.vcToken;
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
-				alert(textStatus+": "+jqXHR.responseText);
+				alert("searchNavigator-->"+textStatus+": "+jqXHR.responseText);
 			}else{
-				alert(textStatus+": "+errorThrown);
+				alert("searchNavigator-->"+textStatus+": "+errorThrown);
 			}  
 		}
 	});
@@ -354,9 +356,9 @@ function <portlet:namespace/>updateProject(){
 			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
-				alert(textStatus+": "+jqXHR.responseText);
+				alert("updateProject-->"+textStatus+": "+jqXHR.responseText);
 			}else{
-				alert(textStatus+": "+errorThrown);
+				alert("updateProject-->"+textStatus+": "+errorThrown);
 			}  
 		}
 	});
@@ -490,7 +492,8 @@ function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
 		type : 'POST',
 		dataType : 'json',
 		data : {
-			"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob)
+			"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob),
+			"<portlet:namespace/>userName" : <portlet:namespace/>jobUserName
 		},
 		success : function(result){
 			if($("#<portlet:namespace/>navigatorParameter").is(":hidden")){
@@ -501,9 +504,9 @@ function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
 		},
 		error : function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
-				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+jqXHR.responseText);
+				alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+jqXHR.responseText);
 			}else{
-				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+errorThrown);
+				alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+errorThrown);
 			}
 		}
 	});
@@ -558,6 +561,7 @@ function <portlet:namespace/>getInputDataPathFromFileId(fileId){
 }
 
 function <portlet:namespace/>getFileIdFromInputData(parentPath,fileName){
+	var fileId = "";
 	jQuery.ajax({
 		type: "POST",
 		url: "<%=getFileIdFromInputDataURL%>",
@@ -568,7 +572,7 @@ function <portlet:namespace/>getFileIdFromInputData(parentPath,fileName){
             "<portlet:namespace/>fileName" : fileName
         },
 		success: function(data) {
-			return data.fileId;
+			fileId = data.fileId;
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
 				alert(textStatus+": "+jqXHR.responseText);
@@ -577,6 +581,7 @@ function <portlet:namespace/>getFileIdFromInputData(parentPath,fileName){
 			}
 		}
 	});
+	return fileId;
 }
 
 function <portlet:namespace/>returnFileObject(nodes){
@@ -606,93 +611,102 @@ function <portlet:namespace/>returnFileObject(nodes){
 	
 }
 
-function <portlet:namespace/>loadDataFile(parentPath,fileName){
-	$("#<portlet:namespace/>fileSelectedText").html(fileName);
-	/*Job Data의 파일 정보가 현재 Project에 포함 되어 있는지 체크*/
-// 	var fileId = <portlet:namespace/>getFileIdFromInputData(parentPath,fileName);
-// 	var meshNode = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node("<portlet:namespace/>"+MESH.Constants.MESHES_PARENT_FOLDER_ID,false);
+function <portlet:namespace/>loadDataFile(isType,parentPath,fileName){
+	if(isType="IS_FILE"){
+		$("#<portlet:namespace/>fileSelectedText").attr("data-parent-path",parentPath).attr("data-file-name",fileName).html(fileName);
+	}else if(isType="IS_SAMPLE"){
+		$("#<portlet:namespace/>fileSelectedText").attr("data-file-name","sample").html("Sample Selected");
+	}else if(isType="IS_NULL"){
+		$("#<portlet:namespace/>fileSelectedText").attr("data-file-name","").html("");
+	}
 }
 
 /***********************************************************************
  * Tree Event section
  ***********************************************************************/
 function <portlet:namespace/>selectedNode(treeData){
-	var node_id = treeData.node.id;
-	var node_data_type = treeData.node.data[MESH.Constants.DATA_NODE_TYPE];
-	
-	/*Controll Panel EVENT - START*/
-	var controllPanel = $("#<portlet:namespace/>controllpanel");
-	
-	var contorllDataId = controllPanel.attr("data-from-id");
-	if(contorllDataId===node_id){
-		var contorllDataSize = controllPanel.attr("data-size");
-		if(contorllDataSize!=0){
-			if(controllPanel.is(":visible")==true){
-				controllPanel.hide();
-			}else{
-				controllPanel.slideDown('fast',null);
-			}
-		}
+	/*isBlock = true -->> EDIT 불가*/
+	if(!<portlet:namespace/>isBlock){
+		var node_id = treeData.node.id;
+		var node_data_type = treeData.node.data[MESH.Constants.DATA_NODE_TYPE];
 		
-	}else{
-		var viewConArr = MESH.Constants.getControllTypes(node_data_type);
-		controllPanel.find(".con-button").css("display","none");
-		controllPanel.attr("data-from-id",node_id);
-		controllPanel.attr("data-size",viewConArr.length);
-		if(viewConArr.length!=0){
-			for (var i = 0, x = viewConArr.length; i < x; i++) {
-				if(viewConArr[i]===MESH.Constants.CON_MESH_VIEW){
-					if(typeof treeData.node.data["analyzerJob"]!=="undefined"){
-						$("#<portlet:namespace/>con-"+viewConArr[i]).attr("onclick","<portlet:namespace/>showMesh('"+treeData.node.data["analyzerJob"]+"')")
-						$("#<portlet:namespace/>con-"+viewConArr[i]).show();
-					}
+		/*Controll Panel EVENT - START*/
+		var controllPanel = $("#<portlet:namespace/>controllpanel");
+		
+		var contorllDataId = controllPanel.attr("data-from-id");
+		if(contorllDataId===node_id){
+			var contorllDataSize = controllPanel.attr("data-size");
+			if(contorllDataSize!=0){
+				if(controllPanel.is(":visible")==true){
+					controllPanel.hide();
 				}else{
-					$("#<portlet:namespace/>con-"+viewConArr[i]).show();
+					controllPanel.slideDown('fast',null);
 				}
 			}
-			controllPanel.slideDown('fast',null);
+			
 		}else{
-			controllPanel.hide();
+			var viewConArr = MESH.Constants.getControllTypes(node_data_type);
+			controllPanel.find(".con-button").css("display","none");
+			controllPanel.attr("data-from-id",node_id);
+			controllPanel.attr("data-size",viewConArr.length);
+			if(viewConArr.length!=0){
+				for (var i = 0, x = viewConArr.length; i < x; i++) {
+					if(viewConArr[i]===MESH.Constants.CON_MESH_VIEW){
+						if(typeof treeData.node.data["analyzerJob"]!=="undefined"){
+							$("#<portlet:namespace/>con-"+viewConArr[i]).attr("onclick","<portlet:namespace/>showMesh('"+treeData.node.data["analyzerJob"]+"')")
+							$("#<portlet:namespace/>con-"+viewConArr[i]).show();
+						}
+					}else{
+						$("#<portlet:namespace/>con-"+viewConArr[i]).show();
+					}
+				}
+				controllPanel.slideDown('fast',null);
+			}else{
+				controllPanel.hide();
+			}
 		}
-	}
-	/*Controll Panel EVENT - END*/
-	
-	/* parameter event - start*/
-	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER
-	    && <portlet:namespace/>checkAnalyzerJob){
-	    <portlet:namespace/>checkAnalyzerJob(treeData.node.data["analyzerJob"]);
-	}else{
-		if(!$("#<portlet:namespace/>navigatorParameter").is(":hidden")){
-			$("#<portlet:namespace/>navigatorParameter").hide();
-		}
-	}
-	
-	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
-		<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
-	}
-	
-	if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
-		<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
-	}
-	
-	if(node_data_type == MESH.Constants.TYPE_VIEW_MESH){
-		var node_data_file_id = treeData.node.data[MESH.Constants.DATA_FILE_ID];
-		<portlet:namespace/>getInputDataPathFromFileId(node_data_file_id);
-	}
-	
-	/* parameter event - end*/
-	
-	if(node_data_type==MESH.Constants.TYPE_ROOT_GEO||node_data_type==MESH.Constants.TYPE_ROOT_MESH){
-		var command = "";
-		if(node_data_type==MESH.Constants.TYPE_ROOT_GEO){
-			command = 'select.geometry';
-		}else if(node_data_type==MESH.Constants.TYPE_ROOT_MESH){
-			command = 'select.mesh';
+		/*Controll Panel EVENT - END*/
+		
+		/* parameter event - start*/
+		if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER
+		    && <portlet:namespace/>checkAnalyzerJob){
+		    <portlet:namespace/>checkAnalyzerJob(treeData.node.data["analyzerJob"]);
+		}else{
+			if(!$("#<portlet:namespace/>navigatorParameter").is(":hidden")){
+				$("#<portlet:namespace/>navigatorParameter").hide();
+			}
 		}
 		
-		var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
-		<portlet:namespace/>viewerEventFire(targetPortlet,command,{});
-	}
+		if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
+			<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
+		}
+		
+		if(node_data_type == MESH.Constants.TYPE_GEO_PARAMETER&& <portlet:namespace/>setXYPlotterResultPath){
+			<portlet:namespace/>setXYPlotterResultPath(treeData.node.data["analyzerJob"]);
+		}
+		
+		if(node_data_type == MESH.Constants.TYPE_VIEW_MESH){
+			var node_data_file_id = treeData.node.data[MESH.Constants.DATA_FILE_ID];
+			<portlet:namespace/>getInputDataPathFromFileId(node_data_file_id);
+		}
+		
+		/* parameter event - end*/
+		
+		if(node_data_type==MESH.Constants.TYPE_ROOT_GEO||node_data_type==MESH.Constants.TYPE_ROOT_MESH){
+			var command = "";
+			if(node_data_type==MESH.Constants.TYPE_ROOT_GEO){
+				command = 'select.geometry';
+			}else if(node_data_type==MESH.Constants.TYPE_ROOT_MESH){
+				command = 'select.mesh';
+			}
+			
+			var targetPortlet = MESH.Constants.MESH_VIEWER_PORTLET;
+			<portlet:namespace/>viewerEventFire(targetPortlet,command,{});
+		}
+	}else{
+		$("#<portlet:namespace/>controllpanel").hide();;
+	}//end Block
+	
 }
 function <portlet:namespace/>addNode(parentId, node){
 	$("#<portlet:namespace/>navigatorTree").jstree().create_node(parentId,OSP.Util.toJSON(node),"last",false);
@@ -913,6 +927,7 @@ AUI().ready(['liferay-util-window'], function(){
 		var fileArray = new Array();
 		for (var i = 0, x = object.length; i < x; i++) {
 			var fileMap = object[i];
+			console.log(fileMap);
 			var data = new MESH.data();
 			data.file(fileMap[0]);
 			data.nodeType(MESH.Constants.getTypeByFileName(fileMap[1]));

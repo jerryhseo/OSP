@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
@@ -98,13 +99,20 @@ public class ParameterController {
 	@ResourceMapping(value="checkAnalyzer")
 	public void checkAnalyzer(
 			@RequestParam("analyzerJob") String analyzerJobJson,
+			@RequestParam("userName") String userName,
 			 ResourceRequest request, ResourceResponse response) throws IOException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		try{
 			AnalyzerJob analyzerJob = new Gson().fromJson(analyzerJobJson, AnalyzerJob.class);
 			
-			User user = PortalUtil.getUser(request);
+			User user = null;
+			if(userName.equals("")){
+				user = PortalUtil.getUser(request);
+			}else{
+				user = UserLocalServiceUtil.getUserByScreenName(themeDisplay.getCompanyId(), userName);
+			}
+			
 			String time = meshAppHelper.getTimeLog(themeDisplay, analyzerJob, user,100).trim();
 			
 			

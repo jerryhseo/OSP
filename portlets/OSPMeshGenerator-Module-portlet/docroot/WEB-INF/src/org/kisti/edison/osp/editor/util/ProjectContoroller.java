@@ -2,6 +2,7 @@ package org.kisti.edison.osp.editor.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
 
@@ -11,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.osp.NoSuchProjectException;
 import org.kisti.edison.osp.model.Project;
 import org.kisti.edison.osp.service.ProjectLocalServiceUtil;
 import org.kisti.edison.osp.service.persistence.ProjectPK;
+import org.kisti.edison.osp.util.IBUserTokenUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
@@ -42,37 +47,61 @@ public class ProjectContoroller {
 	@ResourceMapping(value="getProject")
 	public void getProject(ResourceRequest request, ResourceResponse response,
 			@RequestParam("simulationUuid") String simulationUuid,
-			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException, PortalException, SystemException{
+			@RequestParam("jobSeqNo") long jobSeqNo) throws IOException, PortalException, SystemException, ParseException{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		long groupId = themeDisplay.getScopeGroupId();
 		Map params = RequestUtil.getParameterMap(request);
 		
 		String portletNamespace = themeDisplay.getPortletDisplay().getNamespace();
 		ProjectPK projectPK = new ProjectPK(simulationUuid, portletNamespace, jobSeqNo);
 		
 		JSONObject obj = new JSONObject();
+		Project project = null;
 		try{
-			Project project = ProjectLocalServiceUtil.getProject(projectPK);
+			project = ProjectLocalServiceUtil.getProject(projectPK);
 			obj.putAll(project.getModelAttributes());
 		}catch (Exception e) {
 			if(e instanceof NoSuchProjectException){
 				String projectStructure = CustomUtil.strNull(params.get("projectStructure"));
 				String analyzerStructure = CustomUtil.strNull(params.get("analyzerStructure"));
 				
-				Project project = ProjectLocalServiceUtil.createProject(projectPK);
-				project.setProjectStructure(projectStructure);
-				project.setAnalyzerStructure(analyzerStructure);
-				project.setUserId(themeDisplay.getUserId());
-				project.setCreateDate(new Date());
+				Project newProject = ProjectLocalServiceUtil.createProject(projectPK);
+				newProject.setProjectStructure(projectStructure);
+				newProject.setAnalyzerStructure(analyzerStructure);
+				newProject.setUserId(themeDisplay.getUserId());
+				newProject.setCreateDate(new Date());
 				
 				long projectId = CounterLocalServiceUtil.increment(Project.class.getName());
-				project.setProjectId(projectId);
-				ProjectLocalServiceUtil.addProject(project);
+				newProject.setProjectId(projectId);
+				project = ProjectLocalServiceUtil.addProject(newProject);
 				obj.putAll(project.getModelAttributes());
 			}else{
 				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 			}
 		}finally {
+			/*Project의 UserId를 통하여 VCToken 생성*/
+			long userId = project.getUserId();
+			User user = UserLocalServiceUtil.getUser(userId);
+			
+			/*vcToken*/
+			if(!user.getExpandoBridge().hasAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId))){
+				obj.put("vcToken",IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+			}else{
+				String userVcToken = GetterUtil.getString(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId)),"");
+				
+				if(userVcToken.equals("")){
+					obj.put("vcToken",IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+				}else{
+					int userVcExpired = GetterUtil.getInteger(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN_EXPIRED+ String.valueOf(groupId)),0);
+					if(userVcExpired <= Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyyMMdd"))){
+						obj.put("vcToken",IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
+					}else{
+						obj.put("vcToken",userVcToken);
+					}
+				}
+			}
+			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());

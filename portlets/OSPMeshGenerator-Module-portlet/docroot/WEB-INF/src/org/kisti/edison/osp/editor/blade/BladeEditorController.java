@@ -86,24 +86,7 @@ public class BladeEditorController {
 				DataTypeStructure paramStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(paramTypeId);
 				model.addAttribute(parameterName, paramStructure.getStructure());
 			}
-			
-			/*vcToken*/
-			if(!user.getExpandoBridge().hasAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId))){
-				model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
-			}else{
-				String userVcToken = GetterUtil.getString(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN+ String.valueOf(groupId)),"");
-				
-				if(userVcToken.equals("")){
-					model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
-				}else{
-					int userVcExpired = GetterUtil.getInteger(user.getExpandoBridge().getAttribute(EdisonExpando.USER_VC_TOKEN_EXPIRED+ String.valueOf(groupId)),0);
-					if(userVcExpired <= Integer.parseInt(CustomUtil.dateToStringFormat(new Date(), "yyyyMMdd"))){
-						model.addAttribute("vcToken", IBUserTokenUtil.getOrCreateToken(groupId, user).getVcToken());
-					}else{
-						model.addAttribute("vcToken", userVcToken);
-					}
-				}
-			}
+			model.addAttribute("currentUserName", themeDisplay.getUser().getScreenName());
 		}catch(Exception e){
 			e.printStackTrace();
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);

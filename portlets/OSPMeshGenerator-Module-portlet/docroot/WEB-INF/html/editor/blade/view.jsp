@@ -72,6 +72,10 @@ var <portlet:namespace/>jobSeqNo = '';
 var <portlet:namespace/>projectId = 0;
 
 var <portlet:namespace/>isBlock = false;
+
+var <portlet:namespace/>vcToken = "";
+var <portlet:namespace/>jobUserName = "";
+var <portlet:namespace/>currentUserName = "${currentUserName}";
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
@@ -88,7 +92,6 @@ Liferay.on(OSP.Event.OSP_HANDSHAKE,function(e){
 				targetPortlet : <portlet:namespace/>connector,
 				data : events
 			};
-		
 		Liferay.fire(OSP.Event.OSP_REGISTER_EVENTS, eventData);
 	}
 });
@@ -103,8 +106,9 @@ Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e) {
 Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
+		<portlet:namespace/>jobUserName = "";
 		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
-		$("#<portlet:namespace/>fileSelectedText").html("");
+		<portlet:namespace/>loadDataFile("IS_NULL","","");
 	}
 });
 
@@ -112,15 +116,16 @@ Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		console.log('[<portlet:namespace/>] OSP_LOAD_DATA: ', e );
+		<portlet:namespace/>jobUserName = e.data[OSP.Constants.USER];
 		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
 		/*Workbench Data 존재*/
 		var inputData = new OSP.InputData( e.data );
 		switch( inputData.type() ){
 			case OSP.Enumeration.PathType.FILE:
-				<portlet:namespace/>loadDataFile(inputData.parent(),inputData.name());
+				<portlet:namespace/>loadDataFile("IS_FILE",inputData.parent(),inputData.name());
 				break;
 			case OSP.Enumeration.PathType.DLENTRY_ID:
-				$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
+				<portlet:namespace/>loadDataFile("IS_SAMPLE","","");
 				break;
 			default:
 			
@@ -208,7 +213,7 @@ function <portlet:namespace/>callMeshAnalyzerLoadProject(geometryGroup,meshGroup
 	var data = {
 		"geometryGroup": geometryGroup,
 		"meshGroup": meshGroup,
-		"token": "${vcToken}"
+		"token": <portlet:namespace/>vcToken
 	};
 	
 	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
@@ -219,7 +224,7 @@ function <portlet:namespace/>callMeshAnalyzerAddObject(command, object) {
 	var cmd = command;
 	var data = {
 			"data": JSON.stringify(object),
-			"token": "${vcToken}"
+			"token": <portlet:namespace/>vcToken
 		};
 	<portlet:namespace/>viewerEventFire(targetPortlet,cmd,data);
 }
