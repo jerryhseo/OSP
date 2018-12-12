@@ -15,6 +15,8 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.kisti.edison.bestsimulation.NoSuchSimulationException;
+import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationShare;
@@ -138,6 +140,8 @@ public class DashboardController {
 			
 			Simulation simulation = null;
 			SimulationJob searchJob = null;
+			JsonObject obj = new JsonObject();
+			
 			try{
 				 if(StringUtils.hasText(simulationUuid)){
 					simulation = SimulationLocalServiceUtil.getSimulationByUUID(simulationUuid);
@@ -149,25 +153,24 @@ public class DashboardController {
 					searchJob = SimulationJobLocalServiceUtil.getSimulationJobWithJobUuid(jobUuid);
 				}			
 				
-				JsonObject obj = new JsonObject();
 				obj.add("searchJob", new Gson().toJsonTree(searchJob));
 				obj.add("simulation", new Gson().toJsonTree(simulation));
-				
-				response.setContentType("application/json; charset=UTF-8");
-				PrintWriter out = response.getWriter();
-				out.write(obj.toString());
 			}catch (Exception e) {
+				e.printStackTrace();
 				if(e instanceof IndexOutOfBoundsException){
-					JsonObject obj = new JsonObject();
 					obj.add("simulation",null);
-					
-					response.setContentType("application/json; charset=UTF-8");
-					PrintWriter out = response.getWriter();
-					out.write(obj.toString());
+				}else if(e instanceof NoSuchSimulationException){
+					obj.add("simulation",null);
+				}else if(e instanceof NoSuchSimulationJobException){
+					obj.add("simulation", new Gson().toJsonTree(simulation));
 				}else{
 					handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));
 					e.printStackTrace();
 				}
+			}finally {
+				response.setContentType("application/json; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.write(obj.toString());
 			}
 		
 	}

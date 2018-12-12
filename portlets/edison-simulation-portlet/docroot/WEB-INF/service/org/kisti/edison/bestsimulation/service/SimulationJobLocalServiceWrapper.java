@@ -291,7 +291,8 @@ public class SimulationJobLocalServiceWrapper
 	@Override
 	public org.kisti.edison.bestsimulation.model.SimulationJob getSimulationJobWithJobUuid(
 		java.lang.String jobUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
 		return _simulationJobLocalService.getSimulationJobWithJobUuid(jobUuid);
 	}
 

@@ -121,6 +121,7 @@ public class LayoutController {
 			model.addAttribute("jobUuid", jobUuid);
 			model.addAttribute("blockInputPorts", blockInputPorts);
 			model.addAttribute("simulationUuid", simulationUuid);
+			model.addAttribute("currentUserName", themeDisplay.getUser().getScreenName());
 			
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());

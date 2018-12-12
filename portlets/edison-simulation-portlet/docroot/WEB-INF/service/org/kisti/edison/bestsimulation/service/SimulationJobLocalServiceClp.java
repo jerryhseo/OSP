@@ -953,7 +953,8 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	@Override
 	public org.kisti.edison.bestsimulation.model.SimulationJob getSimulationJobWithJobUuid(
 		java.lang.String jobUuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException {
 		Object returnObj = null;
 
 		try {
@@ -966,6 +967,10 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof org.kisti.edison.bestsimulation.NoSuchSimulationJobException) {
+				throw (org.kisti.edison.bestsimulation.NoSuchSimulationJobException)t;
 			}
 
 			if (t instanceof RuntimeException) {

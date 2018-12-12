@@ -355,9 +355,6 @@ Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
 	}
 });
 
-
-
-
 /***********************************************************************
  * Portlet AJAX Function
  ***********************************************************************/
@@ -640,6 +637,12 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid){
 					<portlet:namespace/>refreshTimer = setInterval(<portlet:namespace/>syncJobStatusList, 5000, simulationUuid);
 				}
 				$("#<portlet:namespace/>pagin").html(result.pagingStr);
+			}else{
+				/*JOB 이 없을 경우 jobController에  Event 전달*/
+				var eventData = {
+						targetPortlet: <portlet:namespace/>connector
+					};
+				Liferay.fire( OSP.Event.OSP_REQUEST_JOB_CONTROLL_RESET, eventData );
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
@@ -1427,10 +1430,15 @@ function <portlet:namespace/>searchSimulationModalOpen(currentPage,isCopy) {
 						}
 					}
 				});
+				
+				modal.find("#"+<portlet:namespace/>parentNamespace+"close-btn").css("display","block");
 			}else{
 				simulatinArea.find("#"+<portlet:namespace/>parentNamespace+"pagin").html("");
 				simulatinArea.css("display","none");
 				opendataArea.css("display","none");
+				
+				modal.find("#"+<portlet:namespace/>parentNamespace+"close-btn").css("display","none");
+				
 			}
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){

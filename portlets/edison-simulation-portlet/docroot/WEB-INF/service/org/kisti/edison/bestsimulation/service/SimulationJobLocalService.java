@@ -257,7 +257,8 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public org.kisti.edison.bestsimulation.model.SimulationJob getSimulationJobWithJobUuid(
 		java.lang.String jobUuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<org.kisti.edison.bestsimulation.model.SimulationJob> getJobsWithSimulationUuid(

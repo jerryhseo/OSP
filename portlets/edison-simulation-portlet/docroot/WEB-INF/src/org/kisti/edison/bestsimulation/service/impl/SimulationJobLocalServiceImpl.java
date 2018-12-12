@@ -128,7 +128,7 @@ public class SimulationJobLocalServiceImpl
 	private final String ICEBREAKER_TEMP_PATH = PropsUtil.get(PropsKeys.LIFERAY_HOME)+"/ICEBREAKER_TEMP";
 	
 	@SuppressWarnings("unchecked")
-  public SimulationJob getSimulationJobWithJobUuid(String jobUuid) throws SystemException{
+  public SimulationJob getSimulationJobWithJobUuid(String jobUuid) throws NoSuchSimulationJobException,SystemException{
 	  DynamicQuery simulationJobQuery = DynamicQueryFactoryUtil.forClass(
         SimulationJob.class, "simJob", PortletClassLoaderUtil.getClassLoader());
 	  simulationJobQuery.add(PropertyFactoryUtil.forName("simJob.jobUuid").eq(jobUuid));
@@ -137,7 +137,7 @@ public class SimulationJobLocalServiceImpl
 	  if(jobs != null && !jobs.isEmpty()){
 	    return jobs.get(0);
 	  }else{
-	    throw new SystemException("There are no SimulationJobs with jobUuid " + jobUuid);
+	    throw new NoSuchSimulationJobException("There are no SimulationJobs with jobUuid " + jobUuid);
 	  }
 	}
 

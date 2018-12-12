@@ -79,7 +79,7 @@
 		<div class="modal-dialog vertical-align-center" role="document">
 			<div class="modal-content" style="width: 35%;">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<button type="button" id="<portlet:namespace/>close-btn" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Simulation List</h4>
 				</div>
 				<div class="modal-body">
@@ -186,6 +186,7 @@ $(function(e) {
 	<portlet:namespace/>workbench.redirectURL('${redirectURL}');
 	<portlet:namespace/>workbench.redirectName('${redirectName}');
 	<portlet:namespace/>workbench.blockInputPorts('${blockInputPorts}');
+	<portlet:namespace/>workbench.currentUserName('${currentUserName}');
 	
 	var scienceApp = new OSP.ScienceApp();
 	scienceApp.id('${scienceApp.getScienceAppId()}');
@@ -673,6 +674,19 @@ Liferay.on(OSP.Event.OSP_REFRESH_URL_CHANGE,function( e ){
 			history.pushState(null, null, renewURL);
 		}
 	}
+});
+
+Liferay.on(OSP.Event.OSP_REQUEST_JOB_CONTROLL_RESET,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	console.log('OSP_REQUEST_JOB_CONTROLL_RESET: ['+e.portletId+', '+new Date()+']');
+	var eventData = {
+		targetPortlet:"BROADCAST",
+		data : {
+			workbenchType : <portlet:namespace/>workbench.type()
+		}
+	};
+	
+	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_CONTROLL_RESET, eventData);
 });
 
 /***********************************************************************

@@ -935,7 +935,13 @@
         var Workbench = this;
         OSP._MapObject.apply( Workbench );
         
-        var isBlockValid = function( outputType, jobStatus ){
+        var isBlockValid = function( outputType, jobStatus, jobUserName){
+        	if(jobUserName!=''){
+        		if(jobUserName!=Workbench.currentUserName()){
+        			return true;
+        		}
+        	}
+        	
             switch( outputType ){
             	case OSP.Enumeration.PortType.INPUT:
             		switch( jobStatus ){
@@ -1771,7 +1777,7 @@
             	if(Workbench.isBlockInputPort(portName)){
             		fireBlockPortEvent(portName,true);
             	}else{
-            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.INPUT, job.status()));
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.INPUT, job.status(),job.user()));
             	}
             }
             
@@ -1779,9 +1785,9 @@
             for(var portName in logPorts ){
             	var portlets = Workbench.getPortlets( portName );
             	if(job.status()===OSP.Enumeration.JobStatus.FAILED){
-            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()),true);
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status(),''),true);
             	}else{
-            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status()),false);
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.LOG, job.status(),''),false);
             	}
             	
             }
@@ -1790,9 +1796,9 @@
             for(var portName in outputPorts ){
             	var portlets = Workbench.getPortlets( portName );
             	if(job.status()===OSP.Enumeration.JobStatus.FAILED){
-            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()),true);
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status(),''),true);
             	}else{
-            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status()),false);
+            		fireBlockPortEvent(portName,isBlockValid( OSP.Enumeration.PortType.OUTPUT, job.status(),''),false);
             	}
             }
             
@@ -2104,6 +2110,11 @@
             return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.BLOCK_INPUT_PORTS, arguments));
         };
         
+        Workbench.currentUserName = function( currentUserName ){
+            return Workbench.property.apply(Workbench, OSP.Util.addFirstArgument(OSP.Constants.USER, arguments));
+        };
+        
+        
         Workbench.isBlockInputPort = function(portName){
         	var blockPorts = Workbench.blockInputPorts();
         	if(!blockPorts){return false;}
@@ -2275,8 +2286,9 @@
                     break;
             }
             
-            if( Workbench.registerEvents( portletId, events ))
-                fire( OSP.Event.OSP_EVENTS_REGISTERED, portletId, events );
+            if( Workbench.registerEvents( portletId, events )){
+            	fire( OSP.Event.OSP_EVENTS_REGISTERED, portletId, events );
+            }
         };
         
         Workbench.handleRequestSampleContent = function( portletId, resourceURL ){

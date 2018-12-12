@@ -165,6 +165,7 @@ var <portlet:namespace/>submitLiObj  = {"simulation":true,"edit":true,"new":true
 var <portlet:namespace/>cancelLiObj  = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
 var <portlet:namespace/>successLiObj = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":true};
 var <portlet:namespace/>failLiObj    = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
+var <portlet:namespace/>initLiObj    = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":false,"delete":false,"select":false,"submit":false,"cancel":false,"log":false,"download":false,"data":false};
 
 
 var <portlet:namespace/>openDataTransSimulationIds = [];
@@ -189,9 +190,8 @@ Liferay.on(OSP.Event.OSP_HANDSHAKE, function(e){
 				targetPortlet: <portlet:namespace/>connector,
 				data: events
 			};
-		Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, eventData );
+		Liferay.fire(OSP.Event.OSP_REGISTER_EVENTS, eventData );
 	}
-	
 });
 
 Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e){
@@ -209,8 +209,10 @@ Liferay.on(OSP.Event.OSP_RESPONSE_APP_INFO, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		<portlet:namespace/>init(e.data.scienceApp);
+		<portlet:namespace/>displayChange("INIT",'',true);
 	}
 });
+
 
 Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
@@ -219,6 +221,16 @@ Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 		<portlet:namespace/>displayChange(nullToStr(e.data.jobStatus),e.data.workbenchType,e.data.isEdit);
 	} 
 });
+
+Liferay.on(OSP.Event.OSP_RESPONSE_JOB_CONTROLL_RESET,function(e){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
+		console.log('OSP_RESPONSE_JOB_CONTROLL_RESET: ['+e.portletId+', '+new Date()+']', e.data);
+		<portlet:namespace/>displayChange("INIT",e.data.workbenchType,true);
+	} 
+});
+
+
 
 Liferay.on(OSP.Event.OSP_RESPONSE_COLLECTION_VIEW,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
@@ -284,6 +296,8 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 		liObj = $.extend({},<portlet:namespace/>submitLiObj);
 	}else if(status=="CANCELED"){
 		liObj = $.extend({},<portlet:namespace/>cancelLiObj);
+	}else if(status=="INIT"){
+		liObj = $.extend({},<portlet:namespace/>initLiObj);
 	}else{
 		liObj = $.extend({},<portlet:namespace/>defaultLiObj);
 	}
