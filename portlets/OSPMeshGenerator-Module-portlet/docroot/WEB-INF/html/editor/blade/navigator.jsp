@@ -612,12 +612,67 @@ function <portlet:namespace/>returnFileObject(nodes){
 }
 
 function <portlet:namespace/>loadDataFile(isType,parentPath,fileName){
-	if(isType="IS_FILE"){
+	if(isType=="IS_FILE"){
 		$("#<portlet:namespace/>fileSelectedText").attr("data-parent-path",parentPath).attr("data-file-name",fileName).html(fileName);
-	}else if(isType="IS_SAMPLE"){
+		<portlet:namespace/>checkJobDataFile(parentPath,fileName);
+	}else if(isType=="IS_SAMPLE"){
 		$("#<portlet:namespace/>fileSelectedText").attr("data-file-name","sample").html("Sample Selected");
-	}else if(isType="IS_NULL"){
+	}else if(isType=="IS_NULL"){
 		$("#<portlet:namespace/>fileSelectedText").attr("data-file-name","").html("");
+	}
+}
+
+var <portlet:namespace/>checkTimer;
+function <portlet:namespace/>checkJobDataFile(parentPath,fileName){
+	
+	var meshNode = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node("<portlet:namespace/>"+MESH.Constants.MESHES_PARENT_FOLDER_ID,false);
+	if(!meshNode){
+		if(<portlet:namespace/>checkTimer){
+			clearTimeout(<portlet:namespace/>checkTimer);
+		}
+		
+		<portlet:namespace/>checkTimer = setTimeout(function(){
+			<portlet:namespace/>checkJobDataFile(parentPath,fileName)
+		}, 500);
+	}else{
+		if(<portlet:namespace/>checkTimer){
+			clearTimeout(<portlet:namespace/>checkTimer);
+		}
+		var isFileExist = false;
+		var nodes = meshNode.children;
+		if (!nodes || nodes.length == 0){
+			isFileExist = false;
+        }else{
+			for (var i = 0, x = nodes.length; i < x; i++) {
+				var fileObject = new Object();
+				var treeData = $("#<portlet:namespace/>navigatorTree").jstree(true).get_node(nodes[i],false);
+				if(treeData.text==fileName){
+					isFileExist = true;
+					break;
+				}
+			}
+		}
+		
+		if(!isFileExist){
+			var fileId = <portlet:namespace/>getFileIdFromInputData(parentPath,fileName);
+			var data = new MESH.data();
+			data.file(fileId);
+			data.nodeType(MESH.Constants.TYPE_VIEW_MESH);
+			
+			var node = new MESH.node();
+			node.addNode(fileName, MESH.Constants.NODE_VIEW_FILE, OSP.Util.toJSON(data));
+			
+			var parentId = "<portlet:namespace/>"+MESH.Constants.MESHES_PARENT_FOLDER_ID;
+			<portlet:namespace/>addNode(parentId,node);
+			
+			var fileArray = new Array();
+			var fileObject = new Object();
+			fileObject.fileId = fileId;
+			fileObject.name = fileName;
+			fileArray.push(fileObject);
+			
+			<portlet:namespace/>callMeshAnalyzerAddObject("add.mesh",fileArray);
+		}
 	}
 }
 
@@ -823,8 +878,6 @@ function <portlet:namespace/>removeNode(){
 						});
 						
 						<portlet:namespace/>callMeshAnalyzerAddObject(command,fileArray);
-						
-						$("#<portlet:namespace/>controllpanel").hide();
 					}
 					
 					<portlet:namespace/>updateProject('none');
@@ -834,6 +887,8 @@ function <portlet:namespace/>removeNode(){
 					tree.delete_node(selectNode);
 					
 					<portlet:namespace/>updateProject("none");
+					
+					$("#<portlet:namespace/>controllpanel").hide();
 				}
 			},
 			cancel: function () {

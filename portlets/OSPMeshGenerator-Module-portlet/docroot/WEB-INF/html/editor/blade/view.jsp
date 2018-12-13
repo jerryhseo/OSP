@@ -283,7 +283,9 @@ function <portlet:namespace/>fireDataChangeWorkbenchEvent(parentPath,fileName){
 
 
 function <portlet:namespace/>takeSample(){
-	$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
-	<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_SAMPLE_SELECTED);
+	if(!<portlet:namespace/>isBlock){
+		$("#<portlet:namespace/>fileSelectedText").html("Sample Selected");
+		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_SAMPLE_SELECTED);
+	}
 }
 </script>
