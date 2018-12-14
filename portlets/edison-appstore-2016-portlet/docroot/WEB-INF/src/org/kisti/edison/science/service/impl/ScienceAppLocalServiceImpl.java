@@ -1907,6 +1907,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		scienceApp.setMinCpus(GetterUtil.getInteger(params.get("minCpus"), 0));
 		scienceApp.setMaxCpus(GetterUtil.getInteger(params.get("maxCpus"), 0));
 		scienceApp.setDefaultCpus(GetterUtil.getInteger(params.get("defaultCpus"), 0));
+		scienceApp.setCluster(CustomUtil.strNull(params.get("cluster")));
 		scienceApp.setModifiedDate(new Date());
 		scienceApp.setRecentModifierId(sc.getUserId());
 
