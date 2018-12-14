@@ -76,9 +76,11 @@ public class MyPageController {
 	8. 내 워크스페이스(myWorkspace)
 	9. 나의 콘텐츠(myContent)
 	10. 나의 프로젝트(myProject)
-	11. 사이트 가입/탈퇴(siteJoin)
-	12. 나의이력관리(myHistory)
-	13. 가스터빈 myFile(eturbMyFile)
+	11. 나의 데이터(my_Data)
+	12. 나의 노트북(myNotebook)
+	13. 사이트 가입/탈퇴(siteJoin)
+	14. 나의이력관리(myHistory)
+	15. 가스터빈 myFile(eturbMyFile)
  * 
  */
 	
@@ -207,6 +209,16 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 			if(tab.contains("eturbMyFile")){
 				tabName=LanguageUtil.get(locale,"edison-myfile-title");
 				tabValue = "eturbMyFile";
+			}
+			
+			if(tab.contains("my_Data")){
+				tabName=LanguageUtil.get(locale,"edison-default-my-data-title");
+				tabValue = "my_Data";
+			}
+			
+			if(tab.contains("myNotebook")){
+				tabName=LanguageUtil.get(locale,"edison-default-my-notebook-title");
+				tabValue = "myNotebook";
 			}
 			
 			if(liClass.contains("select")){                 

@@ -32,8 +32,7 @@
 		jspFile = "edisontab_WAR_edisonsimulationportlet";
 	}else if(clickTab.equals("myApp")){
 		jspFile = "scienceappmanager_WAR_edisonappstore2016portlet";
-	}
-	else if(clickTab.equals("myContent")){
+	}else if(clickTab.equals("myContent")){
 		jspFile = "edisoncontent_WAR_edisoncontent2016portlet";
 	}else if(clickTab.equals("myProject")){
 		jspFile = "edisonsimulationproject_WAR_edisonsimulationproject2017portlet";
@@ -43,6 +42,10 @@
 		jspFile = "edisonprofessormanagement_WAR_edisonvirtuallab2016portlet";
 	}else if(clickTab.equals("eturbMyFile")){
 		jspFile = "simulationmonitoringtreeview_WAR_eturbportlet";
+	}else if(clickTab.equals("my_Data")){
+		jspFile = "edisondatatypeeditor_WAR_edisonappstore2016portlet";
+	}else if(clickTab.equals("myNotebook")){
+		jspFile = "edisondatatypeeditor_WAR_edisonappstore2016portlet";
 	}
 %>
 <div>
