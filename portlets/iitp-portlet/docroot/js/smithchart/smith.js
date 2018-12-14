@@ -160,6 +160,7 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
   
   smith.chart.prototype.addPointLine = function(preMouseX,preMouseY,curMouserX,curMouseY,elementType){
 	  var mouserData = chart.getPointValue(curMouserX,curMouseY);
+	  
 	  var x=0;
 	  var y=0;
 	  var r=0;
@@ -224,14 +225,14 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
   smith.chart.prototype.addMarkerFromMouse = function(svg, real,imag,mouseX,mouseY,id,className){
 	  svg.append('circle')
 	      .attr('fill','#2196F3')
+	      .attr('stroke', 'none')
 	      .attr('cx',mouseX)
 	      .attr('cy',mouseY)
 	      .attr('real',real)
 	      .attr('imaginary',imag)
-	      .attr('r',5)
+	      .attr('r',6)
 	      .attr('id',id)
 	      .attr('class',className)
-	      .attr("stroke-width", 2);
   }
 	
   smith.chart.prototype.getPointPosition = function(real,imag){
@@ -337,12 +338,26 @@ smith.chart.prototype.getPointValue = function(mouseX,mouseY){
       .attr('stroke-width',this.strokeWidth);
         
         
-    svg.append('clipPath')
-      .attr('id','chart-area')
-      .append('circle')
-      .attr('cx',Rcx(0))
-      .attr('cy',Rcy(0))
-      .attr('r',rScale(this.radius)+this.strokeWidth/2);
+    var clipPath = svg.append('clipPath')
+				      .attr('id','chart-area');
+    
+    clipPath.append('circle')
+	      .attr('cx',Rcx(0))
+	      .attr('cy',Rcy(0))
+	      .attr('r',rScale(this.radius)+this.strokeWidth/2);
+
+    
+    var clipPathLine = d3.path();
+    clipPathLine.arc(Rcx(0), Rcy(0), rScale(this.radius)+this.strokeWidth/2, 0, (2 * Math.PI), true);
+    var clipPathArc = clipPathLine.toString();
+    
+	clipPath.append('path')
+        .attr('id', 'chart-area-path')
+        .attr('stroke', 'blue')
+        .attr('stroke-width', 2)
+		.attr('d', clipPathArc);
+    
+    
 
     var lCircles = svg.selectAll('circle.l')
                         .data(this.r)
