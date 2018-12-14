@@ -910,10 +910,28 @@ public class AppManagerController{
 					}
 					activateTab++;
 				}
-				
-				if(scienceApp.getIsStepLayout()){
-					if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
-						if(appLayoutStepValidation(scienceApp)){
+				if(scienceApp.getIsStepLayout()!=null){
+					if(scienceApp.getIsStepLayout()){
+						if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
+							if(appLayoutStepValidation(scienceApp)){
+								if(clickTab.equals("m04")){
+									tabsStr +=",m04over";
+								}else{
+									tabsStr +=",m04out";
+								}
+								activateTab++;
+								
+								appTestButtonView = true;
+							}else{
+								tabsStr +=",m04fail";
+								appStatusButtonView = false;
+							}
+						}else{
+							tabsStr +=",m04fail";
+							appStatusButtonView = false;
+						}
+					}else{
+						if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
 							if(clickTab.equals("m04")){
 								tabsStr +=",m04over";
 							}else{
@@ -926,24 +944,10 @@ public class AppManagerController{
 							tabsStr +=",m04fail";
 							appStatusButtonView = false;
 						}
-					}else{
-						tabsStr +=",m04fail";
-						appStatusButtonView = false;
 					}
 				}else{
-					if(!GetterUtil.getString(scienceApp.getLayout(),"").equals("")){
-						if(clickTab.equals("m04")){
-							tabsStr +=",m04over";
-						}else{
-							tabsStr +=",m04out";
-						}
-						activateTab++;
-						
-						appTestButtonView = true;
-					}else{
-						tabsStr +=",m04fail";
-						appStatusButtonView = false;
-					}
+					tabsStr +=",m04fail";
+					appStatusButtonView = false;
 				}
 			}
 			
