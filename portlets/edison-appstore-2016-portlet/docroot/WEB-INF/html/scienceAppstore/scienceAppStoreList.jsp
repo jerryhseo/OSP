@@ -405,6 +405,7 @@
 		document.searchParamForm.<portlet:namespace/>p_curPage.value = p_curPage;
 		var searchForm = $("form[name=searchParamForm]").serialize();
 		
+		bStart();
 		jQuery.ajax({
 			type: "POST",
 			url: "<%=resorceSearchURL%>",
@@ -465,7 +466,6 @@
 						
 						var modifiedDate = new Date(dataMap.dateList[i]);
 						$("<td/>").text( $.format.date(modifiedDate, "yyyy-MM-dd") ).addClass("TC").attr("stateDate", new Date(dataMap.dataList[i].statusDate)).appendTo($vRow);
-	
 						
 						/* 메뉴얼 */
 						if(typeof dataMap.dataList[i].manualId != "number"){
@@ -540,8 +540,9 @@
 				document.getElementById("pageListDiv").innerHTML = dataMap.pageList;
 			},
 			error:function(msg){
-				alert("System Exception : " + msg);
+				console.log("ajax DOM error", msg);
 			},complete: function(){
+				bEnd();
 			}
 		});
 	}
