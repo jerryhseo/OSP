@@ -235,7 +235,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
 		if(e.data.status){
 			toastr["success"]("", Liferay.Language.get('edison-data-delete-success'));
 			$("li#<portlet:namespace/>job-"+e.data.jobUuid).remove();
-			<portlet:namespace/>selectRow(e.data.simulationUuid,'');
+			<portlet:namespace/>selectRow(e.data.simulationUuid);
 			<portlet:namespace/>removeProjectShare(e.data.jobUuid,'JOB');
 		}else{
 			toastr["error"]("", Liferay.Language.get('edison-data-delete-error'));
@@ -275,6 +275,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SUBMIT_JOB_RESULT, function( e ){
 
 Liferay.on(OSP.Event.OSP_REFRESH_SIMULATIONS, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
+	console.log('OSP_REFRESH_SIMULATIONS: ['+e.portletId+', '+new Date()+']', e.data);
 	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
 		<portlet:namespace/>searchJobUUid = nullToStr(e.data.searchJobUuid);
 		<portlet:namespace/>searchSimulation(nullToStr(e.data.simulationUuid),nullToStr(e.data.searchJobUuid));
@@ -502,14 +503,16 @@ function <portlet:namespace/>selectRow(simulationUuid, jobUuid){
 	if(size==0){
 		<portlet:namespace/>searchSimulationJob(simulationUuid);
 	}
-	
-	setTimeout(function(){
+	var <portlet:namespace/>rowTimer;
+	<portlet:namespace/>rowTimer = setTimeout(function(){
 		if(nullToStr(jobUuid)===''){
 			$topUl.find("li.job-list:first > a").trigger('click');
 		}else{
 			$topUl.find("li#<portlet:namespace/>job-"+jobUuid+" > a").trigger('click');
 		}
-		
+		if(<portlet:namespace/>rowTimer){
+			clearTimeout(<portlet:namespace/>rowTimer);
+		}
 	}, 500);
 }
 

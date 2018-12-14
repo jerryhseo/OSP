@@ -1128,6 +1128,7 @@ public class LayoutController {
 			
 			if( result.getInt("error") > 0 ){
 				_log.error("Job submission failed: "+ result.getInt("error"));
+				throw new PortletException("Job submission failed: "+ result.getInt("error"));
 			}else{
 				if(submittedJobUuid.equals("")){
 					submittedJobUuid = result.getString("uuid");

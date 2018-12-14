@@ -88,8 +88,7 @@ public class ParameterController {
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
-//			out.write("{\"isComplete\": " + isCompleteAnalyzer + "}");
-			out.write("{\"isComplete\": " + true + "}");
+			out.write("{\"isComplete\": " + isCompleteAnalyzer + "}");
 		}catch (Exception e) {
 			e.printStackTrace();
 			handleRuntimeException(e, PortalUtil.getHttpServletResponse(response),LanguageUtil.get(themeDisplay.getLocale(), "edison-data-search-error"));

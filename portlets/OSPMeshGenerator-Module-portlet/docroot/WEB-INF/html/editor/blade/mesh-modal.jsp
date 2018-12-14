@@ -256,7 +256,7 @@ function <portlet:namespace/>submitMeshData(meshData, analyzerUuid){
 		var stringMeshData = JSON.stringify(meshData);
 		var postData = {
 			"<portlet:namespace/>appName" : MESH.Constants.getMakeMeshApp('${type}'),
-			"<portlet:namespace/>appVersion" : DASH.Constants.MAKE_MESH_AERO_2D_VERSION,
+			"<portlet:namespace/>appVersion" : MESH.Constants.MAKE_MESH_AERO_2D_VERSION,
 			"<portlet:namespace/>analyzerUuid" : analyzerUuid,
 			"<portlet:namespace/>meshData" : stringMeshData,
 			"<portlet:namespace/>projectId" : <portlet:namespace/>projectId
@@ -270,8 +270,8 @@ function <portlet:namespace/>submitMeshData(meshData, analyzerUuid){
 				if(meshOutput.isComplete){
 					<portlet:namespace/>addMeshDataNode(meshOutput.analyzerJob,meshOutput.fileId,meshOutput.fileName);
 					<portlet:namespace/>updateProject(false);
-				}else{alert("Mesh program can not be executed.");
-					
+				}else{
+					alert("Mesh program can not be executed.");
 				}
 				bEnd();
 			},error:function(jqXHR, textStatus, errorThrown){
@@ -344,17 +344,17 @@ function <portlet:namespace/>addMeshDataNode(analyzerJob,fileId,fileName){
 		var outputData = new OSP.InputData(analyzerJob.outputData);
 		prevNode.data.analyzerJob = analyzerJob;
 	}else{
-		var parentNodeId = "<portlet:namespace/>" + DASH.Constants.MESHES_PARENT_FOLDER_ID;
+		var parentNodeId = "<portlet:namespace/>" + MESH.Constants.MESHES_PARENT_FOLDER_ID;
 		var outputData = new OSP.InputData(analyzerJob.outputData);
-		var nodeData = new DASH.data();
+		var nodeData = new MESH.data();
 		nodeData.executeId(analyzerJob.analyzerUuid);
 		nodeData.file(fileId);
-		nodeData.nodeType(DASH.Constants.TYPE_VIEW_MESH);
+		nodeData.nodeType(MESH.Constants.TYPE_VIEW_MESH);
 		nodeData.analyzerJob = analyzerJob;
 		var meshDataNode = {
 				"id": analyzerJob.analyzerUuid,
 				"text": fileName,
-				"type": DASH.Constants.NODE_VIEW_FILE,
+				"type": MESH.Constants.NODE_VIEW_FILE,
 				"data": nodeData
 		};
 		
@@ -364,7 +364,7 @@ function <portlet:namespace/>addMeshDataNode(analyzerJob,fileId,fileName){
 		fileObject.fileId = fileId;
 		fileObject.name = fileName;
 		fileArray.push(fileObject);
-// 		<portlet:namespace/>callETurbAnalyzerAddObject("add.mesh", fileArray);
+		<portlet:namespace/>callMeshAnalyzerAddObject("add.mesh", fileArray);
 	}
 }
 

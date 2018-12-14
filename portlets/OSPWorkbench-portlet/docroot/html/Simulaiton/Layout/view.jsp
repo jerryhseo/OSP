@@ -171,6 +171,7 @@ var toastr;
 
 
 var <portlet:namespace/>lodingPortlets = JSON.parse('${lodingPortlets}');
+var <portlet:namespace/>displayTimer;
 /***********************************************************************
  * Initailization section and handling Liferay events
  ***********************************************************************/
@@ -327,7 +328,7 @@ $(function(e) {
 	
 	
 	//time out - 5 sec
-	setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
+	<portlet:namespace/>displayTimer = setTimeout(function(){ <portlet:namespace/>displayInit(); }, 1000*5);
 });
 
 /***********************************************************************
@@ -578,6 +579,7 @@ Liferay.on(OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE,function( e ){
 
 Liferay.on(OSP.Event.OSP_REFRESH_JOB_STATUS,function(e){
 	var myId = '<%=portletDisplay.getId()%>';
+	console.log('OSP_REFRESH_JOB_STATUS: ['+e.portletId+', '+new Date()+']', e.data);
 	if(e.targetPortlet === myId||e.targetPortlet === "BROADCAST"){
 		<portlet:namespace/>flowDisplayChange(nullToStr(e.data.flowLayoutCode));
 	}
@@ -745,6 +747,10 @@ function <portlet:namespace/>displayInit(){
 		Liferay.fire(OSP.Event.OSP_REFRESH_SIMULATIONS, eventData);
 	}
 	bEnd();
+	
+	if(<portlet:namespace/>displayTimer){
+		clearTimeout(<portlet:namespace/>displayTimer);
+	}
 }
 
 function <portlet:namespace/>flowDisplayChange(flowLayoutCode){

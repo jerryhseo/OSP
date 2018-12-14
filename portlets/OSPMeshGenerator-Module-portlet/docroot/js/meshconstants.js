@@ -60,9 +60,9 @@
 		getShapeAnalysisParamAppVersion:function(type){
 			switch (type) {
 				case 'BLADE':
-					return '1.0.1';
-				case 'MESH':
 					return '1.0.0';
+				case 'MESH':
+					return '1.0.1';
 			}
 		},
 		getShapeAnalysisApp:function(type){
@@ -76,17 +76,17 @@
 		getShapeAnalysisAppVersion:function(type){
 			switch (type) {
 				case 'BLADE':
-					return '1.0.1';
-				case 'MESH':
 					return '1.0.0';
+				case 'MESH':
+					return '1.0.1';
 			}
 		},
 		getMakeMeshApp:function(type){
 			switch (type) {
 			case 'BLADE':
-				return 'KGRID';
-			case 'MESH':
 				return 'Mesher';
+			case 'MESH':
+				return 'KGRID';
 		}
 		},
 		MAKE_MESH_AERO_2D_VERSION:'1.0.0',

@@ -414,42 +414,48 @@ function <portlet:namespace/>createParameterNode(analyzerJob, geoNode, selectedN
 }
 
 function <portlet:namespace/>prepareAnalyzer(appName, appVersion, geoNode, fileContent, draw){
-	var geoNodeFileId = geoNode.data[MESH.Constants.DATA_FILE_ID];
-	var analyzerUuid = "";
-	if($("#<portlet:namespace/>navigatorTree").jstree(true).is_parent(geoNode)){
-		analyzerUuid = geoNode.children[0];
-	}
-	
-	$.ajax({
-		url : '${prepareAnalyzerURL}',
-		type : 'POST',
-		dataType : 'json',
-		data : {
-			"<portlet:namespace/>appName" : appName,
-			"<portlet:namespace/>appVersion" : appVersion,
-			"<portlet:namespace/>fileId" : geoNodeFileId,
-			"<portlet:namespace/>analyzerUuid" : analyzerUuid
-		},
-		success : function(analyzerJob){
-			if(draw){
-				<portlet:namespace/>createParameterNode(analyzerJob, geoNode, true);
-				<portlet:namespace/>executeAnalyzer(analyzerJob, "input.inp", geoNode.data[MESH.Constants.DATA_FILE_ID],fileContent);
-			}else{
-				<portlet:namespace/>createParameterNode(analyzerJob, geoNode, false);
-				<portlet:namespace/>executeAnalyzer(analyzerJob, geoNode.text, geoNode.data[MESH.Constants.DATA_FILE_ID],'');
-				
-// 				var result = <portlet:namespace/>executeAnalyzer(analyzerJob, geoNode.text, geoNode.data[MESH.Constants.DATA_FILE_ID],'');
-// 				if(result){
-// 					<portlet:namespace/>createParameterNode(analyzerJob, geoNode, false);
-// 				}
-			}
-		},
-		error : function(){
-			if(console){
-				console.log('[ERROR] AJAX FAILED during prepareAnalyzer');
-			}
+	bStart();
+	<portlet:namespace/>currentTimeOut = setTimeout(function(){
+		var geoNodeFileId = geoNode.data[MESH.Constants.DATA_FILE_ID];
+		var analyzerUuid = "";
+		if($("#<portlet:namespace/>navigatorTree").jstree(true).is_parent(geoNode)){
+			analyzerUuid = geoNode.children[0];
 		}
-	});
+		
+		$.ajax({
+			url : '${prepareAnalyzerURL}',
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				"<portlet:namespace/>appName" : appName,
+				"<portlet:namespace/>appVersion" : appVersion,
+				"<portlet:namespace/>fileId" : geoNodeFileId,
+				"<portlet:namespace/>analyzerUuid" : analyzerUuid
+			},
+			success : function(analyzerJob){
+				if(draw){
+					<portlet:namespace/>createParameterNode(analyzerJob, geoNode, true);
+					<portlet:namespace/>executeAnalyzer(analyzerJob, "input.inp", geoNode.data[MESH.Constants.DATA_FILE_ID],fileContent);
+				}else{
+					<portlet:namespace/>createParameterNode(analyzerJob, geoNode, false);
+					<portlet:namespace/>executeAnalyzer(analyzerJob, geoNode.text, geoNode.data[MESH.Constants.DATA_FILE_ID],'');
+				}
+			},
+			error : function(){
+				if(console){
+					console.log('[ERROR] AJAX FAILED during prepareAnalyzer');
+				}
+				bEnd();
+			},
+			complete : function() {
+				if(<portlet:namespace/>currentTimeOut){
+					clearTimeout(<portlet:namespace/>currentTimeOut);
+				}
+				bEnd();
+			}
+		});
+	},1000);
+	
 }
 
 function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId, fileContent){
@@ -466,7 +472,7 @@ function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId,
 		},
 		success : function(result){
 			if(result.isComplete){
-// 				<portlet:namespace/>setXYPlotterResultPath(analyzerJob);
+				<portlet:namespace/>setXYPlotterResultPath(analyzerJob);
 				<portlet:namespace/>checkAnalyzerJob(analyzerJob);
 				return true;
 			}else{
@@ -486,7 +492,6 @@ function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId,
 }
 
 function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
-	/*parameter 프로그래스 필요*/
 	$.ajax({
 		url : '${checkAnalyzerURL}',
 		type : 'POST',
@@ -922,10 +927,13 @@ function <portlet:namespace/>parameterInitEditor(type,structure,instance){
 }
 
 function <portlet:namespace/>parameterDraw(){
+	
 	var eventData = {
 		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric'
 	};
-	setTimeout(function(){
+	
+	bStart();
+	<portlet:namespace/>currentTimeOut = setTimeout(function(){
 	    Liferay.fire( OSP.Event.OSP_REQUEST_DATA, eventData );
 	},1000);
 		
@@ -934,6 +942,11 @@ function <portlet:namespace/>parameterDraw(){
 /*ParameterDraw befor Request Data after this function*/
 Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	if(e.portletId == "StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric"){
+		bEnd();
+		if(<portlet:namespace/>currentTimeOut){
+			clearTimeout(<portlet:namespace/>currentTimeOut);
+		}
+		
 		var tree = $("#<portlet:namespace/>navigatorTree").jstree(true);
 		var selectNode = $("#<portlet:namespace/>navigatorTree").jstree("get_selected");
 		var node = tree.get_node(selectNode);

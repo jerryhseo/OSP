@@ -68,8 +68,12 @@ public class ExecuteLocalServiceImpl extends ExecuteLocalServiceBaseImpl {
 				AnalyzerJob analyzerJob = new Gson().fromJson(execute.getExecuteDataStructure(),AnalyzerJob.class);
 				Path path = Paths.get(CustomUtil.strNull(analyzerJob.getResultPath()));
 				
-				FileUtils.cleanDirectory(path.getParent().toFile());
-				path.getParent().toAbsolutePath().toFile().delete();
+				try{
+					FileUtils.cleanDirectory(path.getParent().toFile());
+					path.getParent().toAbsolutePath().toFile().delete();
+				}catch (IllegalArgumentException e) {
+					
+				}
 			}
 			
 			super.executePersistence.remove(execute);

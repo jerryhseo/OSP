@@ -76,6 +76,7 @@ var <portlet:namespace/>isBlock = false;
 var <portlet:namespace/>vcToken = "";
 var <portlet:namespace/>jobUserName = "";
 var <portlet:namespace/>currentUserName = "${currentUserName}";
+var <portlet:namespace/>currentTimeOut;
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/

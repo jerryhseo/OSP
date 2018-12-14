@@ -186,7 +186,7 @@ public class MeshAppHelper {
 			ExecuteLocalServiceUtil.simulationWithInputFile(projectId, analyzerJob, fileContent, inputFilePath);
 		}
 		
-//		doAnalyzer(exeFile, inputFilePath, resultPath);
+		doAnalyzer(exeFile, inputFilePath, resultPath);
 		return true;
 	}
 	
@@ -210,7 +210,12 @@ public class MeshAppHelper {
 	
 	public String getOutputData(String portName, String analyzerOutput){
 		JSONObject outputPorts = (JSONObject) JSONSerializer.toJSON(analyzerOutput);
-		return outputPorts.getJSONObject(portName).getString("outputData_");
+		if(outputPorts.has(portName)){
+			return outputPorts.getJSONObject(portName).getString("outputData_");
+		}else{
+			return "";
+		}
+		
 	}
 	
 	public void removeRemoteFilePath(ThemeDisplay themeDisplay, AnalyzerJob analyzerJob,User user) throws SystemException, IOException{
