@@ -475,6 +475,10 @@
 				cursor: pointer;
 			}
 			
+			.<portlet:namespace/>review-text-area{
+				resize: none;
+			}
+			
 		/* End - Rating Popup Setting */
 	/* Strat - Content Panel CSS */
 	
@@ -524,17 +528,19 @@
 			float: none !important;
 		}
 		.<portlet:namespace/>review-input-group button{
-			margin-top: 10px !important;
-			padding: 6px 12px !important;
+			margin-top: 0px !important;
+		}
+		
+		.<portlet:namespace/>review-input-group button.update-btn,
+		.<portlet:namespace/>review-input-group button.cancel-btn{
+			font-size: 15px;
+			padding: 0px 15px !important;
 		}
 	}
 	
 	
 	@media all and (max-width: 1000px){
 		#<portlet:namespace/>scienceAppImage{
-			display: none;
-		}
-		#<portlet:namespace/>scienceAppTitle{
 			display: none;
 		}
 	}
@@ -561,11 +567,11 @@
 	}
 	
 	/* 관련 정보 */
-	#<portlet:namespace/>scienceAppRelateData{
+	#<portlet:namespace/>scienceAppRelateInfo{
 		display: none;
 	}
 	
-	#<portlet:namespace/>scienceAppRelateData .box-body{
+	#<portlet:namespace/>scienceAppRelateInfo .box-body{
 		white-space: pre-line;
 	}
 	
@@ -638,6 +644,49 @@
 		padding-right: 45px !important;
 	}
 	
+	#<portlet:namespace/>reviewRegistTitle{
+		font-size: 18px;
+		border-top: 3px solid #efefef;
+		border-bottom: 3px solid #efefef;
+		border-left: 2px solid #efefef;
+		border-right: 2px solid #efefef;
+		border-radius: 10px;
+	}
+	
+	#<portlet:namespace/>inputPortTable,
+	#<portlet:namespace/>logPortTable,
+	#<portlet:namespace/>outputPortTable{
+		border-top: 2px solid #327bb9;
+	}
+	
+	#<portlet:namespace/>scienceAppTitle{
+		padding:17px;
+		background-color:#f1f1f1;
+		border-radius:7px; 
+		color:#383838; 
+		font-size:25px;
+	}
+	
+	#<portlet:namespace/>contentTabMenu{
+		background-color: #cdd8e4;
+	}
+	
+	.box-body,
+	#<portlet:namespace/>contentDetailInfo{
+		padding: 17px !important;
+	}
+	
+	.content{
+		padding: 20px !important;
+	}
+	
+	.<portlet:namespace/>scienceAppCategoryList{
+		background-color: #9babc7 !important;
+	}
+	
+	.<portlet:namespace/>science-app-relate-data-table{
+		border-top : 2px solid #327bb9 !important;
+	}
 	</style>
 	
 	<!-- 2018. 11. 06 CSS 변경 -->
@@ -676,15 +725,6 @@
 	<div class=" skin-blue sidebar-menu sidebar-mini">
 		<div class="content-wrapper" style="margin-left: 0px;">
 			
-			<!-- Title -->
-			<section id="<portlet:namespace/>scienceAppTitle" class="content-header <portlet:namespace/>science-app-title" style="max-width: 1200px; margin-left: auto; margin-right: auto;">
-				<h1>${solver.name}</h1>
-				<!-- <ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i>EDISON CFD</a></li>
-					<li class="active">유동 범용 해석</li>
-				</ol> -->
-			</section>
-			
 			<section id="<portlet:namespace/>scienceAppContent" class="content <portlet:namespace/>science-app-content" style="max-width: 1200px;">
 				<div class="row">
 					<!-- ScienceApp Info -->
@@ -693,13 +733,8 @@
 							<div class="box-body box-profile">
 								<!-- <img  src="./img/sumnail.png" alt="2D Comp P"> -->
 								<img class="profile-user-img img-responsive" alt="${solver.currentTitle}" src="/documents/${solver.iconRepositoryId}/${solver.iconId}/${solver.iconTitle}/${solver.iconUuid}?imageThumbnail=2" width="104px" style="height: 78px !important;" onerror="this.src='${contextPath}/images/comm_proj/noimage.png'">
-				
-								<h3 class="profile-username text-center" style="word-break: break-all; white-space: pre-line;">
-									${solver.currentTitle}
-								</h3>
-				
-								<!-- <a href="#" class="btn btn-info " style="width: 49%;"><i class="fa fa-book" style="margin-right: 5px;"></i><b>Manual</b></a>
-								<a href="#" class="btn btn-primary " style="width: 49%;"><b><i class="fa fa-play-circle-o" style="margin-right: 5px;"></i>Run</b></a> -->
+								
+								<div class="h20"></div>
 								
 								<c:if test="${!empty solver.current_manualId}">
 									<a class="btn btn-info <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>fileDownload('${solver.current_manualId}');">
@@ -726,6 +761,39 @@
 								
 								<ul class="list-group list-group-unbordered" style="margin-top: 10px; margin-bottom: 0px; word-break: break-all; white-space: pre-line;">
 									
+									
+									<li class="list-group-item">
+										<b><liferay-ui:message key='edison-appstore-solver-name' /></b> 
+										<a class="pull-right">${solver.name}</a>
+									</li>
+									
+									<li class="list-group-item">
+										<b><liferay-ui:message key='version' /></b> 
+										<a class="pull-right">${solver.version}</a>
+									</li>
+									<li class="list-group-item">
+										<b><liferay-ui:message key='edison-science-appstore-view-app-type' /></b> 
+										<a class="pull-right">${solver.appType}</a>
+									</li>
+									<li class="list-group-item" style="display: inline-block; width: 100%;">
+										<b><liferay-ui:message key='developer' /></b> 
+										<a class="pull-right">
+											<c:forEach var="developer" items="${solver.developers }" varStatus="status">
+												<c:if test="${not status.last}"><p style="margin: 0 0 12px 22px;">${developer}</p></c:if>
+												<c:if test="${status.last}"><p style="margin: 0 0 0 22px;">${developer}</p></c:if>
+											</c:forEach>
+										</a>
+									</li>
+									<li class="list-group-item">
+										<b><liferay-ui:message key='edison-table-list-header-date' /></b> 
+										<a class="pull-right">${solver.statusDate}</a>
+									</li>
+									
+									<li class="list-group-item" onclick="<portlet:namespace/>myScienceAppRating();" style="cursor:pointer;">
+										<b><liferay-ui:message key='edison-science-appstore-view-tab-rating' /></b> 
+										<a class="pull-right">${averageScore} (${totalEntries} vote)</a>
+									</li>
+									
 									<% if(isLogin) {%>
 										<li class="list-group-item">
 											<b><liferay-ui:message key='edison-appstore-bookmark' /></b> 
@@ -743,33 +811,6 @@
 										
 										
 									<%} %>
-									
-									<li class="list-group-item" onclick="<portlet:namespace/>myScienceAppRating();" style="cursor:pointer;">
-										<b><liferay-ui:message key='edison-science-appstore-view-tab-rating' /></b> 
-										<a class="pull-right">${averageScore} (${totalEntries} vote)</a>
-									</li>
-									
-									<li class="list-group-item">
-										<b><liferay-ui:message key='version' /></b> 
-										<a class="pull-right">${solver.version}</a>
-									</li>
-									<li class="list-group-item">
-										<b><liferay-ui:message key='edison-science-appstore-view-app-type' /></b> 
-										<a class="pull-right">${solver.appType}</a>
-									</li>
-									<li class="list-group-item">
-										<b><liferay-ui:message key='developer' /></b> 
-										<a class="pull-right">
-											<c:forEach var="developer" items="${solver.developers }" varStatus="status">
-												<c:if test="${not status.last}"><p style="margin: 0 0 12px 22px;">${developer}</p></c:if>
-												<c:if test="${status.last}"><p style="margin: 0 0 0 22px;">${developer}</p></c:if>
-											</c:forEach>
-										</a>
-									</li>
-									<li class="list-group-item">
-										<b><liferay-ui:message key='edison-table-list-header-date' /></b> 
-										<a class="pull-right">${solver.statusDate}</a>
-									</li>
 								</ul>
 								
 							</div>
@@ -782,10 +823,10 @@
 									<liferay-ui:message key='edison-science-appstore-view-tab-category' />
 								</strong>
 								
-								<p>
+								<p style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
 									<c:if test="${childrenCategoryList ne null}">
 										<c:forEach var="childrenCategory" items="${childrenCategoryList}" varStatus="status">
-											<span class="label label-danger">${childrenCategory.name}</span>
+											<span class="label <portlet:namespace/>scienceAppCategoryList">${childrenCategory.name}</span>
 										</c:forEach>
 									</c:if>
 								</p>
@@ -795,9 +836,12 @@
 									<i class="fa fa-book margin-r-5"></i> 
 									<liferay-ui:message key='statistics' />
 								</strong>
-								<p class="text-muted" style="margin-left: 10px;">
+								<p class="text-muted" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
+									<i class="icon-user"></i>&nbsp;&nbsp;
 									Simulation Users : <fmt:formatNumber value="${simulationUsersCnt}" pattern="#,###" /> <br>
-									SImulation Runs : <fmt:formatNumber value="${exeCnt}" pattern="#,###" />
+									
+									<i class="icon-cogs"></i>&nbsp;
+									Simulation Runs : <fmt:formatNumber value="${exeCnt}" pattern="#,###" />
 								</p>
 								
 								<hr>
@@ -807,19 +851,23 @@
 									<liferay-ui:message key='related-content' />
 								</strong>
 								
-								<p class="text-muted" style="margin-left: 10px;">
+								<p class="text-muted" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
+									<img src="${contextPath}/images/comm_proj/icon01.png" width="13" height="12">&nbsp;
 									<liferay-ui:message key="org.kisti.edison.science.model.ScienceApp" /> : 
 									<span id="<portlet:namespace/>appInfoScienceAppCnt"></span>
 									<br/>
 									
+									<img src="${contextPath}/images/comm_proj/icon02.png" width="13" height="12">&nbsp;
 									<liferay-ui:message key="org.kisti.edison.content.model.Content" /> : 
 									<span id="<portlet:namespace/>appInfoContentCnt"></span>
 									<br/>
 									
+									<img src="${contextPath}/images/comm_proj/icon04.png" width="13" height="12">&nbsp;
 									<liferay-ui:message key="org.kisti.edison.model.SimulationProject" /> : 
 									<span id="<portlet:namespace/>appInfoSimulationCnt"></span>
 									<br/>
 									
+									<img src="${contextPath}/images/comm_proj/icon05.png" width="13" height="12">&nbsp;
 									<liferay-ui:message key="community" /> : 
 									<span id="<portlet:namespace/>appInfoOpenDataCnt"></span>
 								</p>
@@ -838,8 +886,13 @@
 							</ul>
 							
 							<div class="tab-content">
-								<div id="<portlet:namespace/>contentDetailInfo" class="tab-pane" style="padding: 10px">
+								<div id="<portlet:namespace/>contentDetailInfo" class="tab-pane">
 									<div class="post">
+										
+										<h2 id="<portlet:namespace/>scienceAppTitle">${solver.currentTitle}</h2>
+										
+										<div class="h30"></div>
+										
 										<strong>
 											<liferay-ui:message key='edison-science-appstore-view-tab-detail-view' />
 										</strong>
@@ -865,7 +918,7 @@
 											Input Port
 										</strong>
 										
-										<hr>
+										<div class="h20"></div>
 										
 										<table id="<portlet:namespace/>inputPortTable" class="table table-bordered table-hover edison-table">
 											<colgroup>
@@ -889,7 +942,7 @@
 											Log Port
 										</strong>
 										
-										<hr>
+										<div class="h20"></div>
 										
 										<table id="<portlet:namespace/>logPortTable" class="table table-bordered table-hover edison-table">
 											<colgroup>
@@ -913,7 +966,7 @@
 											Output Port
 										</strong>
 										
-										<hr>
+										<div class="h20"></div>
 										
 										<table id="<portlet:namespace/>outputPortTable" class="table table-bordered table-hover edison-table">
 											<colgroup>
@@ -940,20 +993,23 @@
 									<hr>
 									<% if(isLogin) {%>
 									<div id="<portlet:namespace/>contentReviewWrite">
-										<div class="form-group">
+										<div class="form-group" id="<portlet:namespace/>reviewRegistTitle">
 											<div class="box-header">
-												<label>새로운 리뷰 등록</label>
+												<div>
+													<i class="icon-edit"></i>&nbsp;
+													<liferay-ui:message key='edison-science-appstore-review-regist' />
+												</div>
 											</div>
 											<div class="box-body">
-												<textarea id="<portlet:namespace/>newReview" class="form-control" rows="3" placeholder="Type a comment"></textarea>
+												<textarea id="<portlet:namespace/>newReview" class="form-control <portlet:namespace/>review-text-area" rows="3" placeholder="Type a comment"></textarea>
 											</div>
 											<div class="box-footer">
 												<div class="pull-right">
 													<button type="submit" class="btn btn-primary" onclick="<portlet:namespace/>saveReview(0)">
-														<i class="fa fa-check"></i> Save
+														<i class="fa fa-check"></i>&nbsp;Save
 													</button>
 													<button type="button" class="btn btn-default">
-														<i class="fa fa-close"></i> Cancel
+														<i class="fa fa-close"></i>&nbsp;Cancel
 													</button>
 												</div>
 											</div>
@@ -969,16 +1025,48 @@
 											<strong>
 												<liferay-ui:message key='edison-science-app-paper' />
 											</strong>
+											
+											<div class="h10"></div>
+											
 											<div class="box-body">
 											</div>
 											
-											<div class="text-center" style="border-top: 1px solid #f4f4f4;">
+											<div class="text-center">
 											</div>
 										</div>
 									</div>
 									
 									<!-- Relate Data List -->
-									<div id="<portlet:namespace/>scienceAppRelateData" class="post">
+									<%-- <div id="<portlet:namespace/>scienceAppRelateData" class="post">
+										<div class="box-solid edison-panel">
+											<strong>
+												Relation Data
+											</strong>
+											<div class="box-body">
+												<ul class="products-list product-list-in-box">
+													<li class="item _edisonscienceAppstore_WAR_edisonappstore2016portlet_paper-list">
+														<div style="width: 85%; float: left; padding-top: 5px;">Gplus New App Data_1</div>
+														<button class="btn bg-orange margin" onclick="window.open('https://www.edison.re.kr', '_blank');" type="button" style="width: 15%; float: left; font-size: 12px; padding: 4px;">
+															<i class="icon-link"> LINK</i>
+														</button>
+													</li>
+													<li class="item _edisonscienceAppstore_WAR_edisonappstore2016portlet_paper-list">
+														<div style="width: 85%; float: left; padding-top: 5px;">GPLUS TEST APP 관련 데이터</div>
+														<button class="btn bg-orange margin" onclick="window.open('https://www.edison.re.kr', '_blank');" type="button" style="width: 15%; float: left; font-size: 12px; padding: 4px;">
+															<i class="icon-link"> LINK</i>
+														</button>
+													</li>
+												</ul>
+											</div>
+											
+											<div class="text-center" style="border-top: 1px solid #f4f4f4;">
+												<!-- 관련 데이터가 많을 경우 페이징 처리 -->
+											</div>
+										</div>
+									</div> --%>
+									
+									<!-- Relate Data List -->
+									<div id="<portlet:namespace/>scienceAppRelateInfo" class="post">
 										<div class="box-solid edison-panel">
 											<strong>
 												<liferay-ui:message key='edison-science-appstore-view-relate-info' />
@@ -1021,6 +1109,10 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentStatistics" class="tab-pane" style="padding: 10px;">
+									<div id="<portlet:namespace/>scienceAppStatisticsDataEmpty" class="post" style="padding: 10px; text-align: center;">
+										<liferay-ui:message key='edison-workflow-data-empty-message' />
+									</div>
+									
 									<div id="<portlet:namespace/>scienceAppMonthlyExeStatistics" class="post" style="padding: 10px;">
 										<!-- ScienceApp Monthly Statistics -->
 										<strong>
@@ -1099,12 +1191,6 @@
 	<link rel="stylesheet" href="${contextPath}/css/bootstrap-toggle.min.css">
 	<script src="${contextPath}/js/bootstrap-toggle.min.js"></script>
 	
-	<!-- 2018.10.22 _ Markdown JS -->
-	<%-- <script src="${contextPath}/js/marked.js"></script>
-	<script src="${contextPath}/js/bootstrap-markdown.js"></script>
-	<script src="${contextPath}/js/markdown-jquery.filedrop.js"></script>
-	<script src="${contextPath}/js/markdown-script.js"></script> --%>
-	
 <script>
 
 /* 2018.09.13 _ Set toastr */
@@ -1132,6 +1218,14 @@ var chart1;
 /* var solverId = "${params.solverId}"; */
 
 $(document).ready(function(){
+	
+	$("#nsubtopwrap").hide();
+	
+	var url = document.location.toString();
+    if (url.match('#')) {
+        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+        $('.nav-tabs a').removeClass('active');
+    }
 	
 	/* Delete Run Button - Mobile */
 	if(Liferay.Browser.isMobile() && 0 < $(".<portlet:namespace/>executeRun").length){
@@ -1213,7 +1307,7 @@ $(document).ready(function(){
 	<portlet:namespace/>getRelateAssetEntryList("${simulationProjectModelName}", "SIMULATION_PROJECT");
 	
 	/* 앱 리뷰 */
-	<portlet:namespace/>getScienceAppReviewList(0);
+	<portlet:namespace/>getScienceAppReviewList(0, 0);
 	$(".<portlet:namespace/>review-editor").text("");
 	
 	changeLocale("${solver.selectLocaleId}");
@@ -1317,6 +1411,19 @@ function <portlet:namespace/>getScienceAppHistory(){
 	});
 }
 
+/* View Review Input Form */
+function <portlet:namespace/>viewScienceAppReviewInputForm(boardSeq){
+	var inputForm = $("#<portlet:namespace/>reviewInputForm_"+boardSeq);
+	if(inputForm.hasClass("active")){
+		$("#<portlet:namespace/>reply_"+boardSeq).val("");
+		inputForm.removeClass("active");
+		inputForm.hide();
+	} else {
+		inputForm.addClass("active");
+		inputForm.show();
+	}
+}
+
 /* Insert Review */
 function <portlet:namespace/>saveReview(boardSeq){
 	
@@ -1357,7 +1464,8 @@ function <portlet:namespace/>saveReview(boardSeq){
 /* Update Review */
 function <portlet:namespace/>updateReview(boardSeq){
 	
-	var content = $("#<portlet:namespace/>reply_" + boardSeq).val();
+	/* var content = $("#<portlet:namespace/>reply_" + boardSeq).val(); */
+	var content = $("#<portlet:namespace/>reviewUpdate_"+boardSeq).val();
 	
 	var sendData = {
 		"_edisoncomment_WAR_edisonboard2016portlet_content": content,
@@ -1380,13 +1488,24 @@ function <portlet:namespace/>updateReview(boardSeq){
 }
 
 /* Get ScienceApp Review Event */
-function <portlet:namespace/>getScienceAppReviewList(groupBoardSeq){
+function <portlet:namespace/>getScienceAppReviewList(groupBoardSeq, replyCnt){
 	var scienceAppId = '${solver.scienceAppId}';
+	var reviewType = 'review';
 	
 	var sendData = {
 		"<portlet:namespace/>scienceAppId": scienceAppId,
 		"<portlet:namespace/>groupBoardSeq": groupBoardSeq,
 		"<portlet:namespace/>divCd": 0
+	};
+	
+	if(groupBoardSeq == 0){
+		reviewType = 'review';
+	} else {
+		reviewType = 'reply';
+		
+		if(replyCnt <= 0){
+			return false;
+		}
 	}
 	
 	jQuery.ajax({
@@ -1397,11 +1516,7 @@ function <portlet:namespace/>getScienceAppReviewList(groupBoardSeq){
 		success: function(data) {
 			getScienceAppReviewList = data.getScienceAppReviewList;
 			
-			if(groupBoardSeq == 0){
-				<portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, groupBoardSeq, "review");
-			} else {
-				<portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, groupBoardSeq, "reply");
-			}
+			<portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, groupBoardSeq, reviewType);
 			
 			changeLocale("${solver.selectLocaleId}");
 		},error:function(msg,e){ 
@@ -1410,24 +1525,28 @@ function <portlet:namespace/>getScienceAppReviewList(groupBoardSeq){
 		}
 	});
 	
+	
 }
 
 /* View ScienceApp Review List */
 function <portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, groupBoardSeq, boardType){
-	var newReview = "";
+	/* var newReview = ""; */
 	var replyPostCss = "";
 	
 	if(boardType == "review"){
 		newReview = $("#<portlet:namespace/>contentReviewList");
 	} else if(boardType == "reply"){
-		replyPostCss = "background-color: #efefef; border-radius: 10px; padding: 5px 10px;";
+		replyPostCss = "background-color: #f1f1f1; border-radius: 10px; padding: 5px 10px;";
 		
 		newReview = $("#<portlet:namespace/>replyList_" + groupBoardSeq);
 		if(newReview.hasClass("active")){
 			newReview.html("");
 			newReview.removeClass("active");
+			newReview.hide();
+			return ;
 		} else {
 			newReview.addClass("active")
+			newReview.show();
 		}
 	}
 	
@@ -1449,11 +1568,13 @@ function <portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, group
 		
 		/* Create Reply List */
 		var reviewPost = $("<div/>").addClass("post")
-									.attr("id", "<portlet:namespace/>board_" + boardSeq);
+									.attr("id", "<portlet:namespace/>board_" + boardSeq)
+									.css("border-bottom", "none");
 		var reviewContentDiv = $("<div/>").attr("style", replyPostCss);
 		
 		var userBlockDiv = $("<div/>").addClass("user-block");
 		
+		/* User Image, User Name */
 		$("<img/>").addClass("img-circle img-bordered-sm")
 					.attr("src", "${contextPath}/images/comm_proj/noimage.png")
 					.appendTo(userBlockDiv);
@@ -1471,65 +1592,102 @@ function <portlet:namespace/>viewScienceAppReview(getScienceAppReviewList, group
 		
 		userBlockDiv.appendTo(reviewContentDiv);
 		
-		$("<div/>").css("margin", "0px 50px 15px")
+		/* Review Text 부분 */
+		$("<div/>").attr("id", "<portlet:namespace/>review_"+boardSeq+"_text")
+					.css("margin", "0px 50px 15px")
 					.html(content)
 					.appendTo(reviewContentDiv);
 		
-		reviewContentDiv.appendTo(reviewPost);
+		var reviewUpdateForm = $("<div/>").addClass("<portlet:namespace/>review-input-group input-group")
+										  .attr("id", "<portlet:namespace/>review_"+boardSeq+"_updateForm")
+										  .css("margin", "0px 50px 15px").css("display", "none");
 		
-		var listInlineUl = $("<ul/>").addClass("list-inline").css("margin-left", "0px");
+		$("<textarea/>").addClass("form-control input-sm <portlet:namespace/>review-text-area")
+						.attr("id", "<portlet:namespace/>reviewUpdate_"+boardSeq)
+						.attr("rows", "2")
+						.attr("type", "text")
+						.css("height", "48px")
+						.appendTo(reviewUpdateForm);
+		
+		/* 수정, 삭제 버튼 부분 */
+		var reviewUpdateBtnDiv = $("<div/>").addClass("input-group-btn");
+		$("<button/>").addClass("btn btn-info update-btn")
+						.attr("id", "<portlet:namespace/>replyUpdateBtn_" + boardSeq)
+						.attr("onclick", "<portlet:namespace/>updateReview("+boardSeq+")")
+						.css("height", "24px").css("width", "100%")
+						.css("padding-top", "0px").css("padding-bottom", "0px")
+						.css("display", "block")
+						.append( $("<i/>").addClass("fa fa-check").text(" Save") )
+						.appendTo(reviewUpdateBtnDiv);
+		$("<button/>").addClass("btn btn-default cancel-btn")
+						.attr("id", "<portlet:namespace/>replyCancelBtn_" + boardSeq)
+						.attr("onclick", "<portlet:namespace/>cancelReview("+boardSeq+")")
+						.css("height", "24px").css("width", "100%")
+						.css("padding-top", "0px").css("padding-bottom", "0px")
+						.css("display", "block")
+						.text("Cancel")
+						.appendTo(reviewUpdateBtnDiv);
+		
+		reviewUpdateBtnDiv.appendTo(reviewUpdateForm);
+		
+		
+		/* Comments() 부분 */
+		var listInlineUl = $("<ul/>").addClass("list-inline").css("margin", "0px 50px");
 		
 		var commentsLi = $("<li/>").addClass("pull-right");
 		$("<a/>").addClass("list-black text-xm")
-				 .attr("onclick", "<portlet:namespace/>getScienceAppReviewList(" + boardSeq + ")")
+				 .attr("onclick", "<portlet:namespace/>getScienceAppReviewList(" + boardSeq + ", " + replyCnt + ")")
 				 .css("cursor", "pointer")
-				 .append( $("<i/>").addClass("fa fa-comments-o margin-r-5").text("Comments (" + replyCnt + ")") )
+				 .append( $("<i/>").addClass("fa fa-comments-o margin-r-5").text(" Comments (" + replyCnt + ")") )
 				 .appendTo(listInlineUl);
+		
+		$("<a/>").addClass("list-black text-xm")
+				 .attr("onclick", "<portlet:namespace/>viewScienceAppReviewInputForm(" + boardSeq + ")")
+				 .css("cursor", "pointer")
+				 .css("margin-left", "10px")
+				 .append( $("<i/>").addClass("fa fa-pencil margin-r-5").text(" <liferay-ui:message key='edison-comment-register' />") )
+				 .appendTo(listInlineUl);
+		
 		commentsLi.appendTo(listInlineUl);
+		listInlineUl.appendTo(reviewContentDiv);
 		
-		listInlineUl.appendTo(reviewPost);
 		
+		reviewContentDiv.appendTo(reviewPost);
+		reviewUpdateForm.appendTo(reviewPost);
+		
+		
+		/* 댓글 리스트 */
 		$("<div/>").attr("id", "<portlet:namespace/>replyList_" + boardSeq)
-					.css("margin", "15px")
+					.css("padding", "15px 0px 15px 35px")
+					.css("display", "none")
 					.appendTo(reviewPost);;
 		
+		/* 댓글 작성 Form  */
 		if(${isSignedIn}){
-			var reviewInputGroup = $("<div/>").addClass("<portlet:namespace/>review-input-group").css("width", "100%").css("display", "table");
+			var reviewInputGroup = $("<div/>").addClass("<portlet:namespace/>review-input-group input-group")
+												.attr("id", "<portlet:namespace/>reviewInputForm_"+boardSeq)
+												.css("display", "none")
+												.css("width", "100%");
 			
-			$("<textarea/>").addClass("form-control input-sm")
+			$("<textarea/>").addClass("form-control input-sm <portlet:namespace/>review-text-area")
 							.attr("id", "<portlet:namespace/>reply_"+boardSeq)
 							.attr("rows", "2")
 							.attr("type", "text")
 							.attr("placeholder", "Type a comment")
-							.css("width", "90%")
-							.css("float", "left")
+							.css("height", "48px")
 							.appendTo(reviewInputGroup);
 			
-			var reviewBtnDiv = $("<div/>").css("width", "100%")
-										  .css("text-align", "right")
-										  .css("margin-top", "7px");
+			var reviewBtnDiv = $("<div/>").addClass("input-group-btn");
+			
 			$("<button/>").addClass("btn btn-info")
 							.attr("id", "<portlet:namespace/>replySaveBtn_" + boardSeq)
 							.attr("onclick", "<portlet:namespace/>saveReview("+boardSeq+")")
-							.append( $("<i/>").addClass("fa fa-check").text("Save") )
-							.appendTo(reviewBtnDiv);
-			$("<button/>").addClass("btn btn-info")
-							.attr("id", "<portlet:namespace/>replyUpdateBtn_" + boardSeq)
-							.attr("onclick", "<portlet:namespace/>updateReview("+boardSeq+")")
-							.css("margin-right", "10px")
-							.css("display", "none")
-							.append( $("<i/>").addClass("fa fa-check").text("Update") )
-							.appendTo(reviewBtnDiv);
-			$("<button/>").addClass("btn btn-default")
-							.attr("id", "<portlet:namespace/>replyCancelBtn_" + boardSeq)
-							.attr("onclick", "<portlet:namespace/>cancelReview("+boardSeq+")")
-							.css("display", "none")
-							.text("Cancel")
+							.css("height", "48px")
+							.append( $("<i/>").addClass("fa fa-check").text(" Save") )
 							.appendTo(reviewBtnDiv);
 			
 			reviewBtnDiv.appendTo(reviewInputGroup);
 			reviewInputGroup.appendTo(reviewPost);
-			/* reviewBtnDiv.appendTo(reviewPost); */
 		}
 		
 		reviewPost.appendTo(newReview);
@@ -1577,34 +1735,21 @@ function <portlet:namespace/>showReviewEditor(boardSeq, content, orderType){
 		
 		$("#<portlet:namespace/>replySaveBtn_"+boardSeq).show();
 	} else if(orderType == 'UPDATE'){
-		$("#<portlet:namespace/>replySaveBtn_"+boardSeq).hide();
-		$("#<portlet:namespace/>replyUpdateBtn_"+boardSeq).show();
-		$("#<portlet:namespace/>replyCancelBtn_"+boardSeq).show();
-		
-		$("<button/>").addClass("btn btn-primary")
-						.attr("onclick", "<portlet:namespace/>updateReview("+boardSeq+")")
-						.css("margin-right", "10px")
-						.text("UPDATE")
-						.appendTo(commentBtnDiv);
-		
-		$("<button/>").addClass("btn btn-default")
-						.attr("onclick", "<portlet:namespace/>cancelReview("+boardSeq+")")
-						.text("CANCEL")
-						.appendTo(commentBtnDiv);
 	}
 	
 	commentBtnDiv.appendTo(reviewEditor);
 	reviewUpdateEditor.text(content).focus();
 }
 
+/* Review Update Cancel */
 function <portlet:namespace/>cancelReview(boardSeq){
-	$("#<portlet:namespace/>reply_"+boardSeq).text("");
-	$("#<portlet:namespace/>replySaveBtn_"+boardSeq).show();
-	$("#<portlet:namespace/>replyUpdateBtn_"+boardSeq).hide();
-	$("#<portlet:namespace/>replyCancelBtn_"+boardSeq).hide();
+	$("#<portlet:namespace/>review_"+boardSeq+"_updateForm").hide();
+	$("#<portlet:namespace/>review_"+boardSeq+"_text").show();
 }
 
 function <portlet:namespace/>updateScienceAppReview(boardSeq){
+	$("#<portlet:namespace/>review_"+boardSeq+"_text").hide();
+	$("#<portlet:namespace/>review_"+boardSeq+"_updateForm").show();
 	
 	var selectLocaleId = "${solver.selectLocaleId}";
 	var content = "";
@@ -1622,7 +1767,7 @@ function <portlet:namespace/>updateScienceAppReview(boardSeq){
 		}
 	%>
 	
-	<portlet:namespace/>showReviewEditor(boardSeq, content, 'UPDATE')
+	$("#<portlet:namespace/>reviewUpdate_"+boardSeq).text(content);
 }
 
 
@@ -1635,7 +1780,7 @@ function <portlet:namespace/>deleteScienceAppReview(boardSeq){
 		title: 'Confirm!',
 		content: '<p style="font-size: 15px;"><liferay-ui:message key='edison-science-appstore-review-delete' /></p>',
 		buttons: {
-			confirm: function () {
+			OK: function () {
 				
 				jQuery.ajax({
 					type: "POST",
@@ -1655,7 +1800,7 @@ function <portlet:namespace/>deleteScienceAppReview(boardSeq){
 				});
 				
 			},
-			cancel: function () {
+			CANCEL: function () {
 			}
 		}
 	});
@@ -1911,17 +2056,18 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 		var myRatingsEntryIsEmpty = "${myRatingsEntryIsEmpty}";
 		
 		var myRating = $("<div/>").addClass("rating my-rating")
-								  .css("padding", "10px 20px")
-								  .css("height", "70px")
-								  .css("width", "72%")
-								  .css("font-size", "13px")
+								  .css("padding", "0px 20px")
+								  .css("width", "100%")
+								  .css("font-size", "11px")
 								  .css("text-align", "left")
 								  .css("display", "inline-block");
 		
 		var myRatingTitle = $("<div/>").css("width", "35%")
 									   .css("float", "left")
-									   .css("font-size", "20px")
-									   .css("padding-top", "15px")
+									   .css("font-size", "17px")
+									   .css("padding-top", "12px")
+									   .css("position", "absolute")
+									   .css("left", "30px")
 									   .text("<liferay-ui:message key='edison-science-appstore-view-tab-rating' /> <liferay-ui:message key='register' />").appendTo(myRating);
 		for(var i=0; i<5; i++){
 			$("<input/>").attr("type", "radio").attr("id", "star"+(5-i)).attr("name","rating").val(5-i).appendTo(myRating);
@@ -1950,7 +2096,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 			title: "<liferay-ui:message key='edison-workflow-science-app' /> <liferay-ui:message key='edison-science-appstore-view-tab-rating' />",
 			titleClass: 'box-header with-border',
 			content: dialogBody,
-			columnClass: 'col-md-6 col-md-offset-3 <portlet:namespace/>rating-box',
+			columnClass: 'col-md-4 col-md-offset-5 <portlet:namespace/>rating-box',
 			buttons: {
 				formSubmit: {
 					text: regBtnTxt,
@@ -2060,18 +2206,27 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 					scienceAppPaperBoxBody.html("");
 					
 					var scienceAppPaperUl = $("<ul/>").addClass("products-list product-list-in-box");
+					var scienceAppPaperTable = $("<table/>").addClass("table table-bordered table-hover edison-table <portlet:namespace/>science-app-relate-data-table");
+															
+					var tableColGroup = $("<colgroup/>");
+					$("<col/>").attr("width", "85%").appendTo(tableColGroup);
+					$("<col/>").attr("width", "15%").appendTo(tableColGroup);
+					tableColGroup.appendTo(scienceAppPaperTable);
 					
 					$.each(scienceAppPaperList, function(idx, scienceAppPaper){
 						var scienceAppPaperType = scienceAppPaper.paperType;
 						
 						if(scienceAppPaperType == 'file'){
 							var scienceAppPaperLi = $("<li/>").addClass("item <portlet:namespace/>paper-list")
+							var scienceAppPaperTr = $("<tr/>");
 							
 							$("<div/>").text(scienceAppPaper.paperFileTitle)
 									   .css("width", "85%")
 									   .css("float","left")
 									   .css("padding-top", "5px")
 									   .appendTo(scienceAppPaperLi);
+							
+							$("<td/>").text(scienceAppPaper.paperFileTitle).appendTo(scienceAppPaperTr);
 							
 							$("<button/>").addClass("btn bg-olive margin")
 										  .attr("onclick", "<portlet:namespace/>fileDownload('" + scienceAppPaper.paperValue + "');")
@@ -2083,7 +2238,18 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 										  .append($("<i/>").addClass("icon-download-alt").text(" DOWN"))
 										  .appendTo(scienceAppPaperLi);
 							
+							$("<td/>")
+							.append($("<button/>").addClass("btn bg-olive margin")
+									  .attr("onclick", "<portlet:namespace/>fileDownload('" + scienceAppPaper.paperValue + "');")
+									  .attr("type", "button")
+									  .css("width", "100%")
+									  .css("font-size", "12px")
+									  .css("padding", "4px")
+									  .append($("<i/>").addClass("icon-download-alt").text(" DOWN")))
+							.appendTo(scienceAppPaperTr);
+							
 							scienceAppPaperLi.appendTo(scienceAppPaperUl);
+							scienceAppPaperTr.appendTo(scienceAppPaperTable);
 						}
 					});
 					
@@ -2092,12 +2258,14 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 						
 						if(scienceAppPaperType == 'link'){
 							var scienceAppPaperLi = $("<li/>").addClass("item <portlet:namespace/>paper-list")
+							var scienceAppPaperTr = $("<tr/>");
 							
 							$("<div/>").text(scienceAppPaper.paperValue)
 									   .css("width", "85%")
-									   .css("float","left")
 									   .css("padding-top", "5px")
 									   .appendTo(scienceAppPaperLi);
+							
+							$("<td/>").text(scienceAppPaper.paperValue).appendTo(scienceAppPaperTr);
 							
 							$("<button/>").addClass("btn bg-orange margin")
 										  .attr("onclick", "window.open('" + scienceAppPaper.paperValue + "', '_blank');")
@@ -2109,11 +2277,25 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 										  .append($("<i/>").addClass("icon-link").text(" LINK"))
 										  .appendTo(scienceAppPaperLi);
 							
+							$("<td/>")
+							.append($("<button/>").addClass("btn bg-orange margin")
+									  .attr("onclick", "window.open('" + scienceAppPaper.paperValue + "', '_blank');")
+									  .attr("type", "button")
+									  .css("width", "100%")
+									  .css("float", "left")
+									  .css("font-size", "12px")
+									  .css("padding", "4px")
+									  .append($("<i/>").addClass("icon-link").text(" LINK")))
+							.appendTo(scienceAppPaperTr);
+							
 							scienceAppPaperLi.appendTo(scienceAppPaperUl);
+							scienceAppPaperTr.appendTo(scienceAppPaperTable);
 						}
 					});
 					
-					scienceAppPaperUl.appendTo(scienceAppPaperBoxBody);
+					/* scienceAppPaperUl.appendTo(scienceAppPaperBoxBody); */
+					
+					scienceAppPaperTable.appendTo(scienceAppPaperBoxBody);
 					
 					if(pagingStr != null){
 						$("#<portlet:namespace/>scienceAppPaper .text-center").html("");
@@ -2162,7 +2344,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 				
 				if(0 < dataSize){
 					
-					$("#<portlet:namespace/>scienceAppRelateData").show();
+					$("#<portlet:namespace/>scienceAppRelateInfo").show();
 					var viewDiv = "";
 					
 					if(selectType === "SCIENCE_APP"){
@@ -2381,7 +2563,7 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 					}
 				});
 				
-				if(selectPortTypeId != "" && selectPortTypeId != "0"){
+				if(0 < selectPortTypeId){
 					$.ajax({
 						type: "POST",
 						url: "<%=getdataTypeViewURL%>",
@@ -2409,7 +2591,10 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 							return false;
 						}
 					});
-				} 
+				} else {
+					$("<td/>").text("-").appendTo(contentTr);
+					$("<td/>").text("-").appendTo(contentTr);
+				}
 				
 				if(portType=='INPUT' && sampleFileId != ''){
 					var sampleDownBtn = $("<a/>").addClass("btn btn-primary btn-block btn-xs")
@@ -2627,15 +2812,34 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 				<portlet:namespace/>drawScienceAppExeStatistics(monthlyExeStatistics);
 				<portlet:namespace/>drawScienceAppStatistics(appStatistics);
 				
-				/* if(monthlyExeStatistics != null && monthlyExeStatistics != '' && 0<monthlyExeStatistics.length){
+				var hasMonthlyStatistics = false;
+				var hasAppStatistics = false;
+				if(monthlyExeStatistics != null && monthlyExeStatistics != '' && 0<monthlyExeStatistics.length){
+					hasMonthlyStatistics = true;
 				} else {
 					$("#<portlet:namespace/>scienceAppMonthlyExeStatistics").hide();
 				}
 				
 				if(appStatistics != null && appStatistics != '' && 0<appStatistics.length){
+					for(var i=0; i<appStatistics.length; i++){
+						var exeCount = appStatistics[i]["exe_count"];
+						if(exeCount <= 0){
+							$("#<portlet:namespace/>scienceAppStatistics").hide();
+							$("#<portlet:namespace/>scienceAppStatistics").hide();
+							hasAppStatistics = false
+						} else {
+							hasAppStatistics = true
+						}
+					}
 				} else {
 					$("#<portlet:namespace/>scienceAppStatistics").hide();
-				} */
+				}
+				
+				if(hasMonthlyStatistics || hasAppStatistics){
+					$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").hide();
+				} else {
+					$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").show();
+				}
 			},error:function(msg,e){ 
 				alert("<liferay-ui:message key='edison-data-event-error' />\nGet Statistics SW Execute Error");
 				return false;

@@ -720,7 +720,7 @@ public class ScienceAppstoreController {
 			long userId = PortalUtil.getUserId(request);
 			String searchValue = CustomUtil.strNull(params.get("searchValue"), "");
 			
-			response.setContentType("text/html");
+			response.setContentType("application/json; charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter writer = response.getWriter();
 
