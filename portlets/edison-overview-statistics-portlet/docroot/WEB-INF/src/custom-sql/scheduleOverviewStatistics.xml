@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+
+	<sql id="org.kisti.edison.overview.schedule.updateSiteUser">	
+		<![CDATA[
+			INSERT EDOV_SiteUser
+			SELECT 
+				USR.createDate, 
+				USR.groupId,
+				USR.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(CreateDate, "%Y-%m-%d") AS createDate,
+					20181 AS groupId,
+					COUNT(*) AS cnt
+				FROM
+					User_
+				GROUP BY DATE_FORMAT(CreateDate, "%Y-%m-%d")) AS USR
+			ON DUPLICATE KEY UPDATE cnt = USR.cnt
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overview.schedule.updateExecuteUser">	
+		<![CDATA[
+			INSERT EDOV_ExecuteUser
+			SELECT 
+				SIM.createDate, 
+				SIM.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(DATE_DATA.simulationCreateDt, '%Y-%m-%d') AS createDate,
+					COUNT(*) AS cnt
+				FROM
+					(SELECT 
+						SIM_DATA.*
+					FROM
+						(SELECT 
+						userId, simulationCreateDt
+					FROM
+						EDSIM_Simulation
+					ORDER BY simulationCreateDt ASC) SIM_DATA
+					GROUP BY SIM_DATA.userId) AS DATE_DATA
+				GROUP BY DATE_FORMAT(DATE_DATA.simulationCreateDt, '%Y-%m-%d')) AS SIM
+			ON DUPLICATE KEY UPDATE cnt = SIM.cnt
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overview.schedule.updateSimulationJob">	
+		<![CDATA[
+			INSERT EDOV_SimulationJob
+			SELECT 
+				SIMJ.createDate, 
+				SIMJ.groupId,
+				SIMJ.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(jobSubmitDt, "%Y-%m-%d") AS createDate,
+					groupId AS groupId,
+					COUNT(*) AS cnt
+				FROM
+				EDSIM_SimulationJob
+				WHERE
+				jobSubmitDt IS NOT NULL
+				GROUP BY DATE_FORMAT(jobSubmitDt, "%Y-%m-%d"), groupId) AS SIMJ
+			ON DUPLICATE KEY UPDATE cnt = SIMJ.cnt
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overview.schedule.updateScienceApp">	
+		<![CDATA[
+			INSERT EDOV_ScienceApp
+			SELECT 
+				APP.createDate, 
+				APP.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(statusDate, '%Y-%m') AS createDate,
+					COUNT(scienceAppId) AS cnt
+				FROM
+					EDAPP_ScienceApp
+				WHERE
+					status = 1901004
+				GROUP BY DATE_FORMAT(statusDate, '%Y-%m')) AS APP
+			ON DUPLICATE KEY UPDATE cnt = APP.cnt
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overview.schedule.updateContents">	
+		<![CDATA[
+			INSERT INTO EDOV_Contents(createDate, cnt)
+			SELECT 
+				CON.createDate, 
+				CON.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(insertDate, '%Y-%m') AS createDate,
+					COUNT(contentSeq) AS cnt
+				FROM
+					EDMED_Content 
+				WHERE
+					openYn = 'Y'
+				GROUP BY DATE_FORMAT(insertDate, '%Y-%m')) AS CON
+			ON DUPLICATE KEY UPDATE cnt = CON.cnt
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overview.schedule.updateCitations">	
+		<![CDATA[
+			INSERT INTO EDOV_Citations(createDate, cnt)
+			SELECT 
+				CON.createDate, 
+				CON.cnt
+			FROM
+				(SELECT 
+					DATE_FORMAT(insertDate, '%Y-%m-%d') AS createDate,
+					COUNT(contentSeq) AS cnt
+				FROM EDMED_Content 
+				WHERE 
+					openYn = 'Y' 
+					AND contentDiv = '2001005' 
+				GROUP BY DATE_FORMAT(insertDate, '%Y-%m-%d')) AS CON
+			ON DUPLICATE KEY UPDATE cnt = CON.cnt
+		]]>
+	</sql>
+	
+</custom-sql>

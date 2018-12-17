@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="org.kisti.edison.model.Citations">
+		<field name="createDate" type="String" />
+		<field name="cnt" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.Contents">
+		<field name="createDate" type="String" />
+		<field name="cnt" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.ExecuteUser">
+		<field name="createDate" type="String" />
+		<field name="cnt" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.ScienceApp">
+		<field name="createDate" type="String" />
+		<field name="cnt" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.SimulationJob">
+		<field name="createDate" type="String" />
+		<field name="groupId" type="long" />
+		<field name="cnt" type="Long" />
+	</model>
+	<model name="org.kisti.edison.model.SiteUser">
+		<field name="createDate" type="String" />
+		<field name="groupId" type="long" />
+		<field name="cnt" type="Long" />
+	</model>
+</model-hints>

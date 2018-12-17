@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="org.kisti.edison" auto-namespace-tables="true">
+	<author>edison</author>
+	<namespace>EDOV</namespace>
+
+	<!-- OverView Site User -->
+	<entity name="SiteUser" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		<column name="groupId" type="long" primary="true"></column>
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+		
+		<!-- Finder -->
+		<finder name="groupId" return-type="Collection">
+			<finder-column name="groupId"/>
+		</finder>
+	</entity>
+	
+	<!-- OverView Execute User -->
+	<entity name="ExecuteUser" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+	</entity>
+	
+	<!-- OverView SimulationJob -->
+	<entity name="SimulationJob" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		<column name="groupId" type="long" primary="true"></column>
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+		
+		<!-- Finder -->
+		<finder name="groupId" return-type="Collection">
+			<finder-column name="groupId"/>
+		</finder>
+	</entity>
+	
+	<!-- OverView ScienceApp -->
+	<entity name="ScienceApp" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+		
+	</entity>
+	
+	<!-- OverView Contents -->
+	<entity name="Contents" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+	</entity>
+	
+	<!-- OverView Citations -->
+	<entity name="Citations" local-service="true" remote-service="false" cache-enabled="false" tx-manager="true">
+		<!-- PK fields -->
+		<column name="createDate" type="String" primary="true" />
+		
+		<!-- Fields -->
+		<column name="cnt" type="Long"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="createDate"/>
+		</order>
+	</entity>
+</service-builder>
