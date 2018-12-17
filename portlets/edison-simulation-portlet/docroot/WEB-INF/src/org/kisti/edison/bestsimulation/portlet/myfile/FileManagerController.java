@@ -78,7 +78,7 @@ public class FileManagerController {
 		try {
 			Map param = RequestUtil.getParameterMap(request);
 
-			long groupId = Long.parseLong(CustomUtil.strNull(param.get("groupId"), String.valueOf(PortalUtil.getScopeGroupId(request))));
+			long groupId = Long.parseLong(String.valueOf(PortalUtil.getScopeGroupId(request)));
 			IcebreakerVcToken icebreakerVcToken = new IcebreakerVcToken();
 
 			Group thisGroup = GroupLocalServiceUtil.getGroup(groupId);
