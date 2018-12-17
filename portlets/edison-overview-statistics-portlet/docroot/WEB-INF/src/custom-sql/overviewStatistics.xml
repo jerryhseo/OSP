@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+
+	<sql id="org.kisti.edison.overviewStatistics.getSiteUserTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_SiteUser
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getSiteUserCountByDate">	
+		<![CDATA[
+			SELECT
+				DATE_FORMAT(ESU.createDate, #dateFormat#) AS createDate,
+				SUM(ESU.cnt) AS count,
+				(
+					SELECT
+						SUM(ESU_SUB.cnt)
+					FROM
+						EDOV_SiteUser ESU_SUB
+					WHERE
+						DATE_FORMAT(ESU_SUB.createDate, #dateFormat#) <= DATE_FORMAT(ESU.createDate, #dateFormat#)
+				) AS cumulative_count
+			FROM
+				EDOV_SiteUser ESU
+			GROUP BY DATE_FORMAT(ESU.createDate, #dateFormat#)
+			ORDER BY ESU.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getSiteUserCountBySite">
+		<![CDATA[
+			SELECT
+				ExtractValue(EV.data_, 'root/Data[@language-id="@@languageId@@"]') AS siteName,
+				COUNT(UG.userId) AS count
+			FROM
+				User_ U,
+				Users_Groups UG,
+				ExpandoColumn EC,
+				ExpandoValue EV
+			WHERE
+				U.userId = UG.userId
+				AND UG.groupId = EV.classPK
+				AND EV.columnId = EC.columnId
+				AND EC.name = 'SiteName'
+				<isNotEmpty property="pieChartCategoryIds">
+					AND UG.groupId IN (#pieChartCategoryIds#)
+				</isNotEmpty>
+			GROUP BY
+				EV.data_
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getExecuteUserTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_ExecuteUser
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getExecuteUserCountByDate">	
+		<![CDATA[
+			SELECT
+				DATE_FORMAT(EEU.createDate, #dateFormat#) AS createDate,
+				SUM(EEU.cnt) AS count,
+				(
+					SELECT
+						SUM(EEU_SUB.cnt)
+					FROM
+						EDOV_ExecuteUser EEU_SUB
+					WHERE
+						DATE_FORMAT(EEU_SUB.createDate, #dateFormat#) <= DATE_FORMAT(EEU.createDate, #dateFormat#)
+				) AS cumulative_count
+			FROM
+				EDOV_ExecuteUser EEU
+			GROUP BY DATE_FORMAT(EEU.createDate, #dateFormat#)
+			ORDER BY EEU.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getSimulationJobTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_SimulationJob
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getSimulationJobCountByDate">	
+		<![CDATA[
+			SELECT
+				DATE_FORMAT(ESJ.createDate, #dateFormat#) AS createDate,
+				SUM(ESJ.cnt) AS count,
+				(
+					SELECT
+						SUM(ESJ_SUB.cnt)
+					FROM
+						EDOV_SimulationJob ESJ_SUB
+					WHERE
+						DATE_FORMAT(ESJ_SUB.createDate, #dateFormat#) <= DATE_FORMAT(ESJ.createDate, #dateFormat#)
+				) AS cumulative_count
+			FROM
+				EDOV_SimulationJob ESJ
+			GROUP BY DATE_FORMAT(ESJ.createDate, #dateFormat#)
+			ORDER BY ESJ.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getSimulationJobCountBySite">
+		<![CDATA[
+			SELECT
+				ExtractValue(EV.data_, 'root/Data[@language-id="@@languageId@@"]') AS siteName,
+				SUM(cnt) AS count
+			FROM
+				EDOV_SimulationJob ESJ,
+				ExpandoColumn EC,
+				ExpandoValue EV
+			WHERE
+				ESJ.groupId = EV.classPK
+				AND EV.columnId = EC.columnId
+				AND EC.name = 'SiteName'
+				<isNotEmpty property="pieChartCategoryIds">
+					AND ESJ.groupId IN (#pieChartCategoryIds#)
+				</isNotEmpty>
+			GROUP BY ESJ.groupId;
+
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getScienceAppTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_ScienceApp
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getScienceAppCountByDate">	
+		<![CDATA[
+			SELECT
+				ESA.createDate AS createDate,
+				SUM(ESA.cnt) AS count,
+				(
+					SELECT
+						SUM(ESA_SUB.cnt)
+					FROM
+						EDOV_ScienceApp ESA_SUB
+					WHERE
+						ESA_SUB.createDate <= ESA.createDate
+				) AS cumulative_count
+			FROM
+				EDOV_ScienceApp ESA
+			GROUP BY ESA.createDate
+			ORDER BY ESA.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getScienceAppCountBySite">
+		<![CDATA[
+			SELECT 
+				(SELECT ExtractValue(SAC.title, 'root/Title[@language-id="ko_KR"]')
+				FROM
+					AssetCategory SAC
+				WHERE
+					SAC.categoryId = AC.parentCategoryId) AS siteName,
+				COUNT(*) AS count
+			FROM 
+				EDAPP_ScienceApp APP,
+				AssetEntry AE,
+				AssetEntries_AssetCategories AEAC,
+				AssetCategory AC
+			WHERE
+				APP.appType = 'Solver'
+				AND APP.status = 1901004
+				AND APP.scienceAppId = AE.classPK
+				AND AE.classNameId = 84711
+				AND AE.entryId = AEAC.entryId
+				AND AEAC.categoryId = AC.categoryId
+			GROUP BY AC.parentCategoryId
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getContentsTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_Contents
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getContentsCountByDate">	
+		<![CDATA[
+			SELECT
+				EC.createDate AS createDate,
+				SUM(EC.cnt) AS count,
+				(
+					SELECT
+						SUM(EC_SUB.cnt)
+					FROM
+						EDOV_Contents EC_SUB
+					WHERE
+						EC_SUB.createDate <= EC.createDate
+				) AS cumulative_count
+			FROM
+				EDOV_Contents EC
+			GROUP BY EC.createDate
+			ORDER BY EC.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getContentsCountBySite">	
+		<![CDATA[
+			SELECT
+				(SELECT 
+					ExtractValue(SAC.title, 'root/Title[@language-id="ko_KR"]')
+				FROM 
+					AssetCategory SAC
+				WHERE 
+					SAC.categoryId = AC.parentCategoryId) AS siteName,
+				COUNT(*) AS count
+			FROM 
+				EDMED_Content EDC,
+				AssetEntry AE,
+				AssetEntries_AssetCategories AEAC,
+				AssetCategory AC
+			WHERE  
+				EDC.openYn = 'Y'
+				AND EDC.contentSeq = AE.classPK
+				AND AE.classNameId = 7416427
+				AND AE.entryId = AEAC.entryId
+				AND AEAC.categoryId = AC.categoryId
+			GROUP BY AC.parentCategoryId
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getCitationsTotalCount">	
+		<![CDATA[
+			SELECT
+				IFNULL(SUM(cnt), 0) AS count
+			FROM
+				EDOV_Citations
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getCitationsCountByDate">	
+		<![CDATA[
+			SELECT
+				DATE_FORMAT(EC.createDate, #dateFormat#) AS createDate,
+				SUM(EC.cnt) AS count,
+				(
+					SELECT
+						SUM(EC_SUB.cnt)
+					FROM
+						EDOV_Citations EC_SUB
+					WHERE
+						DATE_FORMAT(EC_SUB.createDate, #dateFormat#) <= DATE_FORMAT(EC.createDate, #dateFormat#)
+				) AS cumulative_count
+			FROM
+				EDOV_Citations EC
+			GROUP BY DATE_FORMAT(EC.createDate, #dateFormat#)
+			ORDER BY EC.createDate ASC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.overviewStatistics.getCitationsCountBySite">	
+		<![CDATA[
+			SELECT
+				(SELECT 
+					ExtractValue(SAC.title, 'root/Title[@language-id="ko_KR"]')
+				FROM 
+					AssetCategory SAC
+				WHERE 
+					SAC.categoryId = AC.parentCategoryId) AS siteName,
+				COUNT(*) AS count
+			FROM 
+				EDMED_Content EDC,
+				AssetEntry AE,
+				AssetEntries_AssetCategories AEAC,
+				AssetCategory AC
+			WHERE  
+				EDC.openYn = 'Y'
+				AND EDC.contentDiv = 2001005
+				AND EDC.contentSeq = AE.classPK
+				AND AE.classNameId = 7416427
+				AND AE.entryId = AEAC.entryId
+				AND AEAC.categoryId = AC.categoryId
+			GROUP BY AC.parentCategoryId
+		]]>
+	</sql>
+	
+</custom-sql>

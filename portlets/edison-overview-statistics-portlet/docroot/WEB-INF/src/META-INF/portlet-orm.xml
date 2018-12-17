@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.kisti.edison.model.impl.CitationsModelImpl">
+		<attributes>
+			<id name="createDate" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.ContentsModelImpl">
+		<attributes>
+			<id name="createDate" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.ExecuteUserModelImpl">
+		<attributes>
+			<id name="createDate" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.ScienceAppModelImpl">
+		<attributes>
+			<id name="createDate" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.SimulationJobModelImpl">
+		<id-class class="org.kisti.edison.service.persistence.SimulationJobPK" />
+		<attributes>
+			<id name="createDate" />
+			<id name="groupId" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.model.impl.SiteUserModelImpl">
+		<id-class class="org.kisti.edison.service.persistence.SiteUserPK" />
+		<attributes>
+			<id name="createDate" />
+			<id name="groupId" />
+			<basic name="cnt" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.kisti.edison.model.impl.CitationsImpl" name="Citations">
+		<table name="EDOV_Citations" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.ContentsImpl" name="Contents">
+		<table name="EDOV_Contents" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.ExecuteUserImpl" name="ExecuteUser">
+		<table name="EDOV_ExecuteUser" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.ScienceAppImpl" name="ScienceApp">
+		<table name="EDOV_ScienceApp" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.SimulationJobImpl" name="SimulationJob">
+		<table name="EDOV_SimulationJob" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.model.impl.SiteUserImpl" name="SiteUser">
+		<table name="EDOV_SiteUser" />
+		<attributes />
+	</entity>
+</entity-mappings>

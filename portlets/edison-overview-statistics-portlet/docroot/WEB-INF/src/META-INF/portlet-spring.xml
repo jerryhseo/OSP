@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="org.kisti.edison.service.CitationsLocalService" class="org.kisti.edison.service.impl.CitationsLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.CitationsPersistence" class="org.kisti.edison.service.persistence.CitationsPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.CitationsFinder" class="org.kisti.edison.service.persistence.CitationsFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.ContentsLocalService" class="org.kisti.edison.service.impl.ContentsLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.ContentsPersistence" class="org.kisti.edison.service.persistence.ContentsPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.ContentsFinder" class="org.kisti.edison.service.persistence.ContentsFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.ExecuteUserLocalService" class="org.kisti.edison.service.impl.ExecuteUserLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.ExecuteUserPersistence" class="org.kisti.edison.service.persistence.ExecuteUserPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.ExecuteUserFinder" class="org.kisti.edison.service.persistence.ExecuteUserFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.ScienceAppLocalService" class="org.kisti.edison.service.impl.ScienceAppLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.ScienceAppPersistence" class="org.kisti.edison.service.persistence.ScienceAppPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.ScienceAppFinder" class="org.kisti.edison.service.persistence.ScienceAppFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.SimulationJobLocalService" class="org.kisti.edison.service.impl.SimulationJobLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.SimulationJobPersistence" class="org.kisti.edison.service.persistence.SimulationJobPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.SimulationJobFinder" class="org.kisti.edison.service.persistence.SimulationJobFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.SiteUserLocalService" class="org.kisti.edison.service.impl.SiteUserLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.SiteUserPersistence" class="org.kisti.edison.service.persistence.SiteUserPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.persistence.SiteUserFinder" class="org.kisti.edison.service.persistence.SiteUserFinderImpl" parent="basePersistence" />
+</beans>
