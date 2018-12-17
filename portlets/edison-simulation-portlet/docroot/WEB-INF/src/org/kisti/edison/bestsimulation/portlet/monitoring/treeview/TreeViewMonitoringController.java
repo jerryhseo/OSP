@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -541,6 +542,10 @@ public class TreeViewMonitoringController{
         @RequestParam(value = "jobUuid", required=false) String jobUuid,
         @RequestParam(value = "scienceAppId", required=false) String scienceAppId,
         @RequestParam(value = "jobTitle", required=false) String jobTitle,
+        @RequestParam(value = "startDate", required=false) Date startDate,
+        @RequestParam(value = "endDate", required=false) Date endDate,
+        @RequestParam(value = "jobType", required=false) String jobType,
+        @RequestParam(value = "nCores", required=false) int nCores,
         ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
         //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
         //DatasetServiceUtil.curate(ds, sc);
@@ -575,16 +580,20 @@ public class TreeViewMonitoringController{
                 com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
                 SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
                 saveInfo = DatasetServiceUtil.save(
-                            GetterUtil.getLong(collectionId),
-                            jobUuid,
-                            scienceApp.getName(),
-                            scienceApp.getVersion(),
-                            jobTitle,
-                            GetterUtil.getLong(scienceAppId, 0),
-                            REPO_ID,
-                            simulationJobData.getJobData(),  // EDISON jobData 테이블
-                            scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
-                            sc );
+                			GetterUtil.getLong(collectionId),
+                			jobUuid,
+                			scienceApp.getName(),
+                			scienceApp.getVersion(),
+                			jobTitle, 
+                			GetterUtil.getLong(scienceAppId, 0),
+                			REPO_ID,
+                			simulationJobData.getJobData(),  // EDISON jobData 테이블
+                			scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
+                			startDate, 					// 2018.12.12 SDR 요청 _ job 시작 시간
+                			endDate, 					// 2018.12.12 SDR 요청 _ job 종료 시간
+                			jobType, 					// 2018.12.12 SDR 요청 _ job Type (sequantial / parallel)
+                			nCores, 					// 2018.12.12 SDR 요청 _ 사용한 코어 수
+                			sc );
                 
                 if(saveInfo.getBoolean("isValid")){
                     com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
