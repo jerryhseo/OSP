@@ -97,9 +97,9 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 		powerAdmin = true;
 	}else{
 		if(EdisonUserUtil.isRegularRole(user, EdisonRoleConstants.TEMP_USER)){
-			userViewPageTabStr = "favoriteApp,myFile,myClass,eturbMyFile";
+			userViewPageTabStr = "favoriteApp,myFile,mySimulationFile,myClass,eturbMyFile";
 		}else{
-			userViewPageTabStr = "favoriteApp,myCourse,myClass,myFile,myContent,myProject,siteJoin,myWorkspace";
+			userViewPageTabStr = "favoriteApp,myCourse,myClass,myFile,mySimulationFile,myContent,myProject,siteJoin,myWorkspace";
 			
 			if(EdisonUserUtil.isDeveloperThan(user)){
 				userViewPageTabStr = StringUtil.add(userViewPageTabStr, "myApp",",");
