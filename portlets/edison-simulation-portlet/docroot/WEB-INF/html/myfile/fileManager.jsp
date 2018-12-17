@@ -418,7 +418,7 @@
 		$.confirm({
 			title: Liferay.Language.get('new-folder'),
 			content: "<div>Input New Folder Name</div>"+
-					 "<div><input type=\"text\" value=\"new\" class=\"new-folder-name form-control\" /></div>"+
+					 "<div><input type=\"text\" placeholder=\"Type a new folder name.\" value=\"\" class=\"new-folder-name form-control\" /></div>"+
 					 "<div class=\"h10\"></div>",
 			buttons: {
 				formSubmit: {
