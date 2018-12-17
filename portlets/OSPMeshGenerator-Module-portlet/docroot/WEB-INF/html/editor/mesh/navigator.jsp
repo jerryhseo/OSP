@@ -453,7 +453,6 @@ function <portlet:namespace/>prepareAnalyzer(appName, appVersion, geoNode, fileC
 				if(console){
 					console.log('[ERROR] AJAX FAILED during prepareAnalyzer');
 				}
-				bEnd();
 			},
 			complete : function() {
 				if(<portlet:namespace/>currentTimeOut){

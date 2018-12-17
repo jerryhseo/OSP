@@ -113,7 +113,7 @@ public class JobController {
 					
 					String jobTitle = simulation.getSimulationTitle()+" - "+simulationJob.getJobTitle();
 					long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
-					boolean isTrance = this.transferJobDataToSDR(request, collectionId, jobUuid, scienceAppId, jobTitle);
+					boolean isTrance = this.transferJobDataToSDR(request, collectionId, simulationJob, scienceAppId, jobTitle);
 					if(!isTrance){
 						if(isComplete){isComplete = false;}
 						if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
@@ -124,7 +124,7 @@ public class JobController {
 						if(job.getJobStatus()==1701011){
 							String jobTitle = simulation.getSimulationTitle()+" - "+job.getJobTitle();
 							long scienceAppId = GetterUtil.getLong(simulation.getScienceAppId());
-							boolean isTrance = this.transferJobDataToSDR(request, collectionId, job.getJobUuid(), scienceAppId, jobTitle);
+							boolean isTrance = this.transferJobDataToSDR(request, collectionId, job, scienceAppId, jobTitle);
 							if(!isTrance){
 								if(isComplete){isComplete = false;}
 								if(msg.equals("")){msg += jobTitle;}else{msg += ", "+jobTitle;}
@@ -151,10 +151,11 @@ public class JobController {
 		}
 	}
 	
-	private boolean transferJobDataToSDR(ResourceRequest request,String collectionId,String jobUuid,long scienceAppId, String jobTitle){
+	private boolean transferJobDataToSDR(ResourceRequest request,String collectionId,SimulationJob simualtionJob,long scienceAppId, String jobTitle){
 		try{
 			final int REPO_ID = 1;
 			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
+			String jobUuid = simualtionJob.getJobUuid();
 			SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
 			ServiceContext sc = ServiceContextFactory.getInstance(request);
 			
@@ -169,7 +170,7 @@ public class JobController {
 					GetterUtil.getLong(scienceAppId, 0),
 					REPO_ID, 
 					simulationJobData.getJobData(),
-					scienceApp.getLayout(), 
+					scienceApp.getLayout(),
 					sc);
 			
 			if(saveInfo.getBoolean("isValid")){

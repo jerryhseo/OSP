@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.FileSystems;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -81,13 +82,20 @@ public class MeshAppHelper {
 				EXECUTE_BASE_PATH,
 				analyzerJob.getAppName(), analyzerJob.getAppVersion(), user.getScreenName(),
 				analyzerJob.getAnalyzerUuid(), analyzerJob.getLogFile().getParent_(), analyzerJob.getLogFile().getName_());
-		String result = readTextFile(path);
-		int timeLogInt = Integer.parseInt(result.substring(0, result.lastIndexOf(".")).trim());
 		
-		if(timeLogInt>=time){
-			return result;
-		}else{
-			long sleepTime = 5*100;
+		try{
+			String result = readTextFile(path);
+			int timeLogInt = Integer.parseInt(result.substring(0, result.lastIndexOf(".")).trim());
+			
+			if(timeLogInt>=time){
+				return result;
+			}else{
+				long sleepTime = 8*100;
+				Thread.sleep(sleepTime);
+				return getTimeLog(themeDisplay,analyzerJob,user,time);
+			}
+		}catch (NoSuchFileException e) {
+			long sleepTime = 1*1000;
 			Thread.sleep(sleepTime);
 			return getTimeLog(themeDisplay,analyzerJob,user,time);
 		}
