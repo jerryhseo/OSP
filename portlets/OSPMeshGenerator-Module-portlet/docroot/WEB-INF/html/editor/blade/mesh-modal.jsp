@@ -252,7 +252,7 @@ function <portlet:namespace/>resizeParamInputWidth(count){
 function <portlet:namespace/>submitMeshData(meshData, analyzerUuid){
 	$("#<portlet:namespace/>create-mesh-modal").modal("hide");
 	bStart();
-	setTimeout(function(){
+	<portlet:namespace/>currentTimeOut = setTimeout(function(){
 		var stringMeshData = JSON.stringify(meshData);
 		var postData = {
 			"<portlet:namespace/>appName" : MESH.Constants.getMakeMeshApp('${type}'),
@@ -269,18 +269,21 @@ function <portlet:namespace/>submitMeshData(meshData, analyzerUuid){
 			success : function(meshOutput){
 				if(meshOutput.isComplete){
 					<portlet:namespace/>addMeshDataNode(meshOutput.analyzerJob,meshOutput.fileId,meshOutput.fileName);
-					<portlet:namespace/>updateProject(false);
+					<portlet:namespace/>updateProject();
 				}else{
 					alert("Mesh program can not be executed.");
 				}
-				bEnd();
 			},error:function(jqXHR, textStatus, errorThrown){
-				bEnd();
 				if(jqXHR.responseText !== ''){
 					alert("submitMeshData-->"+textStatus+": "+jqXHR.responseText);
 				}else{
 					alert("submitMeshData-->"+textStatus+": "+errorThrown);
 				}
+			},complete : function() {
+				if(<portlet:namespace/>currentTimeOut){
+					clearTimeout(<portlet:namespace/>currentTimeOut);
+				}
+				bEnd();
 			}
 		});
 	}, 2000);

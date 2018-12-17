@@ -19,7 +19,6 @@ Liferay.on('OSP_FROM_EDITOR_EVENT',function(event) {
 					data.token = param.token;
 					data.command = param.command;
 					data.url = <portlet:namespace/>makeRequestUrl(data.fileId, data.name, data.token);
-					console.log(data);
 					if (data.url) {
 						<portlet:namespace/>callViewerRequest(data);
 					}
@@ -51,6 +50,17 @@ Liferay.on('OSP_FROM_EDITOR_EVENT',function(event) {
 			}
 		} else if (cmd == 'loadProject') {
 			<portlet:namespace/>loadProject(param);  
+		} else if (cmd == 'get.display') {
+			var myId = '<%=portletDisplay.getId()%>';
+			var cmd = "set.display";
+			var result = $('#<portlet:namespace/>viewerFrame')[0].contentWindow.getSceneInfo();
+			var eventData = {
+					portletId : myId,
+					targetPortlet : event.portletId,
+					command : cmd,
+					data : result
+				};
+			Liferay.fire(OSP.Event.OSP_FROM_ANALYZER_EVENT, eventData);
 		}
 	}
 });

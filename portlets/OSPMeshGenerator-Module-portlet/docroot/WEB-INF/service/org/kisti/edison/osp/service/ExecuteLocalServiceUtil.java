@@ -301,6 +301,16 @@ public class ExecuteLocalServiceUtil {
 			inputFilePath, inputFileName, fileId);
 	}
 
+	public static void simulationWithInputFiles(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.util.List<java.util.HashMap<java.lang.String, java.lang.String>> fileList,
+		java.nio.file.Path inputPath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.simulationWithInputFiles(projectId, analyzerJob, fileList,
+			inputPath);
+	}
+
 	public static void removeExecuteWithPath(long projectId,
 		java.lang.String executeId, java.lang.String userScreenName,
 		java.lang.String executeBasePath)

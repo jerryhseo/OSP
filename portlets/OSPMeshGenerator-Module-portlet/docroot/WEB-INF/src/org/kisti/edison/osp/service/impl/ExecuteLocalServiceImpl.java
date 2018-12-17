@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -135,6 +136,38 @@ public class ExecuteLocalServiceImpl extends ExecuteLocalServiceBaseImpl {
 			FileUtil.copyFile(ibFile, inputFile);
 			
 			ibFile.delete();
+			
+			modifyExecute(projectId, analyzerJob);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new SystemException();
+		}
+	}
+	
+	public void simulationWithInputFiles(long projectId, AnalyzerJob analyzerJob, List<HashMap<String, String>> fileList,Path inputPath) throws SystemException{
+		try{
+			for(HashMap<String,String> fileMap : fileList){
+				String fileContents = fileMap.get("fileContent").toString();
+				Path inputFilePath = inputPath.resolve(fileMap.get("fileName").toString());
+				
+				File inputFile = new File(inputFilePath.toAbsolutePath().toString());
+				
+				if(inputFile.exists()){
+					inputFile.delete();
+					inputFile.createNewFile();
+				}else{
+					FileUtil.mkdirs(inputFile.getParent());
+					File dir = new File(inputFile.getParent());
+					dir.setReadable(true);
+					dir.setExecutable(true);
+					dir.setWritable(true);
+					inputFile.createNewFile();
+				}
+				
+				FileWriter fileWriter = new FileWriter(inputFile);
+				fileWriter.write(fileContents);
+				fileWriter.close();
+			}
 			
 			modifyExecute(projectId, analyzerJob);
 		}catch(Exception e){

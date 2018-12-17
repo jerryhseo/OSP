@@ -141,9 +141,16 @@ public class ExecuteLocalServiceClpInvoker {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName50 = "removeExecuteWithPath";
+		_methodName49 = "simulationWithInputFiles";
 
-		_methodParameterTypes50 = new String[] {
+		_methodParameterTypes49 = new String[] {
+				"long", "org.kisti.edison.osp.model.AnalyzerJob",
+				"java.util.List", "java.nio.file.Path"
+			};
+
+		_methodName51 = "removeExecuteWithPath";
+
+		_methodParameterTypes51 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
@@ -277,8 +284,18 @@ public class ExecuteLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			ExecuteLocalServiceUtil.simulationWithInputFiles(((Long)arguments[0]).longValue(),
+				(org.kisti.edison.osp.model.AnalyzerJob)arguments[1],
+				(java.util.List<java.util.HashMap<java.lang.String, java.lang.String>>)arguments[2],
+				(java.nio.file.Path)arguments[3]);
+
+			return null;
+		}
+
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
 			ExecuteLocalServiceUtil.removeExecuteWithPath(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3]);
@@ -331,6 +348,8 @@ public class ExecuteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes47;
 	private String _methodName48;
 	private String[] _methodParameterTypes48;
-	private String _methodName50;
-	private String[] _methodParameterTypes50;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
 }

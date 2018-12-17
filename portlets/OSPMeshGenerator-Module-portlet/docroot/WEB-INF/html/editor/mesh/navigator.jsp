@@ -992,13 +992,13 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 				}
 			});
 		}
-	}else{
-		var parentNode = tree.get_node(node.parent);
+	}else if(e.portletId == "StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_meshparametric"){
 		var dataType = new OSP.DataType();
 		dataType.deserializeStructure(e.data.context_);
-		var dataStructure = dataType.structure(); 
+		var dataStructure = dataType.structure();
 		var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
-		<portlet:namespace/>prepareAnalyzer(MESH.Constants.getShapeAnalysisApp('${type}'),MESH.Constants.getShapeAnalysisAppVersion('${type}'), parentNode, fileContent,true);
+		
+		<portlet:namespace/>submitMeshData(fileContent);
 	}
 });
 

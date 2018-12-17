@@ -1,6 +1,5 @@
-package org.kisti.edison.osp.editor.blade;
+package org.kisti.edison.osp.editor.mesh;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.Map;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,8 +30,9 @@ import net.sf.json.JSONSerializer;
 
 @Controller
 @RequestMapping("VIEW")
-public class BladeEditorController {
-	private static Log log = LogFactory.getLog(BladeEditorController.class);
+public class MeshEditorController {
+	private static Log log = LogFactory.getLog(MeshEditorController.class);
+	
 	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model){
@@ -41,7 +40,9 @@ public class BladeEditorController {
 		
 		try{
 			List<String[]> dataStructurAppList = new ArrayList<String[]>();;
-			dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.0", "parametric"});
+			dataStructurAppList.add(new String[]{"KFOIL_AirFoil_Para_parin", "1.0.1", "parametric"});
+			dataStructurAppList.add(new String[]{"KGRID", "1.0.0", "meshparametric"});
+			
 			for(String[] appList : dataStructurAppList){
 				String appName = appList[0];
 				String appVersion = appList[1];
@@ -72,14 +73,8 @@ public class BladeEditorController {
 			e.printStackTrace();
 			SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
 		}
-		model.addAttribute("type", "BLADE");
+		
+		model.addAttribute("type", "MESH");
 		return "view";
 	}
-	
-	protected static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		response.getWriter().write(message);
-		response.flushBuffer();
-	}
-	
 }

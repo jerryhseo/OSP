@@ -6,6 +6,8 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -96,9 +98,6 @@ public class MeshAppHelper {
 		return OSPFileUtil.readTextFile(path);
 	}
 	
-	
-	
-	
 	public AnalyzerJob prepareAnalyzer(String appName, String appVersion, String userScreenName) throws NoSuchScienceAppException, SystemException{
 		UUID analyzerUuid = UUID.randomUUID();
 		return prepareAnalyzer(appName, appVersion, analyzerUuid.toString(), userScreenName);
@@ -135,6 +134,18 @@ public class MeshAppHelper {
 		return analyzerJob;
 	}
 	
+	
+	public String createInputFiles(long projectId,List<HashMap<String, String>> fileList,ThemeDisplay themeDisplay,AnalyzerJob analyzerJob, User user) throws SystemException{
+    	
+    	Path executePath = getAppExecutePath(themeDisplay, analyzerJob);
+        Path workingPath = executePath.resolve(Paths.get(user.getScreenName(), analyzerJob.getAnalyzerUuid()));
+        
+        
+        ExecuteLocalServiceUtil.simulationWithInputFiles(projectId, analyzerJob, fileList, workingPath);
+        
+        return workingPath.toString();
+    }
+
 	public boolean exeAnalyzer(long projectId, String inputFileName, String fileId, String fileContent,
 			ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
 		return exeAnalyzer(projectId, inputFileName, fileId, fileContent, false, themeDisplay, analyzerJob, user);
@@ -189,6 +200,37 @@ public class MeshAppHelper {
 		doAnalyzer(exeFile, inputFilePath, resultPath);
 		return true;
 	}
+	
+	
+	public boolean exeKflowMeshAnalyzer(long projectId,String datFilePath, String sdeFilePath, ThemeDisplay themeDisplay, AnalyzerJob analyzerJob, User user) throws Exception{
+		Path appPath = null;
+		Path exeFile = null;
+		
+		appPath = getAppPath(themeDisplay, analyzerJob);
+		exeFile = appPath.resolve(Paths.get(BIN_PATH, analyzerJob.getExeFileName()));
+		
+		Path executePath = getAppExecutePath(themeDisplay, analyzerJob);
+		Path workingPath = executePath.resolve(Paths.get(user.getScreenName(), analyzerJob.getAnalyzerUuid()));
+		Path resultPath = workingPath.resolve(analyzerJob.getOutputData().getParent_());
+		
+		String resultPathString = resultPath.toString();
+		resultPathString = resultPathString.endsWith(FILESYSTEM_SEPARATOR) ? resultPathString: resultPathString + FILESYSTEM_SEPARATOR;
+		String[] command = new String[]{
+			exeFile.toString(), "-inp", sdeFilePath,
+			"-grd", datFilePath,
+			ANALYZER_DEFAULT_OUTPUT_NAME, resultPathString};
+		
+		for(String cmd : command){
+			log.info(cmd);
+		}
+		ProcessBuilder builder = new ProcessBuilder(command);
+		builder.redirectOutput(Redirect.INHERIT);
+		builder.redirectError(Redirect.INHERIT);
+		builder.start();
+		
+		return true;
+	}
+	
 	
 	private void doAnalyzer(Path exeFile, Path inputFile, Path resultPath) throws IOException{
 		String resultPathString = resultPath.toString();

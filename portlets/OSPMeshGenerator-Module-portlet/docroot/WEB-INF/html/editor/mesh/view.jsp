@@ -259,6 +259,7 @@ function <portlet:namespace/>init(){
 	<portlet:namespace/>navigatorInitJstree();
 	
 	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
+	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${meshparametric},'meshparametric');
 }
 
 function <portlet:namespace/>fireWorkbenchEvent(eventName){

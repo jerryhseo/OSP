@@ -32,6 +32,36 @@
 	</portlet>
 	
 	<portlet>
+		<portlet-name>MeshDataEditor</portlet-name>
+		<display-name>Mesh Data Editor</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>classpath:org/kisti/edison/osp/editor/mesh/edison-mesh-editor-portlet.xml</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<portlet-info>
+			<title>Mesh Data Editor</title>
+			<short-title>Mesh Data Editor</short-title>
+			<keywords>Mesh Data Editor</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
+	
+	<portlet>
         <portlet-name>BladeMeshViewer</portlet-name>
         <display-name>Blade Mesh Viewer</display-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>

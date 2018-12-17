@@ -12,6 +12,15 @@
 		</css-class-wrapper>
         <add-default-resource>true</add-default-resource>
 	</portlet>
+	<portlet>
+		<portlet-name>MeshDataEditor</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<css-class-wrapper>
+			blade-editor-portlet
+		</css-class-wrapper>
+        <add-default-resource>true</add-default-resource>
+	</portlet>
 	
 	<portlet>
         <portlet-name>BladeMeshViewer</portlet-name>

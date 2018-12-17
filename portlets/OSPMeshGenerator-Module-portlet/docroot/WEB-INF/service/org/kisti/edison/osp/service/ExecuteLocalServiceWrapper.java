@@ -312,6 +312,16 @@ public class ExecuteLocalServiceWrapper implements ExecuteLocalService,
 	}
 
 	@Override
+	public void simulationWithInputFiles(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.util.List<java.util.HashMap<java.lang.String, java.lang.String>> fileList,
+		java.nio.file.Path inputPath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_executeLocalService.simulationWithInputFiles(projectId, analyzerJob,
+			fileList, inputPath);
+	}
+
+	@Override
 	public void removeExecuteWithPath(long projectId,
 		java.lang.String executeId, java.lang.String userScreenName,
 		java.lang.String executeBasePath)

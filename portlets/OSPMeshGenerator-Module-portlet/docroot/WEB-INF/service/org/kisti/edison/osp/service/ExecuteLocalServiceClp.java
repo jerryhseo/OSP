@@ -141,9 +141,16 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName22 = "removeExecuteWithPath";
+		_methodName22 = "simulationWithInputFiles";
 
 		_methodParameterTypes22 = new String[] {
+				"long", "org.kisti.edison.osp.model.AnalyzerJob",
+				"java.util.List", "java.nio.file.Path"
+			};
+
+		_methodName23 = "removeExecuteWithPath";
+
+		_methodParameterTypes23 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
@@ -809,14 +816,50 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 	}
 
 	@Override
+	public void simulationWithInputFiles(long projectId,
+		org.kisti.edison.osp.model.AnalyzerJob analyzerJob,
+		java.util.List<java.util.HashMap<java.lang.String, java.lang.String>> fileList,
+		java.nio.file.Path inputPath)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22,
+				new Object[] {
+					projectId,
+					
+				ClpSerializer.translateInput(analyzerJob),
+					
+				ClpSerializer.translateInput(fileList),
+					
+				ClpSerializer.translateInput(inputPath)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public void removeExecuteWithPath(long projectId,
 		java.lang.String executeId, java.lang.String userScreenName,
 		java.lang.String executeBasePath)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException, org.kisti.edison.osp.NoSuchExecuteException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName22,
-				_methodParameterTypes22,
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23,
 				new Object[] {
 					projectId,
 					
@@ -897,4 +940,6 @@ public class ExecuteLocalServiceClp implements ExecuteLocalService {
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
 	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
 }

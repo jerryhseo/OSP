@@ -4,6 +4,7 @@
 <display>
 	<category name="OSP Editors">
 		<portlet id="BladeDataEditor"></portlet>
+		<portlet id="MeshDataEditor"></portlet>
 	</category>
 	<category name="OSP Analyzer">
 		<portlet id="BladeMeshViewer"></portlet>
