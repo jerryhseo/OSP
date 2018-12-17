@@ -35,6 +35,7 @@
 		<field name="version" type="String" />
 		<field name="openYn" type="String" />
 		<field name="coverImageFileEntryId" type="long" />
+		<field name="contentUrl" type="String" />
 	</model>
 	<model name="org.kisti.edison.content.model.GeneralContent">
 		<field name="contentSeq" type="long" />

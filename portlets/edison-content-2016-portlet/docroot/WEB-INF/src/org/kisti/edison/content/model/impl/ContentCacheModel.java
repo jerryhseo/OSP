@@ -37,7 +37,7 @@ import java.util.Date;
 public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -75,6 +75,8 @@ public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 		sb.append(openYn);
 		sb.append(", coverImageFileEntryId=");
 		sb.append(coverImageFileEntryId);
+		sb.append(", contentUrl=");
+		sb.append(contentUrl);
 		sb.append("}");
 
 		return sb.toString();
@@ -172,6 +174,13 @@ public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 
 		contentImpl.setCoverImageFileEntryId(coverImageFileEntryId);
 
+		if (contentUrl == null) {
+			contentImpl.setContentUrl(StringPool.BLANK);
+		}
+		else {
+			contentImpl.setContentUrl(contentUrl);
+		}
+
 		contentImpl.resetOriginalValues();
 
 		return contentImpl;
@@ -197,6 +206,7 @@ public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 		version = objectInput.readUTF();
 		openYn = objectInput.readUTF();
 		coverImageFileEntryId = objectInput.readLong();
+		contentUrl = objectInput.readUTF();
 	}
 
 	@Override
@@ -276,6 +286,13 @@ public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 		}
 
 		objectOutput.writeLong(coverImageFileEntryId);
+
+		if (contentUrl == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(contentUrl);
+		}
 	}
 
 	public String uuid;
@@ -296,4 +313,5 @@ public class ContentCacheModel implements CacheModel<Content>, Externalizable {
 	public String version;
 	public String openYn;
 	public long coverImageFileEntryId;
+	public String contentUrl;
 }

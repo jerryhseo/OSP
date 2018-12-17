@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -446,7 +447,7 @@ public class ContentListController{
 			Map<String, Object> content = ContentLocalServiceUtil.retrieveMapContent(companyId, themeDisplay.getLocale(),
 				contentSeq);
 			model.addAttribute("content", content);
-
+			
 			model.addAttribute("contentSeq", String.valueOf(contentSeq));
 			model.addAttribute("contentDiv", String.valueOf(contentDiv));
 			
@@ -458,7 +459,7 @@ public class ContentListController{
 				DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry((long) content.get("CoverImageFileEntryId"));
 				model.addAttribute("coverImageFile", dlFileEntry);
 			}
-
+			
 			Role managerRole = RoleLocalServiceUtil.getRole(companyId, EdisonRoleConstants.CONTENT_MANAGER);
 
 			// manager List
@@ -690,6 +691,8 @@ public class ContentListController{
 				model.addAttribute("childrenCategory", childrenCategory);
 				model.addAttribute("parentCategory", parentCategory);
 				model.addAttribute("categoryNameList", categoryNameList);
+				
+				model.addAttribute("contentUrl", content.get("contentUrl"));
 
 			}else{
 				long contentSeq = Long.parseLong(CustomUtil.strNull(param.get("contentSeq"), "0"));

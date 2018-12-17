@@ -1019,51 +1019,6 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentRelatedData" class="tab-pane" style="padding: 10px">
-									<!-- Relate Paper List -->
-									<div id="<portlet:namespace/>scienceAppPaper" class="post">
-										<div class="box-solid edison-panel">
-											<strong>
-												<liferay-ui:message key='edison-science-app-paper' />
-											</strong>
-											
-											<div class="h10"></div>
-											
-											<div class="box-body">
-											</div>
-											
-											<div class="text-center">
-											</div>
-										</div>
-									</div>
-									
-									<!-- Relate Data List -->
-									<%-- <div id="<portlet:namespace/>scienceAppRelateData" class="post">
-										<div class="box-solid edison-panel">
-											<strong>
-												Relation Data
-											</strong>
-											<div class="box-body">
-												<ul class="products-list product-list-in-box">
-													<li class="item _edisonscienceAppstore_WAR_edisonappstore2016portlet_paper-list">
-														<div style="width: 85%; float: left; padding-top: 5px;">Gplus New App Data_1</div>
-														<button class="btn bg-orange margin" onclick="window.open('https://www.edison.re.kr', '_blank');" type="button" style="width: 15%; float: left; font-size: 12px; padding: 4px;">
-															<i class="icon-link"> LINK</i>
-														</button>
-													</li>
-													<li class="item _edisonscienceAppstore_WAR_edisonappstore2016portlet_paper-list">
-														<div style="width: 85%; float: left; padding-top: 5px;">GPLUS TEST APP 관련 데이터</div>
-														<button class="btn bg-orange margin" onclick="window.open('https://www.edison.re.kr', '_blank');" type="button" style="width: 15%; float: left; font-size: 12px; padding: 4px;">
-															<i class="icon-link"> LINK</i>
-														</button>
-													</li>
-												</ul>
-											</div>
-											
-											<div class="text-center" style="border-top: 1px solid #f4f4f4;">
-												<!-- 관련 데이터가 많을 경우 페이징 처리 -->
-											</div>
-										</div>
-									</div> --%>
 									
 									<!-- Relate Data List -->
 									<div id="<portlet:namespace/>scienceAppRelateInfo" class="post">
@@ -2369,9 +2324,15 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 						var dataType = "S";
 						var dataTypeClass = "info";
 						var moveParameter = "'" + dataList[i].modelSeq + "', '" + dataList[i].modelDiv + "', '" + selectType + "'";
-						var relateInfoTitle = dataList[i].title + " v" + dataList[i].version;
+						var relateInfoTitle = dataList[i].title;
+						var hasContentUrl = false;
+						var contentUrl = '';
 						
 						if(selectType === "SCIENCE_APP"){
+							
+							/* Add ScienceApp Version */
+							relateInfoTitle =  + " v" + dataList[i].version;
+							
 							if(dataList[i].modelDiv == "Editor"){
 								dataType = "E";
 								dataTypeClass = "success";
@@ -2382,36 +2343,47 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 							
 							moveParameter = "'" + dataList[i].modelSeq + "', '" + dataList[i].groupId + "', '" + selectType + "'";
 						} else if(selectType === "CONTENT"){
-							/* moveParameter = "'" + dataList[i].modelSeq + "', '" + dataList[i].modelDiv + "', '" + selectType + "'"; */
-							
 							dataType = "C";
 							dataTypeClass = "primary";
+							
+							if(dataList[i].contentUrl != ''){
+								hasContentUrl = true;
+								contentUrl = dataList[i].contentUrl;
+							}
 						} else if(selectType === "OPEN_DATA"){
-							relateInfoTitle = dataList[i].title;
 							dataType = "D";
 							dataTypeClass = "primary";
 						} else if(selectType === "SIMULATION_PROJECT"){
-							relateInfoTitle = dataList[i].title;
 							dataType = "P";
 							dataTypeClass = "primary";
 						}
 						
 						var boxBody = $("<div/>").addClass("box-body").addClass("<portlet:namespace/>relate-info-body")
-												 .attr("onclick", "<portlet:namespace/>shortcuts(" + moveParameter + ");")
 												 .css("display", "none").css("margin", "0% 2%")
 												 .css("border-top", "1px solid #f4f4f4")
 												 .css("padding-top", "10px !important")
 												 .css("padding-bottom", "10px !important");
 						
-						$("<i/>").addClass("icon-angle-right").appendTo(boxBody);
+						var relationInfoContent = $("<div/>").addClass("<portlet:namespace/>relate-info-content")
+															.attr("onclick", "<portlet:namespace/>shortcuts(" + moveParameter + ");");
+						$("<i/>").addClass("icon-angle-right").appendTo(relationInfoContent);
 						
 						$("<span/>").addClass("label label-"+dataTypeClass)
 									.css("margin", "0px 5px").css("padding", "2px 4px 2px 3px")
-									.text(dataType).appendTo(boxBody);
-						$("<span/>").text(relateInfoTitle).appendTo(boxBody);
+									.text(dataType).appendTo(relationInfoContent);
+						$("<span/>").text(relateInfoTitle).appendTo(relationInfoContent);
+						
+						relationInfoContent.appendTo(boxBody);
+						
+						/* 논문 URL이 있는 경우 */
+						if(hasContentUrl){
+							relationInfoContent.css("width", "80%").css("float", "left");
+							contentLink = $("<div/>").css("width", "20%").css("float", "left");
+							$("<i/>").addClass("icon-link").append($("<a/>").attr("href", contentUrl).attr("target", "_blank").text(" Citation Link")).appendTo(contentLink);
+							contentLink.appendTo(boxBody);
+						}
 						
 						boxBody.appendTo(viewDiv);
-						
 					}
 				}
 				

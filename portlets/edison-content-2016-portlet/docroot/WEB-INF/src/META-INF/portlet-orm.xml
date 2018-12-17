@@ -58,6 +58,7 @@
 			<basic name="version" />
 			<basic name="openYn" />
 			<basic name="coverImageFileEntryId" />
+			<basic name="contentUrl" />
 			<transient name="contentFileNmCurrentLanguageId" />
 			<transient name="contentFileNmMap" />
 			<transient name="modelAttributes" />
