@@ -30,7 +30,8 @@
 			DATA.version, 
 			DATA.openYn,
 			DATA.coverImageFileEntryId,
-			(SELECT user.screenName FROM User_ user WHERE user.userId=DATA.insertId) screenName
+			(SELECT user.screenName FROM User_ user WHERE user.userId=DATA.insertId) screenName,
+			DATA.contentUrl
 		]]>
 	</sql>
 	
@@ -120,7 +121,8 @@
 				contentDiv,
 				ExtractValue(title, 'root/Title[@language-id="@@languageId@@"]') as title,
 				ExtractValue(resume, 'root/Resume[@language-id="@@languageId@@"]') as resume,
-				version				 
+				version,
+				contentUrl				 
 	</sql>
 	<sql id="org.kisti.edison.content.service.persistence.getAssetEntryModelWhere" >
 		<![CDATA[
@@ -170,7 +172,8 @@
 			A.version, 
 			A.openYn,
 			B.screenName, 	
-			B.firstName
+			B.firstName,
+			B.contentUrl
 		FROM
 			EDMED_Content A, User_ B 
 		WHERE

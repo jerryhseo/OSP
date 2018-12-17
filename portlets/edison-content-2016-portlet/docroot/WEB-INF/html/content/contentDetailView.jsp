@@ -163,6 +163,14 @@ function <portlet:namespace/>closeDialog ( data ){
 							</ul>
 						</div>
 					</c:if>
+					<c:if test="${content.contentUrl != ''}">
+						<div class="msbox">
+							<div style="padding-left: 20px; font-size: 15px;">
+								<i class="icon-link"></i> Link :
+								<a href="${content.contentUrl}">${content.contentUrl}</a> 
+							</div>
+						</div>
+					</c:if>
 				</c:when>
 				<c:otherwise>
 					<%-- <c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}"> --%>
@@ -198,6 +206,18 @@ function <portlet:namespace/>closeDialog ( data ){
 													<br/>
 												</c:if>
 											<%} %>
+										</c:when>
+										<c:when test="${content.contentDiv == 2001005}"><!-- 논문일떄 -->
+											<c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">
+												<li class="txtnum"><span style="cursor:pointer" onclick="<portlet:namespace/>contentFileDownload('${content.contentSeq }', '${content.contentDiv}', '')">${content.contentFileNm }</span></li>
+											</c:if>
+											<c:if test="${content.contentUrl ne ''}">
+												<%-- <li class="txtnum"><span style="cursor:pointer" onclick="<portlet:namespace/>contentFileDownload('${content.contentSeq }', '${content.contentDiv}', '')">${content.contentFileNm }</span></li> --%>
+												<div style="padding-left: 10px; font-size: 15px; margin-top: 15px;">
+													<i class="icon-link"></i> Link :
+													<a href="${content.contentUrl}">${content.contentUrl}</a>
+												</div>
+											</c:if>
 										</c:when>
 										<c:otherwise><!-- 메뉴얼이 아닐때 -->
 										  <c:if test="${content.contentFileNm ne '' && content.contentFileNm ne null}">

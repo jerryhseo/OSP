@@ -45,6 +45,7 @@
 		<property name="version" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="openYn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="coverImageFileEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="contentUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="org.kisti.edison.content.model.impl.GeneralContentImpl" table="EDMED_GeneralContent">
 		<cache usage="read-write" />

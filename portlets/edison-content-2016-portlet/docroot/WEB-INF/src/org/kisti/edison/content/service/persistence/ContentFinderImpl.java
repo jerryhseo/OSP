@@ -277,6 +277,7 @@ public class ContentFinderImpl extends BasePersistenceImpl<Content> implements C
 			query.addScalar("title", Type.STRING);
 			query.addScalar("resume", Type.STRING);
 			query.addScalar("version", Type.STRING);
+			query.addScalar("contentUrl", Type.STRING);
 
 			return (List<Object[]>) query.list();
 		}catch (Exception e){

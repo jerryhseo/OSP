@@ -577,6 +577,21 @@ public interface ContentModel extends BaseModel<Content> {
 	 */
 	public void setCoverImageFileEntryId(long coverImageFileEntryId);
 
+	/**
+	 * Returns the content url of this content.
+	 *
+	 * @return the content url of this content
+	 */
+	@AutoEscape
+	public String getContentUrl();
+
+	/**
+	 * Sets the content url of this content.
+	 *
+	 * @param contentUrl the content url of this content
+	 */
+	public void setContentUrl(String contentUrl);
+
 	@Override
 	public boolean isNew();
 

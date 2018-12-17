@@ -189,6 +189,8 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 			contentMap.put("insertNm", contentUser.getScreenName());
 			contentMap.put("viewCnt", content.getViewCnt());
 			contentMap.put("CoverImageFileEntryId", content.getCoverImageFileEntryId());
+			
+			contentMap.put("contentUrl", content.getContentUrl());
 		}
 
 		return contentMap;
@@ -576,6 +578,9 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 		List<FileEntry> fileEntryList = EdisonFileUtil.insertEdisonFile(request, upload, userId, 20181, "", String.valueOf(contentSeq),
 			"mainImage", contentFilePreFix);
 		
+		
+		// 콘텐츠 URL 등록(논문 링크)
+		content.setContentUrl(CustomUtil.strNull(param.get("contentUrl"), ""));
 
 		/**************************************************************************************************************************************/
 		//DL에 등록된 파일의 FileEntryId를 Content Table에 적용
@@ -697,6 +702,8 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 						AdvancedFileUtil.deleteAllFile(companyId, basicContentFilePath);
 						// 콘텐츠 파일 등록
 						fileName = AdvancedFileUtil.createFile(upload, companyId, basicContentFilePath, String.valueOf(content.getContentSeq()), "contentFile");
+						
+						String advancedStartFileNm = String.valueOf(param.get("advancedStartFileNm"));
 
 						if(content.getContentDiv() == 2001004){
 							AdvancedFileUtil.unzipFile(upload, companyId, basicContentFilePath, String.valueOf(content.getContentSeq()), "contentFile");
@@ -706,7 +713,26 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 				}
 
 			}
+		} else {
+			if(contentDiv == 2001005){
+				Locale[] locales = LanguageUtil.getAvailableLocales();
+				
+				// 콘텐츠 파일 등록
+				for(Locale locale : locales){
+					String languageId = LocaleUtil.toLanguageId(locale);
+					String fileName = "";
+					fileName = AdvancedFileUtil.createFile(upload, companyId, basicContentFilePath + File.separator,
+							String.valueOf(content.getContentSeq()), "contentFile");
+					
+					String advancedStartFileNm = String.valueOf(param.get("advancedStartFileNm"));
+					
+					content.setContentFileNm(fileName, locale);
+				}
+			}
 		}
+		
+		// 콘텐츠 URL 등록(논문 링크)
+		content.setContentUrl(CustomUtil.strNull(param.get("contentUrl"), ""));
 
 		// ********************************************************************************************************************************
 
@@ -850,6 +876,7 @@ public class ContentLocalServiceImpl extends ContentLocalServiceBaseImpl{
 				map.put("title", content[2]);
 				map.put("description", content[3]);
 				map.put("version", content[4]);
+				map.put("contentUrl", content[5]);
 
 				returnList.add(map);
 			}

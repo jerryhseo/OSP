@@ -2440,6 +2440,7 @@ public class ContentPersistenceImpl extends BasePersistenceImpl<Content>
 		contentImpl.setVersion(content.getVersion());
 		contentImpl.setOpenYn(content.getOpenYn());
 		contentImpl.setCoverImageFileEntryId(content.getCoverImageFileEntryId());
+		contentImpl.setContentUrl(content.getContentUrl());
 
 		return contentImpl;
 	}

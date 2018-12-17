@@ -25,6 +25,7 @@
 		<column name="version" type="String" ></column>
 		<column name="openYn" type="String" ></column>
         <column name="coverImageFileEntryId" type="long"></column>
+        <column name="contentUrl" type="String" ></column>
 		
 		<finder name="ContentSeq" return-type="Content">
 			<finder-column name="contentSeq" />

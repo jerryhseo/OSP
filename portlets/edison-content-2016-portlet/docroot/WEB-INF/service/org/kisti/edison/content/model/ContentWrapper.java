@@ -67,6 +67,7 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 		attributes.put("version", getVersion());
 		attributes.put("openYn", getOpenYn());
 		attributes.put("coverImageFileEntryId", getCoverImageFileEntryId());
+		attributes.put("contentUrl", getContentUrl());
 
 		return attributes;
 	}
@@ -181,6 +182,12 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 
 		if (coverImageFileEntryId != null) {
 			setCoverImageFileEntryId(coverImageFileEntryId);
+		}
+
+		String contentUrl = (String)attributes.get("contentUrl");
+
+		if (contentUrl != null) {
+			setContentUrl(contentUrl);
 		}
 	}
 
@@ -925,6 +932,26 @@ public class ContentWrapper implements Content, ModelWrapper<Content> {
 	@Override
 	public void setCoverImageFileEntryId(long coverImageFileEntryId) {
 		_content.setCoverImageFileEntryId(coverImageFileEntryId);
+	}
+
+	/**
+	* Returns the content url of this content.
+	*
+	* @return the content url of this content
+	*/
+	@Override
+	public java.lang.String getContentUrl() {
+		return _content.getContentUrl();
+	}
+
+	/**
+	* Sets the content url of this content.
+	*
+	* @param contentUrl the content url of this content
+	*/
+	@Override
+	public void setContentUrl(java.lang.String contentUrl) {
+		_content.setContentUrl(contentUrl);
 	}
 
 	@Override

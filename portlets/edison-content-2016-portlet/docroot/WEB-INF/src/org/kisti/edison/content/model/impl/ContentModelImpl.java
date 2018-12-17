@@ -88,9 +88,10 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 			{ "updateDate", Types.TIMESTAMP },
 			{ "version", Types.VARCHAR },
 			{ "openYn", Types.VARCHAR },
-			{ "coverImageFileEntryId", Types.BIGINT }
+			{ "coverImageFileEntryId", Types.BIGINT },
+			{ "contentUrl", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDMED_Content (uuid_ VARCHAR(75) null,contentSeq LONG not null primary key,contentDiv LONG,title STRING null,resume STRING null,contentFileNm STRING null,advancedStartFileNm VARCHAR(75) null,serviceLanguage VARCHAR(75) null,projectYn VARCHAR(75) null,projectId LONG,viewCnt LONG,insertId LONG,insertDate DATE null,updateId LONG,updateDate DATE null,version VARCHAR(75) null,openYn VARCHAR(75) null,coverImageFileEntryId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDMED_Content (uuid_ VARCHAR(75) null,contentSeq LONG not null primary key,contentDiv LONG,title STRING null,resume STRING null,contentFileNm STRING null,advancedStartFileNm VARCHAR(75) null,serviceLanguage VARCHAR(75) null,projectYn VARCHAR(75) null,projectId LONG,viewCnt LONG,insertId LONG,insertDate DATE null,updateId LONG,updateDate DATE null,version VARCHAR(75) null,openYn VARCHAR(75) null,coverImageFileEntryId LONG,contentUrl VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDMED_Content";
 	public static final String ORDER_BY_JPQL = " ORDER BY content.contentSeq ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDMED_Content.contentSeq ASC";
@@ -141,6 +142,7 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 		model.setVersion(soapModel.getVersion());
 		model.setOpenYn(soapModel.getOpenYn());
 		model.setCoverImageFileEntryId(soapModel.getCoverImageFileEntryId());
+		model.setContentUrl(soapModel.getContentUrl());
 
 		return model;
 	}
@@ -223,6 +225,7 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 		attributes.put("version", getVersion());
 		attributes.put("openYn", getOpenYn());
 		attributes.put("coverImageFileEntryId", getCoverImageFileEntryId());
+		attributes.put("contentUrl", getContentUrl());
 
 		return attributes;
 	}
@@ -337,6 +340,12 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 
 		if (coverImageFileEntryId != null) {
 			setCoverImageFileEntryId(coverImageFileEntryId);
+		}
+
+		String contentUrl = (String)attributes.get("contentUrl");
+
+		if (contentUrl != null) {
+			setContentUrl(contentUrl);
 		}
 	}
 
@@ -868,6 +877,22 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 		_coverImageFileEntryId = coverImageFileEntryId;
 	}
 
+	@JSON
+	@Override
+	public String getContentUrl() {
+		if (_contentUrl == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _contentUrl;
+		}
+	}
+
+	@Override
+	public void setContentUrl(String contentUrl) {
+		_contentUrl = contentUrl;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -1013,6 +1038,7 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 		contentImpl.setVersion(getVersion());
 		contentImpl.setOpenYn(getOpenYn());
 		contentImpl.setCoverImageFileEntryId(getCoverImageFileEntryId());
+		contentImpl.setContentUrl(getContentUrl());
 
 		contentImpl.resetOriginalValues();
 
@@ -1187,12 +1213,20 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 
 		contentCacheModel.coverImageFileEntryId = getCoverImageFileEntryId();
 
+		contentCacheModel.contentUrl = getContentUrl();
+
+		String contentUrl = contentCacheModel.contentUrl;
+
+		if ((contentUrl != null) && (contentUrl.length() == 0)) {
+			contentCacheModel.contentUrl = null;
+		}
+
 		return contentCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(39);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1230,6 +1264,8 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 		sb.append(getOpenYn());
 		sb.append(", coverImageFileEntryId=");
 		sb.append(getCoverImageFileEntryId());
+		sb.append(", contentUrl=");
+		sb.append(getContentUrl());
 		sb.append("}");
 
 		return sb.toString();
@@ -1237,7 +1273,7 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(58);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.content.model.Content");
@@ -1315,6 +1351,10 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 			"<column><column-name>coverImageFileEntryId</column-name><column-value><![CDATA[");
 		sb.append(getCoverImageFileEntryId());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>contentUrl</column-name><column-value><![CDATA[");
+		sb.append(getContentUrl());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1351,6 +1391,7 @@ public class ContentModelImpl extends BaseModelImpl<Content>
 	private String _version;
 	private String _openYn;
 	private long _coverImageFileEntryId;
+	private String _contentUrl;
 	private long _columnBitmask;
 	private Content _escapedModel;
 }

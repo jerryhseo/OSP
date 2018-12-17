@@ -49,6 +49,7 @@ public class ContentSoap implements Serializable {
 		soapModel.setVersion(model.getVersion());
 		soapModel.setOpenYn(model.getOpenYn());
 		soapModel.setCoverImageFileEntryId(model.getCoverImageFileEntryId());
+		soapModel.setContentUrl(model.getContentUrl());
 
 		return soapModel;
 	}
@@ -245,6 +246,14 @@ public class ContentSoap implements Serializable {
 		_coverImageFileEntryId = coverImageFileEntryId;
 	}
 
+	public String getContentUrl() {
+		return _contentUrl;
+	}
+
+	public void setContentUrl(String contentUrl) {
+		_contentUrl = contentUrl;
+	}
+
 	private String _uuid;
 	private long _contentSeq;
 	private long _contentDiv;
@@ -263,4 +272,5 @@ public class ContentSoap implements Serializable {
 	private String _version;
 	private String _openYn;
 	private long _coverImageFileEntryId;
+	private String _contentUrl;
 }

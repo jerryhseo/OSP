@@ -333,6 +333,15 @@
 					localeIndex++;
 					} 
 				%>
+				
+				<tr class="<portlet:namespace/>citation-data">
+					<th>논문 URL</th>
+					<td colspan="3">
+						<div class="control-group">
+							<input type="text" class="form-control" id="<portlet:namespace/>contentUrl" name="<portlet:namespace/>contentUrl" placeholder="<liferay-ui:message key="edison-content-citation-url-placeholder-message"/>" value="${contentUrl}" />
+						</div>
+					</td>
+				</tr>
 					
 				<tr>
 					<th><liferay-ui:message key="edison-content-main-image"/><span class="requiredField"> *</span></th>
@@ -678,10 +687,12 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 	$(".contentFile").hide();
 	$(".advancedContent").hide();
 	$(".advancedExecuteFileName").hide();
+	$(".<portlet:namespace/>citation-data").hide();
 
 	$("#<portlet:namespace/>contentHtmlYn").prop("checked", false);
 	
-	if(contentDiv == 2001004){//고급콘텐츠일때
+	if(contentDiv == 2001004){
+		/* 고급콘텐츠일때 */
 		$(".contentFile").show();
 		$(".advancedContent").show();
 	
@@ -694,11 +705,16 @@ function <portlet:namespace/>changeContentDiv(contentDiv){
 				$("#<portlet:namespace/>contentHtmlYn").prop("checked",true).attr("disabled", true);		
 			}
 		}
-	}else if(contentDiv == 2001002){//메뉴얼일떄
+	}else if(contentDiv == 2001002){
+		/* 메뉴얼일떄 */
 		$(".contentFile").hide();
 		$(".manualContentFile").show();
-	}
-	else{//그외
+	}else if(contentDiv == 2001005){
+		/* 논문일때 */
+		$(".contentFile").show();
+		$(".<portlet:namespace/>citation-data").show()
+	}else{
+		/* 그외 */
 		$(".contentFile").show();
 	}
 }
@@ -840,9 +856,23 @@ function <portlet:namespace/>checkFileExtensions( contentDiv){
 		<%}%>
 	}else{
 		var contentFileNm = $("#<portlet:namespace/>contentFile").val();
+		var contentUrl = $("#<portlet:namespace/>contentUrl").val();
 		if(contentDiv != 2001002 && contentFileNm == ""){
-			alert(Liferay.Language.get('edison-simulation-execute-user-define-select-your-own-attachments'));
-			return false;
+			if(contentDiv != 2001005){
+				alert(Liferay.Language.get('edison-simulation-execute-user-define-select-your-own-attachments'));
+				return false;
+			} else {
+				if(contentUrl == ""){
+					alert(Liferay.Language.get('edison-content-citation-url-error-message'));
+					return false;
+				} else {
+					var urlRegex = /^http(s)?:\/\/(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/;
+					if(!urlRegex.test(contentUrl)){
+						alert(Liferay.Language.get('edison-science-app-paper-link-invalid'));
+						return false;
+					}
+				}
+			}
 		}
 		
 		if(typeof contentFileNm != "undefined"){
