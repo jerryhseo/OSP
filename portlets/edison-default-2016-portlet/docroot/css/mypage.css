@@ -28,6 +28,9 @@
 /*내 파일 관리*/
 .mpleft ul li.myFile{background:url(../images/mypage/icon05off.png) no-repeat 11px 17px;}
 .mpleft ul li.myFile.select{background:url(../images/mypage/icon05.png) no-repeat 11px 17px; background-color: #ffffff}
+/*내 시뮬레이션 파일 관리*/
+.mpleft ul li.mySimulationFile{background:url(../images/mypage/icon05off.png) no-repeat 11px 17px;}
+.mpleft ul li.mySimulationFile.select{background:url(../images/mypage/icon05.png) no-repeat 11px 17px; background-color: #ffffff}
 /*나의 앱 목록*/
 .mpleft ul li.myApp{background:url(../images/mypage/icon06off.png) no-repeat 11px 17px;}
 .mpleft ul li.myApp.select{background:url(../images/mypage/icon06.png) no-repeat 11px 17px; background-color: #ffffff}

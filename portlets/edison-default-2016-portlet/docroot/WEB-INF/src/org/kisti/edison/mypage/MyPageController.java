@@ -73,6 +73,7 @@ public class MyPageController {
 	5. 강좌 현황(myCourse)
 	6. 수강 현황(myClass)
 	7. 내 파일 관리(myFile)
+	7-1. 내 시뮬레이션 관리(mySimulationFile)
 	8. 내 워크스페이스(myWorkspace)
 	9. 나의 콘텐츠(myContent)
 	10. 나의 프로젝트(myProject)
@@ -185,6 +186,10 @@ protected Map<String,Object> tabCreateAndStatusButtonView(RenderRequest request,
 			if(tab.contains("myFile")){
 				tabName=LanguageUtil.get(locale,"edison-myfile-title");
 				tabValue = "myFile";
+			}
+			if(tab.contains("mySimulationFile")){
+				tabName=LanguageUtil.get(locale,"edison-myedison-file-mng-treeview");
+				tabValue = "mySimulationFile";
 			}
 			if(tab.contains("myApp")){
 				tabName=LanguageUtil.get(locale,"edison-appstore-myapp-list");
