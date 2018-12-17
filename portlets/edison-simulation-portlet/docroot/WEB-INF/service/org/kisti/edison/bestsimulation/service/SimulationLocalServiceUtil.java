@@ -326,8 +326,9 @@ public class SimulationLocalServiceUtil {
 	/**
 	* New Simulation With SimulationJob
 	*
-	* @param user                - 占쎄쑴��占쎈쵐�쏙옙占폱ser 揶쏆빘猿� EX)User user = PortalUtil.getUser(request);
-	* @param groupId             - Portal 占썬끋六�占쏙옙野껋럩��APP占쏙옙groupId�쒙옙筌〓㈇�� 域밸챷��siteGroupId 占쎈뿮��     * @param simulationTitle
+	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
+	* @param groupId             - Portal 실행 일 경우 APP의 groupId를 참고, 그외 siteGroupId 셋팅
+	* @param simulationTitle
 	* @param scienceAppId
 	* @param scienceAppName
 	* @param classId
@@ -370,7 +371,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼹六�     *
+	* 시뮬레이션 수행
+	*
 	* @simulationUuid
 	* @fileId
 	* @Token
@@ -390,7 +392,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼹六�     *
+	* 시뮬레이션 수행
+	*
 	* @simulationUuid
 	* @job_uuid
 	* @Token
@@ -405,9 +408,12 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌뮆占쏙옙�됱뵠占쏙옙占쎌꼷��     *
+	* 시뮬레이션 수정
+	*
 	* @throws JSONException
-	* @Token : 占쎈챷弛�占쎌쥚寃�     * @uuid : 占쎌뮆占쏙옙�됱뵠占쏙옙占쎄쑴�좑옙占�    * @return int resultCode
+	* @Token : 인증 토큰
+	* @uuid : 시뮬레이션 아이디
+	* @return int resultCode
 	*/
 	public static int updateSimulation(java.lang.String icebreakerUrl,
 		java.lang.String simulationUuid, java.lang.String vcToken,
@@ -419,7 +425,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈슣��占쎈굝以덌옙占�    *
+	* 파일 업로드
 	*
 	* @param params
 	String    Token
@@ -438,7 +444,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈슣��占쏙옙��     *
+	* 파일 삭제
+	*
 	* @param icebreakerUrl
 	* @param vcToken
 	* @param fileId
@@ -451,7 +458,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* serverFile 筌뤴뫖以�     */
+	* serverFile 목록
+	*/
 	public static java.lang.String getServerFileList(
 		java.lang.String icebreakerUrl, java.lang.String cmd_directory,
 		java.lang.String cluster, java.lang.String vcToken)
@@ -462,7 +470,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job癰귨옙野껉퀗��占쎈슣��zip占쎈벤源�에占쏙옙�쇱뒲嚥≪뮆諭�     *
+	* job별 결과 파일 zip형태로 다운로드
+	*
 	* @simulationUuid
 	* @job_uuid
 	* @Token
@@ -476,7 +485,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job error 癰귣떯由�     *
+	* job error 보기
+	*
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -488,7 +498,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈슣��ID 占쎈벡��     *
+	* 파일 ID 확인
+	*
 	* @throws IOException
 	*/
 	public static java.lang.String retrieveFileId(
@@ -500,7 +511,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎈뗀�놅옙醫듼봺 占쎈슣��鈺곌퀬��     * 占쎌눖而뀐옙怨몄뵥 占쎄쑴荑귞뵳�由�筌뤴뫖以됵옙占폻ir = result
+	* 디렉토리 파일 조회
+	* 일반적인 후처리기 목록은 dir = result
 	*
 	* @throws IOException
 	*/
@@ -539,7 +551,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* simulation job 餓λ쵐占�     *
+	* simulation job 중지
+	*
 	* @param params
 	* @return
 	* @throws IOException
@@ -554,7 +567,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* Cluster List 鈺곌퀬��     *
+	* Cluster List 조회
+	*
 	* @param params
 	* @return
 	* @throws IOException
@@ -567,7 +581,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* job error 癰귣떯由�     *
+	* job error 보기
+	*
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -579,7 +594,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* file 鈺곌퀬��     *
+	* file 조회
+	*
 	* @param params
 	* @throws IOException
 	* @throws JSONException
@@ -591,7 +607,7 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* webgl占쏙옙占쎄쑵釉�占쎈슣��占쎌빘苑�占쏙옙url �귐뗪쉘(占쎄쑴��占싼딆뒠-�곕���占쎌꼷��占쎈뜆��
+	* webgl을 위한 파일 생성 후 url 리턴(임시 사용-추후 수정 예정)
 	*
 	* @param params
 	* @throws IOException
@@ -619,7 +635,8 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* getUserRepositorySize 鈺곌퀬��     *
+	* getUserRepositorySize 조회
+	*
 	* @param params
 	* @return
 	* @throws IOException
@@ -640,7 +657,12 @@ public class SimulationLocalServiceUtil {
 	}
 
 	/**
-	* 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쏙옙Icebreaker Service End 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쏙옙     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     * 占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉싷옙議삳폏占쎌』堉�     */
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■ Icebreaker Service End ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	* ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	*/
 	public static java.util.List<org.kisti.edison.bestsimulation.model.Simulation> findByUserIdAndGroupId(
 		long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
