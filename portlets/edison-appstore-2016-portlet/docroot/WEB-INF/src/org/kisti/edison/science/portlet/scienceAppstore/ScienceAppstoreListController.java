@@ -168,6 +168,9 @@ public class ScienceAppstoreListController {
 			String searchField = ParamUtil.get(request, "searchField", "");
 			long plid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			model.addAttribute("workBenchPlid", plid);
+			
+			long workflowPlid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "workflowdesigner_WAR_edisonworkflow2016portlet");
+			model.addAttribute("workflowPlid", workflowPlid);
 			params.put("solverStatus", "1901004");
 			params.put("recommandation_flag", "true");
 			
@@ -546,6 +549,7 @@ public class ScienceAppstoreListController {
 					companyGroupId, groupId,
 					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
 					begin, linePerPage, sortField, sortOrder);
+			System.out.println("writeDataList : " + writeDataList.toString());
 			
 			// ScienceApp Date List for ScienceApp Page
 			List<String> dateMapList = new ArrayList<String>();
@@ -630,6 +634,7 @@ public class ScienceAppstoreListController {
 			isSiteMember = true;
 		}
 		
+		System.out.println("isSiteMember : " + isSiteMember);
 		JSONObject obj = new JSONObject();
 		obj.put("isSiteMember", isSiteMember);
 		response.setContentType("application/json; charset=UTF-8");

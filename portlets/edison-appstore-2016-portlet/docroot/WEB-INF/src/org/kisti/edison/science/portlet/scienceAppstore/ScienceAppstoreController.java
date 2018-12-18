@@ -173,11 +173,13 @@ public class ScienceAppstoreController {
 			
 			StringBuffer jsonStringBuffer = new StringBuffer();
 			long scienceAppId = Long.parseLong(CustomUtil.strNull(solver.get("scienceAppId"), "0"));
+			long workflowId = Long.parseLong(CustomUtil.strNull(solver.get("workflowId"), "0"));
 			Locale[] availableLocales = LanguageUtil.getAvailableLocales();
 			
 			if(solver != null){
 				params.put("solverGroupId", solver.get("groupId"));
 				params.put("solverId", scienceAppId);
+				params.put("workflowId", workflowId);
 				params.put("userId", userId);
 			}
 			
@@ -212,11 +214,12 @@ public class ScienceAppstoreController {
 			responseNamespace = responseNamespace.substring(1, responseNamespace.length()-1);
 			//long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "Workbench_WAR_OSPWorkbenchportlet");
 			long plid = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
-			
 			model.addAttribute("workBenchPlid", plid);
+			
+			long workflowPlid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "workflowdesigner_WAR_edisonworkflow2016portlet");
+			model.addAttribute("workflowPlid", workflowPlid);
 			model.addAttribute("isSignedIn", themeDisplay.isSignedIn());
 			model.addAttribute("solver", solver);
-			
 			model.addAttribute("params",params);
 			model.addAttribute("availableLocales", availableLocales);
 			

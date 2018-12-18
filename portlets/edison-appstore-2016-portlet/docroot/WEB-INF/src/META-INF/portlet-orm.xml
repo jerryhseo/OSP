@@ -322,6 +322,7 @@
 			<basic name="projectCategoryId" />
 			<basic name="execute" />
 			<basic name="cluster" />
+			<basic name="workflowId" />
 			<transient name="developersCurrentLanguageId" />
 			<transient name="developersMap" />
 			<transient name="manualIdCurrentLanguageId" />

@@ -133,7 +133,8 @@
         <column name="execute" type="long"></column>
         <column name="cluster" type="String"></column>
         
-        
+        <!-- workflowId -->
+        <column name="workflowId" type="long"></column>
         
         <!-- Finders -->
        <order by="desc">
@@ -161,6 +162,9 @@
         </finder>
         <finder name="Title" return-type="Collection">
             <finder-column name="title" comparator="LIKE"></finder-column>
+        </finder>
+        <finder name="WorkflowId" return-type="Collection">
+            <finder-column name="workflowId"></finder-column>
         </finder>
         <finder name="NameVersion" return-type="ScienceApp">
             <finder-column name="name"></finder-column>

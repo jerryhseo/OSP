@@ -697,4 +697,28 @@ public class ScienceAppFinderImpl extends BasePersistenceImpl<ScienceApp> implem
 		}
 	}
 	
+	public int countScienceAppByWorkflowId(Map<String,Object> searchParam) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		int cnt = 0;
+		
+		try{
+			String sqlSelect = CustomSQLUtil.get("org.kisti.edison.science.service.persistence.ScienceAppFinder.countScienceAppByWorkflowId");
+
+			sqlSb.append(sqlSelect);			
+			
+			session = openSession();
+			
+			String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			
+			query.addScalar("count", Type.INTEGER);
+			
+			return	cnt = (Integer) query.uniqueResult();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
 }

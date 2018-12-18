@@ -66,6 +66,10 @@
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="workflowEditURL" copyCurrentRenderParameters="false" plid="${workflowPlid}" 
+	windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletName="workflowdesigner_WAR_edisonworkflow2016portlet">
+</liferay-portlet:renderURL>
+
 <style type="text/css">
 #solverTypeBody .portalClass:hover ,.onClass{
 	background-color:#e5eff8;
@@ -515,6 +519,20 @@
 												  .css("height", "28px")
 												  .css("cursor","pointer")
 							).appendTo($vRow);
+						} else if(dataMap.dataList[i].appType == "Workflow"){
+							$("<td/>").css("text-align","center").append(
+									$("<img/>").attr("src","${contextPath}/images/btn_run.jpg")
+												.attr("id","manualLinkBtn")
+												.attr("onClick", "<portlet:namespace/>moveWorkflow('" + dataMap.dataList[i].workflowId + "')")
+												.css("height", "28px")
+												.css("cursor","pointer")
+												.css("vertical-align","middle")
+												.hover(
+												  function(){
+												  	$(this).attr("src","${contextPath}/images/btn_run.jpg");
+												  }
+												)
+							).appendTo($vRow);
 						}else {
 							$("<td/>").css("text-align","center").appendTo($vRow);
 						}
@@ -676,6 +694,7 @@
 				async: false,
 				success: function(msg) {
 					isSiteMember = msg.isSiteMember;
+					alert('isSiteMember : ' + isSiteMember);
 					if(isSiteMember){
 						URL = "<%=workbenchURL%>";
 						URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
@@ -689,6 +708,50 @@
 							URL +=	"p_p_id=edisonmypage_WAR_edisondefault2016portlet";
 							URL +=	"&_edisonmypage_WAR_edisondefault2016portlet_clickTab=siteJoin";
 							//window.open(URL, "_self"); 
+						}
+					}
+				},error:function(msg,e){ 
+					alert(e);
+					return false;
+				}
+			});
+			
+			// 팝업 차단 우회 -- 사용자가 의도한 팝업이 아닌 경우(ex. 다른 function 호출 또는 ajax 안에서 window.open) 팝업 차단 발생
+			if(isSiteMember){
+				window.open(URL);
+			} else {
+				window.open(URL, "_self");
+			}
+			
+		} else {
+			window.open("${signedInUrl}", "_self");
+		}
+	}
+	
+	function <portlet:namespace/>moveWorkflow(targetWorkflowId){
+		var isSignedIn = ${isSignedIn};
+		if(isSignedIn){
+			var isSiteMember = false;
+			var URL = "";
+			
+			// Site Member Check
+			jQuery.ajax({
+				type: "POST",
+				url: "<%=isSiteMemberURL%>",
+				async: false,
+				success: function(msg) {
+					isSiteMember = msg.isSiteMember;
+					if(isSiteMember){
+						URL = "<%=workflowEditURL%>";
+						URL += "&_workflowdesigner_WAR_edisonworkflow2016portlet_workflowId="+targetWorkflowId;
+					} else {
+						// Site Member가 아닌 경우 사이트 가입 여부 Confirm
+						if(confirm("<liferay-ui:message key='edison-default-site-no-user' />"+"\n"+"<liferay-ui:message key='edison-default-site-join-regist-confirm' />")){
+							
+							URL = "<%=themeDisplay.getPortalURL()%>";
+							URL += "/my-edison?";
+							URL +=	"p_p_id=edisonmypage_WAR_edisondefault2016portlet";
+							URL +=	"&_edisonmypage_WAR_edisondefault2016portlet_clickTab=siteJoin";
 						}
 					}
 				},error:function(msg,e){ 
