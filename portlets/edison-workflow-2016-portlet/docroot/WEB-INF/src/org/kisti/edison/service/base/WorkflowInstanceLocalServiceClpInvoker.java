@@ -177,35 +177,35 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 
 		_methodParameterTypes31 = new String[] { "long", "long[][]" };
 
-		_methodName54 = "getBeanIdentifier";
+		_methodName62 = "getBeanIdentifier";
 
-		_methodParameterTypes54 = new String[] {  };
+		_methodParameterTypes62 = new String[] {  };
 
-		_methodName55 = "setBeanIdentifier";
+		_methodName63 = "setBeanIdentifier";
 
-		_methodParameterTypes55 = new String[] { "java.lang.String" };
+		_methodParameterTypes63 = new String[] { "java.lang.String" };
 
-		_methodName60 = "createWorkflowInstance";
+		_methodName68 = "createWorkflowInstance";
 
-		_methodParameterTypes60 = new String[] {  };
+		_methodParameterTypes68 = new String[] {  };
 
-		_methodName61 = "updateWorkflowInstance";
+		_methodName69 = "updateWorkflowInstance";
 
-		_methodParameterTypes61 = new String[] { "long", "java.util.Map" };
+		_methodParameterTypes69 = new String[] { "long", "java.util.Map" };
 
-		_methodName62 = "reuseWorkflowInstance";
+		_methodName70 = "reuseWorkflowInstance";
 
-		_methodParameterTypes62 = new String[] { "long", "java.util.Map" };
+		_methodParameterTypes70 = new String[] { "long", "java.util.Map" };
 
-		_methodName63 = "createWorkflowInstance";
+		_methodName71 = "createWorkflowInstance";
 
-		_methodParameterTypes63 = new String[] {
+		_methodParameterTypes71 = new String[] {
 				"java.util.Map", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName64 = "getWorkflowWorkflowInstancesByWorkflowId";
+		_methodName72 = "getWorkflowWorkflowInstancesByWorkflowId";
 
-		_methodParameterTypes64 = new String[] { "long" };
+		_methodParameterTypes72 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -412,43 +412,43 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName54.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+		if (_methodName62.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName55.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+		if (_methodName63.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
 			WorkflowInstanceLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName60.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+		if (_methodName68.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.createWorkflowInstance();
 		}
 
-		if (_methodName61.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+		if (_methodName69.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.updateWorkflowInstance(((Long)arguments[0]).longValue(),
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
 		}
 
-		if (_methodName62.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.reuseWorkflowInstance(((Long)arguments[0]).longValue(),
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
 		}
 
-		if (_methodName63.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.createWorkflowInstance((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
 				(javax.servlet.http.HttpServletRequest)arguments[1]);
 		}
 
-		if (_methodName64.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
+		if (_methodName72.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
 			return WorkflowInstanceLocalServiceUtil.getWorkflowWorkflowInstancesByWorkflowId(((Long)arguments[0]).longValue());
 		}
 
@@ -519,18 +519,18 @@ public class WorkflowInstanceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
-	private String _methodName54;
-	private String[] _methodParameterTypes54;
-	private String _methodName55;
-	private String[] _methodParameterTypes55;
-	private String _methodName60;
-	private String[] _methodParameterTypes60;
-	private String _methodName61;
-	private String[] _methodParameterTypes61;
 	private String _methodName62;
 	private String[] _methodParameterTypes62;
 	private String _methodName63;
 	private String[] _methodParameterTypes63;
-	private String _methodName64;
-	private String[] _methodParameterTypes64;
+	private String _methodName68;
+	private String[] _methodParameterTypes68;
+	private String _methodName69;
+	private String[] _methodParameterTypes69;
+	private String _methodName70;
+	private String[] _methodParameterTypes70;
+	private String _methodName71;
+	private String[] _methodParameterTypes71;
+	private String _methodName72;
+	private String[] _methodParameterTypes72;
 }

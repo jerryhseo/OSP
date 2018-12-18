@@ -37,4 +37,31 @@
 			<hint name="max-length">4096</hint>
 		</field>
 	</model>
+	<model name="org.kisti.edison.model.WorkflowSimulation">
+		<field name="simulationId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="classId" type="long" />
+		<field name="customId" type="long" />
+		<field name="title" type="String" localized="true" />
+		<field name="testYn" type="boolean" />
+		<field name="workflowId" type="long" />
+	</model>
+	<model name="org.kisti.edison.model.WorkflowSimulationJob">
+		<field name="simulationJobId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String" localized="true" />
+		<field name="status" type="String" />
+		<field name="statusResponse" type="String" />
+		<field name="startTime" type="Date" />
+		<field name="endTime" type="Date" />
+		<field name="workflowId" type="long" />
+		<field name="workflowUUID" type="String" />
+		<field name="reuseWorkflowUUID" type="String" />
+		<field name="screenLogic" type="String" />
+	</model>
 </model-hints>

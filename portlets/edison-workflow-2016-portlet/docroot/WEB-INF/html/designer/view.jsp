@@ -1,16 +1,19 @@
-<%@page import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
 <liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
   copyCurrentRenderParameters="false" />
-<liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet" 
+<liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet"
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
-</liferay-portlet:renderURL> 
-<liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet" 
+</liferay-portlet:renderURL>
+<liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet"
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
   <liferay-portlet:param name="myaction" value="detailView" />
 </liferay-portlet:renderURL>
+<liferay-portlet:renderURL var="registerWorkflowAppUrl" portletName="scienceappmanager_WAR_edisonappstore2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" portletMode="view" plid="${scienceAppPlid}" >
+  <liferay-portlet:param name="myRender" value="solverRender" />
+</liferay-portlet:renderURL> 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -41,6 +44,7 @@ var var_cannot_load_analyzer_message = Liferay.Language.get("edison-workflow-can
 var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-workflow-cannot-intermediate-result-message");
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
+var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
 var contextPath = '${contextPath}';
 </script>
 <style>
@@ -116,9 +120,9 @@ var contextPath = '${contextPath}';
 .wf-box .wf-app-status{position: relative; top: 25px;}
 .waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
 .pausebox{border-radius:3px; border:solid 1px #CA412B; background-color:#fb6e50;}
-.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px; 
-	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; 
-	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px; 
+.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px;
+	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
+	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px;
 	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
 .waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
 .runningbox .addIp{ background: #3a81c0; border-color: #3371a8;}
@@ -130,7 +134,7 @@ var contextPath = '${contextPath}';
 .wf-converter{}
 .wf-converter.wf-dynamic > .wf-app-title{overflow: visible; white-space: normal;}
 .waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
-.waitingbox.wf-converter.wf-static{background: #3181c6;}    
+.waitingbox.wf-converter.wf-static{background: #3181c6;}
 
 .wf-box.wf-controller{
     width: 150px !important;
@@ -235,6 +239,12 @@ var contextPath = '${contextPath}';
                 <span>Apps</span>
               </a>
             </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="register-app">
+                <i class="fa fa-lg fa-file"></i>
+                <span>Register App</span>
+              </a>
+            </li>
           </ul>
           <ul class="sidebar-menu bottom" data-widget="tree">
             <li class="treeview">
@@ -311,6 +321,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/jquery.mustache.js"></script>
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/validator.min.js"></script>
+<script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
+
+
 
 <script id="tpl-menu-panel-box" type="text/html">
 <div class="{{panel-type}} col-md-{{col}}">
@@ -397,7 +410,7 @@ $.widget.bridge('uibutton', $.ui.button);
   <div class="box-body">
     <div class="form-group">
       <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
+      <input type="text" class="form-control data-binded" id="title" name="title"
         placeholder="Title" value="{{form.title}}" required>
       <div class="help-block with-errors"></div>
     </div>
@@ -417,7 +430,7 @@ $.widget.bridge('uibutton', $.ui.button);
   <div class="box-body">
     <div class="form-group">
       <label for="title" >Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" 
+      <input type="text" class="form-control data-binded" id="title" name="title"
         placeholder="Title" value="{{form.title}}" required>
       <div class="help-block with-errors"></div>
     </div>
@@ -473,7 +486,7 @@ $.widget.bridge('uibutton', $.ui.button);
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
   var loadedWorkflowId = '${workflowId}';
-  
+
   var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
   $.Mustache.addFromDom();
   toastr.options = {
@@ -498,8 +511,17 @@ $(document).ready(function(){
     "File": '${fileEditor.exeFileName}',
     "SDE": '${structuredEditor.exeFileName}'
   };
+  
+  /* Register WorkflowApp Data */
+  var registerWorkflowAppURL = "<%=registerWorkflowAppUrl%>";
+  registerWorkflowAppURL = registerWorkflowAppURL.replace("/workflow-workbench?", "/my-edison?");
+  var REGISTER_WORKFLOW_APP_PARAM = {
+	"registerWorkflowAppURL": registerWorkflowAppURL,
+	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"
+  }
+  
   var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
-  var uiPanel = new UIPanel(namespace, $, designer, toastr);
+  var uiPanel = new UIPanel(namespace, $, designer, toastr, REGISTER_WORKFLOW_APP_PARAM);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
   var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
@@ -521,11 +543,11 @@ $(document).ready(function(){
       "#" + namespace + "menu-panel-box-app .search-input",
       appData);
     appTree.bindDnd(document, apptreeSelector);
-    $("#wf-workflow-canvas").css("height", 
+    $("#wf-workflow-canvas").css("height",
       $(JQ_PORTLET_BOUNDARY_ID + " div.content-wrapper").actual("height")
       - $(JQ_PORTLET_BOUNDARY_ID + " section.content-header").actual("outerHeight"));
     $("#" + namespace + "menu-panel-box-app .box-body").css("height",
-      $("#" + namespace + "menu-panel-box-app").actual("height") 
+      $("#" + namespace + "menu-panel-box-app").actual("height")
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
   });
 

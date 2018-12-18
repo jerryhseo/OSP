@@ -16,11 +16,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/services/workflows" />
 			<mvc:mapping path="/services/workflows/*" />
-			<!-- <mvc:mapping path="/services/app" />
-			<mvc:mapping path="/services/app/*" /> -->
 			<bean class="org.kisti.edison.wfapi.interceptor.WorkflowInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-
-
 </beans>

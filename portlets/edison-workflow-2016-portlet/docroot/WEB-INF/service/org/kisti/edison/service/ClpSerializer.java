@@ -27,6 +27,8 @@ import com.liferay.portal.model.BaseModel;
 
 import org.kisti.edison.model.WorkflowClp;
 import org.kisti.edison.model.WorkflowInstanceClp;
+import org.kisti.edison.model.WorkflowSimulationClp;
+import org.kisti.edison.model.WorkflowSimulationJobClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -111,6 +113,14 @@ public class ClpSerializer {
 			return translateInputWorkflowInstance(oldModel);
 		}
 
+		if (oldModelClassName.equals(WorkflowSimulationClp.class.getName())) {
+			return translateInputWorkflowSimulation(oldModel);
+		}
+
+		if (oldModelClassName.equals(WorkflowSimulationJobClp.class.getName())) {
+			return translateInputWorkflowSimulationJob(oldModel);
+		}
+
 		return oldModel;
 	}
 
@@ -140,6 +150,27 @@ public class ClpSerializer {
 		WorkflowInstanceClp oldClpModel = (WorkflowInstanceClp)oldModel;
 
 		BaseModel<?> newModel = oldClpModel.getWorkflowInstanceRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputWorkflowSimulation(BaseModel<?> oldModel) {
+		WorkflowSimulationClp oldClpModel = (WorkflowSimulationClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getWorkflowSimulationRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputWorkflowSimulationJob(
+		BaseModel<?> oldModel) {
+		WorkflowSimulationJobClp oldClpModel = (WorkflowSimulationJobClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getWorkflowSimulationJobRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -202,6 +233,80 @@ public class ClpSerializer {
 		if (oldModelClassName.equals(
 					"org.kisti.edison.model.impl.WorkflowInstanceImpl")) {
 			return translateOutputWorkflowInstance(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
+		if (oldModelClassName.equals(
+					"org.kisti.edison.model.impl.WorkflowSimulationImpl")) {
+			return translateOutputWorkflowSimulation(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
+		if (oldModelClassName.equals(
+					"org.kisti.edison.model.impl.WorkflowSimulationJobImpl")) {
+			return translateOutputWorkflowSimulationJob(oldModel);
 		}
 		else if (oldModelClassName.endsWith("Clp")) {
 			try {
@@ -324,6 +429,16 @@ public class ClpSerializer {
 			return new org.kisti.edison.NoSuchWorkflowInstanceException();
 		}
 
+		if (className.equals(
+					"org.kisti.edison.NoSuchWorkflowSimulationException")) {
+			return new org.kisti.edison.NoSuchWorkflowSimulationException();
+		}
+
+		if (className.equals(
+					"org.kisti.edison.NoSuchWorkflowSimulationJobException")) {
+			return new org.kisti.edison.NoSuchWorkflowSimulationJobException();
+		}
+
 		return throwable;
 	}
 
@@ -343,6 +458,28 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setWorkflowInstanceRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputWorkflowSimulation(
+		BaseModel<?> oldModel) {
+		WorkflowSimulationClp newModel = new WorkflowSimulationClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setWorkflowSimulationRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputWorkflowSimulationJob(
+		BaseModel<?> oldModel) {
+		WorkflowSimulationJobClp newModel = new WorkflowSimulationJobClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setWorkflowSimulationJobRemoteModel(oldModel);
 
 		return newModel;
 	}
