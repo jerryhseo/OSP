@@ -162,15 +162,18 @@ public class JobController {
 			JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
 			
 			saveInfo = DatasetServiceUtil.save(
-					GetterUtil.getLong(collectionId),
-					jobUuid, 
+					GetterUtil.getLong(collectionId), 
+					jobUuid,  
 					scienceApp.getName(), 
 					scienceApp.getVersion(), 
-					jobTitle,
-					GetterUtil.getLong(scienceAppId, 0),
-					REPO_ID, 
-					simulationJobData.getJobData(),
-					scienceApp.getLayout(),
+					jobTitle, 
+					GetterUtil.getLong(scienceAppId, 0), 
+					REPO_ID,  
+					simulationJobData.getJobData(), 
+					scienceApp.getLayout(), 
+					simualtionJob.getJobStartDt(), 
+					simualtionJob.getJobEndDt(), 
+					scienceApp.getRunType(), 
 					sc);
 			
 			if(saveInfo.getBoolean("isValid")){
