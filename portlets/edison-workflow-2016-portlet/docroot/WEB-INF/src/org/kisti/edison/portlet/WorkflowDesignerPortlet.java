@@ -15,9 +15,11 @@ import javax.portlet.ResourceResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kisti.edison.model.EdisonMessageConstants;
+import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
+import org.kisti.edison.util.EdisonUserUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -74,6 +76,11 @@ public class WorkflowDesignerPortlet{
             model.addAttribute("username", currentUser.getScreenName());
             model.addAttribute("companyGroupId", themeDisplay.getCompanyGroupId());
             model.addAttribute("groupId", PortalUtil.getScopeGroupId(request));
+            
+            
+            //개발자 권한 체크
+            model.addAttribute("isDeveloper", EdisonUserUtil.isDeveloperThan(themeDisplay.getUser()));
+            
 
         }catch (Exception e){
             log.error(e);

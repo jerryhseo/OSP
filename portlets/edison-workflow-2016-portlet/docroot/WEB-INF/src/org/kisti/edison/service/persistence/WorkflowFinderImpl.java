@@ -58,6 +58,9 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
       query.addScalar("parentIsPublic", Type.BOOLEAN);
       query.addScalar("parentUserId", Type.BOOLEAN);
       query.addScalar("screenName", Type.STRING);
+      query.addScalar("scienceAppId", Type.INTEGER);
+      query.addScalar("name", Type.STRING);
+      query.addScalar("version", Type.STRING);
       
       List<Object[]> rows = (List<Object[]>) query.list();
       List<Map<String, Object>> workflows = new ArrayList<Map<String, Object>>();
@@ -79,6 +82,9 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
           workflowMap.put("parentIsMine", false);
         }
         workflowMap.put("screenName", columns[4]);
+        workflowMap.put("scienceAppId", columns[5]);
+        workflowMap.put("appName", columns[6]);
+        workflowMap.put("appVesion", columns[7]);
         workflows.add(workflowMap);
       }
       

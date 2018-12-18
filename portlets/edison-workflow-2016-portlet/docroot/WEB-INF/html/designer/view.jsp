@@ -45,6 +45,10 @@ var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-w
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
+var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
+
+
+var var_is_developer = '${isDeveloper}';
 var contextPath = '${contextPath}';
 </script>
 <style>
@@ -192,6 +196,7 @@ var contextPath = '${contextPath}';
 }
 
 </style>
+
 <div class="container-fluid">
   <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
     <div class="wrapper" style="border-top: 1px solid #e5e5e9;">
@@ -215,12 +220,12 @@ var contextPath = '${contextPath}';
                 <span>Open</span>
               </a>
             </li>
-            <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="import">
-                <i class="fa fa-lg fa-download"></i>
-                <span>Import</span>
-              </a>
-            </li>
+<!--             <li class="treeview"> -->
+<!--               <a href="#" class="sidebar-btn" data-btn-type="import"> -->
+<!--                 <i class="fa fa-lg fa-download"></i> -->
+<!--                 <span>Import</span> -->
+<!--               </a> -->
+<!--             </li> -->
             <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="save">
                 <i class="fa fa-lg fa-floppy-o"></i>
@@ -239,10 +244,16 @@ var contextPath = '${contextPath}';
                 <span>Apps</span>
               </a>
             </li>
-            <li class="treeview">
+            <li class="treeview" id="<portlet:namespace/>active-app-register">
               <a href="#" class="sidebar-btn" data-btn-type="register-app">
-                <i class="fa fa-lg fa-file"></i>
+                <i class="fa fa-lg fa-archive"></i>
                 <span>Register App</span>
+              </a>
+            </li>
+            <li class="treeview" id="<portlet:namespace/>active-app-config" style="display: none;">
+              <a href="#" class="sidebar-btn" data-btn-type="config-app">
+                <i class="fa fa-lg fa-archive"></i>
+                <span>Configuration App</span>
               </a>
             </li>
           </ul>
@@ -278,7 +289,7 @@ var contextPath = '${contextPath}';
           <span class="sr-only">Toggle navigation</span>
         </a>
         <span id="<portlet:namespace/>workflow-title"></span>
-        <small></small>
+        <small id="<portlet:namespace/>workflow-app-title"></small>
       </h1>
     </section>
     <!-- Main content -->
@@ -514,7 +525,6 @@ $(document).ready(function(){
   
   /* Register WorkflowApp Data */
   var registerWorkflowAppURL = "<%=registerWorkflowAppUrl%>";
-  registerWorkflowAppURL = registerWorkflowAppURL.replace("/workflow-workbench?", "/my-edison?");
   var REGISTER_WORKFLOW_APP_PARAM = {
 	"registerWorkflowAppURL": registerWorkflowAppURL,
 	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"

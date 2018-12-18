@@ -59,12 +59,14 @@
   
 	<sql id="org.kisti.edison.service.persistence.WorkflowFinder.retrieveWorkflows.header" >
 		<![CDATA[
-		SELECT A.*, B.title AS parentTitle, B.isPublic AS parentIsPublic, B.userId AS parentUserId, U.screenName AS screenName 
+		SELECT A.*, B.title AS parentTitle, B.isPublic AS parentIsPublic, B.userId AS parentUserId, U.screenName AS screenName, IFNULL(APP.scienceAppId,0) AS scienceAppId, APP.name, APP.version 
         FROM EDWF_Workflow A
         LEFT OUTER JOIN EDWF_Workflow B
         ON A.parentWorkflowId = B.workflowId
         LEFT OUTER JOIN User_ U
         ON A.userId = U.userId
+        LEFT OUTER JOIN EDAPP_ScienceApp APP
+        ON A.workflowId = APP.workflowId
 		]]>
 	</sql>
 	
