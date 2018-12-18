@@ -247,14 +247,6 @@ public class TreeViewMonitoringController{
         @RequestParam(value = "collectionId", required=false) String collectionId,
         @RequestParam(value = "simulationUuid", required=false) String simulationUuid,
         ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
-        //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
-        //DatasetServiceUtil.curate(ds, sc);
-        //DatasetServiceUtil.s
-        // jobUuid
-        //        - solver(App) Name()
-        //        - collection ID
-        //        - simulation title - job title (optional)
-        //        - service context
 
         final int REPO_ID = 1;
         Gson result = new GsonBuilder().create();
@@ -282,25 +274,28 @@ public class TreeViewMonitoringController{
                 String scienceAppId = simulation.getScienceAppId();
                 String jobTitle = simulation.getSimulationTitle(themeDisplay.getLocale()) + " - "
                     + job.getJobTitle(themeDisplay.getLocale());
-                log.info("collectionId : " + collectionId);
-                log.info("jobUuid : " + jobUuid);
-                log.info("scienceAppId : " + scienceAppId);
-                log.info("jobTitle : " + jobTitle);
                 
                 ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
                 if(scienceApp != null && job.getJobStatus() == JOB_STATUS_SUCCESS){
                     successJob++;
-                    String scienceAppName = scienceApp.getName() + "_" + scienceApp.getVersion();
-                    log.info("scienceAppName : " + scienceAppName);
-
                     com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
                     SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil
                         .getSimulationJobData(jobUuid);
-                    saveInfo = DatasetServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceApp.getName(),
-                        scienceApp.getVersion(), jobTitle, GetterUtil.getLong(scienceAppId, 0), REPO_ID,
-                        simulationJobData.getJobData(), // EDISON jobData 테이블
-                        scienceApp.getLayout(), // EDISON scienceApp 테이블의 layout 필드
-                        sc);
+                    
+                    saveInfo = DatasetServiceUtil.save(
+        					GetterUtil.getLong(collectionId), 
+        					jobUuid,  
+        					scienceApp.getName(), 
+        					scienceApp.getVersion(), 
+        					jobTitle, 
+        					GetterUtil.getLong(scienceAppId, 0), 
+        					REPO_ID,  
+        					simulationJobData.getJobData(), 
+        					scienceApp.getLayout(), 
+        					job.getJobStartDt(), 
+        					job.getJobEndDt(), 
+        					scienceApp.getRunType(), 
+        					sc);
 
                     if(saveInfo.getBoolean("isValid")){
                         com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
@@ -572,15 +567,6 @@ public class TreeViewMonitoringController{
         @RequestParam(value = "scienceAppId", required=false) String scienceAppId,
         @RequestParam(value = "jobTitle", required=false) String jobTitle,
         ResourceRequest request, ResourceResponse response) throws PortalException, SystemException, IOException{
-        //Dataset ds = DatasetServiceUtil.save (location = jobuuid, datatype = scienceAppname)
-        //DatasetServiceUtil.curate(ds, sc);
-        //DatasetServiceUtil.s
-        // jobUuid
-        //        - solver(App) Name()
-        //        - collection ID
-        //        - simulation title - job title (optional)
-        //        - service context
-
         final int REPO_ID = 1;
         Gson result = new GsonBuilder().create();
         Map<String, Object> resultMap  = new HashMap<String, Object>();
@@ -588,33 +574,29 @@ public class TreeViewMonitoringController{
         response.setContentType("application/json; charset=UTF-8");
         ServiceContext sc = ServiceContextFactory.getInstance(request);
         
-        log.info("collectionId : " + collectionId);
-        log.info("jobUuid : " + jobUuid);
-        log.info("scienceAppId : " + scienceAppId);
-        log.info("jobTitle : " + jobTitle);
         ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(scienceAppId, 0));
         if(scienceApp != null){
             String scienceAppName = scienceApp.getName() + "_" + scienceApp.getVersion();
             log.info("scienceAppName : " + scienceAppName);
             try{
-                /*
-                  Dataset ds = DatasetLocalServiceUtil.save(GetterUtil.getLong(collectionId), jobUuid, scienceAppName, jobTitle, REPO_ID, sc);
-                  DatasetLocalServiceUtil.curate(ds, sc);
-                */
-                
                 com.liferay.portal.kernel.json.JSONObject saveInfo = JSONFactoryUtil.createJSONObject();
                 SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
+                SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
+                
                 saveInfo = DatasetServiceUtil.save(
-                            GetterUtil.getLong(collectionId),
-                            jobUuid,
-                            scienceApp.getName(),
-                            scienceApp.getVersion(),
-                            jobTitle,
-                            GetterUtil.getLong(scienceAppId, 0),
-                            REPO_ID,
-                            simulationJobData.getJobData(),  // EDISON jobData 테이블
-                            scienceApp.getLayout(),   // EDISON scienceApp 테이블의 layout 필드
-                            sc );
+    					GetterUtil.getLong(collectionId), 
+    					jobUuid,  
+    					scienceApp.getName(), 
+    					scienceApp.getVersion(), 
+    					jobTitle, 
+    					GetterUtil.getLong(scienceAppId, 0), 
+    					REPO_ID,  
+    					simulationJobData.getJobData(), 
+    					scienceApp.getLayout(), 
+    					simulationJob.getJobStartDt(), 
+    					simulationJob.getJobEndDt(), 
+    					scienceApp.getRunType(), 
+    					sc);
                 
                 if(saveInfo.getBoolean("isValid")){
                     com.liferay.portal.kernel.json.JSONObject curateInfo = JSONFactoryUtil.createJSONObject();
