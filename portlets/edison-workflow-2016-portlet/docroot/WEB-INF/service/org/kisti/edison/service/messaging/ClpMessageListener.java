@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.messaging.Message;
 import org.kisti.edison.service.ClpSerializer;
 import org.kisti.edison.service.WorkflowInstanceLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 
 /**
  * @author EDISON
@@ -39,6 +41,10 @@ public class ClpMessageListener extends BaseMessageListener {
 			WorkflowLocalServiceUtil.clearService();
 
 			WorkflowInstanceLocalServiceUtil.clearService();
+
+			WorkflowSimulationLocalServiceUtil.clearService();
+
+			WorkflowSimulationJobLocalServiceUtil.clearService();
 		}
 	}
 }

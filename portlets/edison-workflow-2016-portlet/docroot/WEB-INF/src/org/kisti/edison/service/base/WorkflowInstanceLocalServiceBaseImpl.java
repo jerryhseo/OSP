@@ -36,6 +36,8 @@ import org.kisti.edison.service.WorkflowInstanceLocalService;
 import org.kisti.edison.service.persistence.WorkflowFinder;
 import org.kisti.edison.service.persistence.WorkflowInstancePersistence;
 import org.kisti.edison.service.persistence.WorkflowPersistence;
+import org.kisti.edison.service.persistence.WorkflowSimulationJobPersistence;
+import org.kisti.edison.service.persistence.WorkflowSimulationPersistence;
 
 import java.io.Serializable;
 
@@ -526,6 +528,82 @@ public abstract class WorkflowInstanceLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the workflow simulation local service.
+	 *
+	 * @return the workflow simulation local service
+	 */
+	public org.kisti.edison.service.WorkflowSimulationLocalService getWorkflowSimulationLocalService() {
+		return workflowSimulationLocalService;
+	}
+
+	/**
+	 * Sets the workflow simulation local service.
+	 *
+	 * @param workflowSimulationLocalService the workflow simulation local service
+	 */
+	public void setWorkflowSimulationLocalService(
+		org.kisti.edison.service.WorkflowSimulationLocalService workflowSimulationLocalService) {
+		this.workflowSimulationLocalService = workflowSimulationLocalService;
+	}
+
+	/**
+	 * Returns the workflow simulation persistence.
+	 *
+	 * @return the workflow simulation persistence
+	 */
+	public WorkflowSimulationPersistence getWorkflowSimulationPersistence() {
+		return workflowSimulationPersistence;
+	}
+
+	/**
+	 * Sets the workflow simulation persistence.
+	 *
+	 * @param workflowSimulationPersistence the workflow simulation persistence
+	 */
+	public void setWorkflowSimulationPersistence(
+		WorkflowSimulationPersistence workflowSimulationPersistence) {
+		this.workflowSimulationPersistence = workflowSimulationPersistence;
+	}
+
+	/**
+	 * Returns the workflow simulation job local service.
+	 *
+	 * @return the workflow simulation job local service
+	 */
+	public org.kisti.edison.service.WorkflowSimulationJobLocalService getWorkflowSimulationJobLocalService() {
+		return workflowSimulationJobLocalService;
+	}
+
+	/**
+	 * Sets the workflow simulation job local service.
+	 *
+	 * @param workflowSimulationJobLocalService the workflow simulation job local service
+	 */
+	public void setWorkflowSimulationJobLocalService(
+		org.kisti.edison.service.WorkflowSimulationJobLocalService workflowSimulationJobLocalService) {
+		this.workflowSimulationJobLocalService = workflowSimulationJobLocalService;
+	}
+
+	/**
+	 * Returns the workflow simulation job persistence.
+	 *
+	 * @return the workflow simulation job persistence
+	 */
+	public WorkflowSimulationJobPersistence getWorkflowSimulationJobPersistence() {
+		return workflowSimulationJobPersistence;
+	}
+
+	/**
+	 * Sets the workflow simulation job persistence.
+	 *
+	 * @param workflowSimulationJobPersistence the workflow simulation job persistence
+	 */
+	public void setWorkflowSimulationJobPersistence(
+		WorkflowSimulationJobPersistence workflowSimulationJobPersistence) {
+		this.workflowSimulationJobPersistence = workflowSimulationJobPersistence;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -711,6 +789,14 @@ public abstract class WorkflowInstanceLocalServiceBaseImpl
 	protected org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService;
 	@BeanReference(type = WorkflowInstancePersistence.class)
 	protected WorkflowInstancePersistence workflowInstancePersistence;
+	@BeanReference(type = org.kisti.edison.service.WorkflowSimulationLocalService.class)
+	protected org.kisti.edison.service.WorkflowSimulationLocalService workflowSimulationLocalService;
+	@BeanReference(type = WorkflowSimulationPersistence.class)
+	protected WorkflowSimulationPersistence workflowSimulationPersistence;
+	@BeanReference(type = org.kisti.edison.service.WorkflowSimulationJobLocalService.class)
+	protected org.kisti.edison.service.WorkflowSimulationJobLocalService workflowSimulationJobLocalService;
+	@BeanReference(type = WorkflowSimulationJobPersistence.class)
+	protected WorkflowSimulationJobPersistence workflowSimulationJobPersistence;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

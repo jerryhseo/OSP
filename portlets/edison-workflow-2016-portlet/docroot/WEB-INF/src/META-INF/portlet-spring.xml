@@ -6,4 +6,8 @@
 	<bean id="org.kisti.edison.service.persistence.WorkflowFinder" class="org.kisti.edison.service.persistence.WorkflowFinderImpl" parent="basePersistence" />
 	<bean id="org.kisti.edison.service.WorkflowInstanceLocalService" class="org.kisti.edison.service.impl.WorkflowInstanceLocalServiceImpl" />
 	<bean id="org.kisti.edison.service.persistence.WorkflowInstancePersistence" class="org.kisti.edison.service.persistence.WorkflowInstancePersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.WorkflowSimulationLocalService" class="org.kisti.edison.service.impl.WorkflowSimulationLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.WorkflowSimulationPersistence" class="org.kisti.edison.service.persistence.WorkflowSimulationPersistenceImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.service.WorkflowSimulationJobLocalService" class="org.kisti.edison.service.impl.WorkflowSimulationJobLocalServiceImpl" />
+	<bean id="org.kisti.edison.service.persistence.WorkflowSimulationJobPersistence" class="org.kisti.edison.service.persistence.WorkflowSimulationJobPersistenceImpl" parent="basePersistence" />
 </beans>

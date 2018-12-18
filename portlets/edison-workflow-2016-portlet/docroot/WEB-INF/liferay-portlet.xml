@@ -14,7 +14,7 @@
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
-    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jsplumbtoolkit.min.js</header-portlet-javascript>
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     <css-class-wrapper>edison-workflow-2016-portlet container</css-class-wrapper>
   </portlet>
@@ -27,7 +27,7 @@
     <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
     <header-portlet-css>/css/toastr.min.css</header-portlet-css>
     <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
-    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jsplumbtoolkit.min.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery-dateFormat.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>
@@ -52,7 +52,7 @@
     <header-portlet-css>/css/jstree/themes/proton/style.css</header-portlet-css>
     <header-portlet-css>/css/toastr.min.css</header-portlet-css>
     <header-portlet-javascript>/js/lib/jstree.js</header-portlet-javascript>
-    <header-portlet-javascript>/js/lib/jsPlumb.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/jsplumbtoolkit.min.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery-dateFormat.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>
