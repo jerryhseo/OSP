@@ -11,6 +11,10 @@
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
   <liferay-portlet:param name="myaction" value="detailView" />
 </liferay-portlet:renderURL>
+<liferay-portlet:renderURL var="registerWorkflowAppUrl" portletName="scienceappmanager_WAR_edisonappstore2016portlet" 
+  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" portletMode="view" plid="${scienceAppPlid}" >
+  <liferay-portlet:param name="myRender" value="solverRender" />
+</liferay-portlet:renderURL> 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -41,6 +45,7 @@ var var_cannot_load_analyzer_message = Liferay.Language.get("edison-workflow-can
 var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-workflow-cannot-intermediate-result-message");
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
+var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
 var contextPath = '${contextPath}';
 </script>
 <style>
@@ -233,6 +238,12 @@ var contextPath = '${contextPath}';
               <a href="#" class="sidebar-btn" data-btn-type="apps">
                 <i class="fa fa-lg fa-th"></i>
                 <span>Apps</span>
+              </a>
+            </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="register-app">
+                <i class="fa fa-lg fa-file"></i>
+                <span>Register App</span>
               </a>
             </li>
           </ul>
@@ -498,8 +509,17 @@ $(document).ready(function(){
     "File": '${fileEditor.exeFileName}',
     "SDE": '${structuredEditor.exeFileName}'
   };
+  
+  /* Register WorkflowApp Data */
+  var registerWorkflowAppURL = "<%=registerWorkflowAppUrl%>";
+  registerWorkflowAppURL = registerWorkflowAppURL.replace("/workflow-workbench?", "/my-edison?");
+  var REGISTER_WORKFLOW_APP_PARAM = {
+	"registerWorkflowAppURL": registerWorkflowAppURL,
+	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"
+  }
+  
   var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
-  var uiPanel = new UIPanel(namespace, $, designer, toastr);
+  var uiPanel = new UIPanel(namespace, $, designer, toastr, REGISTER_WORKFLOW_APP_PARAM);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
   var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);

@@ -59,6 +59,9 @@ public class WorkflowDesignerPortlet{
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
             String workflowId = ParamUtil.get(request, "workflowId", "");
             
+            long plid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "scienceappmanager_WAR_edisonappstore2016portlet");
+			model.addAttribute("scienceAppPlid", plid);
+            
             if(StringUtils.hasText(workflowId)){
                 model.addAttribute("workflowId", workflowId);
             }
