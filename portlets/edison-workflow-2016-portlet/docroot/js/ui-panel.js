@@ -1,4 +1,4 @@
-var UIPanel = (function (namespace, $, designer, toastr) {
+var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     /*jshint -W069 */
     'use strict';
     var currWorkflows = (function () {
@@ -163,12 +163,27 @@ var UIPanel = (function (namespace, $, designer, toastr) {
                 $(".menu-panel").show('slide', { direction: 'left' }, 500);
             }
         }
+        
         if(btnType === "execute"){
             if(!_isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")){
                 var fn = window[namespace + "moveToExecutor"];
                 var workflowId = PANEL_DATA.setting.form.workflowId;
                 fn.apply(null, [workflowId]);
             }
+        } else if (btnType === "register-app") {
+        	var workflowId = PANEL_DATA.setting.form.workflowId;
+        	if(workflowId == "undefined" || workflowId == null || workflowId == ''){
+        		toastr["error"]("", var_workflow_register_app_error_message);
+        	} else {
+        		/* App 등록 페이지로 이동 */
+        		window.AUI().use('liferay-portlet-url', function (A) {
+        			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
+        			var portletName = registerAppParam.portletName;
+        			
+        			registerWorkflowAppURL += "&" + portletName + "workflowId=" + workflowId;
+        			window.open(registerWorkflowAppURL);
+        		});
+        	}
         }
     });
 
@@ -185,7 +200,7 @@ var UIPanel = (function (namespace, $, designer, toastr) {
     function _isEmpty(value, msg){
         if(!value){
             if(msg){
-                toastr["info"]("", msg);
+            	toastr["info"]("", msg);
             }
             return true;
         }
