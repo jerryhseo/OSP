@@ -51,6 +51,10 @@
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
+<liferay-portlet:renderURL var="workflowEditURL" copyCurrentRenderParameters="false" plid="${workflowPlid}" 
+	windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletName="workflowdesigner_WAR_edisonworkflow2016portlet">
+</liferay-portlet:renderURL>
+
 <liferay-portlet:resourceURL var="setMyRatingsEntryURL"  escapeXml="false" id="setMyRatingsEntry" copyCurrentRenderParameters="false"/>
 <liferay-portlet:resourceURL var="getScienceAppPaperListURL"  escapeXml="false" id="getScienceAppPaperList" copyCurrentRenderParameters="false"/>
 
@@ -756,6 +760,15 @@
 									<a class="btn btn-primary <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>fileDownload('${solver.srcFileId }');">
 										<i class="fa fa-download" style="margin-right: 5px;"></i>
 										<b>Download</b>
+									</a>
+								</c:if>
+								
+								<c:if test="${solver.appType eq 'Workflow'}">
+									<a class="btn btn-primary <portlet:namespace/>executeRun <portlet:namespace/>executeBtn" onclick="<portlet:namespace/>moveWorkflow('${params.workflowId}');">
+										<b>
+											<i class="fa fa-play-circle-o" style="margin-right: 5px;"></i>
+											Run
+										</b>
 									</a>
 								</c:if>
 								
@@ -1950,20 +1963,44 @@ function <portlet:namespace/>moveWorkbench(targetScienceAppId){
 		window.open(URL, "_self");
 	}
 	
-	<%-- AUI().use("liferay-portlet-url", function(a) {
-		var portletURL = Liferay.PortletURL.createRenderURL();
-		portletURL.setPortletMode("view");
-		portletURL.setWindowState("<%=LiferayWindowState.NORMAL.toString()%>");
-		portletURL.setPlid("${workBenchPlid}");
-		portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
-		portletURL.setParameter("workbenchType", "SIMULATION_WITH_APP");
-		portletURL.setParameter("scienceAppId", targetScienceAppId);
-		
-		portletURL.setParameter("redirectName", "My Project");
-		portletURL.setParameter("redirectURL", "${redirectURL}");
-		window.open(portletURL);
-		window.location.href = portletURL;
-	}); --%>
+}
+
+function <portlet:namespace/>moveWorkflow(targetWorkflowId){
+	var isSiteMember = false;
+	var URL = "";
+	
+	/* Site Member Check */
+	jQuery.ajax({
+		type: "POST",
+		url: "<%=isSiteMemberURL%>",
+		async : false,
+		success: function(msg) {
+			isSiteMember = msg.isSiteMember;
+			if(isSiteMember){
+				URL = "<%=workflowEditURL%>";
+				URL += "&_workflowdesigner_WAR_edisonworkflow2016portlet_workflowId="+targetWorkflowId;
+			} else {
+				/*  Site Member가 아닌 경우 사이트 가입 여부 Confirm */
+				if(confirm("<liferay-ui:message key='edison-default-site-no-user' />"+"\n"+"<liferay-ui:message key='edison-default-site-join-regist-confirm' />")){
+					
+					URL = "<%=themeDisplay.getPortalURL()%>";
+					URL += "/my-edison?";
+					URL +=	"p_p_id=edisonmypage_WAR_edisondefault2016portlet";
+					URL +=	"&_edisonmypage_WAR_edisondefault2016portlet_clickTab=siteJoin";
+				}
+			}
+		},error:function(msg,e){ 
+			alert("<liferay-ui:message key='edison-data-event-error' />\nMove Workbench Error");
+			return false;
+		}
+	});
+	
+	/*  팝업 차단 우회 -- 사용자가 의도한 팝업이 아닌 경우(ex. 다른 function 호출 또는 ajax 안에서 window.open) 팝업 차단 발생 */
+	if(isSiteMember){
+		window.open(URL);
+	} else {
+		window.open(URL, "_self");
+	}
 }
 
 	<portlet:namespace/>scienceAppRating();

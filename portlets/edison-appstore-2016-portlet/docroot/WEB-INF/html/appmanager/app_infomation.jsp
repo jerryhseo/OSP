@@ -83,6 +83,10 @@
 		<c:if test="<%= sae.getType() == ScienceAppException.FAIL_VALIDATION_SCIENCE_APP_NAME %>">
 			<liferay-ui:message key="edison-app-validation-name-exception-msg" />
 		</c:if>
+		
+		<c:if test="<%= sae.getType() == ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE %>">
+			<liferay-ui:message key="edison-app-duplication-workflow-id-exception-msg" />
+		</c:if>
 	</div>
 </c:if>
 <div class="edison-panel">
@@ -125,6 +129,11 @@
 <div class="table1_list">
 	<aui:form name="frm" method="POST" action="<%=submitURL%>">
 		<aui:input name="actionMode" value="${mode}" type="hidden"/>
+		<aui:input name="workflowId" value="${workflowId}" type="hidden"/>
+		
+		<c:if test="${0 < workflowId}">
+			<aui:input name="workflowAppType" type="hidden" value="Workflow" />
+		</c:if>
 		
 		<c:if test="${mode eq 'update'}">
 			<aui:input name="previousVersion" type="hidden" value="${data.version}" label=""/>

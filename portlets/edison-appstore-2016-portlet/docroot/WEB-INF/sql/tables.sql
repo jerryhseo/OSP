@@ -198,7 +198,8 @@ create table EDAPP_ScienceApp (
 	isCompile BOOLEAN,
 	projectCategoryId LONG,
 	execute LONG,
-	cluster VARCHAR(75) null
+	cluster VARCHAR(75) null,
+	workflowId LONG
 );
 
 create table EDAPP_ScienceAppCategoryLink (

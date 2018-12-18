@@ -46,6 +46,7 @@ create index IX_898F0065 on EDAPP_ScienceApp (title, targetLanguage);
 create index IX_E3294BD4 on EDAPP_ScienceApp (uuid_);
 create index IX_140CBD4 on EDAPP_ScienceApp (uuid_, companyId);
 create unique index IX_E723756 on EDAPP_ScienceApp (uuid_, groupId);
+create index IX_59016B0E on EDAPP_ScienceApp (workflowId);
 
 create index IX_767E0605 on EDAPP_ScienceAppCategoryLink (categoryId);
 create index IX_89F2884F on EDAPP_ScienceAppCategoryLink (parentCategoryId);

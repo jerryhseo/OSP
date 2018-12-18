@@ -38,7 +38,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(81);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -118,6 +118,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		sb.append(execute);
 		sb.append(", cluster=");
 		sb.append(cluster);
+		sb.append(", workflowId=");
+		sb.append(workflowId);
 		sb.append("}");
 
 		return sb.toString();
@@ -299,6 +301,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 			scienceAppImpl.setCluster(cluster);
 		}
 
+		scienceAppImpl.setWorkflowId(workflowId);
+
 		scienceAppImpl.resetOriginalValues();
 
 		return scienceAppImpl;
@@ -345,6 +349,7 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		projectCategoryId = objectInput.readLong();
 		execute = objectInput.readLong();
 		cluster = objectInput.readUTF();
+		workflowId = objectInput.readLong();
 	}
 
 	@Override
@@ -503,6 +508,8 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 		else {
 			objectOutput.writeUTF(cluster);
 		}
+
+		objectOutput.writeLong(workflowId);
 	}
 
 	public String uuid;
@@ -544,4 +551,5 @@ public class ScienceAppCacheModel implements CacheModel<ScienceApp>,
 	public long projectCategoryId;
 	public long execute;
 	public String cluster;
+	public long workflowId;
 }

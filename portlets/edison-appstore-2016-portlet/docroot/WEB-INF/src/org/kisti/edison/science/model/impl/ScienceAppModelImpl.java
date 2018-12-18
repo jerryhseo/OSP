@@ -113,9 +113,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			{ "isCompile", Types.BOOLEAN },
 			{ "projectCategoryId", Types.BIGINT },
 			{ "execute", Types.BIGINT },
-			{ "cluster", Types.VARCHAR }
+			{ "cluster", Types.VARCHAR },
+			{ "workflowId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,isStepLayout BOOLEAN,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table EDAPP_ScienceApp (uuid_ VARCHAR(75) null,scienceAppId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,version VARCHAR(75) null,title STRING null,descriptionId LONG,previousVersionId LONG,iconId LONG,manualId STRING null,exeFileName VARCHAR(75) null,appType VARCHAR(75) null,runType VARCHAR(75) null,authorId LONG,stage VARCHAR(75) null,status INTEGER,recentModifierId LONG,parallelModule VARCHAR(75) null,minCpus INTEGER,maxCpus INTEGER,defaultCpus INTEGER,statusDate DATE null,openLevel VARCHAR(75) null,license VARCHAR(75) null,srcFileName VARCHAR(75) null,targetLanguage VARCHAR(75) null,isStepLayout BOOLEAN,layout VARCHAR(75) null,developers STRING null,editorType VARCHAR(75) null,isPort BOOLEAN,isCompile BOOLEAN,projectCategoryId LONG,execute LONG,cluster VARCHAR(75) null,workflowId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table EDAPP_ScienceApp";
 	public static final String ORDER_BY_JPQL = " ORDER BY scienceApp.createDate DESC, scienceApp.version DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDAPP_ScienceApp.createDate DESC, EDAPP_ScienceApp.version DESC";
@@ -144,7 +145,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	public static long TITLE_COLUMN_BITMASK = 1024L;
 	public static long UUID_COLUMN_BITMASK = 2048L;
 	public static long VERSION_COLUMN_BITMASK = 4096L;
-	public static long CREATEDATE_COLUMN_BITMASK = 8192L;
+	public static long WORKFLOWID_COLUMN_BITMASK = 8192L;
+	public static long CREATEDATE_COLUMN_BITMASK = 16384L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -198,6 +200,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		model.setProjectCategoryId(soapModel.getProjectCategoryId());
 		model.setExecute(soapModel.getExecute());
 		model.setCluster(soapModel.getCluster());
+		model.setWorkflowId(soapModel.getWorkflowId());
 
 		return model;
 	}
@@ -301,6 +304,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		attributes.put("projectCategoryId", getProjectCategoryId());
 		attributes.put("execute", getExecute());
 		attributes.put("cluster", getCluster());
+		attributes.put("workflowId", getWorkflowId());
 
 		return attributes;
 	}
@@ -539,6 +543,12 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 		if (cluster != null) {
 			setCluster(cluster);
+		}
+
+		Long workflowId = (Long)attributes.get("workflowId");
+
+		if (workflowId != null) {
+			setWorkflowId(workflowId);
 		}
 	}
 
@@ -1473,6 +1483,29 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		_cluster = cluster;
 	}
 
+	@JSON
+	@Override
+	public long getWorkflowId() {
+		return _workflowId;
+	}
+
+	@Override
+	public void setWorkflowId(long workflowId) {
+		_columnBitmask |= WORKFLOWID_COLUMN_BITMASK;
+
+		if (!_setOriginalWorkflowId) {
+			_setOriginalWorkflowId = true;
+
+			_originalWorkflowId = _workflowId;
+		}
+
+		_workflowId = workflowId;
+	}
+
+	public long getOriginalWorkflowId() {
+		return _originalWorkflowId;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
@@ -1644,6 +1677,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppImpl.setProjectCategoryId(getProjectCategoryId());
 		scienceAppImpl.setExecute(getExecute());
 		scienceAppImpl.setCluster(getCluster());
+		scienceAppImpl.setWorkflowId(getWorkflowId());
 
 		scienceAppImpl.resetOriginalValues();
 
@@ -1737,6 +1771,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		scienceAppModelImpl._originalOpenLevel = scienceAppModelImpl._openLevel;
 
 		scienceAppModelImpl._originalTargetLanguage = scienceAppModelImpl._targetLanguage;
+
+		scienceAppModelImpl._originalWorkflowId = scienceAppModelImpl._workflowId;
+
+		scienceAppModelImpl._setOriginalWorkflowId = false;
 
 		scienceAppModelImpl._columnBitmask = 0;
 	}
@@ -1952,12 +1990,14 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			scienceAppCacheModel.cluster = null;
 		}
 
+		scienceAppCacheModel.workflowId = getWorkflowId();
+
 		return scienceAppCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(81);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -2037,6 +2077,8 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 		sb.append(getExecute());
 		sb.append(", cluster=");
 		sb.append(getCluster());
+		sb.append(", workflowId=");
+		sb.append(getWorkflowId());
 		sb.append("}");
 
 		return sb.toString();
@@ -2044,7 +2086,7 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(121);
+		StringBundler sb = new StringBundler(124);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2206,6 +2248,10 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 			"<column><column-name>cluster</column-name><column-value><![CDATA[");
 		sb.append(getCluster());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>workflowId</column-name><column-value><![CDATA[");
+		sb.append(getWorkflowId());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -2276,6 +2322,9 @@ public class ScienceAppModelImpl extends BaseModelImpl<ScienceApp>
 	private long _projectCategoryId;
 	private long _execute;
 	private String _cluster;
+	private long _workflowId;
+	private long _originalWorkflowId;
+	private boolean _setOriginalWorkflowId;
 	private long _columnBitmask;
 	private ScienceApp _escapedModel;
 }
