@@ -175,12 +175,12 @@ div.tooltip:after {
                             </div>
                         </div>
                         <div class="form-inline form-group">
-                            <label class="form-control-static title">Characteristic Impedance(?��_?��)</label>
+                            <label class="form-control-static title">Characteristic Impedance(𝒁_𝟎)</label>
                             <input type="number" name="<portlet:namespace/>impedance" id="<portlet:namespace/>impedance" class="form-control" value="50" required>
                         </div>
                         <form action="" id="<portlet:namespace/>settingsform" onsubmit="return false;">
                             <div class="form-inline form-group">
-                                <label class="form-control-static title">Load Impedance(?��_?��)</label>
+                                <label class="form-control-static title">Load Impedance(𝒁_𝑳)</label>
                                 <label class="form-control-static">Real</label>
                                 <input type="text" name="<portlet:namespace/>real" id="<portlet:namespace/>real" class="form-control" required>
                                 <label class="form-control-static">Imaginary</label>
@@ -375,7 +375,6 @@ div.tooltip:after {
 <script src="${contextPath}/js/jquery-confirm/jquery-confirm.min.js"></script>
 
 <script type="text/javascript">
-    //기�???Point 체크 ?��?
     var <portlet:namespace/>stdPoint = false;
     var chart = new smith.chart();
     var svg;
@@ -575,7 +574,7 @@ div.tooltip:after {
                 .call(d3.drag().on('drag', dragged));
             
                 
-			//tooltip ?�성
+			//tooltip ?�성
         	var tooltip = d3.select('body').append('div')
         		.attr('id', '<portlet:namespace/>tooltip')
         		.attr('class', 'tooltip')
@@ -589,7 +588,7 @@ div.tooltip:after {
 			<portlet:namespace/>changeVirtualTooltip(stdPointReal, stdPointImaginary);
 			
 			
-			//drag ?�벤???�수
+			//drag ?�벤???�수
 			function dragged(d) {
 				var $circle = d3.select(this);
                 var m = d3.mouse(this);
@@ -607,7 +606,7 @@ div.tooltip:after {
                     	var py = $clipCircle.attr('cy');
                     	var pr = $clipCircle.attr('r')
                         
-                        //반�?름이 같을 경우, drag stop
+                        //반지름이 같을 경우, drag stop
                       	if(<portlet:namespace/>pointDistance(px, py, pos[0], pos[1]) > pr){
                         	return false;
                         }else{
@@ -628,7 +627,7 @@ div.tooltip:after {
 			}
 			
 			
-			//tooltip info 변�?
+			//tooltip inf
 			function <portlet:namespace/>changeVirtualTooltip(real, imaginary){
 				var offset = $('#<portlet:namespace/>virtualPoint').offset();
 				var top = Number(offset.top - 56);
@@ -657,7 +656,6 @@ div.tooltip:after {
     }
     
     
-    //element Type �?element value
     function <portlet:namespace/>maxElementValueByElementType(elementType){
         if(elementType === 'ser_cap' || elementType === 'sht_ind' || elementType === 'sht_res' ){
         	return 0.001;
@@ -667,7 +665,6 @@ div.tooltip:after {
     }
     
     
-    //?�점 ?�이??거리
 	function <portlet:namespace/>pointDistance(x1, y1, x2, y2) {
 		var width = Math.abs(x1 - x2);
 		var height = Math.abs(y1 - y2);
@@ -677,7 +674,7 @@ div.tooltip:after {
 	}
     
     
-    //virtual point value => element value�?변??
+    //virtual point value => element value
     function <portlet:namespace/>getConvertSchematicValue(elementType, currMouserData, prevMouserData){
     	
 		var result = '';
@@ -750,7 +747,7 @@ div.tooltip:after {
     }
     
     
-    // mouse point??가??가까운 path??point 구하�?
+    // mouse point??가??가까운 path??point 구하�?
     function <portlet:namespace/>findClosestPoint(pathNode, point) {
         var pathLength = pathNode.getTotalLength();
         var precision = 8;
@@ -900,7 +897,7 @@ div.tooltip:after {
     function <portlet:namespace/>clear(){
         $.confirm({
             title: 'Data Clear',
-            content: '?�로??기�??�을 ?�성 ?�시겠습?�까? <br/> ?�당 ?�보???�?�되지 ?�습?�다.',
+            content: '새로운 기준점을 생성 하시겠습니까? <br/> 해당 정보는 저장되지 않습니다.',
             buttons: {
                 confirm: function () {
                     location.reload();

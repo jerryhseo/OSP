@@ -767,6 +767,16 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
                 }
             });
     }
+    
+    function deleteWorkflowDefinitionWithScienceApp(workflowId, scienceAppId, callback){
+        aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId +"/app/" + scienceAppId + "/delete",
+            {}, function (_) {
+                if(callback){
+                    callback();
+                }
+            });
+    }
+    
     function duplicateWorkflowDefinition(workflowId, workflowTitle, callback){
         var param = workflowTitle ? {"title": workflowTitle} : {};
         aSyncAjaxHelper
@@ -866,6 +876,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         "renameWorkflowDefinition": renameWorkflowDefinition,
         "duplicateWorkflowDefinition": duplicateWorkflowDefinition,
         "deleteWorkflowDefinition": deleteWorkflowDefinition,
+        "deleteWorkflowDefinitionWithScienceApp": deleteWorkflowDefinitionWithScienceApp,
         "drawWorkflowDefinition": drawWorkflowDefinition,
         "resetWorkflow": resetWorkflow,
         "getWfPortletGlobalData": function(){

@@ -48,7 +48,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             "header":{
                 "id": "tpl-menu-panel-search-header",
                 "search-input-name": "search",
-                "theads": ["Title", "Description", "App Name", "Version", "Copied from", "Created"]
+                "theads": ["Title", "Description", "App Name", "Version", "Status", "Copied from", "Created"]
             },
             "form": {},
             "footer":{
@@ -376,6 +376,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             '        <td>{{description}}</td>'+
             '        <td>{{appName}}</td>'+
             '        <td>{{appVesion}}</td>'+
+            '        <td>{{statusNm}}</td>'+
             '        <td>{{parentTitle}}</td>'+
             '        <td>{{createDate}}</td>'+
             '    </tr>'+
@@ -429,7 +430,8 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                     "workflowId": workflowId,
                     "scienceAppId": workflow.scienceAppId,
                     "appName": workflow.appName,
-                    "appVersion": workflow.appVesion
+                    "appVersion": workflow.appVesion,
+                    "status": workflow.status
                 });
                 designer.drawWorkflowDefinition(workflow);
                 closePanel();
@@ -522,19 +524,40 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
             return false;
         }
-        _confirm(var_remove_workflow_confirm_message, function () {
-            designer.deleteWorkflowDefinition(workflowId,
-                function (resetDesignerFn) {
-                    if (PANEL_DATA.setting.form.workflowId === workflowId) {
-                        designer.resetWorkflow();
-                        setMetaData({});
-                        if(panelType === "setting"){
-                            $("#" + namespace + "menu-panel-box .data-binded").val("");
-                        }
-                    }
-                    toastr["success"]("", var_success_remove_workflow_message);
-                    loadWorkflowDefinitions(panelType, PANEL_DATA.open.form.params.p_curPage);
-                });
+        
+        var scienceAppId = workflow.scienceAppId;
+        if(scienceAppId!=0){
+        	var appStatus = workflow.status;
+        	if(appStatus===1901004){
+        		toastr["error"]("", var_workflow_remove_status_error_message);
+        		return false;
+        	}else{
+        		deleteWorkflowConfirm(var_remove_with_app_confirm_message,panelType,workflowId,scienceAppId);
+        	}
+        }else{
+        	deleteWorkflowConfirm(var_remove_workflow_confirm_message,panelType,workflowId, scienceAppId);
+        }
+    }
+    
+    function deleteWorkflowConfirm(confirmMsg,panelType, workflowId,scienceAppId){
+    	_confirm(confirmMsg, function () {
+    		var vFunction = function (resetDesignerFn){
+    			 if (PANEL_DATA.setting.form.workflowId === workflowId) {
+                     designer.resetWorkflow();
+                     setMetaData({});
+                     if(panelType === "setting"){
+                         $("#" + namespace + "menu-panel-box .data-binded").val("");
+                     }
+                 }
+                 toastr["success"]("", var_success_remove_workflow_message);
+                 loadWorkflowDefinitions(panelType, PANEL_DATA.open.form.params.p_curPage);
+    		}
+    		
+    		if(scienceAppId!=0){
+    			designer.deleteWorkflowDefinitionWithScienceApp(workflowId,scienceAppId,vFunction);
+    		}else{
+    			designer.deleteWorkflowDefinition(workflowId,vFunction);
+    		}
         }, function () { });
     }
     

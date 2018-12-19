@@ -27,6 +27,7 @@ var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
+var var_remove_with_app_confirm_message = Liferay.Language.get("edison-workflow-remove-with-app-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
 var var_success_remove_workflow_message = Liferay.Language.get("edison-workflow-success-remove-message");
 var var_prepare_copy_workflow_message = Liferay.Language.get("edison-workflow-prepare-copy-message");
@@ -46,6 +47,8 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
 var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
+var var_workflow_remove_status_error_message = Liferay.Language.get("edison-workflow-remove-status-error-message");
+
 
 
 var var_is_developer = '${isDeveloper}';

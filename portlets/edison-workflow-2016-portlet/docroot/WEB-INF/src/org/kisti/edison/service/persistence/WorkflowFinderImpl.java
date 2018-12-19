@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowInstance;
 import org.kisti.edison.model.impl.WorkflowImpl;
 import org.kisti.edison.model.impl.WorkflowInstanceImpl;
+import org.kisti.edison.util.EdisonExpndoUtil;
 import org.kisti.edison.util.GBatisUtil;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -61,6 +63,8 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
       query.addScalar("scienceAppId", Type.INTEGER);
       query.addScalar("name", Type.STRING);
       query.addScalar("version", Type.STRING);
+      query.addScalar("status", Type.INTEGER);
+      
       
       List<Object[]> rows = (List<Object[]>) query.list();
       List<Map<String, Object>> workflows = new ArrayList<Map<String, Object>>();
@@ -85,6 +89,14 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
         workflowMap.put("scienceAppId", columns[5]);
         workflowMap.put("appName", columns[6]);
         workflowMap.put("appVesion", columns[7]);
+        long status = GetterUtil.getLong(columns[8], 0);
+        if(status==0){
+        	workflowMap.put("status", "");
+        	workflowMap.put("statusNm", "");
+        }else{
+        	workflowMap.put("status", status);
+        	workflowMap.put("statusNm", EdisonExpndoUtil.getCommonCdSearchFieldValue(status, EdisonExpando.CDNM, locale));
+        }
         workflows.add(workflowMap);
       }
       

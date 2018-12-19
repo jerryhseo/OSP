@@ -220,6 +220,20 @@ public class WorkflowController{
             throw e;
         }
     }
+    
+    @RequestMapping(value = "/{workflowId}/app/{scienceAppId}/delete", method = RequestMethod.POST)
+    public  @ResponseBody Map<String, Object> removeWorkflowWithSciencApp(
+    	@PathVariable("workflowId") long workflowId,
+    	@PathVariable("scienceAppId") long scienceAppId,
+        HttpServletRequest request) throws Exception{
+        try{
+        	log.info("APP and Workflow Delete workflowId ->"+ workflowId+"  ScienceAppId ->"+scienceAppId);
+            return WorkflowLocalServiceUtil.getWorkflow(workflowId).getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
 
     @RequestMapping(value = "/{workflowId}/run", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> runWorkflow(@RequestParam Map<String, Object> params,
