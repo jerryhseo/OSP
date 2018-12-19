@@ -375,6 +375,7 @@ div.tooltip:after {
 <script src="${contextPath}/js/jquery-confirm/jquery-confirm.min.js"></script>
 
 <script type="text/javascript">
+    //기준점 Point 체크 여부
     var <portlet:namespace/>stdPoint = false;
     var chart = new smith.chart();
     var svg;
@@ -458,7 +459,7 @@ div.tooltip:after {
 				var settingImg = $("#<portlet:namespace/>imaginary").val()/impedance;
                 
                 var positionData = chart.getPointPosition(settingReal, settingImg);
-                var mouserData = chart.getPointValue(positionData.x,positionData.y);
+                var mouserData = chart.getPointValue(positionData.x, positionData.y);
                 
                 <portlet:namespace/>guideCircleMove(mouserData);
                 chart.addMarkerFromMouse(svg, settingReal*1, settingImg*1, positionData.x, positionData.y, "<portlet:namespace/>stdPoint", "<portlet:namespace/>stdPoint");
@@ -515,8 +516,8 @@ div.tooltip:after {
             <portlet:namespace/>clearVirtualGroup();
         	
             //element info
-            var frequency = $('#<portlet:namespace/>frequency').val() * $('#<portlet:namespace/>frequency-addon option:selected').val();
-            var impedance = $('#<portlet:namespace/>impedance').val();
+            var frequency = parseFloat($('#<portlet:namespace/>frequency').val() * $('#<portlet:namespace/>frequency-addon option:selected').val());
+    		var impedance = parseFloat($("#<portlet:namespace/>impedance").val());
             var elementType = $('.elementMethod>input[name=<portlet:namespace/>element-type]:checked').val();
             var elementValue = <portlet:namespace/>maxElementValueByElementType(elementType);
             
@@ -574,7 +575,7 @@ div.tooltip:after {
                 .call(d3.drag().on('drag', dragged));
             
                 
-			//tooltip ?�성
+			//tooltip 생성
         	var tooltip = d3.select('body').append('div')
         		.attr('id', '<portlet:namespace/>tooltip')
         		.attr('class', 'tooltip')
@@ -588,7 +589,7 @@ div.tooltip:after {
 			<portlet:namespace/>changeVirtualTooltip(stdPointReal, stdPointImaginary);
 			
 			
-			//drag ?�벤???�수
+			//drag 이벤트 함수
 			function dragged(d) {
 				var $circle = d3.select(this);
                 var m = d3.mouse(this);
@@ -627,7 +628,7 @@ div.tooltip:after {
 			}
 			
 			
-			//tooltip inf
+			//tooltip info 변경
 			function <portlet:namespace/>changeVirtualTooltip(real, imaginary){
 				var offset = $('#<portlet:namespace/>virtualPoint').offset();
 				var top = Number(offset.top - 56);
@@ -656,15 +657,17 @@ div.tooltip:after {
     }
     
     
+    //element Type 별 element value
     function <portlet:namespace/>maxElementValueByElementType(elementType){
         if(elementType === 'ser_cap' || elementType === 'sht_ind' || elementType === 'sht_res' ){
-        	return 0.001;
+        	return 0.1;
         }else{
         	return 1000;
   	  	}
     }
     
     
+    //두점 사이의 거리
 	function <portlet:namespace/>pointDistance(x1, y1, x2, y2) {
 		var width = Math.abs(x1 - x2);
 		var height = Math.abs(y1 - y2);
@@ -674,7 +677,7 @@ div.tooltip:after {
 	}
     
     
-    //virtual point value => element value
+    //virtual point value => element value로 변환
     function <portlet:namespace/>getConvertSchematicValue(elementType, currMouserData, prevMouserData){
     	
 		var result = '';
@@ -686,13 +689,15 @@ div.tooltip:after {
     	var previous_real = parseFloat(prevMouserData.real['value']) * impedance;
     	var previous_imaginary = parseFloat(prevMouserData.imaginary['value']) * impedance;
 
-    	console.log('#################################');
-    	console.log(prevMouserData);
+    	/* console.log('#################################');
+    	console.log(' elementType : ' + elementType);
+    	console.log(' frequency : ' + frequency);
+    	console.log(' impedance : ' + impedance);
     	console.log(' currReal : ' + current_real);
     	console.log(' currImaginary : ' + current_imaginary);
     	console.log(' prevReal : ' + previous_real);
     	console.log(' prevImaginary : ' + previous_imaginary);
-    	console.log('#################################');
+    	console.log('#################################'); */
     	
 		
 		switch (elementType) {
@@ -747,7 +752,7 @@ div.tooltip:after {
     }
     
     
-    // mouse point??가??가까운 path??point 구하�?
+    // mouse point의 가장 가까운 path의 point 구하기;
     function <portlet:namespace/>findClosestPoint(pathNode, point) {
         var pathLength = pathNode.getTotalLength();
         var precision = 8;
