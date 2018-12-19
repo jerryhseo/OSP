@@ -685,4 +685,15 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppByWorkflowId" >
+		<![CDATA[
+		SELECT 
+			scienceAppId
+		FROM
+			EDAPP_ScienceApp
+		WHERE
+			workflowId = #workflowId#
+		]]>
+	</sql>
+	
 </custom-sql>

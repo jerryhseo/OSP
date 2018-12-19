@@ -1095,4 +1095,12 @@ public interface ScienceAppLocalService extends BaseLocalService,
 	public int countScienceAppByWorkflowId(long workflowId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public org.kisti.edison.science.model.ScienceApp getScienceAppByWorkflowId(
+		long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException;
 }

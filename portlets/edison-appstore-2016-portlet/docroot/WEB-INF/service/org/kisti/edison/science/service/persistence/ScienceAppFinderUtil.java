@@ -144,6 +144,12 @@ public class ScienceAppFinderUtil {
 		return getFinder().countScienceAppByWorkflowId(searchParam);
 	}
 
+	public static int getScienceAppByWorkflowId(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().getScienceAppByWorkflowId(searchParam);
+	}
+
 	public static ScienceAppFinder getFinder() {
 		if (_finder == null) {
 			_finder = (ScienceAppFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.science.service.ClpSerializer.getServletContextName(),

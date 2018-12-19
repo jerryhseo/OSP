@@ -95,4 +95,8 @@ public interface ScienceAppFinder {
 	public int countScienceAppByWorkflowId(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int getScienceAppByWorkflowId(
+		java.util.Map<java.lang.String, java.lang.Object> searchParam)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

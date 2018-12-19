@@ -662,6 +662,10 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		_methodName128 = "countScienceAppByWorkflowId";
 
 		_methodParameterTypes128 = new String[] { "long" };
+
+		_methodName129 = "getScienceAppByWorkflowId";
+
+		_methodParameterTypes129 = new String[] { "long" };
 	}
 
 	@Override
@@ -5056,6 +5060,50 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceAppByWorkflowId(
+		long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName129,
+					_methodParameterTypes129, new Object[] { workflowId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof javax.persistence.NonUniqueResultException) {
+				throw (javax.persistence.NonUniqueResultException)t;
+			}
+
+			if (t instanceof org.kisti.edison.science.NoSuchScienceAppException) {
+				throw (org.kisti.edison.science.NoSuchScienceAppException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.science.model.ScienceApp)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -5313,4 +5361,6 @@ public class ScienceAppLocalServiceClp implements ScienceAppLocalService {
 	private String[] _methodParameterTypes127;
 	private String _methodName128;
 	private String[] _methodParameterTypes128;
+	private String _methodName129;
+	private String[] _methodParameterTypes129;
 }

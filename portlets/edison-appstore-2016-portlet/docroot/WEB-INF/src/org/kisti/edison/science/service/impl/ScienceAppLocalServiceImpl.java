@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.persistence.NonUniqueResultException;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
@@ -2971,6 +2973,19 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		searchParam.put("workflowId", workflowId);
 		
 		return scienceAppFinder.countScienceAppByWorkflowId(searchParam);
+	}
+	
+	public ScienceApp getScienceAppByWorkflowId(long workflowId) throws NoSuchScienceAppException, NonUniqueResultException, SystemException, PortalException{
+		
+		List<ScienceApp> scienceAppList = new ArrayList<ScienceApp>();
+		Map<String, Object> searchParam = new HashMap<String, Object>();
+		searchParam.put("workflowId", workflowId);
+		
+		int getScienceAppId = scienceAppFinder.getScienceAppByWorkflowId(searchParam);
+		
+		ScienceApp scienceApp = getScienceApp(getScienceAppId);
+		
+		return scienceApp;
 	}
 	
 }

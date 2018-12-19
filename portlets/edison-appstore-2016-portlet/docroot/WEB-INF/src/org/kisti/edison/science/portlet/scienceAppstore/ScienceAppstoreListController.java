@@ -549,7 +549,6 @@ public class ScienceAppstoreListController {
 					companyGroupId, groupId,
 					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
 					begin, linePerPage, sortField, sortOrder);
-			System.out.println("writeDataList : " + writeDataList.toString());
 			
 			// ScienceApp Date List for ScienceApp Page
 			List<String> dateMapList = new ArrayList<String>();
@@ -634,7 +633,6 @@ public class ScienceAppstoreListController {
 			isSiteMember = true;
 		}
 		
-		System.out.println("isSiteMember : " + isSiteMember);
 		JSONObject obj = new JSONObject();
 		obj.put("isSiteMember", isSiteMember);
 		response.setContentType("application/json; charset=UTF-8");
