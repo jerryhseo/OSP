@@ -27,52 +27,64 @@
 <script type="text/javascript" src="${contextPath}/js/plotly/plotly-basic.js"></script>
 
 <style>
-	#<portlet:namespace/>overviewCategory > DIV{
-		padding-left: 15px !important;
-		padding-right: 15px !important;
-	}
-	
 	.<portlet:namespace/>overview-category{
-		border: 1px solid #eee;
-		border-radius: 3px;
-		margin-bottom: 10px;
-		padding: 5px 10px;
+		width: 15.9%;
+		float: left;
+		list-style: none;
+		font-size: 32px;
+		color: #383838;
+		text-align: center;
+		margin-right: 0.9%;
+		border: solid 1px #9cbfd6;
+		font-weight: 500;
+		padding-top: 30px;
+		padding-bottom: 30px;
+		background-color: #fcfcfc;
 		cursor: pointer;
-		min-height: 60px;
-		background-color: #eee;
 	}
 	
+	.<portlet:namespace/>overview-category:hover,
 	.<portlet:namespace/>overview-category.selected{
-		background-color: #aacde3;
+		width: 15.9%;
+		float: left;
+		list-style: none;
+		font-size: 32px;
+		color: #383838;
+		text-align: center;
+		margin-right: 0.95%;
+		border: solid 5px #cdcaf1;
+		font-weight: 500;
+		padding-top: 27px;
+		padding-bottom: 30px;
+		background-color: #d6f9fd;
 	}
 	
 	.<portlet:namespace/>overview-category-icon{
-		float: left;
+		/* float: left;
 		width: 25%;
 		font-size: 35px;
-		text-align: center;
+		text-align: center; */
 	}
 	
 	.<portlet:namespace/>overview-category-content{
-		float: left;
+		/* float: left;
 		width: 70%;
-		padding-left: 10%;
+		padding-left: 10%; */
 	}
 	
 	.<portlet:namespace/>overview-category-title{
-		font-size: 15px;
-		padding-bottom: 5px;
-	}
-	
-	.<portlet:namespace/>overview-category-value{
-		font-size: 17px;
-		font-weight: bold;
+		font-size: 14px;
+		color: #98999b;
+		padding: 7px 0 20px 0;
 	}
 	
 	.<portlet:namespace/>overview-chart{
 		text-align: center;
 		min-height: 350px !important;
+		padding-left: 0px !important;
+		padding-right: 0px !important;
 	}
+	
 </style>
 
 <div style="clear: both;height:40px;"></div> 
@@ -91,9 +103,9 @@
 </div>
 
 <div style="width:100%;margin-top:20px; ">
-	<div id="<portlet:namespace/>overviewChar_1" class="<portlet:namespace/>overview-chart col-md-7">
-	</div>
 	<div id="<portlet:namespace/>overviewChar_2" class="<portlet:namespace/>overview-chart col-md-5">
+	</div>
+	<div id="<portlet:namespace/>overviewChar_1" class="<portlet:namespace/>overview-chart col-md-7">
 	</div>
 	<div id="<portlet:namespace/>overviewChar_3" class="<portlet:namespace/>overview-chart col-md-12" style="display: none;">
 	</div>
@@ -102,93 +114,95 @@
 <div class="h40"></div>
 
 <div id="<portlet:namespace/>overviewCategory">
-	<div class="col-md-4">
+	<div>
 		<div id="<portlet:namespace/>overviewSiteUserTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('siteUser', 1)">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-user"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon01.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-site-user-message' />&nbsp;
 					<liferay-ui:icon-help message="edison-overview-statistics-site-user-help-message"/>
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewSiteUser" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div>
 		<div id="<portlet:namespace/>overviewExecuteUserTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('executeUser', 1)">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-user"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon02.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-execute-user-message' />&nbsp;
 					<liferay-ui:icon-help message="edison-overview-statistics-execute-user-help-message"/>
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewExecuteUser" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div>
 		<div id="<portlet:namespace/>overviewSimulationJobTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('simulationJob', 1)">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-cogs"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon03.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-simulation-job-message' />
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewSimulationJob" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div>
 		<div id="<portlet:namespace/>overviewScienceAppTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('scienceApp', 1)">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-cogs"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon04.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-science-app-message' />&nbsp;
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewScienceApp" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div>
 		<div id="<portlet:namespace/>overviewContentsTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('contents', 1)">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-book"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon05.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-contents-message' />&nbsp;
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewContents" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<div id="<portlet:namespace/>overviewCitationsTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('citations', 1)">
+	<div>
+		<div id="<portlet:namespace/>overviewCitationsTab" class="<portlet:namespace/>overview-category" onclick="<portlet:namespace/>getCategoryTotalCount('citations', 1)" style="margin-right: 0px;">
 			<div class="<portlet:namespace/>overview-category-icon">
-				<i class="icon-book"></i>
-			</div>
-			<div class="<portlet:namespace/>overview-category-content">
+				<img src="${contextPath}/images/category/icon06.png">
 				<div class="<portlet:namespace/>overview-category-title">
 					<liferay-ui:message key='edison-overview-statistics-citations-message' />&nbsp;
 				</div>
+			</div>
+			<div class="<portlet:namespace/>overview-category-content">
 				<div id="<portlet:namespace/>overviewCitations" class="<portlet:namespace/>overview-category-value"> 
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="h20"></div>
 	
 <br><br>
 <img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
@@ -247,7 +261,7 @@
 			success: function(data) {
 				getCategoryTotalCount = data.getCategoryTotalCount;
 				
-				resultText = getCategoryTotalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + textSuffix;
+				resultText = getCategoryTotalCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 				overviewCategoryValue.text(resultText);
 			},error:function(msg){
 				alert("System Exception dataSearch: " + msg);
@@ -386,10 +400,18 @@
 		var data = [barChartData, lineChartData];
 		var layout = {
 			title: chartTitle,
-			/* plot_bgcolor: 'rgb(0,0,0)',
-			paper_bgcolor: 'rgb(0,0,0)', */
+			plot_bgcolor: '#2E2E2E',
+			paper_bgcolor: '#2E2E2E',
+			font: {
+				color: '#fff'
+			},
+			xaxis:{
+				exponentformat : 'none',
+				color: '#fff'
+			},
 			yaxis:{
-				exponentformat : 'none'
+				exponentformat : 'none',
+				color: '#fff'
 			},
 			legend: {
 				orientation: 'h',
@@ -427,18 +449,25 @@
 
 		var layout = {
 			title: chartTitle,
+			width: 490,
 			grid: {rows: 1, columns: 1},
 			showlegend: false,
+			plot_bgcolor: '#2E2E2E',
+			paper_bgcolor: '#2E2E2E',
+			font: {
+				color: '#fff',
+			},
 			annotations: [
 				{
 					font: {
-						size: 14
+						size: 14,
+						color:'#fff'
 					},
 					text: "",
 					showarrow: false
 				}
 			],
-			color : 'rgb(0,0,0)'
+			color : '#000'
 		}
 
 		Plotly.newPlot('<portlet:namespace/>overviewChar_2', data, layout);
