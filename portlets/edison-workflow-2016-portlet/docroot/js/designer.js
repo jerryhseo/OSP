@@ -220,8 +220,60 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
 
     function drawScienceAppDiv(pageX, pageY, data, savedId){
         var wfId = savedId ? savedId : getGUID();
-        currentJsPlumbInstance.addFactoryNode("scienceApp",{id:wfId});
+        var scienceAppData = {
+        		sciecneAppId:data.sciecneAppId,
+                runType:data.runType,
+                name:data.name,
+                version:data.version,
+                text:data.text,
+                defaultCpus:data.defaultCpus,
+                maxCpus:data.maxCpus,
+                minCpus:data.minCpus
+        };
+        
+        var ports = {};
+        var nodePorts = new Array();
+        var inputports = getScienceAppInputPort(data.scienceAppId);
+        var inputportJson = $.parseJSON(inputports);
+        if(!$.isEmptyObject(inputportJson)){
+        	ports["input"] = inputportJson;
+        	for(key in inputportJson){
+        		if (inputportJson.hasOwnProperty(key)) {
+        			var port = inputportJson[key];
+        			var nodePort = port;
+        			nodePort["id"] = key;
+        			nodePort["type"] = "input";
+        			nodePorts.push(nodePort);
+        		}
+        	}
+        	
+        }
+        
+        var outputports = getScienceAppOutputPort(data.scienceAppId);
+        var outputportJson = $.parseJSON(outputports);
+        if(!$.isEmptyObject(outputportJson)){
+        	ports["output"] = outputportJson;
+        	for(key in outputportJson){
+        		if (outputportJson.hasOwnProperty(key)) {
+        			var port = outputportJson[key];
+        			var nodePort = port;
+        			nodePort["id"] = key;
+        			nodePort["type"] = "output";
+        			nodePorts.push(nodePort);
+        		}
+        	}
+        }
+        currentJsPlumbInstance.addFactoryNode("scienceApp",{id:wfId,scienceAppData:scienceAppData,ports:ports});
+        
+        var node = currentJsPlumbInstance.getNode(wfId);
+        for(index in nodePorts){
+        	currentJsPlumbInstance.addPort(node,nodePorts[index]);
+        }
+        
+        
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({type:"json"})));
+        
+        
         
 //        var $wfDiv;
 //        if(data.appType && data.appType == WF_APP_TYPES.CONTROLLER.NAME){
@@ -260,6 +312,11 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
     function addScienceAppInputPort(wfId, scienceAppId){
         var inputports = synchronousAjaxHelper.get("/delegate/services/app/"+scienceAppId+"/inputports");
         return addEndPointToScienceApp(wfId, $.parseJSON(inputports), true);
+    }
+    
+    function getScienceAppInputPort(scienceAppId){
+        var inputports = synchronousAjaxHelper.get("/delegate/services/app/"+scienceAppId+"/inputports");
+        return inputports;
     }
 
     function addEndPointToScienceApp(wfId, portJson, isInputPort){
@@ -321,6 +378,11 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
             addEndPoint(currentJsPlumbInstance);
             return outputportsJson;
         }
+    }
+    
+    function getScienceAppOutputPort(scienceAppId){
+        var outputports = synchronousAjaxHelper.get("/delegate/services/app/"+scienceAppId+"/outputports");
+        return outputports;
     }
 
     function getPortsArrayFromPortJson(portJsonObject, isInputPort){
