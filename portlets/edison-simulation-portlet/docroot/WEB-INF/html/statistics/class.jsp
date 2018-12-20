@@ -270,6 +270,7 @@ function <portlet:namespace/>excelDown(){
 			</tbody>
 		</table>
 	</div>
+	<div class="h20"></div>
 	
 	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 
