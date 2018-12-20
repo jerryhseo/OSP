@@ -297,7 +297,12 @@ var contextPath = '${contextPath}';
     </section>
     <!-- Main content -->
     <section class="content">
-      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select"></div>
+      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select">
+      	<div id="miniview" style="position: absolute;top: 25px;right: 25px;z-index: 100;">
+      		
+      	</div>
+      	<div jtk-miniview-type="foo"></div>
+      </div>
     </section>
     <div class="menu-panel" style="top: 0;">
       <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
@@ -336,7 +341,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
-
+<script type="text/x-jtk-templates" src="${contextPath}/templete/templete.html"></script>
 
 
 <script id="tpl-menu-panel-box" type="text/html">

@@ -237,7 +237,7 @@ var AppTree = (function(namespace, $, designer){
                 if(eventTarget.closest('.wf-drop').length) {
                     var nodeId = data.data.nodes[0];
                     var node = $(appTreeSelector).jstree(true).get_node(nodeId);
-                    designer.addScienceApp(eventTarget.closest('.wf-drop'), data.event.pageX, data.event.pageY, node.data);
+                    designer.addScienceApp(data.event.pageX, data.event.pageY, node.data);
                 }
             }
             $(".menu-panel").show();

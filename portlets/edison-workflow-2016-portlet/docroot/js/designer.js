@@ -19,6 +19,33 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
     var inputPortColor = "#416EC5";
     var outputPortColor = "#D6442D";
     var connectionColor = "#11C7E7"
+    	
+    
+	var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
+		beforeConnect:function(source, target, edgeData) {
+			return source !== target && source.getNode() !== target.getNode();
+		}
+	});
+    
+    var view = {
+    	nodes:{
+    		"scienceApp" : {
+    			template : "scienceApp-templete"
+    		}
+    	}
+    } 
+    var renderer = wfWorkflowJsPlumbInstance.render({
+    	 container: "wf-workflow-canvas",
+    	 view: view,
+         layout: {
+             type: "Hierarchical"
+         },
+         miniview:{
+        	 container:"miniview"
+         }
+    });
+    
+    var miniview = renderer.getMiniview();
 
     var outputPortPoint = {
         endpoint: ["Rectangle", {width: 18, height: 18}, {cssClass: "output-port"}],
@@ -64,25 +91,6 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         },
         dropOptions: portDropOption
     };
-
-    var wfWorkflowJsPlumbInstance = jsPlumb.getInstance({
-        Container: "wf-workflow-canvas",
-        DragOptions: {containment: true, cursor: 'pointer'},
-        Endpoint: "Rectangle",
-        ConnectionsDetachable: !isFixed,
-        Anchors: ["TopCenter", "TopCenter"],
-        Overlays: [["Arrow", {location: 1, id: "arrow", length: 14, foldback: 1}]]
-    });
-
-    var renderer = jsPlumbToolkit.Support.ingest({
-        jsPlumb : wfWorkflowJsPlumbInstance,
-        renderParams : {
-            consumeRightClick: true,
-            clampZoom: true,
-            enablePan: true
-        }
-    });
-
 
     /** jsplumb callback **/
     function jsPlumbConnectionDetachedCallback(info, originalEvent) {
@@ -177,22 +185,22 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
     currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
     currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
 
-    function addScienceApp(target, pageX, pageY, data){
-        var wfId = drawScienceAppDiv(target, pageX, pageY, data);
-        if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
-            addEndPointToScienceApp(wfId, data["inputports"], true);
-            addEndPointToScienceApp(wfId, data["outputports"], false);
-        }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
-            addEndPointToController(wfId, data["inputports"], true);
-            addEndPointToController(wfId, data["outputports"], false);
-        }else{
-            var inputports = addScienceAppInputPort(wfId, data.scienceAppId);
-            var outputports = addScienceAppOutputPort(wfId, data.scienceAppId);
-
-            data["inputports"] = inputports;
-            data["outputports"] = outputports;
-        }
-        $("#" + wfId).data(data);
+    function addScienceApp(pageX, pageY, data){
+        var wfId = drawScienceAppDiv(pageX, pageY, data);
+//        if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
+//            addEndPointToScienceApp(wfId, data["inputports"], true);
+//            addEndPointToScienceApp(wfId, data["outputports"], false);
+//        }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
+//            addEndPointToController(wfId, data["inputports"], true);
+//            addEndPointToController(wfId, data["outputports"], false);
+//        }else{
+//            var inputports = addScienceAppInputPort(wfId, data.scienceAppId);
+//            var outputports = addScienceAppOutputPort(wfId, data.scienceAppId);
+//
+//            data["inputports"] = inputports;
+//            data["outputports"] = outputports;
+//        }
+//        $("#" + wfId).data(data);
     }
 
     function drawController(target, pageX, pageY, data, wfId){
@@ -210,36 +218,41 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         })).appendTo(target);
     }
 
-    function drawScienceAppDiv(target, pageX, pageY, data, savedId){
+    function drawScienceAppDiv(pageX, pageY, data, savedId){
         var wfId = savedId ? savedId : getGUID();
-        var $wfDiv;
-        if(data.appType && data.appType == WF_APP_TYPES.CONTROLLER.NAME){
-            $wfDiv = drawController(target, pageX, pageY, data, wfId);
-        }else{
-            $wfDiv = $("<div class='waitingbox wf-box ui-selectee' id='" + wfId +
-            "'><div class='wf-app-title' alt='"+data.text+"'>" +
-            data.name + "</div><div class='addIp buttonwait wf-app-status'>Waiting</div></div>")
-                .appendTo(target);
-        }
-
-        if(data.appType && data.appType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
-            $wfDiv.addClass("wf-converter").addClass("wf-dynamic");
-        }else if(data.appType && data.appType == WF_APP_TYPES.STATIC_CONVERTER.NAME){
-            $wfDiv.addClass("wf-converter").addClass("wf-static");
-        }else if(data.appType && data.appType == WF_APP_TYPES.APP.NAME){
-            $wfDiv.addClass("wf-app");
-        }
-
-        $wfDiv.offset({top : pageY, left : pageX});
-        currentJsPlumbInstance.draggable($wfDiv, {
-            containment:"parent",
-            start: function(el){
-                $(".menu-panel > .menu-panel-box-app").addClass("hidden");
-            },
-            stop: function(){
-                $(".menu-panel > .menu-panel-box-app").removeClass("hidden");
-            }
-        });
+        currentJsPlumbInstance.addFactoryNode("scienceApp",{id:wfId});
+        console.log(JSON.stringify(currentJsPlumbInstance.exportData({type:"json"})));
+        
+//        var $wfDiv;
+//        if(data.appType && data.appType == WF_APP_TYPES.CONTROLLER.NAME){
+//            $wfDiv = drawController(target, pageX, pageY, data, wfId);
+//        }else{
+//            $wfDiv = $("<div class='waitingbox wf-box ui-selectee' id='" + wfId +
+//            "'><div class='wf-app-title' alt='"+data.text+"'>" +
+//            data.name + "</div><div class='addIp buttonwait wf-app-status'>Waiting</div></div>")
+//                .appendTo(target);
+//        }
+//
+//        if(data.appType && data.appType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
+//            $wfDiv.addClass("wf-converter").addClass("wf-dynamic");
+//        }else if(data.appType && data.appType == WF_APP_TYPES.STATIC_CONVERTER.NAME){
+//            $wfDiv.addClass("wf-converter").addClass("wf-static");
+//        }else if(data.appType && data.appType == WF_APP_TYPES.APP.NAME){
+//            $wfDiv.addClass("wf-app");
+//        }
+//
+//        $wfDiv.offset({top : pageY, left : pageX});
+//        currentJsPlumbInstance.draggable($wfDiv, {
+//            containment:"parent",
+//            start: function(el){
+//                $(".menu-panel > .menu-panel-box-app").addClass("hidden");
+//            },
+//            stop: function(){
+//                $(".menu-panel > .menu-panel-box-app").removeClass("hidden");
+//            }
+//        });
+        
+        
         //drawLoopArrow(wfId, data);
         return wfId;
     }
@@ -883,7 +896,8 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
             return wfPortletGlobalData;
         },
         "getCurrentJsPlumbContainerId": function(){
-            return $(currentJsPlumbInstance.getContainer()).attr("id");
+//            return $(currentJsPlumbInstance.getContainer()).attr("id");
+        	return "";
         },
         "getCurrentJsPlumbInstance": function(){
             return currentJsPlumbInstance;
