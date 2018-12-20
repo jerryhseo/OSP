@@ -94,4 +94,36 @@
   		<role-name>user</role-name>
   	</security-role-ref>
   </portlet>
+  
+  <portlet>
+    <portlet-name>workflow-monitoring</portlet-name>
+    <display-name>Workflow Monitoring</display-name>
+    <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+    <init-param>
+      <name>contextConfigLocation</name>
+      <value>classpath:org/kisti/edison/portlet/monitoring/edison-monitoring-portlet.xml</value>
+    </init-param>
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <portlet-info>
+      <title>Workflow Monitoring</title>
+      <short-title>Workflow Monitoring</short-title>
+      <keywords>Workflow Monitoring</keywords>
+    </portlet-info>
+    <security-role-ref>
+      <role-name>administrator</role-name>
+    </security-role-ref>
+    <security-role-ref>
+      <role-name>guest</role-name>
+    </security-role-ref>
+    <security-role-ref>
+      <role-name>power-user</role-name>
+    </security-role-ref>
+    <security-role-ref>
+      <role-name>user</role-name>
+    </security-role-ref>
+  </portlet>
+  
 </portlet-app>

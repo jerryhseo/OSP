@@ -71,6 +71,16 @@
   	</css-class-wrapper>
     <add-default-resource>true</add-default-resource>
   </portlet>
+  
+  <portlet>
+    <portlet-name>workflow-monitoring</portlet-name>
+    <icon>/icon.png</icon>
+    <private-session-attributes>false</private-session-attributes>
+    <header-portlet-css>/css/workflow.css</header-portlet-css>
+    <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+    <css-class-wrapper>edison-workflow-2016-portlet container</css-class-wrapper>
+  </portlet>
+  
   <role-mapper>
     <role-name>administrator</role-name>
     <role-link>Administrator</role-link>

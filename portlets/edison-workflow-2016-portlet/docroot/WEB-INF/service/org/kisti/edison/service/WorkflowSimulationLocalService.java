@@ -376,4 +376,16 @@ public interface WorkflowSimulationLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringJobList(
+		long simulationId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringList(
+		long userId, java.lang.String searchValue, long simulationId,
+		long jobStatus, long classId, int begin, int end,
+		java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

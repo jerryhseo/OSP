@@ -452,6 +452,22 @@ public class WorkflowSimulationLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringJobList(
+		long simulationId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getWorkflowMonitoringJobList(simulationId, locale);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringList(
+		long userId, java.lang.String searchValue, long simulationId,
+		long jobStatus, long classId, int begin, int end,
+		java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getWorkflowMonitoringList(userId, searchValue,
+			simulationId, jobStatus, classId, begin, end, locale);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -171,4 +171,55 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
       closeSession(session);
     }
   }
+  
+  public List<Object[]> getWorkflowMonitoringList(Map<String, Object> searchParams) throws SystemException{
+		StringBuilder sqlSb = new StringBuilder();
+		Session session = null;
+		try{
+			String sqlQuery = CustomSQLUtil.get("org.kisti.edison.service.persistence.WorkflowMonitoringFinder.getListWorkflowMonitoring");
+			sqlSb.append(sqlQuery);
+			
+			session = openSession();
+			String gBatisQuery = GBatisUtil.getGBatis(searchParams, sqlSb.toString());
+			SQLQuery query = session.createSQLQuery(gBatisQuery);
+			
+			query.addScalar("scienceAppId", 			Type.INTEGER);
+			query.addScalar("scienceAppName", 			Type.STRING);
+			query.addScalar("scienceAppVersion",		Type.STRING);
+			query.addScalar("scienceAppTitle", 			Type.STRING);
+			
+			query.addScalar("simulationId", 			Type.INTEGER);
+			query.addScalar("simulationUserId", 		Type.INTEGER);
+			query.addScalar("simulationCreateDate", 	Type.STRING);
+			query.addScalar("simulationModifiedDate", 	Type.STRING);
+			query.addScalar("classId", 					Type.INTEGER);
+			query.addScalar("customId", 				Type.INTEGER);
+			query.addScalar("simulationTitle", 			Type.STRING);
+			query.addScalar("workflowId", 				Type.INTEGER);
+			
+			query.addScalar("simulationJobId", 			Type.INTEGER);
+			query.addScalar("simulationJobUserId", 		Type.INTEGER);
+			query.addScalar("simulationJobCreateDate", 	Type.STRING);
+			query.addScalar("simulationJobModifiedDate",Type.STRING);
+			query.addScalar("simulationJobTitle",		Type.STRING);
+			query.addScalar("status", 					Type.STRING);
+			query.addScalar("statusResponse", 			Type.STRING);
+			query.addScalar("startTime", 				Type.STRING);
+			query.addScalar("endTime", 					Type.STRING);
+			query.addScalar("workflowUUID", 			Type.STRING);
+			query.addScalar("reuseWorkflowUUID", 		Type.STRING);
+			query.addScalar("screenLogic", 				Type.STRING);
+			
+			query.addScalar("userScreenName", 			Type.STRING);
+			
+			query.addScalar("executeDate", 				Type.STRING);
+			query.addScalar("jobCnt", 					Type.STRING);
+			
+			return (List<Object[]>) query.list();
+		}catch (Exception e) {
+			throw new SystemException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
 }

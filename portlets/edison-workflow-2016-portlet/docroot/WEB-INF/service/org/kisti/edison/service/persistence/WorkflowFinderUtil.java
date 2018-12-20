@@ -41,6 +41,12 @@ public class WorkflowFinderUtil {
 		return getFinder().retrieveWorkflowInstances(searchParam, locale);
 	}
 
+	public static java.util.List<java.lang.Object[]> getWorkflowMonitoringList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParams)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().getWorkflowMonitoringList(searchParams);
+	}
+
 	public static WorkflowFinder getFinder() {
 		if (_finder == null) {
 			_finder = (WorkflowFinder)PortletBeanLocatorUtil.locate(org.kisti.edison.service.ClpSerializer.getServletContextName(),
