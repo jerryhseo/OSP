@@ -1,10 +1,33 @@
 <script type="jtk" id="scienceApp-templete">
-<div class="waitingbox wf-box ui-selectee" id="${id}">
-	<div class="wf-app-title">
-		${id}
+<div class="runningbox wf-box ui-selectee" id="${id}">
+	<div class="wf-icon">
+		<i class="icon-cogs"></i>
 	</div>
 	<div class="addIp buttonwait wf-app-status">
 		Waiting
 	</div>
+	<div class="wf-app-title">
+		${scienceAppData.name}
+	</div>
+
+	<div class="wf-app-input-ports">
+		<r-each in="ports.input">
+			<div>${name_}</div>
+		</r-each>
+	</div>
+	
 </div>
+</script>
+
+
+<!-- table column template -->
+<script type="jtk" id="science-app-input-ports-template">
+<li class="table-column table-column-type">
+	<div class="table-column-edit">
+		<div>
+			${name_}<br/>
+			${defaultEditor_}<br/>
+		</div>
+	</div>
+</li>
 </script>

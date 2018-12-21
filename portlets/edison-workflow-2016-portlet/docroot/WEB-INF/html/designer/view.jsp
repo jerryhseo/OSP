@@ -97,45 +97,70 @@ var contextPath = '${contextPath}';
 /* workflow science app box */
 .apparea{position: relative;}
 
-.waitingbox{border-radius:3px; border:solid 1px #00abe3; background-color:#b6e1f8;}
+.waitingbox{border-radius:3px; border:solid 1px #adadad; background-color:#adadad;}
 .waitingbox span{font-size:18px; color:#114a69; font-weight:500;}
 
 .loopbox{background-color:#f7b036;}
 
-.runningbox{border-radius:3px; border:solid 1px #00abe3; background-color:#8db9e5;}
+.runningbox{border-radius:3px; border:solid 1px #8db9e5; background-color:#8db9e5;}
 .runningbox span{font-size:18px; color:#fff; font-weight:500;}
 
-.failbox{border-radius:3px; border:solid 1px #00abe3; background-color:#f8799b;}
+.failbox{border-radius:3px; border:solid 1px #f8799b; background-color:#f8799b;}
 .failbox span{font-size:18px; color:#fff; font-weight:500;}
 
-.donebox{border-radius:3px; border:solid 1px #00abe3; background-color:#76d6cd;}
+.donebox{border-radius:3px; border:solid 1px #76d6cd; background-color:#76d6cd;}
 .donebox span{font-size:18px; color:#fff; font-weight:500;}
+
+.pausebox{border-radius:3px; border:solid 1px #fd9b00; background-color:#fd9b00;}
+
+
 
 .wf-box {
   box-sizing: content-box;
-  padding: 30px 5px 5px 15px;
-  width: 100px !important;
-  height: 110px !important;
+  padding: 15px 0px;
+  width: 130px !important;
+  height: 100px !important;
   position: absolute;
   cursor: move;
-  border-radius: 3px;
-  border: solid 1px #00abe3;
+  border-radius: 10px;
+}
+
+/* 2018.12.20 */
+.wf-box .wf-icon{
+	height: 75%;
+	text-align: center;
+	border-bottom: 1px solid #fff;
+	font-size: 45px;
 }
 
 .wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.wf-box .wf-app-title{font-size: 15px; font-weight: 500; color: #fff;}
-.wf-box .wf-app-status{position: relative; top: 25px;}
+/* 2018.12.20 */
+.wf-box .wf-app-title{
+	font-size: 15px;
+	font-weight: 500;
+	margin-top: 5px;
+	position: absolute;
+	left: -20px;
+	width: 150%;
+}
 .waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
-.pausebox{border-radius:3px; border:solid 1px #CA412B; background-color:#fb6e50;}
-.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px;
-	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
-	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px;
-	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
-.waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
-.runningbox .addIp{ background: #3a81c0; border-color: #3371a8;}
-.failbox .addIp{ background: #c84444; border-color: #b73535; }
-.pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
-.donebox .addIp{ background: #32a993; border-color: #2e9886; }
+
+/* 2018.12.20 */
+.wf-box .addIp { 
+	font-weight: 600; 
+	text-decoration: none; 
+	text-align: center; 
+	font-size: 15px;
+	padding: 10px;
+	color: #fff;
+}
+
+.wf-app-input-ports{
+	position: absolute;
+	top: 10px;
+	left: -25px;
+}
+
 .wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
 
 .wf-converter{}
