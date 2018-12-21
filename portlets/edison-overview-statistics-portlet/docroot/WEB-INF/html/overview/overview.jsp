@@ -29,6 +29,7 @@
 <style>
 	.<portlet:namespace/>overview-category{
 		width: 15.9%;
+		min-height: 222px;
 		float: left;
 		list-style: none;
 		font-size: 32px;
@@ -46,6 +47,7 @@
 	.<portlet:namespace/>overview-category:hover,
 	.<portlet:namespace/>overview-category.selected{
 		width: 15.9%;
+		min-height: 222px;
 		float: left;
 		list-style: none;
 		font-size: 32px;
