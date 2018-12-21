@@ -37,9 +37,9 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
     var renderer = wfWorkflowJsPlumbInstance.render({
     	 container: "wf-workflow-canvas",
     	 view: view,
-         layout: {
-             type: "Hierarchical"
-         },
+//         layout: {
+//             type: "Hierarchical"
+//         },
          miniview:{
         	 container:"miniview"
          }
@@ -231,19 +231,16 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
                 minCpus:data.minCpus
         };
         
-        var ports = {};
-        var nodePorts = new Array();
         var inputports = getScienceAppInputPort(data.scienceAppId);
         var inputportJson = $.parseJSON(inputports);
+        var inputPortsArray = new Array();
         if(!$.isEmptyObject(inputportJson)){
-        	ports["input"] = inputportJson;
         	for(key in inputportJson){
         		if (inputportJson.hasOwnProperty(key)) {
         			var port = inputportJson[key];
-        			var nodePort = port;
-        			nodePort["id"] = key;
-        			nodePort["type"] = "input";
-        			nodePorts.push(nodePort);
+        			port["id"] = key;
+        			port["type"] = "input";
+        			inputPortsArray.push(port);
         		}
         	}
         	
@@ -251,24 +248,22 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         
         var outputports = getScienceAppOutputPort(data.scienceAppId);
         var outputportJson = $.parseJSON(outputports);
+        var outputPortsArray = new Array();
         if(!$.isEmptyObject(outputportJson)){
-        	ports["output"] = outputportJson;
         	for(key in outputportJson){
         		if (outputportJson.hasOwnProperty(key)) {
         			var port = outputportJson[key];
-        			var nodePort = port;
-        			nodePort["id"] = key;
-        			nodePort["type"] = "output";
-        			nodePorts.push(nodePort);
+        			port["id"] = key;
+        			port["type"] = "output";
+        			outputPortsArray.push(port);
         		}
         	}
         }
-        currentJsPlumbInstance.addFactoryNode("scienceApp",{id:wfId,scienceAppData:scienceAppData,ports:ports});
+        currentJsPlumbInstance.addFactoryNode("scienceApp",{id:wfId,left:pageX,top:pageY,
+        				scienceAppData:scienceAppData,
+        				inputPorts:inputPortsArray,outputPorts:outputPortsArray});
         
         var node = currentJsPlumbInstance.getNode(wfId);
-        for(index in nodePorts){
-        	currentJsPlumbInstance.addPort(node,nodePorts[index]);
-        }
         
         
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({type:"json"})));
@@ -407,7 +402,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
         })(ports);
         return function traversePortsAndAddEndPoint(jsPlumbInstance){
             var endPointType = isInputPort ? inputPortPoint : outputPortPoint;
-            var defaultAnchor = isInputPort ? [0, 0.15, -1, 0]: [1, 0.15, 1, 0];
+            var defaultAnchor = isInputPort ? [0, 0.15, -wjs1, 0]: [1, 0.15, 1, 0];
             var isModifiable = $(jsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas";
             $.each(ports, function(_, port){
                 var connectionScope = port.dataType().name + "_" + port.dataType().version;

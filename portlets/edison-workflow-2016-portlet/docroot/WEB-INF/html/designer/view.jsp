@@ -116,14 +116,48 @@ var contextPath = '${contextPath}';
 
 
 .wf-box {
-  box-sizing: content-box;
-  padding: 15px 0px;
-  width: 130px !important;
-  height: 100px !important;
-  position: absolute;
-  cursor: move;
-  border-radius: 10px;
+	box-sizing: content-box;
+    width: 250px !important;
+    position: absolute;
+    cursor: move;
+    border-radius: 10px;
+    min-width: 80px;
+    min-height: 30px;
+    text-align: center;
 }
+
+.wf-box h3.wf-title{ 
+	display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold; 
+}
+
+.wf-box ul.port{
+	width: 45%;
+	padding: 0px;
+}
+
+.wf-box ul.port li{
+	border: 1px solid #CCC;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: #edf7f7;
+}
+
+.wf-box ul.inputport{
+	float: left;
+	text-align: left;	
+}
+
+.wf-box ul.outputport{
+	float: right;
+	text-align: right;
+}
+
 
 /* 2018.12.20 */
 .wf-box .wf-icon{
@@ -143,7 +177,6 @@ var contextPath = '${contextPath}';
 	left: -20px;
 	width: 150%;
 }
-.waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
 
 /* 2018.12.20 */
 .wf-box .addIp { 
