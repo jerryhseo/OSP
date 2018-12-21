@@ -531,13 +531,13 @@ function <portlet:namespace/>dataSearchList() {
 																.attr("type", "button")
 																.attr("value", "<liferay-ui:message key='edison-simulation-monitoring-title' />")
 																.attr("onclick", "<portlet:namespace/>searchMonitoring(" + virtualClassStudentList[i].userId + ")");
-					var workflowMonitoringBtn = $("<input/>").addClass("btn btn-default virtual-class-monitoring-btn")
+					/* var workflowMonitoringBtn = $("<input/>").addClass("btn btn-default virtual-class-monitoring-btn")
 																.attr("type", "button")
 																.attr("value", "<liferay-ui:message key='workflow' />")
 																.attr("onclick", "<portlet:namespace/>searchWorkflowMonitoring(" + virtualClassStudentList[i].userId + ")")
 																.css("margin-left", "10px").css("width", "72px")
-																.css("padding-left", "6px").css("padding-right", "6px");
-					$("<td/>").append(simulationMonitoringBtn).append(workflowMonitoringBtn)
+																.css("padding-left", "6px").css("padding-right", "6px"); */
+					$("<td/>").append(simulationMonitoringBtn)
 							  .css("text-align","center").appendTo($rowResult);
 					if(virtualClassStudentList[i].requestSort == "REQUEST") {
 						$("<td/>").html("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />")
@@ -891,14 +891,14 @@ function <portlet:namespace/>fileDownload(p_fileEntryId){
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-hover edison-table">
 		<colgroup>
 			<col width="5%" />
-			<col width="13%" />
+			<col width="15%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="10%" />
 			<col width="10%" />
 			<col width="13%" />
-			<col width="10%" />
-			<col width="10%" />
-			<col width="19%" />
-			<col width="10%" />
-			<col width="10%" />
 		</colgroup>
 		<thead>
 			<tr>
