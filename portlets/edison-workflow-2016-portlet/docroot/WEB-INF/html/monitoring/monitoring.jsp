@@ -38,6 +38,10 @@
 	#<portlet:namespace/>searchValue{
 		width: 75%;
 	}
+	
+	#<portlet:namespace/>workflowMonitoringTableList tr{
+		border-bottom: 1px solid #dddddd !important;
+	}
 
 </style>
 
@@ -45,7 +49,7 @@
 	<h2>
 		<img src="${contextPath}/images/sub_tit_bl.png" />
 		<span class="subtitlearea">
-			<liferay-ui:message key="edison-simulation-monitoring-title" />	
+			<liferay-ui:message key="edison-workflow-monitoring-title" />	
 		</span>
 	</h2>
 </div>
@@ -54,6 +58,7 @@
 <div class="table-responsive panel edison-panel" style="width: 100%; display: inline;">
 	<form id="<portlet:namespace/>searchForm" action="<%=monitoringSearchUrl%>" method="post">
 		<input type="hidden" id="<portlet:namespace/>userId" name="<portlet:namespace/>userId" value="${userId}" />
+		<input type="hidden" id="<portlet:namespace/>searchClassUserId" name="<portlet:namespace/>searchClassUserId" value="${searchClassUserId}" />
 		
 		<input type="hidden" id="<portlet:namespace/>currentPage" name="<portlet:namespace/>currentPage" value="${currPage}" />
 		<input type="hidden" id="<portlet:namespace/>jobStatus" name="<portlet:namespace/>jobStatus" value="${jobStatus}" />
@@ -220,7 +225,6 @@
 	
 	/* USER 검색 */
 	function <portlet:namespace/>searchUser(userId){
-		alert("userId : " + userId);
 		$("#<portlet:namespace/>userId").val(userId);
 		$("#<portlet:namespace/>searchForm").submit();
 	}
