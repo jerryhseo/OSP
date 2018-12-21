@@ -177,13 +177,84 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 
 		_methodParameterTypes31 = new String[] { "long", "long[][]" };
 
-		_methodName62 = "getBeanIdentifier";
+		_methodName32 = "addWorkflowSimulationWorkflowSimulationJob";
 
-		_methodParameterTypes62 = new String[] {  };
+		_methodParameterTypes32 = new String[] { "long", "long" };
 
-		_methodName63 = "setBeanIdentifier";
+		_methodName33 = "addWorkflowSimulationWorkflowSimulationJob";
 
-		_methodParameterTypes63 = new String[] { "java.lang.String" };
+		_methodParameterTypes33 = new String[] {
+				"long", "org.kisti.edison.model.WorkflowSimulationJob"
+			};
+
+		_methodName34 = "addWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes34 = new String[] { "long", "long[][]" };
+
+		_methodName35 = "addWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes35 = new String[] { "long", "java.util.List" };
+
+		_methodName36 = "clearWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes36 = new String[] { "long" };
+
+		_methodName37 = "deleteWorkflowSimulationWorkflowSimulationJob";
+
+		_methodParameterTypes37 = new String[] { "long", "long" };
+
+		_methodName38 = "deleteWorkflowSimulationWorkflowSimulationJob";
+
+		_methodParameterTypes38 = new String[] {
+				"long", "org.kisti.edison.model.WorkflowSimulationJob"
+			};
+
+		_methodName39 = "deleteWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes39 = new String[] { "long", "long[][]" };
+
+		_methodName40 = "deleteWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes40 = new String[] { "long", "java.util.List" };
+
+		_methodName41 = "getWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes41 = new String[] { "long" };
+
+		_methodName42 = "getWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes42 = new String[] { "long", "int", "int" };
+
+		_methodName43 = "getWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes43 = new String[] {
+				"long", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName44 = "getWorkflowSimulationWorkflowSimulationJobsCount";
+
+		_methodParameterTypes44 = new String[] { "long" };
+
+		_methodName45 = "hasWorkflowSimulationWorkflowSimulationJob";
+
+		_methodParameterTypes45 = new String[] { "long", "long" };
+
+		_methodName46 = "hasWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes46 = new String[] { "long" };
+
+		_methodName47 = "setWorkflowSimulationWorkflowSimulationJobs";
+
+		_methodParameterTypes47 = new String[] { "long", "long[][]" };
+
+		_methodName78 = "getBeanIdentifier";
+
+		_methodParameterTypes78 = new String[] {  };
+
+		_methodName79 = "setBeanIdentifier";
+
+		_methodParameterTypes79 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -390,13 +461,128 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName62.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+
+			return null;
+		}
+
+		if (_methodName33.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				(org.kisti.edison.model.WorkflowSimulationJob)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName34.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				(long[])arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName35.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes35, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				(java.util.List<org.kisti.edison.model.WorkflowSimulationJob>)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName36.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.clearWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue());
+
+			return null;
+		}
+
+		if (_methodName37.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+
+			return null;
+		}
+
+		if (_methodName38.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				(org.kisti.edison.model.WorkflowSimulationJob)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName39.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes39, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				(long[])arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName40.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				(java.util.List<org.kisti.edison.model.WorkflowSimulationJob>)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName41.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName42.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
+		}
+
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationWorkflowSimulationJobsCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.hasWorkflowSimulationWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName46.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.hasWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			WorkflowSimulationJobLocalServiceUtil.setWorkflowSimulationWorkflowSimulationJobs(((Long)arguments[0]).longValue(),
+				(long[])arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName78.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName63.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
+		if (_methodName79.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
 			WorkflowSimulationJobLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
@@ -469,8 +655,40 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
-	private String _methodName62;
-	private String[] _methodParameterTypes62;
-	private String _methodName63;
-	private String[] _methodParameterTypes63;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
+	private String _methodName34;
+	private String[] _methodParameterTypes34;
+	private String _methodName35;
+	private String[] _methodParameterTypes35;
+	private String _methodName36;
+	private String[] _methodParameterTypes36;
+	private String _methodName37;
+	private String[] _methodParameterTypes37;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
+	private String _methodName39;
+	private String[] _methodParameterTypes39;
+	private String _methodName40;
+	private String[] _methodParameterTypes40;
+	private String _methodName41;
+	private String[] _methodParameterTypes41;
+	private String _methodName42;
+	private String[] _methodParameterTypes42;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
+	private String _methodName46;
+	private String[] _methodParameterTypes46;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
+	private String _methodName78;
+	private String[] _methodParameterTypes78;
+	private String _methodName79;
+	private String[] _methodParameterTypes79;
 }

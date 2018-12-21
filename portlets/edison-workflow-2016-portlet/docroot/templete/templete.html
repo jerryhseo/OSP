@@ -1,11 +1,22 @@
 <script type="jtk" id="scienceApp-templete">
 <div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;">
-	<h3 class="wf-title">${scienceAppData.name}</h3>
+	
+	<div class="wf-icon">
+		<i class="icon-cogs"></i>
+	</div>
+	<div class="addIp buttonwait wf-app-status">
+		Waiting
+	</div>
+	<div class="wf-app-title">
+		${scienceAppData.name}
+	</div>
+	
 	<ul class="inputport port">
 		<r-each in="inputPorts">
 			<r-tmpl id="input-port-templete"></r-tmpl>
 		</r-each>
 	</ul>
+
 	<ul class="outputport port">
 		<r-each in="outputPorts">
 			<r-tmpl id="output-port-templete"></r-tmpl>
@@ -17,14 +28,20 @@
 
 <script type="jtk" id="input-port-templete">
 <li>
-	${name_}
+	<div class="port-icon">
+	</div>
+	<span class="input-port-name">
+		${name_}
+	</span>
 	<jtk-source port-id="${name_}" port-type="input"></jtk-source>
 	<jtk-target port-id="${name_}" port-type="input"></jtk-target>
 </li>
 </script>
 <script type="jtk" id="output-port-templete">
 <li>
-	${name_}
+	<span class="output-port-name">
+		${name_}
+	</span>
 	<jtk-source port-id="${name_}" port-type="output"></jtk-source>
 	<jtk-target port-id="${name_}" port-type="output"></jtk-target>
 </li>

@@ -444,6 +444,166 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	}
 
 	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
+		long simulationJobId) throws SystemException {
+		workflowSimulationPersistence.addWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
+		WorkflowSimulationJob workflowSimulationJob) throws SystemException {
+		workflowSimulationPersistence.addWorkflowSimulationJob(simulationId,
+			workflowSimulationJob);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		long[] simulationJobIds) throws SystemException {
+		workflowSimulationPersistence.addWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		List<WorkflowSimulationJob> WorkflowSimulationJobs)
+		throws SystemException {
+		workflowSimulationPersistence.addWorkflowSimulationJobs(simulationId,
+			WorkflowSimulationJobs);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void clearWorkflowSimulationWorkflowSimulationJobs(long simulationId)
+		throws SystemException {
+		workflowSimulationPersistence.clearWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId) throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, WorkflowSimulationJob workflowSimulationJob)
+		throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJob(simulationId,
+			workflowSimulationJob);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, long[] simulationJobIds) throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, List<WorkflowSimulationJob> WorkflowSimulationJobs)
+		throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJobs(simulationId,
+			WorkflowSimulationJobs);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId,
+			start, end);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId,
+			start, end, orderByComparator);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int getWorkflowSimulationWorkflowSimulationJobsCount(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobsSize(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId) throws SystemException {
+		return workflowSimulationPersistence.containsWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.containsWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void setWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		long[] simulationJobIds) throws SystemException {
+		workflowSimulationPersistence.setWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
 	 * Returns the workflow local service.
 	 *
 	 * @return the workflow local service

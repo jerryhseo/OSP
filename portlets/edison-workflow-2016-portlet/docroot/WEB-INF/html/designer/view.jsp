@@ -117,7 +117,7 @@ var contextPath = '${contextPath}';
 
 .wf-box {
 	box-sizing: content-box;
-    width: 250px !important;
+    width: 150px !important;
     position: absolute;
     cursor: move;
     border-radius: 10px;
@@ -136,28 +136,56 @@ var contextPath = '${contextPath}';
     font-weight: bold; 
 }
 
-.wf-box ul.port{
+/* .wf-box ul.port{
 	width: 45%;
 	padding: 0px;
-}
+} */
 
 .wf-box ul.port li{
-	border: 1px solid #CCC;
 	margin-bottom: 10px;
-	padding: 10px;
+	border: 1px solid #CCC;
 	background-color: #edf7f7;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
 }
 
 .wf-box ul.inputport{
 	float: left;
-	text-align: left;	
+	text-align: left;
+	position: absolute;
+	top: 15px;
+	left: -15px;
+	padding-left: 0px;
+}
+
+.wf-box ul.inputport .input-port-name{
+	color: #000;
+	font-size: 15px;
+	position: relative;
+	top: -20px;
+	left: -10px;
+	white-space: nowrap;
 }
 
 .wf-box ul.outputport{
 	float: right;
 	text-align: right;
+	position: absolute;
+	top: 15px;
+	right: -20px;
+	padding-left: 0px;
+	width: 34px;
 }
 
+.wf-box ul.outputport .output-port-name{
+	color: #000;
+	font-size: 15px;
+	position: relative;
+	top: -20px;
+	right: -15px;
+	white-space: nowrap;
+}
 
 /* 2018.12.20 */
 .wf-box .wf-icon{
@@ -165,6 +193,7 @@ var contextPath = '${contextPath}';
 	text-align: center;
 	border-bottom: 1px solid #fff;
 	font-size: 45px;
+	padding: 10px 0px;
 }
 
 .wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -175,7 +204,7 @@ var contextPath = '${contextPath}';
 	margin-top: 5px;
 	position: absolute;
 	left: -20px;
-	width: 150%;
+	width: 130%;
 }
 
 /* 2018.12.20 */
@@ -189,9 +218,7 @@ var contextPath = '${contextPath}';
 }
 
 .wf-app-input-ports{
-	position: absolute;
-	top: 10px;
-	left: -25px;
+	
 }
 
 .wf-app-status-icon{ top: 25px; left: 10px; position: relative;}

@@ -116,6 +116,19 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.EDWF_Workflow_WorkflowInstance"),
 			true);
+	public static final String MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_NAME =
+		"EDWF_WorkflowSimulation_WorkflowSimulationJob";
+	public static final Object[][] MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_COLUMNS =
+		{
+			{ "simulationId", Types.BIGINT },
+			{ "simulationJobId", Types.BIGINT }
+		};
+	public static final String MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_SQL_CREATE =
+		"create table EDWF_WorkflowSimulation_WorkflowSimulationJob (simulationId LONG not null,simulationJobId LONG not null,primary key (simulationId, simulationJobId))";
+	public static final boolean FINDER_CACHE_ENABLED_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB =
+		GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.finder.cache.enabled.EDWF_WorkflowSimulation_WorkflowSimulationJob"),
+			true);
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.kisti.edison.model.WorkflowSimulationJob"));
 

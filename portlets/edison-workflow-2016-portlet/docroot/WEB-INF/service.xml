@@ -133,6 +133,9 @@
     
     <column name="workflows" type="Collection" 
       entity="Workflow" mapping-table="Workflow_WorkflowInstance"/>
+    <!-- collections -->
+    <column name="workflowSimulations" type="Collection" 
+      entity="WorkflowSimulation" mapping-table="WorkflowSimulation_WorkflowSimulationJob"/>
     
     <!-- Order -->
     <order by="desc">
