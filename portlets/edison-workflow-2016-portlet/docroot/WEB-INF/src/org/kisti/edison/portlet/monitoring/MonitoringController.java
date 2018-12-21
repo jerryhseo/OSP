@@ -70,6 +70,10 @@ public class MonitoringController {
 			
 			long jobStatus = GetterUtil.getLong(param.get("jobStatus") ,0);
 			long classId = GetterUtil.getLong(CustomUtil.strNull(param.get("classId"), "0"), 0);
+			long searchClassUserId = GetterUtil.getLong(CustomUtil.strNull(param.get("searchClassUserId"), "0"), 0);
+			if(0 < searchClassUserId){
+				userId = searchClassUserId;
+			}
 			long simulationId = GetterUtil.getLong(CustomUtil.strNull(param.get("simulationId"), "0"),0);
 			
 			int currentPage = Integer.parseInt(CustomUtil.strNull(param.get("currentPage"), "1"));
@@ -96,6 +100,7 @@ public class MonitoringController {
 			model.addAttribute("searchValue", searchValue);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("paging", paging);
+			model.addAttribute("searchClassUserId", searchClassUserId);
 			model.addAttribute("getWorkflowMonitoringList", getWorkflowMonitoringList);
 			
 		} catch (PortalException | SystemException e) {
