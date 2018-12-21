@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
+<!-- 2018.12.21 - Add jsPlumb CSS -->
+<link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";

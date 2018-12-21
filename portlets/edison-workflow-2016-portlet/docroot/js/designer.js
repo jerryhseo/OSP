@@ -33,8 +33,9 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
     			template : "scienceApp-templete"
     		}
     	}
-    } 
-    var renderer = wfWorkflowJsPlumbInstance.render({
+    }
+    
+    var renderer = window.renderer = wfWorkflowJsPlumbInstance.render({
     	 container: "wf-workflow-canvas",
     	 view: view,
 //         layout: {
