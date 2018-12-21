@@ -46,6 +46,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         layout: {
             type: "Absolute"
         },
+        miniview:{
+            container:"miniview"
+        },
+        enablePanButtons:false,
         dragOptions: {
             containment: "parent",
             start: function() {
