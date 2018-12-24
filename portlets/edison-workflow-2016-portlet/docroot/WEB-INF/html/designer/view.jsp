@@ -22,7 +22,6 @@
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
 <!-- 2018.12.21 - Add jsPlumb CSS -->
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
-<link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-demo.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
@@ -304,8 +303,17 @@ var contextPath = '${contextPath}';
 	top: 145px !important;
 	left: auto !important;
 	right: 37px !important;
+	z-index: 10 !important;
+	color: #FFF;
+	margin-right: 10px;
+	position: absolute;
+	display: flex;
 }
 .controls i{
+	background-color: #5184a0;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 4px;
 	margin-right: 5px !important;
 }
 
