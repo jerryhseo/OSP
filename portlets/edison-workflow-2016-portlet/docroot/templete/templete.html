@@ -1,5 +1,6 @@
 <script type="jtk" id="scienceApp-templete">
 <div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;">
+
 	<div class="input-ports-list">
 		<ul class="inputport port">
 			<r-each in="inputPorts">
@@ -7,7 +8,7 @@
 			</r-each>
 		</ul>
 	</div>
-
+	
 	<div class="output-ports-list">
 		<ul class="outputport port">
 			<r-each in="outputPorts">
@@ -17,8 +18,11 @@
 	</div>
 
 	<div class="wf-icon">
+
 		<i class="icon-cogs"></i>
+		<i class="icon-remove remove-btn"></i> 
 	</div>
+
 	<div class="addIp buttonwait wf-app-status">
 		Waiting
 	</div>
@@ -30,7 +34,7 @@
 
 
 <script type="jtk" id="input-port-templete">
-<li>
+<li title="${name_}">
 	<span class="input-port-name">
 		${name_}
 	</span>
@@ -38,7 +42,7 @@
 </li>
 </script>
 <script type="jtk" id="output-port-templete">
-<li>
+<li title="${name_}">
 	<span class="output-port-name">
 		${name_}
 	</span>

@@ -39,7 +39,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             }
         }
     }
-
+    
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: "wf-workflow-canvas",
         view: view,
@@ -50,6 +50,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             container:"miniview"
         },
         enablePanButtons:false,
+        zoomToFit:true,
         dragOptions: {
             containment: "parent",
             start: function() {
@@ -60,9 +61,43 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             }
         }
     });
-
+    
     var miniview = renderer.getMiniview();
-
+    
+    var mainElement = document.querySelector("#wf-workflow-canvas"),
+    controls = mainElement.querySelector(".controls");
+    
+    /* on home button click, zoom content to fit. */
+    jsPlumb.on(controls, "tap", "[reset]", function () {
+    	renderer.setZoom(2.9, false);
+    	wfWorkflowJsPlumbInstance.clearSelection();
+        renderer.zoomToFit();
+    });
+    
+    /* listener for mode change on renderer. */
+    renderer.bind("modeChanged", function (mode) {
+        jsPlumb.removeClass(controls.querySelectorAll("[mode]"), "selected-mode");
+        jsPlumb.addClass(controls.querySelectorAll("[mode='" + mode + "']"), "selected-mode");
+    });
+    
+    /* pan mode/select mode */
+    jsPlumb.on(controls, "tap", "[mode]", function () {
+        renderer.setMode(this.getAttribute("mode"));
+    });
+    
+    /* zoom-in/zoom-out function */
+    jsPlumb.on(controls, "tap", "[zoom]", function () {
+    	zoomValue = this.getAttribute("zoom");
+    	zoomLevel = renderer.getZoom();
+    	if(zoomValue == "in" && zoomLevel < 2.9){
+    		zoomLevel += 0.25;
+    		renderer.setZoom(zoomLevel, true);
+    	}else if(zoomValue == "out" && 0.5 < zoomLevel){
+    		zoomLevel -= 0.25;
+    		renderer.setZoom(zoomLevel, true);
+    	}
+    });
+    
     var outputPortPoint = {
         endpoint: ["Rectangle", { width: 18, height: 18 }, { cssClass: "output-port" }],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,

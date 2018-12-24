@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
 <!-- 2018.12.21 - Add jsPlumb CSS -->
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
+<link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-demo.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
@@ -126,6 +127,7 @@ var contextPath = '${contextPath}';
     min-width: 80px;
     min-height: 30px;
     text-align: center;
+    overflow: visible;
 }
 
 .wf-box h3.wf-title{ 
@@ -147,17 +149,16 @@ var contextPath = '${contextPath}';
 	border-radius: 50%;
 }
 
-.wf-box ul.inputport{
+.wf-box .input-ports-list{
 	float: left;
-	text-align: left;
 	position: relative;
 	top: 15px;
 	left: -15px;
-	padding-left: 0px;
 }
 
-.wf-box input-ports-list{
-	float: left;
+.wf-box ul.inputport{
+	text-align: left;
+	padding-left: 0px;
 }
 
 .wf-box ul.inputport .input-port-name{
@@ -169,12 +170,15 @@ var contextPath = '${contextPath}';
 	white-space: nowrap;
 }
 
-.wf-box ul.outputport{
+.wf-box .output-ports-list{
 	float: right;
-	text-align: right;
 	position: relative;
 	top: 15px;
 	right: -20px;
+}
+
+.wf-box ul.outputport{
+	text-align: right;
 	padding-left: 0px;
 	width: 34px;
 }
@@ -196,8 +200,16 @@ var contextPath = '${contextPath}';
 .wf-box .wf-icon{
 	text-align: center;
 	font-size: 45px;
-	padding: 10px 0px;
+	padding: 20px 0px;
 	margin-bottom: 10px;
+}
+
+.wf-box .wf-icon .remove-btn{
+	font-size: 12px;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	cursor: pointer;
 }
 
 .wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -286,6 +298,15 @@ var contextPath = '${contextPath}';
     width:inherit;
     height:inherit;
     margin: 0 auto;
+}
+
+.controls{
+	top: 145px !important;
+	left: auto !important;
+	right: 37px !important;
+}
+.controls i{
+	margin-right: 5px !important;
 }
 
 </style>
@@ -388,7 +409,14 @@ var contextPath = '${contextPath}';
     <!-- Main content -->
     <section class="content">
       <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select">
-      	<div id="miniview" style="position: absolute;top: 25px;right: 25px;z-index: 100;">
+      	<div class="controls" can-undo="false" can-redo="false">
+      		<!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
+            <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
+      		<i class="fa fa-home" reset title="Zoom To Fit"></i>
+      		<i class="fa fa-plus" zoom="in" title="Zoom In"></i>
+      		<i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
+      	</div>
+      	<div id="miniview" style="position: absolute;top: 10px;right: 25px;z-index: 100;">
       		
       	</div>
       	<div jtk-miniview-type="foo"></div>
