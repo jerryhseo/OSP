@@ -531,7 +531,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     }
 
     function loadScienceApp(id, offset, data) {
-        var target = $(currentJsPlumbInstance.getContainer());
+    	var target = $(currentJsPlumbInstance.getContainer());
         var diff = offset.referencePoint - target.offset().left;
         var wfId = drawScienceAppDiv(target, offset.left - diff, offset.top, data, id);
         var conainerId = $(currentJsPlumbInstance.getContainer()).attr("id");
@@ -814,14 +814,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     function saveOrUpdateWorkflowDefinition(workflowMetaData, callback, backgroudSave) {
         var localWorkflow = modifyingWorkflow;
         var title = workflowMetaData.title;
-        var wfData = getWorkflowDefinition(currentJsPlumbInstance);
 
         /* validation */
         if (!title || title === "" || title.trim() === "") {
             toastr["error"]("", var_create_first_message);
             return false;
         }
-        var wfDataJsonString = JSON.stringify(wfData);
+        
+        /* 2018.12.24 _ Save Workflow Data */
+        var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
         if (localWorkflow) {
             localWorkflow.title = title;
             localWorkflow.description = workflowMetaData.description;
@@ -856,6 +857,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         } else {
             var currentWorkflowId = modifyingWorkflow["workflowId"];
             var wfData = getWorkflowDefinition(currentJsPlumbInstance);
+            
+            /* 2018.12.24 _ Save Workflow Data */
             var wfDataJsonString = JSON.stringify(wfData);
             aSyncAjaxHelper
                 .post("/delegate/services/workflows/" + currentWorkflowId + "/saveas", {
@@ -949,24 +952,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     function drawScreenLogic(screenLogic) {
         var wfData = $.parseJSON(screenLogic);
-        $.each(wfData.elements, function(i) {
-            loadScienceApp(this.id, this.offset, this.data);
-        });
 
-        $.each(wfData.connections, function(i) {
-            var sourceEndpointUuid = this.sourceUuid;
-            var targetEndpointUuid = this.targetUuid;
-            currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
+        /* 2018.12.24 _ Open workflow, jsplumb */
+        currentJsPlumbInstance.load({
+        	data : wfData
         });
-
-        if (wfData.wfPortletGlobalData) {
-            wfPortletGlobalData.wfElements = wfData.wfPortletGlobalData.wfElements;
-        }
     }
 
     function resetCurrentJsPlumbInstance() {
-        currentJsPlumbInstance.reset();
-        $(currentJsPlumbInstance.getContainer()).children(".wf-box").remove();
+    	/* 2018.12.24 _ Clear Nodes */
+    	currentJsPlumbInstance.clear();
     }
 
     function resetWorkflow() {
