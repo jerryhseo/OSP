@@ -18,9 +18,7 @@
 	</div>
 
 	<div class="wf-icon">
-
 		<i class="icon-cogs"></i>
-		<i class="icon-remove remove-btn"></i> 
 	</div>
 
 	<div class="addIp buttonwait wf-app-status">
@@ -56,18 +54,18 @@
 
 
 <script type="jtk" id="input-port-templete">
-<li title="${name_}">
+<li>
 	<span class="input-port-name">
-		${name_}
+		${$key}
 	</span>
-	<jtk-target port-id="${name_}" port-type="input"></jtk-target>
+	<jtk-target port-id="${$key}" port-type="inputPorts"></jtk-target>
 </li>
 </script>
 <script type="jtk" id="output-port-templete">
-<li title="${name_}">
+<li>
 	<span class="output-port-name">
-		${name_}
+		${$key}
 	</span>
-	<jtk-source port-id="${name_}" port-type="output"></jtk-source>
+	<jtk-source port-id="${$key}" port-type="outputPorts"></jtk-source>
 </li>
 </script>

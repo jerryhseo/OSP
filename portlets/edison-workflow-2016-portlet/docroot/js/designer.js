@@ -23,8 +23,45 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
-        	
-            return source !== target && source.getNode() !== target.getNode();
+        	if (source.objectType !== "Node" && target.objectType !== "Node") {
+        		console.log(source);
+            	console.log(target);
+            	console.log(edgeData);
+            	
+        		if (source === target) {
+                    return false;
+                }
+        		
+        		if(target.getAllEdges().length!=0){
+        			return false;
+        		}
+        		
+        		if (source.getNode() === target.getNode()) {
+                    return false;
+                }
+        		
+        		alert(source.getType()+"____"+target.getType());
+        		if(source.getType()==='all' || target.getType()==='all'){
+        			return true;
+        		}else if(source.getType()==='inputPorts'){
+        			return false;
+        		}else{
+        			
+        			var sourceData = source.getNode().data,
+        				targetData = target.getNode().data;
+        			
+        			var sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
+        			var targetPortDataType = targetData[target.getType()][target.id].dataType_;
+        			
+        			var sourectDataTypeStr = sourcePortDataType.name+sourcePortDataType.version;
+        			var targetDataTypeStr = targetPortDataType.name+targetPortDataType.version;
+        			if(sourectPortDataType!=targetPortDataType){
+        				return false;
+        			}else{
+        				return true;
+        			}
+        		}
+        	}
         }
     });
 
@@ -52,8 +89,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         }
     }
     
+    var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
-        container: "wf-workflow-canvas",
+        container: canvasElement,
         view: view,
         layout: {
             type: "Absolute"
@@ -71,10 +109,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             stop: function() {
                 $(".menu-panel > .menu-panel-box-app").removeClass("hidden");
             }
+        },
+        jsPlumb: {
+        	 Anchor: "Center",
+        	 StartpointStyle: { fill: "#416EC5" },
+        	 StartpointHoverStyle: { fill: "#FF6600" },
+             EndpointStyle: { fill: "#11C7E7" },
+             EndpointHoverStyle: { fill: "#FF6600" },
+             HoverPaintStyle: {strokeWidth: 5, stroke: "orange"}
         }
     });
-    
-    var miniview = renderer.getMiniview();
     
     var mainElement = document.querySelector("#wf-workflow-canvas"),
     controls = mainElement.querySelector(".controls");
@@ -284,31 +328,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         };
 
         var inputports = getScienceAppInputPort(data.scienceAppId);
-        var inputportJson = $.parseJSON(inputports);
-        var inputPortsArray = new Array();
-        if (!$.isEmptyObject(inputportJson)) {
-            for (key in inputportJson) {
-                if (inputportJson.hasOwnProperty(key)) {
-                    var port = inputportJson[key];
-                    port["id"] = key;
-                    port["type"] = "input";
-                    inputPortsArray.push(port);
-                }
-            }
+        var inputPortsObj = new Object();
+       
+        if (!$.isEmptyObject(inputports)) {
+        	inputPortsObj = $.parseJSON(inputports);
         }
 
         var outputports = getScienceAppOutputPort(data.scienceAppId);
-        var outputportJson = $.parseJSON(outputports);
-        var outputPortsArray = new Array();
-        if (!$.isEmptyObject(outputportJson)) {
-            for (key in outputportJson) {
-                if (outputportJson.hasOwnProperty(key)) {
-                    var port = outputportJson[key];
-                    port["id"] = key;
-                    port["type"] = "output";
-                    outputPortsArray.push(port);
-                }
-            }
+        var outputPortsObj = new Object();
+        if (!$.isEmptyObject(outputports)) {
+        	outputPortsObj = $.parseJSON(outputports);
         }
         
         
@@ -317,12 +346,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             left: pageX,
             top: pageY,
             scienceAppData: scienceAppData,
-            inputPorts: inputPortsArray,
-            outputPorts: outputPortsArray
+            inputPorts: inputPortsObj,
+            outputPorts: outputPortsObj
         });
 
         var node = currentJsPlumbInstance.getNode(wfId);
-
+        renderer.zoomToFit();
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
         return wfId;
     }
@@ -353,6 +382,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
              scienceAppData: scienceAppData
          });
     	 
+         renderer.zoomToFit();
     	 console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
 
