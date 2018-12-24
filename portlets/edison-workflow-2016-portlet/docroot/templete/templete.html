@@ -32,6 +32,28 @@
 </div>
 </script>
 
+<script type="jtk" id="workflowApp-templete">
+<div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;">
+	<div class="wf-icon">
+		<r-if test="scienceAppData.runType=='DynamicConverter'">
+			<i class="fa fa-code"></i>
+		</r-if>
+		<r-if test="scienceAppData.runType=='Controller'">
+			<i class="fa fa-flag"></i>
+		</r-if>
+		<r-if test="scienceAppData.runType=='FileComponent'">
+			<i class="fa fa-file-code-o"></i>
+		</r-if>
+	</div>
+	<div class="addIp buttonwait wf-app-status">
+		Waiting
+	</div>
+	<div class="wf-app-title">
+		${scienceAppData.name}
+	</div>
+</div>
+</script>
+
 
 <script type="jtk" id="input-port-templete">
 <li title="${name_}">

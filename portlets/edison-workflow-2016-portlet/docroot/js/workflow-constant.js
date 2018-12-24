@@ -42,6 +42,12 @@ var WF_APP_TYPES = {
         OUTPUT_DATA_TYPE: "controller_stdout",
         INPUT_SCOPE: "controller_stdout_",
         OUTPUT_SCOPE: "controller_input_",
+    },FILE_COMPONENT: {
+        NAME: "FileComponent",
+        INPUT_DATA_TYPE: "componet_input",
+        OUTPUT_DATA_TYPE: "componet_stdout",
+        INPUT_SCOPE: "componet_stdout_",
+        OUTPUT_SCOPE: "componet_input_",
     },
     STATIC_CONVERTER: {
         NAME: "Converter"
