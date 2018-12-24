@@ -24,10 +24,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
         	if (source.objectType !== "Node" && target.objectType !== "Node") {
-        		console.log(source);
-            	console.log(target);
-            	console.log(edgeData);
-            	
         		if (source === target) {
                     return false;
                 }
@@ -40,7 +36,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     return false;
                 }
         		
-        		alert(source.getType()+"____"+target.getType());
         		if(source.getType()==='all' || target.getType()==='all'){
         			return true;
         		}else if(source.getType()==='inputPorts'){
@@ -55,8 +50,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         			
         			var sourectDataTypeStr = sourcePortDataType.name+sourcePortDataType.version;
         			var targetDataTypeStr = targetPortDataType.name+targetPortDataType.version;
-        			if(sourectPortDataType!=targetPortDataType){
-        				return false;
+        			if(sourectDataTypeStr!=targetDataTypeStr){
+//        				return false;
+        				return true;
         			}else{
         				return true;
         			}
