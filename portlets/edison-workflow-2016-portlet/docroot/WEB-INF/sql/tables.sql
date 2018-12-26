@@ -6,11 +6,8 @@ create table EDWF_Workflow (
 	modifiedDate DATE null,
 	title STRING null,
 	description STRING null,
-	isPublic BOOLEAN,
 	parentWorkflowId LONG,
-	targetLanguage VARCHAR(75) null,
-	screenLogic TEXT null,
-	tutorialFileEntryId LONG
+	screenLogic TEXT null
 );
 
 create table EDWF_WorkflowInstance (
@@ -37,18 +34,19 @@ create table EDWF_WorkflowSimulation (
 	modifiedDate DATE null,
 	classId LONG,
 	customId LONG,
-	title STRING null,
+	title VARCHAR(75) null,
 	testYn BOOLEAN,
 	workflowId LONG
 );
 
 create table EDWF_WorkflowSimulationJob (
 	simulationJobId LONG not null primary key,
+	simulationId LONG,
 	groupId LONG,
 	userId LONG,
 	createDate DATE null,
 	modifiedDate DATE null,
-	title STRING null,
+	title VARCHAR(75) null,
 	status VARCHAR(75) null,
 	statusResponse VARCHAR(75) null,
 	startTime DATE null,

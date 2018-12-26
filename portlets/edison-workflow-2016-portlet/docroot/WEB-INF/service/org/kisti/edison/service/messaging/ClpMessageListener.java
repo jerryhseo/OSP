@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import org.kisti.edison.service.ClpSerializer;
-import org.kisti.edison.service.WorkflowInstanceLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
@@ -39,8 +38,6 @@ public class ClpMessageListener extends BaseMessageListener {
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
 			WorkflowLocalServiceUtil.clearService();
-
-			WorkflowInstanceLocalServiceUtil.clearService();
 
 			WorkflowSimulationLocalServiceUtil.clearService();
 

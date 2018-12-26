@@ -466,6 +466,40 @@ public class WorkflowSimulationLocalServiceWrapper
 			parameterTypes, arguments);
 	}
 
+	@Override
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		java.lang.String title, long userId, int begin, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationLocalService.getWorkflowSimulations(title,
+			userId, begin, end);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationLocalService.createWorkflowSimulation();
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationLocalService.createWorkflowSimulation(params,
+			user);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulation updateWorkflowSimulation(
+		long simulationId,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationLocalService.updateWorkflowSimulation(simulationId,
+			params, user);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

@@ -20,45 +20,10 @@
 			</basic>
 			<basic name="title" />
 			<basic name="description" />
-			<basic name="isPublic" />
 			<basic name="parentWorkflowId" />
-			<basic name="targetLanguage" />
 			<basic name="screenLogic" />
-			<basic name="tutorialFileEntryId" />
 			<transient name="descriptionCurrentLanguageId" />
 			<transient name="descriptionMap" />
-			<transient name="modelAttributes" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
-			<transient name="titleCurrentLanguageId" />
-			<transient name="titleMap" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
-	<mapped-superclass class="org.kisti.edison.model.impl.WorkflowInstanceModelImpl">
-		<attributes>
-			<id name="workflowInstanceId" />
-			<basic name="companyId" />
-			<basic name="userId" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="title" />
-			<basic name="status" />
-			<basic name="statusResponse" />
-			<basic name="startTime">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="endTime">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="workflowId" />
-			<basic name="workflowUUID" />
-			<basic name="reuseWorkflowUUID" />
-			<basic name="screenLogic" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -85,14 +50,13 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
-			<transient name="titleCurrentLanguageId" />
-			<transient name="titleMap" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl">
 		<attributes>
 			<id name="simulationJobId" />
+			<basic name="simulationId" />
 			<basic name="groupId" />
 			<basic name="userId" />
 			<basic name="createDate">
@@ -117,17 +81,11 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
-			<transient name="titleCurrentLanguageId" />
-			<transient name="titleMap" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<entity class="org.kisti.edison.model.impl.WorkflowImpl" name="Workflow">
 		<table name="EDWF_Workflow" />
-		<attributes />
-	</entity>
-	<entity class="org.kisti.edison.model.impl.WorkflowInstanceImpl" name="WorkflowInstance">
-		<table name="EDWF_WorkflowInstance" />
 		<attributes />
 	</entity>
 	<entity class="org.kisti.edison.model.impl.WorkflowSimulationImpl" name="WorkflowSimulation">

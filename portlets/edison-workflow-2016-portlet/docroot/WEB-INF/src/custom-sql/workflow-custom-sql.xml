@@ -4,11 +4,11 @@
       <![CDATA[
       SELECT 
         COUNT(*) AS totalCnt
-      FROM EDWF_WorkflowInstance WI
+      FROM EDWF_WorkflowSimulationJob WI
       LEFT OUTER JOIN User_ U
       ON WI.userId = U.userId
-      LEFT OUTER JOIN EDWF_Workflow W
-      ON W.workflowId = WI.workflowId
+      LEFT OUTER JOIN EDWF_WorkflowSimulation W
+      ON W.simulationId = WI.simulationId
 	  ]]>
 	</sql>
   <!-- ExtractValue(W.title, 'root/Title[@language-id="@@locale@@"]') AS workflowTitle, -->
@@ -18,20 +18,20 @@
         WI.*,  
         W.title AS workflowTitle,
         U.screenName
-      FROM EDWF_WorkflowInstance WI
-      LEFT OUTER JOIN EDWF_Workflow W
-      ON W.workflowId = WI.workflowId
+      FROM EDWF_WorkflowSimulationJob WI
       LEFT OUTER JOIN User_ U
       ON WI.userId = U.userId
+      LEFT OUTER JOIN EDWF_WorkflowSimulation W
+      ON W.simulationId = WI.simulationId
       ]]>
 	</sql>
   
 	<sql id="org.kisti.edison.service.persistence.WorkflowFinder.retrieveWorkflowInstances.where" >
 		<![CDATA[
 		WHERE 1 = 1
-		<isNotEmpty property="workflowId">
+		<isNotEmpty property="simulationId">
 		AND
-		  W.workflowId = #workflowId#
+		  W.simulationId = #simulationId#
 		</isNotEmpty>
 		<isNotEmpty property="companyId">
 		AND
@@ -49,7 +49,7 @@
 		AND
 		  WI.title LIKE '%@@title@@%'
 		</isNotEmpty>
-        ORDER BY WI.workflowInstanceId DESC
+        ORDER BY WI.simulationJobId DESC
 		<isNotEmpty property="begin">
 			LIMIT
 				#begin#, #end#
@@ -59,7 +59,7 @@
   
 	<sql id="org.kisti.edison.service.persistence.WorkflowFinder.retrieveWorkflows.header" >
 		<![CDATA[
-		SELECT A.*, B.title AS parentTitle, B.isPublic AS parentIsPublic, B.userId AS parentUserId, U.screenName AS screenName 
+		SELECT A.*, B.title AS parentTitle, B.userId AS parentUserId, U.screenName AS screenName 
         FROM EDWF_Workflow A
         LEFT OUTER JOIN EDWF_Workflow B
         ON A.parentWorkflowId = B.workflowId
@@ -85,10 +85,6 @@
 		<isNotEmpty property="userId">
 		AND
 			A.userId = #userId#
-		</isNotEmpty>
-		<isNotEmpty property="isPublic">
-		AND
-			A.isPublic = #isPublic#
 		</isNotEmpty>
 		ORDER BY A.createDate DESC
 		<isNotEmpty property="begin">

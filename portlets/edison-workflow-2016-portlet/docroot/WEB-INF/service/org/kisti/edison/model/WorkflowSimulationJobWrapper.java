@@ -52,6 +52,7 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("simulationJobId", getSimulationJobId());
+		attributes.put("simulationId", getSimulationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("userId", getUserId());
 		attributes.put("createDate", getCreateDate());
@@ -75,6 +76,12 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 
 		if (simulationJobId != null) {
 			setSimulationJobId(simulationJobId);
+		}
+
+		Long simulationId = (Long)attributes.get("simulationId");
+
+		if (simulationId != null) {
+			setSimulationId(simulationId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -197,6 +204,26 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 	}
 
 	/**
+	* Returns the simulation ID of this workflow simulation job.
+	*
+	* @return the simulation ID of this workflow simulation job
+	*/
+	@Override
+	public long getSimulationId() {
+		return _workflowSimulationJob.getSimulationId();
+	}
+
+	/**
+	* Sets the simulation ID of this workflow simulation job.
+	*
+	* @param simulationId the simulation ID of this workflow simulation job
+	*/
+	@Override
+	public void setSimulationId(long simulationId) {
+		_workflowSimulationJob.setSimulationId(simulationId);
+	}
+
+	/**
 	* Returns the group ID of this workflow simulation job.
 	*
 	* @return the group ID of this workflow simulation job
@@ -309,73 +336,6 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 	}
 
 	/**
-	* Returns the localized title of this workflow simulation job in the language. Uses the default language if no localization exists for the requested language.
-	*
-	* @param locale the locale of the language
-	* @return the localized title of this workflow simulation job
-	*/
-	@Override
-	public java.lang.String getTitle(java.util.Locale locale) {
-		return _workflowSimulationJob.getTitle(locale);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation job in the language, optionally using the default language if no localization exists for the requested language.
-	*
-	* @param locale the local of the language
-	* @param useDefault whether to use the default language if no localization exists for the requested language
-	* @return the localized title of this workflow simulation job. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
-	*/
-	@Override
-	public java.lang.String getTitle(java.util.Locale locale, boolean useDefault) {
-		return _workflowSimulationJob.getTitle(locale, useDefault);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation job in the language. Uses the default language if no localization exists for the requested language.
-	*
-	* @param languageId the ID of the language
-	* @return the localized title of this workflow simulation job
-	*/
-	@Override
-	public java.lang.String getTitle(java.lang.String languageId) {
-		return _workflowSimulationJob.getTitle(languageId);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation job in the language, optionally using the default language if no localization exists for the requested language.
-	*
-	* @param languageId the ID of the language
-	* @param useDefault whether to use the default language if no localization exists for the requested language
-	* @return the localized title of this workflow simulation job
-	*/
-	@Override
-	public java.lang.String getTitle(java.lang.String languageId,
-		boolean useDefault) {
-		return _workflowSimulationJob.getTitle(languageId, useDefault);
-	}
-
-	@Override
-	public java.lang.String getTitleCurrentLanguageId() {
-		return _workflowSimulationJob.getTitleCurrentLanguageId();
-	}
-
-	@Override
-	public java.lang.String getTitleCurrentValue() {
-		return _workflowSimulationJob.getTitleCurrentValue();
-	}
-
-	/**
-	* Returns a map of the locales and localized titles of this workflow simulation job.
-	*
-	* @return the locales and localized titles of this workflow simulation job
-	*/
-	@Override
-	public java.util.Map<java.util.Locale, java.lang.String> getTitleMap() {
-		return _workflowSimulationJob.getTitleMap();
-	}
-
-	/**
 	* Sets the title of this workflow simulation job.
 	*
 	* @param title the title of this workflow simulation job
@@ -383,59 +343,6 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 	@Override
 	public void setTitle(java.lang.String title) {
 		_workflowSimulationJob.setTitle(title);
-	}
-
-	/**
-	* Sets the localized title of this workflow simulation job in the language.
-	*
-	* @param title the localized title of this workflow simulation job
-	* @param locale the locale of the language
-	*/
-	@Override
-	public void setTitle(java.lang.String title, java.util.Locale locale) {
-		_workflowSimulationJob.setTitle(title, locale);
-	}
-
-	/**
-	* Sets the localized title of this workflow simulation job in the language, and sets the default locale.
-	*
-	* @param title the localized title of this workflow simulation job
-	* @param locale the locale of the language
-	* @param defaultLocale the default locale
-	*/
-	@Override
-	public void setTitle(java.lang.String title, java.util.Locale locale,
-		java.util.Locale defaultLocale) {
-		_workflowSimulationJob.setTitle(title, locale, defaultLocale);
-	}
-
-	@Override
-	public void setTitleCurrentLanguageId(java.lang.String languageId) {
-		_workflowSimulationJob.setTitleCurrentLanguageId(languageId);
-	}
-
-	/**
-	* Sets the localized titles of this workflow simulation job from the map of locales and localized titles.
-	*
-	* @param titleMap the locales and localized titles of this workflow simulation job
-	*/
-	@Override
-	public void setTitleMap(
-		java.util.Map<java.util.Locale, java.lang.String> titleMap) {
-		_workflowSimulationJob.setTitleMap(titleMap);
-	}
-
-	/**
-	* Sets the localized titles of this workflow simulation job from the map of locales and localized titles, and sets the default locale.
-	*
-	* @param titleMap the locales and localized titles of this workflow simulation job
-	* @param defaultLocale the default locale
-	*/
-	@Override
-	public void setTitleMap(
-		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		java.util.Locale defaultLocale) {
-		_workflowSimulationJob.setTitleMap(titleMap, defaultLocale);
 	}
 
 	/**
@@ -654,29 +561,6 @@ public class WorkflowSimulationJobWrapper implements WorkflowSimulationJob,
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_workflowSimulationJob.setExpandoBridgeAttributes(serviceContext);
-	}
-
-	@Override
-	public java.lang.String[] getAvailableLanguageIds() {
-		return _workflowSimulationJob.getAvailableLanguageIds();
-	}
-
-	@Override
-	public java.lang.String getDefaultLanguageId() {
-		return _workflowSimulationJob.getDefaultLanguageId();
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport()
-		throws com.liferay.portal.LocaleException {
-		_workflowSimulationJob.prepareLocalizedFieldsForImport();
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport(
-		java.util.Locale defaultImportLocale)
-		throws com.liferay.portal.LocaleException {
-		_workflowSimulationJob.prepareLocalizedFieldsForImport(defaultImportLocale);
 	}
 
 	@Override

@@ -38,10 +38,12 @@ public class WorkflowSimulationJobCacheModel implements CacheModel<WorkflowSimul
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{simulationJobId=");
 		sb.append(simulationJobId);
+		sb.append(", simulationId=");
+		sb.append(simulationId);
 		sb.append(", groupId=");
 		sb.append(groupId);
 		sb.append(", userId=");
@@ -78,6 +80,7 @@ public class WorkflowSimulationJobCacheModel implements CacheModel<WorkflowSimul
 		WorkflowSimulationJobImpl workflowSimulationJobImpl = new WorkflowSimulationJobImpl();
 
 		workflowSimulationJobImpl.setSimulationJobId(simulationJobId);
+		workflowSimulationJobImpl.setSimulationId(simulationId);
 		workflowSimulationJobImpl.setGroupId(groupId);
 		workflowSimulationJobImpl.setUserId(userId);
 
@@ -161,6 +164,7 @@ public class WorkflowSimulationJobCacheModel implements CacheModel<WorkflowSimul
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		simulationJobId = objectInput.readLong();
+		simulationId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		userId = objectInput.readLong();
 		createDate = objectInput.readLong();
@@ -180,6 +184,7 @@ public class WorkflowSimulationJobCacheModel implements CacheModel<WorkflowSimul
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		objectOutput.writeLong(simulationJobId);
+		objectOutput.writeLong(simulationId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(userId);
 		objectOutput.writeLong(createDate);
@@ -233,6 +238,7 @@ public class WorkflowSimulationJobCacheModel implements CacheModel<WorkflowSimul
 	}
 
 	public long simulationJobId;
+	public long simulationId;
 	public long groupId;
 	public long userId;
 	public long createDate;

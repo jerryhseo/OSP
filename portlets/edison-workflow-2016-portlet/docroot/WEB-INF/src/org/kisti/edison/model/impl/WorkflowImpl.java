@@ -91,10 +91,6 @@ public class WorkflowImpl extends WorkflowBaseImpl {
 
     Boolean isPublic = GetterUtil.getBoolean(attributes.get("isPublic"));
 
-    if (isPublic != null) {
-      setIsPublic(isPublic);
-    }
-
     Long parentWorkflowId = GetterUtil.getLong(attributes.get("parentWorkflowId"));
 
     if (parentWorkflowId != null) {

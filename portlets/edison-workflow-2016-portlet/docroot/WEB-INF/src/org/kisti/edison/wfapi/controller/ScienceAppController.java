@@ -12,7 +12,7 @@ import org.kisti.edison.science.service.PortTypeAnalyzerLinkLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppOutputPortsLocalServiceUtil;
-import org.kisti.edison.service.WorkflowLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +53,7 @@ public class ScienceAppController{
       long groupId = GetterUtil.getLong(strGroupId);
       long companyGroupId = GetterUtil.getLong(strCompayGroupId);
       Locale locale = PortalUtil.getLocale(request);
-      List<AssetCategory> lv1Categories = WorkflowLocalServiceUtil.getLv1Categories(companyGroupId, groupId, locale);
+      List<AssetCategory> lv1Categories = WorkflowSimulationJobLocalServiceUtil.getLv1Categories(companyGroupId, groupId, locale);
       List<Map<String, Object>> rootCategories = WorkflowBeanUtil
           .assetCategoryToJstreeModel(lv1Categories, locale);
       results.addAll(rootCategories);
@@ -146,7 +146,7 @@ public class ScienceAppController{
           throws SystemException, PortalException{
     try{
       DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(name, version);
-      return WorkflowLocalServiceUtil.getDataTypeEditors(dataType);
+      return WorkflowSimulationJobLocalServiceUtil.getDataTypeEditors(dataType);
     }catch (Exception e){
       log.error("error", e);
       throw e;
@@ -161,7 +161,7 @@ public class ScienceAppController{
           throws SystemException, PortalException{
     try{
       DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(name, version);
-      return WorkflowLocalServiceUtil.getDataTypeAnalyzers(dataType);
+      return WorkflowSimulationJobLocalServiceUtil.getDataTypeAnalyzers(dataType);
     }catch (Exception e){
       log.error("error", e);
       throw e;
@@ -176,7 +176,7 @@ public class ScienceAppController{
       HttpServletRequest request)
           throws SystemException, PortalException{
     DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(name, version);
-    return WorkflowLocalServiceUtil.getDataTypeDefaultEditor(dataType);
+    return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultEditor(dataType);
   }
   
   @RequestMapping(value = {"/{scienceAppId}/outputports/analyzer/default"})
@@ -187,7 +187,7 @@ public class ScienceAppController{
       HttpServletRequest request)
           throws SystemException, PortalException{
     DataType dataType = DataTypeLocalServiceUtil.findDataTypeObject(name, version);
-    return WorkflowLocalServiceUtil.getDataTypeDefaultAnalyzer(dataType);
+    return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultAnalyzer(dataType);
   }
   
   @RequestMapping(value = {

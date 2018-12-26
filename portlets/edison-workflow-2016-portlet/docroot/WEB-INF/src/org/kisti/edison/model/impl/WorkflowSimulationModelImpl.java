@@ -14,18 +14,13 @@
 
 package org.kisti.edison.model.impl;
 
-import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
@@ -43,10 +38,7 @@ import java.sql.Types;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The base model implementation for the WorkflowSimulation service. Represents a row in the &quot;EDWF_WorkflowSimulation&quot; database table, with each column mapped to a property of this class.
@@ -80,7 +72,7 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 			{ "testYn", Types.BOOLEAN },
 			{ "workflowId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulation (simulationId LONG not null primary key,userId LONG,createDate DATE null,modifiedDate DATE null,classId LONG,customId LONG,title STRING null,testYn BOOLEAN,workflowId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulation (simulationId LONG not null primary key,userId LONG,createDate DATE null,modifiedDate DATE null,classId LONG,customId LONG,title VARCHAR(75) null,testYn BOOLEAN,workflowId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table EDWF_WorkflowSimulation";
 	public static final String ORDER_BY_JPQL = " ORDER BY workflowSimulation.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDWF_WorkflowSimulation.createDate DESC";
@@ -317,49 +309,6 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 	}
 
 	@Override
-	public String getTitle(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId);
-	}
-
-	@Override
-	public String getTitle(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId, useDefault);
-	}
-
-	@Override
-	public String getTitle(String languageId) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId);
-	}
-
-	@Override
-	public String getTitle(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId,
-			useDefault);
-	}
-
-	@Override
-	public String getTitleCurrentLanguageId() {
-		return _titleCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getTitleCurrentValue() {
-		Locale locale = getLocale(_titleCurrentLanguageId);
-
-		return getTitle(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getTitleMap() {
-		return LocalizationUtil.getLocalizationMap(getTitle());
-	}
-
-	@Override
 	public void setTitle(String title) {
 		_columnBitmask |= TITLE_COLUMN_BITMASK;
 
@@ -368,46 +317,6 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 		}
 
 		_title = title;
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale) {
-		setTitle(title, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale, Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(title)) {
-			setTitle(LocalizationUtil.updateLocalization(getTitle(), "Title",
-					title, languageId, defaultLanguageId));
-		}
-		else {
-			setTitle(LocalizationUtil.removeLocalization(getTitle(), "Title",
-					languageId));
-		}
-	}
-
-	@Override
-	public void setTitleCurrentLanguageId(String languageId) {
-		_titleCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap) {
-		setTitleMap(titleMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale) {
-		if (titleMap == null) {
-			return;
-		}
-
-		setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
-				"Title", LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	public String getOriginalTitle() {
@@ -454,60 +363,6 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
-	}
-
-	@Override
-	public String[] getAvailableLanguageIds() {
-		Set<String> availableLanguageIds = new TreeSet<String>();
-
-		Map<Locale, String> titleMap = getTitleMap();
-
-		for (Map.Entry<Locale, String> entry : titleMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
-	}
-
-	@Override
-	public String getDefaultLanguageId() {
-		String xml = getTitle();
-
-		if (xml == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		return LocalizationUtil.getDefaultLanguageId(xml, defaultLocale);
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport() throws LocaleException {
-		prepareLocalizedFieldsForImport(null);
-	}
-
-	@Override
-	@SuppressWarnings("unused")
-	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
-		throws LocaleException {
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		String modelDefaultLanguageId = getDefaultLanguageId();
-
-		String title = getTitle(defaultLocale);
-
-		if (Validator.isNull(title)) {
-			setTitle(getTitle(modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setTitle(getTitle(defaultLocale), defaultLocale, defaultLocale);
-		}
 	}
 
 	@Override
@@ -731,7 +586,6 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 	private long _classId;
 	private long _customId;
 	private String _title;
-	private String _titleCurrentLanguageId;
 	private String _originalTitle;
 	private boolean _testYn;
 	private long _workflowId;

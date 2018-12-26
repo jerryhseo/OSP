@@ -293,73 +293,6 @@ public class WorkflowSimulationWrapper implements WorkflowSimulation,
 	}
 
 	/**
-	* Returns the localized title of this workflow simulation in the language. Uses the default language if no localization exists for the requested language.
-	*
-	* @param locale the locale of the language
-	* @return the localized title of this workflow simulation
-	*/
-	@Override
-	public java.lang.String getTitle(java.util.Locale locale) {
-		return _workflowSimulation.getTitle(locale);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation in the language, optionally using the default language if no localization exists for the requested language.
-	*
-	* @param locale the local of the language
-	* @param useDefault whether to use the default language if no localization exists for the requested language
-	* @return the localized title of this workflow simulation. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
-	*/
-	@Override
-	public java.lang.String getTitle(java.util.Locale locale, boolean useDefault) {
-		return _workflowSimulation.getTitle(locale, useDefault);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation in the language. Uses the default language if no localization exists for the requested language.
-	*
-	* @param languageId the ID of the language
-	* @return the localized title of this workflow simulation
-	*/
-	@Override
-	public java.lang.String getTitle(java.lang.String languageId) {
-		return _workflowSimulation.getTitle(languageId);
-	}
-
-	/**
-	* Returns the localized title of this workflow simulation in the language, optionally using the default language if no localization exists for the requested language.
-	*
-	* @param languageId the ID of the language
-	* @param useDefault whether to use the default language if no localization exists for the requested language
-	* @return the localized title of this workflow simulation
-	*/
-	@Override
-	public java.lang.String getTitle(java.lang.String languageId,
-		boolean useDefault) {
-		return _workflowSimulation.getTitle(languageId, useDefault);
-	}
-
-	@Override
-	public java.lang.String getTitleCurrentLanguageId() {
-		return _workflowSimulation.getTitleCurrentLanguageId();
-	}
-
-	@Override
-	public java.lang.String getTitleCurrentValue() {
-		return _workflowSimulation.getTitleCurrentValue();
-	}
-
-	/**
-	* Returns a map of the locales and localized titles of this workflow simulation.
-	*
-	* @return the locales and localized titles of this workflow simulation
-	*/
-	@Override
-	public java.util.Map<java.util.Locale, java.lang.String> getTitleMap() {
-		return _workflowSimulation.getTitleMap();
-	}
-
-	/**
 	* Sets the title of this workflow simulation.
 	*
 	* @param title the title of this workflow simulation
@@ -367,59 +300,6 @@ public class WorkflowSimulationWrapper implements WorkflowSimulation,
 	@Override
 	public void setTitle(java.lang.String title) {
 		_workflowSimulation.setTitle(title);
-	}
-
-	/**
-	* Sets the localized title of this workflow simulation in the language.
-	*
-	* @param title the localized title of this workflow simulation
-	* @param locale the locale of the language
-	*/
-	@Override
-	public void setTitle(java.lang.String title, java.util.Locale locale) {
-		_workflowSimulation.setTitle(title, locale);
-	}
-
-	/**
-	* Sets the localized title of this workflow simulation in the language, and sets the default locale.
-	*
-	* @param title the localized title of this workflow simulation
-	* @param locale the locale of the language
-	* @param defaultLocale the default locale
-	*/
-	@Override
-	public void setTitle(java.lang.String title, java.util.Locale locale,
-		java.util.Locale defaultLocale) {
-		_workflowSimulation.setTitle(title, locale, defaultLocale);
-	}
-
-	@Override
-	public void setTitleCurrentLanguageId(java.lang.String languageId) {
-		_workflowSimulation.setTitleCurrentLanguageId(languageId);
-	}
-
-	/**
-	* Sets the localized titles of this workflow simulation from the map of locales and localized titles.
-	*
-	* @param titleMap the locales and localized titles of this workflow simulation
-	*/
-	@Override
-	public void setTitleMap(
-		java.util.Map<java.util.Locale, java.lang.String> titleMap) {
-		_workflowSimulation.setTitleMap(titleMap);
-	}
-
-	/**
-	* Sets the localized titles of this workflow simulation from the map of locales and localized titles, and sets the default locale.
-	*
-	* @param titleMap the locales and localized titles of this workflow simulation
-	* @param defaultLocale the default locale
-	*/
-	@Override
-	public void setTitleMap(
-		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		java.util.Locale defaultLocale) {
-		_workflowSimulation.setTitleMap(titleMap, defaultLocale);
 	}
 
 	/**
@@ -528,29 +408,6 @@ public class WorkflowSimulationWrapper implements WorkflowSimulation,
 	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_workflowSimulation.setExpandoBridgeAttributes(serviceContext);
-	}
-
-	@Override
-	public java.lang.String[] getAvailableLanguageIds() {
-		return _workflowSimulation.getAvailableLanguageIds();
-	}
-
-	@Override
-	public java.lang.String getDefaultLanguageId() {
-		return _workflowSimulation.getDefaultLanguageId();
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport()
-		throws com.liferay.portal.LocaleException {
-		_workflowSimulation.prepareLocalizedFieldsForImport();
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport(
-		java.util.Locale defaultImportLocale)
-		throws com.liferay.portal.LocaleException {
-		_workflowSimulation.prepareLocalizedFieldsForImport(defaultImportLocale);
 	}
 
 	@Override

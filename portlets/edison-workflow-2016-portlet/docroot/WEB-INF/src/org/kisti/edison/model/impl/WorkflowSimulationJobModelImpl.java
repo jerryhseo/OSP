@@ -14,17 +14,12 @@
 
 package org.kisti.edison.model.impl;
 
-import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
@@ -42,10 +37,7 @@ import java.sql.Types;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The base model implementation for the WorkflowSimulationJob service. Represents a row in the &quot;EDWF_WorkflowSimulationJob&quot; database table, with each column mapped to a property of this class.
@@ -70,6 +62,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	public static final String TABLE_NAME = "EDWF_WorkflowSimulationJob";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "simulationJobId", Types.BIGINT },
+			{ "simulationId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "userId", Types.BIGINT },
 			{ "createDate", Types.TIMESTAMP },
@@ -84,7 +77,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 			{ "reuseWorkflowUUID", Types.VARCHAR },
 			{ "screenLogic", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulationJob (simulationJobId LONG not null primary key,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title STRING null,status VARCHAR(75) null,statusResponse VARCHAR(75) null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,reuseWorkflowUUID VARCHAR(75) null,screenLogic VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulationJob (simulationJobId LONG not null primary key,simulationId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title VARCHAR(75) null,status VARCHAR(75) null,statusResponse VARCHAR(75) null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,reuseWorkflowUUID VARCHAR(75) null,screenLogic VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table EDWF_WorkflowSimulationJob";
 	public static final String ORDER_BY_JPQL = " ORDER BY workflowSimulationJob.simulationJobId DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDWF_WorkflowSimulationJob.simulationJobId DESC";
@@ -100,21 +93,22 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.kisti.edison.model.WorkflowSimulationJob"),
 			true);
-	public static long TITLE_COLUMN_BITMASK = 1L;
-	public static long USERID_COLUMN_BITMASK = 2L;
-	public static long SIMULATIONJOBID_COLUMN_BITMASK = 4L;
-	public static final String MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_NAME =
-		"EDWF_Workflow_WorkflowInstance";
-	public static final Object[][] MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_COLUMNS =
+	public static long SIMULATIONID_COLUMN_BITMASK = 1L;
+	public static long TITLE_COLUMN_BITMASK = 2L;
+	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long SIMULATIONJOBID_COLUMN_BITMASK = 8L;
+	public static final String MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_NAME =
+		"EDWF_WorkflowSimulation_WorkflowSimulationJob";
+	public static final Object[][] MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_COLUMNS =
 		{
-			{ "workflowId", Types.BIGINT },
-			{ "workflowInstanceId", Types.BIGINT }
+			{ "simulationId", Types.BIGINT },
+			{ "simulationJobId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_SQL_CREATE =
-		"create table EDWF_Workflow_WorkflowInstance (workflowId LONG not null,workflowInstanceId LONG not null,primary key (workflowId, workflowInstanceId))";
-	public static final boolean FINDER_CACHE_ENABLED_EDWF_WORKFLOW_WORKFLOWINSTANCE =
+	public static final String MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_SQL_CREATE =
+		"create table EDWF_WorkflowSimulation_WorkflowSimulationJob (simulationId LONG not null,simulationJobId LONG not null,primary key (simulationId, simulationJobId))";
+	public static final boolean FINDER_CACHE_ENABLED_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB =
 		GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
-				"value.object.finder.cache.enabled.EDWF_Workflow_WorkflowInstance"),
+				"value.object.finder.cache.enabled.EDWF_WorkflowSimulation_WorkflowSimulationJob"),
 			true);
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.kisti.edison.model.WorkflowSimulationJob"));
@@ -157,6 +151,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("simulationJobId", getSimulationJobId());
+		attributes.put("simulationId", getSimulationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("userId", getUserId());
 		attributes.put("createDate", getCreateDate());
@@ -180,6 +175,12 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 
 		if (simulationJobId != null) {
 			setSimulationJobId(simulationJobId);
+		}
+
+		Long simulationId = (Long)attributes.get("simulationId");
+
+		if (simulationId != null) {
+			setSimulationId(simulationId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -274,6 +275,28 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	}
 
 	@Override
+	public long getSimulationId() {
+		return _simulationId;
+	}
+
+	@Override
+	public void setSimulationId(long simulationId) {
+		_columnBitmask |= SIMULATIONID_COLUMN_BITMASK;
+
+		if (!_setOriginalSimulationId) {
+			_setOriginalSimulationId = true;
+
+			_originalSimulationId = _simulationId;
+		}
+
+		_simulationId = simulationId;
+	}
+
+	public long getOriginalSimulationId() {
+		return _originalSimulationId;
+	}
+
+	@Override
 	public long getGroupId() {
 		return _groupId;
 	}
@@ -346,49 +369,6 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	}
 
 	@Override
-	public String getTitle(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId);
-	}
-
-	@Override
-	public String getTitle(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId, useDefault);
-	}
-
-	@Override
-	public String getTitle(String languageId) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId);
-	}
-
-	@Override
-	public String getTitle(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId,
-			useDefault);
-	}
-
-	@Override
-	public String getTitleCurrentLanguageId() {
-		return _titleCurrentLanguageId;
-	}
-
-	@JSON
-	@Override
-	public String getTitleCurrentValue() {
-		Locale locale = getLocale(_titleCurrentLanguageId);
-
-		return getTitle(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getTitleMap() {
-		return LocalizationUtil.getLocalizationMap(getTitle());
-	}
-
-	@Override
 	public void setTitle(String title) {
 		_columnBitmask |= TITLE_COLUMN_BITMASK;
 
@@ -397,46 +377,6 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		}
 
 		_title = title;
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale) {
-		setTitle(title, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale, Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(title)) {
-			setTitle(LocalizationUtil.updateLocalization(getTitle(), "Title",
-					title, languageId, defaultLanguageId));
-		}
-		else {
-			setTitle(LocalizationUtil.removeLocalization(getTitle(), "Title",
-					languageId));
-		}
-	}
-
-	@Override
-	public void setTitleCurrentLanguageId(String languageId) {
-		_titleCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap) {
-		setTitleMap(titleMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale) {
-		if (titleMap == null) {
-			return;
-		}
-
-		setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
-				"Title", LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	public String getOriginalTitle() {
@@ -566,60 +506,6 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	}
 
 	@Override
-	public String[] getAvailableLanguageIds() {
-		Set<String> availableLanguageIds = new TreeSet<String>();
-
-		Map<Locale, String> titleMap = getTitleMap();
-
-		for (Map.Entry<Locale, String> entry : titleMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
-	}
-
-	@Override
-	public String getDefaultLanguageId() {
-		String xml = getTitle();
-
-		if (xml == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		return LocalizationUtil.getDefaultLanguageId(xml, defaultLocale);
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport() throws LocaleException {
-		prepareLocalizedFieldsForImport(null);
-	}
-
-	@Override
-	@SuppressWarnings("unused")
-	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
-		throws LocaleException {
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		String modelDefaultLanguageId = getDefaultLanguageId();
-
-		String title = getTitle(defaultLocale);
-
-		if (Validator.isNull(title)) {
-			setTitle(getTitle(modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setTitle(getTitle(defaultLocale), defaultLocale, defaultLocale);
-		}
-	}
-
-	@Override
 	public WorkflowSimulationJob toEscapedModel() {
 		if (_escapedModel == null) {
 			_escapedModel = (WorkflowSimulationJob)ProxyUtil.newProxyInstance(_classLoader,
@@ -634,6 +520,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		WorkflowSimulationJobImpl workflowSimulationJobImpl = new WorkflowSimulationJobImpl();
 
 		workflowSimulationJobImpl.setSimulationJobId(getSimulationJobId());
+		workflowSimulationJobImpl.setSimulationId(getSimulationId());
 		workflowSimulationJobImpl.setGroupId(getGroupId());
 		workflowSimulationJobImpl.setUserId(getUserId());
 		workflowSimulationJobImpl.setCreateDate(getCreateDate());
@@ -707,6 +594,10 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	public void resetOriginalValues() {
 		WorkflowSimulationJobModelImpl workflowSimulationJobModelImpl = this;
 
+		workflowSimulationJobModelImpl._originalSimulationId = workflowSimulationJobModelImpl._simulationId;
+
+		workflowSimulationJobModelImpl._setOriginalSimulationId = false;
+
 		workflowSimulationJobModelImpl._originalUserId = workflowSimulationJobModelImpl._userId;
 
 		workflowSimulationJobModelImpl._setOriginalUserId = false;
@@ -721,6 +612,8 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		WorkflowSimulationJobCacheModel workflowSimulationJobCacheModel = new WorkflowSimulationJobCacheModel();
 
 		workflowSimulationJobCacheModel.simulationJobId = getSimulationJobId();
+
+		workflowSimulationJobCacheModel.simulationId = getSimulationId();
 
 		workflowSimulationJobCacheModel.groupId = getGroupId();
 
@@ -817,10 +710,12 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{simulationJobId=");
 		sb.append(getSimulationJobId());
+		sb.append(", simulationId=");
+		sb.append(getSimulationId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
 		sb.append(", userId=");
@@ -854,7 +749,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(46);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.WorkflowSimulationJob");
@@ -863,6 +758,10 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 		sb.append(
 			"<column><column-name>simulationJobId</column-name><column-value><![CDATA[");
 		sb.append(getSimulationJobId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationId</column-name><column-value><![CDATA[");
+		sb.append(getSimulationId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
@@ -927,6 +826,9 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 			WorkflowSimulationJob.class
 		};
 	private long _simulationJobId;
+	private long _simulationId;
+	private long _originalSimulationId;
+	private boolean _setOriginalSimulationId;
 	private long _groupId;
 	private long _userId;
 	private String _userUuid;
@@ -935,7 +837,6 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 	private Date _createDate;
 	private Date _modifiedDate;
 	private String _title;
-	private String _titleCurrentLanguageId;
 	private String _originalTitle;
 	private String _status;
 	private String _statusResponse;

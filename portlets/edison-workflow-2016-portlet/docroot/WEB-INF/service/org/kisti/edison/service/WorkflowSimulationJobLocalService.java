@@ -238,62 +238,64 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void addWorkflowWorkflowSimulationJob(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void addWorkflowWorkflowSimulationJob(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
 		org.kisti.edison.model.WorkflowSimulationJob workflowSimulationJob)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void addWorkflowWorkflowSimulationJobs(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		long[] simulationJobIds)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void addWorkflowWorkflowSimulationJobs(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		java.util.List<org.kisti.edison.model.WorkflowSimulationJob> WorkflowSimulationJobs)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void clearWorkflowWorkflowSimulationJobs(long workflowId)
+	public void clearWorkflowSimulationWorkflowSimulationJobs(long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteWorkflowWorkflowSimulationJob(long workflowId,
-		long simulationJobId)
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteWorkflowWorkflowSimulationJob(long workflowId,
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId,
 		org.kisti.edison.model.WorkflowSimulationJob workflowSimulationJob)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteWorkflowWorkflowSimulationJobs(long workflowId,
-		long[] simulationJobIds)
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, long[] simulationJobIds)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteWorkflowWorkflowSimulationJobs(long workflowId,
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId,
 		java.util.List<org.kisti.edison.model.WorkflowSimulationJob> WorkflowSimulationJobs)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -301,24 +303,24 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId)
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId, int start, int end)
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId, int start, int end,
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -326,28 +328,30 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getWorkflowWorkflowSimulationJobsCount(long workflowId)
+	public int getWorkflowSimulationWorkflowSimulationJobsCount(
+		long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public boolean hasWorkflowWorkflowSimulationJob(long workflowId,
-		long simulationJobId)
+	public boolean hasWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public boolean hasWorkflowWorkflowSimulationJobs(long workflowId)
+	public boolean hasWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* @throws SystemException if a system exception occurred
 	*/
-	public void setWorkflowWorkflowSimulationJobs(long workflowId,
+	public void setWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		long[] simulationJobIds)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -369,4 +373,194 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationJobs(
+		long simulationId, java.lang.String title, long userId, int begin,
+		int end) throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(
+		long simulationJobId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
+		long simulationId,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob createSimulationJob(
+		org.kisti.edison.model.WorkflowSimulation simulation,
+		org.kisti.edison.model.Workflow workflow,
+		java.lang.String simulationJobTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
+		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob startWorkflowSimulationJob(
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob startWorkflowSimulationJob(
+		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.codehaus.jackson.JsonNode askForWorkflowStart(
+		java.lang.String workflowUUID)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public org.kisti.edison.model.WorkflowSimulationJob getWorkflowStatus(
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulation deleteSimulationAndJobs(
+		long simulationId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob deleteWorkflowSimulationJobWitEngine(
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob deleteWorkflowSimulationJobWitEngine(
+		org.kisti.edison.model.WorkflowSimulationJob job)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob pauseWorkflowSimulationJob(
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulationJob(
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(
+		org.codehaus.jackson.JsonNode workflowStatusJson,
+		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.codehaus.jackson.JsonNode askForWorkflowStatus(
+		java.lang.String workflowUUID)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getWorkflowSimulationLog(
+		java.lang.String workflowUUID, java.lang.String simulationUUID,
+		java.lang.String ibAccessToken) throws java.io.IOException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getWorkflowSimulationErrorLog(
+		java.lang.String workflowUUID, java.lang.String simulationUUID,
+		java.lang.String ibAccessToken) throws java.io.IOException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getWorkflowJobIntermediateResult(
+		java.lang.String jobUuid, java.lang.String ibAccessToken)
+		throws java.io.IOException;
+
+	public java.io.File downloadFileApi(com.liferay.portal.model.User user,
+		long appGroupId, com.liferay.portal.kernel.json.JSONObject inputport)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public java.lang.String uploadFileToIcebreaker(long appGroupId,
+		java.lang.String icebreakerVcToken, java.io.File uploadFile)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException, java.net.MalformedURLException;
+
+	public java.lang.String uploadFileToIcebreaker(long appGroupId,
+		java.lang.String icebreakerVcToken, java.io.InputStream fileContent)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public java.lang.String uploadFileToIcebreaker(long appGroupId,
+		java.lang.String icebreakerVcToken, java.lang.String fileContent)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public long getCountWorkflowSimulationJobByUserId(
+		com.liferay.portal.model.User user,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowSimulationJobByUserId(
+		com.liferay.portal.model.User user,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getDataTypeEditors(
+		com.kisti.osp.icecap.model.DataType dataType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.Map<java.lang.String, java.lang.Object> getDataTypeDefaultEditor(
+		com.kisti.osp.icecap.model.DataType dataType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.Map<java.lang.String, java.lang.Object> getDataTypeDefaultAnalyzer(
+		com.kisti.osp.icecap.model.DataType dataType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getDataTypeAnalyzers(
+		com.kisti.osp.icecap.model.DataType dataType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getRootSiteAssetCategries(
+		long companyGroupId, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getSiteAssetCategoriesByParentId(
+		long companyGroupId, long groupId, long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getLv1Categories(
+		long companyGroupId, long groupId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

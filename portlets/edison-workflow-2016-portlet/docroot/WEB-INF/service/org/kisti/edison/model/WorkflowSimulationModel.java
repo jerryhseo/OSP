@@ -14,7 +14,6 @@
 
 package org.kisti.edison.model;
 
-import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
@@ -26,8 +25,6 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 import java.io.Serializable;
 
 import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * The base model interface for the WorkflowSimulation service. Represents a row in the &quot;EDWF_WorkflowSimulation&quot; database table, with each column mapped to a property of this class.
@@ -167,58 +164,8 @@ public interface WorkflowSimulationModel extends BaseModel<WorkflowSimulation> {
 	 *
 	 * @return the title of this workflow simulation
 	 */
+	@AutoEscape
 	public String getTitle();
-
-	/**
-	 * Returns the localized title of this workflow simulation in the language. Uses the default language if no localization exists for the requested language.
-	 *
-	 * @param locale the locale of the language
-	 * @return the localized title of this workflow simulation
-	 */
-	@AutoEscape
-	public String getTitle(Locale locale);
-
-	/**
-	 * Returns the localized title of this workflow simulation in the language, optionally using the default language if no localization exists for the requested language.
-	 *
-	 * @param locale the local of the language
-	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized title of this workflow simulation. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
-	 */
-	@AutoEscape
-	public String getTitle(Locale locale, boolean useDefault);
-
-	/**
-	 * Returns the localized title of this workflow simulation in the language. Uses the default language if no localization exists for the requested language.
-	 *
-	 * @param languageId the ID of the language
-	 * @return the localized title of this workflow simulation
-	 */
-	@AutoEscape
-	public String getTitle(String languageId);
-
-	/**
-	 * Returns the localized title of this workflow simulation in the language, optionally using the default language if no localization exists for the requested language.
-	 *
-	 * @param languageId the ID of the language
-	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized title of this workflow simulation
-	 */
-	@AutoEscape
-	public String getTitle(String languageId, boolean useDefault);
-
-	@AutoEscape
-	public String getTitleCurrentLanguageId();
-
-	@AutoEscape
-	public String getTitleCurrentValue();
-
-	/**
-	 * Returns a map of the locales and localized titles of this workflow simulation.
-	 *
-	 * @return the locales and localized titles of this workflow simulation
-	 */
-	public Map<Locale, String> getTitleMap();
 
 	/**
 	 * Sets the title of this workflow simulation.
@@ -226,40 +173,6 @@ public interface WorkflowSimulationModel extends BaseModel<WorkflowSimulation> {
 	 * @param title the title of this workflow simulation
 	 */
 	public void setTitle(String title);
-
-	/**
-	 * Sets the localized title of this workflow simulation in the language.
-	 *
-	 * @param title the localized title of this workflow simulation
-	 * @param locale the locale of the language
-	 */
-	public void setTitle(String title, Locale locale);
-
-	/**
-	 * Sets the localized title of this workflow simulation in the language, and sets the default locale.
-	 *
-	 * @param title the localized title of this workflow simulation
-	 * @param locale the locale of the language
-	 * @param defaultLocale the default locale
-	 */
-	public void setTitle(String title, Locale locale, Locale defaultLocale);
-
-	public void setTitleCurrentLanguageId(String languageId);
-
-	/**
-	 * Sets the localized titles of this workflow simulation from the map of locales and localized titles.
-	 *
-	 * @param titleMap the locales and localized titles of this workflow simulation
-	 */
-	public void setTitleMap(Map<Locale, String> titleMap);
-
-	/**
-	 * Sets the localized titles of this workflow simulation from the map of locales and localized titles, and sets the default locale.
-	 *
-	 * @param titleMap the locales and localized titles of this workflow simulation
-	 * @param defaultLocale the default locale
-	 */
-	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale);
 
 	/**
 	 * Returns the test yn of this workflow simulation.
@@ -328,15 +241,6 @@ public interface WorkflowSimulationModel extends BaseModel<WorkflowSimulation> {
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
-
-	public String[] getAvailableLanguageIds();
-
-	public String getDefaultLanguageId();
-
-	public void prepareLocalizedFieldsForImport() throws LocaleException;
-
-	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
-		throws LocaleException;
 
 	@Override
 	public Object clone();

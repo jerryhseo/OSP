@@ -32,6 +32,7 @@ import org.kisti.edison.model.Workflow;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonFileUtil;
 import org.kisti.edison.util.EdisonUserUtil;
@@ -417,7 +418,8 @@ public class WorkflowPortlet{
       int curPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("p_curPage"), "1"));
       int linePerPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("linePerPage"), "10"));
       int pagePerBlock = 5;
-      int totalCnt = GetterUtil.getInteger(WorkflowLocalServiceUtil.getCountWorkflowInstanceByUserId(user, searchParam));
+            int totalCnt = GetterUtil.getInteger(
+                WorkflowSimulationJobLocalServiceUtil.getCountWorkflowSimulationJobByUserId(user, searchParam));
       int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
 
       int begin = (curPage - 1) * linePerPage;
@@ -427,7 +429,8 @@ public class WorkflowPortlet{
 
       String pagingHtml = WorkflowPagingUtil.getPaging("", pagingClassName, totalCnt, curPage, linePerPage, pagePerBlock);
 
-      listAndPagingMap.put("workflowInstances", WorkflowLocalServiceUtil.getWorkflowInstanceByUserId(user, searchParam, locale));
+            listAndPagingMap.put("workflowInstances",
+                WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobByUserId(user, searchParam, locale));
       listAndPagingMap.put("pagingHtml", pagingHtml);
       listAndPagingMap.put("curPage", curPage);
       listAndPagingMap.put("totalPage", totalPage);

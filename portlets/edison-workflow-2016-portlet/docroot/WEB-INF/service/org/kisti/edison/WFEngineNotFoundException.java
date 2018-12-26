@@ -14,26 +14,26 @@
 
 package org.kisti.edison;
 
-import com.liferay.portal.NoSuchModelException;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author EDISON
  */
-public class NoSuchWorkflowInstanceException extends NoSuchModelException {
+public class WFEngineNotFoundException extends PortalException {
 
-	public NoSuchWorkflowInstanceException() {
+	public WFEngineNotFoundException() {
 		super();
 	}
 
-	public NoSuchWorkflowInstanceException(String msg) {
+	public WFEngineNotFoundException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchWorkflowInstanceException(String msg, Throwable cause) {
+	public WFEngineNotFoundException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public NoSuchWorkflowInstanceException(Throwable cause) {
+	public WFEngineNotFoundException(Throwable cause) {
 		super(cause);
 	}
 

@@ -14,16 +14,10 @@
 
 package org.kisti.edison.model;
 
-import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
@@ -37,10 +31,7 @@ import java.lang.reflect.Method;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * @author EDISON
@@ -85,6 +76,7 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("simulationJobId", getSimulationJobId());
+		attributes.put("simulationId", getSimulationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("userId", getUserId());
 		attributes.put("createDate", getCreateDate());
@@ -108,6 +100,12 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 
 		if (simulationJobId != null) {
 			setSimulationJobId(simulationJobId);
+		}
+
+		Long simulationId = (Long)attributes.get("simulationId");
+
+		if (simulationId != null) {
+			setSimulationId(simulationId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -205,6 +203,29 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 				Method method = clazz.getMethod("setSimulationJobId", long.class);
 
 				method.invoke(_workflowSimulationJobRemoteModel, simulationJobId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public long getSimulationId() {
+		return _simulationId;
+	}
+
+	@Override
+	public void setSimulationId(long simulationId) {
+		_simulationId = simulationId;
+
+		if (_workflowSimulationJobRemoteModel != null) {
+			try {
+				Class<?> clazz = _workflowSimulationJobRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setSimulationId", long.class);
+
+				method.invoke(_workflowSimulationJobRemoteModel, simulationId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -320,48 +341,6 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 	}
 
 	@Override
-	public String getTitle(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId);
-	}
-
-	@Override
-	public String getTitle(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getTitle(languageId, useDefault);
-	}
-
-	@Override
-	public String getTitle(String languageId) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId);
-	}
-
-	@Override
-	public String getTitle(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getTitle(), languageId,
-			useDefault);
-	}
-
-	@Override
-	public String getTitleCurrentLanguageId() {
-		return _titleCurrentLanguageId;
-	}
-
-	@Override
-	public String getTitleCurrentValue() {
-		Locale locale = getLocale(_titleCurrentLanguageId);
-
-		return getTitle(locale);
-	}
-
-	@Override
-	public Map<Locale, String> getTitleMap() {
-		return LocalizationUtil.getLocalizationMap(getTitle());
-	}
-
-	@Override
 	public void setTitle(String title) {
 		_title = title;
 
@@ -375,63 +354,6 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale) {
-		setTitle(title, locale, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitle(String title, Locale locale, Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(title)) {
-			setTitle(LocalizationUtil.updateLocalization(getTitle(), "Title",
-					title, languageId, defaultLanguageId));
-		}
-		else {
-			setTitle(LocalizationUtil.removeLocalization(getTitle(), "Title",
-					languageId));
-		}
-	}
-
-	@Override
-	public void setTitleCurrentLanguageId(String languageId) {
-		_titleCurrentLanguageId = languageId;
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap) {
-		setTitleMap(titleMap, LocaleUtil.getDefault());
-	}
-
-	@Override
-	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale) {
-		if (titleMap == null) {
-			return;
-		}
-
-		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		try {
-			if (contextClassLoader != portalClassLoader) {
-				currentThread.setContextClassLoader(portalClassLoader);
-			}
-
-			setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
-					"Title", LocaleUtil.toLanguageId(defaultLocale)));
-		}
-		finally {
-			if (contextClassLoader != portalClassLoader) {
-				currentThread.setContextClassLoader(contextClassLoader);
 			}
 		}
 	}
@@ -684,60 +606,6 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 	}
 
 	@Override
-	public String[] getAvailableLanguageIds() {
-		Set<String> availableLanguageIds = new TreeSet<String>();
-
-		Map<Locale, String> titleMap = getTitleMap();
-
-		for (Map.Entry<Locale, String> entry : titleMap.entrySet()) {
-			Locale locale = entry.getKey();
-			String value = entry.getValue();
-
-			if (Validator.isNotNull(value)) {
-				availableLanguageIds.add(LocaleUtil.toLanguageId(locale));
-			}
-		}
-
-		return availableLanguageIds.toArray(new String[availableLanguageIds.size()]);
-	}
-
-	@Override
-	public String getDefaultLanguageId() {
-		String xml = getTitle();
-
-		if (xml == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		return LocalizationUtil.getDefaultLanguageId(xml, defaultLocale);
-	}
-
-	@Override
-	public void prepareLocalizedFieldsForImport() throws LocaleException {
-		prepareLocalizedFieldsForImport(null);
-	}
-
-	@Override
-	@SuppressWarnings("unused")
-	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
-		throws LocaleException {
-		Locale defaultLocale = LocaleUtil.getDefault();
-
-		String modelDefaultLanguageId = getDefaultLanguageId();
-
-		String title = getTitle(defaultLocale);
-
-		if (Validator.isNull(title)) {
-			setTitle(getTitle(modelDefaultLanguageId), defaultLocale);
-		}
-		else {
-			setTitle(getTitle(defaultLocale), defaultLocale, defaultLocale);
-		}
-	}
-
-	@Override
 	public WorkflowSimulationJob toEscapedModel() {
 		return (WorkflowSimulationJob)ProxyUtil.newProxyInstance(WorkflowSimulationJob.class.getClassLoader(),
 			new Class[] { WorkflowSimulationJob.class },
@@ -749,6 +617,7 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 		WorkflowSimulationJobClp clone = new WorkflowSimulationJobClp();
 
 		clone.setSimulationJobId(getSimulationJobId());
+		clone.setSimulationId(getSimulationId());
 		clone.setGroupId(getGroupId());
 		clone.setUserId(getUserId());
 		clone.setCreateDate(getCreateDate());
@@ -822,10 +691,12 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{simulationJobId=");
 		sb.append(getSimulationJobId());
+		sb.append(", simulationId=");
+		sb.append(getSimulationId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
 		sb.append(", userId=");
@@ -859,7 +730,7 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(46);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.WorkflowSimulationJob");
@@ -868,6 +739,10 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 		sb.append(
 			"<column><column-name>simulationJobId</column-name><column-value><![CDATA[");
 		sb.append(getSimulationJobId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>simulationId</column-name><column-value><![CDATA[");
+		sb.append(getSimulationId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
@@ -928,13 +803,13 @@ public class WorkflowSimulationJobClp extends BaseModelImpl<WorkflowSimulationJo
 	}
 
 	private long _simulationJobId;
+	private long _simulationId;
 	private long _groupId;
 	private long _userId;
 	private String _userUuid;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private String _title;
-	private String _titleCurrentLanguageId;
 	private String _status;
 	private String _statusResponse;
 	private Date _startTime;

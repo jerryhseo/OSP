@@ -34,7 +34,6 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.service.WorkflowLocalService;
 import org.kisti.edison.service.persistence.WorkflowFinder;
-import org.kisti.edison.service.persistence.WorkflowInstancePersistence;
 import org.kisti.edison.service.persistence.WorkflowPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationJobPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationPersistence;
@@ -279,157 +278,6 @@ public abstract class WorkflowLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowInstanceWorkflow(long workflowInstanceId,
-		long workflowId) throws SystemException {
-		workflowInstancePersistence.addWorkflow(workflowInstanceId, workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowInstanceWorkflow(long workflowInstanceId,
-		Workflow workflow) throws SystemException {
-		workflowInstancePersistence.addWorkflow(workflowInstanceId, workflow);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowInstanceWorkflows(long workflowInstanceId,
-		long[] workflowIds) throws SystemException {
-		workflowInstancePersistence.addWorkflows(workflowInstanceId, workflowIds);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowInstanceWorkflows(long workflowInstanceId,
-		List<Workflow> Workflows) throws SystemException {
-		workflowInstancePersistence.addWorkflows(workflowInstanceId, Workflows);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void clearWorkflowInstanceWorkflows(long workflowInstanceId)
-		throws SystemException {
-		workflowInstancePersistence.clearWorkflows(workflowInstanceId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void deleteWorkflowInstanceWorkflow(long workflowInstanceId,
-		long workflowId) throws SystemException {
-		workflowInstancePersistence.removeWorkflow(workflowInstanceId,
-			workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void deleteWorkflowInstanceWorkflow(long workflowInstanceId,
-		Workflow workflow) throws SystemException {
-		workflowInstancePersistence.removeWorkflow(workflowInstanceId, workflow);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void deleteWorkflowInstanceWorkflows(long workflowInstanceId,
-		long[] workflowIds) throws SystemException {
-		workflowInstancePersistence.removeWorkflows(workflowInstanceId,
-			workflowIds);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void deleteWorkflowInstanceWorkflows(long workflowInstanceId,
-		List<Workflow> Workflows) throws SystemException {
-		workflowInstancePersistence.removeWorkflows(workflowInstanceId,
-			Workflows);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public List<Workflow> getWorkflowInstanceWorkflows(long workflowInstanceId)
-		throws SystemException {
-		return workflowInstancePersistence.getWorkflows(workflowInstanceId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public List<Workflow> getWorkflowInstanceWorkflows(
-		long workflowInstanceId, int start, int end) throws SystemException {
-		return workflowInstancePersistence.getWorkflows(workflowInstanceId,
-			start, end);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public List<Workflow> getWorkflowInstanceWorkflows(
-		long workflowInstanceId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		return workflowInstancePersistence.getWorkflows(workflowInstanceId,
-			start, end, orderByComparator);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public int getWorkflowInstanceWorkflowsCount(long workflowInstanceId)
-		throws SystemException {
-		return workflowInstancePersistence.getWorkflowsSize(workflowInstanceId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public boolean hasWorkflowInstanceWorkflow(long workflowInstanceId,
-		long workflowId) throws SystemException {
-		return workflowInstancePersistence.containsWorkflow(workflowInstanceId,
-			workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public boolean hasWorkflowInstanceWorkflows(long workflowInstanceId)
-		throws SystemException {
-		return workflowInstancePersistence.containsWorkflows(workflowInstanceId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void setWorkflowInstanceWorkflows(long workflowInstanceId,
-		long[] workflowIds) throws SystemException {
-		workflowInstancePersistence.setWorkflows(workflowInstanceId, workflowIds);
-	}
-
-	/**
 	 * Returns the workflow local service.
 	 *
 	 * @return the workflow local service
@@ -482,44 +330,6 @@ public abstract class WorkflowLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	public void setWorkflowFinder(WorkflowFinder workflowFinder) {
 		this.workflowFinder = workflowFinder;
-	}
-
-	/**
-	 * Returns the workflow instance local service.
-	 *
-	 * @return the workflow instance local service
-	 */
-	public org.kisti.edison.service.WorkflowInstanceLocalService getWorkflowInstanceLocalService() {
-		return workflowInstanceLocalService;
-	}
-
-	/**
-	 * Sets the workflow instance local service.
-	 *
-	 * @param workflowInstanceLocalService the workflow instance local service
-	 */
-	public void setWorkflowInstanceLocalService(
-		org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService) {
-		this.workflowInstanceLocalService = workflowInstanceLocalService;
-	}
-
-	/**
-	 * Returns the workflow instance persistence.
-	 *
-	 * @return the workflow instance persistence
-	 */
-	public WorkflowInstancePersistence getWorkflowInstancePersistence() {
-		return workflowInstancePersistence;
-	}
-
-	/**
-	 * Sets the workflow instance persistence.
-	 *
-	 * @param workflowInstancePersistence the workflow instance persistence
-	 */
-	public void setWorkflowInstancePersistence(
-		WorkflowInstancePersistence workflowInstancePersistence) {
-		this.workflowInstancePersistence = workflowInstancePersistence;
 	}
 
 	/**
@@ -780,10 +590,6 @@ public abstract class WorkflowLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected WorkflowPersistence workflowPersistence;
 	@BeanReference(type = WorkflowFinder.class)
 	protected WorkflowFinder workflowFinder;
-	@BeanReference(type = org.kisti.edison.service.WorkflowInstanceLocalService.class)
-	protected org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService;
-	@BeanReference(type = WorkflowInstancePersistence.class)
-	protected WorkflowInstancePersistence workflowInstancePersistence;
 	@BeanReference(type = org.kisti.edison.service.WorkflowSimulationLocalService.class)
 	protected org.kisti.edison.service.WorkflowSimulationLocalService workflowSimulationLocalService;
 	@BeanReference(type = WorkflowSimulationPersistence.class)

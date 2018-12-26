@@ -77,13 +77,10 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "title", Types.VARCHAR },
 			{ "description", Types.VARCHAR },
-			{ "isPublic", Types.BOOLEAN },
 			{ "parentWorkflowId", Types.BIGINT },
-			{ "targetLanguage", Types.VARCHAR },
-			{ "screenLogic", Types.VARCHAR },
-			{ "tutorialFileEntryId", Types.BIGINT }
+			{ "screenLogic", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDWF_Workflow (workflowId LONG not null primary key,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title STRING null,description STRING null,isPublic BOOLEAN,parentWorkflowId LONG,targetLanguage VARCHAR(75) null,screenLogic TEXT null,tutorialFileEntryId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table EDWF_Workflow (workflowId LONG not null primary key,companyId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title STRING null,description STRING null,parentWorkflowId LONG,screenLogic TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table EDWF_Workflow";
 	public static final String ORDER_BY_JPQL = " ORDER BY workflow.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDWF_Workflow.createDate DESC";
@@ -99,22 +96,8 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.org.kisti.edison.model.Workflow"),
 			true);
-	public static long ISPUBLIC_COLUMN_BITMASK = 1L;
-	public static long TITLE_COLUMN_BITMASK = 2L;
-	public static long CREATEDATE_COLUMN_BITMASK = 4L;
-	public static final String MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_NAME =
-		"EDWF_Workflow_WorkflowInstance";
-	public static final Object[][] MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_COLUMNS =
-		{
-			{ "workflowId", Types.BIGINT },
-			{ "workflowInstanceId", Types.BIGINT }
-		};
-	public static final String MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_SQL_CREATE =
-		"create table EDWF_Workflow_WorkflowInstance (workflowId LONG not null,workflowInstanceId LONG not null,primary key (workflowId, workflowInstanceId))";
-	public static final boolean FINDER_CACHE_ENABLED_EDWF_WORKFLOW_WORKFLOWINSTANCE =
-		GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
-				"value.object.finder.cache.enabled.EDWF_Workflow_WorkflowInstance"),
-			true);
+	public static long TITLE_COLUMN_BITMASK = 1L;
+	public static long CREATEDATE_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.org.kisti.edison.model.Workflow"));
 
@@ -162,11 +145,8 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("title", getTitle());
 		attributes.put("description", getDescription());
-		attributes.put("isPublic", getIsPublic());
 		attributes.put("parentWorkflowId", getParentWorkflowId());
-		attributes.put("targetLanguage", getTargetLanguage());
 		attributes.put("screenLogic", getScreenLogic());
-		attributes.put("tutorialFileEntryId", getTutorialFileEntryId());
 
 		return attributes;
 	}
@@ -215,34 +195,16 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 			setDescription(description);
 		}
 
-		Boolean isPublic = (Boolean)attributes.get("isPublic");
-
-		if (isPublic != null) {
-			setIsPublic(isPublic);
-		}
-
 		Long parentWorkflowId = (Long)attributes.get("parentWorkflowId");
 
 		if (parentWorkflowId != null) {
 			setParentWorkflowId(parentWorkflowId);
 		}
 
-		String targetLanguage = (String)attributes.get("targetLanguage");
-
-		if (targetLanguage != null) {
-			setTargetLanguage(targetLanguage);
-		}
-
 		String screenLogic = (String)attributes.get("screenLogic");
 
 		if (screenLogic != null) {
 			setScreenLogic(screenLogic);
-		}
-
-		Long tutorialFileEntryId = (Long)attributes.get("tutorialFileEntryId");
-
-		if (tutorialFileEntryId != null) {
-			setTutorialFileEntryId(tutorialFileEntryId);
 		}
 	}
 
@@ -519,33 +481,6 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 	}
 
 	@Override
-	public boolean getIsPublic() {
-		return _isPublic;
-	}
-
-	@Override
-	public boolean isIsPublic() {
-		return _isPublic;
-	}
-
-	@Override
-	public void setIsPublic(boolean isPublic) {
-		_columnBitmask |= ISPUBLIC_COLUMN_BITMASK;
-
-		if (!_setOriginalIsPublic) {
-			_setOriginalIsPublic = true;
-
-			_originalIsPublic = _isPublic;
-		}
-
-		_isPublic = isPublic;
-	}
-
-	public boolean getOriginalIsPublic() {
-		return _originalIsPublic;
-	}
-
-	@Override
 	public long getParentWorkflowId() {
 		return _parentWorkflowId;
 	}
@@ -553,21 +488,6 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 	@Override
 	public void setParentWorkflowId(long parentWorkflowId) {
 		_parentWorkflowId = parentWorkflowId;
-	}
-
-	@Override
-	public String getTargetLanguage() {
-		if (_targetLanguage == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _targetLanguage;
-		}
-	}
-
-	@Override
-	public void setTargetLanguage(String targetLanguage) {
-		_targetLanguage = targetLanguage;
 	}
 
 	@Override
@@ -583,16 +503,6 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 	@Override
 	public void setScreenLogic(String screenLogic) {
 		_screenLogic = screenLogic;
-	}
-
-	@Override
-	public long getTutorialFileEntryId() {
-		return _tutorialFileEntryId;
-	}
-
-	@Override
-	public void setTutorialFileEntryId(long tutorialFileEntryId) {
-		_tutorialFileEntryId = tutorialFileEntryId;
 	}
 
 	public long getColumnBitmask() {
@@ -708,11 +618,8 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 		workflowImpl.setModifiedDate(getModifiedDate());
 		workflowImpl.setTitle(getTitle());
 		workflowImpl.setDescription(getDescription());
-		workflowImpl.setIsPublic(getIsPublic());
 		workflowImpl.setParentWorkflowId(getParentWorkflowId());
-		workflowImpl.setTargetLanguage(getTargetLanguage());
 		workflowImpl.setScreenLogic(getScreenLogic());
-		workflowImpl.setTutorialFileEntryId(getTutorialFileEntryId());
 
 		workflowImpl.resetOriginalValues();
 
@@ -767,10 +674,6 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 
 		workflowModelImpl._originalTitle = workflowModelImpl._title;
 
-		workflowModelImpl._originalIsPublic = workflowModelImpl._isPublic;
-
-		workflowModelImpl._setOriginalIsPublic = false;
-
 		workflowModelImpl._columnBitmask = 0;
 	}
 
@@ -818,17 +721,7 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 			workflowCacheModel.description = null;
 		}
 
-		workflowCacheModel.isPublic = getIsPublic();
-
 		workflowCacheModel.parentWorkflowId = getParentWorkflowId();
-
-		workflowCacheModel.targetLanguage = getTargetLanguage();
-
-		String targetLanguage = workflowCacheModel.targetLanguage;
-
-		if ((targetLanguage != null) && (targetLanguage.length() == 0)) {
-			workflowCacheModel.targetLanguage = null;
-		}
 
 		workflowCacheModel.screenLogic = getScreenLogic();
 
@@ -838,14 +731,12 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 			workflowCacheModel.screenLogic = null;
 		}
 
-		workflowCacheModel.tutorialFileEntryId = getTutorialFileEntryId();
-
 		return workflowCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("{workflowId=");
 		sb.append(getWorkflowId());
@@ -861,16 +752,10 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 		sb.append(getTitle());
 		sb.append(", description=");
 		sb.append(getDescription());
-		sb.append(", isPublic=");
-		sb.append(getIsPublic());
 		sb.append(", parentWorkflowId=");
 		sb.append(getParentWorkflowId());
-		sb.append(", targetLanguage=");
-		sb.append(getTargetLanguage());
 		sb.append(", screenLogic=");
 		sb.append(getScreenLogic());
-		sb.append(", tutorialFileEntryId=");
-		sb.append(getTutorialFileEntryId());
 		sb.append("}");
 
 		return sb.toString();
@@ -878,7 +763,7 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.Workflow");
@@ -913,24 +798,12 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 		sb.append(getDescription());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>isPublic</column-name><column-value><![CDATA[");
-		sb.append(getIsPublic());
-		sb.append("]]></column-value></column>");
-		sb.append(
 			"<column><column-name>parentWorkflowId</column-name><column-value><![CDATA[");
 		sb.append(getParentWorkflowId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>targetLanguage</column-name><column-value><![CDATA[");
-		sb.append(getTargetLanguage());
-		sb.append("]]></column-value></column>");
-		sb.append(
 			"<column><column-name>screenLogic</column-name><column-value><![CDATA[");
 		sb.append(getScreenLogic());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>tutorialFileEntryId</column-name><column-value><![CDATA[");
-		sb.append(getTutorialFileEntryId());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -953,13 +826,8 @@ public class WorkflowModelImpl extends BaseModelImpl<Workflow>
 	private String _originalTitle;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
-	private boolean _isPublic;
-	private boolean _originalIsPublic;
-	private boolean _setOriginalIsPublic;
 	private long _parentWorkflowId;
-	private String _targetLanguage;
 	private String _screenLogic;
-	private long _tutorialFileEntryId;
 	private long _columnBitmask;
 	private Workflow _escapedModel;
 }

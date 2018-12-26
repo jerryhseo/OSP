@@ -56,11 +56,8 @@ public class WorkflowWrapper implements Workflow, ModelWrapper<Workflow> {
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("title", getTitle());
 		attributes.put("description", getDescription());
-		attributes.put("isPublic", getIsPublic());
 		attributes.put("parentWorkflowId", getParentWorkflowId());
-		attributes.put("targetLanguage", getTargetLanguage());
 		attributes.put("screenLogic", getScreenLogic());
-		attributes.put("tutorialFileEntryId", getTutorialFileEntryId());
 
 		return attributes;
 	}
@@ -109,34 +106,16 @@ public class WorkflowWrapper implements Workflow, ModelWrapper<Workflow> {
 			setDescription(description);
 		}
 
-		Boolean isPublic = (Boolean)attributes.get("isPublic");
-
-		if (isPublic != null) {
-			setIsPublic(isPublic);
-		}
-
 		Long parentWorkflowId = (Long)attributes.get("parentWorkflowId");
 
 		if (parentWorkflowId != null) {
 			setParentWorkflowId(parentWorkflowId);
 		}
 
-		String targetLanguage = (String)attributes.get("targetLanguage");
-
-		if (targetLanguage != null) {
-			setTargetLanguage(targetLanguage);
-		}
-
 		String screenLogic = (String)attributes.get("screenLogic");
 
 		if (screenLogic != null) {
 			setScreenLogic(screenLogic);
-		}
-
-		Long tutorialFileEntryId = (Long)attributes.get("tutorialFileEntryId");
-
-		if (tutorialFileEntryId != null) {
-			setTutorialFileEntryId(tutorialFileEntryId);
 		}
 	}
 
@@ -565,36 +544,6 @@ public class WorkflowWrapper implements Workflow, ModelWrapper<Workflow> {
 	}
 
 	/**
-	* Returns the is public of this workflow.
-	*
-	* @return the is public of this workflow
-	*/
-	@Override
-	public boolean getIsPublic() {
-		return _workflow.getIsPublic();
-	}
-
-	/**
-	* Returns <code>true</code> if this workflow is is public.
-	*
-	* @return <code>true</code> if this workflow is is public; <code>false</code> otherwise
-	*/
-	@Override
-	public boolean isIsPublic() {
-		return _workflow.isIsPublic();
-	}
-
-	/**
-	* Sets whether this workflow is is public.
-	*
-	* @param isPublic the is public of this workflow
-	*/
-	@Override
-	public void setIsPublic(boolean isPublic) {
-		_workflow.setIsPublic(isPublic);
-	}
-
-	/**
 	* Returns the parent workflow ID of this workflow.
 	*
 	* @return the parent workflow ID of this workflow
@@ -615,26 +564,6 @@ public class WorkflowWrapper implements Workflow, ModelWrapper<Workflow> {
 	}
 
 	/**
-	* Returns the target language of this workflow.
-	*
-	* @return the target language of this workflow
-	*/
-	@Override
-	public java.lang.String getTargetLanguage() {
-		return _workflow.getTargetLanguage();
-	}
-
-	/**
-	* Sets the target language of this workflow.
-	*
-	* @param targetLanguage the target language of this workflow
-	*/
-	@Override
-	public void setTargetLanguage(java.lang.String targetLanguage) {
-		_workflow.setTargetLanguage(targetLanguage);
-	}
-
-	/**
 	* Returns the screen logic of this workflow.
 	*
 	* @return the screen logic of this workflow
@@ -652,26 +581,6 @@ public class WorkflowWrapper implements Workflow, ModelWrapper<Workflow> {
 	@Override
 	public void setScreenLogic(java.lang.String screenLogic) {
 		_workflow.setScreenLogic(screenLogic);
-	}
-
-	/**
-	* Returns the tutorial file entry ID of this workflow.
-	*
-	* @return the tutorial file entry ID of this workflow
-	*/
-	@Override
-	public long getTutorialFileEntryId() {
-		return _workflow.getTutorialFileEntryId();
-	}
-
-	/**
-	* Sets the tutorial file entry ID of this workflow.
-	*
-	* @param tutorialFileEntryId the tutorial file entry ID of this workflow
-	*/
-	@Override
-	public void setTutorialFileEntryId(long tutorialFileEntryId) {
-		_workflow.setTutorialFileEntryId(tutorialFileEntryId);
 	}
 
 	@Override

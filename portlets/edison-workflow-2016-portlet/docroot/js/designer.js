@@ -82,8 +82,7 @@ var Designer = (function (namespace, $, OSP, toastr, isFixed, editorPortletIds) 
             enablePan: true
         }
     });
-
-
+    
     /** jsplumb callback **/
     function jsPlumbConnectionDetachedCallback(info, originalEvent) {
         if (!info.sourceEndpoint.hasType(WF_JSPLUMB_TYPES.ENDPOINT) ||

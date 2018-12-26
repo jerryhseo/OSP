@@ -34,7 +34,6 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.service.WorkflowSimulationJobLocalService;
 import org.kisti.edison.service.persistence.WorkflowFinder;
-import org.kisti.edison.service.persistence.WorkflowInstancePersistence;
 import org.kisti.edison.service.persistence.WorkflowPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationJobPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationPersistence;
@@ -289,58 +288,9 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void addWorkflowWorkflowSimulationJob(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
 		long simulationJobId) throws SystemException {
-		workflowPersistence.addWorkflowSimulationJob(workflowId, simulationJobId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowWorkflowSimulationJob(long workflowId,
-		WorkflowSimulationJob workflowSimulationJob) throws SystemException {
-		workflowPersistence.addWorkflowSimulationJob(workflowId,
-			workflowSimulationJob);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowWorkflowSimulationJobs(long workflowId,
-		long[] simulationJobIds) throws SystemException {
-		workflowPersistence.addWorkflowSimulationJobs(workflowId,
-			simulationJobIds);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void addWorkflowWorkflowSimulationJobs(long workflowId,
-		List<WorkflowSimulationJob> WorkflowSimulationJobs)
-		throws SystemException {
-		workflowPersistence.addWorkflowSimulationJobs(workflowId,
-			WorkflowSimulationJobs);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void clearWorkflowWorkflowSimulationJobs(long workflowId)
-		throws SystemException {
-		workflowPersistence.clearWorkflowSimulationJobs(workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public void deleteWorkflowWorkflowSimulationJob(long workflowId,
-		long simulationJobId) throws SystemException {
-		workflowPersistence.removeWorkflowSimulationJob(workflowId,
+		workflowSimulationPersistence.addWorkflowSimulationJob(simulationId,
 			simulationJobId);
 	}
 
@@ -348,9 +298,9 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void deleteWorkflowWorkflowSimulationJob(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
 		WorkflowSimulationJob workflowSimulationJob) throws SystemException {
-		workflowPersistence.removeWorkflowSimulationJob(workflowId,
+		workflowSimulationPersistence.addWorkflowSimulationJob(simulationId,
 			workflowSimulationJob);
 	}
 
@@ -358,9 +308,9 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void deleteWorkflowWorkflowSimulationJobs(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		long[] simulationJobIds) throws SystemException {
-		workflowPersistence.removeWorkflowSimulationJobs(workflowId,
+		workflowSimulationPersistence.addWorkflowSimulationJobs(simulationId,
 			simulationJobIds);
 	}
 
@@ -368,10 +318,10 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void deleteWorkflowWorkflowSimulationJobs(long workflowId,
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		List<WorkflowSimulationJob> WorkflowSimulationJobs)
 		throws SystemException {
-		workflowPersistence.removeWorkflowSimulationJobs(workflowId,
+		workflowSimulationPersistence.addWorkflowSimulationJobs(simulationId,
 			WorkflowSimulationJobs);
 	}
 
@@ -379,48 +329,18 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId) throws SystemException {
-		return workflowPersistence.getWorkflowSimulationJobs(workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public List<WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId, int start, int end) throws SystemException {
-		return workflowPersistence.getWorkflowSimulationJobs(workflowId, start,
-			end);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public List<WorkflowSimulationJob> getWorkflowWorkflowSimulationJobs(
-		long workflowId, int start, int end, OrderByComparator orderByComparator)
+	public void clearWorkflowSimulationWorkflowSimulationJobs(long simulationId)
 		throws SystemException {
-		return workflowPersistence.getWorkflowSimulationJobs(workflowId, start,
-			end, orderByComparator);
+		workflowSimulationPersistence.clearWorkflowSimulationJobs(simulationId);
 	}
 
 	/**
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int getWorkflowWorkflowSimulationJobsCount(long workflowId)
-		throws SystemException {
-		return workflowPersistence.getWorkflowSimulationJobsSize(workflowId);
-	}
-
-	/**
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public boolean hasWorkflowWorkflowSimulationJob(long workflowId,
-		long simulationJobId) throws SystemException {
-		return workflowPersistence.containsWorkflowSimulationJob(workflowId,
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId) throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJob(simulationId,
 			simulationJobId);
 	}
 
@@ -428,18 +348,99 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public boolean hasWorkflowWorkflowSimulationJobs(long workflowId)
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, WorkflowSimulationJob workflowSimulationJob)
 		throws SystemException {
-		return workflowPersistence.containsWorkflowSimulationJobs(workflowId);
+		workflowSimulationPersistence.removeWorkflowSimulationJob(simulationId,
+			workflowSimulationJob);
 	}
 
 	/**
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void setWorkflowWorkflowSimulationJobs(long workflowId,
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, long[] simulationJobIds) throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, List<WorkflowSimulationJob> WorkflowSimulationJobs)
+		throws SystemException {
+		workflowSimulationPersistence.removeWorkflowSimulationJobs(simulationId,
+			WorkflowSimulationJobs);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId,
+			start, end);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobs(simulationId,
+			start, end, orderByComparator);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int getWorkflowSimulationWorkflowSimulationJobsCount(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.getWorkflowSimulationJobsSize(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId) throws SystemException {
+		return workflowSimulationPersistence.containsWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId) throws SystemException {
+		return workflowSimulationPersistence.containsWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void setWorkflowSimulationWorkflowSimulationJobs(long simulationId,
 		long[] simulationJobIds) throws SystemException {
-		workflowPersistence.setWorkflowSimulationJobs(workflowId,
+		workflowSimulationPersistence.setWorkflowSimulationJobs(simulationId,
 			simulationJobIds);
 	}
 
@@ -496,44 +497,6 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	 */
 	public void setWorkflowFinder(WorkflowFinder workflowFinder) {
 		this.workflowFinder = workflowFinder;
-	}
-
-	/**
-	 * Returns the workflow instance local service.
-	 *
-	 * @return the workflow instance local service
-	 */
-	public org.kisti.edison.service.WorkflowInstanceLocalService getWorkflowInstanceLocalService() {
-		return workflowInstanceLocalService;
-	}
-
-	/**
-	 * Sets the workflow instance local service.
-	 *
-	 * @param workflowInstanceLocalService the workflow instance local service
-	 */
-	public void setWorkflowInstanceLocalService(
-		org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService) {
-		this.workflowInstanceLocalService = workflowInstanceLocalService;
-	}
-
-	/**
-	 * Returns the workflow instance persistence.
-	 *
-	 * @return the workflow instance persistence
-	 */
-	public WorkflowInstancePersistence getWorkflowInstancePersistence() {
-		return workflowInstancePersistence;
-	}
-
-	/**
-	 * Sets the workflow instance persistence.
-	 *
-	 * @param workflowInstancePersistence the workflow instance persistence
-	 */
-	public void setWorkflowInstancePersistence(
-		WorkflowInstancePersistence workflowInstancePersistence) {
-		this.workflowInstancePersistence = workflowInstancePersistence;
 	}
 
 	/**
@@ -794,10 +757,6 @@ public abstract class WorkflowSimulationJobLocalServiceBaseImpl
 	protected WorkflowPersistence workflowPersistence;
 	@BeanReference(type = WorkflowFinder.class)
 	protected WorkflowFinder workflowFinder;
-	@BeanReference(type = org.kisti.edison.service.WorkflowInstanceLocalService.class)
-	protected org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService;
-	@BeanReference(type = WorkflowInstancePersistence.class)
-	protected WorkflowInstancePersistence workflowInstancePersistence;
 	@BeanReference(type = org.kisti.edison.service.WorkflowSimulationLocalService.class)
 	protected org.kisti.edison.service.WorkflowSimulationLocalService workflowSimulationLocalService;
 	@BeanReference(type = WorkflowSimulationPersistence.class)

@@ -28,17 +28,17 @@ public class WorkflowFinderUtil {
 		return getFinder().retrieveWorkflows(searchParam, locale);
 	}
 
-	public static long countWorkflowInstances(
+	public static long countWorkflowSimulationJobs(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getFinder().countWorkflowInstances(searchParam);
+		return getFinder().countWorkflowSimulationJobs(searchParam);
 	}
 
-	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveWorkflowInstances(
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveWorkflowSimulationJobs(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam,
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getFinder().retrieveWorkflowInstances(searchParam, locale);
+		return getFinder().retrieveWorkflowSimulationJobs(searchParam, locale);
 	}
 
 	public static WorkflowFinder getFinder() {

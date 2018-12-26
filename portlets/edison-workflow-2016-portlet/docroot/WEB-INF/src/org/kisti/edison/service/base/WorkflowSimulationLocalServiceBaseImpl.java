@@ -34,7 +34,6 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import org.kisti.edison.model.WorkflowSimulation;
 import org.kisti.edison.service.WorkflowSimulationLocalService;
 import org.kisti.edison.service.persistence.WorkflowFinder;
-import org.kisti.edison.service.persistence.WorkflowInstancePersistence;
 import org.kisti.edison.service.persistence.WorkflowPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationJobPersistence;
 import org.kisti.edison.service.persistence.WorkflowSimulationPersistence;
@@ -501,44 +500,6 @@ public abstract class WorkflowSimulationLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the workflow instance local service.
-	 *
-	 * @return the workflow instance local service
-	 */
-	public org.kisti.edison.service.WorkflowInstanceLocalService getWorkflowInstanceLocalService() {
-		return workflowInstanceLocalService;
-	}
-
-	/**
-	 * Sets the workflow instance local service.
-	 *
-	 * @param workflowInstanceLocalService the workflow instance local service
-	 */
-	public void setWorkflowInstanceLocalService(
-		org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService) {
-		this.workflowInstanceLocalService = workflowInstanceLocalService;
-	}
-
-	/**
-	 * Returns the workflow instance persistence.
-	 *
-	 * @return the workflow instance persistence
-	 */
-	public WorkflowInstancePersistence getWorkflowInstancePersistence() {
-		return workflowInstancePersistence;
-	}
-
-	/**
-	 * Sets the workflow instance persistence.
-	 *
-	 * @param workflowInstancePersistence the workflow instance persistence
-	 */
-	public void setWorkflowInstancePersistence(
-		WorkflowInstancePersistence workflowInstancePersistence) {
-		this.workflowInstancePersistence = workflowInstancePersistence;
-	}
-
-	/**
 	 * Returns the workflow simulation local service.
 	 *
 	 * @return the workflow simulation local service
@@ -796,10 +757,6 @@ public abstract class WorkflowSimulationLocalServiceBaseImpl
 	protected WorkflowPersistence workflowPersistence;
 	@BeanReference(type = WorkflowFinder.class)
 	protected WorkflowFinder workflowFinder;
-	@BeanReference(type = org.kisti.edison.service.WorkflowInstanceLocalService.class)
-	protected org.kisti.edison.service.WorkflowInstanceLocalService workflowInstanceLocalService;
-	@BeanReference(type = WorkflowInstancePersistence.class)
-	protected WorkflowInstancePersistence workflowInstancePersistence;
 	@BeanReference(type = org.kisti.edison.service.WorkflowSimulationLocalService.class)
 	protected org.kisti.edison.service.WorkflowSimulationLocalService workflowSimulationLocalService;
 	@BeanReference(type = WorkflowSimulationPersistence.class)

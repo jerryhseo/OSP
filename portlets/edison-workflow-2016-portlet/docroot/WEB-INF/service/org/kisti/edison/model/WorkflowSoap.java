@@ -37,11 +37,8 @@ public class WorkflowSoap implements Serializable {
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setTitle(model.getTitle());
 		soapModel.setDescription(model.getDescription());
-		soapModel.setIsPublic(model.getIsPublic());
 		soapModel.setParentWorkflowId(model.getParentWorkflowId());
-		soapModel.setTargetLanguage(model.getTargetLanguage());
 		soapModel.setScreenLogic(model.getScreenLogic());
-		soapModel.setTutorialFileEntryId(model.getTutorialFileEntryId());
 
 		return soapModel;
 	}
@@ -150,32 +147,12 @@ public class WorkflowSoap implements Serializable {
 		_description = description;
 	}
 
-	public boolean getIsPublic() {
-		return _isPublic;
-	}
-
-	public boolean isIsPublic() {
-		return _isPublic;
-	}
-
-	public void setIsPublic(boolean isPublic) {
-		_isPublic = isPublic;
-	}
-
 	public long getParentWorkflowId() {
 		return _parentWorkflowId;
 	}
 
 	public void setParentWorkflowId(long parentWorkflowId) {
 		_parentWorkflowId = parentWorkflowId;
-	}
-
-	public String getTargetLanguage() {
-		return _targetLanguage;
-	}
-
-	public void setTargetLanguage(String targetLanguage) {
-		_targetLanguage = targetLanguage;
 	}
 
 	public String getScreenLogic() {
@@ -186,14 +163,6 @@ public class WorkflowSoap implements Serializable {
 		_screenLogic = screenLogic;
 	}
 
-	public long getTutorialFileEntryId() {
-		return _tutorialFileEntryId;
-	}
-
-	public void setTutorialFileEntryId(long tutorialFileEntryId) {
-		_tutorialFileEntryId = tutorialFileEntryId;
-	}
-
 	private long _workflowId;
 	private long _companyId;
 	private long _userId;
@@ -201,9 +170,6 @@ public class WorkflowSoap implements Serializable {
 	private Date _modifiedDate;
 	private String _title;
 	private String _description;
-	private boolean _isPublic;
 	private long _parentWorkflowId;
-	private String _targetLanguage;
 	private String _screenLogic;
-	private long _tutorialFileEntryId;
 }

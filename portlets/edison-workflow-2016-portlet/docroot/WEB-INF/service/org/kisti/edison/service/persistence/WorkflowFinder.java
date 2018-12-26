@@ -23,11 +23,11 @@ public interface WorkflowFinder {
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public long countWorkflowInstances(
+	public long countWorkflowSimulationJobs(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveWorkflowInstances(
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveWorkflowSimulationJobs(
 		java.util.Map<java.lang.String, java.lang.Object> searchParam,
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException;

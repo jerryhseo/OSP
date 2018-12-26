@@ -6,9 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.kisti.edison.model.Workflow;
-import org.kisti.edison.model.WorkflowInstance;
+import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.model.impl.WorkflowImpl;
-import org.kisti.edison.model.impl.WorkflowInstanceImpl;
 import org.kisti.edison.util.GBatisUtil;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -91,7 +90,7 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
     }
   }
   
-  public long countWorkflowInstances(Map<String,Object> searchParam) throws SystemException{
+  public long countWorkflowSimulationJobs(Map<String,Object> searchParam) throws SystemException{
     StringBuilder sqlSb = new StringBuilder();
     Session session = null;
     try{
@@ -114,7 +113,7 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
   }
   
   @SuppressWarnings("unchecked")
-  public List<Map<String, Object>> retrieveWorkflowInstances(Map<String,Object> searchParam, Locale locale) throws SystemException{
+  public List<Map<String, Object>> retrieveWorkflowSimulationJobs(Map<String,Object> searchParam, Locale locale) throws SystemException{
     StringBuilder sqlSb = new StringBuilder();
     Session session = null;
     try{
@@ -126,14 +125,13 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
       session = openSession();
       String gBatisQuery = GBatisUtil.getGBatis(searchParam, sqlSb.toString());
       SQLQuery query = session.createSQLQuery(gBatisQuery);
-      query.addEntity("EDWF_WorkflowInstance", WorkflowInstanceImpl.class);
       query.addScalar("workflowTitle", Type.STRING);
       query.addScalar("screenName", Type.STRING);
       
       List<Object[]> rows = (List<Object[]>) query.list();
       List<Map<String, Object>> workflowInstances = new ArrayList<Map<String, Object>>();
       for(Object[] columns : rows){
-        WorkflowInstance workflowInstance = (WorkflowInstance)columns[0];
+        WorkflowSimulationJob workflowInstance = (WorkflowSimulationJob)columns[0];
         Map<String, Object> workflowInstanceMap = workflowInstance.getModelAttributes();
         if(workflowInstance.getStatus() != null){
           workflowInstanceMap.put("status", StringUtil.upperCaseFirstLetter(workflowInstance.getStatus().toLowerCase()));

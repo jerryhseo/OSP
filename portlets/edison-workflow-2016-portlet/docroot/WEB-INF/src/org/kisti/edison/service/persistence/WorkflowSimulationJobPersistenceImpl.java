@@ -91,6 +91,1165 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SIMULATIONID_TITLE_USERID =
+		new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowSimulationJobImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findBySimulationId_Title_UserId",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_SIMULATIONID_TITLE_USERID =
+		new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"countBySimulationId_Title_UserId",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				Long.class.getName()
+			});
+
+	/**
+	 * Returns all the workflow simulation jobs where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @return the matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_Title_UserId(
+		long simulationId, String title, long userId) throws SystemException {
+		return findBySimulationId_Title_UserId(simulationId, title, userId,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the workflow simulation jobs where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of workflow simulation jobs
+	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	 * @return the range of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_Title_UserId(
+		long simulationId, String title, long userId, int start, int end)
+		throws SystemException {
+		return findBySimulationId_Title_UserId(simulationId, title, userId,
+			start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the workflow simulation jobs where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of workflow simulation jobs
+	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_Title_UserId(
+		long simulationId, String title, long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SIMULATIONID_TITLE_USERID;
+		finderArgs = new Object[] {
+				simulationId, title, userId,
+				
+				start, end, orderByComparator
+			};
+
+		List<WorkflowSimulationJob> list = (List<WorkflowSimulationJob>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WorkflowSimulationJob workflowSimulationJob : list) {
+				if ((simulationId != workflowSimulationJob.getSimulationId()) ||
+						!StringUtil.wildcardMatches(
+							workflowSimulationJob.getTitle(), title,
+							CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, true) ||
+						(userId != workflowSimulationJob.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_WORKFLOWSIMULATIONJOB_WHERE);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_SIMULATIONID_2);
+
+			boolean bindTitle = false;
+
+			if (title == null) {
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_1);
+			}
+			else if (title.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_3);
+			}
+			else {
+				bindTitle = true;
+
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_2);
+			}
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(WorkflowSimulationJobModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(simulationId);
+
+				if (bindTitle) {
+					qPos.add(title);
+				}
+
+				qPos.add(userId);
+
+				if (!pagination) {
+					list = (List<WorkflowSimulationJob>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<WorkflowSimulationJob>(list);
+				}
+				else {
+					list = (List<WorkflowSimulationJob>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first workflow simulation job in the ordered set where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob findBySimulationId_Title_UserId_First(
+		long simulationId, String title, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = fetchBySimulationId_Title_UserId_First(simulationId,
+				title, userId, orderByComparator);
+
+		if (workflowSimulationJob != null) {
+			return workflowSimulationJob;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("simulationId=");
+		msg.append(simulationId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchWorkflowSimulationJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the first workflow simulation job in the ordered set where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching workflow simulation job, or <code>null</code> if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob fetchBySimulationId_Title_UserId_First(
+		long simulationId, String title, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<WorkflowSimulationJob> list = findBySimulationId_Title_UserId(simulationId,
+				title, userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last workflow simulation job in the ordered set where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob findBySimulationId_Title_UserId_Last(
+		long simulationId, String title, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = fetchBySimulationId_Title_UserId_Last(simulationId,
+				title, userId, orderByComparator);
+
+		if (workflowSimulationJob != null) {
+			return workflowSimulationJob;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("simulationId=");
+		msg.append(simulationId);
+
+		msg.append(", title=");
+		msg.append(title);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchWorkflowSimulationJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the last workflow simulation job in the ordered set where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching workflow simulation job, or <code>null</code> if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob fetchBySimulationId_Title_UserId_Last(
+		long simulationId, String title, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countBySimulationId_Title_UserId(simulationId, title, userId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<WorkflowSimulationJob> list = findBySimulationId_Title_UserId(simulationId,
+				title, userId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the workflow simulation jobs before and after the current workflow simulation job in the ordered set where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationJobId the primary key of the current workflow simulation job
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a workflow simulation job with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob[] findBySimulationId_Title_UserId_PrevAndNext(
+		long simulationJobId, long simulationId, String title, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = findByPrimaryKey(simulationJobId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			WorkflowSimulationJob[] array = new WorkflowSimulationJobImpl[3];
+
+			array[0] = getBySimulationId_Title_UserId_PrevAndNext(session,
+					workflowSimulationJob, simulationId, title, userId,
+					orderByComparator, true);
+
+			array[1] = workflowSimulationJob;
+
+			array[2] = getBySimulationId_Title_UserId_PrevAndNext(session,
+					workflowSimulationJob, simulationId, title, userId,
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected WorkflowSimulationJob getBySimulationId_Title_UserId_PrevAndNext(
+		Session session, WorkflowSimulationJob workflowSimulationJob,
+		long simulationId, String title, long userId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_WORKFLOWSIMULATIONJOB_WHERE);
+
+		query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_SIMULATIONID_2);
+
+		boolean bindTitle = false;
+
+		if (title == null) {
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_1);
+		}
+		else if (title.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_3);
+		}
+		else {
+			bindTitle = true;
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_2);
+		}
+
+		query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_USERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(WorkflowSimulationJobModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(simulationId);
+
+		if (bindTitle) {
+			qPos.add(title);
+		}
+
+		qPos.add(userId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(workflowSimulationJob);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<WorkflowSimulationJob> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the workflow simulation jobs where simulationId = &#63; and title LIKE &#63; and userId = &#63; from the database.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeBySimulationId_Title_UserId(long simulationId,
+		String title, long userId) throws SystemException {
+		for (WorkflowSimulationJob workflowSimulationJob : findBySimulationId_Title_UserId(
+				simulationId, title, userId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(workflowSimulationJob);
+		}
+	}
+
+	/**
+	 * Returns the number of workflow simulation jobs where simulationId = &#63; and title LIKE &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param title the title
+	 * @param userId the user ID
+	 * @return the number of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countBySimulationId_Title_UserId(long simulationId,
+		String title, long userId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_SIMULATIONID_TITLE_USERID;
+
+		Object[] finderArgs = new Object[] { simulationId, title, userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_WORKFLOWSIMULATIONJOB_WHERE);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_SIMULATIONID_2);
+
+			boolean bindTitle = false;
+
+			if (title == null) {
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_1);
+			}
+			else if (title.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_3);
+			}
+			else {
+				bindTitle = true;
+
+				query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_2);
+			}
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_TITLE_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(simulationId);
+
+				if (bindTitle) {
+					qPos.add(title);
+				}
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SIMULATIONID_TITLE_USERID_SIMULATIONID_2 =
+		"workflowSimulationJob.simulationId = ? AND ";
+	private static final String _FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_1 =
+		"workflowSimulationJob.title LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_2 =
+		"workflowSimulationJob.title LIKE ? AND ";
+	private static final String _FINDER_COLUMN_SIMULATIONID_TITLE_USERID_TITLE_3 =
+		"(workflowSimulationJob.title IS NULL OR workflowSimulationJob.title LIKE '') AND ";
+	private static final String _FINDER_COLUMN_SIMULATIONID_TITLE_USERID_USERID_2 =
+		"workflowSimulationJob.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SIMULATIONID_USERID =
+		new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowSimulationJobImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findBySimulationId_UserId",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SIMULATIONID_USERID =
+		new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED,
+			WorkflowSimulationJobImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findBySimulationId_UserId",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			WorkflowSimulationJobModelImpl.SIMULATIONID_COLUMN_BITMASK |
+			WorkflowSimulationJobModelImpl.USERID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SIMULATIONID_USERID = new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
+			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countBySimulationId_UserId",
+			new String[] { Long.class.getName(), Long.class.getName() });
+
+	/**
+	 * Returns all the workflow simulation jobs where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @return the matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_UserId(
+		long simulationId, long userId) throws SystemException {
+		return findBySimulationId_UserId(simulationId, userId,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the workflow simulation jobs where simulationId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of workflow simulation jobs
+	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	 * @return the range of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_UserId(
+		long simulationId, long userId, int start, int end)
+		throws SystemException {
+		return findBySimulationId_UserId(simulationId, userId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the workflow simulation jobs where simulationId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of workflow simulation jobs
+	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<WorkflowSimulationJob> findBySimulationId_UserId(
+		long simulationId, long userId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SIMULATIONID_USERID;
+			finderArgs = new Object[] { simulationId, userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_SIMULATIONID_USERID;
+			finderArgs = new Object[] {
+					simulationId, userId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<WorkflowSimulationJob> list = (List<WorkflowSimulationJob>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WorkflowSimulationJob workflowSimulationJob : list) {
+				if ((simulationId != workflowSimulationJob.getSimulationId()) ||
+						(userId != workflowSimulationJob.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_WORKFLOWSIMULATIONJOB_WHERE);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_USERID_SIMULATIONID_2);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_USERID_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(WorkflowSimulationJobModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(simulationId);
+
+				qPos.add(userId);
+
+				if (!pagination) {
+					list = (List<WorkflowSimulationJob>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<WorkflowSimulationJob>(list);
+				}
+				else {
+					list = (List<WorkflowSimulationJob>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first workflow simulation job in the ordered set where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob findBySimulationId_UserId_First(
+		long simulationId, long userId, OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = fetchBySimulationId_UserId_First(simulationId,
+				userId, orderByComparator);
+
+		if (workflowSimulationJob != null) {
+			return workflowSimulationJob;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("simulationId=");
+		msg.append(simulationId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchWorkflowSimulationJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the first workflow simulation job in the ordered set where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching workflow simulation job, or <code>null</code> if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob fetchBySimulationId_UserId_First(
+		long simulationId, long userId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<WorkflowSimulationJob> list = findBySimulationId_UserId(simulationId,
+				userId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last workflow simulation job in the ordered set where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob findBySimulationId_UserId_Last(
+		long simulationId, long userId, OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = fetchBySimulationId_UserId_Last(simulationId,
+				userId, orderByComparator);
+
+		if (workflowSimulationJob != null) {
+			return workflowSimulationJob;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("simulationId=");
+		msg.append(simulationId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchWorkflowSimulationJobException(msg.toString());
+	}
+
+	/**
+	 * Returns the last workflow simulation job in the ordered set where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching workflow simulation job, or <code>null</code> if a matching workflow simulation job could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob fetchBySimulationId_UserId_Last(
+		long simulationId, long userId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countBySimulationId_UserId(simulationId, userId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<WorkflowSimulationJob> list = findBySimulationId_UserId(simulationId,
+				userId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the workflow simulation jobs before and after the current workflow simulation job in the ordered set where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationJobId the primary key of the current workflow simulation job
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next workflow simulation job
+	 * @throws org.kisti.edison.NoSuchWorkflowSimulationJobException if a workflow simulation job with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WorkflowSimulationJob[] findBySimulationId_UserId_PrevAndNext(
+		long simulationJobId, long simulationId, long userId,
+		OrderByComparator orderByComparator)
+		throws NoSuchWorkflowSimulationJobException, SystemException {
+		WorkflowSimulationJob workflowSimulationJob = findByPrimaryKey(simulationJobId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			WorkflowSimulationJob[] array = new WorkflowSimulationJobImpl[3];
+
+			array[0] = getBySimulationId_UserId_PrevAndNext(session,
+					workflowSimulationJob, simulationId, userId,
+					orderByComparator, true);
+
+			array[1] = workflowSimulationJob;
+
+			array[2] = getBySimulationId_UserId_PrevAndNext(session,
+					workflowSimulationJob, simulationId, userId,
+					orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected WorkflowSimulationJob getBySimulationId_UserId_PrevAndNext(
+		Session session, WorkflowSimulationJob workflowSimulationJob,
+		long simulationId, long userId, OrderByComparator orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_WORKFLOWSIMULATIONJOB_WHERE);
+
+		query.append(_FINDER_COLUMN_SIMULATIONID_USERID_SIMULATIONID_2);
+
+		query.append(_FINDER_COLUMN_SIMULATIONID_USERID_USERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(WorkflowSimulationJobModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(simulationId);
+
+		qPos.add(userId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(workflowSimulationJob);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<WorkflowSimulationJob> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the workflow simulation jobs where simulationId = &#63; and userId = &#63; from the database.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeBySimulationId_UserId(long simulationId, long userId)
+		throws SystemException {
+		for (WorkflowSimulationJob workflowSimulationJob : findBySimulationId_UserId(
+				simulationId, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(workflowSimulationJob);
+		}
+	}
+
+	/**
+	 * Returns the number of workflow simulation jobs where simulationId = &#63; and userId = &#63;.
+	 *
+	 * @param simulationId the simulation ID
+	 * @param userId the user ID
+	 * @return the number of matching workflow simulation jobs
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countBySimulationId_UserId(long simulationId, long userId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SIMULATIONID_USERID;
+
+		Object[] finderArgs = new Object[] { simulationId, userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_WORKFLOWSIMULATIONJOB_WHERE);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_USERID_SIMULATIONID_2);
+
+			query.append(_FINDER_COLUMN_SIMULATIONID_USERID_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(simulationId);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SIMULATIONID_USERID_SIMULATIONID_2 =
+		"workflowSimulationJob.simulationId = ? AND ";
+	private static final String _FINDER_COLUMN_SIMULATIONID_USERID_USERID_2 = "workflowSimulationJob.userId = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TITLE = new FinderPath(WorkflowSimulationJobModelImpl.ENTITY_CACHE_ENABLED,
 			WorkflowSimulationJobModelImpl.FINDER_CACHE_ENABLED,
 			WorkflowSimulationJobImpl.class,
@@ -1271,7 +2430,7 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 		WorkflowSimulationJob workflowSimulationJob) throws SystemException {
 		workflowSimulationJob = toUnwrappedModel(workflowSimulationJob);
 
-		workflowSimulationJobToWorkflowTableMapper.deleteLeftPrimaryKeyTableMappings(workflowSimulationJob.getPrimaryKey());
+		workflowSimulationJobToWorkflowSimulationTableMapper.deleteLeftPrimaryKeyTableMappings(workflowSimulationJob.getPrimaryKey());
 
 		Session session = null;
 
@@ -1340,6 +2499,29 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 
 		else {
 			if ((workflowSimulationJobModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SIMULATIONID_USERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						workflowSimulationJobModelImpl.getOriginalSimulationId(),
+						workflowSimulationJobModelImpl.getOriginalUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SIMULATIONID_USERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SIMULATIONID_USERID,
+					args);
+
+				args = new Object[] {
+						workflowSimulationJobModelImpl.getSimulationId(),
+						workflowSimulationJobModelImpl.getUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SIMULATIONID_USERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SIMULATIONID_USERID,
+					args);
+			}
+
+			if ((workflowSimulationJobModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						workflowSimulationJobModelImpl.getOriginalUserId()
@@ -1376,6 +2558,7 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 		workflowSimulationJobImpl.setPrimaryKey(workflowSimulationJob.getPrimaryKey());
 
 		workflowSimulationJobImpl.setSimulationJobId(workflowSimulationJob.getSimulationJobId());
+		workflowSimulationJobImpl.setSimulationId(workflowSimulationJob.getSimulationId());
 		workflowSimulationJobImpl.setGroupId(workflowSimulationJob.getGroupId());
 		workflowSimulationJobImpl.setUserId(workflowSimulationJob.getUserId());
 		workflowSimulationJobImpl.setCreateDate(workflowSimulationJob.getCreateDate());
@@ -1668,20 +2851,20 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 	}
 
 	/**
-	 * Returns all the workflows associated with the workflow simulation job.
+	 * Returns all the workflow simulations associated with the workflow simulation job.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @return the workflows associated with the workflow simulation job
+	 * @return the workflow simulations associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<org.kisti.edison.model.Workflow> getWorkflows(long pk)
-		throws SystemException {
-		return getWorkflows(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	public List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk) throws SystemException {
+		return getWorkflowSimulations(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 	/**
-	 * Returns a range of all the workflows associated with the workflow simulation job.
+	 * Returns a range of all the workflow simulations associated with the workflow simulation job.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1690,17 +2873,17 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 	 * @param pk the primary key of the workflow simulation job
 	 * @param start the lower bound of the range of workflow simulation jobs
 	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
-	 * @return the range of workflows associated with the workflow simulation job
+	 * @return the range of workflow simulations associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<org.kisti.edison.model.Workflow> getWorkflows(long pk,
-		int start, int end) throws SystemException {
-		return getWorkflows(pk, start, end, null);
+	public List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk, int start, int end) throws SystemException {
+		return getWorkflowSimulations(pk, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the workflows associated with the workflow simulation job.
+	 * Returns an ordered range of all the workflow simulations associated with the workflow simulation job.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1710,56 +2893,57 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 	 * @param start the lower bound of the range of workflow simulation jobs
 	 * @param end the upper bound of the range of workflow simulation jobs (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of workflows associated with the workflow simulation job
+	 * @return the ordered range of workflow simulations associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<org.kisti.edison.model.Workflow> getWorkflows(long pk,
-		int start, int end, OrderByComparator orderByComparator)
+	public List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		return workflowSimulationJobToWorkflowTableMapper.getRightBaseModels(pk,
+		return workflowSimulationJobToWorkflowSimulationTableMapper.getRightBaseModels(pk,
 			start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns the number of workflows associated with the workflow simulation job.
+	 * Returns the number of workflow simulations associated with the workflow simulation job.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @return the number of workflows associated with the workflow simulation job
+	 * @return the number of workflow simulations associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int getWorkflowsSize(long pk) throws SystemException {
-		long[] pks = workflowSimulationJobToWorkflowTableMapper.getRightPrimaryKeys(pk);
+	public int getWorkflowSimulationsSize(long pk) throws SystemException {
+		long[] pks = workflowSimulationJobToWorkflowSimulationTableMapper.getRightPrimaryKeys(pk);
 
 		return pks.length;
 	}
 
 	/**
-	 * Returns <code>true</code> if the workflow is associated with the workflow simulation job.
+	 * Returns <code>true</code> if the workflow simulation is associated with the workflow simulation job.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPK the primary key of the workflow
-	 * @return <code>true</code> if the workflow is associated with the workflow simulation job; <code>false</code> otherwise
+	 * @param workflowSimulationPK the primary key of the workflow simulation
+	 * @return <code>true</code> if the workflow simulation is associated with the workflow simulation job; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public boolean containsWorkflow(long pk, long workflowPK)
+	public boolean containsWorkflowSimulation(long pk, long workflowSimulationPK)
 		throws SystemException {
-		return workflowSimulationJobToWorkflowTableMapper.containsTableMapping(pk,
-			workflowPK);
+		return workflowSimulationJobToWorkflowSimulationTableMapper.containsTableMapping(pk,
+			workflowSimulationPK);
 	}
 
 	/**
-	 * Returns <code>true</code> if the workflow simulation job has any workflows associated with it.
+	 * Returns <code>true</code> if the workflow simulation job has any workflow simulations associated with it.
 	 *
-	 * @param pk the primary key of the workflow simulation job to check for associations with workflows
-	 * @return <code>true</code> if the workflow simulation job has any workflows associated with it; <code>false</code> otherwise
+	 * @param pk the primary key of the workflow simulation job to check for associations with workflow simulations
+	 * @return <code>true</code> if the workflow simulation job has any workflow simulations associated with it; <code>false</code> otherwise
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public boolean containsWorkflows(long pk) throws SystemException {
-		if (getWorkflowsSize(pk) > 0) {
+	public boolean containsWorkflowSimulations(long pk)
+		throws SystemException {
+		if (getWorkflowSimulationsSize(pk) > 0) {
 			return true;
 		}
 		else {
@@ -1768,195 +2952,198 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 	}
 
 	/**
-	 * Adds an association between the workflow simulation job and the workflow. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Adds an association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPK the primary key of the workflow
+	 * @param workflowSimulationPK the primary key of the workflow simulation
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void addWorkflow(long pk, long workflowPK) throws SystemException {
-		workflowSimulationJobToWorkflowTableMapper.addTableMapping(pk,
-			workflowPK);
+	public void addWorkflowSimulation(long pk, long workflowSimulationPK)
+		throws SystemException {
+		workflowSimulationJobToWorkflowSimulationTableMapper.addTableMapping(pk,
+			workflowSimulationPK);
 	}
 
 	/**
-	 * Adds an association between the workflow simulation job and the workflow. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Adds an association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflow the workflow
+	 * @param workflowSimulation the workflow simulation
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void addWorkflow(long pk, org.kisti.edison.model.Workflow workflow)
+	public void addWorkflowSimulation(long pk,
+		org.kisti.edison.model.WorkflowSimulation workflowSimulation)
 		throws SystemException {
-		workflowSimulationJobToWorkflowTableMapper.addTableMapping(pk,
-			workflow.getPrimaryKey());
+		workflowSimulationJobToWorkflowSimulationTableMapper.addTableMapping(pk,
+			workflowSimulation.getPrimaryKey());
 	}
 
 	/**
-	 * Adds an association between the workflow simulation job and the workflows. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Adds an association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPKs the primary keys of the workflows
+	 * @param workflowSimulationPKs the primary keys of the workflow simulations
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void addWorkflows(long pk, long[] workflowPKs)
+	public void addWorkflowSimulations(long pk, long[] workflowSimulationPKs)
 		throws SystemException {
-		for (long workflowPK : workflowPKs) {
-			workflowSimulationJobToWorkflowTableMapper.addTableMapping(pk,
-				workflowPK);
+		for (long workflowSimulationPK : workflowSimulationPKs) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.addTableMapping(pk,
+				workflowSimulationPK);
 		}
 	}
 
 	/**
-	 * Adds an association between the workflow simulation job and the workflows. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Adds an association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflows the workflows
+	 * @param workflowSimulations the workflow simulations
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void addWorkflows(long pk,
-		List<org.kisti.edison.model.Workflow> workflows)
+	public void addWorkflowSimulations(long pk,
+		List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
 		throws SystemException {
-		for (org.kisti.edison.model.Workflow workflow : workflows) {
-			workflowSimulationJobToWorkflowTableMapper.addTableMapping(pk,
-				workflow.getPrimaryKey());
+		for (org.kisti.edison.model.WorkflowSimulation workflowSimulation : workflowSimulations) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.addTableMapping(pk,
+				workflowSimulation.getPrimaryKey());
 		}
 	}
 
 	/**
-	 * Clears all associations between the workflow simulation job and its workflows. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Clears all associations between the workflow simulation job and its workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
-	 * @param pk the primary key of the workflow simulation job to clear the associated workflows from
+	 * @param pk the primary key of the workflow simulation job to clear the associated workflow simulations from
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void clearWorkflows(long pk) throws SystemException {
-		workflowSimulationJobToWorkflowTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
+	public void clearWorkflowSimulations(long pk) throws SystemException {
+		workflowSimulationJobToWorkflowSimulationTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 	}
 
 	/**
-	 * Removes the association between the workflow simulation job and the workflow. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Removes the association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPK the primary key of the workflow
+	 * @param workflowSimulationPK the primary key of the workflow simulation
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeWorkflow(long pk, long workflowPK)
+	public void removeWorkflowSimulation(long pk, long workflowSimulationPK)
 		throws SystemException {
-		workflowSimulationJobToWorkflowTableMapper.deleteTableMapping(pk,
-			workflowPK);
+		workflowSimulationJobToWorkflowSimulationTableMapper.deleteTableMapping(pk,
+			workflowSimulationPK);
 	}
 
 	/**
-	 * Removes the association between the workflow simulation job and the workflow. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Removes the association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflow the workflow
+	 * @param workflowSimulation the workflow simulation
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeWorkflow(long pk, org.kisti.edison.model.Workflow workflow)
+	public void removeWorkflowSimulation(long pk,
+		org.kisti.edison.model.WorkflowSimulation workflowSimulation)
 		throws SystemException {
-		workflowSimulationJobToWorkflowTableMapper.deleteTableMapping(pk,
-			workflow.getPrimaryKey());
+		workflowSimulationJobToWorkflowSimulationTableMapper.deleteTableMapping(pk,
+			workflowSimulation.getPrimaryKey());
 	}
 
 	/**
-	 * Removes the association between the workflow simulation job and the workflows. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Removes the association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPKs the primary keys of the workflows
+	 * @param workflowSimulationPKs the primary keys of the workflow simulations
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeWorkflows(long pk, long[] workflowPKs)
+	public void removeWorkflowSimulations(long pk, long[] workflowSimulationPKs)
 		throws SystemException {
-		for (long workflowPK : workflowPKs) {
-			workflowSimulationJobToWorkflowTableMapper.deleteTableMapping(pk,
-				workflowPK);
+		for (long workflowSimulationPK : workflowSimulationPKs) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.deleteTableMapping(pk,
+				workflowSimulationPK);
 		}
 	}
 
 	/**
-	 * Removes the association between the workflow simulation job and the workflows. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Removes the association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflows the workflows
+	 * @param workflowSimulations the workflow simulations
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeWorkflows(long pk,
-		List<org.kisti.edison.model.Workflow> workflows)
+	public void removeWorkflowSimulations(long pk,
+		List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
 		throws SystemException {
-		for (org.kisti.edison.model.Workflow workflow : workflows) {
-			workflowSimulationJobToWorkflowTableMapper.deleteTableMapping(pk,
-				workflow.getPrimaryKey());
+		for (org.kisti.edison.model.WorkflowSimulation workflowSimulation : workflowSimulations) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.deleteTableMapping(pk,
+				workflowSimulation.getPrimaryKey());
 		}
 	}
 
 	/**
-	 * Sets the workflows associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Sets the workflow simulations associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflowPKs the primary keys of the workflows to be associated with the workflow simulation job
+	 * @param workflowSimulationPKs the primary keys of the workflow simulations to be associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void setWorkflows(long pk, long[] workflowPKs)
+	public void setWorkflowSimulations(long pk, long[] workflowSimulationPKs)
 		throws SystemException {
-		Set<Long> newWorkflowPKsSet = SetUtil.fromArray(workflowPKs);
-		Set<Long> oldWorkflowPKsSet = SetUtil.fromArray(workflowSimulationJobToWorkflowTableMapper.getRightPrimaryKeys(
+		Set<Long> newWorkflowSimulationPKsSet = SetUtil.fromArray(workflowSimulationPKs);
+		Set<Long> oldWorkflowSimulationPKsSet = SetUtil.fromArray(workflowSimulationJobToWorkflowSimulationTableMapper.getRightPrimaryKeys(
 					pk));
 
-		Set<Long> removeWorkflowPKsSet = new HashSet<Long>(oldWorkflowPKsSet);
+		Set<Long> removeWorkflowSimulationPKsSet = new HashSet<Long>(oldWorkflowSimulationPKsSet);
 
-		removeWorkflowPKsSet.removeAll(newWorkflowPKsSet);
+		removeWorkflowSimulationPKsSet.removeAll(newWorkflowSimulationPKsSet);
 
-		for (long removeWorkflowPK : removeWorkflowPKsSet) {
-			workflowSimulationJobToWorkflowTableMapper.deleteTableMapping(pk,
-				removeWorkflowPK);
+		for (long removeWorkflowSimulationPK : removeWorkflowSimulationPKsSet) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.deleteTableMapping(pk,
+				removeWorkflowSimulationPK);
 		}
 
-		newWorkflowPKsSet.removeAll(oldWorkflowPKsSet);
+		newWorkflowSimulationPKsSet.removeAll(oldWorkflowSimulationPKsSet);
 
-		for (long newWorkflowPK : newWorkflowPKsSet) {
-			workflowSimulationJobToWorkflowTableMapper.addTableMapping(pk,
-				newWorkflowPK);
+		for (long newWorkflowSimulationPK : newWorkflowSimulationPKsSet) {
+			workflowSimulationJobToWorkflowSimulationTableMapper.addTableMapping(pk,
+				newWorkflowSimulationPK);
 		}
 	}
 
 	/**
-	 * Sets the workflows associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 * Sets the workflow simulations associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 	 *
 	 * @param pk the primary key of the workflow simulation job
-	 * @param workflows the workflows to be associated with the workflow simulation job
+	 * @param workflowSimulations the workflow simulations to be associated with the workflow simulation job
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void setWorkflows(long pk,
-		List<org.kisti.edison.model.Workflow> workflows)
+	public void setWorkflowSimulations(long pk,
+		List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
 		throws SystemException {
 		try {
-			long[] workflowPKs = new long[workflows.size()];
+			long[] workflowSimulationPKs = new long[workflowSimulations.size()];
 
-			for (int i = 0; i < workflows.size(); i++) {
-				org.kisti.edison.model.Workflow workflow = workflows.get(i);
+			for (int i = 0; i < workflowSimulations.size(); i++) {
+				org.kisti.edison.model.WorkflowSimulation workflowSimulation = workflowSimulations.get(i);
 
-				workflowPKs[i] = workflow.getPrimaryKey();
+				workflowSimulationPKs[i] = workflowSimulation.getPrimaryKey();
 			}
 
-			setWorkflows(pk, workflowPKs);
+			setWorkflowSimulations(pk, workflowSimulationPKs);
 		}
 		catch (Exception e) {
 			throw processException(e);
 		}
 		finally {
-			FinderCacheUtil.clearCache(WorkflowSimulationJobModelImpl.MAPPING_TABLE_EDWF_WORKFLOW_WORKFLOWINSTANCE_NAME);
+			FinderCacheUtil.clearCache(WorkflowSimulationJobModelImpl.MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_NAME);
 		}
 	}
 
@@ -1984,8 +3171,9 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 			}
 		}
 
-		workflowSimulationJobToWorkflowTableMapper = TableMapperFactory.getTableMapper("EDWF_Workflow_WorkflowInstance",
-				"simulationJobId", "workflowId", this, workflowPersistence);
+		workflowSimulationJobToWorkflowSimulationTableMapper = TableMapperFactory.getTableMapper("EDWF_WorkflowSimulation_WorkflowSimulationJob",
+				"simulationJobId", "simulationId", this,
+				workflowSimulationPersistence);
 	}
 
 	public void destroy() {
@@ -1994,12 +3182,13 @@ public class WorkflowSimulationJobPersistenceImpl extends BasePersistenceImpl<Wo
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
-		TableMapperFactory.removeTableMapper("EDWF_Workflow_WorkflowInstance");
+		TableMapperFactory.removeTableMapper(
+			"EDWF_WorkflowSimulation_WorkflowSimulationJob");
 	}
 
-	@BeanReference(type = WorkflowPersistence.class)
-	protected WorkflowPersistence workflowPersistence;
-	protected TableMapper<WorkflowSimulationJob, org.kisti.edison.model.Workflow> workflowSimulationJobToWorkflowTableMapper;
+	@BeanReference(type = WorkflowSimulationPersistence.class)
+	protected WorkflowSimulationPersistence workflowSimulationPersistence;
+	protected TableMapper<WorkflowSimulationJob, org.kisti.edison.model.WorkflowSimulation> workflowSimulationJobToWorkflowSimulationTableMapper;
 	private static final String _SQL_SELECT_WORKFLOWSIMULATIONJOB = "SELECT workflowSimulationJob FROM WorkflowSimulationJob workflowSimulationJob";
 	private static final String _SQL_SELECT_WORKFLOWSIMULATIONJOB_WHERE = "SELECT workflowSimulationJob FROM WorkflowSimulationJob workflowSimulationJob WHERE ";
 	private static final String _SQL_COUNT_WORKFLOWSIMULATIONJOB = "SELECT COUNT(workflowSimulationJob) FROM WorkflowSimulationJob workflowSimulationJob";

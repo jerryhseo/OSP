@@ -4,7 +4,7 @@
   <author>EDISON</author>
   <namespace>EDWF</namespace>
   
-  <entity name="Workflow" local-service="true" remote-service="false">
+    <entity name="Workflow" local-service="true" remote-service="false">
     <!-- PK fields -->
     <column name="workflowId" type="long" primary="true" id-type="increment"/>
     <!-- Audit fields -->
@@ -15,16 +15,17 @@
     <!-- List fields -->
     <column name="title" type="String" localized="true" />
     <column name="description" type="String" localized="true" />
-    <column name="isPublic" type="boolean" />
+    
     <column name="parentWorkflowId" type="long" />
-    <column name="targetLanguage" type="String" />
+    <!-- <column name="targetLanguage" type="String" /> -->
+    <!-- <column name="isPublic" type="boolean" /> -->
+    <!--<column name="tutorialFileEntryId" type="long"/> -->
     <!-- View fields -->
     <column name="screenLogic" type="String" />
-    <column name="tutorialFileEntryId" type="long"/>
     <!-- collections -->
-    <column name="workflowInstances" type="Collection" 
-      entity="WorkflowInstance" mapping-table="Workflow_WorkflowInstance"/>
-    <!-- Order -->
+    <!-- <column name="workflowInstances" type="Collection" 
+      entity="WorkflowInstance" mapping-table="Workflow_WorkflowInstance"/> -->
+    <!--Order -->
     <order by="desc">
       <order-column name="createDate" />
     </order>
@@ -32,28 +33,21 @@
     <finder name="Title" return-type="Collection">
       <finder-column name="title" comparator="LIKE" />
     </finder>
-    <finder name="IsPublic" return-type="Collection">
-      <finder-column name="isPublic" />
-    </finder>
   </entity>
 
+<!-- 
   <entity name="WorkflowInstance" local-service="true" remote-service="false">
-    <!-- PK fields -->
     <column name="workflowInstanceId" type="long" primary="true" id-type="increment"/>
-    <!-- Audit fields -->
     <column name="companyId" type="long" />
     <column name="userId" type="long" />
     <column name="createDate" type="Date" />
     <column name="modifiedDate" type="Date" />
-    <!-- List fields -->
     <column name="title" type="String" localized="true" />
     <column name="status" type="String" />
     <column name="statusResponse" type="String" />
     <column name="startTime" type="Date" />
     <column name="endTime" type="Date" />
-    <!-- Workflow Definition -->
     <column name="workflowId" type="long" />
-    <!-- Workflow Engine fields -->
     <column name="workflowUUID" type="String" />
     <column name="reuseWorkflowUUID" type="String" />
     <column name="screenLogic" type="String" />
@@ -61,11 +55,9 @@
     <column name="workflows" type="Collection" 
       entity="Workflow" mapping-table="Workflow_WorkflowInstance"/>
     
-    <!-- Order -->
     <order by="desc">
       <order-column name="workflowInstanceId" />
     </order>
-    <!-- Finder methods -->
     <finder name="Title" return-type="Collection">
       <finder-column name="title" comparator="LIKE" />
     </finder>
@@ -73,7 +65,8 @@
       <finder-column name="userId" />
     </finder>
   </entity>
-  
+   -->
+   
   <entity name="WorkflowSimulation" local-service="true" remote-service="false">
     <!-- PK fields -->
     <column name="simulationId" type="long" primary="true" id-type="increment"/>
@@ -82,11 +75,11 @@
     <column name="userId" type="long" />
     <column name="createDate" type="Date" />
     <column name="modifiedDate" type="Date" />
-    <column name="classId" type="long"></column>
-    <column name="customId" type="long"></column>
+    <column name="classId" type="long"/>
+    <column name="customId" type="long"/>
     
     <!-- List fields -->
-    <column name="title" type="String" localized="true"/>
+    <column name="title" type="String"/>
     <column name="testYn" type="boolean"/>
     
     <!-- Workflow Definition -->
@@ -101,6 +94,11 @@
       <order-column name="createDate" />
     </order>
     <!-- Finder methods -->
+    <finder name="Title_UserId" return-type="Collection">
+      <finder-column name="title" comparator="LIKE" />
+      <finder-column name="userId"></finder-column>
+    </finder>
+    
     <finder name="Title" return-type="Collection">
       <finder-column name="title" comparator="LIKE" />
     </finder>
@@ -112,6 +110,7 @@
   <entity name="WorkflowSimulationJob" local-service="true" remote-service="false">
     <!-- PK fields -->
     <column name="simulationJobId" type="long" primary="true" id-type="increment"/>
+    <column name="simulationId" type="long"/>
     
     <!-- Audit fields -->
     <column name="groupId" type="long"/>
@@ -119,7 +118,7 @@
     <column name="createDate" type="Date" />
     <column name="modifiedDate" type="Date" />
     <!-- List fields -->
-    <column name="title" type="String" localized="true" />
+    <column name="title" type="String"/>
     <column name="status" type="String" />
     <column name="statusResponse" type="String" />
     <column name="startTime" type="Date" />
@@ -131,14 +130,23 @@
     <column name="reuseWorkflowUUID" type="String" />
     <column name="screenLogic" type="String" />
     
-    <column name="workflows" type="Collection" 
-      entity="Workflow" mapping-table="Workflow_WorkflowInstance"/>
+    <column name="workflowSimulations" type="Collection" 
+      entity="WorkflowSimulation" mapping-table="WorkflowSimulation_WorkflowSimulationJob"/>
     
     <!-- Order -->
     <order by="desc">
       <order-column name="simulationJobId" />
     </order>
     <!-- Finder methods -->
+    <finder name="SimulationId_Title_UserId" return-type="Collection">
+      <finder-column name="simulationId"></finder-column>
+      <finder-column name="title" comparator="LIKE" />
+      <finder-column name="userId"></finder-column>
+    </finder>
+    <finder name="SimulationId_UserId" return-type="Collection">
+      <finder-column name="simulationId"></finder-column>
+      <finder-column name="userId"></finder-column>
+    </finder>
     <finder name="Title" return-type="Collection">
       <finder-column name="title" comparator="LIKE" />
     </finder>
@@ -146,5 +154,18 @@
       <finder-column name="userId" />
     </finder>
   </entity>
+  
+<!-- 401 Unauthorized
+403 Forbidden
+404 Not Found
+500 Internal Server error 
+-->
+  <exceptions>
+    <exception>WFEngineUnauthorized</exception>
+    <exception>WFEngineForbidden</exception>
+    <exception>WFEngineNotFound</exception>
+    <exception>WFEngine500</exception>
+    <exception>WFEngineOther</exception>
+  </exceptions>
   
 </service-builder>

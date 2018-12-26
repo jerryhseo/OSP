@@ -37,7 +37,7 @@ import java.util.Date;
 public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("{workflowId=");
 		sb.append(workflowId);
@@ -53,16 +53,10 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 		sb.append(title);
 		sb.append(", description=");
 		sb.append(description);
-		sb.append(", isPublic=");
-		sb.append(isPublic);
 		sb.append(", parentWorkflowId=");
 		sb.append(parentWorkflowId);
-		sb.append(", targetLanguage=");
-		sb.append(targetLanguage);
 		sb.append(", screenLogic=");
 		sb.append(screenLogic);
-		sb.append(", tutorialFileEntryId=");
-		sb.append(tutorialFileEntryId);
 		sb.append("}");
 
 		return sb.toString();
@@ -104,15 +98,7 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 			workflowImpl.setDescription(description);
 		}
 
-		workflowImpl.setIsPublic(isPublic);
 		workflowImpl.setParentWorkflowId(parentWorkflowId);
-
-		if (targetLanguage == null) {
-			workflowImpl.setTargetLanguage(StringPool.BLANK);
-		}
-		else {
-			workflowImpl.setTargetLanguage(targetLanguage);
-		}
 
 		if (screenLogic == null) {
 			workflowImpl.setScreenLogic(StringPool.BLANK);
@@ -120,8 +106,6 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 		else {
 			workflowImpl.setScreenLogic(screenLogic);
 		}
-
-		workflowImpl.setTutorialFileEntryId(tutorialFileEntryId);
 
 		workflowImpl.resetOriginalValues();
 
@@ -137,11 +121,8 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 		modifiedDate = objectInput.readLong();
 		title = objectInput.readUTF();
 		description = objectInput.readUTF();
-		isPublic = objectInput.readBoolean();
 		parentWorkflowId = objectInput.readLong();
-		targetLanguage = objectInput.readUTF();
 		screenLogic = objectInput.readUTF();
-		tutorialFileEntryId = objectInput.readLong();
 	}
 
 	@Override
@@ -167,15 +148,7 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 			objectOutput.writeUTF(description);
 		}
 
-		objectOutput.writeBoolean(isPublic);
 		objectOutput.writeLong(parentWorkflowId);
-
-		if (targetLanguage == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(targetLanguage);
-		}
 
 		if (screenLogic == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
@@ -183,8 +156,6 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 		else {
 			objectOutput.writeUTF(screenLogic);
 		}
-
-		objectOutput.writeLong(tutorialFileEntryId);
 	}
 
 	public long workflowId;
@@ -194,9 +165,6 @@ public class WorkflowCacheModel implements CacheModel<Workflow>, Externalizable 
 	public long modifiedDate;
 	public String title;
 	public String description;
-	public boolean isPublic;
 	public long parentWorkflowId;
-	public String targetLanguage;
 	public String screenLogic;
-	public long tutorialFileEntryId;
 }

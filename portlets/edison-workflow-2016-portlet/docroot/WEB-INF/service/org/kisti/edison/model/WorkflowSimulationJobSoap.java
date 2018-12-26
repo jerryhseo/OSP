@@ -32,6 +32,7 @@ public class WorkflowSimulationJobSoap implements Serializable {
 		WorkflowSimulationJobSoap soapModel = new WorkflowSimulationJobSoap();
 
 		soapModel.setSimulationJobId(model.getSimulationJobId());
+		soapModel.setSimulationId(model.getSimulationId());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setCreateDate(model.getCreateDate());
@@ -106,6 +107,14 @@ public class WorkflowSimulationJobSoap implements Serializable {
 
 	public void setSimulationJobId(long simulationJobId) {
 		_simulationJobId = simulationJobId;
+	}
+
+	public long getSimulationId() {
+		return _simulationId;
+	}
+
+	public void setSimulationId(long simulationId) {
+		_simulationId = simulationId;
 	}
 
 	public long getGroupId() {
@@ -213,6 +222,7 @@ public class WorkflowSimulationJobSoap implements Serializable {
 	}
 
 	private long _simulationJobId;
+	private long _simulationId;
 	private long _groupId;
 	private long _userId;
 	private Date _createDate;

@@ -91,11 +91,8 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("title", getTitle());
 		attributes.put("description", getDescription());
-		attributes.put("isPublic", getIsPublic());
 		attributes.put("parentWorkflowId", getParentWorkflowId());
-		attributes.put("targetLanguage", getTargetLanguage());
 		attributes.put("screenLogic", getScreenLogic());
-		attributes.put("tutorialFileEntryId", getTutorialFileEntryId());
 
 		return attributes;
 	}
@@ -144,34 +141,16 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 			setDescription(description);
 		}
 
-		Boolean isPublic = (Boolean)attributes.get("isPublic");
-
-		if (isPublic != null) {
-			setIsPublic(isPublic);
-		}
-
 		Long parentWorkflowId = (Long)attributes.get("parentWorkflowId");
 
 		if (parentWorkflowId != null) {
 			setParentWorkflowId(parentWorkflowId);
 		}
 
-		String targetLanguage = (String)attributes.get("targetLanguage");
-
-		if (targetLanguage != null) {
-			setTargetLanguage(targetLanguage);
-		}
-
 		String screenLogic = (String)attributes.get("screenLogic");
 
 		if (screenLogic != null) {
 			setScreenLogic(screenLogic);
-		}
-
-		Long tutorialFileEntryId = (Long)attributes.get("tutorialFileEntryId");
-
-		if (tutorialFileEntryId != null) {
-			setTutorialFileEntryId(tutorialFileEntryId);
 		}
 	}
 
@@ -549,34 +528,6 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 	}
 
 	@Override
-	public boolean getIsPublic() {
-		return _isPublic;
-	}
-
-	@Override
-	public boolean isIsPublic() {
-		return _isPublic;
-	}
-
-	@Override
-	public void setIsPublic(boolean isPublic) {
-		_isPublic = isPublic;
-
-		if (_workflowRemoteModel != null) {
-			try {
-				Class<?> clazz = _workflowRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setIsPublic", boolean.class);
-
-				method.invoke(_workflowRemoteModel, isPublic);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
 	public long getParentWorkflowId() {
 		return _parentWorkflowId;
 	}
@@ -601,30 +552,6 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 	}
 
 	@Override
-	public String getTargetLanguage() {
-		return _targetLanguage;
-	}
-
-	@Override
-	public void setTargetLanguage(String targetLanguage) {
-		_targetLanguage = targetLanguage;
-
-		if (_workflowRemoteModel != null) {
-			try {
-				Class<?> clazz = _workflowRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setTargetLanguage",
-						String.class);
-
-				method.invoke(_workflowRemoteModel, targetLanguage);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
 	public String getScreenLogic() {
 		return _screenLogic;
 	}
@@ -640,30 +567,6 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 				Method method = clazz.getMethod("setScreenLogic", String.class);
 
 				method.invoke(_workflowRemoteModel, screenLogic);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public long getTutorialFileEntryId() {
-		return _tutorialFileEntryId;
-	}
-
-	@Override
-	public void setTutorialFileEntryId(long tutorialFileEntryId) {
-		_tutorialFileEntryId = tutorialFileEntryId;
-
-		if (_workflowRemoteModel != null) {
-			try {
-				Class<?> clazz = _workflowRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setTutorialFileEntryId",
-						long.class);
-
-				method.invoke(_workflowRemoteModel, tutorialFileEntryId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -842,11 +745,8 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 		clone.setModifiedDate(getModifiedDate());
 		clone.setTitle(getTitle());
 		clone.setDescription(getDescription());
-		clone.setIsPublic(getIsPublic());
 		clone.setParentWorkflowId(getParentWorkflowId());
-		clone.setTargetLanguage(getTargetLanguage());
 		clone.setScreenLogic(getScreenLogic());
-		clone.setTutorialFileEntryId(getTutorialFileEntryId());
 
 		return clone;
 	}
@@ -899,7 +799,7 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("{workflowId=");
 		sb.append(getWorkflowId());
@@ -915,16 +815,10 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 		sb.append(getTitle());
 		sb.append(", description=");
 		sb.append(getDescription());
-		sb.append(", isPublic=");
-		sb.append(getIsPublic());
 		sb.append(", parentWorkflowId=");
 		sb.append(getParentWorkflowId());
-		sb.append(", targetLanguage=");
-		sb.append(getTargetLanguage());
 		sb.append(", screenLogic=");
 		sb.append(getScreenLogic());
-		sb.append(", tutorialFileEntryId=");
-		sb.append(getTutorialFileEntryId());
 		sb.append("}");
 
 		return sb.toString();
@@ -932,7 +826,7 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.model.Workflow");
@@ -967,24 +861,12 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 		sb.append(getDescription());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>isPublic</column-name><column-value><![CDATA[");
-		sb.append(getIsPublic());
-		sb.append("]]></column-value></column>");
-		sb.append(
 			"<column><column-name>parentWorkflowId</column-name><column-value><![CDATA[");
 		sb.append(getParentWorkflowId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>targetLanguage</column-name><column-value><![CDATA[");
-		sb.append(getTargetLanguage());
-		sb.append("]]></column-value></column>");
-		sb.append(
 			"<column><column-name>screenLogic</column-name><column-value><![CDATA[");
 		sb.append(getScreenLogic());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>tutorialFileEntryId</column-name><column-value><![CDATA[");
-		sb.append(getTutorialFileEntryId());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -1002,11 +884,8 @@ public class WorkflowClp extends BaseModelImpl<Workflow> implements Workflow {
 	private String _titleCurrentLanguageId;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
-	private boolean _isPublic;
 	private long _parentWorkflowId;
-	private String _targetLanguage;
 	private String _screenLogic;
-	private long _tutorialFileEntryId;
 	private BaseModel<?> _workflowRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.service.ClpSerializer.class;
 }

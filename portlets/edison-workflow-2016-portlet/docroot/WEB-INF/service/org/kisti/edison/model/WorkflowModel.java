@@ -349,27 +349,6 @@ public interface WorkflowModel extends BaseModel<Workflow> {
 		Locale defaultLocale);
 
 	/**
-	 * Returns the is public of this workflow.
-	 *
-	 * @return the is public of this workflow
-	 */
-	public boolean getIsPublic();
-
-	/**
-	 * Returns <code>true</code> if this workflow is is public.
-	 *
-	 * @return <code>true</code> if this workflow is is public; <code>false</code> otherwise
-	 */
-	public boolean isIsPublic();
-
-	/**
-	 * Sets whether this workflow is is public.
-	 *
-	 * @param isPublic the is public of this workflow
-	 */
-	public void setIsPublic(boolean isPublic);
-
-	/**
 	 * Returns the parent workflow ID of this workflow.
 	 *
 	 * @return the parent workflow ID of this workflow
@@ -382,21 +361,6 @@ public interface WorkflowModel extends BaseModel<Workflow> {
 	 * @param parentWorkflowId the parent workflow ID of this workflow
 	 */
 	public void setParentWorkflowId(long parentWorkflowId);
-
-	/**
-	 * Returns the target language of this workflow.
-	 *
-	 * @return the target language of this workflow
-	 */
-	@AutoEscape
-	public String getTargetLanguage();
-
-	/**
-	 * Sets the target language of this workflow.
-	 *
-	 * @param targetLanguage the target language of this workflow
-	 */
-	public void setTargetLanguage(String targetLanguage);
 
 	/**
 	 * Returns the screen logic of this workflow.
@@ -412,20 +376,6 @@ public interface WorkflowModel extends BaseModel<Workflow> {
 	 * @param screenLogic the screen logic of this workflow
 	 */
 	public void setScreenLogic(String screenLogic);
-
-	/**
-	 * Returns the tutorial file entry ID of this workflow.
-	 *
-	 * @return the tutorial file entry ID of this workflow
-	 */
-	public long getTutorialFileEntryId();
-
-	/**
-	 * Sets the tutorial file entry ID of this workflow.
-	 *
-	 * @param tutorialFileEntryId the tutorial file entry ID of this workflow
-	 */
-	public void setTutorialFileEntryId(long tutorialFileEntryId);
 
 	@Override
 	public boolean isNew();

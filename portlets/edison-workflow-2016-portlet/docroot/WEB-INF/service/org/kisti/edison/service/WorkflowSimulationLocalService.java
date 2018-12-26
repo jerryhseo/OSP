@@ -376,4 +376,24 @@ public interface WorkflowSimulationLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		java.lang.String title, long userId, int begin, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public org.kisti.edison.model.WorkflowSimulation updateWorkflowSimulation(
+		long simulationId,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		com.liferay.portal.model.User user)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }
