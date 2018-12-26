@@ -312,9 +312,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     function drawScienceAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
-        
+
         var scienceAppData = {
-            sciecneAppId: data.scienceAppId,
+            scienceAppId: data.scienceAppId,
             runType: data.runType,
             name: data.name,
             version: data.version,
@@ -577,22 +577,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         build: function($trigger, e) {
             var wfWindowId = $trigger.attr("id");
             var appData = $trigger.data();
+            
+            var node = currentJsPlumbInstance.getNode(wfWindowId);
+            var nodeData = node.data;
+            var runType = nodeData.scienceAppData.runType;
+            
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
-            if (appData["appType"] == WF_APP_TYPES.APP.NAME) {
-                items["items"]["open-info"] = {
-                    name: "App Information",
-                    icon: "info",
-                    callback: function(key, options) {
-                        var scienceAppId = appData["scienceAppId"];
-                        var fn = window[namespace + "openSolverDeatilPopup"];
-                        if (fn) {
-                            fn.apply(null, [scienceAppId]);
-                        }
-                    }
-                };
-            }
-            if (appData["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+            if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Converter Script",
                     icon: "edit",
@@ -610,8 +602,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
                     }
                 };
-            }
-            if (appData["appType"] == WF_APP_TYPES.CONTROLLER.NAME) {
+            } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Condition Script",
                     icon: "edit",
@@ -629,9 +620,23 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
                     }
                 };
+            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
+            } else {
+            	items["items"]["open-info"] = {
+                        name: "App Information",
+                        icon: "info",
+                        callback: function(key, options) {
+                        	console.log(node);
+                            var scienceAppId = node.data.scienceAppData.scienceAppId;
+                            var fn = window[namespace + "openSolverDeatilPopup"];
+                            if (fn) {
+                                fn.apply(null, [scienceAppId]);
+                            }
+                        }
+                    };
             }
-
-            if (appData["startPoint"]) {
+            
+            if (nodeData.startPoint) {
                 items["items"]["is-start-point"] = {
                     name: "Start Point",
                     icon: "fa-check-square",
@@ -641,27 +646,30 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             }
 
             if (!appData.workflowStatus) {
-                if (appData["startPoint"]) {
+                if (nodeData.startPoint) {
                     items["items"]["start-point"] = {
                         name: "Remove Start Point",
                         icon: "fa-remove",
                         callback: function(key, options) {
-                            delete appData["startPoint"];
+                            nodeData = node.data;
+                            nodeData.startPoint = false;
                         }
                     };
+                    
                 }
 
-                if (appData["appType"] !== WF_APP_TYPES.CONTROLLER.NAME && !appData["startPoint"]) {
+                if (runType !== WF_APP_TYPES.CONTROLLER.NAME && !nodeData.startPoint) {
                     items["items"]["start-point"] = {
                         name: "Start Point",
                         icon: "fa-play",
                         callback: function(key, options) {
-                            appData["startPoint"] = true;
+                        	nodeData = node.data;
+                            nodeData.startPoint = true;
                         }
                     };
                 }
 
-                if (appData["runType"] === "Parallel") {
+                if (runType === "Parallel") {
                     items["items"]["mpi-title"] = {
                         name: "MPI Setting",
                         icon: "edit",
