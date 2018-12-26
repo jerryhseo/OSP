@@ -1658,6 +1658,171 @@ public class ScienceAppUtil {
 	}
 
 	/**
+	* Returns all the science apps where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @return the matching science apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.science.model.ScienceApp> findByWorkflowId(
+		long workflowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByWorkflowId(workflowId);
+	}
+
+	/**
+	* Returns a range of all the science apps where workflowId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.science.model.impl.ScienceAppModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param start the lower bound of the range of science apps
+	* @param end the upper bound of the range of science apps (not inclusive)
+	* @return the range of matching science apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.science.model.ScienceApp> findByWorkflowId(
+		long workflowId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByWorkflowId(workflowId, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the science apps where workflowId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.science.model.impl.ScienceAppModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param start the lower bound of the range of science apps
+	* @param end the upper bound of the range of science apps (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching science apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.science.model.ScienceApp> findByWorkflowId(
+		long workflowId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByWorkflowId(workflowId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first science app in the ordered set where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching science app
+	* @throws org.kisti.edison.science.NoSuchScienceAppException if a matching science app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.science.model.ScienceApp findByWorkflowId_First(
+		long workflowId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return getPersistence()
+				   .findByWorkflowId_First(workflowId, orderByComparator);
+	}
+
+	/**
+	* Returns the first science app in the ordered set where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching science app, or <code>null</code> if a matching science app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.science.model.ScienceApp fetchByWorkflowId_First(
+		long workflowId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByWorkflowId_First(workflowId, orderByComparator);
+	}
+
+	/**
+	* Returns the last science app in the ordered set where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching science app
+	* @throws org.kisti.edison.science.NoSuchScienceAppException if a matching science app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.science.model.ScienceApp findByWorkflowId_Last(
+		long workflowId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return getPersistence()
+				   .findByWorkflowId_Last(workflowId, orderByComparator);
+	}
+
+	/**
+	* Returns the last science app in the ordered set where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching science app, or <code>null</code> if a matching science app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.science.model.ScienceApp fetchByWorkflowId_Last(
+		long workflowId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByWorkflowId_Last(workflowId, orderByComparator);
+	}
+
+	/**
+	* Returns the science apps before and after the current science app in the ordered set where workflowId = &#63;.
+	*
+	* @param scienceAppId the primary key of the current science app
+	* @param workflowId the workflow ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next science app
+	* @throws org.kisti.edison.science.NoSuchScienceAppException if a science app with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static org.kisti.edison.science.model.ScienceApp[] findByWorkflowId_PrevAndNext(
+		long scienceAppId, long workflowId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return getPersistence()
+				   .findByWorkflowId_PrevAndNext(scienceAppId, workflowId,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the science apps where workflowId = &#63; from the database.
+	*
+	* @param workflowId the workflow ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByWorkflowId(long workflowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByWorkflowId(workflowId);
+	}
+
+	/**
+	* Returns the number of science apps where workflowId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @return the number of matching science apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByWorkflowId(long workflowId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByWorkflowId(workflowId);
+	}
+
+	/**
 	* Returns the science app where name = &#63; and version = &#63; or throws a {@link org.kisti.edison.science.NoSuchScienceAppException} if it could not be found.
 	*
 	* @param name the name

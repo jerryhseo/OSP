@@ -452,6 +452,7 @@ public class WorkflowSimulationLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+<<<<<<< HEAD
 	public static java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
 		java.lang.String title, long userId, int begin, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -477,6 +478,22 @@ public class WorkflowSimulationLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().updateWorkflowSimulation(simulationId, params, user);
+=======
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringJobList(
+		long simulationId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getWorkflowMonitoringJobList(simulationId, locale);
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringList(
+		long userId, java.lang.String searchValue, long simulationId,
+		long jobStatus, long classId, int begin, int end,
+		java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getWorkflowMonitoringList(userId, searchValue,
+			simulationId, jobStatus, classId, begin, end, locale);
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 	}
 
 	public static void clearService() {

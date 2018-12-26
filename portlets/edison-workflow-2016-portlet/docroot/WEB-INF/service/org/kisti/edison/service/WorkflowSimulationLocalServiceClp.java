@@ -187,6 +187,7 @@ public class WorkflowSimulationLocalServiceClp
 
 		_methodParameterTypes33 = new String[] { "java.lang.String" };
 
+<<<<<<< HEAD
 		_methodName35 = "getWorkflowSimulations";
 
 		_methodParameterTypes35 = new String[] {
@@ -207,6 +208,17 @@ public class WorkflowSimulationLocalServiceClp
 
 		_methodParameterTypes38 = new String[] {
 				"long", "java.util.Map", "com.liferay.portal.model.User"
+=======
+		_methodName35 = "getWorkflowMonitoringJobList";
+
+		_methodParameterTypes35 = new String[] { "long", "java.util.Locale" };
+
+		_methodName36 = "getWorkflowMonitoringList";
+
+		_methodParameterTypes36 = new String[] {
+				"long", "java.lang.String", "long", "long", "long", "int", "int",
+				"java.util.Locale"
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 			};
 	}
 
@@ -1244,8 +1256,13 @@ public class WorkflowSimulationLocalServiceClp
 	}
 
 	@Override
+<<<<<<< HEAD
 	public java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
 		java.lang.String title, long userId, int begin, int end)
+=======
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringJobList(
+		long simulationId, java.util.Locale locale)
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
@@ -1253,6 +1270,7 @@ public class WorkflowSimulationLocalServiceClp
 			returnObj = _invokableLocalService.invokeMethod(_methodName35,
 					_methodParameterTypes35,
 					new Object[] {
+<<<<<<< HEAD
 						ClpSerializer.translateInput(title),
 						
 					userId,
@@ -1260,6 +1278,11 @@ public class WorkflowSimulationLocalServiceClp
 					begin,
 						
 					end
+=======
+						simulationId,
+						
+					ClpSerializer.translateInput(locale)
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 					});
 		}
 		catch (Throwable t) {
@@ -1278,16 +1301,28 @@ public class WorkflowSimulationLocalServiceClp
 			}
 		}
 
+<<<<<<< HEAD
 		return (java.util.List<org.kisti.edison.model.WorkflowSimulation>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
 	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation()
+=======
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringList(
+		long userId, java.lang.String searchValue, long simulationId,
+		long jobStatus, long classId, int begin, int end,
+		java.util.Locale locale)
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+<<<<<<< HEAD
 					_methodParameterTypes36, new Object[] {  });
 		}
 		catch (Throwable t) {
@@ -1362,15 +1397,37 @@ public class WorkflowSimulationLocalServiceClp
 					ClpSerializer.translateInput(params),
 						
 					ClpSerializer.translateInput(user)
+=======
+					_methodParameterTypes36,
+					new Object[] {
+						userId,
+						
+					ClpSerializer.translateInput(searchValue),
+						
+					simulationId,
+						
+					jobStatus,
+						
+					classId,
+						
+					begin,
+						
+					end,
+						
+					ClpSerializer.translateInput(locale)
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
+<<<<<<< HEAD
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
+=======
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
@@ -1384,7 +1441,11 @@ public class WorkflowSimulationLocalServiceClp
 			}
 		}
 
+<<<<<<< HEAD
 		return (org.kisti.edison.model.WorkflowSimulation)ClpSerializer.translateOutput(returnObj);
+=======
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -1460,8 +1521,11 @@ public class WorkflowSimulationLocalServiceClp
 	private String[] _methodParameterTypes35;
 	private String _methodName36;
 	private String[] _methodParameterTypes36;
+<<<<<<< HEAD
 	private String _methodName37;
 	private String[] _methodParameterTypes37;
 	private String _methodName38;
 	private String[] _methodParameterTypes38;
+=======
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 }

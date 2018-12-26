@@ -151,11 +151,11 @@ public class JobController {
 		}
 	}
 	
-	private boolean transferJobDataToSDR(ResourceRequest request,String collectionId,SimulationJob simualtionJob,long scienceAppId, String jobTitle){
+	private boolean transferJobDataToSDR(ResourceRequest request,String collectionId,SimulationJob simulationJob,long scienceAppId, String jobTitle){
 		try{
 			final int REPO_ID = 1;
 			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
-			String jobUuid = simualtionJob.getJobUuid();
+			String jobUuid = simulationJob.getJobUuid();
 			SimulationJobData simulationJobData = SimulationJobDataLocalServiceUtil.getSimulationJobData(jobUuid);
 			ServiceContext sc = ServiceContextFactory.getInstance(request);
 			
@@ -171,8 +171,8 @@ public class JobController {
 					REPO_ID,  
 					simulationJobData.getJobData(), 
 					scienceApp.getLayout(), 
-					simualtionJob.getJobStartDt(), 
-					simualtionJob.getJobEndDt(), 
+					simulationJob.getJobStartDt(), 
+					simulationJob.getJobEndDt(), 
 					scienceApp.getRunType(), 
 					sc);
 			

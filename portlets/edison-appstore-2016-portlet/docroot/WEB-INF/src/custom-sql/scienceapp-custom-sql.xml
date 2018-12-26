@@ -674,4 +674,26 @@
 		]]>
 	</sql>
 	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.countScienceAppByWorkflowId" >
+		<![CDATA[
+		SELECT 
+			COUNT(scienceAppId) AS count 
+		FROM
+			EDAPP_ScienceApp
+		WHERE
+			workflowId = #workflowId#
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.science.service.persistence.ScienceAppFinder.getScienceAppByWorkflowId" >
+		<![CDATA[
+		SELECT 
+			scienceAppId
+		FROM
+			EDAPP_ScienceApp
+		WHERE
+			workflowId = #workflowId#
+		]]>
+	</sql>
+	
 </custom-sql>

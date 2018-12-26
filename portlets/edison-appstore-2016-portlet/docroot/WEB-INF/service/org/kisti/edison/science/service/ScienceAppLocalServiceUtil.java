@@ -1334,6 +1334,21 @@ public class ScienceAppLocalServiceUtil {
 		return getService().getSimulationUsersOfScienceApp(scienceAppId);
 	}
 
+	public static int countScienceAppByWorkflowId(long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().countScienceAppByWorkflowId(workflowId);
+	}
+
+	public static org.kisti.edison.science.model.ScienceApp getScienceAppByWorkflowId(
+		long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return getService().getScienceAppByWorkflowId(workflowId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

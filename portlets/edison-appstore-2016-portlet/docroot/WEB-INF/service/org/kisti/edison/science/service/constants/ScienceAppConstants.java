@@ -3,6 +3,7 @@ package org.kisti.edison.science.service.constants;
 public class ScienceAppConstants {
 	public final static String APP_TYPE_SOLVER = "Solver";
 	public final static String APP_TYPE_CONVERTER = "Converter";
+	public final static String APP_TYPE_WORKFLOW = "Workflow";
 	
 	public final static String APP_TYPE_EDITOR = "Editor";
 	public final static String APP_TYPE_ANALYZER = "Analyzer";

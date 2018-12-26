@@ -28,6 +28,8 @@ public class ScienceAppException extends PortalException {
 	public static final int SCIENCE_APP_NO_AUTH = 3;
 	
 	public static final int SCIENCE_APP_FILE_NOT_SUPPORT_OS = 4;
+	
+	public static final int EXISTS_WORKFLOW_APP_DATABASE = 5;
 
 	public ScienceAppException() {
 		super();

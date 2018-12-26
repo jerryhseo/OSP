@@ -37,10 +37,10 @@ var AppTree = (function(namespace, $, designer){
                 "groupId": getSpecificSiteGroupId(),
                 "inputports": {
                     "criteria": {
+                    	"name_": "criteria",
                         "inputData_": {
                             "type_": "file"
                         },
-                        "name_": "criteria",
                         "defaultEditor_": "none",
                         "dataType_": {
                             "name": "controller_input",
@@ -94,7 +94,6 @@ var AppTree = (function(namespace, $, designer){
                             "relative_": true
                         }
                     }
-
                 }
             }
         });
@@ -173,6 +172,57 @@ var AppTree = (function(namespace, $, designer){
         $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
         $(appTreeSelector).jstree().create_node("converter_category", nodes[1], "first");
     }
+    
+    
+    function fileComponet(){
+        var dArr = [];
+        dArr.push({
+            "text": "Component",
+            "parent": "#",
+            "type": "category",
+            "id": "componet_category"
+        });
+        dArr.push({
+            "text": "File Component",
+            "parent": "componet_category",
+            "type": "app",
+            "id": "file_component",
+            "data": {
+                "appType": "FileComponent",
+                "name": "File Component",
+                "text": "File Component",
+                "parent": "componet_category",
+                "groupId": getSpecificSiteGroupId(),
+                "outputports": {
+                    "stdout.out": {
+                        "name_": "stdout.out",
+                        "defaultAnalyzer_": "none",
+                        "dataType_": {
+                            "name": "converter_stdout",
+                            "version": ""
+                        },
+                        "mandatory_": false,
+                        "outputData_": {
+                            "id_": 0,
+                            "parent_": "result",
+                            "type_": "file",
+                            "name_": "stdout.out",
+                            "relative_": true
+                        }
+                    }
+                }
+            }
+        });
+        return dArr;
+    }
+    
+    function addFileComponet(appTreeSelector){
+        var nodes = fileComponet();
+        $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
+        $(appTreeSelector).jstree().create_node("componet_category", nodes[1], "first");
+    }
+    
+    
 
     function drawAppTree(appTreeSelector, searchSelector, initData) {
         $(appTreeSelector).jstree({
@@ -205,6 +255,7 @@ var AppTree = (function(namespace, $, designer){
         }).bind("loaded.jstree", function (event, data) {
             addDynamicConverter(appTreeSelector);
             addController(appTreeSelector);
+            addFileComponet(appTreeSelector);
             $(searchSelector).keyup(function (e) {
                 var searchString = $(this).val();
                 $(appTreeSelector).jstree(true).search(searchString);
@@ -237,7 +288,7 @@ var AppTree = (function(namespace, $, designer){
                 if(eventTarget.closest('.wf-drop').length) {
                     var nodeId = data.data.nodes[0];
                     var node = $(appTreeSelector).jstree(true).get_node(nodeId);
-                    designer.addScienceApp(eventTarget.closest('.wf-drop'), data.event.pageX, data.event.pageY, node.data);
+                    designer.addScienceApp(data.event.pageX, data.event.pageY, node.data);
                 }
             }
             $(".menu-panel").show();

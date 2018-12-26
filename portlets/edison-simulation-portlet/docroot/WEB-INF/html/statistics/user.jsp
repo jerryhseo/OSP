@@ -110,7 +110,7 @@
 	<div style="clear: both; width:100%;text-align:right; font-size: 14px; font-weight: bold;">
 		<div style="float:right;height:33px;padding-top: 7px;">Result : <span id="totalSpan"></span></div>
 	</div>	
-	<br><br>
+	<div class="h20"></div>
 	
 	<img id="loadingBox" src="${contextPath}/images/loading.gif" width="400" style="display: none;"/>
 

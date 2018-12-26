@@ -1193,6 +1193,238 @@ public class WorkflowSimulationJobUtil {
 		getPersistence().setWorkflowSimulations(pk, workflowSimulations);
 	}
 
+	/**
+	* Returns all the workflow simulations associated with the workflow simulation job.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @return the workflow simulations associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getWorkflowSimulations(pk);
+	}
+
+	/**
+	* Returns a range of all the workflow simulations associated with the workflow simulation job.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param start the lower bound of the range of workflow simulation jobs
+	* @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	* @return the range of workflow simulations associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getWorkflowSimulations(pk, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the workflow simulations associated with the workflow simulation job.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationJobModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param start the lower bound of the range of workflow simulation jobs
+	* @param end the upper bound of the range of workflow simulation jobs (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of workflow simulations associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long pk, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .getWorkflowSimulations(pk, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the number of workflow simulations associated with the workflow simulation job.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @return the number of workflow simulations associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int getWorkflowSimulationsSize(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getWorkflowSimulationsSize(pk);
+	}
+
+	/**
+	* Returns <code>true</code> if the workflow simulation is associated with the workflow simulation job.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPK the primary key of the workflow simulation
+	* @return <code>true</code> if the workflow simulation is associated with the workflow simulation job; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	public static boolean containsWorkflowSimulation(long pk,
+		long workflowSimulationPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .containsWorkflowSimulation(pk, workflowSimulationPK);
+	}
+
+	/**
+	* Returns <code>true</code> if the workflow simulation job has any workflow simulations associated with it.
+	*
+	* @param pk the primary key of the workflow simulation job to check for associations with workflow simulations
+	* @return <code>true</code> if the workflow simulation job has any workflow simulations associated with it; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	public static boolean containsWorkflowSimulations(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().containsWorkflowSimulations(pk);
+	}
+
+	/**
+	* Adds an association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPK the primary key of the workflow simulation
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addWorkflowSimulation(long pk, long workflowSimulationPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addWorkflowSimulation(pk, workflowSimulationPK);
+	}
+
+	/**
+	* Adds an association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulation the workflow simulation
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addWorkflowSimulation(long pk,
+		org.kisti.edison.model.WorkflowSimulation workflowSimulation)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addWorkflowSimulation(pk, workflowSimulation);
+	}
+
+	/**
+	* Adds an association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPKs the primary keys of the workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addWorkflowSimulations(long pk,
+		long[] workflowSimulationPKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addWorkflowSimulations(pk, workflowSimulationPKs);
+	}
+
+	/**
+	* Adds an association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulations the workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addWorkflowSimulations(long pk,
+		java.util.List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addWorkflowSimulations(pk, workflowSimulations);
+	}
+
+	/**
+	* Clears all associations between the workflow simulation job and its workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job to clear the associated workflow simulations from
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void clearWorkflowSimulations(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().clearWorkflowSimulations(pk);
+	}
+
+	/**
+	* Removes the association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPK the primary key of the workflow simulation
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeWorkflowSimulation(long pk,
+		long workflowSimulationPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeWorkflowSimulation(pk, workflowSimulationPK);
+	}
+
+	/**
+	* Removes the association between the workflow simulation job and the workflow simulation. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulation the workflow simulation
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeWorkflowSimulation(long pk,
+		org.kisti.edison.model.WorkflowSimulation workflowSimulation)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeWorkflowSimulation(pk, workflowSimulation);
+	}
+
+	/**
+	* Removes the association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPKs the primary keys of the workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeWorkflowSimulations(long pk,
+		long[] workflowSimulationPKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeWorkflowSimulations(pk, workflowSimulationPKs);
+	}
+
+	/**
+	* Removes the association between the workflow simulation job and the workflow simulations. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulations the workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeWorkflowSimulations(long pk,
+		java.util.List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeWorkflowSimulations(pk, workflowSimulations);
+	}
+
+	/**
+	* Sets the workflow simulations associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulationPKs the primary keys of the workflow simulations to be associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void setWorkflowSimulations(long pk,
+		long[] workflowSimulationPKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().setWorkflowSimulations(pk, workflowSimulationPKs);
+	}
+
+	/**
+	* Sets the workflow simulations associated with the workflow simulation job, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the workflow simulation job
+	* @param workflowSimulations the workflow simulations to be associated with the workflow simulation job
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void setWorkflowSimulations(long pk,
+		java.util.List<org.kisti.edison.model.WorkflowSimulation> workflowSimulations)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().setWorkflowSimulations(pk, workflowSimulations);
+	}
+
 	public static WorkflowSimulationJobPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (WorkflowSimulationJobPersistence)PortletBeanLocatorUtil.locate(org.kisti.edison.service.ClpSerializer.getServletContextName(),

@@ -186,6 +186,7 @@
 		<field name="projectCategoryId" type="long" />
 		<field name="execute" type="long" />
 		<field name="cluster" type="String" />
+		<field name="workflowId" type="long" />
 	</model>
 	<model name="org.kisti.edison.science.model.ScienceAppCategoryLink">
 		<field name="uuid" type="String" />

@@ -1455,6 +1455,23 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 		return _scienceAppLocalService.getSimulationUsersOfScienceApp(scienceAppId);
 	}
 
+	@Override
+	public int countScienceAppByWorkflowId(long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.countScienceAppByWorkflowId(workflowId);
+	}
+
+	@Override
+	public org.kisti.edison.science.model.ScienceApp getScienceAppByWorkflowId(
+		long workflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			javax.persistence.NonUniqueResultException,
+			org.kisti.edison.science.NoSuchScienceAppException {
+		return _scienceAppLocalService.getScienceAppByWorkflowId(workflowId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

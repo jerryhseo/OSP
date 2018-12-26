@@ -282,6 +282,10 @@ public class AppManagerController{
 				isPort = GetterUtil.getBoolean(params.get("isPort"), false);
 			}
 			
+			// 2018.12.18. WorkFlow App 등록 __ 0 == seq : 기존 사이언스앱, 0 < seq : 워크플로우앱 
+			long workflowId = Long.parseLong(CustomUtil.strNull(params.get("workflowId"), "0"));
+			model.addAttribute("workflowId", workflowId);
+			
 			String clickTab = CustomUtil.strNull(params.get("clickTab"),"m01");
 			
 			String mode = Constants.ADD;
@@ -578,7 +582,8 @@ public class AppManagerController{
 				model.addAttribute("workBenchPlid", plid);
 			}
 			
-			Map<String,Object> tabAndButtonMap = tabCreateAndStatusButtonView(scienceAppId, isPort, clickTab, locale, data);
+			// Workflow App 등록 시 Tab Menu Setting
+			Map<String,Object> tabAndButtonMap = tabCreateAndStatusButtonView(scienceAppId, isPort, clickTab, locale, data, workflowId);
 			
 			String tabStr = GetterUtil.getString(tabAndButtonMap.get("tabString"),"");
 			boolean appStatusButtonView = GetterUtil.getBoolean(tabAndButtonMap.get("appStatusButtonView"),false);
@@ -839,8 +844,20 @@ public class AppManagerController{
 		}
 		
 		if(mode.equals(Constants.ADD)){
-			ScienceApp scienceApp = ScienceAppLocalServiceUtil.createScienceApp(sc, params);
-			returnLong = scienceApp.getScienceAppId();
+			try {
+				long workflowId = Long.parseLong(CustomUtil.strNull(params.get("workflowId"), "0"));
+				int workflowAppCnt = ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(workflowId);
+				
+				if(workflowAppCnt == 0){
+					ScienceApp scienceApp = ScienceAppLocalServiceUtil.createScienceApp(sc, params);
+					returnLong = scienceApp.getScienceAppId();
+				} else {
+					throw new ScienceAppException(ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE);
+				}
+			} catch (Exception e) {
+				log.error("Create ScienceApp Error...!!");
+				throw new ScienceAppException(ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE);
+			}
 		}else if(mode.equals(Constants.UPDATE)){
 			long scienceAppId = GetterUtil.getLong(params.get("scienceAppId"));
 			ScienceAppLocalServiceUtil.updateScienceApp(sc, params, scienceAppId);
@@ -855,7 +872,7 @@ public class AppManagerController{
 		ScienceAppLocalServiceUtil.updateExeInfomaionScienceApp(sc,params,scienceAppId);
 	}
 	
-	protected Map<String,Object> tabCreateAndStatusButtonView(long scienceAppId, boolean isPort,String clickTab, Locale locale, Map<String,Object> data) throws PortalException, SystemException{
+	protected Map<String,Object> tabCreateAndStatusButtonView(long scienceAppId, boolean isPort,String clickTab, Locale locale, Map<String,Object> data, long workflowId) throws PortalException, SystemException{
 		
 		Map<String,Object> returnMap = new HashMap<String,Object>();
 		
@@ -866,10 +883,14 @@ public class AppManagerController{
 		//Layout 에 따른 Workbench 이동
 		boolean appTestButtonView = false;
 		if(scienceAppId == 0){
-			if(isPort){
-				tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail", "m05fail"};
-			}else{
-				tabs = new String[]{"m01fail", "m02fail", "m05fail"};
+			if(workflowId == 0){
+				if(isPort){
+					tabs = new String[]{"m01fail", "m02fail", "m03fail", "m04fail", "m05fail"};
+				}else{
+					tabs = new String[]{"m01fail", "m02fail", "m05fail"};
+				}
+			} else {
+				tabs = new String[]{"m01fail", "m05fail"};
 			}
 		}else{
 			String tabsStr = "";
@@ -882,16 +903,19 @@ public class AppManagerController{
 			
 			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
 			
-			if(scienceApp.getExeFileName().equals("")){
-				tabsStr +=",m02fail";
-				appStatusButtonView = false;
-			}else{
-				if(clickTab.equals("m02")){
-					tabsStr +=",m02over";
+			// 2018.12.18 workflowId check _ workflowId == 0 : 기존 사이언스앱, workflowId != 0 : 워크플로우앱
+			if(scienceApp.getWorkflowId() == 0){
+				if(scienceApp.getExeFileName().equals("")){
+					tabsStr +=",m02fail";
+					appStatusButtonView = false;
 				}else{
-					tabsStr +=",m02out";
+					if(clickTab.equals("m02")){
+						tabsStr +=",m02over";
+					}else{
+						tabsStr +=",m02out";
+					}
+					activateTab++;
 				}
-				activateTab++;
 			}
 			
 			

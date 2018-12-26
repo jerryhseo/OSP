@@ -89,6 +89,7 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 		attributes.put("projectCategoryId", getProjectCategoryId());
 		attributes.put("execute", getExecute());
 		attributes.put("cluster", getCluster());
+		attributes.put("workflowId", getWorkflowId());
 
 		return attributes;
 	}
@@ -327,6 +328,12 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 
 		if (cluster != null) {
 			setCluster(cluster);
+		}
+
+		Long workflowId = (Long)attributes.get("workflowId");
+
+		if (workflowId != null) {
+			setWorkflowId(workflowId);
 		}
 	}
 
@@ -1533,6 +1540,26 @@ public class ScienceAppWrapper implements ScienceApp, ModelWrapper<ScienceApp> {
 	@Override
 	public void setCluster(java.lang.String cluster) {
 		_scienceApp.setCluster(cluster);
+	}
+
+	/**
+	* Returns the workflow ID of this science app.
+	*
+	* @return the workflow ID of this science app
+	*/
+	@Override
+	public long getWorkflowId() {
+		return _scienceApp.getWorkflowId();
+	}
+
+	/**
+	* Sets the workflow ID of this science app.
+	*
+	* @param workflowId the workflow ID of this science app
+	*/
+	@Override
+	public void setWorkflowId(long workflowId) {
+		_scienceApp.setWorkflowId(workflowId);
 	}
 
 	@Override

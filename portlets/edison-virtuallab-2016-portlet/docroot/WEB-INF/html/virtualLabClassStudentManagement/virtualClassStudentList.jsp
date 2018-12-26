@@ -526,9 +526,19 @@ function <portlet:namespace/>dataSearchList() {
 					$("<td/>").text(virtualClassStudentList[i].executeCount)
 							  .css("text-align","center")
 							  .appendTo($rowResult);
-					$("<td/>").html("<input type='button' value='<liferay-ui:message key='edison-simulation-monitoring-title' />' class='btn btn-default' onclick=\"<portlet:namespace/>searchMonitoring('" + virtualClassStudentList[i].userId + "')\"/>")
-							  .css("text-align","center")
-							  .appendTo($rowResult);
+					
+					var simulationMonitoringBtn = $("<input/>").addClass("btn btn-default virtual-class-monitoring-btn")
+																.attr("type", "button")
+																.attr("value", "<liferay-ui:message key='edison-simulation-monitoring-title' />")
+																.attr("onclick", "<portlet:namespace/>searchMonitoring(" + virtualClassStudentList[i].userId + ")");
+					/* var workflowMonitoringBtn = $("<input/>").addClass("btn btn-default virtual-class-monitoring-btn")
+																.attr("type", "button")
+																.attr("value", "<liferay-ui:message key='workflow' />")
+																.attr("onclick", "<portlet:namespace/>searchWorkflowMonitoring(" + virtualClassStudentList[i].userId + ")")
+																.css("margin-left", "10px").css("width", "72px")
+																.css("padding-left", "6px").css("padding-right", "6px"); */
+					$("<td/>").append(simulationMonitoringBtn)
+							  .css("text-align","center").appendTo($rowResult);
 					if(virtualClassStudentList[i].requestSort == "REQUEST") {
 						$("<td/>").html("<liferay-ui:message key='edison-virtuallab-virtualLabClassRegistrationList-course-registration' />")
 								  .css("text-align","center")
@@ -616,6 +626,35 @@ function <portlet:namespace/>searchMonitoring(userId) {
 					} */
 				},
 				id: 'edisonmonitoring_WAR_edisonsimulationportlet',
+				uri: portletURL.toString()
+			}
+		);
+		
+	});
+}
+
+/* 워크플로우 모니터링 결과 화면 */
+function <portlet:namespace/>searchWorkflowMonitoring(userId) {
+	AUI().use("liferay-portlet-url", function(a) {
+		var portletURL = Liferay.PortletURL.createRenderURL();
+		portletURL.setPlid("<%=requestPlid%>"); <!-- 모니터링 페이지 Plid -->
+		portletURL.setPortletMode("view");
+		portletURL.setWindowState("pop_up");
+		portletURL.setPortletId("workflowmonitoring_WAR_edisonworkflow2016portlet"); <!-- 워크플로우 모니터링 ID -->
+		portletURL.setParameter("searchClassUserId", userId); <!-- 유저 아이디 -->
+		
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					width:1280,
+					height:850,
+					cache: false,
+					modal: true,
+					draggable: false,
+					resizable: false,
+					destroyOnClose: true
+				},
+				id: 'workflowmonitoring_WAR_edisonworkflow2016portlet',
 				uri: portletURL.toString()
 			}
 		);

@@ -437,6 +437,180 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
+		long simulationJobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.addWorkflowSimulationWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJob(long simulationId,
+		org.kisti.edison.model.WorkflowSimulationJob workflowSimulationJob)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.addWorkflowSimulationWorkflowSimulationJob(simulationId,
+			workflowSimulationJob);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		long[] simulationJobIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.addWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void addWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		java.util.List<org.kisti.edison.model.WorkflowSimulationJob> WorkflowSimulationJobs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.addWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			WorkflowSimulationJobs);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void clearWorkflowSimulationWorkflowSimulationJobs(long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.clearWorkflowSimulationWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.deleteWorkflowSimulationWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJob(
+		long simulationId,
+		org.kisti.edison.model.WorkflowSimulationJob workflowSimulationJob)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.deleteWorkflowSimulationWorkflowSimulationJob(simulationId,
+			workflowSimulationJob);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, long[] simulationJobIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.deleteWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void deleteWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId,
+		java.util.List<org.kisti.edison.model.WorkflowSimulationJob> WorkflowSimulationJobs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.deleteWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			WorkflowSimulationJobs);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.getWorkflowSimulationWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.getWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			start, end);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.util.List<org.kisti.edison.model.WorkflowSimulationJob> getWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.getWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public int getWorkflowSimulationWorkflowSimulationJobsCount(
+		long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.getWorkflowSimulationWorkflowSimulationJobsCount(simulationId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJob(
+		long simulationId, long simulationJobId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.hasWorkflowSimulationWorkflowSimulationJob(simulationId,
+			simulationJobId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public boolean hasWorkflowSimulationWorkflowSimulationJobs(
+		long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.hasWorkflowSimulationWorkflowSimulationJobs(simulationId);
+	}
+
+	/**
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public void setWorkflowSimulationWorkflowSimulationJobs(long simulationId,
+		long[] simulationJobIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_workflowSimulationJobLocalService.setWorkflowSimulationWorkflowSimulationJobs(simulationId,
+			simulationJobIds);
+	}
+
+	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean

@@ -168,6 +168,9 @@ public class ScienceAppstoreListController {
 			String searchField = ParamUtil.get(request, "searchField", "");
 			long plid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			model.addAttribute("workBenchPlid", plid);
+			
+			long workflowPlid  = PortalUtil.getPlidFromPortletId(themeDisplay.getScopeGroupId(), false, "workflowdesigner_WAR_edisonworkflow2016portlet");
+			model.addAttribute("workflowPlid", workflowPlid);
 			params.put("solverStatus", "1901004");
 			params.put("recommandation_flag", "true");
 			

@@ -920,6 +920,20 @@ public interface ScienceAppModel extends BaseModel<ScienceApp>, StagedModel {
 	 */
 	public void setCluster(String cluster);
 
+	/**
+	 * Returns the workflow ID of this science app.
+	 *
+	 * @return the workflow ID of this science app
+	 */
+	public long getWorkflowId();
+
+	/**
+	 * Sets the workflow ID of this science app.
+	 *
+	 * @param workflowId the workflow ID of this science app
+	 */
+	public void setWorkflowId(long workflowId);
+
 	@Override
 	public boolean isNew();
 

@@ -125,6 +125,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		attributes.put("projectCategoryId", getProjectCategoryId());
 		attributes.put("execute", getExecute());
 		attributes.put("cluster", getCluster());
+		attributes.put("workflowId", getWorkflowId());
 
 		return attributes;
 	}
@@ -363,6 +364,12 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 		if (cluster != null) {
 			setCluster(cluster);
+		}
+
+		Long workflowId = (Long)attributes.get("workflowId");
+
+		if (workflowId != null) {
+			setWorkflowId(workflowId);
 		}
 	}
 
@@ -1591,6 +1598,29 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	}
 
 	@Override
+	public long getWorkflowId() {
+		return _workflowId;
+	}
+
+	@Override
+	public void setWorkflowId(long workflowId) {
+		_workflowId = workflowId;
+
+		if (_scienceAppRemoteModel != null) {
+			try {
+				Class<?> clazz = _scienceAppRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setWorkflowId", long.class);
+
+				method.invoke(_scienceAppRemoteModel, workflowId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public boolean isApproved() {
 		try {
 			String methodName = "isApproved";
@@ -1856,6 +1886,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		clone.setProjectCategoryId(getProjectCategoryId());
 		clone.setExecute(getExecute());
 		clone.setCluster(getCluster());
+		clone.setWorkflowId(getWorkflowId());
 
 		return clone;
 	}
@@ -1916,7 +1947,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(81);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1996,6 +2027,8 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 		sb.append(getExecute());
 		sb.append(", cluster=");
 		sb.append(getCluster());
+		sb.append(", workflowId=");
+		sb.append(getWorkflowId());
 		sb.append("}");
 
 		return sb.toString();
@@ -2003,7 +2036,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(121);
+		StringBundler sb = new StringBundler(124);
 
 		sb.append("<model><model-name>");
 		sb.append("org.kisti.edison.science.model.ScienceApp");
@@ -2165,6 +2198,10 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 			"<column><column-name>cluster</column-name><column-value><![CDATA[");
 		sb.append(getCluster());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>workflowId</column-name><column-value><![CDATA[");
+		sb.append(getWorkflowId());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -2214,6 +2251,7 @@ public class ScienceAppClp extends BaseModelImpl<ScienceApp>
 	private long _projectCategoryId;
 	private long _execute;
 	private String _cluster;
+	private long _workflowId;
 	private BaseModel<?> _scienceAppRemoteModel;
 	private Class<?> _clpSerializerClass = org.kisti.edison.science.service.ClpSerializer.class;
 }

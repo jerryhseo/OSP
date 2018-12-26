@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
+<!-- 2018.12.21 - Add jsPlumb CSS -->
+<link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
@@ -27,6 +29,7 @@ var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
 var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
+var var_remove_with_app_confirm_message = Liferay.Language.get("edison-workflow-remove-with-app-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
 var var_success_remove_workflow_message = Liferay.Language.get("edison-workflow-success-remove-message");
 var var_prepare_copy_workflow_message = Liferay.Language.get("edison-workflow-prepare-copy-message");
@@ -45,6 +48,12 @@ var var_cannot_load_intermediate_result_message = Liferay.Language.get("edison-w
 var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no-available-analyzer-message");
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
+var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
+var var_workflow_remove_status_error_message = Liferay.Language.get("edison-workflow-remove-status-error-message");
+
+
+
+var var_is_developer = '${isDeveloper}';
 var contextPath = '${contextPath}';
 </script>
 <style>
@@ -90,45 +99,144 @@ var contextPath = '${contextPath}';
 /* workflow science app box */
 .apparea{position: relative;}
 
-.waitingbox{border-radius:3px; border:solid 1px #00abe3; background-color:#b6e1f8;}
+.waitingbox{border-radius:3px; border:solid 1px #adadad; background-color:#adadad;}
 .waitingbox span{font-size:18px; color:#114a69; font-weight:500;}
 
 .loopbox{background-color:#f7b036;}
 
-.runningbox{border-radius:3px; border:solid 1px #00abe3; background-color:#8db9e5;}
+.runningbox{border-radius:3px; border:solid 1px #8db9e5; background-color:#8db9e5;}
 .runningbox span{font-size:18px; color:#fff; font-weight:500;}
 
-.failbox{border-radius:3px; border:solid 1px #00abe3; background-color:#f8799b;}
+.failbox{border-radius:3px; border:solid 1px #f8799b; background-color:#f8799b;}
 .failbox span{font-size:18px; color:#fff; font-weight:500;}
 
-.donebox{border-radius:3px; border:solid 1px #00abe3; background-color:#76d6cd;}
+.donebox{border-radius:3px; border:solid 1px #76d6cd; background-color:#76d6cd;}
 .donebox span{font-size:18px; color:#fff; font-weight:500;}
 
+.pausebox{border-radius:3px; border:solid 1px #fd9b00; background-color:#fd9b00;}
+
+
+
 .wf-box {
-  box-sizing: content-box;
-  padding: 30px 5px 5px 15px;
-  width: 100px !important;
-  height: 110px !important;
-  position: absolute;
-  cursor: move;
-  border-radius: 3px;
-  border: solid 1px #00abe3;
+	box-sizing: content-box;
+    width: 150px !important;
+    position: absolute;
+    cursor: move;
+    border-radius: 10px;
+    min-width: 80px;
+    min-height: 30px;
+    text-align: center;
+    overflow: visible;
+}
+
+.wf-box h3.wf-title{ 
+	display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold; 
+}
+
+.wf-box ul.port li{
+	margin-bottom: 10px;
+	border: 1px solid #CCC;
+	background-color: #edf7f7;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+}
+
+.wf-box .input-ports-list{
+	float: left;
+	position: relative;
+	top: 15px;
+	left: -15px;
+}
+
+.wf-box ul.inputport{
+	text-align: left;
+	padding-left: 0px;
+}
+
+.wf-box ul.inputport .input-port-name{
+	color: #000;
+	font-size: 15px;
+	position: relative;
+	top: -20px;
+	left: -10px;
+	white-space: nowrap;
+}
+
+.wf-box .output-ports-list{
+	float: right;
+	position: relative;
+	top: 15px;
+	right: -20px;
+}
+
+.wf-box ul.outputport{
+	text-align: right;
+	padding-left: 0px;
+	width: 34px;
+}
+
+.wf-box output-ports-list{
+	float: right;
+}
+
+.wf-box ul.outputport .output-port-name{
+	color: #000;
+	font-size: 15px;
+	position: relative;
+	top: -20px;
+	right: -15px;
+	white-space: nowrap;
+}
+
+/* 2018.12.20 */
+.wf-box .wf-icon{
+	text-align: center;
+	font-size: 45px;
+	padding: 20px 0px;
+	margin-bottom: 10px;
+}
+
+.wf-box .wf-icon .remove-btn{
+	font-size: 12px;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	cursor: pointer;
 }
 
 .wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-.wf-box .wf-app-title{font-size: 15px; font-weight: 500; color: #fff;}
-.wf-box .wf-app-status{position: relative; top: 25px;}
-.waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
-.pausebox{border-radius:3px; border:solid 1px #CA412B; background-color:#fb6e50;}
-.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px;
-	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
-	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px;
-	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
-.waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
-.runningbox .addIp{ background: #3a81c0; border-color: #3371a8;}
-.failbox .addIp{ background: #c84444; border-color: #b73535; }
-.pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
-.donebox .addIp{ background: #32a993; border-color: #2e9886; }
+/* 2018.12.20 */
+.wf-box .wf-app-title{
+	font-size: 15px;
+	font-weight: 500;
+	margin-top: 5px;
+	position: relative;
+	bottom: -25px;
+	left: -20px;
+	width: 130%;
+}
+
+/* 2018.12.20 */
+.wf-box .addIp { 
+	font-weight: 600; 
+	text-decoration: none; 
+	text-align: center; 
+	font-size: 15px;
+	padding: 6px 10px 10px;
+	color: #fff;
+	border-top: 1px solid #fff;
+	position: absolute;
+	bottom: -5px;
+	width: 100%;
+}
+
 .wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
 
 .wf-converter{}
@@ -191,7 +299,26 @@ var contextPath = '${contextPath}';
     margin: 0 auto;
 }
 
+.controls{
+	top: 145px !important;
+	left: auto !important;
+	right: 37px !important;
+	z-index: 10 !important;
+	color: #FFF;
+	margin-right: 10px;
+	position: absolute;
+	display: flex;
+}
+.controls i{
+	background-color: #5184a0;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 4px;
+	margin-right: 5px !important;
+}
+
 </style>
+
 <div class="container-fluid">
   <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
     <div class="wrapper" style="border-top: 1px solid #e5e5e9;">
@@ -215,12 +342,12 @@ var contextPath = '${contextPath}';
                 <span>Open</span>
               </a>
             </li>
-            <li class="treeview">
-              <a href="#" class="sidebar-btn" data-btn-type="import">
-                <i class="fa fa-lg fa-download"></i>
-                <span>Import</span>
-              </a>
-            </li>
+<!--             <li class="treeview"> -->
+<!--               <a href="#" class="sidebar-btn" data-btn-type="import"> -->
+<!--                 <i class="fa fa-lg fa-download"></i> -->
+<!--                 <span>Import</span> -->
+<!--               </a> -->
+<!--             </li> -->
             <li class="treeview">
               <a href="#" class="sidebar-btn" data-btn-type="save">
                 <i class="fa fa-lg fa-floppy-o"></i>
@@ -239,10 +366,16 @@ var contextPath = '${contextPath}';
                 <span>Apps</span>
               </a>
             </li>
-            <li class="treeview">
+            <li class="treeview" id="<portlet:namespace/>active-app-register">
               <a href="#" class="sidebar-btn" data-btn-type="register-app">
-                <i class="fa fa-lg fa-file"></i>
+                <i class="fa fa-lg fa-archive"></i>
                 <span>Register App</span>
+              </a>
+            </li>
+            <li class="treeview" id="<portlet:namespace/>active-app-config" style="display: none;">
+              <a href="#" class="sidebar-btn" data-btn-type="config-app">
+                <i class="fa fa-lg fa-archive"></i>
+                <span>Configuration App</span>
               </a>
             </li>
           </ul>
@@ -278,12 +411,24 @@ var contextPath = '${contextPath}';
           <span class="sr-only">Toggle navigation</span>
         </a>
         <span id="<portlet:namespace/>workflow-title"></span>
-        <small></small>
+        <small id="<portlet:namespace/>workflow-app-title"></small>
       </h1>
     </section>
     <!-- Main content -->
     <section class="content">
-      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select"></div>
+      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select">
+      	<div class="controls" can-undo="false" can-redo="false">
+      		<!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
+            <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
+      		<i class="fa fa-home" reset title="Zoom To Fit"></i>
+      		<i class="fa fa-plus" zoom="in" title="Zoom In"></i>
+      		<i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
+      	</div>
+      	<div id="miniview" style="position: absolute;top: 10px;right: 25px;z-index: 100;">
+      		
+      	</div>
+      	<div jtk-miniview-type="foo"></div>
+      </div>
     </section>
     <div class="menu-panel" style="top: 0;">
       <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
@@ -322,7 +467,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
-
+<script type="text/x-jtk-templates" src="${contextPath}/templete/templete.html"></script>
 
 
 <script id="tpl-menu-panel-box" type="text/html">
@@ -514,7 +659,6 @@ $(document).ready(function(){
   
   /* Register WorkflowApp Data */
   var registerWorkflowAppURL = "<%=registerWorkflowAppUrl%>";
-  registerWorkflowAppURL = registerWorkflowAppURL.replace("/workflow-workbench?", "/my-edison?");
   var REGISTER_WORKFLOW_APP_PARAM = {
 	"registerWorkflowAppURL": registerWorkflowAppURL,
 	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"

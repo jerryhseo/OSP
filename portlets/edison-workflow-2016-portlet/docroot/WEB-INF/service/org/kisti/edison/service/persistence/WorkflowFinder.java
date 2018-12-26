@@ -31,4 +31,8 @@ public interface WorkflowFinder {
 		java.util.Map<java.lang.String, java.lang.Object> searchParam,
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<java.lang.Object[]> getWorkflowMonitoringList(
+		java.util.Map<java.lang.String, java.lang.Object> searchParams)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

@@ -130,6 +130,12 @@
     <column name="reuseWorkflowUUID" type="String" />
     <column name="screenLogic" type="String" />
     
+<<<<<<< HEAD
+=======
+    <column name="workflows" type="Collection" 
+      entity="Workflow" mapping-table="Workflow_WorkflowInstance"/>
+    <!-- collections -->
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
     <column name="workflowSimulations" type="Collection" 
       entity="WorkflowSimulation" mapping-table="WorkflowSimulation_WorkflowSimulationJob"/>
     

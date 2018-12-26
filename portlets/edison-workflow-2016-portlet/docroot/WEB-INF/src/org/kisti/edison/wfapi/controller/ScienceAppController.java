@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.PortTypeAnalyzerLinkLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppInputPortsLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
@@ -23,7 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.kisti.osp.icecap.model.DataType;
+import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -109,12 +116,43 @@ public class ScienceAppController{
       long inputportCnt = ScienceAppInputPortsLocalServiceUtil
           .getScienceAppInputPortsesCount(scienceAppId);
       if(inputportCnt > 0){
-        return ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId);
+    	  JsonObject ports = new JsonParser().parse(ScienceAppInputPortsLocalServiceUtil.getInputPortsJsonString(scienceAppId)).getAsJsonObject();
+    	  Set<Map.Entry<String, JsonElement>> entries = ports.entrySet();
+    	  for (Map.Entry<String, JsonElement> entry: entries) {
+    		  JsonObject port = entry.getValue().getAsJsonObject();
+    		  port.addProperty("wfSample_", false);
+    		  JsonObject dataType = port.get("dataType_").getAsJsonObject();
+			  String dtName = dataType.get("name").getAsString();
+			  String dtVersion = dataType.get("version").getAsString();
+			  DataType dataTypeModel = DataTypeLocalServiceUtil.findDataTypeObject(dtName, dtVersion);
+			  
+    		  if(!port.has("sample_")){
+    			  JsonObject sample = new JsonObject();
+    			  sample.addProperty("id_", dataTypeModel.getSamplePath());
+    			  sample.addProperty("type_", "dlEntryId_");
+    			  sample.addProperty("relative_", true);
+    			  port.add("sample_", sample);
+    		  }
+    		  
+    		  
+    		  JsonArray editors = new JsonArray();
+    		  List<Map<String, Object>> editorList = DataTypeEditorLocalServiceUtil.retrieveDataTypeEditorList(dataTypeModel.getTypeId());
+    		  for(Map<String,Object> editor : editorList){
+    			  ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(GetterUtil.getLong(editor.get("editorId")));
+    			  JsonObject editorObject = new JsonObject();
+    			  editorObject.addProperty("name", scienceApp.getName());
+    			  editorObject.addProperty("value", scienceApp.getExeFileName());
+    			  editors.add(editorObject);
+    		  }
+    		  port.add("editors_", editors);
+    	  }
+        return ports.toString();
       }else{
         return "{}";
       }
     }catch (Exception e){
       log.error("error", e);
+      e.printStackTrace();
       throw e;
     }
   }

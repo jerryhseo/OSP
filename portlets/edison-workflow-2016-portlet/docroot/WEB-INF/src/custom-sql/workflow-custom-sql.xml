@@ -59,12 +59,18 @@
   
 	<sql id="org.kisti.edison.service.persistence.WorkflowFinder.retrieveWorkflows.header" >
 		<![CDATA[
+<<<<<<< HEAD
 		SELECT A.*, B.title AS parentTitle, B.userId AS parentUserId, U.screenName AS screenName 
+=======
+		SELECT A.*, B.title AS parentTitle, B.isPublic AS parentIsPublic, B.userId AS parentUserId, U.screenName AS screenName, IFNULL(APP.scienceAppId,0) AS scienceAppId, APP.name, APP.version,APP.status 
+>>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
         FROM EDWF_Workflow A
         LEFT OUTER JOIN EDWF_Workflow B
         ON A.parentWorkflowId = B.workflowId
         LEFT OUTER JOIN User_ U
         ON A.userId = U.userId
+        LEFT OUTER JOIN EDAPP_ScienceApp APP
+        ON A.workflowId = APP.workflowId
 		]]>
 	</sql>
 	
@@ -93,4 +99,101 @@
 		</isNotEmpty>
 		]]>
 	</sql>
+	
+	<sql id="org.kisti.edison.service.persistence.WorkflowMonitoringFinder.getListWorkflowMonitoring">
+		<![CDATA[
+		SELECT
+			APP.scienceAppId AS scienceAppId,
+			APP.name AS scienceAppName,
+			APP.version AS scienceAppVersion,
+			ExtractValue(APP.title, 'root/Data[@language-id="@@languageId@@"]') AS scienceAppTitle,
+			ED_WS.simulationId AS simulationId,
+			ED_WS.userId AS simulationUserId,
+			ED_WS.createDate AS simulationCreateDate,
+			ED_WS.modifiedDate AS simulationModifiedDate,
+			ED_WS.classId AS classId,
+			ED_WS.customId AS customId,
+			ED_WS.title AS simulationTitle,
+			ED_WS.workflowId AS workflowId,
+			ED_WSJ.simulationJobId AS simulationJobId,
+			ED_WSJ.userId AS simulationJobUserId,
+			ED_WSJ.createDate AS simulationJobCreateDate,
+			ED_WSJ.modifiedDate AS simulationJobModifiedDate,
+			ED_WSJ.title AS simulationJobTitle,
+			ED_WSJ.status AS status,
+			ED_WSJ.statusResponse AS statusResponse,
+			ED_WSJ.startTime AS startTime,
+			ED_WSJ.endTime AS endTime,
+			ED_WSJ.workflowUUID AS workflowUUID,
+			ED_WSJ.reuseWorkflowUUID AS reuseWorkflowUUID,
+			ED_WSJ.screenLogic AS screenLogic,
+			USR.screenName AS userScreenName,
+			IFNULL(
+				SEC_TO_TIME(
+					unix_timestamp(ED_WSJ.endTime) - unix_timestamp(ED_WSJ.startTime)),
+				'') AS executeDate
+			<isNotEmpty property="groupSearch">
+				, IF(COUNT(*) > 1, 'Y', 'N') AS jobCnt
+			</isNotEmpty>
+			<isNotEmpty property="jobListSearch">
+				, 'N' AS jobCnt
+			</isNotEmpty>
+		FROM
+			EDWF_WorkflowSimulation ED_WS
+			INNER JOIN EDWF_WorkflowSimulation_WorkflowSimulationJob ED_WS_WSJ
+			ON ED_WS.simulationId = ED_WS_WSJ.simulationId
+			INNER JOIN EDWF_WorkflowSimulationJob ED_WSJ
+			ON ED_WS_WSJ.simulationJobId = ED_WSJ.simulationJobId
+			INNER JOIN EDAPP_ScienceApp APP
+			ON ED_WS.workflowId = APP.workflowId
+			INNER JOIN User_ USR
+			ON ED_WSJ.userId = USR.userId
+		WHERE 
+			APP.appType='Workflow'
+			AND ED_WSJ.status > 1701004
+			AND ED_WS.testYn != TRUE
+			<isNotEmpty property="simulationId">
+				AND
+					ED_WS.simulationId = #simulationId#
+			</isNotEmpty>
+			<isNotEmpty property="userId">
+				AND
+					ED_WSJ.userId = #userId#
+			</isNotEmpty>
+			<isNotEmpty property="searchValue">
+				AND
+					(APP.name LIKE '%@@searchValue@@%'
+					OR
+					ED_WSJ.title LIKE '%@@searchValue@@%')
+			</isNotEmpty>
+			<isNotEmpty property="searchValueAndUserId">
+				AND
+					(APP.name LIKE '%@@searchValueAndUserId@@%'
+					OR
+					ED_WSJ.title LIKE '%@@searchValueAndUserId@@%'
+					OR
+					USR.screenName LIKE '%@@searchValueAndUserId@@%')
+			</isNotEmpty>
+			<isNotEmpty property="jobStatus">
+				AND
+					ED_WSJ.status = #jobStatus#
+			</isNotEmpty>
+			<isNotEmpty property="classId">
+				AND
+					ED_WS.classId = #classId#
+			</isNotEmpty>
+			<isNotEmpty property="customId">
+				AND
+					ED_WS.customId = #customId#
+			</isNotEmpty>
+		<isNotEmpty property="groupSearch">
+			GROUP BY simulationId
+		</isNotEmpty>
+		ORDER BY simulationJobCreateDate DESC
+		<isNotEmpty property="begin">
+			Limit #begin#, #end#
+		</isNotEmpty>
+		]]>
+	</sql>
+	
 </custom-sql>

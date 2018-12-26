@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.persistence.NonUniqueResultException;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
@@ -955,6 +957,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		newApp.setStage(ScienceAppConstants.EMPTY);
 		newApp.setRecentModifierId(sc.getUserId());
 		newApp.setLicense(CustomUtil.strNull(params.get("license")));
+		
+		// 2018.12.18 _ workflowId 등록
+		long workflowId = Long.parseLong(CustomUtil.strNull(params.get("workflowId"), "0"));
+		newApp.setWorkflowId(workflowId);
+		if(0 < workflowId){
+			newApp.setAppType(CustomUtil.strNull(params.get("workflowAppType")));
+		}
 
 		if(CustomUtil.strNull(params.get("targetLanguage")).equals("")){
 			String localeStr = "";
@@ -1072,6 +1081,9 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 				scienceApp.setPreviousVersionId(GetterUtil.getLong(params.get("previousVersion"), 0));
 			}
 			scienceApp.setRecentModifierId(sc.getUserId());
+			
+			// 2018.12.18 _ workflowId Set
+			scienceApp.setWorkflowId(Long.parseLong(CustomUtil.strNull(params.get("workflowId"), "0")));
 	
 		}else if(actionType.equals("publicData")){
 			
@@ -2953,6 +2965,27 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		List<Object[]> simulationUsersMapList = scienceAppFinder.getSimulationUsersOfScienceApp(searchParamMap);
 		
 		return Integer.parseInt(CustomUtil.strNull(simulationUsersMapList.get(0), "0"));
+	}
+	
+	public int countScienceAppByWorkflowId(long workflowId) throws SystemException, PortalException{
+		
+		Map<String, Object> searchParam = new HashMap<String, Object>();
+		searchParam.put("workflowId", workflowId);
+		
+		return scienceAppFinder.countScienceAppByWorkflowId(searchParam);
+	}
+	
+	public ScienceApp getScienceAppByWorkflowId(long workflowId) throws NoSuchScienceAppException, NonUniqueResultException, SystemException, PortalException{
+		
+		List<ScienceApp> scienceAppList = new ArrayList<ScienceApp>();
+		Map<String, Object> searchParam = new HashMap<String, Object>();
+		searchParam.put("workflowId", workflowId);
+		
+		int getScienceAppId = scienceAppFinder.getScienceAppByWorkflowId(searchParam);
+		
+		ScienceApp scienceApp = getScienceApp(getScienceAppId);
+		
+		return scienceApp;
 	}
 	
 }

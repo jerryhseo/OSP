@@ -48,7 +48,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             "header":{
                 "id": "tpl-menu-panel-search-header",
                 "search-input-name": "search",
-                "theads": ["Title", "Description", "Copied from", "Created"]
+                "theads": ["Title", "Description", "App Name", "Version", "Status", "Copied from", "Created"]
             },
             "form": {},
             "footer":{
@@ -170,19 +170,42 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 var workflowId = PANEL_DATA.setting.form.workflowId;
                 fn.apply(null, [workflowId]);
             }
-        } else if (btnType === "register-app") {
+        }
+        
+        if (btnType === "register-app") {
         	var workflowId = PANEL_DATA.setting.form.workflowId;
         	if(workflowId == "undefined" || workflowId == null || workflowId == ''){
         		toastr["error"]("", var_workflow_register_app_error_message);
         	} else {
-        		/* App 등록 페이지로 이동 */
-        		window.AUI().use('liferay-portlet-url', function (A) {
-        			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
-        			var portletName = registerAppParam.portletName;
-        			
-        			registerWorkflowAppURL += "&" + portletName + "workflowId=" + workflowId;
-        			window.open(registerWorkflowAppURL);
-        		});
+        		if(var_is_developer==='true'){
+            		window.AUI().use('liferay-portlet-url', function (A) {
+            			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
+            			var portletName = registerAppParam.portletName;
+            			
+            			registerWorkflowAppURL += "&" + portletName + "workflowId=" + workflowId;
+            			window.open(registerWorkflowAppURL);
+            		});
+        		}else{
+        			toastr["error"]("", var_workflow_register_app_role_error_message);
+        		}
+        	}
+        }
+        
+        if (btnType === "config-app") {
+        	var workflowId = PANEL_DATA.setting.form.workflowId;
+        	if(workflowId == "undefined" || workflowId == null || workflowId == ''){
+        		toastr["error"]("", var_workflow_register_app_error_message);
+        	} else {
+        		var scienceAppId = PANEL_DATA.setting.form.scienceAppId
+        		if(scienceAppId != "undefined" || scienceAppId != null || scienceAppId != 0){
+        			window.AUI().use('liferay-portlet-url', function (A) {
+            			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
+            			var portletName = registerAppParam.portletName;
+            			
+            			registerWorkflowAppURL += "&" + portletName + "scienceAppId=" + scienceAppId;
+            			window.open(registerWorkflowAppURL);
+            		});
+        		}
         	}
         }
     });
@@ -248,10 +271,28 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 
     function setMetaData(metadata){
         setTitle(metadata.title);
+        setAppTitle(metadata.appName,metadata.appVersion);
+        setActiveApp(metadata.scienceAppId);
         PANEL_DATA.setting.form = $.extend({}, metadata);
         PANEL_DATA["save-as"].form = PANEL_DATA.setting.form;
     }
 
+    function setActiveApp(scienceAppId) {
+    	if(scienceAppId==0){
+    		$("#" + namespace + "active-app-register").css("display","block");
+    		$("#" + namespace + "active-app-config").css("display","none");
+    	}else{
+    		$("#" + namespace + "active-app-register").css("display","none");
+    		$("#" + namespace + "active-app-config").css("display","block");
+    	}
+    }
+    
+    function setAppTitle(appName,appVersion) {
+    	var appTitleText = appName || "";
+    	if(appTitleText!=""){appTitleText=appName+" v"+appVersion};
+        $("#" + namespace + "workflow-app-title").text(appTitleText);
+    }
+    
     function setTitle(titleText) {
         titleText = titleText || "";
         $("#" + namespace + "workflow-title").text(titleText);
@@ -333,6 +374,9 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             '    <tr workflow-id="{{workflowId}}">'+
             '        <td>{{title}}</td>'+
             '        <td>{{description}}</td>'+
+            '        <td>{{appName}}</td>'+
+            '        <td>{{appVesion}}</td>'+
+            '        <td>{{statusNm}}</td>'+
             '        <td>{{parentTitle}}</td>'+
             '        <td>{{createDate}}</td>'+
             '    </tr>'+
@@ -383,7 +427,11 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 setMetaData({
                     "title": workflow.title,
                     "description": workflow.description,
-                    "workflowId": workflowId
+                    "workflowId": workflowId,
+                    "scienceAppId": workflow.scienceAppId,
+                    "appName": workflow.appName,
+                    "appVersion": workflow.appVesion,
+                    "status": workflow.status
                 });
                 designer.drawWorkflowDefinition(workflow);
                 closePanel();
@@ -476,19 +524,40 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
             return false;
         }
-        _confirm(var_remove_workflow_confirm_message, function () {
-            designer.deleteWorkflowDefinition(workflowId,
-                function (resetDesignerFn) {
-                    if (PANEL_DATA.setting.form.workflowId === workflowId) {
-                        designer.resetWorkflow();
-                        setMetaData({});
-                        if(panelType === "setting"){
-                            $("#" + namespace + "menu-panel-box .data-binded").val("");
-                        }
-                    }
-                    toastr["success"]("", var_success_remove_workflow_message);
-                    loadWorkflowDefinitions(panelType, PANEL_DATA.open.form.params.p_curPage);
-                });
+        
+        var scienceAppId = workflow.scienceAppId;
+        if(scienceAppId!=0){
+        	var appStatus = workflow.status;
+        	if(appStatus===1901004){
+        		toastr["error"]("", var_workflow_remove_status_error_message);
+        		return false;
+        	}else{
+        		deleteWorkflowConfirm(var_remove_with_app_confirm_message,panelType,workflowId,scienceAppId);
+        	}
+        }else{
+        	deleteWorkflowConfirm(var_remove_workflow_confirm_message,panelType,workflowId, scienceAppId);
+        }
+    }
+    
+    function deleteWorkflowConfirm(confirmMsg,panelType, workflowId,scienceAppId){
+    	_confirm(confirmMsg, function () {
+    		var vFunction = function (resetDesignerFn){
+    			 if (PANEL_DATA.setting.form.workflowId === workflowId) {
+                     designer.resetWorkflow();
+                     setMetaData({});
+                     if(panelType === "setting"){
+                         $("#" + namespace + "menu-panel-box .data-binded").val("");
+                     }
+                 }
+                 toastr["success"]("", var_success_remove_workflow_message);
+                 loadWorkflowDefinitions(panelType, PANEL_DATA.open.form.params.p_curPage);
+    		}
+    		
+    		if(scienceAppId!=0){
+    			designer.deleteWorkflowDefinitionWithScienceApp(workflowId,scienceAppId,vFunction);
+    		}else{
+    			designer.deleteWorkflowDefinition(workflowId,vFunction);
+    		}
         }, function () { });
     }
     
