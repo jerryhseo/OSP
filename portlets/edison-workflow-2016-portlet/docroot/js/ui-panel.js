@@ -696,9 +696,15 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		}
     		var btns = {"ok": "Save", "cancel": "Cancel"};
     		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
-    			nodeData["content"] = $("#" + namespace + "wf-modal").find("textarea[name='script']").val().trim();
-    			console.log(nodeData);
-    			 $("#" + namespace + "wf-modal").modal("hide");
+    			if (appType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    				var inputData = new OSP.InputData();
+    				inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+    				inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
+    				nodeData["content"] = inputData;
+    			}
+    			
+    			designer.setNodeData(nodeId,nodeData);
+    			$("#" + namespace + "wf-modal").modal("hide");
         	});
     	}else{
     		

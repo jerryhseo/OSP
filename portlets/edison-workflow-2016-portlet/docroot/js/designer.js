@@ -373,6 +373,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     	var node = currentJsPlumbInstance.getNode(nodeId);
     	return node.data;
     }
+    
+    function setNodeData(nodeId, nodeData) {
+    	var node = currentJsPlumbInstance.getNode(nodeId);
+    	node["data"] = nodeData;
+    	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+    }
+    
+    
 
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
@@ -1025,6 +1033,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             return currentJsPlumbInstance;
         },
         "setUiPanelInstance" : setUiPanelInstance,
-        "getNodeData" : getNodeData
+        "getNodeData" : getNodeData,
+        "setNodeData" : setNodeData
+        
     };
 });

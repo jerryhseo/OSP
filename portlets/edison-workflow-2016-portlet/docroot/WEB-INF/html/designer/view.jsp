@@ -622,9 +622,7 @@ $.widget.bridge('uibutton', $.ui.button);
 		
 	{{/isFile}}
 	{{^isFile}}
-		<textarea class="form-control" rows="20" id="name="{{name}}" name="{{name}}" style="resize: none;">
-			{{value}}
-		</textarea>
+		<textarea class="form-control" rows="20" id="name="{{name}}" name="{{name}}" style="resize: none;">{{value}}</textarea>
 	{{/isFile}}
   </div>
 {{/inputs}}
