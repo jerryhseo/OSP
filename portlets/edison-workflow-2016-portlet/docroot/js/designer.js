@@ -312,8 +312,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     function drawScienceAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
+        
         var scienceAppData = {
-            sciecneAppId: data.sciecneAppId,
+            sciecneAppId: data.scienceAppId,
             runType: data.runType,
             name: data.name,
             version: data.version,
