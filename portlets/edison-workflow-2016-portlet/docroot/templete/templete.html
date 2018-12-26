@@ -32,6 +32,22 @@
 
 <script type="jtk" id="workflowApp-templete">
 <div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;">
+	<div class="input-ports-list">
+		<ul class="inputport port">
+			<r-each in="inputPorts">
+				<r-tmpl id="wf-input-port-templete"></r-tmpl>
+			</r-each>
+		</ul>
+	</div>
+	
+	<div class="output-ports-list">
+		<ul class="outputport port">
+			<r-each in="outputPorts">
+				<r-tmpl id="wf-output-port-templete"></r-tmpl>
+			</r-each>
+		</ul>
+	</div>
+
 	<div class="wf-icon">
 		<r-if test="scienceAppData.runType=='DynamicConverter'">
 			<i class="fa fa-code"></i>
@@ -67,5 +83,22 @@
 		${$key}
 	</span>
 	<jtk-source port-id="${$key}" port-type="outputPorts"></jtk-source>
+</li>
+</script>
+
+<script type="jtk" id="wf-input-port-templete">
+<li>
+	<span class="input-port-name">
+		${$key}
+	</span>
+	<jtk-target port-id="${$key}" port-type="all"></jtk-target>
+</li>
+</script>
+<script type="jtk" id="wf-output-port-templete">
+<li>
+	<span class="output-port-name">
+		${$key}
+	</span>
+	<jtk-source port-id="${$key}" port-type="all"></jtk-source>
 </li>
 </script>

@@ -37,10 +37,10 @@ var AppTree = (function(namespace, $, designer){
                 "groupId": getSpecificSiteGroupId(),
                 "inputports": {
                     "criteria": {
+                    	"name_": "criteria",
                         "inputData_": {
                             "type_": "file"
                         },
-                        "name_": "criteria",
                         "defaultEditor_": "none",
                         "dataType_": {
                             "name": "controller_input",
@@ -94,7 +94,6 @@ var AppTree = (function(namespace, $, designer){
                             "relative_": true
                         }
                     }
-
                 }
             }
         });
@@ -194,20 +193,6 @@ var AppTree = (function(namespace, $, designer){
                 "text": "File Component",
                 "parent": "componet_category",
                 "groupId": getSpecificSiteGroupId(),
-                "inputports": {
-                    "localfile0": {
-                        "inputData_": {
-                            "type_": "file"
-                        },
-                        "name_": "localfile0",
-                        "defaultEditor_": "none",
-                        "dataType_": {
-                            "name": "converter_input",
-                            "version": ""
-                        },
-                        "mandatory_": true
-                    }
-                },
                 "outputports": {
                     "stdout.out": {
                         "name_": "stdout.out",
