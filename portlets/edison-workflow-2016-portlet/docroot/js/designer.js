@@ -3,11 +3,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
+    
+    var uiPanelInstance = undefined;
+    
+    var setUiPanelInstance = function(uiPanel) {
+    	uiPanelInstance = uiPanel;
+    }
 
     var currentJsPlumbInstance;
     var wfPortletGlobalData = wfPortletGlobalData ? wfPortletGlobalData : { wfElements: {} };
     var modifyingWorkflow;
-    var workflowInputPort;
 
     /** application **/
     var portDropOption = {
@@ -73,15 +78,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 template: "workflowApp-templete",
                 events: {
                     dblclick: function(obj) {
+                    	console.log(obj);
+                    	var wfId = obj.node.id;
                         var data = obj.node.data;
                         var runType = data.scienceAppData.runType;
-                        if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-                            alert(WF_APP_TYPES.DYNAMIC_CONVERTER.NAME);
-                        } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
-                            alert(WF_APP_TYPES.CONTROLLER.NAME);
-                        } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                            alert(WF_APP_TYPES.FILE_COMPONENT.NAME);
-                        }
+                        if(uiPanelInstance) {
+                    		uiPanelInstance.openWfAppDataSetting(wfId, true, runType, data.scienceAppData.name);
+                    	}
                     }
                 }
             }
@@ -89,7 +92,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         ports: {
             "inputPorts": {
                 events: {
-                    dblclick: function(obj, event) {
+                    dblclick: function(obj) {
                         console.log(obj);
                         alert("APP_INPUT_PORT");
                     }
@@ -162,7 +165,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             renderer.setZoom(zoomLevel, true);
         }
     });
-
+    
     var outputPortPoint = {
         endpoint: ["Rectangle", { width: 18, height: 18 }, { cssClass: "output-port" }],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,
@@ -364,20 +367,17 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
         return wfId;
     }
+    
+    
+    function getNodeData(nodeId) {
+    	var node = currentJsPlumbInstance.getNode(nodeId);
+    	return node.data;
+    }
 
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
         var isInputPortExist = false;
-
-        //    	 if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
-        //    		isInputPortExist = true;
-        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
-        //         	disInputPortExist = true;
-        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.FILE_COMPONENT.NAME){
-        //        	
-        //         }
-
         var scienceAppData = {
             runType: data.appType,
             name: data.name
@@ -602,17 +602,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Converter Script",
                     icon: "edit",
                     callback: function(key, options) {
-                        var editor = {
-                            "editorType": "Text",
-                            "exeFileName": editorPortletIds.Text,
-                            "name": "Script Editor"
-                        };
-                        var port = {
-                            "name": function() {
-                                return WF_CONVERTER_SCRIPT;
-                            }
-                        };
-                        workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
+                    	
                     }
                 };
             } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
@@ -620,20 +610,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Condition Script",
                     icon: "edit",
                     callback: function(key, options) {
-                        var editor = {
-                            "editorType": "Text",
-                            "exeFileName": editorPortletIds.Text,
-                            "name": "Script Editor"
-                        };
-                        var port = {
-                            "name": function() {
-                                return WF_CONVERTER_SCRIPT;
-                            }
-                        };
-                        workflowInputPort.popEditorWindow(editor, port, appData, wfWindowId);
+                    	
                     }
                 };
-            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {} else {
+            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 items["items"]["open-info"] = {
                     name: "App Information",
                     icon: "info",
@@ -1044,8 +1024,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         "getCurrentJsPlumbInstance": function() {
             return currentJsPlumbInstance;
         },
-        "setWorkflowInputPortModule": function(workflowInputPortInstance) {
-            workflowInputPort = workflowInputPortInstance;
-        }
+        "setUiPanelInstance" : setUiPanelInstance,
+        "getNodeData" : getNodeData
     };
 });

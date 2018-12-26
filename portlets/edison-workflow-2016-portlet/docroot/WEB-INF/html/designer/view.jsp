@@ -614,6 +614,21 @@ $.widget.bridge('uibutton', $.ui.button);
 </form>
 </script>
 
+<script id="tpl-modal-wf-app-data-body" type="text/html">
+{{#inputs}}
+  <div class="form-group">
+    <label for="{{name}}" class="control-label">{{name}}</label>
+	{{#isFile}}
+		
+	{{/isFile}}
+	{{^isFile}}
+		<textarea class="form-control" rows="20" id="name="{{name}}" name="{{name}}" style="resize: none;">
+			{{value}}
+		</textarea>
+	{{/isFile}}
+  </div>
+{{/inputs}}
+</script>
 <script id="tpl-modal-body" type="text/html">
 {{#inputs}}
   <div class="form-group">
@@ -666,14 +681,9 @@ $(document).ready(function(){
   
   var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
   var uiPanel = new UIPanel(namespace, $, designer, toastr, REGISTER_WORKFLOW_APP_PARAM);
+  designer.setUiPanelInstance(uiPanel);
   var appTree = new AppTree(namespace, $, designer);
   var selectable = new Selectable(namespace, $, designer);
-  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
-  consoleLog.setLoggingLevel({
-     info: true, debug: false, error: true
-  });
-
-  designer.setWorkflowInputPortModule(inputportModule);
 
   aSyncAjaxHelper.post("/delegate/services/app/all", {
     companyGroupId: <portlet:namespace/>getCompanyGroupId(),
@@ -695,9 +705,6 @@ $(document).ready(function(){
         - $(".menu-panel .box.box-solid > .box-header").actual("outerHeight"));
   });
 
-  $("#exampleModal .modal-dialog").draggable({
-      handle: ".modal-header"
-  });
   if(loadedWorkflowId && loadedWorkflowId !== 'null'){
       uiPanel.openWorkflow(loadedWorkflowId);
   }

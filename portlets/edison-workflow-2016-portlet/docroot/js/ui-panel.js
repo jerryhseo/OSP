@@ -94,7 +94,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 "exportWorkflow": exportWorkflow,
                 "delete": deleteWorkflow
             }
-        }
+        }	
     };
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
 
@@ -664,9 +664,50 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         $(that).siblings().removeClass("active");
         $(that).addClass("active");
     }
+    
+    
+    function createOpenModalFromDesigner(title, bodyTemplete, inputs, btns, saveHandler) {
+        var modal = $("#" + namespace + "wf-modal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").empty().append($.Mustache.render(bodyTemplete, { "inputs": inputs }));
+        modal.find(".modal-footer").empty().append($.Mustache.render("tpl-modal-footer", btns));
+        modal.modal({ "backdrop": "static", "keyboard": false });
+        $("#" + namespace + "wf-modal").find("input[name='Title']").select();
+        _delay(function (selector) { $(selector).find("input[name='Title']").select(); }, 500, "#" + namespace + "wf-modal");
+        $("#" + namespace + "wf-modal").find("button[name='Save']").click(saveHandler);
+    }
+    
+    
+    var openWfAppDataSetting = function(nodeId, isWfApp, appType, appName){
+    	var inputs = new Array();
+    	if(isWfApp){
+    		var nodeData = designer.getNodeData(nodeId);
+    		var value;
+    		if(nodeData["content"]){
+    			value = nodeData["content"].trim();
+    		}
+    		
+    		if (appType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+    			inputs.push({"name": "script", "value": value,"isFile":false});
+    		} else if (appType == WF_APP_TYPES.CONTROLLER.NAME) {
+    			inputs.push({"name": "script", "value": value,"isFile":false});
+    		} else if (appType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    			inputs.push({"name": "script", "value": "","isFile":true});
+    		}
+    		var btns = {"ok": "Save", "cancel": "Cancel"};
+    		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
+    			nodeData["content"] = $("#" + namespace + "wf-modal").find("textarea[name='script']").val().trim();
+    			console.log(nodeData);
+    			 $("#" + namespace + "wf-modal").modal("hide");
+        	});
+    	}else{
+    		
+    	}
+    }
 
     return {
         "openWorkflow": openWorkflowByWorkflowId,
+        "openWfAppDataSetting": openWfAppDataSetting,
         "isEmpty": function(){
             return _isEmpty(PANEL_DATA.setting.form.workflowId);
         }
