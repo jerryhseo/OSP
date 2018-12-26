@@ -1223,7 +1223,7 @@ var contextPath = '${contextPath}';
     $("#<portlet:namespace/>descriptionContentBox").find("li[data-value='"+DEFAULT_LANGUAGE+"']").trigger("click");
     var isPublic = workflowData["isPublic"];
     $("input:checkbox[id='<portlet:namespace/>isPublic']").prop("checked", isPublic);
-    $targetLanguage = workflowData["targetLanguage"];
+    /* $targetLanguage = workflowData["targetLanguage"];
     if($targetLanguage != ""){
 		$checkedVal = $targetLanguage.split(",");
 		if($checked =! ""){
@@ -1236,7 +1236,7 @@ var contextPath = '${contextPath}';
 				}
 			});
 		}
-	}
+	} */
     $("#<portlet:namespace/>wf-conf-dialog").dialog("open");
   }
 

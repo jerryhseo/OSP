@@ -208,27 +208,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         dropOptions: portDropOption
     };
 
-<<<<<<< HEAD
-    var wfWorkflowJsPlumbInstance = jsPlumb.getInstance({
-        Container: "wf-workflow-canvas",
-        DragOptions: {containment: true, cursor: 'pointer'},
-        Endpoint: "Rectangle",
-        ConnectionsDetachable: !isFixed,
-        Anchors: ["TopCenter", "TopCenter"],
-        Overlays: [["Arrow", {location: 1, id: "arrow", length: 14, foldback: 1}]]
-    });
-
-    var renderer = jsPlumbToolkit.Support.ingest({
-        jsPlumb : wfWorkflowJsPlumbInstance,
-        renderParams : {
-            consumeRightClick: true,
-            clampZoom: true,
-            enablePan: true
-        }
-    });
-    
-=======
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
     /** jsplumb callback **/
     function jsPlumbConnectionDetachedCallback(info, originalEvent) {
         if (!info.sourceEndpoint.hasType(WF_JSPLUMB_TYPES.ENDPOINT) ||

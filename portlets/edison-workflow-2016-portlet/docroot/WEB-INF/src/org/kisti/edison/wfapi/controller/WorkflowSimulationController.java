@@ -1,22 +1,16 @@
 package org.kisti.edison.wfapi.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.JsonNode;
-import org.kisti.edison.model.Workflow;
-import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.wfapi.custom.Transformer;
-import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.kisti.edison.wfapi.custom.WorkflowPagingUtil;
 import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowError;
 import org.springframework.http.HttpStatus;
@@ -29,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -69,13 +62,15 @@ public class WorkflowSimulationController{
             int curPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("p_curPage"), "1"));
             int linePerPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("linePerPage"), "10"));
             int pagePerBlock = 5;
-            int totalCnt = GetterUtil.getInteger(WorkflowLocalServiceUtil.getCountWorkflowsByLikeSearch(searchParam));
+            int totalCnt = GetterUtil
+                .getInteger(WorkflowSimulationLocalServiceUtil.getCountWorkflowSimulations(title, user.getUserId()));
             int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
             int begin = (curPage - 1) * linePerPage;
             int end = linePerPage;
             
             Map<String, Object> listAndPagingMap = Maps.newHashMap();
-            listAndPagingMap.put("workflows", WorkflowSimulationLocalServiceUtil.getWorkflowSimulations(title, user.getUserId(), begin, end));
+            listAndPagingMap.put("workflows",
+                WorkflowSimulationLocalServiceUtil.getWorkflowSimulations(title, user.getUserId(), begin, end));
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",

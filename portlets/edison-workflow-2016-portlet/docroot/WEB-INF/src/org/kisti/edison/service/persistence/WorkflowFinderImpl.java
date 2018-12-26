@@ -9,11 +9,7 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.model.impl.WorkflowImpl;
-<<<<<<< HEAD
-=======
-import org.kisti.edison.model.impl.WorkflowInstanceImpl;
 import org.kisti.edison.util.EdisonExpndoUtil;
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 import org.kisti.edison.util.GBatisUtil;
 
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -60,7 +56,6 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
       SQLQuery query = session.createSQLQuery(gBatisQuery);
       query.addEntity("EDWF_Workflow", WorkflowImpl.class);
       query.addScalar("parentTitle", Type.STRING);
-      query.addScalar("parentIsPublic", Type.BOOLEAN);
       query.addScalar("parentUserId", Type.BOOLEAN);
       query.addScalar("screenName", Type.STRING);
       query.addScalar("scienceAppId", Type.INTEGER);
@@ -81,18 +76,17 @@ public class WorkflowFinderImpl extends BasePersistenceImpl<Workflow>
         workflowMap.put("descriptionMap", workflow.getDescription());
         workflowMap.put("parentTitle", LocalizationUtil
             .getLocalization(GetterUtil.getString(columns[1]), LocaleUtil.toLanguageId(locale)));
-        workflowMap.put("parentIsPublic", columns[2]);
         
-        if(workflow.getUserId() == GetterUtil.getLong(columns[3])){
+        if(workflow.getUserId() == GetterUtil.getLong(columns[2])){
           workflowMap.put("parentIsMine", true);
         }else{
           workflowMap.put("parentIsMine", false);
         }
-        workflowMap.put("screenName", columns[4]);
-        workflowMap.put("scienceAppId", columns[5]);
-        workflowMap.put("appName", columns[6]);
-        workflowMap.put("appVesion", columns[7]);
-        long status = GetterUtil.getLong(columns[8], 0);
+        workflowMap.put("screenName", columns[3]);
+        workflowMap.put("scienceAppId", columns[4]);
+        workflowMap.put("appName", columns[5]);
+        workflowMap.put("appVesion", columns[6]);
+        long status = GetterUtil.getLong(columns[7], 0);
         if(status==0){
         	workflowMap.put("status", "");
         	workflowMap.put("statusNm", "");

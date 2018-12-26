@@ -183,7 +183,6 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 
 		_methodName59 = "setBeanIdentifier";
 
-<<<<<<< HEAD
 		_methodParameterTypes59 = new String[] { "java.lang.String" };
 
 		_methodName64 = "getWorkflowSimulations";
@@ -192,33 +191,35 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 				"java.lang.String", "long", "int", "int"
 			};
 
-		_methodName65 = "createWorkflowSimulation";
+		_methodName65 = "getCountWorkflowSimulations";
 
-		_methodParameterTypes65 = new String[] {  };
+		_methodParameterTypes65 = new String[] { "java.lang.String", "long" };
 
 		_methodName66 = "createWorkflowSimulation";
 
-		_methodParameterTypes66 = new String[] {
+		_methodParameterTypes66 = new String[] {  };
+
+		_methodName67 = "createWorkflowSimulation";
+
+		_methodParameterTypes67 = new String[] {
 				"java.util.Map", "com.liferay.portal.model.User"
 			};
 
-		_methodName67 = "updateWorkflowSimulation";
+		_methodName68 = "updateWorkflowSimulation";
 
-		_methodParameterTypes67 = new String[] {
+		_methodParameterTypes68 = new String[] {
 				"long", "java.util.Map", "com.liferay.portal.model.User"
-=======
-		_methodParameterTypes63 = new String[] { "java.lang.String" };
+			};
 
-		_methodName68 = "getWorkflowMonitoringJobList";
+		_methodName69 = "getWorkflowMonitoringJobList";
 
-		_methodParameterTypes68 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes69 = new String[] { "long", "java.util.Locale" };
 
-		_methodName69 = "getWorkflowMonitoringList";
+		_methodName70 = "getWorkflowMonitoringList";
 
-		_methodParameterTypes69 = new String[] {
+		_methodParameterTypes70 = new String[] {
 				"long", "java.lang.String", "long", "long", "long", "int", "int",
 				"java.util.Locale"
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 			};
 	}
 
@@ -438,7 +439,6 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 			return null;
 		}
 
-<<<<<<< HEAD
 		if (_methodName64.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
 			return WorkflowSimulationLocalServiceUtil.getWorkflowSimulations((java.lang.String)arguments[0],
@@ -449,29 +449,36 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 
 		if (_methodName65.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes65, parameterTypes)) {
-			return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation();
+			return WorkflowSimulationLocalServiceUtil.getCountWorkflowSimulations((java.lang.String)arguments[0],
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName66.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes66, parameterTypes)) {
-			return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
-				(com.liferay.portal.model.User)arguments[1]);
+			return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation();
 		}
 
 		if (_methodName67.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
+			return WorkflowSimulationLocalServiceUtil.createWorkflowSimulation((java.util.Map<java.lang.String, java.lang.Object>)arguments[0],
+				(com.liferay.portal.model.User)arguments[1]);
+		}
+
+		if (_methodName68.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
 			return WorkflowSimulationLocalServiceUtil.updateWorkflowSimulation(((Long)arguments[0]).longValue(),
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1],
 				(com.liferay.portal.model.User)arguments[2]);
-=======
-		if (_methodName68.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
-			return WorkflowSimulationLocalServiceUtil.getWorkflowMonitoringJobList(((Long)arguments[0]).longValue(),
-				(java.util.Locale)arguments[1]);
 		}
 
 		if (_methodName69.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
+			return WorkflowSimulationLocalServiceUtil.getWorkflowMonitoringJobList(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1]);
+		}
+
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
 			return WorkflowSimulationLocalServiceUtil.getWorkflowMonitoringList(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				((Long)arguments[2]).longValue(),
@@ -480,7 +487,6 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 				((Integer)arguments[5]).intValue(),
 				((Integer)arguments[6]).intValue(),
 				(java.util.Locale)arguments[7]);
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 		}
 
 		throw new UnsupportedOperationException();
@@ -550,7 +556,6 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
-<<<<<<< HEAD
 	private String _methodName58;
 	private String[] _methodParameterTypes58;
 	private String _methodName59;
@@ -563,14 +568,10 @@ public class WorkflowSimulationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes66;
 	private String _methodName67;
 	private String[] _methodParameterTypes67;
-=======
-	private String _methodName62;
-	private String[] _methodParameterTypes62;
-	private String _methodName63;
-	private String[] _methodParameterTypes63;
 	private String _methodName68;
 	private String[] _methodParameterTypes68;
 	private String _methodName69;
 	private String[] _methodParameterTypes69;
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
+	private String _methodName70;
+	private String[] _methodParameterTypes70;
 }

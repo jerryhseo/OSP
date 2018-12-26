@@ -467,12 +467,18 @@ public class WorkflowSimulationLocalServiceWrapper
 	}
 
 	@Override
-<<<<<<< HEAD
 	public java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
 		java.lang.String title, long userId, int begin, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _workflowSimulationLocalService.getWorkflowSimulations(title,
 			userId, begin, end);
+	}
+
+	@Override
+	public int getCountWorkflowSimulations(java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationLocalService.getCountWorkflowSimulations(title,
+			userId);
 	}
 
 	@Override
@@ -499,7 +505,9 @@ public class WorkflowSimulationLocalServiceWrapper
 			com.liferay.portal.kernel.exception.SystemException {
 		return _workflowSimulationLocalService.updateWorkflowSimulation(simulationId,
 			params, user);
-=======
+	}
+
+	@Override
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getWorkflowMonitoringJobList(
 		long simulationId, java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -515,7 +523,6 @@ public class WorkflowSimulationLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _workflowSimulationLocalService.getWorkflowMonitoringList(userId,
 			searchValue, simulationId, jobStatus, classId, begin, end, locale);
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
 	}
 
 	/**

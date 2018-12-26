@@ -241,7 +241,6 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
     public Workflow updateWorkflow(Map<String, Object> workflowParam) throws SystemException, PortalException{
         long workflowId = GetterUtil.getLong(workflowParam.get("workflowId"));
         Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
-        boolean isPublic = GetterUtil.getInteger(workflowParam.get("isPublic")) == 1 ? true : false;
         String serviceLang = "";
         String[] serviceLangArray = CustomUtil.paramToArray(workflowParam.get("select_languageId"));
         if(serviceLangArray != null && serviceLangArray.length > 0){
@@ -282,16 +281,10 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
             if("begin".equals(key) || "end".equals(key)){
                 continue;
             }
-            if("targetLanguage".equals(key)){
-                query.add(RestrictionsFactoryUtil.like(key, "%" + serachParam.get(key) + "%"));
-            }
             if("title".equals(key)){
                 query.add(RestrictionsFactoryUtil.like(key, "%" + serachParam.get(key) + "%"));
             }
             if("userId".equals(key)){
-                query.add(RestrictionsFactoryUtil.eq(key, serachParam.get(key)));
-            }
-            if("isPublic".equals(key)){
                 query.add(RestrictionsFactoryUtil.eq(key, serachParam.get(key)));
             }
         }

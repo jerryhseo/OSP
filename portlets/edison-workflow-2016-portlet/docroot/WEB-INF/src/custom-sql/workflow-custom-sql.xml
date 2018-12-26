@@ -59,11 +59,7 @@
   
 	<sql id="org.kisti.edison.service.persistence.WorkflowFinder.retrieveWorkflows.header" >
 		<![CDATA[
-<<<<<<< HEAD
-		SELECT A.*, B.title AS parentTitle, B.userId AS parentUserId, U.screenName AS screenName 
-=======
-		SELECT A.*, B.title AS parentTitle, B.isPublic AS parentIsPublic, B.userId AS parentUserId, U.screenName AS screenName, IFNULL(APP.scienceAppId,0) AS scienceAppId, APP.name, APP.version,APP.status 
->>>>>>> 7b21a178c4fc74feebf3336ab3a4473abb54bf29
+		SELECT A.*, B.title AS parentTitle, B.userId AS parentUserId, U.screenName AS screenName, IFNULL(APP.scienceAppId,0) AS scienceAppId, APP.name, APP.version,APP.status 
         FROM EDWF_Workflow A
         LEFT OUTER JOIN EDWF_Workflow B
         ON A.parentWorkflowId = B.workflowId
@@ -79,10 +75,6 @@
 		WHERE
 		<isNotEmpty property="companyId">
 			A.companyId = #companyId#
-		</isNotEmpty>
-		<isNotEmpty property="targetLanguage">
-		AND
-			A.targetLanguage LIKE '%@@targetLanguage@@%'
 		</isNotEmpty>
 		<isNotEmpty property="title">
 		AND
