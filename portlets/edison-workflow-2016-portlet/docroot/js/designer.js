@@ -93,8 +93,52 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             "inputPorts": {
                 events: {
                     dblclick: function(obj) {
-                        console.log(obj);
-                        alert("APP_INPUT_PORT");
+                        /* 
+                         * 1. wfSampleFile 선택 panel 출력 
+                         * 2. File 선택
+                         * 3. ajax로 File Upload
+                         * 4. Upload된 파일의 ID Return 받기
+                         * 5. return된 ID가 !=null && 0 < 면  아래 json-object 추가
+                         * 		wfSampleFile_:{
+                         * 			id_ : "file-ID"
+                         * 		}
+                         * 6. wfSample_ : true로 수정
+                         * 7. wfSample_을 사용하지 않을 경우 wfSampleFile_ 삭제
+                         * 
+                         * 8. 앱 삭제 시 wfSampleFile의 ID를 이용하여 DLFile 삭제한 후 앱 삭제
+                         */
+                        
+                        var nodeId = obj.nodeId;
+                        var portId = obj.portId;
+                        var portType = obj.portType;
+                        var nodeData = obj.node.data;
+                        var portWfSample = nodeData[obj.portType][obj.portId].wfSample_;
+                        
+                        var selectedPortData = {
+                        		"nodeId" : nodeId,
+                        		"portId" : portId,
+                        		"portType" : portType,
+                        		"nodeData" : nodeData
+                        }
+                        
+                        /*if(portWfSample){
+                        	nodeData[obj.portType][obj.portId].wfSample_ = false;
+                        	delete nodeData[obj.portType][obj.portId].wfSampleFile_;
+                        } else {
+                        	nodeData[obj.portType][obj.portId].wfSample_ = true;
+                        	nodeData[obj.portType][obj.portId].wfSampleFile_ = {};
+                        	nodeData[obj.portType][obj.portId].wfSampleFile_.id = "111";
+                        	var wfSampleFile
+                        }*/
+                        
+                        var fn = window[namespace + "openWfPortFileUploadModal"];
+                        if (fn) {
+                            fn.apply(null, [selectedPortData]);
+                        }
+                        
+                        /*if(uiPanelInstance) {
+                    		uiPanelInstance.openWfAppDataSetting(nodeId, false, portType, portId);
+                    	}*/
                     }
                 }
             }
@@ -676,12 +720,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         disabled: true
                     };
                     items["items"]["mpi-input"] = {
-                        name: "Cpu Number (scope : " + appData["defaultCpus"] + " ~ " + appData["maxCpus"] + ")",
+                        name: "Cpu Number (scope : " + nodeData.scienceAppData.minCpus + " ~ " + nodeData.scienceAppData.maxCpus + ")",
                         type: 'text',
-                        value: cpuNumber,
+                        value: nodeData.scienceAppData.defaultCpus,
                         events: {
                             keyup: function(e) {
-                                appData["cpuNumber"] = $(this).val();
+                            	nodeData.scienceAppData.defaultCpus = $(this).val();
                             }
                         }
                     };

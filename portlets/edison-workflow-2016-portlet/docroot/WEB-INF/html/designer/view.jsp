@@ -14,6 +14,11 @@
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" portletMode="view" plid="${scienceAppPlid}" >
   <liferay-portlet:param name="myRender" value="solverRender" />
 </liferay-portlet:renderURL> 
+
+<liferay-portlet:renderURL var="uploadWfSampleFilePopupURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>"  copyCurrentRenderParameters="false">
+	<liferay-portlet:param name="myaction" value="uploadWfSampleFilePopup" />
+</liferay-portlet:renderURL>
+
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -456,6 +461,9 @@ var contextPath = '${contextPath}';
 </div>
 </div>
 
+<div id="<portlet:namespace/>portFileUploadDialog" title="파일업로드" class="bigpopupbox" style="display:none;">
+</div>
+
 <script>
 $.widget.bridge('uibutton', $.ui.button);
 </script>
@@ -627,6 +635,20 @@ $.widget.bridge('uibutton', $.ui.button);
   </div>
 {{/inputs}}
 </script>
+<script id="tpl-modal-wf-app-port-file-body" type="text/html">
+{{#inputs}}
+  <div class="form-group">
+	{{#isFile}}
+		<select class="form-control" >
+			<option value="{{value}}">{{name}}</option>
+		</select>
+	{{/isFile}}
+	{{^isFile}}
+
+	{{/isFile}}
+  </div>
+{{/inputs}}
+</script>
 <script id="tpl-modal-body" type="text/html">
 {{#inputs}}
   <div class="form-group">
@@ -734,6 +756,45 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
   var params = "&" + thisPortletNamespace + "solverId=" + scienceAppId;
       params += "&" + thisPortletNamespace + "groupId=" + groupId;
   window.open("<%=scienceAppDetailUrl%>" + params);
+}
+
+function <portlet:namespace/>openWfPortFileUploadModal(selectedPortData){
+	console.log(selectedPortData);
+	var nodeData = selectedPortData.nodeData;
+	var portType = selectedPortData.portType;
+	var portId = selectedPortData.portId;
+	var selectedPortInfo = nodeData[portType][portId];
+	
+	var URL = "<%=uploadWfSampleFilePopupURL%>";
+	URL += "&<portlet:namespace/>sampleFileId=" + selectedPortInfo.sample_.id;
+	URL += "&<portlet:namespace/>editors=" + JSON.stringify(selectedPortInfo.editors_);
+	
+	console.log("url : " + URL);
+	/* modal 출력 */
+	$("#<portlet:namespace/>portFileUploadDialog").dialog({
+		autoOpen: true,
+		width: 800,
+		height: 600,
+		modal: true,
+		resizable: false,
+		show: {effect:'fade', speed: 800}, 
+		hide: {effect:'fade', speed: 800},
+		
+		open: function(event, ui) {
+			$(this).removeClass("ui-widget-content");
+			$(this).parent().removeClass("ui-widget-content");
+			$(this).parent().css('overflow','visible');
+			$(this).load(URL);
+		
+			$('.ui-widget-overlay').bind('click',function(){
+				$("#<portlet:namespace/>portFileUploadDialog").dialog("close");
+			})
+		},
+		close: function() {
+			$("#<portlet:namespace/>portFileUploadDialog").empty();
+		}
+	}).dialog("widget").find(".ui-dialog-titlebar").remove();
+	console.log("end....");
 }
 </script>
 </div>

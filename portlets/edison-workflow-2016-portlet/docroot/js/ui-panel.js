@@ -707,7 +707,28 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     			$("#" + namespace + "wf-modal").modal("hide");
         	});
     	}else{
+    		var nodeData = designer.getNodeData(nodeId);
+    		var portEditorArr = nodeData[appType][appName].editors_;
+    		inputs.push({"isFile":true});
+    		for(var i=0; i<portEditorArr.length; i++){
+    			portEditor = portEditorArr[i];
+    			inputs.push({"name": portEditor.name, "value": portEditor.value});
+    		}
     		
+    		var btns = {"upload": "Save", "cancel": "Cancel"};
+    		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-port-file-body", inputs, btns, function(e){
+    			if (appType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    				var inputData = new OSP.InputData();
+    				/*inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+    				inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
+    				nodeData["content"] = inputData;*/
+    			}
+    			
+    			designer.setNodeData(nodeId,nodeData);
+    			$("#" + namespace + "wf-modal").modal("hide");
+        	});
+    		
+    		nodeData[appType][appName].wfSample_ = true;
     	}
     }
 
