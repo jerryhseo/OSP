@@ -149,6 +149,23 @@ var synchronousAjaxHelper = {
 
 };
 
+function getParameter(searchKeyword, p_curPage, isPublic, linePerPage){
+  var params = {};
+  if (searchKeyword || searchKeyword === 0) {
+    params.title = searchKeyword;
+  }
+  if (p_curPage) {
+    params.p_curPage = p_curPage;
+  }
+  if (linePerPage) {
+    params.linePerPage = linePerPage;
+  }
+  if (isPublic) {
+    params.isPublic = "true";
+  }
+  return params;
+}
+
 var getGUID = function () {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)

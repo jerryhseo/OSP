@@ -3,9 +3,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
-    
+
     var uiPanelInstance = undefined;
-    
+
     var setUiPanelInstance = function(uiPanel) {
     	uiPanelInstance = uiPanel;
     }
@@ -155,6 +155,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 $(".menu-panel > .menu-panel-box-app").removeClass("hidden");
             }
         },
+        lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
             Anchor: "Center",
             StartpointStyle: { fill: "#416EC5" },
@@ -198,7 +199,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             renderer.setZoom(zoomLevel, true);
         }
     });
-    
+
     var outputPortPoint = {
 		endpoint: ["Rectangle", { width: 10, height: 10 }, { cssClass: "output-port" }],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,
@@ -400,13 +401,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
         return wfId;
     }
-    
-    
+
+
     function getNodeData(nodeId) {
     	var node = currentJsPlumbInstance.getNode(nodeId);
     	return node.data;
     }
-    
+
     function setNodeData(nodeId, nodeData) {
     	var node = currentJsPlumbInstance.getNode(nodeId);
     	node["data"] = nodeData;
@@ -692,7 +693,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Converter Script",
                     icon: "edit",
                     callback: function(key, options) {
-                    	
+
                     }
                 };
             } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
@@ -700,7 +701,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Condition Script",
                     icon: "edit",
                     callback: function(key, options) {
-                    	
+
                     }
                 };
             } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {

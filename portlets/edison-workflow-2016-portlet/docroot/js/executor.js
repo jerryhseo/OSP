@@ -55,9 +55,21 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     var currentJsPlumbInstance = designer.getCurrentJsPlumbInstance();
 
+    function createSimulation(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post("/delegate/services/simulation/create",
+            params,
+            function (simulation) {
+                if (callback) {
+                    callback(simulation);
+                }
+            }, errorCallback
+        );
+    }
+
     function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId, 
+        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId,
         function(workflowInstance){
             callback(workflowInstance);
         }, errorCallback);
@@ -65,7 +77,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function loadWorkflowInstance(workflowInstanceId, callback, errorCallback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId, 
+        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId,
         function(workflowInstance){
             callback(workflowInstance);
             if(workflowInstance.workflowUUID){
@@ -100,7 +112,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                 }
             }, function () { });
     }
-    
+
     function resumeWorkflowInstance(workflowInstanceId, callback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
@@ -223,7 +235,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         } else {
             sortSimulations(simulations);
         }
-        
+
         for (var i = 0; i < simulations.length; i++) {
             var clientId = currentCanvasId + " #" + simulations[i].clientId;
             var appData = $(clientId).data();
@@ -287,7 +299,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         }
     }
 
-    
+
     /*********************************************************************************************** TODO : move to executor */
     function drawModal(title, body, bodyHeightPixel, footer, callback, footerCallback){
         var modal = $("#" + namespace + "wf-modal");
@@ -381,7 +393,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         };
         showAnalyzerWindow(analyzer, callbackFunc);
     }
-    
+
     function showAnalyzerWindow(analyzer, callbackFunc) {
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
@@ -441,7 +453,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             function (workflowStatus) {
             });
     } */
-    
+
     /* function runEventHandler(e) {
         e.preventDefault();
         if (runEventHandler.isLoaded != true) {
@@ -481,6 +493,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         }
     } */
     return {
+        "createSimulation": createSimulation,
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
         "deleteWorkflowInstance": deleteWorkflowInstance,

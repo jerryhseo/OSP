@@ -53,6 +53,7 @@ var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflo
 var contextPath = '${contextPath}';
 </script>
 <style>
+.apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
 </style>
 
 <style type="text/css">
@@ -236,8 +237,8 @@ var contextPath = '${contextPath}';
           <!-- jsplumb-drag-select canvas-wide jtk-droppable -->
             <div id="wf-workflow-canvas" class="apparea wf-drop jtk-surface">
               <div class="controls" can-undo="false" can-redo="false">
-                <!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
-              <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
+                <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
+                <i class="fa fa-pencil" mode="select" title="Select Mode"></i>
                 <i class="fa fa-home" reset title="Zoom To Fit"></i>
                 <i class="fa fa-plus" zoom="in" title="Zoom In"></i>
                 <i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
@@ -322,6 +323,15 @@ $.widget.bridge('uibutton', $.ui.button);
       </tr>
     </tbody>
 </table>
+</script>
+
+<script id="tpl-menu-panel-pagination" type="text/html">
+  <div class="box-footer clearfix">
+    <div class="btn-group" role="group">
+    </div>
+    <ul class="pagination pagination-sm no-margin pull-right">
+    </ul>
+  </div>
 </script>
 
 <script id="tpl-menu-panel-new" type="text/html">
@@ -415,29 +425,21 @@ $(document).ready(function(){
   var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS);
   var executor = new SimulationExecutor(namespace, $, designer, toastr);
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
-  var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
-  designer.setWorkflowInputPortModule(inputportModule);
+  // var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
+  // designer.setWorkflowInputPortModule(inputportModule);
 
   //
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
-  // _delay(function(){
-  //     $("#wf-workflow-canvas").css("height",
-  //       $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
-  //       - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
-  // }, 3000);
   _delay(function(){
     if(workflowId){
       if(console){
           console.log("workflow instance count : ", workflowCount);
       }
-      if(workflowCount > 0){
-        $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='open']").click();
-      }else{
+      uiPanel.openWorkflow(workflowId, false, function(){
         $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
-      }
-      uiPanel.openWorkflow(workflowId);
+      });
     }
   }, 1000);
 });
