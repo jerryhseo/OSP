@@ -419,6 +419,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     		nodeData["inputData_"] = sampleData;
     		nodeData["files"] = [sampleData[OSP.Constants.ID]];
     	}
+    	wfBackgroupSave();
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
     
