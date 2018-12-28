@@ -15,9 +15,9 @@
   <liferay-portlet:param name="myRender" value="solverRender" />
 </liferay-portlet:renderURL> 
 
-<liferay-portlet:renderURL var="uploadWfSampleFilePopupURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString()%>"  copyCurrentRenderParameters="false">
-	<liferay-portlet:param name="myaction" value="uploadWfSampleFilePopup" />
-</liferay-portlet:renderURL>
+<liferay-portlet:resourceURL var="addSampleFileURL" id="addSampleFile" copyCurrentRenderParameters="false"/>
+
+<portlet:resourceURL var='fileDownloadURL' id='fileDownload' escapeXml="false"></portlet:resourceURL>
 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
@@ -461,6 +461,25 @@ var contextPath = '${contextPath}';
 </div>
 </div>
 
+<div class="modal fade" id="<portlet:namespace/>wf-file-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>wf-modal-label" style="display: none;">
+<div class="vertical-alignment-helper">
+  <div class="modal-dialog vertical-align-center" role="document">
+    <div class="modal-content">
+      <form id="<portlet:namespace/>sampleForm" method="POST" action="<%=addSampleFileURL%>" enctype="multipart/form-data">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="<portlet:namespace/>wf-modal-label"></h4>
+	      </div>
+	      <div class="modal-body">
+	      </div>
+	      <div class="modal-footer">
+	      </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
 <div id="<portlet:namespace/>portFileUploadDialog" title="파일업로드" class="bigpopupbox" style="display:none;">
 </div>
 
@@ -624,29 +643,10 @@ $.widget.bridge('uibutton', $.ui.button);
 
 <script id="tpl-modal-wf-app-data-body" type="text/html">
 {{#inputs}}
-  <div class="form-group">
-    <label for="{{name}}" class="control-label">{{name}}</label>
-	{{#isFile}}
-		
-	{{/isFile}}
-	{{^isFile}}
-		<textarea class="form-control" rows="20" id="name="{{name}}" name="{{name}}" style="resize: none;">{{value}}</textarea>
-	{{/isFile}}
-  </div>
-{{/inputs}}
-</script>
-<script id="tpl-modal-wf-app-port-file-body" type="text/html">
-{{#inputs}}
-  <div class="form-group">
-	{{#isFile}}
-		<select class="form-control" >
-			<option value="{{value}}">{{name}}</option>
-		</select>
-	{{/isFile}}
-	{{^isFile}}
-
-	{{/isFile}}
-  </div>
+	<div class="form-group">
+		<label for="{{name}}" class="control-label">{{name}}</label>
+		<textarea class="form-control" rows="20" id="{{name}}" name="{{name}}" style="resize: none; ">{{value}}</textarea>
+	</div>
 {{/inputs}}
 </script>
 <script id="tpl-modal-body" type="text/html">
@@ -661,7 +661,48 @@ $.widget.bridge('uibutton', $.ui.button);
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
 </script>
+
+<script id="tpl-modal-wf-app-file-body" type="text/html">
+<input type="hidden" name="<portlet:namespace/>fileType" value="{{formType}}">
+{{#hiddens}}
+<input type="hidden" name="<portlet:namespace/>{{name}}" value="{{value}}">	
+{{/hiddens}}
+
+{{#inputs}}
+	<div class="form-group">
+		<label for="{{title}}" class="control-label">{{title}}</label>
+		{{#isAppFile}}
+			<h5 style="cursor:pointer;" onClick="<portlet:namespace/>fileDownLoad('{{fileId}}')"><i class="icon-download-alt"></i> {{fileName}}</h5>
+		{{/isAppFile}}
+		{{#isFile}}
+			<input type="file" class="form-control-file" name="<portlet:namespace/>sampleFile">
+			{{#fileId}}
+				<h5 style="cursor:pointer;" onClick="<portlet:namespace/>fileDownLoad('{{fileId}}')"><i class="icon-download-alt"></i> {{fileName}}</h5>
+				<input type="hidden" name="<portlet:namespace/>preFileId" value="{{fileId}}">
+			{{/fileId}}
+		{{/isFile}}
+		{{#isSelect}}
+			<select class="form-control" name="<portlet:namespace/>{{name}}">
+				{{#options}}
+					<option value="{{value}}"  {{#selected}}selected="selected"{{/selected}}>{{optionName}}</option>
+				{{/options}}
+			</select>
+		{{/isSelect}}
+		{{#isInput}}
+			<input type="text" class="form-control" name="<portlet:namespace/>{{name}}" value="{{value}}"/>
+		{{/isInput}}
+	</div>
+{{/inputs}}
+</script>
+
+<script id="tpl-modal-file-footer" type="text/html">
+    <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
+    <button type="submit" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
+</script>
+
+
 <script src="${contextPath}/js/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="${contextPath}/js/jquery.form.min.js"></script>
 <script>
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
@@ -728,6 +769,53 @@ $(document).ready(function(){
   if(loadedWorkflowId && loadedWorkflowId !== 'null'){
       uiPanel.openWorkflow(loadedWorkflowId);
   }
+  
+  
+  
+  $("#<portlet:namespace/>sampleForm").ajaxForm({
+	  beforeSubmit: function(arr, $form, options){
+		  bStart();
+		  $("#<portlet:namespace/>wf-file-modal").modal("hide");
+	  },
+	  success: function(msg) {
+		  console.log(msg);
+		  var fileType = msg.fileType;
+		  var nodeId = msg.nodeId;
+		  
+		  var sampleData = new Object();
+		  if(nullToStr(msg.fileEntryId)!=""){
+			  sampleData[OSP.Constants.ID] = msg.fileEntryId;
+			  sampleData[OSP.Constants.TYPE] = OSP.Constants.DLENTRY_ID;
+			  sampleData[OSP.Constants.NAME] = msg.fileName;
+		  }
+		  
+		  if(fileType==="wf-app"){
+			  designer.setAppSampleData(nodeId,sampleData);
+		  }else if(fileType==="wf-port"){
+			  var portType = msg.portType;
+			  var portId = msg.portId;
+			  var defaultEditor = msg.defaultEditor;
+			  var isWfSample = msg.isWfSample;
+			  
+			  designer.setPortSampleData(nodeId,portType,portId,defaultEditor,isWfSample,sampleData);
+			  
+			  toastr["success"]("", Liferay.Language.get('edison-data-insert-success'));
+		  }
+	  },
+	  error:function(jqXHR, textStatus, errorThrown){
+		if(jqXHR.responseText !== ''){
+// 			alert(textStatus+" ajaxForm : "+jqXHR.responseText);
+		}else{
+// 			alert(textStatus+"ajaxForm : "+errorThrown);
+		}
+		
+		toastr["error"]("", Liferay.Language.get('edison-data-insert-error'));
+		return false;
+	},
+	complete: function(xhr) {
+		bEnd();
+	}
+  });
 });
 
 function <portlet:namespace/>moveToExecutor(workflowId){
@@ -758,43 +846,8 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
   window.open("<%=scienceAppDetailUrl%>" + params);
 }
 
-function <portlet:namespace/>openWfPortFileUploadModal(selectedPortData){
-	console.log(selectedPortData);
-	var nodeData = selectedPortData.nodeData;
-	var portType = selectedPortData.portType;
-	var portId = selectedPortData.portId;
-	var selectedPortInfo = nodeData[portType][portId];
-	
-	var URL = "<%=uploadWfSampleFilePopupURL%>";
-	URL += "&<portlet:namespace/>sampleFileId=" + selectedPortInfo.sample_.id;
-	URL += "&<portlet:namespace/>editors=" + JSON.stringify(selectedPortInfo.editors_);
-	
-	console.log("url : " + URL);
-	/* modal 출력 */
-	$("#<portlet:namespace/>portFileUploadDialog").dialog({
-		autoOpen: true,
-		width: 800,
-		height: 600,
-		modal: true,
-		resizable: false,
-		show: {effect:'fade', speed: 800}, 
-		hide: {effect:'fade', speed: 800},
-		
-		open: function(event, ui) {
-			$(this).removeClass("ui-widget-content");
-			$(this).parent().removeClass("ui-widget-content");
-			$(this).parent().css('overflow','visible');
-			$(this).load(URL);
-		
-			$('.ui-widget-overlay').bind('click',function(){
-				$("#<portlet:namespace/>portFileUploadDialog").dialog("close");
-			})
-		},
-		close: function() {
-			$("#<portlet:namespace/>portFileUploadDialog").empty();
-		}
-	}).dialog("widget").find(".ui-dialog-titlebar").remove();
-	console.log("end....");
+function <portlet:namespace/>fileDownLoad(entryId){
+	window.location.href="<%=fileDownloadURL.toString()%>&<portlet:namespace/>fileEntryId="+entryId;
 }
 </script>
 </div>

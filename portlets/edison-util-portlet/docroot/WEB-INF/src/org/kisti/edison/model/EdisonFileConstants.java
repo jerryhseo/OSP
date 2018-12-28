@@ -21,4 +21,6 @@ public class EdisonFileConstants {
 	public static final String DATA_COLLECTION = "DATA_COLLECTION";
 	
 	public static final String COURSE = "COURSE";
+	
+	public static final String WORKFLOW_SAMPLE = "WORKFLOW_SAMPLE";
 }

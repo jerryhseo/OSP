@@ -83,8 +83,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         var data = obj.node.data;
                         var runType = data.scienceAppData.runType;
                         if(uiPanelInstance) {
-                    		uiPanelInstance.openWfAppDataSetting(wfId, true, runType, data.scienceAppData.name);
-                    	}
+                        	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
+                    			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
+                        	}else{
+                    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
+                        	}
+                        }
                     }
                 }
             }
@@ -93,52 +97,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             "inputPorts": {
                 events: {
                     dblclick: function(obj) {
-                        /* 
-                         * 1. wfSampleFile 선택 panel 출력 
-                         * 2. File 선택
-                         * 3. ajax로 File Upload
-                         * 4. Upload된 파일의 ID Return 받기
-                         * 5. return된 ID가 !=null && 0 < 면  아래 json-object 추가
-                         * 		wfSampleFile_:{
-                         * 			id_ : "file-ID"
-                         * 		}
-                         * 6. wfSample_ : true로 수정
-                         * 7. wfSample_을 사용하지 않을 경우 wfSampleFile_ 삭제
-                         * 
-                         * 8. 앱 삭제 시 wfSampleFile의 ID를 이용하여 DLFile 삭제한 후 앱 삭제
-                         */
-                        
-                        var nodeId = obj.nodeId;
+                    	var nodeId = obj.nodeId;
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                        var portWfSample = nodeData[obj.portType][obj.portId].wfSample_;
                         
-                        var selectedPortData = {
-                        		"nodeId" : nodeId,
-                        		"portId" : portId,
-                        		"portType" : portType,
-                        		"nodeData" : nodeData
-                        }
-                        
-                        /*if(portWfSample){
-                        	nodeData[obj.portType][obj.portId].wfSample_ = false;
-                        	delete nodeData[obj.portType][obj.portId].wfSampleFile_;
-                        } else {
-                        	nodeData[obj.portType][obj.portId].wfSample_ = true;
-                        	nodeData[obj.portType][obj.portId].wfSampleFile_ = {};
-                        	nodeData[obj.portType][obj.portId].wfSampleFile_.id = "111";
-                        	var wfSampleFile
-                        }*/
-                        
-                        var fn = window[namespace + "openWfPortFileUploadModal"];
-                        if (fn) {
-                            fn.apply(null, [selectedPortData]);
-                        }
-                        
-                        /*if(uiPanelInstance) {
-                    		uiPanelInstance.openWfAppDataSetting(nodeId, false, portType, portId);
-                    	}*/
+                    	if(uiPanelInstance) {
+                    		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
+                    	}
                     }
                 }
             }
@@ -428,6 +394,26 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
     
+    function setAppSampleData(nodeId,sampleData) {
+    	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
+    	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
+    		portData["inputData_"] = sampleData;
+    	}
+    	
+    	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+    }
+    
+    function setPortSampleData(nodeId,portType,portId,defaultEditor,isWfSample,sampleData) {
+    	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
+    	var portData = nodeData[portType][portId];
+    	portData["defaultEditor_"] = defaultEditor;
+    	portData["isWfSample_"] = isWfSample == 'true';
+    	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
+    		portData["wfSample_"] = sampleData;
+    	}
+    	
+    	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+    }
     
 
 
@@ -625,6 +611,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 var wfId = $(this).attr("id");
                 var node = currentJsPlumbInstance.getNode(wfId);
                 currentJsPlumbInstance.removeNode(node);
+                
+                if(node.data.type===WF_APP_TYPES.APP.NAME){
+                	
+                }else{
+                	if(node.data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME){
+                		
+                	}
+                }
                 console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
             });
         });
@@ -1091,7 +1085,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         },
         "setUiPanelInstance" : setUiPanelInstance,
         "getNodeData" : getNodeData,
-        "setNodeData" : setNodeData
-        
+        "setNodeData" : setNodeData,
+        "setPortSampleData" : setPortSampleData,
+        "setAppSampleData" : setAppSampleData
     };
 });

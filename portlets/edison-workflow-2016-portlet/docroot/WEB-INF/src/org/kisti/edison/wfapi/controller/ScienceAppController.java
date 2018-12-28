@@ -120,7 +120,7 @@ public class ScienceAppController{
     	  Set<Map.Entry<String, JsonElement>> entries = ports.entrySet();
     	  for (Map.Entry<String, JsonElement> entry: entries) {
     		  JsonObject port = entry.getValue().getAsJsonObject();
-    		  port.addProperty("wfSample_", false);
+    		  port.addProperty("isWfSample_", false);
     		  JsonObject dataType = port.get("dataType_").getAsJsonObject();
 			  String dtName = dataType.get("name").getAsString();
 			  String dtVersion = dataType.get("version").getAsString();

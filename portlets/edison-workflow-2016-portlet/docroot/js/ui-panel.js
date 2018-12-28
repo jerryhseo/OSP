@@ -672,69 +672,121 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         modal.find(".modal-body").empty().append($.Mustache.render(bodyTemplete, { "inputs": inputs }));
         modal.find(".modal-footer").empty().append($.Mustache.render("tpl-modal-footer", btns));
         modal.modal({ "backdrop": "static", "keyboard": false });
-        $("#" + namespace + "wf-modal").find("input[name='Title']").select();
-        _delay(function (selector) { $(selector).find("input[name='Title']").select(); }, 500, "#" + namespace + "wf-modal");
+        $("#" + namespace + "wf-modal").find("textarea[name='script']").select();
+//        _delay(function (selector) { $(selector).find("textarea[name='script']").select(); }, 500, "#" + namespace + "wf-modal");
         $("#" + namespace + "wf-modal").find("button[name='Save']").click(saveHandler);
     }
     
     
-    var openWfAppDataSetting = function(nodeId, isWfApp, appType, appName){
-    	var inputs = new Array();
-    	if(isWfApp){
-    		var nodeData = designer.getNodeData(nodeId);
-    		var value;
-    		if(nodeData["content"]){
-    			value = nodeData["content"].trim();
+    var openWfAppDataSetting = function(nodeId, appType, appName){
+		var nodeData = designer.getNodeData(nodeId);
+		var value;
+		if(nodeData[OSP.Constants.INPUT_DATA]){
+    		value = nodeData[OSP.Constants.INPUT_DATA][OSP.Constants.CONTEXT];
+		}
+		
+		var inputs = [{"name": "script", "value": value}];
+		var btns = {"ok": "Save", "cancel": "Cancel"};
+		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
+			var inputData = new OSP.InputData();
+			inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+			inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
+			nodeData[OSP.Constants.INPUT_DATA] = OSP.Util.toJSON( inputData );
+			
+			designer.setNodeData(nodeId,nodeData);
+			$("#" + namespace + "wf-modal").modal("hide");
+    	});
+    }
+    
+    function createOpenModalFileFromDesigner(title, inputs, hiddens, formType) {
+        var modal = $("#" + namespace + "wf-file-modal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").empty().append($.Mustache.render("tpl-modal-wf-app-file-body", { "inputs": inputs, "formType": formType,"hiddens":hiddens}));
+        modal.find(".modal-footer").empty().append($.Mustache.render("tpl-modal-file-footer", {"ok": "Save", "cancel": "Cancel"}));
+        modal.modal({ "backdrop": "static", "keyboard": false });
+    }
+    
+    var openWfAppFileDataSetting = function(nodeId, appType, appName, portId, portType){
+    	
+    	if(nullToStr(PANEL_DATA.setting.form.workflowId)===""){
+    		toastr["error"]("", var_create_first_message);
+			return false;
+		}
+    	
+    	var nodeData = designer.getNodeData(nodeId);
+		var inputs = new Array();
+		var hiddens = new Array();
+		var formType = "";
+		var title = "";
+    	if (appType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    		var inputData = nodeData.inputData_;
+    		if(inputData){
+    			inputs.push({"isFile":true, "fileId": inputData.id_, "fileName": inputData.name_,"title": "WF Sample File"});
+    		}else{
+    			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
     		}
     		
-    		if (appType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-    			inputs.push({"name": "script", "value": value,"isFile":false});
-    		} else if (appType == WF_APP_TYPES.CONTROLLER.NAME) {
-    			inputs.push({"name": "script", "value": value,"isFile":false});
-    		} else if (appType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
-    			inputs.push({"name": "script", "value": "","isFile":true});
+    		hiddens.push({"name":"nodeId", "value": nodeId});
+    		formType = "wf-app";
+    		title = appName+" Script"; 
+    	}else if(appType === WF_APP_TYPES.APP.NAME){
+    		var sample = nodeData[portType][portId].sample_;
+    		inputs.push({"isAppFile":true, "fileId": sample.id_, "fileName": "Download","title": "App Sample File"});
+    		
+    		var wfSample = nodeData[portType][portId].wfSample_;
+    		if(wfSample){
+    			inputs.push({"isFile":true, "fileId": wfSample.id_, "fileName": wfSample.name_,"title": "WF Sample File"});
+    		}else{
+    			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
     		}
-    		var btns = {"ok": "Save", "cancel": "Cancel"};
-    		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
-    			if (appType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
-    				var inputData = new OSP.InputData();
-    				inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
-    				inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
-    				nodeData["content"] = inputData;
+
+    		
+    		var isWfSample = nodeData[portType][portId].isWfSample_;
+    		var fileTypeOptions = new Array();
+    		fileTypeOptions.push({"optionName":"Is App Sample File Use","value":false});
+    		fileTypeOptions.push({"optionName":"Is WF Sample File Use","value":true});
+    		
+    		if(!isWfSample){
+    			fileTypeOptions[0]["selected"] = true;
+    		}else{
+    			fileTypeOptions[1]["selected"] = true;
+    		}
+    		inputs.push({"isSelect": true, "title":"Use Sample Type Setting","name":"isWfSample", "value": value,"options":fileTypeOptions});
+    		
+    		
+    		var defaultEditor = nodeData[portType][portId].defaultEditor_;
+    		var editors = nodeData[portType][portId].editors_;
+    		
+    		var editorOptionS = new Array();
+    		for(var index in editors){
+    			var value = editors[index].value;
+    			var editorOption = {
+    					"optionName":editors[index].name,
+    					"value":value
+    			};
+    			if(value === defaultEditor){
+    				editorOption["selected"] = true;
     			}
-    			
-    			designer.setNodeData(nodeId,nodeData);
-    			$("#" + namespace + "wf-modal").modal("hide");
-        	});
-    	}else{
-    		var nodeData = designer.getNodeData(nodeId);
-    		var portEditorArr = nodeData[appType][appName].editors_;
-    		inputs.push({"isFile":true});
-    		for(var i=0; i<portEditorArr.length; i++){
-    			portEditor = portEditorArr[i];
-    			inputs.push({"name": portEditor.name, "value": portEditor.value});
+    			editorOptionS.push(editorOption);
     		}
+    		inputs.push({"isSelect": true, "title":"Default Editor Setting","name":"editor", "value": value,"options":editorOptionS});
     		
-    		var btns = {"upload": "Save", "cancel": "Cancel"};
-    		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-port-file-body", inputs, btns, function(e){
-    			if (appType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
-    				var inputData = new OSP.InputData();
-    				/*inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
-    				inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
-    				nodeData["content"] = inputData;*/
-    			}
-    			
-    			designer.setNodeData(nodeId,nodeData);
-    			$("#" + namespace + "wf-modal").modal("hide");
-        	});
     		
-    		nodeData[appType][appName].wfSample_ = true;
+    		
+    		hiddens.push({"name":"nodeId", "value": nodeId});
+    		hiddens.push({"name":"portId", "value": portId});
+    		hiddens.push({"name":"portType", "value": portType});
+    		formType = "wf-port";
+    		title = appName+" "+portId+" Script";
     	}
+    	
+    	createOpenModalFileFromDesigner(title,inputs, hiddens, formType);
     }
 
     return {
         "openWorkflow": openWorkflowByWorkflowId,
         "openWfAppDataSetting": openWfAppDataSetting,
+        "openWfAppFileDataSetting": openWfAppFileDataSetting,
         "isEmpty": function(){
             return _isEmpty(PANEL_DATA.setting.form.workflowId);
         }
