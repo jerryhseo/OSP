@@ -124,7 +124,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                        
                     	if(uiPanelInstance) {
                     		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
                     	}
@@ -440,23 +439,26 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     		}
     	}
     	
+    	wfBackgroupSave();
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
     
+    function wfBackgroupSave() {
+    	var localWorkflow = modifyingWorkflow;
+    	var wfId = localWorkflow.workflowId;
+
+    	var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
+    	localWorkflow.screenLogic = wfDataJsonString;
+    	aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" +
+                localWorkflow.workflowId + "/update",
+                JSON.stringify(localWorkflow),
+                null);
+    }
 
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
         var isInputPortExist = false;
-
-        //    	 if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
-        //    		isInputPortExist = true;
-        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
-        //         	disInputPortExist = true;
-        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.FILE_COMPONENT.NAME){
-        //
-        //         }
-
         var scienceAppData = {
             runType: data.appType,
             name: data.name
@@ -966,7 +968,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     function saveAsWorkflowDefinition(workflowMetaData, callback) {
         if (!modifyingWorkflow) {
-            saveOrUpdateWorkflowDefinition(workflowMetaData, false);
+            saveOrUpdateWorkflowDefinition(workflowMetaData, callback, false);
             return false;
         } else {
             var currentWorkflowId = modifyingWorkflow["workflowId"];

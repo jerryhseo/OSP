@@ -708,10 +708,9 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     
     var openWfAppFileDataSetting = function(nodeId, appType, appName, portId, portType){
     	
-    	if(nullToStr(PANEL_DATA.setting.form.workflowId)===""){
-    		toastr["error"]("", var_create_first_message);
-			return false;
-		}
+    	if(_isEmpty(PANEL_DATA.setting.form.workflowId, var_create_first_message)){
+    		return false;
+    	}
     	
     	var nodeData = designer.getNodeData(nodeId);
 		var inputs = new Array();
