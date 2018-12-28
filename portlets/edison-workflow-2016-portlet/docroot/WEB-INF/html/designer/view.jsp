@@ -798,7 +798,6 @@ $(document).ready(function(){
 		  $("#<portlet:namespace/>wf-file-modal").modal("hide");
 	  },
 	  success: function(msg) {
-		  console.log(msg);
 		  var fileType = msg.fileType;
 		  var nodeId = msg.nodeId;
 		  
@@ -812,15 +811,17 @@ $(document).ready(function(){
 		  if(fileType==="wf-app"){
 			  designer.setAppSampleData(nodeId,sampleData);
 		  }else if(fileType==="wf-port"){
+			  var preFileId = msg.preFileId;
+			  
 			  var portType = msg.portType;
 			  var portId = msg.portId;
 			  var defaultEditor = msg.defaultEditor;
 			  var isWfSample = msg.isWfSample;
 			  
-			  designer.setPortSampleData(nodeId,portType,portId,defaultEditor,isWfSample,sampleData);
-			  
-			  toastr["success"]("", Liferay.Language.get('edison-data-insert-success'));
+			  designer.setPortSampleData(nodeId,portType,portId,preFileId,defaultEditor,isWfSample,sampleData);
 		  }
+		  
+		  toastr["success"]("", Liferay.Language.get('edison-data-insert-success'));
 	  },
 	  error:function(jqXHR, textStatus, errorThrown){
 		if(jqXHR.responseText !== ''){

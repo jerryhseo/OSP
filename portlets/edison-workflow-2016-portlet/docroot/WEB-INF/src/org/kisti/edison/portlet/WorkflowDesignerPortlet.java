@@ -166,6 +166,7 @@ public class WorkflowDesignerPortlet{
     				}catch(NoSuchFileEntryException e){
     					
     				}
+    				obj.put("preFileId", CustomUtil.strNull(params.get("preFileId")));
     			}
     			
     			List<FileEntry> sampleFileList = EdisonFileUtil.insertEdisonFile(sc.getLiferayPortletRequest(), upload, sc.getUserId(),
@@ -179,6 +180,7 @@ public class WorkflowDesignerPortlet{
     		
     		obj.put("fileType", fileType);
     		obj.put("nodeId", nodeId);
+    		
     		if(fileType.equals("wf-app")){
     			
     		}else if(fileType.equals("wf-port")){

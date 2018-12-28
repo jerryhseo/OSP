@@ -417,19 +417,27 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     function setAppSampleData(nodeId,sampleData) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
-    		portData["inputData_"] = sampleData;
+    		nodeData["inputData_"] = sampleData;
+    		nodeData["files"] = [sampleData[OSP.Constants.ID]];
     	}
-    	
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
     
-    function setPortSampleData(nodeId,portType,portId,defaultEditor,isWfSample,sampleData) {
+    function setPortSampleData(nodeId,portType,portId,preFileId,defaultEditor,isWfSample,sampleData) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	var portData = nodeData[portType][portId];
     	portData["defaultEditor_"] = defaultEditor;
     	portData["isWfSample_"] = isWfSample == 'true';
     	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
     		portData["wfSample_"] = sampleData;
+    		var nodeFiles = nodeData["files"];
+    		if(nodeFiles){
+    			nodeFiles = nodeFiles.splice(nodeFiles.indexOf(preFileId),1);
+    			nodeFiles.push(sampleData[OSP.Constants.ID]);
+    			nodeData["files"] = nodeFiles;
+    		}else{
+    			nodeData["files"] = [sampleData[OSP.Constants.ID]];
+    		}
     	}
     	
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
