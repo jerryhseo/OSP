@@ -869,5 +869,10 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 function <portlet:namespace/>fileDownLoad(entryId){
 	window.location.href="<%=fileDownloadURL.toString()%>&<portlet:namespace/>fileEntryId="+entryId;
 }
+
+function <portlet:namespace/>closeAppPanel() {
+	$(".menu-panel").hide('slide', { direction: 'left' }, 500);
+	$(JQ_PORTLET_BOUNDARY_ID + " .sidebar > .sidebar-menu > li.active").removeClass("active");
+}
 </script>
 </div>
