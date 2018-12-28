@@ -1,5 +1,4 @@
 var AppTree = (function(namespace, $, designer){
-
     return {
         "bindDnd" : bindDnd,
         "drawAppTree" : drawAppTree
@@ -172,8 +171,8 @@ var AppTree = (function(namespace, $, designer){
         $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
         $(appTreeSelector).jstree().create_node("converter_category", nodes[1], "first");
     }
-    
-    
+
+
     function fileComponet(){
         var dArr = [];
         dArr.push({
@@ -215,14 +214,14 @@ var AppTree = (function(namespace, $, designer){
         });
         return dArr;
     }
-    
+
     function addFileComponet(appTreeSelector){
         var nodes = fileComponet();
         $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
         $(appTreeSelector).jstree().create_node("componet_category", nodes[1], "first");
     }
-    
-    
+
+
 
     function drawAppTree(appTreeSelector, searchSelector, initData) {
         $(appTreeSelector).jstree({
@@ -260,7 +259,7 @@ var AppTree = (function(namespace, $, designer){
                 var searchString = $(this).val();
                 $(appTreeSelector).jstree(true).search(searchString);
             });
-            
+
 
         }).bind("select_node.jstree", function (event, data) {
             var nodeId = data.node.id;

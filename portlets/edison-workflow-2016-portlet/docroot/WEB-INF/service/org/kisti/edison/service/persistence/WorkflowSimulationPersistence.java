@@ -461,6 +461,316 @@ public interface WorkflowSimulationPersistence extends BasePersistence<WorkflowS
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns all the workflow simulations where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @return the matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_Title_UserId(
+		long workflowId, java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the workflow simulations where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param start the lower bound of the range of workflow simulations
+	* @param end the upper bound of the range of workflow simulations (not inclusive)
+	* @return the range of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_Title_UserId(
+		long workflowId, java.lang.String title, long userId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the workflow simulations where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param start the lower bound of the range of workflow simulations
+	* @param end the upper bound of the range of workflow simulations (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_Title_UserId(
+		long workflowId, java.lang.String title, long userId, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first workflow simulation in the ordered set where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation findByWorkflowId_Title_UserId_First(
+		long workflowId, java.lang.String title, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Returns the first workflow simulation in the ordered set where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow simulation, or <code>null</code> if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation fetchByWorkflowId_Title_UserId_First(
+		long workflowId, java.lang.String title, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last workflow simulation in the ordered set where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation findByWorkflowId_Title_UserId_Last(
+		long workflowId, java.lang.String title, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Returns the last workflow simulation in the ordered set where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow simulation, or <code>null</code> if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation fetchByWorkflowId_Title_UserId_Last(
+		long workflowId, java.lang.String title, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the workflow simulations before and after the current workflow simulation in the ordered set where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param simulationId the primary key of the current workflow simulation
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a workflow simulation with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation[] findByWorkflowId_Title_UserId_PrevAndNext(
+		long simulationId, long workflowId, java.lang.String title,
+		long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Removes all the workflow simulations where workflowId = &#63; and title LIKE &#63; and userId = &#63; from the database.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByWorkflowId_Title_UserId(long workflowId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of workflow simulations where workflowId = &#63; and title LIKE &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param title the title
+	* @param userId the user ID
+	* @return the number of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByWorkflowId_Title_UserId(long workflowId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the workflow simulations where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @return the matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_UserId(
+		long workflowId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the workflow simulations where workflowId = &#63; and userId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param start the lower bound of the range of workflow simulations
+	* @param end the upper bound of the range of workflow simulations (not inclusive)
+	* @return the range of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_UserId(
+		long workflowId, long userId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the workflow simulations where workflowId = &#63; and userId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link org.kisti.edison.model.impl.WorkflowSimulationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param start the lower bound of the range of workflow simulations
+	* @param end the upper bound of the range of workflow simulations (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> findByWorkflowId_UserId(
+		long workflowId, long userId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first workflow simulation in the ordered set where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation findByWorkflowId_UserId_First(
+		long workflowId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Returns the first workflow simulation in the ordered set where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching workflow simulation, or <code>null</code> if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation fetchByWorkflowId_UserId_First(
+		long workflowId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last workflow simulation in the ordered set where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation findByWorkflowId_UserId_Last(
+		long workflowId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Returns the last workflow simulation in the ordered set where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching workflow simulation, or <code>null</code> if a matching workflow simulation could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation fetchByWorkflowId_UserId_Last(
+		long workflowId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the workflow simulations before and after the current workflow simulation in the ordered set where workflowId = &#63; and userId = &#63;.
+	*
+	* @param simulationId the primary key of the current workflow simulation
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next workflow simulation
+	* @throws org.kisti.edison.NoSuchWorkflowSimulationException if a workflow simulation with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.kisti.edison.model.WorkflowSimulation[] findByWorkflowId_UserId_PrevAndNext(
+		long simulationId, long workflowId, long userId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.kisti.edison.NoSuchWorkflowSimulationException;
+
+	/**
+	* Removes all the workflow simulations where workflowId = &#63; and userId = &#63; from the database.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByWorkflowId_UserId(long workflowId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of workflow simulations where workflowId = &#63; and userId = &#63;.
+	*
+	* @param workflowId the workflow ID
+	* @param userId the user ID
+	* @return the number of matching workflow simulations
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByWorkflowId_UserId(long workflowId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the workflow simulation in the entity cache if it is enabled.
 	*
 	* @param workflowSimulation the workflow simulation

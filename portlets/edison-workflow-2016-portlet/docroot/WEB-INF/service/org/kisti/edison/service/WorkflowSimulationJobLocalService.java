@@ -379,6 +379,10 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 		long simulationId, java.lang.String title, long userId, int begin,
 		int end) throws com.liferay.portal.kernel.exception.SystemException;
 
+	public int countWorkflowSimulationJobs(long simulationId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(
 		long simulationJobId,
 		java.util.Map<java.lang.String, java.lang.Object> params)

@@ -463,6 +463,20 @@ public class WorkflowSimulationLocalServiceUtil {
 		return getService().getCountWorkflowSimulations(title, userId);
 	}
 
+	public static java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long workflowId, java.lang.String title, long userId, int begin, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getWorkflowSimulations(workflowId, title, userId, begin, end);
+	}
+
+	public static int getCountWorkflowSimulations(long workflowId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getCountWorkflowSimulations(workflowId, title, userId);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().createWorkflowSimulation();

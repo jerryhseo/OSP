@@ -146,6 +146,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     }
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
+    console.log(wfWorkflowJsPlumbInstance)
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
@@ -173,6 +174,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             EndpointStyle: { fill: "#11C7E7" },
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" }
+        },
+        dragOptions: {
+            magnetize:true
         }
     });
 
@@ -430,6 +434,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
         var isInputPortExist = false;
+
+        //    	 if(data["appType"] && data["appType"] == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
+        //    		isInputPortExist = true;
+        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
+        //         	disInputPortExist = true;
+        //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.FILE_COMPONENT.NAME){
+        //
+        //         }
+
         var scienceAppData = {
             runType: data.appType,
             name: data.name

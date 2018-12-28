@@ -459,6 +459,13 @@ public class WorkflowSimulationJobLocalServiceUtil {
 			begin, end);
 	}
 
+	public static int countWorkflowSimulationJobs(long simulationId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countWorkflowSimulationJobs(simulationId, title, userId);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(
 		long simulationJobId,
 		java.util.Map<java.lang.String, java.lang.Object> params)
