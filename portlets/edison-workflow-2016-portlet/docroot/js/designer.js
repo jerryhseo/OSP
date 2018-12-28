@@ -28,6 +28,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
+        	
             if (source.objectType !== "Node" && target.objectType !== "Node") {
                 if (source === target) {
                     return false;
@@ -42,32 +43,60 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 }
 
                 if (source.getType() === 'all' || target.getType() === 'all') {
-                    if (source.getNode().data[scienceAppData].runType === "FileComponent") {
-
+                    if (source.getNode().data.scienceAppData.runType === "FileComponent") {
+                    	
+                    	var isEqualsPortType = false;
+                    	var sourceData = source.getNode().data,
+                		targetData = target.getNode().data;
+                    	var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
+                    	console.log("sourcePortDataType : " + sourcePortDataType);
+                    	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
+                    		sourceData.outputPorts[source.id].dataType_ = {};
+                    		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
+                    		console.log(sourceData.outputPorts[source.id].dataType_);
+                    		isEqualsPortType = true;
+                    	} else {
+                    		isEqualsPortType = checkPortTypeForConnection(source, target, true);
+                    	}
+                    	
+                    	return isEqualsPortType;
                     }
                     return true;
                 } else if (source.getType() === 'inputPorts') {
                     return false;
                 } else {
-
-                    var sourceData = source.getNode().data,
-                        targetData = target.getNode().data;
-
-                    var sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
-                    var targetPortDataType = targetData[target.getType()][target.id].dataType_;
-
-                    var sourectDataTypeStr = sourcePortDataType.name + sourcePortDataType.version;
-                    var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
-                    if (sourectDataTypeStr != targetDataTypeStr) {
-                        //        				return false;
-                        return true;
-                    } else {
-                        return true;
-                    }
+                	return checkPortTypeForConnection(source, target, false);
                 }
             }
         }
     });
+    
+    function checkPortTypeForConnection(source, target, isFileComponent){
+    	var sourceData = source.getNode().data,
+    		targetData = target.getNode().data;
+    	
+    	var sourcePortDataType = null;
+    	if(isFileComponent){
+    		sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
+    	} else {
+    		sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
+    	}
+    	
+    	var targetPortDataType = targetData[target.getType()][target.id].dataType_;
+    	var sourectDataTypeStr = sourcePortDataType.name + sourcePortDataType.version;
+    	var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
+    	
+        if (sourectDataTypeStr != targetDataTypeStr) {
+            //        				return false;
+        	if(isFileComponent){
+        		return false;
+        	} else {
+        		return true;
+        	}
+        } else {
+            return true;
+        }
+    }
 
     var view = {
         nodes: {
@@ -125,7 +154,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         enablePanButtons: false,
         zoomToFit: true,
         dragOptions: {
-            containment: "parent",
+        	magnetize:true,
             start: function() {
                 $(".menu-panel > .menu-panel-box-app").addClass("hidden");
             },
@@ -137,17 +166,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             Anchor: "Center",
             StartpointStyle: { fill: "#416EC5" },
             StartpointHoverStyle: { fill: "#FF6600" },
-            EndpointStyle: { fill: "#11C7E7" },
+            EndpointStyle: { fill: "#445566", radius:7 },
             EndpointHoverStyle: { fill: "#FF6600" },
-            HoverPaintStyle: { strokeWidth: 5, stroke: "orange" }
-        },
-        dragOptions: {
-            magnetize:true
+            HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
+            ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]]
         }
     });
 
-    var mainElement = document.querySelector("#wf-workflow-canvas"),
-        controls = mainElement.querySelector(".controls");
+     var controls = canvasElement.querySelector(".controls");
 
     /* on home button click, zoom content to fit. */
     jsPlumb.on(controls, "tap", "[reset]", function() {
@@ -181,7 +207,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     });
     
     var outputPortPoint = {
-        endpoint: ["Rectangle", { width: 18, height: 18 }, { cssClass: "output-port" }],
+		endpoint: ["Rectangle", { width: 10, height: 10 }, { cssClass: "output-port" }],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,
         paintStyle: { fill: outputPortColor },
         isSource: !isFixed,
@@ -822,8 +848,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         $.each(currentJsPlumbInstance.getAllConnections(), function(idx, connection) {
             var sourceOutputPort = connection.endpoints[0].getParameter("data");
             var targetInputPort = connection.endpoints[1].getParameter("data");
-            // console.log("sourceOutputPort ", sourceOutputPort);
-            // console.log("targetInputPort ", targetInputPort);
+//             console.log("sourceOutputPort ", sourceOutputPort);
+//             console.log("targetInputPort ", targetInputPort);
             wfData.connections.push({
                 connectionId: connection.id,
                 pageSourceId: connection.sourceId,

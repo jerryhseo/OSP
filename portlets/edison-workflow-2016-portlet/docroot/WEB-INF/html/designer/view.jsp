@@ -129,7 +129,7 @@ var contextPath = '${contextPath}';
     cursor: move;
     border-radius: 10px;
     min-width: 80px;
-    min-height: 30px;
+    min-height: 110px;
     text-align: center;
     overflow: visible;
 }
@@ -146,7 +146,7 @@ var contextPath = '${contextPath}';
 
 .wf-box ul.port li{
 	margin-bottom: 10px;
-	border: 1px solid #CCC;
+	border: 1px solid #6d6a6a;
 	background-color: #edf7f7;
 	width: 25px;
 	height: 25px;
@@ -156,7 +156,7 @@ var contextPath = '${contextPath}';
 .wf-box .input-ports-list{
 	float: left;
 	position: relative;
-	top: 15px;
+	top: 5px;
 	left: -15px;
 }
 
@@ -169,7 +169,7 @@ var contextPath = '${contextPath}';
 	color: #000;
 	font-size: 15px;
 	position: relative;
-	top: -20px;
+	top: -15px;
 	left: -10px;
 	white-space: nowrap;
 }
@@ -177,7 +177,7 @@ var contextPath = '${contextPath}';
 .wf-box .output-ports-list{
 	float: right;
 	position: relative;
-	top: 15px;
+	top: 5px;
 	right: -20px;
 }
 
@@ -195,7 +195,7 @@ var contextPath = '${contextPath}';
 	color: #000;
 	font-size: 15px;
 	position: relative;
-	top: -20px;
+	top: -15px;
 	right: -15px;
 	white-space: nowrap;
 }
@@ -204,8 +204,27 @@ var contextPath = '${contextPath}';
 .wf-box .wf-icon{
 	text-align: center;
 	font-size: 45px;
-	padding: 20px 0px;
-	margin-bottom: 10px;
+	padding-bottom: 35px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    /* Center vertically */
+    align-items: center;
+
+    /*Center horizontaly */
+    justify-content: center;
+
+    /*Center horizontaly ie */
+    -ms-flex-pack: center;
+}
+
+.wf-box .wf-icon i{
+	position: relative;
+	/* top: 25%; */
 }
 
 .wf-box .wf-icon .remove-btn{
@@ -221,9 +240,8 @@ var contextPath = '${contextPath}';
 .wf-box .wf-app-title{
 	font-size: 15px;
 	font-weight: 500;
-	margin-top: 5px;
-	position: relative;
-	bottom: -25px;
+	position: absolute;
+	bottom: -45px;
 	left: -20px;
 	width: 130%;
 }
@@ -238,8 +256,9 @@ var contextPath = '${contextPath}';
 	color: #fff;
 	border-top: 1px solid #fff;
 	position: absolute;
-	bottom: -5px;
+	bottom: 15px;
 	width: 100%;
+	height: 10px;
 }
 
 .wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
@@ -543,7 +562,7 @@ $.widget.bridge('uibutton', $.ui.button);
         <input type="text" name="search" class="search-input" placeholder="{{boxtitle}}" />
       </h3>
       <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool menu-panel-close"><i class="fa fa-times"></i></button>
+        <button type="button" class="btn btn-box-tool menu-panel-close" onclick="<portlet:namespace/>closeAppPanel()"><i class="fa fa-times"></i></button>
       </div>
     </div>
     <div class="box-body">
@@ -704,11 +723,12 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="${contextPath}/js/jquery.form.min.js"></script>
 <script>
+var JQ_PORTLET_BOUNDARY_ID = "#p_p_id<portlet:namespace/>";
 $(document).ready(function(){
   var namespace = "<portlet:namespace/>";
   var loadedWorkflowId = '${workflowId}';
 
-  var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
+  
   $.Mustache.addFromDom();
   toastr.options = {
       "closeButton": true,

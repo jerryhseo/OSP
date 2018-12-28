@@ -1,5 +1,5 @@
 <script type="jtk" id="scienceApp-templete">
-<div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="runningbox wf-box ui-selectee" id="${id}" style="left:${left}px;top:${top}px;" title="${scienceAppData.name} v.${scienceAppData.version}">
 
 	<div class="input-ports-list">
 		<ul class="inputport port">
@@ -26,6 +26,8 @@
 	</div>
 	<div class="wf-app-title">
 		${scienceAppData.name}
+		<br/>
+		v.${scienceAppData.version}
 	</div>
 </div>
 </script>
@@ -73,6 +75,7 @@
 <li>
 	<span class="input-port-name">
 		${$key}
+		${name_}
 	</span>
 	<jtk-target port-id="${$key}" port-type="inputPorts"></jtk-target>
 </li>
@@ -81,6 +84,7 @@
 <li>
 	<span class="output-port-name">
 		${$key}
+		${name_}
 	</span>
 	<jtk-source port-id="${$key}" port-type="outputPorts"></jtk-source>
 </li>
@@ -90,6 +94,7 @@
 <li>
 	<span class="input-port-name">
 		${$key}
+		${name_}
 	</span>
 	<jtk-target port-id="${$key}" port-type="all"></jtk-target>
 </li>
@@ -98,6 +103,7 @@
 <li>
 	<span class="output-port-name">
 		${$key}
+		${name_}
 	</span>
 	<jtk-source port-id="${$key}" port-type="all"></jtk-source>
 </li>
