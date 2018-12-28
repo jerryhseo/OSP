@@ -3,9 +3,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
-    
+
     var uiPanelInstance = undefined;
-    
+
     var setUiPanelInstance = function(uiPanel) {
     	uiPanelInstance = uiPanel;
     }
@@ -93,8 +93,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             "inputPorts": {
                 events: {
                     dblclick: function(obj) {
-                        /* 
-                         * 1. wfSampleFile 선택 panel 출력 
+                        /*
+                         * 1. wfSampleFile 선택 panel 출력
                          * 2. File 선택
                          * 3. ajax로 File Upload
                          * 4. Upload된 파일의 ID Return 받기
@@ -104,23 +104,23 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                          * 		}
                          * 6. wfSample_ : true로 수정
                          * 7. wfSample_을 사용하지 않을 경우 wfSampleFile_ 삭제
-                         * 
+                         *
                          * 8. 앱 삭제 시 wfSampleFile의 ID를 이용하여 DLFile 삭제한 후 앱 삭제
                          */
-                        
+
                         var nodeId = obj.nodeId;
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
                         var portWfSample = nodeData[obj.portType][obj.portId].wfSample_;
-                        
+
                         var selectedPortData = {
                         		"nodeId" : nodeId,
                         		"portId" : portId,
                         		"portType" : portType,
                         		"nodeData" : nodeData
                         }
-                        
+
                         /*if(portWfSample){
                         	nodeData[obj.portType][obj.portId].wfSample_ = false;
                         	delete nodeData[obj.portType][obj.portId].wfSampleFile_;
@@ -130,12 +130,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         	nodeData[obj.portType][obj.portId].wfSampleFile_.id = "111";
                         	var wfSampleFile
                         }*/
-                        
+
                         var fn = window[namespace + "openWfPortFileUploadModal"];
                         if (fn) {
                             fn.apply(null, [selectedPortData]);
                         }
-                        
+
                         /*if(uiPanelInstance) {
                     		uiPanelInstance.openWfAppDataSetting(nodeId, false, portType, portId);
                     	}*/
@@ -159,7 +159,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         enablePanButtons: false,
         zoomToFit: true,
         dragOptions: {
-            containment: "parent",
+            magnetize: true,
             start: function() {
                 $(".menu-panel > .menu-panel-box-app").addClass("hidden");
             },
@@ -167,6 +167,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 $(".menu-panel > .menu-panel-box-app").removeClass("hidden");
             }
         },
+        lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
             Anchor: "Center",
             StartpointStyle: { fill: "#416EC5" },
@@ -174,9 +175,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             EndpointStyle: { fill: "#11C7E7" },
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" }
-        },
-        dragOptions: {
-            magnetize:true
         }
     });
 
@@ -213,7 +211,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             renderer.setZoom(zoomLevel, true);
         }
     });
-    
+
     var outputPortPoint = {
         endpoint: ["Rectangle", { width: 18, height: 18 }, { cssClass: "output-port" }],
         type: WF_JSPLUMB_TYPES.ENDPOINT + " " + WF_JSPLUMB_TYPES.OUTPUT,
@@ -415,20 +413,20 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
         return wfId;
     }
-    
-    
+
+
     function getNodeData(nodeId) {
     	var node = currentJsPlumbInstance.getNode(nodeId);
     	return node.data;
     }
-    
+
     function setNodeData(nodeId, nodeData) {
     	var node = currentJsPlumbInstance.getNode(nodeId);
     	node["data"] = nodeData;
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-    
-    
+
+
 
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
@@ -667,7 +665,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Converter Script",
                     icon: "edit",
                     callback: function(key, options) {
-                    	
+
                     }
                 };
             } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
@@ -675,7 +673,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     name: "Condition Script",
                     icon: "edit",
                     callback: function(key, options) {
-                    	
+
                     }
                 };
             } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
@@ -1092,6 +1090,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         "setUiPanelInstance" : setUiPanelInstance,
         "getNodeData" : getNodeData,
         "setNodeData" : setNodeData
-        
+
     };
 });

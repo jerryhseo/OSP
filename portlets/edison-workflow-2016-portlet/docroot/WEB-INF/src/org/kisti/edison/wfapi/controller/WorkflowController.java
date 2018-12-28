@@ -195,4 +195,23 @@ public class WorkflowController{
             throw e;
         }
     }
+    
+    @RequestMapping(value = "/{workflowId}/delete", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> delete(
+        @PathVariable("workflowId") long workflowId,
+        HttpServletRequest request) throws Exception{
+        try{
+            Workflow workflow = WorkflowLocalServiceUtil.deleteWorkflow(workflowId);
+            Locale locale = PortalUtil.getLocale(request);
+            Map<String, Object> workflowMap = workflow.getModelAttributes();
+            workflowMap.put("title", workflow.getTitle(locale));
+            workflowMap.put("titleMap", workflow.getTitle());
+            workflowMap.put("description", workflow.getDescription(locale));
+            workflowMap.put("descriptionMap", workflow.getDescription());
+            return workflowMap;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
 }
