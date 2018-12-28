@@ -87,12 +87,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     	var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
     	
         if (sourectDataTypeStr != targetDataTypeStr) {
-            //        				return false;
-        	if(isFileComponent){
-        		return false;
-        	} else {
-        		return true;
-        	}
+            return false;
         } else {
             return true;
         }

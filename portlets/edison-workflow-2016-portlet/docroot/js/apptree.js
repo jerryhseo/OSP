@@ -196,10 +196,6 @@ var AppTree = (function(namespace, $, designer){
                     "stdout.out": {
                         "name_": "stdout.out",
                         "defaultAnalyzer_": "none",
-                        "dataType_": {
-                            "name": "converter_stdout",
-                            "version": ""
-                        },
                         "mandatory_": false,
                         "outputData_": {
                             "id_": 0,
