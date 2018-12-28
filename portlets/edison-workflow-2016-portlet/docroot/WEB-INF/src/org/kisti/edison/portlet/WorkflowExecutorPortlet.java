@@ -25,6 +25,7 @@ import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -71,14 +72,13 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             ScienceApp textEditor = ScienceAppLocalServiceUtil.getTextEditorScienceApp();
             ScienceApp fileEditor = ScienceAppLocalServiceUtil.getFileEditorScienceApp();
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
-            String simulationId = ParamUtil.get(request, "simulationId", "7608414");
-            if(StringUtils.hasText(simulationId)){
-                model.addAttribute("workflowId", simulationId);
-                List<WorkflowSimulationJob> instances = 
-                    WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationWorkflowSimulationJobs(Long.valueOf(simulationId));
-                model.addAttribute("workflowCount", instances != null ? instances.size() : 0);
+            String workflowId = ParamUtil.get(request, "workflowId", "0");
+            String title = CustomUtil.strNull("title", null);
+            if(StringUtils.hasText(workflowId)){
+                model.addAttribute("workflowCount", WorkflowSimulationLocalServiceUtil
+                    .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId()));
             }
-            model.addAttribute("workflowId", simulationId);
+            model.addAttribute("workflowId", workflowId);
             model.addAttribute("textEditor", textEditor);
             model.addAttribute("fileEditor", fileEditor);
             model.addAttribute("structuredEditor", structuredEditor);

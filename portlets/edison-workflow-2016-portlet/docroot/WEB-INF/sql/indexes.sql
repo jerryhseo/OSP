@@ -7,6 +7,9 @@ create index IX_492DA5C5 on EDWF_WorkflowInstance (userId);
 create index IX_870BE2EB on EDWF_WorkflowSimulation (title);
 create index IX_FA992025 on EDWF_WorkflowSimulation (title, userId);
 create index IX_B9FFF4B7 on EDWF_WorkflowSimulation (userId);
+create index IX_173C4F2B on EDWF_WorkflowSimulation (workflowId);
+create index IX_F90C68B7 on EDWF_WorkflowSimulation (workflowId, title, userId);
+create index IX_4AB94C65 on EDWF_WorkflowSimulation (workflowId, userId);
 
 create index IX_9CCD7A00 on EDWF_WorkflowSimulationJob (simulationId, title, userId);
 create index IX_B65F2B3C on EDWF_WorkflowSimulationJob (simulationId, userId);

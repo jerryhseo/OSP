@@ -1,4 +1,6 @@
-<%@page import="java.util.ArrayList"%>
+<%--suppress ALL --%>
+
+<%@ page import="java.util.ArrayList"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/init.jsp"%>
@@ -19,9 +21,7 @@
 <link rel="stylesheet" href="${contextPath}/css/toastr.min.css">
 
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm/jquery-confirm.min.css">
-<link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <link rel="stylesheet" href="${contextPath}/css/simulation-workbench.css">
-<link rel="stylesheet" href="${contextPath}/css/workflow-executor.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
@@ -53,207 +53,274 @@ var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflo
 var contextPath = '${contextPath}';
 </script>
 <style>
-</style>
+.menu-panel-box-app .box-body.jstree{
+  overflow-y: auto;
+}
+.menu-panel-box-app .box-body.jstree ul > li > a{
+  text-overflow: ellipsis; white-space: nowrap; word-wrap: normal; overflow: hidden; width: 85%;
+}
 
-<style type="text/css">
-  nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
-    text-align: center;
-    padding: 12px;
-    cursor: pointer;
-  }
+#body-div .menu-panel-box-app .header-inner,
+ #body-div .menu-panel-box .header-inner{
+  padding: 15px 5px 10px 10px;
+}
 
-  nav.workbench-custom-nav .<portlet:namespace/>divider-vertical {
-    height: 50px;
-    margin: 9px;
-    border-left: 2px solid #f2f2f2;
-    border-right: 1px solid #ffffff;
-  }
+.search-input {
+  border: none;
+  outline: 0;
+  margin-left: 5px !important;
+}
 
-  .nav li.<portlet:namespace/>divider-vertical{
-    display: none;
-  }
+.search-input:focus {
+  border: none;
+  outline: 0;
+}
+
+.menu-panel{
+  pointer-events:none;
+  background:none !important;
+}
+
+.menu-panel-box,
+.menu-panel-box-app > .app-column{
+  pointer-events: auto;
+}
+
+.menu-panel tbody.panel-tbody > tr {
+  cursor: pointer;
+}
+
+.default-title{line-height: 1.3 !important;}
+
+/* workflow science app box */
+.apparea{position: relative;}
+
+.waitingbox{border-radius:3px; border:solid 1px #00abe3; background-color:#b6e1f8;}
+.waitingbox span{font-size:18px; color:#114a69; font-weight:500;}
+
+.loopbox{background-color:#f7b036;}
+
+
+.runningbox{border-radius:3px; border:solid 1px #00abe3; background-color:#8db9e5;}
+.runningbox span{font-size:18px; color:#fff; font-weight:500;}
+
+.failbox{border-radius:3px; border:solid 1px #00abe3; background-color:#f8799b;}
+.failbox span{font-size:18px; color:#fff; font-weight:500;}
+
+.donebox{border-radius:3px; border:solid 1px #00abe3; background-color:#76d6cd;}
+.donebox span{font-size:18px; color:#fff; font-weight:500;}
+
+.wf-box {
+  box-sizing: content-box;
+  padding: 30px 5px 5px 15px;
+  width: 100px !important;
+  height: 110px !important;
+  position: absolute;
+  cursor: move;
+  border-radius: 3px;
+  border: solid 1px #00abe3;
+}
+
+.wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.wf-box .wf-app-title{font-size: 15px; font-weight: 500; color: #fff;}
+.wf-box .wf-app-status{position: relative; top: 25px;}
+.waitingbox .wf-app-title{ color: #114a69; border-color: #5492ba; }
+.pausebox{border-radius:3px; border:solid 1px #CA412B; background-color:#fb6e50;}
+.wf-box .addIp { font-weight: 500; text-decoration: none; text-indent: 0px;
+	line-height: 0px; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
+	text-align: center; vertical-align: middle; display: inline-block; font-size: 12px;
+	color: #fff; padding: 10px; text-shadow: #ade6ff 0px 0px 0px; border-width: 1px; border-style: solid; }
+.waitingbox .addIp{ background: #6ba0c3; border-color: #3371a8; }
+.runningbox .addIp{ background: #3a81c0; border-color: #3371a8; }
+.failbox .addIp{ background: #c84444; border-color: #b73535; }
+.pausebox .addIp{ background: #4E5A68; border-color: #4E5A68; }
+.donebox .addIp{ background: #32a993; border-color: #2e9886; }
+.wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
+
+.wf-converter{}
+.wf-converter.wf-dynamic > .wf-app-title{overflow: visible; white-space: normal;}
+.waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
+.waitingbox.wf-converter.wf-static{background: #3181c6;}
+
+.wf-box.wf-controller{background-color:transparent !important;}
+
+.wf-box.wf-controller{
+    width: 150px !important;
+    height: 120px !important;
+    padding: 0px !important;
+    border: none !important;
+}
+.wf-box > svg {
+    width: 180px;
+    height: 140px;
+}
+.wf-box g.fc-decision > text{
+    font-size: 15px;
+    font-weight: bold;
+    fill:  #114a69;
+}
+.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #44b4c5;
+}
+
+.runningbox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #3a81c0;
+}
+
+.donebox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #32a993;
+}
+
+.failbox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #c84444;
+}
+
+.pausebox.wf-box g.fc-decision > .fc-rhombus{
+    stroke: #00abe3;
+    fill: #4E5A68;
+}
+
+.hidden{display: none;}
+.jsplumb-endpoint:hover{cursor: pointer; z-index: 9999;}
+.jsplumb-overlay{z-index: 1 !important;}
+
+.wftitlebox001 > input[type="text"]{width: 55%; margin-bottom: 2px;}
+.wftitlebox001 > span > input[type="button"]{margin-right: 5px;}
+.wftitlebox001 > h2 {float: left;}
+.apparea > div {z-index: 2;}
+
+.ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
+.ui-selected{border: solid 1px #555555; box-shadow: 3px 3px 7px #c6c6c6;}
+.ui-selected.wf-controller g.fc-decision > .fc-rhombus {stroke: #555555; filter: drop-shadow( 3px 3px 7px #c6c6c6 );}
+.ui-selected.wf-controller{border: none; box-shadow: none;}
+
+.ui-selecting.wf-controller g.fc-decision > .fc-rhombus{fill:rgba( 30, 30, 30,0.4 ); stroke: #555555; filter: drop-shadow( 3px 3px 7px #c6c6c6 );}
+.ui-selecting.wf-converter,
+.ui-selecting.wf-app{background-color: rgba( 30, 30, 30,0.4 ) !important; box-shadow: 3px 3px 7px #c6c6c6; border: solid 1px #000;}
+
+.toast-designer-pos { top: 120px; right: 12px; }
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+.vertical-align-center {
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-content {
+    width:inherit;
+    height:inherit;
+    margin: 0 auto;
+}
 </style>
 <div class="container-fluid">
-  <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">
-    <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
-      <header class="main-header" id="<portlet:namespace/>column-2">
-        <!-- App Name -->
-        <div class="logo">
-          <div class="logo-lg">
-            <h3 style="font-size: 17px;" id="<portlet:namespace/>appName">Workflow Simulation</h3>
-            <h5 id="<portlet:namespace/>appVersion"></h5>
-          </div>
-          <div class="logo-sm">
-            <i class="fa fa-microchip" style="color:#00a65a;"></i>
-          </div>
-        </div>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar workbench-custom-nav">
-          <!-- Navbar Left Menu -->
-          <div class="navbar-left">
-            <ul class="nav navbar-nav">
-              <li id="<portlet:namespace/>header-li-simulation">
-                <i class="fa fa-cubes fa-2x"></i><br>
-                <span class="nav-icon-text">Simulations</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-edit">
-                <i class="fa fa-cogs fa-2x"></i><br>
-                <span class="nav-icon-text">Edit</span>
-              </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-new" data-divider="job-li-divider">
-                <i class="fa fa-plus-square-o fa-2x"></i><br>
-                <span class="nav-icon-text">New</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-save" data-divider="job-li-divider">
-                <i class="fa fa-save fa-2x"></i><br>
-                <span class="nav-icon-text">Save</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-wf-copy" data-divider="job-li-divider">
-                <i class="fa fa-copy fa-2x"></i><br>
-                <span class="nav-icon-text">Copy</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-copy" data-divider="job-li-divider">
-                <i class="fa fa-copy fa-2x"></i><br>
-                <span class="nav-icon-text">Copy</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-delete" data-divider="job-li-divider">
-                <i class="fa fa-trash-o fa-2x"></i><br>
-                <span class="nav-icon-text">Delete</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-select" data-divider="job-li-divider">
-                <i class="fa fa-check-square-o fa-2x"></i><br>
-                <span class="nav-icon-text">Select</span>
-              </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>ib-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">
-                <i class="fa fa-cloud-upload fa-2x"></i><br>
-                <span class="nav-icon-text">Submit</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">
-                <i class="fa fa-window-close-o fa-2x"></i><br>
-                <span class="nav-icon-text">cancel</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">
-                <i class="fa fa-desktop fa-2x"></i><br>
-                <span class="nav-icon-text">Log</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-download" data-divider="ib-li-divider">
-                <i class="fa fa-cloud-download fa-2x"></i><br>
-                <span class="nav-icon-text">Download</span>
-              </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>data-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-data" data-divider="data-li-divider">
-                <i class="fa fa-share-square-o fa-2x"></i><br>
-                <span class="nav-icon-text">Open Data</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-manual" data-divider="data-li-divider">
-                <i class="fa fa-book fa-2x"></i><br>
-                <span class="nav-icon-text">Manual</span>
-              </li>
-            </ul>
-          </div>
-          <!-- Navbar Right Menu -->
-        </nav>
-      </header>
-
-      <div class="wrapper">
-        <aside class="main-sidebar">
-          <section class="sidebar" id="<portlet:namespace/>column-1" section-type="system">
-            <ul class="sidebar-menu top" data-widget="tree">
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="new">
-                  <i class="fa fa-lg fa-file"></i>
-                  <span>New</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="open">
-                  <i class="fa fa-lg fa-folder-open"></i>
-                  <span>Open</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="save">
-                  <i class="fa fa-lg fa-floppy-o"></i>
-                  <span>Save</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="execute">
-                  <i class="fa fa-lg fa-play-circle"></i>
-                  <span>Run</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
-                  <%-- <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li> --%>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="sidebar-menu bottom" data-widget="tree">
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="designer">
-                  <i class="fa fa-lg fa-pencil-square-o"></i>
-                  <span>Edit</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="sidebar-btn" data-btn-type="setting">
-                  <i class="fa fa-lg  fa-gear"></i>
-                  <span>Setting</span>
-                </a>
-              </li>
-              <li>
-                <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
-                  <a href="#" class="sidebar-toggle">
-                    <i class="fa fa-lg fa-angle-left fa-2x pull-right"></i>
-                    <span class="sr-only">Toggle navigation</span>
-                  </a>
-                </div>
-              </li>
-            </ul>
-          </section>
-        </aside>
-        <div class="content-wrapper">
-          <div class="menu-panel">
-            <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
-            <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
-          </div>
-          <section class="content-header">
-            <h1>
-              <a id="mobile-toggle" href="#mobile-toggle" data-toggle="push-menu">
-                <i class="fa fa-lg fa-compress"></i>
-                <span class="sr-only">Toggle navigation</span>
+  <div class="row hold-transition skin-black-light sidebar-mini" id="body-div">
+    <div class="wrapper" style="border-top: 1px solid #e5e5e9;">
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <ul class="sidebar-menu top" data-widget="tree">
+            <li class="header">
+              <div class="header-inner">
+                Simulation Executor
+              </div>
+            </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="new">
+                <i class="fa fa-lg fa-file"></i>
+                <span>New</span>
               </a>
-              <span id="<portlet:namespace/>workflow-title"></span>
-              <small id="<portlet:namespace/>workflow-sub-title"></small>
-            </h1>
-          </section>
-          <section class="content" style="display: flex;">
-          <!-- jsplumb-drag-select canvas-wide jtk-droppable -->
-            <div id="wf-workflow-canvas" class="apparea wf-drop jtk-surface">
-              <div class="controls" can-undo="false" can-redo="false">
-                <!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
-              <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
-                <i class="fa fa-home" reset title="Zoom To Fit"></i>
-                <i class="fa fa-plus" zoom="in" title="Zoom In"></i>
-                <i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
+            </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="open">
+                <i class="fa fa-lg fa-folder-open"></i>
+                <span>Open</span>
+              </a>
+            </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="save">
+                <i class="fa fa-lg fa-floppy-o"></i>
+                <span>Save</span>
+              </a>
+            </li>
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="execute">
+                <i class="fa fa-lg fa-play-circle"></i>
+                <span>Run</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
+                <%-- <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li> --%>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
+                <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="sidebar-menu bottom" data-widget="tree">
+            <li class="treeview">
+              <a href="#" class="sidebar-btn" data-btn-type="designer">
+                <i class="fa fa-lg fa-pencil-square-o"></i>
+                <span>Edit</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="sidebar-btn" data-btn-type="setting">
+                <i class="fa fa-lg  fa-gear"></i>
+                <span>Setting</span>
+              </a>
+            </li>
+            <li>
+              <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
+                <a href="#" class="sidebar-toggle">
+                  <i class="fa fa-lg fa-angle-left fa-2x pull-right"></i>
+                  <span class="sr-only">Toggle navigation</span>
+                </a>
               </div>
-              <div id="miniview" style="position: absolute;top: 10px;right: 25px;z-index: 100;">
-
-              </div>
-              <div jtk-miniview-type="foo"></div>
-            </div>
-          </section>
+            </li>
+          </ul>
+        </section>
+      </aside>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        <a id="mobile-toggle" href="#mobile-toggle" data-toggle="push-menu">
+          <i class="fa fa-lg fa-compress"></i>
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <span id="<portlet:namespace/>workflow-title"></span>
+        <small id="<portlet:namespace/>workflow-sub-title"></small>
+      </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select">
+        <div class="controls" can-undo="false" can-redo="false">
+          <!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
+        <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
+          <i class="fa fa-home" reset title="Zoom To Fit"></i>
+          <i class="fa fa-plus" zoom="in" title="Zoom In"></i>
+          <i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
         </div>
+        <div id="miniview" style="position: absolute;top: 10px;right: 25px;z-index: 100;">
+
+        </div>
+        <div jtk-miniview-type="foo"></div>
       </div>
+    </section>
+    <div class="menu-panel" style="top: 0;">
+      <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
+      <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
     </div>
   </div>
-</div>
 
+</div>
+</div>
 <div class="modal fade" id="<portlet:namespace/>wf-modal" tabindex="-1" role="dialog"
   aria-labelledby="<portlet:namespace/>wf-modal-label" style="display: none;">
 <div class="vertical-alignment-helper">
@@ -379,8 +446,6 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 <script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
-var namespace = "<portlet:namespace/>";
-var jqPortletBoundaryId = "#p_p_id" + namespace;
 $(document).ready(function(){
   consoleLog.setLoggingLevel({
     error : true,
@@ -392,6 +457,8 @@ $(document).ready(function(){
     "File": '${fileEditor.exeFileName}',
     "SDE": '${structuredEditor.exeFileName}'
   };
+  var namespace = "<portlet:namespace/>";
+  var jqPortletBoundaryId = "#p_p_id" + namespace;
   var workflowId = "${workflowId}";
   var workflowCount = ${workflowCount};
   $.Mustache.addFromDom();
@@ -418,15 +485,15 @@ $(document).ready(function(){
   var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
   designer.setWorkflowInputPortModule(inputportModule);
 
-  //
+  uiPanel.openWorkflow(workflowId);
   $("#exampleModal .modal-dialog").draggable({
       handle: ".modal-header"
   });
-  // _delay(function(){
-  //     $("#wf-workflow-canvas").css("height",
-  //       $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
-  //       - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
-  // }, 3000);
+  _delay(function(){
+      $("#wf-workflow-canvas").css("height",
+        $(jqPortletBoundaryId + " div.content-wrapper").actual("height")
+        - $(jqPortletBoundaryId + " section.content-header").actual("outerHeight"));
+  }, 3000);
   _delay(function(){
     if(workflowId){
       if(console){
@@ -437,7 +504,6 @@ $(document).ready(function(){
       }else{
         $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
       }
-      uiPanel.openWorkflow(workflowId);
     }
   }, 1000);
 });

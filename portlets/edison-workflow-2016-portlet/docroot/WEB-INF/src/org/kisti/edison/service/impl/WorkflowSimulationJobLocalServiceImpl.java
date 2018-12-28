@@ -175,6 +175,13 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         return workflowSimulationJobPersistence.findBySimulationId_UserId(simulationId, userId, begin, end);
     }
     
+    public int countWorkflowSimulationJobs(long simulationId, String title, long userId) throws SystemException {
+        if(StringUtils.hasText(title)) {
+            return workflowSimulationJobPersistence.countBySimulationId_Title_UserId(simulationId, "%" + title + "%", userId);    
+        }
+        return workflowSimulationJobPersistence.countBySimulationId_UserId(simulationId, userId);
+    }
+    
     // UPDATE META DATA
     public WorkflowSimulationJob updateWorkflowSimulationJob(long simulationJobId, Map<String, Object> params) 
         throws PortalException, SystemException {

@@ -105,6 +105,15 @@
     <finder name="UserId" return-type="Collection">
 	  <finder-column name="userId"></finder-column>
 	</finder>
+    <finder name="WorkflowId_Title_UserId" return-type="Collection">
+	  <finder-column name="workflowId"></finder-column>
+	  <finder-column name="title" comparator="LIKE" />
+	  <finder-column name="userId"></finder-column>
+	</finder>
+    <finder name="WorkflowId_UserId" return-type="Collection">
+	  <finder-column name="workflowId"></finder-column>
+	  <finder-column name="userId"></finder-column>
+	</finder>
   </entity>
 
   <entity name="WorkflowSimulationJob" local-service="true" remote-service="false">

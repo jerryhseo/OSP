@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.JsonNode;
-import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -154,13 +153,15 @@ public class WorkflowSimulationController{
             int curPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("p_curPage"), "1"));
             int linePerPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("linePerPage"), "10"));
             int pagePerBlock = 5;
-            int totalCnt = GetterUtil.getInteger(WorkflowLocalServiceUtil.getCountWorkflowsByLikeSearch(searchParam));
+            int totalCnt = GetterUtil.getInteger(WorkflowSimulationJobLocalServiceUtil
+                .countWorkflowSimulationJobs(simulationId, title, user.getUserId()));
             int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
             int begin = (curPage - 1) * linePerPage;
             int end = linePerPage;
             
             Map<String, Object> listAndPagingMap = Maps.newHashMap();
-            listAndPagingMap.put("workflows", WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobs(simulationId, title, user.getUserId(), begin, end));
+            listAndPagingMap.put("workflows", WorkflowSimulationJobLocalServiceUtil
+                .getWorkflowSimulationJobs(simulationId, title, user.getUserId(), begin, end));
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",
@@ -200,7 +201,6 @@ public class WorkflowSimulationController{
             throw e;
         }
     }
-    
     
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/update", 

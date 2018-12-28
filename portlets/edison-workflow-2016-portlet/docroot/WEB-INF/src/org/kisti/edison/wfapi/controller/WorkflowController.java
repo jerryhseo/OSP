@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -88,7 +87,8 @@ public class WorkflowController{
     }
 
     @RequestMapping(value = "/{workflowId}", method = RequestMethod.GET)
-    public @ResponseBody Map<String, Object> getWorkflow(@PathVariable("workflowId") long workflowId,
+    public @ResponseBody Map<String, Object> getWorkflow(
+        @PathVariable("workflowId") long workflowId,
         HttpServletRequest request) throws Exception{
         try{
             Locale locale = PortalUtil.getLocale(request);

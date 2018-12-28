@@ -386,6 +386,16 @@ public interface WorkflowSimulationLocalService extends BaseLocalService,
 	public int getCountWorkflowSimulations(java.lang.String title, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<org.kisti.edison.model.WorkflowSimulation> getWorkflowSimulations(
+		long workflowId, java.lang.String title, long userId, int begin, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCountWorkflowSimulations(long workflowId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation()
 		throws com.liferay.portal.kernel.exception.SystemException;
 

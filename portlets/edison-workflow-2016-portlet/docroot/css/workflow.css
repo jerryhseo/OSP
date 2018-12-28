@@ -33,7 +33,7 @@
 
 .rightwrap{width:819px; float:left; background-color:#f9f9f9; border:solid 1px #dedede; padding:10px; min-height:300px; margin-top:35px; margin-left:3px;}
 
-.apparea{padding:10px; min-height:400px;}
+.apparea{padding:10px;}
 
 .waitingbox{width:150px; height:165px; border-radius:3px; border:solid 1px #00abe3; background-color:#b6e1f8;}
 .waitingbox span{font-size:18px; color:#114a69; font-weight:500;}
@@ -118,9 +118,9 @@
     color: #2184aa; }
   .bgcolor{ background-color:#fcfcfc;}
   .edison .tablemf_list td.pdleft20{ padding-left:20px;}
-  
-  
-  
+
+
+
    .edison .buttonwait {
     font-weight: 500;
     text-decoration: none;
@@ -140,10 +140,10 @@
     border-color: #5492ba;
     border-width: 1px;
     border-style: solid; }
-	
-	
-	
-	
+
+
+
+
    .edison .buttonrunning {
     font-weight: 500;
     text-decoration: none;
@@ -163,8 +163,8 @@
     border-color: #3371a8;
     border-width: 1px;
     border-style: solid; }
-	
-	
+
+
    .edison .buttonfail {
     font-weight: 500;
     text-decoration: none;
@@ -184,7 +184,7 @@
     border-color: #b73535;
     border-width: 1px;
     border-style: solid; }
-	
+
    .edison .buttondone {
     font-weight: 500;
     text-decoration: none;
@@ -204,8 +204,8 @@
     border-color: #2e9886;
     border-width: 1px;
     border-style: solid; }
-	
-	
+
+
    .edison .tabletopwf{
     position: absolute;
     right:395px;
@@ -215,7 +215,7 @@
     border-radius: 3px 3px 3px 3px;
     -webkit-border-radius: 3px 3px 3px 3px;
     background-color: #fff;}
-	
+
 	.wftitlebox001{width:1163px; margin: 0 auto; padding: 0;   border-radius: 3px 3px 0px 0px; -webkit-border-radius: 3px 3px 0px 0px; color: #fff; font-size: 18px; font-weight: 600; position: relative; height:53px; line-height:2.8em; padding-left:55px; margin-bottom:22px; background:url(../images/Workflow/title_icon.png) no-repeat 15px 12px; background-color:#67788a;}
-	
+
 	.wftitlebox001 span{float:right; margin-right:15px;}

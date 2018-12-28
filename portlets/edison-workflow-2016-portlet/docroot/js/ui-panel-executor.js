@@ -83,7 +83,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     toastr["error"]("", var_already_run_message);
                 }
             }, function () { });
-        
+
     }
     function rerun(){
         if($(".wf-box.reset").length){
@@ -98,7 +98,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }else{
             toastr["error"]("","Reset First.");
         }
-        
+
     }
     function pause(){
         var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
@@ -112,7 +112,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     toastr["error"]("", "Workflow is not running.");
                 }});
     }
-    
+
     function restart(){
         var workflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
         executor.getWorkflowInstance(workflowInstanceId,
@@ -132,14 +132,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             if (!simulations.length || simulations.length < 1) {
                 toastr["error"]("", "No Simulations");
                 return false;
-            } 
+            }
             sortSimulations(simulations);
             var tableSimulations = [];
             for (var i = 0; i < simulations.length; i++) {
                 var tableSimulation = {};
                 tableSimulation.title = simulations[i].title;
                 if (simulations[i].status) {
-                    tableSimulation.status = WF_STATUS_CODE_STRING[simulations[i].status]; 
+                    tableSimulation.status = WF_STATUS_CODE_STRING[simulations[i].status];
                 } else {
                     tableSimulation.status = "Waiting";
                 }
@@ -239,7 +239,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $(that).parent("li").addClass("menu-open")
             $(".menu-panel").show('slide', { direction: 'left' }, 500);
         }
-        
+
     }
 
     function getIcebreakerAccessToken(){
@@ -248,10 +248,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn").click(function (e) {
+        console.log(e);
         e.preventDefault();
         var btnType = $(this).attr("data-btn-type");
         var templateData = PANEL_DATA[btnType];
-        
+        console.log(templateData)
+
         if(btnType === "designer"){
             var fn = window[namespace + "moveToDesigner"];
             fn.apply();
@@ -273,6 +275,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $("#" + namespace + "menu-panel-box").show();
             $("#" + namespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
             $("#" + namespace + "menu-panel-box .box-body").mustache(templateData.body, templateData);
+            console.log(templateData.header)
             if(templateData.header){
                 var boxTitleSelecotr = "#" + namespace + "menu-panel-box .box-header.with-border.header-inner > .box-title";
                 $(boxTitleSelecotr).replaceWith($.Mustache.render(templateData.header.id, templateData));
@@ -335,7 +338,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }).bind("loaded.jstree", function(event, data){
             $(instanceTreeSelector).jstree(true).open_all();
             var _delay600 = _instantDelay(600);
-            var boxTitleSelecotr = "#" + namespace + 
+            var boxTitleSelecotr = "#" + namespace +
                 "menu-panel-box .box-header.with-border.header-inner > .box-title";
             var selectedWorkflowInstanceId = PANEL_DATA.setting.form.workflowInstanceId;
             $(boxTitleSelecotr + " > .search-input").keyup(function (e) {
@@ -437,7 +440,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function newSimulation(panelDataType){
         if (isValidate()) {
             var _f = function(){
-                executor.createWorkfowInstance(PANEL_DATA.setting.form.workflowId, 
+                executor.createWorkfowInstance(PANEL_DATA.setting.form.workflowId,
                     PANEL_DATA[panelDataType].form.workflowInstanceTitle, function(workflowInstance){
                         if(panelDataType === "new"){
                             PANEL_DATA[panelDataType].form.workflowInstanceTitle = "";
@@ -490,7 +493,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         executor.updateWorkflowInstance(workflowInstanceId, workflowInstanceTitle,
             designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
     }
-    
+
     function deleteWorkflowInstance(panelDataType){
         if (!_isEmpty(PANEL_DATA.setting.form.workflowInstanceId, var_no_workflow_instance_msg)) {
             _confirm(var_remove_workflow_confirm_message, function () {
@@ -513,6 +516,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function openWorkflowByWorkflowId(workflowId, isNotNew){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
+            console.log(workflow);
             if(!isNotNew){
                 setMetaData({
                     "title": workflow.title,
@@ -570,7 +574,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     $(document).bind('keydown.uiPanel',function (event) {
-        if ((event.which == 115 || event.which == 83) && 
+        if ((event.which == 115 || event.which == 83) &&
             (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
             if(PANEL_DATA.setting.form.workflowInstanceTitle){

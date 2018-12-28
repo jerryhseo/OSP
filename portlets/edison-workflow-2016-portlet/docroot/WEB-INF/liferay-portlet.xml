@@ -55,7 +55,7 @@
     <header-portlet-javascript>/js/lib/jsplumbtoolkit.min.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery-dateFormat.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
-    <header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>
+    <!--<header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>-->
     <header-portlet-javascript>/js/lib/toastr.min.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
     <header-portlet-javascript>/js/workflow-constant.js</header-portlet-javascript>
@@ -71,7 +71,7 @@
   	</css-class-wrapper>
     <add-default-resource>true</add-default-resource>
   </portlet>
-  
+
   <portlet>
     <portlet-name>workflow-monitoring</portlet-name>
     <icon>/icon.png</icon>
@@ -80,7 +80,7 @@
     <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     <css-class-wrapper>edison-workflow-2016-portlet container</css-class-wrapper>
   </portlet>
-  
+
   <role-mapper>
     <role-name>administrator</role-name>
     <role-link>Administrator</role-link>

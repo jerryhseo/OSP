@@ -99,6 +99,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     }
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
+    console.log(wfWorkflowJsPlumbInstance)
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
@@ -126,6 +127,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             EndpointStyle: { fill: "#11C7E7" },
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" }
+        },
+        dragOptions: {
+            magnetize:true
         }
     });
 
@@ -375,7 +379,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.CONTROLLER.NAME){
         //         	disInputPortExist = true;
         //         }else if(data["appType"] && data["appType"] == WF_APP_TYPES.FILE_COMPONENT.NAME){
-        //        	
+        //
         //         }
 
         var scienceAppData = {

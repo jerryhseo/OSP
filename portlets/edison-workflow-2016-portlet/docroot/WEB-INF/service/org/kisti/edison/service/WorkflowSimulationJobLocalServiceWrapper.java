@@ -473,6 +473,14 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public int countWorkflowSimulationJobs(long simulationId,
+		java.lang.String title, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.countWorkflowSimulationJobs(simulationId,
+			title, userId);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(
 		long simulationJobId,
 		java.util.Map<java.lang.String, java.lang.Object> params)

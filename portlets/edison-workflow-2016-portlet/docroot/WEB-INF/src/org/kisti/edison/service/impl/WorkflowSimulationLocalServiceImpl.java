@@ -72,6 +72,20 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
         return workflowSimulationPersistence.countByUserId(userId);
     }
     
+    public List<WorkflowSimulation> getWorkflowSimulations(long workflowId, String title, long userId, int begin, int end) throws SystemException {
+        if(StringUtils.hasText(title)) {
+            return workflowSimulationPersistence.findByWorkflowId_Title_UserId(workflowId, "%" + title + "%", userId, begin, end);    
+        }
+        return workflowSimulationPersistence.findByWorkflowId_UserId(workflowId, userId, begin, end);
+    }
+    
+    public int getCountWorkflowSimulations(long workflowId, String title, long userId) throws SystemException {
+        if(StringUtils.hasText(title)) {
+            return workflowSimulationPersistence.countByWorkflowId_Title_UserId(workflowId, title, userId);    
+        }
+        return workflowSimulationPersistence.countByWorkflowId_UserId(workflowId, userId);
+    }
+    
     public WorkflowSimulation createWorkflowSimulation() throws SystemException{
         long simulationId = super.counterLocalService.increment();
         return workflowSimulationLocalService.createWorkflowSimulation(simulationId);

@@ -90,7 +90,8 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 			true);
 	public static long TITLE_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
-	public static long CREATEDATE_COLUMN_BITMASK = 4L;
+	public static long WORKFLOWID_COLUMN_BITMASK = 4L;
+	public static long CREATEDATE_COLUMN_BITMASK = 8L;
 	public static final String MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_NAME =
 		"EDWF_WorkflowSimulation_WorkflowSimulationJob";
 	public static final Object[][] MAPPING_TABLE_EDWF_WORKFLOWSIMULATION_WORKFLOWSIMULATIONJOB_COLUMNS =
@@ -345,7 +346,19 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 
 	@Override
 	public void setWorkflowId(long workflowId) {
+		_columnBitmask |= WORKFLOWID_COLUMN_BITMASK;
+
+		if (!_setOriginalWorkflowId) {
+			_setOriginalWorkflowId = true;
+
+			_originalWorkflowId = _workflowId;
+		}
+
 		_workflowId = workflowId;
+	}
+
+	public long getOriginalWorkflowId() {
+		return _originalWorkflowId;
 	}
 
 	public long getColumnBitmask() {
@@ -446,6 +459,10 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 		workflowSimulationModelImpl._setOriginalUserId = false;
 
 		workflowSimulationModelImpl._originalTitle = workflowSimulationModelImpl._title;
+
+		workflowSimulationModelImpl._originalWorkflowId = workflowSimulationModelImpl._workflowId;
+
+		workflowSimulationModelImpl._setOriginalWorkflowId = false;
 
 		workflowSimulationModelImpl._columnBitmask = 0;
 	}
@@ -589,6 +606,8 @@ public class WorkflowSimulationModelImpl extends BaseModelImpl<WorkflowSimulatio
 	private String _originalTitle;
 	private boolean _testYn;
 	private long _workflowId;
+	private long _originalWorkflowId;
+	private boolean _setOriginalWorkflowId;
 	private long _columnBitmask;
 	private WorkflowSimulation _escapedModel;
 }
