@@ -49,7 +49,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     	var sourceData = source.getNode().data,
                 		targetData = target.getNode().data;
                     	var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
-                    	console.log("sourcePortDataType : " + sourcePortDataType);
                     	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
                     		sourceData.outputPorts[source.id].dataType_ = {};
                     		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;

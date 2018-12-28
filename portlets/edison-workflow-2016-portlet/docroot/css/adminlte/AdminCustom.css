@@ -138,9 +138,14 @@ a#mobile-toggle:hover, a#mobile-toggle:focus {
     margin-left: 0px !important;
     margin-right: 0px !important;
 }
+
+.menu-panel-box > div {
+	height: 100%;
+}
+
 .menu-panel .box{
     border-radius: 0;
-    height: calc(100vh - 172px);
+    height: inherit;
     margin-bottom: 0px;
 }
 .menu-panel .box > .box-header > .box-tools {
