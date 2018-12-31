@@ -43,8 +43,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 }
 
                 if (source.getType() === 'all' || target.getType() === 'all') {
-                    if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                    	
+                	if(source.getType() == target.getType()){
+                		return false;
+                	} else if (source.getNode().data.scienceAppData.runType === "FileComponent") {
                     	var isEqualsPortType = false;
                     	var sourceData = source.getNode().data,
                 		targetData = target.getNode().data;
@@ -52,7 +53,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
                     		sourceData.outputPorts[source.id].dataType_ = {};
                     		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
-                    		console.log(sourceData.outputPorts[source.id].dataType_);
                     		isEqualsPortType = true;
                     	} else {
                     		isEqualsPortType = checkPortTypeForConnection(source, target, true);
@@ -67,6 +67,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 	return checkPortTypeForConnection(source, target, false);
                 }
             }
+        },
+        beforeDetach(source, target, edgeData){
+        	var sourceData = source.getNode().data;
+        	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
+        		if(source.getAllEdges().length-1 == 0){
+        			delete sourceData.outputPorts[source.id].dataType_;
+        		}
+        	}
         }
     });
     
