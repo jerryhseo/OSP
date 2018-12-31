@@ -122,8 +122,6 @@ var contextPath = '${contextPath}';
 
 .pausebox{border-radius:3px; border:solid 1px #fd9b00; background-color:#fd9b00;}
 
-
-
 .wf-box {
 	box-sizing: content-box;
     width: 150px !important;
@@ -340,6 +338,10 @@ var contextPath = '${contextPath}';
 	cursor: pointer;
 	padding: 4px;
 	margin-right: 5px !important;
+}
+
+.selected-mode {
+	color: #E4F013;
 }
 
 </style>
