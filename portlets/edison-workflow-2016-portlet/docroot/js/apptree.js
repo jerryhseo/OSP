@@ -61,7 +61,7 @@ var AppTree = (function(namespace, $, designer){
                     }
                 },
                 "outputports": {
-                    "y": {
+                    "Y": {
                         "name_": "Y",
                         "defaultAnalyzer_": "none",
                         "dataType_": {
@@ -77,7 +77,7 @@ var AppTree = (function(namespace, $, designer){
                             "relative_": true
                         }
                     },
-                    "n": {
+                    "N": {
                         "name_": "N",
                         "defaultAnalyzer_": "none",
                         "dataType_": {

@@ -954,8 +954,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
         /* 2018.12.24 _ Save Workflow Data */
         var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
-        console.log("---------------------saveOrUpdateWorkflowDefinition-------------");
-        console.log(wfDataJsonString);
         if (localWorkflow) {
             localWorkflow.title = title;
             localWorkflow.description = workflowMetaData.description;
