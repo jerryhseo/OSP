@@ -61,7 +61,7 @@ var AppTree = (function(namespace, $, designer){
                     }
                 },
                 "outputports": {
-                    "y.stdout.out": {
+                    "y": {
                         "name_": "Y",
                         "defaultAnalyzer_": "none",
                         "dataType_": {
@@ -73,11 +73,11 @@ var AppTree = (function(namespace, $, designer){
                             "id_": 0,
                             "parent_": "result",
                             "type_": "file",
-                            "name_": "stdout.out",
+                            "name_": "stdout",
                             "relative_": true
                         }
                     },
-                    "n.stdout.out": {
+                    "n": {
                         "name_": "N",
                         "defaultAnalyzer_": "none",
                         "dataType_": {
@@ -89,7 +89,7 @@ var AppTree = (function(namespace, $, designer){
                             "id_": 0,
                             "parent_": "result",
                             "type_": "file",
-                            "name_": "stdout.out",
+                            "name_": "stdout",
                             "relative_": true
                         }
                     }
@@ -144,8 +144,8 @@ var AppTree = (function(namespace, $, designer){
                     }
                 },
                 "outputports": {
-                    "stdout.out": {
-                        "name_": "stdout.out",
+                    "stdout": {
+                        "name_": "stdout",
                         "defaultAnalyzer_": "none",
                         "dataType_": {
                             "name": "converter_stdout",
@@ -156,7 +156,7 @@ var AppTree = (function(namespace, $, designer){
                             "id_": 0,
                             "parent_": "result",
                             "type_": "file",
-                            "name_": "stdout.out",
+                            "name_": "stdout",
                             "relative_": true
                         }
                     }
@@ -193,15 +193,15 @@ var AppTree = (function(namespace, $, designer){
                 "parent": "componet_category",
                 "groupId": getSpecificSiteGroupId(),
                 "outputports": {
-                    "stdout.out": {
-                        "name_": "stdout.out",
+                    "stdout": {
+                        "name_": "stdout",
                         "defaultAnalyzer_": "none",
                         "mandatory_": false,
                         "outputData_": {
                             "id_": 0,
                             "parent_": "result",
                             "type_": "file",
-                            "name_": "stdout.out",
+                            "name_": "stdout",
                             "relative_": true
                         }
                     }

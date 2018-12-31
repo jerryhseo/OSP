@@ -141,11 +141,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         layout: {
             type: "Absolute"
         },
-        events: {
-            canvasClick: function (e) {
-            	wfWorkflowJsPlumbInstance.clearSelection();
-            }
-        },
         miniview: {
             container: "miniview"
         },
@@ -647,12 +642,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             $el.each(function(_) {
                 var wfId = $(this).attr("id");
                 var node = currentJsPlumbInstance.getNode(wfId);
-                /* Delete Workflow SampleFiles */
-                var fn = window[namespace + "deleteWfSampleFiles"];
-                if (fn) {
-                    fn.apply(null, [node.data]);
-                }
-                
                 currentJsPlumbInstance.removeNode(node);
                 
                 if(node.data.type===WF_APP_TYPES.APP.NAME){
@@ -952,6 +941,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
 
         /* 2018.12.24 _ Save Workflow Data */
         var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
+        console.log("---------------------saveOrUpdateWorkflowDefinition-------------");
+        console.log(wfDataJsonString);
         if (localWorkflow) {
             localWorkflow.title = title;
             localWorkflow.description = workflowMetaData.description;
@@ -985,10 +976,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             return false;
         } else {
             var currentWorkflowId = modifyingWorkflow["workflowId"];
-            var wfData = getWorkflowDefinition(currentJsPlumbInstance);
+            var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
 
-            /* 2018.12.24 _ Save Workflow Data */
-            var wfDataJsonString = JSON.stringify(wfData);
             aSyncAjaxHelper
                 .post("/delegate/services/workflows/" + currentWorkflowId + "/saveas", {
                     title: workflowMetaData.title,
@@ -1006,9 +995,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         }
     }
 
-    function deleteWorkflowDefinition(workflowId, callback, screenLogic) {
-    	deleteWorkflowWfFiles(screenLogic);
-    	
+    function deleteWorkflowDefinition(workflowId, callback) {
         aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId + "/delete", {}, function(_) {
             if (callback) {
                 callback();
@@ -1016,32 +1003,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         });
     }
 
-    function deleteWorkflowDefinitionWithScienceApp(workflowId, scienceAppId, callback, screenLogic) {
-    	deleteWorkflowWfFiles(screenLogic);
-    	
+    function deleteWorkflowDefinitionWithScienceApp(workflowId, scienceAppId, callback) {
         aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId + "/app/" + scienceAppId + "/delete", {}, function(_) {
             if (callback) {
                 callback();
             }
         });
     }
-    
-    /* 2018.12.31 _ Delete wfFiles in Workflow Nodes */
-    function deleteWorkflowWfFiles(screenLogic){
-    	var wfNodes = screenLogic.nodes;
-    	
-    	for(var i=0; i<wfNodes.length; i++){
-    		var nodeData = wfNodes[i];
-    		
-    		var fn = window[namespace + "deleteWfSampleFiles"];
-            if (fn) {
-                fn.apply(null, [nodeData]);
-            }
-    	}
-    }
 
     function duplicateWorkflowDefinition(workflowId, workflowTitle, callback) {
-    	/* TODO 노드 검색해서 파일 삭제 */
         var param = workflowTitle ? { "title": workflowTitle } : {};
         aSyncAjaxHelper
             .jsonPost("/delegate/services/workflows/" + workflowId + "/copy",
