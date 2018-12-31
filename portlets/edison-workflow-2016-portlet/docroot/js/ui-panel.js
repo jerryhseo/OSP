@@ -521,6 +521,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 PANEL_DATA[panelType].form.workflowId : 
                 PANEL_DATA[panelType].form.selected;
         var workflow = currWorkflows.get(workflowId);
+        var screenLogic = JSON.parse(workflow.screenLogic);
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
             return false;
         }
@@ -532,14 +533,14 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         		toastr["error"]("", var_workflow_remove_status_error_message);
         		return false;
         	}else{
-        		deleteWorkflowConfirm(var_remove_with_app_confirm_message,panelType,workflowId,scienceAppId);
+        		deleteWorkflowConfirm(var_remove_with_app_confirm_message,panelType,workflowId,scienceAppId, screenLogic);
         	}
         }else{
-        	deleteWorkflowConfirm(var_remove_workflow_confirm_message,panelType,workflowId, scienceAppId);
+        	deleteWorkflowConfirm(var_remove_workflow_confirm_message,panelType,workflowId, scienceAppId, screenLogic);
         }
     }
     
-    function deleteWorkflowConfirm(confirmMsg,panelType, workflowId,scienceAppId){
+    function deleteWorkflowConfirm(confirmMsg,panelType, workflowId,scienceAppId, screenLogic){
     	_confirm(confirmMsg, function () {
     		var vFunction = function (resetDesignerFn){
     			 if (PANEL_DATA.setting.form.workflowId === workflowId) {
@@ -554,9 +555,9 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		}
     		
     		if(scienceAppId!=0){
-    			designer.deleteWorkflowDefinitionWithScienceApp(workflowId,scienceAppId,vFunction);
+    			designer.deleteWorkflowDefinitionWithScienceApp(workflowId,scienceAppId,vFunction, screenLogic);
     		}else{
-    			designer.deleteWorkflowDefinition(workflowId,vFunction);
+    			designer.deleteWorkflowDefinition(workflowId,vFunction, screenLogic);
     		}
         }, function () { });
     }
@@ -708,9 +709,10 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     
     var openWfAppFileDataSetting = function(nodeId, appType, appName, portId, portType){
     	
-    	if(_isEmpty(PANEL_DATA.setting.form.workflowId, var_create_first_message)){
-    		return false;
-    	}
+    	if(nullToStr(PANEL_DATA.setting.form.workflowId)===""){
+    		toastr["error"]("", var_create_first_message);
+			return false;
+		}
     	
     	var nodeData = designer.getNodeData(nodeId);
 		var inputs = new Array();
