@@ -141,6 +141,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         layout: {
             type: "Absolute"
         },
+        events: {
+            canvasClick: function (e) {
+            	wfWorkflowJsPlumbInstance.clearSelection();
+            }
+        },
         miniview: {
             container: "miniview"
         },
