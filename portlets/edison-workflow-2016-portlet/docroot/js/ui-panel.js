@@ -734,7 +734,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		var sample = nodeData[portType][portId].sample_;
     		inputs.push({"isAppFile":true, "fileId": sample.id_, "fileName": "Download","title": "App Sample File"});
     		
-    		var wfSample = nodeData[portType][portId].wfSample_;
+    		var wfSample = nodeData[portType][portId][OSP.Constants.WF_SAMPLE];
     		if(wfSample){
     			inputs.push({"isFile":true, "fileId": wfSample.id_, "fileName": wfSample.name_,"title": "WF Sample File"});
     		}else{
@@ -742,7 +742,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		}
 
     		
-    		var isWfSample = nodeData[portType][portId].isWfSample_;
+    		var isWfSample = nodeData[portType][portId][OSP.Constants.IS_WF_SAMPLE];
     		var fileTypeOptions = new Array();
     		fileTypeOptions.push({"optionName":"Is App Sample File Use","value":false});
     		fileTypeOptions.push({"optionName":"Is WF Sample File Use","value":true});

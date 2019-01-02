@@ -321,6 +321,8 @@ public class LayoutController {
 			totalLayout.put("columns_", totalColumns);
 			model.addAttribute("totalLayout", totalLayout);
 			
+			System.out.println(totalLayout);
+			
 			model.addAttribute("lodingPortlets", lodingPortlets.toString());
 			model.addAttribute("workbenchLayout", workbenchLayouts);
 		}catch (Exception e) {

@@ -52,6 +52,13 @@
 		<css-class-wrapper>science-app-port</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
+	<portlet>
+		<portlet-name>ModuleViewer</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>true</instanceable>
+		<css-class-wrapper>module-viewer-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

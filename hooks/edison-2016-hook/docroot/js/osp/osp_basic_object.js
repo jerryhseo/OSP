@@ -225,7 +225,11 @@
         CLUSTER: 'cluster_',
         WORKING_DIR: 'workingDir_',
         PORTS_DATA: 'portsData_',
-
+        
+      //Wrokflow property names
+        IS_WF_SAMPLE: 'isWfSample_',
+        WF_SAMPLE: 'wfSample_',
+        
         verifyPathType: function(type) {
             if (!(type === 'file' || type === 'ext' || type === 'folder'))
                 return false;

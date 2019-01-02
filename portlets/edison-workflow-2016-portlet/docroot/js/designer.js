@@ -71,7 +71,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
         	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
-        		if(source.getAllEdges().length-1 == 0){
+        		if(source.getAllEdges().length-1 == 0){     
         			delete sourceData.outputPorts[source.id].dataType_;
         		}
         	}
@@ -441,9 +441,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	var portData = nodeData[portType][portId];
     	portData["defaultEditor_"] = defaultEditor;
-    	portData["isWfSample_"] = isWfSample == 'true';
+    	portData[OSP.Constants.IS_WF_SAMPLE] = isWfSample == 'true';
     	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
-    		portData["wfSample_"] = sampleData;
+    		portData[OSP.Constants.WF_SAMPLE] = sampleData;
     		var nodeFiles = nodeData["files"];
     		if(nodeFiles){
     			nodeFiles = nodeFiles.splice(nodeFiles.indexOf(preFileId),1);

@@ -2296,8 +2296,14 @@
             var portlet = Workbench.getPortlet(portletId);
             var port = scienceApp.getPort( portlet.portName() );
             var dataType = port.dataType();
+            var sample;
+            if(port.isWfSample()){
+            	sample = port.wfSample();
+            }else{
+            	sample = port.sample();
+            }
             
-            var sample = port.sample();
+            
             var dlEntryId = 0;
             var command;
             var ajaxData;
