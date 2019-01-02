@@ -32,23 +32,20 @@ import org.kisti.edison.util.EdisonPropsUtil;
 import org.springframework.util.StringUtils;
 
 import com.google.common.collect.Ordering;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 /**
  * The implementation of the workflow local service.
@@ -159,6 +156,37 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         targetWorkflow.setCreateDate(new Date());
         targetWorkflow.setUserId(user.getUserId());
         targetWorkflow.setCompanyId(PortalUtil.getCompany(request).getCompanyId());
+        
+        String screenLogic = targetWorkflow.getScreenLogic();
+        if(screenLogic != null && StringUtils.hasText(screenLogic)){
+        	JSONObject screenLogicJsonObj = JSONFactoryUtil.createJSONObject(screenLogic);
+        	JSONArray nodesArr = screenLogicJsonObj.getJSONArray("nodes");
+        	for(int nodesArrIdx=0; nodesArrIdx<nodesArr.length(); nodesArrIdx++){
+        		JSONObject node = nodesArr.getJSONObject(nodesArrIdx);
+        		
+        		// Delete files Element in nodes
+        		if(node.has("files")){
+        			node.remove("files");
+        		}
+        		
+        		// Delete wfSample_ Element in inputPorts
+        		if(node.has("inputPorts")){
+        			JSONObject inputPortsObj = node.getJSONObject("inputPorts");
+        			Iterator<String> keys = inputPortsObj.keys();
+        			while(keys.hasNext()){
+        				String key = keys.next();
+        				JSONObject inputPort = inputPortsObj.getJSONObject(key);
+        				
+        				if(inputPort.has("wfSample_")){
+        					inputPort.remove("wfSample_");
+        				}
+        			}
+        		}
+        	}
+        	screenLogic = screenLogicJsonObj.toString();
+        }
+        targetWorkflow.setScreenLogic(screenLogic);
+    	
         return super.workflowLocalService.addWorkflow(targetWorkflow);
     }
 
