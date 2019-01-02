@@ -68,7 +68,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 }
             }
         },
-        beforeDetach(source, target, edgeData){
+        beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
         	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
         		if(source.getAllEdges().length-1 == 0){
