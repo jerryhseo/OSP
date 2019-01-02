@@ -263,7 +263,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             designer.saveAsWorkflowDefinition(PANEL_DATA[panelDataType].form,
                 function (workflowId) {
                     PANEL_DATA.setting.form.workflowId = workflowId;
-                    setMetaData(PANEL_DATA.setting.form);
+                    openWorkflowByWorkflowId(workflowId);
                 });
             closePanel();
         }

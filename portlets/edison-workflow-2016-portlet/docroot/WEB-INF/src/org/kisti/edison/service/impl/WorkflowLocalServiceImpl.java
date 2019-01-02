@@ -122,7 +122,6 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
 
     public Workflow copyWorkflow(long sourceWorkflowId, String newTitle, String descrption, HttpServletRequest request)
         throws SystemException, PortalException{
-
         return copyWorkflow(sourceWorkflowId, newTitle, descrption, null, request);
     }
 
@@ -134,13 +133,44 @@ public class WorkflowLocalServiceImpl extends WorkflowLocalServiceBaseImpl{
         targetWorkflow.setParentWorkflowId(sourceWorkflowId);
         targetWorkflow.setTitle(newTitle);
         targetWorkflow.setDescription(descrption);
-        if(screenLogic != null && StringUtils.hasText(screenLogic)){
-            targetWorkflow.setScreenLogic(screenLogic);
-        }
         targetWorkflow.setWorkflowId(super.counterLocalService.increment());
         targetWorkflow.setCreateDate(new Date());
         targetWorkflow.setUserId(user.getUserId());
         targetWorkflow.setCompanyId(PortalUtil.getCompany(request).getCompanyId());
+        
+        if(screenLogic.equals("") || screenLogic == null){
+        	screenLogic = targetWorkflow.getScreenLogic();
+        }
+        
+        if(screenLogic != null && StringUtils.hasText(screenLogic)){
+        	JSONObject screenLogicJsonObj = JSONFactoryUtil.createJSONObject(screenLogic);
+        	JSONArray nodesArr = screenLogicJsonObj.getJSONArray("nodes");
+        	for(int nodesArrIdx=0; nodesArrIdx<nodesArr.length(); nodesArrIdx++){
+        		JSONObject node = nodesArr.getJSONObject(nodesArrIdx);
+        		
+        		// Delete files Element in nodes
+        		if(node.has("files")){
+        			node.remove("files");
+        		}
+        		
+        		// Delete wfSample_ Element in inputPorts
+        		if(node.has("inputPorts")){
+        			JSONObject inputPortsObj = node.getJSONObject("inputPorts");
+        			Iterator<String> keys = inputPortsObj.keys();
+        			while(keys.hasNext()){
+        				String key = keys.next();
+        				JSONObject inputPort = inputPortsObj.getJSONObject(key);
+        				
+        				if(inputPort.has("wfSample_")){
+        					inputPort.remove("wfSample_");
+        				}
+        			}
+        		}
+        	}
+        	screenLogic = screenLogicJsonObj.toString();
+        }
+        targetWorkflow.setScreenLogic(screenLogic);
+        
         return super.workflowLocalService.addWorkflow(targetWorkflow);
     }
 

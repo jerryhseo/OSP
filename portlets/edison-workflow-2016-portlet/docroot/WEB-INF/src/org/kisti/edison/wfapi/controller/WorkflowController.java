@@ -155,8 +155,6 @@ public class WorkflowController{
         @RequestParam(required = false, value="screenLogic") String screenLogic,
         HttpServletRequest request) throws Exception{
         try{
-            System.out.println("newTitle : " + newTitle);
-            System.out.println("newDescription : " + newDescription);
             Workflow workflow = null;
             if(StringUtils.hasLength(newTitle)){
                 workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, screenLogic, request);
