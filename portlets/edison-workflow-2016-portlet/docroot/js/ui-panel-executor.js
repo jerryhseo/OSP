@@ -629,7 +629,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return false;
     }
-
+    
     $(document).bind('keydown.uiPanel',function (event) {
         if ((event.which == 115 || event.which == 83) &&
             (event.ctrlKey || event.metaKey) || (event.which == 19)) {
@@ -643,9 +643,66 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return true;
     });
+    
+    /* 2019.01.02 _ Popup Button Event */
+    var openScienceAppWorkbench = function(nodeData){
+    	var modal = $("#" + namespace + "science-app-workbench-modal");
+    	
+    	var wfId = nodeData.id;
+    	var simulationUuid = nodeData.simulationUuid;
+    	var scienceAppData = nodeData.scienceAppData;
+    	var scienceAppId = scienceAppData.scienceAppId;
+    	var inputPorts = nodeData.inputPorts;
+    	var inputPortsArr = new Array();
+    	for(var key in inputPorts){
+    		inputPortsArr.push(key);
+    	}
+    	if(simulationUuid == "undefined" || simulationUuid == "" || simulationUuid == null){
+    		/* TODO Create simulation and get SimulationUuid */
+    	}
+    	
+    	var getWorkbenchHtml = null;
+    	window.AUI().use('liferay-portlet-url', function (A) {
+            var portletURL = window.Liferay.PortletURL.createRenderURL();
+            portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+            portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
+            portletURL.setParameter('scienceAppId', scienceAppId);
+            portletURL.setParameter('simulationUuid', "a9ff32de-5df5-4b67-bb53-ca5915611bd1");
+            portletURL.setParameter('blockInputPorts', inputPortsArr.toString());
+            portletURL.setWindowState('pop_up');
+            
+            var wWidth = $(window).width();
+            var wHeight = $(window).height();
+            $("body").css('overflow','hidden')
+            Liferay.Util.openWindow(
+        		{
+					dialog: {
+						width:wWidth,
+						height:wHeight,
+						cache: false,
+						draggable: false,
+						resizable: false,
+						modal: true,
+						destroyOnClose: true,
+						after: {
+							render: function(event) {
+								$("button.btn.close").on("click", function(e){
+									$("body").css('overflow','');
+								});
+							}
+						}
+					},
+					id: "dataTypeSearchDialog",
+					uri: portletURL.toString(),
+					title: "Workbench"
+				}
+            );
+        });
+    }
 
     return {
         "openWorkflow": openWorkflowByWorkflowId,
+        "openScienceAppWorkbench": openScienceAppWorkbench,
         "isEmpty": function(){
             return _isEmpty(PANEL_DATA.setting.form.workflowId && PANEL_DATA.setting.form.simulationId);
         }
