@@ -422,9 +422,10 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS);
+  var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS, false);
   var executor = new SimulationExecutor(namespace, $, designer, toastr);
   var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
+  designer.setUiPanelInstance(uiPanel);
   // var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
   // designer.setWorkflowInputPortModule(inputportModule);
 

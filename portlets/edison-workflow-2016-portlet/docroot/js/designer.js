@@ -1,4 +1,4 @@
-var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
+var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDeginer) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -99,7 +99,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             return true;
         }
     }
-
+    
     var view = {
         nodes: {
             "scienceApp": {
@@ -110,16 +110,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 events: {
                     dblclick: function(obj) {
                     	console.log(obj);
-                    	var wfId = obj.node.id;
-                        var data = obj.node.data;
-                        var runType = data.scienceAppData.runType;
-                        if(uiPanelInstance) {
-                        	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                    			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
-                        	}else{
-                    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
-                        	}
-                        }
+                    	if(isDeginer){
+                    		openWfAppDataSettingHandler(obj);
+                    	}
                     }
                 }
             }
@@ -132,12 +125,25 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                    	if(uiPanelInstance) {
+                    	if(isDeginer && uiPanelInstance) {
                     		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
                     	}
                     }
                 }
             }
+        }
+    }
+    
+    function openWfAppDataSettingHandler(obj){
+    	var wfId = obj.node.id;
+        var data = obj.node.data;
+        var runType = data.scienceAppData.runType;
+        if(uiPanelInstance) {
+        	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
+        	}else{
+    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
+        	}
         }
     }
 
@@ -807,6 +813,20 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         } else {
                             removeSicenceApps($(this));
                         }
+                    }
+                };
+            }
+            
+            /* 2019.01.03 _ Add Context menu('Open Workbench') in execute page */
+            if(!isDeginer && runType != WF_APP_TYPES.CONTROLLER.NAME
+            		 && runType != WF_APP_TYPES.FILE_COMPONENT.NAME
+            		 && runType != WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
+            	items["items"]["open-workbench"] = {
+                    name: "Open Workbench",
+                    icon: "fa-external-link",
+                    callback: function(key, options) {
+                    	var nodeData = node.data;
+                    	uiPanelInstance.openScienceAppWorkbench(nodeData);
                     }
                 };
             }

@@ -65,7 +65,7 @@
     cursor: move;
     border-radius: 10px;
     min-width: 80px;
-    min-height: 30px;
+    min-height: 110px;
     text-align: center;
     overflow: visible;
 }
@@ -82,8 +82,8 @@
 
 .wf-box ul.port li{
     margin-bottom: 10px;
-    border: 1px solid #CCC;
-    background-color: #edf7f7;
+    border: 1px solid #6d6a6a;
+	background-color: #edf7f7;
     width: 25px;
     height: 25px;
     border-radius: 50%;
@@ -92,7 +92,7 @@
 .wf-box .input-ports-list{
     float: left;
     position: relative;
-    top: 15px;
+    top: 5px;
     left: -15px;
 }
 
@@ -105,7 +105,7 @@
     color: #000;
     font-size: 15px;
     position: relative;
-    top: -20px;
+    top: -15px;
     left: -10px;
     white-space: nowrap;
 }
@@ -113,7 +113,7 @@
 .wf-box .output-ports-list{
     float: right;
     position: relative;
-    top: 15px;
+    top: 5px;
     right: -20px;
 }
 
@@ -131,7 +131,7 @@
     color: #000;
     font-size: 15px;
     position: relative;
-    top: -20px;
+    top: -15px;
     right: -15px;
     white-space: nowrap;
 }
@@ -139,9 +139,28 @@
 /* 2018.12.20 */
 .wf-box .wf-icon{
     text-align: center;
-    font-size: 45px;
-    padding: 20px 0px;
-    margin-bottom: 10px;
+	font-size: 45px;
+	padding-bottom: 35px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    /* Center vertically */
+    align-items: center;
+
+    /*Center horizontaly */
+    justify-content: center;
+
+    /*Center horizontaly ie */
+    -ms-flex-pack: center;
+}
+
+.wf-box .wf-icon i{
+	position: relative;
+	/* top: 25%; */
 }
 
 .wf-box .wf-icon .remove-btn{
@@ -158,24 +177,25 @@
     font-size: 15px;
     font-weight: 500;
     margin-top: 5px;
-    position: relative;
-    bottom: -25px;
+    position: absolute;
+    bottom: -45px;
     left: -20px;
     width: 130%;
 }
 
 /* 2018.12.20 */
 .wf-box .addIp {
-    font-weight: 600;
-    text-decoration: none;
-    text-align: center;
-    font-size: 15px;
-    padding: 6px 10px 10px;
-    color: #fff;
-    border-top: 1px solid #fff;
-    position: absolute;
-    bottom: -5px;
-    width: 100%;
+	font-weight: 600; 
+	text-decoration: none; 
+	text-align: center; 
+	font-size: 15px;
+	padding: 6px 10px 10px;
+	color: #fff;
+	border-top: 1px solid #fff;
+	position: absolute;
+	bottom: 15px;
+	width: 100%;
+	height: 10px;
 }
 
 .wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
@@ -260,3 +280,15 @@
 .controls .selected-mode {
     color: #E4F013;
 }
+
+.modal-size-100{
+	width: 100%;
+	height: 100%;
+	margin: 0px !important;
+}
+
+.modal-body-100{
+	height: 100%;
+}
+
+

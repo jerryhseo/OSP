@@ -224,7 +224,6 @@ var contextPath = '${contextPath}';
 
 .wf-box .wf-icon i{
 	position: relative;
-	/* top: 25%; */
 }
 
 .wf-box .wf-icon .remove-btn{
@@ -763,7 +762,7 @@ $(document).ready(function(){
 	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"
   }
   
-  var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
+  var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS, true);
   var uiPanel = new UIPanel(namespace, $, designer, toastr, REGISTER_WORKFLOW_APP_PARAM);
   designer.setUiPanelInstance(uiPanel);
   var appTree = new AppTree(namespace, $, designer);
