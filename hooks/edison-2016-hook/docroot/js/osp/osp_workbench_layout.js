@@ -1830,6 +1830,16 @@
             resetPortlets( job, logPorts, OSP.Enumeration.PortType.LOG );
             resetPortlets( job, outputPorts, OSP.Enumeration.PortType.OUTPUT );
         }
+        
+        
+        Workbench.handleModuleViewerData = function(simulationUuid, jobUuid, inputData, portType){
+        	var simulation  = Workbench.newSimulation();
+        	simulation.uuid(simulationUuid);
+        	
+        	var job = simulation.newJob();
+        	job.uuid()
+        	
+        };
 
         var resetPortlets = function( job, ports, portType ){
             var layout = Workbench.layout();
@@ -2296,8 +2306,14 @@
             var portlet = Workbench.getPortlet(portletId);
             var port = scienceApp.getPort( portlet.portName() );
             var dataType = port.dataType();
+            var sample;
+            if(port.isWfSample()){
+            	sample = port.wfSample();
+            }else{
+            	sample = port.sample();
+            }
             
-            var sample = port.sample();
+            
             var dlEntryId = 0;
             var command;
             var ajaxData;
@@ -2387,7 +2403,12 @@
             inputData.type( OSP.Enumeration.PathType.DLENTRY_ID );
             inputData.dirty( true );
 
-            var sample = inputPort.sample();
+            var sample;
+            if(port.isWfSample()){
+            	sample = inputPort.wfSample();
+            }else{
+            	sample = inputPort.sample();
+            }
             
             if( sample ){
                 inputData.dlEntryId( sample.dlEntryId() );

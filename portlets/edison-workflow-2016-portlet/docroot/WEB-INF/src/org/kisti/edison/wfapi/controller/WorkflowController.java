@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.kisti.edison.model.Workflow;
+import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.wfapi.custom.WorkflowPagingUtil;
@@ -154,8 +155,6 @@ public class WorkflowController{
         @RequestParam(required = false, value="screenLogic") String screenLogic,
         HttpServletRequest request) throws Exception{
         try{
-            System.out.println("newTitle : " + newTitle);
-            System.out.println("newDescription : " + newDescription);
             Workflow workflow = null;
             if(StringUtils.hasLength(newTitle)){
                 workflow = WorkflowLocalServiceUtil.copyWorkflow(workflowId, newTitle, newDescription, screenLogic, request);
@@ -214,4 +213,25 @@ public class WorkflowController{
             throw e;
         }
     }
+    
+    @RequestMapping(value = "/{workflowId}/app/{scienceAppId}/delete", method = RequestMethod.POST)
+    public  @ResponseBody Map<String, Object> removeWorkflowWithSciencApp(
+	@PathVariable("workflowId") long workflowId,
+	@PathVariable("scienceAppId") long scienceAppId,
+    HttpServletRequest request) throws Exception{
+    try{
+    	ScienceAppLocalServiceUtil.deleteScienceAppRelation(scienceAppId);
+    	Workflow workflow = WorkflowLocalServiceUtil.deleteWorkflow(workflowId);
+        Locale locale = PortalUtil.getLocale(request);
+        Map<String, Object> workflowMap = workflow.getModelAttributes();
+        workflowMap.put("title", workflow.getTitle(locale));
+        workflowMap.put("titleMap", workflow.getTitle());
+        workflowMap.put("description", workflow.getDescription(locale));
+        workflowMap.put("descriptionMap", workflow.getDescription());
+        return workflowMap;
+    }catch (Exception e){
+        log.error("error", e);
+        throw e;
+    }
+}
 }

@@ -240,6 +240,24 @@ public class WorkflowDesignerPortlet{
 		out.close();
 		bis.close();
 	}
-    
-
+	
+	@ResourceMapping(value="deleteWfSampleFiles")
+	public void deleteWfSampleFiles(ResourceRequest request, ResourceResponse response,
+			@RequestParam(value = "wfSampleFileIds", required = true) String wfSampleFileIds) throws IOException{
+		try {
+			Map params = RequestUtil.getParameterMap(request);
+			
+			String[] wfSampleFileIdsArr = wfSampleFileIds.split(",");
+			for(String fileEntryId : wfSampleFileIdsArr){
+				DLFileEntryLocalServiceUtil.deleteDLFileEntry(Long.parseLong(fileEntryId));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

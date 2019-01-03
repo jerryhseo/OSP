@@ -117,6 +117,14 @@
 				return IP.property.apply(IP, OSP.Util.addFirstArgument(OSP.Constants.SAMPLE, arguments));
 			};
 			
+			IP.isWfSample = function( isWfSample ){
+				return IP.property.apply(IP, OSP.Util.addFirstArgument(OSP.Constants.IS_WF_SAMPLE, arguments));
+			};
+			
+			IP.wfSample = function( wfSamplePath ){
+				return IP.property.apply(IP, OSP.Util.addFirstArgument(OSP.Constants.WF_SAMPLE, arguments));
+			};
+			
 			IP.deleteSample = function(){
 				IP.removeProperty(OSP.Constants.SAMPLE);
 			};
@@ -157,6 +165,10 @@
 					case OSP.Constants.SAMPLE:
 						var sample = new OSP.InputData( jsonObject[key] );
 						IP.sample( sample );
+						break;
+					case OSP.Constants.WF_SAMPLE:
+						var sample = new OSP.InputData( jsonObject[key] );
+						IP.wfSample( sample );
 						break;
 					default:
 						IP._deserialize( key, jsonObject[key] );

@@ -1,4 +1,4 @@
-var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
+var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDeginer) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -43,8 +43,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 }
 
                 if (source.getType() === 'all' || target.getType() === 'all') {
-                    if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                    	
+                	if(source.getType() == target.getType()){
+                		return false;
+                	} else if (source.getNode().data.scienceAppData.runType === "FileComponent") {
                     	var isEqualsPortType = false;
                     	var sourceData = source.getNode().data,
                 		targetData = target.getNode().data;
@@ -52,7 +53,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
                     		sourceData.outputPorts[source.id].dataType_ = {};
                     		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
-                    		console.log(sourceData.outputPorts[source.id].dataType_);
                     		isEqualsPortType = true;
                     	} else {
                     		isEqualsPortType = checkPortTypeForConnection(source, target, true);
@@ -67,6 +67,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 	return checkPortTypeForConnection(source, target, false);
                 }
             }
+        },
+        beforeDetach: function(source, target, edgeData){
+        	var sourceData = source.getNode().data;
+        	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
+        		if(source.getAllEdges().length-1 == 0){     
+        			delete sourceData.outputPorts[source.id].dataType_;
+        		}
+        	}
         }
     });
     
@@ -91,7 +99,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             return true;
         }
     }
-
+    
     var view = {
         nodes: {
             "scienceApp": {
@@ -102,16 +110,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                 events: {
                     dblclick: function(obj) {
                     	console.log(obj);
-                    	var wfId = obj.node.id;
-                        var data = obj.node.data;
-                        var runType = data.scienceAppData.runType;
-                        if(uiPanelInstance) {
-                        	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                    			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
-                        	}else{
-                    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
-                        	}
-                        }
+                    	if(isDeginer){
+                    		openWfAppDataSettingHandler(obj);
+                    	}
                     }
                 }
             }
@@ -124,12 +125,25 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                    	if(uiPanelInstance) {
+                    	if(isDeginer && uiPanelInstance) {
                     		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
                     	}
                     }
                 }
             }
+        }
+    }
+    
+    function openWfAppDataSettingHandler(obj){
+    	var wfId = obj.node.id;
+        var data = obj.node.data;
+        var runType = data.scienceAppData.runType;
+        if(uiPanelInstance) {
+        	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
+    			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
+        	}else{
+    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
+        	}
         }
     }
 
@@ -140,6 +154,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
         view: view,
         layout: {
             type: "Absolute"
+        },
+        events: {
+            canvasClick: function (e) {
+            	wfWorkflowJsPlumbInstance.clearSelection();
+            }
         },
         miniview: {
             container: "miniview"
@@ -428,9 +447,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	var portData = nodeData[portType][portId];
     	portData["defaultEditor_"] = defaultEditor;
-    	portData["isWfSample_"] = isWfSample == 'true';
+    	portData[OSP.Constants.IS_WF_SAMPLE] = isWfSample == 'true';
     	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
-    		portData["wfSample_"] = sampleData;
+    		portData[OSP.Constants.WF_SAMPLE] = sampleData;
     		var nodeFiles = nodeData["files"];
     		if(nodeFiles){
     			nodeFiles = nodeFiles.splice(nodeFiles.indexOf(preFileId),1);
@@ -797,6 +816,20 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
                     }
                 };
             }
+            
+            /* 2019.01.03 _ Add Context menu('Open Workbench') in execute page */
+            if(!isDeginer && runType != WF_APP_TYPES.CONTROLLER.NAME
+            		 && runType != WF_APP_TYPES.FILE_COMPONENT.NAME
+            		 && runType != WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
+            	items["items"]["open-workbench"] = {
+                    name: "Open Workbench",
+                    icon: "fa-external-link",
+                    callback: function(key, options) {
+                    	var nodeData = node.data;
+                    	uiPanelInstance.openScienceAppWorkbench(nodeData);
+                    }
+                };
+            }
             return items;
         }
     });
@@ -974,10 +1007,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds) {
             return false;
         } else {
             var currentWorkflowId = modifyingWorkflow["workflowId"];
-            var wfData = getWorkflowDefinition(currentJsPlumbInstance);
+            var wfDataJsonString = JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" }));
 
-            /* 2018.12.24 _ Save Workflow Data */
-            var wfDataJsonString = JSON.stringify(wfData);
             aSyncAjaxHelper
                 .post("/delegate/services/workflows/" + currentWorkflowId + "/saveas", {
                     title: workflowMetaData.title,

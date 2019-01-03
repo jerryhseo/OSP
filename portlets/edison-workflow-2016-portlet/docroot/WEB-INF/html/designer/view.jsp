@@ -17,6 +17,8 @@
 
 <liferay-portlet:resourceURL var="addSampleFileURL" id="addSampleFile" copyCurrentRenderParameters="false"/>
 
+<liferay-portlet:resourceURL var="deleteWfSampleFilesURL" id="deleteWfSampleFiles" copyCurrentRenderParameters="false"/>
+
 <portlet:resourceURL var='fileDownloadURL' id='fileDownload' escapeXml="false"></portlet:resourceURL>
 
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
@@ -120,8 +122,6 @@ var contextPath = '${contextPath}';
 
 .pausebox{border-radius:3px; border:solid 1px #fd9b00; background-color:#fd9b00;}
 
-
-
 .wf-box {
 	box-sizing: content-box;
     width: 150px !important;
@@ -224,7 +224,6 @@ var contextPath = '${contextPath}';
 
 .wf-box .wf-icon i{
 	position: relative;
-	/* top: 25%; */
 }
 
 .wf-box .wf-icon .remove-btn{
@@ -326,10 +325,9 @@ var contextPath = '${contextPath}';
 .controls{
 	top: 145px !important;
 	left: auto !important;
-	right: 37px !important;
+	right: 23px !important;
 	z-index: 10 !important;
 	color: #FFF;
-	margin-right: 10px;
 	position: absolute;
 	display: flex;
 }
@@ -339,6 +337,10 @@ var contextPath = '${contextPath}';
 	cursor: pointer;
 	padding: 4px;
 	margin-right: 5px !important;
+}
+
+.selected-mode {
+	color: #E4F013;
 }
 
 </style>
@@ -442,8 +444,8 @@ var contextPath = '${contextPath}';
     <section class="content">
       <div id="wf-workflow-canvas" class="apparea wf-drop jsplumb-drag-select">
       	<div class="controls" can-undo="false" can-redo="false">
-      		<!-- <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
-            <i class="fa fa-pencil" mode="select" title="Select Mode"></i> -->
+      		<i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
+            <i class="fa fa-pencil" mode="select" title="Select Mode"></i>
       		<i class="fa fa-home" reset title="Zoom To Fit"></i>
       		<i class="fa fa-plus" zoom="in" title="Zoom In"></i>
       		<i class="fa fa-minus" zoom="out" title="Zoom Out"></i>
@@ -760,7 +762,7 @@ $(document).ready(function(){
 	"portletName" : "_scienceappmanager_WAR_edisonappstore2016portlet_"
   }
   
-  var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS);
+  var designer = new Designer(namespace, $, OSP, toastr, false, EDITOR_PORTLET_IDS, true);
   var uiPanel = new UIPanel(namespace, $, designer, toastr, REGISTER_WORKFLOW_APP_PARAM);
   designer.setUiPanelInstance(uiPanel);
   var appTree = new AppTree(namespace, $, designer);
@@ -874,6 +876,26 @@ function <portlet:namespace/>fileDownLoad(entryId){
 function <portlet:namespace/>closeAppPanel() {
 	$(".menu-panel").hide('slide', { direction: 'left' }, 500);
 	$(JQ_PORTLET_BOUNDARY_ID + " .sidebar > .sidebar-menu > li.active").removeClass("active");
+}
+
+function <portlet:namespace/>deleteWfSampleFiles(nodeData){
+    var wfSampleFileIds = nodeData.files;
+    if(wfSampleFileIds != 'undifined' && wfSampleFileIds != null && wfSampleFileIds != ''){
+	    $.ajax({
+			url: "<%=deleteWfSampleFilesURL%>",
+			cache: false,
+			data: {
+				"<portlet:namespace/>wfSampleFileIds" : wfSampleFileIds.toString()
+			},
+			success: function(response) {
+				
+			}, error:function(response,e){ 
+				alert('Sample file deletion error');
+			},complete: function(response){
+				
+			}
+		});
+    }
 }
 </script>
 </div>
