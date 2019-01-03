@@ -77,7 +77,7 @@ public class WorkflowSimulationJobModelImpl extends BaseModelImpl<WorkflowSimula
 			{ "reuseWorkflowUUID", Types.VARCHAR },
 			{ "screenLogic", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulationJob (simulationJobId LONG not null primary key,simulationId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title VARCHAR(75) null,status VARCHAR(75) null,statusResponse VARCHAR(75) null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,reuseWorkflowUUID VARCHAR(75) null,screenLogic VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table EDWF_WorkflowSimulationJob (simulationJobId LONG not null primary key,simulationId LONG,groupId LONG,userId LONG,createDate DATE null,modifiedDate DATE null,title VARCHAR(75) null,status VARCHAR(75) null,statusResponse VARCHAR(75) null,startTime DATE null,endTime DATE null,workflowId LONG,workflowUUID VARCHAR(75) null,reuseWorkflowUUID VARCHAR(75) null,screenLogic TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table EDWF_WorkflowSimulationJob";
 	public static final String ORDER_BY_JPQL = " ORDER BY workflowSimulationJob.simulationJobId DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY EDWF_WorkflowSimulationJob.simulationJobId DESC";

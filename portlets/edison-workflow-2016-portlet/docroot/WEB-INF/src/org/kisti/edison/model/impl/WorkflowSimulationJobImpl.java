@@ -14,6 +14,8 @@
 
 package org.kisti.edison.model.impl;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * The extended model implementation for the WorkflowSimulationJob service. Represents a row in the &quot;EDWF_WorkflowSimulationJob&quot; database table, with each column mapped to a property of this class.
  *
@@ -23,6 +25,9 @@ package org.kisti.edison.model.impl;
  *
  * @author EDISON
  */
+@JsonIgnoreProperties(ignoreUnknown = true, 
+value = {"expandoBridge", "expandoBridgeAttributes", "cachedModel",
+    "escapedModel", "modelAttributes", "modelClass", "modelClassName", "new", "primaryKey", "primaryKeyObj"})
 public class WorkflowSimulationJobImpl extends WorkflowSimulationJobBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:

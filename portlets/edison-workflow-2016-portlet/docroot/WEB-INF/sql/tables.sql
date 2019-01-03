@@ -54,7 +54,7 @@ create table EDWF_WorkflowSimulationJob (
 	workflowId LONG,
 	workflowUUID VARCHAR(75) null,
 	reuseWorkflowUUID VARCHAR(75) null,
-	screenLogic VARCHAR(75) null
+	screenLogic TEXT null
 );
 
 create table EDWF_WorkflowSimulation_WorkflowSimulationJob (

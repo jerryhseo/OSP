@@ -6,6 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.JsonNode;
+import org.kisti.edison.model.Workflow;
+import org.kisti.edison.model.WorkflowSimulation;
+import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -16,12 +19,15 @@ import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -33,6 +39,14 @@ import com.liferay.portal.util.PortalUtil;
 @RequestMapping("/services/simulation")
 public class WorkflowSimulationController{
     private Log log = LogFactoryUtil.getLog(getClass());
+    
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public String edisonWorkflowException(Exception exception){
+        exception.printStackTrace();
+        return exception.getMessage();
+    }
     
     @RequestMapping(value = "/error")
     public ResponseEntity<?> error(HttpServletRequest request)
@@ -56,11 +70,12 @@ public class WorkflowSimulationController{
         HttpServletRequest request)
         throws Exception{
         try{
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Locale locale = PortalUtil.getLocale(request);
             User user = PortalUtil.getUser(request);
             String title = CustomUtil.strNull(searchParam.get("title"), null);
             long workflowId = GetterUtil.getLong(searchParam.get("workflowId"), 0);
             if(workflowId == 0){
+                log.error("workflwId is mssing");
                 throw new EdisonWorkflowException("need workflowId");
             }
             
@@ -74,8 +89,9 @@ public class WorkflowSimulationController{
             int end = linePerPage;
             
             Map<String, Object> listAndPagingMap = Maps.newHashMap();
-            listAndPagingMap.put("workflows",
+            listAndPagingMap.put("simulations",
                 WorkflowSimulationLocalServiceUtil.getWorkflowSimulations(workflowId, title, user.getUserId(), begin, end));
+            listAndPagingMap.put("userName", user.getScreenName());
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",
@@ -133,7 +149,6 @@ public class WorkflowSimulationController{
     @RequestMapping(value = "/{simulationId}/delete", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> updateSimulation(
         @PathVariable Long simulationId,
-        @RequestParam Map<String, Object> params,
         HttpServletRequest request)
             throws Exception{
         try{
@@ -166,13 +181,28 @@ public class WorkflowSimulationController{
             int end = linePerPage;
             
             Map<String, Object> listAndPagingMap = Maps.newHashMap();
-            listAndPagingMap.put("workflows", WorkflowSimulationJobLocalServiceUtil
+            listAndPagingMap.put("jobs", WorkflowSimulationJobLocalServiceUtil
                 .getWorkflowSimulationJobs(simulationId, title, user.getUserId(), begin, end));
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",
                 WorkflowPagingUtil.getPaginationMap(totalCnt, curPage, linePerPage, pagePerBlock));
             return listAndPagingMap;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = {"/{simulationId}/job/seq"}, method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> jobSeq(
+        @PathVariable Long simulationId,
+        HttpServletRequest request)
+            throws Exception{
+        try{
+            return ImmutableMap.<String, Object> builder()
+                .put("seq", WorkflowSimulationJobLocalServiceUtil.getSimulationJobSeq(simulationId))
+                .build();
         }catch (Exception e){
             log.error("error", e);
             throw e;
@@ -200,7 +230,10 @@ public class WorkflowSimulationController{
         @RequestParam Map<String, Object> params,
         HttpServletRequest request) throws Exception{
         try{
-            return WorkflowSimulationJobLocalServiceUtil.createWorkflowSimulationJob(simulationId, params, request)
+            WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
+            Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(simulation.getWorkflowId());
+            String simulationJobTitle = GetterUtil.getString(params.get("title"));
+            return WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, simulationJobTitle)
                 .getModelAttributes();
         }catch (Exception e){
             log.error("error", e);

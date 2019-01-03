@@ -38,6 +38,23 @@ var aSyncAjaxHelper = {
       consoleLog.debug(requestUrl + " complete");
     });
   },
+  "getWithParams": function (requestUrl, params, callback, errorCallback) {
+    $.ajax({
+      url: requestUrl,
+      async: true,
+      data: params,
+      method: 'GET',
+      timeout: 10000,
+    }).done(function (result) {
+      if(callback){ callback(result); }
+      consoleLog.debug(requestUrl + " success");
+    }).error(function () {
+      consoleLog.debug(requestUrl + " error");
+      if(errorCallback){ errorCallback(); }
+    }).always(function () {
+      consoleLog.debug(requestUrl + " complete");
+    });
+  },
   "post": function (requestUrl, jsonData, callback, errorCallback) {
     $.ajax({
       url: requestUrl,
@@ -148,23 +165,6 @@ var synchronousAjaxHelper = {
   }
 
 };
-
-function getParameter(searchKeyword, p_curPage, isPublic, linePerPage){
-  var params = {};
-  if (searchKeyword || searchKeyword === 0) {
-    params.title = searchKeyword;
-  }
-  if (p_curPage) {
-    params.p_curPage = p_curPage;
-  }
-  if (linePerPage) {
-    params.linePerPage = linePerPage;
-  }
-  if (isPublic) {
-    params.isPublic = "true";
-  }
-  return params;
-}
 
 var getGUID = function () {
   function s4() {

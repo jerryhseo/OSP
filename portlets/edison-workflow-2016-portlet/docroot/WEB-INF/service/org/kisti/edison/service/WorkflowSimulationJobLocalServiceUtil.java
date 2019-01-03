@@ -485,6 +485,11 @@ public class WorkflowSimulationJobLocalServiceUtil {
 				   .createWorkflowSimulationJob(simulationId, params, request);
 	}
 
+	public static java.lang.String getSimulationJobSeq(long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getSimulationJobSeq(simulationId);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob createSimulationJob(
 		org.kisti.edison.model.WorkflowSimulation simulation,
 		org.kisti.edison.model.Workflow workflow,

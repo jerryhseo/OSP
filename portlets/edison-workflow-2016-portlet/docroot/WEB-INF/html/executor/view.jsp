@@ -25,13 +25,11 @@
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
-var var_select_workflow_first_message = "Select workflow first.";
 var var_create_success_message = "Workflow successfully created.";
 var var_pause_success_message = "Workflow paused.";
 var var_resume_success_message = "Workflow restarted.";
 var var_no_workflow_instance_msg = "Select workflowInstance first.";
 var var_already_run_message = "This workflow has already been executed.";
-var var_new_workflow_confirm_message = Liferay.Language.get("edison-workflow-new-confirm-message");
 var var_remove_workflow_confirm_message = Liferay.Language.get("edison-workflow-remove-confirm-message");
 var var_prepare_remove_workflow_message = Liferay.Language.get("edison-workflow-prepare-remove-message");
 var var_success_remove_workflow_message = Liferay.Language.get("edison-workflow-success-remove-message");
@@ -93,26 +91,22 @@ var contextPath = '${contextPath}';
           <!-- Navbar Left Menu -->
           <div class="navbar-left">
             <ul class="nav navbar-nav">
-              <li id="<portlet:namespace/>header-li-simulation">
+              <li id="<portlet:namespace/>header-li-simulation" class="top-btn" data-btn-type="open">
                 <i class="fa fa-cubes fa-2x"></i><br>
                 <span class="nav-icon-text">Simulations</span>
               </li>
-              <li id="<portlet:namespace/>header-li-edit">
+              <li id="<portlet:namespace/>header-li-edit" class="top-btn" data-btn-type="setting">
                 <i class="fa fa-cogs fa-2x"></i><br>
                 <span class="nav-icon-text">Edit</span>
               </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-new" data-divider="job-li-divider">
+              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>job-li-divider" style="display: block;"></li>
+              <li id="<portlet:namespace/>header-li-new" class="top-btn" data-btn-type="new-job" data-divider="job-li-divider">
                 <i class="fa fa-plus-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">New</span>
               </li>
               <li id="<portlet:namespace/>header-li-save" data-divider="job-li-divider">
                 <i class="fa fa-save fa-2x"></i><br>
                 <span class="nav-icon-text">Save</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-wf-copy" data-divider="job-li-divider">
-                <i class="fa fa-copy fa-2x"></i><br>
-                <span class="nav-icon-text">Copy</span>
               </li>
               <li id="<portlet:namespace/>header-li-copy" data-divider="job-li-divider">
                 <i class="fa fa-copy fa-2x"></i><br>
@@ -122,36 +116,32 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-trash-o fa-2x"></i><br>
                 <span class="nav-icon-text">Delete</span>
               </li>
-              <li id="<portlet:namespace/>header-li-select" data-divider="job-li-divider">
-                <i class="fa fa-check-square-o fa-2x"></i><br>
-                <span class="nav-icon-text">Select</span>
-              </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>ib-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">
-                <i class="fa fa-cloud-upload fa-2x"></i><br>
-                <span class="nav-icon-text">Submit</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">
-                <i class="fa fa-window-close-o fa-2x"></i><br>
-                <span class="nav-icon-text">cancel</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">
-                <i class="fa fa-desktop fa-2x"></i><br>
-                <span class="nav-icon-text">Log</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-download" data-divider="ib-li-divider">
-                <i class="fa fa-cloud-download fa-2x"></i><br>
-                <span class="nav-icon-text">Download</span>
-              </li>
-              <li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>data-li-divider"></li>
-              <li id="<portlet:namespace/>header-li-data" data-divider="data-li-divider">
-                <i class="fa fa-share-square-o fa-2x"></i><br>
-                <span class="nav-icon-text">Open Data</span>
-              </li>
-              <li id="<portlet:namespace/>header-li-manual" data-divider="data-li-divider">
-                <i class="fa fa-book fa-2x"></i><br>
-                <span class="nav-icon-text">Manual</span>
-              </li>
+              <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
+              <%--<li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">--%>
+                <%--<i class="fa fa-cloud-upload fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">Submit</span>--%>
+              <%--</li>--%>
+              <%--<li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">--%>
+                <%--<i class="fa fa-window-close-o fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">cancel</span>--%>
+              <%--</li>--%>
+              <%--<li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">--%>
+                <%--<i class="fa fa-desktop fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">Log</span>--%>
+              <%--</li>--%>
+              <%--<li id="<portlet:namespace/>header-li-download" data-divider="ib-li-divider">--%>
+                <%--<i class="fa fa-cloud-download fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">Download</span>--%>
+              <%--</li>--%>
+              <%--<li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>data-li-divider"></li>--%>
+              <%--<li id="<portlet:namespace/>header-li-data" data-divider="data-li-divider">--%>
+                <%--<i class="fa fa-share-square-o fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">Open Data</span>--%>
+              <%--</li>--%>
+              <%--<li id="<portlet:namespace/>header-li-manual" data-divider="data-li-divider">--%>
+                <%--<i class="fa fa-book fa-2x"></i><br>--%>
+                <%--<span class="nav-icon-text">Manual</span>--%>
+              <%--</li>--%>
             </ul>
           </div>
           <!-- Navbar Right Menu -->
@@ -284,6 +274,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/lib/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
+<script src="${contextPath}/js/constant.js"></script>
 <script type="text/x-jtk-templates" src="${contextPath}/templete/templete.html"></script>
 
 <script id="tpl-menu-panel-box" type="text/html">
@@ -338,9 +329,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <form class="form-horizontal" onsubmit="return false;">
   <div class="box-body">
     <div class="form-group">
-      <label for="workflowInstanceTitle" >Simulation Title</label>
-      <input type="text" class="form-control data-binded" id="workflowInstanceTitle" name="workflowInstanceTitle"
-        placeholder="Simulation Title" value="{{form.workflowInstanceTitle}}" required>
+      <label for="title">Title</label>
+      <input type="text" class="form-control data-binded" id="title" name="title"
+        placeholder="Title" value="{{form.title}}" required>
       <div class="help-block with-errors"></div>
     </div>
   </div>
@@ -355,8 +346,8 @@ $.widget.bridge('uibutton', $.ui.button);
   <div class="box-body">
     <div class="form-group">
       <label for="title">Simulation Title</label>
-      <input type="text" class="form-control data-binded" id="workflowInstanceTitle"
-        name="workflowInstanceTitle" placeholder="Simulation Title" value="{{form.workflowInstanceTitle}}" required>
+      <input type="text" class="form-control data-binded" id="simulationTitle"
+        name="simulationTitle" placeholder="Simulation Title" value="{{form.simulationTitle}}" required>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group">

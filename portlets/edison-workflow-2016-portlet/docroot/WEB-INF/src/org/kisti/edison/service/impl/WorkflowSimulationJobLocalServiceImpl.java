@@ -209,7 +209,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
         Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(simulation.getWorkflowId());
         String icebreakerToken = GetterUtil.getString(params.get("icebreakerVcToken"));
-        String simulationJobTitle = GetterUtil.getString(params.get("simulationJobTitle"));
+        String simulationJobTitle = GetterUtil.getString(params.get("title"));
         
         WorkflowSimulationJob simulationJob = createSimulationJob(simulation, workflow, simulationJobTitle);
         
@@ -234,6 +234,11 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         mWorkflow.setSimulations(getSimulations(user, execPath, locale, simulationJsonArray, outPorts, icebreakerVcToken));
         return Transformer.pojo2Json(mWorkflow);
     }
+    
+    public String getSimulationJobSeq(long simulationId) throws SystemException {
+        return String.format("#%04d", 
+            getWorkflowSimulationWorkflowSimulationJobsCount(simulationId) + 1);
+    }
 
     public WorkflowSimulationJob createSimulationJob(
         WorkflowSimulation simulation, Workflow workflow, String simulationJobTitle) 
@@ -244,8 +249,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         if(StringUtils.hasText(simulationJobTitle)) {
             simulationJob.setTitle(simulationJobTitle);            
         } else {
-            simulationJob.setTitle(String.format("%04d", 
-                getWorkflowSimulationWorkflowSimulationJobsCount(simulation.getSimulationId()) + 1));    
+            simulationJob.setTitle(getSimulationJobSeq(simulation.getSimulationId()));    
         }
         simulationJob.setUserId(simulation.getUserId());
         simulationJob.setScreenLogic(workflow.getScreenLogic());

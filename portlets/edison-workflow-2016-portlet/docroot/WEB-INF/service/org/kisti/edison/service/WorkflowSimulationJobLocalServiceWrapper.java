@@ -503,6 +503,12 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public java.lang.String getSimulationJobSeq(long simulationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.getSimulationJobSeq(simulationId);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob createSimulationJob(
 		org.kisti.edison.model.WorkflowSimulation simulation,
 		org.kisti.edison.model.Workflow workflow,

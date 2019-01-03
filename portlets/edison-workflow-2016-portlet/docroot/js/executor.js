@@ -1,5 +1,7 @@
 var SimulationExecutor = (function (namespace, $, designer, toastr) {
     'use strict';
+
+    var URI_PREFIX = '/delegate/services'
     var WF_STATUS_CODE = {
         CREATED: "CREATED",
         RUNNING: "RUNNING",
@@ -55,9 +57,11 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     var currentJsPlumbInstance = designer.getCurrentJsPlumbInstance();
 
+    /////////////////////////////////////////// renew start
+
     function createSimulation(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post("/delegate/services/simulation/create",
+        aSyncAjaxHelper.post(URI_PREFIX + "/simulation/create",
             params,
             function (simulation) {
                 if (callback) {
@@ -67,9 +71,68 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
+    function renameSimulation(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        console.log(params)
+        if(params && params.simulationId) {
+            aSyncAjaxHelper.post(URI_PREFIX + "/simulation/" + params.simulationId + "/update",
+                params,
+                function (simulation) {
+                    if (callback) {
+                        callback(simulation);
+                    }
+                }, errorCallback
+            );
+        }
+    }
+
+    function deleteSimulation(simulationId, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        if(simulationId) {
+            aSyncAjaxHelper.post(URI_PREFIX + "/simulation/" + simulationId + "/delete",
+                {},
+                function (simulation) {
+                    if (callback) {
+                        callback(simulation);
+                    }
+                }, errorCallback
+            );
+        }
+    }
+
+    function fetchSimulationJobs(simulationId, params, callback, errorCallback){
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.getWithParams(URI_PREFIX + "/simulation/" + simulationId + "/list",
+            params,
+            function(simulationJobs){
+                callback(simulationJobs);
+            }, errorCallback);
+    }
+
+    function createSimulationJob(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(URI_PREFIX + "/simulation/" + params.simulationId + "/job/create",
+            params,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+
+    function fetchSimulationJobSeq(simulationId, callback, errorCallback) {
+        aSyncAjaxHelper.get(URI_PREFIX + "/simulation/" + simulationId + "/job/seq",
+        function (seqMap) {
+            callback(seqMap)
+        }, errorCallback)
+    }
+
+    /////////////////////////////////////////// renew end
+
     function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId,
+        aSyncAjaxHelper.get(URI_PREFIX + "/workflows/instance/" + workflowInstanceId,
         function(workflowInstance){
             callback(workflowInstance);
         }, errorCallback);
@@ -77,7 +140,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function loadWorkflowInstance(workflowInstanceId, callback, errorCallback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId,
+        aSyncAjaxHelper.get(URI_PREFIX + "/workflows/instance/" + workflowInstanceId,
         function(workflowInstance){
             callback(workflowInstance);
             if(workflowInstance.workflowUUID){
@@ -88,7 +151,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function createWorkfowInstance(workflowId, workflowInstanceTitle, callback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post("/delegate/services/workflows/instance/create", {
+        aSyncAjaxHelper.post(URI_PREFIX + "/workflows/instance/create", {
             workflowId: workflowId,
             workflowInstanceTitle: workflowInstanceTitle
         }, function(workflowInstance){
@@ -101,7 +164,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     function pauseWorkflowInstance(workflowInstanceId, callback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
-            "/delegate/services/workflows/instance/" + workflowInstanceId + "/pause", {},
+            URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/pause", {},
             function (workflowStatus) {
                 if (callback) {
                     callback(workflowStatus);
@@ -116,7 +179,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     function resumeWorkflowInstance(workflowInstanceId, callback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
-            "/delegate/services/workflows/instance/"+workflowInstanceId+"/resume", {},
+            URI_PREFIX + "/workflows/instance/"+workflowInstanceId+"/resume", {},
             function (workflowStatus) {
                 if (callback) {
                     callback(workflowStatus);
@@ -130,7 +193,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function deleteWorkflowInstance(workflowInstanceId, callback){
         _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post("/delegate/services/workflows/instance/" + workflowInstanceId + "/delete",
+        aSyncAjaxHelper.post(URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/delete",
             {},
             function (workflowInstance) {
                 if (callback) {
@@ -148,7 +211,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         if(screenLogic){
             workflowInstanceData.screenLogic = JSON.stringify(screenLogic) ;
         }
-        aSyncAjaxHelper.post("/delegate/services/workflows/instance/" + workflowInstanceId + "/update",
+        aSyncAjaxHelper.post(URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/update",
             workflowInstanceData,
             function (workflowInstance) {
                 if (callback) {
@@ -159,7 +222,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function runWorkflowInstance(workflowInstanceId, icebreakerAccessToken){
         aSyncAjaxHelper.post(
-            "/delegate/services/workflows/instance/" + workflowInstanceId + "/run", icebreakerAccessToken,
+            URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/run", icebreakerAccessToken,
             function (status) {
                 if (status) {
                     drawWorkflowInstanceStatus(status);
@@ -174,7 +237,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             workflowInstanceData.screenLogic = JSON.stringify(screenLogic) ;
         }
         aSyncAjaxHelper.post(
-            "/delegate/services/workflows/instance/" + workflowInstanceId + "/reuse", workflowInstanceData,
+            URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/reuse", workflowInstanceData,
             function (workflowInstance) {
                 if (workflowInstance && callback) {
                     callback(workflowInstance);
@@ -185,7 +248,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     }
 
     function getWorkflowInstanceStatus(workflowInstanceId, callback) {
-        aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId + "/status",
+        aSyncAjaxHelper.get(URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/status",
             function (workflowStatus) {
                 if (callback) {
                     callback(workflowStatus);
@@ -346,7 +409,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                 var items = {};
                 var port = $trigger[0]._jsPlumb.getParameter("data");
                 var jsPlumbWindowId = $($($trigger[0]._jsPlumbRelatedElement)[0]).attr("id");
-                var analyzers = synchronousAjaxHelper.post("/delegate/services/app/outputports/analyzer",
+                var analyzers = synchronousAjaxHelper.post(URI_PREFIX + "/app/outputports/analyzer",
                     {
                         "name": port.dataType().name,
                         "version": port.dataType().version
@@ -449,7 +512,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
    /*  function updateWorkflowInstanceDiagram(workflowInstanceId, callback) {
         return synchronousAjaxHelper.get(
-            "/delegate/services/workflows/instance/" + workflowInstanceId + "/status",
+            URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/status",
             function (workflowStatus) {
             });
     } */
@@ -466,7 +529,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
                 var wfData = $.parseJSON(localWorkflow["screenLogic"]);
                 var workflowRquestJson = synchronousAjaxHelper.post(
-                    "/delegate/services/workflows/" + localWorkflow["workflowId"] + "/run", postData,
+                    URI_PREFIX + "/workflows/" + localWorkflow["workflowId"] + "/run", postData,
                     function (workflowInstance) {
                         controlTab($("#my-workflow .running-workflow"));
                         $("#running-workflow > .alert").removeClass("alert-success alert-error")
@@ -494,6 +557,12 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     } */
     return {
         "createSimulation": createSimulation,
+        "renameSimulation": renameSimulation,
+        "deleteSimulation": deleteSimulation,
+        "fetchSimulationJobs": fetchSimulationJobs,
+        "createSimulationJob": createSimulationJob,
+        "fetchSimulationJobSeq": fetchSimulationJobSeq,
+        /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
         "deleteWorkflowInstance": deleteWorkflowInstance,

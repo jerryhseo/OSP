@@ -1,6 +1,41 @@
 var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     /*jshint -W069 */
     'use strict';
+    var currSimulations = (function () {
+        var currSimulations;
+        var selectedId
+        return {
+            set: function (simulations) {
+                currSimulations = {};
+                $.each(simulations, function () {
+                    var simulation = this;
+                    currSimulations[simulation.simulationId] = simulation;
+                });
+            },
+            get: function (key) {
+                return arguments.length === 0 ? currSimulations : currSimulations[key];
+            },
+            select: function (key) {
+                if (key) {
+                    selectedId = key
+                } else {
+                    selectedId = undefined
+                }
+            },
+            selected: function () {
+                return selectedId && currSimulations ? currSimulations[selectedId] : undefined;
+            },
+            contains: function(key){
+                if(!key){
+                    return false;
+                }
+                if($.isEmptyObject(currSimulations)){
+                    return false;
+                }
+                return currSimulations.hasOwnProperty(key);
+            }
+        };
+    })();
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
     var PANEL_DATA = {
         "new": {
@@ -11,23 +46,31 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             "btn": {
                 "create": newSimulation
             }
-        }, "open": {
+        }, "new-job": {
+            "col": 6,
+            "panel-type": "new-job",
+            "body": "tpl-menu-panel-new",
+            "form": {},
+            "btn": {
+                "create": newSimulationJob
+            }
+        },"open": {
             "col": 10,
             "panel-type": "open",
             "body": "tpl-menu-panel-load",
             "header": {
                 "id": "tpl-menu-panel-search-header",
                 "search-input-name": "search",
-                "theads": ["Title", "Description", "App Name", "Version", "Status", "Copied from", "Created"]
+                "theads": ["Title", "User", "Created"]
             },
             "form": {},
             "footer": {
                 "id": "tpl-menu-panel-pagination",
                 "btns": [
-                    { "name": "Open", "func": function(){} },
-                    { "name": "Rename", "func": function(){} },
-                    { "name": "Duplicate", "func": function(){} },
-                    { "name": "Delete", "func": function(){} }
+                    { "name": "New", "func": openNewSimulationPanel },
+                    { "name": "Open", "func": openSimulation },
+                    { "name": "Rename", "func": renameSimulation },
+                    { "name": "Delete", "func": deleteSimulation }
                 ]
             }
         }, "status": {
@@ -55,8 +98,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             "body": "tpl-menu-panel-setting",
             "form": {},
             "btn": {
-                "update": saveOrUpdateWorkflowInstance,
-                "delete": deleteWorkflowInstance
+                "update": renameSimulation,
+                "delete": deleteSimulation
             }
         }
     };
@@ -75,6 +118,404 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (btnType === "restart") { restart(); }
         if (btnType === "status") { status(this, "status"); }
     });
+
+    /////////////////////////////////////////// renew start
+
+    function createPanel(boxTitle, templateData, btnType) {
+        templateData.boxtitle = boxTitle;
+        $("#" + namespace + "menu-panel-box").show();
+        $("#" + namespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
+        $("#" + namespace + "menu-panel-box .box-body").mustache(templateData.body, templateData);
+        if (templateData.header) {
+            var boxTitleSelecotr = "#" + namespace + "menu-panel-box .box-header.with-border.header-inner > .box-title";
+            $(boxTitleSelecotr).replaceWith($.Mustache.render(templateData.header.id, templateData));
+            var _delay600 = _instantDelay(600);
+            $(boxTitleSelecotr + " > .search-input").keyup(function (e) {
+                _delay600(loadPaginatedSimulations, btnType);
+            });
+        }
+
+        if (templateData.footer) {
+            $("#" + namespace + "menu-panel-box .box")
+                .append($.Mustache.render(templateData.footer.id, templateData));
+        }
+
+        $(".menu-panel .menu-panel-close").click(function (e) {
+            e.preventDefault();
+            closePanel();
+        });
+
+        $("#" + namespace + "menu-panel-box .data-binded").change(function (e) {
+            var thisValue = $(this).val();
+            var thisName = $(this).attr("name");
+            templateData.form[thisName] = thisValue;
+        });
+
+        $("#" + namespace + "menu-panel-box .func").each(function (_) {
+            var thisName = $(this).attr("name");
+            if (templateData.btn && templateData.btn[thisName]) {
+                $(this).click(function (e) {
+                    templateData.btn[thisName](btnType, this, e);
+                });
+            }
+        });
+    }
+
+    $(JQ_PORTLET_BOUNDARY_ID + " .top-btn").click(function (e) {
+        e.preventDefault();
+        var btnType = $(this).attr("data-btn-type");
+        var templateData = PANEL_DATA[btnType];
+
+        if(btnType === "designer"){
+            var fn = window[namespace + "moveToDesigner"];
+            fn.apply();
+        }
+
+        if(btnType === "save" ){
+            if(PANEL_DATA.setting.form.simulationTitle){
+                saveOrUpdateWorkflowInstance("setting");
+            }else{
+                toastr["error"]("", var_create_first_message);
+            }
+        }
+
+        if (btnType === 'new-job') {
+            if (_isEmpty(currSimulations.selected(),
+                CONSTS.MESSAGE.edison_wfsimulation_select_first_message)) {
+                return false
+            } else {
+                executor.fetchSimulationJobSeq(
+                    currSimulations.selected().simulationId,
+                    function (seqMap) {
+                        setTimeout(function () {
+                            $('.new-job #title').val(seqMap.seq)
+                            $('.new-job #title').focus()
+                            templateData.form.title = seqMap.seq
+                        }, 100)
+                    })
+            }
+        }
+
+        if (templateData) {
+            var boxTitle = btnType === 'new-job' ? 'New Simulation Job' : $(this).text();
+            activateLi(this);
+            createPanel(boxTitle, templateData, btnType);
+            if (btnType === 'open') {
+                loadPaginatedSimulations(btnType);
+            }
+
+            if($(this).hasClass("menu-open")){
+                $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
+            }else{
+                $(".menu-panel").show('slide', { direction: 'left' }, 500);
+            }
+            $(JQ_PORTLET_BOUNDARY_ID + " li.top-btn").removeClass("menu-open");
+            $(this).addClass("menu-open")
+        }
+    });
+
+    function getParams(workflowId, searchKeyword, currentPage, linePerPage) {
+        var params = {};
+        if (workflowId) {
+            params.workflowId =workflowId;
+        }
+        if (searchKeyword || searchKeyword === 0) {
+            params.title = searchKeyword;
+        }
+        if (currentPage) {
+            params.p_curPage = currentPage;
+        }
+        if (linePerPage) {
+            params.linePerPage = linePerPage;
+        }
+        return params;
+    }
+
+    function loadPaginatedSimulations(panelType, currentPage){
+        var workflowId = getMetaData().workflowId;
+        currentPage = currentPage || 1;
+        var templateData = PANEL_DATA[panelType];
+        var params = getParams(
+            workflowId,
+            getValueByInputName(
+                templateData.header["search-input-name"]),
+            currentPage);
+        templateData.form.params = params;
+
+        fetchPaginatedSimulations(params);
+    }
+
+    function fetchPaginatedSimulations(params) {
+        aSyncAjaxHelper.post("/delegate/services/simulation/list",
+            params,
+            function (paginatedSimulations) {
+                console.log(paginatedSimulations)
+                currSimulations.set(paginatedSimulations.simulations);
+                renderSimulationTable(paginatedSimulations)
+            },
+            function (msg) {
+                toastr["error"]("", msg);
+            });
+    }
+
+    function renderSimulationTable(simulationsMap) {
+        var tbodyTemplate =
+            '{{#rows}}'+
+            '    <tr simulation-id="{{simulationId}}">'+
+            '        <td>{{title}}</td>'+
+            '        <td>{{userName}}</td>'+
+            '        <td>{{createDate}}</td>'+
+            '    </tr>'+
+            '{{/rows}}';
+        tbodyTemplate +=
+            '{{^rows}}'+
+            '    <tr>'+
+            '        <td colspan="4">No Data</td>'+
+            '    </tr>'+
+            '{{/rows}}';
+
+        var paginationTemplate =
+            '<li class="prev"><a href="#">«</a></li>' +
+            '{{#pages}}' +
+            '<li class="page-num {{active}}"><a href="#" page-num="{{num}}">{{num}}</a></li>' +
+            '{{/pages}}' +
+            '<li class="next"><a href="#">»</a></li>';
+        var buttonTemplate =
+            '{{#buttons}}' +
+            '<button type="button" class="btn btn-flat func" name="{{name}}">{{name}}</button>' +
+            '{{/buttons}}';
+
+        tbody(simulationsMap, tbodyTemplate, 'open');
+        pagination(simulationsMap.pagination, paginationTemplate, 'open');
+        buttons(buttonTemplate, 'open');
+    }
+
+    function tbody(simulationMap, tbodyTemplate, panelType) {
+        var simulations = simulationMap.simulations
+        if (simulations && simulations.length > 0) {
+            $.each(simulations, function (i) {
+                simulations[i].userName = simulationMap.userName
+                simulations[i].createDate = $.format.date(
+                    new Date(simulations[i].createDate), "yyyy.MM.dd HH:mm");
+            });
+
+            console.log(PANEL_DATA[panelType].form)
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
+                Mustache.render(tbodyTemplate, { "rows": simulations }))
+                .children("tr").each(function(i){
+                var simluationId = $(this).attr("simulation-id");
+                if(simluationId === PANEL_DATA[panelType].form.selected){
+                    activate(this);
+                }
+                $(this).click(function(e){
+                    PANEL_DATA[panelType].form.selected = simluationId;
+                    activate(this);
+                });
+            });
+        }else{
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
+                Mustache.render(tbodyTemplate, { "rows": simulations }));
+        }
+    }
+
+    function activate(that){
+        $(that).siblings().removeClass("active");
+        $(that).addClass("active");
+    }
+
+    function pagination(paginationData, paginationTemplate, panelType){
+        var pages = [];
+        for(var i = paginationData.startPage; i <= paginationData.endPage; i++){
+            pages.push({
+                "active": paginationData.currentPage === i ? "active" : "",
+                "num": i
+            });
+        }
+        $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination").empty().append(
+            Mustache.render(paginationTemplate, { "pages": pages })).find("li.page-num > a").click(function (e) {
+            e.preventDefault();
+            loadPaginatedSimulations(panelType, $(this).attr("page-num"));
+        });
+
+        if (paginationData.curBlock > 1 && paginationData.curBlock <= paginationData.totalBlock) {
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev > a").click(function (e) {
+                e.preventDefault();
+                loadPaginatedSimulations(panelType, paginationData.startPage - 1);
+            });
+        }else{
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev").addClass("disabled");
+        }
+        if (paginationData.curBlock < paginationData.totalBlock) {
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next > a").click(function (e) {
+                e.preventDefault();
+                loadPaginatedSimulations(panelType, paginationData.endPage + 1);
+            });
+        }else{
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next").addClass("disabled");
+        }
+    }
+
+    function buttons(buttonTemplate, panelType) {
+        $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .btn-group").empty().append(
+            Mustache.render(buttonTemplate, { "buttons": PANEL_DATA[panelType].footer.btns }))
+            .children("button").each(function (i) {
+            var fn = PANEL_DATA[panelType].footer.btns[i].func;
+            $(this).click(function (e) {
+                e.preventDefault();
+                fn(panelType, this, e);
+            });
+        });
+    }
+
+    function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage) {
+        if (currSimulations.contains(simulationId)) {
+            var params = {}
+            if (currentPage) {
+                params.p_curPage = currentPage;
+            }
+            if (linePerPage) {
+                params.linePerPage = linePerPage;
+            }
+            if (searchKeyword || searchKeyword === 0) {
+                params.title = searchKeyword;
+            }
+            executor.fetchSimulationJobs(
+                simulationId,
+                {},
+                function (jobsMap) {
+                    console.log(jobsMap)
+                    currSimulations.select(simulationId)
+                },
+                function () {
+                    currSimulations.select()
+                }
+            )
+            closePanel()
+        }
+    }
+
+    function openSimulation(panelType, that, e) {
+        var simulationId = PANEL_DATA[panelType].form.selected;
+        if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
+            return false
+        }
+        _confirm(CONSTS.MESSAGE.edison_wfsimulation_new_confirm_message,
+            function(){ fetchJobs(simulationId) })
+    }
+
+    function renameSimulation(panelType, that, e) {
+        var simulationId = PANEL_DATA[panelType].form.selected;
+        if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
+            return false;
+        }
+        var simulation = currSimulations.get(simulationId);
+        var inputs = [{"name": "Title", "value": simulation.title}];
+        var btns = {"ok": "Save", "cancel": "Cancel"};
+        createOpenModal("Rename", inputs, btns, function(e){
+            var simulationData = $.extend({}, simulation);
+            simulationData.title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+            delete simulationData.createDate;
+            executor.renameSimulation(simulationData, function(){
+                if (PANEL_DATA.setting.form.simulationId === simulationId) {
+                    PANEL_DATA.setting.form.title = simulationData.title
+                }
+                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage);
+                $("#" + namespace + "wf-modal").modal("hide");
+            });
+        });
+    }
+
+    function deleteSimulation(panelType, that, e) {
+        var simulationId = PANEL_DATA[panelType].form.selected;
+        if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
+            return false;
+        }
+        _confirm(CONSTS.MESSAGE.ediso_wfsimulation_remove_confirm_message,
+            function () {
+                if (currSimulations.contains(simulationId)) {
+                    executor.deleteSimulation(
+                        simulationId,
+                        function (simulation) {
+                            if (simulation) {
+                                loadPaginatedSimulations(panelType);
+                            }
+                        },
+                        function () {
+                        })
+                }
+            });
+    }
+
+    function openNewSimulationPanel() {
+        createPanel('New Simulation', PANEL_DATA['new'], 'new')
+    }
+
+    function newSimulation(panelDataType){
+        if (isValidate()) {
+            var _f = function(){
+                executor.createSimulation({
+                    workflowId: PANEL_DATA.setting.form.workflowId,
+                    title: PANEL_DATA[panelDataType].form.title,
+                }, function(simulation){
+                    console.log(simulation);
+                    if(panelDataType === "new"){
+                        PANEL_DATA[panelDataType].form.title = "";
+                        designer.resetWorkflow();
+                        openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
+                    }
+                    setMetaData({
+                        "workflowTitle": PANEL_DATA.setting.form.workflowTitle,
+                        "workflowDescription": PANEL_DATA.setting.form.workflowDescription,
+                        "workflowId": PANEL_DATA.setting.form.workflowId,
+                        "title": simulation.title,
+                        "simulationId": simulation.simulationId
+                    });
+                    toastr["success"]("", var_create_success_message);
+
+                });
+                closePanel();
+            };
+            if (PANEL_DATA.setting.form.simulationId){
+                _confirm(var_new_workflow_confirm_message, _f, closePanel);
+            }else{
+                _f();
+            }
+        }
+    }
+
+    function newSimulationJob(panelDataType){
+        if (isValidate()) {
+            // var ibToken = getIcebreakerAccessToken()
+            console.log(PANEL_DATA[panelDataType])
+            var _f = function(){
+                executor.createSimulationJob({
+                    simulationId: currSimulations.selected()['simulationId'],
+                    title: PANEL_DATA[panelDataType].form.title,
+                    // icebreakerVcToken: ibToken,
+                }, function(simulationJob){
+                    console.log(simulationJob);
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_create_success_message);
+
+                });
+                closePanel();
+            };
+            _confirm(CONSTS.MESSAGE.edison_wfsimulation_new_confirm_message, _f, closePanel);
+        }
+    }
+
+    function createOpenModal(title, inputs, btns, saveHandler) {
+        var modal = $("#" + namespace + "wf-modal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").empty().append($.Mustache.render("tpl-modal-body", { "inputs": inputs }));
+        modal.find(".modal-footer").empty().append($.Mustache.render("tpl-modal-footer", btns));
+        modal.modal({ "backdrop": "static", "keyboard": false });
+        $("#" + namespace + "wf-modal").find("input[name='Title']").select();
+        _delay(function (selector) { $(selector).find("input[name='Title']").select(); }, 500, "#" + namespace + "wf-modal");
+        $("#" + namespace + "wf-modal").find("button[name='Save']").click(saveHandler);
+        _enterkey("#" + namespace + "wf-modal input[name='Title']", saveHandler);
+    }
+
+    /////////////////////////////////////////// renew end
 
     function run(){
         // console.log("run");
@@ -256,72 +697,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         return fn.apply();
     }
 
-    $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn").click(function (e) {
-        e.preventDefault();
-        var btnType = $(this).attr("data-btn-type");
-        var templateData = PANEL_DATA[btnType];
-
-        if(btnType === "designer"){
-            var fn = window[namespace + "moveToDesigner"];
-            fn.apply();
-        }
-
-        if(btnType === "save" ){
-            if(PANEL_DATA.setting.form.simulationTitle){
-                saveOrUpdateWorkflowInstance("setting");
-            }else{
-                toastr["error"]("", var_create_first_message);
-            }
-        }
-
-        if (templateData) {
-            activateLi(this);
-            templateData.boxtitle = $(this).text();
-            if(btnType === "new"){
-            }
-            $("#" + namespace + "menu-panel-box").show();
-            $("#" + namespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
-            $("#" + namespace + "menu-panel-box .box-body").mustache(templateData.body, templateData);
-            if(templateData.header){
-                var boxTitleSelecotr = "#" + namespace + "menu-panel-box .box-header.with-border.header-inner > .box-title";
-                $(boxTitleSelecotr).replaceWith($.Mustache.render(templateData.header.id, templateData));
-                var _delay600 = _instantDelay(600);
-                $(boxTitleSelecotr + " > .search-input").keyup(function(e){
-                    _delay600(openPaginatedSimulations, btnType);
-                });
-            }
-
-            openPaginatedSimulations(btnType);
-
-            $(".menu-panel .menu-panel-close").click(function (e) {
-                e.preventDefault();
-                closePanel();
-            });
-
-            $("#" + namespace + "menu-panel-box .data-binded").change(function (e) {
-                var thisValue = $(this).val();
-                var thisName = $(this).attr("name");
-                templateData.form[thisName] = thisValue;
-            });
-
-            $("#" + namespace + "menu-panel-box .func").each(function (_) {
-                var thisName = $(this).attr("name");
-                if (templateData.btn && templateData.btn[thisName]) {
-                    $(this).click(function (e) {
-                        templateData.btn[thisName](btnType, this, e);
-                    });
-                }
-            });
-
-            if($(this).parent("li").hasClass("menu-open")){
-                $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
-                $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-menu > li").removeClass("menu-open");
-            }else{
-                $(".menu-panel").show('slide', { direction: 'left' }, 500);
-            }
-        }
-    });
-
     function initJstree(instanceTreeSelector, instancesData){
         $(instanceTreeSelector).jstree({
             "core" : {
@@ -411,50 +786,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    function getParams(workflowId, searchKeyword, currentPage, linePerPage) {
-        var params = {};
-        if (workflowId) {
-            params.workflowId =workflowId;
-        }
-        if (searchKeyword || searchKeyword === 0) {
-            params.title = searchKeyword;
-        }
-        if (currentPage) {
-            params.p_curPage = currentPage;
-        }
-        if (linePerPage) {
-            params.linePerPage = linePerPage;
-        }
-        return params;
-    }
-
-    function openPaginatedSimulations(panelType, currentPage){
-        if (panelType === 'open') {
-            var workflowId = getMetaData().workflowId;
-            currentPage = currentPage || 1;
-            var templateData = PANEL_DATA[panelType];
-            var params = getParams(
-                workflowId,
-                getValueByInputName(
-                    templateData.header["search-input-name"]),
-                currentPage);
-            templateData.form.params = params;
-
-            fetchPaginatedSimulations(params);
-        }
-    }
-
-    function fetchPaginatedSimulations(params) {
-        aSyncAjaxHelper.post("/delegate/services/simulation/list",
-            params,
-            function (paginatedSimulations) {
-                console.log(paginatedSimulations)
-            },
-            function (msg) {
-                toastr["error"]("", msg);
-            });
-    }
-
     function silentSave(){
         var simulationId = PANEL_DATA.setting.form.simulationId;
         var simulationTitle = PANEL_DATA.setting.form.simulationTitle;
@@ -486,39 +817,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function (msg) {
                 toastr["error"]("", msg);
             });
-    }
-
-    function newSimulation(panelDataType){
-        if (isValidate()) {
-            var _f = function(){
-                executor.createSimulation({
-                    workflowId: PANEL_DATA.setting.form.workflowId,
-                    title: PANEL_DATA[panelDataType].form.simulationTitle,
-                }, function(simulation){
-                    console.log(simulation);
-                    if(panelDataType === "new"){
-                        PANEL_DATA[panelDataType].form.simulationTitle = "";
-                        designer.resetWorkflow();
-                        openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
-                    }
-                    setMetaData({
-                        "title": PANEL_DATA.setting.form.title,
-                        "description": PANEL_DATA.setting.form.description,
-                        "workflowId": PANEL_DATA.setting.form.workflowId,
-                        "simulationTitle": simulation.title,
-                        "simulationId": simulation.simulationId
-                    });
-                    toastr["success"]("", var_create_success_message);
-
-                });
-                closePanel();
-            };
-            if (PANEL_DATA.setting.form.simulationId){
-                _confirm(var_new_workflow_confirm_message, _f, closePanel);
-            }else{
-                _f();
-            }
-        }
     }
 
     function saveOrUpdateWorkflowInstance(panelDataType) {
@@ -573,8 +871,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         designer.loadWorkflowDefinition(workflowId, function(workflow){
             if(!isNotNew){
                 setMetaData({
-                    "title": workflow.title,
-                    "description": workflow.description,
+                    "workflowTitle": workflow.title,
+                    "workflowDescription": workflow.description,
                     "workflowId": workflowId
                 });
                 closePanel();
@@ -608,12 +906,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function closePanel() {
         $(".menu-panel").hide('slide', { direction: 'left' }, 500);
-        $(JQ_PORTLET_BOUNDARY_ID + " .sidebar > .sidebar-menu > li.active").removeClass("active");
+        $(JQ_PORTLET_BOUNDARY_ID + " li.top-btn.active").removeClass("active");
     }
 
     function activateLi(jqLink) {
-        $(JQ_PORTLET_BOUNDARY_ID + " .sidebar > .sidebar-menu > li.active").removeClass("active");
-        $(jqLink).parent("li").addClass("active");
+        $(JQ_PORTLET_BOUNDARY_ID + " li.top-btn.active").removeClass("active");
+        $(jqLink).addClass("active");
     }
 
     function getValueByInputName(inputName){
