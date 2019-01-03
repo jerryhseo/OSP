@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -50,14 +51,27 @@ public class ModuleViewerController {
 	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws JSONException{
+		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
+		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
+		String screenName = ParamUtil.getString(request, "screenName", "");
+		String connector = ParamUtil.getString(request, "connector", "");
 		String portType = ParamUtil.getString(request, "portType", "inputPorts");
 		String portData = ParamUtil.getString(request, "portData", "");
+		
+		if(simulationUuid.equals("")){
+			simulationUuid = UUID.randomUUID().toString();
+		}
+		
+		if(jobUuid.equals("")){
+			jobUuid = UUID.randomUUID().toString();
+		}
 		
 		
 		
 		/*TEST DATA*/
 		if(portData.equals("")){
-			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14423117, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
+//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14423117, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
+			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": false, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14423117, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;Spring_constants = [1900 1200] ;Mass_of_particles = [11 28] ;Number_of_frame = 40 ;Wave_number = 0.9 ;\" } } }";
 		}
 		
 		JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
@@ -100,6 +114,11 @@ public class ModuleViewerController {
 		model.addAttribute("portType", portType);
 		model.addAttribute("portData", portData);
 		model.addAttribute("portName", portName);
+		model.addAttribute("simulationUuid", simulationUuid);
+		model.addAttribute("jobUuid", jobUuid);
+		model.addAttribute("screenName", screenName);
+		model.addAttribute("connector", connector);
+		
 		return "view";
 	}
 	
