@@ -15,14 +15,23 @@
 	JSONObject workbenchLayout = (JSONObject) renderRequest.getAttribute("workbenchLayout");
 %>
 ${portType}<br/>${portData}
-<div class="row" id="<portlet:namespace/>canvas">
+<div id="<portlet:namespace/>canvas" style="height: 500px;">
 	
 </div>
-<c:if test="${portType eq 'inputPorts'}">
-	<button onclick="<portlet:namespace/>returnJobData()" class="btn btn-primary">
-		SAVE
-	</button>
-</c:if>
+<div class="row">
+	<div class="col-md-12">
+		<div class="btn-group pull-right" style="margin: 5px 0px;">
+			<c:if test="${portType eq 'inputPorts'}">
+				<button class="btn btn-primary" onclick="<portlet:namespace/>returnJobData()">
+					<span class="icon-save"> Save</span>
+				</button>
+			</c:if>
+			<button class="btn btn-close">
+				<span class="icon-arrow-down"> Close</span>
+			</button>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
 /***********************************************************************
 * Global variables section
@@ -124,7 +133,6 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED,function( e ){
 			console.log(JSON.stringify(inputData));
 			job.inputData("${portName}",inputData);
 		}
-// 		<portlet:namespace/>workbench.handleDataChanged(e.portletId, e.data);
 	}	
 });
 
@@ -134,15 +142,36 @@ Liferay.on(OSP.Event.OSP_REQUEST_SAMPLE_CONTENT,function( e ){
 		<portlet:namespace/>workbench.handleRequestSampleContent( e.portletId, '<%=serveResourceURL%>');
 	}
 });
-
+      
 Liferay.on(OSP.Event.OSP_SAMPLE_SELECTED,function( e ){
 	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
 	console.log('OSP_SAMPLE_SELECTED: ['+e.portletId+', '+new Date()+']');
 	<portlet:namespace/>workbench.handleSampleSelected(e.portletId,'<%=serveResourceURL%>');
 });
 
+Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	console.log('OSP_REQUEST_JOB_INFO: ['+e.portletId+', '+new Date()+']');
+	
+	var simulation = <portlet:namespace/>workbench.workingSimulation();
+	var job = simulation.workingJob();
+	
+	var simulationUuid = simulation.uuid();
+	var jobUuid = job.uuid();
+	var jobSeqNo = job.seqNo();
+	
+	var eventData = {
+		targetPortlet: e.portletId,
+		data : {
+			simulationUuid : simulationUuid,
+			jobUuid : jobUuid,
+			jobSeqNo : jobSeqNo
+		}
+	};
+	
+	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_KEY, eventData);
+});
 
-/*OSP_REQUEST_JOB_KEY 구현 필요*/
 /***********************************************************************
 * portlet Function 
 ***********************************************************************/ 
@@ -151,15 +180,30 @@ function <portlet:namespace/>createSimulationAndJob(){
 	simulation.uuid('${simulationUuid}');
 	<portlet:namespace/>workbench.workingSimulation(simulation)
 	
-	var portDataJson = JSON.parse('${portData}')["${portName}"];
 	var job = simulation.newJob();
 	job.uuid('${jobUuid}');
+	job.seqNo(1);
+	job.status('${status}');
+	job.isSubmit(true);
+
+	var portDataJson = JSON.parse('${portData}')["${portName}"];
 	if(portDataJson.hasOwnProperty(OSP.Constants.INPUTS)){
 		var inputData = new OSP.InputData(portDataJson[OSP.Constants.INPUTS]);
 		job.inputData("${portName}",inputData);
 	}
 	
 	simulation.workingJob(job);
+	
+	var portType = "";
+	if('${portType}'==='inputPorts'){
+		portType = OSP.Enumeration.PortType.INPUT;
+	}else if('${portType}'==='logPorts'){
+		portType = OSP.Enumeration.PortType.LOG;
+	}else if('${portType}'==='outputPorts'){
+		portType = OSP.Enumeration.PortType.OUTPUT;
+	}
+	
+	<portlet:namespace/>workbench.handleModuleViewerData(portType);
 }
 
 function <portlet:namespace/>returnJobData(){
