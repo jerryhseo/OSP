@@ -83,7 +83,7 @@ public class ModuleViewerController {
 			//No-Input Data (FILE_SELECTOR)
 			portData = "{ \"-mesh\": { \"name_\": \"-mesh\", \"defaultEditor_\": \"FileExplorer_WAR_OSPFileExplorerportlet\", \"dataType_\": { \"name\": \"KFLOW_EDISON_UNSTEADY_mesh\", \"version\": \"1.0.0\" }, \"mandatory_\": true, \"order_\": 1, \"isWfSample_\": false, \"sample_\": { \"id_\": \"14110320\", \"type_\": \"dlEntryId_\", \"relative_\": true }, \"editors_\": [{ \"name\": \"FILE_SELECTOR\", \"value\": \"FileExplorer_WAR_OSPFileExplorerportlet\" }] } }";
 		}
-		boolean isAnalyzerTest = false;
+		boolean isAnalyzerTest = true;
 		if(isAnalyzerTest){
 			portType = "outputPorts";
 			status = "SUCCESS";
