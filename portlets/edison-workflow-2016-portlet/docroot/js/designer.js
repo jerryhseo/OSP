@@ -123,6 +123,17 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 }
             }
         },
+        groups:{
+        	"workflowGroup":{
+        		template:"workflowGroup-templete",
+        		revert : false,
+        		orphan:true,
+        		constrain:false,
+        		layout:{
+                    type:"Circular"
+                }
+        	}
+        },
         ports: {
             "inputPorts": {
                 events: {
@@ -164,6 +175,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         events: {
             canvasClick: function (e) {
             	wfWorkflowJsPlumbInstance.clearSelection();
+            },
+            groupAdded:function(group) {
+                console.log(arguments)
             }
         },
         miniview: {
@@ -223,6 +237,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             zoomLevel -= 0.25;
             renderer.setZoom(zoomLevel, true);
         }
+    });
+    
+    
+    jsPlumb.on(canvasElement, "tap", ".group-delete", function (e) {
+    	var info = wfWorkflowJsPlumbInstance.getObjectInfo(this);
+    	_confirm(var_remove_app_confirm, function() {
+    		wfWorkflowJsPlumbInstance.removeGroup(info.obj, true);
+    	});
     });
 
     var outputPortPoint = {
@@ -366,7 +388,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         if (data["appType"] && data["appType"] == WF_APP_TYPES.APP.NAME) {
             drawScienceAppDiv(pageX, pageY, data);
         } else {
-            drawWorkFlowAppDiv(pageX, pageY, data);
+        	if(data["appType"] == WF_APP_TYPES.GROUP.NAME){
+        		drawGroupDiv(pageX, pageY, data);
+        	}else{
+        		drawWorkFlowAppDiv(pageX, pageY, data);
+        	}
+            
         }
     }
 
@@ -482,6 +509,19 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 null);
     }
 
+    function drawGroupDiv(pageX, pageY, data, savedId){
+    	var wfId = savedId ? savedId : getGUID();
+    	currentJsPlumbInstance.addGroup({
+            id: wfId,
+            type:"workflowGroup", 
+            left: pageX,
+            top: pageY,
+            title:"Group "+ (currentJsPlumbInstance.getGroupCount() + 1)
+        });
+    	
+    	renderer.zoomToFit();
+        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+    }
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();

@@ -173,7 +173,7 @@ var AppTree = (function(namespace, $, designer){
     }
 
 
-    function fileComponet(){
+    function componet(){
         var dArr = [];
         dArr.push({
             "text": "Component",
@@ -181,6 +181,7 @@ var AppTree = (function(namespace, $, designer){
             "type": "category",
             "id": "componet_category"
         });
+        
         dArr.push({
             "text": "File Component",
             "parent": "componet_category",
@@ -208,13 +209,27 @@ var AppTree = (function(namespace, $, designer){
                 }
             }
         });
+        dArr.push({
+            "text": "Group",
+            "parent": "componet_category",
+            "type": "app",
+            "id": "group_component",
+            "data": {
+            	"appType": "GroupComponent",
+                "name": "Group Component",
+                "text": "Group Component",
+                "parent": "componet_category"
+            }
+        });
+        
         return dArr;
     }
 
-    function addFileComponet(appTreeSelector){
-        var nodes = fileComponet();
+    function addComponet(appTreeSelector){
+        var nodes = componet();
         $(appTreeSelector).jstree().create_node("#", nodes[0], "first");
         $(appTreeSelector).jstree().create_node("componet_category", nodes[1], "first");
+        $(appTreeSelector).jstree().create_node("componet_category", nodes[2], "first");
     }
 
 
@@ -250,7 +265,7 @@ var AppTree = (function(namespace, $, designer){
         }).bind("loaded.jstree", function (event, data) {
             addDynamicConverter(appTreeSelector);
             addController(appTreeSelector);
-            addFileComponet(appTreeSelector);
+            addComponet(appTreeSelector);
             $(searchSelector).keyup(function (e) {
                 var searchString = $(this).val();
                 $(appTreeSelector).jstree(true).search(searchString);

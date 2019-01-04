@@ -54,5 +54,8 @@ var WF_APP_TYPES = {
     },
     APP: {
         NAME: "Solver"
+    },
+    GROUP: {
+        NAME: "GroupComponent"
     }
 };

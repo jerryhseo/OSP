@@ -27,6 +27,8 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/group.css">
+
 <!-- 2018.12.21 - Add jsPlumb CSS -->
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <script>
@@ -342,7 +344,6 @@ var contextPath = '${contextPath}';
 .selected-mode {
 	color: #E4F013;
 }
-
 </style>
 
 <div class="container-fluid">
