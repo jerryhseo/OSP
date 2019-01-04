@@ -779,7 +779,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
                 }
 
-                if (runType !== WF_APP_TYPES.CONTROLLER.NAME && !nodeData.startPoint) {
+                if (runType !== WF_APP_TYPES.CONTROLLER.NAME && runType !== WF_APP_TYPES.FILE_COMPONENT.NAME && !nodeData.startPoint) {
                     items["items"]["start-point"] = {
                         name: "Start Point",
                         icon: "fa-play",
