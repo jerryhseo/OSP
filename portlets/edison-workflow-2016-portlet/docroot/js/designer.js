@@ -844,8 +844,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     name: "Open Workbench",
                     icon: "fa-external-link",
                     callback: function(key, options) {
-                    	var nodeData = node.data;
-                    	uiPanelInstance.openScienceAppWorkbench(nodeData);
+                    	uiPanelInstance.openScienceAppWorkbench(node);
                     }
                 };
             }
