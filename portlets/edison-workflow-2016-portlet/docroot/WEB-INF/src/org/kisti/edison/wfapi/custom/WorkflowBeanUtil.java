@@ -14,6 +14,7 @@ import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
 
+import com.google.common.collect.Maps;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -119,24 +120,21 @@ public class WorkflowBeanUtil{
         return modelMap;
     }
 
-    public static List<Map<String, Object>> workflowInstanceToJstreeModel(List<WorkflowSimulationJob> workflowInstances,
-        Locale locale){
+    public static List<Map<String, Object>> simulationJobToJstreeModel(List<WorkflowSimulationJob> simulationJobs){
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-        for(WorkflowSimulationJob workflowInstance : workflowInstances){
-            result.add(workflowInstanceToJstreeModel(workflowInstance, locale));
+        for(WorkflowSimulationJob job : simulationJobs){
+            result.add(simulationJobToJstreeModel(job));
         }
         return result;
     }
 
-    public static Map<String, Object> workflowInstanceToJstreeModel(WorkflowSimulationJob job, Locale locale){
-        Map<String, Object> modelMap = job.getModelAttributes();
-        modelMap.put("data", new HashMap<>(modelMap));
+    public static Map<String, Object> simulationJobToJstreeModel(WorkflowSimulationJob job){
+        Map<String, Object> modelMap = Maps.newHashMap();
+        modelMap.put("data", job.getModelAttributes());
         modelMap.put("id", job.getSimulationJobId());
-        modelMap.put("text", job.getTitle() + " - "
-            + StringUtil.upperCaseFirstLetter(job.getStatus().toLowerCase()));
-        modelMap.put("parent", job.getWorkflowId());
+        modelMap.put("text", job.getTitle());
+        modelMap.put("parent", job.getSimulationId());
         modelMap.put("type", "instance");
-
         return modelMap;
     }
 

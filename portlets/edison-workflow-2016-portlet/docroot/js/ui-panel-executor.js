@@ -36,6 +36,41 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             }
         };
     })();
+    var currJobs = (function () {
+        var currJobs;
+        var selectedId
+        return {
+            set: function (jobs) {
+                currJobs = {};
+                $.each(jobs, function () {
+                    var job = this;
+                    currJobs[job.id] = job.data;
+                });
+            },
+            get: function (key) {
+                return arguments.length === 0 ? currJobs : currJobs[key];
+            },
+            select: function (key) {
+                if (key) {
+                    selectedId = key
+                } else {
+                    selectedId = undefined
+                }
+            },
+            selected: function () {
+                return selectedId && currJobs ? currJobs[selectedId] : undefined;
+            },
+            contains: function(key){
+                if(!key){
+                    return false;
+                }
+                if($.isEmptyObject(currJobs)){
+                    return false;
+                }
+                return currJobs.hasOwnProperty(key);
+            }
+        };
+    })();
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
     var PANEL_DATA = {
         "new": {
@@ -73,6 +108,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     { "name": "Delete", "func": deleteSimulation }
                 ]
             }
+        }, "jobs": {
+            "col": 4,
+            "panel-type": "jobs",
+            "header":{
+                "id": "tpl-menu-panel-search-header",
+                "search-input-name": "search"
+            },
+            "form": {}
         }, "status": {
             "col": 10,
             "panel-type": "status",
@@ -383,14 +426,29 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 simulationId,
                 {},
                 function (jobsMap) {
+                    createPanel('Simulation Jobs' ,PANEL_DATA['jobs'], 'jobs')
                     console.log(jobsMap)
                     currSimulations.select(simulationId)
+                    currJobs.set(jobsMap.jobs)
+                    jobsMap.jobs.push({
+                        id: currSimulations.selected().simulationId,
+                        text: currSimulations.selected().title,
+                        parent: '#',
+                        type: 'workflow',
+                    })
+                    var instanceTreeSelector = "#" + namespace + "menu-panel-box .jobs .box-body";
+                    if($(instanceTreeSelector).hasClass("jstree")){
+                        $(instanceTreeSelector).jstree(true).settings.core.data = jobsMap.jobs;
+                        $(instanceTreeSelector).jstree(true).refresh();
+                    }else{
+                        initJstree(instanceTreeSelector, jobsMap.jobs);
+                    }
                 },
                 function () {
                     currSimulations.select()
                 }
             )
-            closePanel()
+            // closePanel()
         }
     }
 
@@ -513,6 +571,24 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         _delay(function (selector) { $(selector).find("input[name='Title']").select(); }, 500, "#" + namespace + "wf-modal");
         $("#" + namespace + "wf-modal").find("button[name='Save']").click(saveHandler);
         _enterkey("#" + namespace + "wf-modal input[name='Title']", saveHandler);
+    }
+
+    function drawWorkflowInstances(params) {
+        var simulationId = getMetaData().simulationId;
+        var instanceTreeSelector = "#" + namespace + "menu-panel-box .open .box-body";
+        aSyncAjaxHelper.post("/delegate/services/simluation/" + simulationId + "/list",
+            params,
+            function (workflowInstances) {
+                if($(instanceTreeSelector).hasClass("jstree")){
+                    $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
+                    $(instanceTreeSelector).jstree(true).refresh();
+                }else{
+                    initJstree(instanceTreeSelector, workflowInstances);
+                }
+            },
+            function (msg) {
+                toastr["error"]("", msg);
+            });
     }
 
     /////////////////////////////////////////// renew end
@@ -689,7 +765,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $(that).parent("li").addClass("menu-open")
             $(".menu-panel").show('slide', { direction: 'left' }, 500);
         }
-
     }
 
     function getIcebreakerAccessToken(){
@@ -801,24 +876,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             });
     }
 
-    function drawWorkflowInstances(params) {
-        var workflowId = getMetaData().workflowId;
-        var instanceTreeSelector = "#" + namespace + "menu-panel-box .open .box-body";
-        aSyncAjaxHelper.post("/delegate/services/workflows/" + workflowId + "/instances",
-            params,
-            function (workflowInstances) {
-                if($(instanceTreeSelector).hasClass("jstree")){
-                    $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
-                    $(instanceTreeSelector).jstree(true).refresh();
-                }else{
-                    initJstree(instanceTreeSelector, workflowInstances);
-                }
-            },
-            function (msg) {
-                toastr["error"]("", msg);
-            });
-    }
-
     function saveOrUpdateWorkflowInstance(panelDataType) {
         if (isValidate()) {
             if (_isEmpty(PANEL_DATA.setting.form.simulationId)) {
@@ -927,7 +984,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return false;
     }
-    
+
     $(document).bind('keydown.uiPanel',function (event) {
         if ((event.which == 115 || event.which == 83) &&
             (event.ctrlKey || event.metaKey) || (event.which == 19)) {
@@ -941,11 +998,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
         return true;
     });
-    
+
     /* 2019.01.02 _ Popup Button Event */
     var openScienceAppWorkbench = function(nodeData){
     	var modal = $("#" + namespace + "science-app-workbench-modal");
-    	
+
     	var wfId = nodeData.id;
     	var simulationUuid = nodeData.simulationUuid;
     	var scienceAppData = nodeData.scienceAppData;
@@ -958,7 +1015,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     	if(simulationUuid == "undefined" || simulationUuid == "" || simulationUuid == null){
     		/* TODO Create simulation and get SimulationUuid */
     	}
-    	
+
     	var getWorkbenchHtml = null;
     	window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
@@ -968,7 +1025,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             portletURL.setParameter('simulationUuid', "a9ff32de-5df5-4b67-bb53-ca5915611bd1");
             portletURL.setParameter('blockInputPorts', inputPortsArr.toString());
             portletURL.setWindowState('pop_up');
-            
+
             var wWidth = $(window).width();
             var wHeight = $(window).height();
             $("body").css('overflow','hidden')

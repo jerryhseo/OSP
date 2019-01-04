@@ -1,5 +1,6 @@
 package org.kisti.edison.wfapi.controller;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.wfapi.custom.Transformer;
+import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.kisti.edison.wfapi.custom.WorkflowPagingUtil;
 import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowError;
 import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
@@ -180,9 +182,12 @@ public class WorkflowSimulationController{
             int begin = (curPage - 1) * linePerPage;
             int end = linePerPage;
             
+            List<Map<String, Object>> jobs = WorkflowBeanUtil.simulationJobToJstreeModel(
+                WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobs(
+                    simulationId, title, user.getUserId(), begin, end));
+            
             Map<String, Object> listAndPagingMap = Maps.newHashMap();
-            listAndPagingMap.put("jobs", WorkflowSimulationJobLocalServiceUtil
-                .getWorkflowSimulationJobs(simulationId, title, user.getUserId(), begin, end));
+            listAndPagingMap.put("jobs", jobs);
             listAndPagingMap.put("curPage", curPage);
             listAndPagingMap.put("totalPage", totalPage);
             listAndPagingMap.put("pagination",
