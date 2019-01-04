@@ -56,7 +56,7 @@
 		<portlet-name>ModuleViewer</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>true</instanceable>
-		<css-class-wrapper>module-viewer-portlet</css-class-wrapper>
+		<css-class-wrapper>module-viewer-portlet container-fluid</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<role-mapper>

@@ -2,6 +2,7 @@ package com.kisti.osp.workbench.portlet.viewer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,11 +34,14 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -57,6 +61,7 @@ public class ModuleViewerController {
 		String connector = ParamUtil.getString(request, "connector", "");
 		String portType = ParamUtil.getString(request, "portType", "inputPorts");
 		String portData = ParamUtil.getString(request, "portData", "");
+		String status = ParamUtil.getString(request, "status", "INITIALIZED");
 		
 		if(simulationUuid.equals("")){
 			simulationUuid = UUID.randomUUID().toString();
@@ -70,8 +75,21 @@ public class ModuleViewerController {
 		
 		/*TEST DATA*/
 		if(portData.equals("")){
-//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14423117, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
-			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": false, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14423117, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;Spring_constants = [1900 1200] ;Mass_of_particles = [11 28] ;Number_of_frame = 40 ;Wave_number = 0.9 ;\" } } }";
+			//No-Input Data (SDE)
+//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
+			//Input Data Exist (SDE)
+//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;Spring_constants = [1900 1200] ;Mass_of_particles = [11 28] ;Number_of_frame = 40 ;Wave_number = 0.9 ;\" } } }";
+			
+			//No-Input Data (FILE_SELECTOR)
+			portData = "{ \"-mesh\": { \"name_\": \"-mesh\", \"defaultEditor_\": \"FileExplorer_WAR_OSPFileExplorerportlet\", \"dataType_\": { \"name\": \"KFLOW_EDISON_UNSTEADY_mesh\", \"version\": \"1.0.0\" }, \"mandatory_\": true, \"order_\": 1, \"isWfSample_\": false, \"sample_\": { \"id_\": \"14110320\", \"type_\": \"dlEntryId_\", \"relative_\": true }, \"editors_\": [{ \"name\": \"FILE_SELECTOR\", \"value\": \"FileExplorer_WAR_OSPFileExplorerportlet\" }] } }";
+		}
+		boolean isAnalyzerTest = false;
+		if(isAnalyzerTest){
+			portType = "outputPorts";
+			status = "SUCCESS";
+			portData = "{ \"bowling\": { \"name_\": \"bowling\", \"outputData_\": { \"id_\": 0, \"parent_\": \"result/\", \"type_\": \"file\", \"name_\": \"bowling.png\", \"relative_\": true }, \"defaultAnalyzer_\": \"OSPImageViewer_WAR_OSPImageViewerportlet\", \"dataType_\": { \"name\": \"ImageViewer\", \"version\": \"1.0.0\" }, \"mandatory_\": true } }";
+			simulationUuid = "e71f4fdf-81f3-4be0-8fef-2e82e96e6086";
+			jobUuid = "2a4f8f37-6fd5-423d-8e62-b9170c4b3ba2";
 		}
 		
 		JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
@@ -118,6 +136,7 @@ public class ModuleViewerController {
 		model.addAttribute("jobUuid", jobUuid);
 		model.addAttribute("screenName", screenName);
 		model.addAttribute("connector", connector);
+		model.addAttribute("status", status);
 		
 		return "view";
 	}
@@ -133,6 +152,8 @@ public class ModuleViewerController {
 				this.resolveLayoutTemplate(request, response);
 			}else if( command.equalsIgnoreCase("GET_DATA_STRUCTURE")){
 				this.getDataStructure(request, response);
+			}else if( command.equalsIgnoreCase("READ_DLENTRY")){
+				this.readDLEntry(request, response);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -199,5 +220,73 @@ public class ModuleViewerController {
 		
 		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
 		ServletResponseUtil.write(httpResponse, dataTypeStructure.getStructure());
+	}
+	
+	protected void readDLEntry( ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException, PortletException{
+		long dlEntryId = ParamUtil.getLong(resourceRequest, "dlEntryId");
+		String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName");
+		String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion");
+		HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(resourceResponse);
+		
+		JSONObject result = JSONFactoryUtil.createJSONObject();
+		String fileContent = this.readDLFileContent( dlEntryId );
+		
+		DataType dataType;
+		try {
+			dataType = DataTypeLocalServiceUtil.findDataTypeObject(dataTypeName, dataTypeVersion);
+		} catch (SystemException e) {
+			_log.error("[ERROR] Invalid data type: "+dataTypeName+"-"+dataTypeVersion);
+			throw new PortletException();
+		}
+		
+		DataTypeStructure dataTypeStructure = null;
+		try {
+			dataTypeStructure = DataTypeStructureLocalServiceUtil.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException e1) {
+			_log.debug("Data type has no defined structure: "+dataTypeName+"-"+dataTypeVersion);
+		} catch (SystemException e1) {
+			_log.error("[ERROR] While getting data type structure: "+dataTypeName+"-"+dataTypeVersion);			
+			throw new IOException();
+		}
+		
+		if( dataTypeStructure == null ){
+			result.put("contentType", "fileContent");
+			result.put("fileContent", fileContent);
+		}
+		else{
+			result.put("contentType", "structuredData");
+			result.put("fileContent", fileContent);
+			result.put("dataStructure", dataTypeStructure.getStructure());
+		}
+		
+		ServletResponseUtil.write(httpResponse, result.toString());
+	}
+	
+	private String readDLFileContent( long dlEntryId ) throws PortletException, IOException{
+		if( dlEntryId <= 0)
+			return "";
+		
+		FileEntry fileEntry;
+		try {
+			fileEntry = DLAppLocalServiceUtil.getFileEntry(dlEntryId);
+		} catch (NumberFormatException | PortalException | SystemException e1) {
+			_log.error("[ERROR] Wrong file entry: "+dlEntryId);
+			throw new PortletException();
+		}
+		
+		InputStream stream = null;
+		try {
+			stream = fileEntry.getContentStream();
+			
+		} catch (PortalException | SystemException e1) {
+			_log.error("[ERROR] readDLFileContent() : "+fileEntry.getFileEntryId());
+			throw new PortletException();
+		}
+
+		String content = new String(FileUtil.getBytes(stream));
+		if( stream != null )
+			stream.close();
+		
+		return content;
 	}
 }

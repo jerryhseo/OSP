@@ -1832,13 +1832,22 @@
         }
         
         
-        Workbench.handleModuleViewerData = function(simulationUuid, jobUuid, inputData, portType){
-        	var simulation  = Workbench.newSimulation();
-        	simulation.uuid(simulationUuid);
+        Workbench.handleModuleViewerData = function(portType){
+        	var scienceApp = Workbench.scienceApp();
         	
-        	var job = simulation.newJob();
-        	job.uuid()
+        	var simulation = Workbench.workingSimulation();
+        	var job = simulation.workingJob();
         	
+        	if(portType===OSP.Enumeration.PortType.INPUT){
+        		var inputPorts = scienceApp.inputPorts();
+        		resetPortlets( job, inputPorts, portType );
+        	}else if(portType===OSP.Enumeration.PortType.LOG){
+        		var logPorts = scienceApp.logPorts();
+        		resetPortlets( job, logPorts, portType );
+        	}else if(portType===OSP.Enumeration.PortType.OUTPUT){
+        		var outputPorts = scienceApp.outputPorts();
+        		resetPortlets( job, outputPorts, portType );
+        	}
         };
 
         var resetPortlets = function( job, ports, portType ){
@@ -1885,7 +1894,7 @@
                     if( isLogValid ){
                         var simulation = Workbench.workingSimulation();
                         var resultFolder = simulation.getJobOutputFolder(job);
-                        
+
                         fireLoadOutputData( ports, resultFolder );
                     }
                     else{
@@ -2404,7 +2413,7 @@
             inputData.dirty( true );
 
             var sample;
-            if(port.isWfSample()){
+            if(inputPort.isWfSample()){
             	sample = inputPort.wfSample();
             }else{
             	sample = inputPort.sample();
