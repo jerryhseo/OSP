@@ -42,29 +42,35 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     return false;
                 }
 
-                if (source.getType() === 'all' || target.getType() === 'all') {
-                	if(source.getType() == target.getType()){
+                if (source.getType() === 'all' && target.getType() === 'all') {
+                	if (source.getNode().data.scienceAppData.runType === "FileComponent") {
                 		return false;
-                	} else if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                    	var isEqualsPortType = false;
-                    	var sourceData = source.getNode().data,
-                		targetData = target.getNode().data;
-                    	var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
-                    	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-                    		sourceData.outputPorts[source.id].dataType_ = {};
-                    		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
-                    		isEqualsPortType = true;
-                    	} else {
-                    		isEqualsPortType = checkPortTypeForConnection(source, target, true);
-                    	}
-                    	
-                    	return isEqualsPortType;
-                    }
-                    return true;
-                } else if (source.getType() === 'inputPorts') {
-                    return false;
-                } else {
-                	return checkPortTypeForConnection(source, target, false);
+                	}else{
+                		return true;
+                	}
+                }else{
+                	if (source.getType() === 'all' || target.getType() === 'all') {
+                		if (source.getNode().data.scienceAppData.runType === "FileComponent") {
+                			var isEqualsPortType = false;
+                			var sourceData = source.getNode().data,
+                			targetData = target.getNode().data;
+                			var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
+                			if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
+                				sourceData.outputPorts[source.id].dataType_ = {};
+                				sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
+                				isEqualsPortType = true;
+                			} else {
+                				isEqualsPortType = checkPortTypeForConnection(source, target, true);
+                			}
+                			
+                			return isEqualsPortType;
+                		}
+                		return true;
+                	} else if (source.getType() === 'inputPorts') {
+                		return false;
+                	} else {
+                		return checkPortTypeForConnection(source, target, false);
+                	}
                 }
             }
         },
@@ -111,7 +117,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     dblclick: function(obj) {
                     	console.log(obj);
                     	if(isDeginer){
-                    		openWfAppDataSettingHandler(obj);
+                    		openWfAppDataSettingHandler(obj.node);
                     	}
                     }
                 }
@@ -134,9 +140,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
     
-    function openWfAppDataSettingHandler(obj){
-    	var wfId = obj.node.id;
-        var data = obj.node.data;
+    function openWfAppDataSettingHandler(node){
+    	var wfId = node.id;
+        var data = node.data;
         var runType = data.scienceAppData.runType;
         if(uiPanelInstance) {
         	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
@@ -707,12 +713,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
+            
             if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Converter Script",
                     icon: "edit",
                     callback: function(key, options) {
-
+                    	openWfAppDataSettingHandler(node);
                     }
                 };
             } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
@@ -720,22 +727,34 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     name: "Condition Script",
                     icon: "edit",
                     callback: function(key, options) {
-
+                    	openWfAppDataSettingHandler(node);
                     }
                 };
-            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                items["items"]["open-info"] = {
-                    name: "App Information",
-                    icon: "info",
-                    callback: function(key, options) {
-                        console.log(node);
-                        var scienceAppId = node.data.scienceAppData.scienceAppId;
-                        var fn = window[namespace + "openSolverDeatilPopup"];
-                        if (fn) {
-                            fn.apply(null, [scienceAppId]);
+            }else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
+                items["items"]["open-texteditor"] = {
+                        name: "File Upload",
+                        icon: "fa-cloud-upload",
+                        callback: function(key, options) {
+                        	openWfAppDataSettingHandler(node);
                         }
-                    }
-                };
+                    };
+                }
+            
+            if(nodeData["type"]){
+            	var type = nodeData["type"];
+            	if (type === "scienceApp") {
+            		items["items"]["open-info"] = {
+            				name: "App Information",
+            				icon: "info",
+            				callback: function(key, options) {
+            					var scienceAppId = node.data.scienceAppData.scienceAppId;
+            					var fn = window[namespace + "openSolverDeatilPopup"];
+            					if (fn) {
+            						fn.apply(null, [scienceAppId]);
+            					}
+            				}
+            		};
+            	}
             }
 
             if (nodeData.startPoint) {
