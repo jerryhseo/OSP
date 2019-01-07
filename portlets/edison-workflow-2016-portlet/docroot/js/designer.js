@@ -205,6 +205,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
             ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]]
+//            Connector: ["Flowchart", { cornerRadius: 3 }]
         }
     });
 

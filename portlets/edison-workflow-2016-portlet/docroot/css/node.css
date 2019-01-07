@@ -1,0 +1,114 @@
+.wf-box {
+	font-size: 12px;
+	position: absolute;
+	display: inline-block;
+	width: 175px;
+	border: 1px #aaa solid;
+	background-color: rgba(255,255,255,.8);
+	border-radius: 3px;
+	z-index: 0;
+	border: 1px solid hsla(0,0%,0%,.8);
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	background-color: hsla(220,11%,97%,.95);
+	box-shadow: inset 0 1px 1px white, 0 2px 3px hsla(0,0%,0%,.7);
+	line-height: 20px;
+}
+
+.wf-box .wf-node-header h1{
+	display: block;
+	font-size: 2em;
+	margin-block-start: 0.67em;
+	margin-block-end: 0.67em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+}
+
+.wf-box .wf-node-header h1.wf-node-header{
+	font-size: 12px;
+	font-weight: 400;
+	font-family: proxima-nova-bold;
+	margin: 0;
+	padding: 6px 10px 1px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-shadow: 0 1px 0 #fff;
+}
+
+.wf-box .wf-node-ports{
+	border-top: solid 1px #fff;
+	border-bottom: solid 1px #f9f9f9;
+	box-shadow: 0 0 1px #dddfe3;
+	background-color: hsla(0,100%,100%,.5);
+}
+
+.wf-box .wf-node-ports .input-ports-list{
+	float: left;
+	width: 50%;
+	padding: 5px 0;
+	text-align: left;
+}
+
+.wf-box .wf-node-ports .input-ports-list .wf-port div.connect{
+	border-color: hsla(0,100%,88%,.6);
+	border: 1px #c6cad1 solid;
+	box-shadow: inset 0 1px 1px #667699;
+	cursor: pointer;
+	width: 10px;
+	height: 10px;
+	margin-bottom: -1px;
+	display: inline-block;
+	border-radius: 4px;
+	text-align: left;
+	background-color: blue;
+}
+
+
+
+.wf-box .wf-node-ports .output-ports-list{
+	float: right;
+	width: 49%;
+	z-index: 1;
+	padding: 5px 0;
+	text-align: right;
+}
+
+.wf-box .wf-node-ports .output-ports-list .wf-port div.connect{
+	border-color: hsla(0,100%,88%,.6);
+	border: 1px #c6cad1 solid;
+	box-shadow: inset 0 1px 1px #667699;
+	cursor: pointer;
+	width: 10px;
+	height: 10px;
+	margin-bottom: -1px;
+	display: inline-block;
+	border-radius: 4px;
+	text-align: right;
+	background-color: red;
+}
+
+
+
+.wf-box .wf-node-ports ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wf-box .wf-node-ports ul li{
+	line-height: 20px;
+}
+
+.wf-box .wf-node-ports ul li.wf-port{
+	border: 0;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.wf-box .wf-node-ports ul lable.wf-port-label{
+	font-family: proxima-nova-regular;
+}
