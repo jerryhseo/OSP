@@ -94,14 +94,14 @@
 </script>
 <script type="jtk" id="wf-output-port-templete">
 <li class="wf-port">
+	<div class="connect">
+		<jtk-source filter-exclude="true" port-id="${$key}" port-type="all"></jtk-source>
+	</div>
 	<label class="wf-port-label">
 		${$key}
 		${name_}
 	
 	</label>
-	<div class="connect">
-		<jtk-source filter-exclude="true" port-id="${$key}" port-type="all"></jtk-source>
-	</div>
 </li>
 </script>
 <script type="jtk" id="workflowGroup-templete">
