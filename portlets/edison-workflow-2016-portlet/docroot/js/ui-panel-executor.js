@@ -715,6 +715,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
     
     function getInputPortsJobData(portNode, portId){
+    	console.log(portNode);
     	var jobDataArr = new Array();
 		jobDataArr = [];
 		
@@ -765,7 +766,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			for(var key in outputPorts){
 				var outputPort = outputPorts[key];
 				var outputData = outputPort.outputData_;
-				jobDataArr.push(outputData);
+				var outputDataType = outputData.type_;
+				if(outputDataType != 'dlEntryId_'){
+					jobDataArr.push(outputData);
+				}
 			}
 		}
 		return jobDataArr;
