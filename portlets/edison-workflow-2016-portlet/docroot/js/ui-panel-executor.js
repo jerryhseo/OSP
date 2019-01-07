@@ -2,6 +2,7 @@ var UIPanelExecutor = (function(namespace, $, designer, executor, toastr) {
 	/* jshint -W069 */
 	'use strict';
 	var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
+	var IB_DATA = "ibData";
 	var PANEL_DATA = {
 		"new" : {
 			"col" : 6,
@@ -781,11 +782,15 @@ var UIPanelExecutor = (function(namespace, $, designer, executor, toastr) {
 	/* 2019.01.02 _ Popup Button Event */
 	var openScienceAppWorkbench = function(node) {
 		var modal = $("#" + namespace + "science-app-workbench-modal");
-
+		
 		var nodeData = node.data;
 		var wfId = nodeData.id;
-		var simulationUuid = nodeData.simulationUuid;
-		var jobUuid = nodeData.jobUuid;
+		
+		if(nodeData[IB_DATA] == 'undefined' || nodeData[IB_DATA] == null){
+			nodeData[IB_DATA] = {};
+		}
+		var simulationUuid = nodeData[IB_DATA].simulationUuid;
+		var jobUuid = nodeData[IB_DATA].jobUuid;
 		var scienceAppData = nodeData.scienceAppData;
 		var scienceAppId = scienceAppData.scienceAppId;
 		var inputPorts = nodeData.inputPorts;
@@ -838,7 +843,6 @@ var UIPanelExecutor = (function(namespace, $, designer, executor, toastr) {
 						jobUuid : jobUuid,
 						jobData : JSON.stringify(jobDataArr)
 					}, function(obj) {
-						console.log(obj);
 						if (obj.hasSimulationInfo) {
 							openWorkbenchPopup(scienceAppId, simulationUuid,
 									jobUuid, connectedInputPorts, wfId);
@@ -916,66 +920,69 @@ var UIPanelExecutor = (function(namespace, $, designer, executor, toastr) {
 	function openWorkbenchPopup(scienceAppId, simulationUuid, jobUuid,
 			connectedInputPorts, nodeId) {
 		var getWorkbenchHtml = null;
-		window
-				.AUI()
-				.use(
-						'liferay-portlet-url',
-						function(A) {
-							var portletURL = window.Liferay.PortletURL
-									.createRenderURL();
-							portletURL
-									.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
-							portletURL.setParameter('workbenchType',
-									"SIMULATION_WITH_WORKFLOW");
-							portletURL.setParameter('scienceAppId',
-									scienceAppId);
-							portletURL.setParameter('simulationUuid',
-									simulationUuid);
-							/* portletURL.setParameter('jobUuid', ""); */
-							portletURL.setParameter('blockInputPorts',
-									connectedInputPorts.toString());
-							portletURL.setParameter('nodeId',
-									nodeId);
-							portletURL.setWindowState('pop_up');
+		window.AUI().use('liferay-portlet-url', function(A) {
+			var portletURL = window.Liferay.PortletURL
+					.createRenderURL();
+			portletURL
+					.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+			portletURL.setParameter('workbenchType',
+					"SIMULATION_WITH_WORKFLOW");
+			portletURL.setParameter('scienceAppId',
+					scienceAppId);
+			portletURL.setParameter('simulationUuid',
+					simulationUuid);
+			/* portletURL.setParameter('jobUuid', ""); */
+			portletURL.setParameter('blockInputPorts',
+					connectedInputPorts.toString());
+			portletURL.setParameter('nodeId',
+					nodeId);
+			portletURL.setWindowState('pop_up');
 
-							var wWidth = $(window).width();
-							var wHeight = $(window).height();
-							$("body").css('overflow', 'hidden')
-							Liferay.Util
-									.openWindow({
-										dialog : {
-											width : wWidth,
-											height : wHeight,
-											cache : false,
-											draggable : false,
-											resizable : false,
-											modal : true,
-											destroyOnClose : true,
-											after : {
-												render : function(event) {
-													$("button.btn.close")
-															.on(
-																	"click",
-																	function(e) {
-																		$(
-																				"body")
-																				.css(
-																						'overflow',
-																						'');
-																	});
-												}
-											}
-										},
-										id : "dataTypeSearchDialog",
-										uri : portletURL.toString(),
-										title : "Workbench"
-									});
-						});
+			var wWidth = $(window).width();
+			var wHeight = $(window).height();
+			$("body").css('overflow', 'hidden')
+			Liferay.Util.openWindow({
+				dialog : {
+					width : wWidth,
+					height : wHeight,
+					cache : false,
+					draggable : false,
+					resizable : false,
+					modal : true,
+					destroyOnClose : true,
+					after : {
+						render : function(event) {
+							$("button.btn.close").on("click", function(e) {
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+				id : "dataTypeSearchDialog",
+				uri : portletURL.toString(),
+				title : "Workbench"
+			});
+		});
+	}
+	
+	/* 2019.01.07 _ Setting selected simulationUuid and jobUuid in the workbench */
+	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid){
+		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
+		var nodeData = node.data;
+		if(nodeData) {
+			if(!nodeData[IB_DATA]) {
+				nodeData[IB_DATA] = {}
+			}
+			nodeData[IB_DATA].simulationUuid = simulationUuid;
+			nodeData[IB_DATA].jobUuid = jobUuid;
+		}
+		console.log(node);
 	}
 
 	return {
 		"openWorkflow" : openWorkflowByWorkflowId,
 		"openScienceAppWorkbench" : openScienceAppWorkbench,
+		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

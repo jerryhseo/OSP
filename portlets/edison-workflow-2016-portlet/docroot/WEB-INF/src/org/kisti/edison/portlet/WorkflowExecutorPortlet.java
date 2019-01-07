@@ -47,6 +47,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -78,6 +79,24 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
                 model.addAttribute("workflowCount", WorkflowSimulationLocalServiceUtil
                     .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId()));
             }
+            
+            // Workflow Edit Permission Check
+            boolean isAdmin = false;
+            ScienceApp wfScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(Long.parseLong(workflowId));
+            if(wfScienceApp == null){
+            	isAdmin = true;
+            } else {
+            	// Not Open Workflow-ScienceApp
+            	if(wfScienceApp.getStatus() != 1901004){
+            		boolean powerUser = EdisonUserUtil.isRegularRole(currentUser, RoleConstants.POWER_USER);
+            		boolean admin = EdisonUserUtil.isRegularRole(currentUser, RoleConstants.ADMINISTRATOR);
+            		boolean siteAdmin = EdisonUserUtil.isSiteRole(currentUser, themeDisplay.getScopeGroupId(), RoleConstants.SITE_ADMINISTRATOR);
+            		if(powerUser || admin || siteAdmin || wfScienceApp.getAuthorId() == currentUser.getUserId()){
+            			isAdmin = true;
+            		}
+            	}
+            }
+            
             model.addAttribute("workflowId", workflowId);
             model.addAttribute("textEditor", textEditor);
             model.addAttribute("fileEditor", fileEditor);
@@ -88,6 +107,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             model.addAttribute("username", currentUser.getScreenName());
             model.addAttribute("companyGroupId", themeDisplay.getCompanyGroupId());
             model.addAttribute("groupId", PortalUtil.getScopeGroupId(request));
+            model.addAttribute("isAdmin", isAdmin);
 
         }catch (Exception e){
             log.error(e);

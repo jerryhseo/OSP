@@ -200,18 +200,20 @@ var contextPath = '${contextPath}';
               </li>
             </ul>
             <ul class="sidebar-menu bottom" data-widget="tree">
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="designer">
-                  <i class="fa fa-lg fa-pencil-square-o"></i>
-                  <span>Edit</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="sidebar-btn" data-btn-type="setting">
-                  <i class="fa fa-lg  fa-gear"></i>
-                  <span>Setting</span>
-                </a>
-              </li>
+              <c:if test="${isAdmin eq true}">
+	              <li class="treeview">
+	                <a href="#" class="sidebar-btn" data-btn-type="designer">
+	                  <i class="fa fa-lg fa-pencil-square-o"></i>
+	                  <span>Edit</span>
+	                </a>
+	              </li>
+	              <li>
+	                <a href="#" class="sidebar-btn" data-btn-type="setting">
+	                  <i class="fa fa-lg  fa-gear"></i>
+	                  <span>Setting</span>
+	                </a>
+	              </li>
+              </c:if>
               <li>
                 <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
                   <a href="#" class="sidebar-toggle">
@@ -396,6 +398,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <script>
 var namespace = "<portlet:namespace/>";
 var jqPortletBoundaryId = "#p_p_id" + namespace;
+var designer = null;
+var executor = null;
+var uiPanel = null;
 $(document).ready(function(){
   consoleLog.setLoggingLevel({
     error : true,
@@ -427,9 +432,9 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS, false);
-  var executor = new SimulationExecutor(namespace, $, designer, toastr);
-  var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
+  designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS, false);
+  executor = new SimulationExecutor(namespace, $, designer, toastr);
+  uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
   designer.setUiPanelInstance(uiPanel);
   // var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
   // designer.setWorkflowInputPortModule(inputportModule);
@@ -477,6 +482,20 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
       params += "&" + thisPortletNamespace + "groupId=" + groupId;
   window.open("<%=scienceAppDetailUrl%>" + params);
 }
+
+AUI().ready(['liferay-util-window'], function(){
+	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
+		<portlet:namespace/>closePopup("dataTypeSearchDialog");
+		
+		/* TODO 노드Id로 노드 찾아서 SimUuid, JobUuid 세팅해주기 */
+		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid);
+		$("body").css('overflow','');
+	});
+	
+	Liferay.provide(window,'<portlet:namespace />closePopup',function(popupIdToClose) {
+		Liferay.Util.getWindow(popupIdToClose).destroy(); 
+	});
+});
 
 </script>
 </div>

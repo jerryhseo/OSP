@@ -31,11 +31,12 @@
 	font-weight: 400;
 	font-family: proxima-nova-bold;
 	margin: 0;
-	padding: 6px 10px 1px;
+	padding: 6px 5px 1px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-shadow: 0 1px 0 #fff;
+	max-width: 88%;
 }
 
 .wf-box .wf-node-ports{
@@ -45,11 +46,30 @@
 	background-color: hsla(0,100%,100%,.5);
 }
 
+.wf-box .wf-node-ports .wf-port label.wf-port-label{
+	max-width: 85%;
+}
+
 .wf-box .wf-node-ports .input-ports-list{
 	float: left;
 	width: 50%;
 	padding: 5px 0;
 	text-align: left;
+}
+
+.wf-box .wf-node-ports .input-ports-list li.wf-port,
+.wf-box .wf-node-ports .output-ports-list li.wf-port{
+	display: inline-block;
+	width: 100%;
+}
+
+.wf-box .wf-node-ports .input-ports-list .wf-port label.wf-port-label{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	position: relative;
+	left: 5px;
+	float: left;
 }
 
 .wf-box .wf-node-ports .input-ports-list .wf-port div.connect{
@@ -64,9 +84,10 @@
 	border-radius: 4px;
 	text-align: left;
 	background-color: blue;
+	float: left;
+	position: relative;
+	top: 5px;
 }
-
-
 
 .wf-box .wf-node-ports .output-ports-list{
 	float: right;
@@ -74,6 +95,15 @@
 	z-index: 1;
 	padding: 5px 0;
 	text-align: right;
+}
+
+.wf-box .wf-node-ports .output-ports-list .wf-port label.wf-port-label{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	position: relative;
+	right: 5px;
+	float: right;
 }
 
 .wf-box .wf-node-ports .output-ports-list .wf-port div.connect{
@@ -88,9 +118,10 @@
 	border-radius: 4px;
 	text-align: right;
 	background-color: red;
+	float: right;
+	position: relative;
+	top: 5px;
 }
-
-
 
 .wf-box .wf-node-ports ul {
 	list-style: none;
@@ -112,3 +143,10 @@
 .wf-box .wf-node-ports ul lable.wf-port-label{
 	font-family: proxima-nova-regular;
 }
+
+
+.waitingbox{background-color:#adadad;}
+.runningbox{background-color:#8db9e5;}
+.failbox{background-color:#f8799b;}
+.donebox{background-color:#76d6cd;}
+.pausebox{background-color:#fd9b00;}

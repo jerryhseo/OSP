@@ -1,7 +1,11 @@
 <script type="jtk" id="scienceApp-templete">
 <div class="wf-box" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
-		<h1 class="wf-node-header">${scienceAppData.name}</h1>
+		<h1 class="wf-node-header">
+			${scienceAppData.name}
+			<span class="wf-node-header-version">v.${scienceAppData.version}</span>
+		</h1>
+		
 	</div>
 
 	<div class="wf-node-ports">
@@ -79,14 +83,14 @@
 </script>
 <script type="jtk" id="output-port-templete">
 <li class="wf-port">
+	<div class="connect">
+		<jtk-source filter-exclude="true" port-id="${$key}" port-type="outputPorts"></jtk-source>
+	</div>
 	<label class="wf-port-label">
 		${$key}
 		${name_}
 	
 	</label>
-	<div class="connect">
-		<jtk-source filter-exclude="true" port-id="${$key}" port-type="outputPorts"></jtk-source>
-	</div>
 </li>
 </script>
 
