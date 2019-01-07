@@ -66,7 +66,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             }, errorCallback
         );
     }
-
+    
     function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.get("/delegate/services/workflows/instance/" + workflowInstanceId,
@@ -493,7 +493,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         }
     } */
     return {
-        "createSimulation": createSimulation,
+    	"createSimulation": createSimulation,
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
         "deleteWorkflowInstance": deleteWorkflowInstance,

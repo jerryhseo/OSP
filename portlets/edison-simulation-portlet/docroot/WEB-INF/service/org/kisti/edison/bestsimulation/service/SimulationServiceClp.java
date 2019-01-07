@@ -38,6 +38,13 @@ public class SimulationServiceClp implements SimulationService {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName4 = "getSimulationJob";
+
+		_methodParameterTypes4 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
 	}
 
 	@Override
@@ -126,6 +133,45 @@ public class SimulationServiceClp implements SimulationService {
 		return (com.liferay.portal.kernel.json.JSONObject)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject getSimulationJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String jobData) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName4,
+					_methodParameterTypes4,
+					new Object[] {
+						userId,
+						
+					ClpSerializer.translateInput(appName),
+						
+					ClpSerializer.translateInput(appVersion),
+						
+					ClpSerializer.translateInput(simulationUuid),
+						
+					ClpSerializer.translateInput(jobUuid),
+						
+					ClpSerializer.translateInput(jobData)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.json.JSONObject)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableService _invokableService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -133,4 +179,6 @@ public class SimulationServiceClp implements SimulationService {
 	private String[] _methodParameterTypes1;
 	private String _methodName3;
 	private String[] _methodParameterTypes3;
+	private String _methodName4;
+	private String[] _methodParameterTypes4;
 }

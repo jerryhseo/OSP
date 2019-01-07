@@ -19,14 +19,14 @@ import java.util.Map;
 import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.base.SimulationServiceBaseImpl;
-import org.kisti.edison.science.model.ScienceApp;
+import org.kisti.edison.bestsimulation.service.persistence.SimulationJobUtil;
+import org.kisti.edison.bestsimulation.service.persistence.SimulationUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.springframework.util.StringUtils;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
@@ -104,6 +104,63 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 		}catch (Exception e) {
 			resultInfo.put("isValid", false);
 			resultInfo.put("failMessage", e.getMessage());
+		}finally {
+			return resultInfo;
+		}
+	}
+	
+	@JSONWebService(method = "POST", value = "get-simulation-job")
+	public JSONObject getSimulationJob(long userId, String appName, String appVersion, String simulationUuid, String jobUuid, String jobData){
+		JSONObject resultInfo = JSONFactoryUtil.createJSONObject();
+		boolean hasSimulationInfo = true; 
+		
+		try {
+			
+			if(!StringUtils.hasText(appName)){
+				throw new PortalException("appName is Null");
+			}
+			
+			if(!StringUtils.hasText(appVersion)){
+				throw new PortalException("appVersion is Null");
+			}
+			
+			if(!ScienceAppLocalServiceUtil.existApp(appName, appVersion)){
+				throw new PortalException("No Such ScienceApp is Primary Key ["+appName+","+appVersion+"]");
+			}
+			
+			if(!StringUtils.hasText(simulationUuid)){
+				throw new PortalException("simulationUuid is Null");
+			}
+			
+			if(!StringUtils.hasText(jobUuid)){
+				throw new PortalException("jobUuid is Null");
+			}
+			
+			if(!StringUtils.hasText(jobData)){
+				throw new PortalException("jobData is Null");
+			}
+			
+			JSONArray jobDataJsonArr = JSONFactoryUtil.createJSONArray(jobData);
+			jobData = jobDataJsonArr.toString();
+			
+			int simulationCnt = SimulationUtil.countBySimulationUuid(simulationUuid);
+			int simulationJobCnt = SimulationJobUtil.countByjobUuid(simulationUuid, jobUuid);
+			
+			if(0< simulationCnt && 0 < simulationJobCnt){
+				resultInfo.put("hasSimulationInfo", hasSimulationInfo);
+			} else {
+				boolean hasSimulation = (0 < simulationCnt) ? true : false;
+				Group group = GroupLocalServiceUtil.getGroup(EDISON_COMPANY_ID, "Guest");
+				User user = UserLocalServiceUtil.getUser(userId);
+				
+				Map<String, Object> resultMap = SimulationLocalServiceUtil.createSimulationWithJob(user, group, appName, appVersion, simulationUuid, jobUuid, jobData, hasSimulation);
+				
+				hasSimulationInfo = Boolean.parseBoolean(CustomUtil.strNull(resultMap.get("hasSimulationInfo")));
+				resultInfo.put("hasSimulationInfo", hasSimulationInfo);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			resultInfo.put("hasSimulationInfo", false);
 		}finally {
 			return resultInfo;
 		}

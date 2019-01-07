@@ -71,6 +71,15 @@ public class SimulationServiceUtil {
 			simulationTitle, jobData);
 	}
 
+	public static com.liferay.portal.kernel.json.JSONObject getSimulationJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String jobData) {
+		return getService()
+				   .getSimulationJob(userId, appName, appVersion,
+			simulationUuid, jobUuid, jobData);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

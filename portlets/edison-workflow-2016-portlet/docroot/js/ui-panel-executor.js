@@ -645,59 +645,171 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     });
     
     /* 2019.01.02 _ Popup Button Event */
-    var openScienceAppWorkbench = function(nodeData){
+    var openScienceAppWorkbench = function(node){
     	var modal = $("#" + namespace + "science-app-workbench-modal");
     	
+    	var nodeData = node.data;
     	var wfId = nodeData.id;
     	var simulationUuid = nodeData.simulationUuid;
+    	var jobUuid = nodeData.jobUuid;
     	var scienceAppData = nodeData.scienceAppData;
     	var scienceAppId = scienceAppData.scienceAppId;
     	var inputPorts = nodeData.inputPorts;
-    	var inputPortsArr = new Array();
-    	for(var key in inputPorts){
-    		inputPortsArr.push(key);
-    	}
-    	if(simulationUuid == "undefined" || simulationUuid == "" || simulationUuid == null){
-    		/* TODO Create simulation and get SimulationUuid */
+    	
+    	/* Get Connected Input Ports and Disconnected Input Ports */
+    	var connectedInputPorts = new Array();
+    	var disconnectedInputPorts = new Array();
+    	var jobDataArr = new Array();
+    	for(var portIndex in node.getPorts()){
+    		var port = node.getPorts()[portIndex];
+    		var portType = port["data"]["type"];
+    		if(portType == "inputPorts"){
+    			if(port.getAllEdges().length == 1){
+    				connectedInputPorts.push(port.id);
+    				
+    				/* Get Parent Node's JobData */
+    				var targetEdges = port.getTargetEdges();
+    				var getJobData = getParentPortsJobData(targetEdges[0]);
+    				if(getJobData != 'undefined' && getJobData != null && getJobData != ''){
+    					jobDataArr = jobDataArr.concat(getJobData);
+    				}
+    			} else {
+    				disconnectedInputPorts.push(port.id);
+    				
+    				/* Get Node's JobData */
+    				var getJobData = getInputPortsJobData(port.getNode(), port.id)
+    				if(getJobData != 'undefined' && getJobData != null && getJobData != ''){
+    					jobDataArr = jobDataArr.concat(getJobData);
+    				}
+    			}
+    		}
     	}
     	
-    	var getWorkbenchHtml = null;
-    	window.AUI().use('liferay-portlet-url', function (A) {
-            var portletURL = window.Liferay.PortletURL.createRenderURL();
-            portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
-            portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
-            portletURL.setParameter('scienceAppId', scienceAppId);
-            portletURL.setParameter('simulationUuid', "a9ff32de-5df5-4b67-bb53-ca5915611bd1");
-            portletURL.setParameter('blockInputPorts', inputPortsArr.toString());
-            portletURL.setWindowState('pop_up');
-            
-            var wWidth = $(window).width();
-            var wHeight = $(window).height();
-            $("body").css('overflow','hidden')
-            Liferay.Util.openWindow(
-        		{
-					dialog: {
-						width:wWidth,
-						height:wHeight,
-						cache: false,
-						draggable: false,
-						resizable: false,
-						modal: true,
-						destroyOnClose: true,
-						after: {
-							render: function(event) {
-								$("button.btn.close").on("click", function(e){
-									$("body").css('overflow','');
-								});
-							}
+    	/* test Uuid */
+    	simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
+    	jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
+    	
+    	if(0 < jobDataArr.length){
+    		/* Call API get-simulation-job */
+    		var getSimulationJob = Liferay.Service(
+    				'/edison-simulation-portlet.simulation/get-simulation-job',
+    				{
+    					userId: Liferay.ThemeDisplay.getUserId(),
+    					appName: scienceAppData.name,
+    					appVersion: scienceAppData.version,
+    					simulationUuid: simulationUuid,
+    					jobUuid: jobUuid,
+    					jobData: JSON.stringify(jobDataArr)
+    				}, function(obj){
+    					console.log(obj);
+    					if(obj.hasSimulationInfo){
+    						openWorkbenchPopup(scienceAppId, simulationUuid, jobUuid, connectedInputPorts);
+    					} else {
+    						toastr["error"]("", "Simulation not exist!!");
+    					}
+    				}
+    		);
+    	} else {
+    		toastr["error"]("", "JobData not found!!");
+    	}
+    }
+    
+    function getInputPortsJobData(portNode, portId){
+    	var jobDataArr = new Array();
+		jobDataArr = [];
+		
+    	var inputPorts = portNode.data.inputPorts;
+    	var inputPort = inputPorts[portId];
+    	var inputPortData = inputPort.inputData_;
+    	
+    	jobDataArr.push(inputPortData);
+    	return jobDataArr;
+    }
+    
+	function getParentPortsJobData(targetEdge){
+		var jobDataArr = new Array();
+		jobDataArr = [];
+		var sourcePort = targetEdge.source;
+		var sourceNode = sourcePort.getNode();
+		var sourceNodeData = sourceNode.data;
+		var runType = sourceNodeData.scienceAppData.runType;
+		
+		findJobData : while(runType == 'Controller' || runType == 'DynamicConverter'){
+			for(var portIndex in sourceNode.getPorts()){
+				var port = sourceNode.getPorts()[portIndex];
+				if((runType == 'Controller' && port.id =='transfer') 
+						|| (runType == 'DynamicConverter' && port.id =='localfile0')){
+					
+					var targetEdges = port.getTargetEdges();
+					if(targetEdges == 'undefined' || targetEdges == null || targetEdges == ''){
+						toastr["error"]("", "JobData not found!!");
+						break findJobData;
+					} else {
+						sourcePort = targetEdges[0].source;
+						if(sourcePort == undefined){
+							break findJobData;
+						} else {
+							sourceNode = sourcePort.getNode();
+							sourceNodeData = sourceNode.data;
+							runType = sourceNodeData.scienceAppData.runType;
+							continue findJobData;
 						}
-					},
-					id: "dataTypeSearchDialog",
-					uri: portletURL.toString(),
-					title: "Workbench"
+					}
 				}
-            );
-        });
+			}
+		}
+		
+		if(runType != 'Controller' && runType != 'DynamicConverter'){
+			/* get outputData in outputPorts */
+			var outputPorts = sourceNodeData.outputPorts;
+			for(var key in outputPorts){
+				var outputPort = outputPorts[key];
+				var outputData = outputPort.outputData_;
+				jobDataArr.push(outputData);
+			}
+		}
+		return jobDataArr;
+    }
+    
+    function openWorkbenchPopup(scienceAppId, simulationUuid, jobUuid, connectedInputPorts){
+    	var getWorkbenchHtml = null;
+		window.AUI().use('liferay-portlet-url', function (A) {
+			var portletURL = window.Liferay.PortletURL.createRenderURL();
+			portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+			portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
+			portletURL.setParameter('scienceAppId', scienceAppId);
+			portletURL.setParameter('simulationUuid', simulationUuid);
+			/*portletURL.setParameter('jobUuid', "");*/
+			portletURL.setParameter('blockInputPorts', connectedInputPorts.toString());
+			portletURL.setWindowState('pop_up');
+			
+			var wWidth = $(window).width();
+			var wHeight = $(window).height();
+			$("body").css('overflow','hidden')
+			Liferay.Util.openWindow(
+					{
+						dialog: {
+							width:wWidth,
+							height:wHeight,
+							cache: false,
+							draggable: false,
+							resizable: false,
+							modal: true,
+							destroyOnClose: true,
+							after: {
+								render: function(event) {
+									$("button.btn.close").on("click", function(e){
+										$("body").css('overflow','');
+									});
+								}
+							}
+						},
+						id: "dataTypeSearchDialog",
+						uri: portletURL.toString(),
+						title: "Workbench"
+					}
+			);
+		});
     }
 
     return {

@@ -361,6 +361,33 @@ public class SimulationLocalServiceUtil {
 			simulationTitle);
 	}
 
+	/**
+	* New Simulation With SimulationJob
+	*
+	* @param user                - 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
+	* @param groupId             - Portal GroupId
+	* @param scienceAppName
+	* @param scienceAppVersion
+	* @param simulationUuid
+	* @param jobUuid
+	* @param jobData
+	* @return
+	* @throws SystemException
+	* @throws PortalException
+	*/
+	public static java.util.Map<java.lang.String, java.lang.Object> createSimulationWithJob(
+		com.liferay.portal.model.User user,
+		com.liferay.portal.model.Group group, java.lang.String appName,
+		java.lang.String appVersion, java.lang.String simulationUuid,
+		java.lang.String jobUuid, java.lang.String jobData,
+		boolean hasSimulation)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .createSimulationWithJob(user, group, appName, appVersion,
+			simulationUuid, jobUuid, jobData, hasSimulation);
+	}
+
 	public static org.kisti.edison.model.IcebreakerVcToken getOrCreateToken(
 		long thisGroupId, com.liferay.portal.model.User user)
 		throws com.liferay.portal.kernel.exception.PortalException,

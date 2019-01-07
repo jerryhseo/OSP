@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.service.BaseService;
@@ -68,4 +69,11 @@ public interface SimulationService extends BaseService, InvokableService {
 	public com.liferay.portal.kernel.json.JSONObject addSimulationWithJob(
 		long userId, java.lang.String appName, java.lang.String appVersion,
 		java.lang.String simulationTitle, java.lang.String jobData);
+
+	@com.liferay.portal.kernel.jsonwebservice.JSONWebService(method = "POST", value = "get-simulation-job")
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.kernel.json.JSONObject getSimulationJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String jobData);
 }
