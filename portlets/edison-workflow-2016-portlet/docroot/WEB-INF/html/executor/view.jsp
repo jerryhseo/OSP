@@ -74,6 +74,10 @@ var contextPath = '${contextPath}';
   .nav li.<portlet:namespace/>divider-vertical{
     display: none;
   }
+  
+  .group-delete{
+  	display: none !important;
+  }
 </style>
 <div class="container-fluid">
   <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">

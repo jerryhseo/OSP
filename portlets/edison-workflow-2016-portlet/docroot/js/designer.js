@@ -1,4 +1,4 @@
-var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDeginer) {
+var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDesigner) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -116,7 +116,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     dblclick: function(obj) {
                     	console.log(obj);
-                    	if(isDeginer){
+                    	if(isDesigner){
                     		openWfAppDataSettingHandler(obj.node);
                     	}
                     }
@@ -144,7 +144,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                    	if(isDeginer && uiPanelInstance) {
+                    	if(isDesigner && uiPanelInstance) {
                     		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
                     	}
                     }
@@ -251,7 +251,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     });
     
-    
+
     jsPlumb.on(canvasElement, "tap", ".group-delete", function (e) {
     	var info = wfWorkflowJsPlumbInstance.getObjectInfo(this);
     	_confirm(var_remove_app_confirm, function() {
@@ -889,7 +889,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
             
             /* 2019.01.03 _ Add Context menu('Open Workbench') in execute page */
-            if(!isDeginer && runType != WF_APP_TYPES.CONTROLLER.NAME
+            if(!isDesigner && runType != WF_APP_TYPES.CONTROLLER.NAME
             		 && runType != WF_APP_TYPES.FILE_COMPONENT.NAME
             		 && runType != WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
             	items["items"]["open-workbench"] = {
