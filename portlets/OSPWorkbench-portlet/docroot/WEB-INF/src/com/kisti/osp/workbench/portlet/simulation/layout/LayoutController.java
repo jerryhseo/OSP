@@ -106,7 +106,8 @@ public class LayoutController {
 		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
 		String blockInputPorts = ParamUtil.getString(request, "blockInputPorts", "");
-		
+		/*From WorkFlow Parameter*/
+		String nodeId = ParamUtil.getString(request, "nodeId", "");
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
@@ -122,6 +123,7 @@ public class LayoutController {
 			model.addAttribute("blockInputPorts", blockInputPorts);
 			model.addAttribute("simulationUuid", simulationUuid);
 			model.addAttribute("currentUserName", themeDisplay.getUser().getScreenName());
+			model.addAttribute("nodeId", nodeId);
 			
 			
 			IBAgent agent = new IBAgent(themeDisplay.getScopeGroup(), themeDisplay.getUser());
