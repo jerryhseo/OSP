@@ -126,11 +126,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         groups:{
         	"workflowGroup":{
         		template:"workflowGroup-templete",
+        		autoSize:true,
+        		droppable :true,
         		revert : false,
         		orphan:true,
         		constrain:false,
         		layout:{
-                    type:"Circular"
+                    type:"Absolute"
                 }
         	}
         },
@@ -219,6 +221,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     renderer.bind("modeChanged", function(mode) {
         jsPlumb.removeClass(controls.querySelectorAll("[mode]"), "selected-mode");
         jsPlumb.addClass(controls.querySelectorAll("[mode='" + mode + "']"), "selected-mode");
+    });
+    
+    renderer.bind("group:addMember", function(params) {
+    	console.log(params);
+//    	alert(params.group);
+    	renderer.setZoom(2.9, false);
+    	wfWorkflowJsPlumbInstance.clearSelection();
+//    	wfWorkflowJsPlumbInstance.sizeGroupToFit(params.Group);
+        renderer.zoomToFit();
     });
 
     /* pan mode/select mode */
