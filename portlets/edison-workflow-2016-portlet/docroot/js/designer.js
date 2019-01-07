@@ -224,12 +224,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     });
     
     renderer.bind("group:addMember", function(params) {
-    	console.log(params);
-//    	alert(params.group);
+    	if(params.group!=true){
+    		wfWorkflowJsPlumbInstance.clearSelection();
+    		renderer.sizeGroupToFit(params.group);
+    	}
+    	
     	renderer.setZoom(2.9, false);
-    	wfWorkflowJsPlumbInstance.clearSelection();
-//    	wfWorkflowJsPlumbInstance.sizeGroupToFit(params.Group);
-        renderer.zoomToFit();
+    	renderer.zoomToFit();
     });
 
     /* pan mode/select mode */
