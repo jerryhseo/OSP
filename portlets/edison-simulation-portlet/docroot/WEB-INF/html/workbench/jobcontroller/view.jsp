@@ -128,7 +128,7 @@ var <portlet:namespace/>LI_EVENT = {
 		"event" : OSP.Event.OSP_SAVE_SIMULATION
 	},
 	"wf-copy":{
-		"event" : OSP.Event.OSP_SAVE_SIMULATION
+		"event" : OSP.Event.OSP_REQUEST_COPY_JOB
 	},
 	"copy":{
 		"event" : OSP.Event.OSP_REQUEST_SIMULATION_MODAL
@@ -137,7 +137,7 @@ var <portlet:namespace/>LI_EVENT = {
 		"event" : OSP.Event.OSP_REQUEST_DELETE_JOB_VIEW
 	},
 	"select":{
-		"event" : OSP.Event.OSP_REQUEST_DELETE_JOB_VIEW
+		"event" : OSP.Event.OSP_REQUEST_JOB_KEY
 	},
 	"submit":{
 		"event" : OSP.Event.OSP_SUBMIT_JOB
@@ -159,7 +159,7 @@ var <portlet:namespace/>LI_EVENT = {
 };
 
 
-var <portlet:namespace/>wfLiObj 	 = {"simulation":false,"edit":false,"new":false,"wf-copy":true,"copy":false,"delete":false,"select":true,"data":false};
+var <portlet:namespace/>wfLiObj 	 = {"simulation":false,"edit":false,"new":false,"wf-copy":true,"copy":false,"delete":false,"data":false};
 var <portlet:namespace/>defaultLiObj = {"simulation":true,"edit":true,"new":true,"save":true,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":true,"cancel":false,"log":false,"download":false,"data":false};
 var <portlet:namespace/>submitLiObj  = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":false,"delete":false,"select":false,"submit":false,"cancel":true,"log":true,"download":false,"data":false};
 var <portlet:namespace/>cancelLiObj  = {"simulation":true,"edit":true,"new":true,"save":false,"wf-copy":false,"copy":true,"delete":true,"select":false,"submit":false,"cancel":false,"log":true,"download":true,"data":false};
@@ -255,6 +255,17 @@ Liferay.on(OSP.Event.OSP_RESPONSE_SAVE_SIMULATION_RESULT, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		console.log('OSP_RESPONSE_JOB_KEY: ['+e.targetPortlet+', '+new Date()+']');
+		<portlet:namespace/>jobSelectResult(e.data.wfNodeId, e.data.simulationUuid,e.data.jobUuid)
+	}
+});
+
+
+
+
 /***********************************************************************
 * Portlet AJAX Function
 ***********************************************************************/
@@ -306,6 +317,10 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 		for(var key in <portlet:namespace/>wfLiObj){
 			liObj[key]=<portlet:namespace/>wfLiObj[key];
 		}
+		
+		if(status=="SUCCESS"){
+			liObj["select"] = true;
+		}
 	}
 	
 	if(!isEdit){
@@ -332,6 +347,14 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 			element.css("display","none");
 		}
 	}
+	
+	if(workBenchType==='SIMULATION_WITH_WORKFLOW'){
+		$("li#<portlet:namespace/>job-li-divider").css("display","none");
+	}
+}
+
+function <portlet:namespace/>jobSelect(){
+	
 }
 
 function <portlet:namespace/>liEventFire(eventKey){
@@ -346,14 +369,20 @@ function <portlet:namespace/>liEventFire(eventKey){
 			content: '<p>'+object.title+'</p>',
 			buttons: {
 				confirm: function () {
-					var myId = '<%=portletDisplay.getId()%>';
-					var eventData = {
-							portletId : myId,
-							targetPortlet : <portlet:namespace/>connector
-							
-					};
-					Liferay.fire(object.event, eventData);
-					
+					if(object.script){
+						var fn = window[object.script];
+						if(typeof fn == 'function') {
+							fn();
+						}
+					}else{
+						var myId = '<%=portletDisplay.getId()%>';
+						var eventData = {
+								portletId : myId,
+								targetPortlet : <portlet:namespace/>connector
+								
+						};
+						Liferay.fire(object.event, eventData);
+					}
 				},
 				cancel: function () {
 					
@@ -428,6 +457,11 @@ function sdrcommon_collectionPopup(result){
 		$.alert(Liferay.Language.get("edison-simulation-monitoring-export-job-fail-msg"));
 		console.log(msg);
 	});
+}
+
+/*Workflow Return Value*/
+function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid){
+	Liferay.Util.getOpener().setSimAndJobFromWorkbench(wfNodeId,simulationUuid,jobUuid);
 }
 </script>
 

@@ -558,10 +558,6 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_RESULT_VIEW,function( e ){
 	}
 });
 
-
-
-
-
 Liferay.on(OSP.Event.OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REQUEST_FLOW_LAYOUT_CODE_UPDATE: ['+e.portletId+', '+new Date()+']');
@@ -633,7 +629,8 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 		data : {
 			simulationUuid : simulationUuid,
 			jobUuid : jobUuid,
-			jobSeqNo : jobSeqNo
+			jobSeqNo : jobSeqNo,
+			wfNodeId : '${nodeId}'
 		}
 	};
 	
@@ -690,6 +687,23 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_CONTROLL_RESET,function( e ){
 	
 	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_CONTROLL_RESET, eventData);
 });
+
+Liferay.on(OSP.Event.OSP_REQUEST_COPY_JOB,function( e ){
+	if( <portlet:namespace/>workbench.id() !== e.targetPortlet )return;
+	console.log('OSP_REQUEST_COPY_JOB: ['+e.portletId+', '+new Date()+']');
+	
+	var simulation = <portlet:namespace/>workbench.workingSimulation();
+	var simulationUuid = simulation.uuid();
+	
+	var eventData = {
+		targetPortlet:"BROADCAST",
+		data : {
+			simulationUuid : simulationUuid
+		}
+	};
+	Liferay.fire(OSP.Event.OSP_RESPONSE_COPY_JOB, eventData);
+});
+
 
 /***********************************************************************
  * Global Function section

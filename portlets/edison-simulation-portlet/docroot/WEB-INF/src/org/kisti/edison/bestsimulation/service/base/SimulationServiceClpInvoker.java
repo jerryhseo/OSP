@@ -38,6 +38,13 @@ public class SimulationServiceClpInvoker {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
+
+		_methodName75 = "getSimulationJob";
+
+		_methodParameterTypes75 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -61,6 +68,14 @@ public class SimulationServiceClpInvoker {
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
 		}
 
+		if (_methodName75.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
+			return SimulationServiceUtil.getSimulationJob(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				(java.lang.String)arguments[5]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -70,4 +85,6 @@ public class SimulationServiceClpInvoker {
 	private String[] _methodParameterTypes69;
 	private String _methodName74;
 	private String[] _methodParameterTypes74;
+	private String _methodName75;
+	private String[] _methodParameterTypes75;
 }

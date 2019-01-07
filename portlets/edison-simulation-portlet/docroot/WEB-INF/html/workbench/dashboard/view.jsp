@@ -356,6 +356,15 @@ Liferay.on(OSP.Event.OSP_PORT_STATUS_CHANGED, function( e ){
 	}
 });
 
+Liferay.on(OSP.Event.OSP_RESPONSE_COPY_JOB, function( e ){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
+		var simulationUuid = e.data.simulationUuid;
+		<portlet:namespace/>copyJobAndAddJob(simulationUuid)
+	}
+});
+
+
 /***********************************************************************
  * Portlet AJAX Function
  ***********************************************************************/
@@ -1482,7 +1491,6 @@ function <portlet:namespace/>openDataSimulation(modalName){
 		Liferay.fire(OSP.Event.OSP_REQUEST_COLLECTION_VIEW, eventData);
 	}
 }
-
 
 function <portlet:namespace/>copyJobAndAddJob(simulationUuid) {
 	var workbench = window[<portlet:namespace/>parentNamespace+"workbench"];

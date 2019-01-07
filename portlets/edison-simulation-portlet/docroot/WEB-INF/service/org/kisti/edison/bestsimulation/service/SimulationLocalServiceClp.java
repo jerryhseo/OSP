@@ -169,262 +169,271 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName27 = "getOrCreateToken";
+		_methodName27 = "createSimulationWithJob";
 
 		_methodParameterTypes27 = new String[] {
+				"com.liferay.portal.model.User",
+				"com.liferay.portal.model.Group", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "boolean"
+			};
+
+		_methodName28 = "getOrCreateToken";
+
+		_methodParameterTypes28 = new String[] {
 				"long", "com.liferay.portal.model.User"
 			};
 
-		_methodName28 = "executeJob";
+		_methodName29 = "executeJob";
 
-		_methodParameterTypes28 = new String[] {
+		_methodParameterTypes29 = new String[] {
 				"java.lang.String", "java.util.Map"
 			};
 
-		_methodName29 = "statusJob";
+		_methodName30 = "statusJob";
 
-		_methodParameterTypes29 = new String[] {
+		_methodParameterTypes30 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName30 = "updateSimulation";
+		_methodName31 = "updateSimulation";
 
-		_methodParameterTypes30 = new String[] {
+		_methodParameterTypes31 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName31 = "uploadFile";
+		_methodName32 = "uploadFile";
 
-		_methodParameterTypes31 = new String[] {
+		_methodParameterTypes32 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.io.File"
 			};
 
-		_methodName32 = "deleteFile";
+		_methodName33 = "deleteFile";
 
-		_methodParameterTypes32 = new String[] {
+		_methodParameterTypes33 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName33 = "getServerFileList";
+		_methodName34 = "getServerFileList";
 
-		_methodParameterTypes33 = new String[] {
+		_methodParameterTypes34 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName34 = "downloadFileJob";
-
-		_methodParameterTypes34 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName35 = "errorView";
+		_methodName35 = "downloadFileJob";
 
 		_methodParameterTypes35 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName36 = "retrieveFileId";
+		_methodName36 = "errorView";
 
 		_methodParameterTypes36 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName37 = "retrievePostProcessor";
+		_methodName37 = "retrieveFileId";
 
 		_methodParameterTypes37 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
 			};
 
-		_methodName38 = "retrieveRemoteDir";
+		_methodName38 = "retrievePostProcessor";
 
 		_methodParameterTypes38 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
-			};
-
-		_methodName39 = "retrieveAllPostProcessor";
-
-		_methodParameterTypes39 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName40 = "retrieveAllRemoteDir";
+		_methodName39 = "retrieveRemoteDir";
 
-		_methodParameterTypes40 = new String[] {
+		_methodParameterTypes39 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName41 = "cancleJob";
+		_methodName40 = "retrieveAllPostProcessor";
+
+		_methodParameterTypes40 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName41 = "retrieveAllRemoteDir";
 
 		_methodParameterTypes41 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName42 = "retrieveCluster";
+		_methodName42 = "cancleJob";
 
 		_methodParameterTypes42 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String"
+			};
+
+		_methodName43 = "retrieveCluster";
+
+		_methodParameterTypes43 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName43 = "getResultRead";
-
-		_methodParameterTypes43 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName44 = "getFileRead";
+		_methodName44 = "getResultRead";
 
 		_methodParameterTypes44 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName45 = "getResultFile";
+		_methodName45 = "getFileRead";
 
 		_methodParameterTypes45 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName46 = "getResultFile";
+
+		_methodParameterTypes46 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName46 = "getCurrentAssignedCoresByUser";
-
-		_methodParameterTypes46 = new String[] {
-				"java.lang.String", "java.lang.String"
-			};
-
-		_methodName47 = "getUserRepositorySize";
+		_methodName47 = "getCurrentAssignedCoresByUser";
 
 		_methodParameterTypes47 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName48 = "deleteSimulationJob";
+		_methodName48 = "getUserRepositorySize";
 
 		_methodParameterTypes48 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
+
+		_methodName49 = "deleteSimulationJob";
+
+		_methodParameterTypes49 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName49 = "findByUserIdAndGroupId";
+		_methodName50 = "findByUserIdAndGroupId";
 
-		_methodParameterTypes49 = new String[] { "long", "long" };
+		_methodParameterTypes50 = new String[] { "long", "long" };
 
-		_methodName50 = "findByGroupId";
+		_methodName51 = "findByGroupId";
 
-		_methodParameterTypes50 = new String[] { "long", "int", "int" };
+		_methodParameterTypes51 = new String[] { "long", "int", "int" };
 
-		_methodName51 = "findByUserIdAndGroupId";
+		_methodName52 = "findByUserIdAndGroupId";
 
-		_methodParameterTypes51 = new String[] { "long", "long", "int", "int" };
-
-		_methodName52 = "countByUserIdAndGroupId";
-
-		_methodParameterTypes52 = new String[] { "long" };
+		_methodParameterTypes52 = new String[] { "long", "long", "int", "int" };
 
 		_methodName53 = "countByUserIdAndGroupId";
 
-		_methodParameterTypes53 = new String[] { "long", "long" };
+		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "findByUserIdAndTitle";
+		_methodName54 = "countByUserIdAndGroupId";
 
-		_methodParameterTypes54 = new String[] {
-				"long", "long", "java.lang.String", "int", "int"
-			};
+		_methodParameterTypes54 = new String[] { "long", "long" };
 
-		_methodName55 = "countByUserIdAndTitle";
+		_methodName55 = "findByUserIdAndTitle";
 
 		_methodParameterTypes55 = new String[] {
-				"long", "long", "java.lang.String"
-			};
-
-		_methodName56 = "findByTitle";
-
-		_methodParameterTypes56 = new String[] {
-				"long", "java.lang.String", "int", "int"
-			};
-
-		_methodName57 = "countByTitle";
-
-		_methodParameterTypes57 = new String[] { "long", "java.lang.String" };
-
-		_methodName58 = "findByUserIdAndGroupIdAndTitle";
-
-		_methodParameterTypes58 = new String[] {
 				"long", "long", "java.lang.String", "int", "int"
 			};
 
-		_methodName59 = "countByUserIdAndGroupIdAndTitle";
+		_methodName56 = "countByUserIdAndTitle";
 
-		_methodParameterTypes59 = new String[] {
+		_methodParameterTypes56 = new String[] {
 				"long", "long", "java.lang.String"
 			};
 
-		_methodName60 = "findByGroupIdAndTitle";
+		_methodName57 = "findByTitle";
 
-		_methodParameterTypes60 = new String[] {
+		_methodParameterTypes57 = new String[] {
 				"long", "java.lang.String", "int", "int"
 			};
 
-		_methodName61 = "countByGroupIdAndTitle";
+		_methodName58 = "countByTitle";
 
-		_methodParameterTypes61 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes58 = new String[] { "long", "java.lang.String" };
 
-		_methodName62 = "addSimulation";
+		_methodName59 = "findByUserIdAndGroupIdAndTitle";
 
-		_methodParameterTypes62 = new String[] {
+		_methodParameterTypes59 = new String[] {
+				"long", "long", "java.lang.String", "int", "int"
+			};
+
+		_methodName60 = "countByUserIdAndGroupIdAndTitle";
+
+		_methodParameterTypes60 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName61 = "findByGroupIdAndTitle";
+
+		_methodParameterTypes61 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
+
+		_methodName62 = "countByGroupIdAndTitle";
+
+		_methodParameterTypes62 = new String[] { "long", "java.lang.String" };
+
+		_methodName63 = "addSimulation";
+
+		_methodParameterTypes63 = new String[] {
 				"java.lang.String", "java.lang.String", "long",
 				"java.lang.String", "java.lang.String", "long", "long",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName63 = "deleteSimulation";
+		_methodName64 = "deleteSimulation";
 
-		_methodParameterTypes63 = new String[] { "java.lang.String" };
-
-		_methodName64 = "addJob";
-
-		_methodParameterTypes64 = new String[] {
-				"java.lang.String", "com.liferay.portal.service.ServiceContext"
-			};
+		_methodParameterTypes64 = new String[] { "java.lang.String" };
 
 		_methodName65 = "addJob";
 
 		_methodParameterTypes65 = new String[] {
+				"java.lang.String", "com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName66 = "addJob";
+
+		_methodParameterTypes66 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName66 = "deleteJob";
+		_methodName67 = "deleteJob";
 
-		_methodParameterTypes66 = new String[] {
+		_methodParameterTypes67 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName67 = "deleteAllJobs";
-
-		_methodParameterTypes67 = new String[] { "java.lang.String" };
-
-		_methodName68 = "getJobData";
+		_methodName68 = "deleteAllJobs";
 
 		_methodParameterTypes68 = new String[] { "java.lang.String" };
 
-		_methodName69 = "getSimulationsByAppId";
+		_methodName69 = "getJobData";
 
-		_methodParameterTypes69 = new String[] { "long" };
+		_methodParameterTypes69 = new String[] { "java.lang.String" };
 
 		_methodName70 = "getSimulationsByAppId";
 
-		_methodParameterTypes70 = new String[] { "long", "int", "int" };
+		_methodParameterTypes70 = new String[] { "long" };
 
-		_methodName71 = "countSimulationsByAppId";
+		_methodName71 = "getSimulationsByAppId";
 
-		_methodParameterTypes71 = new String[] { "long" };
+		_methodParameterTypes71 = new String[] { "long", "int", "int" };
+
+		_methodName72 = "countSimulationsByAppId";
+
+		_methodParameterTypes72 = new String[] { "long" };
 	}
 
 	@Override
@@ -1313,6 +1322,61 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	}
 
 	@Override
+	public java.util.Map<java.lang.String, java.lang.Object> createSimulationWithJob(
+		com.liferay.portal.model.User user,
+		com.liferay.portal.model.Group group, java.lang.String appName,
+		java.lang.String appVersion, java.lang.String simulationUuid,
+		java.lang.String jobUuid, java.lang.String jobData,
+		boolean hasSimulation)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
+					new Object[] {
+						ClpSerializer.translateInput(user),
+						
+					ClpSerializer.translateInput(group),
+						
+					ClpSerializer.translateInput(appName),
+						
+					ClpSerializer.translateInput(appVersion),
+						
+					ClpSerializer.translateInput(simulationUuid),
+						
+					ClpSerializer.translateInput(jobUuid),
+						
+					ClpSerializer.translateInput(jobData),
+						
+					hasSimulation
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public org.kisti.edison.model.IcebreakerVcToken getOrCreateToken(
 		long thisGroupId, com.liferay.portal.model.User user)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1322,8 +1386,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
 					new Object[] { thisGroupId, ClpSerializer.translateInput(
 							user) });
 		}
@@ -1371,8 +1435,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1418,8 +1482,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName29,
-					_methodParameterTypes29,
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1461,8 +1525,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30,
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1507,8 +1571,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31,
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32,
 					new Object[] {
 						ClpSerializer.translateInput(cluster),
 						
@@ -1551,8 +1615,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		java.lang.String vcToken, java.lang.String fileId)
 		throws java.io.IOException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName32,
-				_methodParameterTypes32,
+			_invokableLocalService.invokeMethod(_methodName33,
+				_methodParameterTypes33,
 				new Object[] {
 					ClpSerializer.translateInput(icebreakerUrl),
 					
@@ -1586,8 +1650,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33,
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1628,8 +1692,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34,
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1668,8 +1732,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35,
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1704,8 +1768,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36,
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1742,8 +1806,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName37,
-					_methodParameterTypes37,
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1778,8 +1842,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName38,
-					_methodParameterTypes38,
+			returnObj = _invokableLocalService.invokeMethod(_methodName39,
+					_methodParameterTypes39,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1818,8 +1882,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName39,
-					_methodParameterTypes39,
+			returnObj = _invokableLocalService.invokeMethod(_methodName40,
+					_methodParameterTypes40,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1860,8 +1924,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName40,
-					_methodParameterTypes40,
+			returnObj = _invokableLocalService.invokeMethod(_methodName41,
+					_methodParameterTypes41,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1904,8 +1968,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName41,
-					_methodParameterTypes41,
+			returnObj = _invokableLocalService.invokeMethod(_methodName42,
+					_methodParameterTypes42,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1946,8 +2010,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName42,
-					_methodParameterTypes42,
+			returnObj = _invokableLocalService.invokeMethod(_methodName43,
+					_methodParameterTypes43,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -1980,8 +2044,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName43,
-					_methodParameterTypes43,
+			returnObj = _invokableLocalService.invokeMethod(_methodName44,
+					_methodParameterTypes44,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2016,8 +2080,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName44,
-					_methodParameterTypes44,
+			returnObj = _invokableLocalService.invokeMethod(_methodName45,
+					_methodParameterTypes45,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2052,8 +2116,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName45,
-					_methodParameterTypes45,
+			returnObj = _invokableLocalService.invokeMethod(_methodName46,
+					_methodParameterTypes46,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2090,8 +2154,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName46,
-					_methodParameterTypes46,
+			returnObj = _invokableLocalService.invokeMethod(_methodName47,
+					_methodParameterTypes47,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2124,8 +2188,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName47,
-					_methodParameterTypes47,
+			returnObj = _invokableLocalService.invokeMethod(_methodName48,
+					_methodParameterTypes48,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2158,8 +2222,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName48,
-					_methodParameterTypes48,
+			returnObj = _invokableLocalService.invokeMethod(_methodName49,
+					_methodParameterTypes49,
 					new Object[] {
 						ClpSerializer.translateInput(icebreakerUrl),
 						
@@ -2196,8 +2260,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName49,
-					_methodParameterTypes49, new Object[] { groupId, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName50,
+					_methodParameterTypes50, new Object[] { groupId, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2225,8 +2289,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName50,
-					_methodParameterTypes50,
+			returnObj = _invokableLocalService.invokeMethod(_methodName51,
+					_methodParameterTypes51,
 					new Object[] { groupId, start, end });
 		}
 		catch (Throwable t) {
@@ -2255,8 +2319,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName51,
-					_methodParameterTypes51,
+			returnObj = _invokableLocalService.invokeMethod(_methodName52,
+					_methodParameterTypes52,
 					new Object[] { groupId, userId, start, end });
 		}
 		catch (Throwable t) {
@@ -2284,8 +2348,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName52,
-					_methodParameterTypes52, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName53,
+					_methodParameterTypes53, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2312,8 +2376,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName53,
-					_methodParameterTypes53, new Object[] { groupId, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName54,
+					_methodParameterTypes54, new Object[] { groupId, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2341,8 +2405,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName54,
-					_methodParameterTypes54,
+			returnObj = _invokableLocalService.invokeMethod(_methodName55,
+					_methodParameterTypes55,
 					new Object[] {
 						groupId,
 						
@@ -2381,8 +2445,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName55,
-					_methodParameterTypes55,
+			returnObj = _invokableLocalService.invokeMethod(_methodName56,
+					_methodParameterTypes56,
 					new Object[] {
 						groupId,
 						
@@ -2417,8 +2481,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName56,
-					_methodParameterTypes56,
+			returnObj = _invokableLocalService.invokeMethod(_methodName57,
+					_methodParameterTypes57,
 					new Object[] {
 						groupId,
 						
@@ -2454,8 +2518,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName57,
-					_methodParameterTypes57,
+			returnObj = _invokableLocalService.invokeMethod(_methodName58,
+					_methodParameterTypes58,
 					new Object[] {
 						groupId,
 						
@@ -2488,8 +2552,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName58,
-					_methodParameterTypes58,
+			returnObj = _invokableLocalService.invokeMethod(_methodName59,
+					_methodParameterTypes59,
 					new Object[] {
 						groupId,
 						
@@ -2528,8 +2592,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName59,
-					_methodParameterTypes59,
+			returnObj = _invokableLocalService.invokeMethod(_methodName60,
+					_methodParameterTypes60,
 					new Object[] {
 						groupId,
 						
@@ -2564,8 +2628,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName60,
-					_methodParameterTypes60,
+			returnObj = _invokableLocalService.invokeMethod(_methodName61,
+					_methodParameterTypes61,
 					new Object[] {
 						groupId,
 						
@@ -2602,8 +2666,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName61,
-					_methodParameterTypes61,
+			returnObj = _invokableLocalService.invokeMethod(_methodName62,
+					_methodParameterTypes62,
 					new Object[] {
 						groupId,
 						
@@ -2639,8 +2703,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName62,
-					_methodParameterTypes62,
+			returnObj = _invokableLocalService.invokeMethod(_methodName63,
+					_methodParameterTypes63,
 					new Object[] {
 						ClpSerializer.translateInput(uuid),
 						
@@ -2683,8 +2747,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName63,
-				_methodParameterTypes63,
+			_invokableLocalService.invokeMethod(_methodName64,
+				_methodParameterTypes64,
 				new Object[] { ClpSerializer.translateInput(simulationUuid) });
 		}
 		catch (Throwable t) {
@@ -2716,8 +2780,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName64,
-					_methodParameterTypes64,
+			returnObj = _invokableLocalService.invokeMethod(_methodName65,
+					_methodParameterTypes65,
 					new Object[] {
 						ClpSerializer.translateInput(simulationUUID),
 						
@@ -2752,8 +2816,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName65,
-					_methodParameterTypes65,
+			returnObj = _invokableLocalService.invokeMethod(_methodName66,
+					_methodParameterTypes66,
 					new Object[] {
 						ClpSerializer.translateInput(simulationUUID),
 						
@@ -2788,8 +2852,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName66,
-				_methodParameterTypes66,
+			_invokableLocalService.invokeMethod(_methodName67,
+				_methodParameterTypes67,
 				new Object[] {
 					ClpSerializer.translateInput(simulationUuid),
 					
@@ -2817,8 +2881,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	public void deleteAllJobs(java.lang.String simulationUuid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName67,
-				_methodParameterTypes67,
+			_invokableLocalService.invokeMethod(_methodName68,
+				_methodParameterTypes68,
 				new Object[] { ClpSerializer.translateInput(simulationUuid) });
 		}
 		catch (Throwable t) {
@@ -2845,8 +2909,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName68,
-					_methodParameterTypes68,
+			returnObj = _invokableLocalService.invokeMethod(_methodName69,
+					_methodParameterTypes69,
 					new Object[] { ClpSerializer.translateInput(jobUuid) });
 		}
 		catch (Throwable t) {
@@ -2879,8 +2943,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName69,
-					_methodParameterTypes69, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName70,
+					_methodParameterTypes70, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2908,8 +2972,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName70,
-					_methodParameterTypes70,
+			returnObj = _invokableLocalService.invokeMethod(_methodName71,
+					_methodParameterTypes71,
 					new Object[] { scienceAppId, start, end });
 		}
 		catch (Throwable t) {
@@ -2937,8 +3001,8 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName71,
-					_methodParameterTypes71, new Object[] { scienceAppId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName72,
+					_methodParameterTypes72, new Object[] { scienceAppId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -3102,4 +3166,6 @@ public class SimulationLocalServiceClp implements SimulationLocalService {
 	private String[] _methodParameterTypes70;
 	private String _methodName71;
 	private String[] _methodParameterTypes71;
+	private String _methodName72;
+	private String[] _methodParameterTypes72;
 }

@@ -1,4 +1,4 @@
-var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDeginer) {
+var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, isDesigner) {
     /*jshint -W018 */
     /*jshint -W069 */
     /*jshint -W014 */
@@ -42,29 +42,35 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     return false;
                 }
 
-                if (source.getType() === 'all' || target.getType() === 'all') {
-                	if(source.getType() == target.getType()){
+                if (source.getType() === 'all' && target.getType() === 'all') {
+                	if (source.getNode().data.scienceAppData.runType === "FileComponent") {
                 		return false;
-                	} else if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                    	var isEqualsPortType = false;
-                    	var sourceData = source.getNode().data,
-                		targetData = target.getNode().data;
-                    	var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
-                    	if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-                    		sourceData.outputPorts[source.id].dataType_ = {};
-                    		sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
-                    		isEqualsPortType = true;
-                    	} else {
-                    		isEqualsPortType = checkPortTypeForConnection(source, target, true);
-                    	}
-                    	
-                    	return isEqualsPortType;
-                    }
-                    return true;
-                } else if (source.getType() === 'inputPorts') {
-                    return false;
-                } else {
-                	return checkPortTypeForConnection(source, target, false);
+                	}else{
+                		return true;
+                	}
+                }else{
+                	if (source.getType() === 'all' || target.getType() === 'all') {
+                		if (source.getNode().data.scienceAppData.runType === "FileComponent") {
+                			var isEqualsPortType = false;
+                			var sourceData = source.getNode().data,
+                			targetData = target.getNode().data;
+                			var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
+                			if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
+                				sourceData.outputPorts[source.id].dataType_ = {};
+                				sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
+                				isEqualsPortType = true;
+                			} else {
+                				isEqualsPortType = checkPortTypeForConnection(source, target, true);
+                			}
+                			
+                			return isEqualsPortType;
+                		}
+                		return true;
+                	} else if (source.getType() === 'inputPorts') {
+                		return false;
+                	} else {
+                		return checkPortTypeForConnection(source, target, false);
+                	}
                 }
             }
         },
@@ -110,12 +116,25 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     dblclick: function(obj) {
                     	console.log(obj);
-                    	if(isDeginer){
-                    		openWfAppDataSettingHandler(obj);
+                    	if(isDesigner){
+                    		openWfAppDataSettingHandler(obj.node);
                     	}
                     }
                 }
             }
+        },
+        groups:{
+        	"workflowGroup":{
+        		template:"workflowGroup-templete",
+        		autoSize:true,
+        		droppable :true,
+        		revert : false,
+        		orphan:true,
+        		constrain:false,
+        		layout:{
+                    type:"Absolute"
+                }
+        	}
         },
         ports: {
             "inputPorts": {
@@ -125,7 +144,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         var portId = obj.portId;
                         var portType = obj.portType;
                         var nodeData = obj.node.data;
-                    	if(isDeginer && uiPanelInstance) {
+                    	if(isDesigner && uiPanelInstance) {
                     		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
                     	}
                     }
@@ -134,9 +153,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
     
-    function openWfAppDataSettingHandler(obj){
-    	var wfId = obj.node.id;
-        var data = obj.node.data;
+    function openWfAppDataSettingHandler(node){
+    	var wfId = node.id;
+        var data = node.data;
         var runType = data.scienceAppData.runType;
         if(uiPanelInstance) {
         	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
@@ -158,6 +177,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         events: {
             canvasClick: function (e) {
             	wfWorkflowJsPlumbInstance.clearSelection();
+            },
+            groupAdded:function(group) {
+                console.log(arguments)
             }
         },
         miniview: {
@@ -200,6 +222,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         jsPlumb.removeClass(controls.querySelectorAll("[mode]"), "selected-mode");
         jsPlumb.addClass(controls.querySelectorAll("[mode='" + mode + "']"), "selected-mode");
     });
+    
+    renderer.bind("group:addMember", function(params) {
+    	if(params.group!=true){
+    		wfWorkflowJsPlumbInstance.clearSelection();
+    		renderer.sizeGroupToFit(params.group);
+    	}
+    	
+    	renderer.setZoom(2.9, false);
+    	renderer.zoomToFit();
+    });
 
     /* pan mode/select mode */
     jsPlumb.on(controls, "tap", "[mode]", function() {
@@ -217,6 +249,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             zoomLevel -= 0.25;
             renderer.setZoom(zoomLevel, true);
         }
+    });
+    
+
+    jsPlumb.on(canvasElement, "tap", ".group-delete", function (e) {
+    	var info = wfWorkflowJsPlumbInstance.getObjectInfo(this);
+    	_confirm(var_remove_app_confirm, function() {
+    		wfWorkflowJsPlumbInstance.removeGroup(info.obj, true);
+    	});
     });
 
     var outputPortPoint = {
@@ -360,7 +400,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         if (data["appType"] && data["appType"] == WF_APP_TYPES.APP.NAME) {
             drawScienceAppDiv(pageX, pageY, data);
         } else {
-            drawWorkFlowAppDiv(pageX, pageY, data);
+        	if(data["appType"] == WF_APP_TYPES.GROUP.NAME){
+        		drawGroupDiv(pageX, pageY, data);
+        	}else{
+        		drawWorkFlowAppDiv(pageX, pageY, data);
+        	}
+            
         }
     }
 
@@ -476,6 +521,19 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 null);
     }
 
+    function drawGroupDiv(pageX, pageY, data, savedId){
+    	var wfId = savedId ? savedId : getGUID();
+    	currentJsPlumbInstance.addGroup({
+            id: wfId,
+            type:"workflowGroup", 
+            left: pageX,
+            top: pageY,
+            title:"Group "+ (currentJsPlumbInstance.getGroupCount() + 1)
+        });
+    	
+    	renderer.zoomToFit();
+        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+    }
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
@@ -707,12 +765,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
+            
             if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Converter Script",
                     icon: "edit",
                     callback: function(key, options) {
-
+                    	openWfAppDataSettingHandler(node);
                     }
                 };
             } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
@@ -720,22 +779,34 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     name: "Condition Script",
                     icon: "edit",
                     callback: function(key, options) {
-
+                    	openWfAppDataSettingHandler(node);
                     }
                 };
-            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                items["items"]["open-info"] = {
-                    name: "App Information",
-                    icon: "info",
-                    callback: function(key, options) {
-                        console.log(node);
-                        var scienceAppId = node.data.scienceAppData.scienceAppId;
-                        var fn = window[namespace + "openSolverDeatilPopup"];
-                        if (fn) {
-                            fn.apply(null, [scienceAppId]);
+            }else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
+                items["items"]["open-texteditor"] = {
+                        name: "File Upload",
+                        icon: "fa-cloud-upload",
+                        callback: function(key, options) {
+                        	openWfAppDataSettingHandler(node);
                         }
-                    }
-                };
+                    };
+                }
+            
+            if(nodeData["type"]){
+            	var type = nodeData["type"];
+            	if (type === "scienceApp") {
+            		items["items"]["open-info"] = {
+            				name: "App Information",
+            				icon: "info",
+            				callback: function(key, options) {
+            					var scienceAppId = node.data.scienceAppData.scienceAppId;
+            					var fn = window[namespace + "openSolverDeatilPopup"];
+            					if (fn) {
+            						fn.apply(null, [scienceAppId]);
+            					}
+            				}
+            		};
+            	}
             }
 
             if (nodeData.startPoint) {
@@ -760,7 +831,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
                 }
 
-                if (runType !== WF_APP_TYPES.CONTROLLER.NAME && !nodeData.startPoint) {
+                if (runType !== WF_APP_TYPES.CONTROLLER.NAME && runType !== WF_APP_TYPES.FILE_COMPONENT.NAME && !nodeData.startPoint) {
                     items["items"]["start-point"] = {
                         name: "Start Point",
                         icon: "fa-play",
@@ -818,15 +889,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
             
             /* 2019.01.03 _ Add Context menu('Open Workbench') in execute page */
-            if(!isDeginer && runType != WF_APP_TYPES.CONTROLLER.NAME
+            if(!isDesigner && runType != WF_APP_TYPES.CONTROLLER.NAME
             		 && runType != WF_APP_TYPES.FILE_COMPONENT.NAME
             		 && runType != WF_APP_TYPES.DYNAMIC_CONVERTER.NAME){
             	items["items"]["open-workbench"] = {
                     name: "Open Workbench",
                     icon: "fa-external-link",
                     callback: function(key, options) {
-                    	var nodeData = node.data;
-                    	uiPanelInstance.openScienceAppWorkbench(nodeData);
+                    	uiPanelInstance.openScienceAppWorkbench(node);
                     }
                 };
             }

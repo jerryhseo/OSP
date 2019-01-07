@@ -64,6 +64,15 @@ public class SimulationServiceWrapper implements SimulationService,
 			appVersion, simulationTitle, jobData);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject getSimulationJob(
+		long userId, java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String jobData) {
+		return _simulationService.getSimulationJob(userId, appName, appVersion,
+			simulationUuid, jobUuid, jobData);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

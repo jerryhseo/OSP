@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,10 @@ import org.kisti.edison.bestsimulation.NoSuchSimulationException;
 import org.kisti.edison.bestsimulation.NoSuchSimulationJobDataException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
+import org.kisti.edison.bestsimulation.model.SimulationJobData;
+import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.base.SimulationLocalServiceBaseImpl;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationPK;
 import org.kisti.edison.model.EdisonExpando;
@@ -296,6 +300,280 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 		}finally{
 			return returnMap;
 		}
+	}
+	
+	/**
+	 * New Simulation With SimulationJob
+	 * @param user				- 현재 접속한 User 객체, EX)User user = PortalUtil.getUser(request);
+	 * @param groupId 			- Portal GroupId
+	 * @param scienceAppName
+	 * @param scienceAppVersion
+	 * @param simulationUuid
+	 * @param jobUuid
+	 * @param jobData
+	 * 
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public Map<String, Object> createSimulationWithJob(User user, Group group, String appName, String appVersion,String simulationUuid, String jobUuid, String jobData, boolean hasSimulation) throws SystemException, PortalException{
+		Simulation simulation = null;
+		SimulationJob simulationJob = null;
+		SimulationJobData simulationJobData = null;
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			String icebreakerUrl = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_URL));
+			String icebreakerZone = CustomUtil.strNull(group.getExpandoBridge().getAttribute(EdisonExpando.SITE_ICEBREAKER_ZONE));
+			IcebreakerVcToken vcTokenEntity = getOrCreateToken(group.getGroupId(), user);
+			String vcToken = vcTokenEntity.getVcToken();
+			
+			ScienceApp scienceApp = ScienceAppLocalServiceUtil.getScienceApp(appName, appVersion);
+			
+			if(!CustomUtil.strNull(vcToken).equals("")){
+				
+				icebreakerUrl = "https://www.edison.re.kr/ldap/";
+				vcToken = "ZWRpc29uYWRtOjE1NDY0NjQxNTk5MzQjJCVeJSQjMTU0NzY3Mzc1OTkzNA==";
+				URL url = new URL(icebreakerUrl+"/api/simulation/"+simulationUuid+"/job/"+jobUuid+"/status");
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				
+				conn.setDoOutput(true);
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+				conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+				
+				//GET Token
+				conn.setRequestProperty("Authorization", "Basic "+vcToken);
+									
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+				
+				String  output = "";
+				JSONObject jsonObj = null;
+				StringBuffer responseBuffer = new StringBuffer();
+				if (conn.getResponseCode() == 200 || conn.getResponseCode() == 201) {
+					while ((output = br.readLine()) != null) {
+						if(!CustomUtil.strNull(output).equals("null")){
+							responseBuffer.append(CustomUtil.strNull(output));	
+													
+							jsonObj = JSONObject.fromObject(JSONSerializer.toJSON(responseBuffer.toString()));
+							
+						}
+					}
+					
+					if(jsonObj != null){
+						boolean createComplete = false;
+						if(!hasSimulation){
+							simulation = createSimulationByWorkbenchApiParams(simulationUuid, user.getUserId(), group.getGroupId(), 
+																						scienceApp.getScienceAppId(), scienceApp.getName(), 
+																						scienceApp.getVersion(), jsonObj);
+							if(simulation != null){
+								createComplete = true;
+							} else {
+								createComplete = false;
+							}
+						} else {
+							createComplete = true;
+						}
+						
+						simulationJob = createSimulationJobByWorkbenchApiParams(simulationUuid, jobUuid, group.getGroupId(), jsonObj);
+						if(createComplete && simulationJob != null ){
+							createComplete = true;
+							
+							simulationJobData = createSimulationJobDataByWorkbenchApiParams(jobUuid, jobData);
+							if(createComplete && simulationJobData != null ){
+								createComplete = true;
+							} else {
+								createComplete = false;
+							}
+						} else {
+							createComplete = false;
+						}
+						
+						if(createComplete){
+							resultMap.put("hasSimulationInfo", true);
+						} else {
+							resultMap.put("hasSimulationInfo", false);
+						}
+					} else {
+						System.out.println("2...");
+						resultMap.put("hasSimulationInfo", false);
+					}
+				}else if (conn.getResponseCode() == 400) {
+					resultMap.put("hasSimulationInfo", false);
+					System.out.println("Failed IcebreakerService [ statusJob ] : BAD REQUEST : wrong body content - HTTP error code : " + conn.getResponseCode());		
+				}else if (conn.getResponseCode() == 401) {
+					resultMap.put("hasSimulationInfo", false);
+					System.out.println("Failed IcebreakerService [ statusJob ] : UNAUTHORIZED : access denied - HTTP error code : " + conn.getResponseCode());		
+				}else if (conn.getResponseCode() == 404) {
+					resultMap.put("hasSimulationInfo", false);
+					System.out.println("Failed IcebreakerService [ statusJob ] : NOT FOUND : no existing job - HTTP error code : " + conn.getResponseCode());
+				}else{			
+					resultMap.put("hasSimulationInfo", false);
+					System.out.println("Failed IcebreakerService [ statusJob ] : ETC : etc error - HTTP error code : " + conn.getResponseCode());
+				}
+				
+				conn.disconnect();		
+			}else{
+				resultMap.put("hasSimulationInfo", false);
+				System.out.println("Failed IcebreakerService [ statusJob ] : Token is NOT NULL - Request error code : 999");
+			}
+			
+		} catch (MalformedURLException e) {
+			resultMap.put("hasSimulationInfo", false);
+			e.printStackTrace();
+		} catch (IOException e) {
+			resultMap.put("hasSimulationInfo", false);
+			e.printStackTrace();
+		} catch (ParseException e) {
+			resultMap.put("hasSimulationInfo", false);
+			e.printStackTrace();
+		}
+		
+		return resultMap;
+	}
+	
+	/* 2019.01.04 _ Create simulation by API Params */
+	private Simulation createSimulationByWorkbenchApiParams(String simulationUuid, long userId, long groupId, long appId, String appName, String appVersion, JSONObject jsonObj){
+		Simulation simulation = null;
+		try {
+			//TODO Simulation 등록하기
+			SimulationPK simulationPK = new SimulationPK(simulationUuid, groupId);
+			simulation = SimulationLocalServiceUtil.createSimulation(simulationPK);
+			
+			simulation.setUserId(userId);
+			simulation.setSimulationTitle("sample");
+			simulation.setScienceAppId(CustomUtil.strNull(appId));
+			simulation.setScienceAppName(appName);
+			simulation.setScienceAppVersion(appVersion);
+			
+			String simulationCreateDt = CustomUtil.strNull(jsonObj.get("submittedTime"), new Date().toString());
+			simulationCreateDt = simulationCreateDt.substring(0, 19);
+			simulationCreateDt = simulationCreateDt.replace("T", " ");
+			simulation.setSimulationCreateDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(simulationCreateDt));
+			simulation.setCluster(CustomUtil.strNull(jsonObj.get("cluster"), ""));
+			String classId = CustomUtil.strNull(jsonObj.get("classId"), "0").replaceAll(" ", "");
+			simulation.setClassId(Long.parseLong(CustomUtil.strNull(classId, "0")));
+			String customId = CustomUtil.strNull(jsonObj.get("customIdId"), "0").replaceAll(" ", "");
+			simulation.setCustomId(Long.parseLong(CustomUtil.strNull(customId, "0")));
+			
+			simulation = SimulationLocalServiceUtil.updateSimulation(simulation);
+		} catch (ParseException e) {
+			simulation = null;
+			e.printStackTrace();
+		} catch (SystemException e) {
+			simulation = null;
+			e.printStackTrace();
+		}
+		
+		return simulation;
+	}
+	
+	/* 2019.01.04 _ Create simulationJob by API Params */
+	private SimulationJob createSimulationJobByWorkbenchApiParams(String simulationUuid, String jobUuid, long groupId, JSONObject jsonObj){
+		SimulationJob simulationJob = null;
+		
+		try {
+			String jobTitle = CustomUtil.strNull(jsonObj.get("title"), "#001 "+ "sample");
+			simulationJob = SimulationJobLocalServiceUtil.createSimulationJob(simulationUuid, groupId, jobTitle);
+			simulationJob.setJobUuid(jobUuid);
+			long jobStatus = convertStringJobStatusTolong(CustomUtil.strNull(jsonObj.get("status")));
+			simulationJob.setJobStatus(jobStatus);
+			
+			String jobStartDt = CustomUtil.strNull(jsonObj.get("startTime"), new Date().toString());
+			jobStartDt = jobStartDt.substring(0, 19);
+			jobStartDt = jobStartDt.replace("T", " ");
+			simulationJob.setJobStartDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobStartDt));
+			
+			String jobEndDt = CustomUtil.strNull(jsonObj.get("endTime"), new Date().toString());
+			jobEndDt = jobEndDt.substring(0, 19);
+			jobEndDt = jobEndDt.replace("T", " ");
+			simulationJob.setJobEndDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobEndDt));
+			
+			String jobSubmitDt = CustomUtil.strNull(jsonObj.get("submittedTime"), new Date().toString());
+			jobSubmitDt = jobSubmitDt.substring(0, 19);
+			jobSubmitDt = jobSubmitDt.replace("T", " ");
+			simulationJob.setJobSubmitDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobSubmitDt));
+			
+			if(jobSubmitDt != null && !jobSubmitDt.equals("")){
+				simulationJob.setJobSubmit(true);
+			}
+			
+			simulationJob = SimulationJobLocalServiceUtil.updateSimulationJob(simulationJob);
+		} catch (SystemException e) {
+			simulationJob = null;
+			e.printStackTrace();
+		} catch (JSONException e) {
+			simulationJob = null;
+			e.printStackTrace();
+		} catch (ParseException e) {
+			simulationJob = null;
+			e.printStackTrace();
+		}
+		
+		return simulationJob;
+	}
+	
+	private SimulationJobData createSimulationJobDataByWorkbenchApiParams(String jobUuid, String jobData){
+		SimulationJobData simulationJobData = null;
+		try {
+			simulationJobData = SimulationJobDataLocalServiceUtil.createSimulationJobData(jobUuid);
+			simulationJobData.setJobData(jobData);
+			
+			simulationJobData = SimulationJobDataLocalServiceUtil.updateSimulationJobData(simulationJobData);
+		} catch (SystemException e) {
+			simulationJobData = null;
+			e.printStackTrace();
+		}
+		
+		return simulationJobData;
+	}
+	
+	/* 2019.01.04 _ Get jobStatus(long) by jobStatus(String) */
+	private long convertStringJobStatusTolong(String jobStatus) throws SystemException, JSONException{
+		long returnStatus = 0;
+		switch ( jobStatus.toUpperCase() ){
+		case "Unknown":
+			returnStatus = 1701001;
+			break;
+		case "INITIALIZE_FAILED":
+			returnStatus = 1701002;
+			break;
+		case "INITIALIZED":
+			returnStatus = 1701003;
+			break;
+		case "SUBMISSION_FAILED":
+			returnStatus = 1701004;
+			break;
+		case "QUEUED":
+			returnStatus = 1701005;
+			break;
+		case "RUNNING":
+			returnStatus = 1701006;
+			break;
+		case "SUSPEND_REQUESTED":
+			returnStatus = 1701007;
+			break;
+		case "SUSPENDED":
+			returnStatus = 1701008;
+			break;
+		case "CANCEL_REQUESTED":
+			returnStatus = 1701009;
+			break;
+		case "CANCELED":
+			returnStatus = 1701010;
+			break;
+		case "SUCCESS":
+			returnStatus = 1701011;
+			break;
+		case "FAILED":
+			returnStatus = 1701012;
+			break;
+		default :
+			returnStatus = 0;
+			break;
+		}
+		return returnStatus;
 	}
 	
 	/**

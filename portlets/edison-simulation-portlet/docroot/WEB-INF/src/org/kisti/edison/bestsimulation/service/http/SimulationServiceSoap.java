@@ -79,5 +79,22 @@ public class SimulationServiceSoap {
 		}
 	}
 
+	public static java.lang.String getSimulationJob(long userId,
+		java.lang.String appName, java.lang.String appVersion,
+		java.lang.String simulationUuid, java.lang.String jobUuid,
+		java.lang.String jobData) throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONObject returnValue = SimulationServiceUtil.getSimulationJob(userId,
+					appName, appVersion, simulationUuid, jobUuid, jobData);
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(SimulationServiceSoap.class);
 }
