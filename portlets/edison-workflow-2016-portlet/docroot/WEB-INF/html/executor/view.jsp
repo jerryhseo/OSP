@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <link rel="stylesheet" href="${contextPath}/css/simulation-workbench.css">
 <link rel="stylesheet" href="${contextPath}/css/workflow-executor.css">
+<link rel="stylesheet" href="${contextPath}/css/group.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
 var var_create_first_message = "Create First.";
