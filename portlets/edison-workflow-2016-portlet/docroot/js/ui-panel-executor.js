@@ -360,7 +360,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 {},
                 function (jobsMap) {
                     // createPanel('Simulation Jobs' ,PANEL_DATA['jobs'], 'jobs')
-                    // console.log(jobsMap)
                     currSimulations.select(simulationId)
                     currJobs.set(jobsMap.jobs)
                     renderJobs(jobsMap, currentPage === 1)
@@ -387,7 +386,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function renderJobs(jobsMap, isFirstPage) {
-        console.log(currJobs.get())
         var ulSelector = "#" + namespace + "column-1 > ul";
         var li =
             '<li class="header">\n' +
@@ -450,7 +448,21 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $.each(ports, function (key, value) {
                 value.id = nodeId + "." + key
                 portArray.push(value)
-                console.log(value)
+            })
+        }
+    }
+
+    function setPortsId(nodeId, ports, type) {
+        if (ports) {
+            var jtkType = type === CONSTS.WF_JSPLUMB_TYPES.INPUT ? 'target' : 'source'
+            $.each(ports, function (key, value) {
+                var portId = nodeId + "." + key
+                $("#" + nodeId)
+                    .find("jtk-" + jtkType + "[port-id='" + value.name_ + "']")
+                    .parent("li")
+                    .addClass(CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
+                    .addClass(type)
+                    .attr("port-id", portId)
             })
         }
     }
@@ -458,7 +470,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function selectSimulationJob(simulationJobId) {
         var li =
             '{{#ports}}' +
-            '<li>\n' +
+            '<li  port-id="{{id}}">\n' +
             '  <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
             '    <i class="fa fa-edit"></i>\n' +
             '    <span>{{name_}}</span>\n' +
@@ -479,27 +491,69 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var outputPorts = []
         $.each(jpInstance.getNodes(), function(i){
             var node = this
-            pushPorts(node.id, node.data.inputPorts, inputPorts);
-            pushPorts(node.id, node.data.outputPorts, outputPorts);
+            pushPorts(node.id, node.data.inputPorts, inputPorts)
+            pushPorts(node.id, node.data.outputPorts, outputPorts)
+            setPortsId(node.id, node.data.inputPorts, CONSTS.WF_JSPLUMB_TYPES.INPUT)
+            setPortsId(node.id, node.data.outputPorts, CONSTS.WF_JSPLUMB_TYPES.OUTPUT)
         })
+        var currInputPorts = eStruct("id")
+        var currOutputPorts = eStruct("id")
+        currInputPorts.set(inputPorts)
+        currOutputPorts.set(outputPorts)
         $("#input-ports-" + simulationJobId).empty()
-            .append(Mustache.render(li, { "ports": inputPorts }));
-        $("#output-ports-" + simulationJobId).empty()
-            .append(Mustache.render(li, { "ports": outputPorts }));
+            .append(Mustache.render(li, { "ports": inputPorts }))
+            .children("li")
+            .each(function(i) {
+                var that = this
+                var portId = $(that).attr("port-id")
+                var nodeId = jpInstance.getPort(portId).getNode().id
+                $(that).children("a").click(function(e) {
+                })
+                $(that).children("a").hover(
+                    function (e) {
+                        var port = currInputPorts.get(portId)
+                        $("#" + nodeId).addClass("wf-selected-node")
+                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                            .addClass("wf-selected-port").addClass("element-animation")
 
-        // console.log(screenLogic)
-        // $.each(screenLogic.ports, function (i) {
-        //     if (this.type === CONSTS.WF_JSPLUMB_TYPES.OTHER_PORTS) return
-        //     var name = this.id.split(".")[1]
-        //     var id = this.id
-        //     console.log(name, id)
-        //     if (this.type === CONSTS.WF_JSPLUMB_TYPES.INPUT_PORTS) {
-        //     }
-        //     if (this.type === CONSTS.WF_JSPLUMB_TYPES.OUTPUT_PORTS) {
-        //     }
-        // })
-        // console.log(jpInstance.getNodes())
-        // console.log(jpInstance.exportData({ type: "json" }))
+                    },
+                    function (e) {
+                        var port = currInputPorts.get(portId)
+                        $("#" + nodeId).removeClass("wf-selected-node")
+                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                            .removeClass("wf-selected-port").removeClass("element-animation")
+                    })
+                $(that).children("a").children("span.sidebar-btn").click(function(e) {
+                    e.stopPropagation()
+                })
+            })
+        $("#output-ports-" + simulationJobId).empty()
+            .append(Mustache.render(li, { "ports": outputPorts }))
+            .children("li")
+            .each(function(i) {
+                var that = this
+                var portId = $(that).attr("port-id")
+                var nodeId = jpInstance.getPort(portId).getNode().id
+                $(that).children("a").click(function(e) {
+                })
+                $(that).children("a").hover(
+                    function (e) {
+                        var port = currOutputPorts.get(portId)
+                        $("#" + nodeId).addClass("wf-selected-node")
+                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                            .addClass("wf-selected-port").addClass("element-animation")
+
+                    },
+                    function (e) {
+                        var port = currOutputPorts.get(portId)
+                        $("#" + nodeId).removeClass("wf-selected-node")
+                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                            .removeClass("wf-selected-port").removeClass("element-animation")
+                    })
+                $(that).children("a").children("span.sidebar-btn").click(function(e) {
+                    e.stopPropagation()
+                })
+            })
     }
 
     function openSimulation(panelType, that, e) {
@@ -576,10 +630,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                                 openNewSimulationPanel()
                             }
                         })
-
-                        // TODO: draw workflow
-                        // designer.resetWorkflow();
-                        // openWorkflowByWorkflowId(PANEL_DATA.setting.form.workflowId, true);
                     }
                     setMetaData({
                         "workflowTitle": PANEL_DATA.setting.form.workflowTitle,
@@ -1147,7 +1197,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     jobUuid : jobUuid,
                     jobData : JSON.stringify(jobDataArr)
                 }, function(obj) {
-                    console.log(obj);
                     if (obj.hasSimulationInfo) {
                         openWorkbenchPopup(scienceAppId, simulationUuid,
                             jobUuid, connectedInputPorts, wfId);

@@ -56,6 +56,17 @@ var contextPath = '${contextPath}';
 </style>
 
 <style type="text/css">
+
+  .wf-selected-node {
+    -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+    -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+    box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+  }
+
+  .wf-selected-port {
+    background-color: #ff8d00 !important;
+  }
+
   .sidebar-menu > li > a.job-li {
     padding: 10px 5px 10px 12px;
     font-size: 12px;

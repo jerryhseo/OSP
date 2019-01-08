@@ -32,6 +32,7 @@ var CONSTS = {
         ENDPOINT: "endpoint",
         INPUT: "input",
         OUTPUT: "output",
+        PORT_ELEMENT: "port-element",
         LOOP: "loop",
     },
     WF_CONVERTER_SCRIPT: "converter-script",
