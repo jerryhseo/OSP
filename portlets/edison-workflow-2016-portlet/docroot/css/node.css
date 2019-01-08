@@ -183,23 +183,29 @@
     font-family: proxima-nova-regular;
 }
 
-.waitingbox {
+.wf-box .wf-node-execute-status{
+	width: 100%;
+	font-size: 10px;
+	text-align: center;
+}
+
+.wf-box.WAITING .wf-node-ports {
     background-color: #c9fbff;
 }
 
-.runningbox {
+.wf-box.RUNNING .wf-node-ports {
     background-color: #d9f3d8;
 }
 
-.failbox {
+.wf-box.FAIL .wf-node-ports {
     background-color: #b9aeaf;
 }
 
-.donebox {
+.wf-box.SUCCESS .wf-node-ports {
     background-color: #d7d773;
 }
 
-.pausebox {
+.wf-box.PAUSE .wf-node-ports {
     background-color: #ffecdd;
 }
 

@@ -3,7 +3,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
-
+    
     var uiPanelInstance = undefined;
 
     var setUiPanelInstance = function(uiPanel) {
@@ -28,55 +28,57 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
         	
-            if (source.objectType !== "Node" && target.objectType !== "Node") {
-                if (source === target) {
-                    return false;
-                }
-
-                if (target.getAllEdges().length != 0) {
-                    return false;
-                }
-
-                if (source.getNode() === target.getNode()) {
-                    return false;
-                }
-
-                if (source.getType() === 'all' && target.getType() === 'all') {
-                	if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                		return false;
-                	}else{
-                		return true;
-                	}
-                }else{
-                	if (source.getType() === 'all' || target.getType() === 'all') {
-                		if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                			var isEqualsPortType = false;
-                			var sourceData = source.getNode().data,
-                			targetData = target.getNode().data;
-                			var sourcePortDataType = sourceData.outputPorts[source.id][OSP.Constants.DATA_TYPE];
-                			if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-                				sourceData.outputPorts[source.id] = targetData[target.getType()][target.id];
-                				sourceData.outputPorts[source.id][OSP.Constants.NAME] = WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME;
-                				sourceData.outputPorts[source.id][OSP.Constants.IS_WF_SAMPLE] = false;
-                				if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
-                					sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
-                				}
-                				
-                				isEqualsPortType = true;
-                			} else {
-                				isEqualsPortType = checkPortTypeForConnection(source, target, true);
-                			}
-                			
-                			return isEqualsPortType;
-                		}
-                		return true;
-                	} else if (source.getType() === 'inputPorts') {
-                		return false;
-                	} else {
-                		return checkPortTypeForConnection(source, target, false);
-                	}
-                }
-            }
+        	if(isDesigner){
+        		if (source.objectType !== "Node" && target.objectType !== "Node") {
+        			if (source === target) {
+        				return false;
+        			}
+        			
+        			if (target.getAllEdges().length != 0) {
+        				return false;
+        			}
+        			
+        			if (source.getNode() === target.getNode()) {
+        				return false;
+        			}
+        			
+        			if (source.getType() === 'all' && target.getType() === 'all') {
+        				if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
+        					return false;
+        				}else{
+        					return true;
+        				}
+        			}else{
+        				if (source.getType() === 'all' || target.getType() === 'all') {
+        					if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
+        						var isEqualsPortType = false;
+        						var sourceData = source.getNode().data,
+        						targetData = target.getNode().data;
+        						var sourcePortDataType = sourceData.outputPorts[source.id][OSP.Constants.DATA_TYPE];
+        						if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
+        							sourceData.outputPorts[source.id] = targetData[target.getType()][target.id];
+        							sourceData.outputPorts[source.id][OSP.Constants.NAME] = WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME;
+        							sourceData.outputPorts[source.id][OSP.Constants.IS_WF_SAMPLE] = false;
+        							if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
+        								sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
+        							}
+        							
+        							isEqualsPortType = true;
+        						} else {
+        							isEqualsPortType = checkPortTypeForConnection(source, target, true);
+        						}
+        						
+        						return isEqualsPortType;
+        					}
+        					return true;
+        				} else if (source.getType() === 'inputPorts') {
+        					return false;
+        				} else {
+        					return checkPortTypeForConnection(source, target, false);
+        				}
+        			}
+        		}
+        	}
         },
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
@@ -462,7 +464,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         if (!$.isEmptyObject(outputports)) {
             outputPortsObj = $.parseJSON(outputports);
         }
-        
+
         var ibDataObj = {
         	status : "WAITING"
         };
@@ -777,7 +779,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         $("#" + conainerId + " #" + wfId).data(data);
     }
-
+    
     $.contextMenu({
         selector: '.wf-box',
         build: function($trigger, e) {
@@ -1212,6 +1214,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     
     function drawScreenLogic(screenLogic) {
         var wfData = $.parseJSON(screenLogic);
+
+        /* 2018.12.24 _ Open workflow, jsplumb */
         currentJsPlumbInstance.load({
         	type:"json",
             data: wfData

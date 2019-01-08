@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <link rel="stylesheet" href="${contextPath}/css/simulation-workbench.css">
 <link rel="stylesheet" href="${contextPath}/css/workflow-executor.css">
+<link rel="stylesheet" href="${contextPath}/css/node.css">
 <link rel="stylesheet" href="${contextPath}/css/group.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
@@ -53,6 +54,8 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var contextPath = '${contextPath}';
 </script>
+
+
 <style>
 .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
 </style>
@@ -291,7 +294,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/lib/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
-<script type="text/x-jtk-templates" src="${contextPath}/templete/templete.html"></script>
+<script type="text/x-jtk-templates" src="${contextPath}/templete/execute-template.html"></script>
 
 <script id="tpl-menu-panel-box" type="text/html">
 <div class="{{panel-type}} col-md-{{col}}">
