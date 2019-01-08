@@ -34,6 +34,9 @@ var AppTree = (function(namespace, $, designer){
                 "text": "Controller",
                 "parent": "controller_category",
                 "groupId": getSpecificSiteGroupId(),
+                "ibData": {
+                	"status": "WAITING"
+                },
                 "inputports": {
                     "criteria": {
                     	"name_": "criteria",
@@ -129,6 +132,9 @@ var AppTree = (function(namespace, $, designer){
                 "text": "Dynamic Converter",
                 "parent": "converter_category",
                 "groupId": getSpecificSiteGroupId(),
+                "ibData": {
+                	"status": "WAITING"
+                },
                 "inputports": {
                     "localfile0": {
                         "inputData_": {

@@ -463,6 +463,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         if (!$.isEmptyObject(outputports)) {
             outputPortsObj = $.parseJSON(outputports);
         }
+        
+        var ibDataObj = {
+        	status : "WAITING"
+        };
 
 
         currentJsPlumbInstance.addFactoryNode("scienceApp", {
@@ -471,7 +475,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             top: pageY,
             scienceAppData: scienceAppData,
             inputPorts: inputPortsObj,
-            outputPorts: outputPortsObj
+            outputPorts: outputPortsObj,
+            ibData:ibDataObj
         });
 
         var node = currentJsPlumbInstance.getNode(wfId);
@@ -563,7 +568,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             top: pageY,
             scienceAppData: scienceAppData,
             inputPorts: data.inputports,
-            outputPorts: data.outputports
+            outputPorts: data.outputports,
+            ibData: data.ibData
         });
 
         renderer.zoomToFit();
