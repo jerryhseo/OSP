@@ -183,14 +183,14 @@ var AppTree = (function(namespace, $, designer){
         });
         
         dArr.push({
-            "text": "File Component",
+            "text": "Data Component",
             "parent": "componet_category",
             "type": "app",
             "id": "file_component",
             "data": {
                 "appType": "FileComponent",
-                "name": "File Component",
-                "text": "File Component",
+                "name": "Data Component",
+                "text": "Data Component",
                 "parent": "componet_category",
                 "groupId": getSpecificSiteGroupId(),
                 "outputports": {

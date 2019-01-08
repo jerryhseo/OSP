@@ -43,21 +43,26 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 }
 
                 if (source.getType() === 'all' && target.getType() === 'all') {
-                	if (source.getNode().data.scienceAppData.runType === "FileComponent") {
+                	if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 		return false;
                 	}else{
                 		return true;
                 	}
                 }else{
                 	if (source.getType() === 'all' || target.getType() === 'all') {
-                		if (source.getNode().data.scienceAppData.runType === "FileComponent") {
+                		if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 			var isEqualsPortType = false;
                 			var sourceData = source.getNode().data,
                 			targetData = target.getNode().data;
-                			var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
+                			var sourcePortDataType = sourceData.outputPorts[source.id][OSP.Constants.DATA_TYPE];
                 			if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-                				sourceData.outputPorts[source.id].dataType_ = {};
-                				sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
+                				sourceData.outputPorts[source.id] = targetData[target.getType()][target.id];
+                				sourceData.outputPorts[source.id][OSP.Constants.NAME] = WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME;
+                				sourceData.outputPorts[source.id][OSP.Constants.IS_WF_SAMPLE] = false;
+                				if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
+                					sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
+                				}
+                				
                 				isEqualsPortType = true;
                 			} else {
                 				isEqualsPortType = checkPortTypeForConnection(source, target, true);
@@ -76,9 +81,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
-        	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
-        		if(source.getAllEdges().length-1 == 0){     
-        			delete sourceData.outputPorts[source.id].dataType_;
+        	if(source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME){
+        		console.log(sourceData.outputPorts[source.id]);
+        		if(source.getAllEdges().length-1 == 0){
+        			sourceData.outputPorts[source.id] = {};
         		}
         	}
         }
@@ -140,12 +146,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             "inputPorts": {
                 events: {
                     dblclick: function(obj) {
-                    	var nodeId = obj.nodeId;
-                        var portId = obj.portId;
-                        var portType = obj.portType;
-                        var nodeData = obj.node.data;
-                    	if(isDesigner && uiPanelInstance) {
-                    		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
+                    	if(obj.port.getAllEdges().length == 0){
+                    		var nodeId = obj.nodeId;
+                    		var portId = obj.portId;
+                    		var portType = obj.portType;
+                    		var nodeData = obj.node.data;
+                    		if(isDesigner && uiPanelInstance) {
+                    			uiPanelInstance.openWfAppFileDataSetting(nodeId,nodeData.scienceAppData.name, portId, portType);
+                    		}
+                    	}else{
+                    		return false;
                     	}
                     }
                 }
@@ -161,13 +171,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
     			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
         	}else{
-    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
+        		if(node.getAllEdges().length != 0){
+        			uiPanelInstance.openWfAppFileDataSetting(wfId,data.scienceAppData.name,WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME, "outputPorts");
+        		}else{
+        			toastr["error"]("", var_workflow_config_data_error_message);
+        		}
         	}
         }
     }
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
-    console.log(wfWorkflowJsPlumbInstance)
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
@@ -791,8 +804,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 };
             }else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 items["items"]["open-texteditor"] = {
-                        name: "File Upload",
-                        icon: "fa-cloud-upload",
+                        name: "Cofiguration Data",
+                        icon: "fa-cogs",
                         callback: function(key, options) {
                         	openWfAppDataSettingHandler(node);
                         }

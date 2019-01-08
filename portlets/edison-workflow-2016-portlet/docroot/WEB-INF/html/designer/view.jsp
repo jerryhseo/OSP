@@ -59,6 +59,7 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
 var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
+var var_workflow_config_data_error_message = Liferay.Language.get("edison-workflow-config-data-error-message");
 var var_workflow_remove_status_error_message = Liferay.Language.get("edison-workflow-remove-status-error-message");
 
 

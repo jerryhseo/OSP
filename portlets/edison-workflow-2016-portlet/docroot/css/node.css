@@ -2,7 +2,8 @@
     font-size: 12px;
     position: absolute;
     display: inline-block;
-    width: 175px;
+/*     width: 175px; */
+    min-width: 150px;
     border: 1px #aaa solid;
     background-color: rgba(255, 255, 255, .8);
     border-radius: 3px;
@@ -15,6 +16,10 @@
     line-height: 20px;
 }
 
+.wf-box .wf-node-header .app-config{
+	cursor: pointer;
+}
+
 .wf-box .wf-node-header h1 {
     display: block;
     font-size: 2em;
@@ -25,17 +30,18 @@
     font-weight: bold;
 }
 
-.wf-box .wf-node-header h1.wf-node-header {
+.wf-box .wf-node-header h1.wf-node-header-title {
     font-size: 12px;
     font-weight: 400;
     font-family: proxima-nova-bold;
     margin: 0;
-    padding: 6px 5px 1px;
+    padding: 2px 5px 2px 1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-shadow: 0 1px 0 #fff;
-    max-width: 88%;
+    width: 90%;
+    float: left;
 }
 
 .wf-box .wf-node-ports {
