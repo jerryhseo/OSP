@@ -25,7 +25,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var outputPortColor = "#D6442D";
     var connectionColor = "#11C7E7"
 
-
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
         	
@@ -1210,13 +1209,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         modifyingWorkflow = workflow;
     }
-
+    
     function drawScreenLogic(screenLogic) {
         var wfData = $.parseJSON(screenLogic);
-        console.log(wfData);
-
-        /* 2018.12.24 _ Open workflow, jsplumb */
         currentJsPlumbInstance.load({
+        	type:"json",
             data: wfData
         });
     }

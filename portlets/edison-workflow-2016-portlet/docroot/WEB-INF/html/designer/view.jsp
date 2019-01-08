@@ -629,7 +629,11 @@ $(document).ready(function(){
   });
 
   if(loadedWorkflowId && loadedWorkflowId !== 'null'){
-      uiPanel.openWorkflow(loadedWorkflowId);
+	  bStart();
+      setTimeout(function() {
+    	  uiPanel.openWorkflow(loadedWorkflowId);
+    	  bEnd();
+    	}, 2000);
   }
   
   
