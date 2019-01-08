@@ -40,8 +40,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-shadow: 0 1px 0 #fff;
-    width: 90%;
-    float: left;
+    width: 100%;
 }
 
 .wf-box .wf-node-ports {
