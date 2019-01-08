@@ -56,6 +56,27 @@ var contextPath = '${contextPath}';
 </style>
 
 <style type="text/css">
+  .sidebar-menu > li > a.job-li {
+    padding: 10px 5px 10px 12px;
+    font-size: 12px;
+  }
+
+  #<portlet:namespace/>column-1 .header-inner {
+    margin: 0px;
+    padding: 15px 5px 10px 7px;
+    border-bottom: none;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn {
+    cursor: pointer;
+  }
+
+  #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn:hover > i{
+    color: orange;
+  }
+
   nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
     text-align: center;
     padding: 12px;
@@ -72,10 +93,11 @@ var contextPath = '${contextPath}';
   .nav li.<portlet:namespace/>divider-vertical{
     display: none;
   }
-  
+
   .group-delete{
   	display: none !important;
   }
+
 </style>
 <div class="container-fluid">
   <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">
@@ -157,59 +179,6 @@ var contextPath = '${contextPath}';
         <aside class="main-sidebar">
           <section class="sidebar" id="<portlet:namespace/>column-1" section-type="system">
             <ul class="sidebar-menu top" data-widget="tree">
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="new">
-                  <i class="fa fa-lg fa-file"></i>
-                  <span>New</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="open">
-                  <i class="fa fa-lg fa-folder-open"></i>
-                  <span>Open</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="save">
-                  <i class="fa fa-lg fa-floppy-o"></i>
-                  <span>Save</span>
-                </a>
-              </li>
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="execute">
-                  <i class="fa fa-lg fa-play-circle"></i>
-                  <span>Run</span>
-                </a>
-                <ul class="treeview-menu">
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
-                  <%-- <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li> --%>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
-                  <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="sidebar-menu bottom" data-widget="tree">
-              <li class="treeview">
-                <a href="#" class="sidebar-btn" data-btn-type="designer">
-                  <i class="fa fa-lg fa-pencil-square-o"></i>
-                  <span>Edit</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="sidebar-btn" data-btn-type="setting">
-                  <i class="fa fa-lg  fa-gear"></i>
-                  <span>Setting</span>
-                </a>
-              </li>
-              <li>
-                <div class="sidebar-toggle-wrapper" class="sidebar-toggle" id="sidebar-toggle" data-toggle="push-menu" role="button">
-                  <a href="#" class="sidebar-toggle">
-                    <i class="fa fa-lg fa-angle-left fa-2x pull-right"></i>
-                    <span class="sr-only">Toggle navigation</span>
-                  </a>
-                </div>
-              </li>
             </ul>
           </section>
         </aside>
@@ -435,7 +404,7 @@ $(document).ready(function(){
           console.log("workflow instance count : ", workflowCount);
       }
       uiPanel.openWorkflow(workflowId, false, function(){
-        $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
+        // $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
       });
     }
   }, 1000);

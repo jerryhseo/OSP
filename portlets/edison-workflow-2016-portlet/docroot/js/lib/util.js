@@ -216,3 +216,51 @@ function _confirm(msg, _of, _cf){
       }
   });
 }
+
+function eStruct(idName, dataName) {
+  var map
+  var list = []
+  var selectedId
+  return {
+    set: function (items) {
+      map = {};
+      list = []
+      $.each(items, function () {
+        var item = this;
+        if (dataName) {
+          list.push(item[dataName])
+          map[item[idName]] = item[dataName];
+        } else {
+          list.push(item)
+          map[item[idName]] = item;
+        }
+
+      });
+    },
+    get: function (key) {
+      return arguments.length === 0 ? map : map[key];
+    },
+    getArray: function (key) {
+      return arguments.length === 0 ? list : list[key];
+    },
+    select: function (key) {
+      if (key) {
+        selectedId = key
+      } else {
+        selectedId = undefined
+      }
+    },
+    selected: function () {
+      return selectedId && map ? map[selectedId] : undefined;
+    },
+    contains: function (key) {
+      if (!key) {
+        return false;
+      }
+      if ($.isEmptyObject(map)) {
+        return false;
+      }
+      return map.hasOwnProperty(key);
+    }
+  };
+}

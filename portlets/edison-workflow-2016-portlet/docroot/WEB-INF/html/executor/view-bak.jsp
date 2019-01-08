@@ -255,7 +255,6 @@ var contextPath = '${contextPath}';
               </a>
               <ul class="treeview-menu">
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="run"><i></i><span>Run Simulation</span></a></li>
-                <%-- <li><a href="#" class="sidbar-run-btn" data-btn-type="rerun"><i></i><span>Rerun Simulation</span></a></li> --%>
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="status"><i></i><span>Status</span></a></li>
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="pause"><i></i><span>Pause</span></a></li>
                 <li><a href="#" class="sidbar-run-btn" data-btn-type="restart"><i></i><span>Restart</span></a></li>

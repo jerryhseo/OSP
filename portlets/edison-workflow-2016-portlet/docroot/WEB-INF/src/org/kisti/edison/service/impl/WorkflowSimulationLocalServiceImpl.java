@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulation;
+import org.kisti.edison.service.WorkflowLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.base.WorkflowSimulationLocalServiceBaseImpl;
 import org.kisti.edison.util.CustomUtil;
 import org.springframework.util.StringUtils;
@@ -91,16 +94,20 @@ public class WorkflowSimulationLocalServiceImpl extends WorkflowSimulationLocalS
         return workflowSimulationLocalService.createWorkflowSimulation(simulationId);
     }
     
-    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user) throws SystemException{
+    public WorkflowSimulation createWorkflowSimulation(Map<String, Object> params, User user) throws SystemException, PortalException{
         String tetsYnStr = CustomUtil.strNull(params.get("testYn"), "true");
-        boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y"); 
+        boolean testYn = tetsYnStr.equals("true") || tetsYnStr.equals("y") || tetsYnStr.equals("Y");
+        long workflowId = GetterUtil.getLong(params.get("workflowId"));
+        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
         WorkflowSimulation simulation = createWorkflowSimulation();
         simulation.setTitle(CustomUtil.strNull(params.get("title"), "workflow simulation #" + simulation.getSimulationId()));
-        simulation.setWorkflowId(GetterUtil.getLong(params.get("workflowId")));
+        simulation.setWorkflowId(workflowId);
         simulation.setUserId(user.getUserId());
         simulation.setTestYn(testYn);
         simulation.setCreateDate(new Date());
-        return workflowSimulationLocalService.addWorkflowSimulation(simulation);
+        simulation = workflowSimulationLocalService.addWorkflowSimulation(simulation);
+        WorkflowSimulationJobLocalServiceUtil.createSimulationJob(simulation, workflow, null);
+        return simulation;
     }
     
     public WorkflowSimulation updateWorkflowSimulation(long simulationId, Map<String, Object> params, User user) 

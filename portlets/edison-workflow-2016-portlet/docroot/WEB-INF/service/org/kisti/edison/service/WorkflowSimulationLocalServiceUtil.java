@@ -485,7 +485,8 @@ public class WorkflowSimulationLocalServiceUtil {
 	public static org.kisti.edison.model.WorkflowSimulation createWorkflowSimulation(
 		java.util.Map<java.lang.String, java.lang.Object> params,
 		com.liferay.portal.model.User user)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService().createWorkflowSimulation(params, user);
 	}
 
