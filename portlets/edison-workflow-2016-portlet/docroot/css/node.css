@@ -184,21 +184,25 @@
 }
 
 .waitingbox {
-    background-color: #adadad;
+    background-color: #c9fbff;
 }
 
 .runningbox {
-    background-color: #8db9e5;
+    background-color: #d9f3d8;
 }
 
 .failbox {
-    background-color: #f8799b;
+    background-color: #b9aeaf;
 }
 
 .donebox {
-    background-color: #76d6cd;
+    background-color: #d7d773;
 }
 
 .pausebox {
-    background-color: #fd9b00;
+    background-color: #ffecdd;
+}
+
+.jtk-endpoint {
+	z-index: 10; 
 }
