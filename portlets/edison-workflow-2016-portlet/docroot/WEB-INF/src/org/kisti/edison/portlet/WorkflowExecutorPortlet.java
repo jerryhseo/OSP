@@ -82,10 +82,12 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             
             // Workflow Edit Permission Check
             boolean isAdmin = false;
-            ScienceApp wfScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(Long.parseLong(workflowId));
-            if(wfScienceApp == null){
+            int wfScienceAppCnt = ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(Long.parseLong(workflowId));
+            if(wfScienceAppCnt <= 0){
             	isAdmin = true;
             } else {
+            	ScienceApp wfScienceApp = wfScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(Long.parseLong(workflowId));
+            	
             	// Not Open Workflow-ScienceApp
             	if(wfScienceApp.getStatus() != 1901004){
             		boolean powerUser = EdisonUserUtil.isRegularRole(currentUser, RoleConstants.POWER_USER);
@@ -111,6 +113,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 
         }catch (Exception e){
             log.error(e);
+            e.printStackTrace();
             SessionErrors.add(request, EdisonMessageConstants.SEARCH_ERROR);
         }
         return "executor/view";
