@@ -85,77 +85,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
-<<<<<<< HEAD
-<<<<<<< HEAD
-        beforeConnect: function(source, target, edgeData) {
-        	
-        	if(true){
-        		if (source.objectType !== "Node" && target.objectType !== "Node") {
-        			if (source === target) {
-        				return false;
-        			}
-        			
-        			if (target.getAllEdges().length != 0) {
-        				return false;
-        			}
-        			
-        			if (source.getNode() === target.getNode()) {
-        				return false;
-        			}
-        			
-        			if (source.getType() === 'all' && target.getType() === 'all') {
-        				if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-        					return false;
-        				}else{
-        					return true;
-        				}
-        			}else{
-        				if (source.getType() === 'all' || target.getType() === 'all') {
-        					if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-        						var isEqualsPortType = false;
-        						var sourceData = source.getNode().data,
-        						targetData = target.getNode().data;
-        						var sourcePortDataType = sourceData.outputPorts[source.id][OSP.Constants.DATA_TYPE];
-        						if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-        							sourceData.outputPorts[source.id] = targetData[target.getType()][target.id];
-        							sourceData.outputPorts[source.id][OSP.Constants.NAME] = WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME;
-        							sourceData.outputPorts[source.id][OSP.Constants.IS_WF_SAMPLE] = false;
-        							if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
-        								sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
-        							}
-        							
-        							isEqualsPortType = true;
-        						} else {
-        							isEqualsPortType = checkPortTypeForConnection(source, target, true);
-        						}
-        						
-        						return isEqualsPortType;
-        					}
-        					return true;
-        				} else if (source.getType() === 'inputPorts') {
-        					return false;
-        				} else {
-        					return checkPortTypeForConnection(source, target, false);
-        				}
-        			}
-        		}
-        	}
-=======
-    	/*beforeStartConnect: function(source, edgeData) {
-    		if(!isDesigner){
-    			console.log(source);
-    			console.log(jsPlumb);
-    			console.log(jsPlumbToolkit);
-    			deleteEdge
-    			return false;
-    		}
-    	},*/
-=======
->>>>>>> work-local-imjeong
         beforeConnect: beforeConnectHandler,
         beforeStartDetach:function() { 
     		return isDesigner; 
->>>>>>> work-local-imjeong
         },
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
