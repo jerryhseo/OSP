@@ -69,6 +69,10 @@ var contextPath = '${contextPath}';
   .wf-selected-port {
     background-color: #ff8d00 !important;
   }
+  .wf-selected-port-label {
+    color: #ff8d00 !important;
+    font-size: 14px !important;
+  }
 
   .sidebar-menu > li > a.job-li {
     padding: 10px 5px 10px 12px;
@@ -463,14 +467,14 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 AUI().ready(['liferay-util-window'], function(){
 	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
-		
+
 		/* TODO 노드Id로 노드 찾아서 SimUuid, JobUuid 세팅해주기 */
 		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid);
 		$("body").css('overflow','');
 	});
-	
+
 	Liferay.provide(window,'<portlet:namespace />closePopup',function(popupIdToClose) {
-		Liferay.Util.getWindow(popupIdToClose).destroy(); 
+		Liferay.Util.getWindow(popupIdToClose).destroy();
 	});
 });
 

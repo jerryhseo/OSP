@@ -445,7 +445,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var portId = nodeId + "." + key
                 $("#" + nodeId)
                     .find("jtk-" + jtkType + "[port-id='" + value.name_ + "']")
-                    .parent("li")
+                    .parent("div")
                     .addClass(CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT)
                     .addClass(type)
                     .attr("port-id", portId)
@@ -500,14 +500,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         var port = currInputPorts.get(portId)
                         $("#" + nodeId).addClass("wf-selected-node")
                         $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .addClass("wf-selected-port").addClass("element-animation")
+                            .addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
 
                     },
                     function (e) {
                         var port = currInputPorts.get(portId)
                         $("#" + nodeId).removeClass("wf-selected-node")
                         $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .removeClass("wf-selected-port").removeClass("element-animation")
+                            .removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
                     })
                 $(that).children("a").children("span.sidebar-btn").click(function(e) {
                     e.stopPropagation()
@@ -527,14 +527,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         var port = currOutputPorts.get(portId)
                         $("#" + nodeId).addClass("wf-selected-node")
                         $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .addClass("wf-selected-port").addClass("element-animation")
+                            .addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
 
                     },
                     function (e) {
                         var port = currOutputPorts.get(portId)
                         $("#" + nodeId).removeClass("wf-selected-node")
                         $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .removeClass("wf-selected-port").removeClass("element-animation")
+                            .removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
                     })
                 $(that).children("a").children("span.sidebar-btn").click(function(e) {
                     e.stopPropagation()
