@@ -465,10 +465,12 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 }
 
 AUI().ready(['liferay-util-window'], function(){
-	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portId, jobData){
+	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portName, jobData){
 // 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
 // 		$("body").css('overflow','');
-
+		
+		alert(nodeId);
+		alert(portName);
 		console.log(jobData);
 	});
 	

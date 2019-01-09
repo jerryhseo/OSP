@@ -209,7 +209,13 @@ function <portlet:namespace/>createSimulationAndJob(){
 function <portlet:namespace/>returnJobData(){
 	var simulation = <portlet:namespace/>workbench.workingSimulation();
 	var job = simulation.workingJob();
-	console.log(JSON.stringify(job.inputData("${portName}")));
+	var jobData = JSON.stringify(job.inputData("${portName}"));
+// 	console.log(jobData);
+	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData);
+}
+
+function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid){
+	Liferay.Util.getOpener().setSimAndJobFromWorkbench(wfNodeId,simulationUuid,jobUuid);
 }
 
 </script>

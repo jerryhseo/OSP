@@ -61,6 +61,7 @@ public class ModuleViewerController {
 		String portType = ParamUtil.getString(request, "portType", "inputPorts");
 		String portData = ParamUtil.getString(request, "portData", "");
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");
+		String nodeId = ParamUtil.getString(request, "nodeId");
 		
 		if(simulationUuid.equals("")){
 			simulationUuid = UUID.randomUUID().toString();
@@ -137,6 +138,8 @@ public class ModuleViewerController {
 		model.addAttribute("jobUuid", jobUuid);
 		model.addAttribute("screenName", screenName);
 		model.addAttribute("status", status);
+		model.addAttribute("nodeId", nodeId);
+		
 		
 		return "view";
 	}
