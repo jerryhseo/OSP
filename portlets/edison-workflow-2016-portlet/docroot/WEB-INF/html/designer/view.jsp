@@ -741,5 +741,6 @@ function <portlet:namespace/>deleteWfSampleFiles(nodeData){
 		});
     }
 }
+
 </script>
 </div>
