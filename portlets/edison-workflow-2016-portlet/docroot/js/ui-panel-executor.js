@@ -1337,7 +1337,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			
 			/* TODO Workflow Status Setting */
 			
-			nodeData[CONSTS.STATUS].status = "";
+			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";
 		}
 		console.log(node);
 	}
