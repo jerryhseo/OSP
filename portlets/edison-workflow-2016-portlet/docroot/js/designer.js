@@ -85,15 +85,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
-    	/*beforeStartConnect: function(source, edgeData) {
-    		if(!isDesigner){
-    			console.log(source);
-    			console.log(jsPlumb);
-    			console.log(jsPlumbToolkit);
-    			deleteEdge
-    			return false;
-    		}
-    	},*/
         beforeConnect: beforeConnectHandler,
         beforeStartDetach:function() { 
     		return isDesigner; 
