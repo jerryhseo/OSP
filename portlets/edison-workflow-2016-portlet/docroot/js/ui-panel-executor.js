@@ -1385,8 +1385,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			if(!nodeData[IB_DATA]) {
 				nodeData[IB_DATA] = {}
 			}
-			nodeData[IB_DATA].simulationUuid = simulationUuid;
-			nodeData[IB_DATA].jobUuid = jobUuid;
+			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
+			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
 			
 			/* TODO Workflow Status Setting */
 			

@@ -86,6 +86,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
 <<<<<<< HEAD
+<<<<<<< HEAD
         beforeConnect: function(source, target, edgeData) {
         	
         	if(true){
@@ -149,6 +150,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     			return false;
     		}
     	},*/
+=======
+>>>>>>> work-local-imjeong
         beforeConnect: beforeConnectHandler,
         beforeStartDetach:function() { 
     		return isDesigner; 
