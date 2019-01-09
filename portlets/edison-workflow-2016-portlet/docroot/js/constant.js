@@ -1,9 +1,12 @@
 var CONSTS = {
     MESSAGE: {
         edison_wfsimulation_new_confirm_message: 'Unsaved changes will be deleted. Do you want to continue?',
-        edison_wfsimulation_create_success_message: 'Successfully created.',
+        edison_wfsimulation_save_complete_message: 'Successfully saved',
+        edison_wfsimulation_create_success_message: 'Successfully created',
+        edison_wfsimulation_delete_success_message: 'Successfully deleted',
         edison_wfsimulation_select_first_message: 'Please select the simulation first',
-        ediso_wfsimulation_remove_confirm_message: 'Deleted simulation can not be recovered. Are you sure you want to delete?'
+        edison_wfsimulation_remove_confirm_message: 'Deleted data can not be recovered. Are you sure you want to delete?',
+        edison_wfsimulation_no_selected_job_message: 'Please select the simulation job first',
     },
     WF_STATUS_CODE: {
         CREATED: "CREATED",

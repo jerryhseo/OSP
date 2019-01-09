@@ -28,7 +28,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
-        	
+
             if (source.objectType !== "Node" && target.objectType !== "Node") {
                 if (source === target) {
                     return false;
@@ -62,7 +62,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 			} else {
                 				isEqualsPortType = checkPortTypeForConnection(source, target, true);
                 			}
-                			
+
                 			return isEqualsPortType;
                 		}
                 		return true;
@@ -77,35 +77,35 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
         	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
-        		if(source.getAllEdges().length-1 == 0){     
+        		if(source.getAllEdges().length-1 == 0){
         			delete sourceData.outputPorts[source.id].dataType_;
         		}
         	}
         }
     });
-    
+
     function checkPortTypeForConnection(source, target, isFileComponent){
     	var sourceData = source.getNode().data,
     		targetData = target.getNode().data;
-    	
+
     	var sourcePortDataType = null;
     	if(isFileComponent){
     		sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
     	} else {
     		sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
     	}
-    	
+
     	var targetPortDataType = targetData[target.getType()][target.id].dataType_;
     	var sourectDataTypeStr = sourcePortDataType.name + sourcePortDataType.version;
     	var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
-    	
+
         if (sourectDataTypeStr != targetDataTypeStr) {
             return false;
         } else {
             return true;
         }
     }
-    
+
     var view = {
         nodes: {
             "scienceApp": {
@@ -152,7 +152,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
         }
     }
-    
+
     function openWfAppDataSettingHandler(node){
     	var wfId = node.id;
         var data = node.data;
@@ -222,13 +222,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         jsPlumb.removeClass(controls.querySelectorAll("[mode]"), "selected-mode");
         jsPlumb.addClass(controls.querySelectorAll("[mode='" + mode + "']"), "selected-mode");
     });
-    
+
     renderer.bind("group:addMember", function(params) {
     	if(params.group!=true){
     		wfWorkflowJsPlumbInstance.clearSelection();
     		renderer.sizeGroupToFit(params.group);
     	}
-    	
+
     	renderer.setZoom(2.9, false);
     	renderer.zoomToFit();
     });
@@ -250,7 +250,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             renderer.setZoom(zoomLevel, true);
         }
     });
-    
+
 
     jsPlumb.on(canvasElement, "tap", ".group-delete", function (e) {
     	var info = wfWorkflowJsPlumbInstance.getObjectInfo(this);
@@ -405,7 +405,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	}else{
         		drawWorkFlowAppDiv(pageX, pageY, data);
         	}
-            
+
         }
     }
 
@@ -477,7 +477,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     	node["data"] = nodeData;
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-    
+
     function setAppSampleData(nodeId,sampleData) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	if(sampleData.hasOwnProperty(OSP.Constants.ID)){
@@ -487,7 +487,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     	wfBackgroupSave();
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-    
+
     function setPortSampleData(nodeId,portType,portId,preFileId,defaultEditor,isWfSample,sampleData) {
     	var nodeData = currentJsPlumbInstance.getNode(nodeId).data;
     	var portData = nodeData[portType][portId];
@@ -504,11 +504,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     			nodeData["files"] = [sampleData[OSP.Constants.ID]];
     		}
     	}
-    	
+
     	wfBackgroupSave();
     	console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
-    
+
     function wfBackgroupSave() {
     	var localWorkflow = modifyingWorkflow;
     	var wfId = localWorkflow.workflowId;
@@ -525,12 +525,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     	var wfId = savedId ? savedId : getGUID();
     	currentJsPlumbInstance.addGroup({
             id: wfId,
-            type:"workflowGroup", 
+            type:"workflowGroup",
             left: pageX,
             top: pageY,
             title:"Group "+ (currentJsPlumbInstance.getGroupCount() + 1)
         });
-    	
+
     	renderer.zoomToFit();
         console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
@@ -720,12 +720,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 var wfId = $(this).attr("id");
                 var node = currentJsPlumbInstance.getNode(wfId);
                 currentJsPlumbInstance.removeNode(node);
-                
+
                 if(node.data.type===WF_APP_TYPES.APP.NAME){
-                	
+
                 }else{
                 	if(node.data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME){
-                		
+
                 	}
                 }
                 console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
@@ -765,7 +765,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
-            
+
             if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
                 items["items"]["open-texteditor"] = {
                     name: "Converter Script",
@@ -791,7 +791,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         }
                     };
                 }
-            
+
             if(nodeData["type"]){
             	var type = nodeData["type"];
             	if (type === "scienceApp") {
@@ -887,7 +887,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     }
                 };
             }
-            
+
             /* 2019.01.03 _ Add Context menu('Open Workbench') in execute page */
             if(!isDesigner && runType != WF_APP_TYPES.CONTROLLER.NAME
             		 && runType != WF_APP_TYPES.FILE_COMPONENT.NAME

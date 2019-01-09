@@ -359,23 +359,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 simulationId,
                 {},
                 function (jobsMap) {
-                    // createPanel('Simulation Jobs' ,PANEL_DATA['jobs'], 'jobs')
                     currSimulations.select(simulationId)
                     currJobs.set(jobsMap.jobs)
                     renderJobs(jobsMap, currentPage === 1)
-                    // jobsMap.jobs.push({
-                    //     id: currSimulations.selected().simulationId,
-                    //     text: currSimulations.selected().title,
-                    //     parent: '#',
-                    //     type: 'workflow',
-                    // })
-                    // var instanceTreeSelector = "#" + namespace + "column-1";
-                    // if($(instanceTreeSelector).hasClass("jstree")){
-                    //     $(instanceTreeSelector).jstree(true).settings.core.data = jobsMap.jobs;
-                    //     $(instanceTreeSelector).jstree(true).refresh();
-                    // }else{
-                    //     initJstree(instanceTreeSelector, jobsMap.jobs);
-                    // }
                 },
                 function () {
                     currSimulations.select()
@@ -592,7 +578,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
             return false;
         }
-        _confirm(CONSTS.MESSAGE.ediso_wfsimulation_remove_confirm_message,
+        _confirm(CONSTS.MESSAGE.edison_wfsimulation_remove_confirm_message,
             function () {
                 if (currSimulations.contains(simulationId)) {
                     executor.deleteSimulation(
@@ -670,6 +656,68 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    $("#" + namespace + "header-li-save").click(function(e){
+        if(currJobs.selected()) {
+            saveSimulationJob(currJobs.selected())
+        } else {
+            toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message);
+        }
+    })
+
+    function saveSimulationJob(job, callback) {
+        var jqInstance = designer.getCurrentJsPlumbInstance()
+        job.screenLogic = JSON.stringify(jqInstance.exportData({ type: "json" }))
+        executor.updateSimulationJob(
+            job,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob)
+                } else {
+                    fetchJobs(simulationJob.simulationId, null, 1)
+                    _delay(function () {
+                        toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_save_complete_message)
+                    }, 100)
+                }
+            },
+            function () {
+            })
+    }
+
+    $("#" + namespace + "header-li-copy").click(function (e) {
+        if(_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)){
+            return false;
+        }
+        var sourceJob = currJobs.selected();
+        var inputs = [{"name": "Title", "value": "copy " + sourceJob.title}];
+        var btns = {"ok": "Save", "cancel": "Cancel"};
+        createOpenModal("Copy", inputs, btns, function(e){
+            var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+            copySimulationJob(sourceJob, title)
+            $("#" + namespace + "wf-modal").modal("hide");
+        });
+    })
+
+    function copySimulationJob(job, title, callback) {
+        saveSimulationJob(job, function(sourceJob){
+            var params = {
+                simulationJobId: sourceJob.simulationJobId,
+                title: title,
+            }
+            executor.copySimulationJob(
+                params,
+                function (simulationJob) {
+                    if (callback) {
+                        callback(simulationJob)
+                    } else {
+                        fetchJobs(simulationJob.simulationId, null, 1)
+                        _delay(function () {
+                            toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_save_complete_message)
+                        }, 100)
+                    }
+                })
+        })
+    }
+
     function createOpenModal(title, inputs, btns, saveHandler) {
         var modal = $("#" + namespace + "wf-modal");
         modal.find(".modal-title").text(title);
@@ -699,6 +747,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 toastr["error"]("", msg);
             });
     }
+
+    $("#" + namespace + "header-li-delete").click(function (e) {
+        if (_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)) {
+            return false;
+        }
+        _confirm(CONSTS.MESSAGE.edison_wfsimulation_remove_confirm_message,
+            function () {
+                var simulationId = currJobs.selected().simulationId
+                executor.deleteSimulationJob(currJobs.selected(), function () {
+                    fetchJobs(simulationId, null, 1)
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_delete_success_message)
+                })
+            },
+            function () {
+            });
+    })
 
     /////////////////////////////////////////// renew end
 
@@ -961,49 +1025,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    function loadWorkflowInstances(panelType, currentPage){
-        if(panelType === 'open' || panelType === 'import'){
-            if(!_isEmpty(PANEL_DATA.setting.form.simulationId)){
-                silentSave();
-            }
-            drawWorkflowInstances({});
-
-        }
-    }
-
-    function silentSave(){
-        var simulationId = PANEL_DATA.setting.form.simulationId;
-        var simulationTitle = PANEL_DATA.setting.form.simulationTitle;
-        saveWorkflowInstance(simulationId, simulationTitle,
-            function (workflowInstance) {
-                setMetaData({
-                    "title": PANEL_DATA.setting.form.title,
-                    "description": PANEL_DATA.setting.form.description,
-                    "workflowId": PANEL_DATA.setting.form.workflowId,
-                    "simulationTitle": workflowInstance.title,
-                    "simulationId": workflowInstance.simulationId
-                });
-            });
-    }
-
-    function drawWorkflowInstances(params) {
-        var workflowId = getMetaData().workflowId;
-        var instanceTreeSelector = "#" + namespace + "menu-panel-box .open .box-body";
-        aSyncAjaxHelper.post("/delegate/services/workflows/" + workflowId + "/instances",
-            params,
-            function (workflowInstances) {
-                if($(instanceTreeSelector).hasClass("jstree")){
-                    $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
-                    $(instanceTreeSelector).jstree(true).refresh();
-                }else{
-                    initJstree(instanceTreeSelector, workflowInstances);
-                }
-            },
-            function (msg) {
-                toastr["error"]("", msg);
-            });
-    }
-
     function saveOrUpdateWorkflowInstance(panelDataType) {
         if (isValidate()) {
             if (_isEmpty(PANEL_DATA.setting.form.simulationId)) {
@@ -1030,26 +1051,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function saveWorkflowInstance(simulationId, simulationTitle, callback) {
         executor.updateWorkflowInstance(simulationId, simulationTitle,
             designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
-    }
-
-    function deleteWorkflowInstance(panelDataType){
-        if (!_isEmpty(PANEL_DATA.setting.form.simulationId, var_no_workflow_instance_msg)) {
-            _confirm(var_remove_workflow_confirm_message, function () {
-                executor.deleteWorkflowInstance(PANEL_DATA.setting.form.simulationId,
-                    function (reponseStatus) {
-                        toastr["success"]("", var_success_remove_workflow_message);
-                        var workflowId = PANEL_DATA.setting.form.workflowId;
-                        resetWorkflowInstance();
-                        openWorkflowByWorkflowId(workflowId);
-                    });
-                closePanel();
-            }, closePanel);
-        }
-    }
-
-    function resetWorkflowInstance(){
-        setMetaData({});
-        setTitle();
     }
 
     function openWorkflowByWorkflowId(workflowId, isNotNew, callback){

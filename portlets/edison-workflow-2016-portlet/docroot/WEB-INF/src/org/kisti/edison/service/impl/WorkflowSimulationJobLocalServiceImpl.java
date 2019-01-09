@@ -202,6 +202,29 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         return this.updateWorkflowSimulationJob(simulationJob);
     }
 
+    // COPY
+    public WorkflowSimulationJob copyWorkflowSimulationJob(
+        long sourceSimulationJobId, Map<String, Object> params)
+        throws SystemException, PortalException{
+        WorkflowSimulationJob sourceJob = this.getWorkflowSimulationJob(sourceSimulationJobId);
+        String simulationJobTitle = GetterUtil.getString(params.get("title"));
+
+        WorkflowSimulationJob targetJob = createWorkflowSimulationJob();
+        targetJob.setWorkflowId(sourceJob.getWorkflowId());
+        targetJob.setSimulationId(sourceJob.getSimulationId());
+        if(StringUtils.hasText(simulationJobTitle)){
+            targetJob.setTitle(simulationJobTitle);
+        }else{
+            targetJob.setTitle("copy " + sourceJob.getTitle());
+        }
+        targetJob.setUserId(sourceJob.getUserId());
+        targetJob.setScreenLogic(sourceJob.getScreenLogic());
+        targetJob = WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationJob(targetJob);
+        WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJob(targetJob.getSimulationId(),
+            targetJob.getSimulationJobId());
+        return targetJob;
+    }
+    
     // CREATE
     public WorkflowSimulationJob createWorkflowSimulationJob(
         long simulationId, Map<String, Object> params, HttpServletRequest request) 

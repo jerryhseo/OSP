@@ -121,6 +121,45 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
+    function updateSimulationJob(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/update",
+            params,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+
+    function copySimulationJob(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/copy",
+            params,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+
+    function deleteSimulationJob(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/delete",
+            {},
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+
     function fetchSimulationJobSeq(simulationId, callback, errorCallback) {
         aSyncAjaxHelper.get(URI_PREFIX + "/simulation/" + simulationId + "/job/seq",
         function (seqMap) {
@@ -258,7 +297,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
 
     function updateStatus(workflowInstanceId) {
         getWorkflowInstanceStatus(workflowInstanceId, function(workflowStatus){
-            console.log(workflowStatus);
             if (workflowStatus.workflow.status === WF_STATUS_CODE.NOT_FOUND) {
                 toastr["error"]("", var_workflow_status_not_found_message + workflowStatus.workflow.uuid);
             } else {
@@ -561,6 +599,9 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "deleteSimulation": deleteSimulation,
         "fetchSimulationJobs": fetchSimulationJobs,
         "createSimulationJob": createSimulationJob,
+        "updateSimulationJob": updateSimulationJob,
+        "copySimulationJob": copySimulationJob,
+        "deleteSimulationJob": deleteSimulationJob,
         "fetchSimulationJobSeq": fetchSimulationJobSeq,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,

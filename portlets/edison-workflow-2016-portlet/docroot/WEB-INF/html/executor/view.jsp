@@ -142,23 +142,28 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-plus-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">New</span>
               </li>
-              <li id="<portlet:namespace/>header-li-save" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-save" data-btn-type="save-job" data-divider="job-li-divider">
                 <i class="fa fa-save fa-2x"></i><br>
                 <span class="nav-icon-text">Save</span>
               </li>
-              <li id="<portlet:namespace/>header-li-copy" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-copy" data-btn-type="copy-job" data-divider="job-li-divider">
                 <i class="fa fa-copy fa-2x"></i><br>
                 <span class="nav-icon-text">Copy</span>
               </li>
-              <li id="<portlet:namespace/>header-li-delete" data-divider="job-li-divider">
+              <li id="<portlet:namespace/>header-li-delete" data-btn-type="delete-job" data-divider="job-li-divider">
                 <i class="fa fa-trash-o fa-2x"></i><br>
                 <span class="nav-icon-text">Delete</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <%--<li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">--%>
-                <%--<i class="fa fa-cloud-upload fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">Submit</span>--%>
-              <%--</li>--%>
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">
+                <i class="fa fa-cloud-upload fa-2x"></i><br>
+                <span class="nav-icon-text">Submit</span>
+              </li>
+              <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
+              <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
+                <i class="fa fa-share-square-o fa-2x"></i><br>
+                <span class="nav-icon-text">Designer</span>
+              </li>
               <%--<li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">--%>
                 <%--<i class="fa fa-window-close-o fa-2x"></i><br>--%>
                 <%--<span class="nav-icon-text">cancel</span>--%>

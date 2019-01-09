@@ -263,6 +263,22 @@ public class WorkflowSimulationController{
     }
     
     @RequestMapping(value = {
+        "/{simulationId}/job/{simulationJobId}/copy", 
+    "/job/{simulationJobId}/copy"}, method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> copyWorkflowSimulationJob(
+        @RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long targetSimulationJobId, 
+        HttpServletRequest request) throws Exception{
+        try{
+            return WorkflowSimulationJobLocalServiceUtil.copyWorkflowSimulationJob(targetSimulationJobId, params)
+                .getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/delete",
         "/job/{simulationJobId}/delete"}, method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> deleteWorkflowSimulationJob(

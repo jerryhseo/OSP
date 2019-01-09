@@ -201,175 +201,179 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 
 		_methodParameterTypes66 = new String[] { "long", "java.util.Map" };
 
-		_methodName67 = "createWorkflowSimulationJob";
+		_methodName67 = "copyWorkflowSimulationJob";
 
-		_methodParameterTypes67 = new String[] {
+		_methodParameterTypes67 = new String[] { "long", "java.util.Map" };
+
+		_methodName68 = "createWorkflowSimulationJob";
+
+		_methodParameterTypes68 = new String[] {
 				"long", "java.util.Map", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName69 = "getSimulationJobSeq";
+		_methodName70 = "getSimulationJobSeq";
 
-		_methodParameterTypes69 = new String[] { "long" };
+		_methodParameterTypes70 = new String[] { "long" };
 
-		_methodName70 = "createSimulationJob";
+		_methodName71 = "createSimulationJob";
 
-		_methodParameterTypes70 = new String[] {
+		_methodParameterTypes71 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulation",
 				"org.kisti.edison.model.Workflow", "java.lang.String"
 			};
 
-		_methodName71 = "createWorkflowSimulationJob";
-
-		_methodParameterTypes71 = new String[] {  };
-
 		_methodName72 = "createWorkflowSimulationJob";
 
-		_methodParameterTypes72 = new String[] {
+		_methodParameterTypes72 = new String[] {  };
+
+		_methodName73 = "createWorkflowSimulationJob";
+
+		_methodParameterTypes73 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
-
-		_methodName74 = "startWorkflowSimulationJob";
-
-		_methodParameterTypes74 = new String[] { "long" };
 
 		_methodName75 = "startWorkflowSimulationJob";
 
-		_methodParameterTypes75 = new String[] {
+		_methodParameterTypes75 = new String[] { "long" };
+
+		_methodName76 = "startWorkflowSimulationJob";
+
+		_methodParameterTypes76 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName76 = "askForWorkflowStart";
+		_methodName77 = "askForWorkflowStart";
 
-		_methodParameterTypes76 = new String[] { "java.lang.String" };
+		_methodParameterTypes77 = new String[] { "java.lang.String" };
 
-		_methodName77 = "getWorkflowStatus";
-
-		_methodParameterTypes77 = new String[] { "long" };
-
-		_methodName78 = "deleteSimulationAndJobs";
+		_methodName78 = "getWorkflowStatus";
 
 		_methodParameterTypes78 = new String[] { "long" };
 
-		_methodName79 = "deleteWorkflowSimulationJobWitEngine";
+		_methodName79 = "deleteSimulationAndJobs";
 
 		_methodParameterTypes79 = new String[] { "long" };
 
 		_methodName80 = "deleteWorkflowSimulationJobWitEngine";
 
-		_methodParameterTypes80 = new String[] {
+		_methodParameterTypes80 = new String[] { "long" };
+
+		_methodName81 = "deleteWorkflowSimulationJobWitEngine";
+
+		_methodParameterTypes81 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName81 = "pauseWorkflowSimulationJob";
-
-		_methodParameterTypes81 = new String[] { "long" };
-
-		_methodName82 = "resumeWorkflowSimulationJob";
+		_methodName82 = "pauseWorkflowSimulationJob";
 
 		_methodParameterTypes82 = new String[] { "long" };
 
-		_methodName83 = "updateWorkflowSimulationJob";
+		_methodName83 = "resumeWorkflowSimulationJob";
 
-		_methodParameterTypes83 = new String[] {
+		_methodParameterTypes83 = new String[] { "long" };
+
+		_methodName84 = "updateWorkflowSimulationJob";
+
+		_methodParameterTypes84 = new String[] {
 				"org.codehaus.jackson.JsonNode",
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName84 = "askForWorkflowStatus";
+		_methodName85 = "askForWorkflowStatus";
 
-		_methodParameterTypes84 = new String[] { "java.lang.String" };
+		_methodParameterTypes85 = new String[] { "java.lang.String" };
 
-		_methodName86 = "getWorkflowSimulationLog";
-
-		_methodParameterTypes86 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName87 = "getWorkflowSimulationErrorLog";
+		_methodName87 = "getWorkflowSimulationLog";
 
 		_methodParameterTypes87 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName89 = "getWorkflowJobIntermediateResult";
+		_methodName88 = "getWorkflowSimulationErrorLog";
 
-		_methodParameterTypes89 = new String[] {
+		_methodParameterTypes88 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName90 = "getWorkflowJobIntermediateResult";
+
+		_methodParameterTypes90 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName94 = "downloadFileApi";
+		_methodName95 = "downloadFileApi";
 
-		_methodParameterTypes94 = new String[] {
+		_methodParameterTypes95 = new String[] {
 				"com.liferay.portal.model.User", "long",
 				"com.liferay.portal.kernel.json.JSONObject"
-			};
-
-		_methodName97 = "uploadFileToIcebreaker";
-
-		_methodParameterTypes97 = new String[] {
-				"long", "java.lang.String", "java.io.File"
 			};
 
 		_methodName98 = "uploadFileToIcebreaker";
 
 		_methodParameterTypes98 = new String[] {
-				"long", "java.lang.String", "java.io.InputStream"
+				"long", "java.lang.String", "java.io.File"
 			};
 
 		_methodName99 = "uploadFileToIcebreaker";
 
 		_methodParameterTypes99 = new String[] {
+				"long", "java.lang.String", "java.io.InputStream"
+			};
+
+		_methodName100 = "uploadFileToIcebreaker";
+
+		_methodParameterTypes100 = new String[] {
 				"long", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName100 = "getCountWorkflowSimulationJobByUserId";
+		_methodName101 = "getCountWorkflowSimulationJobByUserId";
 
-		_methodParameterTypes100 = new String[] {
+		_methodParameterTypes101 = new String[] {
 				"com.liferay.portal.model.User", "java.util.Map"
 			};
 
-		_methodName101 = "getWorkflowSimulationJobByUserId";
+		_methodName102 = "getWorkflowSimulationJobByUserId";
 
-		_methodParameterTypes101 = new String[] {
+		_methodParameterTypes102 = new String[] {
 				"com.liferay.portal.model.User", "java.util.Map",
 				"java.util.Locale"
 			};
 
-		_methodName102 = "getDataTypeEditors";
-
-		_methodParameterTypes102 = new String[] {
-				"com.kisti.osp.icecap.model.DataType"
-			};
-
-		_methodName103 = "getDataTypeDefaultEditor";
+		_methodName103 = "getDataTypeEditors";
 
 		_methodParameterTypes103 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName104 = "getDataTypeDefaultAnalyzer";
+		_methodName104 = "getDataTypeDefaultEditor";
 
 		_methodParameterTypes104 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName105 = "getDataTypeAnalyzers";
+		_methodName105 = "getDataTypeDefaultAnalyzer";
 
 		_methodParameterTypes105 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName106 = "getRootSiteAssetCategries";
+		_methodName106 = "getDataTypeAnalyzers";
 
-		_methodParameterTypes106 = new String[] { "long", "long" };
+		_methodParameterTypes106 = new String[] {
+				"com.kisti.osp.icecap.model.DataType"
+			};
 
-		_methodName107 = "getSiteAssetCategoriesByParentId";
+		_methodName107 = "getRootSiteAssetCategries";
 
-		_methodParameterTypes107 = new String[] { "long", "long", "long" };
+		_methodParameterTypes107 = new String[] { "long", "long" };
 
-		_methodName110 = "getLv1Categories";
+		_methodName108 = "getSiteAssetCategoriesByParentId";
 
-		_methodParameterTypes110 = new String[] {
+		_methodParameterTypes108 = new String[] { "long", "long", "long" };
+
+		_methodName111 = "getLv1Categories";
+
+		_methodParameterTypes111 = new String[] {
 				"long", "long", "java.util.Locale"
 			};
 	}
@@ -613,181 +617,187 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 
 		if (_methodName67.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.copyWorkflowSimulationJob(((Long)arguments[0]).longValue(),
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
+		}
+
+		if (_methodName68.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.createWorkflowSimulationJob(((Long)arguments[0]).longValue(),
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1],
 				(javax.servlet.http.HttpServletRequest)arguments[2]);
 		}
 
-		if (_methodName69.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getSimulationJobSeq(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName70.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.createSimulationJob((org.kisti.edison.model.WorkflowSimulation)arguments[0],
 				(org.kisti.edison.model.Workflow)arguments[1],
 				(java.lang.String)arguments[2]);
 		}
 
-		if (_methodName71.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+		if (_methodName72.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.createWorkflowSimulationJob();
 		}
 
-		if (_methodName72.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
+		if (_methodName73.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.createWorkflowSimulationJob((org.kisti.edison.model.WorkflowSimulationJob)arguments[0]);
-		}
-
-		if (_methodName74.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName75.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob((org.kisti.edison.model.WorkflowSimulationJob)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName76.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.askForWorkflowStart((java.lang.String)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob((org.kisti.edison.model.WorkflowSimulationJob)arguments[0]);
 		}
 
 		if (_methodName77.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getWorkflowStatus(((Long)arguments[0]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.askForWorkflowStart((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName78.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes78, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.deleteSimulationAndJobs(((Long)arguments[0]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowStatus(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName79.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes79, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationJobWitEngine(((Long)arguments[0]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.deleteSimulationAndJobs(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName80.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes80, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationJobWitEngine((org.kisti.edison.model.WorkflowSimulationJob)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationJobWitEngine(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName81.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes81, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.pauseWorkflowSimulationJob(((Long)arguments[0]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.deleteWorkflowSimulationJobWitEngine((org.kisti.edison.model.WorkflowSimulationJob)arguments[0]);
 		}
 
 		if (_methodName82.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes82, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.resumeWorkflowSimulationJob(((Long)arguments[0]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.pauseWorkflowSimulationJob(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName83.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes83, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob((org.codehaus.jackson.JsonNode)arguments[0],
-				(org.kisti.edison.model.WorkflowSimulationJob)arguments[1]);
+			return WorkflowSimulationJobLocalServiceUtil.resumeWorkflowSimulationJob(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName84.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.askForWorkflowStatus((java.lang.String)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob((org.codehaus.jackson.JsonNode)arguments[0],
+				(org.kisti.edison.model.WorkflowSimulationJob)arguments[1]);
 		}
 
-		if (_methodName86.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationLog((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.askForWorkflowStatus((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName87.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationLog((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+		}
+
+		if (_methodName88.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes88, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationErrorLog((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
-		if (_methodName89.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes89, parameterTypes)) {
+		if (_methodName90.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getWorkflowJobIntermediateResult((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1]);
 		}
 
-		if (_methodName94.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes94, parameterTypes)) {
+		if (_methodName95.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes95, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.downloadFileApi((com.liferay.portal.model.User)arguments[0],
 				((Long)arguments[1]).longValue(),
 				(com.liferay.portal.kernel.json.JSONObject)arguments[2]);
 		}
 
-		if (_methodName97.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes97, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.uploadFileToIcebreaker(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1], (java.io.File)arguments[2]);
-		}
-
 		if (_methodName98.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.uploadFileToIcebreaker(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1],
-				(java.io.InputStream)arguments[2]);
+				(java.lang.String)arguments[1], (java.io.File)arguments[2]);
 		}
 
 		if (_methodName99.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes99, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.uploadFileToIcebreaker(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+				(java.lang.String)arguments[1],
+				(java.io.InputStream)arguments[2]);
 		}
 
 		if (_methodName100.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes100, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getCountWorkflowSimulationJobByUserId((com.liferay.portal.model.User)arguments[0],
-				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
+			return WorkflowSimulationJobLocalServiceUtil.uploadFileToIcebreaker(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName101.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes101, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getCountWorkflowSimulationJobByUserId((com.liferay.portal.model.User)arguments[0],
+				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1]);
+		}
+
+		if (_methodName102.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes102, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobByUserId((com.liferay.portal.model.User)arguments[0],
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[1],
 				(java.util.Locale)arguments[2]);
 		}
 
-		if (_methodName102.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes102, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getDataTypeEditors((com.kisti.osp.icecap.model.DataType)arguments[0]);
-		}
-
 		if (_methodName103.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes103, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultEditor((com.kisti.osp.icecap.model.DataType)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.getDataTypeEditors((com.kisti.osp.icecap.model.DataType)arguments[0]);
 		}
 
 		if (_methodName104.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes104, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultAnalyzer((com.kisti.osp.icecap.model.DataType)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultEditor((com.kisti.osp.icecap.model.DataType)arguments[0]);
 		}
 
 		if (_methodName105.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes105, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getDataTypeAnalyzers((com.kisti.osp.icecap.model.DataType)arguments[0]);
+			return WorkflowSimulationJobLocalServiceUtil.getDataTypeDefaultAnalyzer((com.kisti.osp.icecap.model.DataType)arguments[0]);
 		}
 
 		if (_methodName106.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes106, parameterTypes)) {
-			return WorkflowSimulationJobLocalServiceUtil.getRootSiteAssetCategries(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return WorkflowSimulationJobLocalServiceUtil.getDataTypeAnalyzers((com.kisti.osp.icecap.model.DataType)arguments[0]);
 		}
 
 		if (_methodName107.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes107, parameterTypes)) {
+			return WorkflowSimulationJobLocalServiceUtil.getRootSiteAssetCategries(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName108.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes108, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getSiteAssetCategoriesByParentId(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName110.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes110, parameterTypes)) {
+		if (_methodName111.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes111, parameterTypes)) {
 			return WorkflowSimulationJobLocalServiceUtil.getLv1Categories(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(), (java.util.Locale)arguments[2]);
 		}
@@ -871,16 +881,16 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes66;
 	private String _methodName67;
 	private String[] _methodParameterTypes67;
-	private String _methodName69;
-	private String[] _methodParameterTypes69;
+	private String _methodName68;
+	private String[] _methodParameterTypes68;
 	private String _methodName70;
 	private String[] _methodParameterTypes70;
 	private String _methodName71;
 	private String[] _methodParameterTypes71;
 	private String _methodName72;
 	private String[] _methodParameterTypes72;
-	private String _methodName74;
-	private String[] _methodParameterTypes74;
+	private String _methodName73;
+	private String[] _methodParameterTypes73;
 	private String _methodName75;
 	private String[] _methodParameterTypes75;
 	private String _methodName76;
@@ -901,16 +911,16 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes83;
 	private String _methodName84;
 	private String[] _methodParameterTypes84;
-	private String _methodName86;
-	private String[] _methodParameterTypes86;
+	private String _methodName85;
+	private String[] _methodParameterTypes85;
 	private String _methodName87;
 	private String[] _methodParameterTypes87;
-	private String _methodName89;
-	private String[] _methodParameterTypes89;
-	private String _methodName94;
-	private String[] _methodParameterTypes94;
-	private String _methodName97;
-	private String[] _methodParameterTypes97;
+	private String _methodName88;
+	private String[] _methodParameterTypes88;
+	private String _methodName90;
+	private String[] _methodParameterTypes90;
+	private String _methodName95;
+	private String[] _methodParameterTypes95;
 	private String _methodName98;
 	private String[] _methodParameterTypes98;
 	private String _methodName99;
@@ -931,6 +941,8 @@ public class WorkflowSimulationJobLocalServiceClpInvoker {
 	private String[] _methodParameterTypes106;
 	private String _methodName107;
 	private String[] _methodParameterTypes107;
-	private String _methodName110;
-	private String[] _methodParameterTypes110;
+	private String _methodName108;
+	private String[] _methodParameterTypes108;
+	private String _methodName111;
+	private String[] _methodParameterTypes111;
 }

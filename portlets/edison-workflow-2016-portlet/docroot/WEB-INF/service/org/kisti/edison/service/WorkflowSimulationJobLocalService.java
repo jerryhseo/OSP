@@ -389,6 +389,12 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public org.kisti.edison.model.WorkflowSimulationJob copyWorkflowSimulationJob(
+		long sourceSimulationJobId,
+		java.util.Map<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
 		long simulationId,
 		java.util.Map<java.lang.String, java.lang.Object> params,
