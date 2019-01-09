@@ -37,7 +37,7 @@
 
 .wf-box .wf-node-header h1.wf-node-header-title {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     font-family: proxima-nova-bold;
     margin: 0;
     padding: 6px 5px;
@@ -50,10 +50,9 @@
 }
 
 .wf-box .wf-node-header .wf-node-menu-icon{
-	width: 20px;
 	float: right;
-	padding-top: 3px;
 	cursor: pointer;
+	padding: 2px 5px;
 }
 
 .wf-box .wf-node-ports {
@@ -62,6 +61,7 @@
     box-shadow: 0 0 1px #dddfe3;
     background-color: hsla(0, 100%, 100%, .5);
     position: relative;
+    min-height: 60px;
 }
 
 .wf-box .wf-node-ports.wf-tool {
@@ -86,6 +86,7 @@
 .wf-box .wf-node-ports .output-ports-list li.wf-port {
     display: inline-block;
     width: 100%;
+    vertical-align: middle;
 }
 
 .wf-box .wf-node-ports .input-ports-list .wf-port label.wf-port-label {
@@ -95,6 +96,7 @@
     position: relative;
     left: 5px;
     float: left;
+    margin-bottom: 0px;
 }
 
 .wf-box .wf-node-ports .input-ports-list .wf-port div.connect {
@@ -129,6 +131,7 @@
     position: relative;
     right: 5px;
     float: right;
+    margin-bottom: 0px;
 }
 
 .wf-box .wf-node-ports .output-ports-list .wf-port div.connect {
@@ -199,8 +202,10 @@
 
 .wf-box .wf-node-execute-status{
 	width: 100%;
-	font-size: 10px;
+	font-size: 12px;
 	text-align: center;
+	font-weight: 600;
+	border-top: 1px solid #bbb;
 }
 
 .wf-box.WAITING .wf-node-ports {
