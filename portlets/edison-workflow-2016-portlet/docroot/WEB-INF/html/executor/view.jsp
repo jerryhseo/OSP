@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="${contextPath}/css/jsplumb/jsplumbtoolkit-defaults.css">
 <link rel="stylesheet" href="${contextPath}/css/simulation-workbench.css">
 <link rel="stylesheet" href="${contextPath}/css/workflow-executor.css">
+<link rel="stylesheet" href="${contextPath}/css/node.css">
 <link rel="stylesheet" href="${contextPath}/css/group.css">
 <script>
 var var_save_success_message =  Liferay.Language.get("edison-workflow-save-success-message");
@@ -51,6 +52,8 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var contextPath = '${contextPath}';
 </script>
+
+
 <style>
 .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
 </style>
@@ -265,7 +268,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
 <script src="${contextPath}/js/constant.js"></script>
-<script type="text/x-jtk-templates" src="${contextPath}/templete/templete.html"></script>
+<script type="text/x-jtk-templates" src="${contextPath}/templete/execute-template.html"></script>
 
 <script id="tpl-menu-panel-box" type="text/html">
 <div class="{{panel-type}} col-md-{{col}}">
@@ -372,6 +375,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <script>
 var namespace = "<portlet:namespace/>";
 var jqPortletBoundaryId = "#p_p_id" + namespace;
+var designer = null;
+var executor = null;
+var uiPanel = null;
 $(document).ready(function(){
   consoleLog.setLoggingLevel({
     error : true,
@@ -403,9 +409,9 @@ $(document).ready(function(){
       "showMethod": "slideDown",
       "hideMethod": "slideUp"
   };
-  var designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS, false);
-  var executor = new SimulationExecutor(namespace, $, designer, toastr);
-  var uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
+  designer = new Designer(namespace, $, OSP, toastr, true, EDITOR_PORTLET_IDS, false);
+  executor = new SimulationExecutor(namespace, $, designer, toastr);
+  uiPanel = new UIPanelExecutor(namespace, $, designer, executor, toastr);
   designer.setUiPanelInstance(uiPanel);
   // var inputportModule = new WorkflowInputPort(namespace, $, designer, toastr, uiPanel, EDITOR_PORTLET_IDS);
   // designer.setWorkflowInputPortModule(inputportModule);
@@ -453,6 +459,20 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
       params += "&" + thisPortletNamespace + "groupId=" + groupId;
   window.open("<%=scienceAppDetailUrl%>" + params);
 }
+
+AUI().ready(['liferay-util-window'], function(){
+	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
+		<portlet:namespace/>closePopup("dataTypeSearchDialog");
+		
+		/* TODO 노드Id로 노드 찾아서 SimUuid, JobUuid 세팅해주기 */
+		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid);
+		$("body").css('overflow','');
+	});
+	
+	Liferay.provide(window,'<portlet:namespace />closePopup',function(popupIdToClose) {
+		Liferay.Util.getWindow(popupIdToClose).destroy(); 
+	});
+});
 
 </script>
 </div>

@@ -44,8 +44,8 @@ var WF_APP_TYPES = {
         OUTPUT_SCOPE: "controller_input_",
     },FILE_COMPONENT: {
         NAME: "FileComponent",
+        OUTPUT_NAME: "stdout",
         INPUT_DATA_TYPE: "componet_input",
-        OUTPUT_DATA_TYPE: "componet_stdout",
         INPUT_SCOPE: "componet_stdout_",
         OUTPUT_SCOPE: "componet_input_",
     },

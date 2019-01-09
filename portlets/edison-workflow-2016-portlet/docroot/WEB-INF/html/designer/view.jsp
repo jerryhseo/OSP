@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="${contextPath}/css/adminlte/skins/skin-black-light.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminCustom.css">
 <link rel="stylesheet" href="${contextPath}/css/jquery-confirm.min.css">
+<link rel="stylesheet" href="${contextPath}/css/node.css">
 <link rel="stylesheet" href="${contextPath}/css/group.css">
 
 <!-- 2018.12.21 - Add jsPlumb CSS -->
@@ -58,6 +59,7 @@ var var_no_available_analyzer_message = Liferay.Language.get("edison-workflow-no
 var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflow-status-not-found");
 var var_workflow_register_app_error_message = Liferay.Language.get("edison-workflow-register-app-error-message");
 var var_workflow_register_app_role_error_message = Liferay.Language.get("edison-workflow-register-app-role-error-message");
+var var_workflow_config_data_error_message = Liferay.Language.get("edison-workflow-config-data-error-message");
 var var_workflow_remove_status_error_message = Liferay.Language.get("edison-workflow-remove-status-error-message");
 
 
@@ -124,170 +126,7 @@ var contextPath = '${contextPath}';
 
 .pausebox{border-radius:3px; border:solid 1px #fd9b00; background-color:#fd9b00;}
 
-.wf-box {
-	box-sizing: content-box;
-    width: 150px !important;
-    position: absolute;
-    cursor: move;
-    border-radius: 10px;
-    min-width: 80px;
-    min-height: 110px;
-    text-align: center;
-    overflow: visible;
-}
 
-.wf-box h3.wf-title{ 
-	display: block;
-    font-size: 1.17em;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold; 
-}
-
-.wf-box ul.port li{
-	margin-bottom: 10px;
-	border: 1px solid #6d6a6a;
-	background-color: #edf7f7;
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-}
-
-.wf-box .input-ports-list{
-	float: left;
-	position: relative;
-	top: 5px;
-	left: -15px;
-}
-
-.wf-box ul.inputport{
-	text-align: left;
-	padding-left: 0px;
-}
-
-.wf-box ul.inputport .input-port-name{
-	color: #000;
-	font-size: 15px;
-	position: relative;
-	top: -15px;
-	left: -10px;
-	white-space: nowrap;
-}
-
-.wf-box .output-ports-list{
-	float: right;
-	position: relative;
-	top: 5px;
-	right: -20px;
-}
-
-.wf-box ul.outputport{
-	text-align: right;
-	padding-left: 0px;
-	width: 34px;
-}
-
-.wf-box output-ports-list{
-	float: right;
-}
-
-.wf-box ul.outputport .output-port-name{
-	color: #000;
-	font-size: 15px;
-	position: relative;
-	top: -15px;
-	right: -15px;
-	white-space: nowrap;
-}
-
-/* 2018.12.20 */
-.wf-box .wf-icon{
-	text-align: center;
-	font-size: 45px;
-	padding-bottom: 35px;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-
-    /* Center vertically */
-    align-items: center;
-
-    /*Center horizontaly */
-    justify-content: center;
-
-    /*Center horizontaly ie */
-    -ms-flex-pack: center;
-}
-
-.wf-box .wf-icon i{
-	position: relative;
-}
-
-.wf-box .wf-icon .remove-btn{
-	font-size: 12px;
-	position: absolute;
-	top: 5px;
-	right: 10px;
-	cursor: pointer;
-}
-
-.wf-box .wf-app-title, .wf-container .jstree-leaf{white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-/* 2018.12.20 */
-.wf-box .wf-app-title{
-	font-size: 15px;
-	font-weight: 500;
-	position: absolute;
-	bottom: -45px;
-	left: -20px;
-	width: 130%;
-}
-
-/* 2018.12.20 */
-.wf-box .addIp { 
-	font-weight: 600; 
-	text-decoration: none; 
-	text-align: center; 
-	font-size: 15px;
-	padding: 6px 10px 10px;
-	color: #fff;
-	border-top: 1px solid #fff;
-	position: absolute;
-	bottom: 15px;
-	width: 100%;
-	height: 10px;
-}
-
-.wf-app-status-icon{ top: 25px; left: 10px; position: relative;}
-
-.wf-converter{}
-.wf-converter.wf-dynamic > .wf-app-title{overflow: visible; white-space: normal;}
-.waitingbox.wf-converter.wf-dynamic{background: #44b4c5;}
-.waitingbox.wf-converter.wf-static{background: #3181c6;}
-
-.wf-box.wf-controller{
-    width: 150px !important;
-    height: 120px !important;
-    padding: 0px !important;
-    border: none !important;
-}
-.wf-box > svg {
-    width: 180px;
-    height: 140px;
-}
-.wf-box g.fc-decision > text{
-    font-size: 15px;
-    font-weight: bold;
-    fill:  #114a69;
-}
-.wf-box g.fc-decision > .fc-rhombus{
-    stroke: #00abe3;
-    fill: #44b4c5;
-}
 
 .hidden{display: none;}
 .jsplumb-endpoint:hover{cursor: pointer; z-index: 9999;}
@@ -790,7 +629,11 @@ $(document).ready(function(){
   });
 
   if(loadedWorkflowId && loadedWorkflowId !== 'null'){
-      uiPanel.openWorkflow(loadedWorkflowId);
+	  bStart();
+      setTimeout(function() {
+    	  uiPanel.openWorkflow(loadedWorkflowId);
+    	  bEnd();
+    	}, 2000);
   }
   
   

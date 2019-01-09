@@ -34,6 +34,9 @@ var AppTree = (function(namespace, $, designer){
                 "text": "Controller",
                 "parent": "controller_category",
                 "groupId": getSpecificSiteGroupId(),
+                "ibData": {
+                	"status": "WAITING"
+                },
                 "inputports": {
                     "criteria": {
                     	"name_": "criteria",
@@ -129,6 +132,9 @@ var AppTree = (function(namespace, $, designer){
                 "text": "Dynamic Converter",
                 "parent": "converter_category",
                 "groupId": getSpecificSiteGroupId(),
+                "ibData": {
+                	"status": "WAITING"
+                },
                 "inputports": {
                     "localfile0": {
                         "inputData_": {
@@ -183,14 +189,14 @@ var AppTree = (function(namespace, $, designer){
         });
         
         dArr.push({
-            "text": "File Component",
+            "text": "Data Component",
             "parent": "componet_category",
             "type": "app",
             "id": "file_component",
             "data": {
                 "appType": "FileComponent",
-                "name": "File Component",
-                "text": "File Component",
+                "name": "Data Component",
+                "text": "Data Component",
                 "parent": "componet_category",
                 "groupId": getSpecificSiteGroupId(),
                 "outputports": {

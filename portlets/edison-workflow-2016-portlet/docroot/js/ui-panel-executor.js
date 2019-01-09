@@ -1138,205 +1138,213 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         return true;
     });
 
-    /* 2019.01.02 _ Popup Button Event */
-    var openScienceAppWorkbench = function(node) {
-        var modal = $("#" + namespace + "science-app-workbench-modal");
+	/* 2019.01.02 _ Popup Button Event */
+	var openScienceAppWorkbench = function(node) {
+		var modal = $("#" + namespace + "science-app-workbench-modal");
 
-        var nodeData = node.data;
-        var wfId = nodeData.id;
-        var simulationUuid = nodeData.simulationUuid;
-        var jobUuid = nodeData.jobUuid;
-        var scienceAppData = nodeData.scienceAppData;
-        var scienceAppId = scienceAppData.scienceAppId;
-        var inputPorts = nodeData.inputPorts;
+		var nodeData = node.data;
+		var wfId = nodeData.id;
 
-        /* Get Connected Input Ports and Disconnected Input Ports */
-        var connectedInputPorts = new Array();
-        var disconnectedInputPorts = new Array();
-        var jobDataArr = new Array();
-        for ( var portIndex in node.getPorts()) {
-            var port = node.getPorts()[portIndex];
-            var portType = port["data"]["type"];
-            if (portType == "inputPorts") {
-                if (port.getAllEdges().length == 1) {
-                    connectedInputPorts.push(port.id);
+		if(nodeData[IB_DATA] == 'undefined' || nodeData[IB_DATA] == null){
+			nodeData[IB_DATA] = {};
+		}
+		var simulationUuid = nodeData[IB_DATA].simulationUuid;
+		var jobUuid = nodeData[IB_DATA].jobUuid;
+		var scienceAppData = nodeData.scienceAppData;
+		var scienceAppId = scienceAppData.scienceAppId;
+		var inputPorts = nodeData.inputPorts;
 
-                    /* Get Parent Node's JobData */
-                    var targetEdges = port.getTargetEdges();
-                    var getJobData = getParentPortsJobData(targetEdges[0]);
-                    if (getJobData != 'undefined' && getJobData != null
-                        && getJobData != '') {
-                        jobDataArr = jobDataArr.concat(getJobData);
-                    }
-                } else {
-                    disconnectedInputPorts.push(port.id);
+		/* Get Connected Input Ports and Disconnected Input Ports */
+		var connectedInputPorts = new Array();
+		var disconnectedInputPorts = new Array();
+		var jobDataArr = new Array();
+		for ( var portIndex in node.getPorts()) {
+			var port = node.getPorts()[portIndex];
+			var portType = port["data"]["type"];
+			if (portType == "inputPorts") {
+				if (port.getAllEdges().length == 1) {
+					connectedInputPorts.push(port.id);
 
-                    /* Get Node's JobData */
-                    var getJobData = getInputPortsJobData(port.getNode(),
-                        port.id)
-                    if (getJobData != 'undefined' && getJobData != null
-                        && getJobData != '') {
-                        jobDataArr = jobDataArr.concat(getJobData);
-                    }
-                }
-            }
-        }
+					/* Get Parent Node's JobData */
+					var targetEdges = port.getTargetEdges();
+					var getJobData = getParentPortsJobData(targetEdges[0]);
+					if (getJobData != 'undefined' && getJobData != null
+							&& getJobData != '') {
+						jobDataArr = jobDataArr.concat(getJobData);
+					}
+				} else {
+					disconnectedInputPorts.push(port.id);
 
-        /* test Uuid */
-        simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
-        jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
+					/* Get Node's JobData */
+					var getJobData = getInputPortsJobData(port.getNode(),
+							port.id)
+					if (getJobData != 'undefined' && getJobData != null
+							&& getJobData != '') {
+						jobDataArr = jobDataArr.concat(getJobData);
+					}
+				}
+			}
+		}
 
-        if (0 < jobDataArr.length) {
-            /* Call API get-simulation-job */
-            var getSimulationJob = Liferay.Service(
-                '/edison-simulation-portlet.simulation/get-simulation-job',
-                {
-                    userId : Liferay.ThemeDisplay.getUserId(),
-                    appName : scienceAppData.name,
-                    appVersion : scienceAppData.version,
-                    simulationUuid : simulationUuid,
-                    jobUuid : jobUuid,
-                    jobData : JSON.stringify(jobDataArr)
-                }, function(obj) {
-                    if (obj.hasSimulationInfo) {
-                        openWorkbenchPopup(scienceAppId, simulationUuid,
-                            jobUuid, connectedInputPorts, wfId);
-                    } else {
-                        toastr["error"]("", "Simulation not exist!!");
-                    }
-                });
-        } else {
-            toastr["error"]("", "JobData not found!!");
-        }
-    }
+		/* test Uuid */
+		simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
+		jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
 
-    function getInputPortsJobData(portNode, portId) {
-        var jobDataArr = new Array();
-        jobDataArr = [];
+		if (0 < jobDataArr.length) {
+			/* Call API get-simulation-job */
+			var getSimulationJob = Liferay.Service(
+					'/edison-simulation-portlet.simulation/get-simulation-job',
+					{
+						userId : Liferay.ThemeDisplay.getUserId(),
+						appName : scienceAppData.name,
+						appVersion : scienceAppData.version,
+						simulationUuid : simulationUuid,
+						jobUuid : jobUuid,
+						jobData : JSON.stringify(jobDataArr)
+					}, function(obj) {
+						if (obj.hasSimulationInfo) {
+							openWorkbenchPopup(scienceAppId, simulationUuid,
+									jobUuid, connectedInputPorts, wfId);
+						} else {
+							toastr["error"]("", "Simulation not exist!!");
+						}
+					});
+		} else {
+			toastr["error"]("", "JobData not found!!");
+		}
+	}
 
-        var inputPorts = portNode.data.inputPorts;
-        var inputPort = inputPorts[portId];
-        var inputPortData = inputPort.inputData_;
+	function getInputPortsJobData(portNode, portId) {
+		var jobDataArr = new Array();
+		jobDataArr = [];
 
-        jobDataArr.push(inputPortData);
-        return jobDataArr;
-    }
+		var inputPorts = portNode.data.inputPorts;
+		var inputPort = inputPorts[portId];
+		var inputPortData = inputPort.inputData_;
 
-    function getParentPortsJobData(targetEdge) {
-        var jobDataArr = new Array();
-        jobDataArr = [];
-        var sourcePort = targetEdge.source;
-        var sourceNode = sourcePort.getNode();
-        var sourceNodeData = sourceNode.data;
-        var runType = sourceNodeData.scienceAppData.runType;
+		jobDataArr.push(inputPortData);
+		return jobDataArr;
+	}
 
-        findJobData: while (runType == 'Controller'
-        || runType == 'DynamicConverter') {
-            for ( var portIndex in sourceNode.getPorts()) {
-                var port = sourceNode.getPorts()[portIndex];
-                if ((runType == 'Controller' && port.id == 'transfer')
-                    || (runType == 'DynamicConverter' && port.id == 'localfile0')) {
+	function getParentPortsJobData(targetEdge) {
+		var jobDataArr = new Array();
+		jobDataArr = [];
+		var sourcePort = targetEdge.source;
+		var sourceNode = sourcePort.getNode();
+		var sourceNodeData = sourceNode.data;
+		var runType = sourceNodeData.scienceAppData.runType;
 
-                    var targetEdges = port.getTargetEdges();
-                    if (targetEdges == 'undefined' || targetEdges == null
-                        || targetEdges == '') {
-                        toastr["error"]("", "JobData not found!!");
-                        break findJobData;
-                    } else {
-                        sourcePort = targetEdges[0].source;
-                        if (sourcePort == undefined) {
-                            break findJobData;
-                        } else {
-                            sourceNode = sourcePort.getNode();
-                            sourceNodeData = sourceNode.data;
-                            runType = sourceNodeData.scienceAppData.runType;
-                            continue findJobData;
-                        }
-                    }
-                }
-            }
-        }
+		findJobData: while (runType == 'Controller'
+				|| runType == 'DynamicConverter') {
+			for ( var portIndex in sourceNode.getPorts()) {
+				var port = sourceNode.getPorts()[portIndex];
+				if ((runType == 'Controller' && port.id == 'transfer')
+						|| (runType == 'DynamicConverter' && port.id == 'localfile0')) {
 
-        if (runType != 'Controller' && runType != 'DynamicConverter') {
-            /* get outputData in outputPorts */
-            var outputPorts = sourceNodeData.outputPorts;
-            for ( var key in outputPorts) {
-                var outputPort = outputPorts[key];
-                var outputData = outputPort.outputData_;
-                var outputDataType = outputData.type_;
-                if (outputDataType != 'dlEntryId_') {
-                    jobDataArr.push(outputData);
-                }
-            }
-        }
-        return jobDataArr;
-    }
+					var targetEdges = port.getTargetEdges();
+					if (targetEdges == 'undefined' || targetEdges == null
+							|| targetEdges == '') {
+						toastr["error"]("", "JobData not found!!");
+						break findJobData;
+					} else {
+						sourcePort = targetEdges[0].source;
+						if (sourcePort == undefined) {
+							break findJobData;
+						} else {
+							sourceNode = sourcePort.getNode();
+							sourceNodeData = sourceNode.data;
+							runType = sourceNodeData.scienceAppData.runType;
+							continue findJobData;
+						}
+					}
+				}
+			}
+		}
 
-    function openWorkbenchPopup(scienceAppId, simulationUuid, jobUuid,
-                                connectedInputPorts, nodeId) {
-        var getWorkbenchHtml = null;
-        window
-            .AUI()
-            .use(
-                'liferay-portlet-url',
-                function(A) {
-                    var portletURL = window.Liferay.PortletURL
-                        .createRenderURL();
-                    portletURL
-                        .setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
-                    portletURL.setParameter('workbenchType',
-                        "SIMULATION_WITH_WORKFLOW");
-                    portletURL.setParameter('scienceAppId',
-                        scienceAppId);
-                    portletURL.setParameter('simulationUuid',
-                        simulationUuid);
-                    /* portletURL.setParameter('jobUuid', ""); */
-                    portletURL.setParameter('blockInputPorts',
-                        connectedInputPorts.toString());
-                    portletURL.setParameter('nodeId',
-                        nodeId);
-                    portletURL.setWindowState('pop_up');
+		if (runType != 'Controller' && runType != 'DynamicConverter') {
+			/* get outputData in outputPorts */
+			var outputPorts = sourceNodeData.outputPorts;
+			for ( var key in outputPorts) {
+				var outputPort = outputPorts[key];
+				var outputData = outputPort.outputData_;
+				var outputDataType = outputData.type_;
+				if (outputDataType != 'dlEntryId_') {
+					jobDataArr.push(outputData);
+				}
+			}
+		}
+		return jobDataArr;
+	}
 
-                    var wWidth = $(window).width();
-                    var wHeight = $(window).height();
-                    $("body").css('overflow', 'hidden')
-                    Liferay.Util
-                        .openWindow({
-                            dialog : {
-                                width : wWidth,
-                                height : wHeight,
-                                cache : false,
-                                draggable : false,
-                                resizable : false,
-                                modal : true,
-                                destroyOnClose : true,
-                                after : {
-                                    render : function(event) {
-                                        $("button.btn.close")
-                                            .on(
-                                                "click",
-                                                function(e) {
-                                                    $(
-                                                        "body")
-                                                        .css(
-                                                            'overflow',
-                                                            '');
-                                                });
-                                    }
-                                }
-                            },
-                            id : "dataTypeSearchDialog",
-                            uri : portletURL.toString(),
-                            title : "Workbench"
-                        });
-                });
-    }
+	function openWorkbenchPopup(scienceAppId, simulationUuid, jobUuid,
+			connectedInputPorts, nodeId) {
+		var getWorkbenchHtml = null;
+		window.AUI().use('liferay-portlet-url', function(A) {
+			var portletURL = window.Liferay.PortletURL
+					.createRenderURL();
+			portletURL
+					.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+			portletURL.setParameter('workbenchType',
+					"SIMULATION_WITH_WORKFLOW");
+			portletURL.setParameter('scienceAppId',
+					scienceAppId);
+			portletURL.setParameter('simulationUuid',
+					simulationUuid);
+			/* portletURL.setParameter('jobUuid', ""); */
+			portletURL.setParameter('blockInputPorts',
+					connectedInputPorts.toString());
+			portletURL.setParameter('nodeId',
+					nodeId);
+			portletURL.setWindowState('pop_up');
 
-    return {
-        "openWorkflow" : openWorkflowByWorkflowId,
-        "openScienceAppWorkbench" : openScienceAppWorkbench,
-        "isEmpty": function(){
-            return _isEmpty(PANEL_DATA.setting.form.workflowId && PANEL_DATA.setting.form.simulationId);
-        }
-    };
+			var wWidth = $(window).width();
+			var wHeight = $(window).height();
+			$("body").css('overflow', 'hidden')
+			Liferay.Util.openWindow({
+				dialog : {
+					width : wWidth,
+					height : wHeight,
+					cache : false,
+					draggable : false,
+					resizable : false,
+					modal : true,
+					destroyOnClose : true,
+					after : {
+						render : function(event) {
+							$("button.btn.close").on("click", function(e) {
+								$("body").css('overflow','');
+							});
+						}
+					}
+				},
+				id : "dataTypeSearchDialog",
+				uri : portletURL.toString(),
+				title : "Workbench"
+			});
+		});
+	}
+
+	/* 2019.01.07 _ Setting selected simulationUuid and jobUuid in the workbench */
+	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid){
+		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
+		var nodeData = node.data;
+		if(nodeData) {
+			if(!nodeData[IB_DATA]) {
+				nodeData[IB_DATA] = {}
+			}
+			nodeData[IB_DATA].simulationUuid = simulationUuid;
+			nodeData[IB_DATA].jobUuid = jobUuid;
+		}
+		console.log(node);
+	}
+
+	return {
+		"openWorkflow" : openWorkflowByWorkflowId,
+		"openScienceAppWorkbench" : openScienceAppWorkbench,
+		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
+		"isEmpty" : function() {
+			return _isEmpty(PANEL_DATA.setting.form.workflowId
+					&& PANEL_DATA.setting.form.simulationId);
+		}
+	};
 });

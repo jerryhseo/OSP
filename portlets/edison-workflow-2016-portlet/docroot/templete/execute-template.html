@@ -1,5 +1,5 @@
 <script type="jtk" id="scienceApp-templete">
-<div class="wf-box" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${ibData.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
 		<h1 class="wf-node-header-title">
 			${scienceAppData.name}
@@ -24,12 +24,16 @@
 			</ul>
 		</div>
 		<div style="clear:both;"></div>
+
+		<div class="wf-node-execute-status">
+			${ibData.status}
+		</div>
 	</div>
 </div>
 </script>
 
 <script type="jtk" id="workflowApp-templete">
-<div class="wf-box " id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${ibData.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
 		<h1 class="wf-node-header-title">${scienceAppData.name}</h1>
 	</div>
@@ -51,7 +55,14 @@
 			</ul>
 		</div>
 		<div style="clear:both;"></div>
+
+		<r-if test="scienceAppData.runType != 'FileComponent'">
+			<div class="wf-node-execute-status">
+				${ibData.status}
+			</div>
+		</r-if>
 	</div>
+
 </div>
 </script>
 

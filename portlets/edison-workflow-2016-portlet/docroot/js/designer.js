@@ -3,7 +3,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
-
+    
     var uiPanelInstance = undefined;
 
     var setUiPanelInstance = function(uiPanel) {
@@ -25,60 +25,67 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var outputPortColor = "#D6442D";
     var connectionColor = "#11C7E7"
 
-
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
-
-            if (source.objectType !== "Node" && target.objectType !== "Node") {
-                if (source === target) {
-                    return false;
-                }
-
-                if (target.getAllEdges().length != 0) {
-                    return false;
-                }
-
-                if (source.getNode() === target.getNode()) {
-                    return false;
-                }
-
-                if (source.getType() === 'all' && target.getType() === 'all') {
-                	if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                		return false;
-                	}else{
-                		return true;
-                	}
-                }else{
-                	if (source.getType() === 'all' || target.getType() === 'all') {
-                		if (source.getNode().data.scienceAppData.runType === "FileComponent") {
-                			var isEqualsPortType = false;
-                			var sourceData = source.getNode().data,
-                			targetData = target.getNode().data;
-                			var sourcePortDataType = sourceData.outputPorts[source.id].dataType_;
-                			if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
-                				sourceData.outputPorts[source.id].dataType_ = {};
-                				sourceData.outputPorts[source.id].dataType_ = targetData[target.getType()][target.id].dataType_;
-                				isEqualsPortType = true;
-                			} else {
-                				isEqualsPortType = checkPortTypeForConnection(source, target, true);
-                			}
-
-                			return isEqualsPortType;
-                		}
-                		return true;
-                	} else if (source.getType() === 'inputPorts') {
-                		return false;
-                	} else {
-                		return checkPortTypeForConnection(source, target, false);
-                	}
-                }
-            }
+        	
+        	if(isDesigner){
+        		if (source.objectType !== "Node" && target.objectType !== "Node") {
+        			if (source === target) {
+        				return false;
+        			}
+        			
+        			if (target.getAllEdges().length != 0) {
+        				return false;
+        			}
+        			
+        			if (source.getNode() === target.getNode()) {
+        				return false;
+        			}
+        			
+        			if (source.getType() === 'all' && target.getType() === 'all') {
+        				if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
+        					return false;
+        				}else{
+        					return true;
+        				}
+        			}else{
+        				if (source.getType() === 'all' || target.getType() === 'all') {
+        					if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
+        						var isEqualsPortType = false;
+        						var sourceData = source.getNode().data,
+        						targetData = target.getNode().data;
+        						var sourcePortDataType = sourceData.outputPorts[source.id][OSP.Constants.DATA_TYPE];
+        						if(sourcePortDataType == 'undefined' || sourcePortDataType == null || sourcePortDataType == ''){
+        							sourceData.outputPorts[source.id] = targetData[target.getType()][target.id];
+        							sourceData.outputPorts[source.id][OSP.Constants.NAME] = WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME;
+        							sourceData.outputPorts[source.id][OSP.Constants.IS_WF_SAMPLE] = false;
+        							if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
+        								sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
+        							}
+        							
+        							isEqualsPortType = true;
+        						} else {
+        							isEqualsPortType = checkPortTypeForConnection(source, target, true);
+        						}
+        						
+        						return isEqualsPortType;
+        					}
+        					return true;
+        				} else if (source.getType() === 'inputPorts') {
+        					return false;
+        				} else {
+        					return checkPortTypeForConnection(source, target, false);
+        				}
+        			}
+        		}
+        	}
         },
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
-        	if(source.getNode().data.scienceAppData.runType === "FileComponent"){
+        	if(source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME){
+        		console.log(sourceData.outputPorts[source.id]);
         		if(source.getAllEdges().length-1 == 0){
-        			delete sourceData.outputPorts[source.id].dataType_;
+        			sourceData.outputPorts[source.id] = {};
         		}
         	}
         }
@@ -140,12 +147,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             "inputPorts": {
                 events: {
                     dblclick: function(obj) {
-                    	var nodeId = obj.nodeId;
-                        var portId = obj.portId;
-                        var portType = obj.portType;
-                        var nodeData = obj.node.data;
-                    	if(isDesigner && uiPanelInstance) {
-                    		uiPanelInstance.openWfAppFileDataSetting(nodeId,WF_APP_TYPES.APP.NAME, nodeData.scienceAppData.name, portId, portType);
+                    	if(obj.port.getAllEdges().length == 0){
+                    		var nodeId = obj.nodeId;
+                    		var portId = obj.portId;
+                    		var portType = obj.portType;
+                    		var nodeData = obj.node.data;
+                    		if(isDesigner && uiPanelInstance) {
+                    			uiPanelInstance.openWfAppFileDataSetting(nodeId,nodeData.scienceAppData.name, portId, portType);
+                    		}
+                    	}else{
+                    		return false;
                     	}
                     }
                 }
@@ -161,13 +172,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
     			uiPanelInstance.openWfAppDataSetting(wfId,runType,data.scienceAppData.name);
         	}else{
-    			uiPanelInstance.openWfAppFileDataSetting(wfId,runType, data.scienceAppData.name);
+        		if(node.getAllEdges().length != 0){
+        			uiPanelInstance.openWfAppFileDataSetting(wfId,data.scienceAppData.name,WF_APP_TYPES.FILE_COMPONENT.OUTPUT_NAME, "outputPorts");
+        		}else{
+        			toastr["error"]("", var_workflow_config_data_error_message);
+        		}
         	}
         }
     }
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
-    console.log(wfWorkflowJsPlumbInstance)
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
@@ -205,6 +219,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
             ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]]
+//            Connector: ["Flowchart", { cornerRadius: 3 }]
         }
     });
 
@@ -450,6 +465,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             outputPortsObj = $.parseJSON(outputports);
         }
 
+        var ibDataObj = {
+        	status : "WAITING"
+        };
+
 
         currentJsPlumbInstance.addFactoryNode("scienceApp", {
             id: wfId,
@@ -457,7 +476,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             top: pageY,
             scienceAppData: scienceAppData,
             inputPorts: inputPortsObj,
-            outputPorts: outputPortsObj
+            outputPorts: outputPortsObj,
+            ibData:ibDataObj
         });
 
         var node = currentJsPlumbInstance.getNode(wfId);
@@ -549,7 +569,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             top: pageY,
             scienceAppData: scienceAppData,
             inputPorts: data.inputports,
-            outputPorts: data.outputports
+            outputPorts: data.outputports,
+            ibData: data.ibData
         });
 
         renderer.zoomToFit();
@@ -719,6 +740,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             $el.each(function(_) {
                 var wfId = $(this).attr("id");
                 var node = currentJsPlumbInstance.getNode(wfId);
+                /* Delete Workflow SampleFiles */
+                var fn = window[namespace + "deleteWfSampleFiles"];
+                if (fn) {
+                    fn.apply(null, [node.data]);
+                }
+                
                 currentJsPlumbInstance.removeNode(node);
 
                 if(node.data.type===WF_APP_TYPES.APP.NAME){
@@ -752,7 +779,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         $("#" + conainerId + " #" + wfId).data(data);
     }
-
+    
     $.contextMenu({
         selector: '.wf-box',
         build: function($trigger, e) {
@@ -784,8 +811,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 };
             }else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 items["items"]["open-texteditor"] = {
-                        name: "File Upload",
-                        icon: "fa-cloud-upload",
+                        name: "Cofiguration Data",
+                        icon: "fa-cogs",
                         callback: function(key, options) {
                         	openWfAppDataSettingHandler(node);
                         }
@@ -1096,7 +1123,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
 
-    function deleteWorkflowDefinition(workflowId, callback) {
+    function deleteWorkflowDefinition(workflowId, callback, screenLogic) {
+    	deleteWorkflowWfFiles(screenLogic);
         aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId + "/delete", {}, function(_) {
             if (callback) {
                 callback();
@@ -1104,12 +1132,27 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         });
     }
 
-    function deleteWorkflowDefinitionWithScienceApp(workflowId, scienceAppId, callback) {
+    function deleteWorkflowDefinitionWithScienceApp(workflowId, scienceAppId, callback, screenLogic) {
+    	deleteWorkflowWfFiles(screenLogic);
         aSyncAjaxHelper.jsonPost("/delegate/services/workflows/" + workflowId + "/app/" + scienceAppId + "/delete", {}, function(_) {
             if (callback) {
                 callback();
             }
         });
+    }
+    
+    /* 2018.12.31 _ Delete wfFiles in Workflow Nodes */
+    function deleteWorkflowWfFiles(screenLogic){
+    	var wfNodes = screenLogic.nodes;
+    	
+    	for(var i=0; i<wfNodes.length; i++){
+    		var nodeData = wfNodes[i];
+    		
+    		var fn = window[namespace + "deleteWfSampleFiles"];
+            if (fn) {
+                fn.apply(null, [nodeData]);
+            }
+    	}
     }
 
     function duplicateWorkflowDefinition(workflowId, workflowTitle, callback) {
@@ -1168,12 +1211,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         modifyingWorkflow = workflow;
     }
-
+    
     function drawScreenLogic(screenLogic) {
         var wfData = $.parseJSON(screenLogic);
 
         /* 2018.12.24 _ Open workflow, jsplumb */
         currentJsPlumbInstance.load({
+        	type:"json",
             data: wfData
         });
     }

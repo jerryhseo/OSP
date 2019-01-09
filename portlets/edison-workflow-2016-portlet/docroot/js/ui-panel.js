@@ -707,7 +707,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         modal.modal({ "backdrop": "static", "keyboard": false });
     }
     
-    var openWfAppFileDataSetting = function(nodeId, appType, appName, portId, portType){
+    var openWfAppFileDataSetting = function(nodeId, appName, portId, portType){
     	
     	if(nullToStr(PANEL_DATA.setting.form.workflowId)===""){
     		toastr["error"]("", var_create_first_message);
@@ -719,67 +719,54 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 		var hiddens = new Array();
 		var formType = "";
 		var title = "";
-    	if (appType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-    		var inputData = nodeData.inputData_;
-    		if(inputData){
-    			inputs.push({"isFile":true, "fileId": inputData.id_, "fileName": inputData.name_,"title": "WF Sample File"});
-    		}else{
-    			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
-    		}
-    		
-    		hiddens.push({"name":"nodeId", "value": nodeId});
-    		formType = "wf-app";
-    		title = appName+" Script"; 
-    	}else if(appType === WF_APP_TYPES.APP.NAME){
-    		var sample = nodeData[portType][portId].sample_;
-    		inputs.push({"isAppFile":true, "fileId": sample.id_, "fileName": "Download","title": "App Sample File"});
-    		
-    		var wfSample = nodeData[portType][portId][OSP.Constants.WF_SAMPLE];
-    		if(wfSample){
-    			inputs.push({"isFile":true, "fileId": wfSample.id_, "fileName": wfSample.name_,"title": "WF Sample File"});
-    		}else{
-    			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
-    		}
+		var sample = nodeData[portType][portId].sample_;
+		inputs.push({"isAppFile":true, "fileId": sample.id_, "fileName": "Download","title": "App Sample File"});
+		
+		var wfSample = nodeData[portType][portId][OSP.Constants.WF_SAMPLE];
+		if(wfSample){
+			inputs.push({"isFile":true, "fileId": wfSample.id_, "fileName": wfSample.name_,"title": "WF Sample File"});
+		}else{
+			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
+		}
 
-    		
-    		var isWfSample = nodeData[portType][portId][OSP.Constants.IS_WF_SAMPLE];
-    		var fileTypeOptions = new Array();
-    		fileTypeOptions.push({"optionName":"Is App Sample File Use","value":false});
-    		fileTypeOptions.push({"optionName":"Is WF Sample File Use","value":true});
-    		
-    		if(!isWfSample){
-    			fileTypeOptions[0]["selected"] = true;
-    		}else{
-    			fileTypeOptions[1]["selected"] = true;
-    		}
-    		inputs.push({"isSelect": true, "title":"Use Sample Type Setting","name":"isWfSample", "value": value,"options":fileTypeOptions});
-    		
-    		
-    		var defaultEditor = nodeData[portType][portId].defaultEditor_;
-    		var editors = nodeData[portType][portId].editors_;
-    		
-    		var editorOptionS = new Array();
-    		for(var index in editors){
-    			var value = editors[index].value;
-    			var editorOption = {
-    					"optionName":editors[index].name,
-    					"value":value
-    			};
-    			if(value === defaultEditor){
-    				editorOption["selected"] = true;
-    			}
-    			editorOptionS.push(editorOption);
-    		}
-    		inputs.push({"isSelect": true, "title":"Default Editor Setting","name":"editor", "value": value,"options":editorOptionS});
-    		
-    		
-    		
-    		hiddens.push({"name":"nodeId", "value": nodeId});
-    		hiddens.push({"name":"portId", "value": portId});
-    		hiddens.push({"name":"portType", "value": portType});
-    		formType = "wf-port";
-    		title = appName+" "+portId+" Script";
-    	}
+		
+		var isWfSample = nodeData[portType][portId][OSP.Constants.IS_WF_SAMPLE];
+		var fileTypeOptions = new Array();
+		fileTypeOptions.push({"optionName":"Is App Sample File Use","value":false});
+		fileTypeOptions.push({"optionName":"Is WF Sample File Use","value":true});
+		
+		if(!isWfSample){
+			fileTypeOptions[0]["selected"] = true;
+		}else{
+			fileTypeOptions[1]["selected"] = true;
+		}
+		inputs.push({"isSelect": true, "title":"Use Sample Type Setting","name":"isWfSample", "value": value,"options":fileTypeOptions});
+		
+		
+		var defaultEditor = nodeData[portType][portId].defaultEditor_;
+		var editors = nodeData[portType][portId].editors_;
+		
+		var editorOptionS = new Array();
+		for(var index in editors){
+			var value = editors[index].value;
+			var editorOption = {
+					"optionName":editors[index].name,
+					"value":value
+			};
+			if(value === defaultEditor){
+				editorOption["selected"] = true;
+			}
+			editorOptionS.push(editorOption);
+		}
+		inputs.push({"isSelect": true, "title":"Default Editor Setting","name":"editor", "value": value,"options":editorOptionS});
+		
+		
+		
+		hiddens.push({"name":"nodeId", "value": nodeId});
+		hiddens.push({"name":"portId", "value": portId});
+		hiddens.push({"name":"portType", "value": portType});
+		formType = "wf-port";
+		title = appName+" "+portId+" Script";
     	
     	createOpenModalFileFromDesigner(title,inputs, hiddens, formType);
     }
