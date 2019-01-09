@@ -494,6 +494,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var portId = $(that).attr("port-id")
                 var nodeId = jpInstance.getPort(portId).getNode().id
                 $(that).children("a").click(function(e) {
+                    openInputPort()
                 })
                 $(that).children("a").hover(
                     function (e) {
@@ -540,6 +541,45 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     e.stopPropagation()
                 })
             })
+    }
+
+    function openInputPort(scienceAppId, simulationUuid, jobUuid, connectedInputPorts, nodeId) {
+        window.AUI().use('liferay-portlet-url', function(A) {
+            // var portletURL = window.Liferay.PortletURL.createRenderURL();
+            // portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+            // portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
+            // portletURL.setParameter('scienceAppId', scienceAppId);
+            // portletURL.setParameter('simulationUuid', simulationUuid);
+            // /* portletURL.setParameter('jobUuid', ""); */
+            // portletURL.setParameter('blockInputPorts', connectedInputPorts.toString());
+            // portletURL.setParameter('nodeId', nodeId);
+            // portletURL.setWindowState('pop_up');
+
+            var wWidth = $(window).width();
+            var wHeight = $(window).height();
+            $("body").css('overflow', 'hidden')
+            Liferay.Util.openWindow({
+                dialog : {
+                    width : wWidth,
+                    height : wHeight,
+                    cache : false,
+                    draggable : false,
+                    resizable : false,
+                    modal : true,
+                    destroyOnClose : true,
+                    after : {
+                        render : function(event) {
+                            $("button.btn.close").on("click", function(e) {
+                                $("body").css('overflow','');
+                            });
+                        }
+                    }
+                },
+                id : namespace + "inputPort",
+                uri : "",
+                title : ""
+            });
+        });
     }
 
     function openSimulation(panelType, that, e) {
