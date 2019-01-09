@@ -465,6 +465,13 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 }
 
 AUI().ready(['liferay-util-window'], function(){
+	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portId, jobData){
+// 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
+// 		$("body").css('overflow','');
+
+		console.log(jobData);
+	});
+	
 	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
 

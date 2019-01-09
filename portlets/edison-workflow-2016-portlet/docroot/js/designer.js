@@ -28,7 +28,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: function(source, target, edgeData) {
         	
-        	if(isDesigner){
+        	if(true){
         		if (source.objectType !== "Node" && target.objectType !== "Node") {
         			if (source === target) {
         				return false;

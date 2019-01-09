@@ -1,6 +1,8 @@
 var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     /*jshint -W069 */
     'use strict';
+    var simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
+    var jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
     var currSimulations = eStruct("simulationId");
     var currJobs = eStruct("id", "data");
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
@@ -224,7 +226,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         aSyncAjaxHelper.post("/delegate/services/simulation/list",
             params,
             function (paginatedSimulations) {
-                currSimulations.set(paginatedSimulations.simulations);
+        		if(paginatedSimulations.simulations && paginatedSimulations.simulations.length > 0) {
+        			currSimulations.set(paginatedSimulations.simulations);
+        		}
                 renderSimulationTable(paginatedSimulations)
                 if(callback) {
                    callback()
@@ -453,6 +457,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    var currInputPorts = eStruct("id")
+    var currOutputPorts = eStruct("id")
+    
     function selectSimulationJob(simulationJobId) {
         var li =
             '{{#ports}}' +
@@ -482,8 +489,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             setPortsId(node.id, node.data.inputPorts, CONSTS.WF_JSPLUMB_TYPES.INPUT)
             setPortsId(node.id, node.data.outputPorts, CONSTS.WF_JSPLUMB_TYPES.OUTPUT)
         })
-        var currInputPorts = eStruct("id")
-        var currOutputPorts = eStruct("id")
         currInputPorts.set(inputPorts)
         currOutputPorts.set(outputPorts)
         $("#input-ports-" + simulationJobId).empty()
@@ -494,7 +499,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var portId = $(that).attr("port-id")
                 var nodeId = jpInstance.getPort(portId).getNode().id
                 $(that).children("a").click(function(e) {
-                    openInputPort()
+                    openInputPort(portId, nodeId)
                 })
                 $(that).children("a").hover(
                     function (e) {
@@ -543,17 +548,25 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
     }
 
-    function openInputPort(scienceAppId, simulationUuid, jobUuid, connectedInputPorts, nodeId) {
-        window.AUI().use('liferay-portlet-url', function(A) {
-            // var portletURL = window.Liferay.PortletURL.createRenderURL();
-            // portletURL.setPortletId("SimulationWorkbench_WAR_OSPWorkbenchportlet");
+    function openInputPort(portId, nodeId) {
+    	var portData = {}
+    	portData[currInputPorts.get(portId)["name_"]] =  $.extend({}, currInputPorts.get(portId));
+    	console.log(portData)
+    	window.AUI().use('liferay-portlet-url', function(A) {
+             var portletURL = window.Liferay.PortletURL.createRenderURL();
+             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
+              portletURL.setParameter('simulationUuid', simulationUuid);
+              portletURL.setParameter('portData', JSON.stringify(portData));
+              portletURL.setParameter('portType', "inputPorts");
+              portletURL.setParameter('nodeId', nodeId);
+              
+              
             // portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
             // portletURL.setParameter('scienceAppId', scienceAppId);
-            // portletURL.setParameter('simulationUuid', simulationUuid);
             // /* portletURL.setParameter('jobUuid', ""); */
             // portletURL.setParameter('blockInputPorts', connectedInputPorts.toString());
             // portletURL.setParameter('nodeId', nodeId);
-            // portletURL.setWindowState('pop_up');
+             portletURL.setWindowState('pop_up');
 
             var wWidth = $(window).width();
             var wHeight = $(window).height();
@@ -576,7 +589,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }
                 },
                 id : namespace + "inputPort",
-                uri : "",
+                uri : portletURL.toString(),
                 title : ""
             });
         });

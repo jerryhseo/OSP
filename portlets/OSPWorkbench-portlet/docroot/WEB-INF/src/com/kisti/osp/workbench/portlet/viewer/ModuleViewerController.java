@@ -58,7 +58,6 @@ public class ModuleViewerController {
 		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
 		String screenName = ParamUtil.getString(request, "screenName", "");
-		String connector = ParamUtil.getString(request, "connector", "");
 		String portType = ParamUtil.getString(request, "portType", "inputPorts");
 		String portData = ParamUtil.getString(request, "portData", "");
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");
@@ -83,7 +82,7 @@ public class ModuleViewerController {
 			//No-Input Data (FILE_SELECTOR)
 			portData = "{ \"-mesh\": { \"name_\": \"-mesh\", \"defaultEditor_\": \"FileExplorer_WAR_OSPFileExplorerportlet\", \"dataType_\": { \"name\": \"KFLOW_EDISON_UNSTEADY_mesh\", \"version\": \"1.0.0\" }, \"mandatory_\": true, \"order_\": 1, \"isWfSample_\": false, \"sample_\": { \"id_\": \"14110320\", \"type_\": \"dlEntryId_\", \"relative_\": true }, \"editors_\": [{ \"name\": \"FILE_SELECTOR\", \"value\": \"FileExplorer_WAR_OSPFileExplorerportlet\" }] } }";
 		}
-		boolean isAnalyzerTest = true;
+		boolean isAnalyzerTest = false;
 		if(isAnalyzerTest){
 			portType = "outputPorts";
 			status = "SUCCESS";
@@ -91,6 +90,8 @@ public class ModuleViewerController {
 			simulationUuid = "e71f4fdf-81f3-4be0-8fef-2e82e96e6086";
 			jobUuid = "2a4f8f37-6fd5-423d-8e62-b9170c4b3ba2";
 		}
+		
+		System.out.println(portData);
 		
 		JSONObject portDataJson = JSONFactoryUtil.createJSONObject(portData);
 		String defaultPortlet = "";
@@ -135,7 +136,6 @@ public class ModuleViewerController {
 		model.addAttribute("simulationUuid", simulationUuid);
 		model.addAttribute("jobUuid", jobUuid);
 		model.addAttribute("screenName", screenName);
-		model.addAttribute("connector", connector);
 		model.addAttribute("status", status);
 		
 		return "view";
