@@ -644,7 +644,6 @@
 		
 		/* 문제필터 */
 		$("#configFilter").find("td").on("click",function(event){
-			alert("click configFilter")
 			if(!$(event.target).is("input")){
 				if($(this).has(":input").length>0){
 					var checkbox = $(':checkbox', $(this)).get(0);
@@ -694,7 +693,6 @@
 				async: false,
 				success: function(msg) {
 					isSiteMember = msg.isSiteMember;
-					alert('isSiteMember : ' + isSiteMember);
 					if(isSiteMember){
 						URL = "<%=workbenchURL%>";
 						URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;

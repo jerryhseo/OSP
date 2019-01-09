@@ -1387,6 +1387,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[IB_DATA].simulationUuid = simulationUuid;
 			nodeData[IB_DATA].jobUuid = jobUuid;
+			
+			/* TODO Workflow Status Setting */
+			
+			nodeData[CONSTS.STATUS].status = "";
 		}
 		console.log(node);
 	}

@@ -70,4 +70,7 @@ var CONSTS = {
             NAME: "GroupComponent"
         }
     },
+    WF_NODE_CODE: {
+    	STATUS : "status"
+    }
 }

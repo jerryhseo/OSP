@@ -1,10 +1,13 @@
 <script type="jtk" id="scienceApp-templete">
-<div class="wf-box ${ibData.status}" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
 		<h1 class="wf-node-header-title">
 			${scienceAppData.name}
 			<span class="wf-node-header-version">v.${scienceAppData.version}</span>
 		</h1>
+		<div class="wf-node-menu-icon">
+			<i class="icon-cog"></i>
+		</div>
 	</div>
 
 	<div class="wf-node-ports ScienceApp">
@@ -26,16 +29,19 @@
 		<div style="clear:both;"></div>
 
 		<div class="wf-node-execute-status">
-			${ibData.status}
+			${status.status}
 		</div>
 	</div>
 </div>
 </script>
 
 <script type="jtk" id="workflowApp-templete">
-<div class="wf-box ${ibData.status}" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
 		<h1 class="wf-node-header-title">${scienceAppData.name}</h1>
+		<div class="wf-node-menu-icon">
+			<i class="icon-cog"></i>
+		</div>
 	</div>
 
 	<div class="wf-node-ports wf-tool ${scienceAppData.runType}">
@@ -58,7 +64,7 @@
 
 		<r-if test="scienceAppData.runType != 'FileComponent'">
 			<div class="wf-node-execute-status">
-				${ibData.status}
+				${status.status}
 			</div>
 		</r-if>
 	</div>
