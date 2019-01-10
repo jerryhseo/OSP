@@ -1201,11 +1201,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var nodeData = node.data;
 		var wfId = nodeData.id;
 
-		if(nodeData[IB_DATA] == 'undefined' || nodeData[IB_DATA] == null){
-			nodeData[IB_DATA] = {};
+		if(nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == 'undefined' || nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == null){
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
 		}
-		var simulationUuid = nodeData[IB_DATA].simulationUuid;
-		var jobUuid = nodeData[IB_DATA].jobUuid;
+		var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
+		var jobUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
 		var scienceAppData = nodeData.scienceAppData;
 		var scienceAppId = scienceAppData.scienceAppId;
 		var inputPorts = nodeData.inputPorts;
@@ -1385,12 +1385,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
 		var nodeData = node.data;
 		if(nodeData) {
-			if(!nodeData[IB_DATA]) {
-				nodeData[IB_DATA] = {}
+			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]) {
+				nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {}
 			}
-			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
-			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
-
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
+			
 			/* TODO Workflow Status Setting */
 
 			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";

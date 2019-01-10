@@ -503,7 +503,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             inputPorts: inputPortsObj,
             outputPorts: outputPortsObj,
             ibData:ibDataObj,
-            status: statusObj
+            status: statusObj,
+            startPoint: false
         });
 
         var node = currentJsPlumbInstance.getNode(wfId);
