@@ -74,6 +74,7 @@ var CONSTS = {
         }
     },
     WF_NODE_CODE: {
+    	IB_DATA: "ibData",
     	STATUS : "status",
     	IB_UUID : "ibUuid",
     	IB_SIM_UUID : "ibSimUuid"

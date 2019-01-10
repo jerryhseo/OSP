@@ -190,7 +190,18 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
     
-    var defaultLayout = { type: "Absolute" };
+    var defaultLayout = isDesigner ? { type: "Absolute" } : 
+    {
+        type: "Hierarchical",
+        parameters: {
+            multipleRoots: true,
+            orientation: "horizontal",
+            padding: [50, 50],
+            align:"end",
+            invert: false,
+            spacing: "auto",
+        }
+    };
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
@@ -221,12 +232,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            Anchor: "Center",
-            StartpointStyle: { fill: "#416EC5" },
-            StartpointHoverStyle: { fill: "#FF6600" },
-            EndpointStyle: { fill: "#445566", radius:7 },
-            EndpointHoverStyle: { fill: "#FF6600" },
+            Anchor: [
+            	["TopRight"],
+            	["TopLeft"]
+            ],
+            EndpointStyle: { fill: "#445566", radius:3 },
+            EndpointHoverStyle: { fill: "#FF6600",radius:7},
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
+            PaintStyle: { strokeWidth: 3, stroke: "#445566" },
             ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]],
 //            Connector: ["Flowchart", { cornerRadius: 3 }]
         },
@@ -490,7 +503,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             inputPorts: inputPortsObj,
             outputPorts: outputPortsObj,
             ibData:ibDataObj,
-            status: statusObj
+            status: statusObj,
+            startPoint: false
         });
 
         var node = currentJsPlumbInstance.getNode(wfId);
@@ -795,8 +809,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     
     $.contextMenu({
         selector: '.wf-box',
+        determinePosition: function($menu){
+        	$menu.css('display', 'block').position({ my: "left bottom", at: "center bottom", of: this, offset: "0 5"});
+        },
         build: function($trigger, e) {
-            var wfWindowId = $trigger.attr("id");
+        	console.log($trigger);
+        	var wfWindowId = $trigger.attr("id");
             var appData = $trigger.data();
 
             var node = currentJsPlumbInstance.getNode(wfWindowId);
@@ -866,6 +884,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = false;
+                            
+                            $("#"+node.id).removeClass("true");
                         }
                     };
 
@@ -878,6 +898,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = true;
+                            
+                            $("#"+node.id).addClass("true");
                         }
                     };
                 }
@@ -1242,7 +1264,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	turnOffBeforeConnect(currentJsPlumbInstance);
         }
     }
-
+    
     function resetCurrentJsPlumbInstance() {
         /* 2018.12.24 _ Clear Nodes */
         currentJsPlumbInstance.clear();

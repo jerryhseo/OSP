@@ -1,5 +1,5 @@
 <script type="jtk" id="scienceApp-templete">
-<div class="wf-box ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${startPoint} ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header">
 		<h1 class="wf-node-header-title">
 			${scienceAppData.name}
@@ -35,7 +35,7 @@
 </script>
 
 <script type="jtk" id="workflowApp-templete">
-<div class="wf-box ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
+<div class="wf-box ${startPoint} ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
 	<div class="wf-node-header wf-tool">
 		<h1 class="wf-node-header-title">${scienceAppData.name}</h1>
 		<div class="wf-node-menu-icon">
