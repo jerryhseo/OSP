@@ -76,7 +76,7 @@
 <script type="jtk" id="output-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source filter-exclude="true" port-id="${$key}" port-type="outputPorts"></jtk-source>
+		<jtk-source filter=".connect" filter-exclude="true" port-id="${$key}" port-type="outputPorts"></jtk-source>
 	</div>
 	<label class="wf-port-label">
 		${$key}
@@ -105,7 +105,6 @@
 	<label class="wf-port-label">
 		${$key}
 		${name_}
-	
 	</label>
 </li>
 </script>

@@ -232,12 +232,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            Anchor: "Center",
-            StartpointStyle: { fill: "#416EC5" },
-            StartpointHoverStyle: { fill: "#FF6600" },
-            EndpointStyle: { fill: "#445566", radius:7 },
-            EndpointHoverStyle: { fill: "#FF6600" },
+            Anchor: [
+            	["TopRight"],
+            	["TopLeft"]
+            ],
+            EndpointStyle: { fill: "#445566", radius:3 },
+            EndpointHoverStyle: { fill: "#FF6600",radius:7},
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
+            PaintStyle: { strokeWidth: 3, stroke: "#445566" },
             ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]],
 //            Connector: ["Flowchart", { cornerRadius: 3 }]
         },
