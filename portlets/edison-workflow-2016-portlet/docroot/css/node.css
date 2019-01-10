@@ -178,6 +178,12 @@
     content: "\f15c";
 }
 
+.wf-box.true .wf-node-ports:before {
+    content: "\f1d8";
+}
+
+
+
 .wf-box .wf-node-ports ul {
     list-style: none;
     margin: 0;
@@ -206,7 +212,6 @@
 	font-weight: 600;
 	border-top: 1px solid #bbb;
 }
-
 
 .wf-box.WAITING .wf-node-header,
 .wf-box.CANCELED .wf-node-header,
