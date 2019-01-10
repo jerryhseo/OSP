@@ -16,6 +16,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,10 +79,10 @@ public class ModuleViewerController {
 			//No-Input Data (SDE)
 //			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" } } }";
 			//Input Data Exist (SDE)
-//			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;Spring_constants = [1900 1200] ;Mass_of_particles = [11 28] ;Number_of_frame = 40 ;Wave_number = 0.9 ;\" } } }";
+			portData = "{ \"-o\": { \"editors_\": [{ \"name\": \"SDE\", \"value\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\" }], \"sample_\": { \"type_\": \"dlEntryId_\", \"relative_\": true, \"id_\": \"13283219\" }, \"defaultEditor_\": \"StructuredDataEditor_WAR_OSPStructuredDataEditorportlet\", \"mandatory_\": true, \"isWfSample_\": true, \"name_\": \"-o\", \"dataType_\": { \"name\": \"1dPhononLab_inputDect\", \"version\": \"1.0.0\" }, \"wfSample_\": { \"id_\": 14428816, \"type_\": \"dlEntryId_\", \"name_\": \"00000.txt (1)_b1c.txt\" }, \"inputs_\": { \"portName_\": \"-o\", \"order_\": 1, \"type_\": \"fileContent\", \"context_\": \"Type_of_phonon = Optical ;\\nSpring_constants = [1900 1250] ;\\nMass_of_particles = [11 30] ;\\nNumber_of_frame = 40 ;\\nWave_number = 0.9 ;\" } } }";
 			
 			//No-Input Data (FILE_SELECTOR)
-			portData = "{ \"-mesh\": { \"name_\": \"-mesh\", \"defaultEditor_\": \"FileExplorer_WAR_OSPFileExplorerportlet\", \"dataType_\": { \"name\": \"KFLOW_EDISON_UNSTEADY_mesh\", \"version\": \"1.0.0\" }, \"mandatory_\": true, \"order_\": 1, \"isWfSample_\": false, \"sample_\": { \"id_\": \"14110320\", \"type_\": \"dlEntryId_\", \"relative_\": true }, \"editors_\": [{ \"name\": \"FILE_SELECTOR\", \"value\": \"FileExplorer_WAR_OSPFileExplorerportlet\" }] } }";
+//			portData = "{ \"-mesh\": { \"name_\": \"-mesh\", \"defaultEditor_\": \"FileExplorer_WAR_OSPFileExplorerportlet\", \"dataType_\": { \"name\": \"KFLOW_EDISON_UNSTEADY_mesh\", \"version\": \"1.0.0\" }, \"mandatory_\": true, \"order_\": 1, \"isWfSample_\": false, \"sample_\": { \"id_\": \"14110320\", \"type_\": \"dlEntryId_\", \"relative_\": true }, \"editors_\": [{ \"name\": \"FILE_SELECTOR\", \"value\": \"FileExplorer_WAR_OSPFileExplorerportlet\" }] } }";
 		}
 		boolean isAnalyzerTest = false;
 		if(isAnalyzerTest){
@@ -132,7 +133,7 @@ public class ModuleViewerController {
 		
 		model.addAttribute("workbenchLayout", moduleLayout);
 		model.addAttribute("portType", portType);
-		model.addAttribute("portData", portData);
+		model.addAttribute("portData", StringEscapeUtils.escapeJavaScript(portData));
 		model.addAttribute("portName", portName);
 		model.addAttribute("simulationUuid", simulationUuid);
 		model.addAttribute("jobUuid", jobUuid);

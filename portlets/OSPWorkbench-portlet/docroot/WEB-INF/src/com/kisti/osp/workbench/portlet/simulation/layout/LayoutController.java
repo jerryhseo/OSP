@@ -429,6 +429,8 @@ public class LayoutController {
 			isEdit=true;
 		}
 		
+		
+		
 		String userScreenName = UserLocalServiceUtil.getUser(simulation.getUserId()).getScreenName();
 		jsonObj.put("job_", this.convertJobToJSON(job,isEdit,userScreenName));
 		
