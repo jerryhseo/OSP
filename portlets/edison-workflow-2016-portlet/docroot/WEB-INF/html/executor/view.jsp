@@ -427,9 +427,6 @@ $(document).ready(function(){
   });
   _delay(function(){
     if(workflowId){
-      if(console){
-          console.log("workflow instance count : ", workflowCount);
-      }
       uiPanel.openWorkflow(workflowId, false, function(){
         // $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
         bEnd()

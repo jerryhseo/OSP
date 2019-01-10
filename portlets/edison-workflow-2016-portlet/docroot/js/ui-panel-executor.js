@@ -561,8 +561,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var currPortData = $.extend({}, currInputPorts.get(portId))
         delete currPortData.id
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
-        console.log(portData)
-        console.log(JSON.stringify(portData))
 
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
