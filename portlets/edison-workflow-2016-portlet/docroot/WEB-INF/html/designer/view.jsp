@@ -490,10 +490,6 @@ $.widget.bridge('uibutton', $.ui.button);
       <textarea class="form-control data-binded" rows="5" name="description" id="description">{{form.description}}</textarea>
     </div>
     <div class="form-group"></div>
-    <div class="form-group">
-      <label for="description">Export as App</label>
-      <button type="button" class="btn btn-info btn-flat pull-right func" name="exportWorkflow">Export</button>
-    </div>
   </div>
   <div class="box-footer">
     <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
