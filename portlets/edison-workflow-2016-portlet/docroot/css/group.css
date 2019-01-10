@@ -4,6 +4,8 @@
 /*     z-index: 10; */
     min-width: 250px;
     min-height: 250px;
+    background-color: #fbfbfb;
+    border-radius: 3px;
 }
 
 .jtk-group.jtk-drag-hover, .jtk-node.jtk-drag-hover {
@@ -13,8 +15,8 @@
 .group-title {
     margin:0;
     width:100%;
-    height:40px;
-    line-height:40px;
+    height:25px;
+    line-height:25px;
     background-color:#3ec9ce;
     color:white;
     font-size: 13px;
@@ -27,7 +29,7 @@
 .group-title button {
     position:absolute;
     right:5px;
-    top:10px;
+    top:1px;
     cursor:pointer;
     line-height: 1;
     color: black;
@@ -58,10 +60,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-}
-
-.jtk-group {
-    background-color: #fbfbfb;
 }
 
 .jtk-group.jtk-group-collapsed {

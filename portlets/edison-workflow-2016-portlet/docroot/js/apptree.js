@@ -35,6 +35,8 @@ var AppTree = (function(namespace, $, designer){
                 "parent": "controller_category",
                 "groupId": getSpecificSiteGroupId(),
                 "ibData": {
+                },
+                "status": {
                 	"status": "WAITING"
                 },
                 "inputports": {
@@ -133,6 +135,8 @@ var AppTree = (function(namespace, $, designer){
                 "parent": "converter_category",
                 "groupId": getSpecificSiteGroupId(),
                 "ibData": {
+                },
+                "status": {
                 	"status": "WAITING"
                 },
                 "inputports": {
