@@ -189,14 +189,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	}
         }
     }
+    
+    var defaultLayout = { type: "Absolute" };
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
-        layout: {
-            type: "Absolute"
-        },
+        layout: defaultLayout,
         events: {
             canvasClick: function (e) {
             	wfWorkflowJsPlumbInstance.clearSelection();
@@ -227,7 +227,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             EndpointStyle: { fill: "#445566", radius:7 },
             EndpointHoverStyle: { fill: "#FF6600" },
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
-            ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]]
+            ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]],
 //            Connector: ["Flowchart", { cornerRadius: 3 }]
         },
         elementsDraggable: isDesigner

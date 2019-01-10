@@ -27,24 +27,23 @@
 			</ul>
 		</div>
 		<div style="clear:both;"></div>
-
-		<div class="wf-node-execute-status">
-			${status.status}
-		</div>
+	</div>
+	<div class="wf-node-execute-status">
+		${status.status}
 	</div>
 </div>
 </script>
 
 <script type="jtk" id="workflowApp-templete">
 <div class="wf-box ${status.status}" id="${id}" style="left:${left}px;top:${top}px;">
-	<div class="wf-node-header">
+	<div class="wf-node-header wf-tool">
 		<h1 class="wf-node-header-title">${scienceAppData.name}</h1>
 		<div class="wf-node-menu-icon">
 			<i class="icon-cog"></i>
 		</div>
 	</div>
 
-	<div class="wf-node-ports wf-tool ${scienceAppData.runType}">
+	<div class="wf-node-ports ${scienceAppData.runType}">
 		<div class="input-ports-list">
 			<ul>
 				<r-each in="inputPorts">
@@ -61,13 +60,12 @@
 			</ul>
 		</div>
 		<div style="clear:both;"></div>
-
-		<r-if test="scienceAppData.runType != 'FileComponent'">
-			<div class="wf-node-execute-status">
-				${status.status}
-			</div>
-		</r-if>
 	</div>
+	<r-if test="scienceAppData.runType != 'FileComponent'">
+		<div class="wf-node-execute-status">
+			${status.status}
+		</div>
+	</r-if>
 
 </div>
 </script>

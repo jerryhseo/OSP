@@ -33,14 +33,14 @@
 
 <script type="jtk" id="workflowApp-templete">
 <div class="wf-box " id="${id}" style="left:${left}px;top:${top}px;">
-	<div class="wf-node-header">
+	<div class="wf-node-header wf-tool">
 		<h1 class="wf-node-header-title">${scienceAppData.name}</h1>
 		<div class="wf-node-menu-icon wfMenuIcon">
 			<i class="icon-cog"></i>
 		</div>
 	</div>
 
-	<div class="wf-node-ports wf-tool ${scienceAppData.runType}">
+	<div class="wf-node-ports ${scienceAppData.runType}">
 		<div class="input-ports-list">
 			<ul>
 				<r-each in="inputPorts">

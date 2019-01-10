@@ -55,6 +55,10 @@
 	padding: 2px 5px;
 }
 
+.wf-box .wf-node-header.wf-tool {
+	background-color: #8db9e59e;
+}
+
 .wf-box .wf-node-ports {
     border-top: solid 1px #fff;
     border-bottom: solid 1px #f9f9f9;
@@ -62,11 +66,6 @@
     background-color: hsla(0, 100%, 100%, .5);
     position: relative;
     min-height: 60px;
-}
-
-.wf-box .wf-node-ports.wf-tool {
-	/* background-color: #eefee0; */
-	background-color: #8db9e59e;
 }
 
 .wf-box .wf-node-ports .wf-port label.wf-port-label {
@@ -110,7 +109,7 @@
     display: inline-block;
     border-radius: 4px;
     text-align: left;
-    background-color: #23cece;
+    background-color: white;
     float: left;
     position: relative;
     top: 5px;
@@ -145,7 +144,7 @@
     display: inline-block;
     border-radius: 4px;
     text-align: right;
-    background-color: #d27705;
+    background-color: white;
     float: right;
     position: relative;
     top: 5px;
@@ -208,24 +207,43 @@
 	border-top: 1px solid #bbb;
 }
 
-.wf-box.WAITING .wf-node-ports {
-    background-color: #c9fbff;
+
+.wf-box.WAITING .wf-node-header,
+.wf-box.CANCELED .wf-node-header,
+.wf-box.CREATED .wf-node-header,
+.wf-box.NOT_FOUND .wf-node-header {
+    background-color: hsla(220, 11%, 97%, .95);
 }
 
-.wf-box.RUNNING .wf-node-ports {
-    background-color: #d9f3d8;
+.wf-box.RUNNING .wf-node-header {
+    background-color: hsl(217, 71%, 53%);
+    color: white;
 }
 
-.wf-box.FAIL .wf-node-ports {
-    background-color: #b9aeaf;
+.wf-box.FAILED .wf-node-header {
+    background-color: hsl(348, 100%, 61%);
+    color: white;
 }
 
-.wf-box.SUCCESS .wf-node-ports {
-    background-color: #d7d773;
+.wf-box.DONE .wf-node-header,
+.wf-box.SUCCESS .wf-node-header,
+.wf-box.COMPLETED .wf-node-header {
+    background-color: hsl(141, 71%, 48%);
+    color: white;
 }
 
-.wf-box.PAUSE .wf-node-ports {
-    background-color: #ffecdd;
+.wf-box.PAUSED .wf-node-header {
+    background-color: hsl(48, 100%, 67%);
+    color: white;
+}
+
+.wf-box.RUNNING .wf-node-header h1.wf-node-header-title,
+.wf-box.FAILED .wf-node-header h1.wf-node-header-title,
+.wf-box.DONE .wf-node-header h1.wf-node-header-title,
+.wf-box.SUCCESS .wf-node-header h1.wf-node-header-title,
+.wf-box.COMPLETED .wf-node-header h1.wf-node-header-title,
+.wf-box.PAUSED .wf-node-header h1.wf-node-header-title {
+	text-shadow: none;
 }
 
 .jtk-endpoint {
