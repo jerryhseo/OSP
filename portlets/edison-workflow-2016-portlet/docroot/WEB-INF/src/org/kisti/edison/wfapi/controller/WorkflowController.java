@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.kisti.edison.model.Workflow;
+import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -94,11 +95,23 @@ public class WorkflowController{
         try{
             Locale locale = PortalUtil.getLocale(request);
             Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+            int workflowScienceAppCnt = ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(workflowId);
             Map<String, Object> workflowMap = workflow.getModelAttributes();
             workflowMap.put("title", workflow.getTitle(locale));
             workflowMap.put("titleMap", workflow.getTitle());
             workflowMap.put("description", workflow.getDescription(locale));
             workflowMap.put("descriptionMap", workflow.getDescription());
+            
+            if(0<workflowScienceAppCnt){
+            	ScienceApp workflowScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(workflowId);
+            	workflowMap.put("isScienceApp", true);
+            	workflowMap.put("scienceAppId", workflowScienceApp.getScienceAppId());
+            	workflowMap.put("scienceAppName", workflowScienceApp.getName());
+            	workflowMap.put("scienceAppVersion", workflowScienceApp.getVersion());
+            } else {
+            	workflowMap.put("isScienceApp", false);
+            }
+            
             return workflowMap;
         }catch (Exception e){
             log.error("error", e);

@@ -446,11 +446,19 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 
     function openWorkflowByWorkflowId(workflowId){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
-            setMetaData({
-                "title": workflow.title,
-                "description": workflow.description,
-                "workflowId": workflowId
-            });
+        	
+        	var metaData = {
+    			"title": workflow.title,
+        		"description": workflow.description,
+        		"workflowId": workflowId
+        	}
+        	if(workflow.isScienceApp){
+        		metaData["scienceAppId"] = workflow.scienceAppId;
+        		metaData["appName"] = workflow.scienceAppName;
+        		metaData["appVersion"] = workflow.scienceAppVersion;
+        	}
+        	
+        	setMetaData(metaData);
             closePanel();
         });
     }
