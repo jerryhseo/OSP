@@ -230,7 +230,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function (paginatedSimulations) {
         		if(paginatedSimulations.simulations && paginatedSimulations.simulations.length > 0) {
         			currSimulations.set(paginatedSimulations.simulations);
-        		}
+        		} else {
+                    currSimulations.set([])
+                }
                 renderSimulationTable(paginatedSimulations)
                 if(callback) {
                    callback()
@@ -349,7 +351,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         });
     }
 
-    function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage) {
+    function initJobs() {
+        currJobs.set([])
+        renderJobs()
+    }
+
+    function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage, selectedJobId) {
         if (currSimulations.contains(simulationId)) {
             var params = {}
             if (currentPage) {
@@ -367,7 +374,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 function (jobsMap) {
                     currSimulations.select(simulationId)
                     currJobs.set(jobsMap.jobs)
-                    renderJobs(jobsMap, currentPage === 1)
+                    currJobs.select(selectedJobId)
+                    renderJobs(currentPage === 1)
                 },
                 function () {
                     currSimulations.select()
@@ -377,7 +385,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    function renderJobs(jobsMap, isFirstPage) {
+    function renderJobs(isFirstPage) {
+
         var ulSelector = "#" + namespace + "column-1 > ul";
         var li =
             '<li class="header">\n' +
@@ -386,7 +395,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '  </div>\n' +
             '</li>' +
             '{{#jobs}}' +
-            '<li class="treeview">\n' +
+            '<li class="treeview" job-id="{{simulationJobId}}">\n' +
             '  <a href="#" class="sidebar-btn job-li" job-id=\"{{simulationJobId}}\">\n' +
             '    <i class="fa fa-file"></i>\n' +
             '    <span>{{title}}</span>\n' +
@@ -406,11 +415,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '  </ul>' +
             '</li>' +
             '{{/jobs}}';
+        var selectedJobId = currJobs.selected() ? currJobs.selected()["simulationJobId"] : undefined
+        var selectedSimulationTitle = currSimulations.selected() ? currSimulations.selected()['title'] : 'No available Simulation Job'
         $(ulSelector)
             .empty()
             .append(
                 Mustache.render(li, {
-                    "simulationTitle": currSimulations.selected()['title'],
+                    "simulationTitle": selectedSimulationTitle,
                     "jobs": currJobs.getArray()
                 })
             )
@@ -418,20 +429,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             .each(function(i) {
                 if (i === 0) return
                 var that = this
+                var simulationJobId = $(that).attr("job-id")
                 $(that).children("a").click(function(e) {
-                    var simulationJobId = $(this).attr("job-id")
                     $(this).parent("li").siblings("li").removeClass("action")
                     $(this).parent("li").addClass("action")
                     selectSimulationJob(simulationJobId)
                 })
-                if (i === 1 && isFirstPage) {
+                $(that).children("a").children("span.sidebar-btn").click(function(e) {
+                    e.stopPropagation()
+                })
+                if (i === 1 && isFirstPage && !selectedJobId) {
+                    _delay(function() {
+                        $(that).children("a").click()
+                    }, 100)
+                    return
+                }
+                if(simulationJobId == selectedJobId) {
                     _delay(function() {
                         $(that).children("a").click()
                     }, 100)
                 }
-                $(that).children("a").children("span.sidebar-btn").click(function(e) {
-                    e.stopPropagation()
-                })
             })
     }
 
@@ -623,7 +640,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 if (PANEL_DATA.setting.form.simulationId === simulationId) {
                     PANEL_DATA.setting.form.title = simulationData.title
                 }
-                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage);
+                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
+                    if (currSimulations.getArray().length > 0) {
+                        var simulationId = currSimulations.getArray()[0].simulationId
+                        currSimulations.select(simulationId)
+                        fetchJobs(simulationId, null,  1)
+                    }
+                })
+
                 $("#" + namespace + "wf-modal").modal("hide");
             });
         });
@@ -641,7 +665,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         simulationId,
                         function (simulation) {
                             if (simulation) {
-                                loadPaginatedSimulations(panelType);
+                                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
+                                    if (currSimulations.getArray().length > 0) {
+                                        var simulationId = currSimulations.getArray()[0].simulationId
+                                        currSimulations.select(simulationId)
+                                        fetchJobs(simulationId, null,  1)
+                                    } else {
+                                        initJobs()
+                                    }
+                                })
                             }
                         },
                         function () {
@@ -729,7 +761,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 if (callback) {
                     callback(simulationJob)
                 } else {
-                    fetchJobs(simulationJob.simulationId, null, 1)
+                    fetchJobs(simulationJob.simulationId, null, 1, null, job.simulationJobId)
                     _delay(function () {
                         toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_save_complete_message)
                     }, 100)
@@ -819,6 +851,65 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function () {
             });
     })
+
+    $("#" + namespace + "header-li-submit").click(function (e) {
+        submitSimulationJob()
+    })
+
+    function resetSubmitData(){
+        $.each(designer.getCurrentJsPlumbInstance().getNodes(),
+            function () {
+                var node = this
+                delete node.data.parentNodes
+                delete node.data.childNodes
+                delete node.data.outPort
+                delete node.data.outPortFile
+            })
+    }
+
+    function submitSimulationJob() {
+        resetSubmitData()
+        // console.log(designer.getCurrentJsPlumbInstance())
+        var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+        var jp = designer.getCurrentJsPlumbInstance()
+        var outputPorts = currOutputPorts.getArray()
+        $.each(outputPorts, function(){
+            // console.log(this)
+            var currSourcePortData = this
+            var sourcePort = jp.getPort(this.id)
+            // console.log(jp.getPort(sourcePort.id))
+            $.each(sourcePort.getSourceEdges(), function(){
+                var targetPort = this.target
+                if(targetPort) {
+                    // console.log(sourcePort)
+                    // console.log(targetPort)
+                    var prefixedId = prefix + targetPort.id
+                    var sourceNode = sourcePort.getNode()
+                    var targetNode = targetPort.getNode()
+                    sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                    if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                        sourceNode.data.childNodes.push(targetNode.getFullId())
+                    }
+
+                    sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                    sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                    if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                        sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                    }
+
+                    sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                    sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+
+                    targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                    if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                        targetNode.data.parentNodes.push(sourceNode.getFullId())
+                    }
+                }
+            })
+        })
+        console.log(designer.getCurrentJsPlumbInstance().exportData({ type: "json" }))
+        // console.log(designer.getCurrentJsPlumbInstance().getNodes())
+    }
 
     /////////////////////////////////////////// renew end
 
@@ -1124,12 +1215,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         currSimulations.select(simulationId)
                         fetchJobs(simulationId, null,  1)
                     } else {
-                        openNewSimulationPanel()
+                        _delay(function() {
+                            $("#" + namespace + "header-li-simulation").click()
+                            openNewSimulationPanel()
+                        }, 500)
                     }
                 })
 
                 if(callback) {
-                    callback();
+                    callback()
                 }
             }
         });
@@ -1184,10 +1278,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if ((event.which == 115 || event.which == 83) &&
             (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            if(PANEL_DATA.setting.form.simulationTitle){
-                saveOrUpdateWorkflowInstance("setting");
-            }else{
-                toastr["error"]("", var_create_first_message);
+            if(currJobs.selected()) {
+                saveSimulationJob(currJobs.selected())
+            } else {
+                toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message);
             }
             return false;
         }

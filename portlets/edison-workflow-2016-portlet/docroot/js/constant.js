@@ -38,6 +38,9 @@ var CONSTS = {
         PORT_ELEMENT: "port-element",
         LOOP: "loop",
     },
+    WF_ENGINE: {
+        CMD_PREFIX: "cmd",
+    },
     WF_CONVERTER_SCRIPT: "converter-script",
     WF_CONDITION_SCRIPT: "condition-script",
     WF_APP_TYPES: {

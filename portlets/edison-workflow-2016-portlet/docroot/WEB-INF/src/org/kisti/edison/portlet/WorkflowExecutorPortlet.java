@@ -21,10 +21,8 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.model.IcebreakerVcToken;
-import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
-import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
@@ -76,8 +74,8 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             String workflowId = ParamUtil.get(request, "workflowId", "0");
             String title = CustomUtil.strNull("title", null);
             if(StringUtils.hasText(workflowId)){
-                model.addAttribute("workflowCount", WorkflowSimulationLocalServiceUtil
-                    .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId()));
+                int simulationCount = WorkflowSimulationLocalServiceUtil
+                .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId());
             }
             
             // Workflow Edit Permission Check
@@ -86,7 +84,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             if(wfScienceAppCnt <= 0){
             	isAdmin = true;
             } else {
-            	ScienceApp wfScienceApp = wfScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(Long.parseLong(workflowId));
+            	ScienceApp wfScienceApp = ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(Long.parseLong(workflowId));
             	
             	// Not Open Workflow-ScienceApp
             	if(wfScienceApp.getStatus() != 1901004){

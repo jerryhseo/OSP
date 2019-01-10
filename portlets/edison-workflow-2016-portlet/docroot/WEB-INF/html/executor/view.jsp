@@ -202,6 +202,11 @@ var contextPath = '${contextPath}';
         <aside class="main-sidebar">
           <section class="sidebar" id="<portlet:namespace/>column-1" section-type="system">
             <ul class="sidebar-menu top" data-widget="tree">
+                <li class="header">
+                    <div class="header-inner">
+                        <i class="fa fa-folder"></i> No available Simulation Job
+                    </div>
+                </li>
             </ul>
           </section>
         </aside>
@@ -395,7 +400,7 @@ $(document).ready(function(){
     "SDE": '${structuredEditor.exeFileName}'
   };
   var workflowId = "${workflowId}";
-  var workflowCount = ${workflowCount};
+  // var workflowCount = ${workflowCount};
   $.Mustache.addFromDom();
   toastr.options = {
       "closeButton": true,
@@ -428,7 +433,6 @@ $(document).ready(function(){
   _delay(function(){
     if(workflowId){
       uiPanel.openWorkflow(workflowId, false, function(){
-        // $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
         bEnd()
       });
     }
