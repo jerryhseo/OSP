@@ -5,6 +5,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     var jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
     var currSimulations = eStruct("simulationId");
     var currJobs = eStruct("id", "data");
+    var currInputPorts = eStruct("id")
+    var currOutputPorts = eStruct("id")
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
     var PANEL_DATA = {
         "new": {
@@ -457,9 +459,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    var currInputPorts = eStruct("id")
-    var currOutputPorts = eStruct("id")
-    
     function selectSimulationJob(simulationJobId) {
         var li =
             '{{#ports}}' +
@@ -499,7 +498,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var portId = $(that).attr("port-id")
                 var nodeId = jpInstance.getPort(portId).getNode().id
                 $(that).children("a").click(function(e) {
-                    openInputPort(portId, nodeId)
+                    openInputPort(nodeId, portId)
                 })
                 $(that).children("a").hover(
                     function (e) {
@@ -548,49 +547,55 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
     }
 
-    function openInputPort(portId, nodeId) {
-    	var portData = {}
-    	portData[currInputPorts.get(portId)["name_"]] =  $.extend({}, currInputPorts.get(portId));
-    	console.log(portData)
-    	window.AUI().use('liferay-portlet-url', function(A) {
-             var portletURL = window.Liferay.PortletURL.createRenderURL();
-             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
-              portletURL.setParameter('simulationUuid', simulationUuid);
-              portletURL.setParameter('portData', JSON.stringify(portData));
-              portletURL.setParameter('portType', "inputPorts");
-              portletURL.setParameter('nodeId', nodeId);
-              
-              
-            // portletURL.setParameter('workbenchType', "SIMULATION_WITH_WORKFLOW");
-            // portletURL.setParameter('scienceAppId', scienceAppId);
-            // /* portletURL.setParameter('jobUuid', ""); */
-            // portletURL.setParameter('blockInputPorts', connectedInputPorts.toString());
-            // portletURL.setParameter('nodeId', nodeId);
-             portletURL.setWindowState('pop_up');
+    function setPortData(nodeId, portName, strPortDataJson) {
+        var portId = nodeId + "." + portName
+        if (strPortDataJson && strPortDataJson !== "false") {
+            var prevPortData = currInputPorts.get(portId)
+            prevPortData[OSP.Constants.INPUTS] = JSON.parse(strPortDataJson)
+            currInputPorts.update(portId, prevPortData)
+        }
+    }
+
+    function openInputPort(nodeId, portId) {
+        var portData = {}
+        var currPortData = $.extend({}, currInputPorts.get(portId))
+        delete currPortData.id
+        portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        console.log(portData)
+        console.log(JSON.stringify(portData))
+
+        window.AUI().use('liferay-portlet-url', function (A) {
+            var portletURL = window.Liferay.PortletURL.createRenderURL();
+            portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
+            portletURL.setParameter('simulationUuid', simulationUuid);
+            portletURL.setParameter('portData', JSON.stringify(portData));
+            portletURL.setParameter('portType', "inputPorts");
+            portletURL.setParameter('nodeId', nodeId);
+            portletURL.setWindowState('pop_up');
 
             var wWidth = $(window).width();
             var wHeight = $(window).height();
             $("body").css('overflow', 'hidden')
             Liferay.Util.openWindow({
-                dialog : {
-                    width : wWidth,
-                    height : wHeight,
-                    cache : false,
-                    draggable : false,
-                    resizable : false,
-                    modal : true,
-                    destroyOnClose : true,
-                    after : {
-                        render : function(event) {
-                            $("button.btn.close").on("click", function(e) {
-                                $("body").css('overflow','');
+                dialog: {
+                    width: wWidth,
+                    height: wHeight,
+                    cache: false,
+                    draggable: false,
+                    resizable: false,
+                    modal: true,
+                    destroyOnClose: true,
+                    after: {
+                        render: function (event) {
+                            $("button.btn.close").on("click", function (e) {
+                                $("body").css('overflow', '');
                             });
                         }
                     }
                 },
-                id : namespace + "inputPort",
-                uri : portletURL.toString(),
-                title : ""
+                id: namespace + "inputPort",
+                uri: portletURL.toString(),
+                title: ""
             });
         });
     }
@@ -1387,9 +1392,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
-			
+
 			/* TODO Workflow Status Setting */
-			
+
 			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";
 		}
 		console.log(node);
@@ -1399,6 +1404,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"openWorkflow" : openWorkflowByWorkflowId,
 		"openScienceAppWorkbench" : openScienceAppWorkbench,
 		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
+		"setPortData" : setPortData,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

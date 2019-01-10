@@ -238,15 +238,25 @@ function eStruct(idName, dataName) {
 
       });
     },
-    get: function (key) {
-      return arguments.length === 0 ? map : map[key];
+    update: function (id, data) {
+      if (id) {
+        var currData = map[id]
+        if (currData) {
+          $.each(data, function (key, value) {
+            currData[key] = value
+          })
+        }
+      }
     },
-    getArray: function (key) {
-      return arguments.length === 0 ? list : list[key];
+    get: function (id) {
+      return arguments.length === 0 ? map : map[id];
     },
-    select: function (key) {
-      if (key) {
-        selectedId = key
+    getArray: function (id) {
+      return arguments.length === 0 ? list : list[id];
+    },
+    select: function (id) {
+      if (id) {
+        selectedId = id
       } else {
         selectedId = undefined
       }
@@ -254,14 +264,14 @@ function eStruct(idName, dataName) {
     selected: function () {
       return selectedId && map ? map[selectedId] : undefined;
     },
-    contains: function (key) {
-      if (!key) {
+    contains: function (id) {
+      if (!id) {
         return false;
       }
       if ($.isEmptyObject(map)) {
         return false;
       }
-      return map.hasOwnProperty(key);
+      return map.hasOwnProperty(id);
     }
   };
 }

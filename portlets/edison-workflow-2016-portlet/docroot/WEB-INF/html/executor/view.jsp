@@ -377,6 +377,7 @@ $.widget.bridge('uibutton', $.ui.button);
 </script>
 <script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
+bStart();
 var namespace = "<portlet:namespace/>";
 var jqPortletBoundaryId = "#p_p_id" + namespace;
 var designer = null;
@@ -431,6 +432,7 @@ $(document).ready(function(){
       }
       uiPanel.openWorkflow(workflowId, false, function(){
         // $(jqPortletBoundaryId + " .sidebar-btn[data-btn-type='new']").click();
+        bEnd()
       });
     }
   }, 1000);
@@ -466,14 +468,14 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 
 AUI().ready(['liferay-util-window'], function(){
 	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portName, jobData){
-// 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
-// 		$("body").css('overflow','');
-		
-		alert(nodeId);
-		alert(portName);
-		console.log(jobData);
+        <portlet:namespace/>closePopup(namespace + "inputPort");
+        uiPanel.setPortData(nodeId, portName, jobData);
+        $("body").css('overflow','');
+		// alert(nodeId);
+		// alert(portName);
+		// console.log(jobData);
 	});
-	
+
 	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
 
