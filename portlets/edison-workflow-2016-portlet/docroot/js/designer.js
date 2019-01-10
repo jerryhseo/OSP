@@ -190,7 +190,18 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
     
-    var defaultLayout = { type: "Absolute" };
+    var defaultLayout = isDesigner ? { type: "Absolute" } : 
+    {
+        type: "Hierarchical",
+        parameters: {
+            multipleRoots: true,
+            orientation: "horizontal",
+            padding: [50, 50],
+            align:"end",
+            invert: false,
+            spacing: "auto",
+        }
+    };
 
     var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
@@ -866,6 +877,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = false;
+                            
+                            $("#"+node.id).removeClass("true");
                         }
                     };
 
@@ -878,6 +891,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = true;
+                            
+                            $("#"+node.id).addClass("true");
                         }
                     };
                 }
@@ -1242,7 +1257,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	turnOffBeforeConnect(currentJsPlumbInstance);
         }
     }
-
+    
     function resetCurrentJsPlumbInstance() {
         /* 2018.12.24 _ Clear Nodes */
         currentJsPlumbInstance.clear();
