@@ -805,6 +805,17 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     $.contextMenu({
+    	selector: '.wfMenuIcon',
+        trigger: 'left',
+        build: function($trigger, e) {
+        	e.preventDefault();
+        	$trigger.parents(".wf-box").contextmenu({});
+        	return false;
+        }
+    })
+    
+    
+    $.contextMenu({
         selector: '.wf-box',
         build: function($trigger, e) {
             var wfWindowId = $trigger.attr("id");
