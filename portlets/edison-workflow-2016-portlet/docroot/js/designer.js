@@ -806,20 +806,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     $.contextMenu({
-    	selector: '.wfMenuIcon',
-        trigger: 'left',
-        build: function($trigger, e) {
-        	e.preventDefault();
-        	$trigger.parents(".wf-box").contextmenu({});
-        	return false;
-        }
-    })
-    
-    
-    $.contextMenu({
         selector: '.wf-box',
+        determinePosition: function($menu){
+        	$menu.css('display', 'block').position({ my: "left bottom", at: "center bottom", of: this, offset: "0 5"});
+        },
         build: function($trigger, e) {
-            var wfWindowId = $trigger.attr("id");
+        	console.log($trigger);
+        	var wfWindowId = $trigger.attr("id");
             var appData = $trigger.data();
 
             var node = currentJsPlumbInstance.getNode(wfWindowId);

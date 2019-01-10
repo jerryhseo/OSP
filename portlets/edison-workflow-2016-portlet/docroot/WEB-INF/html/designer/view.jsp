@@ -738,5 +738,8 @@ function <portlet:namespace/>deleteWfSampleFiles(nodeData){
     }
 }
 
+function cogClick(nodeId){
+	$("#"+nodeId).contextmenu();
+}
 </script>
 </div>
