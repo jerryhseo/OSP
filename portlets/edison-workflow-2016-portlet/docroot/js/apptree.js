@@ -212,7 +212,6 @@ var AppTree = (function(namespace, $, designer){
                             "id_": 0,
                             "parent_": "result",
                             "type_": "file",
-                            "name_": "stdout",
                             "relative_": true
                         }
                     }

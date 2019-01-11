@@ -34,8 +34,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     
     function beforeConnectHandler(source, target, edgeData) {
 		if (source.objectType !== "Node" && target.objectType !== "Node") {
+			
+			var sourcePortName = source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME];
 	    	var targetPortName = target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME];
 	    	/*Port Connect Bug fix*/
+	    	if(sourcePortName!=source.id){
+	    		source.getNode()["data"]["outputPorts"][source.id][OSP.Constants.NAME] = source.id;
+	    	}
+	    	
 	    	if(targetPortName!=target.id){
 	    		target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME] = target.id;
 	    	}
@@ -52,14 +58,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 				return false;
 			}
 			
-			if (source.getType() === 'all' && target.getType() === 'all') {
+			if (source.getType() === 'source-all' && target.getType() === 'target-all') {
 				if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
 					return false;
 				}else{
 					return true;
 				}
 			}else{
-				if (source.getType() === 'all' || target.getType() === 'all') {
+				if (source.getType() === 'source-all' || target.getType() === 'target-all') {
 					if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
 						var isEqualsPortType = false;
 						var sourceData = source.getNode().data,
@@ -102,6 +108,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         		console.log(sourceData.outputPorts[source.id]);
         		if(source.getAllEdges().length-1 == 0){
         			sourceData.outputPorts[source.id] = {};
+        			sourceData.outputPorts[source.id][OSP.Constants.NAME] = source.id;
         		}
         	}
         }
@@ -161,6 +168,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         ports: {
             "inputPorts": {
+            	template: "input-port-templete",
             	anchor:["Center"],
                 events: {
                     dblclick: function(obj) {
@@ -179,10 +187,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 }
         	},
         	"outputPorts": {
+        		template: "output-port-templete",
         		anchor:["Right"]
         	},
-        	"all": {
-        		anchor:["Left","Right"]
+        	"source-all": {
+        		template: "wf-output-port-templete",
+        		anchor:["Right"]
+        	},
+        	"target-all": {
+        		template: "wf-input-port-templete",
+        		anchor:["Center"]
         	}
         }
     }
