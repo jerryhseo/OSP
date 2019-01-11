@@ -1317,12 +1317,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 		}
 
-		if (runType != 'Controller' && runType != 'DynamicConverter') {
+		if (runType != CONSTS.WF_APP_TYPES.CONTROLLER.NAME 
+				&& runType != CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
 			/* get outputData in outputPorts */
 			var outputPorts = sourceNodeData.outputPorts;
 			for ( var key in outputPorts) {
 				var outputPort = outputPorts[key];
-				var outputData = outputPort.outputData_;
+				var outputData = "";
+				console.log(outputPort);
+				if(runType == CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
+					outputData = outputPort.sample_;
+				} else{
+					outputData = outputPort.outputData_;
+				}
+				
 				var outputDataType = outputData.type_;
 				if (outputDataType != 'dlEntryId_') {
 					jobDataArr.push(outputData);
