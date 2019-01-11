@@ -106,15 +106,26 @@
 	</label>
 </li>
 </script>
-<script type="jtk" id="wf-output-port-templete">
+<script type="jtk" id="wf-input-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source filter-exclude="true" port-id="${$key}" port-type="all"></jtk-source>
+		<jtk-target port-id="${$key}" port-type="targetAll"></jtk-target>
 	</div>
 	<label class="wf-port-label">
 		${$key}
 		${name_}
-	
+	</label>
+</li>
+</script>
+<script type="jtk" id="wf-output-port-templete">
+<li class="wf-port">
+	<div class="connect">
+		
+	</div>
+	<jtk-source filter=".connect" filter-exclude="false" port-id="${$key}" port-type="sourceAll"></jtk-source>
+	<label class="wf-port-label">
+		${$key}
+		${name_}
 	</label>
 </li>
 </script>

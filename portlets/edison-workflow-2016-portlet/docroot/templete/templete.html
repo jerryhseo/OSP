@@ -65,7 +65,7 @@
 <script type="jtk" id="input-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-target filter-exclude="true" port-id="${$key}" port-type="inputPorts"></jtk-target>
+		<jtk-target port-id="${$key}" port-type="inputPorts"></jtk-target>
 	</div>
 	<label class="wf-port-label">
 		${$key}
@@ -76,12 +76,11 @@
 <script type="jtk" id="output-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source filter=".connect" filter-exclude="true" port-id="${$key}" port-type="outputPorts"></jtk-source>
 	</div>
+	<jtk-source filter=".connect" port-id="${$key}" port-type="outputPorts"></jtk-source>
 	<label class="wf-port-label">
 		${$key}
 		${name_}
-	
 	</label>
 </li>
 </script>
@@ -89,7 +88,7 @@
 <script type="jtk" id="wf-input-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-target filter-exclude="true" port-id="${$key}" port-type="all"></jtk-target>
+		<jtk-target port-id="${$key}" port-type="targetAll"></jtk-target>
 	</div>
 	<label class="wf-port-label">
 		${$key}
@@ -100,8 +99,9 @@
 <script type="jtk" id="wf-output-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source filter-exclude="true" port-id="${$key}" port-type="all"></jtk-source>
+		
 	</div>
+	<jtk-source filter=".connect" filter-exclude="false" port-id="${$key}" port-type="sourceAll"></jtk-source>
 	<label class="wf-port-label">
 		${$key}
 		${name_}

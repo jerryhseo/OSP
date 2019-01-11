@@ -278,7 +278,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     }
 
     function setActiveApp(scienceAppId) {
-    	if(scienceAppId==0){
+    	if(scienceAppId==0 || scienceAppId=='undefined' || scienceAppId == null){
     		$("#" + namespace + "active-app-register").css("display","block");
     		$("#" + namespace + "active-app-config").css("display","none");
     	}else{
