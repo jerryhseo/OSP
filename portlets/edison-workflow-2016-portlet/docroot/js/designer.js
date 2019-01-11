@@ -59,14 +59,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 return false;
             }
 
-            if (source.getType() === 'source-all' && target.getType() === 'target-all') {
+            if (source.getType() === 'sourceAll' && target.getType() === 'targetAll') {
                 if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
                     return false;
                 } else {
                     return true;
                 }
             } else {
-                if (source.getType() === 'source-all' || target.getType() === 'target-all') {
+                if (source.getType() === 'sourceAll' || target.getType() === 'targetAll') {
                     if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
                         var isEqualsPortType = false;
                         var sourceData = source.getNode().data,
@@ -191,11 +191,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 template: "output-port-templete",
                 anchor: ["Right"]
             },
-            "source-all": {
+            "sourceAll": {
                 template: "wf-output-port-templete",
                 anchor: ["Right"]
             },
-            "target-all": {
+            "targetAll": {
                 template: "wf-input-port-templete",
                 anchor: ["Center"]
             }
