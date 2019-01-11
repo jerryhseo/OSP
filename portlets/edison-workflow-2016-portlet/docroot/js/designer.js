@@ -29,11 +29,17 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     function turnOnBeforeConnect(jpInstance) {
-    	jpInstance.beforeConnect = beforeConnectHandler
+    	jpInstance.beforeConnect = beforeConnectHandler();
     }
     
     function beforeConnectHandler(source, target, edgeData) {
 		if (source.objectType !== "Node" && target.objectType !== "Node") {
+	    	var targetPortName = target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME];
+	    	/*Port Connect Bug fix*/
+	    	if(targetPortName!=target.id){
+	    		target.getNode()["data"]["inputPorts"][target.id][OSP.Constants.NAME] = target.id;
+	    	}
+	    	
 			if (source === target) {
 				return false;
 			}
@@ -71,7 +77,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 						} else {
 							isEqualsPortType = checkPortTypeForConnection(source, target, true);
 						}
-						
 						return isEqualsPortType;
 					}
 					return true;
@@ -81,6 +86,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 					return checkPortTypeForConnection(source, target, false);
 				}
 			}
+		}else{
+			return false;
 		}
     }
     
