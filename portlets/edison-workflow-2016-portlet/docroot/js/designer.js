@@ -260,9 +260,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            EndpointStyle: { fill: "#445566", radius: 6 },
+            EndpointStyle: { fill: "#445566", radius: 5 },
             EndpointHoverStyle: { fill: "#FF6600", radius: 7 },
-            HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
+            HoverPaintStyle: { strokeWidth: 5, stroke: "#FF6600" },
             PaintStyle: { strokeWidth: 3, stroke: "#445566" },
             ConnectionOverlays: [
                 ["Arrow", { location: 1, width: 15, length: 10 }]
@@ -607,6 +607,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
+    	console.log("draw...")
         var wfId = savedId ? savedId : getGUID();
         var isInputPortExist = false;
         var scienceAppData = {
@@ -621,7 +622,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             scienceAppData: scienceAppData,
             inputPorts: data.inputports,
             outputPorts: data.outputports,
-            ibData: data.ibData
+            ibData: data.ibData,
+            status: data.status
         });
 
         renderer.zoomToFit();
