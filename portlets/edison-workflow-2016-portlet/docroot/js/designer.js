@@ -29,7 +29,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
     
     function turnOnBeforeConnect(jpInstance) {
-    	jpInstance.beforeConnect = beforeConnectHandler();
+    	jpInstance.beforeConnect = beforeConnectHandler;
     }
     
     function beforeConnectHandler(source, target, edgeData) {
@@ -182,7 +182,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         		anchor:["Right"]
         	},
         	"all": {
-        		anchor:["Left","Right"]
+        		anchor: [
+        		    ["Right"],
+        		    ["Left"]
+        		]
         	}
         }
     }
@@ -246,7 +249,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            EndpointStyle:{ fill:"blue", radius:6 },
+            EndpointStyle:{ fill:"#445566", radius:6 },
             EndpointHoverStyle: { fill: "#FF6600",radius:7},
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
             PaintStyle: { strokeWidth: 3, stroke: "#445566" },

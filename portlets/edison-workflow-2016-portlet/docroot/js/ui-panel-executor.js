@@ -1418,16 +1418,27 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			for ( var key in outputPorts) {
 				var outputPort = outputPorts[key];
 				var outputData = "";
-				console.log(outputPort);
+				var isWfSample = false; 
+
 				if(runType == CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
-					outputData = outputPort.sample_;
+					outputData = outputPort.wfSample_;
+					if(outputData == "undefined" || outputData == null){
+						outputData = outputPort.sample_;
+						isWfSample = false;
+					} else {
+						isWfSample = true;
+					}
 				} else{
 					outputData = outputPort.outputData_;
 				}
 				
 				var outputDataType = outputData.type_;
-				if (outputDataType != 'dlEntryId_') {
+				if(isWfSample){
 					jobDataArr.push(outputData);
+				} else {
+					if (outputDataType != 'dlEntryId_') {
+						jobDataArr.push(outputData);
+					}
 				}
 			}
 		}
@@ -1497,7 +1508,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";
 		}
-		console.log(node);
 	}
 
 	return {
