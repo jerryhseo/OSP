@@ -96,6 +96,7 @@
     left: 5px;
     float: left;
     margin-bottom: 0px;
+	top: -3px;
 }
 
 .wf-box .wf-node-ports .input-ports-list .wf-port div.connect {
@@ -103,8 +104,8 @@
     border: 1px #c6cad1 solid;
     box-shadow: inset 0 1px 1px #667699;
     cursor: pointer;
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     margin-bottom: -1px;
     display: inline-block;
     border-radius: 4px;
@@ -112,7 +113,7 @@
     background-color: white;
     float: left;
     position: relative;
-    top: 5px;
+    top: 1.5px;
 }
 
 .wf-box .wf-node-ports .output-ports-list {
@@ -131,6 +132,7 @@
     right: 5px;
     float: right;
     margin-bottom: 0px;
+    top: -1px;
 }
 
 .wf-box .wf-node-ports .output-ports-list .wf-port div.connect {
@@ -138,16 +140,16 @@
     border: 1px #c6cad1 solid;
     box-shadow: inset 0 1px 1px #667699;
     cursor: pointer;
-    width: 10px;
-    height: 10px;
-    margin-bottom: -1px;
+    width: 11px;
+    height: 11px;
     display: inline-block;
     border-radius: 4px;
     text-align: right;
     background-color: white;
     float: right;
     position: relative;
-    top: 5px;
+    top: 3.5px;
+	margin-right: 7px;
 }
 
 .wf-box .wf-node-ports:before {

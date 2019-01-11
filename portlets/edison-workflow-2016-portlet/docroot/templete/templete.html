@@ -76,8 +76,8 @@
 <script type="jtk" id="output-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source port-id="${$key}" port-type="outputPorts"></jtk-source>
 	</div>
+	<jtk-source filter=".connect" port-id="${$key}" port-type="outputPorts"></jtk-source>
 	<label class="wf-port-label">
 		${$key}
 		${name_}
@@ -100,8 +100,10 @@
 <script type="jtk" id="wf-output-port-templete">
 <li class="wf-port">
 	<div class="connect">
-		<jtk-source port-id="${$key}" port-type="all"></jtk-source>
+		
 	</div>
+	<jtk-source filter=".connect" filter-exclude="false" port-id="${$key}" port-type="all"></jtk-source>
+
 	<label class="wf-port-label">
 		${$key}
 		${name_}

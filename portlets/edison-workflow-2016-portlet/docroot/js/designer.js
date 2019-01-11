@@ -161,6 +161,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         ports: {
             "inputPorts": {
+            	anchor:["Center"],
                 events: {
                     dblclick: function(obj) {
                     	if(obj.port.getAllEdges().length == 0){
@@ -176,6 +177,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     	}
                     }
                 }
+        	},
+        	"outputPorts": {
+        		anchor:["Right"]
+        	},
+        	"all": {
+        		anchor:["Left","Right"]
         	}
         }
     }
@@ -224,7 +231,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
         },
         miniview: {
-            container: "miniview"
+            container: "miniview" 
         },
         enablePanButtons: false,
         zoomToFit: true,
@@ -239,16 +246,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            Anchor: [
-            	["TopRight"],
-            	["TopLeft"]
-            ],
-            EndpointStyle: { fill: "#445566", radius:3 },
+            EndpointStyle:{ fill:"blue", radius:6 },
             EndpointHoverStyle: { fill: "#FF6600",radius:7},
             HoverPaintStyle: { strokeWidth: 5, stroke: "orange" },
             PaintStyle: { strokeWidth: 3, stroke: "#445566" },
             ConnectionOverlays: [["Arrow", {location: 1, width: 15, length: 10}]],
-//            Connector: ["Flowchart", { cornerRadius: 3 }]
         },
         elementsDraggable: isDesigner
     });
