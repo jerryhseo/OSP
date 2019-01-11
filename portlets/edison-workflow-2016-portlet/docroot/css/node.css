@@ -132,7 +132,7 @@
     right: 5px;
     float: right;
     margin-bottom: 0px;
-    top: -1px;
+    top: -3px;
 }
 
 .wf-box .wf-node-ports .output-ports-list .wf-port div.connect {
@@ -148,7 +148,7 @@
     background-color: white;
     float: right;
     position: relative;
-    top: 3.5px;
+    top: 1.5px;
 	margin-right: 7px;
 }
 
