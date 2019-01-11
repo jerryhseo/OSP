@@ -240,10 +240,10 @@ throw new Error('AdminLTE requires jQuery')
   BoxWidget.prototype.remove = function () {
     var removedEvent = $.Event(Event.removed);
 
-    $(this.element).animate({width: 'hide'},this.options.animationSpeed, function () {
-        $(this.element).trigger(removedEvent);
-        $(this.element).remove();
-      }.bind(this));
+    $(this.element).slideUp(this.options.animationSpeed, function () {
+      $(this.element).trigger(removedEvent);
+      $(this.element).remove();
+    }.bind(this));
   };
 
   // Private
@@ -601,9 +601,11 @@ throw new Error('AdminLTE requires jQuery')
     $(Selector.layoutBoxed + ' > ' + Selector.wrapper).css('overflow', 'hidden');
 
     // Get window height and the wrapper height
-    //var footerHeight  = $(Selector.mainFooter).outerHeight() || 0;
-    //var neg           = $(Selector.mainHeader).outerHeight() + footerHeight;
-    var windowHeight  = $(window).height() - 103;
+    var footerHeight = $(Selector.mainFooter).outerHeight() || 0;
+    var headerHeight  = $(Selector.mainHeader).outerHeight() || 0;
+    var neg           = headerHeight + footerHeight;
+    var mainHeaderTopHeight = $(Selector.mainHeader).offset() ? $(Selector.mainHeader).offset().top : 0
+    var windowHeight  = $(window).height() - mainHeaderTopHeight;
     var sidebarHeight = $(Selector.sidebar).height() || 0;
 
     // Set the min-height of the content and sidebar based on
@@ -612,11 +614,13 @@ throw new Error('AdminLTE requires jQuery')
       $(Selector.contentWrapper).css('height', windowHeight);
     } else {
       var postSetHeight;
-
       if (windowHeight >= sidebarHeight) {
-        $(Selector.contentWrapper).css('height', windowHeight);
-        $(Selector.sidebar).css('min-height', windowHeight);
+        $(Selector.contentWrapper).css('height', windowHeight-neg);
+        $(Selector.sidebar).css('min-height', windowHeight-neg);
         postSetHeight = windowHeight;
+
+        /*WorkBench Layout Area Full Height Setting - GPLUS*/
+        $("#workbench-layout-area").css('height', windowHeight-neg);
       } else {
         $(Selector.contentWrapper).css('height', sidebarHeight);
         postSetHeight = sidebarHeight;
@@ -629,6 +633,28 @@ throw new Error('AdminLTE requires jQuery')
           $(Selector.contentWrapper).css('min-height', $controlSidebar.height());
       }
     }
+
+    //WorkBench Height Setting - GPLUS
+//    var rowCnt = $('#workbench-layout-area  .layout-grid').length;
+//    var contentWrapperHeight = $(Selector.contentWrapper).height();
+//    var contentHeaderHeight = $('.content-header').outerHeight(true);
+//
+//    if(rowCnt!=0){
+//      var $subCols = $('#workbench-layout-area div.sub-col');
+//      if($subCols.css("height")=='0px'){
+//          var $subCol = $('#workbench-layout-area div.sub-col');
+//          $subCol.each(function(e){
+//              if($(this).css('height')=="100%"){
+//                  $(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
+//              }else{
+//                  $(this).css('height',Math.round((contentWrapperHeight-contentHeaderHeight) / rowCnt));
+//              }
+//          });
+//      }
+//    }
+
+    //FLOW-GRID
+//    $('#workbench-layout-area  .flow-grid div.sub-col').css('height',Math.round((contentWrapperHeight-contentHeaderHeight)));
   };
 
   Layout.prototype.fixSidebar = function () {
@@ -791,7 +817,7 @@ throw new Error('AdminLTE requires jQuery')
       $(".sidebar-toggle-wrapper > a > i").addClass("pull-right");
     }
   };
-  
+
   PushMenu.prototype.open = function () {
     var windowWidth = $(window).width();
 
@@ -1008,7 +1034,7 @@ throw new Error('AdminLTE requires jQuery')
   var DataKey = 'lte.tree';
 
   var Default = {
-    animationSpeed: 500,
+    animationSpeed: 300,
     accordion     : true,
     followLink    : false,
     trigger       : '.treeview a'
@@ -1048,7 +1074,8 @@ throw new Error('AdminLTE requires jQuery')
   };
 
   Tree.prototype.toggle = function (link, event) {
-    var treeviewMenu = link.next(Selector.treeviewMenu);
+//    var treeviewMenu = link.next(Selector.treeviewMenu);
+    var treeviewMenu = link.parent().children(Selector.treeviewMenu);
     var parentLi     = link.parent();
     var isOpen       = parentLi.hasClass(ClassName.open);
 
@@ -1094,7 +1121,7 @@ throw new Error('AdminLTE requires jQuery')
   };
 
   // Private
-  
+
   Tree.prototype._setUpListeners = function () {
     var that = this;
 

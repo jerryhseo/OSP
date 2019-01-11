@@ -3,8 +3,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     'use strict';
     var simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
     var jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
-    var currSimulations = eStruct("simulationId");
-    var currJobs = eStruct("id", "data");
+    var currNodes = eStruct("id")
+    var currSimulations = eStruct("simulationId")
+    var currJobs = eStruct("id", "data")
     var currInputPorts = eStruct("id")
     var currOutputPorts = eStruct("id")
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
@@ -229,7 +230,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             params,
             function (paginatedSimulations) {
         		if(paginatedSimulations.simulations && paginatedSimulations.simulations.length > 0) {
-        			currSimulations.set(paginatedSimulations.simulations);
+        			currSimulations.set(paginatedSimulations.simulations, function(id) {});
         		} else {
                     currSimulations.set([])
                 }
@@ -403,15 +404,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '    <i class="icon-arrow-right"></i>\n' +
             '  </span>' +
             '  </a>\n' +
-            '  <ul class="treeview-menu">\n' +
-            '    <li class="treeview">' +
-            '       <a href="#"><i class="fa fa-laptop"></i><span>input</span></a>' +
-            '       <ul id="input-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
-            '    </li>\n' +
-            '    <li class="treeview">' +
-            '       <a href="#"><i class="fa fa-laptop"></i><span>output</span></a>' +
-            '       <ul id="output-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
-            '    </li>\n' +
+            '  <ul id="nodes-{{simulationJobId}}" class="treeview-menu">\n' +
+            // '    <li class="treeview">' +
+            // '       <a href="#"><i class="fa fa-laptop"></i><span>input</span></a>' +
+            // '       <ul id="input-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
+            // '    </li>\n' +
+            // '    <li class="treeview">' +
+            // '       <a href="#"><i class="fa fa-laptop"></i><span>output</span></a>' +
+            // '       <ul id="output-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
+            // '    </li>\n' +
             '  </ul>' +
             '</li>' +
             '{{/jobs}}';
@@ -452,11 +453,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
     }
 
-    function pushPorts(nodeId, ports, portArray) {
+    function pushPorts(nodeId, ports, classPortArray, nodePortArray) {
         if (ports) {
             $.each(ports, function (key, value) {
                 value.id = nodeId + "." + key
-                portArray.push(value)
+                classPortArray.push(value)
+                nodePortArray.push(value)
             })
         }
     }
@@ -476,90 +478,130 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    function addPortHandler(that, nodeId, isInput) {
+        var portId = $(that).attr("port-id")
+        $(that).children("a").click(function (e) {
+            if(isInput) {
+                openInputPort(nodeId, portId)
+            }
+        })
+        $(that).children("a").hover(
+            function (e) {
+                $("#" + nodeId).addClass("wf-selected-node")
+                $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                    .addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
+
+            },
+            function (e) {
+                $("#" + nodeId).removeClass("wf-selected-node")
+                $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
+                    .removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
+            })
+        $(that).children("a").children("span.sidebar-btn").click(function (e) {
+            e.stopPropagation()
+        })
+    }
+
     function selectSimulationJob(simulationJobId) {
-        var li =
-            '{{#ports}}' +
-            '<li  port-id="{{id}}">\n' +
-            '  <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
-            '    <i class="fa fa-edit"></i>\n' +
-            '    <span>{{name_}}</span>\n' +
+        var renderer = designer.getCurrentJsPlumbRenderer()
+        console.log(renderer)
+        var nodeLi =
+            '{{#nodes}}' +
+            '<li node-id="{{id}}" class="treeview">\n' +
+            '  <a href="#" class="sidebar-btn job-li" node-id=\"{{id}}\">\n' +
+            '    <i class="fa fa-cog"></i>\n' +
+            '    <span>{{data.scienceAppData.name}}</span>\n' +
             // '  <span class="label label-primary pull-right sidebar-btn">\n' +
             // '    <i class="icon-arrow-right"></i>\n' +
             // '  </span>' +
             '  </a>\n' +
+            '  <ul class="treeview-menu">\n' +
+            '    <li class="treeview">' +
+            '       <a href="#"><i class="fa fa-laptop"></i><span>input</span></a>' +
+            '       <ul class="treeview-menu">' +
+            '       {{#data.arrInputPorts}}' +
+            '       <li class="treeview port-li input" port-id="{{id}}">\n' +
+            '           <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
+            '               <i class="fa fa-edit"></i>\n' +
+            '               <span>{{name_}}</span>\n' +
+            // '               <span class="label label-primary pull-right sidebar-btn">\n' +
+            // '               <i class="icon-arrow-right"></i>\n' +
+            // '               </span>' +
+            '           </a>\n' +
+            '       </li>' +
+            '       {{/data.arrInputPorts}}' +
+            '       </ul>' +
+            '    </li>\n' +
+            '    <li class="treeview">' +
+            '       <a href="#"><i class="fa fa-laptop"></i><span>output</span></a>' +
+            '       <ul class="treeview-menu">' +
+            '       {{#data.arrOutputPorts}}' +
+            '       <li class="treeview port-li output" port-id="{{id}}">\n' +
+            '           <a href="#" class="sidebar-btn job-li" port-id=\"{{id}}\">\n' +
+            '               <i class="fa fa-edit"></i>\n' +
+            '               <span>{{name_}}</span>\n' +
+            // '               <span class="label label-primary pull-right sidebar-btn">\n' +
+            // '               <i class="icon-arrow-right"></i>\n' +
+            // '               </span>' +
+            '           </a>\n' +
+            '       </li>' +
+            '       {{/data.arrOutputPorts}}' +
+            '</ul>' +
+            '    </li>\n' +
+            '  </ul>' +
             '</li>' +
-            '{{/ports}}';
+            '{{/nodes}}';
 
         currJobs.select(simulationJobId)
         var job = currJobs.selected()
         designer.resetWorkflow()
         designer.drawScreenLogic(job.screenLogic)
-        var jpInstance = designer.getCurrentJsPlumbInstance()
         // var screenLogic = jpInstance.exportData({ type: "json" })
         var inputPorts = []
         var outputPorts = []
-        $.each(jpInstance.getNodes(), function(i){
+        currNodes.set(
+            designer.getCurrentJsPlumbInstance().getNodes(),
+            function (id) {
+            })
+
+        $.each(currNodes.getArray(), function(i){
             var node = this
-            pushPorts(node.id, node.data.inputPorts, inputPorts)
-            pushPorts(node.id, node.data.outputPorts, outputPorts)
+            node.data.arrInputPorts = []
+            node.data.arrOutputPorts = []
+            pushPorts(node.id, node.data.inputPorts, inputPorts, node.data.arrInputPorts)
+            pushPorts(node.id, node.data.outputPorts, outputPorts, node.data.arrOutputPorts)
             setPortsId(node.id, node.data.inputPorts, CONSTS.WF_JSPLUMB_TYPES.INPUT)
             setPortsId(node.id, node.data.outputPorts, CONSTS.WF_JSPLUMB_TYPES.OUTPUT)
         })
+
+        currInputPorts.set([])
+        currOutputPorts.set([])
         currInputPorts.set(inputPorts)
         currOutputPorts.set(outputPorts)
-        $("#input-ports-" + simulationJobId).empty()
-            .append(Mustache.render(li, { "ports": inputPorts }))
+
+        var move = _instantDelay(100)
+        $("#nodes-" + simulationJobId).empty()
+            .append(Mustache.render(nodeLi, { "nodes": currNodes.getArray() }))
             .children("li")
             .each(function(i) {
-                var that = this
-                var portId = $(that).attr("port-id")
-                var nodeId = jpInstance.getPort(portId).getNode().id
-                $(that).children("a").click(function(e) {
-                    openInputPort(nodeId, portId)
-                })
-                $(that).children("a").hover(
+                var nodeId = $(this).attr("node-id")
+                $(this).hover(
                     function (e) {
-                        var port = currInputPorts.get(portId)
+                        move(function () { renderer.centerOnAndZoom(nodeId, 0.3) })
                         $("#" + nodeId).addClass("wf-selected-node")
-                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
-
                     },
                     function (e) {
-                        var port = currInputPorts.get(portId)
                         $("#" + nodeId).removeClass("wf-selected-node")
-                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
                     })
-                $(that).children("a").children("span.sidebar-btn").click(function(e) {
+                $(this).children("a").click(function(e){
+                    currNodes.select(nodeId)
+                })
+                $(this).children("a").children("span.sidebar-btn").click(function(e) {
                     e.stopPropagation()
                 })
-            })
-        $("#output-ports-" + simulationJobId).empty()
-            .append(Mustache.render(li, { "ports": outputPorts }))
-            .children("li")
-            .each(function(i) {
-                var that = this
-                var portId = $(that).attr("port-id")
-                var nodeId = jpInstance.getPort(portId).getNode().id
-                $(that).children("a").click(function(e) {
-                })
-                $(that).children("a").hover(
-                    function (e) {
-                        var port = currOutputPorts.get(portId)
-                        $("#" + nodeId).addClass("wf-selected-node")
-                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .addClass("wf-selected-port").siblings("label").addClass("wf-selected-port-label")
 
-                    },
-                    function (e) {
-                        var port = currOutputPorts.get(portId)
-                        $("#" + nodeId).removeClass("wf-selected-node")
-                        $("." + CONSTS.WF_JSPLUMB_TYPES.PORT_ELEMENT + "[port-id='" + portId + "']")
-                            .removeClass("wf-selected-port").siblings("label").removeClass("wf-selected-port-label")
-                    })
-                $(that).children("a").children("span.sidebar-btn").click(function(e) {
-                    e.stopPropagation()
+                $(this).find("li.treeview.port-li").each(function(){
+                    addPortHandler(this, nodeId, $(this).hasClass("input"))
                 })
             })
     }
@@ -578,6 +620,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var currPortData = $.extend({}, currInputPorts.get(portId))
         delete currPortData.id
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+
+        var node = currNodes.get(nodeId)
 
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
@@ -610,7 +654,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 },
                 id: namespace + "inputPort",
                 uri: portletURL.toString(),
-                title: ""
+                title: node.data.scienceAppData.name + " " + currPortData.name_
             });
         });
     }
@@ -1484,7 +1528,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
-			
+
 			/* TODO Workflow Status Setting */
 
 			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";

@@ -32,6 +32,7 @@
     <header-portlet-javascript>/js/lib/jquery.contextMenu.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/jquery.actual.min.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/toastr.min.js</header-portlet-javascript>
+    <header-portlet-javascript>/js/lib/watch.js</header-portlet-javascript>
     <header-portlet-javascript>/js/lib/util.js</header-portlet-javascript>
     <header-portlet-javascript>/js/workflow-constant.js</header-portlet-javascript>
     <footer-portlet-javascript>/js/decision.js</footer-portlet-javascript>

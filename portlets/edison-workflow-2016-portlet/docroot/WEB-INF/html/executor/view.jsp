@@ -53,71 +53,68 @@ var var_workflow_status_not_found_message = Liferay.Language.get("edison-workflo
 var contextPath = '${contextPath}';
 </script>
 
-
 <style>
-.apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
-</style>
-
-<style type="text/css">
-
-  .wf-selected-node {
-    -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-    -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-    box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
-  }
-
-  .wf-selected-port {
-    background-color: #ff8d00 !important;
-  }
-  .wf-selected-port-label {
-    color: #ff8d00 !important;
-    font-size: 14px !important;
-  }
-
-  .sidebar-menu > li > a.job-li {
-    padding: 10px 5px 10px 12px;
-    font-size: 12px;
-  }
-
-  #<portlet:namespace/>column-1 .header-inner {
-    margin: 0px;
-    padding: 15px 5px 10px 7px;
-    border-bottom: none;
-    font-size: 14px;
-    line-height: 1;
-  }
-
-  #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn {
-    cursor: pointer;
-  }
-
-  #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn:hover > i{
-    color: orange;
-  }
-
-  nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
-    text-align: center;
-    padding: 12px;
-    cursor: pointer;
-  }
-
-  nav.workbench-custom-nav .<portlet:namespace/>divider-vertical {
-    height: 50px;
-    margin: 9px;
-    border-left: 2px solid #f2f2f2;
-    border-right: 1px solid #ffffff;
-  }
-
-  .nav li.<portlet:namespace/>divider-vertical{
-    display: none;
-  }
-
-  .group-delete{
-  	display: none !important;
-  }
+    .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
+    
+    .wf-selected-node {
+        -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+        -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+        box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
+    }
+    
+    .wf-selected-port {
+        background-color: #ff8d00 !important;
+    }
+    .wf-selected-port-label {
+        color: #ff8d00 !important;
+        font-size: 14px !important;
+    }
+    
+    .sidebar-menu > li > a.job-li {
+        padding: 10px 5px 10px 12px;
+        font-size: 12px;
+    }
+    
+    #<portlet:namespace/>column-1 .header-inner {
+        margin: 0px;
+        padding: 15px 5px 10px 7px;
+        border-bottom: none;
+        font-size: 14px;
+        line-height: 1;
+    }
+    
+    #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn {
+        cursor: pointer;
+    }
+    
+    #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn:hover > i{
+        color: orange;
+    }
+    
+    nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
+        text-align: center;
+        padding: 12px;
+        cursor: pointer;
+    }
+    
+    nav.workbench-custom-nav .<portlet:namespace/>divider-vertical {
+        height: 50px;
+        margin: 9px;
+        border-left: 2px solid #f2f2f2;
+        border-right: 1px solid #ffffff;
+    }
+    
+    .nav li.<portlet:namespace/>divider-vertical{
+        display: none;
+    }
+    
+    .group-delete{
+        display: none !important;
+    }
+    .workflow-executor.container-fluid { padding-left: 10px; padding-right: 10px;}
 
 </style>
-<div class="container-fluid">
+<div class="container-fluid workflow-executor">
   <div class="row" id="<portlet:namespace/>canvas" style="border-top: 1px solid #e5e5e9;">
     <div class="hold-transition skin-black-light sidebar-mini" id="body-div">
       <header class="main-header" id="<portlet:namespace/>column-2">
@@ -215,7 +212,7 @@ var contextPath = '${contextPath}';
             <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
             <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
           </div>
-          <section class="content-header">
+          <%-- <section class="content-header">
             <h1>
               <a id="mobile-toggle" href="#mobile-toggle" data-toggle="push-menu">
                 <i class="fa fa-lg fa-compress"></i>
@@ -224,7 +221,7 @@ var contextPath = '${contextPath}';
               <span id="<portlet:namespace/>workflow-title"></span>
               <small id="<portlet:namespace/>workflow-sub-title"></small>
             </h1>
-          </section>
+          </section> --%>
           <section class="content" style="display: flex;">
           <!-- jsplumb-drag-select canvas-wide jtk-droppable -->
             <div id="wf-workflow-canvas" class="apparea wf-drop jtk-surface">

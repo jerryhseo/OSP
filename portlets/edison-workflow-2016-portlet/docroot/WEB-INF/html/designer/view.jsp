@@ -4,7 +4,7 @@
 <liferay-portlet:resourceURL var="getSpecificSiteGroupIdUrl" escapeXml="false" id="getSpecificSiteGroupId"
   copyCurrentRenderParameters="false" />
 <liferay-portlet:renderURL var="executorUrl" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet"
-  windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
+  windowState="<%=LiferayWindowState.POP_UP.toString() %>" >
 </liferay-portlet:renderURL>
 <liferay-portlet:renderURL var="scienceAppDetailUrl" portletName="edisonscienceAppstore_WAR_edisonappstore2016portlet"
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >

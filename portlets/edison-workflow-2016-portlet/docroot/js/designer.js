@@ -3,7 +3,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     /*jshint -W069 */
     /*jshint -W014 */
     isFixed = isFixed === true ? true : false;
-    
+
     var uiPanelInstance = undefined;
 
     var setUiPanelInstance = function(uiPanel) {
@@ -27,25 +27,25 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     function turnOffBeforeConnect(jpInstance) {
     	jpInstance.beforeConnect = function() {return false;}
     }
-    
+
     function turnOnBeforeConnect(jpInstance) {
     	jpInstance.beforeConnect = beforeConnectHandler
     }
-    
+
     function beforeConnectHandler(source, target, edgeData) {
 		if (source.objectType !== "Node" && target.objectType !== "Node") {
 			if (source === target) {
 				return false;
 			}
-			
+
 			if (target.getAllEdges().length != 0) {
 				return false;
 			}
-			
+
 			if (source.getNode() === target.getNode()) {
 				return false;
 			}
-			
+
 			if (source.getType() === 'all' && target.getType() === 'all') {
 				if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
 					return false;
@@ -66,12 +66,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 							if(sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE]){
 								sourceData.outputPorts[source.id][OSP.Constants.WF_SAMPLE] = {};
 							}
-							
+
 							isEqualsPortType = true;
 						} else {
 							isEqualsPortType = checkPortTypeForConnection(source, target, true);
 						}
-						
+
 						return isEqualsPortType;
 					}
 					return true;
@@ -83,11 +83,11 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 			}
 		}
     }
-    
+
     var wfWorkflowJsPlumbInstance = jsPlumbToolkit.newInstance({
         beforeConnect: beforeConnectHandler,
-        beforeStartDetach:function() { 
-    		return isDesigner; 
+        beforeStartDetach:function() {
+    		return isDesigner;
         },
         beforeDetach: function(source, target, edgeData){
         	var sourceData = source.getNode().data;
@@ -189,8 +189,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	}
         }
     }
-    
-    var defaultLayout = isDesigner ? { type: "Absolute" } : 
+
+    var defaultLayout = isDesigner ? { type: "Absolute" } :
     {
         type: "Hierarchical",
         parameters: {
@@ -490,7 +490,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
         var ibDataObj = {
         };
-        
+
         var statusObj = {
         	status : "WAITING"
         };
@@ -772,7 +772,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 if (fn) {
                     fn.apply(null, [node.data]);
                 }
-                
+
                 currentJsPlumbInstance.removeNode(node);
 
                 if(node.data.type===WF_APP_TYPES.APP.NAME){
@@ -806,7 +806,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         $("#" + conainerId + " #" + wfId).data(data);
     }
-    
+
     $.contextMenu({
         selector: '.wf-box',
         determinePosition: function($menu){
@@ -884,7 +884,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = false;
-                            
+
                             $("#"+node.id).removeClass("true");
                         }
                     };
@@ -898,7 +898,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback: function(key, options) {
                             nodeData = node.data;
                             nodeData.startPoint = true;
-                            
+
                             $("#"+node.id).addClass("true");
                         }
                     };
@@ -1175,14 +1175,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             }
         });
     }
-    
+
     /* 2018.12.31 _ Delete wfFiles in Workflow Nodes */
     function deleteWorkflowWfFiles(screenLogic){
     	var wfNodes = screenLogic.nodes;
-    	
+
     	for(var i=0; i<wfNodes.length; i++){
     		var nodeData = wfNodes[i];
-    		
+
     		var fn = window[namespace + "deleteWfSampleFiles"];
             if (fn) {
                 fn.apply(null, [nodeData]);
@@ -1246,10 +1246,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
         modifyingWorkflow = workflow;
     }
-    
+
     function drawScreenLogic(screenLogic) {
         var wfData = $.parseJSON(screenLogic);
-        
+
         if(!isDesigner){
         	turnOnBeforeConnect(currentJsPlumbInstance);
         }
@@ -1259,12 +1259,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	type:"json",
             data: wfData
         });
-        
+
         if(!isDesigner){
         	turnOffBeforeConnect(currentJsPlumbInstance);
         }
     }
-    
+
     function resetCurrentJsPlumbInstance() {
         /* 2018.12.24 _ Clear Nodes */
         currentJsPlumbInstance.clear();
@@ -1302,6 +1302,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         "getCurrentJsPlumbInstance": function() {
             return currentJsPlumbInstance;
+        },
+        "getCurrentJsPlumbRenderer": function() {
+            return renderer;
         },
         "setUiPanelInstance" : setUiPanelInstance,
         "getNodeData" : getNodeData,

@@ -221,9 +221,9 @@ function _confirm(msg, _of, _cf){
 function eStruct(idName, dataName) {
   var map
   var list = []
-  var selectedId
+  var selectedId = { id: undefined,  prevWatcher: undefined}
   return {
-    set: function (items) {
+    set: function (items, watcher) {
       map = {};
       list = []
       $.each(items, function () {
@@ -235,8 +235,14 @@ function eStruct(idName, dataName) {
           list.push(item)
           map[item[idName]] = item;
         }
-
       });
+      !selectedId.prevWatcher || unwatch(selectedId, "id", selectedId.prevWatcher)
+      if (watcher) {
+        selectedId.prevWatcher = function () {
+          watcher(selectedId.id)
+        }
+        watch(selectedId, "id", selectedId.prevWatcher)
+      }
     },
     update: function (id, data) {
       if (id) {
@@ -256,13 +262,13 @@ function eStruct(idName, dataName) {
     },
     select: function (id) {
       if (id) {
-        selectedId = id
+        selectedId.id = id
       } else {
-        selectedId = undefined
+        selectedId.id = undefined
       }
     },
     selected: function () {
-      return selectedId && map ? map[selectedId] : undefined;
+      return selectedId.id && map ? map[selectedId.id] : undefined;
     },
     contains: function (id) {
       if (!id) {
