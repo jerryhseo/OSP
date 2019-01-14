@@ -66,7 +66,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     return true;
                 }
             } else {
-                if (source.getType() === 'sourceAll' || target.getType() === 'targetAll') {
+            	if (source.getType() === 'sourceAll' || target.getType() === 'targetAll') {
                     if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
                         var isEqualsPortType = false;
                         var sourceData = source.getNode().data,
@@ -125,8 +125,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         } else {
             sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
         }
-
-        var targetPortDataType = targetData[target.getType()][target.id].dataType_;
+        
+        var targetPortDataType = targetData["inputPorts"][target.id].dataType_;
         var sourectDataTypeStr = sourcePortDataType.name + sourcePortDataType.version;
         var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
 
@@ -607,7 +607,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     }
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
-    	console.log("draw...")
         var wfId = savedId ? savedId : getGUID();
         var isInputPortExist = false;
         var scienceAppData = {
