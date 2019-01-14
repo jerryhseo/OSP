@@ -1518,6 +1518,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(),ExpandoTableConstants.DEFAULT_TABLE_NAME);
 		ExpandoColumn column = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(),EdisonExpando.USER_UNIVERSITY);
 		searchMap.put("columnId", column.getColumnId());
+		searchMap.put("tableId", table.getTableId());
 		
 		searchMap.put("companyId", GetterUtil.getLong(param.get("companyId")));
 		searchMap.put("appTypes", GetterUtil.getStringValues(param.get("appTypes")));
@@ -2601,7 +2602,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		ExpandoTable table = ExpandoTableLocalServiceUtil.getTable(group.getCompanyId(), User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME);
 		ExpandoColumn column = ExpandoColumnLocalServiceUtil.getColumn(table.getTableId(), EdisonExpando.USER_UNIVERSITY);
 		searchParam.put("columnId", column.getColumnId());
-		
+		searchParam.put("tableId", table.getTableId());
 		
 		
 		//전체 검색 및 기관 검색이 있을 경우
