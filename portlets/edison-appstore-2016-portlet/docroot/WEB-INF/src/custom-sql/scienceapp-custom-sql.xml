@@ -16,6 +16,9 @@
 			<isNotEmpty property="columnId">
 				AND E.columnId = #columnId#
 			</isNotEmpty>
+			<isNotEmpty property="tableId">
+				AND E.tableId = #tableId#
+			</isNotEmpty>
 		]]>
 	</sql>
 
@@ -64,6 +67,9 @@
 					<isNotEmpty property="columnId">
 						AND E.columnId = #columnId#
 					</isNotEmpty>
+					<isNotEmpty property="tableId">
+						AND E.tableId = #tableId#
+					</isNotEmpty>
 		]]>
 	</sql>
 	
@@ -91,6 +97,9 @@
 					<isNotEmpty property="columnId">
 						AND E.columnId = #columnId#
 					</isNotEmpty>
+					<isNotEmpty property="tableId">
+						AND E.tableId = #tableId#
+					</isNotEmpty>
 		]]>
 	</sql>
 	
@@ -108,6 +117,9 @@
 			AND U.userId = E.classPK
 			<isNotEmpty property="columnId">
 				AND E.columnId = #columnId#
+			</isNotEmpty>
+			<isNotEmpty property="tableId">
+				AND E.tableId = #tableId#
 			</isNotEmpty>
 		]]>
 	</sql>
@@ -132,6 +144,9 @@
 				<isNotEmpty property="columnId">
 					AND E.columnId = #columnId#
 				</isNotEmpty>
+				<isNotEmpty property="tableId">
+					AND E.tableId = #tableId#
+				</isNotEmpty>
 		]]>
 	</sql>
 	
@@ -153,6 +168,9 @@
 					AND U.userId = E.classPK
 					<isNotEmpty property="columnId">
 						AND E.columnId = #columnId#
+					</isNotEmpty>
+					<isNotEmpty property="tableId">
+						AND E.tableId = #tableId#
 					</isNotEmpty>
 		]]>
 	</sql>
@@ -180,6 +198,9 @@
 					AND U.userId = E.classPK
 					<isNotEmpty property="columnId">
 						AND E.columnId = #columnId#
+					</isNotEmpty>
+					<isNotEmpty property="tableId">
+						AND E.tableId = #tableId#
 					</isNotEmpty>
 		]]>
 	</sql>
