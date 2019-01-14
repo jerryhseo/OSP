@@ -1414,7 +1414,17 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 		var inputPorts = portNode.data.inputPorts;
 		var inputPort = inputPorts[portId];
+		var isWfSample = inputPort.isWfSample_;
 		var inputPortData = inputPort.inputData_;
+		if(isWfSample){
+			inputPortData = inputPort.wfSample_;
+		} else {
+			if(inputPort.inputData_){
+				inputPortData = inputPort.inputData_;
+			} else {
+				inputPortData = inputPort.sample_;
+			}
+		}
 
 		jobDataArr.push(inputPortData);
 		return jobDataArr;
@@ -1462,27 +1472,21 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			for ( var key in outputPorts) {
 				var outputPort = outputPorts[key];
 				var outputData = "";
-				var isWfSample = false; 
+				var isWfSample = outputPort.isWfSample_; 
 
 				if(runType == CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
-					outputData = outputPort.wfSample_;
-					if(outputData == "undefined" || outputData == null){
-						outputData = outputPort.sample_;
-						isWfSample = false;
+					if(isWfSample){
+						outputData = outputPort.wfSample_;
 					} else {
-						isWfSample = true;
+						outputData = outputPort.sample_;
 					}
 				} else{
 					outputData = outputPort.outputData_;
 				}
 				
 				var outputDataType = outputData.type_;
-				if(isWfSample){
+				if (outputDataType != 'dlEntryId_') {
 					jobDataArr.push(outputData);
-				} else {
-					if (outputDataType != 'dlEntryId_') {
-						jobDataArr.push(outputData);
-					}
 				}
 			}
 		}
