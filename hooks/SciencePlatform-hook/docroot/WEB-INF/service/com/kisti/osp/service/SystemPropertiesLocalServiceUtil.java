@@ -275,11 +275,6 @@ public class SystemPropertiesLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
-	public static boolean exist(java.lang.String propertyName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().exist(propertyName);
-	}
-
 	public static void clearService() {
 		_service = null;
 	}

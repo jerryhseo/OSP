@@ -7,19 +7,13 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
-	<mapped-superclass class="com.kisti.osp.model.impl.FileManagementModelImpl">
+	<mapped-superclass class="com.kisti.osp.model.impl.OSPFileModelImpl">
 		<attributes>
-			<id name="userId" />
-			<basic name="assigned" />
-			<basic name="used" />
-			<basic name="lastModified">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="status" />
+			<id name="propertyName" />
+			<basic name="propertyValue" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.kisti.osp.model.impl.SystemPropertiesModelImpl">
@@ -34,8 +28,8 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
-	<entity class="com.kisti.osp.model.impl.FileManagementImpl" name="FileManagement">
-		<table name="OSP_FileManagement" />
+	<entity class="com.kisti.osp.model.impl.OSPFileImpl" name="OSPFile">
+		<table name="OSP_OSPFile" />
 		<attributes />
 	</entity>
 	<entity class="com.kisti.osp.model.impl.SystemPropertiesImpl" name="SystemProperties">

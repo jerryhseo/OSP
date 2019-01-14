@@ -616,6 +616,12 @@ public class DataTypeLocalServiceUtil {
 		return getService().addSampleFilePath(typeId, sc, upload);
 	}
 
+	public static java.lang.String getDataTypeStructure(
+		java.lang.String dataTypeName, java.lang.String dataTypeVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDataTypeStructure(dataTypeName, dataTypeVersion);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

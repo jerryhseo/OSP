@@ -42,7 +42,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
@@ -333,7 +333,7 @@ public class DashboardController {
 				simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
 				jobStatus = simulationJob.getJobStatus();
 				try{
-					String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
+					String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".out");
 					com.liferay.portal.kernel.json.JSONObject outLog = getReadLogFile(request, jobUuid, logFile, lastPosition);;
 					result.put("outLog", outLog);
 				}catch(Exception e){
@@ -346,7 +346,7 @@ public class DashboardController {
 				
 				if(jobStatus>=1701011){
 					try{
-						String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
+						String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".err");
 						com.liferay.portal.kernel.json.JSONObject errLog = getReadLogFile(request, jobUuid, logFile, lastPosition);
 						result.put("errLog", errLog);
 					}catch(Exception e){
@@ -379,7 +379,7 @@ public class DashboardController {
 	private com.liferay.portal.kernel.json.JSONObject getReadLogFile(ResourceRequest request,String jobUuid, String logFile, long lastPosition) throws Exception{
 		com.liferay.portal.kernel.json.JSONObject log = JSONFactoryUtil.createJSONObject();
 		try {
-			log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+			log = OSPFileLocalServiceUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
 		} catch (Exception e) {
 			if(e instanceof NoSuchFileException){
 				e.printStackTrace();

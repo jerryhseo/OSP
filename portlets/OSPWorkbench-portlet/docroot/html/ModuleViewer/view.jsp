@@ -46,6 +46,7 @@ var <portlet:namespace/>workbench = new OSP.Workbench( '<portlet:namespace/>');
 $(function(e) {
 	bStart();
 	<portlet:namespace/>workbench.layout( new OSP.Layout(JSON.parse('<%=workbenchLayout.toString()%>')));
+	<portlet:namespace/>workbench.currentUserName('${screenName}');
 	
 	var scienceApp = new OSP.ScienceApp();
 	if('${portType}'==='inputPorts'){

@@ -31,10 +31,6 @@ public class SystemPropertiesServiceClpInvoker {
 		_methodName25 = "setBeanIdentifier";
 
 		_methodParameterTypes25 = new String[] { "java.lang.String" };
-
-		_methodName30 = "exist";
-
-		_methodParameterTypes30 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -51,11 +47,6 @@ public class SystemPropertiesServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName30.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
-			return SystemPropertiesServiceUtil.exist((java.lang.String)arguments[0]);
-		}
-
 		throw new UnsupportedOperationException();
 	}
 
@@ -63,6 +54,4 @@ public class SystemPropertiesServiceClpInvoker {
 	private String[] _methodParameterTypes24;
 	private String _methodName25;
 	private String[] _methodParameterTypes25;
-	private String _methodName30;
-	private String[] _methodParameterTypes30;
 }

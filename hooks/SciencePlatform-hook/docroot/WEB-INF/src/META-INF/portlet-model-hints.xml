@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="com.kisti.osp.model.FileManagement">
-		<field name="userId" type="long" />
-		<field name="assigned" type="int" />
-		<field name="used" type="int" />
-		<field name="lastModified" type="Date" />
-		<field name="status" type="int" />
+	<model name="com.kisti.osp.model.OSPFile">
+		<field name="propertyName" type="String" />
+		<field name="propertyValue" type="String" />
 	</model>
 	<model name="com.kisti.osp.model.SystemProperties">
 		<field name="propertyName" type="String" />

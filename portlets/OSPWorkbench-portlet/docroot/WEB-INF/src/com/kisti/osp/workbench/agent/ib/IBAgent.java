@@ -38,7 +38,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONException;
@@ -300,7 +300,7 @@ public class IBAgent {
 		*/
 		
 		//String strMvCmd = new String(strBaseCmd);
-		String filePath = OSPFileUtil.copyFile(
+		String filePath = OSPFileLocalServiceUtil.copyFile(
 				portletRequest, 
 				source, 
 				target, 
@@ -332,7 +332,7 @@ public class IBAgent {
 		*/
 		
 		//String strMvCmd = new String(strBaseCmd);
-		OSPFileUtil.upload(portletRequest, target, paramName, repositoryType);
+		OSPFileLocalServiceUtil.upload(portletRequest, target, paramName, repositoryType);
 		
 		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
         
@@ -348,7 +348,7 @@ public class IBAgent {
 			String cluster ) throws PortalException, SystemException, IOException{
 		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
 		
-		OSPFileUtil.saveFileContent(portletRequest, target, content, repositoryType);
+		OSPFileLocalServiceUtil.saveFileContent(portletRequest, target, content, repositoryType);
 
 		String ibFileId = this.getFileId(portletRequest, target, repositoryType);
 		
@@ -363,14 +363,14 @@ public class IBAgent {
 			) throws IOException, SystemException, PortalException{
 		String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
 		
-		String filePath = OSPFileUtil.copyDLEntryFile(
+		String filePath = OSPFileLocalServiceUtil.copyDLEntryFile(
 				portletRequest, 
 				dlEntryId, 
 				target, 
 				true, 
 				repositoryType);
 		
-		//Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, target, repositoryType);
+		//Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(portletRequest, target, repositoryType);
         String ibFileId = this.getFileId(portletRequest, target, repositoryType);
         //String ibFileId = getFileId(targetPath.toString());
         //System.out.println("File: "+targetPath.toString());
@@ -421,7 +421,7 @@ public class IBAgent {
 	}
 	
 	public String getFileId( PortletRequest portletRequest, String path, String repositoryType ) throws IOException, SystemException, PortalException{
-		Path targetPath = OSPFileUtil.getRepositoryPath(portletRequest, path, repositoryType);
+		Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(portletRequest, path, repositoryType);
 		return this.getFileId(targetPath.toString());
 	}
 	

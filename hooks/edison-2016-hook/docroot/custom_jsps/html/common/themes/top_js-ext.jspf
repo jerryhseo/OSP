@@ -26,6 +26,7 @@
 <script src="/edison-2016-hook/js/osp/osp_super_class.js"></script>
 <script src="/edison-2016-hook/js/osp/osp_simulation.js"></script>
 <script src="/edison-2016-hook/js/osp/osp_workbench_layout.js"></script>
+<script src="/edison-2016-hook/js/osp/osp_visualizer.js"></script>
 
 <script src="/edison-2016-hook/js/bootstrap/3.3.7/bootstrap.min.js"></script>
 

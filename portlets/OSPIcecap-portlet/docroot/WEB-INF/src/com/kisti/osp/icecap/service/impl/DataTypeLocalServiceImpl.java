@@ -808,4 +808,16 @@ System.out.println("typeId:" + typeId);
 		
 		return returnMap;
 	}
+	
+	public String getDataTypeStructure( String dataTypeName, String dataTypeVersion ) throws SystemException {
+		DataType dataType = findDataTypeObject(dataTypeName, dataTypeVersion);
+		DataTypeStructure structure = null;;
+		try {
+			structure = super.dataTypeStructureLocalService.getDataTypeStructure(dataType.getTypeId());
+		} catch (PortalException | SystemException e) {
+			throw new SystemException();
+		} 
+		
+		return structure.getStructure();
+	}
 }

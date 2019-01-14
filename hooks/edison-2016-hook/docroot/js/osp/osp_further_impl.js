@@ -1,11 +1,7 @@
-(function(window){
+(function(OSP){
 	'use strict';
 
-	if( window.OSP ){
-		if( OSP.DataCollection )	return;
-	}
-	else
-		window.OSP = {};
+	if( OSP.DataCollection )	return;
 	
 	OSP.DataCollection = function(){
 		var DataCollection = this; 
@@ -507,4 +503,4 @@
 
 	}; /* End of Workflow */
 	
-})(window);
+})(OSP);

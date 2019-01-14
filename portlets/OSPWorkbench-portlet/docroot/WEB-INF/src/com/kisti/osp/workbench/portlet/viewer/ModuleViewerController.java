@@ -56,9 +56,11 @@ public class ModuleViewerController {
 	
 	@RequestMapping//default
 	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws JSONException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
 		String jobUuid = ParamUtil.getString(request, "jobUuid", "");
-		String screenName = ParamUtil.getString(request, "screenName", "");
+		String screenName = ParamUtil.getString(request, "screenName", themeDisplay.getUser().getScreenName());
 		String portType = ParamUtil.getString(request, "portType", "inputPorts");
 		String portData = ParamUtil.getString(request, "portData", "");
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");

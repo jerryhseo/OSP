@@ -1,12 +1,12 @@
-(function(window) {
+(function(w) {
     'use strict';
 
-    if (window.OSP) {
+    if (w.OSP) {
         if (OSP.Constants) return;
     } else
-        window.OSP = {};
+        w.OSP = {};
 
-    OSP.Constants = {
+    w.OSP.Constants = {
         ACTION: 'action_',
         ARRAY_KEYS: 'arrayKeys_',
         ASSIGNED_PORTS: 'assignedPorts_',
@@ -21,7 +21,7 @@
         COMPARATIVE_VALUE: 'comparativeValue_',
         CONNECTIONS: 'connections_',
         CONNECTOR: 'connector_',
-        CONTEXT: 'context_',
+        CONTENT: 'content_',
         CURRENT_PORTLET: 'currentPortlet_',
         CUSTOM_ID: 'customId_',
         REDIRECT_URL: 'redirectURL_',
@@ -82,7 +82,8 @@
         PATH_TYPE: 'pathType_',
         PENDDING_EVENT: 'penddingEvent',
         PORT_NAME: 'portName_',
-        PORT_NAMES: 'portNames_',
+        PORT_NAMES: 'portNames_',		 
+        PORT_TYPE:'portType_',
         PORTLET: 'portlet_',
         PORTLET_ID: 'portletId_',
         PORTLETS: 'portlets_',
@@ -112,11 +113,12 @@
         TITLE: 'title_',
         SEQ_NO: 'seqNo_',
         TWO: 'two_',
-        TYPE: 'type_',
-        VERSION: 'version_',
-        UPDATES: 'updates_',
+        TYPE: 'type_',		  
+        UPDATES: 'updates_',		  
         URI: 'uri_',
-        USER: 'user_',
+        URL: 'url_',
+        USER:'user_',
+        VERSION: 'version_',
         WINDOW_STATE: 'windowState_',
         WORKBENCH_ID: 'workbenchId_',
         WORKING_JOB: 'workingJob_',
@@ -260,13 +262,20 @@
             types.push(this.EXT);
             types.push(this.FOLDER);
             return types;
+        },
+        getInstanceStr: function(portletId){
+            var instanceIndex = portletId.lastIndexOf('_INSTANCE_');
+            if( instanceIndex > 0)
+                return portletId.substring(instanceIndex);
+            return '';
         }
     }; // End of Constants
 
-    OSP.Event = {
+    w.OSP.Event = {
         OSP_CANCEL_CLICKED: 'OSP_CANCEL_CLICKED',
         OSP_CANCEL_JOB: 'OSP_CANCEL_JOB',
-        OSP_CANCEL_SIMULATION: 'OSP_CANCEL_SIMULATION',
+        OSP_CANCEL_SIMULATION: 'OSP_CANCEL_SIMULATION',	 
+        OSP_COPY_JOB: 'OSP_COPY_JOB',
         OSP_REQUEST_COPY_JOB: 'OSP_REQUEST_COPY_JOB',
         OSP_RESPONSE_COPY_JOB: 'OSP_REQUEST_COPY_JOB',
         OSP_REFRESH_URL_CHANGE: 'OSP_REFRESH_URL_CHANGE',
@@ -290,7 +299,7 @@
         OSP_JOB_SELECTED: 'OSP_JOB_SELECTED',
         OSP_JOB_STATUS_CHANGED: 'OSP_JOB_STATUS_CHANGED',
         OSP_LOAD_DATA: 'OSP_LOAD_DATA',
-        OSP_DISABLE_CONTROLLS: 'OSP_DISABLE_CONTROLLS',
+        OSP_DISABLE_CONTROLS: 'OSP_DISABLE_CONTROLS', 
         OSP_LOAD_FILE: 'OSP_LOAD_FILE',
         OSP_LOAD_HTML: 'OSP_LOAD_HTML',
         OSP_OK_CLICKED: 'OSP_OK_CLICKED',
@@ -318,7 +327,8 @@
         OSP_REQUEST_OUTPUT_PATH: 'OSP_REQUEST_OUTPUT_PATH',
         OSP_REQUEST_PATH: 'OSP_REQUEST_PATH',
         OSP_REQUEST_PORT_INFO: 'OSP_REQUEST_PORT_INFO',
-        OSP_REQUEST_SAMPLE_CONTENT: 'OSP_REQUEST_SAMPLE_CONTENT',
+        OSP_REQUEST_SAMPLE_CONTENT: 'OSP_REQUEST_SAMPLE_CONTENT',	 
+        OSP_REQUEST_SAMPLE_URL: 'OSP_REQUEST_SAMPLE_URL',
         OSP_REQUEST_SIMULATION_UUID: 'OSP_REQUEST_SIMULATION_UUID',
         OSP_REQUEST_SPREAD_TO_PORT: 'OSP_REQUEST_SPREAD_TO_PORT',
         OSP_REQUEST_UPLOAD: 'OSP_REQUEST_UPLOAD',
@@ -402,8 +412,6 @@
                 data: data
             };
 
-            console.log('FileSelected++++++++++++====================');
-            console.log(eventData);
             Liferay.fire(OSP.Event.OSP_FILE_SELECTED, eventData);
         },
 
@@ -447,7 +455,7 @@
 
     }; // End of Event
 
-    OSP.Enumeration = {
+    w.OSP.Enumeration = {
         WorkbenchType: {
             SIMULATION_WITH_APP: 'SIMULATION_WITH_APP',
             SIMULATION_RERUN: 'SIMULATION_RERUN',
@@ -477,12 +485,15 @@
             NONE: 'none',
             DLENTRY_ID: 'dlEntryId',
             FILE_CONTENT: 'fileContent',
+            FILE_CONTENTS: 'fileContents',
+            CONTENT: 'content',
             STRUCTURED_DATA: 'structuredData',
             URL: 'url',
             FILE: 'file',
+            FILES:'files',
             FOLDER: 'folder',
+            FOLDER_CONTENT:'folderContent',
             EXT: 'ext',
-            CONTEXT: 'context',
             SAMPLE: 'sample'
         },
         SweepMethod: {
@@ -512,11 +523,9 @@
             FAIL: -1
         },
         PortType: {
-            APP_INFO: 'appInfo',
-            DASHBOARD: 'dashboard',
-            SIMULATION_MONITOR: 'simulationMonitor',
-            JOB_MONITOR: 'jobMonitor',
-            JOB_STATUS: 'jobStatus',
+            FILE: 'FILE',
+            FOLDER: 'FOLDER',
+            EXT: 'EXT',
             INPUT: 'input',
             LOG: 'log',
             OUTPUT: 'output'
@@ -565,18 +574,16 @@
             READY: 'ready'
         },
         AppType: {
-            STATIC_SOLVER: 'ss',
-            JAVASCRIPT_SOLVER: 'js',
-            DYNAMIC_SOLVER: 'ds',
-            STATIC_CONVERTER: 'sc',
-            DYNAMIC_CONVERTER: 'dc',
-            EDITOR: 'e',
-            ANALYZER: 'a',
-            EDITABLE_ANALYZER: 'ea'
+            STATIC_SOLVER: 'STATIC_SOLVER',
+            DYNAMIC_SOLVER: 'DYNAMIC_SOLVER',
+            STATIC_CONVERTER: 'STATIC_CONVERTER',
+            DYNAMIC_CONVERTER: 'DYNAMIC_CONVERTER',
+            CALCULATOR: 'CALCULATOR',
+            VISUALIZER: 'VISUALIZER'
         }
     }; // End of Enumeration
 
-    OSP.Util = {
+    w.OSP.Util = {
         guid: function() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(char) {
                 var random = Math.random() * 16 | 0,
@@ -644,10 +651,10 @@
             return true;
         },
         convertToPath: function(filePath) {
-            var path = new OSP.Path();
+            var path = {};
             if (!filePath) {
-                path.parent('');
-                path.name('');
+                path.parent_ = '';
+                path.name_ = '';
                 return path;
             }
 
@@ -655,11 +662,11 @@
 
             var lastIndexOfSlash = filePath.lastIndexOf('/');
             if (lastIndexOfSlash < 0) {
-                path.parent('');
-                path.name(filePath);
+                path.parent_ = '';
+                path.name_ = filePath;
             } else {
-                path.parent(filePath.slice(0, lastIndexOfSlash));
-                path.name(filePath.slice(lastIndexOfSlash + 1));
+                path.parent_ = filePath.slice(0, lastIndexOfSlash);
+                path.name_ = filePath.slice(lastIndexOfSlash + 1);
             }
 
             return path;
@@ -761,10 +768,22 @@
                 default:
                     return "Unknown";
             }
+        },
+        getLocalFile: function( anchor ){
+            return $(anchor)[0].files[0];
+        },
+        getLocalFileName: function( anchor ){
+            var fileName = $(anchor).val();
+			
+			var slashIndex = fileName.lastIndexOf('\\');
+			if( slashIndex < 0 )
+                slashIndex = fileName.lastIndexOf('/');
+                 
+			return fileName.slice(slashIndex+1);
         }
     }; // End of OSP.Util
 
-    OSP.Debug = {
+    w.OSP.Debug = {
         eventTrace: function(message, event, eventData) {
             console.log('/+++++++++' + message + '++++++++/');
             console.log(event);

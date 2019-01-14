@@ -236,6 +236,12 @@ public class DataTypeLocalServiceClpInvoker {
 				"long", "com.liferay.portal.service.ServiceContext",
 				"com.liferay.portal.kernel.upload.UploadPortletRequest"
 			};
+
+		_methodName108 = "getDataTypeStructure";
+
+		_methodParameterTypes108 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -494,6 +500,12 @@ public class DataTypeLocalServiceClpInvoker {
 				(com.liferay.portal.kernel.upload.UploadPortletRequest)arguments[2]);
 		}
 
+		if (_methodName108.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes108, parameterTypes)) {
+			return DataTypeLocalServiceUtil.getDataTypeStructure((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -577,4 +589,6 @@ public class DataTypeLocalServiceClpInvoker {
 	private String[] _methodParameterTypes106;
 	private String _methodName107;
 	private String[] _methodParameterTypes107;
+	private String _methodName108;
+	private String[] _methodParameterTypes108;
 }

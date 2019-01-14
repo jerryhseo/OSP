@@ -46,7 +46,7 @@ import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.model.DataTypeStructure;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.kisti.osp.workbench.Exception.SimulationWorkbenchException;
 import com.kisti.osp.workbench.agent.ib.IBAgent;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -573,7 +573,7 @@ public class LayoutController {
 		
 		byte[] fileContent = null;
 		try {
-			fileContent = OSPFileUtil.readFileContent(resourceRequest, Paths.get(parentPath).resolve(fileName).toString(), repositoryType);
+			fileContent = OSPFileLocalServiceUtil.readFileContent(resourceRequest, Paths.get(parentPath).resolve(fileName).toString(), repositoryType);
 		} catch (PortalException | SystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

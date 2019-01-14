@@ -1,11 +1,7 @@
-(function(window){
+(function(OSP){
     'use strict';
 
-    if( window.OSP ){
-        if( OSP.Layouts )    return;
-    }
-    else
-        window.OSP = {};
+    if( OSP.Layouts )    return;
     
     OSP.Layouts = function(jsonLayouts){
     	var Layouts = this;
@@ -1080,7 +1076,7 @@
     		var eventData = {
                     portletId: Workbench.id(),
                     targetPortlet: targetPortletId,
-                    data: data 
+                    data: data
     			};
     		
     		console.log(event+"__________"+JSON.stringify(eventData));
@@ -1807,16 +1803,22 @@
         
         var fireBlockPortEvent = function(portName,isBlock,isError){
         	var portlets = Workbench.getPortlets( portName );
-        	var data = {
-                    isBlock: isBlock
+        	var data ={
+                  "disabled" : isBlock
         	};
         	
-        	if(typeof isError != 'undefined'){data.isError=isError;}
-        	
+//        	if(typeof isError != 'undefined'){data.isError=isError;}
         	for(var index in portlets ){
         		var portlet = portlets[index];
-        		console.log('OSP_DISABLE_CONTROLLS: ['+portlet.instanceId()+', '+new Date()+']', data);
-        		fire( OSP.Event.OSP_DISABLE_CONTROLLS, portlet.instanceId(), data);
+        		console.log('OSP_DISABLE_CONTROLS: ['+portlet.instanceId()+', '+new Date()+']', data);
+//        		fire( OSP.Event.OSP_DISABLE_CONTROLS, portlet.instanceId(), data);
+        		var eventData = {
+                        portletId: Workbench.id(),
+                        targetPortlet: portlet.instanceId(),
+                        params: data 
+			       };
+			       
+			       Liferay.fire( OSP.Event.OSP_DISABLE_CONTROLS, eventData );
         	}
         }
         
@@ -1877,7 +1879,6 @@
                     for( var portName in ports ){
                         var portlets = layout.getPortlets( portName );
                         var inputData = job.inputData( portName );
-                        
                         for( var index in portlets ){
                             var portlet = portlets[index];
                             if( !inputData ){
@@ -2368,7 +2369,7 @@
                     
                     switch( contentType ){
                         case 'fileContent':
-                            inputData.context( result.fileContent );
+                            inputData.content( result.fileContent );
                             break;
                         case 'structuredData':
                             var ospDataType = new OSP.DataType();
@@ -2376,7 +2377,7 @@
                             if( result.fileContent ){
                                 ospDataType.loadStructure( result.fileContent );
                             }
-                            inputData.context( ospDataType.structure() );
+                            inputData.content( ospDataType.structure() );
                             break;
                         default:
                             console.log('[ERROR] Wrong sample data type.'+contentType);
@@ -2479,7 +2480,7 @@
                     
                     var data = {
                                 type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
-                                context_: OSP.Util.toJSON( dataType.structure() )
+                                content_: OSP.Util.toJSON( dataType.structure() )
                     };
                     
                     fireLoadData( OSP.Event.OSP_LOAD_DATA, portletId, data );
@@ -2665,7 +2666,7 @@
         			if(inputData){
         				if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
         					var dataType = new OSP.DataType();
-            				dataType.deserializeStructure(inputData.context());
+            				dataType.deserializeStructure(inputData.content());
             				var dataStructure = dataType.structure(); 
     						var fileContents = dataStructure.activeParameterFormattedInputs();
     						
@@ -2673,7 +2674,7 @@
     						data.portName( inputData.portName() );
     						data.order( inputData.order() );
     						data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-    						data.context( fileContents[0].join('') );
+    						data.content( fileContents[0].join('') );
     						fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(data) );
         				}else{
         					fireLoadData( OSP.Event.OSP_LOAD_DATA, portlet.instanceId(), OSP.Util.toJSON(inputData) );
@@ -2693,7 +2694,7 @@
         		if(inputData){
         			if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
         				var dataType = new OSP.DataType();
-        				dataType.deserializeStructure(inputData.context());
+        				dataType.deserializeStructure(inputData.content());
         				var dataStructure = dataType.structure(); 
 						var fileContents = dataStructure.activeParameterFormattedInputs();
 						
@@ -2701,7 +2702,7 @@
 						data.portName( inputData.portName() );
 						data.order( inputData.order() );
 						data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-						data.context( fileContents[0].join('') );
+						data.content( fileContents[0].join('') );
 						
 						copyJob.inputData(inputData.portName(), data );
         			}else{
@@ -3138,7 +3139,7 @@
                 success: function(jsonDataStructure) {
                     var data = {
                                 type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
-                                context_: jsonDataStructure
+                                content_: jsonDataStructure
                             };
                     fireLoadData( OSP.Event.OSP_LOAD_DATA, portletId, data );
                 },
@@ -3290,11 +3291,48 @@
             var portType = scienceApp.getPortType( portlet.portName() );
             portlet.portType( portType );
             
-            var eventData = {
+            var data = {};
+            var params = {};
+            
+            
+            /*repositoryType_*/
+            switch( portType ){
+	            case OSP.Enumeration.PortType.INPUT:
+	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
+	                break;
+	            case OSP.Enumeration.PortType.OUTPUT:
+	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+	                break;
+	            case OSP.Enumeration.PortType.LOG:
+	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+	                break;
+            }
+            
+            /*user_*/
+            data[OSP.Constants.USER] = Workbench.currentUserName();
+            
+            /*dataType_*/
+    		if(portlet){
+    			var port = scienceApp.getPort(portlet.portName());
+    			if(port){
+    				var dataType = port.dataType();
+    				if(dataType){
+    					data[OSP.Constants.DATA_TYPE] = dataType;
+    				}
+    			}
+    		}
+    		
+    		var eventData = {
                     portletId: sourceId,
                     targetPortlet: targetId,
+                    data:data,
+                    params:{
+                    	connector:sourceId
+                    }
             };
-            
+    		
+    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
+    		console.log(JSON.stringify(eventData));
             Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
         };
         
@@ -3363,4 +3401,4 @@
         
     }; /* End of Workbench */
     
-})(window);
+})(OSP);

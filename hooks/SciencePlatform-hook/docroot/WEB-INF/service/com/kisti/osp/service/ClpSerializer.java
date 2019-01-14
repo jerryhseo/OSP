@@ -14,7 +14,7 @@
 
 package com.kisti.osp.service;
 
-import com.kisti.osp.model.FileManagementClp;
+import com.kisti.osp.model.OSPFileClp;
 import com.kisti.osp.model.SystemPropertiesClp;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -103,8 +103,8 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
-		if (oldModelClassName.equals(FileManagementClp.class.getName())) {
-			return translateInputFileManagement(oldModel);
+		if (oldModelClassName.equals(OSPFileClp.class.getName())) {
+			return translateInputOSPFile(oldModel);
 		}
 
 		if (oldModelClassName.equals(SystemPropertiesClp.class.getName())) {
@@ -126,10 +126,10 @@ public class ClpSerializer {
 		return newList;
 	}
 
-	public static Object translateInputFileManagement(BaseModel<?> oldModel) {
-		FileManagementClp oldClpModel = (FileManagementClp)oldModel;
+	public static Object translateInputOSPFile(BaseModel<?> oldModel) {
+		OSPFileClp oldClpModel = (OSPFileClp)oldModel;
 
-		BaseModel<?> newModel = oldClpModel.getFileManagementRemoteModel();
+		BaseModel<?> newModel = oldClpModel.getOSPFileRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -163,9 +163,8 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
-		if (oldModelClassName.equals(
-					"com.kisti.osp.model.impl.FileManagementImpl")) {
-			return translateOutputFileManagement(oldModel);
+		if (oldModelClassName.equals("com.kisti.osp.model.impl.OSPFileImpl")) {
+			return translateOutputOSPFile(oldModel);
 		}
 		else if (oldModelClassName.endsWith("Clp")) {
 			try {
@@ -317,8 +316,8 @@ public class ClpSerializer {
 			return new SystemException();
 		}
 
-		if (className.equals("com.kisti.osp.NoSuchFileManagementException")) {
-			return new com.kisti.osp.NoSuchFileManagementException();
+		if (className.equals("com.kisti.osp.NoSuchFileException")) {
+			return new com.kisti.osp.NoSuchFileException();
 		}
 
 		if (className.equals("com.kisti.osp.NoSuchSystemPropertiesException")) {
@@ -328,12 +327,12 @@ public class ClpSerializer {
 		return throwable;
 	}
 
-	public static Object translateOutputFileManagement(BaseModel<?> oldModel) {
-		FileManagementClp newModel = new FileManagementClp();
+	public static Object translateOutputOSPFile(BaseModel<?> oldModel) {
+		OSPFileClp newModel = new OSPFileClp();
 
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		newModel.setFileManagementRemoteModel(oldModel);
+		newModel.setOSPFileRemoteModel(oldModel);
 
 		return newModel;
 	}

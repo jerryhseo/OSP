@@ -60,7 +60,8 @@ import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
+import com.kisti.osp.service.persistence.OSPFileUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -1491,9 +1492,9 @@ public class MonitoringController {
 		try{
 			response.setContentType("application/json; charset=UTF-8");
 			String fileExt = CustomUtil.strNull(type).equals("")?"out":type;
-			String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
+			String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+"."+fileExt);
 
-			com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
+			com.liferay.portal.kernel.json.JSONObject log = OSPFileLocalServiceUtil.readFileAtPosition(request, logFile, lastPosition, 300, OSPRepositoryTypes.USER_JOBS.toString());
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.getJob(jobUuid);
 			log.put( "jobStatus", simulationJob.getJobStatus());
 			

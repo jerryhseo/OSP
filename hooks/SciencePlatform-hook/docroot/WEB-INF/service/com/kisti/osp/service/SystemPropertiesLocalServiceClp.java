@@ -115,10 +115,6 @@ public class SystemPropertiesLocalServiceClp
 		_methodName17 = "setBeanIdentifier";
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
-
-		_methodName19 = "exist";
-
-		_methodParameterTypes19 = new String[] { "java.lang.String" };
 	}
 
 	@Override
@@ -678,35 +674,6 @@ public class SystemPropertiesLocalServiceClp
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public boolean exist(java.lang.String propertyName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName19,
-					_methodParameterTypes19,
-					new Object[] { ClpSerializer.translateInput(propertyName) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Boolean)returnObj).booleanValue();
-	}
-
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -744,6 +711,4 @@ public class SystemPropertiesLocalServiceClp
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
-	private String _methodName19;
-	private String[] _methodParameterTypes19;
 }

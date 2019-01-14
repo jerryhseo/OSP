@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -115,8 +115,8 @@ public class WorkbenchJobStatusAndResultController {
             response.setContentType("application/json; charset=UTF-8");
             long lastPosition = GetterUtil.getLong(strLastPoistion, 0);
             
-            String logFile = OSPFileUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
-            com.liferay.portal.kernel.json.JSONObject log = OSPFileUtil.readFileAtPosition(
+            String logFile = OSPFileLocalServiceUtil.getJobResultPath(simulationUuid, jobUuid, jobUuid+".log");
+            com.liferay.portal.kernel.json.JSONObject log = OSPFileLocalServiceUtil.readFileAtPosition(
                 request, logFile, lastPosition, 0, OSPRepositoryTypes.USER_JOBS.toString());
             
             HttpServletResponse httpResponse = PortalUtil.getHttpServletResponse(response);

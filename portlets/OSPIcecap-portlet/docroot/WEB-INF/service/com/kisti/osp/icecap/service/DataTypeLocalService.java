@@ -541,4 +541,9 @@ public interface DataTypeLocalService extends BaseLocalService,
 		com.liferay.portal.kernel.upload.UploadPortletRequest upload)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getDataTypeStructure(
+		java.lang.String dataTypeName, java.lang.String dataTypeVersion)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

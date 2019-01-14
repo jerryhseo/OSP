@@ -1,11 +1,7 @@
-(function(window){
+(function(OSP){
 	'use strict';
 
-	if( window.OSP ){
-		if( OSP._MapObject )	return;
-	}
-	else
-		window.OSP = {};
+	if( OSP._MapObject )	return;
 	
 	OSP._MapObject = function(){
 		var MapObject = this;
@@ -345,4 +341,4 @@
 		};
 	}; // End of _StyleObject
 	
-})(window);
+})(OSP);

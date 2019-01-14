@@ -1,39 +1,18 @@
-(function(window){
+(function(OSP){
 	'use strict';
 
-	if( window.OSP ){
-		if( OSP.DataType )	return;
-	}
-	else
-		window.OSP = {};
+	if( OSP.DataType )	return;
 	
 	OSP.Path = function( jsonObject ){
 		var Path = this;
 		OSP._MapObject.apply(Path);
 
-		Path.uri = function( uri ){
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.URI, arguments) );
+		Path.url = function( url ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
 		};
-
-		Path.setPath = function( id, parent, name, type, relative ){
-			if( arguments.length < 3 )
-				return false;
-			Path.id( id );
-			Path.parent(parent);
-			Path.type(type);
-			if( type === OSP.Constants.FOLDER )
-				Path.folderName(name);
-			else if( type === OSP.Constants.EXT )
-				Path.extension(name);
-			else
-				Path.fileName(name);
-
-			Path.relative(relative);
-			return true;
-		};
-
-		Path.id = function( id ){
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments) );
+						   
+        Path.id = function( id ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
 		};
 
 		Path.type = function( type ){
@@ -48,69 +27,53 @@
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.NAME, arguments) );
 		};
 
-		Path.fileName = function( fileName ){
-			if( Path.type() !== OSP.Constants.FILE )
-				return false;
-
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.NAME, arguments) );
+		Path.repositoryType = function( repositoryType ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments) );
 		};
 
+		Path.user = function( user ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.USER, arguments) );
+		};
+		
 		Path.relative = function( relative ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.RELATIVE, arguments) );
 		};
 		
-		Path.repositoryType = function( repositoryType ){
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments) );
+		Path.content = function( content ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
+		};
+
+		Path.dlEntryId = function( entryId ){
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
+		};
+
+		Path.fullPath = function(){
+			if( Path.type() === OSP.Enumeration.PathType.URL )
+				return Path.url();
+			if( !Path.parent() && !Path.name())
+				return '';
+			if( !Path.parent() )
+				return Path.name();
+			if( !Path.name() )
+				return Path.parent();
+
+			return Path.parent()+'/'+ Path.name();
 		};
 		
-		Path.dlEntryId = function( entryId ){
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.ID, arguments) );
-		};
-
-		Path.extension = function( ext ){
-			if( Path.type() !== OSP.Constants.EXT )
-				return false;
-
-			switch( arguments.length ){
-			case 0:
-				return Path.property(OSP.Constants.NAME).replace('*', '').replace('.', '').replace('/','');
-			case 1:
-				return Path.property(OSP.Constants.NAME, ext.replace('*', '').replace('.', '').replace('/',''));
-			default:
-				return false;
+		Path.getFullFolderPath = function(){
+			var folder = '';
+			if( Path.type() === OSP.Enumeration.PathType.FOLDER  ){
+				folder = OSP.Util.mergePath( Path.parent(), Path.name() );
 			}
-		};
-
-		Path.folderName = function( folderName ){
-			if( Path.type() !== OSP.Constants.FOLDER )
-				return false;
-
-			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.NAME, arguments) );
-		};
-
-		Path.fullPath = function( path ){
-			switch( arguments.length ){
-			case 0:
-				if( Path.type() === OSP.Constants.URI )
-					return Path.uri();
-				if( !Path.parent() && !Path.name())
-					return '';
-				if( !Path.parent() )
-					return Path.name();
-				if( !Path.name() )
-					return Path.parent();
-
-				return Path.parent()+'/'+ Path.name();
-			case 1:
-				var pathObj = OSP.Util.convertToPath( path );
-				Path.parent(pathObj.parent());
-				return Path.name(pathObj.name());
-			default:
-				console.log( 'Argument count mismatch: fullPath' );
-				return false;
+			else if ( Path.type() === OSP.Enumeration.PathType.FILE ||
+						Path.type() === OSP.Enumeration.PathType.EXT ||
+						Path.type() === OSP.Enumeration.PathType.FILE_CONTENT ){
+				folder = Path.parent();
 			}
-		};
 
+			return folder;
+		};
+		
 		Path.clone = function(){
 			return new OSP.Path( OSP.Util.toJSON( Path ) );
 		};
@@ -129,16 +92,24 @@
 		var InputData = this;
 		OSP.Path.apply(InputData);
 
-		InputData.context = function( context ){
-			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.CONTEXT, arguments) );
-		};
-		
+
 		InputData.order = function( order ){
 			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.ORDER, arguments) );
 		};
 		
-		InputData.portName = function( portName ){
-			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.PORT_NAME, arguments) );
+		InputData.dataType = function( dataType ){
+			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.DATA_TYPE, arguments) );
+		};
+
+		InputData.setDataType = function( typeName, version ){
+			var dataType = InputData.dataType();
+			if( !dataType ){
+				dataType = {};
+				InputData.dataType(dataType);
+			}
+			
+			dataType.name_ = typeName;
+			dataType.version_ = version;
 		};
 
 		InputData.clone = function(){
@@ -149,8 +120,8 @@
 			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.DIRTY, arguments) );
 		};
 		
-		InputData.user = function( dirty ){
-			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.USER, arguments) );
+		InputData.portName = function( portName ){
+			return InputData.property.apply( InputData, OSP.Util.addFirstArgument(OSP.Constants.PORT_NAME, arguments) );
 		};
 		
 		InputData.deserialize = function( jsonInputData ){
@@ -159,23 +130,27 @@
 				//console.log('key: '+key);
 				//console.log('value: ', jsonInputData[key]);
 				switch( key ){
-				case OSP.Constants.TYPE:
-				case OSP.Constants.REPOSITORY_TYPE:
-				case OSP.Constants.PARENT:
-				case OSP.Constants.NAME:
-				case OSP.Constants.URI:
-				case OSP.Constants.CONTEXT:
-				case OSP.Constants.ID:
-				case OSP.Constants.DIRTY:
-				case OSP.Constants.RELATIVE:
-				case OSP.Constants.ORDER:
-				case OSP.Constants.PORT_NAME:
-				case OSP.Constants.USER:
-				case OSP.Constants.DATA_TYPE:
-					InputData.property( key, jsonInputData[key] );
-					break;
-				default:
-					console.log('Un-recognizable InputData key: ' + key);
+					case OSP.Constants.TYPE:
+					case OSP.Constants.REPOSITORY_TYPE:
+					case OSP.Constants.USER:
+					case OSP.Constants.PARENT:
+					case OSP.Constants.NAME:
+					case OSP.Constants.CONTENT:
+					case OSP.Constants.DIRTY:
+					case OSP.Constants.ORDER:
+					case OSP.Constants.DATA_TYPE:
+					case OSP.Constants.CONTENT:
+					case OSP.Constants.ID:
+					case OSP.Constants.URI:
+					case OSP.Constants.RELATIVE:
+					case OSP.Constants.PORT_NAME:
+						InputData.property( key, jsonInputData[key] );
+						break;
+					case OSP.Constants.CONTEXT:
+						InputData.property( OSP.Constants.CONTENT, jsonInputData[key] );
+						break;
+					default:
+						console.log('Un-recognizable InputData key: ' + key);
 				}
 			}
 		};
@@ -4109,7 +4084,7 @@
 			};
 
 			var parameterRow = function( parameter, eventFlag){
-				console.log(JSON.stringify(parameter, null, 4));
+//				console.log(JSON.stringify(parameter, null, 4));
 				var div;
 				switch(parameter.type()){
 				case OSP.Constants.GROUP:
@@ -4385,4 +4360,4 @@
 		
 	}; // End of DataType
 
-})(window);
+})(OSP);

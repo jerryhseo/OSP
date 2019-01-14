@@ -236,6 +236,12 @@ public class DataTypeLocalServiceClp implements DataTypeLocalService {
 				"long", "com.liferay.portal.service.ServiceContext",
 				"com.liferay.portal.kernel.upload.UploadPortletRequest"
 			};
+
+		_methodName41 = "getDataTypeStructure";
+
+		_methodParameterTypes41 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	@Override
@@ -1612,6 +1618,40 @@ public class DataTypeLocalServiceClp implements DataTypeLocalService {
 		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public java.lang.String getDataTypeStructure(
+		java.lang.String dataTypeName, java.lang.String dataTypeVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName41,
+					_methodParameterTypes41,
+					new Object[] {
+						ClpSerializer.translateInput(dataTypeName),
+						
+					ClpSerializer.translateInput(dataTypeVersion)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -1693,4 +1733,6 @@ public class DataTypeLocalServiceClp implements DataTypeLocalService {
 	private String[] _methodParameterTypes39;
 	private String _methodName40;
 	private String[] _methodParameterTypes40;
+	private String _methodName41;
+	private String[] _methodParameterTypes41;
 }

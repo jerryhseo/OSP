@@ -15,8 +15,8 @@
 package com.kisti.osp.service.messaging;
 
 import com.kisti.osp.service.ClpSerializer;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
-import com.kisti.osp.service.FileManagementServiceUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
+import com.kisti.osp.service.OSPFileServiceUtil;
 import com.kisti.osp.service.SystemPropertiesLocalServiceUtil;
 import com.kisti.osp.service.SystemPropertiesServiceUtil;
 
@@ -38,9 +38,9 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
-			FileManagementLocalServiceUtil.clearService();
+			OSPFileLocalServiceUtil.clearService();
 
-			FileManagementServiceUtil.clearService();
+			OSPFileServiceUtil.clearService();
 			SystemPropertiesLocalServiceUtil.clearService();
 
 			SystemPropertiesServiceUtil.clearService();

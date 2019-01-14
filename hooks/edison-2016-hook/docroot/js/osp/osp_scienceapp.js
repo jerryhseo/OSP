@@ -1,11 +1,7 @@
-(function(window){
+(function(OSP){
 	'use strict';
 
-	if( window.OSP ){
-		if( OSP.ScienceApp )	return;
-	}
-	else
-		window.OSP = {};
+	if( OSP.ScienceApp )	return;
 
 	OSP.ScienceApp = function(){
 		var ScienceApp = this;
@@ -727,4 +723,4 @@
 		};
 	}; // End of ScienceApp
 
-})(window);
+})(OSP);

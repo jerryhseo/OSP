@@ -6,11 +6,15 @@
 		<portlet-name>OSPImageViewer</portlet-name>
 		<display-name>OSP Image Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.imageviewer.OSPImageViewerPortlet
+			com.kisti.osp.visualizer.portlet.imageviewer.OSPImageViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/ImageViewer/image_viewer.jsp</value>
+			<value>/html/ImageViewer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/ImageViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

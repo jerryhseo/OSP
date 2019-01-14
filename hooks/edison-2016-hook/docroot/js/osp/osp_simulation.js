@@ -1,11 +1,7 @@
-(function(window){
+(function(OSP){
 	'use strict';
 
-	if( window.OSP ){
-		if( OSP.Simulation )	return;
-	}
-	else
-		window.OSP = {};
+	if( OSP.Simulation )	return;
 	
 	OSP.Simulation = function( jsonSimulation ){
 		var Simulation = this;
@@ -253,7 +249,7 @@
 					if(inputData){
 						if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
 							var dataType = new OSP.DataType();
-							dataType.deserializeStructure(inputData.context());
+							dataType.deserializeStructure(inputData.content());
 							var dataStructure = dataType.structure(); 
 							var fileContents = dataStructure.activeParameterFormattedInputs();
 							//console.log( 'fileContent: ', fileContents );
@@ -264,7 +260,7 @@
 									data.portName( inputData.portName() );
 									data.order( inputData.order() );
 									data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-									data.context( fileContents[0].join('') );
+									data.content( fileContents[0].join('') );
 									job.inputData( portName, data );
 								}
 							}
@@ -279,7 +275,7 @@
 										data.portName( inputData.portName() );
 										data.order( inputData.order() );
 										data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-										data.context( fileContents[fileIndex].join('') );
+										data.content( fileContents[fileIndex].join('') );
 										cloneJob.inputData( portName, data );
 										cloneJobs.push(cloneJob);
 									}
@@ -528,4 +524,4 @@
 			Simulation.deserialize( jsonSimulation );
 	}; /* End of Simulation */
 	
-})(window);
+})(OSP);

@@ -649,6 +649,14 @@ public class DataTypeLocalServiceWrapper implements DataTypeLocalService,
 		return _dataTypeLocalService.addSampleFilePath(typeId, sc, upload);
 	}
 
+	@Override
+	public java.lang.String getDataTypeStructure(
+		java.lang.String dataTypeName, java.lang.String dataTypeVersion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _dataTypeLocalService.getDataTypeStructure(dataTypeName,
+			dataTypeVersion);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

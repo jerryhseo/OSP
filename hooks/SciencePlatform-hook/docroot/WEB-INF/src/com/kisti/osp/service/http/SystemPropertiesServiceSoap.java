@@ -14,13 +14,6 @@
 
 package com.kisti.osp.service.http;
 
-import com.kisti.osp.service.SystemPropertiesServiceUtil;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-
-import java.rmi.RemoteException;
-
 /**
  * Provides the SOAP utility for the
  * {@link com.kisti.osp.service.SystemPropertiesServiceUtil} service utility. The
@@ -62,19 +55,4 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class SystemPropertiesServiceSoap {
-	public static boolean exist(java.lang.String propertyName)
-		throws RemoteException {
-		try {
-			boolean returnValue = SystemPropertiesServiceUtil.exist(propertyName);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	private static Log _log = LogFactoryUtil.getLog(SystemPropertiesServiceSoap.class);
 }

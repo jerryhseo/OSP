@@ -6,11 +6,15 @@
 		<portlet-name>StructuredDataEditor</portlet-name>
 		<display-name>Structured Data Editor</display-name>
 		<portlet-class>
-			com.kisti.osp.editor.portlet.sde.StructuredDataEditorPortlet
+			com.kisti.osp.visualizer.portlet.sde.StructuredDataEditorPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/StructuredDataEditor/structured_data_editor.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/StructuredDataEditor/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

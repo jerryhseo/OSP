@@ -16,7 +16,7 @@ package com.kisti.osp.service.base;
 
 import com.kisti.osp.model.SystemProperties;
 import com.kisti.osp.service.SystemPropertiesLocalService;
-import com.kisti.osp.service.persistence.FileManagementPersistence;
+import com.kisti.osp.service.persistence.OSPFilePersistence;
 import com.kisti.osp.service.persistence.SystemPropertiesPersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -282,60 +282,59 @@ public abstract class SystemPropertiesLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the file management local service.
+	 * Returns the o s p file local service.
 	 *
-	 * @return the file management local service
+	 * @return the o s p file local service
 	 */
-	public com.kisti.osp.service.FileManagementLocalService getFileManagementLocalService() {
-		return fileManagementLocalService;
+	public com.kisti.osp.service.OSPFileLocalService getOSPFileLocalService() {
+		return ospFileLocalService;
 	}
 
 	/**
-	 * Sets the file management local service.
+	 * Sets the o s p file local service.
 	 *
-	 * @param fileManagementLocalService the file management local service
+	 * @param ospFileLocalService the o s p file local service
 	 */
-	public void setFileManagementLocalService(
-		com.kisti.osp.service.FileManagementLocalService fileManagementLocalService) {
-		this.fileManagementLocalService = fileManagementLocalService;
+	public void setOSPFileLocalService(
+		com.kisti.osp.service.OSPFileLocalService ospFileLocalService) {
+		this.ospFileLocalService = ospFileLocalService;
 	}
 
 	/**
-	 * Returns the file management remote service.
+	 * Returns the o s p file remote service.
 	 *
-	 * @return the file management remote service
+	 * @return the o s p file remote service
 	 */
-	public com.kisti.osp.service.FileManagementService getFileManagementService() {
-		return fileManagementService;
+	public com.kisti.osp.service.OSPFileService getOSPFileService() {
+		return ospFileService;
 	}
 
 	/**
-	 * Sets the file management remote service.
+	 * Sets the o s p file remote service.
 	 *
-	 * @param fileManagementService the file management remote service
+	 * @param ospFileService the o s p file remote service
 	 */
-	public void setFileManagementService(
-		com.kisti.osp.service.FileManagementService fileManagementService) {
-		this.fileManagementService = fileManagementService;
+	public void setOSPFileService(
+		com.kisti.osp.service.OSPFileService ospFileService) {
+		this.ospFileService = ospFileService;
 	}
 
 	/**
-	 * Returns the file management persistence.
+	 * Returns the o s p file persistence.
 	 *
-	 * @return the file management persistence
+	 * @return the o s p file persistence
 	 */
-	public FileManagementPersistence getFileManagementPersistence() {
-		return fileManagementPersistence;
+	public OSPFilePersistence getOSPFilePersistence() {
+		return ospFilePersistence;
 	}
 
 	/**
-	 * Sets the file management persistence.
+	 * Sets the o s p file persistence.
 	 *
-	 * @param fileManagementPersistence the file management persistence
+	 * @param ospFilePersistence the o s p file persistence
 	 */
-	public void setFileManagementPersistence(
-		FileManagementPersistence fileManagementPersistence) {
-		this.fileManagementPersistence = fileManagementPersistence;
+	public void setOSPFilePersistence(OSPFilePersistence ospFilePersistence) {
+		this.ospFilePersistence = ospFilePersistence;
 	}
 
 	/**
@@ -571,12 +570,12 @@ public abstract class SystemPropertiesLocalServiceBaseImpl
 		}
 	}
 
-	@BeanReference(type = com.kisti.osp.service.FileManagementLocalService.class)
-	protected com.kisti.osp.service.FileManagementLocalService fileManagementLocalService;
-	@BeanReference(type = com.kisti.osp.service.FileManagementService.class)
-	protected com.kisti.osp.service.FileManagementService fileManagementService;
-	@BeanReference(type = FileManagementPersistence.class)
-	protected FileManagementPersistence fileManagementPersistence;
+	@BeanReference(type = com.kisti.osp.service.OSPFileLocalService.class)
+	protected com.kisti.osp.service.OSPFileLocalService ospFileLocalService;
+	@BeanReference(type = com.kisti.osp.service.OSPFileService.class)
+	protected com.kisti.osp.service.OSPFileService ospFileService;
+	@BeanReference(type = OSPFilePersistence.class)
+	protected OSPFilePersistence ospFilePersistence;
 	@BeanReference(type = com.kisti.osp.service.SystemPropertiesLocalService.class)
 	protected com.kisti.osp.service.SystemPropertiesLocalService systemPropertiesLocalService;
 	@BeanReference(type = com.kisti.osp.service.SystemPropertiesService.class)
