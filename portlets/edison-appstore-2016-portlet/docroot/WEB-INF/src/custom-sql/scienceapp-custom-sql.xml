@@ -39,6 +39,9 @@
 				<isNotEmpty property="columnId">
 					AND E.columnId = #columnId#
 				</isNotEmpty>
+				<isNotEmpty property="tableId">
+					AND E.tableId = #tableId#
+				</isNotEmpty>
 		]]>
 	</sql>
 	
@@ -211,8 +214,6 @@
 			<isNotEmpty property="scienceAppIds">
 				AND A.scienceAppId IN (@@scienceAppIds@@)	
 			</isNotEmpty>
-			
-			
 			
 			<isNotEmpty property="likeSwNameAndSwTitle">
 				AND	(
