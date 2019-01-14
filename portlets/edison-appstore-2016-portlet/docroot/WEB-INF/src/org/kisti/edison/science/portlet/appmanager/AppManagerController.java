@@ -328,7 +328,9 @@ public class AppManagerController{
 				}
 				
 				String editorTypeOptions = HtmlFormUtils.makeCombo(ScienceAppConstants.getEditorTypes(), scienceApp.getEditorType());
-				String runTypeOptions = HtmlFormUtils.makeCombo(ScienceAppConstants.getScienceAppRunTypes(), scienceApp.getRunType());
+				String[] runTypes = new String[1];
+				runTypes[0] = ScienceAppConstants.getScienceAppRunTypes()[0];
+				String runTypeOptions = HtmlFormUtils.makeCombo(runTypes, scienceApp.getRunType());
 				String parallelOptions = HtmlFormUtils.makeCombo(ScienceAppConstants.getScienceAppParallerModule(), scienceApp.getParallelModule());
 
 				model.addAttribute("editorTypeOptions",editorTypeOptions);
