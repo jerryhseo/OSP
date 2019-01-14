@@ -579,6 +579,33 @@
 		white-space: pre-line;
 	}
 	
+	/* 관련 데이터 */
+	#<portlet:namespace/>scienceAppDataSetList table{
+		border-top: 2px solid #327bb9 !important;
+	}
+	
+	#<portlet:namespace/>scienceAppDataSetList table > thead{
+		background-color: #f9f9f9 !important;
+	}
+	
+	#<portlet:namespace/>scienceAppDataSetList table > tbody > tr{
+		background-color: #fff !important;
+	}
+	
+	#<portlet:namespace/>scienceAppDataSetList table > tbody > tr:hover{
+		background-color: #e7e7e7 !important;
+	}
+	
+	#<portlet:namespace/>scienceAppDataSetList table > thead th:first-child,
+	#<portlet:namespace/>scienceAppDataSetList table > tbody td:first-child{
+		border-left: none;
+	}
+	
+	#<portlet:namespace/>scienceAppDataSetList table > thead th:last-child,
+	#<portlet:namespace/>scienceAppDataSetList table > tbody td:last-child{
+		border-right: none;
+	}
+	
 	/* 타임라인 */
 	#<portlet:namespace/>contentTimelineArea .timeline{
 		display: inline-block;
@@ -1032,6 +1059,11 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentRelatedData" class="tab-pane" style="padding: 10px">
+									
+									<div id="<portlet:namespace/>scienceAppDataSetList" class="post">
+										<liferay-portlet:runtime portletName="datasetlistforedison_WAR_SDR_baseportlet" defaultPreferences="" 
+											queryString="&solverName=${solver.name}&solverVersion=${solver.version}"/>
+									</div>
 									
 									<!-- Relate Data List -->
 									<div id="<portlet:namespace/>scienceAppRelateInfo" class="post">
