@@ -248,6 +248,14 @@
 	</div>
 	<script type="text/javascript">
 	
+	$(document).ready(function(){
+		var divNm = "${boardDiv.divNm}"
+		if(divNm == 'FAQ'){
+			$("th:nth-child(3)").show();
+			$("td:nth-child(3)").show();
+		}
+	})
+	
 	function changeListSize<portlet:namespace/>(value){
 		$('input[id=<portlet:namespace/>listSize]').val(value);
 	}
