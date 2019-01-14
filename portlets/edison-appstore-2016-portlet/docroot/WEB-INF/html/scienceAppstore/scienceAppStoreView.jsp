@@ -606,6 +606,15 @@
 		border-right: none;
 	}
 	
+	#<portlet:namespace/>scienceAppDataSetList DIV.box-body DIV.alert.alert-error{
+		background-color: #fff !important;
+		color: #000 !important;
+		text-align: center;
+		border: none;
+		border-bottom: 1px solid #ddd  !important;
+		border-top: 2px solid #327bb9 !important;
+	}
+	
 	/* 타임라인 */
 	#<portlet:namespace/>contentTimelineArea .timeline{
 		display: inline-block;
