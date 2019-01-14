@@ -1059,10 +1059,19 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentRelatedData" class="tab-pane" style="padding: 10px">
+								
 									
 									<div id="<portlet:namespace/>scienceAppDataSetList" class="post">
-										<liferay-portlet:runtime portletName="datasetlistforedison_WAR_SDR_baseportlet" defaultPreferences="" 
-											queryString="&solverName=${solver.name}&solverVersion=${solver.version}"/>
+										<div class="box-solid edison-panel">
+											<strong>
+												<liferay-ui:message key='edison-science-appstore-view-relate-data' />
+											</strong>
+											
+											<div class="box-body" style="margin-top: 15px;">
+												<liferay-portlet:runtime portletName="datasetlistforedison_WAR_SDR_baseportlet" defaultPreferences="" 
+													queryString="&solverName=${solver.name}&solverVersion=${solver.version}"/>
+											</div>
+										</div>
 									</div>
 									
 									<!-- Relate Data List -->
