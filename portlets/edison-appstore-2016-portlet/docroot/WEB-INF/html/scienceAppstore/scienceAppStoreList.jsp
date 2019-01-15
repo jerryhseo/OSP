@@ -66,8 +66,8 @@
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP"/>
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="workflowEditURL" copyCurrentRenderParameters="false" plid="${workflowPlid}" 
-	windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletName="workflowdesigner_WAR_edisonworkflow2016portlet">
+<liferay-portlet:renderURL var="workflowExecuteURL" copyCurrentRenderParameters="false" plid="${workflowPlid}" 
+	windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletName="workflowsimulationexecutor_WAR_edisonworkflow2016portlet">
 </liferay-portlet:renderURL>
 
 <style type="text/css">
@@ -740,8 +740,8 @@
 				success: function(msg) {
 					isSiteMember = msg.isSiteMember;
 					if(isSiteMember){
-						URL = "<%=workflowEditURL%>";
-						URL += "&_workflowdesigner_WAR_edisonworkflow2016portlet_workflowId="+targetWorkflowId;
+						URL = "<%=workflowExecuteURL%>";
+						URL += "&_workflowsimulationexecutor_WAR_edisonworkflow2016portlet_workflowId="+targetWorkflowId;
 					} else {
 						// Site Member가 아닌 경우 사이트 가입 여부 Confirm
 						if(confirm("<liferay-ui:message key='edison-default-site-no-user' />"+"\n"+"<liferay-ui:message key='edison-default-site-join-regist-confirm' />")){
