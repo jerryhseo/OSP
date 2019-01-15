@@ -81,6 +81,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 "update": renameSimulation,
                 "delete": deleteSimulation
             }
+        }, "job-setting": {
+            "col": 6,
+            "panel-type": "setting",
+            "body": "tpl-job-panel-setting",
+            "form": {},
+            "btn": {
+                "update": renameSimulationJobInPanel,
+                "copy": copySimulationJobInPanel,
+                "delete": deleteSimulationJobInPanel
+            }
         }
     };
 
@@ -397,7 +407,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '</li>' +
             '{{#jobs}}' +
             '<li class="treeview" job-id="{{simulationJobId}}">\n' +
-            '  <a href="#" class="sidebar-btn job-li" job-id=\"{{simulationJobId}}\">\n' +
+            '  <a href="#" class="sidebar-btn job-li" job-id=\"{{simulationJobId}}\" job-status=\"{{status}}\">\n' +
             '    <i class="fa fa-file"></i>\n' +
             '    <span>{{title}}</span>\n' +
             '  <span class="label label-primary pull-right sidebar-btn">\n' +
@@ -437,7 +447,23 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     selectSimulationJob(simulationJobId)
                 })
                 $(that).children("a").children("span.sidebar-btn").click(function(e) {
-                    e.stopPropagation()
+                	e.stopPropagation()
+                	
+                	/* 2019.01.15 _ Open Job Update Panel */
+                	var boxTitle = 'Job Information';
+                	var templateData = PANEL_DATA["job-setting"];
+                	var job = currJobs.get(simulationJobId);
+                	var jobTitle = job.title;
+                	var getStatusInfo = getStatusAndStatusImg(job);
+                	var jobStatus = getStatusInfo.jobStatus;
+                	var jobStatusImg = getStatusInfo.jobStatusImg;
+                	
+                	templateData.form.jobId = simulationJobId;
+                	templateData.form.jobTitle = jobTitle;
+                	templateData.form.jobStatus = jobStatus;
+                	templateData.form.jobStatusImg = jobStatusImg;
+                    createPanel(boxTitle, templateData, "job-setting");
+                    $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
                 })
                 if (i === 1 && isFirstPage && !selectedJobId) {
                     _delay(function() {
@@ -451,6 +477,41 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }, 100)
                 }
             })
+    }
+    
+    /* 2019.01.15 _ Get JobStatus */
+    function getStatusAndStatusImg(job){
+    	var status = job.status;
+    	
+    	var returnObj = new Object;
+    	var jobStatus = "";
+    	var jobStatusImg = null;
+    	switch(status){
+	        case 1701002:
+	        case 1701004:
+	        case 1701012:
+	        	jobStatus = "FAILED";
+	        	jobStatusImg = "FAILED";
+	        case 1701005:
+	        	jobStatus = "QUEUED";
+	        	jobStatusImg = "QUEUED";
+	        case 1701006:
+	        	jobStatus = "RUNNING";
+	        	jobStatusImg = "RUNNING";
+	        case 1701010:
+	        	jobStatus = "CANCELED";
+	        	jobStatusImg = "CANCELED";
+	        case 1701011:
+	        	jobStatus = "SUCCESS";
+	        	jobStatusImg = "SUCCESS";
+	        default:
+	        	jobStatus = "INITIALIZED";
+	        	jobStatusImg = "QUEUED";
+    	}
+    	
+    	returnObj.jobStatus = jobStatus;
+    	returnObj.jobStatusImg = jobStatusImg;
+    	return returnObj;
     }
 
     function pushPorts(nodeId, ports, classPortArray, nodePortArray) {
@@ -814,7 +875,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function () {
             })
     }
-
+    
     $("#" + namespace + "header-li-copy").click(function (e) {
         if(_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)){
             return false;
@@ -828,6 +889,25 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $("#" + namespace + "wf-modal").modal("hide");
         });
     })
+    
+    /* 2019.01.15 _ Job Rename Function */
+    function renameSimulationJobInPanel(panelType, that, e){
+    	var simulationJobId = PANEL_DATA[panelType].form.jobId;
+    	var simulationJobTitle = PANEL_DATA[panelType].form.jobTitle;
+    	var job = currJobs.get(simulationJobId);
+    	job.title = simulationJobTitle;
+    	saveSimulationJob(job);
+    }
+    
+    /* 2019.01.15 _ Job Copy Function */
+    function copySimulationJobInPanel(){
+    	$("#" + namespace + "header-li-copy").click();
+    }
+    
+    /* 2019.01.15 _ Job Delete Function */
+    function deleteSimulationJobInPanel(){
+    	$("#" + namespace + "header-li-delete").click();
+    }
 
     function copySimulationJob(job, title, callback) {
         saveSimulationJob(job, function(sourceJob){

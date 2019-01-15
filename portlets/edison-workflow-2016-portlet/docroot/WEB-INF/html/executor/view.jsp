@@ -112,6 +112,16 @@ var contextPath = '${contextPath}';
         display: none !important;
     }
     .workflow-executor.container-fluid { padding-left: 10px; padding-right: 10px;}
+    
+    .execute-panel.job-status-header{
+    	width: 40%;
+    	vertical-align: middle !important;
+    }
+    
+    .execute-panel.job-status-body{
+    	text-align: center;
+    	vertical-align: middle !important;
+    }
 
 </style>
 <div class="container-fluid workflow-executor">
@@ -360,6 +370,37 @@ $.widget.bridge('uibutton', $.ui.button);
   </div>
   <div class="box-footer">
     <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
+    <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
+  </div>
+</form>
+</script>
+
+<script id="tpl-job-panel-setting" type="text/html">
+<form class="form-horizontal" onsubmit="return false;">
+  <div class="box-body">
+    <div class="form-group">
+      <label for="title">Job Title</label>
+      <input type="text" class="form-control data-binded" id="jobTitle"
+        name="jobTitle" placeholder="Job Title" value="{{form.jobTitle}}" required>
+      <div class="help-block with-errors"></div>
+    </div>
+
+	<table class="table table-bordered table-hover">
+		<tbody class="panel-tbody">
+			<tr>
+				<th class="execute-panel job-status-header">Status</th>
+				<td class="execute-panel job-status-body">
+					<img src="${contextPath}/images/monitoring/status/monitor_{{form.jobStatusImg}}.png" />
+					&nbsp;
+					{{form.jobStatus}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+  </div>
+  <div class="box-footer">
+    <button type="button" class="btn btn-primary btn-flat func" name="update">Rename</button>
+	<button type="button" class="btn btn-info btn-flat func" name="copy">Copy</button>
     <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
 </form>
