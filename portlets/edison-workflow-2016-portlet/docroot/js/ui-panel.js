@@ -183,7 +183,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             			var portletName = registerAppParam.portletName;
             			
             			registerWorkflowAppURL += "&" + portletName + "workflowId=" + workflowId;
-            			window.open(registerWorkflowAppURL);
+            			window.open(registerWorkflowAppURL, "_self");
             		});
         		}else{
         			toastr["error"]("", var_workflow_register_app_role_error_message);
@@ -203,7 +203,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             			var portletName = registerAppParam.portletName;
             			
             			registerWorkflowAppURL += "&" + portletName + "scienceAppId=" + scienceAppId;
-            			window.open(registerWorkflowAppURL);
+            			window.open(registerWorkflowAppURL, "_self");
             		});
         		}
         	}
