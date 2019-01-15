@@ -1,0 +1,47 @@
+{
+    "portlets":["TextEditor_WAR_OSPTextEditorportlet_INSTANCE_9JZltJBpd6he"],
+    "events":{
+        "OSP_HANDSHAKE":[
+			{
+			    "data":{
+			    	"repositoryType_": "USER_HOME",
+			    	"user_":"edison"
+			    },
+			   "params":{
+				"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+				"disabled": "false"
+			   }
+			}
+        ],
+        "OSP_EVENTS_REGISTERED":[],
+        "OSP_LOAD_DATA":[
+            {
+                "data":{
+                    "type_":"file",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"edisonadm",
+                    "dataType_":{
+                        "name":"any",
+                        "version":"0.0.0"
+                    },
+                    "parent_":"",
+                    "name_":"mqcp.hst"
+                },
+                "params":{}
+            }
+        ],
+        "OSP_INITIALIZE":[],
+        "OSP_DISABLE_CONTROLS":[
+        	{
+        		"params":{
+        			"disabled": true
+        		}
+        	},
+        	{
+        		"params":{
+        			"disabled": false
+        		}
+        	}
+        ]
+    }
+}

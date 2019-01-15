@@ -6,11 +6,15 @@
 		<portlet-name>OSPPlotViewer</portlet-name>
 		<display-name>OSP Plot Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.plotviewer.OSPPlotViewerPortlet
+			com.kisti.osp.visualizer.portlet.plotviewer.OSPPlotViewerPortlet 
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/PlotViewer/plot_viewer.jsp</value>
+			<value>/html/PlotViewer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/PlotViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

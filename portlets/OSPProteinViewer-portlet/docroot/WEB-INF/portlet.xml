@@ -6,11 +6,15 @@
 		<portlet-name>OSPProteinViewer</portlet-name>
 		<display-name>OSP Protein Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.proteinviewer.OSPProteinViewerPortlet
+			com.kisti.osp.visualizer.portlet.proteinviewer.OSPProteinViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/ProteinViewer/protein_viewer.jsp</value>
+			<value>/html/ProteinViewer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/ProteinViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

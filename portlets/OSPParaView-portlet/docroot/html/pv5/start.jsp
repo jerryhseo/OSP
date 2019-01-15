@@ -1,7 +1,7 @@
 <%@page import="java.io.IOException"%>
-<%@ page import="com.kisti.osp.analyzer.portlet.paraview.LauncherHelper"%>
+<%@ page import="com.kisti.osp.visualizer.portlet.paraview.LauncherHelper"%>
 <%@ page
-	import="com.kisti.osp.analyzer.portlet.paraview.ProcessReadyCallback"%>
+	import="com.kisti.osp.visualizer.portlet.paraview.ProcessReadyCallback"%>
 
 <html>
 <body>Starting ParaView server...

@@ -6,11 +6,15 @@
 		<portlet-name>StringEditor</portlet-name>
 		<display-name>String Editor</display-name>
 		<portlet-class>
-			com.kisti.osp.editor.portlet.stringeditor.StringEditorPortlet
+			com.kisti.osp.visualizer.portlet.stringeditor.StringEditorPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/StringEditor/string_editor.jsp</value>
+			<value>/html/StringEditor/string-editor.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/StringEditor/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

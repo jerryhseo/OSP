@@ -1,0 +1,129 @@
+{
+    "portlets":["FileExplorer_WAR_OSPFileExplorerportlet_INSTANCE_rP5yIhtq2oaA"],
+    "events":{
+        "OSP_HANDSHAKE":[
+	{
+	    "data":{
+	    	"repositoryType_": "USER_HOME",
+	    	"user_":"edison"
+	    },
+	   "params":{
+		"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+		"disabled": "false"
+	   }
+	},
+	{
+	    "data":{
+	    	"repositoryType_": "USER_HOME",
+		"user_":"edisonadm"
+	    },
+	   "params":{
+		"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+		"disabled": "false"
+	   }
+	},
+	{
+	    "data":{
+	    	"repositoryType_": "USER_HOME",
+		"user_":"edisonadm",
+		"type_":"folder"
+	    },
+	   "params":{
+		"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+		"disabled": "false"
+	   }
+	},
+	{
+	    "data":{
+	    	"repositoryType_": "USER_HOME",
+		"user_":"edisonadm",
+		"type_":"ext",
+		"parent_":"",
+		"name_":"*.jpg"
+	    },
+	   "params":{
+		"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+		"disabled": "false"
+	   }
+	}
+        ],
+        "OSP_EVENTS_REGISTERED":[],
+        "OSP_LOAD_DATA":[{
+                    "data":{
+                        "type_":"folder",
+                        "repositoryType_":"USER_HOME",
+                        "user_":"edisonadm",
+                        "dataType_":{
+                            "name":"any",
+                            "version":"0.0.0"
+                        },
+                        "parent_":"images",
+                        "name_":""
+                    },
+                    "params":{}
+            },
+            {
+                "data":{
+                    "type_":"folder",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"edisonadm",
+                    "dataType_":{
+                        "name":"any",
+                        "version":"0.0.0"
+                    },
+                    "parent_":"temp",
+                    "name_":""
+                },
+                "params":{}
+            },
+            {
+                "data":{
+                    "type_":"file",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"edisonadm",
+                    "dataType_":{
+                        "name":"any",
+                        "version":"0.0.0"
+                    },
+                    "parent_":"images",
+                    "name_":"directory.gif"
+                },
+                "params":{}
+            },
+            {
+                "data":{
+                    "type_":"ext",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"test",
+                    "dataType_":{
+                        "name":"any",
+                        "version":"0.0.0"
+                    },
+                    "parent_":"images",
+                    "name_":"*.gif"
+                },
+                "params":{}
+            }
+        ],
+        "OSP_REQUEST_DATA":[
+            {
+                "params":{
+                	"procFunc":"readServerFile"
+                }
+            }
+        ],
+        "OSP_INITIALIZE":[],
+        "OSP_DISABLE_CONTROLS":[
+        	{
+        		"params":{
+        			"disabled": true
+        		}
+        	},
+        	{
+        		"params":{
+        			"disabled": false
+        		}
+        	}
+        ]
+    }
+}

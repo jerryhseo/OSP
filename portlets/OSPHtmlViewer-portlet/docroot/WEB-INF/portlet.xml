@@ -6,11 +6,15 @@
 		<portlet-name>OSPHtmlViewer</portlet-name>
 		<display-name>OSP Html Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.htmlviewer.OSPHtmlViewerPortlet
+			com.kisti.osp.visualizer.portlet.htmlviewer.OSPHtmlViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/HtmlViewer/html_viewer.jsp</value>
+			<value>/html/HtmlViewer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/HtmlViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

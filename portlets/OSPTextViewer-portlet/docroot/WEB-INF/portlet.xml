@@ -6,11 +6,15 @@
 		<portlet-name>OSPTextViewer</portlet-name>
 		<display-name>OSP Text Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.textviewer.OSPTextViewerPortlet
+			com.kisti.osp.visualizer.portlet.textviewer.OSPTextViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/TextViewer/text_viewer.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/TextViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

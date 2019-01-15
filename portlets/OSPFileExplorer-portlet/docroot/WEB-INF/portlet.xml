@@ -6,11 +6,15 @@
 		<portlet-name>FileExplorer</portlet-name>
 		<display-name>File Explorer</display-name>
 		<portlet-class>
-			com.kisti.osp.editor.portlet.fileexplorer.FileExplorerPortlet
+			com.kisti.osp.visualizer.portlet.fileexplorer.FileExplorerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/FileExplorer/file_explorer.jsp</value>
+			<value>/html/FileExplorer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/FileExplorer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

@@ -1,0 +1,35 @@
+{
+    "portlets":["OSPHtmlViewer_WAR_OSPHtmlViewerportlet_INSTANCE_JCMwhpK7ulrF"],
+    "events":{
+        "OSP_HANDSHAKE":[
+        	{
+			    "data":{
+			    	"repositoryType_": "USER_HOME",
+			    	"user_":"edison"
+			    },
+			   "params":{
+					"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+					"disabled": "false"
+			   }
+			}
+        ],
+        "OSP_EVENTS_REGISTERED":[],
+        "OSP_LOAD_DATA":[
+            {
+                "data":{
+                    "type_":"file",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"edison",
+                    "dataType_":{
+                        "name":"html",
+                        "version":"1.0.0"
+                    },
+                    "parent_":"pv-master/pv-master",
+                    "name_":"index.html"
+                },
+                "params":{}
+            }
+        ],
+        "OSP_INITIALIZE":[]
+    }
+}

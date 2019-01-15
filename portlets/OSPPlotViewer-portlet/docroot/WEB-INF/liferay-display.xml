@@ -3,7 +3,7 @@
 
 <display>
 	
-	<category name="OSP Analyzers">
+	<category name="OSP Viewers">
 		<portlet id="OSPPlotViewer"></portlet>
 	</category>
 </display>

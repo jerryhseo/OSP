@@ -6,6 +6,7 @@
 	<portlet>
 		<portlet-name>OSPProteinViewer</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>com.kisti.osp.visualizer.portlet.proteinviewer.ProteinViewerPortletConfigAction </configuration-action-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>

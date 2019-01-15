@@ -1,11 +1,11 @@
-.file-explorer-portlet .canvas ul, ol {
+.file-explorer-portlet > .canvas ul, ol {
 	font-size: 12px;
 	color: black;
 	margin: 0 0 10px 3px;
 	padding: 0;
 	height:100%;
 }
-.file-explorer-portlet .no_checkbox>i.jstree-checkbox
+.file-explorer-portlet > .no_checkbox>i.jstree-checkbox
 {
     display:none !important;
 }

@@ -1,11 +1,11 @@
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.PrintWriter"%>
-<%@ page import="com.kisti.osp.analyzer.portlet.paraview.LauncherHelper"%>
+<%@ page import="com.kisti.osp.visualizer.portlet.paraview.LauncherHelper"%>
 <%@ page
-	import="com.kisti.osp.analyzer.portlet.paraview.ProcessReadyCallback"%>
+	import="com.kisti.osp.visualizer.portlet.paraview.ProcessReadyCallback"%>
 
-<html style="height:89%">
-<body style="height:100%">Starting ParaView server...
+<html style="height:100%">
+<body style="margin:0px; height:100%">Starting ParaView server...
 </body>
 </html>
 
