@@ -80,7 +80,7 @@ public class OSPVisualizerUtil {
 		try {
 			jsonInitData = JSONFactoryUtil.createJSONObject( config.initData );
 			String repositoryType = jsonInitData.getString("repositoryType_", portletRepository);
-			jsonInitData.put("repositoryType_", portletRepository );
+			jsonInitData.put("repositoryType_", repositoryType );
 			String userScreenName = jsonInitData.getString("user_", user.getScreenName() );
 			jsonInitData.put("user_", userScreenName );
 			config.initData = jsonInitData.toString();

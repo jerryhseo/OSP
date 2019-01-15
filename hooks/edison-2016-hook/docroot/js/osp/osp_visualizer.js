@@ -230,7 +230,6 @@
                            return;
                        }
 
-                       console.log(data.structuredData);
                         var result = {
                             type_: OSP.Enumeration.PathType.STRUCTURED_DATA,
                             dataType_:{

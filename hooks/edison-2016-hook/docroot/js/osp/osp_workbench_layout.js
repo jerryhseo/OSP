@@ -197,7 +197,26 @@
                 AUI().use('liferay-portlet-url', function(A){
                     var portletURL = Liferay.PortletURL.createRenderURL();
                     portletURL.setPortletId( P.instanceId() );
-                    portletURL.setParameter( 'eventEnable', eventEnable);
+//                    portletURL.setParameter( 'eventEnable', eventEnable);
+                    var initData = {};
+                    
+                    var portType = P.portType();
+                    
+                    /*repositoryType_*/
+                    switch( portType ){
+        	            case OSP.Enumeration.PortType.INPUT:
+        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
+        	                break;
+        	            case OSP.Enumeration.PortType.OUTPUT:
+        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+        	                break;
+        	            case OSP.Enumeration.PortType.LOG:
+        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+        	                break;
+                    }
+                    
+                    portletURL.setParameter( 'initData', JSON.stringify(initData));
+                    
                     portletURL.setParameter( 'connector', connector);
                     portletURL.setWindowState(windowState);
 
@@ -2215,6 +2234,8 @@
         	var layout = Workbench.layout();
         	if( !layout )       return false;
         		
+        	evaluatePortletType();
+        	
         	layout.loadPortlets( Workbench.id(), true, windowState, handShakeCallback );
         };
         
@@ -3331,8 +3352,8 @@
                     }
             };
     		
-    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
-    		console.log(JSON.stringify(eventData));
+//    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
+//    		console.log(JSON.stringify(eventData));
             Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
         };
         

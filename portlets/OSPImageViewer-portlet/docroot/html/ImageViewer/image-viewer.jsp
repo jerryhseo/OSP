@@ -45,6 +45,10 @@
 				$('#canvas').iviewer( 'fit' );
 				//$('#canvas').iviewer('update');
 		}
+		
+		function disable(){
+			
+		}
 	</script>
 </head>
 <body style="text-align: center; height:100%;">

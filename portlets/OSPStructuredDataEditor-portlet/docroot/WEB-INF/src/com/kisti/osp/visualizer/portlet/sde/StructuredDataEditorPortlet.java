@@ -45,9 +45,6 @@ public class StructuredDataEditorPortlet extends MVCPortlet {
 			String dataTypeName = ParamUtil.getString(resourceRequest, "dataTypeName", "");
 			String dataTypeVersion = ParamUtil.getString(resourceRequest, "dataTypeVersion", "");
 			
-			System.out.println(dataTypeName);
-			System.out.println(dataTypeVersion);
-			
 			JSONObject jsonResult = JSONFactoryUtil.createJSONObject();
 			try {
 				String dataTypeStructure = DataTypeLocalServiceUtil.getDataTypeStructure(dataTypeName, dataTypeVersion);
