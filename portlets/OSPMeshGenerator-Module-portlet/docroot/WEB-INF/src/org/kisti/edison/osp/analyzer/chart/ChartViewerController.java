@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.util.PortalUtil;
 
@@ -40,7 +40,7 @@ public class ChartViewerController {
 		
 		try{
 			Path filePath = Paths.get(targetFilePath);
-			String result = OSPFileUtil.readTextFile(filePath);
+			String result = OSPFileLocalServiceUtil.readTextFile(filePath);
 			response.setContentType("text/plain; charset=UTF-8");
 			response.getWriter().write(result);
 			response.getWriter().flush();

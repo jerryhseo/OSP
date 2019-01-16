@@ -24,7 +24,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -153,7 +153,7 @@ public class ParameterController {
 			ResourceRequest request, ResourceResponse response) throws IOException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		try{
-			Path ospPath = OSPFileUtil.getRepositoryPath(themeDisplay.getUser().getScreenName(), parentPath+"/"+fileName, OSPRepositoryTypes.USER_HOME.toString());
+			Path ospPath = OSPFileLocalServiceUtil.getRepositoryPath(themeDisplay.getUser().getScreenName(), parentPath+"/"+fileName, OSPRepositoryTypes.USER_HOME.toString());
 			String ospPathStr = ospPath.toString();
 			String opsPathStrReplace = ospPathStr.replaceAll("\\\\", "/");
 			byte[] decodeFileId = Base64.encodeBase64(opsPathStrReplace.getBytes());
