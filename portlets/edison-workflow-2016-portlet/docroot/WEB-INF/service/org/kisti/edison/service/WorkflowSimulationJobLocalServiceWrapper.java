@@ -501,23 +501,11 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
-	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
-		long simulationId,
-		java.util.Map<java.lang.String, java.lang.Object> params,
-		javax.servlet.http.HttpServletRequest request)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return _workflowSimulationJobLocalService.createWorkflowSimulationJob(simulationId,
-			params, request);
-	}
-
-	@Override
-	public java.lang.String createWorkflowEngineJson(java.lang.String title,
+	public java.lang.String createWorkflowEngineJson(long simulationJobId,
 		java.lang.String strNodes, java.lang.String userName,
 		java.lang.String ibToken, javax.servlet.http.HttpServletRequest request)
 		throws org.kisti.edison.WFEngine500Exception {
-		return _workflowSimulationJobLocalService.createWorkflowEngineJson(title,
+		return _workflowSimulationJobLocalService.createWorkflowEngineJson(simulationJobId,
 			strNodes, userName, ibToken, request);
 	}
 

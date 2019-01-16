@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonNode;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulation;
+import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
@@ -21,6 +22,7 @@ import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -306,7 +308,7 @@ public class WorkflowSimulationController{
             User user = PortalUtil.getUser(request);
             WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
             String workflowUuid = WorkflowSimulationJobLocalServiceUtil.createWorkflowEngineJson(
-                simulation.getTitle(), strNodes, user.getScreenName(), icebreakerVcToken, request);
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request);
             return ImmutableMap.<String, Object> builder()
                 .put("workflowUuid", workflowUuid)
                 .build();

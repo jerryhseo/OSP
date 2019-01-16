@@ -112,12 +112,12 @@ var contextPath = '${contextPath}';
         display: none !important;
     }
     .workflow-executor.container-fluid { padding-left: 10px; padding-right: 10px;}
-    
+
     .execute-panel.job-status-header{
     	width: 40%;
     	vertical-align: middle !important;
     }
-    
+
     .execute-panel.job-status-body{
     	text-align: center;
     	vertical-align: middle !important;
@@ -169,19 +169,32 @@ var contextPath = '${contextPath}';
                 <span class="nav-icon-text">Delete</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit">
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
+                <i class="fa fa-pause-circle fa-2x"></i><br>
+                <span class="nav-icon-text">Pause</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
+                <i class="fa fa-play-circle fa-2x"></i><br>
+                <span class="nav-icon-text">Resume</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-stop" style="display: none;">
+                <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
+                <span class="nav-icon-text">ReRun</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit" style="display: none;">
+                <i class="fa fa-window-close-o fa-2x"></i><br>
+                <span class="nav-icon-text">Cancel</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
               <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
-              <%--<li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">--%>
-                <%--<i class="fa fa-window-close-o fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">cancel</span>--%>
-              <%--</li>--%>
+
               <%--<li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">--%>
                 <%--<i class="fa fa-desktop fa-2x"></i><br>--%>
                 <%--<span class="nav-icon-text">Log</span>--%>

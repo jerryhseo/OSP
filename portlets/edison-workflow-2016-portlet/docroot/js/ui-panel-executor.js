@@ -397,7 +397,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 {},
                 function (jobsMap) {
                     currSimulations.select(simulationId)
-                    currJobs.set(jobsMap.jobs)
+                    currJobs.set(jobsMap.jobs, function(id) {
+                        bStart()
+                        var job = currJobs.get(id)
+                        console.log(job)
+                        if (_isBlank(job.workflowUUID)) {
+                            $(".before-submit").show()
+                            $(".after-submit").hide()
+                        } else {
+                            $(".before-submit").hide()
+                            $(".after-submit").show()
+                        }
+                        $(".after-pause").hide()
+                        bEnd()
+                    })
                     currJobs.select(selectedJobId)
                     renderJobs(currentPage === 1)
                 },
@@ -461,7 +474,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 })
                 $(that).children("a").children("span.sidebar-btn").click(function(e) {
                 	e.stopPropagation()
-                	
+
                 	/* 2019.01.15 _ Open Job Update Panel */
                 	var boxTitle = 'Job Information';
                 	var templateData = PANEL_DATA["job-setting"];
@@ -470,13 +483,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 	var getStatusInfo = getStatusAndStatusImg(job);
                 	var jobStatus = getStatusInfo.jobStatus;
                 	var jobStatusImg = getStatusInfo.jobStatusImg;
-                	
+
                 	templateData.form.jobId = simulationJobId;
                 	templateData.form.jobTitle = jobTitle;
                 	templateData.form.jobStatus = jobStatus;
                 	templateData.form.jobStatusImg = jobStatusImg;
                     createPanel(boxTitle, templateData, "job-setting");
-                    $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
+                    if(!$(this).hasClass("is-open")) {
+                        $(".menu-panel").show('slide', { direction: 'left' }, 500);
+                        $(JQ_PORTLET_BOUNDARY_ID + " .job-li > span.sidebar-btn").removeClass("is-open")
+                        $(JQ_PORTLET_BOUNDARY_ID + " .top-btn").removeClass("menu-open")
+                        $(this).addClass("is-open")
+                    }
                 })
                 if (i === 1 && isFirstPage && !selectedJobId) {
                     _delay(function() {
@@ -491,11 +509,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 }
             })
     }
-    
+
     /* 2019.01.15 _ Get JobStatus */
     function getStatusAndStatusImg(job){
     	var status = job.status;
-    	
+
     	var returnObj = new Object;
     	var jobStatus = "";
     	var jobStatusImg = null;
@@ -521,7 +539,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	        	jobStatus = "INITIALIZED";
 	        	jobStatusImg = "QUEUED";
     	}
-    	
+
     	returnObj.jobStatus = jobStatus;
     	returnObj.jobStatusImg = jobStatusImg;
     	return returnObj;
@@ -890,7 +908,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             function () {
             })
     }
-    
+
     $("#" + namespace + "header-li-copy").click(function (e) {
         if(_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)){
             return false;
@@ -904,7 +922,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $("#" + namespace + "wf-modal").modal("hide");
         });
     })
-    
+
     /* 2019.01.15 _ Job Rename Function */
     function renameSimulationJobInPanel(panelType, that, e){
     	var simulationJobId = PANEL_DATA[panelType].form.jobId;
@@ -913,12 +931,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     	job.title = simulationJobTitle;
     	saveSimulationJob(job);
     }
-    
+
     /* 2019.01.15 _ Job Copy Function */
     function copySimulationJobInPanel(){
     	$("#" + namespace + "header-li-copy").click();
     }
-    
+
     /* 2019.01.15 _ Job Delete Function */
     function deleteSimulationJobInPanel(){
     	$("#" + namespace + "header-li-delete").click();
@@ -1576,7 +1594,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			for ( var key in outputPorts) {
 				var outputPort = outputPorts[key];
 				var outputData = "";
-				var isWfSample = outputPort.isWfSample_; 
+				var isWfSample = outputPort.isWfSample_;
 
 				if(runType == CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
 					if(isWfSample){
