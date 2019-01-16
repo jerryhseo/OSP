@@ -55,13 +55,13 @@ var contextPath = '${contextPath}';
 
 <style>
     .apparea{position: relative; height: 100%; display: flex; flex-grow:1;}
-    
+
     .wf-selected-node {
         -webkit-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
         -moz-box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
         box-shadow: 9px 7px 7px 2px rgba(231,166,26,1);
     }
-    
+
     .wf-selected-port {
         background-color: #ff8d00 !important;
     }
@@ -69,12 +69,12 @@ var contextPath = '${contextPath}';
         color: #ff8d00 !important;
         font-size: 14px !important;
     }
-    
+
     .sidebar-menu > li > a.job-li {
         padding: 10px 5px 10px 12px;
         font-size: 12px;
     }
-    
+
     #<portlet:namespace/>column-1 .header-inner {
         margin: 0px;
         padding: 15px 5px 10px 7px;
@@ -82,42 +82,42 @@ var contextPath = '${contextPath}';
         font-size: 14px;
         line-height: 1;
     }
-    
+
     #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn {
         cursor: pointer;
     }
-    
+
     #<portlet:namespace/>column-1 .label.label-primary.pull-right.sidebar-btn:hover > i{
         color: orange;
     }
-    
+
     nav.workbench-custom-nav ul > li:not(.<portlet:namespace/>divider-vertical){
         text-align: center;
         padding: 12px;
         cursor: pointer;
     }
-    
+
     nav.workbench-custom-nav .<portlet:namespace/>divider-vertical {
         height: 50px;
         margin: 9px;
         border-left: 2px solid #f2f2f2;
         border-right: 1px solid #ffffff;
     }
-    
+
     .nav li.<portlet:namespace/>divider-vertical{
         display: none;
     }
-    
+
     .group-delete{
         display: none !important;
     }
     .workflow-executor.container-fluid { padding-left: 10px; padding-right: 10px;}
-    
+
     .execute-panel.job-status-header{
     	width: 40%;
     	vertical-align: middle !important;
     }
-    
+
     .execute-panel.job-status-body{
     	text-align: center;
     	vertical-align: middle !important;
@@ -169,19 +169,32 @@ var contextPath = '${contextPath}';
                 <span class="nav-icon-text">Delete</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
-              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider">
+              <li id="<portlet:namespace/>header-li-submit" data-divider="ib-li-divider" class="before-submit">
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
+                <i class="fa fa-pause-circle fa-2x"></i><br>
+                <span class="nav-icon-text">Pause</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
+                <i class="fa fa-play-circle fa-2x"></i><br>
+                <span class="nav-icon-text">Resume</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-stop" style="display: none;">
+                <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
+                <span class="nav-icon-text">ReRun</span>
+              </li>
+              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit" style="display: none;">
+                <i class="fa fa-window-close-o fa-2x"></i><br>
+                <span class="nav-icon-text">Cancel</span>
               </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
               <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
-              <%--<li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider">--%>
-                <%--<i class="fa fa-window-close-o fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">cancel</span>--%>
-              <%--</li>--%>
+
               <%--<li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">--%>
                 <%--<i class="fa fa-desktop fa-2x"></i><br>--%>
                 <%--<span class="nav-icon-text">Log</span>--%>
@@ -222,18 +235,7 @@ var contextPath = '${contextPath}';
             <div class="row menu-panel-box" id="<portlet:namespace/>menu-panel-box"></div>
             <div class="row menu-panel-box-app" id="<portlet:namespace/>menu-panel-box-app" style="display:none;"></div>
           </div>
-          <%-- <section class="content-header">
-            <h1>
-              <a id="mobile-toggle" href="#mobile-toggle" data-toggle="push-menu">
-                <i class="fa fa-lg fa-compress"></i>
-                <span class="sr-only">Toggle navigation</span>
-              </a>
-              <span id="<portlet:namespace/>workflow-title"></span>
-              <small id="<portlet:namespace/>workflow-sub-title"></small>
-            </h1>
-          </section> --%>
           <section class="content" style="display: flex;">
-          <!-- jsplumb-drag-select canvas-wide jtk-droppable -->
             <div id="wf-workflow-canvas" class="apparea wf-drop jtk-surface">
               <div class="controls" can-undo="false" can-redo="false">
                 <i class="fa fa-arrows selected-mode" mode="pan" title="Pan Mode"></i>
@@ -356,20 +358,20 @@ $.widget.bridge('uibutton', $.ui.button);
     <div class="form-group">
       <label for="title">Simulation Title</label>
       <input type="text" class="form-control data-binded" id="simulationTitle"
-        name="simulationTitle" placeholder="Simulation Title" value="{{form.simulationTitle}}" required>
+        name="simulationTitle" placeholder="Simulation Title" value="{{form.simulationTitle}}" readonly>
       <div class="help-block with-errors"></div>
     </div>
     <div class="form-group">
       <label for="title">Workflow Title</label>
-      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.title}}" readonly>
+      <input type="text" class="form-control data-binded" id="title" name="title" placeholder="Title" value="{{form.workflowTitle}}" readonly>
     </div>
     <div class="form-group">
       <label for="description" >Description</label>
-      <textarea class="form-control data-binded" rows="5" name="description" id="description" readonly>{{form.description}}</textarea>
+      <textarea class="form-control data-binded" rows="5" name="description" id="description" readonly>{{form.workflowDescription}}</textarea>
     </div>
   </div>
   <div class="box-footer">
-    <button type="button" class="btn btn-primary btn-flat func" name="update">Save</button>
+    <button type="button" class="btn btn-primary btn-flat func" name="rename">Rename</button>
     <button type="button" class="btn btn-danger btn-flat pull-right func" name="delete">Delete</button>
   </div>
 </form>
@@ -388,11 +390,19 @@ $.widget.bridge('uibutton', $.ui.button);
 	<table class="table table-bordered table-hover">
 		<tbody class="panel-tbody">
 			<tr>
-				<th class="execute-panel job-status-header">Status</th>
+				<th class="execute-panel job-status-header">
+					<liferay-ui:message key='edison-simulation-execute-job-create-list-submit-time' />
+				</th>
 				<td class="execute-panel job-status-body">
-					<img src="${contextPath}/images/monitoring/status/monitor_{{form.jobStatusImg}}.png" />
-					&nbsp;
-					{{form.jobStatus}}
+					{{form.startTime}}
+				</td>
+			</tr>
+			<tr>
+				<th class="execute-panel job-status-header">
+					<liferay-ui:message key='edison-simulation-monitoring-table-header-complete-time' />
+				</td>
+				<td class="execute-panel job-status-body">
+					{{form.endTime}}
 				</td>
 			</tr>
 		</tbody>
@@ -418,6 +428,9 @@ $.widget.bridge('uibutton', $.ui.button);
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
 </script>
+<script src="${contextPath}/js/moment.js"></script>
+<script src="${contextPath}/js/moment-timezone.js"></script>
+<script src="${contextPath}/js/moment-timezone-with-data-2012-2022.js"></script>
 <script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
 bStart();
@@ -480,7 +493,7 @@ $(document).ready(function(){
 function <portlet:namespace/>moveToDesigner(){
     var thisPortletNamespace = "_workflowdesigner_WAR_edisonworkflow2016portlet_";
     var params = "&" + thisPortletNamespace + "workflowId=${workflowId}";
-    
+
     /* 2019.01.16 _ state=pop_up -> state=maximized */
     var designerUrl = "<%=designerUrl%>";
     designerUrl = designerUrl.replace("pop_up", "maximized");
