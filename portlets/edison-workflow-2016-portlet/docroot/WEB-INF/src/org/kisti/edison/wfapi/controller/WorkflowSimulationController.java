@@ -294,7 +294,28 @@ public class WorkflowSimulationController{
     }
 
     ///////////////////////////////////////////////////////// ENGINE
-
+    
+    @RequestMapping(value = "/{simulationId}/job/{simulationJobId}/create/engine", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> createSimulationJobEngine(
+        @PathVariable("simulationId") long simulationId, 
+        @PathVariable("simulationJobId") long simulationJobId, 
+        @RequestParam("strNodes") String strNodes,
+        @RequestParam("icebreakerVcToken") String icebreakerVcToken,
+        HttpServletRequest request) throws Exception{
+        try{
+            User user = PortalUtil.getUser(request);
+            WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
+            String workflowUuid = WorkflowSimulationJobLocalServiceUtil.createWorkflowEngineJson(
+                simulation.getTitle(), strNodes, user.getScreenName(), icebreakerVcToken, request);
+            return ImmutableMap.<String, Object> builder()
+                .put("workflowUuid", workflowUuid)
+                .build();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/job/{simulationJobId}/run", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> runWorkflow(
         @PathVariable("simulationJobId") long simulationJobId, 

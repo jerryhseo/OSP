@@ -513,6 +513,15 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public java.lang.String createWorkflowEngineJson(java.lang.String title,
+		java.lang.String strNodes, java.lang.String userName,
+		java.lang.String ibToken, javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return _workflowSimulationJobLocalService.createWorkflowEngineJson(title,
+			strNodes, userName, ibToken, request);
+	}
+
+	@Override
 	public java.lang.String getSimulationJobSeq(long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _workflowSimulationJobLocalService.getSimulationJobSeq(simulationId);
@@ -660,6 +669,16 @@ public class WorkflowSimulationJobLocalServiceWrapper
 		throws java.io.IOException {
 		return _workflowSimulationJobLocalService.getWorkflowJobIntermediateResult(jobUuid,
 			ibAccessToken);
+	}
+
+	@Override
+	public java.lang.String getFileId(long appGroupId,
+		java.lang.String vcToken, java.lang.String path)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.getFileId(appGroupId,
+			vcToken, path);
 	}
 
 	@Override
