@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page import="com.kisti.osp.util.OSPVisualizerUtil"%>
+<%@page import="com.kisti.osp.util.OSPVisualizerConfig"%>
+
 <%@ include file="/common/init.jsp"%>
+
+<portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstree/themes/proton/style.css" media="screen"/>
 
 <%
-	PortletPreferences preferences = portletDisplay.getPortletSetup();
-	preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE)); 
-	preferences.store();
+	OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(renderRequest, portletDisplay, user);
 %>
 
 <style type="text/css">
@@ -79,99 +82,89 @@ var <portlet:namespace/>currentUserName = "${currentUserName}";
 var <portlet:namespace/>currentTimeOut;
 
 var <portlet:namespace/>analyzerStructure = "";
+
+var <portlet:namespace/>config = {
+			namespace: '<portlet:namespace/>',
+			displayCanvas: <portlet:namespace/>content,
+			portletId: '<%=portletDisplay.getId()%>',
+			connector: '<%=visualizerConfig.connector%>',
+			resourceURL: '<%=serveResourceURL%>',
+			eventHandlers: {
+				'OSP_HANDSHAKE': <portlet:namespace/>handshakeEventHandler,
+				'OSP_LOAD_DATA': <portlet:namespace/>loadDataEventHandler,
+				'OSP_INITIALIZE': <portlet:namespace/>initializeEventHandler,
+				'OSP_RESPONSE_JOB_KEY' : <portlet:namespace/>responseJobKeyEventHandler,
+				'OSP_RESPONSE_DELETE_SIMULATION_RESULT' : <portlet:namespace/>simulationDeleteEventHandler,
+				'OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT' : <portlet:namespace/>jobDeleteEventHandler,
+				'OSP_DISABLE_CONTROLS': <portlet:namespace/>disableControlsEventHandler
+			},
+			disabled: JSON.parse( '<%=visualizerConfig.disabled%>')
+};
+
+var <portlet:namespace/>visualizer;
+$(function() {
+	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
+	<%-- <portlet:namespace/>processInitAction( JSON.parse( '<%=visualizerConfig.initData%>' ), false ); --%>
+	
+	<portlet:namespace/>init();
+	
+	<portlet:namespace/>connector = <portlet:namespace/>config.connector;
+});
+
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
-Liferay.on(OSP.Event.OSP_HANDSHAKE,function(e){
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		<portlet:namespace/>connector = e.portletId;
-		var events = [
-				OSP.Event.OSP_EVENTS_REGISTERED,
-				OSP.Event.OSP_LOAD_DATA
-			];
-		var eventData = {
-				portletId : myId,
-				targetPortlet : <portlet:namespace/>connector,
-				data : events
-			};
-		Liferay.fire(OSP.Event.OSP_REGISTER_EVENTS, eventData);
-	}
-});
+function <portlet:namespace/>handshakeEventHandler( jsonData, params ){
+	<portlet:namespace/>visualizer.configConnection( params.connector, params.disabled );
+	<portlet:namespace/>visualizer.fireRegisterEventsEvent();
+}
 
-Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e) {
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		<portlet:namespace/>init();
-	}
-});
+function <portlet:namespace/>loadDataEventHandler( jsonData, params ){
+	<portlet:namespace/>jobUserName = jsonData[OSP.Constants.USER];
+	<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
+	/*Workbench Data 존재*/
+	var inputData = new OSP.InputData( jsonData );
+	switch( inputData.type() ){
+		case OSP.Enumeration.PathType.FILE:
+			<portlet:namespace/>loadDataFile("IS_FILE",inputData.parent(),inputData.name());
+			break;
+		case OSP.Enumeration.PathType.DLENTRY_ID:
+			<portlet:namespace/>loadDataFile("IS_SAMPLE","","");
+			break;
+		default:
 		
-Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		<portlet:namespace/>jobUserName = "";
-		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
-		<portlet:namespace/>loadDataFile("IS_NULL","","");
 	}
-});
+}
 
-Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		console.log('[<portlet:namespace/>] OSP_LOAD_DATA: ', e );
-		<portlet:namespace/>jobUserName = e.data[OSP.Constants.USER];
-		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
-		/*Workbench Data 존재*/
-		var inputData = new OSP.InputData( e.data );
-		switch( inputData.type() ){
-			case OSP.Enumeration.PathType.FILE:
-				<portlet:namespace/>loadDataFile("IS_FILE",inputData.parent(),inputData.name());
-				break;
-			case OSP.Enumeration.PathType.DLENTRY_ID:
-				<portlet:namespace/>loadDataFile("IS_SAMPLE","","");
-				break;
-			default:
-			
-		}
+function <portlet:namespace/>initializeEventHandler( data, params ){
+	<portlet:namespace/>jobUserName = "";
+	<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
+	<portlet:namespace/>loadDataFile("IS_NULL","","");
+}
+
+function <portlet:namespace/>disableControlsEventHandler( data, params ){
+	<portlet:namespace/>isBlock = params.disabled;
+}
+
+function <portlet:namespace/>responseJobKeyEventHandler( data, params ){
+	<portlet:namespace/>simulationUuid = data.simulationUuid;
+	<portlet:namespace/>jobSeqNo = data.jobSeqNo;
+	<portlet:namespace/>searchNavigator(); 
+}
+
+function <portlet:namespace/>simulationDeleteEventHandler(data,params){
+	var status = data.status;
+	var simulationUuid = data.simulationUuid;
+	if(status){
+		<portlet:namespace/>removeProject('SIMULATION');
 	}
-});
+}
 
-Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY,function(e) {
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		<portlet:namespace/>simulationUuid = e.data.simulationUuid;
-		<portlet:namespace/>jobSeqNo = e.data.jobSeqNo;
-		<portlet:namespace/>searchNavigator(); 
+function <portlet:namespace/>jobDeleteEventHandler(data,params){
+	if(data.status){
+		<portlet:namespace/>removeProject('JOB');
 	}
-});
-
-Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_RESULT, function( e ){
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
-		var status = e.data.status;
-		var simulationUuid = e.data.simulationUuid;
-		if(status){
-			<portlet:namespace/>removeProject('SIMULATION');
-		}
-	}
-});
-
-Liferay.on(OSP.Event.OSP_RESPONSE_DELETE_SIMULATION_JOB_RESULT, function( e ){
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId||e.targetPortlet ==='BROADCAST'){
-		if(e.data.status){
-			<portlet:namespace/>removeProject('JOB');
-		}
-	}
-});
-
-Liferay.on(OSP.Event.OSP_DISABLE_CONTROLLS, function( e ){
-	var myId = '<%=portletDisplay.getId()%>';
-	if(e.targetPortlet === myId){
-		<portlet:namespace/>isBlock = e.data.isBlock;
-	}
-});
-
+}
 
 Liferay.on(OSP.Event.OSP_FROM_ANALYZER_EVENT, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';

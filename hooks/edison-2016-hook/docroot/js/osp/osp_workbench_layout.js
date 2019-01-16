@@ -226,18 +226,23 @@
                         async: false,
                         dataType:'text',
                         success: function( renderResult ){
+                        	P.status(true);
+                        	
                             if(typeof $targetDiv.attr("section-type")!="undefined"){
-                                $targetDiv.html( renderResult );
+                                $targetDiv.html( renderResult ).promise().done(function(){
+                                	callback(connector,P.instanceId());
+                                });
                             }else{
                                 var $portletDiv = $('<div>');
                                 console.log(P.getNamespace());
                                 $portletDiv.attr('id', P.getNamespace());
                                 $portletDiv.css('height', "inherit");
                                 $portletDiv.html( renderResult );
-                                $targetDiv.append( $portletDiv );
+                                $targetDiv.append( $portletDiv ).promise().done(function(){
+                                	callback(connector,P.instanceId());
+                                });
                             }
-                            P.status(true);
-                            callback(connector,P.instanceId());
+                            
                         },
                         error: function(){
                             console.log('AJAX loading failed', P);

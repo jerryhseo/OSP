@@ -933,7 +933,7 @@ function <portlet:namespace/>closePanel(){
 function <portlet:namespace/>parameterInitEditor(type,structure,instance){
 	var srcData = new OSP.InputData();
 	srcData.type(type);
-	srcData.context(structure);
+	srcData.content(structure);
 	var eventData = {
 		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_'+instance,
 		data: OSP.Util.toJSON(srcData)
