@@ -273,7 +273,7 @@ var AppTree = (function(namespace, $, designer){
             "plugins": ["types", "dnd", "search"]
         }).bind("loaded.jstree", function (event, data) {
             addDynamicConverter(appTreeSelector);
-            addController(appTreeSelector);
+            /*addController(appTreeSelector);*/
             addComponet(appTreeSelector);
             $(searchSelector).keyup(function (e) {
                 var searchString = $(this).val();
