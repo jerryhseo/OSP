@@ -185,6 +185,10 @@ function _enterkey(selector, runEventHandler){
   });
 }
 
+function _isBlank(str) {
+  return (!str || /^\s*$/.test(str));
+}
+
 function _instantDelay(wait) {
   var timer = 0;
   return function (func) {

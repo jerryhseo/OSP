@@ -483,25 +483,14 @@ public class WorkflowSimulationJobLocalServiceUtil {
 				   .copyWorkflowSimulationJob(sourceSimulationJobId, params);
 	}
 
-	public static org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
-		long simulationId,
-		java.util.Map<java.lang.String, java.lang.Object> params,
-		javax.servlet.http.HttpServletRequest request)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return getService()
-				   .createWorkflowSimulationJob(simulationId, params, request);
-	}
-
 	public static java.lang.String createWorkflowEngineJson(
-		java.lang.String title, java.lang.String strNodes,
+		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
 		javax.servlet.http.HttpServletRequest request)
 		throws org.kisti.edison.WFEngine500Exception {
 		return getService()
-				   .createWorkflowEngineJson(title, strNodes, userName,
-			ibToken, request);
+				   .createWorkflowEngineJson(simulationJobId, strNodes,
+			userName, ibToken, request);
 	}
 
 	public static java.lang.String getSimulationJobSeq(long simulationId)

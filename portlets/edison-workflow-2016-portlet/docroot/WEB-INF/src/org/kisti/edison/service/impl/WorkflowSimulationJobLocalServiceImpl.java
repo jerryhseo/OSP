@@ -243,27 +243,48 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     }
     
     // CREATE
-    public WorkflowSimulationJob createWorkflowSimulationJob(
-        long simulationId, Map<String, Object> params, HttpServletRequest request) 
-            throws SystemException, PortalException, IOException{
-        WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
-        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(simulation.getWorkflowId());
-        String icebreakerToken = GetterUtil.getString(params.get("icebreakerVcToken"));
-        String simulationJobTitle = GetterUtil.getString(params.get("title"));
-        
-        WorkflowSimulationJob simulationJob = createSimulationJob(simulation, workflow, simulationJobTitle);
-        
-        JsonNode workflowJson = createWorkflow(simulationJob, icebreakerToken, request);
-        simulationJob.setWorkflowUUID(askForCreateWorkflow(workflowJson));
-        return createWorkflowSimulationJob(simulationJob);
-    }
+//    public WorkflowSimulationJob createWorkflowSimulationJob(
+//        long simulationId, Map<String, Object> params, HttpServletRequest request) 
+//            throws SystemException, PortalException, IOException{
+//        WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
+//        Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(simulation.getWorkflowId());
+//        String icebreakerToken = GetterUtil.getString(params.get("icebreakerVcToken"));
+//        String simulationJobTitle = GetterUtil.getString(params.get("title"));
+//        
+//        WorkflowSimulationJob simulationJob = createSimulationJob(simulation, workflow, simulationJobTitle);
+//        
+//        JsonNode workflowJson = createWorkflow(simulationJob, icebreakerToken, request);
+//        simulationJob.setWorkflowUUID(askForCreateWorkflow(workflowJson));
+//        return createWorkflowSimulationJob(simulationJob);
+//    }
+    
+    
+//  private JsonNode createWorkflow(WorkflowSimulationJob simulationJob, String icebreakerVcToken, HttpServletRequest request)
+//      throws SystemException, PortalException, IOException{
+//      long companyId = PortalUtil.getCompanyId(request);
+//      User user = PortalUtil.getUser(request);
+//      Locale locale = PortalUtil.getLocale(request);
+//      String execPath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
+//      JSONObject screenLogic = JSONFactoryUtil.createJSONObject(simulationJob.getScreenLogic());
+//      JSONObject outPorts = screenLogic.getJSONObject("outPorts");
+//      JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
+//      MWorkflow mWorkflow = new MWorkflow();
+//      mWorkflow.setTitle(simulationJob.getTitle());
+//      mWorkflow.setAccessToken("Basic " + icebreakerVcToken);
+//      mWorkflow.setUserId(user.getScreenName());
+//      mWorkflow.setSimulations(getSimulations(user, execPath, locale, simulationJsonArray, outPorts, icebreakerVcToken));
+//      return Transformer.pojo2Json(mWorkflow);
+//  }
     
     @SuppressWarnings("unchecked")
     public String createWorkflowEngineJson(
-        String title, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
+        long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
         if(!StringUtils.hasText(strNodes)){
         }
         try{
+            WorkflowSimulationJob job = WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
+            WorkflowSimulation workflowSimulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(job.getSimulationId());
+            String title = workflowSimulation.getTitle();
             PermissionChecker checker = PermissionCheckerFactoryUtil.create(PortalUtil.getUser(request));
             PermissionThreadLocal.setPermissionChecker(checker);
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -283,8 +304,13 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             JsonElement workflowJson = gson.toJsonTree(workflow);
             JsonObject root = new JsonObject();
             root.add("workflow", workflowJson);
-            
-            return askForCreateWorkflow(gson.toJson(root));
+            String workflowUUID = askForCreateWorkflow(gson.toJson(root));
+            if(StringUtils.hasText(workflowUUID)){
+                job.setWorkflowUUID(workflowUUID);
+                askForWorkflowStart(workflowUUID);
+                startWorkflowSimulationJob(job);
+            }
+            return workflowUUID;
         }catch (Exception e){
             throw new WFEngine500Exception(e);
         }
@@ -493,23 +519,6 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         return null;
     }
     
-    private JsonNode createWorkflow(WorkflowSimulationJob simulationJob, String icebreakerVcToken, HttpServletRequest request)
-        throws SystemException, PortalException, IOException{
-        long companyId = PortalUtil.getCompanyId(request);
-        User user = PortalUtil.getUser(request);
-        Locale locale = PortalUtil.getLocale(request);
-        String execPath = PrefsPropsUtil.getString(companyId, EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
-        JSONObject screenLogic = JSONFactoryUtil.createJSONObject(simulationJob.getScreenLogic());
-        JSONObject outPorts = screenLogic.getJSONObject("outPorts");
-        JSONArray simulationJsonArray = screenLogic.getJSONArray("elements");
-        MWorkflow mWorkflow = new MWorkflow();
-        mWorkflow.setTitle(simulationJob.getTitle());
-        mWorkflow.setAccessToken("Basic " + icebreakerVcToken);
-        mWorkflow.setUserId(user.getScreenName());
-        mWorkflow.setSimulations(getSimulations(user, execPath, locale, simulationJsonArray, outPorts, icebreakerVcToken));
-        return Transformer.pojo2Json(mWorkflow);
-    }
-    
     public String getSimulationJobSeq(long simulationId) throws SystemException {
         return String.format("#%04d", 
             getWorkflowSimulationWorkflowSimulationJobsCount(simulationId) + 1);
@@ -519,6 +528,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         WorkflowSimulation simulation, Workflow workflow, String simulationJobTitle) 
         throws SystemException, PortalException{
         WorkflowSimulationJob simulationJob = createWorkflowSimulationJob(); 
+        simulationJob.setCreateDate(new Date());
         simulationJob.setWorkflowId(simulation.getWorkflowId());
         simulationJob.setSimulationId(simulation.getSimulationId());
         if(StringUtils.hasText(simulationJobTitle)) {
@@ -548,10 +558,6 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         simulationJob.setStatus(workflowStatus.getStatus());
         simulationJob.setStatusResponse(workflowStatusJson.toString());
         return simulationJob;
-    }
-    
-    private String askForCreateWorkflow(JsonNode workflowJson) throws PortalException{
-        return askForCreateWorkflow(workflowJson != null ? workflowJson.toString() : "{}");
     }
     
     private String askForCreateWorkflow(String workflowJson) throws PortalException{
