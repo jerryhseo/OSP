@@ -39,7 +39,7 @@ import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
 import org.kisti.edison.util.TokenProviderUtil;
 import org.kisti.edison.util.VCRegisterUtil;
-import org.kisti.edison.wfapi.custom.MyFileIcebreakerUtil;
+import org.kisti.edison.wfapi.custom.IBUtil;
 import org.kisti.edison.wfapi.custom.WorkflowBeanUtil;
 import org.kisti.edison.wfapi.custom.WorkflowPagingUtil;
 import org.springframework.stereotype.Controller;
@@ -367,7 +367,7 @@ public class WorkflowPortlet{
           }
         }else{
           // icebreaker 계정은 있으나 포털에 expando가 없는 경우 expando 추가 생성
-          icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId,
+          icebreakerVcToken = IBUtil.createExpandoUserVctoken(user, groupId,
               userScreenName, userPassword);
         }
       }
@@ -378,7 +378,7 @@ public class WorkflowPortlet{
           majorField);
       if(resultRegist == 201){
         // icebreaker 가입이 성공한 경우 신규 토큰 발행 및 커스텀 필드 추가
-        icebreakerVcToken = MyFileIcebreakerUtil.createExpandoUserVctoken(user, groupId,
+        icebreakerVcToken = IBUtil.createExpandoUserVctoken(user, groupId,
             userScreenName, userPassword);
       }
     }
