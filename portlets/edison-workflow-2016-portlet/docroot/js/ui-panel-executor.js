@@ -189,6 +189,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (templateData) {
             var boxTitle = btnType === 'new-job' ? 'New Simulation Job' : $(this).text();
             activateLi(this);
+            /* 2019.01.16 _ simulationTitle setting in edit panel */
+            if (btnType === 'setting') {
+            	var currSimulationId = templateData.form.simulationId;
+            	var simulation = currSimulations.get(currSimulationId);
+            	templateData.form["simulationTitle"] = simulation.title;
+            }
             createPanel(boxTitle, templateData, btnType);
             if (btnType === 'open') {
                 loadPaginatedSimulations(btnType);
@@ -726,40 +732,70 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         _confirm(CONSTS.MESSAGE.edison_wfsimulation_new_confirm_message,
-            function(){ fetchJobs(simulationId, null, 1) })
+            function(){ 
+        		fetchJobs(simulationId, null, 1) 
+        		
+        		/* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
+        		PANEL_DATA["setting"].form["simulationId"] =simulationId;
+    	});
     }
 
     function renameSimulation(panelType, that, e) {
-        var simulationId = PANEL_DATA[panelType].form.selected;
+        var simulationId = null;
+    	if(panelType === 'open'){
+            simulationId = PANEL_DATA[panelType].form.selected;
+    	} else {
+            /* 2019.01.16 _ when panelType is setting */
+    		simulationId = PANEL_DATA[panelType].form.simulationId;
+    	}
         if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
             return false;
         }
         var simulation = currSimulations.get(simulationId);
         var inputs = [{"name": "Title", "value": simulation.title}];
         var btns = {"ok": "Save", "cancel": "Cancel"};
-        createOpenModal("Rename", inputs, btns, function(e){
-            var simulationData = $.extend({}, simulation);
-            simulationData.title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
-            delete simulationData.createDate;
-            executor.renameSimulation(simulationData, function(){
-                if (PANEL_DATA.setting.form.simulationId === simulationId) {
-                    PANEL_DATA.setting.form.title = simulationData.title
-                }
-                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
-                    if (currSimulations.getArray().length > 0) {
-                        var simulationId = currSimulations.getArray()[0].simulationId
-                        currSimulations.select(simulationId)
-                        fetchJobs(simulationId, null,  1)
-                    }
-                })
-
-                $("#" + namespace + "wf-modal").modal("hide");
-            });
-        });
+        
+        var simulationData = $.extend({}, simulation);
+        if(panelType === 'open'){
+        	createOpenModal("Rename", inputs, btns, function(e){
+        		simulationData.title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+        		delete simulationData.createDate;
+        		executor.renameSimulation(simulationData, function(){
+        			if (PANEL_DATA.setting.form.simulationId === simulationId) {
+        				PANEL_DATA.setting.form.title = simulationData.title
+        			}
+        			loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
+        				if (currSimulations.getArray().length > 0) {
+        					var simulationId = currSimulations.getArray()[0].simulationId
+        					currSimulations.select(simulationId)
+        					fetchJobs(simulationId, null,  1)
+        				}
+        			})
+        			
+        			$("#" + namespace + "wf-modal").modal("hide");
+        		});
+        	});
+    	} else {
+            /* 2019.01.16 _ when panelType is setting */
+    		simulationData.title = PANEL_DATA[panelType].form.simulationTitle;
+    		executor.renameSimulation(simulationData, function(){
+    			if (PANEL_DATA.setting.form.simulationId === simulationId) {
+    				PANEL_DATA.setting.form.title = simulationData.title
+    			}
+    			
+    			location.reload();
+    		});
+    	}
     }
 
     function deleteSimulation(panelType, that, e) {
-        var simulationId = PANEL_DATA[panelType].form.selected;
+    	var simulationId = null;
+    	if(panelType === 'open'){
+    		simulationId = PANEL_DATA[panelType].form.selected;
+    	} else {
+            /* 2019.01.16 _ when panelType is setting */
+    		simulationId = PANEL_DATA[panelType].form.simulationId;
+    	}
         if(_isEmpty(simulationId, CONSTS.MESSAGE.edison_wfsimulation_select_first_message)){
             return false;
         }
@@ -770,15 +806,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         simulationId,
                         function (simulation) {
                             if (simulation) {
-                                loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
-                                    if (currSimulations.getArray().length > 0) {
-                                        var simulationId = currSimulations.getArray()[0].simulationId
-                                        currSimulations.select(simulationId)
-                                        fetchJobs(simulationId, null,  1)
-                                    } else {
-                                        initJobs()
-                                    }
-                                })
+                                /* 2019.01.16 _ when panelType is setting */
+                            	if(panelType === 'setting'){
+                            		location.reload();
+                            	} else {
+                            		loadPaginatedSimulations(panelType, PANEL_DATA[panelType].form.params.p_curPage, function() {
+                            			if (currSimulations.getArray().length > 0) {
+                            				var simulationId = currSimulations.getArray()[0].simulationId
+                            				currSimulations.select(simulationId)
+                            				fetchJobs(simulationId, null,  1)
+                            			} else {
+                            				initJobs()
+                            			}
+                            		})
+                            	}
                             }
                         },
                         function () {
@@ -1327,16 +1368,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function openWorkflowByWorkflowId(workflowId, isNotNew, callback){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
             if(!isNotNew){
-                setMetaData({
-                    "workflowTitle": workflow.title,
+            	var metaData = {
+        			"workflowTitle": workflow.title,
                     "workflowDescription": workflow.description,
                     "workflowId": workflowId
-                });
-
+            	}
+            	
+            	setMetaData(metaData);
+            	
                 loadPaginatedSimulations('open', 1, function() {
                     if (currSimulations.getArray().length > 0) {
                         var simulationId = currSimulations.getArray()[0].simulationId
                         currSimulations.select(simulationId)
+                        
+                        /* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
+                        metaData["simulationId"] = simulationId;
+                        setMetaData(metaData);
                         fetchJobs(simulationId, null,  1)
                     } else {
                         _delay(function() {
