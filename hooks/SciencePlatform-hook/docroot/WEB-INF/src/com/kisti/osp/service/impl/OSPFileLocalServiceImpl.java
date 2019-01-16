@@ -257,6 +257,7 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 	}
 
 	 private void changeFileOwner( String target, String owner ) throws PortalException, SystemException{
+		if( !System.getProperty("os.name").toLowerCase().contains("windows") ) {			 
 			String strCmd = "";
 			strCmd += "sudo /bin/chown -R ";
 			strCmd += owner;
@@ -265,11 +266,11 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			
 			CommandLine cmdLine = CommandLine.parse( strCmd );
 			
-	//		System.out.println("chown Command: "+cmdLine.toString());
+			//		System.out.println("chown Command: "+cmdLine.toString());
 			
 			final OutputStream outStream = new ByteArrayOutputStream();
 			final OutputStream errorStream = new ByteArrayOutputStream();
-	
+			
 			DefaultExecuteResultHandler resultHandler;
 			try {
 				resultHandler = execute(cmdLine, null, outStream, errorStream);
@@ -281,46 +282,50 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			} catch (InterruptedException e) {
 				throw new PortalException("chown InterruptedException: " + e.getMessage(), e);
 			}
-	
+			
 			int exitValue = resultHandler.getExitValue();
-	
+			
 			if (exitValue != 0)
 				throw new PortalException("Failed to chown : " + errorStream.toString());
+			
 		}
+	}
 
 	 private void changeFileMode( 
 				String target, 
 				String mode ) throws PortalException, SystemException{
-			String strCmd = "";
-			strCmd += "sudo /bin/chmod -R ";
-			strCmd += mode;
-			strCmd += " ";
-			strCmd += target;
-			
-			CommandLine cmdLine = CommandLine.parse( strCmd );
-			
-	//		System.out.println("chmod Command: "+cmdLine.toString());
-			
-			final OutputStream outStream = new ByteArrayOutputStream();
-	        final OutputStream errorStream = new ByteArrayOutputStream();
-	        
-	        DefaultExecuteResultHandler resultHandler;
-	        try {
-	            resultHandler = execute(cmdLine, null, outStream, errorStream);
-	            resultHandler.waitFor(_DEFAULT_TIMEOUT);
-	        } catch (ExecuteException e) {
-	        	throw new PortalException("Fail to chmod exec");
-	        } catch (IOException e) {
-	            throw new PortalException("chmod IOException: " + e.getMessage(), e);
-	        } catch (InterruptedException e) {
-	            throw new PortalException("chmod InterruptedException: " + e.getMessage(), e);
-	        }
-	
-	        int exitValue = resultHandler.getExitValue();
-	
-	        if (exitValue != 0)
-	            throw new PortalException("Failed to chmod : " + errorStream.toString());
-		}
+		 if( !System.getProperty("os.name").toLowerCase().contains("windows") ) {
+			 String strCmd = "";
+			 strCmd += "sudo /bin/chmod -R ";
+			 strCmd += mode;
+			 strCmd += " ";
+			 strCmd += target;
+			 
+			 CommandLine cmdLine = CommandLine.parse( strCmd );
+			 
+			 //		System.out.println("chmod Command: "+cmdLine.toString());
+			 
+			 final OutputStream outStream = new ByteArrayOutputStream();
+			 final OutputStream errorStream = new ByteArrayOutputStream();
+			 
+			 DefaultExecuteResultHandler resultHandler;
+			 try {
+				 resultHandler = execute(cmdLine, null, outStream, errorStream);
+				 resultHandler.waitFor(_DEFAULT_TIMEOUT);
+			 } catch (ExecuteException e) {
+				 throw new PortalException("Fail to chmod exec");
+			 } catch (IOException e) {
+				 throw new PortalException("chmod IOException: " + e.getMessage(), e);
+			 } catch (InterruptedException e) {
+				 throw new PortalException("chmod InterruptedException: " + e.getMessage(), e);
+			 }
+			 
+			 int exitValue = resultHandler.getExitValue();
+			 
+			 if (exitValue != 0)
+				 throw new PortalException("Failed to chmod : " + errorStream.toString());
+		 }
+	}
 
 	 private DefaultExecuteResultHandler execute(CommandLine cmdLine, OutputStream outStream, OutputStream errorStream)
 	        throws ExecuteException, IOException {
