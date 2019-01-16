@@ -480,7 +480,11 @@ $(document).ready(function(){
 function <portlet:namespace/>moveToDesigner(){
     var thisPortletNamespace = "_workflowdesigner_WAR_edisonworkflow2016portlet_";
     var params = "&" + thisPortletNamespace + "workflowId=${workflowId}";
-    location.href = "<%=designerUrl%>" + params;
+    
+    /* 2019.01.16 _ state=pop_up -> state=maximized */
+    var designerUrl = "<%=designerUrl%>";
+    designerUrl = designerUrl.replace("pop_up", "maximized");
+    location.href = designerUrl + params;
 }
 
 function <portlet:namespace/>getCompanyGroupId(){
