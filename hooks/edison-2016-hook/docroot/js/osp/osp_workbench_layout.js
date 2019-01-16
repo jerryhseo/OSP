@@ -227,17 +227,21 @@
                         dataType:'text',
                         success: function( renderResult ){
                             if(typeof $targetDiv.attr("section-type")!="undefined"){
-                                $targetDiv.html( renderResult );
+                                $targetDiv.html( renderResult ).promise().done(function(){
+                                	P.status(true);
+                                    callback(connector,P.instanceId());
+                                });
                             }else{
                                 var $portletDiv = $('<div>');
                                 console.log(P.getNamespace());
                                 $portletDiv.attr('id', P.getNamespace());
                                 $portletDiv.css('height', "inherit");
                                 $portletDiv.html( renderResult );
-                                $targetDiv.append( $portletDiv );
+                                $targetDiv.append( $portletDiv ).promise().done(function(){
+                                	P.status(true);
+                                    callback(connector,P.instanceId());
+                                });
                             }
-                            P.status(true);
-                            callback(connector,P.instanceId());
                         },
                         error: function(){
                             console.log('AJAX loading failed', P);
@@ -3352,8 +3356,8 @@
                     }
             };
     		
-//    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
-//    		console.log(JSON.stringify(eventData));
+    		console.log("OSP_HAND_SHAKE---------->>>>>>>>"+targetId);
+    		console.log(JSON.stringify(eventData));
             Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
         };
         
