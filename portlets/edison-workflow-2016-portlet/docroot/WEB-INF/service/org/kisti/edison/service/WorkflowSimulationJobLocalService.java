@@ -395,10 +395,13 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public java.lang.String createWorkflowEngineJson(long simulationJobId,
-		java.lang.String strNodes, java.lang.String userName,
-		java.lang.String ibToken, javax.servlet.http.HttpServletRequest request)
-		throws org.kisti.edison.WFEngine500Exception;
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
+		long simulationId,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.lang.String getSimulationJobSeq(long simulationId)
@@ -495,13 +498,6 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 	public java.lang.String getWorkflowJobIntermediateResult(
 		java.lang.String jobUuid, java.lang.String ibAccessToken)
 		throws java.io.IOException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.String getFileId(long appGroupId,
-		java.lang.String vcToken, java.lang.String path)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException;
 
 	public java.io.File downloadFileApi(com.liferay.portal.model.User user,
 		long appGroupId, com.liferay.portal.kernel.json.JSONObject inputport)

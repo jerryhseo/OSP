@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<%@page import="com.kisti.osp.util.OSPVisualizerUtil"%>
-<%@page import="com.kisti.osp.util.OSPVisualizerConfig"%>
 <%@ include file="/common/init.jsp"%>
-
-<portlet:resourceURL var="serveResourceURL"></portlet:resourceURL>
 
 <link type="text/css" rel="stylesheet" href="${contextPath}/css/jstree/themes/proton/style.css" media="screen"/>
 
 <%
-	OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(renderRequest, portletDisplay, user);
+	PortletPreferences preferences = portletDisplay.getPortletSetup();
+	preferences.setValue("portletSetupShowBorders", String.valueOf(Boolean.FALSE)); 
+	preferences.store();
 %>
 
 <style type="text/css">
@@ -81,54 +79,41 @@ var <portlet:namespace/>currentUserName = "${currentUserName}";
 var <portlet:namespace/>currentTimeOut;
 
 var <portlet:namespace/>analyzerStructure = "";
-
-
-var <portlet:namespace/>config = {
-		namespace: '<portlet:namespace/>',
-		displayCanvas: <portlet:namespace/>content,
-		portletId: '<%=portletDisplay.getId()%>',
-		connector: '<%=visualizerConfig.connector%>',
-		menuOptions: JSON.parse('<%=visualizerConfig.menuOptions%>'), 
-		resourceURL: '<%=serveResourceURL%>',
-		eventHandlers: {
-			'OSP_INITIALIZE': <portlet:namespace/>initializeEventHandler,
-			'OSP_RESPONSE_JOB_KEY':<portlet:namespace/>responseJobKeyEventHandler,
-			'OSP_LOAD_DATA':<portlet:namespace/>loadDataEventHandler
-		},
-		procFuncs:{
-			readServerFile: function( jsonData ){
-				console.log('Custom function for readServerFile....');
-			}
-		}
-};
-
-
-var <portlet:namespace/>visualizer;
-$(function() {
-	<portlet:namespace/>visualizer = OSP.Visualizer(<portlet:namespace/>config);
-	
-	<portlet:namespace/>navigatorInitJstree();
-	
-	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
-	
-	<portlet:namespace/>connector = <portlet:namespace/>config.connector;
-});
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
-function <portlet:namespace/>initializeEventHandler(data, params){
-	<portlet:namespace/>jobUserName = "";
-	<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
-	<portlet:namespace/>loadDataFile("IS_NULL","","");
-}
+Liferay.on(OSP.Event.OSP_HANDSHAKE,function(e){
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		<portlet:namespace/>connector = e.portletId;
+		var events = [
+				OSP.Event.OSP_EVENTS_REGISTERED,
+				OSP.Event.OSP_LOAD_DATA
+			];
+		var eventData = {
+				portletId : myId,
+				targetPortlet : <portlet:namespace/>connector,
+				data : events
+			};
+		Liferay.fire(OSP.Event.OSP_REGISTER_EVENTS, eventData);
+	}
+});
 
-function <portlet:namespace/>responseJobKeyEventHandler(data,params){
-	<portlet:namespace/>simulationUuid = data.simulationUuid;
-	<portlet:namespace/>jobSeqNo = data.jobSeqNo;
-	<portlet:namespace/>searchNavigator(); 
-}
-
-
+Liferay.on(OSP.Event.OSP_EVENTS_REGISTERED,function(e) {
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		<portlet:namespace/>init();
+	}
+});
+		
+Liferay.on(OSP.Event.OSP_INITIALIZE,function(e) {
+	var myId = '<%=portletDisplay.getId()%>';
+	if(e.targetPortlet === myId){
+		<portlet:namespace/>jobUserName = "";
+		<portlet:namespace/>fireWorkbenchEvent(OSP.Event.OSP_REQUEST_JOB_KEY);
+		<portlet:namespace/>loadDataFile("IS_NULL","","");
+	}
+});
 
 Liferay.on(OSP.Event.OSP_LOAD_DATA,function(e) {
 	var myId = '<%=portletDisplay.getId()%>';
@@ -270,6 +255,12 @@ function <portlet:namespace/>viewerEventFire(targetPortlet,cmd,data){
 /***********************************************************************
 * Portlet Function
 ***********************************************************************/
+function <portlet:namespace/>init(){
+	<portlet:namespace/>navigatorInitJstree();
+	
+	<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.STRUCTURED_DATA,${parametric},'parametric');
+}
+
 function <portlet:namespace/>fireWorkbenchEvent(eventName){
 	var myId = '<%=portletDisplay.getId()%>';
 	var eventData = {

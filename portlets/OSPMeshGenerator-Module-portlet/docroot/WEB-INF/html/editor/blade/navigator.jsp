@@ -142,7 +142,7 @@ div#<portlet:namespace/>navigatorParameter .container-fluid{
 		</div>
 		<div class="pull-right"><button class="btn btn-xs btn-primary" onclick="<portlet:namespace/>parameterDraw();">Draw</button></div>
 		<div class="h2 clearfix" style="border-bottom: 1px solid #d3d3d3;padding: 5px 0px;"></div>
-<!-- 			<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric" queryString=""/> -->
+			<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric" queryString=""/>
 		</div>
 	</div>
 </div>
@@ -934,7 +934,7 @@ function <portlet:namespace/>closePanel(){
 function <portlet:namespace/>parameterInitEditor(type,structure,instance){
 	var srcData = new OSP.InputData();
 	srcData.type(type);
-	srcData.content(structure);
+	srcData.context(structure);
 	var eventData = {
 		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_'+instance,
 		data: OSP.Util.toJSON(srcData)

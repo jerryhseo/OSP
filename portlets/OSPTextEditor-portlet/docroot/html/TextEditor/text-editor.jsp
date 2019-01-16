@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
@@ -37,7 +37,7 @@
 	</div>
 	<script>
 	$(document).ready(function(){
-// 		$('body').height(document.documentElement.clientHeight );
+		$('body').height(document.documentElement.clientHeight );
 	});
 	
 	var namespace;

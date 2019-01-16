@@ -194,6 +194,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (templateData) {
             var boxTitle = btnType === 'new-job' ? 'New Simulation Job' : $(this).text();
             activateLi(this);
+            /* 2019.01.16 _ simulationTitle setting in edit panel */
+            if (btnType === 'setting') {
+            	var currSimulationId = templateData.form.simulationId;
+            	var simulation = currSimulations.get(currSimulationId);
+            	templateData.form["simulationTitle"] = simulation.title;
+            }
             createPanel(boxTitle, templateData, btnType);
             if (btnType === 'open') {
                 loadPaginatedSimulations(btnType);
@@ -483,11 +489,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 	var getStatusInfo = getStatusAndStatusImg(job);
                 	var jobStatus = getStatusInfo.jobStatus;
                 	var jobStatusImg = getStatusInfo.jobStatusImg;
+                	var jobStartTime = job.startTime;
+                	
+                	/* 
+                	 * Calculated in Greenwich mean time.
+                	 * KST : Greenwich mean time - 9 hour (DB start/end Date).
+                	 */
+                	if(jobStartTime != null){
+                		jobStartTime = new Date((job.startTime)-(60*60*1000*9)).toLocaleString();
+                	}
+                	var jobEndTime = job.endTime;
+                	if(jobEndTime != null){
+                		jobEndTime = new Date((job.endTime)-(60*60*1000*9)).toLocaleString();
+                	}
 
                 	templateData.form.jobId = simulationJobId;
                 	templateData.form.jobTitle = jobTitle;
                 	templateData.form.jobStatus = jobStatus;
                 	templateData.form.jobStatusImg = jobStatusImg;
+                	templateData.form.startTime = jobStartTime;
+                	templateData.form.endTime = jobEndTime;
                     createPanel(boxTitle, templateData, "job-setting");
                     if(!$(this).hasClass("is-open")) {
                         $(".menu-panel").show('slide', { direction: 'left' }, 500);
@@ -768,7 +789,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         _confirm(CONSTS.MESSAGE.edison_wfsimulation_new_confirm_message,
-            function(){ fetchJobs(simulationId, null, 1) })
+            function(){ 
+        		fetchJobs(simulationId, null, 1) 
+        		
+        		/* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
+        		PANEL_DATA["setting"].form["simulationId"] =simulationId;
+    	});
     }
 
     function renameSimulation() {
@@ -1377,16 +1403,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function openWorkflowByWorkflowId(workflowId, isNotNew, callback){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
             if(!isNotNew){
-                setMetaData({
-                    "workflowTitle": workflow.title,
+            	var metaData = {
+        			"workflowTitle": workflow.title,
                     "workflowDescription": workflow.description,
                     "workflowId": workflowId
-                });
-
+            	}
+            	
+            	setMetaData(metaData);
+            	
                 loadPaginatedSimulations('open', 1, function() {
                     if (currSimulations.getArray().length > 0) {
                         var simulationId = currSimulations.getArray()[0].simulationId
                         currSimulations.select(simulationId)
+                        
+                        /* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
+                        metaData["simulationId"] = simulationId;
+                        setMetaData(metaData);
                         fetchJobs(simulationId, null,  1)
                     } else {
                         _delay(function() {

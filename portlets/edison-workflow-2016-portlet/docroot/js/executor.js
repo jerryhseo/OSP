@@ -71,8 +71,9 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
-    function updateSimulation(params, callback, errorCallback) {
+    function renameSimulation(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
+        console.log(params)
         if(params && params.simulationId) {
             aSyncAjaxHelper.post(URI_PREFIX + "/simulation/" + params.simulationId + "/update",
                 params,
@@ -151,20 +152,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         aSyncAjaxHelper.post(
             URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/delete",
             {},
-            function (simulationJob) {
-                if (callback) {
-                    callback(simulationJob);
-                }
-            }, errorCallback
-        );
-    }
-
-    function createSimulationJobEngine(params, callback, errorCallback) {
-        console.log(params)
-        _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post(
-            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/create/engine",
-            params,
             function (simulationJob) {
                 if (callback) {
                     callback(simulationJob);
@@ -608,7 +595,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     } */
     return {
         "createSimulation": createSimulation,
-        "updateSimulation": updateSimulation,
+        "renameSimulation": renameSimulation,
         "deleteSimulation": deleteSimulation,
         "fetchSimulationJobs": fetchSimulationJobs,
         "createSimulationJob": createSimulationJob,
@@ -616,8 +603,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "copySimulationJob": copySimulationJob,
         "deleteSimulationJob": deleteSimulationJob,
         "fetchSimulationJobSeq": fetchSimulationJobSeq,
-
-        "createSimulationJobEngine": createSimulationJobEngine,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,

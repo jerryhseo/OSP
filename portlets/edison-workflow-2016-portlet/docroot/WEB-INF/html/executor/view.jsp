@@ -390,11 +390,19 @@ $.widget.bridge('uibutton', $.ui.button);
 	<table class="table table-bordered table-hover">
 		<tbody class="panel-tbody">
 			<tr>
-				<th class="execute-panel job-status-header">Status</th>
+				<th class="execute-panel job-status-header">
+					<liferay-ui:message key='edison-simulation-execute-job-create-list-submit-time' />
+				</th>
 				<td class="execute-panel job-status-body">
-					<img src="${contextPath}/images/monitoring/status/monitor_{{form.jobStatusImg}}.png" />
-					&nbsp;
-					{{form.jobStatus}}
+					{{form.startTime}}
+				</td>
+			</tr>
+			<tr>
+				<th class="execute-panel job-status-header">
+					<liferay-ui:message key='edison-simulation-monitoring-table-header-complete-time' />
+				</td>
+				<td class="execute-panel job-status-body">
+					{{form.endTime}}
 				</td>
 			</tr>
 		</tbody>
@@ -420,6 +428,9 @@ $.widget.bridge('uibutton', $.ui.button);
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
 </script>
+<script src="${contextPath}/js/moment.js"></script>
+<script src="${contextPath}/js/moment-timezone.js"></script>
+<script src="${contextPath}/js/moment-timezone-with-data-2012-2022.js"></script>
 <script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
 bStart();
@@ -482,7 +493,11 @@ $(document).ready(function(){
 function <portlet:namespace/>moveToDesigner(){
     var thisPortletNamespace = "_workflowdesigner_WAR_edisonworkflow2016portlet_";
     var params = "&" + thisPortletNamespace + "workflowId=${workflowId}";
-    location.href = "<%=designerUrl%>" + params;
+
+    /* 2019.01.16 _ state=pop_up -> state=maximized */
+    var designerUrl = "<%=designerUrl%>";
+    designerUrl = designerUrl.replace("pop_up", "maximized");
+    location.href = designerUrl + params;
 }
 
 function <portlet:namespace/>getCompanyGroupId(){
