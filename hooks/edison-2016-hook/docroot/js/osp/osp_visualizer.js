@@ -893,7 +893,7 @@
             );
         };
 
-        var getFolderInfo = function( folderPath, extension){
+        var getFolderInfo = function( folderPath, extension, changeAlert){
             var params = {};
             params.command = 'GET_FILE_INFO';
             params.repositoryType = baseFolder.repositoryType();
@@ -926,7 +926,7 @@
                         name_: baseFolder.type() === OSP.Enumeration.PathType.EXT ? baseFolder.name() : '', 
                         content_: data.fileInfos
                     };
-                    loadCanvas( jsonData, true );
+                    loadCanvas( jsonData, changeAlert );
                     //successFunc( data.parentPath, data.fileInfos );
                 },
                 error:function(ed, e){
@@ -938,7 +938,7 @@
 
 
         var loadCanvas = function( jsonData, changeAlert ){
-            console.log('loadCanvas data: ', jsonData );
+            console.log('loadCanvas data: ', jsonData, changeAlert );
             setCurrentData( jsonData );
             loadCanvasFunc( OSP.Util.toJSON(currentData), changeAlert);
         };
@@ -975,7 +975,7 @@
 
             console.log( 'After processInitAction: ', currentData );
             if( launchCanvas ){
-                loadCanvas( OSP.Util.toJSON(currentData) );
+                loadCanvas( OSP.Util.toJSON(currentData), false );
             }
         };
 

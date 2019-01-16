@@ -186,14 +186,13 @@ $('#<portlet:namespace/>canvas').on('change', function(){
  * Handling OSP Events and event handlers
  ***********************************************************************/
  function <portlet:namespace/>handshakeEventHandler( jsonData, params ){
-	 console.log( 'Visualizer: ', <portlet:namespace/>visualizer);
 	 <portlet:namespace/>visualizer.configConnection( params.connector, params.disabled );
 	<portlet:namespace/>processInitAction( jsonData );
 	<portlet:namespace/>visualizer.fireRegisterEventsEvent();
  }
  
 function <portlet:namespace/>loadDataEventHandler( jsonData, params ){
-	<portlet:namespace/>visualizer.loadCanvas( jsonData, !<portlet:namespace/>disabled );
+	<portlet:namespace/>visualizer.loadCanvas( jsonData, params.changeAlert );
 }
 
 function <portlet:namespace/>requestDataEventHandler( jsonData, params ){

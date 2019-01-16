@@ -27,7 +27,9 @@
                     "parent_":"",
                     "name_":"mqcp.hst"
                 },
-                "params":{}
+                "params":{
+                        "changeAlert": false
+                }
             }
         ],
         "OSP_INITIALIZE":[],

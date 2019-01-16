@@ -60,7 +60,9 @@
                         "parent_":"images",
                         "name_":""
                     },
-                    "params":{}
+                    "params":{
+                        "changeAlert": false
+                    }
             },
             {
                 "data":{
@@ -74,7 +76,9 @@
                     "parent_":"temp",
                     "name_":""
                 },
-                "params":{}
+                "params":{
+                        "changeAlert": false
+                }
             },
             {
                 "data":{
@@ -88,7 +92,9 @@
                     "parent_":"images",
                     "name_":"directory.gif"
                 },
-                "params":{}
+                "params":{
+                        "changeAlert": false
+                }
             },
             {
                 "data":{
@@ -102,7 +108,9 @@
                     "parent_":"images",
                     "name_":"*.gif"
                 },
-                "params":{}
+                "params":{
+                        "changeAlert": true
+                }
             }
         ],
         "OSP_REQUEST_DATA":[

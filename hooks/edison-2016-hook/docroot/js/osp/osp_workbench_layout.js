@@ -1099,7 +1099,10 @@
     		var eventData = {
                     portletId: Workbench.id(),
                     targetPortlet: targetPortletId,
-                    data: data
+                    data: data,
+                    params:{
+                    	changeAlert:false
+                    }
     			};
     		
     		console.log(event+"__________"+JSON.stringify(eventData));

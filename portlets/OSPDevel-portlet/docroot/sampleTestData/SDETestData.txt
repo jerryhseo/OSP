@@ -1,0 +1,52 @@
+{
+    "portlets":["StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_jfvRBDYkaHl6"],
+    "events":{
+        "OSP_HANDSHAKE":[
+			{
+			    "data":{
+			    	"repositoryType_": "USER_HOME",
+			    	"user_":"edison",
+					"dataType_":{
+						"name":"Grating_InputData",
+						"version":"1.0.0"
+					}
+			    },
+			   "params":{
+				"connector":"OSPWorkbenchSimulator_WAR_OSPDevelportlet",
+				"disabled": false
+			   }
+			}
+        ],
+        "OSP_EVENTS_REGISTERED":[],
+        "OSP_LOAD_DATA":[
+            {
+                "data":{
+                    "type_":"structuredData",
+                    "repositoryType_":"USER_HOME",
+                    "user_":"edisonadm",
+                    "dataType_":{
+						"name":"Grating_InputData",
+						"version":"1.0.0"
+	        		},
+                    "content_":{"sweepMax_":1,"vectorForm_":{"space_":false,"braceChar_":"SQUARE_SPACE","sample_":"[ A B C ]","delimiter_":" "},"parameterForm_":{"space_":false,"valueDelimiter_":" = ","parameterDelimiter_":" ;"},"parameters_":{"freq":{"type_":"numeric","active_":true,"name_":"freq","nameText_":{"ko_KR":"freq","en_US":"freq"},"value_":"1e13","sweepable_":false,"sweeped_":false},"permittivity":{"type_":"numeric","active_":true,"name_":"permittivity","nameText_":{"ko_KR":"permittivity","en_US":"permittivity"},"value_":"1.0","sweepable_":false,"sweeped_":false},"resolution":{"type_":"numeric","active_":true,"name_":"resolution","nameText_":{"ko_KR":"resolution","en_US":"resolution"},"range_":{"lowerBoundary_":20,"upperBoundary_":1000,"operand_":"=="},"value_":"100","sweepable_":false,"sweeped_":false},"depth":{"type_":"numeric","active_":true,"name_":"depth","nameText_":{"ko_KR":"depth","en_US":"depth"},"description_":{"ko_KR":"Vertical length [m]","en_US":"Vertical length [m]"},"value_":"80e-6","sweepable_":false,"sweeped_":false},"period":{"type_":"numeric","active_":true,"name_":"period","nameText_":{"ko_KR":"period","en_US":"period"},"description_":{"ko_KR":"Period of the grating [m]","en_US":"Period of the grating [m]"},"value_":"4e-6","sweepable_":false,"sweeped_":false},"tx_grating":{"type_":"numeric","active_":true,"name_":"tx_grating","nameText_":{"ko_KR":"tx_grating","en_US":"tx_grating"},"value_":"4e-6","sweepable_":false,"sweeped_":false},"fill":{"type_":"numeric","active_":true,"name_":"fill","nameText_":{"ko_KR":"fill","en_US":"fill"},"description_":{"ko_KR":"Fill factor of the grating [1] For example, fill = 0.8 represents a case of 20 % opening.","en_US":"Fill factor of the grating [1] For example, fill = 0.8 represents a case of 20 % opening."},"value_":"0.875","sweepable_":false,"sweeped_":false},"courant":{"type_":"numeric","active_":true,"name_":"courant","nameText_":{"ko_KR":"courant","en_US":"courant"},"value_":"0.9","sweepable_":false,"sweeped_":false},"buffer":{"type_":"numeric","active_":true,"name_":"buffer","nameText_":{"ko_KR":"buffer","en_US":"buffer"},"value_":"1e-6","sweepable_":false,"sweeped_":false}},"defaultLanguageId_":"ko_KR","availableLanguageIds_":["ko_KR","en_US"]}
+                },
+                "params":{
+                        "changeAlert": false
+                }
+            }
+        ],
+        "OSP_INITIALIZE":[],
+        "OSP_DISABLE_CONTROLS":[
+        	{
+        		"params":{
+        			"disabled": true
+        		}
+        	},
+        	{
+        		"params":{
+        			"disabled": false
+        		}
+        	}
+        ]
+    }
+}

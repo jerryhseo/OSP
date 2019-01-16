@@ -94,7 +94,7 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 			
 			<portlet:namespace/>setTextEditorContent( Liferay.Util.unescapeHTML(jsonData.content_) );
 
-			if( changeAlert )
+			if( !<portlet:namespace/>disabled && changeAlert )
 				<portlet:namespace/>visualizer.fireDataChangedEvent();
 			break;
 		case OSP.Enumeration.PathType.DLENTRY_ID:
@@ -207,7 +207,7 @@ $('#<portlet:namespace/>download').click(function(){
 function <portlet:namespace/>loadDataEventHandler( data, params ){
 	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
 	
-	<portlet:namespace/>visualizer.loadCanvas( data, !<portlet:namespace/>disabled );
+	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
 }
 
 function <portlet:namespace/>requestDataEventHandler( data, params ){

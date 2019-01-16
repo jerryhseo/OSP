@@ -31,7 +31,7 @@
 	
 	</style>
 </head>
-<body style="height: 100%">
+<body style="height: 100%;">
 	<div class="inner-canvas">
 		<textarea id="canvas" class="canvas"></textarea>
 	</div>
