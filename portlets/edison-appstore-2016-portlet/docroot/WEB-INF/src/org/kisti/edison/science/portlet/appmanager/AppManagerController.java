@@ -848,13 +848,14 @@ public class AppManagerController{
 		if(mode.equals(Constants.ADD)){
 			try {
 				long workflowId = Long.parseLong(CustomUtil.strNull(params.get("workflowId"), "0"));
-				int workflowAppCnt = ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(workflowId);
-				
-				if(workflowAppCnt == 0){
-					ScienceApp scienceApp = ScienceAppLocalServiceUtil.createScienceApp(sc, params);
-					returnLong = scienceApp.getScienceAppId();
-				} else {
-					throw new ScienceAppException(ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE);
+				if(0 < workflowId){
+					int workflowAppCnt = ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(workflowId);
+					if(workflowAppCnt == 0){
+						ScienceApp scienceApp = ScienceAppLocalServiceUtil.createScienceApp(sc, params);
+						returnLong = scienceApp.getScienceAppId();
+					} else {
+						throw new ScienceAppException(ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE);
+					}
 				}
 			} catch (Exception e) {
 				log.error("Create ScienceApp Error...!!");
