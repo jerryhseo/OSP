@@ -404,7 +404,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 }
             })
         }
-        console.log(workflowStatus)
+        // console.log(workflowStatus)
     }
 
     function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage, selectedJobId) {
@@ -444,6 +444,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                             }
                         }
                         $(".after-pause").hide()
+                        if (job) {
+                            validateSimulationJob()
+                        }
                         bEnd()
                     })
                     currJobs.select(selectedJobId)
@@ -458,7 +461,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function renderJobs(jobsMap, simulationId, currentPage) {
-        console.log(jobsMap)
         var isFirstPage = currentPage == 1
         var ulSelector = "#" + namespace + "column-1 > ul";
         var li =
@@ -477,14 +479,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '  </span>' +
             '  </a>\n' +
             '  <ul id="nodes-{{simulationJobId}}" class="treeview-menu">\n' +
-            // '    <li class="treeview">' +
-            // '       <a href="#"><i class="fa fa-laptop"></i><span>input</span></a>' +
-            // '       <ul id="input-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
-            // '    </li>\n' +
-            // '    <li class="treeview">' +
-            // '       <a href="#"><i class="fa fa-laptop"></i><span>output</span></a>' +
-            // '       <ul id="output-ports-{{simulationJobId}}" class="treeview-menu"></ul>' +
-            // '    </li>\n' +
             '  </ul>' +
             '</li>' +
             '{{/jobs}}' +
@@ -590,22 +584,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         });
 
         if (paginationData.curBlock > 1 && paginationData.curBlock <= paginationData.totalBlock) {
-            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev > a").click(function (e) {
+            $(JQ_PORTLET_BOUNDARY_ID + " #job-pagination.pagination .prev > a").click(function (e) {
                 e.preventDefault();
                 fetchJobs(simulationId, null, paginationData.startPage - 1, null)
                 // loadPaginatedSimulations(panelType, paginationData.startPage - 1);
             });
         }else{
-            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev").addClass("disabled");
+            $(JQ_PORTLET_BOUNDARY_ID + " #job-pagination.pagination .prev").addClass("disabled");
         }
         if (paginationData.curBlock < paginationData.totalBlock) {
-            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next > a").click(function (e) {
+            $(JQ_PORTLET_BOUNDARY_ID + " #job-pagination.pagination .next > a").click(function (e) {
                 e.preventDefault();
                 fetchJobs(simulationId, null, paginationData.endPage + 1, null)
                 // loadPaginatedSimulations(panelType, paginationData.endPage + 1);
             });
         }else{
-            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next").addClass("disabled");
+            $(JQ_PORTLET_BOUNDARY_ID + " #job-pagination.pagination .next").addClass("disabled");
         }
     }
 
@@ -707,16 +701,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var renderer = designer.getCurrentJsPlumbRenderer()
         var nodeLi =
             '{{#nodes}}' +
-            '<li node-id="{{id}}" class="treeview">\n' +
-            '  <a href="#" class="sidebar-btn job-li" node-id=\"{{id}}\">\n' +
+            '<li node-id="{{id}}" class="node-li treeview">\n' +
+            '  <a href="#" class="port sidebar-btn job-li" node-id=\"{{id}}\">\n' +
             '    <i class="fa fa-cog"></i>\n' +
-            '    <span>{{data.scienceAppData.name}}</span>\n' +
-            // '  <span class="label label-primary pull-right sidebar-btn">\n' +
-            // '    <i class="icon-arrow-right"></i>\n' +
-            // '  </span>' +
+            '    <div class="li-node-name">{{data.scienceAppData.name}}</div>\n' +
+            '  <span class="label pull-right">\n' +
+            // '    <i class="fa fa-question"> 3</i>\n' +
+            '  </span>' +
             '  </a>\n' +
             '  <ul class="treeview-menu">\n' +
-            '    <li class="treeview">' +
+            '    <li class="treeview input">' +
             '       <a href="#"><i class="fa fa-laptop"></i><span>input</span></a>' +
             '       <ul class="treeview-menu">' +
             '       {{#data.arrInputPorts}}' +
@@ -732,7 +726,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             '       {{/data.arrInputPorts}}' +
             '       </ul>' +
             '    </li>\n' +
-            '    <li class="treeview">' +
+            '    <li class="treeview output">' +
             '       <a href="#"><i class="fa fa-laptop"></i><span>output</span></a>' +
             '       <ul class="treeview-menu">' +
             '       {{#data.arrOutputPorts}}' +
@@ -814,6 +808,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             console.log(inputData)
             prevPortData[OSP.Constants.INPUTS] = JSON.parse(strPortDataJson)
             currInputPorts.update(portId, prevPortData)
+        }
+        if(currJobs.selected()) {
+            validateSimulationJob()
         }
     }
 
@@ -1129,6 +1126,45 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
     }
 
+    function validateSimulationJob(){
+        var inputPorts = currInputPorts.getArray()
+        var jp = designer.getCurrentJsPlumbInstance()
+        var notReady = {}
+        var valid = true
+        $.each(inputPorts, function(){
+            var port = this
+            var portData = jp.getPort(port.id)
+            var nodeId = portData.getNode().id
+            if(port.inputs_ || portData.getEdges().length > 0) {
+                port.isReady = true
+                $('a.job-li[port-id="'+ port.id + '"]').addClass('is-ready')
+                $('a.job-li[port-id="'+ port.id + '"]').removeClass('not-ready')
+                $('.port-element.input[port-id="'+ port.id + '"]').addClass('is-ready')
+                $('.port-element.input[port-id="'+ port.id + '"]').removeClass('not-ready')
+            } else {
+                port.isReady = false
+                if(notReady[nodeId] || notReady[nodeId] === 0) {
+                    notReady[nodeId] = notReady[nodeId] + 1
+                } else {
+                    notReady[nodeId] = 1
+                }
+
+                $('a.job-li[port-id="'+ port.id + '"]').removeClass('is-ready')
+                $('a.job-li[port-id="'+ port.id + '"]').addClass('not-ready')
+                $('.port-element.input[port-id="'+ port.id + '"]').removeClass('is-ready')
+                $('.port-element.input[port-id="'+ port.id + '"]').addClass('not-ready')
+            }
+        })
+        $('li.node-li').removeClass('not-ready')
+        $('li.node-li a.port.sidebar-btn.job-li > span.label').text('')
+        $.each(notReady, function(key, value) {
+            valid = false
+            $('li.node-li[node-id="' + key + '"]').addClass('not-ready')
+            $('li.node-li[node-id="' + key + '"] a.port.sidebar-btn.job-li > span.label').text(value)
+        })
+        return valid
+    }
+
     function submitSimulationJob() {
         resetSubmitData()
         // console.log(designer.getCurrentJsPlumbInstance())
@@ -1174,6 +1210,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 }
             })
         })
+
+        if(!validateSimulationJob()){
+            return false
+        }
+
         var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
         console.log(json)
         var simulationId = currJobs.selected().simulationId
