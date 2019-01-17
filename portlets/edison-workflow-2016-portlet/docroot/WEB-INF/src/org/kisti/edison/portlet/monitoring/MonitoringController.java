@@ -2,7 +2,6 @@ package org.kisti.edison.portlet.monitoring;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +12,6 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
@@ -30,11 +28,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 

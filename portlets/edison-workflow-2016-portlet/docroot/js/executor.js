@@ -71,9 +71,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
-    function renameSimulation(params, callback, errorCallback) {
+    function updateSimulation(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
-        console.log(params)
         if(params && params.simulationId) {
             aSyncAjaxHelper.post(URI_PREFIX + "/simulation/" + params.simulationId + "/update",
                 params,
@@ -160,7 +159,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
-<<<<<<< HEAD
     function createSimulationJobEngine(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
@@ -174,8 +172,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         );
     }
 
-=======
->>>>>>> devel
     function fetchSimulationJobSeq(simulationId, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.get(URI_PREFIX + "/simulation/" + simulationId + "/job/seq",
@@ -644,7 +640,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     } */
     return {
         "createSimulation": createSimulation,
-        "renameSimulation": renameSimulation,
+        "updateSimulation": updateSimulation,
         "deleteSimulation": deleteSimulation,
         "fetchSimulationJobs": fetchSimulationJobs,
         "createSimulationJob": createSimulationJob,
@@ -652,14 +648,11 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "copySimulationJob": copySimulationJob,
         "deleteSimulationJob": deleteSimulationJob,
         "fetchSimulationJobSeq": fetchSimulationJobSeq,
-<<<<<<< HEAD
         "updateStatus": updateStatus,
         "clearStatusTimeout": function() {
             _clearTimeout(STATUS_TIMER)
         },
         "createSimulationJobEngine": createSimulationJobEngine,
-=======
->>>>>>> devel
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,

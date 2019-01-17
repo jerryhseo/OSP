@@ -525,8 +525,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 	var jobStatus = getStatusInfo.jobStatus;
                 	var jobStatusImg = getStatusInfo.jobStatusImg;
                 	var jobStartTime = job.startTime;
-                	
-                	/* 
+
+                	/*
                 	 * Calculated in Greenwich mean time.
                 	 * KST : Greenwich mean time - 9 hour (DB start/end Date).
                 	 */
@@ -867,9 +867,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         _confirm(CONSTS.MESSAGE.edison_wfsimulation_new_confirm_message,
-            function(){ 
-        		fetchJobs(simulationId, null, 1) 
-        		
+            function(){
+        		fetchJobs(simulationId, null, 1)
+
         		/* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
         		PANEL_DATA["setting"].form["simulationId"] =simulationId;
     	});
@@ -1505,14 +1505,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     "workflowDescription": workflow.description,
                     "workflowId": workflowId
             	}
-            	
+
             	setMetaData(metaData);
-            	
+
                 loadPaginatedSimulations('open', 1, function() {
                     if (currSimulations.getArray().length > 0) {
                         var simulationId = currSimulations.getArray()[0].simulationId
                         currSimulations.select(simulationId)
-                        
+
                         /* 2019.01.16 _  SimulationId Setting in PANEL_DATA["setting"] */
                         metaData["simulationId"] = simulationId;
                         setMetaData(metaData);
