@@ -211,7 +211,7 @@ function <portlet:namespace/>returnJobData(){
 	var job = simulation.workingJob();
 	var jobData = JSON.stringify(job.inputData("${portName}"));
 	console.log(jobData);
-// 	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData);
+	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData);
 }
 
 function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid){
