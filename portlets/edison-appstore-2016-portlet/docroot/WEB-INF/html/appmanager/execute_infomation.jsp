@@ -456,6 +456,10 @@ if(mode.equals(Constants.UPDATE)){
 // 		<portlet:namespace/>noUpdateDisabled('${data.status}');
 		<portlet:namespace/>getClusterList();
 	});
+<%} else { %>
+	$(document).ready(function () {
+		<portlet:namespace/>getClusterList();
+	});
 <%}%>
 
 /* 클러스터 리스트 가져오기 */
