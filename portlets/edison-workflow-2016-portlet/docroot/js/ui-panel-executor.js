@@ -814,6 +814,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    function openInputPortData(portData) {
+        // console.log(portData)
+        openInputPort(portData.nodeId, portData.nodeId + "." +portData.portId)
+    }
+
     function openInputPort(nodeId, portId) {
         console.log(currJobs.selected())
         var userId = currJobs.selected() ? currJobs.selected().userId : null
@@ -825,7 +830,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var node = currNodes.get(nodeId)
         if(node && node.data && node.data.ibData) {
             node.data.ibData.simulationUuid || (node.data.ibData.simulationUuid= getGUID())
-            node.data.ibData.jobUuid || (node.data.ibData.jobUuid= getGUID())
+            // node.data.ibData.jobUuid || (node.data.ibData.jobUuid= getGUID())
 
         }else{
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
@@ -838,7 +843,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
             portletURL.setParameter('simulationUuid', node.data.ibData.simulationUuid);
-            portletURL.setParameter('simulationUuid', node.data.ibData.jobUuid);
+            // portletURL.setParameter('simulationUuid', node.data.ibData.jobUuid);
             portletURL.setParameter('portData', JSON.stringify(portData));
             portletURL.setParameter('portType', "inputPorts");
             portletURL.setParameter('nodeId', nodeId);
@@ -1210,7 +1215,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }
 
                     sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
-                    sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                    console.log(currSourcePortData)
+                    if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                        sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                    }
 
                     targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
                     if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
@@ -1256,7 +1264,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 }
             } else {
                 // TODO : currentPage
-                fetchJobs(simulationId, null, 1, null, simulationJobId)
+                fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
             }
 
         })
@@ -1866,6 +1874,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	return {
 		"openWorkflow" : openWorkflowByWorkflowId,
+		"openInputPortData" : openInputPortData,
 		"openScienceAppWorkbench" : openScienceAppWorkbench,
 		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
 		"setPortData" : setPortData,

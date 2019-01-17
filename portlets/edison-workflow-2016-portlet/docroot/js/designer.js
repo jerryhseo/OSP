@@ -125,7 +125,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         } else {
             sourcePortDataType = sourceData[source.getType()][source.id].dataType_;
         }
-        
+
         var targetPortDataType = targetData["inputPorts"][target.id].dataType_;
         var sourectDataTypeStr = sourcePortDataType.name + sourcePortDataType.version;
         var targetDataTypeStr = targetPortDataType.name + targetPortDataType.version;
@@ -172,6 +172,12 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 template: "input-port-templete",
                 anchor: ["Center"],
                 events: {
+                    click: function(obj) {
+                        // console.log(obj)
+                        if (!isDesigner && uiPanelInstance) {
+                            uiPanelInstance.openInputPortData(obj)
+                        }
+                    },
                     dblclick: function(obj) {
                         if (obj.port.getAllEdges().length == 0) {
                             var nodeId = obj.nodeId;

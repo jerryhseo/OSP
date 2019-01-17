@@ -356,6 +356,20 @@ public class WorkflowSimulationController{
 //        }
 //    }
     
+    @RequestMapping(value = "/job/{simulationJobId}/pause", method = RequestMethod.POST)
+    public @ResponseBody JsonNode pauseWorkflowSimulationJob(@RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
+        try{
+            JsonNode status = Transformer
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .pauseWorkflowSimulationJob(simulationJobId).getStatusResponse());
+            return status;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/job/{simulationJobId}/resume", method = RequestMethod.POST)
     public @ResponseBody JsonNode resumeWorkflowSimulationJob(@RequestParam Map<String, Object> params,
         @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
@@ -409,18 +423,6 @@ public class WorkflowSimulationController{
         }
     }
 
-    @RequestMapping(value = "/job/{simulationJobId}/pause", method = RequestMethod.POST)
-    public @ResponseBody JsonNode pauseWorkflowSimulationJob(@RequestParam Map<String, Object> params,
-        @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
-        try{
-            JsonNode status = Transformer
-                .string2Json(WorkflowSimulationJobLocalServiceUtil.pauseWorkflowSimulationJob(simulationJobId).getStatusResponse());
-            return status;
-        }catch (Exception e){
-            log.error("error", e);
-            throw e;
-        }
-    }
 
 //    @SuppressWarnings("serial")
 //    @RequestMapping(value = "/job/{simulationJobId}/siblings", method = RequestMethod.GET)
