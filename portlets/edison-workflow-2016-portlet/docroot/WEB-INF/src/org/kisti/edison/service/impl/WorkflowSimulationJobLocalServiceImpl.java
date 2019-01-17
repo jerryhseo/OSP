@@ -502,7 +502,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                     userName, target.toString(),
                     OSPRepositoryTypes.USER_HOME.toString());
                 ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath.toString());
-            }else if( pathType.equalsIgnoreCase("context") ){
+            }else if( pathType.equalsIgnoreCase("contents") ){
 //                        JSONObject argVal = JSONFactoryUtil.createJSONObject();
 //                        argVal.put("type", "STRING");
 //                        argVal.put("value", inputData.getString("context_"));
