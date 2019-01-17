@@ -1,4 +1,4 @@
-$.ajaxSetup({cache: false});
+// $.ajaxSetup({cache: false});
 var slice = Array.prototype.slice;
 var consoleLog = {
   loggingLevel: { info: true, debug: false, error: true },

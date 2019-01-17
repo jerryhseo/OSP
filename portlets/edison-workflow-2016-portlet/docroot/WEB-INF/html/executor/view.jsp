@@ -423,6 +423,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/jquery-confirm.min.js"></script>
 <script>
 bStart();
+var contextPath = '${contextPath}'
 var namespace = "<portlet:namespace/>";
 var jqPortletBoundaryId = "#p_p_id" + namespace;
 var designer = null;

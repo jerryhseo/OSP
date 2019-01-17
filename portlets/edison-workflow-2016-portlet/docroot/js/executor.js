@@ -160,7 +160,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     }
 
     function createSimulationJobEngine(params, callback, errorCallback) {
-        console.log(params)
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
             URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/create/engine",
@@ -174,10 +173,43 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
     }
 
     function fetchSimulationJobSeq(simulationId, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.get(URI_PREFIX + "/simulation/" + simulationId + "/job/seq",
         function (seqMap) {
             callback(seqMap)
         }, errorCallback)
+    }
+
+    function getWorkflowStatus(simulationJobId, callback) {
+        aSyncAjaxHelper.get(URI_PREFIX + "/simulation/job/" + simulationJobId + "/status",
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            });
+    }
+
+    function updateStatus(simulationJobId, initStatus, callback) {
+        getWorkflowStatus(simulationJobId,
+            function (workflowStatus) {
+                if (workflowStatus.workflow.status === WF_STATUS_CODE.NOT_FOUND) {
+                    toastr["error"]("", var_workflow_status_not_found_message + workflowStatus.workflow.uuid);
+                } else {
+                    callback(workflowStatus)
+                    // TODO : button Control
+                    _clearTimeout(STATUS_TIMER);
+                    STATUS_TIMER = _delay(updateStatus, 1000, simulationJobId, workflowStatus, callback);
+                    // if (workflowStatus.workflow.status === WF_STATUS_CODE.COMPLETED) {
+                    //     _clearTimeout(STATUS_TIMER);
+                    // } else if (workflowStatus.workflow.status === WF_STATUS_CODE.PAUSED) {
+                    //
+                    // } else if (workflowStatus.workflow.status === WF_STATUS_CODE.RUNNING ||
+                    //     workflowStatus.workflow.status === WF_STATUS_CODE.CREATED) {
+                    //     _clearTimeout(STATUS_TIMER);
+                    //     STATUS_TIMER = _delay(updateStatus, 1000, simulationJobId, workflowStatus, callback);
+                    // }
+                }
+            });
     }
 
     /////////////////////////////////////////// renew end
@@ -308,25 +340,25 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             });
     }
 
-    function updateStatus(workflowInstanceId) {
-        getWorkflowInstanceStatus(workflowInstanceId, function(workflowStatus){
-            if (workflowStatus.workflow.status === WF_STATUS_CODE.NOT_FOUND) {
-                toastr["error"]("", var_workflow_status_not_found_message + workflowStatus.workflow.uuid);
-            } else {
-                drawWorkflowInstanceStatus(workflowStatus);
-                // TODO : button Controll
-                if (workflowStatus.workflow.status === WF_STATUS_CODE.COMPLETED) {
-
-                } else if (workflowStatus.workflow.status === WF_STATUS_CODE.PAUSED) {
-
-                } else if (workflowStatus.workflow.status === WF_STATUS_CODE.RUNNING ||
-                    workflowStatus.workflow.status === WF_STATUS_CODE.CREATED) {
-                    _clearTimeout(STATUS_TIMER);
-                    STATUS_TIMER = _delay(updateStatus, 1000, workflowInstanceId);
-                }
-            }
-        });
-    }
+    // function updateStatus(workflowInstanceId) {
+    //     getWorkflowInstanceStatus(workflowInstanceId, function(workflowStatus){
+    //         if (workflowStatus.workflow.status === WF_STATUS_CODE.NOT_FOUND) {
+    //             toastr["error"]("", var_workflow_status_not_found_message + workflowStatus.workflow.uuid);
+    //         } else {
+    //             drawWorkflowInstanceStatus(workflowStatus);
+    //             // TODO : button Control
+    //             if (workflowStatus.workflow.status === WF_STATUS_CODE.COMPLETED) {
+    //
+    //             } else if (workflowStatus.workflow.status === WF_STATUS_CODE.PAUSED) {
+    //
+    //             } else if (workflowStatus.workflow.status === WF_STATUS_CODE.RUNNING ||
+    //                 workflowStatus.workflow.status === WF_STATUS_CODE.CREATED) {
+    //                 _clearTimeout(STATUS_TIMER);
+    //                 STATUS_TIMER = _delay(updateStatus, 1000, workflowInstanceId);
+    //             }
+    //         }
+    //     });
+    // }
 
     function sortSimulations(simulations){
         simulations.sort(function (a, b) {
@@ -616,7 +648,10 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "copySimulationJob": copySimulationJob,
         "deleteSimulationJob": deleteSimulationJob,
         "fetchSimulationJobSeq": fetchSimulationJobSeq,
-
+        "updateStatus": updateStatus,
+        "clearStatusTimeout": function() {
+            _clearTimeout(STATUS_TIMER)
+        },
         "createSimulationJobEngine": createSimulationJobEngine,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,

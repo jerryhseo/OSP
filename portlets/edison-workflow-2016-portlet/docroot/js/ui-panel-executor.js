@@ -8,6 +8,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     var currJobs = eStruct("id", "data")
     var currInputPorts = eStruct("id")
     var currOutputPorts = eStruct("id")
+    var currPageJob = 1
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
     var PANEL_DATA = {
         "new": {
@@ -380,6 +381,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         renderJobs()
     }
 
+    function updateNodeStatus(workflowStatus) {
+        if (workflowStatus && workflowStatus.workflow && workflowStatus.workflow.simulations) {
+            $.each(workflowStatus.workflow.simulations, function () {
+                var simulation = this
+                var nodeId = simulation.clientId
+                $("#" + nodeId).removeClass(
+                    "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
+                    "FAILED DONE SUCCESS COMPLETED PAUSED")
+                $("#" + nodeId).addClass(simulation.status)
+                var html = $("#" + nodeId + " .wf-node-execute-status").text(simulation.status)
+                if(simulation.status === "RUNNING") {
+                    $("#" + nodeId + " .top-cog-icon").addClass("fa-spin")
+                } else {
+                    $("#" + nodeId + " .top-cog-icon").removeClass("fa-spin")
+                }
+            })
+        }
+        console.log(workflowStatus)
+    }
+
     function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage, selectedJobId) {
         if (currSimulations.contains(simulationId)) {
             var params = {}
@@ -394,25 +415,33 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             }
             executor.fetchSimulationJobs(
                 simulationId,
-                {},
+                params,
                 function (jobsMap) {
                     currSimulations.select(simulationId)
+                    if (currentPage) {
+                        currPageJob = currentPage
+                    }
                     currJobs.set(jobsMap.jobs, function(id) {
                         bStart()
+                        executor.clearStatusTimeout()
                         var job = currJobs.get(id)
-                        console.log(job)
-                        if (_isBlank(job.workflowUUID)) {
-                            $(".before-submit").show()
-                            $(".after-submit").hide()
-                        } else {
-                            $(".before-submit").hide()
-                            $(".after-submit").show()
+                        if(job) {
+                            if (_isBlank(job.workflowUUID)) {
+                                $(".before-submit").show()
+                                $(".after-submit").hide()
+                            } else {
+                                $(".before-submit").hide()
+                                $(".after-submit").show()
+                                var initStatus = JSON.parse(job.statusResponse)
+                                updateNodeStatus(initStatus)
+                                executor.updateStatus(id, initStatus, updateNodeStatus)
+                            }
                         }
                         $(".after-pause").hide()
                         bEnd()
                     })
                     currJobs.select(selectedJobId)
-                    renderJobs(currentPage === 1)
+                    renderJobs(jobsMap, simulationId, currentPage)
                 },
                 function () {
                     currSimulations.select()
@@ -422,8 +451,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    function renderJobs(isFirstPage) {
-
+    function renderJobs(jobsMap, simulationId, currentPage) {
+        console.log(jobsMap)
+        var isFirstPage = currentPage == 1
         var ulSelector = "#" + namespace + "column-1 > ul";
         var li =
             '<li class="header">\n' +
@@ -451,7 +481,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             // '    </li>\n' +
             '  </ul>' +
             '</li>' +
-            '{{/jobs}}';
+            '{{/jobs}}' +
+            '<li class="text-center">' +
+            '  <ul id="job-pagination" class="pagination">\n' +
+            '  </ul>' +
+            '</li>';
+
         var selectedJobId = currJobs.selected() ? currJobs.selected()["simulationJobId"] : undefined
         var selectedSimulationTitle = currSimulations.selected() ? currSimulations.selected()['title'] : 'No available Simulation Job'
         $(ulSelector)
@@ -508,6 +543,49 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }, 100)
                 }
             })
+        jobsPagination(jobsMap.pagination, simulationId)
+
+    }
+
+    function jobsPagination(paginationData, simulationId){
+        var paginationTemplate =
+            '<li class="prev"><a href="#">«</a></li>' +
+            '{{#pages}}' +
+            '<li class="page-num {{active}}"><a href="#" page-num="{{num}}">{{num}}</a></li>' +
+            '{{/pages}}' +
+            '<li class="next"><a href="#">»</a></li>';
+        var pages = [];
+        for(var i = paginationData.startPage; i <= paginationData.endPage; i++){
+            pages.push({
+                "active": paginationData.currentPage === i ? "active" : "",
+                "num": i
+            });
+        }
+        $(JQ_PORTLET_BOUNDARY_ID + " #job-pagination").empty().append(
+            Mustache.render(paginationTemplate, { "pages": pages })).find("li.page-num > a").click(function (e) {
+            e.preventDefault();
+            fetchJobs(simulationId, null, $(this).attr("page-num"), null)
+            // loadPaginatedSimulations(panelType, $(this).attr("page-num"));
+        });
+
+        if (paginationData.curBlock > 1 && paginationData.curBlock <= paginationData.totalBlock) {
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev > a").click(function (e) {
+                e.preventDefault();
+                fetchJobs(simulationId, null, paginationData.startPage - 1, null)
+                // loadPaginatedSimulations(panelType, paginationData.startPage - 1);
+            });
+        }else{
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev").addClass("disabled");
+        }
+        if (paginationData.curBlock < paginationData.totalBlock) {
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next > a").click(function (e) {
+                e.preventDefault();
+                fetchJobs(simulationId, null, paginationData.endPage + 1, null)
+                // loadPaginatedSimulations(panelType, paginationData.endPage + 1);
+            });
+        }else{
+            $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .next").addClass("disabled");
+        }
     }
 
     /* 2019.01.15 _ Get JobStatus */
@@ -899,7 +977,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 if (callback) {
                     callback(simulationJob)
                 } else {
-                    fetchJobs(simulationJob.simulationId, null, 1, null, job.simulationJobId)
+                    fetchJobs(simulationJob.simulationId, null, currPageJob ? currPageJob : 1, null, job.simulationJobId)
                     _delay(function () {
                         toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_save_complete_message)
                     }, 100)
@@ -1072,15 +1150,34 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         })
         var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
         console.log(json)
+        var simulationId = currJobs.selected().simulationId
+        var simulationJobId = currJobs.selected().simulationJobId
         var token = getIcebreakerAccessToken()
         executor.createSimulationJobEngine({
-            simulationId: currJobs.selected().simulationId,
-            simulationJobId: currJobs.selected().simulationJobId,
+            simulationId: simulationId,
+            simulationJobId: simulationJobId,
             icebreakerVcToken: token.icebreakerVcToken,
             groupId: token.groupId,
             strNodes: JSON.stringify(json.nodes)
-        }, function(submitData) {
-            console.log(submitData)
+        }, function(simulationJob) {
+            // console.log(submitData)
+            if (currJobs.contains(simulationJob.id)) {
+                currJobs.update(simulationJob.id, simulationJob)
+                if (_isBlank(simulationJob.workflowUUID)) {
+                    $(".before-submit").show()
+                    $(".after-submit").hide()
+                } else {
+                    $(".before-submit").hide()
+                    $(".after-submit").show()
+                    var initStatus = JSON.parse(simulationJob.statusResponse)
+                    updateNodeStatus(initStatus)
+                    executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                }
+            } else {
+                // TODO : currentPage
+                fetchJobs(simulationId, null, 1, null, simulationJobId)
+            }
+
         })
         // console.log(designer.getCurrentJsPlumbInstance().getNodes())
     }

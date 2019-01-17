@@ -59,7 +59,6 @@ import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.PortTypeLocalServiceUtil;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.science.service.constants.ScienceAppConstants;
-import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.service.base.WorkflowSimulationJobLocalServiceBaseImpl;
@@ -95,6 +94,7 @@ import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
+import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -277,7 +277,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //  }
     
     @SuppressWarnings("unchecked")
-    public String createWorkflowEngineJson(
+    public WorkflowSimulationJob createWorkflowEngineJson(
         long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
         if(!StringUtils.hasText(strNodes)){
         }
@@ -305,12 +305,13 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             JsonObject root = new JsonObject();
             root.add("workflow", workflowJson);
             String workflowUUID = askForCreateWorkflow(gson.toJson(root));
+            System.out.println(workflowUUID);
             if(StringUtils.hasText(workflowUUID)){
                 job.setWorkflowUUID(workflowUUID);
-                askForWorkflowStart(workflowUUID);
-                startWorkflowSimulationJob(job);
+                return startWorkflowSimulationJob(job);
+            } else {
+                return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
             }
-            return workflowUUID;
         }catch (Exception e){
             throw new WFEngine500Exception(e);
         }
@@ -620,15 +621,19 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     
     public WorkflowSimulationJob startWorkflowSimulationJob(WorkflowSimulationJob simulationJob)
         throws SystemException, PortalException, IOException{
-        if(StringUtils.hasText(simulationJob.getReuseWorkflowUUID())){
-            JsonNode statusJson = askForWorkflowStart(simulationJob.getReuseWorkflowUUID());
+        
+        if(StringUtils.hasText(simulationJob.getWorkflowUUID())){
+            JsonNode statusJson = askForWorkflowStart(simulationJob.getWorkflowUUID());
             MWorkflow workflowStatus = Transformer.json2Pojo(statusJson, MWorkflow.class);
+            simulationJob.setStatus(workflowStatus.getStatus());
             simulationJob.setStatusResponse(statusJson.toString());
             simulationJob.setStartTime(GetterUtil.getDate(workflowStatus.getStartTime(),
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"), new Date()));
 //            simulationJob.setReuseWorkflowUUID("");
         }
-        return WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob(simulationJob);
+        simulationJob = WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob(simulationJob);
+        // CacheRegistryUtil.clear();
+        return simulationJob;
     }
     
     public JsonNode askForWorkflowStart(String workflowUUID) throws PortalException{
@@ -673,10 +678,10 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     // STATUS
     public WorkflowSimulationJob getWorkflowStatus(long simulationJobId)
         throws PortalException, SystemException, IOException{
-        WorkflowSimulationJob instance = WorkflowSimulationJobLocalServiceUtil
+        WorkflowSimulationJob job = WorkflowSimulationJobLocalServiceUtil
             .getWorkflowSimulationJob(simulationJobId);
-        JsonNode workflowStatusJson = askForWorkflowStatus(instance.getWorkflowUUID());
-        return updateWorkflowSimulationJob(workflowStatusJson, instance);
+        JsonNode workflowStatusJson = askForWorkflowStatus(job.getWorkflowUUID());
+        return updateWorkflowSimulationJob(workflowStatusJson, job);
     }
 
     // DELETE
@@ -752,7 +757,8 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         return getWorkflowStatus(simulationJobId);
     }
 
-    public WorkflowSimulationJob updateWorkflowSimulationJob(JsonNode workflowStatusJson,
+    public WorkflowSimulationJob updateWorkflowSimulationJob(
+        JsonNode workflowStatusJson,
         WorkflowSimulationJob simulationJob) throws SystemException{
         MWorkflow workflowStatus = Transformer.json2Pojo(workflowStatusJson, MWorkflow.class);
         simulationJob.setStatus(workflowStatus.getStatus());

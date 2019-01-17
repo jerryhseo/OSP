@@ -34,7 +34,9 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="title" type="String" />
 		<field name="status" type="String" />
-		<field name="statusResponse" type="String" />
+		<field name="statusResponse" type="String">
+			<hint name="max-length">4096</hint>
+		</field>
 		<field name="startTime" type="Date" />
 		<field name="endTime" type="Date" />
 		<field name="workflowId" type="long" />

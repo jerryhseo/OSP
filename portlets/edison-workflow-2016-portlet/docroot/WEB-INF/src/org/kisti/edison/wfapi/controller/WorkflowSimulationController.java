@@ -182,7 +182,9 @@ public class WorkflowSimulationController{
                 .countWorkflowSimulationJobs(simulationId, title, user.getUserId()));
             int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
             int begin = (curPage - 1) * linePerPage;
-            int end = linePerPage;
+            int end = begin + linePerPage;
+            System.out.println(begin);
+            System.out.println(end);
             
             List<Map<String, Object>> jobs = WorkflowBeanUtil.simulationJobToJstreeModel(
                 WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobs(
@@ -306,12 +308,8 @@ public class WorkflowSimulationController{
         HttpServletRequest request) throws Exception{
         try{
             User user = PortalUtil.getUser(request);
-            WorkflowSimulation simulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(simulationId);
-            String workflowUuid = WorkflowSimulationJobLocalServiceUtil.createWorkflowEngineJson(
-                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request);
-            return ImmutableMap.<String, Object> builder()
-                .put("workflowUuid", workflowUuid)
-                .build();
+            return WorkflowSimulationJobLocalServiceUtil.createWorkflowEngineJson(
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request).getModelAttributes();
         }catch (Exception e){
             log.error("error", e);
             throw e;
@@ -335,7 +333,8 @@ public class WorkflowSimulationController{
         @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
         try{
             JsonNode status = Transformer
-                .string2Json(WorkflowSimulationJobLocalServiceUtil.getWorkflowStatus(simulationJobId).getStatusResponse());
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .getWorkflowStatus(simulationJobId).getStatusResponse());
             return status;
         }catch (Exception e){
             log.error("error", e);

@@ -483,7 +483,7 @@ public class WorkflowSimulationJobLocalServiceUtil {
 				   .copyWorkflowSimulationJob(sourceSimulationJobId, params);
 	}
 
-	public static java.lang.String createWorkflowEngineJson(
+	public static org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
 		javax.servlet.http.HttpServletRequest request)

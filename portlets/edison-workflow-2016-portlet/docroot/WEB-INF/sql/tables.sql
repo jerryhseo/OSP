@@ -48,7 +48,7 @@ create table EDWF_WorkflowSimulationJob (
 	modifiedDate DATE null,
 	title VARCHAR(75) null,
 	status VARCHAR(75) null,
-	statusResponse VARCHAR(75) null,
+	statusResponse TEXT null,
 	startTime DATE null,
 	endTime DATE null,
 	workflowId LONG,
