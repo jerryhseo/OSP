@@ -77,7 +77,7 @@
 <div class="modal fade" id="<portlet:namespace/>simulation-modal" tabindex="-1" role="dialog" aria-labelledby="<portlet:namespace/>simulation-modal" style="display: none;">
 	<div class="vertical-alignment-helper">
 		<div class="modal-dialog vertical-align-center" role="document">
-			<div class="modal-content" style="width: 35%;">
+			<div class="modal-content" style="width: 45%;">
 				<div class="modal-header">
 					<button type="button" id="<portlet:namespace/>close-btn" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title">Simulation List</h4>
@@ -415,7 +415,11 @@ Liferay.on(OSP.Event.OSP_DELETE_SIMULATION,function( e ){
 		<portlet:namespace/>workbench.handleDeleteSimulation(e.portletId, e.data.simulationUuid, '<%=serveResourceURL.toString()%>');
 		
 		var simulation = <portlet:namespace/>workbench.workingSimulation();
-		if(simulation.uuid()===e.data.simulationUuid){
+		if(simulation){
+			if(simulation.uuid()===e.data.simulationUuid){
+				<portlet:namespace/>activeBlockLayout(true);
+			}
+		}else{
 			<portlet:namespace/>activeBlockLayout(true);
 		}
 	}
