@@ -29,7 +29,6 @@ import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -40,6 +39,7 @@ import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -55,7 +55,7 @@ public class ModuleViewerController {
 	protected static Log  _log = LogFactoryUtil.getLog(ModuleViewerController.class);
 	
 	@RequestMapping//default
-	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws JSONException{
+	public String view(RenderRequest request, RenderResponse response, ModelMap model) throws PortalException, SystemException{
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		String simulationUuid = ParamUtil.getString(request, "simulationUuid", "");
@@ -65,6 +65,10 @@ public class ModuleViewerController {
 		String portData = ParamUtil.getString(request, "portData", "");
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");
 		String nodeId = ParamUtil.getString(request, "nodeId");
+		long userId = ParamUtil.getLong(request, "userId", 0);
+		if(userId != 0){
+		    screenName = UserLocalServiceUtil.getUser(userId).getScreenName();
+		}
 		
 		if(simulationUuid.equals("")){
 			simulationUuid = UUID.randomUUID().toString();

@@ -7,6 +7,7 @@ var CONSTS = {
         edison_wfsimulation_select_first_message: 'Please select the simulation first',
         edison_wfsimulation_remove_confirm_message: 'Deleted data can not be recovered. Are you sure you want to delete?',
         edison_wfsimulation_no_selected_job_message: 'Please select the simulation job first',
+        edison_wfsimulation_no_valid_node_data_message: 'Simulation Job Data is incorrect',
     },
     WF_STATUS_CODE: {
         CREATED: "CREATED",

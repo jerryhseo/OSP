@@ -815,20 +815,34 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function openInputPort(nodeId, portId) {
+        console.log(currJobs.selected())
+        var userId = currJobs.selected() ? currJobs.selected().userId : null
         var portData = {}
         var currPortData = $.extend({}, currInputPorts.get(portId))
         delete currPortData.id
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
 
         var node = currNodes.get(nodeId)
+        if(node && node.data && node.data.ibData) {
+            node.data.ibData.simulationUuid || (node.data.ibData.simulationUuid= getGUID())
+            node.data.ibData.jobUuid || (node.data.ibData.jobUuid= getGUID())
+
+        }else{
+            toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
+            return false
+        }
+
+        console.log(node)
 
         window.AUI().use('liferay-portlet-url', function (A) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
-            portletURL.setParameter('simulationUuid', simulationUuid);
+            portletURL.setParameter('simulationUuid', node.data.ibData.simulationUuid);
+            portletURL.setParameter('simulationUuid', node.data.ibData.jobUuid);
             portletURL.setParameter('portData', JSON.stringify(portData));
             portletURL.setParameter('portType', "inputPorts");
             portletURL.setParameter('nodeId', nodeId);
+            portletURL.setParameter('userId', userId);
             portletURL.setWindowState('pop_up');
 
             var wWidth = $(window).width();
