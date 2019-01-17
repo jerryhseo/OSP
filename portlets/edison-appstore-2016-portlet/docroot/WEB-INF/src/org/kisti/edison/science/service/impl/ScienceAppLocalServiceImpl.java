@@ -1312,11 +1312,11 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
     public List<Map<String, Object>> retrieveListScienceAppFromExplore(long companyGroupId, long groupId, Locale locale,
         String[] appTypes, long[] categoryIds, String searchText, int begin, int end)
         throws SystemException, PortalException{
-		return retrieveListScienceAppFromExplore(companyGroupId, groupId, locale, appTypes, categoryIds, searchText, begin, end, null, null);
+		return retrieveListScienceAppFromExplore(companyGroupId, groupId, locale, appTypes, categoryIds, searchText, "", begin, end, null, null);
 	}
     
     public List<Map<String, Object>> retrieveListScienceAppFromExplore(long companyGroupId, long groupId, Locale locale,
-        String[] appTypes, long[] categoryIds, String searchText, int begin, int end, String sortField, String sortOrder)
+        String[] appTypes, long[] categoryIds, String searchText, String searchOrgCode, int begin, int end, String sortField, String sortOrder)
         throws SystemException, PortalException{
         final String SORT_ORDER_ASC = "asc";
         final String SORT_TYPE_VIEW = "view"; 
@@ -1327,16 +1327,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
             categorySearch = true;
         }
         
-//        String swNameOrSwTitle = searchText; //.split(",")[0];
-//        String searchOrgCd = searchText.split(",")[1];
-        
         Map<String,Object> param = new HashMap<String,Object>();
         param.put("begin", begin);
         param.put("end", end);
         param.put("status", 1901004);
         param.put("appTypes", appTypes);
         param.put("likeSwNameAndSwTitle", searchText);
-//        param.put("searchOrgCd", searchOrgCd);
+        param.put("searchOrgCd", searchOrgCode);
         param.put("categoryIds", categoryIds);
         
         Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
@@ -1367,7 +1364,10 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	 * 통합 검색 앱 카운트 서비스
 	 * @param categoryIds -> Category 조회가 아닐 경우에는 null 입력
 	 */
-	public int countScienceAppFromExplore(long companyGroupId,long groupId,Locale locale, String[] appTypes, long[] categoryIds, String searchText) throws SystemException, PortalException{
+    public int countScienceAppFromExplore(long companyGroupId,long groupId,Locale locale, String[] appTypes, long[] categoryIds, String searchText) throws SystemException, PortalException{
+    	return countScienceAppFromExplore(companyGroupId, groupId, locale, appTypes, categoryIds, searchText, "");
+    }
+	public int countScienceAppFromExplore(long companyGroupId,long groupId,Locale locale, String[] appTypes, long[] categoryIds, String searchText, String searchOrgCode) throws SystemException, PortalException{
 		boolean categorySearch = false;
 		if(categoryIds != null && categoryIds.length > 0){
 			categorySearch = true;
@@ -1383,7 +1383,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		param.put("status", 1901004);
 		param.put("appTypes", appTypes);
 		param.put("likeSwNameAndSwTitle", searchText);
-//		param.put("searchOrgCd", organCode);
+		param.put("searchOrgCd", searchOrgCode);
 		param.put("categoryIds", categoryIds);
 		
 		Map<String,Object> searchParam = settingScienceAppParameter(companyGroupId, groupId, locale, param, categorySearch, false,true);
@@ -1532,13 +1532,13 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		searchMap.put("likeSwName", GetterUtil.getString(param.get("likeSwName")));
 		searchMap.put("likeSwTitle", GetterUtil.getString(param.get("likeSwTitle")));
 		searchMap.put("likeUserName", GetterUtil.getString(param.get("likeUserName")));
-		// String[] searchOrgCd = new String[1];
-		// searchOrgCd[0] = GetterUtil.getString(param.get("searchOrgCd")); 
-		// if(!searchOrgCd[0].equals("") && searchOrgCd[0] != null){
-		// 	searchMap.put("likeOrgCode", searchOrgCd);
-		// } else {
+		 String[] searchOrgCd = new String[1];
+		 searchOrgCd[0] = GetterUtil.getString(param.get("searchOrgCd")); 
+		 if(!searchOrgCd[0].equals("") && searchOrgCd[0] != null){
+		 	searchMap.put("likeOrgCode", searchOrgCd);
+		 } else {
 			searchMap.put("likeOrgCode", makeOrgCode(locale,GetterUtil.getString(param.get("likeOrgName"))));
-		// }
+		 }
 		searchMap.put("likeDeveloper", GetterUtil.getString(param.get("likeDeveloper")));
 		
 		
@@ -1622,6 +1622,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	}
 	
 	private List<Map<String, Object>> retrieveListScienceApp(Locale locale,Map<String, Object> searchParam,boolean categorySearch,boolean managerSearch) throws SystemException, PortalException{
+		System.out.println("searchParams : " + searchParam.toString());
 		List<Object[]> scienceAppList = scienceAppFinder.retrieveListScienceApp(searchParam, categorySearch, managerSearch);
 		
 		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
