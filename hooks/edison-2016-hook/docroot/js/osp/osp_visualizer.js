@@ -690,7 +690,7 @@
 
             var defaultDisableControlsEventHandler = function( data, params ){
                 disabled = data;
-                if( canvas.tagName.toLowerCase() === 'iframe' ){
+                if( canvas.tagName.toLowerCase() === 'iframe' && canvas.contentWindow['disable']){
                     //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
                      canvas.contentWindow['disable']( disabled );
                 }
