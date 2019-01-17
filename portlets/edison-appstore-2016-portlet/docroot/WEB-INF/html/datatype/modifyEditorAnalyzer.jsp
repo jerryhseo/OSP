@@ -263,11 +263,9 @@ function checkEditor(id) {
     if(appNameObj["SDE"]){
     	saveBtn.html("");
     	saveBtn.html("<span class='icon-arrow-right'>  <liferay-ui:message key='next'/></span>");
-	    console.log("has SDE");
     } else {
     	saveBtn.html("");
     	saveBtn.html("<span class='icon-ok'>  <liferay-ui:message key='save'/></span>");
-    	console.log("not has SDE");
     }
 
 }
