@@ -696,8 +696,6 @@ public class LayoutController {
 	private void createJob( ResourceRequest resourceRequest, ResourceResponse resourceResponse ) throws PortletException, IOException{
 		String simulationUuid = ParamUtil.getString(resourceRequest, "simulationUuid");
 		String title = ParamUtil.getString(resourceRequest, "title");
-		String scienceAppName = ParamUtil.getString(resourceRequest, "scienceAppName");
-		String scienceAppVersion = ParamUtil.getString(resourceRequest, "scienceAppVersion");
 		String initData = ParamUtil.getString(resourceRequest, "initData", "");
 		
 		ServiceContext sc = null;
@@ -957,7 +955,6 @@ public class LayoutController {
 		_log.info("jobs.length()-->"+jobs.length());
 		
 		int jobCount = jobs.length();
-		int jobSubmitCnt = 0;
 		for( int i=0; i<jobCount; i++){
 			JSONObject jsonJob = jobs.getJSONObject(i);
 			SimulationJob job = null;
@@ -988,7 +985,6 @@ public class LayoutController {
 			
 			JSONArray jobData =  jsonJob.getJSONArray("inputs_");
 			this.jsonArrayPrint(jobData);
-			jobSubmitCnt += jobData.length();
 			
 			Date date = new Date();
 			for( int dataIndex = 0; dataIndex<jobData.length(); dataIndex++){
@@ -1167,7 +1163,7 @@ public class LayoutController {
 		JSONObject submittedJob = JSONFactoryUtil.createJSONObject();
 		submittedJob.put("tempJobUuid", tempJobUuid);
 		submittedJob.put("jobUuid", submittedJobUuid);
-		submittedJob.put("jobSubmitCnt", jobSubmitCnt);
+		submittedJob.put("jobSubmitCnt", jobCount);
 		
 		ServletResponseUtil.write(httpResponse, submittedJob.toString());
 	}

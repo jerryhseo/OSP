@@ -119,7 +119,7 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED,function( e ){
 		var inputData = new OSP.InputData( e.data );
 		if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
 			var dataType = new OSP.DataType();
-			dataType.deserializeStructure(inputData.context());
+			dataType.deserializeStructure(inputData.content());
 			var dataStructure = dataType.structure(); 
 			var fileContents = dataStructure.activeParameterFormattedInputs();
 			
@@ -127,7 +127,7 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED,function( e ){
 			data.portName("${portName}");
 			data.order(1);
 			data.type( OSP.Enumeration.PathType.FILE_CONTENT );
-			data.context( fileContents[0].join('') );
+			data.content( fileContents[0].join('') );
 			console.log(JSON.stringify(data));
 			job.inputData("${portName}",data);
 		}else{
