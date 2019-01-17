@@ -23,10 +23,8 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.model.ExpandoValue;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoRowLocalServiceUtil;
@@ -58,12 +56,10 @@ public class OrganizationController{
 			String upCode = "1501";		//기관 upCode
 			List<Map<String,String>> sendOrganList = new ArrayList<Map<String,String>>(); 
 			List<Map<String,String>> organList = EdisonExpndoUtil.getCodeListByUpCode(upCode, themeDisplay.getLocale());
-			
-			UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(request);
-			String fileName = uploadPortletRequest.getFileName("fileName");
-			
+
+
 			int curPage = Integer.parseInt(CustomUtil.strNull(params.get("curPage"), "1"));
-			int linePerPage = 10;
+			int linePerPage = Integer.parseInt(CustomUtil.strNull(params.get("viewCnt"), "10"));
 			int pagePerBlock = 5;
 			int begin = (curPage - 1) * linePerPage;
 			int end = begin+linePerPage;
@@ -80,11 +76,14 @@ public class OrganizationController{
 					organization.put("regionNm", regionNm);
 				}
 				long cd = Long.parseLong(organization.get("cd"));
-				if(cd < 1501999){
-					nextCd = (long) (nextCd < cd?cd:nextCd);
-				}
-				
 				sendOrganList.add(organization);
+			}
+			
+			for(Map<String, String> organ : organList){
+				long organCd = Long.parseLong(organ.get("cd"));
+				if(organCd < 1501999){
+					nextCd = (long) (nextCd < organCd ? organCd : nextCd);
+				}
 			}
 			
 			String upCodeRegion = "1601";		// 지역
