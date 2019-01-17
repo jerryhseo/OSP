@@ -70,13 +70,13 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 	switch( jsonData.type_){
 	case OSP.Enumeration.PathType.FILE_CONTENT:
 		case OSP.Enumeration.PathType.FILE:
-			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, '' );
+			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, '', false);
 			break;
 		case OSP.Enumeration.PathType.FOLDER:
-			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, '' );
+			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, '', false );
 			break;
 		case OSP.Enumeration.PathType.EXT:
-			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, jsonData.name_ );
+			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, jsonData.name_, false );
 			break;
 		case OSP.Enumeration.PathType.FOLDER_CONTENT:
 			if( jsonData.name_ )
@@ -194,7 +194,7 @@ $('#<portlet:namespace/>download').click(function(){
 function <portlet:namespace/>loadDataEventHandler( data, params ){
 	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
 	
-	<portlet:namespace/>visualizer.loadCanvas( data, true );
+	<portlet:namespace/>visualizer.loadCanvas( data, params.changeAlert );
 }
 
 function <portlet:namespace/>requestDataEventHandler( data, params ){

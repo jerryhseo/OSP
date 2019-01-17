@@ -126,7 +126,7 @@
 	<liferay-portlet:param name="groupId" value="<%=selectedGroupId%>"/>
 </liferay-portlet:renderURL>
 
-<liferay-portlet:renderURL var="workbenchURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.NORMAL.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
+<liferay-portlet:renderURL var="workbenchURL" plid="${workBenchPlid}" portletName="SimulationWorkbench_WAR_OSPWorkbenchportlet" windowState="<%=LiferayWindowState.POP_UP.toString()%>" portletMode="<%=LiferayPortletMode.VIEW.toString()%>">
 	<liferay-portlet:param name="workbenchType" value="SIMULATION_WITH_APP" />
 	<portlet:param name="redirectURL" 	value="${redirectURL}"/>
 	<portlet:param name="redirectName" 	value="Monitoring"/>
@@ -692,7 +692,7 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 function <portlet:namespace/>moveWorkBench(targetScienceAppId, targetSimulationUuid, targetJobUuid) {
     var URL = "<%=workbenchURL%>";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_simulationUuid="+targetSimulationUuid;
+    /* URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_simulationUuid="+targetSimulationUuid; */
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_jobUuid="+targetJobUuid;
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_customId=0";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_classId=0";

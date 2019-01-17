@@ -52,8 +52,12 @@ div#<portlet:namespace/>content div.title{
 	padding: 10px 0px;
 }
 
-div#<portlet:namespace/>navigatorParameter .osp-editor .header{
+div#<portlet:namespace/>navigatorParameter .osp-header{
 	display: none;
+}
+
+div#<portlet:namespace/>navigatorParameter .osp-canvas{
+	overflow: auto !important;
 }
 
 div#<portlet:namespace/>navigatorParameter .container-fluid{
@@ -142,7 +146,7 @@ div#<portlet:namespace/>navigatorParameter .container-fluid{
 		</div>
 		<div class="pull-right"><button class="btn btn-xs btn-primary" onclick="<portlet:namespace/>parameterDraw();">Draw</button></div>
 		<div class="h2 clearfix" style="border-bottom: 1px solid #d3d3d3;padding: 5px 0px;"></div>
-<!-- 			<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric" queryString=""/> -->
+			<liferay-portlet:runtime portletName="StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_parametric" queryString=""/>
 		</div>
 	</div>
 </div>
@@ -829,7 +833,7 @@ function <portlet:namespace/>openFile(){
 		Liferay.Util.openWindow(
 			{
 				dialog: {
-					width:1024,
+					width:1080,
 					height:850,
 					cache: false,
 					draggable: false,
@@ -937,7 +941,10 @@ function <portlet:namespace/>parameterInitEditor(type,structure,instance){
 	srcData.content(structure);
 	var eventData = {
 		targetPortlet: 'StructuredDataEditor_WAR_OSPStructuredDataEditorportlet_INSTANCE_'+instance,
-		data: OSP.Util.toJSON(srcData)
+		data: OSP.Util.toJSON(srcData),
+		params:{
+			changeAlert:false
+		}
 	};
 	Liferay.fire( OSP.Event.OSP_LOAD_DATA, eventData );
 }
@@ -977,7 +984,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 				success : function(analyzerJob){
 					var parentNode = tree.get_node(node.parent);
 					var dataType = new OSP.DataType();
-					dataType.deserializeStructure(e.data.context_);
+					dataType.deserializeStructure(e.data.content_);
 					var dataStructure = dataType.structure();
 					var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 					
@@ -995,7 +1002,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_DATA,function(e) {
 	}else{
 		var parentNode = tree.get_node(node.parent);
 		var dataType = new OSP.DataType();
-		dataType.deserializeStructure(e.data.context_);
+		dataType.deserializeStructure(e.data.content_);
 		var dataStructure = dataType.structure(); 
 		var fileContent = dataStructure.activeParameterFormattedInputs().toString().replace(/,/gi, "");
 		<portlet:namespace/>prepareAnalyzer(MESH.Constants.getShapeAnalysisApp('${type}'),MESH.Constants.getShapeAnalysisAppVersion('${type}'), parentNode, fileContent,true);

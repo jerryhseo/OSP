@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonNode;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulation;
-import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
@@ -22,7 +21,6 @@ import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -298,6 +296,7 @@ public class WorkflowSimulationController{
     }
 
     ///////////////////////////////////////////////////////// ENGINE
+<<<<<<< HEAD
     
     @RequestMapping(value = "/{simulationId}/job/{simulationJobId}/create/engine", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> createSimulationJobEngine(
@@ -316,6 +315,9 @@ public class WorkflowSimulationController{
         }
     }
     
+=======
+
+>>>>>>> devel
     @RequestMapping(value = "/job/{simulationJobId}/run", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> runWorkflow(
         @PathVariable("simulationJobId") long simulationJobId, 

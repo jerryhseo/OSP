@@ -69,6 +69,8 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
  * Menu click events and binding functions 
  ***********************************************************************/
 $('#<portlet:namespace/>canvas').on('change', function(){
+	if( <portlet:namespace/>disabled )	return;
+	
 	var jsonData = {
 		type_: OSP.Enumeration.PathType.CONTENT,
 		content_: $(this).val()
@@ -84,7 +86,7 @@ $('#<portlet:namespace/>canvas').on('change', function(){
 function <portlet:namespace/>loadDataEventHandler( data, params ){
 	console.log('[<portlet:namespace/>loadDataEventHandler] ', data );
 	
-	<portlet:namespace/>visualizer.loadCanvas( data, true );
+	<portlet:namespace/>visualizer.loadCanvas( data, false );
 }
 
 function <portlet:namespace/>requestDataEventHandler( data, params ){

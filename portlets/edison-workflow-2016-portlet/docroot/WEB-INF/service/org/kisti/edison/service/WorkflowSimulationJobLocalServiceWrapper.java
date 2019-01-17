@@ -501,6 +501,7 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+<<<<<<< HEAD
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
@@ -508,6 +509,17 @@ public class WorkflowSimulationJobLocalServiceWrapper
 		throws org.kisti.edison.WFEngine500Exception {
 		return _workflowSimulationJobLocalService.createWorkflowEngineJson(simulationJobId,
 			strNodes, userName, ibToken, request);
+=======
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
+		long simulationId,
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		javax.servlet.http.HttpServletRequest request)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.createWorkflowSimulationJob(simulationId,
+			params, request);
+>>>>>>> devel
 	}
 
 	@Override
@@ -658,16 +670,6 @@ public class WorkflowSimulationJobLocalServiceWrapper
 		throws java.io.IOException {
 		return _workflowSimulationJobLocalService.getWorkflowJobIntermediateResult(jobUuid,
 			ibAccessToken);
-	}
-
-	@Override
-	public java.lang.String getFileId(long appGroupId,
-		java.lang.String vcToken, java.lang.String path)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return _workflowSimulationJobLocalService.getFileId(appGroupId,
-			vcToken, path);
 	}
 
 	@Override

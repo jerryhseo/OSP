@@ -72,7 +72,11 @@ function <portlet:namespace/>loadParaView( jsonData, changeAlert ){
 			},
 			success: function( result ){
 				console.log( 'Result: '+result);
-				<portlet:namespace/>visualizer.callIframeFunc( 'connectParaview', null, <portlet:namespace/>launcherURL, dataDir, fileName );
+				var dataDir = result.replace(/\\/g, '/' ); 
+				console.log( 'dataDir: '+dataDir );
+				dataDir = dataDir.replace('d:','');
+				console.log( 'dataDir: '+dataDir );
+				<portlet:namespace/>visualizer.callIframeFunc( 'connectParaview', null, <portlet:namespace/>launcherURL, dataDir);
 			},
 			error: function( data, e){
 				console.log('ParaView AJAX ERROR-->'+e);

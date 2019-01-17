@@ -226,10 +226,11 @@
                         async: false,
                         dataType:'text',
                         success: function( renderResult ){
+                        	P.status(true);
+                        	
                             if(typeof $targetDiv.attr("section-type")!="undefined"){
                                 $targetDiv.html( renderResult ).promise().done(function(){
-                                	P.status(true);
-                                    callback(connector,P.instanceId());
+                                	callback(connector,P.instanceId());
                                 });
                             }else{
                                 var $portletDiv = $('<div>');
@@ -238,10 +239,10 @@
                                 $portletDiv.css('height', "inherit");
                                 $portletDiv.html( renderResult );
                                 $targetDiv.append( $portletDiv ).promise().done(function(){
-                                	P.status(true);
-                                    callback(connector,P.instanceId());
+                                	callback(connector,P.instanceId());
                                 });
                             }
+                            
                         },
                         error: function(){
                             console.log('AJAX loading failed', P);
@@ -1099,7 +1100,10 @@
     		var eventData = {
                     portletId: Workbench.id(),
                     targetPortlet: targetPortletId,
-                    data: data
+                    data: data,
+                    params:{
+                    	changeAlert:false
+                    }
     			};
     		
     		console.log(event+"__________"+JSON.stringify(eventData));
@@ -3356,8 +3360,8 @@
                     }
             };
     		
-    		console.log("OSP_HAND_SHAKE---------->>>>>>>>"+targetId);
-    		console.log(JSON.stringify(eventData));
+//    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
+//    		console.log(JSON.stringify(eventData));
             Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
         };
         

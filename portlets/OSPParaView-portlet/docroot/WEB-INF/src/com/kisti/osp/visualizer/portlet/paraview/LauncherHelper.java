@@ -12,9 +12,19 @@ public class LauncherHelper {
 		try {
 			// Create connection
 			URL url = new URL(targetURL);
-			//System.out.println("Connection URL: "+url.toString());
+			System.out.println("Connection URL: "+url.toString());
 			
 			connection = (HttpURLConnection) url.openConnection();
+			/*
+			int responseCode = connection.getResponseCode();
+			if (responseCode != 200) {
+		        System.out.println("Server responded with: " + responseCode + " " + connection.getResponseMessage());
+		        throw new IOException("Server responded with: " + responseCode + " " + connection.getResponseMessage());
+		    }
+			else {
+				System.out.println("Connection success to: "+url.toString());
+			}
+			*/
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setRequestProperty("Content-Length",	Integer.toString(bodyJSON.getBytes().length));
@@ -39,8 +49,8 @@ public class LauncherHelper {
 				jsonContent.append(buffer, 0, size);
 			}
 			reader.close();
-			//System.out.println("Reading finished: ");
-			//System.out.println(jsonContent.toString());
+			System.out.println("Reading finished: ");
+			System.out.println(jsonContent.toString());
 			callback.onResponse(jsonContent.toString());
 		} finally {
 			if (connection != null) {
