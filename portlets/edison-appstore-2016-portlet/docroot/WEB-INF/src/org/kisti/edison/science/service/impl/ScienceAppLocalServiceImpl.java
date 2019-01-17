@@ -1071,6 +1071,7 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 		long entryId = GetterUtil.getLong(params.get("entryId"));
 		String actionType = CustomUtil.strNull(params.get("actionType"));
 		
+		System.out.println("scienceAppId : " + scienceAppId);
 		ScienceApp scienceApp = super.scienceAppPersistence.findByPrimaryKey(scienceAppId);
 		if(actionType.equals("appInfomation")){
 			scienceApp.setModifiedDate(new Date());
@@ -1622,7 +1623,6 @@ public class ScienceAppLocalServiceImpl extends ScienceAppLocalServiceBaseImpl{
 	}
 	
 	private List<Map<String, Object>> retrieveListScienceApp(Locale locale,Map<String, Object> searchParam,boolean categorySearch,boolean managerSearch) throws SystemException, PortalException{
-		System.out.println("searchParams : " + searchParam.toString());
 		List<Object[]> scienceAppList = scienceAppFinder.retrieveListScienceApp(searchParam, categorySearch, managerSearch);
 		
 		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
