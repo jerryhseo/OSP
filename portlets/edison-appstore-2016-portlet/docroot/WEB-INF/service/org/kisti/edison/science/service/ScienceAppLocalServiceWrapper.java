@@ -1020,13 +1020,13 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> retrieveListScienceAppFromExplore(
 		long companyGroupId, long groupId, java.util.Locale locale,
 		java.lang.String[] appTypes, long[] categoryIds,
-		java.lang.String searchText, int begin, int end,
-		java.lang.String sortField, java.lang.String sortOrder)
+		java.lang.String searchText, java.lang.String searchOrgCode, int begin,
+		int end, java.lang.String sortField, java.lang.String sortOrder)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _scienceAppLocalService.retrieveListScienceAppFromExplore(companyGroupId,
-			groupId, locale, appTypes, categoryIds, searchText, begin, end,
-			sortField, sortOrder);
+			groupId, locale, appTypes, categoryIds, searchText, searchOrgCode,
+			begin, end, sortField, sortOrder);
 	}
 
 	/**
@@ -1042,6 +1042,17 @@ public class ScienceAppLocalServiceWrapper implements ScienceAppLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _scienceAppLocalService.countScienceAppFromExplore(companyGroupId,
 			groupId, locale, appTypes, categoryIds, searchText);
+	}
+
+	@Override
+	public int countScienceAppFromExplore(long companyGroupId, long groupId,
+		java.util.Locale locale, java.lang.String[] appTypes,
+		long[] categoryIds, java.lang.String searchText,
+		java.lang.String searchOrgCode)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _scienceAppLocalService.countScienceAppFromExplore(companyGroupId,
+			groupId, locale, appTypes, categoryIds, searchText, searchOrgCode);
 	}
 
 	@Override

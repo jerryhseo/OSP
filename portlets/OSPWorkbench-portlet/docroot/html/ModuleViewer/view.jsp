@@ -14,7 +14,7 @@
 	
 	JSONObject workbenchLayout = (JSONObject) renderRequest.getAttribute("workbenchLayout");
 %>
-${portType}<br/>${portData}
+${portType}<br/>${portData}<br/>${simulationUuid}
 <div id="<portlet:namespace/>canvas" style="height: 500px;">
 	
 </div>
@@ -59,6 +59,8 @@ $(function(e) {
 	
 	<portlet:namespace/>workbench.scienceApp(scienceApp);
 	
+	<portlet:namespace/>createSimulationAndJob();
+	
 	// Resolving workbench layout
 	$.ajax({
 		url: '<%=serveResourceURL.toString()%>',
@@ -92,15 +94,6 @@ $(function(e) {
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
-Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
-	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
-		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
-		
-		<portlet:namespace/>createSimulationAndJob();
-	}
-});
-
 Liferay.on(OSP.Event.OSP_REQUEST_DATA_STRUCTURE,function( e ){
 	console.log('OSP_REQUEST_DATA_STRUCTURE: ['+e.portletId+', '+new Date()+']');
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
@@ -116,7 +109,15 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED,function( e ){
 		var simulation = <portlet:namespace/>workbench.workingSimulation();
 		var job = simulation.workingJob();
 		
+		var scienceApp = <portlet:namespace/>workbench.scienceApp();
+		var port = scienceApp.inputPort("${portName}");
+		
 		var inputData = new OSP.InputData( e.data );
+			inputData.portName(port.name());
+			inputData.relative( true );
+			inputData.dirty( true );
+			inputData.order(port.order());
+        
 		if( inputData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
 			var dataType = new OSP.DataType();
 			dataType.deserializeStructure(inputData.content());
@@ -124,15 +125,13 @@ Liferay.on(OSP.Event.OSP_DATA_CHANGED,function( e ){
 			var fileContents = dataStructure.activeParameterFormattedInputs();
 			
 			var data = new OSP.InputData();
-			data.portName("${portName}");
-			data.order(1);
+			data.portName(port.name());
+			data.order(port.order());
 			data.type( OSP.Enumeration.PathType.FILE_CONTENT );
 			data.content( fileContents[0].join('') );
-			console.log(JSON.stringify(data));
-			job.inputData("${portName}",data);
+			job.inputData(port.name(),data);
 		}else{
-			console.log(JSON.stringify(inputData));
-			job.inputData("${portName}",inputData);
+			job.inputData(port.name(),inputData);
 		}
 	}	
 });
@@ -179,7 +178,7 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 function <portlet:namespace/>createSimulationAndJob(){
 	var simulation  = <portlet:namespace/>workbench.newSimulation();
 	simulation.uuid('${simulationUuid}');
-	<portlet:namespace/>workbench.workingSimulation(simulation)
+	<portlet:namespace/>workbench.workingSimulation(simulation);
 	
 	var job = simulation.newJob();
 	job.uuid('${jobUuid}');
@@ -211,7 +210,7 @@ function <portlet:namespace/>returnJobData(){
 	var simulation = <portlet:namespace/>workbench.workingSimulation();
 	var job = simulation.workingJob();
 	var jobData = JSON.stringify(job.inputData("${portName}"));
-// 	console.log(jobData);
+	console.log(jobData);
 	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData);
 }
 

@@ -284,12 +284,12 @@
 							 '</div>' +
 							 '<div class="h10" ></div>' +
 							 '<div id="<portlet:namespace/>upgradeVersionForm" style="width: 100%; padding-top:20px; border-top:1px solid #efefef; display: none;">' + 
-							 '<div class="input-group" style="width:100%; text-align:center;">' + 
-								 '<input type="number" title="Release" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>releaseNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
-								 '.' +
-								 '<input type="number" title="Major" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>majorNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
-								 '.' +
-								 '<input type="number" title="Minor" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>minorNumber" style="float:none; margin:0px 5px;" min="0" value="" >' +
+							 '<div class="input-group" style="width:100%; text-align:center; padding-left:35%;">' + 
+								 '<input type="number" title="Release" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>releaseNumber" style="float:left; margin:0px 5px;" min="0" value="" >' +
+								 '<span style="float:left; padding-top:10px;">.</span>' +
+								 '<input type="number" title="Major" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>majorNumber" style="float:left; margin:0px 5px;" min="0" value="" >' +
+								 '<span style="float:left; padding-top:10px;">.</span>' +
+								 '<input type="number" title="Minor" class="form-control <portlet:namespace/>app-version" id="<portlet:namespace/>minorNumber" style="float:left; margin:0px 5px;" min="0" value="" >' +
 							 '</div>' + 
 							 '<div class="h10" ></div>' + 
 								 Liferay.Language.get('edison-science-appstore-upgrade-new-version-massage') + '<br/>' +

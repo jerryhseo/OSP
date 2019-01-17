@@ -856,6 +856,9 @@ public class AppManagerController{
 					} else {
 						throw new ScienceAppException(ScienceAppException.EXISTS_WORKFLOW_APP_DATABASE);
 					}
+				} else {
+					ScienceApp scienceApp = ScienceAppLocalServiceUtil.createScienceApp(sc, params);
+					returnLong = scienceApp.getScienceAppId();
 				}
 			} catch (Exception e) {
 				log.error("Create ScienceApp Error...!!");

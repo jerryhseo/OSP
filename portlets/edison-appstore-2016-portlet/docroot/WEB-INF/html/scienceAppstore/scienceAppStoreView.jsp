@@ -716,6 +716,10 @@
 		padding: 17px !important;
 	}
 	
+	#<portlet:namespace/>contentDetailInfo img{
+		max-width: 100%;
+	}
+	
 	.content{
 		padding: 20px !important;
 	}

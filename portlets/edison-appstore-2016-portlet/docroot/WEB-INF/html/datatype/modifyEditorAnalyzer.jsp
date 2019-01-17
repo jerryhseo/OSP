@@ -199,7 +199,9 @@
 	</div>
 	<div class="pull-right" style="margin: 18px 0px;">
 		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>historyBack();"><span class="icon-list-ul">  <liferay-ui:message key='edison-virtuallab-surveyResultList-list'/></span></button>
-		<button type="button" class="btn btn-default" onclick="<portlet:namespace/>modifyDataType();"><span class="icon-arrow-right">  <liferay-ui:message key='next'/></span></button>
+		<button type="button" class="btn btn-default" id="<portlet:namespace/>dataTypeSaveBtn" onclick="<portlet:namespace/>modifyDataType();">
+			<span class="icon-ok">  <liferay-ui:message key='save'/></span>
+		</button>
 	</div>
 </div>
 <script type="text/javascript">
@@ -248,6 +250,22 @@ function checkEditor(id) {
     } else {
         $("#<portlet:namespace/>defaultEditorOption_" + appId).remove();
         $selectbox.focus();
+    }
+    
+    /* 2019.01.17 _ SDE Next btn */
+    var appNameObj = new Object()
+    $("input[type='checkbox'][name='<portlet:namespace/>editorCheckbox']:checked").each(function() {
+    	var appName = $(this).attr("data-app-name");
+    	appNameObj[appName] = appName;
+    });
+    
+    var saveBtn = $("#<portlet:namespace/>dataTypeSaveBtn");
+    if(appNameObj["SDE"]){
+    	saveBtn.html("");
+    	saveBtn.html("<span class='icon-arrow-right'>  <liferay-ui:message key='next'/></span>");
+    } else {
+    	saveBtn.html("");
+    	saveBtn.html("<span class='icon-ok'>  <liferay-ui:message key='save'/></span>");
     }
 
 }

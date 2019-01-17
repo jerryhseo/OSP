@@ -1092,13 +1092,13 @@ public class LayoutController {
 					
 				}else if ( pathType.equalsIgnoreCase("uri")){
 					
-				}else if( pathType.equalsIgnoreCase("context") ){
+				}else if( pathType.equalsIgnoreCase("content") ){
 					JSONObject argVal = JSONFactoryUtil.createJSONObject();
 					argVal.put("type", "STRING");
-					argVal.put("value", inputData.getString("context_"));
+					argVal.put("value", inputData.getString("content_"));
 					progArgs.put(portName, argVal);
 					
-					files.put(portName, inputData.getString("context_"));
+					files.put(portName, inputData.getString("content_"));
 				}else{
 					_log.error("Un-defined path type: " + pathType);
 					throw new PortletException();

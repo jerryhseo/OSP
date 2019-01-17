@@ -490,9 +490,7 @@ public class ScienceAppstoreListController {
 			long groupId = Long.parseLong(CustomUtil.strNull(params.get("groupId"),String.valueOf(PortalUtil.getScopeGroupId(request))));
 			long userId = PortalUtil.getUserId(request);
 			String searchValue = CustomUtil.strNull(params.get("searchValue"), "");
-			//String searchOrgCode = CustomUtil.strNull(params.get("searchOrgCode"), "");
-			//searchValue += "," + searchOrgCode;
-			//System.out.println("searchValue : " + searchValue);
+			String searchOrgCode = CustomUtil.strNull(params.get("searchOrgCode"), "");
 			
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
@@ -540,14 +538,14 @@ public class ScienceAppstoreListController {
 			String[] appTypes = null;
 			int solverCount = ScienceAppLocalServiceUtil.countScienceAppFromExplore(
 					companyGroupId, groupId,
-					themeDisplay.getLocale(),  appTypes, categoryIds, searchValue);
+					themeDisplay.getLocale(),  appTypes, categoryIds, searchValue, searchOrgCode);
 			
 			int begin = (curPage - 1) * linePerPage;
 			int end = linePerPage;
 			
 			List<Map<String, Object>> writeDataList = ScienceAppLocalServiceUtil.retrieveListScienceAppFromExplore(
 					companyGroupId, groupId,
-					themeDisplay.getLocale(), appTypes, categoryIds, searchValue,
+					themeDisplay.getLocale(), appTypes, categoryIds, searchValue, searchOrgCode,
 					begin, linePerPage, sortField, sortOrder);
 			
 			// ScienceApp Date List for ScienceApp Page

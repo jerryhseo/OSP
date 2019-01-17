@@ -439,8 +439,8 @@ public class ScienceAppLocalServiceClpInvoker {
 
 		_methodParameterTypes266 = new String[] {
 				"long", "long", "java.util.Locale", "java.lang.String[][]",
-				"long[][]", "java.lang.String", "int", "int", "java.lang.String",
-				"java.lang.String"
+				"long[][]", "java.lang.String", "java.lang.String", "int", "int",
+				"java.lang.String", "java.lang.String"
 			};
 
 		_methodName267 = "countScienceAppFromExplore";
@@ -450,231 +450,238 @@ public class ScienceAppLocalServiceClpInvoker {
 				"long[][]", "java.lang.String"
 			};
 
-		_methodName268 = "retrieveListScienceAppAsManager";
+		_methodName268 = "countScienceAppFromExplore";
 
 		_methodParameterTypes268 = new String[] {
+				"long", "long", "java.util.Locale", "java.lang.String[][]",
+				"long[][]", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName269 = "retrieveListScienceAppAsManager";
+
+		_methodParameterTypes269 = new String[] {
 				"long", "long", "java.util.Locale", "long",
 				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
 				"java.lang.String", "boolean", "int", "int"
 			};
 
-		_methodName269 = "countScienceAppAsManager";
+		_methodName270 = "countScienceAppAsManager";
 
-		_methodParameterTypes269 = new String[] {
+		_methodParameterTypes270 = new String[] {
 				"long", "long", "java.util.Locale", "long",
 				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
 				"java.lang.String", "boolean"
 			};
 
-		_methodName270 = "retrieveListScienceAppAsCategory";
+		_methodName271 = "retrieveListScienceAppAsCategory";
 
-		_methodParameterTypes270 = new String[] {
+		_methodParameterTypes271 = new String[] {
 				"long", "long", "java.util.Locale", "long",
 				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
 				"java.lang.String", "int", "int", "boolean"
 			};
 
-		_methodName271 = "countListScienceAppAsCategory";
+		_methodName272 = "countListScienceAppAsCategory";
 
-		_methodParameterTypes271 = new String[] {
+		_methodParameterTypes272 = new String[] {
 				"long", "long", "java.util.Locale", "long",
 				"java.lang.String[][]", "java.lang.String[][]", "java.util.Map",
 				"java.lang.String", "boolean"
 			};
 
-		_methodName272 = "retrieveListScienceAppByName";
+		_methodName273 = "retrieveListScienceAppByName";
 
-		_methodParameterTypes272 = new String[] {
+		_methodParameterTypes273 = new String[] {
 				"long", "long", "java.util.Locale", "java.lang.String",
 				"boolean"
 			};
 
-		_methodName273 = "retrieveListScienceApp";
+		_methodName274 = "retrieveListScienceApp";
 
-		_methodParameterTypes273 = new String[] {
+		_methodParameterTypes274 = new String[] {
 				"long", "java.util.Locale", "long", "java.lang.String[][]",
 				"java.lang.String[][]", "java.util.Map", "java.lang.String",
 				"int", "int", "boolean"
 			};
 
-		_methodName274 = "countListScienceApp";
+		_methodName275 = "countListScienceApp";
 
-		_methodParameterTypes274 = new String[] {
+		_methodParameterTypes275 = new String[] {
 				"long", "java.util.Locale", "long", "java.lang.String[][]",
 				"java.lang.String[][]", "java.util.Map", "java.lang.String",
 				"boolean"
 			};
 
-		_methodName279 = "getScienceAppReturnObject";
+		_methodName280 = "getScienceAppReturnObject";
 
-		_methodParameterTypes279 = new String[] { "long", "java.util.Locale" };
+		_methodParameterTypes280 = new String[] { "long", "java.util.Locale" };
 
-		_methodName280 = "deleteScienceAppRelation";
+		_methodName281 = "deleteScienceAppRelation";
 
-		_methodParameterTypes280 = new String[] { "long" };
+		_methodParameterTypes281 = new String[] { "long" };
 
-		_methodName281 = "updateExeInfomaionScienceApp";
+		_methodName282 = "updateExeInfomaionScienceApp";
 
-		_methodParameterTypes281 = new String[] {
+		_methodParameterTypes282 = new String[] {
 				"com.liferay.portal.service.ServiceContext", "java.util.Map",
 				"long"
 			};
 
-		_methodName282 = "copyScienceApp";
+		_methodName283 = "copyScienceApp";
 
-		_methodParameterTypes282 = new String[] {
+		_methodParameterTypes283 = new String[] {
 				"com.liferay.portal.service.ServiceContext", "long",
 				"java.lang.String"
 			};
 
-		_methodName283 = "addScienceAppFile";
+		_methodName284 = "addScienceAppFile";
 
-		_methodParameterTypes283 = new String[] {
+		_methodParameterTypes284 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.io.InputStream"
 			};
 
-		_methodName284 = "retrieveListAppTest";
+		_methodName285 = "retrieveListAppTest";
 
-		_methodParameterTypes284 = new String[] { "java.util.Map" };
+		_methodParameterTypes285 = new String[] { "java.util.Map" };
 
-		_methodName285 = "countAppTest";
+		_methodName286 = "countAppTest";
 
-		_methodParameterTypes285 = new String[] { "long" };
+		_methodParameterTypes286 = new String[] { "long" };
 
-		_methodName286 = "getMyAppListWithQna";
-
-		_methodParameterTypes286 = new String[] {
-				"java.util.Map", "java.util.Locale"
-			};
-
-		_methodName287 = "getListMyAppQna";
+		_methodName287 = "getMyAppListWithQna";
 
 		_methodParameterTypes287 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName288 = "searchAssetEntryModelAPP";
+		_methodName288 = "getListMyAppQna";
 
-		_methodParameterTypes288 = new String[] { "java.util.Map" };
-
-		_methodName289 = "searchAssetEntryModelAPPCount";
-
-		_methodParameterTypes289 = new String[] { "java.util.Map" };
-
-		_methodName290 = "relatedAssetLinkedEntryScienceAPP";
-
-		_methodParameterTypes290 = new String[] { "java.util.Map" };
-
-		_methodName292 = "updateScienceApp";
-
-		_methodParameterTypes292 = new String[] {
-				"org.kisti.edison.science.model.ScienceApp", "int"
-			};
-
-		_methodName294 = "migrationScienceApp";
-
-		_methodParameterTypes294 = new String[] {
-				"org.kisti.edison.science.model.ScienceApp"
-			};
-
-		_methodName295 = "getMyAppListForProject";
-
-		_methodParameterTypes295 = new String[] {
+		_methodParameterTypes288 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName296 = "getMyAppListForProjectCount";
+		_methodName289 = "searchAssetEntryModelAPP";
+
+		_methodParameterTypes289 = new String[] { "java.util.Map" };
+
+		_methodName290 = "searchAssetEntryModelAPPCount";
+
+		_methodParameterTypes290 = new String[] { "java.util.Map" };
+
+		_methodName291 = "relatedAssetLinkedEntryScienceAPP";
+
+		_methodParameterTypes291 = new String[] { "java.util.Map" };
+
+		_methodName293 = "updateScienceApp";
+
+		_methodParameterTypes293 = new String[] {
+				"org.kisti.edison.science.model.ScienceApp", "int"
+			};
+
+		_methodName295 = "migrationScienceApp";
+
+		_methodParameterTypes295 = new String[] {
+				"org.kisti.edison.science.model.ScienceApp"
+			};
+
+		_methodName296 = "getMyAppListForProject";
 
 		_methodParameterTypes296 = new String[] {
 				"java.util.Map", "java.util.Locale"
 			};
 
-		_methodName297 = "getScienceApp";
+		_methodName297 = "getMyAppListForProjectCount";
 
 		_methodParameterTypes297 = new String[] {
+				"java.util.Map", "java.util.Locale"
+			};
+
+		_methodName298 = "getScienceApp";
+
+		_methodParameterTypes298 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName298 = "countScienceApp";
+		_methodName299 = "countScienceApp";
 
-		_methodParameterTypes298 = new String[] {
+		_methodParameterTypes299 = new String[] {
 				"long", "long", "long", "java.util.Locale", "java.util.Map"
 			};
 
-		_methodName299 = "retrieveListScienceApp";
+		_methodName300 = "retrieveListScienceApp";
 
-		_methodParameterTypes299 = new String[] {
+		_methodParameterTypes300 = new String[] {
 				"long", "long", "long", "java.util.Locale", "java.util.Map",
 				"int", "int", "boolean"
 			};
 
-		_methodName301 = "retrieveListByTemplateId";
+		_methodName302 = "retrieveListByTemplateId";
 
-		_methodParameterTypes301 = new String[] { "java.lang.String" };
+		_methodParameterTypes302 = new String[] { "java.lang.String" };
 
-		_methodName303 = "getScienceAppRatingsStats";
+		_methodName304 = "getScienceAppRatingsStats";
 
-		_methodParameterTypes303 = new String[] {
+		_methodParameterTypes304 = new String[] {
 				"long", "long", "java.lang.String"
 			};
 
-		_methodName304 = "deleteScienceAppRatingsStats";
+		_methodName305 = "deleteScienceAppRatingsStats";
 
-		_methodParameterTypes304 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes305 = new String[] { "long", "java.lang.String" };
 
-		_methodName305 = "getScienceAppMyRatingsEntry";
+		_methodName306 = "getScienceAppMyRatingsEntry";
 
-		_methodParameterTypes305 = new String[] {
+		_methodParameterTypes306 = new String[] {
 				"long", "java.lang.String", "com.liferay.portal.model.User"
 			};
 
-		_methodName306 = "setScienceAppMyRatingsEntry";
+		_methodName307 = "setScienceAppMyRatingsEntry";
 
-		_methodParameterTypes306 = new String[] {
+		_methodParameterTypes307 = new String[] {
 				"long", "java.lang.String", "com.liferay.portal.model.User",
 				"long"
 			};
 
-		_methodName307 = "deleteScienceAppMyRatingsEntry";
+		_methodName308 = "deleteScienceAppMyRatingsEntry";
 
-		_methodParameterTypes307 = new String[] {
+		_methodParameterTypes308 = new String[] {
 				"long", "com.liferay.portal.model.User"
 			};
 
-		_methodName308 = "deleteScienceAppPaperItem";
+		_methodName309 = "deleteScienceAppPaperItem";
 
-		_methodParameterTypes308 = new String[] {
+		_methodParameterTypes309 = new String[] {
 				"long", "long", "java.lang.String"
 			};
 
-		_methodName309 = "getScienceAppPaperList";
-
-		_methodParameterTypes309 = new String[] { "long" };
-
-		_methodName310 = "getScienceAppExecuteStatistics";
+		_methodName310 = "getScienceAppPaperList";
 
 		_methodParameterTypes310 = new String[] { "long" };
 
-		_methodName311 = "getScienceAppHistoryList";
+		_methodName311 = "getScienceAppExecuteStatistics";
 
-		_methodParameterTypes311 = new String[] { "java.util.Map" };
+		_methodParameterTypes311 = new String[] { "long" };
 
-		_methodName312 = "getScienceAppReviewList";
+		_methodName312 = "getScienceAppHistoryList";
 
 		_methodParameterTypes312 = new String[] { "java.util.Map" };
 
-		_methodName313 = "getSimulationUsersOfScienceApp";
+		_methodName313 = "getScienceAppReviewList";
 
-		_methodParameterTypes313 = new String[] { "long" };
+		_methodParameterTypes313 = new String[] { "java.util.Map" };
 
-		_methodName314 = "countScienceAppByWorkflowId";
+		_methodName314 = "getSimulationUsersOfScienceApp";
 
 		_methodParameterTypes314 = new String[] { "long" };
 
-		_methodName315 = "getScienceAppByWorkflowId";
+		_methodName315 = "countScienceAppByWorkflowId";
 
 		_methodParameterTypes315 = new String[] { "long" };
+
+		_methodName316 = "getScienceAppByWorkflowId";
+
+		_methodParameterTypes316 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1224,10 +1231,10 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
 				(java.lang.String[])arguments[3], (long[])arguments[4],
-				(java.lang.String)arguments[5],
-				((Integer)arguments[6]).intValue(),
+				(java.lang.String)arguments[5], (java.lang.String)arguments[6],
 				((Integer)arguments[7]).intValue(),
-				(java.lang.String)arguments[8], (java.lang.String)arguments[9]);
+				((Integer)arguments[8]).intValue(),
+				(java.lang.String)arguments[9], (java.lang.String)arguments[10]);
 		}
 
 		if (_methodName267.equals(name) &&
@@ -1241,6 +1248,15 @@ public class ScienceAppLocalServiceClpInvoker {
 
 		if (_methodName268.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes268, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.countScienceAppFromExplore(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.util.Locale)arguments[2],
+				(java.lang.String[])arguments[3], (long[])arguments[4],
+				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
+		}
+
+		if (_methodName269.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes269, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListScienceAppAsManager(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
@@ -1254,8 +1270,8 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Integer)arguments[10]).intValue());
 		}
 
-		if (_methodName269.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes269, parameterTypes)) {
+		if (_methodName270.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes270, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.countScienceAppAsManager(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
@@ -1267,8 +1283,8 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[8]).booleanValue());
 		}
 
-		if (_methodName270.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes270, parameterTypes)) {
+		if (_methodName271.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes271, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListScienceAppAsCategory(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
@@ -1282,8 +1298,8 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[10]).booleanValue());
 		}
 
-		if (_methodName271.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes271, parameterTypes)) {
+		if (_methodName272.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes272, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.countListScienceAppAsCategory(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
@@ -1295,16 +1311,16 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[8]).booleanValue());
 		}
 
-		if (_methodName272.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes272, parameterTypes)) {
+		if (_methodName273.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes273, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListScienceAppByName(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2], (java.lang.String)arguments[3],
 				((Boolean)arguments[4]).booleanValue());
 		}
 
-		if (_methodName273.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes273, parameterTypes)) {
+		if (_methodName274.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes274, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListScienceApp(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1],
 				((Long)arguments[2]).longValue(),
@@ -1317,8 +1333,8 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[9]).booleanValue());
 		}
 
-		if (_methodName274.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes274, parameterTypes)) {
+		if (_methodName275.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes275, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.countListScienceApp(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1],
 				((Long)arguments[2]).longValue(),
@@ -1329,33 +1345,33 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[7]).booleanValue());
 		}
 
-		if (_methodName279.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes279, parameterTypes)) {
+		if (_methodName280.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes280, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.getScienceAppReturnObject(((Long)arguments[0]).longValue(),
 				(java.util.Locale)arguments[1]);
 		}
 
-		if (_methodName280.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes280, parameterTypes)) {
+		if (_methodName281.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes281, parameterTypes)) {
 			ScienceAppLocalServiceUtil.deleteScienceAppRelation(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
-		if (_methodName281.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes281, parameterTypes)) {
+		if (_methodName282.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes282, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.updateExeInfomaionScienceApp((com.liferay.portal.service.ServiceContext)arguments[0],
 				(java.util.Map)arguments[1], ((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName282.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes282, parameterTypes)) {
+		if (_methodName283.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes283, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.copyScienceApp((com.liferay.portal.service.ServiceContext)arguments[0],
 				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
 		}
 
-		if (_methodName283.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes283, parameterTypes)) {
+		if (_methodName284.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes284, parameterTypes)) {
 			ScienceAppLocalServiceUtil.addScienceAppFile(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3],
@@ -1364,74 +1380,74 @@ public class ScienceAppLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName284.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes284, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.retrieveListAppTest((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
-		}
-
 		if (_methodName285.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes285, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.countAppTest(((Long)arguments[0]).longValue());
+			return ScienceAppLocalServiceUtil.retrieveListAppTest((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
 		if (_methodName286.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes286, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getMyAppListWithQna((java.util.Map)arguments[0],
-				(java.util.Locale)arguments[1]);
+			return ScienceAppLocalServiceUtil.countAppTest(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName287.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes287, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getListMyAppQna((java.util.Map)arguments[0],
+			return ScienceAppLocalServiceUtil.getMyAppListWithQna((java.util.Map)arguments[0],
 				(java.util.Locale)arguments[1]);
 		}
 
 		if (_methodName288.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes288, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.searchAssetEntryModelAPP((java.util.Map)arguments[0]);
+			return ScienceAppLocalServiceUtil.getListMyAppQna((java.util.Map)arguments[0],
+				(java.util.Locale)arguments[1]);
 		}
 
 		if (_methodName289.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes289, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.searchAssetEntryModelAPPCount((java.util.Map)arguments[0]);
+			return ScienceAppLocalServiceUtil.searchAssetEntryModelAPP((java.util.Map)arguments[0]);
 		}
 
 		if (_methodName290.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes290, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.searchAssetEntryModelAPPCount((java.util.Map)arguments[0]);
+		}
+
+		if (_methodName291.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes291, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.relatedAssetLinkedEntryScienceAPP((java.util.Map)arguments[0]);
 		}
 
-		if (_methodName292.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes292, parameterTypes)) {
+		if (_methodName293.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes293, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.updateScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0],
 				((Integer)arguments[1]).intValue());
 		}
 
-		if (_methodName294.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes294, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.migrationScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0]);
-		}
-
 		if (_methodName295.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes295, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getMyAppListForProject((java.util.Map)arguments[0],
-				(java.util.Locale)arguments[1]);
+			return ScienceAppLocalServiceUtil.migrationScienceApp((org.kisti.edison.science.model.ScienceApp)arguments[0]);
 		}
 
 		if (_methodName296.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes296, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getMyAppListForProjectCount((java.util.Map)arguments[0],
+			return ScienceAppLocalServiceUtil.getMyAppListForProject((java.util.Map)arguments[0],
 				(java.util.Locale)arguments[1]);
 		}
 
 		if (_methodName297.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes297, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceApp((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1]);
+			return ScienceAppLocalServiceUtil.getMyAppListForProjectCount((java.util.Map)arguments[0],
+				(java.util.Locale)arguments[1]);
 		}
 
 		if (_methodName298.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes298, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.getScienceApp((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName299.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes299, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.countScienceApp(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -1439,8 +1455,8 @@ public class ScienceAppLocalServiceClpInvoker {
 				(java.util.Map<java.lang.String, java.lang.Object>)arguments[4]);
 		}
 
-		if (_methodName299.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes299, parameterTypes)) {
+		if (_methodName300.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes300, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListScienceApp(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -1451,82 +1467,82 @@ public class ScienceAppLocalServiceClpInvoker {
 				((Boolean)arguments[7]).booleanValue());
 		}
 
-		if (_methodName301.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes301, parameterTypes)) {
+		if (_methodName302.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes302, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.retrieveListByTemplateId((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName303.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes303, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceAppRatingsStats(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName304.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes304, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.deleteScienceAppRatingsStats(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
+			return ScienceAppLocalServiceUtil.getScienceAppRatingsStats(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
 		}
 
 		if (_methodName305.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes305, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.deleteScienceAppRatingsStats(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName306.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes306, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.getScienceAppMyRatingsEntry(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.model.User)arguments[2]);
 		}
 
-		if (_methodName306.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes306, parameterTypes)) {
+		if (_methodName307.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes307, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.setScienceAppMyRatingsEntry(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				(com.liferay.portal.model.User)arguments[2],
 				((Long)arguments[3]).longValue());
 		}
 
-		if (_methodName307.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes307, parameterTypes)) {
+		if (_methodName308.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes308, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.deleteScienceAppMyRatingsEntry(((Long)arguments[0]).longValue(),
 				(com.liferay.portal.model.User)arguments[1]);
 		}
 
-		if (_methodName308.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes308, parameterTypes)) {
+		if (_methodName309.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes309, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.deleteScienceAppPaperItem(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
 		}
 
-		if (_methodName309.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes309, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceAppPaperList(((Long)arguments[0]).longValue());
-		}
-
 		if (_methodName310.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes310, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceAppExecuteStatistics(((Long)arguments[0]).longValue());
+			return ScienceAppLocalServiceUtil.getScienceAppPaperList(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName311.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes311, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceAppHistoryList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
+			return ScienceAppLocalServiceUtil.getScienceAppExecuteStatistics(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName312.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes312, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getScienceAppReviewList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
+			return ScienceAppLocalServiceUtil.getScienceAppHistoryList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
 		if (_methodName313.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes313, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.getSimulationUsersOfScienceApp(((Long)arguments[0]).longValue());
+			return ScienceAppLocalServiceUtil.getScienceAppReviewList((java.util.Map<java.lang.String, java.lang.Object>)arguments[0]);
 		}
 
 		if (_methodName314.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes314, parameterTypes)) {
-			return ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(((Long)arguments[0]).longValue());
+			return ScienceAppLocalServiceUtil.getSimulationUsersOfScienceApp(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName315.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes315, parameterTypes)) {
+			return ScienceAppLocalServiceUtil.countScienceAppByWorkflowId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName316.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes316, parameterTypes)) {
 			return ScienceAppLocalServiceUtil.getScienceAppByWorkflowId(((Long)arguments[0]).longValue());
 		}
 
@@ -1729,8 +1745,8 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes273;
 	private String _methodName274;
 	private String[] _methodParameterTypes274;
-	private String _methodName279;
-	private String[] _methodParameterTypes279;
+	private String _methodName275;
+	private String[] _methodParameterTypes275;
 	private String _methodName280;
 	private String[] _methodParameterTypes280;
 	private String _methodName281;
@@ -1753,10 +1769,10 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes289;
 	private String _methodName290;
 	private String[] _methodParameterTypes290;
-	private String _methodName292;
-	private String[] _methodParameterTypes292;
-	private String _methodName294;
-	private String[] _methodParameterTypes294;
+	private String _methodName291;
+	private String[] _methodParameterTypes291;
+	private String _methodName293;
+	private String[] _methodParameterTypes293;
 	private String _methodName295;
 	private String[] _methodParameterTypes295;
 	private String _methodName296;
@@ -1767,10 +1783,10 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes298;
 	private String _methodName299;
 	private String[] _methodParameterTypes299;
-	private String _methodName301;
-	private String[] _methodParameterTypes301;
-	private String _methodName303;
-	private String[] _methodParameterTypes303;
+	private String _methodName300;
+	private String[] _methodParameterTypes300;
+	private String _methodName302;
+	private String[] _methodParameterTypes302;
 	private String _methodName304;
 	private String[] _methodParameterTypes304;
 	private String _methodName305;
@@ -1795,4 +1811,6 @@ public class ScienceAppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes314;
 	private String _methodName315;
 	private String[] _methodParameterTypes315;
+	private String _methodName316;
+	private String[] _methodParameterTypes316;
 }
