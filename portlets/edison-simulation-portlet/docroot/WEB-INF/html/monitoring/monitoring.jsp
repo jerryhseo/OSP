@@ -692,7 +692,7 @@ function <portlet:namespace/>monitoringController(jobSeqNo,simulationUuid,jobUui
 function <portlet:namespace/>moveWorkBench(targetScienceAppId, targetSimulationUuid, targetJobUuid) {
     var URL = "<%=workbenchURL%>";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_scienceAppId="+targetScienceAppId;
-    URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_simulationUuid="+targetSimulationUuid;
+    /* URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_simulationUuid="+targetSimulationUuid; */
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_jobUuid="+targetJobUuid;
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_customId=0";
     URL += "&_SimulationWorkbench_WAR_OSPWorkbenchportlet_classId=0";
