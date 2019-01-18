@@ -617,17 +617,14 @@
 				} else {
 					destPath += "/" + value;
 				}
-				console.log("for destPath : " + destPath)
 			})
 		}
 		destPath = destPath.replace("HOME/", "");
 		if(isSelectedFolder){
-			console.log(selectedItem);
 			destPath += "/" + selectedItem[0].innerText.replace("\n", "") + "/";
 		} else {
 			destPath += "/";
 		}
-		console.log("destPath : " + destPath);
 		
 		if(0 < copyFilesArray.length && targetId != ""){
 			var groupId = $("#<portlet:namespace/>groupId").val();
