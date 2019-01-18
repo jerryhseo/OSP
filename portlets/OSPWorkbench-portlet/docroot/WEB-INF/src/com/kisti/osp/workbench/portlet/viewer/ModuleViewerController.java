@@ -67,6 +67,7 @@ public class ModuleViewerController {
 		String nodeId = ParamUtil.getString(request, "nodeId");
 		String dialogId = ParamUtil.getString(request, "dialogId");
 		long userId = ParamUtil.getLong(request, "userId", 0);
+		boolean saveFlag = ParamUtil.getBoolean(request, "saveFlag",false);
 		if(userId != 0){
 		    screenName = UserLocalServiceUtil.getUser(userId).getScreenName();
 		}
@@ -157,7 +158,7 @@ public class ModuleViewerController {
 		model.addAttribute("status", status);
 		model.addAttribute("nodeId", nodeId);
 		model.addAttribute("dialogId", dialogId);
-		
+		model.addAttribute("saveFlag", saveFlag);
 		
 		return "view";
 	}
