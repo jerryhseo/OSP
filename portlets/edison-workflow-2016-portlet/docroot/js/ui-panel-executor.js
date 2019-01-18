@@ -100,7 +100,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         e.preventDefault();
         var btnType = $(this).attr("data-btn-type");
         if(!PANEL_DATA.setting.form.simulationId){
-            toastr["info"]("", "Create Simulation First.");
+            toastr['warning']("", "Create Simulation First.");
             $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn[data-btn-type='new']").click();
             return false;
         }
@@ -874,14 +874,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function openInputPort(nodeId, portId) {
         var node = currNodes.get(nodeId)
-        console.log(currJobs.selected())
         var portData = {}
         var currPortData = $.extend({}, currInputPorts.get(portId))
-
         delete currPortData.id
+
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
 
-        console.log(node)
+        console.log(portData)
+        if (currPortData.isReady && !currPortData.inputs_) {
+            toastr['warning']('','Connected input port')
+            return false
+        }
+
         popPortDialog(node, portId, portData);
     }
 
@@ -900,7 +904,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false
         }
         if (currOpenPort.containsKey(portId)) {
-            toastr['info']('', 'Already open')
+            toastr['warning']('', 'Already open')
             return false
         }
         var dialogId = namespace + getGUID()
@@ -1355,7 +1359,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
 
             if(!validateSimulationJob()){
-                toastr['info']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
+                toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
                 return false
             }
 
@@ -1727,7 +1731,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function _isEmpty(value, msg){
         if(!value){
             if(msg){
-                toastr["info"]("", msg);
+                toastr['warning']("", msg);
             }
             return true;
         }
