@@ -32,7 +32,7 @@ var print = function(param) {
                 	fun: function(){
                 		var selectedItem = file_manager.explorer.find('.ui-selected');
                 		if(selectCopyNode!==null){
-                			_fileManager_pasteNode(selectedItem);
+                			_fileManager_pasteNode(selectedItem, false);
                 		}
                 	}
                 }, {
@@ -67,7 +67,7 @@ var print = function(param) {
                 	title: 'Paste',
                 	fun: function(){
                 		var selectedItem = file_manager.explorer.find('.ui-selected');
-                		_fileManager_pasteNode(selectedItem);
+                		_fileManager_pasteNode(selectedItem, true);
                 	}
                 }, {
                 	name: 'Info',
