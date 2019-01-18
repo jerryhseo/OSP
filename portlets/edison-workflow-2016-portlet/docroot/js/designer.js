@@ -148,7 +148,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     dblclick: function(obj) {
 //                        console.log(obj);
                         if (isDesigner) {
-                            openWfAppDataSettingHandler(obj.node);
+                        	openWfAppDataSettingHandler(obj.node);
                         }
                     }
                 }
@@ -186,6 +186,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             var nodeData = obj.node.data;
                             if (isDesigner && uiPanelInstance) {
                                 uiPanelInstance.openWfAppFileDataSetting(nodeId, nodeData.scienceAppData.name, portId, portType);
+                            } else if(!isDesigner){
+                            	uiPanelInstance.openInputPort(nodeId, portId);
                             }
                         } else {
                             return false;
@@ -241,7 +243,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
-        layout: defaultLayout,
+        /*layout: defaultLayout,*/
         events: {
             canvasClick: function(e) {
                 wfWorkflowJsPlumbInstance.clearSelection();
