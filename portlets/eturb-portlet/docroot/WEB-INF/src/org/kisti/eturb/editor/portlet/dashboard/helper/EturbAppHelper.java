@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.model.User;
@@ -209,7 +209,7 @@ public class EturbAppHelper{
         }
     
     protected String readTextFile(Path path) throws IOException {
-		return OSPFileUtil.readTextFile(path);
+		return OSPFileLocalServiceUtil.readTextFile(path);
 	}
     
     public AnalyzerJob prepareAnalyzer(String appName, String appVersion, String userScreenName)

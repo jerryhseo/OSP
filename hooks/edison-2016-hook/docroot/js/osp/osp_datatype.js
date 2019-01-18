@@ -146,7 +146,8 @@
 					case OSP.Constants.PORT_NAME:
 						InputData.property( key, jsonInputData[key] );
 						break;
-					case OSP.Constants.CONTEXT:
+					case 'context_':
+					case OSP.Constants.CONTENT:
 						InputData.property( OSP.Constants.CONTENT, jsonInputData[key] );
 						break;
 					default:

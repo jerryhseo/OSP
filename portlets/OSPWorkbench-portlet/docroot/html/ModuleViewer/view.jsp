@@ -59,7 +59,7 @@ $(function(e) {
 	
 	<portlet:namespace/>workbench.scienceApp(scienceApp);
 	
-	<portlet:namespace/>createSimulationAndJob();
+// 	<portlet:namespace/>createSimulationAndJob();
 	
 	// Resolving workbench layout
 	$.ajax({
@@ -75,8 +75,14 @@ $(function(e) {
 		success: function( result ){
 			$('#<portlet:namespace/>canvas').html(result);
 			/*All Layout Grid*/
+			
 			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
 			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
+			
+			setTimeout(function(){
+				<portlet:namespace/>createSimulationAndJob();
+			}, 1000);
+			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
 				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+jqXHR.responseText);
@@ -94,6 +100,16 @@ $(function(e) {
 /***********************************************************************
 * Handling OSP Events
 ***********************************************************************/
+Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
+	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
+		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
+		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
+		
+// 		<portlet:namespace/>createSimulationAndJob();
+	}
+});
+
+
 Liferay.on(OSP.Event.OSP_REQUEST_DATA_STRUCTURE,function( e ){
 	console.log('OSP_REQUEST_DATA_STRUCTURE: ['+e.portletId+', '+new Date()+']');
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
@@ -185,6 +201,7 @@ function <portlet:namespace/>createSimulationAndJob(){
 	job.seqNo(1);
 	job.status('${status}');
 	job.isSubmit(true);
+	job.user('${screenName}');
 
 	var portDataJson = JSON.parse('${portData}')["${portName}"];
 	if(portDataJson.hasOwnProperty(OSP.Constants.INPUTS)){

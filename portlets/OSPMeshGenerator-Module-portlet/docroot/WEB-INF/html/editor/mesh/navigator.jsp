@@ -116,13 +116,13 @@ div#<portlet:namespace/>navigatorParameter .container-fluid{
 					</li>
 					
 					
-					<li class="con-button" id="<portlet:namespace/>con-mesh-view">
-						<a class='btn btn-small' href='#'>
-							<i class='icon-large icon-edit'>
-								<span class="font">View</span> 
-							</i>
-						</a>
-					</li>
+<%-- 					<li class="con-button" id="<portlet:namespace/>con-mesh-view"> --%>
+<!-- 						<a class='btn btn-small' href='#'> -->
+<!-- 							<i class='icon-large icon-edit'> -->
+<!-- 								<span class="font">View</span>  -->
+<!-- 							</i> -->
+<!-- 						</a> -->
+<!-- 					</li> -->
 					
 					<li>
 						<a class='btn btn-small' href='#' onclick="<portlet:namespace/>closePanel();return false;">
@@ -483,12 +483,11 @@ function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId,
 		},
 		success : function(result){
 			if(result.isComplete){
-				<portlet:namespace/>setXYPlotterResultPath(analyzerJob);
-				<portlet:namespace/>checkAnalyzerJob(analyzerJob);
-				return true;
+				if(<portlet:namespace/>checkAnalyzerJob(analyzerJob)){
+					<portlet:namespace/>setXYPlotterResultPath(analyzerJob);
+				}
 			}else{
 				alert("It did not run properly. Please contact your administrator.");
-				return false;
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown){
@@ -497,35 +496,45 @@ function <portlet:namespace/>executeAnalyzer(analyzerJob, inputFileName, fileId,
 			}else{
 				alert("[ERROR] AJAX FAILED during executeAnalyzer -->"+textStatus+": "+errorThrown);
 			}
-			return false;
 		}
 	});
 }
 
 function <portlet:namespace/>checkAnalyzerJob(analyzerJob){
-	$.ajax({
-		url : '${checkAnalyzerURL}',
-		type : 'POST',
-		dataType : 'json',
-		data : {
-			"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob),
-			"<portlet:namespace/>userName" : <portlet:namespace/>jobUserName
-		},
-		success : function(result){
-			if($("#<portlet:namespace/>navigatorParameter").is(":hidden")){
-				$("#<portlet:namespace/>navigatorParameter").slideDown("fast");
+	bStart();
+	<portlet:namespace/>currentTimeOut = setTimeout(function(){
+		$.ajax({
+			url : '${checkAnalyzerURL}',
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				"<portlet:namespace/>analyzerJob" : JSON.stringify(analyzerJob),
+				"<portlet:namespace/>userName" : <portlet:namespace/>jobUserName
+			},
+			success : function(result){
+				if($("#<portlet:namespace/>navigatorParameter").is(":hidden")){
+					$("#<portlet:namespace/>navigatorParameter").slideDown("fast");
+				}
+				
+				<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.FILE_CONTENT,result.out,'parametric');
+				return true;
+			},
+			error : function(jqXHR, textStatus, errorThrown){
+				if(jqXHR.responseText !== ''){
+					alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+jqXHR.responseText);
+				}else{
+					alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+errorThrown);
+				}
+				return false;
+			},
+			complete : function() {
+				if(<portlet:namespace/>currentTimeOut){
+					clearTimeout(<portlet:namespace/>currentTimeOut);
+				}
+				bEnd();
 			}
-			
-			<portlet:namespace/>parameterInitEditor(OSP.Enumeration.PathType.FILE_CONTENT,result.out,'parametric');
-		},
-		error : function(jqXHR, textStatus, errorThrown){
-			if(jqXHR.responseText !== ''){
-				alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+jqXHR.responseText);
-			}else{
-				alert("[ERROR] AJAX FAILED during checkAnalyzerJob -->"+textStatus+": "+errorThrown);
-			}
-		}
-	});
+		});
+	},1000);
 }
 
 function <portlet:namespace/>getSelectedGeometryNode(){

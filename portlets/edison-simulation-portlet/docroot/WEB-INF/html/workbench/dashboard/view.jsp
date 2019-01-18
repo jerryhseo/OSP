@@ -764,7 +764,7 @@ function <portlet:namespace/>submitJobElementChange(preJobUuid,currentJobUuid){
 	/*Object Id Change*/
 	$topLi = $("li#<portlet:namespace/>job-"+preJobUuid);
 	$topLi.children("a").attr("data-job-uuid",currentJobUuid);
-	$topLi.attr("id",currentJobUuid);
+	$topLi.attr("id","<portlet:namespace/>job-"+currentJobUuid);
 	
 	/*jobStatus Sync*/
 	<portlet:namespace/>syncJobStatusList(<portlet:namespace/>workSimulationId);

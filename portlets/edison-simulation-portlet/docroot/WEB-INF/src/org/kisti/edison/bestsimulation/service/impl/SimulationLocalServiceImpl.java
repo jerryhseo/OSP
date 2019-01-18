@@ -1927,8 +1927,8 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 	}
 	
 	public void deleteSimulation( String simulationUuid ) throws NoSuchSimulationException, SystemException{
-		super.simulationPersistence.removeBySimulationUuid(simulationUuid);
 		super.simulationJobLocalService.deleteJobsBySimulationUuid(simulationUuid);
+		super.simulationPersistence.removeBySimulationUuid(simulationUuid);
 	}
 	
 	public SimulationJob addJob ( String simulationUUID, ServiceContext sc) throws SystemException{
