@@ -103,6 +103,10 @@
             P.portType = function( type ){
                 return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.TYPE, arguments));
             };
+            
+            P.repositoryType = function( type ){
+                return P.property.apply(P, OSP.Util.addFirstArgument(OSP.Constants.REPOSITORY_TYPE, arguments));
+            };
 
             P.generateInstanceId = function( instanceIndex ){
                 var instanceId = P.instanceId();
@@ -200,20 +204,9 @@
 //                    portletURL.setParameter( 'eventEnable', eventEnable);
                     var initData = {};
                     
-                    var portType = P.portType();
-                    
+                    console.log(P);
                     /*repositoryType_*/
-                    switch( portType ){
-        	            case OSP.Enumeration.PortType.INPUT:
-        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-        	                break;
-        	            case OSP.Enumeration.PortType.OUTPUT:
-        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-        	                break;
-        	            case OSP.Enumeration.PortType.LOG:
-        	            	initData[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-        	                break;
-                    }
+                    initData[OSP.Constants.REPOSITORY_TYPE] = P.repositoryType();
                     
                     portletURL.setParameter( 'initData', JSON.stringify(initData));
                     
@@ -227,7 +220,6 @@
                         dataType:'text',
                         success: function( renderResult ){
                         	P.status(true);
-                        	
                             if(typeof $targetDiv.attr("section-type")!="undefined"){
                                 $targetDiv.html( renderResult ).promise().done(function(){
                                 	callback(connector,P.instanceId());
@@ -1436,8 +1428,26 @@
                     var portlet = portlets[pi];
                     
                     var portType = scienceApp.getPortType(portlet.portName());
-                    if( portType )
-                        portlet.portType( portType );
+                    if( portType ){
+                    	portlet.portType( portType );
+                    	switch( portType ){
+                    		case OSP.Enumeration.PortType.INPUT:
+                    			if(!Workbench.isBlockInputPort(portlet.portName())){
+                    				portlet.repositoryType(OSP.Enumeration.RepositoryTypes.USER_HOME);
+            	            	}else{
+            	            		var repositoryType = Workbench.getBlockInputPortRepositoryType(P.portName());
+            	            		portlet.repositoryType(repositoryType);
+            	            	}
+                    		break;
+                    		case OSP.Enumeration.PortType.OUTPUT:
+                    			portlet.repositoryType(OSP.Enumeration.RepositoryTypes.USER_JOBS);
+                        	break;
+                    		case OSP.Enumeration.PortType.LOG:
+                    			portlet.repositoryType(OSP.Enumeration.RepositoryTypes.USER_JOBS);
+                        	break;
+                    	}
+                    }
+                    
                 }
             }
             
@@ -2167,11 +2177,25 @@
         	if(!blockPorts){return false;}
         	if(blockPorts===''){return false;}
         	
-        	var arrayBlockPorts = blockPorts.split(',');
-        	for(var index in arrayBlockPorts){
-        		var blockPortName = arrayBlockPorts[index];
-        		if(blockPortName===portName){
+        	for(var index in blockPorts){
+        		var blockPort = blockPorts[index];
+        		if(blockPort[OSP.Constants.PORT_NAME]===portName){
         			return true;
+        		}else{
+        			return false;
+        		}
+        	}
+        };
+        
+        Workbench.getBlockInputPortRepositoryType = function(portName){
+        	var blockPorts = Workbench.blockInputPorts();
+        	if(!blockPorts){return false;}
+        	if(blockPorts===''){return false;}
+        	
+        	for(var index in blockPorts){
+        		var blockPort = blockPorts[index];
+        		if(blockPort[OSP.Constants.PORT_NAME]===portName){
+        			return blockPort[OSP.Constants.REPOSITORY_TYPE];
         		}else{
         			return false;
         		}
@@ -2316,25 +2340,7 @@
         
         Workbench.namespace( namespace );
         
-        Workbench.handleRegisterEvents = function( portletId, portletType, events ){
-            switch( portletType ){
-                case OSP.Enumeration.PortType.DASHBOARD:
-                    Workbench.dashboardPortlet( portletId );
-                    break;
-                case OSP.Enumeration.PortType.SIMULATION_MONITOR:
-                    Workbench.simulationMonitorPortlet( portletId );
-                    break;
-                case OSP.Enumeration.PortType.JOB_MONITOR:
-                    Workbench.jobMonitorPortlet( portletId );
-                    break;
-                case OSP.Enumeration.PortType.JOB_STATUS:
-                    Workbench.jobStatusPorltet( portletId );
-                    break;
-                case OSP.Enumeration.PortType.APP_INFO:
-                    Workbench.scienceAppInfoPortlet( portletId );
-                    break;
-            }
-            
+        Workbench.handleRegisterEvents = function( portletId, events ){
             if( Workbench.registerEvents( portletId, events )){
             	fire( OSP.Event.OSP_EVENTS_REGISTERED, portletId, events );
             }
@@ -3323,19 +3329,8 @@
             var data = {};
             var params = {};
             
-            
             /*repositoryType_*/
-            switch( portType ){
-	            case OSP.Enumeration.PortType.INPUT:
-	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-	                break;
-	            case OSP.Enumeration.PortType.OUTPUT:
-	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-	                break;
-	            case OSP.Enumeration.PortType.LOG:
-	            	data[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-	                break;
-            }
+            data[OSP.Constants.REPOSITORY_TYPE] = portlet.repositoryType()
             
             /*user_*/
             data[OSP.Constants.USER] = Workbench.currentUserName();
@@ -3360,8 +3355,8 @@
                     }
             };
     		
-//    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
-//    		console.log(JSON.stringify(eventData));
+    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
+    		console.log(JSON.stringify(eventData));
             Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
         };
         
