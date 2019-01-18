@@ -21,7 +21,7 @@ ${portType}<br/>${portData}<br/>${simulationUuid}
 <div class="row">
 	<div class="col-md-12">
 		<div class="btn-group pull-right" style="margin: 5px 0px;">
-			<c:if test="${portType eq 'inputPorts'}">
+			<c:if test="${saveFlag}">
 				<button class="btn btn-primary" onclick="<portlet:namespace/>returnJobData()">
 					<span class="icon-save"> Save</span>
 				</button>
@@ -78,11 +78,6 @@ $(function(e) {
 			
 			<portlet:namespace/>workbench.resizeLayout('<portlet:namespace/>');
 			<portlet:namespace/>workbench.loadPortlets('<%=LiferayWindowState.EXCLUSIVE%>');
-			
-			setTimeout(function(){
-				<portlet:namespace/>createSimulationAndJob();
-			}, 1000);
-			
 		},error:function(jqXHR, textStatus, errorThrown){
 			if(jqXHR.responseText !== ''){
 				console.log("<portlet:namespace/>RESOLVE_TEMPLATE-->"+textStatus+": "+jqXHR.responseText);
@@ -102,10 +97,10 @@ $(function(e) {
 ***********************************************************************/
 Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
-		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
+		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']' );
+		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data );
 		
-// 		<portlet:namespace/>createSimulationAndJob();
+		<portlet:namespace/>createSimulationAndJob();
 	}
 });
 
@@ -219,8 +214,10 @@ function <portlet:namespace/>createSimulationAndJob(){
 	}else if('${portType}'==='outputPorts'){
 		portType = OSP.Enumeration.PortType.OUTPUT;
 	}
+	setTimeout(function() {
+		<portlet:namespace/>workbench.handleModuleViewerData(portType);
+	}, 500);
 	
-	<portlet:namespace/>workbench.handleModuleViewerData(portType);
 }
 
 function <portlet:namespace/>returnJobData(){

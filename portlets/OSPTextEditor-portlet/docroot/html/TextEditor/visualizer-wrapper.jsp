@@ -139,6 +139,7 @@ function <portlet:namespace/>processInitAction( jsonInitData ){
 function <portlet:namespace/>fireDataChangedEvent( content ){
 	console.log('fireDataChangedEvent in text editor wrapper...');
 	<portlet:namespace/>visualizer.fireDataChangedEvent({
+		type_: "content",
 		content_: content 
 	});
 };
@@ -157,7 +158,7 @@ function <portlet:namespace/>setTextEditorContent( content ){
 $('#<portlet:namespace/>sample').click(function(){
 	if( <portlet:namespace/>disabled )
 		return;
-
+	
 	<portlet:namespace/>visualizer.fireRequestSampleContentEvent();
 });
 

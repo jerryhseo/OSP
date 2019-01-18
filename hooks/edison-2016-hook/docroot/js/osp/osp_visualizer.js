@@ -684,7 +684,7 @@
                 //Very first data to be disploy from the connector.
                 console.log( 'defaultEventsResigeteredEventHandler called.....', jsonData );
                 if( jsonData ){
-                    Visualizer.loadCanvas( jsonData, false);
+//                    Visualizer.loadCanvas( jsonData, false);
                 }
             }; 
 
@@ -731,6 +731,10 @@
         };
 
         var fireDataChangedEvent = function( data, params ){
+        	if(currentData.type()===OSP.Enumeration.PathType.FILE_CONTENT){
+        		data.type_ = currentData.type();
+        	}
+        	
             if( data ){
                 setCurrentData( data );
                 currentData.dirty(true);
@@ -745,7 +749,7 @@
             Liferay.fire( OSP.Event.OSP_SAMPLE_SELECTED, createEventData(data, params) );
         };
 
-        var fireRequestSampleContent = function( data, params ){
+        var fireRequestSampleContentEvent = function( data, params ){
             Liferay.fire( OSP.Event.OSP_REQUEST_SAMPLE_CONTENT, createEventData(data, params) );
         };
 
@@ -1019,6 +1023,9 @@
             //callIframeFuncDelayed( 'setNamespace', 10, function(){}, namespace );
             //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
             canvas.contentWindow['setNamespace']( namespace );
+            
+            fireRegisterEventsEvent();
+            
             if( disabled )
                 canvas.contentWindow['disable']( disabled );
         }
@@ -1050,7 +1057,7 @@
             fireDataChangedEvent: fireDataChangedEvent,
             fireSampleSelectedEvent: fireSampleSelectedEvent,
             fireRegisterEventsEvent: fireRegisterEventsEvent,
-            fireRequestSampleContent:fireRequestSampleContent,
+            fireRequestSampleContentEvent:fireRequestSampleContentEvent,
             fireRequestSampleURL:fireRequestSampleURL,
             fireRequestDataEvent: fireRequestDataEvent,
             fireResponseDataEvent:fireResponseDataEvent,

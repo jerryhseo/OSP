@@ -336,13 +336,13 @@ $(function(e) {
  ***********************************************************************/
 Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']', e.portletType );
+		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']' );
 		delete <portlet:namespace/>lodingPortlets[e.portletId];
 		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0){
 			//portlet all loding check
 			<portlet:namespace/>displayInit();
 		}
-		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.portletType, e.data );
+		<portlet:namespace/>workbench.handleRegisterEvents( e.portletId, e.data );
 	}
 });
 

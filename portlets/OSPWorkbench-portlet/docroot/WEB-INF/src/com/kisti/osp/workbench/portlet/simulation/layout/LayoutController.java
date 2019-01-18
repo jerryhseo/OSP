@@ -996,7 +996,7 @@ public class LayoutController {
 				String portName = inputData.getString("portName_");
 				String pathType = inputData.getString("type_");
 				
-				if( pathType.equalsIgnoreCase("fileContent") ){
+				if( pathType.equalsIgnoreCase("fileContent")||pathType.equalsIgnoreCase("content") ){
 					String inputParent = inputData.getString("parent_", "");
 					String inputFileName = inputData.getString("name_", "");
 					Path parentPath = null;
@@ -1012,7 +1012,7 @@ public class LayoutController {
 						inputFileName = portName.replaceAll("-", "");
 					}
 					
-					String content = inputData.getString("context_");
+					String content = inputData.getString("content_");
 					
 					String fileId = ibAgent.uploadFileContent( 
 							portletRequest, 
@@ -1030,7 +1030,7 @@ public class LayoutController {
 					inputData.put("type_", "file");
 					inputData.put("parent_", parentPath.toString());
 					inputData.put("name_", inputFileName);
-					inputData.remove("context_");
+					inputData.remove("content_");
 					
 				}else if( pathType.equalsIgnoreCase("dlEntryId")){
 					long fileEntryId = inputData.getLong("id_");
@@ -1077,7 +1077,12 @@ public class LayoutController {
 					
 					_log.info("Port Data get IB File ID: "+target.toString());
 					
-					String fileId =  ibAgent.getFileId( portletRequest, target.toString(), OSPRepositoryTypes.USER_HOME.toString());
+					String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+					if(inputData.has("repositoryType_")){
+						repositoryType = inputData.getString("repositoryType_");
+					}
+					
+					String fileId =  ibAgent.getFileId( portletRequest, target.toString(), repositoryType);
 					
 					JSONObject argVal = JSONFactoryUtil.createJSONObject();
 					argVal.put("type", "FILE_ID");
@@ -1092,17 +1097,20 @@ public class LayoutController {
 					
 				}else if ( pathType.equalsIgnoreCase("uri")){
 					
-				}else if( pathType.equalsIgnoreCase("content") ){
-					JSONObject argVal = JSONFactoryUtil.createJSONObject();
-					argVal.put("type", "STRING");
-					argVal.put("value", inputData.getString("content_"));
-					progArgs.put(portName, argVal);
-					
-					files.put(portName, inputData.getString("content_"));
 				}else{
 					_log.error("Un-defined path type: " + pathType);
 					throw new PortletException();
 				}
+				
+				/*String Editor 사용시 작성*/
+//				if( pathType.equalsIgnoreCase("content") ){
+//					JSONObject argVal = JSONFactoryUtil.createJSONObject();
+//					argVal.put("type", "STRING");
+//					argVal.put("value", inputData.getString("content_"));
+//					progArgs.put(portName, argVal);
+//					
+//					files.put(portName, inputData.getString("content_"));
+//				}
 				
 				inputData.put( "dirty_", false);
 			}
