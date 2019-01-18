@@ -113,8 +113,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     /////////////////////////////////////////// renew start
 
-    function openNodeHandler(obj) {
-        console.log(obj)
+    function openNodeHandler(node) {
+        console.log(node)
+        if(node.data && node.data.scienceAppData &&
+            node.data.scienceAppData.runType === CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
+            fileComponentHandler(node)
+        }
+    }
+
+    function fileComponentHandler(node) {
+
     }
 
     function createPanel(boxTitle, templateData, btnType) {
@@ -394,14 +402,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function updateNodeStatus(workflowStatus) {
-        console.log(workflowStatus)
+        // console.log(workflowStatus)
         if (workflowStatus && workflowStatus.workflow) {
             if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.PAUSED) {
                 $(".before-pause").hide()
                 $(".after-pause").show()
+                $(".after-stop").hide()
             } else if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.RUNNING) {
                 $(".after-pause").hide()
                 $(".before-pause").show()
+                $(".after-stop").hide()
             } else if (workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.FAILED ||
                 workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.CANCELED ||
                 workflowStatus.workflow.status === CONSTS.WF_STATUS_CODE.COMPLETED) {
@@ -470,10 +480,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                             if (_isBlank(job.workflowUUID)) {
                                 $(".before-submit").show()
                                 $(".after-submit").hide()
+                                $(".after-stop").hide()
                             } else {
                                 $(".before-submit").hide()
                                 $(".after-submit").show()
                                 $(".after-pause").hide()
+                                $(".after-stop").hide()
 
                                 var initStatus = JSON.parse(job.statusResponse)
                                 updateNodeStatus(initStatus)
@@ -1334,6 +1346,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         var prefixedId = prefix + targetPort.id
                         var sourceNode = sourcePort.getNode()
                         var targetNode = targetPort.getNode()
+                        console.log(sourceNode)
                         sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
                         if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
                             sourceNode.data.childNodes.push(targetNode.getFullId())
@@ -1363,6 +1376,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }
                 })
             })
+            return false
 
             if(!validateSimulationJob()){
                 toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)

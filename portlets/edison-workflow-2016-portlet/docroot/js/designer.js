@@ -144,7 +144,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 events: {
                     dblclick: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
-                            uiPanelInstance.openNodeHandler(obj);
+                            uiPanelInstance.openNodeHandler(obj.node);
                         }
                     }
                 }
@@ -157,7 +157,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         if (isDesigner) {
                         	openWfAppDataSettingHandler(obj.node);
                         } else if (!isDesigner && uiPanelInstance) {
-                            uiPanelInstance.openNodeHandler(obj);
+                            uiPanelInstance.openNodeHandler(obj.node);
                         }
                     }
                 }
@@ -229,7 +229,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         var wfId = node.id;
         var data = node.data;
         var runType = data.scienceAppData.runType;
-        if (uiPanelInstance) {
+        if (uiPanelInstance && isDesigner) {
             if (runType != WF_APP_TYPES.FILE_COMPONENT.NAME) {
                 uiPanelInstance.openWfAppDataSetting(wfId, runType, data.scienceAppData.name);
             } else {
@@ -870,34 +870,37 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             var cpuNumber = appData["cpuNumber"] ? appData["cpuNumber"] : "" + appData["defaultCpus"];
             var items = { items: {} };
 
-            if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
-                items["items"]["open-texteditor"] = {
-                    name: "Converter Script",
-                    icon: "edit",
-                    callback: function(key, options) {
-                        openWfAppDataSettingHandler(node);
-                    }
-                };
-            } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
-                items["items"]["open-texteditor"] = {
-                    name: "Condition Script",
-                    icon: "edit",
-                    callback: function(key, options) {
-                        openWfAppDataSettingHandler(node);
-                    }
-                };
-            } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
-                items["items"]["open-texteditor"] = {
-                    name: "Cofiguration Data",
-                    icon: "fa-cogs",
-                    callback: function(key, options) {
-                        openWfAppDataSettingHandler(node);
-                    }
-                };
+            if(isDesigner) {
+                if (runType == WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+                    items["items"]["open-texteditor"] = {
+                        name: "Converter Script",
+                        icon: "edit",
+                        callback: function(key, options) {
+                            openWfAppDataSettingHandler(node);
+                        }
+                    };
+                } else if (runType == WF_APP_TYPES.CONTROLLER.NAME) {
+                    items["items"]["open-texteditor"] = {
+                        name: "Condition Script",
+                        icon: "edit",
+                        callback: function(key, options) {
+                            openWfAppDataSettingHandler(node);
+                        }
+                    };
+                } else if (runType == WF_APP_TYPES.FILE_COMPONENT.NAME) {
+                    items["items"]["open-texteditor"] = {
+                        name: "Cofiguration Data",
+                        icon: "fa-cogs",
+                        callback: function(key, options) {
+                            openWfAppDataSettingHandler(node);
+                        }
+                    };
+                }
             }
 
             if (nodeData["type"]) {
                 var type = nodeData["type"];
+                console.log(type)
                 if (type === "scienceApp") {
                     items["items"]["open-info"] = {
                         name: "App Information",
@@ -910,6 +913,16 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             }
                         }
                     };
+                }else if (type === "workflowApp") {
+                    items["items"]["open-handler"] = {
+                        name: "Open Port",
+                        icon: "fa-cogs",
+                        callback: function(key, options) {
+                            if (!isDesigner && uiPanelInstance) {
+                                uiPanelInstance.openNodeHandler(node)
+                            }
+                        }
+                    }
                 }
             }
 
