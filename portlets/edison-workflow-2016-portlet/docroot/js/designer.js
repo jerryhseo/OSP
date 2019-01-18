@@ -140,7 +140,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var view = {
         nodes: {
             "scienceApp": {
-                template: "scienceApp-templete"
+                template: "scienceApp-templete",
+                events: {
+                    dblclick: function(obj) {
+                        if (!isDesigner && uiPanelInstance) {
+                            uiPanelInstance.openNodeHandler(obj);
+                        }
+                    }
+                }
             },
             "workflowApp": {
                 template: "workflowApp-templete",
@@ -149,6 +156,8 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 //                        console.log(obj);
                         if (isDesigner) {
                         	openWfAppDataSettingHandler(obj.node);
+                        } else if (!isDesigner && uiPanelInstance) {
+                            uiPanelInstance.openNodeHandler(obj);
                         }
                     }
                 }

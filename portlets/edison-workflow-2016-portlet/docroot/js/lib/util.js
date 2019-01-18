@@ -180,7 +180,9 @@ var getGUID = function () {
 function _enterkey(selector, runEventHandler){
   $(selector).keypress(function(e){
     if(e.which == 13){
-      runEventHandler(e);
+      _delay(function () {
+        runEventHandler(e)
+      }, 500)
     }
   });
 }

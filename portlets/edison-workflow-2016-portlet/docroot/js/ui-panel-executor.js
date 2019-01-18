@@ -113,6 +113,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     /////////////////////////////////////////// renew start
 
+    function openNodeHandler(obj) {
+        console.log(obj)
+    }
+
     function createPanel(boxTitle, templateData, btnType) {
         if(currSimulations.selected() && currSimulations.selected().id) {
             currSimulations.select(currSimulations.selected().id)
@@ -147,6 +151,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var thisName = $(this).attr("name");
                 templateData.form[thisName] = thisValue;
             });
+
             if (templateData.btn && templateData.btn["create"]) {
                 _enterkey(that, templateData.btn["create"]);
             } else if (templateData.btn && templateData.btn["save"]) {
@@ -1032,6 +1037,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function newSimulation(){
         if (isValidate()) {
+            console.log(PANEL_DATA)
             var _f = function(){
                 executor.createSimulation({
                     workflowId: PANEL_DATA.setting.form.workflowId,
@@ -1986,6 +1992,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
 		"setPortData" : setPortData,
 		"closePortPopup" : closePortPopup,
+		"openNodeHandler" : openNodeHandler,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);
