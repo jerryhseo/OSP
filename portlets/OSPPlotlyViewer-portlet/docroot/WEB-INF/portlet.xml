@@ -6,11 +6,15 @@
 		<portlet-name>OSPPlotlyViewer</portlet-name>
 		<display-name>OSP Plotly Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.plotlyviewer.OSPPlotlyViewerPortlet
+			com.kisti.osp.viewer.portlet.plotlyviewer.OSPPlotlyViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/PlotlyViewer/plotly_viewer.jsp</value>
+			<value>/html/PlotlyViewer/visualizer-wrapper.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/PlotlyViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -20,7 +24,7 @@
 		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>OSP Plotly Viewer</title>
-			<short-title>OSP Plotly Viewer</short-title>
+			<short-title>OSPPlotlyViewer</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>

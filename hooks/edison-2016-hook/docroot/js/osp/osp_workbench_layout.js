@@ -2456,7 +2456,12 @@
             }
             
             if( sample ){
-                inputData.dlEntryId( sample.dlEntryId() );
+            	if(sample.dlEntryId()){
+            		inputData.dlEntryId( sample.dlEntryId() );
+            	}else{
+            		inputData.dlEntryId( sample[OSP.Constants.ID]);
+            	}
+            	
                 fireDataChanged( portletId, OSP.Util.toJSON( inputData ) );
             }
             else{

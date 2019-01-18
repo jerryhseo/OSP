@@ -132,6 +132,9 @@ public class ScienceAppController{
     			  sample.addProperty("type_", "dlEntryId_");
     			  sample.addProperty("relative_", true);
     			  port.add("sample_", sample);
+    		  }else{
+    			  JsonObject sample = port.get("sample_").getAsJsonObject();
+    			  sample.add("content_", sample.get("id_"));
     		  }
     		  
     		  
