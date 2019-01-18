@@ -333,8 +333,8 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			
 			if(!CustomUtil.strNull(vcToken).equals("")){
 				
-				icebreakerUrl = "https://www.edison.re.kr/ldap/";
-				vcToken = "ZWRpc29uYWRtOjE1NDY0NjQxNTk5MzQjJCVeJSQjMTU0NzY3Mzc1OTkzNA==";
+				/*icebreakerUrl = "https://www.edison.re.kr/ldap/";
+				vcToken = "ZWRpc29uYWRtOjE1NDY0NjQxNTk5MzQjJCVeJSQjMTU0NzY3Mzc1OTkzNA==";*/
 				URL url = new URL(icebreakerUrl+"/api/simulation/"+simulationUuid+"/job/"+jobUuid+"/status");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				

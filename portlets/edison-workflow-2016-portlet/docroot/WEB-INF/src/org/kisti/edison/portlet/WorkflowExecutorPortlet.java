@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -21,8 +22,10 @@ import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.model.IcebreakerVcToken;
+import org.kisti.edison.model.Workflow;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
+import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
@@ -36,8 +39,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -48,6 +53,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -233,4 +239,54 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
         }
         return icebreakerVcToken;
     }
+    
+    @ResourceMapping(value = "copyParentNodeFiles")
+    public void copyParentNodeFiles(ResourceRequest request, ResourceResponse response){
+    	
+		try {
+			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+			Map params = RequestUtil.getParameterMap(request);
+			String copyFileObj = CustomUtil.strNull(params.get("copyFileObj"), "");
+			
+			JSONObject obj = JSONFactoryUtil.createJSONObject(copyFileObj);
+			Long workflowId = obj.getLong("workflowId");
+			Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+			
+			String fileName = obj.getString("fileName");
+			String srcPportName = CustomUtil.strNull(obj.getString("sourcePortName"));
+			String simulationUuid = CustomUtil.strNull(obj.getString("simulationUuid"));
+			String simulationJobUuid = CustomUtil.strNull(obj.getString("simulationJobUuid"));
+			
+			User sourceUser = UserLocalServiceUtil.getUser(workflow.getUserId());
+			String source = simulationUuid + "/" + simulationJobUuid + "/" + srcPportName + "/" +fileName;
+			String srcRepositoryType = CustomUtil.strNull(obj.getString("repositoryType_"));
+			
+			User targetUser = themeDisplay.getUser();
+			Date thisDate = new Date();
+			System.out.println("thisDate : " + thisDate);
+			String target = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(thisDate) + "/" + fileName;
+			String targetRepositoryType = CustomUtil.strNull(obj.getString("targetRepositoryType"));
+			
+			System.out.println("srcScreenName : " + sourceUser.getScreenName());
+			System.out.println("source : " + source);
+			System.out.println("srcRepositoryType : " + srcRepositoryType);
+			System.out.println("targetScreenName : " + targetUser.getScreenName());
+			System.out.println("target : " + target);
+			System.out.println("targetRepositoryType : " + targetRepositoryType);
+			
+			// copyFile
+			target = OSPFileLocalServiceUtil.copyFile(sourceUser.getScreenName(), source, srcRepositoryType, 
+											targetUser.getScreenName(), target, targetRepositoryType, false);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }
