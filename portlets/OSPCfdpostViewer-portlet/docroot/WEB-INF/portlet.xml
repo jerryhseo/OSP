@@ -4,13 +4,17 @@
 	
 	<portlet>
 		<portlet-name>OSPCfdpostViewer</portlet-name>
-		<display-name>OSP Cfd Post Viewer</display-name>
+		<display-name>OSP CFDPOST Viewer</display-name>
 		<portlet-class>
-			com.kisti.osp.analyzer.portlet.plotviewer.OSPPlotViewerPortlet
+			com.kisti.osp.viewer.portlet.CfdpostViewer.OSPCfdpostViewerPortlet
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/PlotViewer/plot_viewer.jsp</value>
+			<value>/html/CfdpostViewer/cfdpost_viewer.jsp</value>
+		</init-param>
+		<init-param>
+			<name>config-template</name>
+			<value>/html/CfdpostViewer/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -19,8 +23,8 @@
 		</supports>
 		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>OSP CFD Post Viewer</title>
-			<short-title>OSP CFD Post Viewer</short-title>
+			<title>OSP CFDPOST Viewer</title>
+			<short-title>OSPCfdpostViewer</short-title>
 			<keywords></keywords>
 		</portlet-info>
 		<security-role-ref>

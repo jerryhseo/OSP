@@ -1,0 +1,76 @@
+.osp-analyzer {
+	height: 100%;
+   	min-height:200px;
+   	margin: 0;
+   	padding-top: 0px;
+    padding-right: 0px !important;
+    padding-bottom: 5px;
+    padding-left: 0px !important;
+}
+
+
+.osp-analyzer .header{
+	height: 35px;
+	padding: 0;
+	margin:5px;
+}
+.osp-analyzer .header [class*="col-"]{
+	padding-left: 0;
+	padding-right: 0;
+}
+.osp-analyzer .no-header-frame{ 
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+.osp-analyzer .frame{ 
+	height: calc(100% - 45px);
+	height: -o-calc(100% - 45px); /* opera */
+	height: -webkit-calc(100% - 45px); /* google, safari */
+	height: -moz-calc(100% - 45px); /* firefox */
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.osp-analyzer .canvas {
+	height:100%;
+	margin:0;
+	padding:0;
+	
+	overflow:auto;
+}
+.osp-analyzer .iframe-canvas {
+   	border:none;
+   	height:100%;
+   	margin:0;
+   	padding:0;
+   	
+   	overflow:hidden;
+}
+
+.osp-analyzer .icon-menu {
+  font-size: 15px;
+  color: #5cb2d7;
+  border: 2px solid;
+  border-radius: 3px;
+  padding-left: 2px;
+  padding-right: 3px;
+  vertical-align: middle;
+}
+
+.osp-analyzer .hidden {
+	display: none;
+}
+
+.osp-analyzer .file-explorer-content {
+	height: calc(100% - 40px);
+	height: -o-calc(100% - 40px); /* opera */
+	height: -webkit-calc(100% - 40px); /* google, safari */
+	height: -moz-calc(100% - 40px); /* firefox */ 
+}
+
+.osp-menu {
+
+}

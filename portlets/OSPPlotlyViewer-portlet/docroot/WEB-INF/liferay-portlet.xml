@@ -6,10 +6,9 @@
 	<portlet>
 		<portlet-name>OSPPlotlyViewer</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>com.kisti.osp.viewer.portlet.plotlyviewer.PlotlyViewerPortletConfigAction</configuration-action-class>
 		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>plotly-viewer-portlet</css-class-wrapper>
+		<css-class-wrapper>PlotlyViewer-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<role-mapper>
