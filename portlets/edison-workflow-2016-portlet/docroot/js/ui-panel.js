@@ -691,7 +691,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 		var nodeData = designer.getNodeData(nodeId);
 		var value;
 		if(nodeData[OSP.Constants.INPUT_DATA]){
-    		value = nodeData[OSP.Constants.INPUT_DATA][OSP.Constants.CONTEXT];
+    		value = nodeData[OSP.Constants.INPUT_DATA][OSP.Constants.CONTENT];
 		}
 		
 		var inputs = [{"name": "script", "value": value}];
@@ -699,7 +699,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
 			var inputData = new OSP.InputData();
 			inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
-			inputData.context( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
+			inputData.content( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
 			nodeData[OSP.Constants.INPUT_DATA] = OSP.Util.toJSON( inputData );
 			
 			designer.setNodeData(nodeId,nodeData);

@@ -116,13 +116,13 @@ div#<portlet:namespace/>navigatorParameter .container-fluid{
 					</li>
 					
 					
-					<li class="con-button" id="<portlet:namespace/>con-mesh-view">
-						<a class='btn btn-small' href='#'>
-							<i class='icon-large icon-edit'>
-								<span class="font">View</span> 
-							</i>
-						</a>
-					</li>
+<%-- 					<li class="con-button" id="<portlet:namespace/>con-mesh-view"> --%>
+<!-- 						<a class='btn btn-small' href='#'> -->
+<!-- 							<i class='icon-large icon-edit'> -->
+<!-- 								<span class="font">View</span>  -->
+<!-- 							</i> -->
+<!-- 						</a> -->
+<!-- 					</li> -->
 					
 					<li>
 						<a class='btn btn-small' href='#' onclick="<portlet:namespace/>closePanel();return false;">

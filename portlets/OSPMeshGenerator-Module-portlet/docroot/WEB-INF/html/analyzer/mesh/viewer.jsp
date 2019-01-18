@@ -12,7 +12,7 @@
 
 <%
 String Local_MAC_URL = "http://118.128.153.167:9090/fileDownload";
-String frameURL = "/eturb-portlet/public/viewer.html";
+String frameURL = "/OSPMeshGenerator-Module-portlet/public/viewer.html";
 
 HttpServletRequest r = PortalUtil.getHttpServletRequest(renderRequest);
 String paramUrl = PortalUtil.getOriginalServletRequest(r).getParameter("url");

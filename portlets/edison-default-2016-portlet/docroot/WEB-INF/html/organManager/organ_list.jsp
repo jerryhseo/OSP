@@ -428,7 +428,7 @@
 		$("#<portlet:namespace/>organForm input[type=hidden]").val("")
 	}
 	
-	// 기관 추가 Bubbon Event
+	/* 기관 추가 Bubbon Event */
 	function <portlet:namespace/>addDetailView(){
 		$(".<portlet:namespace/>organTr").removeClass("selected");
 		$(".<portlet:namespace/>organTr").attr("viewType", "close");

@@ -94,7 +94,6 @@
     overflow: hidden;
     position: relative;
     left: 5px;
-    float: left;
     margin-bottom: 0px;
 	top: -3px;
 }
@@ -130,7 +129,6 @@
     overflow: hidden;
     position: relative;
     right: 5px;
-    float: right;
     margin-bottom: 0px;
     top: -3px;
 }
@@ -193,7 +191,7 @@
 }
 
 .wf-box .wf-node-ports ul li {
-    line-height: 20px;
+    line-height: 16px;
 }
 
 .wf-box .wf-node-ports ul li.wf-port {
