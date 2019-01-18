@@ -173,7 +173,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 anchor: ["Center"],
                 events: {
                     click: function(obj) {
-                        // console.log(obj)
                         if (!isDesigner && uiPanelInstance) {
                             uiPanelInstance.openInputPortData(obj)
                         }
@@ -187,7 +186,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             if (isDesigner && uiPanelInstance) {
                                 uiPanelInstance.openWfAppFileDataSetting(nodeId, nodeData.scienceAppData.name, portId, portType);
                             } else if(!isDesigner){
-                            	uiPanelInstance.openInputPort(nodeId, portId);
+                            	uiPanelInstance.openInputPortData(nodeId, portId);
                             }
                         } else {
                             return false;
@@ -197,6 +196,13 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             },
             "outputPorts": {
                 template: "output-port-templete",
+                events: {
+                    click: function(obj) {
+                        if (!isDesigner && uiPanelInstance) {
+                            uiPanelInstance.openOutputPortData(obj)
+                        }
+                    },
+                },
                 anchor: ["Right"]
             },
             "sourceAll": {

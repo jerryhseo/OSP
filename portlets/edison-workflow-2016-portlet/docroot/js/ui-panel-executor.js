@@ -406,6 +406,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $.each(workflowStatus.workflow.simulations, function () {
                 var simulation = this
                 var nodeId = simulation.clientId
+                var node = currNodes.get(nodeId)
+                node.data.status = simulation
+
                 $("#" + nodeId).removeClass(
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
@@ -691,8 +694,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             if (port.dataType_.name === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.INPUT_DATA_TYPE) {
                 return
             }
-            if(isInput) {
+            if (isInput) {
                 openInputPort(nodeId, portId)
+            } else {
+                openOutputPort(nodeId, portId)
             }
         })
         $(that).children("a").hover(
@@ -832,13 +837,28 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // console.log(portData)
         openInputPort(portData.nodeId, portData.nodeId + "." +portData.portId)
     }
+    function openOutputPortData(portData) {
+        openOutputPort(portData.nodeId, portData.nodeId + "." +portData.portId)
+    }
 
     function closePortPopup(nodeId, portName, dialogId) {
         Liferay.Util.getWindow(dialogId).destroy()
         currOpenPort.remove(nodeId + "." + portName)
     }
 
+    function openOutputPort(nodeId, portId) {
+        var node = currNodes.get(nodeId)
+        console.log(node)
+        var userId = currJobs.selected() ? currJobs.selected().userId : null
+        var portData = {}
+        var currPortData = $.extend({}, currOutputPorts.get(portId))
+        delete currPortData.id
+        portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
+        console.log(portData)
+
+    }
     function openInputPort(nodeId, portId) {
+        var node = currNodes.get(nodeId)
         console.log(currJobs.selected())
         var userId = currJobs.selected() ? currJobs.selected().userId : null
         var portData = {}
@@ -846,12 +866,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         delete currPortData.id
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
 
-        var node = currNodes.get(nodeId)
+
         console.log(node)
         if(node && node.data && node.data.ibData) {
             node.data.ibData.simulationUuid || (node.data.ibData.simulationUuid= getGUID())
             // node.data.ibData.jobUuid || (node.data.ibData.jobUuid= getGUID())
-
         }else{
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
@@ -1928,6 +1947,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	return {
 		"openWorkflow" : openWorkflowByWorkflowId,
 		"openInputPortData" : openInputPortData,
+		"openOutputPortData" : openOutputPortData,
 		"openScienceAppWorkbench" : openScienceAppWorkbench,
 		"setSelectedJobFromWorkbench" : setSelectedJobFromWorkbench,
 		"setPortData" : setPortData,
