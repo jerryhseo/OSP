@@ -312,12 +312,28 @@ public class WorkflowSimulationController{
         }
     }
     
-    @RequestMapping(value = "/job/{simulationJobId}/run", method = RequestMethod.POST)
-    public @ResponseBody Map<String, Object> runWorkflow(
+//    @RequestMapping(value = "/job/{simulationJobId}/run", method = RequestMethod.POST)
+//    public @ResponseBody Map<String, Object> runSimulationJob(
+//        @PathVariable("simulationJobId") long simulationJobId, 
+//        HttpServletRequest request) throws Exception{
+//        try{
+//            return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob(simulationJobId).getModelAttributes();
+//        }catch (Exception e){
+//            log.error("error", e);
+//            throw e;
+//        }
+//    }
+    
+    @RequestMapping(value = {
+        "/{simulationId}/job/{simulationJobId}/rerun", 
+        "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> reRunSimulationJob(
+        @RequestParam Map<String, Object> params,
         @PathVariable("simulationJobId") long simulationJobId, 
         HttpServletRequest request) throws Exception{
         try{
-            return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob(simulationJobId).getModelAttributes();
+            return WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob(simulationJobId, params)
+                .getModelAttributes();
         }catch (Exception e){
             log.error("error", e);
             throw e;
@@ -368,6 +384,22 @@ public class WorkflowSimulationController{
     
     @RequestMapping(value = "/job/{simulationJobId}/resume", method = RequestMethod.POST)
     public @ResponseBody JsonNode resumeWorkflowSimulationJob(@
+        RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long simulationJobId, 
+        HttpServletRequest request) throws Exception{
+        try{
+            JsonNode status = Transformer
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .resumeWorkflowSimulationJob(simulationJobId).getStatusResponse());
+            return status;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = "/job/{simulationJobId}/cancel", method = RequestMethod.POST)
+    public @ResponseBody JsonNode cancelWorkflowSimulationJob(@
         RequestParam Map<String, Object> params,
         @PathVariable("simulationJobId") long simulationJobId, 
         HttpServletRequest request) throws Exception{
