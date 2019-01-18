@@ -21,7 +21,7 @@ ${portType}<br/>${portData}<br/>${simulationUuid}
 <div class="row">
 	<div class="col-md-12">
 		<div class="btn-group pull-right" style="margin: 5px 0px;">
-			<c:if test="${portType eq 'inputPorts'}">
+			<c:if test="${saveFlag}">
 				<button class="btn btn-primary" onclick="<portlet:namespace/>returnJobData()">
 					<span class="icon-save"> Save</span>
 				</button>
