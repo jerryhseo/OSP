@@ -341,3 +341,5 @@ a.job-li.is-ready {color: #37ec0b !important;}
 a.job-li.not-ready {color: red !important;}
 .port-element.input.is-ready {background-color:  #37ec0b !important;}
 .port-element.input.not-ready {background-color: red !important;}
+
+.modal-header { cursor: pointer; }

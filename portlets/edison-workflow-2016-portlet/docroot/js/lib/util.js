@@ -222,6 +222,43 @@ function _confirm(msg, _of, _cf){
   });
 }
 
+function eMap() {
+  var map
+  return {
+    put: function (key, value) {
+      if (!map) {
+        map = {}
+      }
+      if(key || key === 0) {
+        map[key] = value
+      }
+    },
+    get: function (key) {
+      if ($.isEmptyObject(map)) {
+        return undefined
+      }
+      return map[key]
+    },
+    remove: function(key) {
+      if(map.hasOwnProperty(key)) {
+        delete map[key]
+      }
+    },
+    removeAll: function() {
+      map = {}
+    },
+    containsKey: function (key) {
+      if (!key && key === 0) {
+        return false;
+      }
+      if ($.isEmptyObject(map)) {
+        return false;
+      }
+      return map.hasOwnProperty(key);
+    }
+  }
+}
+
 function eStruct(idName, dataName) {
   var map
   var list = []

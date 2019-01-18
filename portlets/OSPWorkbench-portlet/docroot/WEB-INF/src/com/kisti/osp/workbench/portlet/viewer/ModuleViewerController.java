@@ -65,6 +65,7 @@ public class ModuleViewerController {
 		String portData = ParamUtil.getString(request, "portData", "");
 		String status = ParamUtil.getString(request, "status", "INITIALIZED");
 		String nodeId = ParamUtil.getString(request, "nodeId");
+		String dialogId = ParamUtil.getString(request, "dialogId");
 		long userId = ParamUtil.getLong(request, "userId", 0);
 		if(userId != 0){
 		    screenName = UserLocalServiceUtil.getUser(userId).getScreenName();
@@ -150,6 +151,7 @@ public class ModuleViewerController {
 		model.addAttribute("screenName", screenName);
 		model.addAttribute("status", status);
 		model.addAttribute("nodeId", nodeId);
+		model.addAttribute("dialogId", dialogId);
 		
 		
 		return "view";

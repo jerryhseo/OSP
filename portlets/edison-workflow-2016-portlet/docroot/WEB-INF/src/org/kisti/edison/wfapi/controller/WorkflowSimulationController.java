@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonNode;
 import org.kisti.edison.model.Workflow;
 import org.kisti.edison.model.WorkflowSimulation;
-import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
@@ -22,7 +21,6 @@ import org.kisti.edison.wfapi.custom.exception.EdisonWorkflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -183,8 +181,6 @@ public class WorkflowSimulationController{
             int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
             int begin = (curPage - 1) * linePerPage;
             int end = begin + linePerPage;
-            System.out.println(begin);
-            System.out.println(end);
             
             List<Map<String, Object>> jobs = WorkflowBeanUtil.simulationJobToJstreeModel(
                 WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobs(
@@ -371,11 +367,14 @@ public class WorkflowSimulationController{
     }
     
     @RequestMapping(value = "/job/{simulationJobId}/resume", method = RequestMethod.POST)
-    public @ResponseBody JsonNode resumeWorkflowSimulationJob(@RequestParam Map<String, Object> params,
-        @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
+    public @ResponseBody JsonNode resumeWorkflowSimulationJob(@
+        RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long simulationJobId, 
+        HttpServletRequest request) throws Exception{
         try{
             JsonNode status = Transformer
-                .string2Json(WorkflowSimulationJobLocalServiceUtil.resumeWorkflowSimulationJob(simulationJobId).getStatusResponse());
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .resumeWorkflowSimulationJob(simulationJobId).getStatusResponse());
             return status;
         }catch (Exception e){
             log.error("error", e);

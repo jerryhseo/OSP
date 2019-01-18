@@ -26,7 +26,7 @@ ${portType}<br/>${portData}<br/>${simulationUuid}
 					<span class="icon-save"> Save</span>
 				</button>
 			</c:if>
-			<button class="btn btn-close">
+			<button class="btn btn-close" onclick="<portlet:namespace/>close()">
 				<span class="icon-arrow-down"> Close</span>
 			</button>
 		</div>
@@ -210,8 +210,10 @@ function <portlet:namespace/>returnJobData(){
 	var simulation = <portlet:namespace/>workbench.workingSimulation();
 	var job = simulation.workingJob();
 	var jobData = JSON.stringify(job.inputData("${portName}"));
-	console.log(jobData);
-	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData);
+	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData, '${dialogId}');
+}
+function <portlet:namespace/>close(){
+	Liferay.Util.getOpener().closeFromModule("${nodeId}","${portName}",'${dialogId}');
 }
 
 function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid){

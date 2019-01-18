@@ -94,7 +94,6 @@ import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeEditorLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeStructureLocalServiceUtil;
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
-import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -468,8 +467,13 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                 
                 String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
                 String targetPath = IBUtil.saveFileContent(userName, target, content, repositoryType);
+                System.out.println(targetPath);
 //                ibFileId = IBUtil.getFileId(targetPath);
-                ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath);
+                if(!System.getProperty("os.name").toLowerCase().contains("windows")){
+                    ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath);
+                }else {
+                    ibFileId = uploadFileToIcebreaker(groupId, token, new File(targetPath));
+                }
             }else if( pathType.equalsIgnoreCase("dlEntryId")){
                 long fileEntryId = GetterUtil.getLong(inputs.get("id_"));
                 Path parentPath = null;
@@ -495,13 +499,23 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                         parentPath.resolve(inputFileName).toString(),
                         repositoryType,
                         true);
-                ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, filePath);
+                System.out.println(filePath);
+                if(!System.getProperty("os.name").toLowerCase().contains("windows")){
+                    ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, filePath);
+                }else {
+                    ibFileId = uploadFileToIcebreaker(groupId, token, new File(filePath));
+                }
             }else if( pathType.equalsIgnoreCase("file")){
                 Path target = Paths.get(inputParent).resolve(inputFileName);
                 Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(
                     userName, target.toString(),
                     OSPRepositoryTypes.USER_HOME.toString());
-                ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath.toString());
+                System.out.println(targetPath.toString());
+                if(!System.getProperty("os.name").toLowerCase().contains("windows")){
+                    ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath.toString());
+                }else {
+                    ibFileId = uploadFileToIcebreaker(groupId, token, new File(targetPath.toString()));
+                }
             }else if( pathType.equalsIgnoreCase("contents") ){
 //                        JSONObject argVal = JSONFactoryUtil.createJSONObject();
 //                        argVal.put("type", "STRING");
@@ -510,6 +524,8 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //                        files.put(portName, inputData.getString("context_"));
             }
             if(ibFileId != null) {
+                System.out.println(file.getKey());
+                System.out.println(ibFileId);
                 file.setValue(ibFileId);
                 return file;
             }
@@ -741,10 +757,10 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 
     public WorkflowSimulationJob resumeWorkflowSimulationJob(long simulationJobId)
         throws PortalException, SystemException, IOException{
-        WorkflowSimulationJob WorkflowSimulationJob = WorkflowSimulationJobLocalServiceUtil
+        WorkflowSimulationJob simulationJob = WorkflowSimulationJobLocalServiceUtil
             .getWorkflowSimulationJob(simulationJobId);
         URL url = new URL(
-            WORKFLOW_ENGINE_URL_PRIVATE + "/workflow/" + WorkflowSimulationJob.getWorkflowUUID() + "/resume");
+            WORKFLOW_ENGINE_URL_PRIVATE + "/workflow/" + simulationJob.getWorkflowUUID() + "/resume");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("PUT");
@@ -1132,8 +1148,8 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                 responseBuffer.append(line);
             }
             reader.close();
-
-            JSONObject response = JSONFactoryUtil.createJSONObject(responseBuffer.toString());
+            String responseFileId = responseBuffer.toString();
+            JSONObject response = JSONFactoryUtil.createJSONObject(responseFileId);
             fileId = response.getString("id");
         }else if(connection.getResponseCode() == 400){
             connection.disconnect();
@@ -1265,8 +1281,10 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         String fileId = null;
         try{
             log.info("uploadFileToIcebreaker - upload target File : " + uploadFile.getAbsolutePath());
+            System.out.println(fileApiURL);
             Map returnFileMap = SimulationLocalServiceUtil.uploadFile(ICEBREAKER_UPLOAD_CLUSTER, fileApiURL,
                 icebreakerVcToken, uploadFile);
+            System.out.println(returnFileMap);
             fileId = CustomUtil.strNull(returnFileMap.get("fileId"));
         }catch (InterruptedException e){
             throw new SystemException(e);

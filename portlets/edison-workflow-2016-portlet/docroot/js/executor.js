@@ -212,6 +212,28 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             });
     }
 
+    function pauseSimulationJob(simulationJobId, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/job/" + simulationJobId + "/pause", {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            }, function () { });
+    }
+
+    function resumeSimulationJob(simulationJobId, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/job/" + simulationJobId + "/resume", {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            }, function () { });
+    }
+
     /////////////////////////////////////////// renew end
 
     function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
@@ -243,36 +265,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                 callback(workflowInstance);
             }
         }, function(){});
-    }
-
-    function pauseWorkflowInstance(workflowInstanceId, callback) {
-        _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post(
-            URI_PREFIX + "/workflows/instance/" + workflowInstanceId + "/pause", {},
-            function (workflowStatus) {
-                if (callback) {
-                    callback(workflowStatus);
-                }
-                if (workflowStatus.workflow) {
-                    drawWorkflowInstanceStatus(workflowStatus);
-                    updateStatus(workflowInstanceId);
-                }
-            }, function () { });
-    }
-
-    function resumeWorkflowInstance(workflowInstanceId, callback) {
-        _clearTimeout(STATUS_TIMER);
-        aSyncAjaxHelper.post(
-            URI_PREFIX + "/workflows/instance/"+workflowInstanceId+"/resume", {},
-            function (workflowStatus) {
-                if (callback) {
-                    callback(workflowStatus);
-                }
-                if (workflowStatus.workflow) {
-                    drawWorkflowInstanceStatus(workflowStatus);
-                    updateStatus(workflowInstanceId);
-                }
-            }, function () { });
     }
 
     function deleteWorkflowInstance(workflowInstanceId, callback){
@@ -653,14 +645,16 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             _clearTimeout(STATUS_TIMER)
         },
         "createSimulationJobEngine": createSimulationJobEngine,
+        "pauseSimulationJob": pauseSimulationJob,
+        "resumeSimulationJob": resumeSimulationJob,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
         "deleteWorkflowInstance": deleteWorkflowInstance,
         "runWorkflowInstance": runWorkflowInstance,
         "reRunWorkflowInstance": reRunWorkflowInstance,
-        "pauseWorkflowInstance": pauseWorkflowInstance,
-        "resumeWorkflowInstance": resumeWorkflowInstance,
+        // "pauseWorkflowInstance": pauseWorkflowInstance,
+        // "resumeWorkflowInstance": resumeWorkflowInstance,
         "getWorkflowInstanceStatus": getWorkflowInstanceStatus,
         "getWorkflowInstance": getWorkflowInstance,
         "loadWorkflowInstance": loadWorkflowInstance

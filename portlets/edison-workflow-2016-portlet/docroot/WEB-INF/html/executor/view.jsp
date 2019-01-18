@@ -173,19 +173,19 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-cloud-upload fa-2x"></i><br>
                 <span class="nav-icon-text">Submit</span>
               </li>
-              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-pause" data-divider="ib-li-divider" class="after-submit before-pause" style="display: none;">
                 <i class="fa fa-pause-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Pause</span>
               </li>
-              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
+              <li id="<portlet:namespace/>header-li-resume" data-divider="ib-li-divider" class="after-submit after-pause" style="display: none;">
                 <i class="fa fa-play-circle fa-2x"></i><br>
                 <span class="nav-icon-text">Resume</span>
               </li>
-              <li id="<portlet:namespace/>header-li-start" data-divider="ib-li-divider" class="after-stop" style="display: none;">
+              <li id="<portlet:namespace/>header-li-rerun" data-divider="ib-li-divider" class="after-stop" style="display: none;">
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
-              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit" style="display: none;">
+              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit before-stop" style="display: none;">
                 <i class="fa fa-window-close-o fa-2x"></i><br>
                 <span class="nav-icon-text">Cancel</span>
               </li>
@@ -524,13 +524,12 @@ function <portlet:namespace/>openSolverDeatilPopup(scienceAppId) {
 }
 
 AUI().ready(['liferay-util-window'], function(){
-	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portName, jobData){
-        <portlet:namespace/>closePopup(namespace + "inputPort");
-        uiPanel.setPortData(nodeId, portName, jobData);
-        $("body").css('overflow','');
-		// alert(nodeId);
-		// alert(portName);
-		// console.log(jobData);
+	Liferay.provide(window, "setJobDataFromModule", function(nodeId, portName, jobData, dialogId){
+        uiPanel.setPortData(nodeId, portName, jobData)
+        uiPanel.closePortPopup(nodeId, portName ,dialogId)
+    });
+	Liferay.provide(window, "closeFromModule", function(nodeId, portName, dialogId){
+        uiPanel.closePortPopup(nodeId, portName, dialogId)
 	});
 
 	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){

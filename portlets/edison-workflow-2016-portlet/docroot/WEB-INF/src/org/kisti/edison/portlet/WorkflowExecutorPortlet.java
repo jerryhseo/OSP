@@ -73,10 +73,10 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
             ScienceApp structuredEditor = ScienceAppLocalServiceUtil.getStructuredEditorScienceApp();
             String workflowId = ParamUtil.get(request, "workflowId", "0");
             String title = CustomUtil.strNull("title", null);
-            if(StringUtils.hasText(workflowId)){
-                int simulationCount = WorkflowSimulationLocalServiceUtil
-                .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId());
-            }
+//            if(StringUtils.hasText(workflowId)){
+//                int simulationCount = WorkflowSimulationLocalServiceUtil
+//                .getCountWorkflowSimulations(Long.valueOf(workflowId), title, currentUser.getUserId());
+//            }
             
             // Workflow Edit Permission Check
             boolean isAdmin = false;
