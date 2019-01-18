@@ -821,12 +821,15 @@ public class MyFileIcebreakerUtil {
                     
                     StringBuffer bodyStr = new StringBuffer();
                     
+                    System.out.println("sourceId : " + sourceId);
+                    System.out.println("destPath : " + destPath);
                     bodyStr.append("{");
                     bodyStr.append("   \"fileId\" : \"" + sourceId + "\", ");
                     
                     destPath = FILE_MOVE_PATH + userScreenName + "/repository/"+destPath + sourceFileName.toString();
                     bodyStr.append("   \"destPath\" : \""+destPath +"\" ");
                     bodyStr.append("}");
+                    System.out.println("bodyStr : " + bodyStr.toString());
                     
                     OutputStream os = conn.getOutputStream();
                     os.write(bodyStr.toString().getBytes());

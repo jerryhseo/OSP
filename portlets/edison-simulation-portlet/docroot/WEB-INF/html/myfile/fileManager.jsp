@@ -30,7 +30,6 @@
 <liferay-portlet:resourceURL var="createFolderURL" id="createNewFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="renameFolderURL" id="renameFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteFolderURL" id="deleteFolder" copyCurrentRenderParameters="false" escapeXml="false"/>
-<liferay-portlet:resourceURL var="copyFileURL"   id="copyFile"   copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="deleteFileURL" id="deleteFile" copyCurrentRenderParameters="false" escapeXml="false"/>
 <liferay-portlet:resourceURL var="getItemInfoURL" id="getItemInfo" copyCurrentRenderParameters="false" escapeXml="false"/>
 
@@ -593,7 +592,7 @@
 	}
 
 	/* File Paste Event */
-	function _fileManager_pasteNode(selectedItem){
+	function _fileManager_pasteNode(selectedItem, isSelectedFolder){
 		
 		var targetId = selectedItem.attr("id");
 		
@@ -618,10 +617,17 @@
 				} else {
 					destPath += "/" + value;
 				}
+				console.log("for destPath : " + destPath)
 			})
 		}
 		destPath = destPath.replace("HOME/", "");
-		destPath += "/" + selectedItem.text() + "/";
+		if(isSelectedFolder){
+			console.log(selectedItem);
+			destPath += "/" + selectedItem[0].innerText.replace("\n", "") + "/";
+		} else {
+			destPath += "/";
+		}
+		console.log("destPath : " + destPath);
 		
 		if(0 < copyFilesArray.length && targetId != ""){
 			var groupId = $("#<portlet:namespace/>groupId").val();
