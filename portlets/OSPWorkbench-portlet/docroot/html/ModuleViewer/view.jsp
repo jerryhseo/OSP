@@ -214,8 +214,10 @@ function <portlet:namespace/>createSimulationAndJob(){
 	}else if('${portType}'==='outputPorts'){
 		portType = OSP.Enumeration.PortType.OUTPUT;
 	}
+	setTimeout(function() {
+		<portlet:namespace/>workbench.handleModuleViewerData(portType);
+	}, 500);
 	
-	<portlet:namespace/>workbench.handleModuleViewerData(portType);
 }
 
 function <portlet:namespace/>returnJobData(){
