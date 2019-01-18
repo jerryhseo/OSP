@@ -11,6 +11,9 @@
   windowState="<%=LiferayWindowState.MAXIMIZED.toString() %>" >
   <liferay-portlet:param name="myaction" value="detailView" />
 </liferay-portlet:renderURL>
+
+<liferay-portlet:resourceURL var="copyParentNodeFilesURL" id="copyParentNodeFiles" copyCurrentRenderParameters="false"/>
+
 <link rel="stylesheet" href="${contextPath}/css/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="${contextPath}/css/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet" href="${contextPath}/css/adminlte/AdminLTE.css">
@@ -522,6 +525,25 @@ AUI().ready(['liferay-util-window'], function(){
 		Liferay.Util.getWindow(popupIdToClose).destroy();
 	});
 });
+
+function <portlet:namespace/>copyParentNodeFiles(params){
+	var copyFileResult = false;
+	$.ajax({
+		url: "<%=copyParentNodeFilesURL%>",
+		cache: false,
+		data: {
+			"<portlet:namespace/>copyFileObj" : JSON.stringify(params)
+		},
+		success: function(response) {
+			copyFileResult = true;
+		}, error:function(response,e){ 
+			copyFileResult = false;
+			alert('Sample file deletion error');
+		},complete: function(response){
+			return copyFileResult;
+		}
+	});
+}
 
 </script>
 </div>
