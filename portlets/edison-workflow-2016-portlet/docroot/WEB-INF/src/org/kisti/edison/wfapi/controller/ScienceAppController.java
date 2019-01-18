@@ -128,7 +128,7 @@ public class ScienceAppController{
 			  
     		  if(!port.has("sample_")){
     			  JsonObject sample = new JsonObject();
-    			  sample.addProperty("id_", dataTypeModel.getSamplePath());
+    			  sample.addProperty("content_", dataTypeModel.getSamplePath());
     			  sample.addProperty("type_", "dlEntryId_");
     			  sample.addProperty("relative_", true);
     			  port.add("sample_", sample);

@@ -723,16 +723,17 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 		}
     	
     	var nodeData = designer.getNodeData(nodeId);
+    	console.log(JSON.stringify(nodeData));
 		var inputs = new Array();
 		var hiddens = new Array();
 		var formType = "";
 		var title = "";
 		var sample = nodeData[portType][portId].sample_;
-		inputs.push({"isAppFile":true, "fileId": sample.id_, "fileName": "Download","title": "App Sample File"});
+		inputs.push({"isAppFile":true, "fileId": sample[OSP.Constants.CONTENT], "fileName": "Download","title": "App Sample File"});
 		
 		var wfSample = nodeData[portType][portId][OSP.Constants.WF_SAMPLE];
 		if(wfSample){
-			inputs.push({"isFile":true, "fileId": wfSample.id_, "fileName": wfSample.name_,"title": "WF Sample File"});
+			inputs.push({"isFile":true, "fileId": wfSample[OSP.Constants.CONTENT], "fileName": wfSample.name_,"title": "WF Sample File"});
 		}else{
 			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
 		}
