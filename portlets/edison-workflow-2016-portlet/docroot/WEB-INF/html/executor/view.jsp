@@ -185,33 +185,11 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-undo fa-flip-horizontal fa-2x"></i><br>
                 <span class="nav-icon-text">ReRun</span>
               </li>
-              <li id="<portlet:namespace/>header-li-cancel" data-divider="ib-li-divider" class="after-submit before-stop" style="display: none;">
-                <i class="fa fa-window-close-o fa-2x"></i><br>
-                <span class="nav-icon-text">Cancel</span>
-              </li>
               <li class="<portlet:namespace/>divider-vertical" style="display: block;"></li>
               <li id="<portlet:namespace/>header-li-data" class="top-btn" data-btn-type="designer" data-divider="data-li-divider">
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
-
-              <%--<li id="<portlet:namespace/>header-li-log" data-divider="ib-li-divider">--%>
-                <%--<i class="fa fa-desktop fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">Log</span>--%>
-              <%--</li>--%>
-              <%--<li id="<portlet:namespace/>header-li-download" data-divider="ib-li-divider">--%>
-                <%--<i class="fa fa-cloud-download fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">Download</span>--%>
-              <%--</li>--%>
-              <%--<li class="<portlet:namespace/>divider-vertical" id="<portlet:namespace/>data-li-divider"></li>--%>
-              <%--<li id="<portlet:namespace/>header-li-data" data-divider="data-li-divider">--%>
-                <%--<i class="fa fa-share-square-o fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">Open Data</span>--%>
-              <%--</li>--%>
-              <%--<li id="<portlet:namespace/>header-li-manual" data-divider="data-li-divider">--%>
-                <%--<i class="fa fa-book fa-2x"></i><br>--%>
-                <%--<span class="nav-icon-text">Manual</span>--%>
-              <%--</li>--%>
             </ul>
           </div>
           <!-- Navbar Right Menu -->

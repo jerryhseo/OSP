@@ -80,6 +80,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 import com.google.gson.Gson;
@@ -219,6 +220,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     }
 
     // COPY
+    @SuppressWarnings("unchecked")
     public WorkflowSimulationJob copyWorkflowSimulationJob(
         long sourceSimulationJobId, Map<String, Object> params)
         throws SystemException, PortalException{
@@ -234,7 +236,17 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             targetJob.setTitle("copy " + sourceJob.getTitle());
         }
         targetJob.setUserId(sourceJob.getUserId());
-        targetJob.setScreenLogic(sourceJob.getScreenLogic());
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Map<String, Object> screenLogic = gson.fromJson(sourceJob.getScreenLogic(), Map.class);
+        List<Map<String, Object>> nodes = (List<Map<String, Object>>) screenLogic.get("nodes");
+        for(Map<String, Object> node : nodes) {
+            Map<String, String> status = Maps.newHashMap();
+            status.put("status", "WAITING");
+            node.put("status", status);
+            node.put("ibData", Maps.newHashMap());
+        }
+        targetJob.setScreenLogic(gson.toJson(screenLogic));
+//        targetJob.setScreenLogic(sourceJob.getScreenLogic());
         targetJob = WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationJob(targetJob);
         WorkflowSimulationJobLocalServiceUtil.addWorkflowSimulationWorkflowSimulationJob(targetJob.getSimulationId(),
             targetJob.getSimulationJobId());
@@ -475,7 +487,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                     ibFileId = uploadFileToIcebreaker(groupId, token, new File(targetPath));
                 }
             }else if( pathType.equalsIgnoreCase("dlEntryId")){
-                long fileEntryId = GetterUtil.getLong(inputs.get("id_"));
+                long fileEntryId = GetterUtil.getLong(inputs.get("content_"));
                 Path parentPath = null;
                 if( Validator.isNull(inputParent) ){
                     SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");

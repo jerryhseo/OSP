@@ -323,13 +323,10 @@
     }
 }
 
-a.port.sidebar-btn.job-li { display: flex; justify-content: start}
-a.port.sidebar-btn.job-li > span.label { padding-top: 4px; margin-left: 11px; background-color: red; display: none;}
-li.node-li.not-ready a.port.sidebar-btn.job-li{color: red !important;}
-li.node-li.not-ready a.port.sidebar-btn.job-li > span.label {display: inline;}
-li.node-li.not-ready > ul > li.input > a {color: red !important;}
-
-.li-node-name {
+.sidebar-menu.top.tree li.treeview > a {display: flex; justify-content: start;}
+.sidebar-menu.top.tree li.treeview > a > div {
+    font-size: 12px;
+    text-align: left;
     width: 150px;
     text-overflow:ellipsis;
     white-space:nowrap;
@@ -337,9 +334,19 @@ li.node-li.not-ready > ul > li.input > a {color: red !important;}
     overflow:hidden;
 }
 
+.sidebar-menu.top.tree li.treeview > a > span {
+    position: absolute;
+    right: 5px;
+}
+
+a.port.sidebar-btn.job-li > span.label { padding-top: 4px; margin-left: 11px; background-color: red; display: none;}
+li.node-li.not-ready a.port.sidebar-btn.job-li{color: red !important;}
+li.node-li.not-ready a.port.sidebar-btn.job-li > span.label {display: inline;}
+li.node-li.not-ready > ul > li.input > a {color: red !important;}
+
 a.job-li.is-ready {color: #37ec0b !important;}
 a.job-li.not-ready {color: red !important;}
 .port-element.input.is-ready {background-color:  #37ec0b !important;}
 .port-element.input.not-ready {background-color: red !important;}
 
-.modal-header { cursor: pointer; }
+.wf-port-popup .modal-header { cursor: pointer; }

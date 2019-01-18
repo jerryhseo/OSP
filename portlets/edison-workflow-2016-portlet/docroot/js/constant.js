@@ -17,6 +17,7 @@ var CONSTS = {
         edison_wfsimulation_validation_fail_message: 'Please fill all input values',
     },
     WF_STATUS_CODE: {
+        WAITING: "WAITING",
         CREATED: "CREATED",
         RUNNING: "RUNNING",
         PAUSED: "PAUSED",
