@@ -224,6 +224,7 @@ function <portlet:namespace/>returnJobData(){
 	var simulation = <portlet:namespace/>workbench.workingSimulation();
 	var job = simulation.workingJob();
 	var jobData = JSON.stringify(job.inputData("${portName}"));
+	console.log(jobData);
 	Liferay.Util.getOpener().setJobDataFromModule("${nodeId}","${portName}",jobData, '${dialogId}');
 }
 function <portlet:namespace/>close(){
