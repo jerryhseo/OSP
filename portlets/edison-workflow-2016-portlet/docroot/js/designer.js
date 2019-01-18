@@ -249,7 +249,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
-        /*layout: defaultLayout,*/
         events: {
             canvasClick: function(e) {
                 wfWorkflowJsPlumbInstance.clearSelection();
@@ -264,7 +263,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         enablePanButtons: false,
         zoomToFit: true,
         dragOptions: {
-            magnetize: true,
             start: function() {
                 $(".menu-panel > .menu-panel-box-app").addClass("hidden");
             },
@@ -547,7 +545,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
         var node = currentJsPlumbInstance.getNode(wfId);
         renderer.zoomToFit();
-//        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
+        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
         return wfId;
     }
 
@@ -578,15 +576,15 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         var portData = nodeData[portType][portId];
         portData["defaultEditor_"] = defaultEditor;
         portData[OSP.Constants.IS_WF_SAMPLE] = isWfSample == 'true';
-        if (sampleData.hasOwnProperty(OSP.Constants.ID)) {
+        if (sampleData.hasOwnProperty(OSP.Constants.CONTENT)) {
             portData[OSP.Constants.WF_SAMPLE] = sampleData;
             var nodeFiles = nodeData["files"];
             if (nodeFiles) {
                 nodeFiles = nodeFiles.splice(nodeFiles.indexOf(preFileId), 1);
-                nodeFiles.push(sampleData[OSP.Constants.ID]);
+                nodeFiles.push(sampleData[OSP.Constants.CONTENT]);
                 nodeData["files"] = nodeFiles;
             } else {
-                nodeData["files"] = [sampleData[OSP.Constants.ID]];
+                nodeData["files"] = [sampleData[OSP.Constants.CONTENT]];
             }
         }
 

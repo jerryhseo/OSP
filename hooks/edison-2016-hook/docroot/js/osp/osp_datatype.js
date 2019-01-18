@@ -10,6 +10,24 @@
 		Path.url = function( url ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
 		};
+		
+		Path.setPath = function( id, parent, name, type, relative ){
+			if( arguments.length < 3 )
+				return false;
+			
+			Path.id( id );
+			Path.parent(parent);
+			Path.type(type);
+			if( type === OSP.Constants.FOLDER )
+				Path.folderName(name);
+			else if( type === OSP.Constants.EXT )
+				Path.extension(name);
+			else
+				Path.fileName(name);
+
+			Path.relative(relative);
+			return true;
+		};
 						   
         Path.id = function( id ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
@@ -45,6 +63,34 @@
 
 		Path.dlEntryId = function( entryId ){
 			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.CONTENT, arguments) );
+		};
+		
+		Path.fileName = function( fileName ){
+			if( Path.type() !== OSP.Constants.FILE )
+				return false;
+
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.NAME, arguments) );
+		};
+		
+		Path.extension = function( ext ){
+			if( Path.type() !== OSP.Constants.EXT )
+				return false;
+
+			switch( arguments.length ){
+			case 0:
+				return Path.property(OSP.Constants.NAME).replace('*', '').replace('.', '').replace('/','');
+			case 1:
+				return Path.property(OSP.Constants.NAME, ext.replace('*', '').replace('.', '').replace('/',''));
+			default:
+				return false;
+			}
+		};
+
+		Path.folderName = function( folderName ){
+			if( Path.type() !== OSP.Constants.FOLDER )
+				return false;
+
+			return Path.property.apply( Path, OSP.Util.addFirstArgument(OSP.Constants.NAME, arguments) );
 		};
 
 		Path.fullPath = function(){

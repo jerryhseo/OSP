@@ -645,7 +645,7 @@ $(document).ready(function(){
 		  
 		  var sampleData = new Object();
 		  if(nullToStr(msg.fileEntryId)!=""){
-			  sampleData[OSP.Constants.ID] = msg.fileEntryId;
+			  sampleData[OSP.Constants.CONTENT] = msg.fileEntryId;
 			  sampleData[OSP.Constants.TYPE] = OSP.Constants.DLENTRY_ID;
 			  sampleData[OSP.Constants.NAME] = msg.fileName;
 		  }
