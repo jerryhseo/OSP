@@ -668,7 +668,6 @@
 	function <portlet:namespace/>viewDataStructure(){
 		
 		var dataStructure = <portlet:namespace/>dataType.structure();
-		console.log(JSON.stringify(dataStructure));
 		var jsonDataStructure = JSON.stringify(dataStructure,null,4);
 		
 		var defaultDiv = $("<div/>").attr("id", "<portlet:namespace/>dataStructureForm");
@@ -716,13 +715,19 @@
 					text: 'Download',
 					action: function(){
 						
-						var a = document.createElement('a');
-						a.href = textFile;
-						a.download = downloadFileName;
-						a.style.display == 'none';
-						document.body.appendChild(a);
-						a.click();
-						delete a;
+						var agent = window.navigator.userAgent.toLowerCase();
+						if ( (window.navigator.appName == 'Netscape' && agent.indexOf('trident') != -1) || (agent.indexOf("msie") != -1)) {
+							/* IE Browser */
+							window.navigator.msSaveOrOpenBlob(data, downloadFileName);
+						} else {
+							var a = document.createElement('a');
+							a.href = textFile;
+							a.download = downloadFileName;
+							a.style.display = 'none';
+							document.body.appendChild(a);
+							a.click();
+							delete a;
+						}
 						
 						return false;
 					}
