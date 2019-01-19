@@ -894,4 +894,21 @@ public interface OSPFileLocalService extends BaseLocalService,
 	public void processOSPResourceAction(
 		javax.portlet.ResourceRequest resourceRequest,
 		javax.portlet.ResourceResponse resourceResponse);
+
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(
+		java.lang.String srcScreenName, java.lang.String srcSimulationUuid,
+		java.lang.String srcJobUuid,
+		com.liferay.portal.kernel.json.JSONObject outputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
+
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormInputData(
+		java.lang.String srcScreenName,
+		com.liferay.portal.kernel.json.JSONObject inputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException;
 }

@@ -1120,6 +1120,31 @@ public class OSPFileLocalServiceWrapper implements OSPFileLocalService,
 			resourceResponse);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(
+		java.lang.String srcScreenName, java.lang.String srcSimulationUuid,
+		java.lang.String srcJobUuid,
+		com.liferay.portal.kernel.json.JSONObject outputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _ospFileLocalService.setJobDataWithFileFormOutputData(srcScreenName,
+			srcSimulationUuid, srcJobUuid, outputData, targetScreenName);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormInputData(
+		java.lang.String srcScreenName,
+		com.liferay.portal.kernel.json.JSONObject inputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _ospFileLocalService.setJobDataWithFileFormInputData(srcScreenName,
+			inputData, targetScreenName);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

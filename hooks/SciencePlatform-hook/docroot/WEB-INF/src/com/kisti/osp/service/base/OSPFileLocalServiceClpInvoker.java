@@ -530,6 +530,20 @@ public class OSPFileLocalServiceClpInvoker {
 				"javax.portlet.ResourceRequest",
 				"javax.portlet.ResourceResponse"
 			};
+
+		_methodName130 = "setJobDataWithFileFormOutputData";
+
+		_methodParameterTypes130 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.kernel.json.JSONObject", "java.lang.String"
+			};
+
+		_methodName131 = "setJobDataWithFileFormInputData";
+
+		_methodParameterTypes131 = new String[] {
+				"java.lang.String", "com.liferay.portal.kernel.json.JSONObject",
+				"java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -1145,6 +1159,21 @@ public class OSPFileLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName130.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes130, parameterTypes)) {
+			return OSPFileLocalServiceUtil.setJobDataWithFileFormOutputData((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(com.liferay.portal.kernel.json.JSONObject)arguments[3],
+				(java.lang.String)arguments[4]);
+		}
+
+		if (_methodName131.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes131, parameterTypes)) {
+			return OSPFileLocalServiceUtil.setJobDataWithFileFormInputData((java.lang.String)arguments[0],
+				(com.liferay.portal.kernel.json.JSONObject)arguments[1],
+				(java.lang.String)arguments[2]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -1306,4 +1335,8 @@ public class OSPFileLocalServiceClpInvoker {
 	private String[] _methodParameterTypes128;
 	private String _methodName129;
 	private String[] _methodParameterTypes129;
+	private String _methodName130;
+	private String[] _methodParameterTypes130;
+	private String _methodName131;
+	private String[] _methodParameterTypes131;
 }

@@ -1089,6 +1089,31 @@ public class OSPFileLocalServiceUtil {
 		getService().processOSPResourceAction(resourceRequest, resourceResponse);
 	}
 
+	public static com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(
+		java.lang.String srcScreenName, java.lang.String srcSimulationUuid,
+		java.lang.String srcJobUuid,
+		com.liferay.portal.kernel.json.JSONObject outputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .setJobDataWithFileFormOutputData(srcScreenName,
+			srcSimulationUuid, srcJobUuid, outputData, targetScreenName);
+	}
+
+	public static com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormInputData(
+		java.lang.String srcScreenName,
+		com.liferay.portal.kernel.json.JSONObject inputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .setJobDataWithFileFormInputData(srcScreenName, inputData,
+			targetScreenName);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

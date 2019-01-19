@@ -14,33 +14,6 @@
 
 package com.kisti.osp.service.impl;
 
-import com.kisti.osp.constants.OSPPropsUtil;
-import com.kisti.osp.constants.OSPRepositoryTypes;
-import com.kisti.osp.service.OSPFileLocalServiceUtil;
-import com.kisti.osp.service.base.OSPFileLocalServiceBaseImpl;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.User;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -70,8 +43,10 @@ import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -92,6 +67,32 @@ import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteStreamHandler;
 import org.apache.commons.exec.PumpStreamHandler;
+
+import com.kisti.osp.constants.OSPPropsUtil;
+import com.kisti.osp.constants.OSPRepositoryTypes;
+import com.kisti.osp.service.base.OSPFileLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryServiceUtil;
 
 /**
  * The implementation of the o s p file local service.
@@ -2101,6 +2102,65 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
 			System.out.println("{ERROR] Unsupported command: "+command);
 		}
     }
+    
+    
+    public JSONObject setJobDataWithFileFormOutputData(String srcScreenName, String srcSimulationUuid, String srcJobUuid, JSONObject outputData, String targetScreenName) throws PortalException, SystemException, IOException{
+    	if(!outputData.has("type_")){
+    		throw new PortalException("JSONObject is Not Key : type_");
+    	}else{
+    		if(!outputData.getString("type_").equals("file")){
+    			throw new PortalException("JSONObject is Not Type File - this : "+outputData.getString("type_"));
+    		}
+    	}
+    	
+    	try{
+    		String fileName = outputData.getString("name_");
+    		Path sourcePath = Paths.get(srcSimulationUuid,srcJobUuid+".job",outputData.getString("parent_"),fileName);
+    		Path sourceFullPath = getRepositoryPath(srcScreenName, sourcePath.toString(), OSPRepositoryTypes.USER_JOBS.toString());
+    	
+    		return copyFileReturnInputData(sourceFullPath, fileName, targetScreenName, outputData);
+    	}catch (JSONException e) {
+			throw new PortalException(e);
+		}
+    }
+    
+    public JSONObject setJobDataWithFileFormInputData(String srcScreenName, JSONObject inputData, String targetScreenName) throws PortalException, SystemException, IOException{
+    	if(!inputData.has("type_")){
+    		throw new PortalException("JSONObject is Not Key : type_");
+    	}else{
+    		if(!inputData.getString("type_").equals("file")){
+    			throw new PortalException("JSONObject is Not Type File - this : "+inputData.getString("type_"));
+    		}
+    	}
+    	
+    	try{
+    		String fileName = inputData.getString("name_");
+    		Path sourcePath = Paths.get(inputData.getString("parent_"),fileName);
+    		Path sourceFullPath = getRepositoryPath(srcScreenName, sourcePath.toString(), OSPRepositoryTypes.USER_HOME.toString());
+    		
+    		return copyFileReturnInputData(sourceFullPath, fileName, targetScreenName, inputData);
+    	}catch (JSONException e) {
+			throw new PortalException(e);
+		}
+    }
+    
+    protected JSONObject copyFileReturnInputData(Path sourcePath, String sourceFileName,String targetScreenName, JSONObject data) throws IOException, PortalException, SystemException {
+    	SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+		String parentFolderName = dateForm.format(new Date());
+		Path targetPath = Paths.get(parentFolderName,sourceFileName);
+		Path targetFullPath = getRepositoryPath(targetScreenName, targetPath.toString(), OSPRepositoryTypes.USER_HOME.toString());
+		
+    	File targetPathFile = new File(targetFullPath.toString());
+		if(!targetPathFile.exists()){
+			Files.createDirectories(targetFullPath);
+		}
+		
+    	copyFile(sourcePath, targetFullPath, true);
+    	
+    	data.put("parent_", parentFolderName);
+    	
+    	return data;
+	}
     
 	public class Commands {
 		public static final String CHECK_DUPLICATED = "CHECK_DUPLICATED";

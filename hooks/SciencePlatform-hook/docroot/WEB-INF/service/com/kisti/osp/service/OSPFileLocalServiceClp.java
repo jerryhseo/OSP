@@ -530,6 +530,20 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 				"javax.portlet.ResourceRequest",
 				"javax.portlet.ResourceResponse"
 			};
+
+		_methodName80 = "setJobDataWithFileFormOutputData";
+
+		_methodParameterTypes80 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.kernel.json.JSONObject", "java.lang.String"
+			};
+
+		_methodName81 = "setJobDataWithFileFormInputData";
+
+		_methodParameterTypes81 = new String[] {
+				"java.lang.String", "com.liferay.portal.kernel.json.JSONObject",
+				"java.lang.String"
+			};
 	}
 
 	@Override
@@ -3856,6 +3870,107 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 		}
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(
+		java.lang.String srcScreenName, java.lang.String srcSimulationUuid,
+		java.lang.String srcJobUuid,
+		com.liferay.portal.kernel.json.JSONObject outputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName80,
+					_methodParameterTypes80,
+					new Object[] {
+						ClpSerializer.translateInput(srcScreenName),
+						
+					ClpSerializer.translateInput(srcSimulationUuid),
+						
+					ClpSerializer.translateInput(srcJobUuid),
+						
+					ClpSerializer.translateInput(outputData),
+						
+					ClpSerializer.translateInput(targetScreenName)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.json.JSONObject)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormInputData(
+		java.lang.String srcScreenName,
+		com.liferay.portal.kernel.json.JSONObject inputData,
+		java.lang.String targetScreenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName81,
+					_methodParameterTypes81,
+					new Object[] {
+						ClpSerializer.translateInput(srcScreenName),
+						
+					ClpSerializer.translateInput(inputData),
+						
+					ClpSerializer.translateInput(targetScreenName)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.json.JSONObject)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -4015,4 +4130,8 @@ public class OSPFileLocalServiceClp implements OSPFileLocalService {
 	private String[] _methodParameterTypes78;
 	private String _methodName79;
 	private String[] _methodParameterTypes79;
+	private String _methodName80;
+	private String[] _methodParameterTypes80;
+	private String _methodName81;
+	private String[] _methodParameterTypes81;
 }
