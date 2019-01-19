@@ -2148,27 +2148,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					after : {
 						render : function(event) {
 							$("button.btn.close").on("click", function(e) {
-								var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))
-															.css("font-size", "16px");
-								$.confirm({
-									icon: 'fa fa-warning',
-									title: '',
-									content: rerunMsg,
-									theme: 'modern',
-									buttons: {
-										yes : {
-											text: 'YES',
-											action: function(){
-												rerun();
-											}
-										},
-										no : {
-											text: 'NO',
-											action: function(){
-											}
-										}
-									}
-								});
 								$("body").css('overflow','');
 							});
 						}
