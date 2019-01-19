@@ -1454,7 +1454,7 @@
             console.log( 'evaluatePortletType: ', columns);
         };
         
-        var createSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL){
+        var createSimulation = function(portletId, title, jobTitle, jobInitData, jobOwenerName, resourceURL){
             var scienceApp = Workbench.scienceApp();
             
             var ajaxData = Liferay.Util.ns(
@@ -1468,6 +1468,7 @@
                                            srcClassId: Workbench.customId(),
                                            title: Liferay.Util.escapeHTML(title),
                                            jobTitle: Liferay.Util.escapeHTML(jobTitle),
+                                           jobOwenerName : jobOwenerName,
                                            jobInitData: jobInitData ? jobInitData : '' 
                                        });
             
@@ -2761,7 +2762,9 @@
 
         
         Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
-            createSimulation(portletId, title, jobTitle, jobInitData, resourceURL );
+        	var simulation = Workbench.workingSimulation();
+        	var job = simulation.workingJob();
+            createSimulation(portletId, title, jobTitle, jobInitData, job.user(),resourceURL );
         };
         
         
@@ -3267,6 +3270,9 @@
         Workbench.handleCreateJob = function(portletId, simulationUuid, title, initData, resourceURL){
             console.log('handleCreateJob: ', initData );
             
+            var simulation = Workbench.workingSimulation();
+        	var job = simulation.workingJob();
+            
             var scienceApp = Workbench.scienceApp();
             
             var ajaxData = Liferay.Util.ns(
@@ -3277,6 +3283,7 @@
                                            title: title,
                                            scienceAppName: scienceApp.name(),
                                            scienceAppVersion: scienceApp.version(),
+                                           jobOwenerName : job.user(),
                                            initData: initData ? initData : '' 
                                        }
             );

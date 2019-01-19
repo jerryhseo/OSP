@@ -895,6 +895,10 @@ public interface OSPFileLocalService extends BaseLocalService,
 		javax.portlet.ResourceRequest resourceRequest,
 		javax.portlet.ResourceResponse resourceResponse);
 
+	/**
+	* ADD GPLUS
+	*      ***********************************************************************
+	*/
 	public com.liferay.portal.kernel.json.JSONObject setJobDataWithFileFormOutputData(
 		java.lang.String srcScreenName, java.lang.String srcSimulationUuid,
 		java.lang.String srcJobUuid,

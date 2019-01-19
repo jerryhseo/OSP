@@ -2104,12 +2104,19 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
     }
     
     
+    
+    
+    /*************************************************************************
+     * ADD GPLUS
+     ************************************************************************/
     public JSONObject setJobDataWithFileFormOutputData(String srcScreenName, String srcSimulationUuid, String srcJobUuid, JSONObject outputData, String targetScreenName) throws PortalException, SystemException, IOException{
     	if(!outputData.has("type_")){
-    		throw new PortalException("JSONObject is Not Key : type_");
+    		_log.info("JSONObject is Not Key : type_");
+    		return outputData;
     	}else{
     		if(!outputData.getString("type_").equals("file")){
-    			throw new PortalException("JSONObject is Not Type File - this : "+outputData.getString("type_"));
+    			_log.info("JSONObject is Not Type File - this : "+outputData.getString("type_"));
+    			return outputData;
     		}
     	}
     	
@@ -2126,10 +2133,12 @@ public class OSPFileLocalServiceImpl extends OSPFileLocalServiceBaseImpl {
     
     public JSONObject setJobDataWithFileFormInputData(String srcScreenName, JSONObject inputData, String targetScreenName) throws PortalException, SystemException, IOException{
     	if(!inputData.has("type_")){
-    		throw new PortalException("JSONObject is Not Key : type_");
+    		_log.info("JSONObject is Not Key : type_");
+    		return inputData;
     	}else{
     		if(!inputData.getString("type_").equals("file")){
-    			throw new PortalException("JSONObject is Not Type File - this : "+inputData.getString("type_"));
+    			_log.info("JSONObject is Not Type File - this : "+inputData.getString("type_"));
+    			return inputData;
     		}
     	}
     	

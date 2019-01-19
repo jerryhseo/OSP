@@ -634,9 +634,11 @@ public class LayoutController {
 		try {
 			String jobTitle = ParamUtil.getString(resourceRequest, "jobTitle");
 			String jobInitData = ParamUtil.getString(resourceRequest, "jobInitData");
+			
+			String jobOwenerName = ParamUtil.getString(resourceRequest, "jobOwenerName");
 			String userScreenName = themeDisplay.getUser().getScreenName();
 			
-			this.createJob(simulation.getSimulationUuid(), userScreenName, scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
+			this.createJob(simulation.getSimulationUuid(), jobOwenerName, userScreenName, scienceAppName, scienceAppVersion, sc, jobTitle, jobInitData);
 		} catch (JSONException | SystemException e1) {
 			_log.error("Creating job : "+simulation.getSimulationUuid());
 			throw new PortletException();
@@ -654,7 +656,34 @@ public class LayoutController {
 		}
 	}
 	
-	private JSONObject createJob( String simulationUuid, String userScreenName, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
+	private String copyJobInitDataConvertor(String jobOwenerName, String userScreenName, String jobInitData){
+		if(jobOwenerName.equals("")){
+			return jobInitData;
+		}
+		
+		if(jobOwenerName.equals(userScreenName)){
+			return jobInitData;
+		}
+		
+		try {
+			JSONArray jobInitDatas = JSONFactoryUtil.createJSONArray(jobInitData);
+			for(int i=0; i<jobInitDatas.length();i++){
+				JSONObject jobData = jobInitDatas.getJSONObject(i);
+				
+				JSONObject newJobData = OSPFileLocalServiceUtil.setJobDataWithFileFormInputData(jobOwenerName, jobData, userScreenName);
+				
+				jobInitDatas.getJSONArray(i).put(newJobData);
+			}
+			
+			jobInitData = jobInitDatas.toString();
+		} catch (PortalException | SystemException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			return jobInitData;
+		}
+	}
+	
+	private JSONObject createJob( String simulationUuid, String jobOwenerName, String userScreenName, String scienceAppName, String scienceAppVersion, ServiceContext sc,String jobTitle,String jobInitData) throws PortletException, JSONException, SystemException{
 		SimulationJob job = null;
 		
 		try {
@@ -667,6 +696,7 @@ public class LayoutController {
 				if( Validator.isNotNull(jobInitData) ){
 					System.out.println("+++++++++Job Init Data: \n "+jobInitData);
 					try {
+						jobInitData = this.copyJobInitDataConvertor(jobOwenerName, userScreenName, jobInitData);
 						SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), jobInitData);
 					} catch (SystemException e) {
 						_log.error("Adding job data: "+e.getMessage());
@@ -698,6 +728,10 @@ public class LayoutController {
 		String title = ParamUtil.getString(resourceRequest, "title");
 		String initData = ParamUtil.getString(resourceRequest, "initData", "");
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String userScreenName = themeDisplay.getUser().getScreenName();
+		
+		
 		ServiceContext sc = null;
 		try {
 			sc = ServiceContextFactory.getInstance(SimulationJob.class.getName(), resourceRequest);
@@ -724,6 +758,8 @@ public class LayoutController {
 		if( Validator.isNotNull(initData) ){
 			System.out.println("+++++++++Job Init Data: \n "+initData);
 			try {
+				String jobOwenerName = ParamUtil.getString(resourceRequest, "jobOwenerName", "");
+				initData = this.copyJobInitDataConvertor(jobOwenerName, userScreenName, initData);
 				SimulationJobDataLocalServiceUtil.modifySimulationJobData(job.getJobUuid(), initData);
 			} catch (SystemException e) {
 				_log.error("Adding job data: "+e.getMessage());
@@ -733,8 +769,8 @@ public class LayoutController {
 		
 		JSONObject jsonJob = null;
 		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-			jsonJob = this.convertJobToJSON(job,true,themeDisplay.getUser().getScreenName());
+			
+			jsonJob = this.convertJobToJSON(job,true,userScreenName);
 		} catch (JSONException | SystemException e) {
 			_log.error("Converting job to JSON: "+e.getMessage());
 			throw new PortletException();

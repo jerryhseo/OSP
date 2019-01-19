@@ -36,7 +36,6 @@
 			</div>
 			<section class="content text-center" id="no-job-layout-area">
 				<span>
-					select simulation job..!
 				</span>
 			</section>
 			
