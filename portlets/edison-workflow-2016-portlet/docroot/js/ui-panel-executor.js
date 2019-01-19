@@ -1793,10 +1793,17 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		/*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
 		jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
 		
+		/* SimulationJob check */
+		if(!currJobs.selected()){
+			toastr['error']("", "Select SimulationJob First.");
+			return false;
+		}
+		
 		/* Parents node status check */
 		openWorkbench = checkParentsNodeStatus(ports);
 		/* Parents node exist and parents node not successed _ Not open workbench */
 		if(!openWorkbench){
+		 	toastr['warning']("", "The parent's job is not successful.");
 			return false;
 		}
 		
@@ -1806,8 +1813,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
 		var jobDataArr = currNodeInputPortsInfo.jobDataArr
 
+		/* Call API get-simulation-job */
 		if (0 < jobDataArr.length) {
-			/* Call API get-simulation-job */
+			/* Add flag for keeping SimulationUuid and JobUuid */
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
 			if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
 				if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
 					getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version, 
@@ -1821,7 +1830,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			} else {
 				addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, 
 									scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-									connectedInputPorts, wfId);
+									connectedInputPorts, wfId, node);
 			}
 			
 		} else {
@@ -1829,8 +1838,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		}
 	}
 	
-	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId){
+	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
 		
+		var nodeData = node.data;
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/add-simulation',
 			{
@@ -1841,6 +1851,20 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				jobData : jobData
 			}, function(obj) {
 				if(obj.isValid){
+					pause();
+					/* IB_DATA Setting */
+					var thisJob = currJobs.selected();
+					var simulationJobId = thisJob.simulationJobId;
+					console.log(simulationJobId);
+						var simulationUuid = obj.simulationUuid;
+						var simulationJobUuid = obj.simulationJobUuid;
+						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
+						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
+						
+					var job = currJobs.selected();
+					saveSimulationJob(job);
+					
+					pause();
 					openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
@@ -1861,6 +1885,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				jobData : jobData
 			}, function(obj) {
 				if(obj.hasSimulationInfo){
+					
+					var job = currJobs.selected();
+					saveSimulationJob(job);
+					
+					pause();
 					openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
@@ -1936,14 +1965,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 						connectedInputPorts.push(connectedInputPortsObj);
 						
 						var getJobData = getParentObj.jobData;
-						/*getParentObj[OSP.Constants.PORT_NAME] = getJobData;*/
-						jobDataArr = jobDataArr.concat(getJobData);
+						/*jobDataArr = jobDataArr.concat(getJobData);*/
 						
 						getParentObj.simulationUuid = simulationUuid;
 						getParentObj.simulationJobUuid = jobUuid;
 						if(sourceJobDataType.toLowerCase() == "file"){
 							getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-							parentNodeFileCopy(getParentObj);
+							var copyResult = parentNodeFileCopy(getParentObj);
+							if(copyResult.copyFileResult){
+								jobDataArr = jobDataArr.concat(copyResult.jobData);
+							} else {
+								jobDataArr = jobDataArr.concat(getJobData);
+							}
 						}
 					}
 					
@@ -1970,7 +2003,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var workflowId = PANEL_DATA.open.form.params.workflowId;
 		parentObjData["workflowId"] = workflowId;
 		var fn = window[namespace + "copyParentNodeFiles"];
-		fn.apply(null, [parentObjData]);
+		return fn.apply(null, [parentObjData]);
 	}
 
 	function getInputPortsJobData(portNode, portId) {
@@ -2115,6 +2148,27 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					after : {
 						render : function(event) {
 							$("button.btn.close").on("click", function(e) {
+								var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))
+															.css("font-size", "16px");
+								$.confirm({
+									icon: 'fa fa-warning',
+									title: '',
+									content: rerunMsg,
+									theme: 'modern',
+									buttons: {
+										yes : {
+											text: 'YES',
+											action: function(){
+												rerun();
+											}
+										},
+										no : {
+											text: 'NO',
+											action: function(){
+											}
+										}
+									}
+								});
 								$("body").css('overflow','');
 							});
 						}
@@ -2137,11 +2191,29 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
-
-			/* TODO Workflow Status Setting */
-
-			nodeData[CONSTS.WF_NODE_CODE.STATUS].status = "";
 		}
+		
+		var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))
+									.css("font-size", "16px");
+		$.confirm({
+			icon: 'fa fa-warning',
+			title: '',
+			content: rerunMsg,
+			theme: 'modern',
+			buttons: {
+				yes : {
+					text: 'YES',
+					action: function(){
+						rerun();
+					}
+				},
+				no : {
+					text: 'NO',
+					action: function(){
+					}
+				}
+			}
+		});
 	}
 
 	return {

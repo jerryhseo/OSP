@@ -248,35 +248,33 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			Map params = RequestUtil.getParameterMap(request);
 			String copyFileObj = CustomUtil.strNull(params.get("copyFileObj"), "");
 			
-			JSONObject obj = JSONFactoryUtil.createJSONObject(copyFileObj);
-			Long workflowId = obj.getLong("workflowId");
+			JSONObject copyFileobj = JSONFactoryUtil.createJSONObject(copyFileObj);
+			Long workflowId = copyFileobj.getLong("workflowId");
 			Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
 			
-			String fileName = obj.getString("fileName");
-			String srcPportName = CustomUtil.strNull(obj.getString("sourcePortName"));
-			String simulationUuid = CustomUtil.strNull(obj.getString("simulationUuid"));
-			String simulationJobUuid = CustomUtil.strNull(obj.getString("simulationJobUuid"));
+			String fileName = copyFileobj.getString("fileName");
+			String srcPportName = CustomUtil.strNull(copyFileobj.getString("sourcePortName"));
+			String simulationUuid = CustomUtil.strNull(copyFileobj.getString("simulationUuid"));
+			String simulationJobUuid = CustomUtil.strNull(copyFileobj.getString("simulationJobUuid"));
+			JSONObject outputData = copyFileobj.getJSONArray("jobData").getJSONObject(0);
 			
 			User sourceUser = UserLocalServiceUtil.getUser(workflow.getUserId());
 			String source = simulationUuid + "/" + simulationJobUuid + "/" + srcPportName + "/" +fileName;
-			String srcRepositoryType = CustomUtil.strNull(obj.getString("repositoryType_"));
+			String srcRepositoryType = CustomUtil.strNull(copyFileobj.getString("repositoryType_"));
 			
 			User targetUser = themeDisplay.getUser();
 			Date thisDate = new Date();
-			System.out.println("thisDate : " + thisDate);
 			String target = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(thisDate) + "/" + fileName;
-			String targetRepositoryType = CustomUtil.strNull(obj.getString("targetRepositoryType"));
-			
-			System.out.println("srcScreenName : " + sourceUser.getScreenName());
-			System.out.println("source : " + source);
-			System.out.println("srcRepositoryType : " + srcRepositoryType);
-			System.out.println("targetScreenName : " + targetUser.getScreenName());
-			System.out.println("target : " + target);
-			System.out.println("targetRepositoryType : " + targetRepositoryType);
+			String targetRepositoryType = CustomUtil.strNull(copyFileobj.getString("targetRepositoryType"));
 			
 			// copyFile
-			target = OSPFileLocalServiceUtil.copyFile(sourceUser.getScreenName(), source, srcRepositoryType, 
-											targetUser.getScreenName(), target, targetRepositoryType, false);
+			JSONObject copyResultObj = OSPFileLocalServiceUtil.setJobDataWithFileFormOutputData(sourceUser.getScreenName(), simulationUuid, simulationJobUuid, outputData, targetUser.getScreenName());
+			
+			JSONObject returnObj = JSONFactoryUtil.createJSONObject();
+			returnObj.put("jobData", copyResultObj);
+			response.setContentType("application/json; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(returnObj.toString());
 			
 		} catch (JSONException e) {
 			e.printStackTrace();

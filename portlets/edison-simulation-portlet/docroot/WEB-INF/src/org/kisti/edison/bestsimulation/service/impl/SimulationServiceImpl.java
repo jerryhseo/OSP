@@ -94,6 +94,7 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			
 			Map<String,Object> simulationAndJobMap = SimulationLocalServiceUtil.createSimulationWithJob(user, group.getGroupId(), appName, appVersion, simulationTitle);
 			
+			String simulationUuid = CustomUtil.strNull(simulationAndJobMap.get("simulationUuid"));
 			String jobUuid = CustomUtil.strNull(simulationAndJobMap.get("jobUuid"));
 			SimulationJobDataLocalServiceUtil.modifySimulationJobData(jobUuid, jobData);
 			
@@ -101,6 +102,8 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			long plid = PortalUtil.getPlidFromPortletId(group.getGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			resultInfo.put("isValid", isValid);
 			resultInfo.put("workbencPlid", plid);
+			resultInfo.put("simulationUuid", simulationUuid);
+			resultInfo.put("simulationJobUuid", jobUuid);
 		}catch (Exception e) {
 			resultInfo.put("isValid", false);
 			resultInfo.put("failMessage", e.getMessage());

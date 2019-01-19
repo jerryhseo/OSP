@@ -527,22 +527,28 @@ AUI().ready(['liferay-util-window'], function(){
 });
 
 function <portlet:namespace/>copyParentNodeFiles(params){
+	var resultObj = new Object();
 	var copyFileResult = false;
+	var jobData = "";
 	$.ajax({
 		url: "<%=copyParentNodeFilesURL%>",
 		cache: false,
+		async: false,
 		data: {
 			"<portlet:namespace/>copyFileObj" : JSON.stringify(params)
 		},
 		success: function(response) {
 			copyFileResult = true;
+			jobData = response.jobData;
 		}, error:function(response,e){ 
 			copyFileResult = false;
-			alert('Sample file deletion error');
+			jobData = "";
 		},complete: function(response){
-			return copyFileResult;
+			resultObj.copyFileResult = copyFileResult;
+			resultObj.jobData = jobData;
 		}
 	});
+	return resultObj;
 }
 
 </script>
