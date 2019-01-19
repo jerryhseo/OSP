@@ -30,7 +30,7 @@
 			disabled = flag;
 		}
 		
-		function loadFileExplorer( folderPath, fileInfoList){
+		function loadFileExplorer( folderPath, fileInfoList, selectedFile){
 			var nodeDataAry = [];
 			
 			console.log('explorer: ', folderPath );
@@ -54,6 +54,7 @@
 			else if( folderPath === '/' )
 				folderPath = '';
 
+			console.log( 'File selectedFile: '+selectedFile);
 			for(var index in fileInfoList ){
 				var fileInfo = fileInfoList[index];
 				var type = (fileInfo.isFile) ? 'file' : 'closed-folder';
@@ -63,6 +64,9 @@
 					'type':type,
 					'li_attr': {
 						'childLength': 0
+					},
+					'state':{
+						'selected': (selectedFile === fileInfo.name) ? true : false
 					}
 				};
 				nodeDataAry.push(obj);
@@ -114,7 +118,7 @@
 						'plugins' : ['contextmenu', 'state', 'sort', 'types', 'checkbox']
 				}).bind('loaded.jstree', function(event, data) { 
 						$('#panel').jstree('open_all');
-						$('#panel').jstree('deselect_all');
+						//$('#panel').jstree('deselect_all');
 				}).bind('select_node.jstree',function(e, data){
 						console.log( 'disabled: '+disabled );
 						if( disabled === true )	return;

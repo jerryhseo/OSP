@@ -79,12 +79,10 @@ function <portlet:namespace/>loadCanvas( jsonData, changeAlert ){
 			<portlet:namespace/>visualizer.getFolderInfo( jsonData.parent_, jsonData.name_, false );
 			break;
 		case OSP.Enumeration.PathType.FOLDER_CONTENT:
-			if( jsonData.name_ )
-				<portlet:namespace/>setCurrentSelect( jsonData.parent_+'/'+jsonData.name_ );
-			else
-				<portlet:namespace/>setCurrentSelect( jsonData.parent_ );
+			var currentSelect = OSP.Util.mergePath(jsonData.parent_, jsonData.name_);
+			<portlet:namespace/>setCurrentSelect( currentSelect );
 				
-			<portlet:namespace/>visualizer.callIframeFunc('loadFileExplorer', null, jsonData.parent_, jsonData.content_ );
+			<portlet:namespace/>visualizer.callIframeFunc('loadFileExplorer', null, jsonData.parent_, jsonData.content_, jsonData.name_ );
 			if( changeAlert ){
 				<portlet:namespace/>visualizer.fireDataChangedEvent();
 			}

@@ -927,7 +927,7 @@
                     var jsonData = {
                         type_: OSP.Enumeration.PathType.FOLDER_CONTENT,
                         parent_: data.parentPath,
-                        name_: baseFolder.type() === OSP.Enumeration.PathType.EXT ? baseFolder.name() : '', 
+                        name_: currentData.name(), 
                         content_: data.fileInfos
                     };
                     loadCanvas( jsonData, changeAlert );
