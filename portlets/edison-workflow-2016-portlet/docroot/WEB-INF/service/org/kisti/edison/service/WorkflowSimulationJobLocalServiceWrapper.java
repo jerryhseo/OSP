@@ -501,6 +501,16 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return _workflowSimulationJobLocalService.rerunWorkflowEngineJson(simulationJobId,
+			strNodes, userName, ibToken, request);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,

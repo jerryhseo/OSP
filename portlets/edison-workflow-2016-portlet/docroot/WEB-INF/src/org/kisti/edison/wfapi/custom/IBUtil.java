@@ -50,7 +50,7 @@ public class IBUtil{
         throws PortalException, SystemException, IOException {
         Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(screenName, target, repositoryType);
         Path targetFolder = targetPath.getParent();
-        String owner = screenName + ":" + OSPPropsUtil.OSP_PORTAL_SERVER_USER_GROUP();
+        String owner = screenName;
         if(Files.notExists(targetFolder)){
             Files.createDirectories(targetFolder);
         }
@@ -75,8 +75,7 @@ public class IBUtil{
         stream = fileEntry.getContentStream();
         Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(targetScreenName, target, targetRepository);
         Path targetFolder = targetPath.getParent();
-        String owner = targetScreenName + ":" + OSPPropsUtil.OSP_PORTAL_SERVER_USER_GROUP();
-
+        String owner = targetScreenName;
         if(!Files.exists(targetFolder)){
             Files.createDirectories(targetFolder);
         }

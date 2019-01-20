@@ -234,6 +234,19 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             }, function () { });
     }
 
+    function rerunSimulationJobEngine(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/rerun",
+            params,
+            function (simulationJob) {
+                if (callback) {
+                    callback(simulationJob);
+                }
+            }, errorCallback
+        );
+    }
+
     /////////////////////////////////////////// renew end
 
     function getWorkflowInstance(workflowInstanceId, callback, errorCallback){
@@ -647,6 +660,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "createSimulationJobEngine": createSimulationJobEngine,
         "pauseSimulationJob": pauseSimulationJob,
         "resumeSimulationJob": resumeSimulationJob,
+        "rerunSimulationJobEngine": rerunSimulationJobEngine,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,
