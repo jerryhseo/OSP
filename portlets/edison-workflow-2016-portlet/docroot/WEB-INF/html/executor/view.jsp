@@ -535,6 +535,7 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 	var resultObj = new Object();
 	var copyFileResult = false;
 	var jobData = "";
+	var getError="";
 	$.ajax({
 		url: "<%=copyParentNodeFilesURL%>",
 		cache: false,
@@ -548,9 +549,11 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 		}, error:function(response,e){
 			copyFileResult = false;
 			jobData = "";
+			getError = response.responseText;
 		},complete: function(response){
 			resultObj.copyFileResult = copyFileResult;
 			resultObj.jobData = jobData;
+			resultObj.error = getError;
 		}
 	});
 	return resultObj;

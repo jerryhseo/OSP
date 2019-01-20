@@ -1880,18 +1880,27 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			/*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
 			jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
 
-			/* SimulationJob check */
-			if(!currJobs.selected()){
-				toastr['error']("", "Select SimulationJob First.");
-				return false;
-			}
+		/* Get Connected Input Ports and Disconnected Input Ports */
+		var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
+		var copyError = currNodeInputPortsInfo.error;
+		if(copyError != ""){
+			toastr['warning']("", copyError);
+			return false;
+		}
+		var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
+		var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
+		var jobDataArr = currNodeInputPortsInfo.jobDataArr
 
-			/* Parents node status check */
-			openWorkbench = checkParentsNodeStatus(ports);
-			/* Parents node exist and parents node not successed _ Not open workbench */
-			if(!openWorkbench){
-			 	toastr['warning']("", "The parent's job is not successful.");
-				return false;
+		/* Call API get-simulation-job */
+		if (0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
+			/* Add flag for keeping SimulationUuid and JobUuid */
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
+			
+			var isWorkBench = false;
+			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+				nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
+			}else{
+				isWorkBench = true;
 			}
 
 			/* Get Connected Input Ports and Disconnected Input Ports */
@@ -1940,8 +1949,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			} else {
 				toastr["error"]("", "JobData not found!!");
 			}
-		}, 2000)
-	}
+			
+		} else {
+			toastr["error"]("", "You can not run the workbench.!!");
+			return false;
+		}
+    })
+}
 
 	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
 
@@ -2101,6 +2115,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							if(sourceJobDataType.toLowerCase() == "file"){
 								getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
 								var copyResult = parentNodeFileCopy(getParentObj);
+								var copyError = copyResult.error;
+								if(copyError != ""){
+									returnObj.error = copyError;
+									return returnObj;
+								}
 								if(copyResult.copyFileResult){
 									jobDataArr = jobDataArr.concat(copyResult.jobData);
 								} else {

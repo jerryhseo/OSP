@@ -291,6 +291,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.createSimulationJob(simulationUuid, groupId, "#001  "+simulationTitle);
 			returnMap.put("jobUuid", simulationJob.getJobUuid());
 		} catch (Exception e) {
+			e.printStackTrace();
 			if(e instanceof PortalException){
 				throw e;
 			}else{
