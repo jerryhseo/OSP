@@ -1012,6 +1012,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
             portletURL.setParameter('simulationUuid', node.data.ibData.ibSimUuid);
+            if(node.data.status){
+                portletURL.setParameter('status', node.data.status.status);
+            }
             if (node.data.ibData.ibUuid) {
                 portletURL.setParameter('jobUuid', node.data.ibData.ibUuid);
             }
