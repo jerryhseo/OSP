@@ -430,7 +430,7 @@ public class WorkflowSimulationController{
         try{
             JsonNode status = Transformer
                 .string2Json(WorkflowSimulationJobLocalServiceUtil
-                    .pauseWorkflowSimulation(simulationJobId, simUuid).getStatusResponse());
+                    .resumeWorkflowSimulation(simulationJobId, simUuid).getStatusResponse());
             return status;
         }catch (Exception e){
             log.error("error", e);

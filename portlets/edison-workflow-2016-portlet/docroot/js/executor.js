@@ -234,6 +234,28 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             }, function () { });
     }
 
+    function pauseSingleNode(simulationJobId, uuid, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/job/" + simulationJobId + "/pause/"+ uuid, {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            }, function () { });
+    }
+
+    function resumeSingleNode(simulationJobId, uuid, callback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/job/" + simulationJobId + "/resume/"+ uuid, {},
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            }, function () { });
+    }
+
     function rerunSimulationJobEngine(params, callback, errorCallback) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
@@ -661,6 +683,8 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "pauseSimulationJob": pauseSimulationJob,
         "resumeSimulationJob": resumeSimulationJob,
         "rerunSimulationJobEngine": rerunSimulationJobEngine,
+        "pauseSingleNode": pauseSingleNode,
+        "resumeSingleNode": resumeSingleNode,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,

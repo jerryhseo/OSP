@@ -121,6 +121,32 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    function isPauseAbleNode(node) {
+        var currJob = currJobs.selected()
+        if(currJob && node.data && node.data.status &&
+            (currJob.status !== '' &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
+                node.data.status.status === CONSTS.WF_STATUS_CODE.CREATED) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function isResumeAbleNode(node) {
+        var currJob = currJobs.selected()
+        if(currJob && node.data && node.data.status &&
+            (currJob.status !== '' &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
+                node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     function setReUseNodeStatus(node) {
         if (node && node.data && !!node.data.isReUseNode) {
             $('#' + node.id).addClass('is-re-use-node')
@@ -135,6 +161,38 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (node) {
             node.data.isReUseNode = !!isReUsable
             setReUseNodeStatus(node)
+        }
+    }
+
+    function pauseNode(node, pause, callback) {
+        var currJob = currJobs.selected()
+        if (isPauseAbleNode(node) && currJob && node.data.status && pause) {
+            executor.pauseSingleNode(currJob.simulationJobId, node.data.status.uuid,
+                function (status) {
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_success_message)
+                    updateNodeStatus(status)
+                    executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
+                    if(callback) {
+                        callback()
+                    }
+                },
+                function () {
+                    toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_fail_message);
+                })
+        }else if (isResumeAbleNode(node) && currJob && node.data.status && !pause){
+            executor.resumeSingleNode(currJob.simulationJobId, node.data.status.uuid, function (status) {
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_resume_success_message)
+                    updateNodeStatus(status)
+                    executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
+                    if(callback) {
+                        callback()
+                    }
+                },
+                function () {
+                    toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_resume_fail_message);
+                })
+        }else {
+            toastr['error']('', pause ? 'Cannot pause' : 'Cannot resume')
         }
     }
 
@@ -497,13 +555,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }
                 }
 
+                var statusCode = simulation.status
+                if(simulation.pause && simulation.pause === 'pause' &&
+                    simulation.status === CONSTS.WF_STATUS_CODE.CREATED) {
+                    statusCode = CONSTS.WF_STATUS_CODE.PAUSED
+                }
                 $("#" + nodeId).removeClass(
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
-                $("#" + nodeId).addClass(simulation.status)
+                $("#" + nodeId).addClass(statusCode)
                 setReUseNodeStatus(node)
-                var html = $("#" + nodeId + " .wf-node-execute-status").text(simulation.status)
-                if(simulation.status === "RUNNING") {
+                $("#" + nodeId + " .wf-node-execute-status").text(statusCode)
+                if(statusCode === "RUNNING") {
                     $("#" + nodeId + " .top-cog-icon").addClass("fa-spin")
                 } else {
                     $("#" + nodeId + " .top-cog-icon").removeClass("fa-spin")
@@ -1325,7 +1388,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 
     function rerun() {
-        console.log('rerun')
+        // console.log('rerun')
         submitSimulationJob(true)
     }
 
@@ -1508,8 +1571,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulationId = currJobs.selected().simulationId
                 var simulationJobId = currJobs.selected().simulationJobId
                 var token = getIcebreakerAccessToken()
-                console.log(token)
-                console.log(json.nodes)
+                // console.log(token)
+                // console.log(json.nodes)
 
                 var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 
@@ -1729,11 +1792,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					/* IB_DATA Setting */
 					var thisJob = currJobs.selected();
 					var simulationJobId = thisJob.simulationJobId;
-					console.log(simulationJobId);
-						var simulationUuid = obj.simulationUuid;
-						var simulationJobUuid = obj.simulationJobUuid;
-						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
-						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
+					// console.log(simulationJobId);
+                    var simulationUuid = obj.simulationUuid;
+                    var simulationJobUuid = obj.simulationJobUuid;
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
 
 					var job = currJobs.selected();
 					saveSimulationJob(job);
@@ -2104,8 +2167,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setPortData" : setPortData,
 		"closePortPopup" : closePortPopup,
 		"openNodeHandler" : openNodeHandler,
+		"isPauseAbleNode" : isPauseAbleNode,
+		"isResumeAbleNode" : isResumeAbleNode,
 		"isReUsableNode" : isReUsableNode,
 		"setReuseNode" : setReuseNode,
+		"pauseNode" : pauseNode,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);
