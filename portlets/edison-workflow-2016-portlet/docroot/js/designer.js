@@ -51,10 +51,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 return false;
             }
 
-            /*if (target.getAllEdges().length != 0) {
-                return false;
-            }*/
-
             if (source.getNode() === target.getNode()) {
                 return false;
             }
@@ -106,7 +102,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         beforeDetach: function(source, target, edgeData) {
             var sourceData = source.getNode().data;
             if (source.getNode().data.scienceAppData.runType === WF_APP_TYPES.FILE_COMPONENT.NAME) {
-//                console.log(sourceData.outputPorts[source.id]);
                 if (source.getAllEdges().length - 1 == 0) {
                     sourceData.outputPorts[source.id] = {};
                     sourceData.outputPorts[source.id][OSP.Constants.NAME] = source.id;
@@ -139,17 +134,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     
 	function edgesHandler(){
 		var edgesData = {};
-		console.log(isDesigner);
 		if(isDesigner){
 			edgesData = {
 				"default": {
-					anchor: [ "Left", "Right" ], // anchors for the endpoints
-					cssClass:"common-edge",
-					events: {
-						"dbltap": function (params) {
-							_editEdge(params.edge);
-						}
-					},
 					overlays: [
 						["Label", {
 							cssClass: "delete-relationship",
@@ -183,7 +170,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 template: "workflowApp-templete",
                 events: {
                     dblclick: function(obj) {
-//                        console.log(obj);
                         if (isDesigner) {
                         	openWfAppDataSettingHandler(obj.node);
                         } else if (!isDesigner && uiPanelInstance) {
@@ -289,12 +275,14 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
         view: view,
+        layout: {
+            type: "Absolute"
+        },
         events: {
             canvasClick: function(e) {
                 wfWorkflowJsPlumbInstance.clearSelection();
             },
             groupAdded: function(group) {
-//                console.log(arguments)
             }
         },
         miniview: {
@@ -498,7 +486,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 },
                 function(result) {
                     var jsPlumbWindowId = element.elementId;
-                    // TODO : popEditorWindow(result, port, jsPlumbWindowId);
                 });
         }
     }
@@ -598,7 +585,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
     function setNodeData(nodeId, nodeData) {
         var node = currentJsPlumbInstance.getNode(nodeId);
         node["data"] = nodeData;
-//        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
 
     function setAppSampleData(nodeId, sampleData) {
@@ -608,7 +594,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             nodeData["files"] = [sampleData[OSP.Constants.ID]];
         }
         wfBackgroupSave();
-//        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
 
     function setPortSampleData(nodeId, portType, portId, preFileId, defaultEditor, isWfSample, sampleData) {
