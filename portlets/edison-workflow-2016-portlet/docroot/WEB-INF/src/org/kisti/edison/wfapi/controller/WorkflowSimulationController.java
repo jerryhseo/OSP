@@ -378,6 +378,22 @@ public class WorkflowSimulationController{
         }
     }
     
+    @RequestMapping(value = "/job/{simulationJobId}/update-ib", method = RequestMethod.POST)
+    public @ResponseBody JsonNode insertIbUuid(
+        @RequestParam("jobUuid") String jobUuid,
+        @RequestParam("ibSimUuid") String ibSimUuid,
+        @RequestParam("ibJobUuid") String ibJobUuid,
+        @PathVariable("simulationJobId") long simulationJobId, 
+        HttpServletRequest request) throws Exception{
+        try{
+            return WorkflowSimulationJobLocalServiceUtil
+                .updateWorflowSimulationJobIbUuid(simulationJobId, jobUuid, ibSimUuid, ibJobUuid);
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/job/{simulationJobId}/pause/{uuid}", method = RequestMethod.POST)
     public @ResponseBody JsonNode pauseWorkflowSimulation(
         @RequestParam Map<String, Object> params,
