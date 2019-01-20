@@ -312,18 +312,6 @@ public class WorkflowSimulationController{
         }
     }
     
-//    @RequestMapping(value = "/job/{simulationJobId}/run", method = RequestMethod.POST)
-//    public @ResponseBody Map<String, Object> runSimulationJob(
-//        @PathVariable("simulationJobId") long simulationJobId, 
-//        HttpServletRequest request) throws Exception{
-//        try{
-//            return WorkflowSimulationJobLocalServiceUtil.startWorkflowSimulationJob(simulationJobId).getModelAttributes();
-//        }catch (Exception e){
-//            log.error("error", e);
-//            throw e;
-//        }
-//    }
-    
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/rerun", 
         "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
@@ -376,20 +364,6 @@ public class WorkflowSimulationController{
         }
     }
 
-
-//    @RequestMapping(value = "/instance/{workflowInstanceId}/reuse", method = RequestMethod.POST)
-//    public @ResponseBody Map<String, Object> reuseWorkflowSimulationJob(
-//        @RequestParam Map<String, Object> params,
-//        @PathVariable("workflowInstanceId") long workflowInstanceId, 
-//        HttpServletRequest request) throws Exception{
-//        try{
-//            return WorkflowSimulationJobLocalServiceUtil.reuseWorkflowSimulationJob(workflowInstanceId, params).getModelAttributes();
-//        }catch (Exception e){
-//            log.error("error", e);
-//            throw e;
-//        }
-//    }
-    
     @RequestMapping(value = "/job/{simulationJobId}/pause", method = RequestMethod.POST)
     public @ResponseBody JsonNode pauseWorkflowSimulationJob(@RequestParam Map<String, Object> params,
         @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
@@ -453,22 +427,6 @@ public class WorkflowSimulationController{
             throw e;
         }
     }
-    
-    @RequestMapping(value = "/job/{simulationJobId}/cancel", method = RequestMethod.POST)
-    public @ResponseBody JsonNode cancelWorkflowSimulationJob(@
-        RequestParam Map<String, Object> params,
-        @PathVariable("simulationJobId") long simulationJobId, 
-        HttpServletRequest request) throws Exception{
-        try{
-            JsonNode status = Transformer
-                .string2Json(WorkflowSimulationJobLocalServiceUtil
-                    .resumeWorkflowSimulationJob(simulationJobId).getStatusResponse());
-            return status;
-        }catch (Exception e){
-            log.error("error", e);
-            throw e;
-        }
-    }
 
     @RequestMapping(value = "/job/engine/{jobUUID}/intermediate", method = RequestMethod.GET)
     public @ResponseBody String intermediateLog(@RequestParam(value = "accessToken") String ibAccessToken,
@@ -509,93 +467,5 @@ public class WorkflowSimulationController{
             throw e;
         }
     }
-
-
-//    @SuppressWarnings("serial")
-//    @RequestMapping(value = "/job/{simulationJobId}/siblings", method = RequestMethod.GET)
-//    public @ResponseBody List<Map<String, Object>> workflowInstanceList(
-//        @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
-//        try{
-//            Locale locale = PortalUtil.getLocale(request);
-//            List<Map<String, Object>> jstreeList = new ArrayList<>();
-//            Map<String, Object> rootCategory = new HashMap<String, Object>(){
-//                {
-//                    put("id", "currentWorkflowTop");
-//                    put("parent", "#");
-//                    put("text", "Current Workflow");
-//                    put("type", "root");
-//                }
-//            };
-//            WorkflowSimulationJob currInstance = WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(workflowInstanceId);
-//            Workflow workflow = WorkflowSimulationJobLocalServiceUtil.getWorkflow(currInstance.getWorkflowId());
-//            List<WorkflowSimulationJob> workflowInstances = WorkflowSimulationJobLocalServiceUtil
-//                .getWorkflowWorkflowSimulationJobsByWorkflowId(workflow.getWorkflowId());
-//            jstreeList.add(rootCategory);
-//            jstreeList.add(WorkflowBeanUtil.workflowToJstreeModel(workflow, locale));
-//            jstreeList.addAll(WorkflowBeanUtil.workflowInstanceToJstreeModel(workflowInstances, locale));
-//            return jstreeList;
-//        }catch (Exception e){
-//            log.error("error", e);
-//            throw e;
-//        }
-//    }
-//
-//    @RequestMapping(value = "/{simulationId}/instances", method = RequestMethod.POST)
-//    public @ResponseBody List<Map<String, Object>> workflowInstances(
-//        @PathVariable("simulationId") long simulationId,
-//        HttpServletRequest request) throws Exception{
-//        try{
-//            Locale locale = PortalUtil.getLocale(request);
-//            Workflow workflow = WorkflowSimulationJobLocalServiceUtil.getWorkflow(simulationId);
-//            System.out.println(simulationId);
-//            List<WorkflowSimulationJob> workflowInstances = WorkflowSimulationJobLocalServiceUtil
-//                .getWorkflowWorkflowSimulationJobsByWorkflowId(simulationId);
-//            List<Map<String, Object>> jstreeIntances = WorkflowBeanUtil
-//                .workflowInstanceToJstreeModel(workflowInstances, locale);
-//            jstreeIntances.add(WorkflowBeanUtil.workflowToJstreeModel(workflow, "#", locale));
-//            return jstreeIntances;
-//        }catch (Exception e){
-//            log.error("error", e);
-//            throw e;
-//        }
-//    }
-//    
-//    @RequestMapping(value = "/instance", method = RequestMethod.POST)
-//    public @ResponseBody Map<String, Object> workflowInstanceListByUser(@RequestParam Map<String, Object> searchParam,
-//        HttpServletRequest request) throws Exception{
-//        try{
-//            Locale locale = PortalUtil.getLocale(request);
-//            User user = PortalUtil.getUser(request);
-//            Map<String, Object> listAndPagingMap = new HashMap<>();
-//            long companyId = PortalUtil.getCompany(request).getCompanyId();
-//            searchParam.put("companyId", companyId);
-//            String pagingClassName = GetterUtil.getString(searchParam.get("pagingClassName"));
-//            int curPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("p_curPage"), "1"));
-//            int linePerPage = Integer.parseInt(CustomUtil.strNull(searchParam.get("linePerPage"), "10"));
-//            int pagePerBlock = 5;
-//            int totalCnt = GetterUtil
-//                .getInteger(WorkflowSimulationJobLocalServiceUtil.getCountWorkflowSimulationJobByUserId(user, searchParam));
-//            int totalPage = WorkflowPagingUtil.getTotalPage(totalCnt, curPage, linePerPage);
-//
-//            int begin = (curPage - 1) * linePerPage;
-//            int end = linePerPage;
-//            searchParam.put("begin", begin);
-//            searchParam.put("end", end);
-//
-//            String pagingHtml = WorkflowPagingUtil.getPaging(request.getContextPath(), pagingClassName, totalCnt,
-//                curPage, linePerPage, pagePerBlock);
-//
-//            listAndPagingMap.put("workflowInstances",
-//                WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJobByUserId(user, searchParam, locale));
-//            listAndPagingMap.put("pagingHtml", pagingHtml);
-//            listAndPagingMap.put("curPage", curPage);
-//            listAndPagingMap.put("totalPage", totalPage);
-//
-//            return listAndPagingMap;
-//        }catch (Exception e){
-//            log.error("error", e);
-//            throw e;
-//        }
-//    }
 
 }

@@ -553,15 +553,6 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
-	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
-		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return _workflowSimulationJobLocalService.createWorkflowSimulationJob(simulationJob);
-	}
-
-	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob startWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
