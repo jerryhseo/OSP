@@ -318,9 +318,8 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 			liObj[key]=<portlet:namespace/>wfLiObj[key];
 		}
 		
-		liObj["select"] = true;
 		if(status=="SUCCESS"){
-// 			liObj["select"] = true;
+			liObj["select"] = true;
 		}
 	}
 	
