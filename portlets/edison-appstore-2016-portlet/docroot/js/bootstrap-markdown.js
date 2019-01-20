@@ -71,7 +71,7 @@
 
     this.showEditor();
   };
-
+  
   Markdown.prototype = {
 
     constructor: Markdown,
@@ -329,10 +329,20 @@
         
         /* 2018.11.22 GPLUS _ Markdown Help */
         var markdownHelp = $("<div/>").addClass("md-how-to-use custom-md-help")
+        								.css("width", "100%")
         								.css("border-top", "1px dashed #ddd")
         								.css("display", "none");
         
-        $("<div/>").text("이곳에 마크다운 사용 방법을 입력합니다.").appendTo(markdownHelp);
+        var markdownHelpDiv = $("<div/>").css("width", "100%").css("padding", "4px 10px");
+        $("<button/>").addClass("btn btn-default").attr("onclick", "_appManager_helpMD($(this).text())").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("Headers").appendTo(markdownHelpDiv);
+        $("<button/>").addClass("btn btn-default").attr("onclick", "_appManager_helpMD($(this).text())").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("Links").appendTo(markdownHelpDiv);
+        $("<button/>").addClass("btn btn-default").attr("onclick", "_appManager_helpMD($(this).text())").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("Images").appendTo(markdownHelpDiv);
+        $("<button/>").addClass("btn btn-default").attr("onclick", "_appManager_helpMD($(this).text())").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("Tables").appendTo(markdownHelpDiv);
+        $("<button/>").addClass("btn btn-default").attr("onclick", "_appManager_helpMD($(this).text())").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("Styling").appendTo(markdownHelpDiv);
+        /*$("<button/>").addClass("btn btn-default").attr("type", "button").css("width", "88px").css("padding", "3px 6px").css("margin-right", "10px").text("BlockQuotes").appendTo(markdownHelpDiv);*/
+        $("<div/>").addClass("md-how-to-use-text").css("width", "100%").appendTo(markdownHelpDiv);
+        
+        markdownHelpDiv.appendTo(markdownHelp)
         editor.append(markdownHelp);
 
         // Wrap the textarea
@@ -1059,7 +1069,7 @@
         data: [{
           name: 'cmdBold',
           hotkey: 'Ctrl+B',
-          title: 'Bold(Ctrl+B)',
+          title: 'Bold',
           icon: {
             glyph: 'glyphicon glyphicon-bold',
             fa: 'icon-bold',
@@ -1095,7 +1105,7 @@
           }
         }, {
           name: 'cmdItalic',
-          title: 'Italic(Ctrl+I)',
+          title: 'Italic',
           hotkey: 'Ctrl+I',
           icon: {
             glyph: 'glyphicon glyphicon-italic',
@@ -1132,7 +1142,7 @@
           }
         }, {
           name: 'cmdHeading',
-          title: 'Heading(Ctrl+H)',
+          title: 'Heading',
           hotkey: 'Ctrl+H',
           icon: {
             glyph: 'glyphicon glyphicon-header',
@@ -1177,7 +1187,7 @@
         name: 'groupLink',
         data: [{
           name: 'cmdUrl',
-          title: 'URL/Link(Ctrl+L)',
+          title: 'URL/Link',
           hotkey: 'Ctrl+L',
           icon: {
             glyph: 'glyphicon glyphicon-link',
@@ -1215,7 +1225,7 @@
           }
         }, {
           name: 'cmdImage',
-          title: 'Image(Ctrl+G)',
+          title: 'Image',
           hotkey: 'Ctrl+G',
           icon: {
             glyph: 'glyphicon glyphicon-picture',
@@ -1265,7 +1275,7 @@
         data: [{
           name: 'cmdList',
           hotkey: 'Ctrl+U',
-          title: 'Unordered List(Ctrl+U)',
+          title: 'Unordered List',
           icon: {
             glyph: 'glyphicon glyphicon-list',
             fa: 'icon-list-ul',
@@ -1317,7 +1327,7 @@
         }, {
           name: 'cmdListO',
           hotkey: 'Ctrl+O',
-          title: 'Ordered List(Ctrl+O)',
+          title: 'Ordered List',
           icon: {
             glyph: 'glyphicon glyphicon-th-list',
             fa: 'icon-list-ol',
@@ -1371,7 +1381,7 @@
         }, {
           name: 'cmdCode',
           hotkey: 'Ctrl+K',
-          title: 'Code(Ctrl+K)',
+          title: 'Code',
           icon: {
             glyph: 'glyphicon glyphicon-console',
             fa: 'icon-code',
@@ -1416,7 +1426,7 @@
         }, {
           name: 'cmdQuote',
           hotkey: 'Ctrl+Q',
-          title: 'Quote(Ctrl+Q)',
+          title: 'Quote',
           icon: {
             glyph: 'glyphicon glyphicon-comment',
             fa: 'icon-quote-left',
@@ -1513,9 +1523,14 @@
             },
             callback: function(e) {
             	
-            	console.log("title : " + $(this).attr("title"));
-            	
-            	$(".md-how-to-use.custom-md-help").show();
+            	var mdHowToUse = $(".md-how-to-use.custom-md-help");
+            	if(mdHowToUse.hasClass("active")){
+            		mdHowToUse.removeClass("active");
+            		mdHowToUse.hide();
+            	} else {
+            		mdHowToUse.addClass("active");
+            		mdHowToUse.show();
+            	}
             }
           }]
         }]
