@@ -131,7 +131,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             return true;
         }
     }
-    
+
 	function edgesHandler(){
 		var edgesData = {};
 		if(isDesigner){
@@ -936,6 +936,25 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                                 icon: isReUseNode ? "fa-ban" : "fa-recycle",
                                 callback: function(key, options) {
                                     uiPanelInstance.setReuseNode(node, !isReUseNode)
+                                }
+                            }
+                        }
+                        if(uiPanelInstance.isPauseAbleNode(node)){
+                            var status = node.data.status.status
+                            items["items"]["open-pause-handler"] = {
+                                name: "Pause",
+                                icon: "fa-pause-circle",
+                                callback: function(key, options) {
+                                    uiPanelInstance.pauseNode(node, true)
+                                }
+                            }
+                        } else if(uiPanelInstance.isResumeAbleNode(node)) {
+                            var status = node.data.status.status
+                            items["items"]["open-pause-handler"] = {
+                                name: "Resume",
+                                icon: "fa-play-circle",
+                                callback: function(key, options) {
+                                    uiPanelInstance.pauseNode(node, false)
                                 }
                             }
                         }

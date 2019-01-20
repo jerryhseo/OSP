@@ -948,6 +948,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     
     public WorkflowSimulationJob pauseWorkflowSimulation(long simulationJobId, String simUuid)
         throws PortalException, SystemException, IOException{
+        System.out.println(WORKFLOW_ENGINE_URL_PRIVATE + "/simulation/" + simUuid + "/pause");
         URL url = new URL(
             WORKFLOW_ENGINE_URL_PRIVATE + "/simulation/" + simUuid + "/pause");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -1690,6 +1691,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     }
     
     private PortalException passException(int httpStatusCode, String message) {
+        System.out.println("httpStatusCode : " + httpStatusCode);
         if(httpStatusCode == HttpStatus.UNAUTHORIZED.value()) {
             return new WFEngineUnauthorizedException(message);
         }
