@@ -259,7 +259,7 @@ Liferay.on(OSP.Event.OSP_RESPONSE_JOB_KEY, function( e ){
 	var myId = '<%=portletDisplay.getId()%>';
 	if(e.targetPortlet === myId){
 		console.log('OSP_RESPONSE_JOB_KEY: ['+e.targetPortlet+', '+new Date()+']');
-		<portlet:namespace/>jobSelectResult(e.data.wfNodeId, e.data.simulationUuid,e.data.jobUuid)
+		<portlet:namespace/>jobSelectResult(e.data.wfNodeId, e.data.simulationUuid,e.data.jobUuid,e.data.returnInputData)
 	}
 });
 
@@ -318,8 +318,9 @@ function <portlet:namespace/>displayChange(status,workBenchType,isEdit){
 			liObj[key]=<portlet:namespace/>wfLiObj[key];
 		}
 		
+		liObj["select"] = true;
 		if(status=="SUCCESS"){
-			liObj["select"] = true;
+// 			liObj["select"] = true;
 		}
 	}
 	
@@ -460,8 +461,8 @@ function sdrcommon_collectionPopup(result){
 }
 
 /*Workflow Return Value*/
-function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid){
-	Liferay.Util.getOpener().setSimAndJobFromWorkbench(wfNodeId,simulationUuid,jobUuid);
+function <portlet:namespace/>jobSelectResult(wfNodeId, simulationUuid,jobUuid,jobDataArray){
+	Liferay.Util.getOpener().setSimAndJobFromWorkbench(wfNodeId,simulationUuid,jobUuid,jobDataArray);
 }
 </script>
 

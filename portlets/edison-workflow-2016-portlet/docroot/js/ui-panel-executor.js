@@ -1763,7 +1763,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				} else {
 					addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
 										scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-										connectedInputPorts, wfId);
+										connectedInputPorts, wfId, node);
 				}
 			} else {
 				addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
@@ -1974,16 +1974,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var inputPort = inputPorts[portId];
 		var isWfSample = inputPort.isWfSample_;
 		var inputPortData = inputPort.inputData_;
-		if(isWfSample){
-			inputPortData = inputPort.wfSample_;
-		} else {
-			if(inputPort.inputData_){
-				inputPortData = inputPort.inputData_;
-			} else {
+		
+		if(inputPort[OSP.Constants.INPUTS]){
+			inputPortData = inputPort[OSP.Constants.INPUTS];
+		}else{
+			if(isWfSample){
+				inputPortData = inputPort.wfSample_;
+			}else{
 				inputPortData = inputPort.sample_;
 			}
 		}
-
+		
+		inputPortData[OSP.Constants.ORDER] = inputPort[OSP.Constants.ORDER];
+		
 		inputPortData[OSP.Constants.PORT_NAME] = portId;
 		jobDataArr.push(inputPortData);
 		return jobDataArr;
