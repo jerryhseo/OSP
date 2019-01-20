@@ -1506,6 +1506,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulationJobId = currJobs.selected().simulationJobId
                 var token = getIcebreakerAccessToken()
                 console.log(token)
+                console.log(json.nodes)
 
                 var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 

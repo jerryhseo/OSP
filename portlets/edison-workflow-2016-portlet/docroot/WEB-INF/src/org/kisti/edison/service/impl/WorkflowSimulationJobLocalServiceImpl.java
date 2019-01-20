@@ -291,8 +291,59 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //  }
     
     @SuppressWarnings("unchecked")
+    public String exportWorkflowEngineJson(long simulationJobId, String strNodes, String userName, String ibToken,
+        HttpServletRequest request) throws WFEngine500Exception{
+        if(!StringUtils.hasText(strNodes)){
+        }
+        try{
+            WorkflowSimulationJob job = WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
+            WorkflowSimulation workflowSimulation = WorkflowSimulationLocalServiceUtil
+                .getWorkflowSimulation(job.getSimulationId());
+            String title = workflowSimulation.getTitle();
+            PermissionChecker checker = PermissionCheckerFactoryUtil.create(PortalUtil.getUser(request));
+            PermissionThreadLocal.setPermissionChecker(checker);
+            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            org.kisti.edison.wfapi.custom.model.Workflow workflow = new org.kisti.edison.wfapi.custom.model.Workflow();
+            workflow.setTitle(title);
+            workflow.setUserId("edison".equals(userName) ? "edisonadm" : userName);
+            workflow.setAccessToken(_TOKEN_PREFIX + ibToken);
+            List<Simulation> simulations = Lists.newArrayList();
+            List<Map<String, Object>> nodes = (List<Map<String, Object>>) gson.fromJson(strNodes, List.class);
+            Map<String, String> changedClientIds = Maps.newHashMap();
+            for(Map<String, Object> node : nodes){
+                Simulation simulation = handleNode(node, userName, request, changedClientIds);
+                if(simulation != null){
+                    simulations.add(simulation);
+                }
+            }
+            for(Simulation simulation : simulations){
+                simulation.setChildNodes(changeClientIds(changedClientIds, simulation.getChildNodes()));
+                simulation.setParentNodes(changeClientIds(changedClientIds, simulation.getParentNodes()));
+                Map<String, List<String>> outPort = simulation.getOutPort();
+                if(outPort != null){
+                    for(String key : outPort.keySet()){
+                        List<String> oldIds = outPort.get(key);
+                        outPort.put(key, changeClientIds(changedClientIds, oldIds));
+                    }
+                }
+            }
+            job.setScreenLogic(changedScreenLogicClientIds(job.getScreenLogic(), changedClientIds));
+            workflow.setSimulations(simulations);
+            if(StringUtils.hasText(job.getWorkflowUUID())){
+                workflow.setReUseWorkflowUuid(job.getWorkflowUUID());
+            }
+            JsonElement workflowJson = gson.toJsonTree(workflow);
+            JsonObject root = new JsonObject();
+            root.add("workflow", workflowJson);
+            return workflowJson.toString();
+        }catch (Exception e){
+            throw new WFEngine500Exception(e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
     public WorkflowSimulationJob rerunWorkflowEngineJson(
-        long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
+            long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
         if(!StringUtils.hasText(strNodes)){
         }
         try{
@@ -563,7 +614,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             Item file = new Item(_CMD_PREFIX + portName);
             String ibFileId = null;
             
-            if( pathType.equalsIgnoreCase("fileContent") || pathType.equalsIgnoreCase("content")){
+            if( pathType.equalsIgnoreCase("fileContent")){
                 Path parentPath = null;
                 if( Validator.isNull(inputParent) ){
                     SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
@@ -577,7 +628,32 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                     inputFileName = portName.replaceAll("-", "");
                 }
                 
-                String content = CustomUtil.strNull(inputs.get("context_"));
+                String content = CustomUtil.strNull(inputs.get("content_"));
+                String target = Paths.get(parentPath.toString(), inputFileName).toString();
+                
+                String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
+                String targetPath = IBUtil.saveFileContent(userName, target, content, repositoryType);
+                System.out.println(targetPath);
+                if(!System.getProperty("os.name").toLowerCase().contains("windows")){
+                    ibFileId = WorkflowSimulationJobLocalServiceUtil.getFileId(groupId, token, targetPath);
+                }else {
+                    ibFileId = uploadFileToIcebreaker(groupId, token, new File(targetPath));
+                }
+            } else if(pathType.equalsIgnoreCase("content")){
+                Path parentPath = null;
+                if( Validator.isNull(inputParent) ){
+                    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
+                    parentPath = Paths.get(dateForm.format(new Date()));
+                }
+                else{
+                    parentPath = Paths.get(inputParent);
+                }
+                
+                if( Validator.isNull(inputFileName) ){
+                    inputFileName = portName.replaceAll("-", "");
+                }
+                
+                String content = CustomUtil.strNull(inputs.get("content_"));
                 String target = Paths.get(parentPath.toString(), inputFileName).toString();
                 
                 String repositoryType = OSPRepositoryTypes.USER_HOME.toString();
