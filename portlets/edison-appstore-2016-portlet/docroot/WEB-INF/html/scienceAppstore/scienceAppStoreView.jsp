@@ -1131,7 +1131,7 @@
 								</div>
 								
 								<div id="<portlet:namespace/>contentStatistics" class="tab-pane" style="padding: 10px;">
-									<div id="<portlet:namespace/>scienceAppStatisticsDataEmpty" class="post" style="padding: 10px; text-align: center;">
+									<div id="<portlet:namespace/>scienceAppStatisticsDataEmpty" class="post" style="padding: 10px; text-align: center; display: none;">
 										<liferay-ui:message key='edison-workflow-data-empty-message' />
 									</div>
 									
@@ -2102,7 +2102,7 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 		var myRatingsEntryIsEmpty = "${myRatingsEntryIsEmpty}";
 		
 		var myRating = $("<div/>").addClass("rating my-rating")
-								  .css("padding", "0px 20px")
+								  .css("padding", "0px 30px")
 								  .css("width", "100%")
 								  .css("font-size", "11px")
 								  .css("text-align", "left")
@@ -2120,11 +2120,12 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 			$("<label/>").attr("for", "star"+(5-i)).appendTo(myRating);
 		}
 		
-		var myScore = $("<div/>").css("width", "25%")
+		var myScore = $("<div/>").css("width", "50%")
 								 .css("font-size", "20px")
 								 .css("position", "absolute")
-								 .css("top", "40%")
-								 .css("right", "0%")
+								 .css("top", "25%")
+								 .css("right", "1%")
+								 .css("text-align", "right")
 								 .attr("id", "<portlet:namespace/>myRatingsScore")
 								 .appendTo(myRating);
 		
@@ -2135,7 +2136,6 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 			regBtnTxt = 'UPDATE';
 		}
 		
-		/* var dialogBody = $("<div/>").append(averageRating).append(myRating); */
 		var dialogBody = $("<div/>").append(myRating);
 		
 		$.confirm({
@@ -2163,14 +2163,16 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 														.css("font-size", "14px")
 														.css("position", "absolute")
 														.css("top", "75%")
-														.css("right", "-15%")
+														.css("right", "-6%")
 														.text("<liferay-ui:message key='date' /> : " + modifiedDt)
 														.appendTo(myRating);
 					
 					$("#<portlet:namespace/>myRatingsScore").text("(" + score + ")");
 					
+					dialogBody.css("min-height", "65px");
 					<portlet:namespace/>checkMyScore(score);
 				} else {
+					dialogBody.css("min-height", "auto");
 					<portlet:namespace/>checkMyScore(0);
 				}
 			}
@@ -2863,53 +2865,55 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 		}
 		
 		bStart();
-		jQuery.ajax({
-			type: "POST",
-			url: "<%=getStatisticsSwExeURL%>",
-			data : sendData,
-			async : false,
-			success: function(data) {
-				var monthlyExeStatistics = data.barChartDateList;
-				var appStatistics = data.pieChartOrganigationList;
-				
-				<portlet:namespace/>drawScienceAppExeStatistics(monthlyExeStatistics);
-				<portlet:namespace/>drawScienceAppStatistics(appStatistics);
-				
-				var hasMonthlyStatistics = false;
-				var hasAppStatistics = false;
-				if(monthlyExeStatistics != null && monthlyExeStatistics != '' && 0<monthlyExeStatistics.length){
-					hasMonthlyStatistics = true;
-				} else {
-					$("#<portlet:namespace/>scienceAppMonthlyExeStatistics").hide();
-				}
-				
-				if(appStatistics != null && appStatistics != '' && 0<appStatistics.length){
-					for(var i=0; i<appStatistics.length; i++){
-						var exeCount = appStatistics[i]["exe_count"];
-						if(exeCount <= 0){
-							$("#<portlet:namespace/>scienceAppStatistics").hide();
-							$("#<portlet:namespace/>scienceAppStatistics").hide();
-							hasAppStatistics = false
-						} else {
-							hasAppStatistics = true
-						}
+		setTimeout(function(){
+			jQuery.ajax({
+				type: "POST",
+				url: "<%=getStatisticsSwExeURL%>",
+				data : sendData,
+				async : false,
+				success: function(data) {
+					var monthlyExeStatistics = data.barChartDateList;
+					var appStatistics = data.pieChartOrganigationList;
+					
+					<portlet:namespace/>drawScienceAppExeStatistics(monthlyExeStatistics);
+					<portlet:namespace/>drawScienceAppStatistics(appStatistics);
+					
+					var hasMonthlyStatistics = false;
+					var hasAppStatistics = false;
+					if(monthlyExeStatistics != null && monthlyExeStatistics != '' && 0<monthlyExeStatistics.length){
+						hasMonthlyStatistics = true;
+					} else {
+						$("#<portlet:namespace/>scienceAppMonthlyExeStatistics").hide();
 					}
-				} else {
-					$("#<portlet:namespace/>scienceAppStatistics").hide();
+					
+					if(appStatistics != null && appStatistics != '' && 0<appStatistics.length){
+						for(var i=0; i<appStatistics.length; i++){
+							var exeCount = appStatistics[i]["exe_count"];
+							if(exeCount <= 0){
+								$("#<portlet:namespace/>scienceAppStatistics").hide();
+								$("#<portlet:namespace/>scienceAppStatistics").hide();
+								hasAppStatistics = false
+							} else {
+								hasAppStatistics = true
+							}
+						}
+					} else {
+						$("#<portlet:namespace/>scienceAppStatistics").hide();
+					}
+					
+					if(hasMonthlyStatistics || hasAppStatistics){
+						$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").hide();
+					} else {
+						$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").show();
+					}
+				},error:function(msg,e){ 
+					alert("<liferay-ui:message key='edison-data-event-error' />\nGet Statistics SW Execute Error");
+					return false;
+				},complete: function(){
+					bEnd();
 				}
-				
-				if(hasMonthlyStatistics || hasAppStatistics){
-					$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").hide();
-				} else {
-					$("#<portlet:namespace/>scienceAppStatisticsDataEmpty").show();
-				}
-			},error:function(msg,e){ 
-				alert("<liferay-ui:message key='edison-data-event-error' />\nGet Statistics SW Execute Error");
-				return false;
-			},complete: function(){
-				bEnd();
-			}
-		});
+			});
+		}, 500);
 	}
 
 	/* Draw Monthly Execute Statistics */
