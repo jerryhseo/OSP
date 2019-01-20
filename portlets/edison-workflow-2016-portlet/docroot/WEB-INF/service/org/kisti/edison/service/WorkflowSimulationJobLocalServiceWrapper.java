@@ -631,12 +631,32 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob pauseWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.pauseWorkflowSimulation(simulationJobId,
+			simUuid);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		return _workflowSimulationJobLocalService.resumeWorkflowSimulationJob(simulationJobId);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.resumeWorkflowSimulation(simulationJobId,
+			simUuid);
 	}
 
 	@Override

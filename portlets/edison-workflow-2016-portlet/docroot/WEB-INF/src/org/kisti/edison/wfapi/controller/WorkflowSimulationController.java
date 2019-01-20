@@ -346,7 +346,7 @@ public class WorkflowSimulationController{
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/export", 
         "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
-    public @ResponseBody Map<String, Object> exportSimulationJob(
+    public @ResponseBody String exportSimulationJob(
         @PathVariable("simulationId") long simulationId, 
         @PathVariable("simulationJobId") long simulationJobId, 
         @RequestParam("strNodes") String strNodes,
@@ -355,7 +355,7 @@ public class WorkflowSimulationController{
         try{
             User user = PortalUtil.getUser(request);
             return WorkflowSimulationJobLocalServiceUtil.exportWorkflowEngineJson(
-                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request).getModelAttributes();
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request);
         }catch (Exception e){
             log.error("error", e);
             throw e;
@@ -397,6 +397,40 @@ public class WorkflowSimulationController{
             JsonNode status = Transformer
                 .string2Json(WorkflowSimulationJobLocalServiceUtil
                     .pauseWorkflowSimulationJob(simulationJobId).getStatusResponse());
+            return status;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = "/job/{simulationJobId}/pause/{uuid}", method = RequestMethod.POST)
+    public @ResponseBody JsonNode pauseWorkflowSimulation(
+        @RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long simulationJobId, 
+        @PathVariable("uuid") String simUuid, 
+        HttpServletRequest request) throws Exception{
+        try{
+            JsonNode status = Transformer
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .pauseWorkflowSimulation(simulationJobId, simUuid).getStatusResponse());
+            return status;
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
+    @RequestMapping(value = "/job/{simulationJobId}/resume/{uuid}", method = RequestMethod.POST)
+    public @ResponseBody JsonNode resumeWorkflowSimulation(
+        @RequestParam Map<String, Object> params,
+        @PathVariable("simulationJobId") long simulationJobId, 
+        @PathVariable("uuid") String simUuid, 
+        HttpServletRequest request) throws Exception{
+        try{
+            JsonNode status = Transformer
+                .string2Json(WorkflowSimulationJobLocalServiceUtil
+                    .pauseWorkflowSimulation(simulationJobId, simUuid).getStatusResponse());
             return status;
         }catch (Exception e){
             log.error("error", e);

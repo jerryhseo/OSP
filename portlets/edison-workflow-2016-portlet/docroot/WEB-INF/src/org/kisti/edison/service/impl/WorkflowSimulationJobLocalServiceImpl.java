@@ -945,6 +945,22 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         conn.disconnect();
         return getWorkflowStatus(simulationJobId);
     }
+    
+    public WorkflowSimulationJob pauseWorkflowSimulation(long simulationJobId, String simUuid)
+        throws PortalException, SystemException, IOException{
+        URL url = new URL(
+            WORKFLOW_ENGINE_URL_PRIVATE + "/simulation/" + simUuid + "/pause");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        
+        if(conn.getResponseCode() == HttpStatus.OK.value()){
+        }else{
+            throw passException(conn.getResponseCode(), "Failed WorkflowEngineService [ pauseWorkflowSimulationJob ]");
+        }
+        conn.disconnect();
+        return getWorkflowStatus(simulationJobId);
+    }
 
     public WorkflowSimulationJob resumeWorkflowSimulationJob(long simulationJobId)
         throws PortalException, SystemException, IOException{
@@ -956,6 +972,22 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         conn.setDoOutput(true);
         conn.setRequestMethod("PUT");
 
+        if(conn.getResponseCode() == HttpStatus.OK.value()){
+        }else{
+            throw passException(conn.getResponseCode(), "Failed WorkflowEngineService [ resumeWorkflowSimulationJob ]");
+        }
+        conn.disconnect();
+        return getWorkflowStatus(simulationJobId);
+    }
+    
+    public WorkflowSimulationJob resumeWorkflowSimulation(long simulationJobId, String simUuid)
+        throws PortalException, SystemException, IOException{
+        URL url = new URL(
+            WORKFLOW_ENGINE_URL_PRIVATE + "/simulation/" + simUuid + "/resume");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("PUT");
+        
         if(conn.getResponseCode() == HttpStatus.OK.value()){
         }else{
             throw passException(conn.getResponseCode(), "Failed WorkflowEngineService [ resumeWorkflowSimulationJob ]");
