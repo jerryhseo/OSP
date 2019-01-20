@@ -1888,6 +1888,8 @@
         		var outputPorts = scienceApp.outputPorts();
         		resetPortlets( job, outputPorts, portType );
         	}
+        	
+        	blockModule(job);
         };
 
         var resetPortlets = function( job, ports, portType ){
