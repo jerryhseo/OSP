@@ -59,8 +59,6 @@ $(function(e) {
 	
 	<portlet:namespace/>workbench.scienceApp(scienceApp);
 	
-// 	<portlet:namespace/>createSimulationAndJob();
-	
 	// Resolving workbench layout
 	$.ajax({
 		url: '<%=serveResourceURL.toString()%>',

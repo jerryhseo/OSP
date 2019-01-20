@@ -52,8 +52,7 @@ import com.kisti.osp.constants.OSPRepositoryTypes;
 import com.kisti.osp.icecap.model.DataType;
 import com.kisti.osp.icecap.service.DataTypeAnalyzerLocalServiceUtil;
 import com.kisti.osp.icecap.service.DataTypeLocalServiceUtil;
-import com.kisti.osp.service.FileManagementLocalServiceUtil;
-import com.kisti.osp.util.OSPFileUtil;
+import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -131,14 +130,14 @@ public class TreeViewMonitoringController{
             .fromJson(wrapJobDataArray(simulationJobData), JobDataList.class);
         JobData portData = jobData.getPortData(portName);
         if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE)){
-            OSPFileUtil.downloadFile(request, response,
+            OSPFileLocalServiceUtil.downloadFile(request, response,
                 Paths.get(portData.getParent_(), portData.getName_()).toString(),
                 OSPRepositoryTypes.USER_HOME.toString());
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_DL_ENTRY_ID)){
-            OSPFileUtil.downloadDLEntry(request, response, Long.valueOf(portData.getId_()));
+        	OSPFileLocalServiceUtil.downloadDLEntry(request, response, Long.valueOf(portData.getId_()));
         }else if(ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_CONTEXT)
             || ObjectUtils.nullSafeEquals(portData.getType_(), OSP_PATH_TYPE_FILE_CONTENT)){
-            OSPFileUtil.downloadFromText(request, response, portName + ".txt", portData.getContext_());
+        	OSPFileLocalServiceUtil.downloadFromText(request, response, portName + ".txt", portData.getContext_());
         }
     }
     

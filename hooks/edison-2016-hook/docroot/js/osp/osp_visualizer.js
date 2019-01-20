@@ -732,8 +732,10 @@
 
         var fireDataChangedEvent = function( data, params ){
             if( data ){
-            	if(currentData.type()===OSP.Enumeration.PathType.FILE_CONTENT){
-            		data.type_ = currentData.type();
+            	if(!data.type_){
+            		if(currentData.type()===OSP.Enumeration.PathType.FILE_CONTENT){
+            			data.type_ = currentData.type();
+            		}
             	}
             	
                 setCurrentData( data );

@@ -646,7 +646,7 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 			for( var portName in inputPorts ){
 				var portData = job.inputData( portName );
 				if( portData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
-					var ospDataType = new OSP.DataType();
+					var dataType = new OSP.DataType();
 					dataType.deserializeStructure(portData.content());
 					var dataStructure = dataType.structure(); 
 					var fileContents = dataStructure.activeParameterFormattedInputs();
