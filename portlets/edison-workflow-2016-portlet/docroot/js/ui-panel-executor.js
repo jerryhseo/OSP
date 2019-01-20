@@ -1254,7 +1254,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
-    function pause(){
+    function pause(callback){
         var simulationJobId = currJobs.selected() ? currJobs.selected().simulationJobId : undefined
         console.log(simulationJobId)
         if (simulationJobId) {
@@ -1263,6 +1263,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_success_message)
                     updateNodeStatus(status)
                     executor.updateStatus(simulationJobId, status, updateNodeStatus)
+                    if(callback) {
+                    	callback()
+                    }
                 },
                 function () {
                     toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_fail_message);
@@ -1851,7 +1854,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				jobData : jobData
 			}, function(obj) {
 				if(obj.isValid){
-					pause();
 					/* IB_DATA Setting */
 					var thisJob = currJobs.selected();
 					var simulationJobId = thisJob.simulationJobId;
@@ -1864,8 +1866,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					var job = currJobs.selected();
 					saveSimulationJob(job);
 					
-					pause();
-					openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
+					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
+					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
+						pause(function(){
+							openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
+						})
+					} else {
+						openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
+					}
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
 				}
@@ -1889,8 +1897,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					var job = currJobs.selected();
 					saveSimulationJob(job);
 					
-					pause();
-					openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
+					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
+						pause(function(){
+							openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+						})
+					} else {
+						openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+					}
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
 				}
@@ -1910,15 +1924,23 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			if (portType == "inputPorts") {
 				if (currPort.getAllEdges().length == 1) {
 					 /*status is success : return true, else return false*/ 
-					var thisNode = currPort.getNode();
-					var status = thisNode.data.status.status;
-					
-					if(status == OSP.Enumeration.JobStatus.SUCCESS){
-						openWorkbench = true;
-					} else {
-						openWorkbench = false;
-						break checkStatusLoof;
+					var thisNode = currPort.getAllEdges();
+					var parentEdges = currPort.getTargetEdges();
+					for(var parentEdgesIdx in parentEdges){
+						var parentEdge = parentEdges[parentEdgesIdx];
+						var sourcePort = parentEdge.source;
+						var sourceNode = sourcePort.getNode();
+						
+						var status = sourceNode.data.status.status;
+						
+						if(status == OSP.Enumeration.JobStatus.SUCCESS){
+							openWorkbench = true;
+						} else {
+							openWorkbench = false;
+							break checkStatusLoof;
+						}
 					}
+					
 				} else {
 					openWorkbench = true;
 				}
@@ -1946,36 +1968,39 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					/* Get Parent Node's JobData */
 					var targetEdges = port.getTargetEdges();
 					var inputPortName = port.data.id;
-					var getParentObj = getParentPortsJobData(targetEdges[0], inputPortName);
-					
-					if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
+					for(var targetEdgesIdx in targetEdges){
 						
-						var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
-						var isDataComponent = getParentObj.isDataComponent;
+						var getParentObj = getParentPortsJobData(targetEdges[targetEdgesIdx], inputPortName);
 						
-						connectedInputPortsObj[OSP.Constants.PORT_NAME] = port.id;
-						if(isDataComponent){
-							getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-							connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-						} else {
-							getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-							connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
-						}
-						
-						connectedInputPorts.push(connectedInputPortsObj);
-						
-						var getJobData = getParentObj.jobData;
-						/*jobDataArr = jobDataArr.concat(getJobData);*/
-						
-						getParentObj.simulationUuid = simulationUuid;
-						getParentObj.simulationJobUuid = jobUuid;
-						if(sourceJobDataType.toLowerCase() == "file"){
-							getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-							var copyResult = parentNodeFileCopy(getParentObj);
-							if(copyResult.copyFileResult){
-								jobDataArr = jobDataArr.concat(copyResult.jobData);
+						if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
+							
+							var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
+							var isDataComponent = getParentObj.isDataComponent;
+							
+							connectedInputPortsObj[OSP.Constants.PORT_NAME] = port.id;
+							if(isDataComponent){
+								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
+								connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
 							} else {
-								jobDataArr = jobDataArr.concat(getJobData);
+								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+								connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
+							}
+							
+							connectedInputPorts.push(connectedInputPortsObj);
+							
+							var getJobData = getParentObj.jobData;
+							/*jobDataArr = jobDataArr.concat(getJobData);*/
+							
+							getParentObj.simulationUuid = simulationUuid;
+							getParentObj.simulationJobUuid = jobUuid;
+							if(sourceJobDataType.toLowerCase() == "file"){
+								getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
+								var copyResult = parentNodeFileCopy(getParentObj);
+								if(copyResult.copyFileResult){
+									jobDataArr = jobDataArr.concat(copyResult.jobData);
+								} else {
+									jobDataArr = jobDataArr.concat(getJobData);
+								}
 							}
 						}
 					}
@@ -2050,14 +2075,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 						toastr["error"]("", "JobData not found!!");
 						break findJobData;
 					} else {
-						sourcePort = targetEdges[0].source;
-						if (sourcePort == undefined) {
-							break findJobData;
-						} else {
-							sourceNode = sourcePort.getNode();
-							sourceNodeData = sourceNode.data;
-							runType = sourceNodeData.scienceAppData.runType;
-							continue findJobData;
+						for(var targetEdgesIdx in targetEdges){
+							sourcePort = targetEdges[targetEdgesIdx].source;
+							if (sourcePort == undefined) {
+								break findJobData;
+							} else {
+								sourceNode = sourcePort.getNode();
+								sourceNodeData = sourceNode.data;
+								runType = sourceNodeData.scienceAppData.runType;
+								continue findJobData;
+							}
 						}
 					}
 				}
@@ -2183,7 +2210,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				yes : {
 					text: 'YES',
 					action: function(){
-						rerun();
+						alert("YES~");
 					}
 				},
 				no : {

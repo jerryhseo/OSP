@@ -222,6 +222,29 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 template: "wf-input-port-templete",
                 anchor: ["Center"]
             }
+        },
+        edges: {
+            "default": {
+                anchor: [ "Left", "Right" ], // anchors for the endpoints
+                connector: "StateMachine",  //  StateMachine connector type
+                cssClass:"common-edge",
+                events: {
+                    "dbltap": function (params) {
+                        _editEdge(params.edge);
+                    }
+                },
+                overlays: [
+                    [ "Label", {
+                        cssClass: "delete-relationship",
+                        label: "<i class='fa fa-times'></i>",
+                        events: {
+                            "tap": function (params) {
+                            	currentJsPlumbInstance.removeEdge(params.edge);
+                            }
+                        }
+                    } ]
+                ]
+            }
         }
     }
 
