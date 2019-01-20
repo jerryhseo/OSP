@@ -268,6 +268,18 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
             }, errorCallback
         );
     }
+    function exportSimulationJob(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/export",
+            params,
+            function (strExportJson) {
+                if (callback) {
+                    callback(strExportJson);
+                }
+            }, errorCallback
+        );
+    }
 
     /////////////////////////////////////////// renew end
 
@@ -685,6 +697,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "rerunSimulationJobEngine": rerunSimulationJobEngine,
         "pauseSingleNode": pauseSingleNode,
         "resumeSingleNode": resumeSingleNode,
+        "exportSimulationJob": exportSimulationJob,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,

@@ -345,7 +345,7 @@ public class WorkflowSimulationController{
     
     @RequestMapping(value = {
         "/{simulationId}/job/{simulationJobId}/export", 
-        "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
+        "/job/{simulationJobId}/export"}, method = RequestMethod.POST)
     public @ResponseBody String exportSimulationJob(
         @PathVariable("simulationId") long simulationId, 
         @PathVariable("simulationJobId") long simulationJobId, 
