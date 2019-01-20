@@ -51,9 +51,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                 return false;
             }
 
-            if (target.getAllEdges().length != 0) {
+            /*if (target.getAllEdges().length != 0) {
                 return false;
-            }
+            }*/
 
             if (source.getNode() === target.getNode()) {
                 return false;
@@ -136,6 +136,37 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             return true;
         }
     }
+    
+	function edgesHandler(){
+		var edgesData = {};
+		console.log(isDesigner);
+		if(isDesigner){
+			edgesData = {
+				"default": {
+					anchor: [ "Left", "Right" ], // anchors for the endpoints
+					connector: "StateMachine",  //  StateMachine connector type
+					cssClass:"common-edge",
+					events: {
+						"dbltap": function (params) {
+							_editEdge(params.edge);
+						}
+					},
+					overlays: [
+						["Label", {
+							cssClass: "delete-relationship",
+							label: "<i class='fa fa-times'></i>",
+							events: {
+								"tap": function (params) {
+									currentJsPlumbInstance.removeEdge(params.edge);
+								}
+							}
+						} ]
+					]
+				}
+			}
+		}
+		return edgesData;
+	}
 
     var view = {
         nodes: {
@@ -179,7 +210,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         ports: {
             "inputPorts": {
                 template: "input-port-templete",
-                anchor: ["Center"],
+                anchor: ["Left"],
                 events: {
                     click: function(obj) {
                         if (!isDesigner && uiPanelInstance) {
@@ -220,32 +251,10 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
             },
             "targetAll": {
                 template: "wf-input-port-templete",
-                anchor: ["Center"]
+                anchor: ["Left"]
             }
         },
-        edges: {
-            "default": {
-                anchor: [ "Left", "Right" ], // anchors for the endpoints
-                connector: "StateMachine",  //  StateMachine connector type
-                cssClass:"common-edge",
-                events: {
-                    "dbltap": function (params) {
-                        _editEdge(params.edge);
-                    }
-                },
-                overlays: [
-                    [ "Label", {
-                        cssClass: "delete-relationship",
-                        label: "<i class='fa fa-times'></i>",
-                        events: {
-                            "tap": function (params) {
-                            	currentJsPlumbInstance.removeEdge(params.edge);
-                            }
-                        }
-                    } ]
-                ]
-            }
-        }
+        edges: edgesHandler()
     }
 
     function openWfAppDataSettingHandler(node) {
@@ -304,8 +313,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         },
         lassoFilter: ".controls, .controls *, .miniview, .miniview *",
         jsPlumb: {
-            EndpointStyle: { fill: "#445566", radius: 5 },
-            EndpointHoverStyle: { fill: "#FF6600", radius: 7 },
+        	Endpoint: "Blank",
             HoverPaintStyle: { strokeWidth: 5, stroke: "#FF6600" },
             PaintStyle: { strokeWidth: 3, stroke: "#445566" },
             ConnectionOverlays: [

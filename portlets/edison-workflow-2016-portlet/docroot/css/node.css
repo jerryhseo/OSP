@@ -14,6 +14,7 @@
     background-color: hsla(220, 11%, 97%, .95);
     box-shadow: inset 0 1px 1px white, 0 2px 2px hsla(0, 0%, 0%, .2);
     line-height: 20px;
+    z-index: 100;
 }
 
 .wf-box .wf-node-header{
@@ -115,6 +116,10 @@
     top: 1.5px;
 }
 
+.wf-box .wf-node-ports .input-ports-list .wf-port div.jtk-connected{
+	background-color: #37ec0b !important;
+}
+
 .wf-box .wf-node-ports .output-ports-list {
     float: right;
     width: 49%;
@@ -147,7 +152,10 @@
     float: right;
     position: relative;
     top: 1.5px;
-	margin-right: 7px;
+}
+
+.wf-box .wf-node-ports .output-ports-list li.jtk-connected > div.connect{
+	background-color: #ec920b !important;
 }
 
 .wf-box .wf-node-ports:before {
@@ -256,3 +264,27 @@
 }
 
 .top-cog-icon {width: auto !important;}
+
+.delete-relationship{
+	/* background-color: #ecf0f5; */
+	color: #ff1300;
+	font-size: 10px;
+	font-weight: 400;
+	padding: 1px 2px;
+	z-index: 100;
+	border-radius: 12px;
+	cursor: pointer;
+	text-align: center;
+	line-height: 0px !important;
+}
+
+.delete-relationship i{
+	background-color: #ecf0f5;
+	border-radius: 10px;
+}
+
+.delete-relationship:hover,
+.delete-relationship i:hover{
+	color: #fff;
+	background-color: #f76258;
+}
