@@ -332,10 +332,11 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             if(StringUtils.hasText(job.getWorkflowUUID())){
                 workflow.setReUseWorkflowUuid(job.getWorkflowUUID());
             }
+            gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
             JsonElement workflowJson = gson.toJsonTree(workflow);
             JsonObject root = new JsonObject();
             root.add("workflow", workflowJson);
-            return workflowJson.toString();
+            return gson.toJson(root);
         }catch (Exception e){
             throw new WFEngine500Exception(e);
         }

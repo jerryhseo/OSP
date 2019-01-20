@@ -127,7 +127,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             (currJob.status !== '' &&
                 currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
                 currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
-                node.data.status.status === CONSTS.WF_STATUS_CODE.CREATED) {
+                node.data.status.status === CONSTS.WF_STATUS_CODE.CREATED &&
+                node.data.status.pause !== 'pause') {
             return true
         } else {
             return false
@@ -140,7 +141,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             (currJob.status !== '' &&
                 currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
                 currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
-                node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED) {
+            (node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED)) {
             return true
         } else {
             return false
@@ -1075,6 +1076,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
             portletURL.setParameter('simulationUuid', node.data.ibData.ibSimUuid);
+            console.log(node.data.status.status)
             if(node.data.status){
                 portletURL.setParameter('status', node.data.status.status);
             }
@@ -1337,24 +1339,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         _enterkey("#" + namespace + "wf-modal input[name='Title']", saveHandler);
     }
 
-    function drawWorkflowInstances(params) {
-        var simulationId = getMetaData().simulationId;
-        var instanceTreeSelector = "#" + namespace + "menu-panel-box .open .box-body";
-        aSyncAjaxHelper.post("/delegate/services/simluation/" + simulationId + "/list",
-            params,
-            function (workflowInstances) {
-                if($(instanceTreeSelector).hasClass("jstree")){
-                    $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
-                    $(instanceTreeSelector).jstree(true).refresh();
-                }else{
-                    initJstree(instanceTreeSelector, workflowInstances);
-                }
-            },
-            function (msg) {
-                toastr["error"]("", msg);
-            });
-    }
-
     $("#" + namespace + "header-li-delete").click(function (e) {
         if (_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)) {
             return false;
@@ -1382,10 +1366,122 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     $("#" + namespace + "header-li-pause").click(function (e) {
         pause()
     })
+
     $("#" + namespace + "header-li-resume").click(function (e) {
         resume()
     })
+    $("#" + namespace + "header-li-export").click(function (e) {
+        exportJson()
+    })
 
+    function exportJson() {
+        bStart()
+        _delay(function() {
+            saveSimulationJob(currJobs.selected(), function() {
+                resetSubmitData()
+                // console.log(designer.getCurrentJsPlumbInstance())
+                var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+                var jp = designer.getCurrentJsPlumbInstance()
+                var outputPorts = currOutputPorts.getArray()
+                var isReRun = false
+                $.each(outputPorts, function(){
+                    // console.log(this)
+                    var currSourcePortData = this
+                    var sourcePort = jp.getPort(this.id)
+                    var sourceNode = sourcePort.getNode()
+                    if(isDataComponentNode(sourceNode)) {
+                        return
+                    }
+                    $.each(sourcePort.getSourceEdges(), function(){
+                        var targetPort = this.target
+                        if(targetPort) {
+                            var prefixedId = prefix + targetPort.id
+                            var targetNode = targetPort.getNode()
+
+                            if(isDataComponentNode(targetNode)) {
+                                isReRun = true
+                                return
+                            }
+
+                            sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                                sourceNode.data.childNodes.push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                            sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                                sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                            if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                                sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                            }
+
+                            targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                            if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                                targetNode.data.parentNodes.push(sourceNode.getFullId())
+                            }
+
+                            targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
+                            if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
+                                targetNode.data.connectedPorts.push(targetPort.data.id)
+                            }
+                        }
+                    })
+                })
+
+                var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
+                var nodes = []
+                $.each(json.nodes, function(i, node){
+                    if (isReRun) {
+                        node.regenerateClientId = true
+                    } else {
+                        node.regenerateClientId = false
+                    }
+                    if (!isDataComponentNode({data: node})) {
+                        nodes.push(node)
+                    }
+                })
+                json.nodes = nodes
+                var simulationId = currJobs.selected().simulationId
+                var simulationJobId = currJobs.selected().simulationJobId
+                var token = getIcebreakerAccessToken()
+
+                executor.exportSimulationJob({
+                    simulationId: simulationId,
+                    simulationJobId: simulationJobId,
+                    icebreakerVcToken: token.icebreakerVcToken,
+                    groupId: token.groupId,
+                    strNodes: JSON.stringify(json.nodes)
+                }, function(exportJson) {
+                    // console.log(submitData)
+                    toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_export_success_message)
+                    var currJob = currJobs.selected()
+                    var currSimulation = currSimulations.selected()
+                    var fileName = currSimulation.title + '-' + currJob.title
+                    fileName = fileName ? fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'workflowExport';
+                    bEnd()
+                    try {
+                        var blob = new Blob([exportJson], {type: "application/json;charset=utf-8"})
+                        window.saveAs(blob, fileName)
+                    } catch (e) {
+                        if(console) {
+                            console.log(e)
+                        }
+                    }
+                }, function() {
+                    bEnd()
+                    toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_export_fail_message)
+                })
+            }, function () {
+                bEnd()
+                toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_export_fail_message)
+            })
+        }, 2000)
+
+    }
 
     function rerun() {
         // console.log('rerun')
