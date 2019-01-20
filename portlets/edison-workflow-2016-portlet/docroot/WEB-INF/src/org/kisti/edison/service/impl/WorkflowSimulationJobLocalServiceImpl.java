@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -290,7 +291,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //  }
     
     @SuppressWarnings("unchecked")
-    public WorkflowSimulationJob createWorkflowEngineJson(
+    public WorkflowSimulationJob rerunWorkflowEngineJson(
         long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
         if(!StringUtils.hasText(strNodes)){
         }
@@ -307,8 +308,94 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             workflow.setAccessToken(_TOKEN_PREFIX + ibToken);
             List<Simulation> simulations = Lists.newArrayList();
             List<Map<String, Object>> nodes = (List<Map<String, Object>>) gson.fromJson(strNodes, List.class);
+            Map<String, String> changedClientIds = Maps.newHashMap();
             for(Map<String, Object> node : nodes){
-                Simulation simulation = handleNode(node, userName, request);
+                Simulation simulation = handleNode(node, userName, request, changedClientIds);
+                if(simulation != null){
+                    simulations.add(simulation);
+                }
+            }
+            for(Simulation simulation : simulations){
+                simulation.setChildNodes(changeClientIds(changedClientIds, simulation.getChildNodes()));
+                simulation.setParentNodes(changeClientIds(changedClientIds, simulation.getParentNodes()));
+                Map<String, List<String>> outPort = simulation.getOutPort();
+                if(outPort != null){
+                    for(String key : outPort.keySet()){
+                        List<String> oldIds = outPort.get(key);
+                        outPort.put(key, changeClientIds(changedClientIds, oldIds));
+                    }
+                }
+            }
+            job.setScreenLogic(changedScreenLogicClientIds(job.getScreenLogic(), changedClientIds)); ;
+            workflow.setSimulations(simulations);
+            if(StringUtils.hasText(job.getWorkflowUUID())){
+                workflow.setReUseWorkflowUuid(job.getWorkflowUUID());
+            }
+            JsonElement workflowJson = gson.toJsonTree(workflow);
+            JsonObject root = new JsonObject();
+            root.add("workflow", workflowJson);
+            String workflowUUID = askForCreateWorkflow(gson.toJson(root));
+            System.out.println(workflowUUID);
+            if(StringUtils.hasText(workflowUUID)){
+                job.setWorkflowUUID(workflowUUID);
+                return startWorkflowSimulationJob(job);
+            } else {
+                return WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
+            }
+        }catch (Exception e){
+            throw new WFEngine500Exception(e);
+        }
+    }
+    
+    private String changedScreenLogicClientIds(String screenLogic, Map<String, String> changedClientIds){
+        if(screenLogic == null || !(screenLogic instanceof String)){
+            return null;
+        }
+        if(changedClientIds == null){
+            return screenLogic;
+        }
+        for(String key : changedClientIds.keySet()) {
+            screenLogic = screenLogic.replace(key, changedClientIds.get(key)); 
+        }
+        return screenLogic;
+    }
+
+    private List<String> changeClientIds(Map<String, String> changedClientId, List<String> oldIds){
+        if(oldIds == null){
+            return null;
+        }
+        List<String> newIds = Lists.newArrayList();
+        for(String oldId : oldIds) {
+            if(changedClientId.containsKey(oldId)){
+                newIds.add(changedClientId.get(oldId));
+            }else{
+                newIds.add(oldId);
+            }
+        }
+        return newIds;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public WorkflowSimulationJob createWorkflowEngineJson(
+        long simulationJobId, String strNodes, String userName, String ibToken, HttpServletRequest request) throws WFEngine500Exception{
+        if(!StringUtils.hasText(strNodes)){
+        }
+        try{
+            WorkflowSimulationJob job = WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
+            WorkflowSimulation workflowSimulation = WorkflowSimulationLocalServiceUtil.getWorkflowSimulation(job.getSimulationId());
+            String title = workflowSimulation.getTitle();
+            PermissionChecker checker = PermissionCheckerFactoryUtil.create(PortalUtil.getUser(request));
+            PermissionThreadLocal.setPermissionChecker(checker);
+            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            org.kisti.edison.wfapi.custom.model.Workflow workflow = new org.kisti.edison.wfapi.custom.model.Workflow();
+            workflow.setTitle(title);
+            workflow.setUserId("edison".equals(userName) ? "edisonadm" : userName);
+            workflow.setAccessToken(_TOKEN_PREFIX + ibToken);
+            
+            List<Simulation> simulations = Lists.newArrayList();
+            List<Map<String, Object>> nodes = (List<Map<String, Object>>) gson.fromJson(strNodes, List.class);
+            for(Map<String, Object> node : nodes){
+                Simulation simulation = handleNode(node, userName, request, null);
                 if(simulation != null){
                     simulations.add(simulation);
                 }
@@ -331,7 +418,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     }
     
     @SuppressWarnings("unchecked")
-    private Simulation handleNode(Map<String, Object> node, String userScreenName, HttpServletRequest request) 
+    private Simulation handleNode(Map<String, Object> node, String userScreenName, HttpServletRequest request, Map<String, String> changedClientId) 
         throws PortalException, SystemException, IOException {
         
         String execPath = PrefsPropsUtil.getString(PortalUtil.getCompanyId(request), EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
@@ -365,8 +452,21 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                 System.out.println(scienceAppData);
                 scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
             }
+            boolean regenerateClientId = GetterUtil.getBoolean(node.get("regenerateClientId"), false);
+            boolean isReUseNode = GetterUtil.getBoolean(node.get("isReUseNode"), false);
+            System.out.println("regenerateClientId : " + regenerateClientId);
+            System.out.println("isReUseNode : " + isReUseNode);
+            if(regenerateClientId && !isReUseNode && changedClientId != null){
+                String newId = UUID.randomUUID().toString();
+                String oldId = CustomUtil.strNull(node.get("id"));
+                if(StringUtils.hasText(oldId)){
+                    changedClientId.put(oldId, newId);
+                    simulation.setClientId(newId);
+                }
+            }else{
+                simulation.setClientId(CustomUtil.strNull(node.get("id")));
+            }
             
-            simulation.setClientId(CustomUtil.strNull(node.get("id")));
             simulation.setTitle(CustomUtil.strNull(scienceAppData.get("name")));
             simulation.setDescription(CustomUtil.strNull(scienceAppData.get("text")));
             simulation.setSolverId(GetterUtil.getLong(scienceAppData.get("scienceAppId")));

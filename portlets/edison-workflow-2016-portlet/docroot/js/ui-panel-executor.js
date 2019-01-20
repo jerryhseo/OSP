@@ -482,6 +482,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulation = this
                 var nodeId = simulation.clientId
                 var node = currNodes.get(nodeId)
+                if(!node) {
+                    return
+                }
                 node.data.status = simulation
                 // "ibUuid": "e3e949e4-c288-47c0-b6b3-f576f097a264",
                 //     "ibSimUuid": "a859bcbb-1010-4c20-a0ca-1e229d859ac5"
@@ -1307,8 +1310,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     })
 
     $("#" + namespace + "header-li-rerun").click(function (e) {
-        console.log('rerun')
-        // submitSimulationJob()
+        rerun()
     })
 
     $("#" + namespace + "header-li-pause").click(function (e) {
@@ -1317,6 +1319,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     $("#" + namespace + "header-li-resume").click(function (e) {
         resume()
     })
+
+
+    function rerun() {
+        console.log('rerun')
+        submitSimulationJob(true)
+    }
 
     function resume(){
         var simulationJobId = currJobs.selected() ? currJobs.selected().simulationJobId : undefined
@@ -1408,116 +1416,136 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // return false
     }
 
-    function submitSimulationJob() {
+    function submitSimulationJob(isReRun) {
         if(!currJobs.selected()) {
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
         }
-        saveSimulationJob(currJobs.selected(), function() {
-            resetSubmitData()
-            // console.log(designer.getCurrentJsPlumbInstance())
-            var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
-            var jp = designer.getCurrentJsPlumbInstance()
-            var outputPorts = currOutputPorts.getArray()
-            $.each(outputPorts, function(){
-                // console.log(this)
-                var currSourcePortData = this
-                var sourcePort = jp.getPort(this.id)
-                var sourceNode = sourcePort.getNode()
-                if(isDataComponentNode(sourceNode)) {
-                    return
-                }
-                // console.log(jp.getPort(sourcePort.id))
-                $.each(sourcePort.getSourceEdges(), function(){
-                    var targetPort = this.target
-                    if(targetPort) {
-                        // console.log(sourcePort)
-                        // console.log(targetPort)
-                        var prefixedId = prefix + targetPort.id
-                        var targetNode = targetPort.getNode()
 
-                        if(isDataComponentNode(targetNode)) {
-                            return
-                        }
+        if(!validateSimulationJob()){
+            toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
+            return false
+        }
 
-                        sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
-                        if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
-                            sourceNode.data.childNodes.push(targetNode.getFullId())
-                        }
+        executor.clearStatusTimeout()
 
-                        sourceNode.data.outPort || (sourceNode.data.outPort = {})
-                        sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
-                        if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
-                            sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
-                        }
+        bStart()
+        _delay(function() {
+            saveSimulationJob(currJobs.selected(), function() {
+                resetSubmitData()
+                // console.log(designer.getCurrentJsPlumbInstance())
+                var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+                var jp = designer.getCurrentJsPlumbInstance()
+                var outputPorts = currOutputPorts.getArray()
+                $.each(outputPorts, function(){
+                    // console.log(this)
+                    var currSourcePortData = this
+                    var sourcePort = jp.getPort(this.id)
+                    var sourceNode = sourcePort.getNode()
+                    if(isDataComponentNode(sourceNode)) {
+                        return
+                    }
+                    // console.log(jp.getPort(sourcePort.id))
+                    $.each(sourcePort.getSourceEdges(), function(){
+                        var targetPort = this.target
+                        if(targetPort) {
+                            // console.log(sourcePort)
+                            // console.log(targetPort)
+                            var prefixedId = prefix + targetPort.id
+                            var targetNode = targetPort.getNode()
 
-                        sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
-                        if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
-                            sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
-                        }
+                            if(isDataComponentNode(targetNode)) {
+                                return
+                            }
 
-                        targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
-                        if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
-                            targetNode.data.parentNodes.push(sourceNode.getFullId())
-                        }
+                            sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                                sourceNode.data.childNodes.push(targetNode.getFullId())
+                            }
 
-                        targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
-                        if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
-                            targetNode.data.connectedPorts.push(targetPort.data.id)
+                            sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                            sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                                sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                            if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                                sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                            }
+
+                            targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                            if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                                targetNode.data.parentNodes.push(sourceNode.getFullId())
+                            }
+
+                            targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
+                            if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
+                                targetNode.data.connectedPorts.push(targetPort.data.id)
+                            }
                         }
+                    })
+                })
+                // return false
+
+                var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
+                var nodes = []
+                $.each(json.nodes, function(i, node){
+                    if (isReRun) {
+                        node.regenerateClientId = true
+                    } else {
+                        node.regenerateClientId = false
+                    }
+                    if (!isDataComponentNode({data: node})) {
+                        nodes.push(node)
                     }
                 })
-            })
-            // return false
+                json.nodes = nodes
+                // return false
+                var simulationId = currJobs.selected().simulationId
+                var simulationJobId = currJobs.selected().simulationJobId
+                var token = getIcebreakerAccessToken()
+                console.log(token)
 
-            if(!validateSimulationJob()){
-                toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
-                return false
-            }
+                var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 
-            var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
-            var nodes = []
-            $.each(json.nodes, function(i, node){
-                if (!isDataComponentNode({data: node})) {
-                    nodes.push(node)
-                }
-            })
-            json.nodes = nodes
-            // return false
-            var simulationId = currJobs.selected().simulationId
-            var simulationJobId = currJobs.selected().simulationJobId
-            var token = getIcebreakerAccessToken()
-            console.log(token)
-
-            executor.createSimulationJobEngine({
-                simulationId: simulationId,
-                simulationJobId: simulationJobId,
-                icebreakerVcToken: token.icebreakerVcToken,
-                groupId: token.groupId,
-                strNodes: JSON.stringify(json.nodes)
-            }, function(simulationJob) {
-                // console.log(submitData)
-                toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_submit_success_message)
-                if (currJobs.contains(simulationJob.id)) {
-                    currJobs.update(simulationJob.id, simulationJob)
-                    if (_isBlank(simulationJob.workflowUUID)) {
-                        $(".before-submit").show()
-                        $(".after-submit").hide()
+                exeFunction({
+                    simulationId: simulationId,
+                    simulationJobId: simulationJobId,
+                    icebreakerVcToken: token.icebreakerVcToken,
+                    groupId: token.groupId,
+                    strNodes: JSON.stringify(json.nodes)
+                }, function(simulationJob) {
+                    // console.log(submitData)
+                    toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_submit_success_message)
+                    if (currJobs.contains(simulationJob.id)) {
+                        currJobs.update(simulationJob.id, simulationJob)
+                        if (_isBlank(simulationJob.workflowUUID)) {
+                            $(".before-submit").show()
+                            $(".after-submit").hide()
+                        } else {
+                            $(".before-submit").hide()
+                            $(".after-submit").show()
+                            var initStatus = JSON.parse(simulationJob.statusResponse)
+                            updateNodeStatus(initStatus)
+                            executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                        }
                     } else {
-                        $(".before-submit").hide()
-                        $(".after-submit").show()
-                        var initStatus = JSON.parse(simulationJob.statusResponse)
-                        updateNodeStatus(initStatus)
-                        executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                        // TODO : currentPage
+                        fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
                     }
-                } else {
-                    // TODO : currentPage
-                    fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
-                }
-            }, function() {
+                    bEnd()
+                }, function() {
+                    bEnd()
+                    toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
+                })
+            }, function () {
+                bEnd()
                 toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
             })
-        })
+        }, 2000)
+
+
         // console.log(designer.getCurrentJsPlumbInstance().getNodes())
     }
 
@@ -1540,21 +1568,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     toastr["error"]("", var_already_run_message);
                 }
             }, function () { });
-
-    }
-    function rerun(){
-        if($(".wf-box.reset").length){
-            var simulationId = PANEL_DATA.setting.form.simulationId;
-            executor.reRunWorkflowInstance(simulationId,
-                designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()),
-                function (workflowInstance) {
-                    var ibToken = getIcebreakerAccessToken();
-                    executor.runWorkflowInstance(workflowInstance.simulationId, ibToken);
-                    toastr["success"]("", var_success_run_workflow_message);
-                });
-        }else{
-            toastr["error"]("","Reset First.");
-        }
 
     }
 
@@ -1962,7 +1975,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 					var job = currJobs.selected();
 					saveSimulationJob(job);
-					
+
 					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
 					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
 						pause(function(){
@@ -1993,7 +2006,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 					var job = currJobs.selected();
 					saveSimulationJob(job);
-					
+
 					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
 					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
 						pause(function(){
@@ -2020,16 +2033,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 			if (portType == "inputPorts") {
 				if (currPort.getAllEdges().length == 1) {
-					 /*status is success : return true, else return false*/ 
+					 /*status is success : return true, else return false*/
 					var thisNode = currPort.getAllEdges();
 					var parentEdges = currPort.getTargetEdges();
 					for(var parentEdgesIdx in parentEdges){
 						var parentEdge = parentEdges[parentEdgesIdx];
 						var sourcePort = parentEdge.source;
 						var sourceNode = sourcePort.getNode();
-						
+
 						var status = sourceNode.data.status.status;
-						
+
 						if(status == OSP.Enumeration.JobStatus.SUCCESS){
 							openWorkbench = true;
 						} else {
@@ -2037,7 +2050,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							break checkStatusLoof;
 						}
 					}
-					
+
 				} else {
 					openWorkbench = true;
 				}
@@ -2066,14 +2079,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					var targetEdges = port.getTargetEdges();
 					var inputPortName = port.data.id;
 					for(var targetEdgesIdx in targetEdges){
-						
+
 						var getParentObj = getParentPortsJobData(targetEdges[targetEdgesIdx], inputPortName);
-						
+
 						if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
-							
+
 							var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
 							var isDataComponent = getParentObj.isDataComponent;
-							
+
 							connectedInputPortsObj[OSP.Constants.PORT_NAME] = port.id;
 							if(isDataComponent){
 								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
@@ -2082,12 +2095,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 								connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 							}
-							
+
 							connectedInputPorts.push(connectedInputPortsObj);
-							
+
 							var getJobData = getParentObj.jobData;
 							/*jobDataArr = jobDataArr.concat(getJobData);*/
-							
+
 							getParentObj.simulationUuid = simulationUuid;
 							getParentObj.simulationJobUuid = jobUuid;
 							if(sourceJobDataType.toLowerCase() == "file"){

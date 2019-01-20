@@ -395,6 +395,12 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception;
+
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,

@@ -328,12 +328,15 @@ public class WorkflowSimulationController{
         "/{simulationId}/job/{simulationJobId}/rerun", 
         "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> reRunSimulationJob(
-        @RequestParam Map<String, Object> params,
+        @PathVariable("simulationId") long simulationId, 
         @PathVariable("simulationJobId") long simulationJobId, 
+        @RequestParam("strNodes") String strNodes,
+        @RequestParam("icebreakerVcToken") String icebreakerVcToken,
         HttpServletRequest request) throws Exception{
         try{
-            return WorkflowSimulationJobLocalServiceUtil.updateWorkflowSimulationJob(simulationJobId, params)
-                .getModelAttributes();
+            User user = PortalUtil.getUser(request);
+            return WorkflowSimulationJobLocalServiceUtil.rerunWorkflowEngineJson(
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request).getModelAttributes();
         }catch (Exception e){
             log.error("error", e);
             throw e;
