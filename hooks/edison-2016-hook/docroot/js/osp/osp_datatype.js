@@ -177,11 +177,12 @@
 				//console.log('value: ', jsonInputData[key]);
 				switch( key ){
 					case OSP.Constants.TYPE:
+						InputData.property( OSP.Constants.TYPE, jsonInputData[key].replace(/_/g,''));
+						break;
 					case OSP.Constants.REPOSITORY_TYPE:
 					case OSP.Constants.USER:
 					case OSP.Constants.PARENT:
 					case OSP.Constants.NAME:
-					case OSP.Constants.CONTENT:
 					case OSP.Constants.DIRTY:
 					case OSP.Constants.ORDER:
 					case OSP.Constants.DATA_TYPE:
