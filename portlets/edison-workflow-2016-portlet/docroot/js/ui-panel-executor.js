@@ -1843,12 +1843,17 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 		/* Get Connected Input Ports and Disconnected Input Ports */
 		var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
+		var copyError = currNodeInputPortsInfo.error;
+		if(copyError != ""){
+			toastr['warning']("", copyError);
+			return false;
+		}
 		var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
 		var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
 		var jobDataArr = currNodeInputPortsInfo.jobDataArr
 
 		/* Call API get-simulation-job */
-		if (0 < jobDataArr.length) {
+		if (0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
 			/* Add flag for keeping SimulationUuid and JobUuid */
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
 			
@@ -1886,7 +1891,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			
 		} else {
-			toastr["error"]("", "JobData not found!!");
+			toastr["error"]("", "You can not run the workbench.!!");
+			return false;
 		}
 	}
 
@@ -2045,6 +2051,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							if(sourceJobDataType.toLowerCase() == "file"){
 								getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
 								var copyResult = parentNodeFileCopy(getParentObj);
+								var copyError = copyResult.error;
+								if(copyError != ""){
+									returnObj.error = copyError;
+									return returnObj;
+								}
 								if(copyResult.copyFileResult){
 									jobDataArr = jobDataArr.concat(copyResult.jobData);
 								} else {

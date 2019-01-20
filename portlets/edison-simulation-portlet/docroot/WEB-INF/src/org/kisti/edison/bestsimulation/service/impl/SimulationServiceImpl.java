@@ -64,12 +64,12 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 	public JSONObject addSimulationWithJob(long userId, String appName, String appVersion, String simulationTitle, String jobData){
 		JSONObject resultInfo = JSONFactoryUtil.createJSONObject();
 		Boolean isValid = true;
-		
 		try {
 			
 			if(!StringUtils.hasText(simulationTitle)){
 				throw new PortalException("SimulationTitle is Null");
 			}
+			
 			
 			if(!StringUtils.hasText(appName)){
 				throw new PortalException("appName is Null");
@@ -88,16 +88,12 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			}
 			
 			JSONFactoryUtil.createJSONArray(jobData);
-			
 			User user = UserLocalServiceUtil.getUser(userId);
 			Group group = GroupLocalServiceUtil.getGroup(EDISON_COMPANY_ID, "Guest");
-			
 			Map<String,Object> simulationAndJobMap = SimulationLocalServiceUtil.createSimulationWithJob(user, group.getGroupId(), appName, appVersion, simulationTitle);
-			
 			String simulationUuid = CustomUtil.strNull(simulationAndJobMap.get("simulationUuid"));
 			String jobUuid = CustomUtil.strNull(simulationAndJobMap.get("jobUuid"));
 			SimulationJobDataLocalServiceUtil.modifySimulationJobData(jobUuid, jobData);
-			
 			
 			long plid = PortalUtil.getPlidFromPortletId(group.getGroupId(), false, "SimulationWorkbench_WAR_OSPWorkbenchportlet");
 			resultInfo.put("isValid", isValid);
@@ -105,6 +101,7 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			resultInfo.put("simulationUuid", simulationUuid);
 			resultInfo.put("simulationJobUuid", jobUuid);
 		}catch (Exception e) {
+			e.printStackTrace();
 			resultInfo.put("isValid", false);
 			resultInfo.put("failMessage", e.getMessage());
 		}finally {

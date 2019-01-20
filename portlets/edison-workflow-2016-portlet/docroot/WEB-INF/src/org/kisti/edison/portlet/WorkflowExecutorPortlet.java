@@ -15,6 +15,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +27,6 @@ import org.kisti.edison.model.Workflow;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
-import org.kisti.edison.service.WorkflowSimulationLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -35,20 +35,19 @@ import org.kisti.edison.util.VCRegisterUtil;
 import org.kisti.edison.wfapi.custom.IBUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
@@ -241,10 +240,10 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
     }
     
     @ResourceMapping(value = "copyParentNodeFiles")
-    public void copyParentNodeFiles(ResourceRequest request, ResourceResponse response){
+    public void copyParentNodeFiles(ResourceRequest request, ResourceResponse response) throws IOException{
     	
+    	ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 			Map params = RequestUtil.getParameterMap(request);
 			String copyFileObj = CustomUtil.strNull(params.get("copyFileObj"), "");
 			
@@ -276,15 +275,20 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			PrintWriter out = response.getWriter();
 			out.write(returnObj.toString());
 			
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			if(e instanceof WorkflowException){
+				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-workflow-not-run-workbench-message"));
+			}else{
+				e.printStackTrace();
+				handleRuntimeException(e, PortalUtil.getHttpServletResponse(response), LanguageUtil.get(themeDisplay.getLocale(), "edison-workflow-not-run-workbench-message"));
+			}
 		}
-		
+	}
+    
+    public static void handleRuntimeException(Exception ex, HttpServletResponse response,String message) throws IOException {
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		response.getWriter().write(message);
+		response.flushBuffer();
 	}
 }
