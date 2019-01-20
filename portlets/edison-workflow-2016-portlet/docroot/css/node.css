@@ -274,7 +274,6 @@
 	color: #ff1300;
 	font-size: 10px;
 	font-weight: 400;
-	padding: 1px 2px;
 	z-index: 100;
 	border-radius: 12px;
 	cursor: pointer;
@@ -284,6 +283,7 @@
 
 .delete-relationship i{
 	background-color: #ecf0f5;
+	padding: 0px 2px 1px;
 	border-radius: 10px;
 }
 
