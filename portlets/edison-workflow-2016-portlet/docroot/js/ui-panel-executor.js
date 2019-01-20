@@ -1851,11 +1851,25 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		if (0 < jobDataArr.length) {
 			/* Add flag for keeping SimulationUuid and JobUuid */
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
+			
+			var isWorkBench = false;
+			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+				nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
+			}else{
+				isWorkBench = true;
+			}
+			
 			if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
 				if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
-					getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
-											simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
-											connectedInputPorts, wfId);
+					if(isWorkBench){
+						getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
+								simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
+								connectedInputPorts, wfId);
+					}else{
+						addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
+								scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+								connectedInputPorts, wfId, node);
+					}
 				} else {
 					addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
 										scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
@@ -1866,7 +1880,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 									scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
 									connectedInputPorts, wfId, node);
 			}
-
+			
+			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+				nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
+			}
+			
 		} else {
 			toastr["error"]("", "JobData not found!!");
 		}
@@ -2225,7 +2243,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArr){
 		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
 		var nodeData = node.data;
+		
 		if(nodeData) {
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = true;
+			
 			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]) {
 				nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {}
 			}

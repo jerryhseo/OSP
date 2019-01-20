@@ -90,6 +90,7 @@ var CONSTS = {
     	STATUS : "status",
     	IB_UUID : "ibUuid",
     	IB_SIM_UUID : "ibSimUuid",
-    	WORKBENCH : "workbench"
+    	WORKBENCH : "workbench",
+    	IS_WORKBENCH: "isWorkbench"
     }
 }
