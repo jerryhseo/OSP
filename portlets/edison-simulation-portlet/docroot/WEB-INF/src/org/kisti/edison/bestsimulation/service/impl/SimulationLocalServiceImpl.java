@@ -454,7 +454,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			simulation.setCluster(CustomUtil.strNull(jsonObj.get("cluster"), ""));
 			String classId = CustomUtil.strNull(jsonObj.get("classId"), "0").replaceAll(" ", "");
 			simulation.setClassId(Long.parseLong(CustomUtil.strNull(classId, "0")));
-			String customId = CustomUtil.strNull(jsonObj.get("customIdId"), "0").replaceAll(" ", "");
+			String customId = CustomUtil.strNull(jsonObj.get("customId"), "0").replaceAll(" ", "");
 			simulation.setCustomId(Long.parseLong(CustomUtil.strNull(customId, "0")));
 			
 			simulation = SimulationLocalServiceUtil.updateSimulation(simulation);

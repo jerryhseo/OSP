@@ -199,15 +199,6 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
                     // TODO : button Control
                     _clearTimeout(STATUS_TIMER);
                     STATUS_TIMER = _delay(updateStatus, 1000, simulationJobId, workflowStatus, callback);
-                    // if (workflowStatus.workflow.status === WF_STATUS_CODE.COMPLETED) {
-                    //     _clearTimeout(STATUS_TIMER);
-                    // } else if (workflowStatus.workflow.status === WF_STATUS_CODE.PAUSED) {
-                    //
-                    // } else if (workflowStatus.workflow.status === WF_STATUS_CODE.RUNNING ||
-                    //     workflowStatus.workflow.status === WF_STATUS_CODE.CREATED) {
-                    //     _clearTimeout(STATUS_TIMER);
-                    //     STATUS_TIMER = _delay(updateStatus, 1000, simulationJobId, workflowStatus, callback);
-                    // }
                 }
             });
     }
@@ -272,6 +263,20 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         _clearTimeout(STATUS_TIMER);
         aSyncAjaxHelper.post(
             URI_PREFIX + "/simulation/" + params.simulationId + "/job/" + params.simulationJobId + "/export",
+            params,
+            function (workflowStatus) {
+                if (callback) {
+                    callback(workflowStatus);
+                }
+            }, errorCallback
+        );
+    }
+
+    function insertIbUuid(params, callback, errorCallback) {
+        _clearTimeout(STATUS_TIMER);
+        ///job/{simulationJobId}/update-ib
+        aSyncAjaxHelper.post(
+            URI_PREFIX + "/job/" + params.simulationJobId + "/update-ib",
             params,
             function (strExportJson) {
                 if (callback) {
@@ -698,6 +703,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         "pauseSingleNode": pauseSingleNode,
         "resumeSingleNode": resumeSingleNode,
         "exportSimulationJob": exportSimulationJob,
+        "insertIbUuid": insertIbUuid,
         /////////////////////////// renew
         "createWorkfowInstance": createWorkfowInstance,
         "updateWorkflowInstance": updateWorkflowInstance,

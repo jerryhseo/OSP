@@ -165,6 +165,51 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    function insertIbUuid(node) {
+        if (node.ibData && node.ibData.workbench &&
+            node.data.status && node.data.status.jobs && node.data.status.jobs[0]) {
+            var job = currJobs.selected()
+            var jobUuid = node.data.status.jobs[0].uuid
+            var params = {
+                simulationJobId: job.simulationJobId,
+                ibSimUuid: ibData.ibSimUuid,
+                ibJobUuid: ibData.ibUuid,
+                jobUuid: jobUuid,
+            }
+            executor.insertIbUuid(params, function (workflowStatus) {
+                if (workflowStatus && workflowStatus.status !== CONSTS.WF_STATUS_CODE.PAUSED) {
+                    updateAncestorReuse(node)
+                    rerun()
+                } else {
+                    resume()
+                }
+            })
+        }
+    }
+
+    function updateAncestorReuse(node){
+        if(isReUsableNode(node)) {
+            setReuseNode(node, true)
+            // console.log(node)
+            var jp = designer.getCurrentJsPlumbInstance()
+            var prevNodes = []
+            if(node.data && node.data.arrInputPorts) {
+                $.each(node.data.arrInputPorts, function(i, port){
+                    var sourcePort = jp.getPort(port.id)
+                    $.each(sourcePort.getAllEdges(), function(i, edge){
+                        if (edge.source && edge.source.getNode()) {
+                            var parentNode = edge.source.getNode()
+                            if($.inArray(parentNode.id, prevNodes) === -1){
+                                prevNodes.push(parentNode.id)
+                                updateAncestorReuse(parentNode)
+                            }
+                        }
+                    })
+                })
+            }
+        }
+    }
+
     function pauseNode(node, pause, callback) {
         var currJob = currJobs.selected()
         if (isPauseAbleNode(node) && currJob && node.data.status && pause) {
@@ -549,7 +594,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 //     "ibSimUuid": "a859bcbb-1010-4c20-a0ca-1e229d859ac5"
 
                 if(node.data.status && node.data.status.jobs &&
-                    node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid) {
+                    node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid &&
+                    node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
+                ) {
                     node.data.ibData = {
                         ibUuid: node.data.status.jobs[0].ibUuid,
                         ibSimUuid: node.data.status.jobs[0].ibSimUuid,
@@ -561,6 +608,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     simulation.status === CONSTS.WF_STATUS_CODE.CREATED) {
                     statusCode = CONSTS.WF_STATUS_CODE.PAUSED
                 }
+                // console.log(statusCode)
                 $("#" + nodeId).removeClass(
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
@@ -601,6 +649,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         bStart()
                         executor.clearStatusTimeout()
                         var job = currJobs.get(id)
+                        if(console) {
+                            console.log(job)
+                        }
                         if(job) {
                             if (_isBlank(job.workflowUUID)) {
                                 $(".before-submit").show()
@@ -1846,6 +1897,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
 		var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
 		var jobDataArr = currNodeInputPortsInfo.jobDataArr
+        console.log(jobDataArr)
 
 		/* Call API get-simulation-job */
 		if (0 < jobDataArr.length) {
@@ -1874,16 +1926,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
 
+	    var data = {
+            userId : userId,
+            appName : appName,
+            appVersion : appVersion,
+            simulationTitle : "default_simulation",
+            jobData : jobData
+        }
+        console.log(data)
+
 		var nodeData = node.data;
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/add-simulation',
-			{
-				userId : userId,
-				appName : appName,
-				appVersion : appVersion,
-				simulationTitle : "default_simulation",
-				jobData : jobData
-			}, function(obj) {
+            data, function(obj) {
 				if(obj.isValid){
 					/* IB_DATA Setting */
 					var thisJob = currJobs.selected();
@@ -1913,16 +1968,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	function getSimulationJob(userId, appName, appVersion, simulationUuid, jobUuid, jobData, appId, connInputPorts, wfId){
+	    var data = {
+            userId : userId,
+            appName : appName,
+            appVersion : appVersion,
+            simulationUuid : simulationUuid,
+            jobUuid : jobUuid,
+            jobData : jobData
+        }
+        console.log(data)
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/get-simulation-job',
-			{
-				userId : userId,
-				appName : appName,
-				appVersion : appVersion,
-				simulationUuid : simulationUuid,
-				jobUuid : jobUuid,
-				jobData : jobData
-			}, function(obj) {
+            data, function(obj) {
 				if(obj.hasSimulationInfo){
 
 					var job = currJobs.selected();
@@ -1982,6 +2039,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	function getNodeInputPortsInfo(ports, simulationUuid, jobUuid){
+	    console.log(arguments)
 
 		var returnObj = new Object();
 		var connectedInputPorts = new Array();
@@ -2070,7 +2128,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var inputPort = inputPorts[portId];
 		var isWfSample = inputPort.isWfSample_;
 		var inputPortData = inputPort.inputData_;
-		
+
 		if(inputPort[OSP.Constants.INPUTS]){
 			inputPortData = inputPort[OSP.Constants.INPUTS];
 		}else{
@@ -2080,9 +2138,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				inputPortData = inputPort.sample_;
 			}
 		}
-		
+
 		inputPortData[OSP.Constants.ORDER] = inputPort[OSP.Constants.ORDER];
-		
+
 		inputPortData[OSP.Constants.PORT_NAME] = portId;
 		jobDataArr.push(inputPortData);
 		return jobDataArr;
@@ -2223,7 +2281,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	/* 2019.01.07 _ Setting selected simulationUuid and jobUuid in the workbench */
 	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArr){
-		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
+		var node = currNodes.get(nodeId);
 		var nodeData = node.data;
 		if(nodeData) {
 			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]) {
@@ -2231,8 +2289,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
-			
-			var ports = node.getPorts();
+
 			var inputPorts = nodeData.inputPorts;
 			var jobDataObj = JSON.parse(jobDataArr);
 			for(var jobDataIdx in jobDataObj){
@@ -2253,7 +2310,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				yes : {
 					text: 'YES',
 					action: function(){
-						alert("YES~");
+                        insertIbUuid(node)
+						// alert("YES~");
 					}
 				},
 				no : {
@@ -2279,6 +2337,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"isResumeAbleNode" : isResumeAbleNode,
 		"isReUsableNode" : isReUsableNode,
 		"setReuseNode" : setReuseNode,
+		// "insertIbUuid" : insertIbUuid,
 		"pauseNode" : pauseNode,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId

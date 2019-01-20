@@ -542,7 +542,6 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         jobs.add(job);
         simulation.setJobs(jobs);
         return simulation;
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -815,6 +814,53 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             }else {
                 log.error(e);
                 throw passException(-1, "Failed WorkflowEngineService Portal Error [ runWorkflow ]");
+            }
+        }finally{
+            if(conn != null)
+                conn.disconnect();
+        }
+    }
+    
+    public JsonNode updateWorflowSimulationJobIbUuid(
+        long simulationJobId, String jobUuid, String ibSimUuid, String ibJobUuid) throws PortalException, SystemException{
+        WorkflowSimulationJob job = getWorkflowSimulationJob(simulationJobId);
+        JsonNode status = askForInsertIbUuid(jobUuid, ibSimUuid, ibJobUuid);
+        job.setStatus(status.toString());
+        updateWorkflowSimulationJob(job);
+        return status;
+    }
+    
+    public JsonNode askForInsertIbUuid(String jobUuid, String ibSimUuid, String ibJobUuid) throws PortalException{
+        HttpURLConnection conn = null;
+        try{
+            // GET /job/{job_uuid}/insertIbUuid
+            URL url = new URL(WORKFLOW_ENGINE_URL_PRIVATE + "/job/" + jobUuid 
+                + "/insertIbUuid?ibJobUuid=" + ibJobUuid + "&ibSimUuid=" + ibSimUuid);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            if(conn.getResponseCode() == HttpStatus.OK.value()){
+                String output = "";
+                StringBuffer responseBuffer = new StringBuffer();
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                while((output = br.readLine()) != null){
+                    if(!GetterUtil.getString(output).equals("null")){
+                        responseBuffer.append(GetterUtil.getString(output));
+                    }
+                }
+                String wrappedResponse = wrapWorkflowRoot(responseBuffer.toString());
+                return Transformer.string2Json(wrappedResponse);
+            }else{
+                throw passException(conn.getResponseCode(), "Failed WorkflowEngineService [ askForInsertIbUuid ]");
+            }
+        }catch (Exception e){
+            if(e instanceof PortalException) {
+                throw (PortalException) e;
+            }else {
+                log.error(e);
+                throw passException(-1, "Failed WorkflowEngineService Portal Error [ askForInsertIbUuid ]");
             }
         }finally{
             if(conn != null)

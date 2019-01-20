@@ -442,6 +442,17 @@ public interface WorkflowSimulationJobLocalService extends BaseLocalService,
 		java.lang.String workflowUUID)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	public org.codehaus.jackson.JsonNode updateWorflowSimulationJobIbUuid(
+		long simulationJobId, java.lang.String jobUuid,
+		java.lang.String ibSimUuid, java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public org.codehaus.jackson.JsonNode askForInsertIbUuid(
+		java.lang.String jobUuid, java.lang.String ibSimUuid,
+		java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public org.kisti.edison.model.WorkflowSimulationJob getWorkflowStatus(
 		long simulationJobId)

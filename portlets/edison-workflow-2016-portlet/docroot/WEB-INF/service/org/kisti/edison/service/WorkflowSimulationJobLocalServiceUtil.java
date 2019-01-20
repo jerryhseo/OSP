@@ -555,6 +555,23 @@ public class WorkflowSimulationJobLocalServiceUtil {
 		return getService().askForWorkflowStart(workflowUUID);
 	}
 
+	public static org.codehaus.jackson.JsonNode updateWorflowSimulationJobIbUuid(
+		long simulationJobId, java.lang.String jobUuid,
+		java.lang.String ibSimUuid, java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateWorflowSimulationJobIbUuid(simulationJobId, jobUuid,
+			ibSimUuid, ibJobUuid);
+	}
+
+	public static org.codehaus.jackson.JsonNode askForInsertIbUuid(
+		java.lang.String jobUuid, java.lang.String ibSimUuid,
+		java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().askForInsertIbUuid(jobUuid, ibSimUuid, ibJobUuid);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob getWorkflowStatus(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
