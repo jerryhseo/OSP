@@ -144,7 +144,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 			edgesData = {
 				"default": {
 					anchor: [ "Left", "Right" ], // anchors for the endpoints
-					connector: "StateMachine",  //  StateMachine connector type
 					cssClass:"common-edge",
 					events: {
 						"dbltap": function (params) {
@@ -316,6 +315,7 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         	Endpoint: "Blank",
             HoverPaintStyle: { strokeWidth: 5, stroke: "#FF6600" },
             PaintStyle: { strokeWidth: 3, stroke: "#445566" },
+            Connector: "StateMachine",
             ConnectionOverlays: [
                 ["Arrow", { location: 1, width: 15, length: 10 }]
             ],
