@@ -112,17 +112,48 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     });
 
     /////////////////////////////////////////// renew start
-
-    function openNodeHandler(node) {
-        console.log(node)
-        if(node.data && node.data.scienceAppData &&
+    function isDataComponentNode(node) {
+        if(node && node.data && node.data.scienceAppData &&
             node.data.scienceAppData.runType === CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
-            fileComponentHandler(node)
+            return true
+        }else{
+            return false
         }
     }
 
-    function fileComponentHandler(node) {
+    function openNodeHandler(node) {
+        if(isDataComponentNode(node)){
+            dataComponentHandler(node)
+        }
+    }
 
+    function setDataComponent(node) {
+        if(isDataComponentNode(node)) {
+            node.data.dataChildren = []
+            $.each(node.getAllEdges(), function (i, edge) {
+                var targetPort = edge.target
+                if (targetPort) {
+                    var portName = targetPort.data.id
+                    var targetNode = targetPort.getNode()
+                    if (targetNode.data.inputPorts) {
+                        var portId = targetNode.data.inputPorts[portName].id
+                        var portData = currInputPorts.get(portId)
+                        portData["dataComponentNodeId"] = node.id
+                        node.data.dataChildren.push(portId)
+                    }
+                }
+            })
+        }
+    }
+
+    function dataComponentHandler(node) {
+        if(node && node.data.dataChildren && node.data.dataChildren.length > 0) {
+            var portId = node.data.dataChildren[0]
+            var nodeId = portId.split('.')[0]
+            openInputPort(nodeId, portId, true)
+        }else {
+            toastr['warning']('', 'There are no connected port')
+        }
     }
 
     function createPanel(boxTitle, templateData, btnType) {
@@ -803,13 +834,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // var screenLogic = jpInstance.exportData({ type: "json" })
         var inputPorts = []
         var outputPorts = []
+        var dataComponentNodes = []
         currNodes.set(
             designer.getCurrentJsPlumbInstance().getNodes(),
             function (id) {
             })
 
-        $.each(currNodes.getArray(), function(i){
-            var node = this
+        $.each(currNodes.getArray(), function(i, node){
             node.data.arrInputPorts = []
             node.data.arrOutputPorts = []
             pushPorts(node.id, node.data.inputPorts, inputPorts, node.data.arrInputPorts)
@@ -821,11 +852,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         currInputPorts.set(inputPorts)
         currOutputPorts.set(outputPorts)
 
+        $.each(currNodes.getArray(), function(i, node){
+            setDataComponent(node)
+            if (isDataComponentNode(node)) {
+                dataComponentNodes.push(node.id)
+            }
+        })
+
         var move = _instantDelay(100)
         $("#nodes-" + simulationJobId).empty()
             .append(Mustache.render(nodeLi, { "nodes": currNodes.getArray() }))
             .children("li")
             .each(function(i) {
+                // console.log(this)
                 var nodeId = $(this).attr("node-id")
                 $(this).hover(
                     function (e) {
@@ -838,6 +877,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 $(this).children("a").click(function(e){
                     currNodes.select(nodeId)
                 })
+                if ($.inArray(nodeId, dataComponentNodes) >= 0) {
+                    $(this).find('ul > li.treeview.input > a').click(function (e) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        dataComponentHandler(currNodes.get(nodeId))
+                    })
+                }
                 $(this).children("a").children("span.sidebar-btn").click(function(e) {
                     e.stopPropagation()
                 })
@@ -848,14 +894,24 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             })
     }
 
+    function updatePortData(prevPortData, inputData) {
+        prevPortData[OSP.Constants.INPUTS] = inputData
+        currInputPorts.update(prevPortData.id, prevPortData)
+    }
+
     function setPortData(nodeId, portName, strPortDataJson) {
         var portId = nodeId + "." + portName
-        console.log(strPortDataJson)
         if (strPortDataJson && strPortDataJson !== "false") {
             var prevPortData = currInputPorts.get(portId)
             var inputData = JSON.parse(strPortDataJson)
-            prevPortData[OSP.Constants.INPUTS] = JSON.parse(strPortDataJson)
-            currInputPorts.update(portId, prevPortData)
+            if (prevPortData.dataComponentNodeId) {
+                var dataComponent = designer.getCurrentJsPlumbInstance().getNode(prevPortData.dataComponentNodeId)
+                $.each(dataComponent.data.dataChildren, function(i, childPortId){
+                    updatePortData(currInputPorts.get(childPortId), inputData);
+                })
+            } else {
+                updatePortData(prevPortData, inputData);
+            }
         }
         if(currJobs.selected()) {
             validateSimulationJob()
@@ -881,14 +937,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         var currPortData = $.extend({}, currOutputPorts.get(portId))
         delete currPortData.id
         portData[currOutputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
-        console.log(node)
-        console.log(portId)
-        console.log(portData)
 
         popPortDialog(node, portId, portData);
     }
 
-    function openInputPort(nodeId, portId) {
+    function openInputPort(nodeId, portId, isDataComponentCall) {
         var node = currNodes.get(nodeId)
         var portData = {}
         var currPortData = $.extend({}, currInputPorts.get(portId))
@@ -896,16 +949,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
         portData[currInputPorts.get(portId)[OSP.Constants.NAME]] = currPortData;
 
-        console.log(portData)
-        if (currPortData.isReady && !currPortData.inputs_) {
+        if ((currPortData.isReady && !currPortData.inputs_) ||
+            (!isDataComponentCall &&  !!currPortData.dataComponentNodeId)) {
             toastr['warning']('','Connected input port')
             return false
         }
 
-        popPortDialog(node, portId, portData);
+        popPortDialog(node, portId, portData, isDataComponentCall);
     }
 
-    function popPortDialog(node, portId, portData) {
+    function popPortDialog(node, portId, portData, isDataComponentCall) {
         var portName = ''
         var nodeId = node.id
         var userId = currJobs.selected() ? currJobs.selected().userId : null
@@ -964,7 +1017,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 },
                 id: dialogId,
                 uri: portletURL.toString(),
-                title: node.data.scienceAppData.name + " " + portName
+                title: (isDataComponentCall ? 'DataComponent' : node.data.scienceAppData.name ) + " " + portName
             });
             $('#' + dialogId).css('top', '72px').css('left', '230px')
         });
@@ -1048,7 +1101,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function newSimulation(){
         if (isValidate()) {
-            console.log(PANEL_DATA)
             var _f = function(){
                 executor.createSimulation({
                     workflowId: PANEL_DATA.setting.form.workflowId,
@@ -1256,7 +1308,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function pause(){
         var simulationJobId = currJobs.selected() ? currJobs.selected().simulationJobId : undefined
-        console.log(simulationJobId)
         if (simulationJobId) {
             executor.pauseSimulationJob(simulationJobId,
                 function (status) {
@@ -1290,8 +1341,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         $.each(inputPorts, function(){
             var port = this
             var portData = jp.getPort(port.id)
-            var nodeId = portData.getNode().id
-            if(port.inputs_ || portData.getEdges().length > 0) {
+            var node = portData.getNode()
+            var nodeId = node.id
+            var currPortData = currInputPorts.get(port.id)
+            var dataComponentNodeId = currPortData.dataComponentNodeId
+            var isDataComponentPort = !!dataComponentNodeId
+            if(port.inputs_ || (portData.getEdges().length > 0 && !isDataComponentPort) ) {
                 port.isReady = true
                 $('a.job-li[port-id="'+ port.id + '"]').addClass('is-ready')
                 $('a.job-li[port-id="'+ port.id + '"]').removeClass('not-ready')
@@ -1304,6 +1359,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 } else {
                     notReady[nodeId] = 1
                 }
+                notReady[dataComponentNodeId] = 1
 
                 $('a.job-li[port-id="'+ port.id + '"]').removeClass('is-ready')
                 $('a.job-li[port-id="'+ port.id + '"]').addClass('not-ready')
@@ -1319,6 +1375,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             $('li.node-li[node-id="' + key + '"] a.port.sidebar-btn.job-li > span.label').text(value)
         })
         return valid
+        // return false
     }
 
     function submitSimulationJob() {
@@ -1336,6 +1393,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 // console.log(this)
                 var currSourcePortData = this
                 var sourcePort = jp.getPort(this.id)
+                var sourceNode = sourcePort.getNode()
+                if(isDataComponentNode(sourceNode)) {
+                    return
+                }
                 // console.log(jp.getPort(sourcePort.id))
                 $.each(sourcePort.getSourceEdges(), function(){
                     var targetPort = this.target
@@ -1343,9 +1404,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         // console.log(sourcePort)
                         // console.log(targetPort)
                         var prefixedId = prefix + targetPort.id
-                        var sourceNode = sourcePort.getNode()
                         var targetNode = targetPort.getNode()
-                        console.log(sourceNode)
+
+                        if(isDataComponentNode(targetNode)) {
+                            return
+                        }
+
                         sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
                         if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
                             sourceNode.data.childNodes.push(targetNode.getFullId())
@@ -1358,7 +1422,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         }
 
                         sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
-                        console.log(currSourcePortData)
                         if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
                             sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
                         }
@@ -1375,7 +1438,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     }
                 })
             })
-            return false
+            // return false
 
             if(!validateSimulationJob()){
                 toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
@@ -1383,11 +1446,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             }
 
             var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
-            console.log(json)
+            var nodes = []
+            $.each(json.nodes, function(i, node){
+                if (!isDataComponentNode({data: node})) {
+                    nodes.push(node)
+                }
+            })
+            json.nodes = nodes
+            // return false
             var simulationId = currJobs.selected().simulationId
             var simulationJobId = currJobs.selected().simulationJobId
             var token = getIcebreakerAccessToken()
             console.log(token)
+
             executor.createSimulationJobEngine({
                 simulationId: simulationId,
                 simulationJobId: simulationJobId,
@@ -1413,7 +1484,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     // TODO : currentPage
                     fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
                 }
-
             }, function() {
                 toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
             })
@@ -1775,7 +1845,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	var openScienceAppWorkbench = function(node) {
 		var modal = $("#" + namespace + "science-app-workbench-modal");
 		var openWorkbench = true;
-		
+
 		var nodeData = node.data;
 		var wfId = nodeData.id;
 
@@ -1786,19 +1856,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var jobUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
 		var scienceAppData = nodeData.scienceAppData;
 		var scienceAppId = scienceAppData.scienceAppId;
-		var ports = node.getPorts(); 
+		var ports = node.getPorts();
 		var inputPorts = nodeData.inputPorts;
-		
+
 		/* test Uuid */
 		/*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
 		jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
-		
+
 		/* SimulationJob check */
 		if(!currJobs.selected()){
 			toastr['error']("", "Select SimulationJob First.");
 			return false;
 		}
-		
+
 		/* Parents node status check */
 		openWorkbench = checkParentsNodeStatus(ports);
 		/* Parents node exist and parents node not successed _ Not open workbench */
@@ -1806,7 +1876,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		 	toastr['warning']("", "The parent's job is not successful.");
 			return false;
 		}
-		
+
 		/* Get Connected Input Ports and Disconnected Input Ports */
 		var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
 		var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
@@ -1819,27 +1889,27 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
 			if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
 				if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
-					getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version, 
+					getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
 											simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
 											connectedInputPorts, wfId);
 				} else {
-					addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, 
+					addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
 										scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
 										connectedInputPorts, wfId);
 				}
 			} else {
-				addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, 
+				addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
 									scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
 									connectedInputPorts, wfId, node);
 			}
-			
+
 		} else {
 			toastr["error"]("", "JobData not found!!");
 		}
 	}
-	
+
 	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
-		
+
 		var nodeData = node.data;
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/add-simulation',
@@ -1860,10 +1930,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 						var simulationJobUuid = obj.simulationJobUuid;
 						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
 						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
-						
+
 					var job = currJobs.selected();
 					saveSimulationJob(job);
-					
+
 					pause();
 					openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
 				} else {
@@ -1872,7 +1942,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 		);
 	}
-	
+
 	function getSimulationJob(userId, appName, appVersion, simulationUuid, jobUuid, jobData, appId, connInputPorts, wfId){
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/get-simulation-job',
@@ -1885,10 +1955,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				jobData : jobData
 			}, function(obj) {
 				if(obj.hasSimulationInfo){
-					
+
 					var job = currJobs.selected();
 					saveSimulationJob(job);
-					
+
 					pause();
 					openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
 				} else {
@@ -1897,22 +1967,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 		);
 	}
-	
+
 	/* check parents node status */
 	function checkParentsNodeStatus(port){
 		var openWorkbench = true;
-		
+
 		checkStatusLoof : for ( var portIndex in port) {
-			
+
 			var currPort = port[portIndex];
 			var portType = currPort["data"]["type"];
-			
+
 			if (portType == "inputPorts") {
 				if (currPort.getAllEdges().length == 1) {
-					 /*status is success : return true, else return false*/ 
+					 /*status is success : return true, else return false*/
 					var thisNode = currPort.getNode();
 					var status = thisNode.data.status.status;
-					
+
 					if(status == OSP.Enumeration.JobStatus.SUCCESS){
 						openWorkbench = true;
 					} else {
@@ -1924,35 +1994,35 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				}
 			}
 		}
-		
+
 		return openWorkbench;
 	}
-	
+
 	function getNodeInputPortsInfo(ports, simulationUuid, jobUuid){
-		
+
 		var returnObj = new Object();
 		var connectedInputPorts = new Array();
 		var disconnectedInputPorts = new Array();
 		var jobDataArr = new Array();
-		
+
 		for (var portIndex in ports) {
 			var connectedInputPortsObj = new Object();
 			var port = ports[portIndex];
 			var portType = port["data"]["type"];
-			
+
 			if (portType == "inputPorts") {
 				if (port.getAllEdges().length == 1) {
-					
+
 					/* Get Parent Node's JobData */
 					var targetEdges = port.getTargetEdges();
 					var inputPortName = port.data.id;
 					var getParentObj = getParentPortsJobData(targetEdges[0], inputPortName);
-					
+
 					if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
-						
+
 						var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
 						var isDataComponent = getParentObj.isDataComponent;
-						
+
 						connectedInputPortsObj[OSP.Constants.PORT_NAME] = port.id;
 						if(isDataComponent){
 							getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
@@ -1961,12 +2031,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 							connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 						}
-						
+
 						connectedInputPorts.push(connectedInputPortsObj);
-						
+
 						var getJobData = getParentObj.jobData;
 						/*jobDataArr = jobDataArr.concat(getJobData);*/
-						
+
 						getParentObj.simulationUuid = simulationUuid;
 						getParentObj.simulationJobUuid = jobUuid;
 						if(sourceJobDataType.toLowerCase() == "file"){
@@ -1979,7 +2049,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							}
 						}
 					}
-					
+
 				} else {
 					disconnectedInputPorts.push(port.id);
 
@@ -1991,14 +2061,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				}
 			}
 		}
-		
+
 		returnObj.connectedInputPorts = connectedInputPorts;
 		returnObj.disconnectedInputPorts = disconnectedInputPorts;
 		returnObj.jobDataArr = jobDataArr;
-		
+
 		return returnObj;
 	}
-	
+
 	function parentNodeFileCopy(parentObjData){
 		var workflowId = PANEL_DATA.open.form.params.workflowId;
 		parentObjData["workflowId"] = workflowId;
@@ -2009,7 +2079,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	function getInputPortsJobData(portNode, portId) {
 		var jobDataArr = new Array();
 		jobDataArr = [];
-		
+
 		var inputPorts = portNode.data.inputPorts;
 		var inputPort = inputPorts[portId];
 		var isWfSample = inputPort.isWfSample_;
@@ -2023,7 +2093,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				inputPortData = inputPort.sample_;
 			}
 		}
-		
+
 		inputPortData[OSP.Constants.PORT_NAME] = portId;
 		jobDataArr.push(inputPortData);
 		return jobDataArr;
@@ -2036,7 +2106,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var sourceNode = sourcePort.getNode();
 		var sourceNodeData = sourceNode.data;
 		var runType = sourceNodeData.scienceAppData.runType;
-		
+
 		findJobData: while (runType == 'Controller'
 				|| runType == 'DynamicConverter') {
 			for ( var portIndex in sourceNode.getPorts()) {
@@ -2100,7 +2170,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				}
 			}
 		}
-		
+
 		var resultObj = new Object();
 		resultObj.jobData = jobDataArr;
 		resultObj.simulationUuid = simulationUuid;
@@ -2109,7 +2179,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		resultObj.isDataComponent = isDataComponent;
 		resultObj.isDlEntryId = isDlEntryId;
 		resultObj.sourcePortName = sourcePort.data.id;
-		
+
 		return resultObj;
 	}
 
@@ -2171,7 +2241,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
 		}
-		
+
 		var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))
 									.css("font-size", "16px");
 		$.confirm({
