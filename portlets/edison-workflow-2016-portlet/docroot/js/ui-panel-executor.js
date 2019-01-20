@@ -1835,10 +1835,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
 					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
 						pause(function(){
-							openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+							openWorkbenchPopup(appId, null, jobUuid, connInputPorts, wfId);
 						})
 					} else {
-						openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+						openWorkbenchPopup(appId, null, jobUuid, connInputPorts, wfId);
 					}
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
@@ -2126,7 +2126,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	/* 2019.01.07 _ Setting selected simulationUuid and jobUuid in the workbench */
-	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid){
+	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArr){
 		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
 		var nodeData = node.data;
 		if(nodeData) {
@@ -2135,6 +2135,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 			}
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
+			
+			var ports = node.getPorts();
+			var inputPorts = nodeData.inputPorts;
+			var jobDataObj = JSON.parse(jobDataArr);
+			for(var jobDataIdx in jobDataObj){
+				var jobData = jobDataObj[jobDataIdx];
+				var currPortName = jobData[OSP.Constants.PORT_NAME];
+				inputPorts[currPortName][OSP.Constants.INPUTS] = jobData;
+			}
 		}
 
 		var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))

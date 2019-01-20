@@ -514,11 +514,10 @@ AUI().ready(['liferay-util-window'], function(){
 	});
 
 	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid, jobDataArray){
-		console.log(jobDataArray);
 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
 
 		/* TODO 노드Id로 노드 찾아서 SimUuid, JobUuid 세팅해주기 */
-		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid);
+		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArray);
 		$("body").css('overflow','');
 	});
 
