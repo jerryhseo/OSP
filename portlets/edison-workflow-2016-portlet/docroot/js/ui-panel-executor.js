@@ -2219,7 +2219,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 				var outputDataType = outputData.type_;
 				jobDataArr.push(outputData);
-				if (outputDataType != 'dlEntryId_') {
+				if (outputDataType != OSP.Constants.DLENTRY_ID) {
 					isDlEntryId = true;
 				}
 			}
