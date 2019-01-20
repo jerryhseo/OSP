@@ -207,189 +207,196 @@ public class WorkflowSimulationJobLocalServiceClp
 
 		_methodParameterTypes38 = new String[] { "long", "java.util.Map" };
 
-		_methodName39 = "rerunWorkflowEngineJson";
+		_methodName39 = "exportWorkflowEngineJson";
 
 		_methodParameterTypes39 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName40 = "createWorkflowEngineJson";
+		_methodName40 = "rerunWorkflowEngineJson";
 
 		_methodParameterTypes40 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "javax.servlet.http.HttpServletRequest"
 			};
 
-		_methodName41 = "getSimulationJobSeq";
+		_methodName41 = "createWorkflowEngineJson";
 
-		_methodParameterTypes41 = new String[] { "long" };
+		_methodParameterTypes41 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"java.lang.String", "javax.servlet.http.HttpServletRequest"
+			};
 
-		_methodName42 = "createSimulationJob";
+		_methodName42 = "getSimulationJobSeq";
 
-		_methodParameterTypes42 = new String[] {
+		_methodParameterTypes42 = new String[] { "long" };
+
+		_methodName43 = "createSimulationJob";
+
+		_methodParameterTypes43 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulation",
 				"org.kisti.edison.model.Workflow", "java.lang.String"
 			};
 
-		_methodName43 = "createWorkflowSimulationJob";
-
-		_methodParameterTypes43 = new String[] {  };
-
 		_methodName44 = "createWorkflowSimulationJob";
 
-		_methodParameterTypes44 = new String[] {
+		_methodParameterTypes44 = new String[] {  };
+
+		_methodName45 = "createWorkflowSimulationJob";
+
+		_methodParameterTypes45 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
-
-		_methodName45 = "startWorkflowSimulationJob";
-
-		_methodParameterTypes45 = new String[] { "long" };
 
 		_methodName46 = "startWorkflowSimulationJob";
 
-		_methodParameterTypes46 = new String[] {
+		_methodParameterTypes46 = new String[] { "long" };
+
+		_methodName47 = "startWorkflowSimulationJob";
+
+		_methodParameterTypes47 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName47 = "askForWorkflowStart";
+		_methodName48 = "askForWorkflowStart";
 
-		_methodParameterTypes47 = new String[] { "java.lang.String" };
+		_methodParameterTypes48 = new String[] { "java.lang.String" };
 
-		_methodName48 = "getWorkflowStatus";
-
-		_methodParameterTypes48 = new String[] { "long" };
-
-		_methodName49 = "deleteSimulationAndJobs";
+		_methodName49 = "getWorkflowStatus";
 
 		_methodParameterTypes49 = new String[] { "long" };
 
-		_methodName50 = "deleteWorkflowSimulationJobWitEngine";
+		_methodName50 = "deleteSimulationAndJobs";
 
 		_methodParameterTypes50 = new String[] { "long" };
 
 		_methodName51 = "deleteWorkflowSimulationJobWitEngine";
 
-		_methodParameterTypes51 = new String[] {
+		_methodParameterTypes51 = new String[] { "long" };
+
+		_methodName52 = "deleteWorkflowSimulationJobWitEngine";
+
+		_methodParameterTypes52 = new String[] {
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName52 = "pauseWorkflowSimulationJob";
-
-		_methodParameterTypes52 = new String[] { "long" };
-
-		_methodName53 = "resumeWorkflowSimulationJob";
+		_methodName53 = "pauseWorkflowSimulationJob";
 
 		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "updateWorkflowSimulationJob";
+		_methodName54 = "resumeWorkflowSimulationJob";
 
-		_methodParameterTypes54 = new String[] {
+		_methodParameterTypes54 = new String[] { "long" };
+
+		_methodName55 = "updateWorkflowSimulationJob";
+
+		_methodParameterTypes55 = new String[] {
 				"org.codehaus.jackson.JsonNode",
 				"org.kisti.edison.model.WorkflowSimulationJob"
 			};
 
-		_methodName55 = "askForWorkflowStatus";
+		_methodName56 = "askForWorkflowStatus";
 
-		_methodParameterTypes55 = new String[] { "java.lang.String" };
+		_methodParameterTypes56 = new String[] { "java.lang.String" };
 
-		_methodName56 = "getWorkflowSimulationLog";
-
-		_methodParameterTypes56 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
-			};
-
-		_methodName57 = "getWorkflowSimulationErrorLog";
+		_methodName57 = "getWorkflowSimulationLog";
 
 		_methodParameterTypes57 = new String[] {
 				"java.lang.String", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName58 = "getWorkflowJobIntermediateResult";
+		_methodName58 = "getWorkflowSimulationErrorLog";
 
 		_methodParameterTypes58 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
+
+		_methodName59 = "getWorkflowJobIntermediateResult";
+
+		_methodParameterTypes59 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName59 = "getFileId";
+		_methodName60 = "getFileId";
 
-		_methodParameterTypes59 = new String[] {
+		_methodParameterTypes60 = new String[] {
 				"long", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName60 = "downloadFileApi";
-
-		_methodParameterTypes60 = new String[] {
-				"com.liferay.portal.model.User", "long",
-				"com.liferay.portal.kernel.json.JSONObject"
-			};
-
-		_methodName61 = "uploadFileToIcebreaker";
+		_methodName61 = "downloadFileApi";
 
 		_methodParameterTypes61 = new String[] {
-				"long", "java.lang.String", "java.io.File"
+				"com.liferay.portal.model.User", "long",
+				"com.liferay.portal.kernel.json.JSONObject"
 			};
 
 		_methodName62 = "uploadFileToIcebreaker";
 
 		_methodParameterTypes62 = new String[] {
-				"long", "java.lang.String", "java.io.InputStream"
+				"long", "java.lang.String", "java.io.File"
 			};
 
 		_methodName63 = "uploadFileToIcebreaker";
 
 		_methodParameterTypes63 = new String[] {
+				"long", "java.lang.String", "java.io.InputStream"
+			};
+
+		_methodName64 = "uploadFileToIcebreaker";
+
+		_methodParameterTypes64 = new String[] {
 				"long", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName64 = "getCountWorkflowSimulationJobByUserId";
+		_methodName65 = "getCountWorkflowSimulationJobByUserId";
 
-		_methodParameterTypes64 = new String[] {
+		_methodParameterTypes65 = new String[] {
 				"com.liferay.portal.model.User", "java.util.Map"
 			};
 
-		_methodName65 = "getWorkflowSimulationJobByUserId";
+		_methodName66 = "getWorkflowSimulationJobByUserId";
 
-		_methodParameterTypes65 = new String[] {
+		_methodParameterTypes66 = new String[] {
 				"com.liferay.portal.model.User", "java.util.Map",
 				"java.util.Locale"
 			};
 
-		_methodName66 = "getDataTypeEditors";
-
-		_methodParameterTypes66 = new String[] {
-				"com.kisti.osp.icecap.model.DataType"
-			};
-
-		_methodName67 = "getDataTypeDefaultEditor";
+		_methodName67 = "getDataTypeEditors";
 
 		_methodParameterTypes67 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName68 = "getDataTypeDefaultAnalyzer";
+		_methodName68 = "getDataTypeDefaultEditor";
 
 		_methodParameterTypes68 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName69 = "getDataTypeAnalyzers";
+		_methodName69 = "getDataTypeDefaultAnalyzer";
 
 		_methodParameterTypes69 = new String[] {
 				"com.kisti.osp.icecap.model.DataType"
 			};
 
-		_methodName70 = "getRootSiteAssetCategries";
+		_methodName70 = "getDataTypeAnalyzers";
 
-		_methodParameterTypes70 = new String[] { "long", "long" };
+		_methodParameterTypes70 = new String[] {
+				"com.kisti.osp.icecap.model.DataType"
+			};
 
-		_methodName71 = "getSiteAssetCategoriesByParentId";
+		_methodName71 = "getRootSiteAssetCategries";
 
-		_methodParameterTypes71 = new String[] { "long", "long", "long" };
+		_methodParameterTypes71 = new String[] { "long", "long" };
 
-		_methodName72 = "getLv1Categories";
+		_methodName72 = "getSiteAssetCategoriesByParentId";
 
-		_methodParameterTypes72 = new String[] {
+		_methodParameterTypes72 = new String[] { "long", "long", "long" };
+
+		_methodName73 = "getLv1Categories";
+
+		_methodParameterTypes73 = new String[] {
 				"long", "long", "java.util.Locale"
 			};
 	}
@@ -1581,10 +1588,9 @@ public class WorkflowSimulationJobLocalServiceClp
 	}
 
 	@Override
-	public org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
-		long simulationJobId, java.lang.String strNodes,
-		java.lang.String userName, java.lang.String ibToken,
-		javax.servlet.http.HttpServletRequest request)
+	public java.lang.String exportWorkflowEngineJson(long simulationJobId,
+		java.lang.String strNodes, java.lang.String userName,
+		java.lang.String ibToken, javax.servlet.http.HttpServletRequest request)
 		throws org.kisti.edison.WFEngine500Exception {
 		Object returnObj = null;
 
@@ -1619,11 +1625,11 @@ public class WorkflowSimulationJobLocalServiceClp
 			}
 		}
 
-		return (org.kisti.edison.model.WorkflowSimulationJob)ClpSerializer.translateOutput(returnObj);
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
+	public org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
 		javax.servlet.http.HttpServletRequest request)
@@ -1665,13 +1671,55 @@ public class WorkflowSimulationJobLocalServiceClp
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName41,
+					_methodParameterTypes41,
+					new Object[] {
+						simulationJobId,
+						
+					ClpSerializer.translateInput(strNodes),
+						
+					ClpSerializer.translateInput(userName),
+						
+					ClpSerializer.translateInput(ibToken),
+						
+					ClpSerializer.translateInput(request)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof org.kisti.edison.WFEngine500Exception) {
+				throw (org.kisti.edison.WFEngine500Exception)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.kisti.edison.model.WorkflowSimulationJob)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.lang.String getSimulationJobSeq(long simulationId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName41,
-					_methodParameterTypes41, new Object[] { simulationId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName42,
+					_methodParameterTypes42, new Object[] { simulationId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1702,8 +1750,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName42,
-					_methodParameterTypes42,
+			returnObj = _invokableLocalService.invokeMethod(_methodName43,
+					_methodParameterTypes43,
 					new Object[] {
 						ClpSerializer.translateInput(simulation),
 						
@@ -1741,8 +1789,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName43,
-					_methodParameterTypes43, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName44,
+					_methodParameterTypes44, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1772,8 +1820,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName44,
-					_methodParameterTypes44,
+			returnObj = _invokableLocalService.invokeMethod(_methodName45,
+					_methodParameterTypes45,
 					new Object[] { ClpSerializer.translateInput(simulationJob) });
 		}
 		catch (Throwable t) {
@@ -1812,8 +1860,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName45,
-					_methodParameterTypes45, new Object[] { simulationJobId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName46,
+					_methodParameterTypes46, new Object[] { simulationJobId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1851,8 +1899,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName46,
-					_methodParameterTypes46,
+			returnObj = _invokableLocalService.invokeMethod(_methodName47,
+					_methodParameterTypes47,
 					new Object[] { ClpSerializer.translateInput(simulationJob) });
 		}
 		catch (Throwable t) {
@@ -1889,8 +1937,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName47,
-					_methodParameterTypes47,
+			returnObj = _invokableLocalService.invokeMethod(_methodName48,
+					_methodParameterTypes48,
 					new Object[] { ClpSerializer.translateInput(workflowUUID) });
 		}
 		catch (Throwable t) {
@@ -1921,8 +1969,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName48,
-					_methodParameterTypes48, new Object[] { simulationJobId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName49,
+					_methodParameterTypes49, new Object[] { simulationJobId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1959,8 +2007,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName49,
-					_methodParameterTypes49, new Object[] { simulationId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName50,
+					_methodParameterTypes50, new Object[] { simulationId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1994,8 +2042,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName50,
-					_methodParameterTypes50, new Object[] { simulationJobId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName51,
+					_methodParameterTypes51, new Object[] { simulationJobId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2033,8 +2081,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName51,
-					_methodParameterTypes51,
+			returnObj = _invokableLocalService.invokeMethod(_methodName52,
+					_methodParameterTypes52,
 					new Object[] { ClpSerializer.translateInput(job) });
 		}
 		catch (Throwable t) {
@@ -2073,8 +2121,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName52,
-					_methodParameterTypes52, new Object[] { simulationJobId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName53,
+					_methodParameterTypes53, new Object[] { simulationJobId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2112,8 +2160,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName53,
-					_methodParameterTypes53, new Object[] { simulationJobId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName54,
+					_methodParameterTypes54, new Object[] { simulationJobId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -2150,8 +2198,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName54,
-					_methodParameterTypes54,
+			returnObj = _invokableLocalService.invokeMethod(_methodName55,
+					_methodParameterTypes55,
 					new Object[] {
 						ClpSerializer.translateInput(workflowStatusJson),
 						
@@ -2184,8 +2232,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName55,
-					_methodParameterTypes55,
+			returnObj = _invokableLocalService.invokeMethod(_methodName56,
+					_methodParameterTypes56,
 					new Object[] { ClpSerializer.translateInput(workflowUUID) });
 		}
 		catch (Throwable t) {
@@ -2209,42 +2257,6 @@ public class WorkflowSimulationJobLocalServiceClp
 
 	@Override
 	public java.lang.String getWorkflowSimulationLog(
-		java.lang.String workflowUUID, java.lang.String simulationUUID,
-		java.lang.String ibAccessToken) throws java.io.IOException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName56,
-					_methodParameterTypes56,
-					new Object[] {
-						ClpSerializer.translateInput(workflowUUID),
-						
-					ClpSerializer.translateInput(simulationUUID),
-						
-					ClpSerializer.translateInput(ibAccessToken)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof java.io.IOException) {
-				throw (java.io.IOException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.lang.String getWorkflowSimulationErrorLog(
 		java.lang.String workflowUUID, java.lang.String simulationUUID,
 		java.lang.String ibAccessToken) throws java.io.IOException {
 		Object returnObj = null;
@@ -2280,14 +2292,50 @@ public class WorkflowSimulationJobLocalServiceClp
 	}
 
 	@Override
+	public java.lang.String getWorkflowSimulationErrorLog(
+		java.lang.String workflowUUID, java.lang.String simulationUUID,
+		java.lang.String ibAccessToken) throws java.io.IOException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName58,
+					_methodParameterTypes58,
+					new Object[] {
+						ClpSerializer.translateInput(workflowUUID),
+						
+					ClpSerializer.translateInput(simulationUUID),
+						
+					ClpSerializer.translateInput(ibAccessToken)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.lang.String getWorkflowJobIntermediateResult(
 		java.lang.String jobUuid, java.lang.String ibAccessToken)
 		throws java.io.IOException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName58,
-					_methodParameterTypes58,
+			returnObj = _invokableLocalService.invokeMethod(_methodName59,
+					_methodParameterTypes59,
 					new Object[] {
 						ClpSerializer.translateInput(jobUuid),
 						
@@ -2322,8 +2370,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName59,
-					_methodParameterTypes59,
+			returnObj = _invokableLocalService.invokeMethod(_methodName60,
+					_methodParameterTypes60,
 					new Object[] {
 						appGroupId,
 						
@@ -2368,8 +2416,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName60,
-					_methodParameterTypes60,
+			returnObj = _invokableLocalService.invokeMethod(_methodName61,
+					_methodParameterTypes61,
 					new Object[] {
 						ClpSerializer.translateInput(user),
 						
@@ -2414,8 +2462,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName61,
-					_methodParameterTypes61,
+			returnObj = _invokableLocalService.invokeMethod(_methodName62,
+					_methodParameterTypes62,
 					new Object[] {
 						appGroupId,
 						
@@ -2464,8 +2512,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName62,
-					_methodParameterTypes62,
+			returnObj = _invokableLocalService.invokeMethod(_methodName63,
+					_methodParameterTypes63,
 					new Object[] {
 						appGroupId,
 						
@@ -2510,8 +2558,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName63,
-					_methodParameterTypes63,
+			returnObj = _invokableLocalService.invokeMethod(_methodName64,
+					_methodParameterTypes64,
 					new Object[] {
 						appGroupId,
 						
@@ -2555,8 +2603,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName64,
-					_methodParameterTypes64,
+			returnObj = _invokableLocalService.invokeMethod(_methodName65,
+					_methodParameterTypes65,
 					new Object[] {
 						ClpSerializer.translateInput(user),
 						
@@ -2591,8 +2639,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName65,
-					_methodParameterTypes65,
+			returnObj = _invokableLocalService.invokeMethod(_methodName66,
+					_methodParameterTypes66,
 					new Object[] {
 						ClpSerializer.translateInput(user),
 						
@@ -2628,8 +2676,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName66,
-					_methodParameterTypes66,
+			returnObj = _invokableLocalService.invokeMethod(_methodName67,
+					_methodParameterTypes67,
 					new Object[] { ClpSerializer.translateInput(dataType) });
 		}
 		catch (Throwable t) {
@@ -2657,41 +2705,6 @@ public class WorkflowSimulationJobLocalServiceClp
 
 	@Override
 	public java.util.Map<java.lang.String, java.lang.Object> getDataTypeDefaultEditor(
-		com.kisti.osp.icecap.model.DataType dataType)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName67,
-					_methodParameterTypes67,
-					new Object[] { ClpSerializer.translateInput(dataType) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.Map<java.lang.String, java.lang.Object> getDataTypeDefaultAnalyzer(
 		com.kisti.osp.icecap.model.DataType dataType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -2726,7 +2739,7 @@ public class WorkflowSimulationJobLocalServiceClp
 	}
 
 	@Override
-	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getDataTypeAnalyzers(
+	public java.util.Map<java.lang.String, java.lang.Object> getDataTypeDefaultAnalyzer(
 		com.kisti.osp.icecap.model.DataType dataType)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -2735,6 +2748,41 @@ public class WorkflowSimulationJobLocalServiceClp
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName69,
 					_methodParameterTypes69,
+					new Object[] { ClpSerializer.translateInput(dataType) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.Map<java.lang.String, java.lang.Object>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getDataTypeAnalyzers(
+		com.kisti.osp.icecap.model.DataType dataType)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName70,
+					_methodParameterTypes70,
 					new Object[] { ClpSerializer.translateInput(dataType) });
 		}
 		catch (Throwable t) {
@@ -2768,8 +2816,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName70,
-					_methodParameterTypes70,
+			returnObj = _invokableLocalService.invokeMethod(_methodName71,
+					_methodParameterTypes71,
 					new Object[] { companyGroupId, groupId });
 		}
 		catch (Throwable t) {
@@ -2803,8 +2851,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName71,
-					_methodParameterTypes71,
+			returnObj = _invokableLocalService.invokeMethod(_methodName72,
+					_methodParameterTypes72,
 					new Object[] { companyGroupId, groupId, parentCategoryId });
 		}
 		catch (Throwable t) {
@@ -2838,8 +2886,8 @@ public class WorkflowSimulationJobLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName72,
-					_methodParameterTypes72,
+			returnObj = _invokableLocalService.invokeMethod(_methodName73,
+					_methodParameterTypes73,
 					new Object[] {
 						companyGroupId,
 						
@@ -3016,4 +3064,6 @@ public class WorkflowSimulationJobLocalServiceClp
 	private String[] _methodParameterTypes71;
 	private String _methodName72;
 	private String[] _methodParameterTypes72;
+	private String _methodName73;
+	private String[] _methodParameterTypes73;
 }

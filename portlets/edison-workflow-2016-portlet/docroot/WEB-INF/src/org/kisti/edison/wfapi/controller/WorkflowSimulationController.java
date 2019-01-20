@@ -343,6 +343,25 @@ public class WorkflowSimulationController{
         }
     }
     
+    @RequestMapping(value = {
+        "/{simulationId}/job/{simulationJobId}/export", 
+        "/job/{simulationJobId}/rerun"}, method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> exportSimulationJob(
+        @PathVariable("simulationId") long simulationId, 
+        @PathVariable("simulationJobId") long simulationJobId, 
+        @RequestParam("strNodes") String strNodes,
+        @RequestParam("icebreakerVcToken") String icebreakerVcToken,
+        HttpServletRequest request) throws Exception{
+        try{
+            User user = PortalUtil.getUser(request);
+            return WorkflowSimulationJobLocalServiceUtil.exportWorkflowEngineJson(
+                simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request).getModelAttributes();
+        }catch (Exception e){
+            log.error("error", e);
+            throw e;
+        }
+    }
+    
     @RequestMapping(value = "/job/{simulationJobId}/status", method = RequestMethod.GET)
     public @ResponseBody JsonNode workflowStatus(@RequestParam Map<String, Object> params,
         @PathVariable("simulationJobId") long simulationJobId, HttpServletRequest request) throws Exception{
