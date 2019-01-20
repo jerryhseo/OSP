@@ -303,7 +303,6 @@ public class WorkflowSimulationController{
         @RequestParam("icebreakerVcToken") String icebreakerVcToken,
         HttpServletRequest request) throws Exception{
         try{
-            System.out.println("ENGINE CREATE !!!!!!!!!!!!!!");
             User user = PortalUtil.getUser(request);
             return WorkflowSimulationJobLocalServiceUtil.createWorkflowEngineJson(
                 simulationJobId, strNodes, user.getScreenName(), icebreakerVcToken, request).getModelAttributes();

@@ -244,6 +244,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             Map<String, String> status = Maps.newHashMap();
             status.put("status", "WAITING");
             node.put("status", status);
+            node.put("isReUseNode", false);
             node.put("ibData", Maps.newHashMap());
         }
         targetJob.setScreenLogic(gson.toJson(screenLogic));

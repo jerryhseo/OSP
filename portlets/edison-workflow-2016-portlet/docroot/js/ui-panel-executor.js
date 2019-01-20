@@ -112,6 +112,32 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     });
 
     /////////////////////////////////////////// renew start
+    function isReUsableNode(node) {
+        if (node && node.data && node.data.status &&
+            node.data.status.status === CONSTS.WF_STATUS_CODE.COMPLETED) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function setReUseNodeStatus(node) {
+        if (node && node.data && !!node.data.isReUseNode) {
+            $('#' + node.id).addClass('is-re-use-node')
+            $('#' + node.id + ' .top-cog-icon').removeClass('fa-cog').addClass('fa-recycle')
+        } else {
+            $('#' + node.id).removeClass('is-re-use-node')
+            $('#' + node.id + ' .top-cog-icon').removeClass('fa-recycle').addClass('fa-cog')
+        }
+    }
+
+    function setReuseNode(node, isReUsable) {
+        if (node) {
+            node.data.isReUseNode = !!isReUsable
+            setReUseNodeStatus(node)
+        }
+    }
+
     function isDataComponentNode(node) {
         if(node && node.data && node.data.scienceAppData &&
             node.data.scienceAppData.runType === CONSTS.WF_APP_TYPES.FILE_COMPONENT.NAME){
@@ -472,6 +498,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
                 $("#" + nodeId).addClass(simulation.status)
+                setReUseNodeStatus(node)
                 var html = $("#" + nodeId + " .wf-node-execute-status").text(simulation.status)
                 if(simulation.status === "RUNNING") {
                     $("#" + nodeId + " .top-cog-icon").addClass("fa-spin")
@@ -2275,6 +2302,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setPortData" : setPortData,
 		"closePortPopup" : closePortPopup,
 		"openNodeHandler" : openNodeHandler,
+		"isReUsableNode" : isReUsableNode,
+		"setReuseNode" : setReuseNode,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

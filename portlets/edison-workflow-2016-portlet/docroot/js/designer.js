@@ -900,7 +900,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
             if (nodeData["type"]) {
                 var type = nodeData["type"];
-                console.log(type)
                 if (type === "scienceApp") {
                     items["items"]["open-info"] = {
                         name: "App Information",
@@ -913,12 +912,24 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                             }
                         }
                     };
+                    if (!isDesigner && uiPanelInstance) {
+                        if(uiPanelInstance.isReUsableNode(node)){
+                            var isReUseNode = (!!node && !!node.data && !!node.data.isReUseNode)
+                            items["items"]["open-reuse-handler"] = {
+                                name: isReUseNode ? "Do not reuse" : "ReUse",
+                                icon: isReUseNode ? "fa-ban" : "fa-recycle",
+                                callback: function(key, options) {
+                                    uiPanelInstance.setReuseNode(node, !isReUseNode)
+                                }
+                            }
+                        }
+                    }
                 }else if (type === "workflowApp") {
-                    items["items"]["open-handler"] = {
-                        name: "Open Port",
-                        icon: "fa-cogs",
-                        callback: function(key, options) {
-                            if (!isDesigner && uiPanelInstance) {
+                    if (!isDesigner && uiPanelInstance) {
+                        items["items"]["open-handler"] = {
+                            name: "Open Port",
+                            icon: "fa-cogs",
+                            callback: function(key, options) {
                                 uiPanelInstance.openNodeHandler(node)
                             }
                         }
