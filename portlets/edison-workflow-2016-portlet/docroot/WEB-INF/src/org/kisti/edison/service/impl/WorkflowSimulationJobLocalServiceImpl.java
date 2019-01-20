@@ -836,6 +836,8 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             // GET /job/{job_uuid}/insertIbUuid
             URL url = new URL(WORKFLOW_ENGINE_URL_PRIVATE + "/job/" + jobUuid 
                 + "/insertIbUuid?ibJobUuid=" + ibJobUuid + "&ibSimUuid=" + ibSimUuid);
+            System.out.println(WORKFLOW_ENGINE_URL_PRIVATE + "/job/" + jobUuid 
+                    + "/insertIbUuid?ibJobUuid=" + ibJobUuid + "&ibSimUuid=" + ibSimUuid);
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
@@ -853,6 +855,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
                 String wrappedResponse = wrapWorkflowRoot(responseBuffer.toString());
                 return Transformer.string2Json(wrappedResponse);
             }else{
+            	System.out.println(conn.getResponseCode());
                 throw passException(conn.getResponseCode(), "Failed WorkflowEngineService [ askForInsertIbUuid ]");
             }
         }catch (Exception e){

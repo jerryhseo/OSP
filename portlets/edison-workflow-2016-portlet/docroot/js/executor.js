@@ -276,7 +276,7 @@ var SimulationExecutor = (function (namespace, $, designer, toastr) {
         _clearTimeout(STATUS_TIMER);
         ///job/{simulationJobId}/update-ib
         aSyncAjaxHelper.post(
-            URI_PREFIX + "/job/" + params.simulationJobId + "/update-ib",
+            URI_PREFIX + "/simulation/job/" + params.simulationJobId + "/update-ib",
             params,
             function (strExportJson) {
                 if (callback) {
