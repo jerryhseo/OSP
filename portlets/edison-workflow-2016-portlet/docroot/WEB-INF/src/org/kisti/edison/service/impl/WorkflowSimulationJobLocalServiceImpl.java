@@ -166,6 +166,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     // private final String WORKFLOW_INSTANCE_PATH = "/EDISON/LDAP/DATA/";
     private static final String DYNAMIC_CONVERTER = "DynamicConverter";
     private static final String CONTROLLER = "Controller";
+    private static final String DATA_COMPONENT = "Controller";
     private static final String _DEFAULT_CLUSTER = "EDISON-CFD";
     private static final String _CMD_PREFIX = "cmd";
     private static final String _TEMP_BASE_PATH = "/EDISON/SOLVERS/";
@@ -243,6 +244,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             Map<String, String> status = Maps.newHashMap();
             status.put("status", "WAITING");
             node.put("status", status);
+            node.put("isReUseNode", false);
             node.put("ibData", Maps.newHashMap());
         }
         targetJob.setScreenLogic(gson.toJson(screenLogic));
@@ -360,6 +362,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //                scienceApp.setGroupId(data.getLong("groupId"));
                 simulation.setBackend("docker");
             }else{
+                System.out.println(scienceAppData);
                 scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
             }
             
@@ -460,7 +463,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             Item file = new Item(_CMD_PREFIX + portName);
             String ibFileId = null;
             
-            if( pathType.equalsIgnoreCase("fileContent") ){
+            if( pathType.equalsIgnoreCase("fileContent") || pathType.equalsIgnoreCase("content")){
                 Path parentPath = null;
                 if( Validator.isNull(inputParent) ){
                     SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss.SSS");
@@ -592,9 +595,9 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
     private String askForCreateWorkflow(String workflowJson) throws PortalException{
         String workflowUuid = null;
         HttpURLConnection conn = null;
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
-        log.info(workflowJson);
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Create Workflow");
+        System.out.println(workflowJson);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try{
             URL url = new URL(WORKFLOW_ENGINE_URL_PRIVATE + "/workflow/create");
             conn = (HttpURLConnection) url.openConnection();

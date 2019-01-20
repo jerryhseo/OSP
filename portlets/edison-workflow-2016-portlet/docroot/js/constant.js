@@ -22,6 +22,7 @@ var CONSTS = {
         RUNNING: "RUNNING",
         PAUSED: "PAUSED",
         COMPLETED: "SUCCESS",
+        SUCCESS: "SUCCESS",
         DONE: "DONE",
         FAILED: "FAILED",
         CANCELED: "CANCELED",

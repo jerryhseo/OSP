@@ -2,7 +2,7 @@
     font-size: 12px;
     position: absolute;
     display: inline-block;
-    width: 175px;
+    width: 180px;
     min-width: 150px;
     border: 1px #bbb solid;
     background-color: rgba(255, 255, 255, .8);
@@ -241,6 +241,11 @@
     background-color: hsl(48, 100%, 67%);
     color: white;
 }
+
+.wf-box.is-re-use-node .wf-node-header {
+    background-color: hsla(32, 100%, 49%, 0.95) !important;
+}
+
 
 .wf-box.RUNNING .wf-node-header h1.wf-node-header-title,
 .wf-box.FAILED .wf-node-header h1.wf-node-header-title,
