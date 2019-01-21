@@ -14,7 +14,7 @@
 	
 	JSONObject workbenchLayout = (JSONObject) renderRequest.getAttribute("workbenchLayout");
 %>
-${portType}<br/>${portData}<br/>${simulationUuid}
+<%-- ${portType}<br/>${portData}<br/>${simulationUuid}<br/>${jobUuid}<br/>${status} --%>
 <div id="<portlet:namespace/>canvas" style="height: 500px;">
 	
 </div>
@@ -58,8 +58,6 @@ $(function(e) {
 	}
 	
 	<portlet:namespace/>workbench.scienceApp(scienceApp);
-	
-// 	<portlet:namespace/>createSimulationAndJob();
 	
 	// Resolving workbench layout
 	$.ajax({
@@ -195,6 +193,7 @@ function <portlet:namespace/>createSimulationAndJob(){
 	job.uuid('${jobUuid}');
 	job.seqNo(1);
 	job.status('${status}');
+	
 	job.isSubmit(true);
 	job.user('${screenName}');
 

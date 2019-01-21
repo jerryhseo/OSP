@@ -633,10 +633,34 @@ Liferay.on(OSP.Event.OSP_REQUEST_JOB_KEY,function( e ){
 		data : {
 			simulationUuid : simulationUuid,
 			jobUuid : jobUuid,
-			jobSeqNo : jobSeqNo,
-			wfNodeId : '${nodeId}'
+			jobSeqNo : jobSeqNo
 		}
 	};
+	
+	if(<portlet:namespace/>workbench.type()==='SIMULATION_WITH_WORKFLOW'){
+		var scienceApp = <portlet:namespace/>workbench.scienceApp();
+		var inputPorts = scienceApp.inputPorts();
+		
+		var newInputData = new Array();
+		if( inputPorts ){
+			for( var portName in inputPorts ){
+				var portData = job.inputData( portName );
+				if( portData.type() === OSP.Enumeration.PathType.STRUCTURED_DATA ){
+					var dataType = new OSP.DataType();
+					dataType.deserializeStructure(portData.content());
+					var dataStructure = dataType.structure(); 
+					var fileContents = dataStructure.activeParameterFormattedInputs();
+					
+					portData.type( OSP.Enumeration.PathType.FILE_CONTENT );
+					portData.content( fileContents[0].join('') );
+				}
+				
+				newInputData.push(portData);
+			}
+		}
+		eventData.data['returnInputData'] = JSON.stringify(newInputData);
+		eventData.data['wfNodeId'] = '${nodeId}';
+	}
 	
 	Liferay.fire(OSP.Event.OSP_RESPONSE_JOB_KEY, eventData);
 });

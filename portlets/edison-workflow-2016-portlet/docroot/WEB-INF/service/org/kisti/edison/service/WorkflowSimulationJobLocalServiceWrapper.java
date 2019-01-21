@@ -501,6 +501,25 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public java.lang.String exportWorkflowEngineJson(long simulationJobId,
+		java.lang.String strNodes, java.lang.String userName,
+		java.lang.String ibToken, javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return _workflowSimulationJobLocalService.exportWorkflowEngineJson(simulationJobId,
+			strNodes, userName, ibToken, request);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return _workflowSimulationJobLocalService.rerunWorkflowEngineJson(simulationJobId,
+			strNodes, userName, ibToken, request);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
@@ -534,15 +553,6 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
-	public org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
-		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return _workflowSimulationJobLocalService.createWorkflowSimulationJob(simulationJob);
-	}
-
-	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob startWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -565,6 +575,25 @@ public class WorkflowSimulationJobLocalServiceWrapper
 		java.lang.String workflowUUID)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _workflowSimulationJobLocalService.askForWorkflowStart(workflowUUID);
+	}
+
+	@Override
+	public org.codehaus.jackson.JsonNode updateWorflowSimulationJobIbUuid(
+		long simulationJobId, java.lang.String jobUuid,
+		java.lang.String ibSimUuid, java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _workflowSimulationJobLocalService.updateWorflowSimulationJobIbUuid(simulationJobId,
+			jobUuid, ibSimUuid, ibJobUuid);
+	}
+
+	@Override
+	public org.codehaus.jackson.JsonNode askForInsertIbUuid(
+		java.lang.String jobUuid, java.lang.String ibSimUuid,
+		java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _workflowSimulationJobLocalService.askForInsertIbUuid(jobUuid,
+			ibSimUuid, ibJobUuid);
 	}
 
 	@Override
@@ -612,12 +641,32 @@ public class WorkflowSimulationJobLocalServiceWrapper
 	}
 
 	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob pauseWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.pauseWorkflowSimulation(simulationJobId,
+			simUuid);
+	}
+
+	@Override
 	public org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		return _workflowSimulationJobLocalService.resumeWorkflowSimulationJob(simulationJobId);
+	}
+
+	@Override
+	public org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _workflowSimulationJobLocalService.resumeWorkflowSimulation(simulationJobId,
+			simUuid);
 	}
 
 	@Override

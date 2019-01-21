@@ -734,11 +734,13 @@
         };
 
         var fireDataChangedEvent = function( data, params ){
-        	if(currentData.type()===OSP.Enumeration.PathType.FILE_CONTENT){
-        		data.type_ = currentData.type();
-        	}
-        	
             if( data ){
+            	if(!data.type_){
+            		if(currentData.type()===OSP.Enumeration.PathType.FILE_CONTENT){
+            			data.type_ = currentData.type();
+            		}
+            	}
+            	
                 setCurrentData( data );
                 currentData.dirty(true);
             }

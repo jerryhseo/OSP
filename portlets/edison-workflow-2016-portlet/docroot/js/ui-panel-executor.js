@@ -1,8 +1,6 @@
 var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     /*jshint -W069 */
     'use strict';
-    var simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
-    var jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";
     var currNodes = eStruct("id")
     var currSimulations = eStruct("simulationId")
     var currJobs = eStruct("id", "data")
@@ -96,25 +94,37 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     };
 
-    $(JQ_PORTLET_BOUNDARY_ID + " .sidbar-run-btn").click(function (e) {
-        e.preventDefault();
-        var btnType = $(this).attr("data-btn-type");
-        if(!PANEL_DATA.setting.form.simulationId){
-            toastr['warning']("", "Create Simulation First.");
-            $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-btn[data-btn-type='new']").click();
-            return false;
-        }
-        if (btnType === "run") { run(); }
-        if (btnType === "rerun") { rerun(); }
-        if (btnType === "pause") { pause(); }
-        if (btnType === "restart") { resume(); }
-        if (btnType === "status") { status(this, "status"); }
-    });
-
     /////////////////////////////////////////// renew start
     function isReUsableNode(node) {
         if (node && node.data && node.data.status &&
             node.data.status.status === CONSTS.WF_STATUS_CODE.COMPLETED) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function isPauseAbleNode(node) {
+        var currJob = currJobs.selected()
+        if(currJob && node.data && node.data.status &&
+            (currJob.status !== '' &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
+                node.data.status.status === CONSTS.WF_STATUS_CODE.CREATED &&
+                node.data.status.pause !== 'pause') {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function isResumeAbleNode(node) {
+        var currJob = currJobs.selected()
+        if(currJob && node.data && node.data.status &&
+            (currJob.status !== '' &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
+            (node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED)) {
             return true
         } else {
             return false
@@ -135,6 +145,84 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (node) {
             node.data.isReUseNode = !!isReUsable
             setReUseNodeStatus(node)
+        }
+    }
+
+    function insertIbUuid(node) {
+        if (node.data && node.data.ibData && node.data.ibData.workbench &&
+            node.data.status && node.data.status.jobs && node.data.status.jobs[0]) {
+            var job = currJobs.selected()
+            var jobUuid = node.data.status.jobs[0].uuid
+            var params = {
+                simulationJobId: job.simulationJobId,
+                ibSimUuid: node.data.ibData.ibSimUuid,
+                ibJobUuid: node.data.ibData.ibUuid,
+                jobUuid: jobUuid,
+            }
+            executor.insertIbUuid(params, function (workflowStatus) {
+                if (workflowStatus && workflowStatus.status !== CONSTS.WF_STATUS_CODE.PAUSED) {
+                    updateAncestorReuse(node)
+                    rerun()
+                } else {
+                    resume()
+                }
+            })
+        }else {
+        	console.log(false)
+        }
+    }
+
+    function updateAncestorReuse(node){
+        if(isReUsableNode(node)) {
+            setReuseNode(node, true)
+            var jp = designer.getCurrentJsPlumbInstance()
+            var prevNodes = []
+            if(node.data && node.data.arrInputPorts) {
+                $.each(node.data.arrInputPorts, function(i, port){
+                    var sourcePort = jp.getPort(port.id)
+                    $.each(sourcePort.getAllEdges(), function(i, edge){
+                        if (edge.source && edge.source.getNode()) {
+                            var parentNode = edge.source.getNode()
+                            if($.inArray(parentNode.id, prevNodes) === -1){
+                                prevNodes.push(parentNode.id)
+                                updateAncestorReuse(parentNode)
+                            }
+                        }
+                    })
+                })
+            }
+        }
+    }
+
+    function pauseNode(node, pause, callback) {
+        var currJob = currJobs.selected()
+        if (isPauseAbleNode(node) && currJob && node.data.status && pause) {
+            executor.pauseSingleNode(currJob.simulationJobId, node.data.status.uuid,
+                function (status) {
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_success_message)
+                    updateNodeStatus(status)
+                    executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
+                    if(callback) {
+                        callback()
+                    }
+                },
+                function () {
+                    toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_fail_message);
+                })
+        }else if (isResumeAbleNode(node) && currJob && node.data.status && !pause){
+            executor.resumeSingleNode(currJob.simulationJobId, node.data.status.uuid, function (status) {
+                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_resume_success_message)
+                    updateNodeStatus(status)
+                    executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
+                    if(callback) {
+                        callback()
+                    }
+                },
+                function () {
+                    toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_resume_fail_message);
+                })
+        }else {
+            toastr['error']('', pause ? 'Cannot pause' : 'Cannot resume')
         }
     }
 
@@ -482,25 +570,36 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulation = this
                 var nodeId = simulation.clientId
                 var node = currNodes.get(nodeId)
+                if(!node) {
+                    return
+                }
                 node.data.status = simulation
                 // "ibUuid": "e3e949e4-c288-47c0-b6b3-f576f097a264",
                 //     "ibSimUuid": "a859bcbb-1010-4c20-a0ca-1e229d859ac5"
 
                 if(node.data.status && node.data.status.jobs &&
-                    node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid) {
-                    node.ibData = {
+                    node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid &&
+                    node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
+                ) {
+                    node.data.ibData = {
                         ibUuid: node.data.status.jobs[0].ibUuid,
                         ibSimUuid: node.data.status.jobs[0].ibSimUuid,
                     }
                 }
 
+                var statusCode = simulation.status
+                if(simulation.pause && simulation.pause === 'pause' &&
+                    simulation.status === CONSTS.WF_STATUS_CODE.CREATED) {
+                    statusCode = CONSTS.WF_STATUS_CODE.PAUSED
+                }
+                // console.log(statusCode)
                 $("#" + nodeId).removeClass(
                     "WAITING CANCELED CREATED NOT_FOUND RUNNING " +
                     "FAILED DONE SUCCESS COMPLETED PAUSED")
-                $("#" + nodeId).addClass(simulation.status)
+                $("#" + nodeId).addClass(statusCode)
                 setReUseNodeStatus(node)
-                var html = $("#" + nodeId + " .wf-node-execute-status").text(simulation.status)
-                if(simulation.status === "RUNNING") {
+                $("#" + nodeId + " .wf-node-execute-status").text(statusCode)
+                if(statusCode === "RUNNING") {
                     $("#" + nodeId + " .top-cog-icon").addClass("fa-spin")
                 } else {
                     $("#" + nodeId + " .top-cog-icon").removeClass("fa-spin")
@@ -534,6 +633,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                         bStart()
                         executor.clearStatusTimeout()
                         var job = currJobs.get(id)
+                        if(console) {
+                            console.log(job)
+                        }
                         if(job) {
                             if (_isBlank(job.workflowUUID)) {
                                 $(".before-submit").show()
@@ -1009,6 +1111,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var portletURL = window.Liferay.PortletURL.createRenderURL();
             portletURL.setPortletId("ModuleViewer_WAR_OSPWorkbenchportlet");
             portletURL.setParameter('simulationUuid', node.data.ibData.ibSimUuid);
+            if(node.data.status){
+                portletURL.setParameter('status', node.data.status.status);
+            }
             if (node.data.ibData.ibUuid) {
                 portletURL.setParameter('jobUuid', node.data.ibData.ibUuid);
             }
@@ -1021,12 +1126,19 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             portletURL.setParameter('saveFlag', saveFlag);
             portletURL.setWindowState('pop_up');
 
-            var wWidth = '40vw' // $(window).width();
-            var wHeight = '50vh' //$(window).height();
+            var wWidth = $(window).width()
+            var wHeight =$(window).height()
+
+            console.log(wWidth)
+            console.log(wHeight)
+
+            var fWidth = wWidth > 2000 ? '50vw' : '1024px'
+            var fHeight = wWidth > 2000 ? '50vh' : '600px'
+
             Liferay.Util.openWindow({
                 dialog: {
-                    width: wWidth,
-                    height: wHeight,
+                    width: fWidth,
+                    height: fHeight,
                     cache: false,
                     centered: false,
                     draggable: true,
@@ -1268,24 +1380,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         _enterkey("#" + namespace + "wf-modal input[name='Title']", saveHandler);
     }
 
-    function drawWorkflowInstances(params) {
-        var simulationId = getMetaData().simulationId;
-        var instanceTreeSelector = "#" + namespace + "menu-panel-box .open .box-body";
-        aSyncAjaxHelper.post("/delegate/services/simluation/" + simulationId + "/list",
-            params,
-            function (workflowInstances) {
-                if($(instanceTreeSelector).hasClass("jstree")){
-                    $(instanceTreeSelector).jstree(true).settings.core.data = workflowInstances;
-                    $(instanceTreeSelector).jstree(true).refresh();
-                }else{
-                    initJstree(instanceTreeSelector, workflowInstances);
-                }
-            },
-            function (msg) {
-                toastr["error"]("", msg);
-            });
-    }
-
     $("#" + namespace + "header-li-delete").click(function (e) {
         if (_isEmpty(currJobs.selected(), CONSTS.MESSAGE.edison_wfsimulation_no_selected_job_message)) {
             return false;
@@ -1307,16 +1401,133 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     })
 
     $("#" + namespace + "header-li-rerun").click(function (e) {
-        console.log('rerun')
-        // submitSimulationJob()
+        rerun()
     })
 
     $("#" + namespace + "header-li-pause").click(function (e) {
         pause()
     })
+
     $("#" + namespace + "header-li-resume").click(function (e) {
         resume()
     })
+    $("#" + namespace + "header-li-export").click(function (e) {
+        exportJson()
+    })
+
+    function exportJson() {
+        bStart()
+        _delay(function() {
+            saveSimulationJob(currJobs.selected(), function() {
+                resetSubmitData()
+                // console.log(designer.getCurrentJsPlumbInstance())
+                var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+                var jp = designer.getCurrentJsPlumbInstance()
+                var outputPorts = currOutputPorts.getArray()
+                var isReRun = false
+                $.each(outputPorts, function(){
+                    // console.log(this)
+                    var currSourcePortData = this
+                    var sourcePort = jp.getPort(this.id)
+                    var sourceNode = sourcePort.getNode()
+                    if(isDataComponentNode(sourceNode)) {
+                        return
+                    }
+                    $.each(sourcePort.getSourceEdges(), function(){
+                        var targetPort = this.target
+                        if(targetPort) {
+                            var prefixedId = prefix + targetPort.id
+                            var targetNode = targetPort.getNode()
+
+                            if(isDataComponentNode(targetNode)) {
+                                isReRun = true
+                                return
+                            }
+
+                            sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                                sourceNode.data.childNodes.push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                            sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                                sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                            if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                                sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                            }
+
+                            targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                            if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                                targetNode.data.parentNodes.push(sourceNode.getFullId())
+                            }
+
+                            targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
+                            if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
+                                targetNode.data.connectedPorts.push(targetPort.data.id)
+                            }
+                        }
+                    })
+                })
+
+                var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
+                var nodes = []
+                $.each(json.nodes, function(i, node){
+                    if (isReRun) {
+                        node.regenerateClientId = true
+                    } else {
+                        node.regenerateClientId = false
+                    }
+                    if (!isDataComponentNode({data: node})) {
+                        nodes.push(node)
+                    }
+                })
+                json.nodes = nodes
+                var simulationId = currJobs.selected().simulationId
+                var simulationJobId = currJobs.selected().simulationJobId
+                var token = getIcebreakerAccessToken()
+
+                executor.exportSimulationJob({
+                    simulationId: simulationId,
+                    simulationJobId: simulationJobId,
+                    icebreakerVcToken: token.icebreakerVcToken,
+                    groupId: token.groupId,
+                    strNodes: JSON.stringify(json.nodes)
+                }, function(exportJson) {
+                    // console.log(submitData)
+                    toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_export_success_message)
+                    var currJob = currJobs.selected()
+                    var currSimulation = currSimulations.selected()
+                    var fileName = currSimulation.title + '-' + currJob.title
+                    fileName = fileName ? fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'workflowExport';
+                    bEnd()
+                    try {
+                        var blob = new Blob([exportJson], {type: "application/json;charset=utf-8"})
+                        window.saveAs(blob, fileName)
+                    } catch (e) {
+                        if(console) {
+                            console.log(e)
+                        }
+                    }
+                }, function() {
+                    bEnd()
+                    toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_export_fail_message)
+                })
+            }, function () {
+                bEnd()
+                toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_export_fail_message)
+            })
+        }, 2000)
+
+    }
+
+    function rerun() {
+        // console.log('rerun')
+        submitSimulationJob(true)
+    }
 
     function resume(){
         var simulationJobId = currJobs.selected() ? currJobs.selected().simulationJobId : undefined
@@ -1408,381 +1619,145 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // return false
     }
 
-    function submitSimulationJob() {
+    function submitSimulationJob(isReRun) {
         if(!currJobs.selected()) {
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
         }
-        saveSimulationJob(currJobs.selected(), function() {
-            resetSubmitData()
-            // console.log(designer.getCurrentJsPlumbInstance())
-            var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
-            var jp = designer.getCurrentJsPlumbInstance()
-            var outputPorts = currOutputPorts.getArray()
-            $.each(outputPorts, function(){
-                // console.log(this)
-                var currSourcePortData = this
-                var sourcePort = jp.getPort(this.id)
-                var sourceNode = sourcePort.getNode()
-                if(isDataComponentNode(sourceNode)) {
-                    return
-                }
-                // console.log(jp.getPort(sourcePort.id))
-                $.each(sourcePort.getSourceEdges(), function(){
-                    var targetPort = this.target
-                    if(targetPort) {
-                        // console.log(sourcePort)
-                        // console.log(targetPort)
-                        var prefixedId = prefix + targetPort.id
-                        var targetNode = targetPort.getNode()
 
-                        if(isDataComponentNode(targetNode)) {
-                            return
-                        }
+        if(!validateSimulationJob()){
+            toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
+            return false
+        }
 
-                        sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
-                        if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
-                            sourceNode.data.childNodes.push(targetNode.getFullId())
-                        }
+        executor.clearStatusTimeout()
 
-                        sourceNode.data.outPort || (sourceNode.data.outPort = {})
-                        sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
-                        if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
-                            sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
-                        }
+        bStart()
+        _delay(function() {
+            saveSimulationJob(currJobs.selected(), function() {
+                resetSubmitData()
+                // console.log(designer.getCurrentJsPlumbInstance())
+                var prefix = CONSTS.WF_ENGINE.CMD_PREFIX
+                var jp = designer.getCurrentJsPlumbInstance()
+                var outputPorts = currOutputPorts.getArray()
+                $.each(outputPorts, function(){
+                    // console.log(this)
+                    var currSourcePortData = this
+                    var sourcePort = jp.getPort(this.id)
+                    var sourceNode = sourcePort.getNode()
+                    if(isDataComponentNode(sourceNode)) {
+                        return
+                    }
+                    // console.log(jp.getPort(sourcePort.id))
+                    $.each(sourcePort.getSourceEdges(), function(){
+                        var targetPort = this.target
+                        if(targetPort) {
+                            // console.log(sourcePort)
+                            // console.log(targetPort)
+                            var prefixedId = prefix + targetPort.id
+                            var targetNode = targetPort.getNode()
 
-                        sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
-                        if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
-                            sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
-                        }
+                            if(isDataComponentNode(targetNode)) {
+                                return
+                            }
 
-                        targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
-                        if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
-                            targetNode.data.parentNodes.push(sourceNode.getFullId())
-                        }
+                            sourceNode.data.childNodes || (sourceNode.data.childNodes = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.childNodes) < 0){
+                                sourceNode.data.childNodes.push(targetNode.getFullId())
+                            }
 
-                        targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
-                        if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
-                            targetNode.data.connectedPorts.push(targetPort.data.id)
+                            sourceNode.data.outPort || (sourceNode.data.outPort = {})
+                            sourceNode.data.outPort.hasOwnProperty(prefixedId) || (sourceNode.data.outPort[prefixedId] = [])
+                            if($.inArray(targetNode.getFullId(), sourceNode.data.outPort[prefixedId]) < 0){
+                                sourceNode.data.outPort[prefixedId].push(targetNode.getFullId())
+                            }
+
+                            sourceNode.data.outPortFile || (sourceNode.data.outPortFile = {})
+                            if (currSourcePortData[OSP.Constants.OUTPUT_DATA]) {
+                                sourceNode.data.outPortFile[prefixedId] = currSourcePortData[OSP.Constants.OUTPUT_DATA][OSP.Constants.NAME]
+                            }
+
+                            targetNode.data.parentNodes || (targetNode.data.parentNodes = [])
+                            if($.inArray(sourceNode.getFullId(), targetNode.data.parentNodes) < 0){
+                                targetNode.data.parentNodes.push(sourceNode.getFullId())
+                            }
+
+                            targetNode.data.connectedPorts || (targetNode.data.connectedPorts = [])
+                            if($.inArray(targetPort.data.id, targetNode.data.connectedPorts) < 0){
+                                targetNode.data.connectedPorts.push(targetPort.data.id)
+                            }
                         }
+                    })
+                })
+                // return false
+
+                var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
+                var nodes = []
+                $.each(json.nodes, function(i, node){
+                    if (isReRun) {
+                        node.regenerateClientId = true
+                    } else {
+                        node.regenerateClientId = false
+                    }
+                    if (!isDataComponentNode({data: node})) {
+                        nodes.push(node)
                     }
                 })
-            })
-            // return false
+                json.nodes = nodes
+                // return false
+                var simulationId = currJobs.selected().simulationId
+                var simulationJobId = currJobs.selected().simulationJobId
+                var token = getIcebreakerAccessToken()
+                // console.log(token)
+                // console.log(json.nodes)
 
-            if(!validateSimulationJob()){
-                toastr['warning']('',CONSTS.MESSAGE.edison_wfsimulation_validation_fail_message)
-                return false
-            }
+                var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 
-            var json = designer.getCurrentJsPlumbInstance().exportData({ type: "json" })
-            var nodes = []
-            $.each(json.nodes, function(i, node){
-                if (!isDataComponentNode({data: node})) {
-                    nodes.push(node)
-                }
-            })
-            json.nodes = nodes
-            // return false
-            var simulationId = currJobs.selected().simulationId
-            var simulationJobId = currJobs.selected().simulationJobId
-            var token = getIcebreakerAccessToken()
-            console.log(token)
-
-            executor.createSimulationJobEngine({
-                simulationId: simulationId,
-                simulationJobId: simulationJobId,
-                icebreakerVcToken: token.icebreakerVcToken,
-                groupId: token.groupId,
-                strNodes: JSON.stringify(json.nodes)
-            }, function(simulationJob) {
-                // console.log(submitData)
-                toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_submit_success_message)
-                if (currJobs.contains(simulationJob.id)) {
-                    currJobs.update(simulationJob.id, simulationJob)
-                    if (_isBlank(simulationJob.workflowUUID)) {
-                        $(".before-submit").show()
-                        $(".after-submit").hide()
+                exeFunction({
+                    simulationId: simulationId,
+                    simulationJobId: simulationJobId,
+                    icebreakerVcToken: token.icebreakerVcToken,
+                    groupId: token.groupId,
+                    strNodes: JSON.stringify(json.nodes)
+                }, function(simulationJob) {
+                    // console.log(submitData)
+                    toastr['success']('', CONSTS.MESSAGE.edison_wfsimulation_submit_success_message)
+                    if (currJobs.contains(simulationJob.id)) {
+                        currJobs.update(simulationJob.id, simulationJob)
+                        if (_isBlank(simulationJob.workflowUUID)) {
+                            $(".before-submit").show()
+                            $(".after-submit").hide()
+                        } else {
+                            $(".before-submit").hide()
+                            $(".after-submit").show()
+                            var initStatus = JSON.parse(simulationJob.statusResponse)
+                            updateNodeStatus(initStatus)
+                            executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                        }
                     } else {
-                        $(".before-submit").hide()
-                        $(".after-submit").show()
-                        var initStatus = JSON.parse(simulationJob.statusResponse)
-                        updateNodeStatus(initStatus)
-                        executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                        // TODO : currentPage
+                        fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
                     }
-                } else {
-                    // TODO : currentPage
-                    fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
-                }
-            }, function() {
+                    bEnd()
+                }, function() {
+                    bEnd()
+                    toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
+                })
+            }, function () {
+                bEnd()
                 toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_submit_fail_message)
             })
-        })
+        }, 2000)
+
+
         // console.log(designer.getCurrentJsPlumbInstance().getNodes())
     }
 
     /////////////////////////////////////////// renew end
 
-    function run(){
-        // console.log("run");
-        var simulationId = PANEL_DATA.setting.form.simulationId;
-        var simulationTitle = PANEL_DATA.setting.form.simulationTitle;
-        executor.getWorkflowInstance(simulationId,
-            function (currentWorkflowInstance) {
-                if(currentWorkflowInstance.status === WF_STATUS_CODE.CREATED){
-                    var ibToken = getIcebreakerAccessToken();
-                    saveWorkflowInstance(simulationId, simulationTitle,
-                        function (workflowInstance) {
-                            executor.runWorkflowInstance(simulationId, ibToken);
-                            toastr["success"]("", var_success_run_workflow_message);
-                        });
-                }else{
-                    toastr["error"]("", var_already_run_message);
-                }
-            }, function () { });
-
-    }
-    function rerun(){
-        if($(".wf-box.reset").length){
-            var simulationId = PANEL_DATA.setting.form.simulationId;
-            executor.reRunWorkflowInstance(simulationId,
-                designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()),
-                function (workflowInstance) {
-                    var ibToken = getIcebreakerAccessToken();
-                    executor.runWorkflowInstance(workflowInstance.simulationId, ibToken);
-                    toastr["success"]("", var_success_run_workflow_message);
-                });
-        }else{
-            toastr["error"]("","Reset First.");
-        }
-
-    }
-
-    function drawWorkflowStatus(simulationId){
-        executor.getWorkflowInstanceStatus(simulationId, function(workflowStatus){
-            var simulations = workflowStatus.workflow.simulations;
-            if (!simulations.length || simulations.length < 1) {
-                toastr["error"]("", "No Simulations");
-                return false;
-            }
-            sortSimulations(simulations);
-            var tableSimulations = [];
-            for (var i = 0; i < simulations.length; i++) {
-                var tableSimulation = {};
-                tableSimulation.title = simulations[i].title;
-                if (simulations[i].status) {
-                    tableSimulation.status = WF_STATUS_CODE_STRING[simulations[i].status];
-                } else {
-                    tableSimulation.status = "Waiting";
-                }
-                if(simulations[i].jobs[0].submittedTime){
-                    tableSimulation.submittedTime = $.format.date(new Date(simulations[i].jobs[0].submittedTime), "yyyy.MM.dd HH:mm:ss")
-                }else{
-                    tableSimulation.submittedTime = "";
-                }
-                if(simulations[i].jobs[0].endTime){
-                    tableSimulation.endTime = $.format.date(new Date(simulations[i].jobs[0].endTime), "yyyy.MM.dd HH:mm:ss");
-                }else{
-                    tableSimulation.endTime = "";
-                }
-                tableSimulations.push(tableSimulation);
-            }
-            var tbodyTemplate = '{{#rows}}' +
-                '    <tr>' +
-                '        <td>{{title}}</td>' +
-                '        <td>{{status}}</td>' +
-                '        <td>{{submittedTime}}</td>' +
-                '        <td>{{endTime}}</td>' +
-                '    </tr>' +
-                '{{/rows}}';
-            tbodyTemplate +=
-                '{{^rows}}' +
-                '    <tr>' +
-                '        <td colspan="4">No Data</td>' +
-                '    </tr>' +
-                '{{/rows}}';
-
-            if (tableSimulations && tableSimulations.length > 0) {
-                $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
-                    Mustache.render(tbodyTemplate, { "rows": tableSimulations }));
-            }else{
-                $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel tbody.panel-tbody").empty().append(
-                    Mustache.render(tbodyTemplate, { "rows": tableSimulations }));
-            }
-
-        });
-    }
-
-    function sortSimulations(simulations){
-        simulations.sort(function (a, b) {
-            if (!a.jobs[0].submittedTime || !b.jobs[0].submittedTime)
-                return 1;
-            if (a.jobs[0].submittedTime > b.jobs[0].submittedTime)
-                return 1;
-            if (a.jobs[0].submittedTime < b.jobs[0].submittedTime)
-                return -1;
-            return 0;
-        });
-    }
-
-    function status(that, btnType){
-        var templateData = PANEL_DATA[btnType];
-        templateData.boxtitle = "Simulation Status";
-        var simulationId = PANEL_DATA.setting.form.simulationId;
-        $("#" + namespace + "menu-panel-box").show();
-        $("#" + namespace + "menu-panel-box").empty().mustache('tpl-menu-panel-box', templateData);
-        $("#" + namespace + "menu-panel-box .box-body").mustache(templateData.body, templateData);
-        if (templateData.header) {
-            var boxTitleSelecotr = "#" + namespace + "menu-panel-box .box-header.with-border.header-inner > .box-title";
-            $(boxTitleSelecotr).replaceWith($.Mustache.render(templateData.header.id, templateData));
-            var _delay600 = _instantDelay(600);
-            $(boxTitleSelecotr + " > .search-input").keyup(function (e) {
-                _delay600(drawWorkflowStatus, btnType);
-            });
-        }
-
-        drawWorkflowStatus(simulationId);
-
-        $(".menu-panel .menu-panel-close").click(function (e) {
-            e.preventDefault();
-            closePanel();
-        });
-
-        $("#" + namespace + "menu-panel-box .data-binded").change(function (e) {
-            var thisValue = $(this).val();
-            var thisName = $(this).attr("name");
-            templateData.form[thisName] = thisValue;
-        });
-
-        $("#" + namespace + "menu-panel-box .func").each(function (_) {
-            var thisName = $(this).attr("name");
-            if (templateData.btn && templateData.btn[thisName]) {
-                $(this).click(function (e) {
-                    templateData.btn[thisName](btnType, this, e);
-                });
-            }
-        });
-
-        if($(that).parent("li").hasClass("menu-open")){
-            $(".menu-panel").toggle('slide', { direction: 'left' }, 500);
-            $(JQ_PORTLET_BOUNDARY_ID + " .sidebar-menu > li").removeClass("menu-open");
-        }else{
-            $(that).parent("li").addClass("menu-open")
-            $(".menu-panel").show('slide', { direction: 'left' }, 500);
-        }
-
-    }
-
     function getIcebreakerAccessToken(){
         var fn = window[namespace + "getIcebreakerAccessToken"];
         return fn.apply();
-    }
-
-    function initJstree(instanceTreeSelector, instancesData){
-        $(instanceTreeSelector).jstree({
-            "core" : {
-                "check_callback" : true,
-                "data" : instancesData,
-                "themes" : {
-                    "name" : "proton",
-                    "responsive" : true
-                }
-            },
-            "types": {
-                "root": {},
-                "workflow": {},
-                "instance": {
-                    "icon": "icon-file"
-                }
-            },
-            "progressive_render" : true,
-            "plugins" : ["types", "search"]
-        }).bind("loaded.jstree", function(event, data){
-            $(instanceTreeSelector).jstree(true).open_all();
-            var _delay600 = _instantDelay(600);
-            var boxTitleSelecotr = "#" + namespace +
-                "menu-panel-box .box-header.with-border.header-inner > .box-title";
-            var selectedWorkflowInstanceId = PANEL_DATA.setting.form.simulationId;
-            $(boxTitleSelecotr + " > .search-input").keyup(function (e) {
-                var searchString = $(this).val();
-                _delay600(function(){
-                    $(instanceTreeSelector).jstree(true).search(searchString);
-                    if(!_isEmpty(selectedWorkflowInstanceId)){
-                        $(instanceTreeSelector + " .jstree-node#" + selectedWorkflowInstanceId).
-                        addClass("selected-jstree");
-                    }
-                });
-            });
-        }).bind("load_node.jstree", function(event, data){
-        }).bind("select_node.jstree", function(event, data){
-            var nodeId = data.node.id;
-            var node = data.node;
-            if(node.type === "workflow"){
-                if(!$("#" + nodeId).hasClass("jstree-open")){
-                    openJstreeNode(instanceTreeSelector, nodeId, node);
-                }else{
-                    $(instanceTreeSelector).jstree("close_node", node);
-                }
-            }else if(node.type === "instance"){
-                var simulationId = node.data.simulationId;
-                loadInstance(simulationId);
-                //displayJob(nodeId);
-            }
-        }).bind("hover_node.jstree", function(event, data){
-        });
-    }
-
-    function loadInstance(simulationId) {
-        executor.loadWorkflowInstance(simulationId,
-            function (workflowInstance) {
-                designer.resetWorkflow();
-                designer.drawScreenLogic(workflowInstance.screenLogic);
-                setMetaData({
-                    "title": PANEL_DATA.setting.form.title,
-                    "description": PANEL_DATA.setting.form.description,
-                    "workflowId": PANEL_DATA.setting.form.workflowId,
-                    "simulationTitle": workflowInstance.title,
-                    "simulationId": workflowInstance.simulationId
-                });
-            }, function (err) {
-                if(console){
-                    console.log(err);
-                }
-            });
-    }
-
-    function openJstreeNode(instanceTreeSelector, nodeId, node){
-        if($("#" + nodeId).hasClass("is-loaded")){
-            $(instanceTreeSelector).jstree("open_node", node);
-        }
-    }
-
-    function saveOrUpdateWorkflowInstance(panelDataType) {
-        if (isValidate()) {
-            if (_isEmpty(PANEL_DATA.setting.form.simulationId)) {
-                newSimulation(panelDataType);
-            } else {
-                var simulationId = PANEL_DATA.setting.form.simulationId;
-                var simulationTitle = PANEL_DATA.setting.form.simulationTitle;
-                saveWorkflowInstance(simulationId, simulationTitle,
-                    function (workflowInstance) {
-                        setMetaData({
-                            "title": PANEL_DATA.setting.form.title,
-                            "description": PANEL_DATA.setting.form.description,
-                            "workflowId": PANEL_DATA.setting.form.workflowId,
-                            "simulationTitle": workflowInstance.title,
-                            "simulationId": workflowInstance.simulationId
-                        });
-                        toastr["success"]("", var_save_success_message);
-                        closePanel();
-                    });
-            }
-        }
-    }
-
-    function saveWorkflowInstance(simulationId, simulationTitle, callback) {
-        executor.updateWorkflowInstance(simulationId, simulationTitle,
-            designer.getWorkflowDefinition(designer.getCurrentJsPlumbInstance()), callback);
     }
 
     function openWorkflowByWorkflowId(workflowId, isNotNew, callback){
@@ -1873,104 +1848,135 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	/* 2019.01.02 _ Popup Button Event */
 	var openScienceAppWorkbench = function(node) {
-		var modal = $("#" + namespace + "science-app-workbench-modal");
-		var openWorkbench = true;
+		executor.clearStatusTimeout()
+		_delay(function() {
+            var modal = $("#" + namespace + "science-app-workbench-modal");
+            var openWorkbench = true;
 
-		var nodeData = node.data;
-		var wfId = nodeData.id;
+            var nodeData = node.data;
+            var wfId = nodeData.id;
 
-		if(nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == 'undefined' || nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == null){
-			nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
-		}
-		var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
-		var jobUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
-		var scienceAppData = nodeData.scienceAppData;
-		var scienceAppId = scienceAppData.scienceAppId;
-		var ports = node.getPorts();
-		var inputPorts = nodeData.inputPorts;
+            if(nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == 'undefined' || nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == null){
+                nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
+            }
+            var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
+            var jobUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
+            var scienceAppData = nodeData.scienceAppData;
+            var scienceAppId = scienceAppData.scienceAppId;
+            var ports = node.getPorts();
+            var inputPorts = nodeData.inputPorts;
 
-		/* test Uuid */
-		/*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
-		jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
+            /* test Uuid */
+            /*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
+            jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
 
-		/* SimulationJob check */
-		if(!currJobs.selected()){
-			toastr['error']("", "Select SimulationJob First.");
-			return false;
-		}
+            /* Get Connected Input Ports and Disconnected Input Ports */
+            var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
+            var copyError = currNodeInputPortsInfo.error;
+            if(copyError != ""){
+                toastr['warning']("", copyError);
+                return false;
+            }
+            var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
+            var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
+            var jobDataArr = currNodeInputPortsInfo.jobDataArr
 
-		/* Parents node status check */
-		openWorkbench = checkParentsNodeStatus(ports);
-		/* Parents node exist and parents node not successed _ Not open workbench */
-		if(!openWorkbench){
-		 	toastr['warning']("", "The parent's job is not successful.");
-			return false;
-		}
+            /* Call API get-simulation-job */
+            if (0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
+                /* Add flag for keeping SimulationUuid and JobUuid */
+                nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
 
-		/* Get Connected Input Ports and Disconnected Input Ports */
-		var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
-		var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
-		var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
-		var jobDataArr = currNodeInputPortsInfo.jobDataArr
+                var isWorkBench = false;
+                if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
+                }else{
+                    isWorkBench = true;
+                }
 
-		/* Call API get-simulation-job */
-		if (0 < jobDataArr.length) {
-			/* Add flag for keeping SimulationUuid and JobUuid */
-			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
-			if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
-				if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
-					getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
-											simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
-											connectedInputPorts, wfId);
-				} else {
-					addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-										scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-										connectedInputPorts, wfId);
-				}
-			} else {
-				addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-									scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-									connectedInputPorts, wfId, node);
-			}
+                /* Get Connected Input Ports and Disconnected Input Ports */
+                var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
+                var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
+                var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
+                var jobDataArr = currNodeInputPortsInfo.jobDataArr
 
-		} else {
-			toastr["error"]("", "JobData not found!!");
-		}
-	}
+                /* Call API get-simulation-job */
+                if (0 < jobDataArr.length) {
+                    /* Add flag for keeping SimulationUuid and JobUuid */
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
+
+                    var isWorkBench = false;
+                    if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+                        nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
+                    }else{
+                        isWorkBench = true;
+                    }
+                    if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
+                        if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
+                            if(isWorkBench){
+                                getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
+                                        simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
+                                        connectedInputPorts, wfId);
+                            }else{
+                                addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
+                                        scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                                        connectedInputPorts, wfId, node);
+                            }
+                        } else {
+                            addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
+                                                scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                                                connectedInputPorts, wfId, node);
+                        }
+                    } else {
+                        addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
+                                            scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                                            connectedInputPorts, wfId, node);
+                    }
+                } else {
+                    toastr["error"]("", "JobData not found!!");
+                }
+
+            } else {
+                toastr["error"]("", "You can not run the workbench.!!");
+                return false;
+            }
+        })
+    }
 
 	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
 
+	    var data = {
+            userId : userId,
+            appName : appName,
+            appVersion : appVersion,
+            simulationTitle : "default_simulation",
+            jobData : jobData
+        }
 		var nodeData = node.data;
-		Liferay.Service(
+		window.Liferay.Service(
 			'/edison-simulation-portlet.simulation/add-simulation',
-			{
-				userId : userId,
-				appName : appName,
-				appVersion : appVersion,
-				simulationTitle : "default_simulation",
-				jobData : jobData
-			}, function(obj) {
+            data, function(obj) {
 				if(obj.isValid){
 					/* IB_DATA Setting */
 					var thisJob = currJobs.selected();
 					var simulationJobId = thisJob.simulationJobId;
-					console.log(simulationJobId);
-						var simulationUuid = obj.simulationUuid;
-						var simulationJobUuid = obj.simulationJobUuid;
-						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
-						nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
+					// console.log(simulationJobId);
+                    var simulationUuid = obj.simulationUuid;
+                    var simulationJobUuid = obj.simulationJobUuid;
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
 
 					var job = currJobs.selected();
-					saveSimulationJob(job);
-					
-					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
-					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
-						pause(function(){
-							openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
-						})
-					} else {
-						openWorkbenchPopup(appId, null, null, connInputPorts, wfId);
-					}
+					saveSimulationJob(job, function (simulationJob){
+						var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
+						if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
+							pause(function(){
+								openWorkbenchPopup(appId, simulationUuid, null, connInputPorts, wfId);
+							})
+						} else {
+							openWorkbenchPopup(appId, simulationUuid, null, connInputPorts, wfId);
+						}
+					});
+
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
 				}
@@ -1979,28 +1985,29 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	function getSimulationJob(userId, appName, appVersion, simulationUuid, jobUuid, jobData, appId, connInputPorts, wfId){
+	    var data = {
+            userId : userId,
+            appName : appName,
+            appVersion : appVersion,
+            simulationUuid : simulationUuid,
+            jobUuid : jobUuid,
+            jobData : jobData
+        }
 		Liferay.Service(
 			'/edison-simulation-portlet.simulation/get-simulation-job',
-			{
-				userId : userId,
-				appName : appName,
-				appVersion : appVersion,
-				simulationUuid : simulationUuid,
-				jobUuid : jobUuid,
-				jobData : jobData
-			}, function(obj) {
+            data, function(obj) {
 				if(obj.hasSimulationInfo){
 
 					var job = currJobs.selected();
 					saveSimulationJob(job);
-					
+
 					var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
 					if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
 						pause(function(){
-							openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+							openWorkbenchPopup(appId, null, jobUuid, connInputPorts, wfId);
 						})
 					} else {
-						openWorkbenchPopup(appId, simulationUuid, jobUuid, connInputPorts, wfId);
+						openWorkbenchPopup(appId, null, jobUuid, connInputPorts, wfId);
 					}
 				} else {
 					toastr["error"]("", "Simulation not exist!!");
@@ -2020,16 +2027,16 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 			if (portType == "inputPorts") {
 				if (currPort.getAllEdges().length == 1) {
-					 /*status is success : return true, else return false*/ 
+					 /*status is success : return true, else return false*/
 					var thisNode = currPort.getAllEdges();
 					var parentEdges = currPort.getTargetEdges();
 					for(var parentEdgesIdx in parentEdges){
 						var parentEdge = parentEdges[parentEdgesIdx];
 						var sourcePort = parentEdge.source;
 						var sourceNode = sourcePort.getNode();
-						
+
 						var status = sourceNode.data.status.status;
-						
+
 						if(status == OSP.Enumeration.JobStatus.SUCCESS){
 							openWorkbench = true;
 						} else {
@@ -2037,7 +2044,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							break checkStatusLoof;
 						}
 					}
-					
+
 				} else {
 					openWorkbench = true;
 				}
@@ -2066,14 +2073,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					var targetEdges = port.getTargetEdges();
 					var inputPortName = port.data.id;
 					for(var targetEdgesIdx in targetEdges){
-						
+
 						var getParentObj = getParentPortsJobData(targetEdges[targetEdgesIdx], inputPortName);
-						
+
 						if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
-							
+
 							var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
 							var isDataComponent = getParentObj.isDataComponent;
-							
+
 							connectedInputPortsObj[OSP.Constants.PORT_NAME] = port.id;
 							if(isDataComponent){
 								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_HOME;
@@ -2082,17 +2089,22 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 								getParentObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 								connectedInputPortsObj[OSP.Constants.REPOSITORY_TYPE] = OSP.Enumeration.RepositoryTypes.USER_JOBS;
 							}
-							
+
 							connectedInputPorts.push(connectedInputPortsObj);
-							
+
 							var getJobData = getParentObj.jobData;
 							/*jobDataArr = jobDataArr.concat(getJobData);*/
-							
+
 							getParentObj.simulationUuid = simulationUuid;
 							getParentObj.simulationJobUuid = jobUuid;
 							if(sourceJobDataType.toLowerCase() == "file"){
 								getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
 								var copyResult = parentNodeFileCopy(getParentObj);
+								var copyError = copyResult.error;
+								if(copyError != ""){
+									returnObj.error = copyError;
+									return returnObj;
+								}
 								if(copyResult.copyFileResult){
 									jobDataArr = jobDataArr.concat(copyResult.jobData);
 								} else {
@@ -2136,15 +2148,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var inputPort = inputPorts[portId];
 		var isWfSample = inputPort.isWfSample_;
 		var inputPortData = inputPort.inputData_;
-		if(isWfSample){
-			inputPortData = inputPort.wfSample_;
-		} else {
-			if(inputPort.inputData_){
-				inputPortData = inputPort.inputData_;
-			} else {
+
+		if(inputPort[OSP.Constants.INPUTS]){
+			inputPortData = inputPort[OSP.Constants.INPUTS];
+		}else{
+			if(isWfSample){
+				inputPortData = inputPort.wfSample_;
+			}else{
 				inputPortData = inputPort.sample_;
 			}
 		}
+
+		inputPortData[OSP.Constants.ORDER] = inputPort[OSP.Constants.ORDER];
 
 		inputPortData[OSP.Constants.PORT_NAME] = portId;
 		jobDataArr.push(inputPortData);
@@ -2248,8 +2263,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					"SIMULATION_WITH_WORKFLOW");
 			portletURL.setParameter('scienceAppId',
 					scienceAppId);
-			/*portletURL.setParameter('simulationUuid',
-					simulationUuid);*/
+			portletURL.setParameter('simulationUuid',
+					simulationUuid);
 			portletURL.setParameter('jobUuid', jobUuid);
 			portletURL.setParameter('blockInputPorts',
 					connectedInputPorts.toString());
@@ -2285,15 +2300,26 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	/* 2019.01.07 _ Setting selected simulationUuid and jobUuid in the workbench */
-	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid){
-		var node = designer.getCurrentJsPlumbInstance().getNode(nodeId);
+	function setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArr){
+		var node = currNodes.get(nodeId);
 		var nodeData = node.data;
+
 		if(nodeData) {
+			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = true;
+
 			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]) {
 				nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {}
 			}
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
 			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
+
+			var inputPorts = nodeData.inputPorts;
+			var jobDataObj = JSON.parse(jobDataArr);
+			for(var jobDataIdx in jobDataObj){
+				var jobData = jobDataObj[jobDataIdx];
+				var currPortName = jobData[OSP.Constants.PORT_NAME];
+				inputPorts[currPortName][OSP.Constants.INPUTS] = jobData;
+			}
 		}
 
 		var rerunMsg = $("<div/>").text(Liferay.Language.get("edison-workflow-rerun-message"))
@@ -2307,7 +2333,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 				yes : {
 					text: 'YES',
 					action: function(){
-						alert("YES~");
+                        insertIbUuid(node)
+						// alert("YES~");
 					}
 				},
 				no : {
@@ -2329,8 +2356,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"setPortData" : setPortData,
 		"closePortPopup" : closePortPopup,
 		"openNodeHandler" : openNodeHandler,
+		"isPauseAbleNode" : isPauseAbleNode,
+		"isResumeAbleNode" : isResumeAbleNode,
 		"isReUsableNode" : isReUsableNode,
 		"setReuseNode" : setReuseNode,
+		// "insertIbUuid" : insertIbUuid,
+		"pauseNode" : pauseNode,
 		"isEmpty" : function() {
 			return _isEmpty(PANEL_DATA.setting.form.workflowId
 					&& PANEL_DATA.setting.form.simulationId);

@@ -1,6 +1,7 @@
 var CONSTS = {
     MESSAGE: {
         edison_wfsimulation_new_confirm_message: 'Unsaved changes will be deleted. Do you want to continue?',
+        edison_wfsimulation_export_success_message: 'Successfully exported',
         edison_wfsimulation_save_complete_message: 'Successfully saved',
         edison_wfsimulation_create_success_message: 'Successfully created',
         edison_wfsimulation_delete_success_message: 'Successfully deleted',
@@ -8,6 +9,7 @@ var CONSTS = {
         edison_wfsimulation_pause_success_message: 'Simulation Job successfully paused',
         edison_wfsimulation_resume_success_message: 'Simulation Job successfully resumed',
         edison_wfsimulation_submit_fail_message: 'Job submition failed',
+        edison_wfsimulation_export_fail_message: 'Job export failed',
         edison_wfsimulation_pause_fail_message: 'Job pause failed',
         edison_wfsimulation_resume_fail_message: 'Job resume failed',
         edison_wfsimulation_select_first_message: 'Please select the simulation first',
@@ -88,6 +90,7 @@ var CONSTS = {
     	STATUS : "status",
     	IB_UUID : "ibUuid",
     	IB_SIM_UUID : "ibSimUuid",
-    	WORKBENCH : "workbench"
+    	WORKBENCH : "workbench",
+    	IS_WORKBENCH: "isWorkbench"
     }
 }

@@ -559,8 +559,94 @@ public String marshallParams(Map<String, String> params) {
 
 	<liferay-portlet:runtime portletName="edisonrelateasset_WAR_edisondefault2016portlet" defaultPreferences="" 
 		queryString="&entryId=${data.entryId}&isMgrBtn=true&isVirTitle=true&redirectURL=<%=assetRedirectURL%>&redirectName=<%=assetRedirectName%>"/>
-	
 
+<div id="<portlet:namespace/>helpMarkdown" style="display: none;">
+	<table style="width: 100%;">
+		<colgroup>
+			<col width="50%;">
+			<col width="50%;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th style="text-align:left;">Markdown Input</th>
+				<th style="text-align:left;">Markdown Output</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="<portlet:namespace/>help-md-content Headers" style="display: none;">
+				<td>
+					# This is an H1<br/>
+					## This is an H2<br/>
+					### This is an H3
+				</td>
+				<td>
+					<h1>This is an H1</h1><br/>
+					<h2>This is an H2</h2><br/>
+					<h3>This is an H3</h3>
+				</td>
+			</tr>
+			<tr class="<portlet:namespace/>help-md-content Links" style="display: none;">
+				<td>
+					[EDISON](https://www.edison.re.kr/ "site description")
+					<br/>
+					https://www.edison.re.kr/
+				</td>
+				<td>
+					<a href="https://www.edison.re.kr" title="site description">EDISON</a>
+					<br/>
+					<a href="https://www.edison.re.kr">https://www.edison.re.kr</a>
+				</td>
+			</tr>
+			<tr class="<portlet:namespace/>help-md-content Images" style="display: none;">
+				<td>
+					![title](https://www.edison.re.kr/image/layout_set_logo?img_id=321849&t=1547995013998"image description")
+				</td>
+				<td>
+					<img alt="title" src="https://www.edison.re.kr/image/layout_set_logo?img_id=321849&t=1547995013998" title="image description">
+				</td>
+			</tr>
+			<tr class="<portlet:namespace/>help-md-content Tables" style="display: none;">
+				<td>
+					| Project Type | Pull Request | Issue |<br/>
+					| ----------------- | ----------------- | ------- |<br/>
+					|  Git  |  Yes  |  Yes  |<br/>
+					|  SVN  |  No  |  Yes  |
+				</td>
+				<td>
+					<table>
+						<tr>
+							<th>Project Type</th>
+							<th>Pull Request</th>
+							<th>Issue</th>
+						</tr>
+						<tr>
+							<td>Git</td>
+							<td>Yes</td>
+							<td>Yes</td>
+						</tr>
+						<tr>
+							<td>SVN</td>
+							<td>No</td>
+							<td>Yes</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="<portlet:namespace/>help-md-content Styling" style="display: none;">
+				<td>
+					*This is an italic*<br/>
+					**This is an bold**<br/>
+					~~This is an strike~~
+				</td>
+				<td>
+					<em>This is an italic</em><br/>
+					<strong>This is an bold</strong><br/>
+					<del>This is an strike</del>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 
 <script type="text/javascript">
 	
@@ -585,6 +671,7 @@ public String marshallParams(Map<String, String> params) {
 	};
 	
 	$(document).ready(function () {
+		
 		<portlet:namespace/>appManagerList();
 		
 		/* App Owner Dialog */
@@ -1216,6 +1303,23 @@ public String marshallParams(Map<String, String> params) {
 		
 		hiddenSpan.hide();
 		showSpan.show();
+	}
+	
+	function _appManager_helpMD(text){
+		var viewContent = $("#<portlet:namespace/>helpMarkdown tr."+text);
+		
+		var helpMarkdown = $("#<portlet:namespace/>helpMarkdown").html();
+		$(".md-how-to-use-text").html(helpMarkdown);
+		if(viewContent.hasClass("active")){
+			$(".<portlet:namespace/>help-md-content").removeClass("active");
+			$(".md-how-to-use-text").html('');
+		} else {
+			$(".<portlet:namespace/>help-md-content").removeClass("active");
+			$(".<portlet:namespace/>help-md-content."+text).addClass("active");
+			$(".<portlet:namespace/>help-md-content").hide();
+			$(".<portlet:namespace/>help-md-content."+text).show()
+		}
+		
 	}
 	
 </script>

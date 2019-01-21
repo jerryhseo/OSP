@@ -483,6 +483,26 @@ public class WorkflowSimulationJobLocalServiceUtil {
 				   .copyWorkflowSimulationJob(sourceSimulationJobId, params);
 	}
 
+	public static java.lang.String exportWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return getService()
+				   .exportWorkflowEngineJson(simulationJobId, strNodes,
+			userName, ibToken, request);
+	}
+
+	public static org.kisti.edison.model.WorkflowSimulationJob rerunWorkflowEngineJson(
+		long simulationJobId, java.lang.String strNodes,
+		java.lang.String userName, java.lang.String ibToken,
+		javax.servlet.http.HttpServletRequest request)
+		throws org.kisti.edison.WFEngine500Exception {
+		return getService()
+				   .rerunWorkflowEngineJson(simulationJobId, strNodes,
+			userName, ibToken, request);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob createWorkflowEngineJson(
 		long simulationJobId, java.lang.String strNodes,
 		java.lang.String userName, java.lang.String ibToken,
@@ -513,14 +533,6 @@ public class WorkflowSimulationJobLocalServiceUtil {
 		return getService().createWorkflowSimulationJob();
 	}
 
-	public static org.kisti.edison.model.WorkflowSimulationJob createWorkflowSimulationJob(
-		org.kisti.edison.model.WorkflowSimulationJob simulationJob)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
-		return getService().createWorkflowSimulationJob(simulationJob);
-	}
-
 	public static org.kisti.edison.model.WorkflowSimulationJob startWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -541,6 +553,23 @@ public class WorkflowSimulationJobLocalServiceUtil {
 		java.lang.String workflowUUID)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().askForWorkflowStart(workflowUUID);
+	}
+
+	public static org.codehaus.jackson.JsonNode updateWorflowSimulationJobIbUuid(
+		long simulationJobId, java.lang.String jobUuid,
+		java.lang.String ibSimUuid, java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateWorflowSimulationJobIbUuid(simulationJobId, jobUuid,
+			ibSimUuid, ibJobUuid);
+	}
+
+	public static org.codehaus.jackson.JsonNode askForInsertIbUuid(
+		java.lang.String jobUuid, java.lang.String ibSimUuid,
+		java.lang.String ibJobUuid)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().askForInsertIbUuid(jobUuid, ibSimUuid, ibJobUuid);
 	}
 
 	public static org.kisti.edison.model.WorkflowSimulationJob getWorkflowStatus(
@@ -582,12 +611,28 @@ public class WorkflowSimulationJobLocalServiceUtil {
 		return getService().pauseWorkflowSimulationJob(simulationJobId);
 	}
 
+	public static org.kisti.edison.model.WorkflowSimulationJob pauseWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService().pauseWorkflowSimulation(simulationJobId, simUuid);
+	}
+
 	public static org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulationJob(
 		long simulationJobId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException,
 			java.io.IOException {
 		return getService().resumeWorkflowSimulationJob(simulationJobId);
+	}
+
+	public static org.kisti.edison.model.WorkflowSimulationJob resumeWorkflowSimulation(
+		long simulationJobId, java.lang.String simUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService().resumeWorkflowSimulation(simulationJobId, simUuid);
 	}
 
 	public static org.kisti.edison.model.WorkflowSimulationJob updateWorkflowSimulationJob(

@@ -193,6 +193,10 @@ var contextPath = '${contextPath}';
                 <i class="fa fa-share-square-o fa-2x"></i><br>
                 <span class="nav-icon-text">Designer</span>
               </li>
+              <li id="<portlet:namespace/>header-li-export" class="top-btn">
+                <i class="fa fa-download fa-2x"></i><br>
+                <span class="nav-icon-text">Export</span>
+              </li>
             </ul>
           </div>
           <!-- Navbar Right Menu -->
@@ -266,6 +270,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="${contextPath}/js/lib/mustache.min.js"></script>
 <script src="${contextPath}/js/lib/validator.min.js"></script>
 <script src="${contextPath}/js/lib/jsplumbtoolkit.js"></script>
+<script src="${contextPath}/js/lib/FileSaver.min.js"></script>
 <script src="${contextPath}/js/constant.js"></script>
 <script type="text/x-jtk-templates" src="${contextPath}/templete/execute-template.html"></script>
 
@@ -513,11 +518,11 @@ AUI().ready(['liferay-util-window'], function(){
         uiPanel.closePortPopup(nodeId, portName, dialogId)
 	});
 
-	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid){
+	Liferay.provide(window, "setSimAndJobFromWorkbench", function(nodeId, simulationUuid, jobUuid, jobDataArray){
 		<portlet:namespace/>closePopup("dataTypeSearchDialog");
 
 		/* TODO 노드Id로 노드 찾아서 SimUuid, JobUuid 세팅해주기 */
-		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid);
+		uiPanel.setSelectedJobFromWorkbench(nodeId, simulationUuid, jobUuid, jobDataArray);
 		$("body").css('overflow','');
 	});
 
@@ -530,6 +535,7 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 	var resultObj = new Object();
 	var copyFileResult = false;
 	var jobData = "";
+	var getError="";
 	$.ajax({
 		url: "<%=copyParentNodeFilesURL%>",
 		cache: false,
@@ -540,12 +546,14 @@ function <portlet:namespace/>copyParentNodeFiles(params){
 		success: function(response) {
 			copyFileResult = true;
 			jobData = response.jobData;
-		}, error:function(response,e){ 
+		}, error:function(response,e){
 			copyFileResult = false;
 			jobData = "";
+			getError = response.responseText;
 		},complete: function(response){
 			resultObj.copyFileResult = copyFileResult;
 			resultObj.jobData = jobData;
+			resultObj.error = getError;
 		}
 	});
 	return resultObj;

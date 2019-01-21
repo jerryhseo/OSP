@@ -19,7 +19,6 @@ import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.util.TokenProviderUtil;
 import org.springframework.util.StringUtils;
 
-import com.kisti.osp.constants.OSPPropsUtil;
 import com.kisti.osp.service.OSPFileLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -50,7 +49,7 @@ public class IBUtil{
         throws PortalException, SystemException, IOException {
         Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(screenName, target, repositoryType);
         Path targetFolder = targetPath.getParent();
-        String owner = screenName + ":" + OSPPropsUtil.OSP_PORTAL_SERVER_USER_GROUP();
+        String owner = screenName;
         if(Files.notExists(targetFolder)){
             Files.createDirectories(targetFolder);
         }
@@ -59,8 +58,8 @@ public class IBUtil{
             StandardOpenOption.TRUNCATE_EXISTING};
         Files.write(targetPath, content.getBytes(StandardCharsets.UTF_8), openOptions);
         if(!System.getProperty("os.name").toLowerCase().contains("windows")){
-            OSPFileLocalServiceUtil.changeFileOwner(screenName, targetFolder.toString(), owner, repositoryType);
-            OSPFileLocalServiceUtil.changeFileMode(screenName, targetFolder.toString(), "g+w", repositoryType);
+            OSPFileLocalServiceUtil.changeFileOwner(screenName, target, owner, repositoryType);
+            OSPFileLocalServiceUtil.changeFileMode(screenName, target, "g+w", repositoryType);
         }
 
         return targetPath != null ? targetPath.toString() : null;
@@ -75,16 +74,15 @@ public class IBUtil{
         stream = fileEntry.getContentStream();
         Path targetPath = OSPFileLocalServiceUtil.getRepositoryPath(targetScreenName, target, targetRepository);
         Path targetFolder = targetPath.getParent();
-        String owner = targetScreenName + ":" + OSPPropsUtil.OSP_PORTAL_SERVER_USER_GROUP();
-
+        String owner = targetScreenName;
         if(!Files.exists(targetFolder)){
             Files.createDirectories(targetFolder);
         }
 
         Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
         if(!System.getProperty("os.name").toLowerCase().contains("windows")){
-            OSPFileLocalServiceUtil.changeFileOwner(targetScreenName, targetFolder.toString(), owner, targetRepository);
-            OSPFileLocalServiceUtil.changeFileMode(targetScreenName, targetFolder.toString(), "g+w", targetRepository);
+            OSPFileLocalServiceUtil.changeFileOwner(targetScreenName, target, owner, targetRepository);
+            OSPFileLocalServiceUtil.changeFileMode(targetScreenName, target, "g+w", targetRepository);
         }
 
         if(Validator.isNotNull(stream))

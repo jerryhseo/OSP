@@ -291,6 +291,7 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			SimulationJob simulationJob = SimulationJobLocalServiceUtil.createSimulationJob(simulationUuid, groupId, "#001  "+simulationTitle);
 			returnMap.put("jobUuid", simulationJob.getJobUuid());
 		} catch (Exception e) {
+			e.printStackTrace();
 			if(e instanceof PortalException){
 				throw e;
 			}else{
@@ -333,8 +334,6 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			
 			if(!CustomUtil.strNull(vcToken).equals("")){
 				
-				/*icebreakerUrl = "https://www.edison.re.kr/ldap/";
-				vcToken = "ZWRpc29uYWRtOjE1NDY0NjQxNTk5MzQjJCVeJSQjMTU0NzY3Mzc1OTkzNA==";*/
 				URL url = new URL(icebreakerUrl+"/api/simulation/"+simulationUuid+"/job/"+jobUuid+"/status");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				
@@ -452,10 +451,11 @@ public class SimulationLocalServiceImpl extends SimulationLocalServiceBaseImpl {
 			simulationCreateDt = simulationCreateDt.replace("T", " ");
 			simulation.setSimulationCreateDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(simulationCreateDt));
 			simulation.setCluster(CustomUtil.strNull(jsonObj.get("cluster"), ""));
-			String classId = CustomUtil.strNull(jsonObj.get("classId"), "0").replaceAll(" ", "");
+			/* ClassId --> url param */
+			/*String classId = CustomUtil.strNull(jsonObj.get("classId"), "0").replaceAll(" ", "");
 			simulation.setClassId(Long.parseLong(CustomUtil.strNull(classId, "0")));
 			String customId = CustomUtil.strNull(jsonObj.get("customIdId"), "0").replaceAll(" ", "");
-			simulation.setCustomId(Long.parseLong(CustomUtil.strNull(customId, "0")));
+			simulation.setCustomId(Long.parseLong(CustomUtil.strNull(customId, "0")));*/
 			
 			simulation = SimulationLocalServiceUtil.updateSimulation(simulation);
 		} catch (ParseException e) {
