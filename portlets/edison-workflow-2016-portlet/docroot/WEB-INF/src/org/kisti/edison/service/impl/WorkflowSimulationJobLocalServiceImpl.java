@@ -474,6 +474,9 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             simulation.setDescription(CustomUtil.strNull(scienceAppData.get("text")));
             simulation.setSolverId(GetterUtil.getLong(scienceAppData.get("scienceAppId")));
             
+            if(node.containsKey("pause")) {
+                simulation.setPause(GetterUtil.getString(node.get("pause"), null));
+            }
             if(node.containsKey("childNodes")) {
                 simulation.setChildNodes((List<String>) node.get("childNodes"));
             }

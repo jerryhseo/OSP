@@ -9,11 +9,18 @@ public class Simulation{
     private Long solverId;
     private String clientId;
     private String backend;
+    private String pause;
     private List<String> parentNodes;
     private List<String> childNodes;
     private Map<String, List<String>>outPort;
     private Map<String, String> outPortFile;
     private List<Job> jobs;
+    public String getPause(){
+        return pause;
+    }
+    public void setPause(String pause){
+        this.pause = pause;
+    }
     public String getTitle(){
         return title;
     }

@@ -162,7 +162,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             executor.insertIbUuid(params, function (workflowStatus) {
                 if (workflowStatus && workflowStatus.status !== CONSTS.WF_STATUS_CODE.PAUSED) {
                     updateAncestorReuse(node)
-                    rerun()
+                    rerun(node.id)
                 } else {
                     resume()
                 }
@@ -1096,7 +1096,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if (node && node.data && node.data.ibData) {
             node.data.ibData.ibSimUuid || (node.data.ibData.ibSimUuid = getGUID())
             // node.data.ibData.jobUuid || (node.data.ibData.jobUuid= getGUID())
-            saveFlag = node.data.status && node.data.status.status === CONSTS.WF_STATUS_CODE.WAITING
+            saveFlag = node.data.status && node.data.status.status !== CONSTS.WF_STATUS_CODE.RUNNING
         } else {
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
@@ -1524,9 +1524,9 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     }
 
-    function rerun() {
+    function rerun(pauseNodId) {
         // console.log('rerun')
-        submitSimulationJob(true)
+        submitSimulationJob(true, pauseNodId)
     }
 
     function resume(){
@@ -1619,7 +1619,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // return false
     }
 
-    function submitSimulationJob(isReRun) {
+    function submitSimulationJob(isReRun, pauseNodId) {
         if(!currJobs.selected()) {
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
@@ -1634,6 +1634,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
         bStart()
         _delay(function() {
+            if (pauseNodId && currNodes.get(pauseNodId)) {
+                var pauseNode = currNodes.get(pauseNodId)
+                pauseNode.data.pause = 'pause'
+            }
             saveSimulationJob(currJobs.selected(), function() {
                 resetSubmitData()
                 // console.log(designer.getCurrentJsPlumbInstance())
@@ -1848,8 +1852,10 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	/* 2019.01.02 _ Popup Button Event */
 	var openScienceAppWorkbench = function(node) {
-		executor.clearStatusTimeout()
-		_delay(function() {
+	    executor.clearStatusTimeout()
+	    bStart()
+        _delay(function(){
+            bEnd()
             var modal = $("#" + namespace + "science-app-workbench-modal");
             var openWorkbench = true;
 
@@ -1870,19 +1876,39 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             /*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
             jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
 
-            /* Get Connected Input Ports and Disconnected Input Ports */
-            var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
-            var copyError = currNodeInputPortsInfo.error;
-            if(copyError != ""){
-                toastr['warning']("", copyError);
+            /* SimulationJob check */
+            if(!currJobs.selected()){
+                toastr['error']("", "Select SimulationJob First.");
                 return false;
             }
+
+            /* Parents node status check */
+            openWorkbench = checkParentsNodeStatus(ports);
+            /* Parents node exist and parents node not successed _ Not open workbench */
+            if(!openWorkbench){
+                toastr['warning']("", "The parent's job is not successful.");
+                return false;
+            }
+
+            if(node.data.status && node.data.status.jobs  && node.data.status.jobs[0]){
+                simulationUuid = node.data.status.jobs[0].ibSimUuid
+                jobUuid = node.data.status.jobs[0].ibJobUuid
+            }
+
+            /* Get Connected Input Ports and Disconnected Input Ports */
+            var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
+            // var copyError = currNodeInputPortsInfo.error;
+            // if(copyError != ""){
+            //     toastr['warning']("", copyError);
+            //     return false;
+            // }
             var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
             var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
             var jobDataArr = currNodeInputPortsInfo.jobDataArr
+            console.log(jobDataArr)
 
             /* Call API get-simulation-job */
-            if (0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
+            if (jobDataArr && 0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
                 /* Add flag for keeping SimulationUuid and JobUuid */
                 nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
 
@@ -1893,56 +1919,41 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                     isWorkBench = true;
                 }
 
-                /* Get Connected Input Ports and Disconnected Input Ports */
-                var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
-                var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
-                var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
-                var jobDataArr = currNodeInputPortsInfo.jobDataArr
-
-                /* Call API get-simulation-job */
-                if (0 < jobDataArr.length) {
-                    /* Add flag for keeping SimulationUuid and JobUuid */
-                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
-
-                    var isWorkBench = false;
-                    if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
-                        nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
-                    }else{
-                        isWorkBench = true;
-                    }
-                    if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
-                        if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
-                            if(isWorkBench){
-                                getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
-                                        simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
-                                        connectedInputPorts, wfId);
-                            }else{
-                                addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-                                        scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-                                        connectedInputPorts, wfId, node);
-                            }
-                        } else {
+                console.log(simulationUuid, jobUuid, isWorkBench)
+                if(!!simulationUuid && simulationUuid != ''){
+                    if(!!jobUuid && jobUuid != ''){
+                        if(isWorkBench){
+                            getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
+                                simulationUuid, jobUuid, JSON.stringify(jobDataArr), scienceAppId,
+                                connectedInputPorts, wfId);
+                        }else{
                             addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-                                                scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-                                                connectedInputPorts, wfId, node);
+                                scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                                connectedInputPorts, wfId, node);
                         }
                     } else {
                         addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-                                            scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
-                                            connectedInputPorts, wfId, node);
+                            scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                            connectedInputPorts, wfId, node);
                     }
                 } else {
-                    toastr["error"]("", "JobData not found!!");
+                    addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
+                        scienceAppData.version, JSON.stringify(jobDataArr), scienceAppId,
+                        connectedInputPorts, wfId, node, true);
+                }
+
+                if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
+                    nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
                 }
 
             } else {
                 toastr["error"]("", "You can not run the workbench.!!");
                 return false;
             }
-        })
-    }
+        }, 2000)
+	}
 
-	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node){
+	function addSimulation(userId, appName, appVersion, jobData, appId, connInputPorts, wfId, node, copy){
 
 	    var data = {
             userId : userId,
@@ -1957,11 +1968,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             data, function(obj) {
 				if(obj.isValid){
 					/* IB_DATA Setting */
+
 					var thisJob = currJobs.selected();
 					var simulationJobId = thisJob.simulationJobId;
 					// console.log(simulationJobId);
                     var simulationUuid = obj.simulationUuid;
                     var simulationJobUuid = obj.simulationJobUuid;
+                    if(copy) {
+                        getNodeInputPortsInfo(node.getPorts(), simulationUuid, simulationJobUuid);
+                    }
                     nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
                     nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
 
@@ -2097,15 +2112,18 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 							getParentObj.simulationUuid = simulationUuid;
 							getParentObj.simulationJobUuid = jobUuid;
-							if(sourceJobDataType.toLowerCase() == "file"){
+							if(sourceJobDataType.toLowerCase() == "file") {
 								getParentObj["targetRepositoryType"] = OSP.Enumeration.RepositoryTypes.USER_HOME;
-								var copyResult = parentNodeFileCopy(getParentObj);
-								var copyError = copyResult.error;
-								if(copyError != ""){
-									returnObj.error = copyError;
-									return returnObj;
-								}
-								if(copyResult.copyFileResult){
+                                var copyResult;
+								if(simulationUuid && jobUuid) {
+                                    copyResult = parentNodeFileCopy(getParentObj);
+                                    var copyError = copyResult.error;
+                                    if(copyError != ""){
+                                        returnObj.error = copyError;
+                                        return returnObj;
+                                    }
+                                }
+								if(copyResult && copyResult.copyFileResult){
 									jobDataArr = jobDataArr.concat(copyResult.jobData);
 								} else {
 									jobDataArr = jobDataArr.concat(getJobData);
