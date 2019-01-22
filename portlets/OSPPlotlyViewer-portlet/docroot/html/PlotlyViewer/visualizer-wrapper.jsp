@@ -101,6 +101,11 @@ function <portlet:namespace/>loadOneD( jsonData, changeAlert ){
 }
 
 function <portlet:namespace/>setTitle( title ){
+	var titleSplit = title.split(".job/");
+	if(titleSplit.length > 1 ) {
+		var title = "./" + titleSplit[1];
+		title = title.replace("//","/");
+	}
 	$('#<portlet:namespace/>title').html( '<h4 style="margin:0;">'+title+'</h4>' );
 }
 

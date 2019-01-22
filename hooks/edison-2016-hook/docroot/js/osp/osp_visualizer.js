@@ -330,6 +330,9 @@
                                 type_: OSP.Enumeration.PathType.FILE,
                                 parent_: currentData.parent(),
                                 name_: currentData.name()
+                        },
+                        params:{
+                            changeAlert:false
                         }
             };
             Liferay.fire(OSP.Event.OSP_LOAD_DATA, eventData );
