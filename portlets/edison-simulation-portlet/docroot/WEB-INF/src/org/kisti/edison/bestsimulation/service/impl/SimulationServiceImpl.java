@@ -148,6 +148,7 @@ public class SimulationServiceImpl extends SimulationServiceBaseImpl {
 			
 			if(0< simulationCnt && 0 < simulationJobCnt){
 				resultInfo.put("hasSimulationInfo", hasSimulationInfo);
+				SimulationJobDataLocalServiceUtil.modifySimulationJobData(jobUuid, jobData);
 			} else {
 				boolean hasSimulation = (0 < simulationCnt) ? true : false;
 				Group group = GroupLocalServiceUtil.getGroup(EDISON_COMPANY_ID, "Guest");
