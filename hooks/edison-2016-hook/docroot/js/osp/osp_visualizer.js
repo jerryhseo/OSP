@@ -672,6 +672,7 @@
                 processInitAction(data, false);
                 console.log('baseFolder: ', baseFolder );
                 console.log('currentData: ', currentData );
+                
                 var eventData = {
                             portletId: portletId,
                             targetPortlet: params.connector,
@@ -1024,11 +1025,7 @@
         
         if( canvas.tagName.toLowerCase() === 'iframe' ){
             console.log('Visualizer setNamespace!!');
-            //callIframeFuncDelayed( 'setNamespace', 10, function(){}, namespace );
-            //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
             canvas.contentWindow['setNamespace']( namespace );
-            
-            fireRegisterEventsEvent();
             
             if( disabled )
                 canvas.contentWindow['disable']( disabled );
@@ -1046,6 +1043,15 @@
         procFuncs.readServerFileURL = [
                 readServerFileURL
         ];
+
+        if( connector ){
+            var events = [];
+            for( var event in attachedEventHandlers ){
+                events.push( event );
+            }
+            console.log('--------------------------', events);
+            fireRegisterEventsEvent( events, {} );
+        }
 
         return {
             callIframeFunc: callIframeFunc,

@@ -199,12 +199,16 @@
             
             P.load = function( $targetDiv, connector, eventEnable, windowState, callback ){
                 AUI().use('liferay-portlet-url', function(A){
+                    console.log(P);
+                    if( P.status() ){
+                        return;
+                    }
+
                     var portletURL = Liferay.PortletURL.createRenderURL();
                     portletURL.setPortletId( P.instanceId() );
 //                    portletURL.setParameter( 'eventEnable', eventEnable);
                     var initData = {};
                     
-                    console.log(P);
                     /*repositoryType_*/
                     initData[OSP.Constants.REPOSITORY_TYPE] = P.repositoryType();
                     
@@ -216,10 +220,11 @@
                     $.ajax({
                         url: portletURL.toString(),
                         type:'POST',
-                        async: false,
                         dataType:'text',
+                        processData: false,  // tell jQuery not to process the data
+                        contentType: false,  // tell jQuery not to set contentType
                         success: function( renderResult ){
-                        	P.status(true);
+                        	// P.status(true);
                             if(typeof $targetDiv.attr("section-type")!="undefined"){
                                 $targetDiv.html( renderResult ).promise().done(function(){
                                 	callback(connector,P.instanceId());
@@ -231,7 +236,7 @@
                                 $portletDiv.css('height', "inherit");
                                 $portletDiv.html( renderResult );
                                 $targetDiv.append( $portletDiv ).promise().done(function(){
-                                	callback(connector,P.instanceId());
+                                    callback(connector,P.instanceId());
                                 });
                             }
                             
@@ -421,7 +426,7 @@
                     return true;
                 }
                 
-                targetPortlet.status( true );
+                //targetPortlet.status( true );
                 var $targetDiv = $('#'+C.getPortletSectionId(connector));
                 targetPortlet.load( $targetDiv, connector, eventEnable, windowState, callback );
             };
@@ -2293,6 +2298,7 @@
             if( !layout )       return false;
             
             var portlet = layout.getPortlet( portletId );
+            portlet.status(true);
             return portlet.events( events );
         };
         
@@ -3370,9 +3376,32 @@
                     }
             };
     		
-    		console.log("OSP_HAND_SHAKE---------->>>>>>>>");
-    		console.log(JSON.stringify(eventData));
-            Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
+            console.log("OSP_HAND_SHAKE---------->>>>>>>>", JSON.stringify(eventData));
+            var timer;
+            var limit=0;
+            var fire = function(){
+                Liferay.fire( OSP.Event.OSP_HANDSHAKE, eventData );
+                if( timer ){
+                    clearTimeout(timer);
+                    timer = null;
+                }
+                console.log('====HandshakeCallback: ', Workbench.namespace(), portlet, limit);
+                timer = setTimeout(
+                    function(){
+                        if( !portlet.status() && limit < 10 ){
+                            fire();
+                            limit++;
+                        }
+                        else{
+                            clearTimeout(timer);
+                            limit = 0;
+                        }                    
+                    },
+                    10
+                );
+            };
+            
+            fire();
         };
         
         Workbench.switchPortlet = function( portletInstanceId ){
@@ -3419,7 +3448,6 @@
                 inputData.type(portData.type());
                 inputData.parent( parentPath );
                 inputData.name(portData.name());
-                inputData.relative(true);
             }
             
             if( inputData ){
