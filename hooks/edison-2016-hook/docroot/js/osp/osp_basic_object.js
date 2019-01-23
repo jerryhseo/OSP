@@ -676,15 +676,15 @@
             return path.name();
         },
         removeEndSlashes: function(strPath) {
-            var index = strPath.indexOf('/');
-            if (index == 0)
-                strPath = strPath.slice(1);
-
-            index = strPath.lastIndexOf('/');
-            if (index === strPath.length - 1)
-                strPath = strPath.slice(0, index);
-
-            return strPath;
+            while( strPath.startsWith('/') ){
+		        strPath = strPath.slice(1);
+	        }
+	
+	        while( strPath.endsWith('/') ){
+		        strPath = strPath.slice(0, strPath.length-1 );
+	        }
+	
+	        return strPath;
         },
         removeArrayElement: function(array, index) {
             array.splice(index, 1);
@@ -710,6 +710,8 @@
             return newArgs;
         },
         mergePath: function(parent, child) {
+            parent = this.removeEndSlashes(parent);
+            child = this.removeEndSlashes(child);
             if (!parent && !child) return '';
             if (!parent)
                 return child;

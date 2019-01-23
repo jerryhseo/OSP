@@ -1756,23 +1756,22 @@
             //block
             bStart();
             setTimeout(function(){
-                var ajaxData = Liferay.Util.ns(
-                        Workbench.namespace(),
-                        {
-                           command: 'SUBMIT_JOBS',
-                           simulationUuid: simulation.uuid(),
-                           simulationTime: simulationCreateTime,
-                           scienceAppName: scienceApp.name(),
-                           scienceAppVersion: scienceApp.version(),
-                           ncores: ncores,
-                           jobs: JSON.stringify( jobsToSubmit )
-                        });
+                var ajaxData = new FormData();
+                ajaxData.append( Workbench.namespace()+'command', 'SUBMIT_JOBS');
+                ajaxData.append( Workbench.namespace()+'simulationUuid', simulation.uuid() );
+                ajaxData.append( Workbench.namespace()+'simulationTime', simulationCreateTime);
+                ajaxData.append( Workbench.namespace()+'scienceAppName', scienceApp.name());
+                ajaxData.append( Workbench.namespace()+'scienceAppVersion', scienceApp.version());
+                ajaxData.append( Workbench.namespace()+'ncores', ncores);
+                ajaxData.append( Workbench.namespace()+'jobs', JSON.stringify( jobsToSubmit ));
             
                 $.ajax({
                     url : resourceURL,
                     type: 'post',
                     dataType: 'json',
                     data : ajaxData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
                     success : function(submittedJob){
                         console.log('[SUCCESS] submit job : '+submittedJob);
                         var data = {
@@ -1789,6 +1788,7 @@
                     },
                     error:function(jqXHR, textStatus, errorThrown){
                         bEnd();
+                        console.log('*****************************************', jqXHR, textStatus, errorThrown);
                         fireSubmitJobResult({status:false});
                     }
                 });
@@ -2763,10 +2763,11 @@
         };
 
         
-        Workbench.handleCreateSimulation = function(portletId, title, jobTitle, jobInitData, resourceURL ){
-        	var simulation = Workbench.workingSimulation();
-        	var job = simulation.workingJob();
-            createSimulation(portletId, title, jobTitle, jobInitData, job.user(),resourceURL );
+        Workbench.handleCreateSimulation = function(portletId, defaultUser, title, jobTitle, jobInitData, resourceURL ){
+            //var simulation = Workbench.workingSimulation();
+        	// var job = simulation.workingJob();
+            //createSimulation(portletId, title, jobTitle, jobInitData, job.user(),resourceURL );
+            createSimulation(portletId, title, jobTitle, jobInitData, defaultUser, resourceURL );
         };
         
         

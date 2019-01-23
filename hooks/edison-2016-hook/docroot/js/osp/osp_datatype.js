@@ -4221,7 +4221,7 @@
 							NumericParameterValueDiv:'text-align:center; padding: 2px 10px; display:inline;margin:0px;',
 							ListParameterValueDiv:'text-align:center; padding: 2px 10px; display:inline;margin: 0 auto;',
 							GroupParameterRow:'border:3px inset #cce7ff; padding:0px 0px 0px 30px; margin:5px 0px 10px 0px;',
-							ParameterRow:'padding:5px 0px;',
+							ParameterRow:'padding:5px 0px;margin:auto;',
 							VectorParameterValueDiv:'text-align:center; padding: 2px 10px; display:inline;margin: 0 auto;',
 							VectorInput: 'width: 40px; text-align:right;',
 							StringParameterValueDiv:'text-align:center; padding: 2px 10px; display:inline;margin: 0 auto;',

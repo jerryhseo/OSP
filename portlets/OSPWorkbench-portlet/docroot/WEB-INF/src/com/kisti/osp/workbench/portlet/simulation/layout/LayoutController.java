@@ -1069,7 +1069,7 @@ public class LayoutController {
 					inputData.remove("content_");
 					
 				}else if( pathType.equalsIgnoreCase("dlEntryId")){
-					long fileEntryId = inputData.getLong("id_");
+					long fileEntryId = inputData.getLong("content_");
 					String inputParent = inputData.getString("parent_", "");
 					String inputFileName = inputData.getString("name_", "");
 					Path parentPath = null;
@@ -1107,7 +1107,6 @@ public class LayoutController {
 					inputData.put("type_", "file");
 					inputData.put("parent_", parentPath.toString());
 					inputData.put("name_", inputFileName);
-					inputData.remove("id_");
 				}else if( pathType.equalsIgnoreCase("file")){
 					Path target = Paths.get(inputData.getString("parent_")).resolve(inputData.getString("name_"));
 					

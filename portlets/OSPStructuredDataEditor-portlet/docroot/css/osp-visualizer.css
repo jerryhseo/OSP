@@ -4,7 +4,7 @@
 	height: 100%;
    	min-height:200px;
    	margin: 0px;
-   padding: 0px 5px 0px 5px;
+   padding: 0px 5px 0px 5px !important;
 }
 .osp-visualizer .osp-header{
 	height: 40px;
@@ -47,6 +47,28 @@
    	
    	overflow:hidden;
 }
+
+.osp-visualizer .osp-no-scroll-canvas {
+   	border:none;
+	width:100%;
+	height: 100%;
+   	margin:0;
+   	padding:5px;
+   	
+   	overflow:hidden;
+}
+
+.osp-visualizer .osp-scroll-canvas {
+   	border:none;
+	width:100%;
+	height: 100%;
+   	margin:0;
+   	padding:5px;
+   	
+   	overflow:auto;
+}
+
+
 .osp-visualizer .osp-iframe-canvas {
 	border:none;
 	width:100%;

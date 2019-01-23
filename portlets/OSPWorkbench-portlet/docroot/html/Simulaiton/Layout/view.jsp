@@ -51,6 +51,8 @@
 	String inputPorts = (String) renderRequest.getAttribute("inputPorts");
 	String logPorts = (String) renderRequest.getAttribute("logPorts");
 	String outputPorts = (String) renderRequest.getAttribute("outputPorts");
+	
+	String userScreenName = user.getScreenName();
 %>
 <div class="row" id="<portlet:namespace/>canvas">
 	
@@ -405,8 +407,8 @@ Liferay.on(OSP.Event.OSP_SAVE_SIMULATION,function( e ){
 });
 Liferay.on(OSP.Event.OSP_CREATE_SIMULATION,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
-		console.log('OSP_CREATE_SIMULATION: ['+e.portletId+', '+new Date()+']');
-		<portlet:namespace/>workbench.handleCreateSimulation(e.portletId,e.data.title,e.data.jobTitle,e.data.jobInitData,'<%=serveResourceURL.toString()%>');
+		console.log('OSP_CREATE_SIMULATION: ['+e.portletId+', '+new Date()+']', e);
+		<portlet:namespace/>workbench.handleCreateSimulation(e.portletId, '<%=userScreenName%>', e.data.title,e.data.jobTitle,e.data.jobInitData,'<%=serveResourceURL.toString()%>');
 	}
 });
 Liferay.on(OSP.Event.OSP_DELETE_SIMULATION,function( e ){

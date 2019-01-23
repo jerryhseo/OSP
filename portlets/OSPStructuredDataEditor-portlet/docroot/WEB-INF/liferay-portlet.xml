@@ -8,10 +8,6 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>com.kisti.osp.visualizer.portlet.sde.StructuredDataEditorPortletConfigAction </configuration-action-class>
 		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>
 			structured-data-editor-portlet
 		</css-class-wrapper>

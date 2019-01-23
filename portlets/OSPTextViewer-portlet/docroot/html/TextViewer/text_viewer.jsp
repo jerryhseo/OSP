@@ -32,7 +32,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
 	</div>
 	<div class="row-fluid osp-frame">
 		<pre 
-				class="col-sm-12 osp-canvas"
+				class="col-sm-12 osp-scroll-canvas"
 				 style="<%=visualizerConfig.getDisplayStyle()%>"
 				id="<portlet:namespace/>canvas">
 		</pre>
