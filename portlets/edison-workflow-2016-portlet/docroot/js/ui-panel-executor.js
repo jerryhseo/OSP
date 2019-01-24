@@ -579,7 +579,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
                 if(node.data.status && node.data.status.jobs &&
                     node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid &&
-                    node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
+                    !node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
                 ) {
                     node.data.ibData = {
                         ibUuid: node.data.status.jobs[0].ibUuid,
@@ -1856,8 +1856,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             var nodeData = node.data;
             var wfId = nodeData.id;
 
-            if(nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == 'undefined' || nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == null){
+            if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]){
                 nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
+            }
+            if(!nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA]) {
+            	nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA] = {}
             }
             var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
             var jobUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
@@ -1871,8 +1874,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
             
             /* Call API */
-            if(!simulationUuid){
-            	if(!jobUuid){
+            if(!!simulationUuid){
+            	if(!!jobUuid){
             		getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
             				simulationUuid, jobUuid, scienceAppId, wfId, node);
             	} else {
