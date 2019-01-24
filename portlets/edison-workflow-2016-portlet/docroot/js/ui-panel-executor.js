@@ -1859,8 +1859,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             if(nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == 'undefined' || nodeData[CONSTS.WF_NODE_CODE.IB_DATA] == null){
                 nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
             }
-            var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
-            var jobUuid = nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
+            var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
+            var jobUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
             var scienceAppData = nodeData.scienceAppData;
             var scienceAppId = scienceAppData.scienceAppId;
             var ports = node.getPorts();
@@ -1869,25 +1869,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             /* test Uuid */
             /*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
             jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
-
-            nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.WORKBENCH] = true;
-            var isWorkBench = false;
-            if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH]){
-            	nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = false;
-            }else{
-            	isWorkBench = true;
-            }
             
             /* Call API */
-            if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
-            	if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
-            		if(isWorkBench){
-	            		getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
-	            				simulationUuid, jobUuid, scienceAppId, wfId, node);
-            		}else{
-            			addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
-            					scienceAppData.version, "[]", scienceAppId, wfId, node);
-            		}
+            if(!simulationUuid){
+            	if(!jobUuid){
+            		getSimulationJob(Liferay.ThemeDisplay.getUserId(), scienceAppData.name, scienceAppData.version,
+            				simulationUuid, jobUuid, scienceAppId, wfId, node);
             	} else {
             		addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
             				scienceAppData.version, "[]", scienceAppId, wfId, node);
@@ -1958,6 +1945,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         			'/edison-simulation-portlet.simulation/get-simulation-job',
         			data, function(obj) {
         				if(obj.hasSimulationInfo){
+        					node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
+    						node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
         					var job = currJobs.selected();
         					saveSimulationJob(job, function (simulationJob){
         						var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
@@ -2274,13 +2263,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		var nodeData = node.data;
 
 		if(nodeData) {
-			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IS_WORKBENCH] = true;
-
-			if(!nodeData[CONSTS.WF_NODE_CODE.IB_DATA]) {
-				nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {}
-			}
-			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
-			nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
+			nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID] = simulationUuid;
+			nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
 
 			var inputPorts = nodeData.inputPorts;
 			var jobDataObj = JSON.parse(jobDataArr);
