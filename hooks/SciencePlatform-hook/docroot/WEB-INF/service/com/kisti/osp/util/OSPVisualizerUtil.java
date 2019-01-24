@@ -44,7 +44,7 @@ public class OSPVisualizerUtil {
 		
 		config.portletWidth = preferences.getValue("portletWidth", "");
 		config.portletHeight = preferences.getValue("portletHeight", "");
-		config.portletScroll = preferences.getValue("portletScroll", "hidden");
+		config.portletScroll = preferences.getValue("portletScroll", "");
 		
 		config.disabled = ParamUtil.getString(renderRequest, "disabled", "false");
 		config.connector = ParamUtil.getString(renderRequest, "connector", "");

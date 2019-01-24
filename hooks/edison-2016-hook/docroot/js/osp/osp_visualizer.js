@@ -32,9 +32,8 @@
             var offset = $('#p_p_id'+namespace).offset();
             console.log('Block visualizer: '+namespace, offset, $('#p_p_id'+namespace).width(), $('#p_p_id'+namespace).height() );
             console.log('theme display: ', Liferay.ThemeDisplay.getPathThemeImages());
-            
             $('#p_p_id'+namespace).block({
-                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/processing.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);\"/>',
+                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/processing.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
                         css: {
                             'width':$('#p_p_id'+namespace).width()+'px',
                             'height':$('#p_p_id'+namespace).height()+'px',
@@ -673,6 +672,7 @@
                 processInitAction(data, false);
                 console.log('baseFolder: ', baseFolder );
                 console.log('currentData: ', currentData );
+                
                 var eventData = {
                             portletId: portletId,
                             targetPortlet: params.connector,
@@ -1025,11 +1025,7 @@
         
         if( canvas.tagName.toLowerCase() === 'iframe' ){
             console.log('Visualizer setNamespace!!');
-            //callIframeFuncDelayed( 'setNamespace', 10, function(){}, namespace );
-            //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
             canvas.contentWindow['setNamespace']( namespace );
-            
-            fireRegisterEventsEvent();
             
             if( disabled )
                 canvas.contentWindow['disable']( disabled );
@@ -1047,6 +1043,15 @@
         procFuncs.readServerFileURL = [
                 readServerFileURL
         ];
+
+        if( connector ){
+            var events = [];
+            for( var event in attachedEventHandlers ){
+                events.push( event );
+            }
+            console.log('--------------------------', events);
+            fireRegisterEventsEvent( events, {} );
+        }
 
         return {
             callIframeFunc: callIframeFunc,
