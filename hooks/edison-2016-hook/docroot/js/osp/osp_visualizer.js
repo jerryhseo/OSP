@@ -31,7 +31,6 @@
         var blockVisualizer = function(){
             var offset = $('#p_p_id'+namespace).offset();
             console.log('Block visualizer: '+namespace, offset, $('#p_p_id'+namespace).width(), $('#p_p_id'+namespace).height() );
-            console.log('theme display: ', Liferay.ThemeDisplay.getPathThemeImages());
             $('#p_p_id'+namespace).block({
                         message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/processing.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
                         css: {
@@ -76,7 +75,6 @@
         var openServerFileExplorer = function( procFuncName ){
             var buttons = {
                     OK: function(){
-                                     console.log('===== FireExplorer OK.' );
                                     fireRequestDataEvent( 
                                         fileExplorerId, 
                                         {},
@@ -87,7 +85,6 @@
                                     fileExplorerDialog.dialog('close');
                                 },
                     Cancel: function(){
-                                    console.log('===== FireExplorer Cancel.' );
                                     fileExplorerDialog.dialog('close');
                                 }
             };
@@ -97,7 +94,6 @@
                 var instanceIndex = portletId.lastIndexOf('_INSTANCE_');
                 if( instanceIndex > 0)
                     fileExplorerId += portletId.substring(instanceIndex);
-                console.log( 'FileExplorer ID: '+fileExplorerId );
 
                 fileExplorerDialog = $( 
                     '<div title=\"Select a file\" id=\"'+fileExplorerId+'\"></div>');
@@ -112,7 +108,6 @@
 
                 AUI().use('liferay-portlet-url', function(A){
                     var dialogURL = Liferay.PortletURL.createRenderURL();
-                    console.log('dialogURL: '+dialogURL.toString() );
                     dialogURL.setPortletId(fileExplorerId);
                     dialogURL.setWindowState('EXCLUSIVE');
 
@@ -162,7 +157,6 @@
                 setCurrentData( jsonData );
             }
 
-            console.log( 'readServerFile: ', currentData );
             var params = {
                 command:'READ_FILE',
                 repositoryType: baseFolder.repositoryType(),
@@ -262,7 +256,6 @@
                 params.fileName = baseFolder.name();
             }
 
-            console.log( 'getFirstFileName: ', params );
              var formData = createFormData( params );
 
              $.ajax({
@@ -385,7 +378,6 @@
         };
 
         var runProcFuncs = function( funcName ){
-            console.log( 'procFuncName: '+funcName, procFuncs);
             var args = Array.prototype.slice.call(arguments);
             var newArgs = [];
             var funcName = args[0];
@@ -412,8 +404,6 @@
                 stripedArgs.push(args[i]);
             }
 
-            //console.log( 'callIframeFunc: ', currentData );
-            //console.log('stripped args: '+JSON.stringify(stripedArgs));
             var result = canvas.contentWindow[funcName].apply(canvas.contentWindow, stripedArgs);
             if( resultProcFunc ){
                 resultProcFunc( result );
@@ -477,7 +467,6 @@
                 beforeSend: blockVisualizer,
                 success : function(data) {
                         //currentData.deserialize( data );
-                        console.log( 'currentData after upload: ', currentData );
                         currentData.type( OSP.Enumeration.PathType.FILE );
                         successFunc(data);
                 },
@@ -494,7 +483,6 @@
                         '</p>' +
                     '</div>';
             var dialog = $(dialogDom);
-            console.log( 'namespace in showDefaultFileUploadConfirmDialog(): '+namespace);
             dialog.find( '#'+namespace+'targetFilePath').val(OSP.Util.mergePath(currentData.parent(), targetFileName));
             dialog.dialog({
                 resizable: false,
@@ -507,7 +495,6 @@
                         var path = OSP.Util.convertToPath( targetPath );
                         currentData.parent(path.parent_);
                         currentData.name(path.name_);
-                        console.log( 'target path: ', path );
                         submitUpload( localFile, successFunc );
                         dialog.dialog( 'destroy' );
                     },
@@ -534,7 +521,6 @@
                     contentType: false,
                     beforeSend: blockVisualizer,
                     success: function( result ){
-                        console.log( 'duplicated result: ', result);
                         if( result.duplicated ){
                             showFileUploadConfirmDialog( localFile, targetFileName, successFunc );
                         }
@@ -589,37 +575,19 @@
             data[namespace+'fileNames'] = JSON.stringify(fileNames);
 
             var url = resourceURL + separator + $.param(data);
-            console.log('Download URL: '+url);
 
             window.location.href = url;
         };
 
-        /*
         var attachEventHandler = function( event, handler ){
-            AUI().use('event', 'node', function(A){
-                var aCanvas = A.one( '#'+namespace+'canvas' );
-                console.log( 'Event handler attached: '+portletId+' - '+ event );
-                var eventHandler = function( e ){
-                        if( e.targetPortlet !== portletId )   return;
-                        console.log( event+': ', e);
-                        handler( e.data, e.params );
-                };
-    
-                //aCanvas.detach( event );
-                aCanvas.on( event, eventHandler );
-            });
-        };
-        */
-        
-        var attachEventHandler = function( event, handler ){
-            console.log( 'Event handler attached: '+portletId+' - '+ event );
+            // console.log( 'Event handler attached: '+portletId+' - '+ event );
             if( attachedEventHandlers[event] ){
                 Liferay.detach( event, attachedEventHandlers[event] );
             }
             else{
                 attachedEventHandlers[event] = function( e ){
                     if( e.targetPortlet !== portletId )   return;
-                    console.log( event+': ', e);
+                    console.log( event+'['+portletId+']: ', e);
                     handler( e.data, e.params );
                 };
             }
@@ -633,7 +601,6 @@
             currentData.dirty(false);
             baseFolder = new OSP.InputData();
 
-            console.log('initData: ', initData );
             for( var key in initData ){
                 switch( key ){
                     case OSP.Constants.TYPE:
@@ -652,13 +619,13 @@
             }
 
             if( !baseFolder.repositoryType() ){
-                console.log('[WORNING] Portlet '+portletId+' baseFolder has no repositoryType!');
+                console.log('[WARNING] Portlet '+portletId+' baseFolder has no repositoryType!');
             }
 
         };
 
         var attachEventHandlers = function(){
-            console.log( 'Event Handlers: ', eventHandlers);
+           // console.log( 'Event Handlers: ', eventHandlers);
             for( var event in eventHandlers){
                 var handler = eventHandlers[event];
                 attachEventHandler( event, handler);
@@ -670,8 +637,7 @@
                disabled = params.disabled;
 
                 processInitAction(data, false);
-                console.log('baseFolder: ', baseFolder );
-                console.log('currentData: ', currentData );
+                // console.log('baseFolder: ', baseFolder );
                 
                 var eventData = {
                             portletId: portletId,
@@ -684,17 +650,11 @@
             };
 
             var defaultEventsResigeteredEventHandler = function( jsonData, params ){
-                //Very first data to be disploy from the connector.
-                console.log( 'defaultEventsResigeteredEventHandler called.....', jsonData );
-                if( jsonData ){
-//                    Visualizer.loadCanvas( jsonData, false);
-                }
             }; 
 
             var defaultDisableControlsEventHandler = function( data, params ){
                 disabled = data;
                 if( canvas.tagName.toLowerCase() === 'iframe' && canvas.contentWindow['disable']){
-                    //callIframeFuncDelayed( 'disable', 10, function(){}, disabled );
                      canvas.contentWindow['disable']( disabled );
                 }
             };
@@ -720,16 +680,8 @@
             };
         };
 
-        var fire = function(){
-            AUI().use('event', 'node', function(A){
-                var aCanvas = A.one( '#'+namespace+'canvas' );
-                //aCanvas.detach( event );
-                aCanvas.on( event, eventHandler );
-            });
-        };
-
         var fireRegisterEventsEvent = function( data, params ){
-            console.log( '++++ EventData: ', createEventData(data, params ));
+            // console.log( '++++ EventData: ', createEventData(data, params ));
             Liferay.fire( OSP.Event.OSP_REGISTER_EVENTS, createEventData(data, params ));
         };
 
@@ -745,7 +697,7 @@
                 currentData.dirty(true);
             }
 
-            console.log('Fire data changed event: ', currentData );
+            // console.log('Fire data changed event: ', currentData );
             var eventData = data ? data : OSP.Util.toJSON(currentData);
             Liferay.fire( OSP.Event.OSP_DATA_CHANGED, createEventData(eventData, params ) );
         };
@@ -947,7 +899,7 @@
 
 
         var loadCanvas = function( jsonData, changeAlert ){
-            console.log('loadCanvas data: ', jsonData, changeAlert );
+            // console.log('loadCanvas data: ', jsonData, changeAlert );
             setCurrentData( jsonData );
             loadCanvasFunc( OSP.Util.toJSON(currentData), changeAlert);
         };
@@ -982,7 +934,7 @@
             
             setBaseFolderAndCurrentData();
 
-            console.log( 'After processInitAction: ', currentData );
+            // console.log( 'After processInitAction: ', currentData );
             if( launchCanvas ){
                 loadCanvas( OSP.Util.toJSON(currentData), false );
             }
@@ -1024,7 +976,7 @@
         // Set namespace on iframe if canvas is iframe
         
         if( canvas.tagName.toLowerCase() === 'iframe' ){
-            console.log('Visualizer setNamespace!!');
+            // console.log('Visualizer setNamespace!!');
             canvas.contentWindow['setNamespace']( namespace );
             
             if( disabled )
