@@ -1044,6 +1044,9 @@
                 readServerFileURL
         ];
 
+        /**
+         * The following block will be enabled after OSP_HANDSHAKE event is deprecated.  
+         *  
         if( connector ){
             var events = [];
             for( var event in attachedEventHandlers ){
@@ -1052,6 +1055,7 @@
             console.log('--------------------------', events);
             fireRegisterEventsEvent( events, {} );
         }
+         */
 
         return {
             callIframeFunc: callIframeFunc,

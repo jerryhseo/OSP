@@ -81,6 +81,7 @@ OSPVisualizerConfig visualizerConfig = OSPVisualizerUtil.getVisualizerConfig(ren
  ***********************************************************************/
 function <portlet:namespace/>loadData( jsonData, changeAlert ){
 	var dataType = <portlet:namespace/>dataType;
+	
 	$('#<portlet:namespace/>canvas').empty();
 	
 	switch( jsonData.type_ ){

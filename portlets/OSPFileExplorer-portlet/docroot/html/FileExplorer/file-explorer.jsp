@@ -213,16 +213,5 @@
 			var fileName = slashIndex >= 0 ? path.substring(slashIndex+1) : path;
 			return fileName;
 		}
-		
-		function mergePath( parent, child ){
-			if( !parent && !child )	return '';
-			if( !parent )
-				return child;
-			if( !child )
-				return parent;
-			
-			return parent+'/'+child;
-		}
-		
 	</script>
 </html>

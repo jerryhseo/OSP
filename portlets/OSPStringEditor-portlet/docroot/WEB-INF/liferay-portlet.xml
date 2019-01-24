@@ -8,10 +8,6 @@
 		<icon>/icon.png</icon>
 		<configuration-action-class>com.kisti.osp.visualizer.portlet.stringeditor.StringEditorPortletConfigAction </configuration-action-class>
 		<instanceable>true</instanceable>
-		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>string-editor-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
