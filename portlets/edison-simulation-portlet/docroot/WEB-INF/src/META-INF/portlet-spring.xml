@@ -29,4 +29,7 @@
 	<bean id="org.kisti.edison.bestsimulation.service.UniversityExecuteService" class="org.kisti.edison.bestsimulation.service.impl.UniversityExecuteServiceImpl" />
 	<bean id="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistence" class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistenceImpl" parent="basePersistence" />
 	<bean id="org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinder" class="org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinderImpl" parent="basePersistence" />
+	<bean id="org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalService" class="org.kisti.edison.bestsimulation.service.impl.VirtualLabClassStatisticsLocalServiceImpl" />
+	<bean id="org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsService" class="org.kisti.edison.bestsimulation.service.impl.VirtualLabClassStatisticsServiceImpl" />
+	<bean id="org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPersistence" class="org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPersistenceImpl" parent="basePersistence" />
 </beans>

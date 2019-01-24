@@ -33,6 +33,7 @@ import org.kisti.edison.bestsimulation.model.SimulationJobDataClp;
 import org.kisti.edison.bestsimulation.model.SimulationJobStatusClp;
 import org.kisti.edison.bestsimulation.model.SimulationShareClp;
 import org.kisti.edison.bestsimulation.model.UniversityExecuteClp;
+import org.kisti.edison.bestsimulation.model.VirtualLabClassStatisticsClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -142,6 +143,11 @@ public class ClpSerializer {
 			return translateInputUniversityExecute(oldModel);
 		}
 
+		if (oldModelClassName.equals(
+					VirtualLabClassStatisticsClp.class.getName())) {
+			return translateInputVirtualLabClassStatistics(oldModel);
+		}
+
 		return oldModel;
 	}
 
@@ -233,6 +239,17 @@ public class ClpSerializer {
 		UniversityExecuteClp oldClpModel = (UniversityExecuteClp)oldModel;
 
 		BaseModel<?> newModel = oldClpModel.getUniversityExecuteRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputVirtualLabClassStatistics(
+		BaseModel<?> oldModel) {
+		VirtualLabClassStatisticsClp oldClpModel = (VirtualLabClassStatisticsClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getVirtualLabClassStatisticsRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -552,6 +569,43 @@ public class ClpSerializer {
 			}
 		}
 
+		if (oldModelClassName.equals(
+					"org.kisti.edison.bestsimulation.model.impl.VirtualLabClassStatisticsImpl")) {
+			return translateOutputVirtualLabClassStatistics(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
 		return oldModel;
 	}
 
@@ -672,6 +726,11 @@ public class ClpSerializer {
 			return new org.kisti.edison.bestsimulation.NoSuchUniversityExecuteException();
 		}
 
+		if (className.equals(
+					"org.kisti.edison.bestsimulation.NoSuchVirtualLabClassStatisticsException")) {
+			return new org.kisti.edison.bestsimulation.NoSuchVirtualLabClassStatisticsException();
+		}
+
 		return throwable;
 	}
 
@@ -753,6 +812,17 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setUniversityExecuteRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputVirtualLabClassStatistics(
+		BaseModel<?> oldModel) {
+		VirtualLabClassStatisticsClp newModel = new VirtualLabClassStatisticsClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setVirtualLabClassStatisticsRemoteModel(oldModel);
 
 		return newModel;
 	}

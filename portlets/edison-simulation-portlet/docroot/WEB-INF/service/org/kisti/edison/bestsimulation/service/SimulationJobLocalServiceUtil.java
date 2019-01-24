@@ -697,6 +697,18 @@ public class SimulationJobLocalServiceUtil {
 		getService().deleteJob(jobUuid);
 	}
 
+	public static void executeSchedulerOfClassStatistics()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().executeSchedulerOfClassStatistics();
+	}
+
+	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		return getService()
+				   .getVirtualLabClassStatisticsList(params, locale, excelFile);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}
