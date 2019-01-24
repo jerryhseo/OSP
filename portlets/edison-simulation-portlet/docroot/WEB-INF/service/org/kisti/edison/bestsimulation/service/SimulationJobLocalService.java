@@ -560,4 +560,12 @@ public interface SimulationJobLocalService extends BaseLocalService,
 	public void deleteJob(java.lang.String jobUuid)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
+
+	public void executeSchedulerOfClassStatistics()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile);
 }

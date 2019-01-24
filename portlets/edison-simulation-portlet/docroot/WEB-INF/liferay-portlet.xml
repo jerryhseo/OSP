@@ -181,6 +181,24 @@
         </css-class-wrapper>
     </portlet>
     
+    <portlet>
+		<portlet-name>edison-virtuallab-class-statistics-scheduler</portlet-name>
+		<icon>/icon.png</icon>
+		<scheduler-entry>
+			<scheduler-description>Virtual Lab Class Statistics Scheduler</scheduler-description>
+			<scheduler-event-listener-class>
+				org.kisti.edison.scheduler.VirtualLabClassStatisticsSchedule
+			</scheduler-event-listener-class>
+			<trigger>
+				<cron>
+					<cron-trigger-value>0 0 3 * * ?</cron-trigger-value>
+				</cron>
+			</trigger>
+		</scheduler-entry>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<css-class-wrapper>edison-virtuallab-class-statistics-scheduler container</css-class-wrapper>
+	</portlet>
+    
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

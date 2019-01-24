@@ -114,35 +114,35 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 				"org.kisti.edison.bestsimulation.model.ScienceAppExecute"
 			};
 
-		_methodName84 = "getBeanIdentifier";
+		_methodName90 = "getBeanIdentifier";
 
-		_methodParameterTypes84 = new String[] {  };
+		_methodParameterTypes90 = new String[] {  };
 
-		_methodName85 = "setBeanIdentifier";
+		_methodName91 = "setBeanIdentifier";
 
-		_methodParameterTypes85 = new String[] { "java.lang.String" };
+		_methodParameterTypes91 = new String[] { "java.lang.String" };
 
-		_methodName90 = "getSiteCategoryIdList";
+		_methodName96 = "getSiteCategoryIdList";
 
-		_methodParameterTypes90 = new String[] { "long", "long" };
+		_methodParameterTypes96 = new String[] { "long", "long" };
 
-		_methodName92 = "getStatisticsSwExeTableOrganigation";
+		_methodName98 = "getStatisticsSwExeTableOrganigation";
 
-		_methodParameterTypes92 = new String[] {
+		_methodParameterTypes98 = new String[] {
 				"long", "long", "java.util.Locale", "long", "java.lang.String",
 				"java.lang.String", "java.util.List", "boolean", "long"
 			};
 
-		_methodName93 = "getStatisticsSwExeBarChartDate";
+		_methodName99 = "getStatisticsSwExeBarChartDate";
 
-		_methodParameterTypes93 = new String[] {
+		_methodParameterTypes99 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.util.List", "boolean", "long"
 			};
 
-		_methodName94 = "insertCustomScienceAppExecute";
+		_methodName100 = "insertCustomScienceAppExecute";
 
-		_methodParameterTypes94 = new String[] {
+		_methodParameterTypes100 = new String[] {
 				"java.lang.String", "java.lang.String"
 			};
 	}
@@ -236,26 +236,26 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 			return ScienceAppExecuteLocalServiceUtil.updateScienceAppExecute((org.kisti.edison.bestsimulation.model.ScienceAppExecute)arguments[0]);
 		}
 
-		if (_methodName84.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
+		if (_methodName90.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			return ScienceAppExecuteLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName85.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+		if (_methodName91.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
 			ScienceAppExecuteLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName90.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
+		if (_methodName96.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes96, parameterTypes)) {
 			return ScienceAppExecuteLocalServiceUtil.getSiteCategoryIdList(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName92.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes92, parameterTypes)) {
+		if (_methodName98.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
 			return ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeTableOrganigation(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Locale)arguments[2],
@@ -266,8 +266,8 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 				((Long)arguments[8]).longValue());
 		}
 
-		if (_methodName93.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes93, parameterTypes)) {
+		if (_methodName99.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes99, parameterTypes)) {
 			return ScienceAppExecuteLocalServiceUtil.getStatisticsSwExeBarChartDate(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -277,8 +277,8 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 				((Long)arguments[7]).longValue());
 		}
 
-		if (_methodName94.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes94, parameterTypes)) {
+		if (_methodName100.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes100, parameterTypes)) {
 			return ScienceAppExecuteLocalServiceUtil.insertCustomScienceAppExecute((java.lang.String)arguments[0],
 				(java.lang.String)arguments[1]);
 		}
@@ -318,16 +318,16 @@ public class ScienceAppExecuteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName84;
-	private String[] _methodParameterTypes84;
-	private String _methodName85;
-	private String[] _methodParameterTypes85;
 	private String _methodName90;
 	private String[] _methodParameterTypes90;
-	private String _methodName92;
-	private String[] _methodParameterTypes92;
-	private String _methodName93;
-	private String[] _methodParameterTypes93;
-	private String _methodName94;
-	private String[] _methodParameterTypes94;
+	private String _methodName91;
+	private String[] _methodParameterTypes91;
+	private String _methodName96;
+	private String[] _methodParameterTypes96;
+	private String _methodName98;
+	private String[] _methodParameterTypes98;
+	private String _methodName99;
+	private String[] _methodParameterTypes99;
+	private String _methodName100;
+	private String[] _methodParameterTypes100;
 }

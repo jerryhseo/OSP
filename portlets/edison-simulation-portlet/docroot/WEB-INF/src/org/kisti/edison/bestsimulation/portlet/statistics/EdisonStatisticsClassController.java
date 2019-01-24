@@ -181,10 +181,13 @@ public class EdisonStatisticsClassController {
 			params.put("groupId", groupId);
 			params.put("universityCode", CustomUtil.strNull(params.get("universityCode")));
 			
-			List<Map<String, Object>> statisticsDataList = SimulationJobLocalServiceUtil.getVirtualClassStatisticsList(params, themeDisplay.getLocale(), false);
+			/*List<Map<String, Object>> statisticsDataList = SimulationJobLocalServiceUtil.getVirtualClassStatisticsList(params, themeDisplay.getLocale(), false);*/
+			
+			// get VirtualClassStatisticsList in Statistics Table
+			List<Map<String, Object>> virtualLabClassStatisticsList = SimulationJobLocalServiceUtil.getVirtualLabClassStatisticsList(params, themeDisplay.getLocale(), false);
 			
 			JSONObject obj = new JSONObject();
-			obj.put("dataList", statisticsDataList);
+			obj.put("dataList", virtualLabClassStatisticsList);
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(obj.toString());
