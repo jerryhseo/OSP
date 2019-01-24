@@ -91,6 +91,7 @@ var CONSTS = {
     	IB_UUID : "ibUuid",
     	IB_SIM_UUID : "ibSimUuid",
     	WORKBENCH : "workbench",
-    	IS_WORKBENCH: "isWorkbench"
+    	IS_WORKBENCH: "isWorkbench",
+    	WORKBENCH_DATA: "workbench_data"
     }
 }
