@@ -1026,7 +1026,9 @@
         if( canvas.tagName.toLowerCase() === 'iframe' ){
             console.log('Visualizer setNamespace!!');
             canvas.contentWindow['setNamespace']( namespace );
-            
+            										  
+
+
             if( disabled )
                 canvas.contentWindow['disable']( disabled );
         }
