@@ -579,7 +579,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
                 if(node.data.status && node.data.status.jobs &&
                     node.data.status.jobs[0] && node.data.status.jobs[0].ibUuid &&
-                    node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
+                    !node.data.ibData[CONSTS.WF_NODE_CODE.WORKBENCH]
                 ) {
                     node.data.ibData = {
                         ibUuid: node.data.status.jobs[0].ibUuid,
@@ -1852,10 +1852,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 	/* 2019.01.02 _ Popup Button Event */
 	var openScienceAppWorkbench = function(node) {
-	    executor.clearStatusTimeout()
-	    bStart()
-        _delay(function(){
-            bEnd()
+		executor.clearStatusTimeout()
+		_delay(function() {
             var modal = $("#" + namespace + "science-app-workbench-modal");
             var openWorkbench = true;
 
@@ -1883,7 +1881,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             }else{
             	isWorkBench = true;
             }
-            
+
             /* Call API */
             if(simulationUuid != 'undefined' && simulationUuid != '' && simulationUuid != null){
             	if(jobUuid != 'undefined' && jobUuid != '' && jobUuid != null){
@@ -1902,8 +1900,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             	addSimulation(Liferay.ThemeDisplay.getUserId(), scienceAppData.name,
             			scienceAppData.version, "[]", scienceAppId, wfId, node);
             }
-        }, 2000)
-	}
+        })
+    }
 
 	function addSimulation(userId, appName, appVersion, jobData, appId, wfId, node){
 	    var data = {
@@ -1919,17 +1917,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             data, function(obj) {
 				if(obj.isValid){
 					/* IB_DATA Setting */
-
 					var thisJob = currJobs.selected();
 					var simulationJobId = thisJob.simulationJobId;
                     var simulationUuid = obj.simulationUuid;
                     var simulationJobUuid = obj.simulationJobUuid;
-                    if(copy) {
-                        getNodeInputPortsInfo(node.getPorts(), simulationUuid, simulationJobUuid);
-                    }
                     nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID]= simulationUuid;
                     nodeData[CONSTS.WF_NODE_CODE.IB_DATA][CONSTS.WF_NODE_CODE.IB_UUID]= simulationJobUuid;
-                    
+
                     /* 2019.01.23 _ getSimulationJob*/
                     getSimulationJob(userId, appName, appVersion, simulationUuid, simulationJobUuid, appId, wfId, node);
 				} else {
@@ -1940,7 +1934,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	function getSimulationJob(userId, appName, appVersion, simulationUuid, jobUuid, appId, wfId, node){
-		
+
 		/* Get Connected Input Ports and Disconnected Input Ports */
 		var ports = node.getPorts();
         var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
@@ -1953,7 +1947,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         	toastr['warning']("", copyError);
         	return false;
         }
-		
+
         /* Add flag for keeping SimulationUuid and JobUuid */
         if (0 < jobDataArr.length && 0 < disconnectedInputPorts.length) {
         	var data = {
@@ -2051,11 +2045,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 					for(var targetEdgesIdx in targetEdges){
 
 						var getParentObj = getParentPortsJobData(targetEdges[targetEdgesIdx], inputPortName);
-						
+
 						if (getParentObj != 'undefined' && getParentObj != null && getParentObj != '') {
-							
+
 							connectedParentObj.push(getParentObj);
-							
+
 							var sourceJobDataType = getParentObj.jobData[0][OSP.Constants.TYPE];
 							var isDataComponent = getParentObj.isDataComponent;
 
@@ -2109,7 +2103,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
 		return returnObj;
 	}
-	
+
 	function parentNodeFileCopy(parentObj, simulationUuid, jobUuid){
 		parentObj.simulationUuid = simulationUuid;
 		parentObj.simulationJobUuid = jobUuid;
