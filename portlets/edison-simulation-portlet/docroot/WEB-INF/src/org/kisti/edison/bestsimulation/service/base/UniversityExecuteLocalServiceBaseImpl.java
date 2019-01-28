@@ -46,6 +46,7 @@ import org.kisti.edison.bestsimulation.service.persistence.SimulationSharePersis
 import org.kisti.edison.bestsimulation.service.persistence.UniversityExecuteFinder;
 import org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePK;
 import org.kisti.edison.bestsimulation.service.persistence.UniversityExecutePersistence;
+import org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPersistence;
 
 import java.io.Serializable;
 
@@ -827,6 +828,63 @@ public abstract class UniversityExecuteLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the virtual lab class statistics local service.
+	 *
+	 * @return the virtual lab class statistics local service
+	 */
+	public org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalService getVirtualLabClassStatisticsLocalService() {
+		return virtualLabClassStatisticsLocalService;
+	}
+
+	/**
+	 * Sets the virtual lab class statistics local service.
+	 *
+	 * @param virtualLabClassStatisticsLocalService the virtual lab class statistics local service
+	 */
+	public void setVirtualLabClassStatisticsLocalService(
+		org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalService virtualLabClassStatisticsLocalService) {
+		this.virtualLabClassStatisticsLocalService = virtualLabClassStatisticsLocalService;
+	}
+
+	/**
+	 * Returns the virtual lab class statistics remote service.
+	 *
+	 * @return the virtual lab class statistics remote service
+	 */
+	public org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsService getVirtualLabClassStatisticsService() {
+		return virtualLabClassStatisticsService;
+	}
+
+	/**
+	 * Sets the virtual lab class statistics remote service.
+	 *
+	 * @param virtualLabClassStatisticsService the virtual lab class statistics remote service
+	 */
+	public void setVirtualLabClassStatisticsService(
+		org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsService virtualLabClassStatisticsService) {
+		this.virtualLabClassStatisticsService = virtualLabClassStatisticsService;
+	}
+
+	/**
+	 * Returns the virtual lab class statistics persistence.
+	 *
+	 * @return the virtual lab class statistics persistence
+	 */
+	public VirtualLabClassStatisticsPersistence getVirtualLabClassStatisticsPersistence() {
+		return virtualLabClassStatisticsPersistence;
+	}
+
+	/**
+	 * Sets the virtual lab class statistics persistence.
+	 *
+	 * @param virtualLabClassStatisticsPersistence the virtual lab class statistics persistence
+	 */
+	public void setVirtualLabClassStatisticsPersistence(
+		VirtualLabClassStatisticsPersistence virtualLabClassStatisticsPersistence) {
+		this.virtualLabClassStatisticsPersistence = virtualLabClassStatisticsPersistence;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -1058,6 +1116,12 @@ public abstract class UniversityExecuteLocalServiceBaseImpl
 	protected UniversityExecutePersistence universityExecutePersistence;
 	@BeanReference(type = UniversityExecuteFinder.class)
 	protected UniversityExecuteFinder universityExecuteFinder;
+	@BeanReference(type = org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalService.class)
+	protected org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalService virtualLabClassStatisticsLocalService;
+	@BeanReference(type = org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsService.class)
+	protected org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsService virtualLabClassStatisticsService;
+	@BeanReference(type = VirtualLabClassStatisticsPersistence.class)
+	protected VirtualLabClassStatisticsPersistence virtualLabClassStatisticsPersistence;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

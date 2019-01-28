@@ -18,3 +18,5 @@ create index IX_2BCAD57D on EDSIM_SimulationJob (simulationUuid, jobUuid);
 create index IX_101568AF on EDSIM_SimulationJobStatus (groupId, simulationUuid, jobUuid);
 
 create index IX_3EBE1D31 on EDSIM_SimulationShare (jobUuid);
+
+create index IX_6FA9CE1A on EDSIM_VirtualLabClassStatistics (virtualLabId, classId);

@@ -469,7 +469,7 @@
 			        mgr.avgerageRuntime  
 			  FROM EDVIR_VirtualLabClassStsMigration mgr
 			WHERE mgr.groupId = #groupId#
-			<isNotEmpty property="universityCode">    
+			<isNotEmpty property="universityCode">
 				AND mgr.universityField = #universityCode#
 			</isNotEmpty> 
 			AND STR_TO_DATE(mgr.classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
@@ -479,6 +479,91 @@
 		]]>
 	</sql>
 	
-
-		
+	<sql id="org.kisti.edison.statistics.getVirtualClassListForInsertStatistics" >
+		<![CDATA[
+			SELECT
+				EVL.groupId AS groupId,
+				EVL.virtualLabUniversityField AS university,
+				EVL.virtualLabId,
+				EVL.virtualLabTitle AS virtualLabTitle,
+				EVLC.classTitle AS classTitle,
+				CONCAT(U.firstName, U.middleName, U.lastName) AS virtualLabPersonName,  
+				EVLC.virtualClassCd AS classId,
+				GROUP_CONCAT(DISTINCT EVLSAL.scienceAppId SEPARATOR ',') AS scienceAppId,
+				GROUP_CONCAT(DISTINCT EVLU.userId SEPARATOR ',') AS virtualLabUsersId, 
+				COUNT(DISTINCT EVLU.userId) AS registerStudentCnt,
+				EVLC.classCreateDt AS classCreateDt,
+				EVL.virtualLabUseYn AS virtualLabUseYn,
+				EVLC.classUseYn AS classUseYn
+			FROM 
+				EDVIR_VirtualLabs_VirtualLabClasses EVLVLC
+				INNER JOIN
+				  EDVIR_VirtualLabClass EVLC
+				ON EVLVLC.classId = EVLC.classId
+				INNER JOIN
+				  EDVIR_VirtualLab EVL
+				ON EVLVLC.virtualLabId = EVL.virtualLabId
+				INNER JOIN
+				  EDVIR_Professor EP
+				ON EVL.professorSeq = EP.professorSeq
+				INNER JOIN
+				  User_ U
+				ON EP.userId = U.userId
+				LEFT OUTER JOIN
+				  EDVIR_VirtualLabClasses_VirtualLabUsers EVLCVLU
+				ON EVLVLC.classId = EVLCVLU.classId
+				LEFT OUTER JOIN
+				  EDVIR_VirtualLabUser EVLU
+				ON EVLCVLU.virtualLabUserId = EVLU.virtualLabUserId
+				LEFT OUTER JOIN
+				  EDVIR_VirtualLabScienceAppLinkClass EVLSALC
+				ON EVLVLC.classId = EVLSALC.classId
+				LEFT OUTER JOIN
+				  EDVIR_VirtualLabScienceAppLink EVLSAL
+				ON EVLSALC.scienceAppSeqNo = EVLSAL.scienceAppSeqNo
+			GROUP BY
+				EVL.virtualLabUniversityField,
+				EVL.virtualLabId,
+				EVLC.classId
+			ORDER BY EVLC.classCreateDt DESC
+		]]>
+	</sql>
+	
+	<sql id="org.kisti.edison.statistics.getVirtualLabClassStatisticsList" >
+		<![CDATA[
+		SELECT 
+			groupId,
+			university,
+			virtualLabId,
+			ExtractValue(virtualLabTitle, 'root/VirtualLabTitle[@language-id="@@languageId@@"]') AS virtualLabTitle,
+			ExtractValue(classTitle, 'root/ClassTitle[@language-id="@@languageId@@"]') AS classTitle,
+			virtualLabPersonName,
+			classId,
+			scienceAppId,
+			virtualLabUsersId,
+			registerStudentCnt,
+			classCreateDt,
+			executeUserCnt,
+			executeCnt,
+			cputime,
+			lastModifiedDt
+		FROM
+			EDSIM_VirtualLabClassStatistics
+		WHERE 
+			groupId = #groupId# 
+			AND classUseYn = 'Y' 
+			AND virtualLabUseYn='Y'
+			AND(
+					STR_TO_DATE(classCreateDt, '%Y-%m-%d') BETWEEN STR_TO_DATE(#startDt#, '%Y-%m-%d') AND STR_TO_DATE(#endDt#, '%Y-%m-%d') 
+			)
+		<isNotEmpty property="universityCode">
+			AND university = #universityCode#
+		</isNotEmpty>
+		GROUP BY 
+			university, 
+			virtualLabId, 
+			classId
+		]]>
+	</sql>
+	
 </custom-sql>

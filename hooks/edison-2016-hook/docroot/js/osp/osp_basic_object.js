@@ -676,6 +676,8 @@
             return path.name();
         },
         removeEndSlashes: function(strPath) {
+        	if(!strPath){return strPath;}
+        	
             while( strPath.startsWith('/') ){
 		        strPath = strPath.slice(1);
 	        }

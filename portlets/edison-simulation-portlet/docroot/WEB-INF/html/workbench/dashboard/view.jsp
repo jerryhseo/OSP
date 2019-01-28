@@ -423,6 +423,10 @@ function <portlet:namespace/>searchSimulation(simulationUuid,jobUuid){
 					<portlet:namespace/>workSimulationId = simulationUuid;
 				}
 				
+				/*adminLTE Tree Active*/
+				var trees = $('[data-widget="tree"]');
+				trees.tree();
+				
 				<portlet:namespace/>searchSimulationJob(<portlet:namespace/>workSimulationId);
 				<portlet:namespace/>selectRow(<portlet:namespace/>workSimulationId,'');
 			}else{
@@ -631,7 +635,7 @@ function <portlet:namespace/>searchSimulationJob(simulationUuid){
 								.append(
 										$("<i/>").addClass("icon-arrow-right")
 								).appendTo($topLi);
-					$aWrapper = $("<a/>").attr("href","javascript:void(0)").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
+					$aWrapper = $("<a/>").attr("href","#").attr("data-simulation-uuid",simulationUuid).attr("data-job-uuid",job._jobUuid)
 								.attr("onclick","<portlet:namespace/>jobSelect(this);return false;").appendTo($topLi);
 					$("<i/>").addClass(jobStatusCss).appendTo($aWrapper);
 					$("<span/>").attr("id","jobTitle").html(cutStr(job._jobTitle,15)).appendTo($aWrapper);

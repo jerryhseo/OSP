@@ -664,4 +664,36 @@
 			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-virtuallab-class-statistics-scheduler</portlet-name>
+		<display-name>Edison Virtuallab Class Statistics Scheduler</display-name>
+		<portlet-class>org.kisti.edison.bestsimulation.portlet.schedule.VirtualLabClassStatisticsScheduler</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/WEB-INF/html/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Edison Virtuallab Class Statistics Scheduler</title>
+			<short-title>Edison Virtuallab Class Statistics Scheduler</short-title>
+			<keywords>Edison Virtuallab Class Statistics Scheduler</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+	</portlet>
 </portlet-app>

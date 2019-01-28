@@ -20,6 +20,7 @@
 	  <portlet id="edison-tree-view-monitoring"></portlet>
 	  <portlet id="edison-tab"></portlet>
 	  <portlet id="edison-file-manager" />
+	  <portlet id="edison-virtuallab-class-statistics-scheduler"></portlet>
 	</category>
 	<category name="OSP Workbench">
 		<portlet id="SimulationDashboard" />

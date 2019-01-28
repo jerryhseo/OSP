@@ -34,6 +34,8 @@ import org.kisti.edison.bestsimulation.service.SimulationShareLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationShareServiceUtil;
 import org.kisti.edison.bestsimulation.service.UniversityExecuteLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.UniversityExecuteServiceUtil;
+import org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsServiceUtil;
 
 /**
  * @author EDISON
@@ -74,6 +76,9 @@ public class ClpMessageListener extends BaseMessageListener {
 			UniversityExecuteLocalServiceUtil.clearService();
 
 			UniversityExecuteServiceUtil.clearService();
+			VirtualLabClassStatisticsLocalServiceUtil.clearService();
+
+			VirtualLabClassStatisticsServiceUtil.clearService();
 		}
 	}
 }

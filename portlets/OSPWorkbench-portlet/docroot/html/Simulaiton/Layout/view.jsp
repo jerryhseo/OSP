@@ -340,7 +340,7 @@ Liferay.on(OSP.Event.OSP_REGISTER_EVENTS,function( e ){
 	if( <portlet:namespace/>workbench.id() === e.targetPortlet ){
 		console.log('OSP_REGISTER_EVENTS: ['+e.portletId+', '+new Date()+']' );
 		delete <portlet:namespace/>lodingPortlets[e.portletId];
-		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0){
+		if(Object.keys(<portlet:namespace/>lodingPortlets).length===0&&<portlet:namespace/>displayTimer){
 			//portlet all loding check
 			<portlet:namespace/>displayInit();
 		}

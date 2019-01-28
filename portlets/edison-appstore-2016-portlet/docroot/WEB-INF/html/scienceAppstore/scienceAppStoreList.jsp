@@ -190,7 +190,7 @@
 					<div class="input-group pull-left" style="width: 50%;">
 						<select id="<portlet:namespace/>sortField" name="<portlet:namespace/>sortField" onchange="<portlet:namespace/>dataSearchList()" class="form-control" style="width: 24%;">
 							<option value="${SORT_FIELD_CREATED}">Latest</option>
-							<option value="${SORT_FIELD_EXECUTE}">Execute</option>
+							<option value="${SORT_FIELD_EXECUTE}">Run Count</option>
 							<option value="${SORT_FIELD_NAME}">Name</option>
 						</select>
 						

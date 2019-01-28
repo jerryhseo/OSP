@@ -78,4 +78,23 @@
 		<field name="exeCnt" type="long" />
 		<field name="cpuTime" type="long" />
 	</model>
+	<model name="org.kisti.edison.bestsimulation.model.VirtualLabClassStatistics">
+		<field name="virtualLabId" type="long" />
+		<field name="classId" type="String" />
+		<field name="virtualLabTitle" type="String" localized="true" />
+		<field name="classTitle" type="String" localized="true" />
+		<field name="virtualLabPersonName" type="String" />
+		<field name="registerStudentCnt" type="long" />
+		<field name="virtualLabUsersId" type="String" />
+		<field name="scienceAppId" type="String" />
+		<field name="executeUserCnt" type="long" />
+		<field name="executeCnt" type="long" />
+		<field name="cputime" type="String" />
+		<field name="groupId" type="long" />
+		<field name="university" type="long" />
+		<field name="classCreateDt" type="Date" />
+		<field name="virtualLabUseYn" type="String" />
+		<field name="classUseYn" type="String" />
+		<field name="lastModifiedDt" type="Date" />
+	</model>
 </model-hints>
