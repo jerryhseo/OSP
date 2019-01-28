@@ -104,13 +104,15 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         }
     }
 
+    function consoleNodeInfo(node) {
+        console.log(node)
+    }
+
     function isPauseAbleNode(node) {
         var currJob = currJobs.selected()
         if(currJob && node.data && node.data.status &&
-            (currJob.status !== '' &&
-                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+            (currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
                 currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
-                node.data.status.status === CONSTS.WF_STATUS_CODE.CREATED &&
                 node.data.status.pause !== 'pause') {
             return true
         } else {
@@ -149,32 +151,51 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     }
 
     function insertIbUuid(node) {
-        if (node.data && node.data.ibData && node.data.ibData.workbench &&
-            node.data.status && node.data.status.jobs && node.data.status.jobs[0]) {
+        if (node.data && node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA]) {
             var job = currJobs.selected()
-            var jobUuid = node.data.status.jobs[0].uuid
+            var nodeId = node.id
             var params = {
                 simulationJobId: job.simulationJobId,
-                ibSimUuid: node.data.ibData.ibSimUuid,
-                ibJobUuid: node.data.ibData.ibUuid,
-                jobUuid: jobUuid,
+                ibSimUuid: node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA].ibSimUuid,
+                ibJobUuid: node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA].ibUuid,
             }
-            executor.insertIbUuid(params, function (workflowStatus) {
-                if (workflowStatus && workflowStatus.status !== CONSTS.WF_STATUS_CODE.PAUSED) {
-                    updateAncestorReuse(node)
-                    rerun(node.id)
-                } else {
-                    resume()
-                }
-            })
-        }else {
-        	console.log(false)
+            if(node.data.status.jobs && node.data.status.jobs[0] &&
+                (node.data.status.jobs[0].status === CONSTS.WF_STATUS_CODE.PAUSED ||
+                    node.data.status.jobs[0].status === CONSTS.WF_STATUS_CODE.CREATED)) {
+                params.jobUuid = node.data.status.jobs[0].uuid
+                bStart()
+                _delay(function() {
+                    executor.insertIbUuid(params, function () {
+                        bEnd()
+                        resume()
+                    })
+                }, 2000)
+            } else {
+                updateAncestorReuse(node, true)
+                rerun(nodeId, function(nodes) {
+                    $.each(nodes, function(i, iNode) {
+                        if (iNode.data.status && iNode.data.status.status &&
+                            iNode.data.status.pause === 'pause') {
+                            params.jobUuid = iNode.data.status.jobs[0].uuid
+                            executor.insertIbUuid(params, function () {
+                                resume()
+                            })
+                        }
+                    })
+                })
+            }
+            if(console) {
+                console.log('ib insertion params')
+                console.log(params)
+            }
         }
     }
 
-    function updateAncestorReuse(node){
+    function updateAncestorReuse(node, isFirstNode){
         if(isReUsableNode(node)) {
-            setReuseNode(node, true)
+            if(!isFirstNode) {
+                setReuseNode(node, true)
+            }
             var jp = designer.getCurrentJsPlumbInstance()
             var prevNodes = []
             if(node.data && node.data.arrInputPorts) {
@@ -197,18 +218,24 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function pauseNode(node, pause, callback) {
         var currJob = currJobs.selected()
         if (isPauseAbleNode(node) && currJob && node.data.status && pause) {
-            executor.pauseSingleNode(currJob.simulationJobId, node.data.status.uuid,
-                function (status) {
-                    toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_success_message)
-                    updateNodeStatus(status)
-                    executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
-                    if(callback) {
-                        callback()
-                    }
-                },
-                function () {
-                    toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_fail_message);
-                })
+            if(node.data.status === '' || node.data.status === CONSTS.WF_STATUS_CODE.CREATED) {
+                node.data.status.pause = 'pause'
+                node.data.pause = 'pause'
+
+            }else {
+                executor.pauseSingleNode(currJob.simulationJobId, node.data.status.uuid,
+                    function (status) {
+                        toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_success_message)
+                        updateNodeStatus(status)
+                        executor.updateStatus(currJob.simulationJobId, status, updateNodeStatus)
+                        if(callback) {
+                            callback()
+                        }
+                    },
+                    function () {
+                        toastr["error"]("", CONSTS.MESSAGE.edison_wfsimulation_pause_fail_message);
+                    })
+            }
         }else if (isResumeAbleNode(node) && currJob && node.data.status && !pause){
             executor.resumeSingleNode(currJob.simulationJobId, node.data.status.uuid, function (status) {
                     toastr["success"]("", CONSTS.MESSAGE.edison_wfsimulation_resume_success_message)
@@ -238,6 +265,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     function openNodeHandler(node) {
         if(isDataComponentNode(node)){
             dataComponentHandler(node)
+        }else {
+            consoleNodeInfo(node)
         }
     }
 
@@ -609,7 +638,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // console.log(workflowStatus)
     }
 
-    function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage, selectedJobId) {
+    function fetchJobs(simulationId, searchKeyword, currentPage, linePerPage, selectedJobId, pauseCallback) {
         if (currSimulations.contains(simulationId)) {
             var params = {}
             if (currentPage) {
@@ -649,7 +678,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
                                 var initStatus = JSON.parse(job.statusResponse)
                                 updateNodeStatus(initStatus)
-                                executor.updateStatus(id, initStatus, updateNodeStatus)
+                                if(pauseCallback) {
+                                    pauseCallback(currNodes.getArray())
+                                }else{
+                                    executor.updateStatus(id, initStatus, updateNodeStatus)
+                                }
                             }
                         }
                         if (job) {
@@ -1127,10 +1160,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             portletURL.setWindowState('pop_up');
 
             var wWidth = $(window).width()
-            var wHeight =$(window).height()
-
-            console.log(wWidth)
-            console.log(wHeight)
+            // var wHeight =$(window).height()
 
             var fWidth = wWidth > 2000 ? '50vw' : '1024px'
             var fHeight = wWidth > 2000 ? '50vh' : '600px'
@@ -1319,13 +1349,17 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             return false;
         }
         var sourceJob = currJobs.selected();
-        var inputs = [{"name": "Title", "value": "copy " + sourceJob.title}];
-        var btns = {"ok": "Save", "cancel": "Cancel"};
-        createOpenModal("Copy", inputs, btns, function(e){
-            var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
-            copySimulationJob(sourceJob, title)
-            $("#" + namespace + "wf-modal").modal("hide");
-        });
+        executor.fetchSimulationJobSeq(
+            currSimulations.selected().simulationId,
+            function (seqMap) {
+                var inputs = [{"name": "Title", "value": seqMap.seq}];
+                var btns = {"ok": "Save", "cancel": "Cancel"};
+                createOpenModal("Copy", inputs, btns, function(e){
+                    var title = $("#" + namespace + "wf-modal").find("input[name='Title']").val();
+                    copySimulationJob(sourceJob, title)
+                    $("#" + namespace + "wf-modal").modal("hide");
+                });
+            })
     })
 
     /* 2019.01.15 _ Job Rename Function */
@@ -1524,9 +1558,8 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     }
 
-    function rerun(pauseNodId) {
-        // console.log('rerun')
-        submitSimulationJob(true, pauseNodId)
+    function rerun(pauseNodId, pauseCallback) {
+        submitSimulationJob(true, pauseNodId, pauseCallback)
     }
 
     function resume(){
@@ -1619,7 +1652,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         // return false
     }
 
-    function submitSimulationJob(isReRun, pauseNodId) {
+    function submitSimulationJob(isReRun, pauseNodId, pauseCallback) {
         if(!currJobs.selected()) {
             toastr['error']('', CONSTS.MESSAGE.edison_wfsimulation_no_valid_node_data_message)
             return false
@@ -1736,11 +1769,14 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                             $(".after-submit").show()
                             var initStatus = JSON.parse(simulationJob.statusResponse)
                             updateNodeStatus(initStatus)
-                            executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                            pauseCallback(currNodes)
+                            if(!pauseCallback) {
+                                executor.updateStatus(simulationJob.id, initStatus, updateNodeStatus)
+                            }
                         }
                     } else {
                         // TODO : currentPage
-                        fetchJobs(simulationId, null, currPageJob, null, simulationJobId)
+                        fetchJobs(simulationId, null, currPageJob, null, simulationJobId, pauseCallback)
                     }
                     bEnd()
                 }, function() {
@@ -1876,7 +1912,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             /* test Uuid */
             /*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
             jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
-            
+
             /* Call API */
             if(!!simulationUuid){
             	if(!!jobUuid){
@@ -2097,10 +2133,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	}
 
 	function parentNodeFileCopy(parentObj, simulationUuid, jobUuid){
+	    var simulationJob = currJobs.selected()
 		parentObj.simulationUuid = simulationUuid;
 		parentObj.simulationJobUuid = jobUuid;
-		var workflowId = PANEL_DATA.open.form.params.workflowId;
-		parentObj["workflowId"] = workflowId;
+		parentObj.simulationJobId = simulationJob.simulationJobId;
+
 		var fn = window[namespace + "copyParentNodeFiles"];
 		return fn.apply(null, [parentObj]);
 	}
@@ -2318,6 +2355,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		"openNodeHandler" : openNodeHandler,
 		"isPauseAbleNode" : isPauseAbleNode,
 		"isResumeAbleNode" : isResumeAbleNode,
+		"consoleNodeInfo" : consoleNodeInfo,
 		"isReUsableNode" : isReUsableNode,
 		"setReuseNode" : setReuseNode,
 		// "insertIbUuid" : insertIbUuid,

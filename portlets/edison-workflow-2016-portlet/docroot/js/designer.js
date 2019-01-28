@@ -259,18 +259,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
         }
     }
 
-    var defaultLayout = isDesigner ? { type: "Absolute" } : {
-        type: "Hierarchical",
-        parameters: {
-            multipleRoots: true,
-            orientation: "horizontal",
-            padding: [50, 50],
-            align: "end",
-            invert: false,
-            spacing: "auto",
-        }
-    };
-
     var canvasElement = document.querySelector("#wf-workflow-canvas");
     var renderer = wfWorkflowJsPlumbInstance.render({
         container: canvasElement,
@@ -645,7 +633,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 
     function drawWorkFlowAppDiv(pageX, pageY, data, savedId) {
         var wfId = savedId ? savedId : getGUID();
-        var isInputPortExist = false;
         var scienceAppData = {
             runType: data.appType,
             name: data.name
@@ -666,22 +653,9 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
 //        console.log(JSON.stringify(currentJsPlumbInstance.exportData({ type: "json" })));
     }
 
-    function addScienceAppInputPort(wfId, scienceAppId) {
-        var inputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/inputports");
-        return addEndPointToScienceApp(wfId, $.parseJSON(inputports), true);
-    }
-
     function getScienceAppInputPort(scienceAppId) {
         var inputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/inputports");
         return inputports;
-    }
-
-    function addEndPointToScienceApp(wfId, portJson, isInputPort) {
-        if (!$.isEmptyObject(portJson)) {
-            var addEndPoint = prepareEndpoint(wfId, portJson, isInputPort);
-            addEndPoint(currentJsPlumbInstance);
-            return portJson;
-        }
     }
 
     function addEndPointToController(wfId, portJson, isInputPort) {
@@ -722,17 +696,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                     },
                     endPointType).setParameter("data", port);
             });
-        }
-    }
-
-    function addScienceAppOutputPort(wfId, scienceAppId) {
-        var outputports = synchronousAjaxHelper.get("/delegate/services/app/" + scienceAppId + "/outputports");
-        var outputportsJson = $.parseJSON(outputports);
-        delete outputportsJson["temp"]; /* 중간 확인 포트 제거  */
-        if (!$.isEmptyObject(outputportsJson)) {
-            var addEndPoint = prepareEndpoint(wfId, outputportsJson, false);
-            addEndPoint(currentJsPlumbInstance);
-            return outputportsJson;
         }
     }
 
@@ -1305,29 +1268,6 @@ var Designer = (function(namespace, $, OSP, toastr, isFixed, editorPortletIds, i
                         callback(_);
                     }
                 });
-    }
-
-    function copyWorkflowDefinition(workflowId) {
-        resetCurrentJsPlumbInstance();
-        duplicateWorkflowDefinition(workflowId, function(workflow) {
-            var wfData = $.parseJSON(workflow["screenLogic"]);
-            if ($(currentJsPlumbInstance.getContainer()).attr("id") == "wf-workflow-canvas") {
-                $("#worfklow-definition-name").val(workflow["title"]);
-                currentJsPlumbInstance.bind("dblclick", jsPlumbDblClickCallback);
-                currentJsPlumbInstance.bind("connectionDetached", jsPlumbConnectionDetachedCallback);
-                currentJsPlumbInstance.bind("connection", jsPlumbConnectionCallback);
-            }
-
-            $.each(wfData.elements, function(i) {
-                loadScienceApp(this["id"], this["offset"], this["data"]);
-            });
-
-            $.each(wfData.connections, function(i) {
-                var sourceEndpointUuid = this["sourceUuid"];
-                var targetEndpointUuid = this["targetUuid"];
-                currentJsPlumbInstance.connect({ uuids: [sourceEndpointUuid, targetEndpointUuid] });
-            });
-        });
     }
 
     function loadWorkflowDefinition(workflowId, fnCallback) {

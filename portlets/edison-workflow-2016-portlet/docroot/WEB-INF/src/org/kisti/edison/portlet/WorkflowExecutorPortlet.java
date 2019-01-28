@@ -19,14 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.EdisonMessageConstants;
 import org.kisti.edison.model.EdisonRoleConstants;
 import org.kisti.edison.model.IcebreakerVcToken;
 import org.kisti.edison.model.Workflow;
+import org.kisti.edison.model.WorkflowSimulationJob;
 import org.kisti.edison.science.model.ScienceApp;
 import org.kisti.edison.science.service.ScienceAppLocalServiceUtil;
 import org.kisti.edison.service.WorkflowLocalServiceUtil;
+import org.kisti.edison.service.WorkflowSimulationJobLocalServiceUtil;
 import org.kisti.edison.util.CustomUtil;
 import org.kisti.edison.util.EdisonUserUtil;
 import org.kisti.edison.util.RequestUtil;
@@ -248,8 +251,8 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			String copyFileObj = CustomUtil.strNull(params.get("copyFileObj"), "");
 			
 			JSONObject copyFileobj = JSONFactoryUtil.createJSONObject(copyFileObj);
-			Long workflowId = copyFileobj.getLong("workflowId");
-			Workflow workflow = WorkflowLocalServiceUtil.getWorkflow(workflowId);
+			Long simulationJobId = copyFileobj.getLong("simulationJobId");
+			WorkflowSimulationJob job = WorkflowSimulationJobLocalServiceUtil.getWorkflowSimulationJob(simulationJobId);
 			
 			String fileName = copyFileobj.getString("fileName");
 			String srcPportName = CustomUtil.strNull(copyFileobj.getString("sourcePortName"));
@@ -257,7 +260,7 @@ public class WorkflowExecutorPortlet extends MVCPortlet{
 			String simulationJobUuid = CustomUtil.strNull(copyFileobj.getString("simulationJobUuid"));
 			JSONObject outputData = copyFileobj.getJSONArray("jobData").getJSONObject(0);
 			
-			User sourceUser = UserLocalServiceUtil.getUser(workflow.getUserId());
+			User sourceUser = UserLocalServiceUtil.getUser(job.getUserId());
 			String source = simulationUuid + "/" + simulationJobUuid + "/" + srcPportName + "/" +fileName;
 			String srcRepositoryType = CustomUtil.strNull(copyFileobj.getString("repositoryType_"));
 			

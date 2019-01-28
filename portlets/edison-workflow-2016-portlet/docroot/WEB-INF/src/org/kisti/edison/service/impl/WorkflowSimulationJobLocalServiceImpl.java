@@ -220,7 +220,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         if(StringUtils.hasText(simulationJobTitle)){
             targetJob.setTitle(simulationJobTitle);
         }else{
-            targetJob.setTitle("copy " + sourceJob.getTitle());
+            targetJob.setTitle(getSimulationJobSeq(sourceJob.getSimulationId()));
         }
         targetJob.setUserId(sourceJob.getUserId());
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -232,6 +232,8 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             node.put("status", status);
             node.put("isReUseNode", false);
             node.put("ibData", Maps.newHashMap());
+            node.put("workbench_data", Maps.newHashMap());
+            node.remove("pause");
         }
         targetJob.setScreenLogic(gson.toJson(screenLogic));
         targetJob.setCreateDate(new Date());
