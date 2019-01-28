@@ -158,6 +158,39 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="org.kisti.edison.bestsimulation.model.impl.VirtualLabClassStatisticsModelImpl">
+		<id-class class="org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPK" />
+		<attributes>
+			<id name="virtualLabId" />
+			<id name="classId" />
+			<basic name="virtualLabTitle" />
+			<basic name="classTitle" />
+			<basic name="virtualLabPersonName" />
+			<basic name="registerStudentCnt" />
+			<basic name="virtualLabUsersId" />
+			<basic name="scienceAppId" />
+			<basic name="executeUserCnt" />
+			<basic name="executeCnt" />
+			<basic name="cputime" />
+			<basic name="groupId" />
+			<basic name="university" />
+			<basic name="classCreateDt">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="virtualLabUseYn" />
+			<basic name="classUseYn" />
+			<basic name="lastModifiedDt">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<transient name="classTitleCurrentLanguageId" />
+			<transient name="classTitleMap" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="virtualLabTitleCurrentLanguageId" />
+			<transient name="virtualLabTitleMap" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="org.kisti.edison.bestsimulation.model.impl.ScienceAppExecuteImpl" name="ScienceAppExecute">
 		<table name="EDSIM_ScienceAppExecute" />
 		<attributes />
@@ -188,6 +221,10 @@
 	</entity>
 	<entity class="org.kisti.edison.bestsimulation.model.impl.UniversityExecuteImpl" name="UniversityExecute">
 		<table name="EDSIM_UniversityExecute" />
+		<attributes />
+	</entity>
+	<entity class="org.kisti.edison.bestsimulation.model.impl.VirtualLabClassStatisticsImpl" name="VirtualLabClassStatistics">
+		<table name="EDSIM_VirtualLabClassStatistics" />
 		<attributes />
 	</entity>
 </entity-mappings>

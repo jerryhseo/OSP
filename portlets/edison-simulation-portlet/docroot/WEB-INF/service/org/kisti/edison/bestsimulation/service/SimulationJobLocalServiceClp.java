@@ -378,6 +378,16 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 		_methodName67 = "deleteJob";
 
 		_methodParameterTypes67 = new String[] { "java.lang.String" };
+
+		_methodName68 = "executeSchedulerOfClassStatistics";
+
+		_methodParameterTypes68 = new String[] {  };
+
+		_methodName69 = "getVirtualLabClassStatisticsList";
+
+		_methodParameterTypes69 = new String[] {
+				"java.util.Map", "java.util.Locale", "boolean"
+			};
 	}
 
 	@Override
@@ -2702,6 +2712,62 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 		}
 	}
 
+	@Override
+	public void executeSchedulerOfClassStatistics()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName68,
+				_methodParameterTypes68, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName69,
+					_methodParameterTypes69,
+					new Object[] {
+						ClpSerializer.translateInput(params),
+						
+					ClpSerializer.translateInput(locale),
+						
+					excelFile
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.util.Map<java.lang.String, java.lang.Object>>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -2837,4 +2903,8 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	private String[] _methodParameterTypes66;
 	private String _methodName67;
 	private String[] _methodParameterTypes67;
+	private String _methodName68;
+	private String[] _methodParameterTypes68;
+	private String _methodName69;
+	private String[] _methodParameterTypes69;
 }

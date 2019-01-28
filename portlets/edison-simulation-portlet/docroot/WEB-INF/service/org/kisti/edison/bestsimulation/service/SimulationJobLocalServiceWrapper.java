@@ -741,6 +741,20 @@ public class SimulationJobLocalServiceWrapper
 		_simulationJobLocalService.deleteJob(jobUuid);
 	}
 
+	@Override
+	public void executeSchedulerOfClassStatistics()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_simulationJobLocalService.executeSchedulerOfClassStatistics();
+	}
+
+	@Override
+	public java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
+		java.util.Map<java.lang.String, java.lang.Object> params,
+		java.util.Locale locale, boolean excelFile) {
+		return _simulationJobLocalService.getVirtualLabClassStatisticsList(params,
+			locale, excelFile);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

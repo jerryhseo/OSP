@@ -44,12 +44,18 @@ import org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 import org.kisti.edison.bestsimulation.model.Simulation;
 import org.kisti.edison.bestsimulation.model.SimulationJob;
 import org.kisti.edison.bestsimulation.model.SimulationJobData;
+import org.kisti.edison.bestsimulation.model.VirtualLabClassStatistics;
 import org.kisti.edison.bestsimulation.service.SimulationJobDataLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationJobLocalServiceUtil;
 import org.kisti.edison.bestsimulation.service.SimulationLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsLocalServiceUtil;
+import org.kisti.edison.bestsimulation.service.VirtualLabClassStatisticsServiceUtil;
 import org.kisti.edison.bestsimulation.service.base.SimulationJobLocalServiceBaseImpl;
+import org.kisti.edison.bestsimulation.service.persistence.SimulationJobFinderUtil;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationJobPK;
 import org.kisti.edison.bestsimulation.service.persistence.SimulationPK;
+import org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPK;
+import org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsUtil;
 import org.kisti.edison.model.EdisonAssetCategory;
 import org.kisti.edison.model.EdisonExpando;
 import org.kisti.edison.model.IcebreakerVcToken;
@@ -1651,4 +1657,184 @@ public class SimulationJobLocalServiceImpl
 			}
 		}
 	}
+	
+	public void executeSchedulerOfClassStatistics() throws SystemException {
+		try {
+			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics();
+			
+			List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+			
+			Map <String, Object> resultRow = null;
+			if(virtualClassStatisticsList != null && virtualClassStatisticsList.size() > 0) {
+				int insertCnt = 0;
+				int updateCnt = 0;
+				for (int i = 0; i < virtualClassStatisticsList.size(); i++) {
+					VirtualLabClassStatistics virtualLabClassStatistics = null;
+					Object[] resultArray = virtualClassStatisticsList.get(i);
+					
+					if(resultArray != null) {
+						Long groupId = (Long) resultArray[0];
+						Long university = (Long) resultArray[1];
+						Long virtualLabId = (Long) resultArray[2];
+						String virtualLabTitle = (String) resultArray[3];
+						String classTitle = (String) resultArray[4];
+						String virtualLabPersonName = (String) resultArray[5];
+						String classId = (String) resultArray[6];
+						String scienceAppIdObj = CustomUtil.strNull(resultArray[7]);
+						String virtualLabUsersIdObj = CustomUtil.strNull(resultArray[8]);
+						Long registerStudentCnt = (Long) resultArray[9];
+						String classCreateDt = CustomUtil.strNull(resultArray[10]);
+						String virtualLabUseYn = CustomUtil.strNull(resultArray[11]);
+						String classUseYn = CustomUtil.strNull(resultArray[12]);
+						
+						int getExistCnt = VirtualLabClassStatisticsUtil.countByvirtualLabIdAndClassId(virtualLabId, classId);
+						boolean hasClassStatistics = false;
+						if(getExistCnt <= 0){
+							hasClassStatistics = false;
+						} else {
+							hasClassStatistics = true;
+						}
+						
+						VirtualLabClassStatisticsPK virtualLabClassStatisticsPK = new VirtualLabClassStatisticsPK(virtualLabId, classId);
+						if(hasClassStatistics){
+							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.getVirtualLabClassStatistics(virtualLabClassStatisticsPK);
+							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(new Date().toString()));
+						} else {
+							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.createVirtualLabClassStatistics(virtualLabClassStatisticsPK);
+							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
+						}
+						virtualLabClassStatistics.setGroupId(groupId);
+						virtualLabClassStatistics.setUniversity(university);
+						virtualLabClassStatistics.setVirtualLabTitle(virtualLabTitle);
+						virtualLabClassStatistics.setClassTitle(classTitle);
+						virtualLabClassStatistics.setVirtualLabPersonName(virtualLabPersonName);
+						virtualLabClassStatistics.setRegisterStudentCnt(registerStudentCnt);
+						virtualLabClassStatistics.setVirtualLabUsersId(virtualLabUsersIdObj);
+						virtualLabClassStatistics.setScienceAppId(scienceAppIdObj);
+						virtualLabClassStatistics.setClassCreateDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
+						virtualLabClassStatistics.setVirtualLabUseYn(virtualLabUseYn);
+						virtualLabClassStatistics.setClassUseYn(classUseYn);
+						
+						Map<String, Object> virtualClassStatisticsMap = SimulationJobLocalServiceUtil.getVirtualClassStatisticsSimulation(scienceAppIdObj, virtualLabUsersIdObj);
+						
+						Long executeCount = Long.parseLong(CustomUtil.strNull(virtualClassStatisticsMap.get("executeCnt"),"0"));
+						Long executeStudentcount = Long.parseLong(CustomUtil.strNull(virtualClassStatisticsMap.get("executeUserCnt"),"0"));
+						String avgerageRuntime = CustomUtil.strNull(virtualClassStatisticsMap.get("cpuTime"),"0");
+						
+						virtualLabClassStatistics.setExecuteCnt(executeCount);
+						virtualLabClassStatistics.setExecuteUserCnt(executeStudentcount);
+						virtualLabClassStatistics.setCputime(avgerageRuntime);
+						
+						if(hasClassStatistics){
+							virtualLabClassStatistics.setNew(false);
+							VirtualLabClassStatisticsLocalServiceUtil.updateVirtualLabClassStatistics(virtualLabClassStatistics);
+							updateCnt += 1;
+						} else {
+							virtualLabClassStatistics.setNew(true);
+							VirtualLabClassStatisticsLocalServiceUtil.addVirtualLabClassStatistics(virtualLabClassStatistics);
+							insertCnt += 1;
+						}
+					}
+				}
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Map<String, Object>> getVirtualLabClassStatisticsList(Map<String, Object> params, Locale locale, boolean excelFile) {
+		List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualLabClassStatisticsList(params, locale);
+		
+		List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+		
+		Map <String, Object> resultRow = null;
+		if(virtualClassStatisticsList != null && virtualClassStatisticsList.size() > 0) {
+			for (int i = 0; i < virtualClassStatisticsList.size(); i++) {
+				Object[] resultArray = virtualClassStatisticsList.get(i);
+				
+				if(resultArray != null) {
+					int groupId = (Integer) resultArray[0];
+					String university = (String) resultArray[1];
+					Long virtualLabId = (Long) resultArray[2];
+					String virtualLabTitle = (String) resultArray[3];
+					String classTitle = (String) resultArray[4];
+					String virtualLabPersonName = (String) resultArray[5];
+					String classId = (String) resultArray[6];
+					String scienceAppIdObj = CustomUtil.strNull(resultArray[7]);
+					String virtualLabUsersIdObj = CustomUtil.strNull(resultArray[8]);
+					String registerStudentCnt = CustomUtil.strNull(resultArray[9]);
+					String classCreateDt = CustomUtil.strNull(resultArray[10]);
+					Long executeStudentcount = (Long) resultArray[11];
+					Long executeCount = (Long) resultArray[12];
+					String avgerageRuntime = (String) resultArray[13];
+					
+					resultRow = new HashMap<String, Object>();
+					resultRow.put("groupId", groupId);
+					
+					String affiliation = "";
+					if(!"".equals(university)){
+						affiliation = EdisonExpndoUtil.getCommonCdSearchFieldValue(String.valueOf(university), EdisonExpando.CDNM, locale);
+					}
+					
+					resultRow.put("universityId", university);
+					resultRow.put("university", affiliation);
+					resultRow.put("virtualLabId", virtualLabId);
+					resultRow.put("virtualLabTitle", virtualLabTitle);
+					resultRow.put("classTitle", classTitle);
+					resultRow.put("virtualLabPersonName", virtualLabPersonName);
+					resultRow.put("classId", classId);
+					resultRow.put("executeCount", executeCount);
+					resultRow.put("executeStudentcount",executeStudentcount);
+					resultRow.put("classCreateDt",classCreateDt);
+					resultRow.put("registerStudentCtn",registerStudentCnt);
+					resultRow.put("executeCount", executeCount);
+					resultRow.put("executeStudentcount", executeStudentcount);
+					resultRow.put("avgerageRuntime", avgerageRuntime);
+					
+					List<String> scienceAppTitleList = new ArrayList<String>();
+
+					String scienceAppTitle = ""; 
+					if(scienceAppIdObj != null && !scienceAppIdObj.equals("")){
+						String scienceAppIdArray[] = scienceAppIdObj.split(",");
+						List<String> scienceAppIdDistinctList = new ArrayList<String>(new HashSet<String>(new ArrayList<String>(Arrays.asList(scienceAppIdArray))));
+						
+						if(!scienceAppIdDistinctList.isEmpty() && scienceAppIdDistinctList.size() > 0){
+							for(String scienceAppId : scienceAppIdDistinctList){
+								if(scienceAppTitleList.size() < 5){
+									ScienceApp sciecneApp = null;
+									try {
+										sciecneApp = ScienceAppLocalServiceUtil.getScienceApp(Long.parseLong(scienceAppId));
+										scienceAppTitleList.add(sciecneApp.getTitle(locale));
+										resultRow.put("scienceAppTitle", scienceAppTitleList);
+										
+										if(excelFile){
+											scienceAppTitle += "● " + sciecneApp.getTitle(locale) +"\n ";					
+											resultRow.put("scienceAppTitle", scienceAppTitle);
+										}
+									} catch (NumberFormatException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (PortalException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (SystemException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}else{
+									break;
+								}
+							}
+						}
+					}
+					
+					returnList.add(resultRow);
+				}
+			}
+		}
+		return returnList;
+	}
+	
 }

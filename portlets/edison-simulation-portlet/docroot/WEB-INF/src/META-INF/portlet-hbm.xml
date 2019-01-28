@@ -10,6 +10,7 @@
 	<import class="org.kisti.edison.bestsimulation.model.SimulationJobStatus" />
 	<import class="org.kisti.edison.bestsimulation.model.SimulationShare" />
 	<import class="org.kisti.edison.bestsimulation.model.UniversityExecute" />
+	<import class="org.kisti.edison.bestsimulation.model.VirtualLabClassStatistics" />
 	<class name="org.kisti.edison.bestsimulation.model.impl.ScienceAppExecuteImpl" table="EDSIM_ScienceAppExecute">
 		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.ScienceAppExecutePK">
 			<key-property name="executeDate" type="com.liferay.portal.dao.orm.hibernate.StringType" />
@@ -102,5 +103,27 @@
 		<property name="avgExeTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="exeCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="cpuTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="org.kisti.edison.bestsimulation.model.impl.VirtualLabClassStatisticsImpl" table="EDSIM_VirtualLabClassStatistics">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="org.kisti.edison.bestsimulation.service.persistence.VirtualLabClassStatisticsPK">
+			<key-property name="virtualLabId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="classId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="virtualLabTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="classTitle" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="virtualLabPersonName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="registerStudentCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="virtualLabUsersId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="scienceAppId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="executeUserCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="executeCnt" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="cputime" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="university" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="classCreateDt" type="org.hibernate.type.TimestampType" />
+		<property name="virtualLabUseYn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="classUseYn" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="lastModifiedDt" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

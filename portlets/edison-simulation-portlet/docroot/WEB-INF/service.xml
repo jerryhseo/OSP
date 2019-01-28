@@ -217,5 +217,46 @@
 			<finder-column name="jobUuid"/>
 		</finder>
 	</entity>
+	
+	<entity name="VirtualLabClassStatistics" local-service="true" >
+		
+		<!-- Primary Key -->
+		<column name="virtualLabId" type="long" primary="true"></column>
+		<column name="classId" type="String" primary="true"></column>
+		
+		<!-- Other -->
+		<column name="virtualLabTitle" type="String" localized="true"></column>
+		<column name="classTitle" type="String" localized="true"></column>
+				
+		<column name="virtualLabPersonName" type="String"></column>
+		<column name="registerStudentCnt" type="long"></column>
+		<column name="virtualLabUsersId" type="String"></column>
+		<column name="scienceAppId" type="String"></column>
+		
+		<column name="executeUserCnt" type="long"/>
+		<column name="executeCnt" type="long"/>
+		<column name="cputime" type="String"/>
+		
+		<column name="groupId" type="long"></column>
+		<column name="university" type="long"></column>
+		
+		<column name="classCreateDt" type="Date"></column>
+		
+		<column name="virtualLabUseYn" type="String"></column>
+		<column name="classUseYn" type="String"></column>
+		
+		<column name="lastModifiedDt" type="Date"></column>
+		
+		<!-- Order By -->
+		<order by="desc">
+			<order-column name="classCreateDt"></order-column>
+		</order>
+		
+		<!-- Finder -->
+		<finder name="virtualLabIdAndClassId" return-type="Collection">
+			<finder-column name="virtualLabId"/>
+			<finder-column name="classId"/>
+		</finder>
+	</entity>
 
 </service-builder>

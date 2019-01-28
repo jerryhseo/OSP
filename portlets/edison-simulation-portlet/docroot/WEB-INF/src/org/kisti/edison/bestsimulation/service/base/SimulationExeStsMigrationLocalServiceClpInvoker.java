@@ -114,13 +114,13 @@ public class SimulationExeStsMigrationLocalServiceClpInvoker {
 				"org.kisti.edison.bestsimulation.model.SimulationExeStsMigration"
 			};
 
-		_methodName84 = "getBeanIdentifier";
+		_methodName90 = "getBeanIdentifier";
 
-		_methodParameterTypes84 = new String[] {  };
+		_methodParameterTypes90 = new String[] {  };
 
-		_methodName85 = "setBeanIdentifier";
+		_methodName91 = "setBeanIdentifier";
 
-		_methodParameterTypes85 = new String[] { "java.lang.String" };
+		_methodParameterTypes91 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -212,13 +212,13 @@ public class SimulationExeStsMigrationLocalServiceClpInvoker {
 			return SimulationExeStsMigrationLocalServiceUtil.updateSimulationExeStsMigration((org.kisti.edison.bestsimulation.model.SimulationExeStsMigration)arguments[0]);
 		}
 
-		if (_methodName84.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
+		if (_methodName90.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
 			return SimulationExeStsMigrationLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName85.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+		if (_methodName91.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
 			SimulationExeStsMigrationLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
@@ -259,8 +259,8 @@ public class SimulationExeStsMigrationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName84;
-	private String[] _methodParameterTypes84;
-	private String _methodName85;
-	private String[] _methodParameterTypes85;
+	private String _methodName90;
+	private String[] _methodParameterTypes90;
+	private String _methodName91;
+	private String[] _methodParameterTypes91;
 }

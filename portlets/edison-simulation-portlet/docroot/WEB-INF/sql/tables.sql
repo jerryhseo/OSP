@@ -89,3 +89,24 @@ create table EDSIM_UniversityExecute (
 	cpuTime LONG,
 	primary key (executeDate, universityField)
 );
+
+create table EDSIM_VirtualLabClassStatistics (
+	virtualLabId LONG not null,
+	classId VARCHAR(75) not null,
+	virtualLabTitle STRING null,
+	classTitle STRING null,
+	virtualLabPersonName VARCHAR(75) null,
+	registerStudentCnt LONG,
+	virtualLabUsersId VARCHAR(75) null,
+	scienceAppId VARCHAR(75) null,
+	executeUserCnt LONG,
+	executeCnt LONG,
+	cputime VARCHAR(75) null,
+	groupId LONG,
+	university LONG,
+	classCreateDt DATE null,
+	virtualLabUseYn VARCHAR(75) null,
+	classUseYn VARCHAR(75) null,
+	lastModifiedDt DATE null,
+	primary key (virtualLabId, classId)
+);

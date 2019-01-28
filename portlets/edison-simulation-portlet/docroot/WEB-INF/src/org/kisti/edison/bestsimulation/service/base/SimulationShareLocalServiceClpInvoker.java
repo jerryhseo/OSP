@@ -114,57 +114,57 @@ public class SimulationShareLocalServiceClpInvoker {
 				"org.kisti.edison.bestsimulation.model.SimulationShare"
 			};
 
-		_methodName84 = "getBeanIdentifier";
+		_methodName90 = "getBeanIdentifier";
 
-		_methodParameterTypes84 = new String[] {  };
+		_methodParameterTypes90 = new String[] {  };
 
-		_methodName85 = "setBeanIdentifier";
+		_methodName91 = "setBeanIdentifier";
 
-		_methodParameterTypes85 = new String[] { "java.lang.String" };
+		_methodParameterTypes91 = new String[] { "java.lang.String" };
 
-		_methodName90 = "sharingSimulationJob";
+		_methodName96 = "sharingSimulationJob";
 
-		_methodParameterTypes90 = new String[] {
+		_methodParameterTypes96 = new String[] {
 				"int", "int", "int", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName91 = "deleteShareSimulationJob";
+		_methodName97 = "deleteShareSimulationJob";
 
-		_methodParameterTypes91 = new String[] {
+		_methodParameterTypes97 = new String[] {
 				"org.kisti.edison.bestsimulation.model.SimulationShare"
 			};
 
-		_methodName92 = "getSimulationShare";
+		_methodName98 = "getSimulationShare";
 
-		_methodParameterTypes92 = new String[] {
+		_methodParameterTypes98 = new String[] {
 				"int", "int", "java.lang.String", "java.lang.String"
 			};
 
-		_methodName93 = "findListByJobUuid";
+		_methodName99 = "findListByJobUuid";
 
-		_methodParameterTypes93 = new String[] { "java.lang.String" };
+		_methodParameterTypes99 = new String[] { "java.lang.String" };
 
-		_methodName94 = "isExitByJobUUid";
+		_methodName100 = "isExitByJobUUid";
 
-		_methodParameterTypes94 = new String[] { "java.lang.String" };
+		_methodParameterTypes100 = new String[] { "java.lang.String" };
 
-		_methodName95 = "removeBySimulationUuid";
+		_methodName101 = "removeBySimulationUuid";
 
-		_methodParameterTypes95 = new String[] { "java.lang.String" };
+		_methodParameterTypes101 = new String[] { "java.lang.String" };
 
-		_methodName96 = "removeByJobUuid";
+		_methodName102 = "removeByJobUuid";
 
-		_methodParameterTypes96 = new String[] { "java.lang.String" };
+		_methodParameterTypes102 = new String[] { "java.lang.String" };
 
-		_methodName97 = "createByJobUuid";
+		_methodName103 = "createByJobUuid";
 
-		_methodParameterTypes97 = new String[] {
+		_methodParameterTypes103 = new String[] {
 				"java.lang.String", "long", "long"
 			};
 
-		_methodName98 = "removeAndCreateByJobUUids";
+		_methodName104 = "removeAndCreateByJobUUids";
 
-		_methodParameterTypes98 = new String[] {
+		_methodParameterTypes104 = new String[] {
 				"java.lang.String", "long", "java.lang.String"
 			};
 	}
@@ -258,71 +258,71 @@ public class SimulationShareLocalServiceClpInvoker {
 			return SimulationShareLocalServiceUtil.updateSimulationShare((org.kisti.edison.bestsimulation.model.SimulationShare)arguments[0]);
 		}
 
-		if (_methodName84.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.getBeanIdentifier();
-		}
-
-		if (_methodName85.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
-			SimulationShareLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
-
-			return null;
-		}
-
 		if (_methodName90.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.sharingSimulationJob(((Integer)arguments[0]).intValue(),
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue(),
-				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
+			return SimulationShareLocalServiceUtil.getBeanIdentifier();
 		}
 
 		if (_methodName91.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.deleteShareSimulationJob((org.kisti.edison.bestsimulation.model.SimulationShare)arguments[0]);
-		}
-
-		if (_methodName92.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes92, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.getSimulationShare(((Integer)arguments[0]).intValue(),
-				((Integer)arguments[1]).intValue(),
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
-		}
-
-		if (_methodName93.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes93, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.findListByJobUuid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName94.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes94, parameterTypes)) {
-			return SimulationShareLocalServiceUtil.isExitByJobUUid((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName95.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes95, parameterTypes)) {
-			SimulationShareLocalServiceUtil.removeBySimulationUuid((java.lang.String)arguments[0]);
+			SimulationShareLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
 		if (_methodName96.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes96, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.sharingSimulationJob(((Integer)arguments[0]).intValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue(),
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4]);
+		}
+
+		if (_methodName97.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes97, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.deleteShareSimulationJob((org.kisti.edison.bestsimulation.model.SimulationShare)arguments[0]);
+		}
+
+		if (_methodName98.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.getSimulationShare(((Integer)arguments[0]).intValue(),
+				((Integer)arguments[1]).intValue(),
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
+		}
+
+		if (_methodName99.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes99, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.findListByJobUuid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName100.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes100, parameterTypes)) {
+			return SimulationShareLocalServiceUtil.isExitByJobUUid((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName101.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes101, parameterTypes)) {
+			SimulationShareLocalServiceUtil.removeBySimulationUuid((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName102.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes102, parameterTypes)) {
 			SimulationShareLocalServiceUtil.removeByJobUuid((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName97.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes97, parameterTypes)) {
+		if (_methodName103.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes103, parameterTypes)) {
 			return SimulationShareLocalServiceUtil.createByJobUuid((java.lang.String)arguments[0],
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName98.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes98, parameterTypes)) {
+		if (_methodName104.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes104, parameterTypes)) {
 			SimulationShareLocalServiceUtil.removeAndCreateByJobUUids((java.lang.String)arguments[0],
 				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
 
@@ -364,26 +364,26 @@ public class SimulationShareLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName84;
-	private String[] _methodParameterTypes84;
-	private String _methodName85;
-	private String[] _methodParameterTypes85;
 	private String _methodName90;
 	private String[] _methodParameterTypes90;
 	private String _methodName91;
 	private String[] _methodParameterTypes91;
-	private String _methodName92;
-	private String[] _methodParameterTypes92;
-	private String _methodName93;
-	private String[] _methodParameterTypes93;
-	private String _methodName94;
-	private String[] _methodParameterTypes94;
-	private String _methodName95;
-	private String[] _methodParameterTypes95;
 	private String _methodName96;
 	private String[] _methodParameterTypes96;
 	private String _methodName97;
 	private String[] _methodParameterTypes97;
 	private String _methodName98;
 	private String[] _methodParameterTypes98;
+	private String _methodName99;
+	private String[] _methodParameterTypes99;
+	private String _methodName100;
+	private String[] _methodParameterTypes100;
+	private String _methodName101;
+	private String[] _methodParameterTypes101;
+	private String _methodName102;
+	private String[] _methodParameterTypes102;
+	private String _methodName103;
+	private String[] _methodParameterTypes103;
+	private String _methodName104;
+	private String[] _methodParameterTypes104;
 }
