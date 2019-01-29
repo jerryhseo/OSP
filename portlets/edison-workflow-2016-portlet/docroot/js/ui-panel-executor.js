@@ -1,6 +1,7 @@
 var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     /*jshint -W069 */
     'use strict';
+    var uiPanelDesigner = new UIPanel(namespace, $, designer, toastr, undefined);
     var currNodes = eStruct("id")
     var currSimulations = eStruct("simulationId")
     var currJobs = eStruct("id", "data")
@@ -266,6 +267,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
         if(isDataComponentNode(node)){
             dataComponentHandler(node)
         }else {
+            if (node.data && node.data.scienceAppData && node.data.scienceAppData.runType &&
+                node.data.scienceAppData.runType === CONSTS.WF_APP_TYPES.DYNAMIC_CONVERTER.NAME) {
+                uiPanelDesigner.openWfAppDataSetting(
+                    node.id, node.data.scienceAppData.runType , node.data.scienceAppData.name);
+            }
             consoleNodeInfo(node)
         }
     }
@@ -1746,7 +1752,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 var simulationJobId = currJobs.selected().simulationJobId
                 var token = getIcebreakerAccessToken()
                 // console.log(token)
-                // console.log(json.nodes)
+                console.log(json.nodes)
 
                 var exeFunction = !!isReRun ? executor.rerunSimulationJobEngine : executor.createSimulationJobEngine
 

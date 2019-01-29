@@ -76,6 +76,7 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -340,7 +341,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             JsonObject root = new JsonObject();
             root.add("workflow", workflowJson);
             String workflowUUID = askForCreateWorkflow(gson.toJson(root));
-            System.out.println(workflowUUID);
+            System.out.println("workflowUUID : " + workflowUUID);
             if(StringUtils.hasText(workflowUUID)){
                 job.setWorkflowUUID(workflowUUID);
                 return startWorkflowSimulationJob(job);
@@ -410,7 +411,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             JsonObject root = new JsonObject();
             root.add("workflow", workflowJson);
             String workflowUUID = askForCreateWorkflow(gson.toJson(root));
-            System.out.println(workflowUUID);
+            System.out.println("workflowUUID : " + workflowUUID);
             if(StringUtils.hasText(workflowUUID)){
                 job.setWorkflowUUID(workflowUUID);
                 return startWorkflowSimulationJob(job);
@@ -429,6 +430,7 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         String execPath = PrefsPropsUtil.getString(PortalUtil.getCompanyId(request), EdisonPropsUtil.SCIENCEAPP_BASE_PATH);
         execPath = execPath != null ? execPath :_TEMP_BASE_PATH;
         Simulation simulation = new Simulation();
+        String script = null;
         List<Job> jobs = Lists.newArrayList();
         simulation.setBackend("torque");
         Job job = new Job();
@@ -436,25 +438,26 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
         if(node.get("scienceAppData") != null){
             Map<String, Object> scienceAppData = (Map<String, Object>) node.get("scienceAppData");
             String runType = CustomUtil.strNull(scienceAppData.get("runType"));
-            String appType = CustomUtil.strNull(scienceAppData.get("appType"));
             long scienceAppId = GetterUtil.getLong(scienceAppData.get("scienceAppId"));
+            List<Map<String, Object>> arrInputPorts = (List<Map<String, Object>>) node.get("arrInputPorts");
+            List<String> connectedPorts = node.containsKey("connectedPorts") ? (List<String>) node.get("connectedPorts") : null;
+            List<Item> files = Lists.newArrayList();
+            List<String> executions = Lists.newArrayList();
             ScienceApp scienceApp = null;
-            if(ObjectUtils.nullSafeEquals(appType, DYNAMIC_CONVERTER)){
+            if(ObjectUtils.nullSafeEquals(runType, DYNAMIC_CONVERTER) ||
+                ObjectUtils.nullSafeEquals(runType, CONTROLLER)){
+                String title = ObjectUtils.nullSafeEquals(runType, DYNAMIC_CONVERTER) ? "Dynamic Converter" : "Switcher"; 
                 scienceApp = ScienceAppLocalServiceUtil.createScienceApp(-1);
-                scienceApp.setTitle("Dynamic Converter");
-                scienceApp.setName("Dynamic Converter");
-                scienceApp.setAppType(appType);
-//                scienceApp.setGroupId(data.getLong("groupId"));
+                scienceApp.setTitle(title);
+                scienceApp.setName(title);
+                scienceApp.setAppType(runType);
+                scienceApp.setRunType(runType);
                 simulation.setBackend("docker");
-            }else if(ObjectUtils.nullSafeEquals(appType, CONTROLLER)){
-                scienceApp = ScienceAppLocalServiceUtil.createScienceApp(-1);
-                scienceApp.setTitle("Switcher");
-                scienceApp.setName("Switcher");
-                scienceApp.setAppType(appType);
-//                scienceApp.setGroupId(data.getLong("groupId"));
-                simulation.setBackend("docker");
+                arrInputPorts.add(ImmutableMap.<String, Object> builder()
+                    .put("name_", "script")
+                    .put("inputs_", node.get("inputData_"))
+                    .build());
             }else{
-                System.out.println(scienceAppData);
                 scienceApp = ScienceAppLocalServiceUtil.getScienceApp(scienceAppId);
             }
             boolean regenerateClientId = GetterUtil.getBoolean(node.get("regenerateClientId"), false);
@@ -510,32 +513,28 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
             }
             job.setAttributes(attributes);
             
-            if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
+            if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getRunType())){
                 job.setExecutable(execPath + "DCExcution/1.0.0/bin/DCExcution.sh");
-            }else if(ObjectUtils.nullSafeEquals(CONTROLLER, scienceApp.getAppType())){
+            }else if(ObjectUtils.nullSafeEquals(CONTROLLER, scienceApp.getRunType())){
                 job.setExecutable(execPath + "WFSwitcher/1.0.0/bin/WFSwitcher.sh");
             }else{
                 job.setExecutable(
                     execPath + ScienceAppLocalServiceUtil.getScienceAppBinPath(scienceApp.getScienceAppId()));
             }
-            List<Map<String, Object>> arrInputPorts = (List<Map<String, Object>>) node.get("arrInputPorts");
-            List<String> connectedPorts = node.containsKey("connectedPorts") ? (List<String>) node.get("connectedPorts") : null;
-            List<Item> files = Lists.newArrayList();
-            List<String> executions = Lists.newArrayList();
             for(Map<String, Object> inputPort : arrInputPorts) {
-                String portName = CustomUtil.strNull(inputPort.get("name_"));
                 Item file = handleInputPort(request, inputPort, connectedPorts);
                 if(file != null){
                     files.add(file);
-                    executions.add(
-                        file.getKey().replace("cmd", "") + " $" +file.getKey());                    
-                }
-                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
-                    executions.add("$cmd" + portName);
+                    if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getRunType())){
+                        executions.add("$" + file.getKey());
+                    } else {
+                        executions.add(
+                            file.getKey().replace("cmd", "") + " $" + file.getKey());                    
+                    }
                 }
             }
             if(executions.size() > 0){
-                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getAppType())){
+                if(ObjectUtils.nullSafeEquals(DYNAMIC_CONVERTER, scienceApp.getRunType())){
                     Collections.sort(executions, scriptFirst);
                 }
                 job.setExecution(Joiner.on(" ").join(executions));
@@ -670,8 +669,6 @@ public class WorkflowSimulationJobLocalServiceImpl extends WorkflowSimulationJob
 //                        files.put(portName, inputData.getString("context_"));
             }
             if(ibFileId != null) {
-                System.out.println(file.getKey());
-                System.out.println(ibFileId);
                 file.setValue(ibFileId);
                 return file;
             }

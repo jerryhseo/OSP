@@ -32,7 +32,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             "header":{
                 "id": "tpl-menu-panel-search-header",
                 "search-input-name": "search"
-            } 
+            }
         }, "new": {
             "col": 6,
             "panel-type": "new",
@@ -75,7 +75,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 "btns" : [
                     { "name": "Import", "func": importWorkflow }
                 ]
-            } 
+            }
         }, "save-as": {
             "col": 6,
             "panel-type": "save",
@@ -94,7 +94,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 "exportWorkflow": exportWorkflow,
                 "delete": deleteWorkflow
             }
-        }	
+        }
     };
     var JQ_PORTLET_BOUNDARY_ID = "#p_p_id" + namespace;
 
@@ -163,7 +163,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 $(".menu-panel").show('slide', { direction: 'left' }, 500);
             }
         }
-        
+
         if(btnType === "execute"){
             if(!_isEmpty(PANEL_DATA.setting.form.workflowId, "Load Workflow first.")){
                 var fn = window[namespace + "moveToExecutor"];
@@ -171,7 +171,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 fn.apply(null, [workflowId]);
             }
         }
-        
+
         if (btnType === "register-app") {
         	var workflowId = PANEL_DATA.setting.form.workflowId;
         	if(workflowId == "undefined" || workflowId == null || workflowId == ''){
@@ -181,7 +181,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             		window.AUI().use('liferay-portlet-url', function (A) {
             			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
             			var portletName = registerAppParam.portletName;
-            			
+
             			registerWorkflowAppURL += "&" + portletName + "workflowId=" + workflowId;
             			window.open(registerWorkflowAppURL, "_self");
             		});
@@ -190,7 +190,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         		}
         	}
         }
-        
+
         if (btnType === "config-app") {
         	var workflowId = PANEL_DATA.setting.form.workflowId;
         	if(workflowId == "undefined" || workflowId == null || workflowId == ''){
@@ -201,7 +201,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         			window.AUI().use('liferay-portlet-url', function (A) {
             			var registerWorkflowAppURL = registerAppParam.registerWorkflowAppURL;
             			var portletName = registerAppParam.portletName;
-            			
+
             			registerWorkflowAppURL += "&" + portletName + "scienceAppId=" + scienceAppId;
             			window.open(registerWorkflowAppURL, "_self");
             		});
@@ -211,11 +211,14 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     });
 
     $(document).bind('keydown.uiPanel',function (event) {
-        if ((event.which == 115 || event.which == 83) && 
-            (event.ctrlKey || event.metaKey) || (event.which == 19)) {
-            event.preventDefault();
-            saveOrUpdateDesigner();
-            return false;
+        if(registerAppParam) {
+            if ((event.which == 115 || event.which == 83) &&
+                (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+                event.preventDefault();
+
+                saveOrUpdateDesigner();
+                return false;
+            }
         }
         return true;
     });
@@ -286,13 +289,13 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		$("#" + namespace + "active-app-config").css("display","block");
     	}
     }
-    
+
     function setAppTitle(appName,appVersion) {
     	var appTitleText = appName || "";
     	if(appTitleText!=""){appTitleText=appName+" v"+appVersion};
         $("#" + namespace + "workflow-app-title").text(appTitleText);
     }
-    
+
     function setTitle(titleText) {
         titleText = titleText || "";
         $("#" + namespace + "workflow-title").text(titleText);
@@ -322,7 +325,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 getValueByInputName(
                     templateData.header["search-input-name"]), currentPage, isPublic);
             templateData.form.params = params;
-                
+
             drawWorkflowDefinitions(params, isPublic);
         }
     }
@@ -361,7 +364,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     }
 
     function drawWorkflowTable(workflowsMap, isPublic) {
-        var tbodyTemplate = isPublic ? 
+        var tbodyTemplate = isPublic ?
             '{{#rows}}'+
             '    <tr workflow-id="{{workflowId}}">'+
             '        <td>{{title}}</td>'+
@@ -381,7 +384,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             '        <td>{{createDate}}</td>'+
             '    </tr>'+
             '{{/rows}}';
-        tbodyTemplate += 
+        tbodyTemplate +=
             '{{^rows}}'+
             '    <tr>'+
             '        <td colspan="4">No Data</td>'+
@@ -394,11 +397,11 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
             '<li class="page-num {{active}}"><a href="#" page-num="{{num}}">{{num}}</a></li>' +
             '{{/pages}}' +
             '<li class="next"><a href="#">»</a></li>';
-        var buttonTemplate = 
+        var buttonTemplate =
             '{{#buttons}}' +
             '<button type="button" class="btn btn-flat func" name="{{name}}">{{name}}</button>' +
             '{{/buttons}}';
-        
+
         tbody(workflowsMap.workflows, tbodyTemplate, _panelType(isPublic));
         pagination(workflowsMap.pagination, paginationTemplate, _panelType(isPublic));
         buttons(buttonTemplate, _panelType(isPublic));
@@ -415,7 +418,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 });
             });
     }
-    
+
     function openWorkflow(panelType, that, e){
         var workflowId = PANEL_DATA[panelType].form.selected;
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
@@ -446,7 +449,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 
     function openWorkflowByWorkflowId(workflowId){
         designer.loadWorkflowDefinition(workflowId, function(workflow){
-        	
+
         	var metaData = {
     			"title": workflow.title,
         		"description": workflow.description,
@@ -457,7 +460,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         		metaData["appName"] = workflow.scienceAppName;
         		metaData["appVersion"] = workflow.scienceAppVersion;
         	}
-        	
+
         	setMetaData(metaData);
             closePanel();
         });
@@ -525,15 +528,15 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     }
 
     function deleteWorkflow(panelType, that, e){
-        var workflowId = panelType === "setting" ? 
-                PANEL_DATA[panelType].form.workflowId : 
+        var workflowId = panelType === "setting" ?
+                PANEL_DATA[panelType].form.workflowId :
                 PANEL_DATA[panelType].form.selected;
         var workflow = currWorkflows.get(workflowId);
         var screenLogic = JSON.parse(workflow.screenLogic);
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
             return false;
         }
-        
+
         var scienceAppId = workflow.scienceAppId;
         if(scienceAppId!=0){
         	var appStatus = workflow.status;
@@ -547,7 +550,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         	deleteWorkflowConfirm(var_remove_workflow_confirm_message,panelType,workflowId, scienceAppId, screenLogic);
         }
     }
-    
+
     function deleteWorkflowConfirm(confirmMsg,panelType, workflowId,scienceAppId, screenLogic){
     	_confirm(confirmMsg, function () {
     		var vFunction = function (resetDesignerFn){
@@ -561,7 +564,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                  toastr["success"]("", var_success_remove_workflow_message);
                  loadWorkflowDefinitions(panelType, PANEL_DATA.open.form.params.p_curPage);
     		}
-    		
+
     		if(scienceAppId!=0){
     			designer.deleteWorkflowDefinitionWithScienceApp(workflowId,scienceAppId,vFunction, screenLogic);
     		}else{
@@ -569,7 +572,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
     		}
         }, function () { });
     }
-    
+
     function importWorkflow(panelType, that, e){
         var workflowId = PANEL_DATA[panelType].form.selected;
         if(_isEmpty(workflowId, var_select_workflow_first_message)){
@@ -626,7 +629,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
                 e.preventDefault();
                 loadWorkflowDefinitions(panelType, $(this).attr("page-num"));
             });
-        
+
         if (paginationData.curBlock > 1 && paginationData.curBlock <= paginationData.totalBlock) {
             $(JQ_PORTLET_BOUNDARY_ID + " .menu-panel .pagination .prev > a").click(function (e) {
                 e.preventDefault();
@@ -673,8 +676,8 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         $(that).siblings().removeClass("active");
         $(that).addClass("active");
     }
-    
-    
+
+
     function createOpenModalFromDesigner(title, bodyTemplete, inputs, btns, saveHandler) {
         var modal = $("#" + namespace + "wf-modal");
         modal.find(".modal-title").text(title);
@@ -685,15 +688,15 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 //        _delay(function (selector) { $(selector).find("textarea[name='script']").select(); }, 500, "#" + namespace + "wf-modal");
         $("#" + namespace + "wf-modal").find("button[name='Save']").click(saveHandler);
     }
-    
-    
+
+
     var openWfAppDataSetting = function(nodeId, appType, appName){
 		var nodeData = designer.getNodeData(nodeId);
 		var value;
 		if(nodeData[OSP.Constants.INPUT_DATA]){
     		value = nodeData[OSP.Constants.INPUT_DATA][OSP.Constants.CONTENT];
 		}
-		
+
 		var inputs = [{"name": "script", "value": value}];
 		var btns = {"ok": "Save", "cancel": "Cancel"};
 		createOpenModalFromDesigner(appName+" Script", "tpl-modal-wf-app-data-body", inputs, btns, function(e){
@@ -701,12 +704,12 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 			inputData.type( OSP.Enumeration.PathType.FILE_CONTENT );
 			inputData.content( $("#" + namespace + "wf-modal").find("textarea[name='script']").val() );
 			nodeData[OSP.Constants.INPUT_DATA] = OSP.Util.toJSON( inputData );
-			
+
 			designer.setNodeData(nodeId,nodeData);
 			$("#" + namespace + "wf-modal").modal("hide");
     	});
     }
-    
+
     function createOpenModalFileFromDesigner(title, inputs, hiddens, formType) {
         var modal = $("#" + namespace + "wf-file-modal");
         modal.find(".modal-title").text(title);
@@ -714,14 +717,14 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
         modal.find(".modal-footer").empty().append($.Mustache.render("tpl-modal-file-footer", {"ok": "Save", "cancel": "Cancel"}));
         modal.modal({ "backdrop": "static", "keyboard": false });
     }
-    
+
     var openWfAppFileDataSetting = function(nodeId, appName, portId, portType){
-    	
+
     	if(nullToStr(PANEL_DATA.setting.form.workflowId)===""){
     		toastr["error"]("", var_create_first_message);
 			return false;
 		}
-    	
+
     	var nodeData = designer.getNodeData(nodeId);
     	console.log(JSON.stringify(nodeData));
 		var inputs = new Array();
@@ -730,7 +733,7 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 		var title = "";
 		var sample = nodeData[portType][portId].sample_;
 		inputs.push({"isAppFile":true, "fileId": sample[OSP.Constants.CONTENT], "fileName": "Download","title": "App Sample File"});
-		
+
 		var wfSample = nodeData[portType][portId][OSP.Constants.WF_SAMPLE];
 		if(wfSample){
 			inputs.push({"isFile":true, "fileId": wfSample[OSP.Constants.CONTENT], "fileName": wfSample.name_,"title": "WF Sample File"});
@@ -738,23 +741,23 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 			inputs.push({"isFile":true, "fileId": "", "fileName": "","title": "WF Sample File"});
 		}
 
-		
+
 		var isWfSample = nodeData[portType][portId][OSP.Constants.IS_WF_SAMPLE];
 		var fileTypeOptions = new Array();
 		fileTypeOptions.push({"optionName":"Is App Sample File Use","value":false});
 		fileTypeOptions.push({"optionName":"Is WF Sample File Use","value":true});
-		
+
 		if(!isWfSample){
 			fileTypeOptions[0]["selected"] = true;
 		}else{
 			fileTypeOptions[1]["selected"] = true;
 		}
 		inputs.push({"isSelect": true, "title":"Use Sample Type Setting","name":"isWfSample", "value": value,"options":fileTypeOptions});
-		
-		
+
+
 		var defaultEditor = nodeData[portType][portId].defaultEditor_;
 		var editors = nodeData[portType][portId].editors_;
-		
+
 		var editorOptionS = new Array();
 		for(var index in editors){
 			var value = editors[index].value;
@@ -768,15 +771,15 @@ var UIPanel = (function (namespace, $, designer, toastr, registerAppParam) {
 			editorOptionS.push(editorOption);
 		}
 		inputs.push({"isSelect": true, "title":"Default Editor Setting","name":"editor", "value": value,"options":editorOptionS});
-		
-		
-		
+
+
+
 		hiddens.push({"name":"nodeId", "value": nodeId});
 		hiddens.push({"name":"portId", "value": portId});
 		hiddens.push({"name":"portType", "value": portType});
 		formType = "wf-port";
 		title = appName+" "+portId+" Script";
-    	
+
     	createOpenModalFileFromDesigner(title,inputs, hiddens, formType);
     }
 

@@ -410,6 +410,14 @@ $.widget.bridge('uibutton', $.ui.button);
   </div>
 {{/inputs}}
 </script>
+<script id="tpl-modal-wf-app-data-body" type="text/html">
+    {{#inputs}}
+        <div class="form-group">
+            <label for="{{name}}" class="control-label">{{name}}</label>
+            <textarea class="form-control" rows="20" id="{{name}}" name="{{name}}" style="resize: none; ">{{value}}</textarea>
+        </div>
+    {{/inputs}}
+</script>
 <script id="tpl-modal-footer" type="text/html">
     <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" name="{{cancel}}">{{cancel}}</button>
     <button type="button" class="btn btn-primary btn-flat" name="{{ok}}">{{ok}}</button>
