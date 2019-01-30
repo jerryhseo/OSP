@@ -111,10 +111,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function isPauseAbleNode(node) {
         var currJob = currJobs.selected()
-        if(currJob && node.data && node.data.status &&
-            (currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
-                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
-                node.data.status.pause !== 'pause') {
+        if (currJob && node.data && node.data.status &&
+            currJob.status !== CONSTS.WF_STATUS_CODE.PAUSED &&
+            currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+            currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS &&
+            node.data.status.pause !== 'pause') {
             return true
         } else {
             return false
@@ -123,11 +124,11 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 
     function isResumeAbleNode(node) {
         var currJob = currJobs.selected()
-        if(currJob && node.data && node.data.status &&
-            (currJob.status !== '' &&
-                currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
-                currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS) &&
-            (node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED)) {
+        if (currJob && node.data && node.data.status &&
+            currJob.status !== '' &&
+            currJob.status !== CONSTS.WF_STATUS_CODE.FAILED &&
+            currJob.status !== CONSTS.WF_STATUS_CODE.SUCCESS &&
+            node.data.status.status === CONSTS.WF_STATUS_CODE.PAUSED) {
             return true
         } else {
             return false
@@ -1896,9 +1897,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 	var openScienceAppWorkbench = function(node) {
 		executor.clearStatusTimeout()
 		_delay(function() {
-            var modal = $("#" + namespace + "science-app-workbench-modal");
-            var openWorkbench = true;
-
             var nodeData = node.data;
             var wfId = nodeData.id;
 
@@ -1906,18 +1904,12 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
                 nodeData[CONSTS.WF_NODE_CODE.IB_DATA] = {};
             }
             if(!nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA]) {
-            	nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA] = {}
+            	nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA] = {};
             }
             var simulationUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_SIM_UUID];
             var jobUuid = nodeData[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID];
             var scienceAppData = nodeData.scienceAppData;
             var scienceAppId = scienceAppData.scienceAppId;
-            var ports = node.getPorts();
-            var inputPorts = nodeData.inputPorts;
-
-            /* test Uuid */
-            /*simulationUuid = "0028ec20-8d46-4bde-890b-7e2ac0520a32";
-            jobUuid = "fa796ee7-4b2e-424e-b665-5df2d26edfc9";*/
 
             /* Call API */
             if(!!simulationUuid){
@@ -1942,7 +1934,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
             appVersion : appVersion,
             simulationTitle : "default_simulation",
             jobData : jobData
-        }
+        };
 		var nodeData = node.data;
 		window.Liferay.Service(
 			'/edison-simulation-portlet.simulation/add-simulation',
@@ -1970,7 +1962,6 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 		/* Get Connected Input Ports and Disconnected Input Ports */
 		var ports = node.getPorts();
         var currNodeInputPortsInfo = getNodeInputPortsInfo(ports, simulationUuid, jobUuid);
-        var connectedParentObj = currNodeInputPortsInfo.connectedParentObj;
         var connectedInputPorts = currNodeInputPortsInfo.connectedInputPorts;
         var disconnectedInputPorts = currNodeInputPortsInfo.disconnectedInputPorts
         var jobDataArr = currNodeInputPortsInfo.jobDataArr
@@ -1998,14 +1989,13 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
     						node.data[CONSTS.WF_NODE_CODE.WORKBENCH_DATA][CONSTS.WF_NODE_CODE.IB_UUID] = jobUuid;
         					var job = currJobs.selected();
         					saveSimulationJob(job, function (simulationJob){
-        						var currJobStatus = currJobs.selected()[CONSTS.WF_NODE_CODE.STATUS];
-        						if(currJobStatus == OSP.Enumeration.JobStatus.RUNNING){
-        							pause(function(){
-        								openWorkbenchPopup(appId, simulationUuid, null, connectedInputPorts, wfId);
-        							})
-        						} else {
-        							openWorkbenchPopup(appId, simulationUuid, null, connectedInputPorts, wfId);
-        						}
+        						if (isPauseAbleNode(node)) {
+        						    pauseNode(node, true, function () {
+                                        openWorkbenchPopup(appId, simulationUuid, null, connectedInputPorts, wfId);
+                                    });
+                                } else {
+                                    openWorkbenchPopup(appId, simulationUuid, null, connectedInputPorts, wfId);
+                                }
         					});
         				} else {
         					toastr["error"]("", "Simulation not exist!!");
