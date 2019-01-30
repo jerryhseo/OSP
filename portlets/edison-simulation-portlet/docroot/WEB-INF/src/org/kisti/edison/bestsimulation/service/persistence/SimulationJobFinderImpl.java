@@ -964,9 +964,8 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 		return null;
 	}
 	
-	public List<Object[]> getVirtualClassListForInsertStatistics() {
+	public List<Object[]> getVirtualClassListForInsertStatistics(Map params) {
 		StringBuilder sqlSb = new StringBuilder();
-		Map params = new HashMap();
 		Session session = null;
 		try {
 			String sqlQuery = CustomSQLUtil.get("org.kisti.edison.statistics.getVirtualClassListForInsertStatistics");
@@ -1018,7 +1017,6 @@ public class SimulationJobFinderImpl extends BasePersistenceImpl<SimulationJob> 
 			params.put("languageId", locale.toString());
 			
 			String gBatisQuery = GBatisUtil.getGBatis(params, sqlSb.toString());
-			System.out.println("gBatisQuery : " + gBatisQuery);
 			SQLQuery query = session.createSQLQuery(gBatisQuery);
 			
 			query.addScalar("groupId", Type.INTEGER);//0

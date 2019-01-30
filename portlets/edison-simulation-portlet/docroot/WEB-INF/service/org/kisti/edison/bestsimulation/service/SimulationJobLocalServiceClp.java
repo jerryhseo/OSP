@@ -381,7 +381,7 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 
 		_methodName68 = "executeSchedulerOfClassStatistics";
 
-		_methodParameterTypes68 = new String[] {  };
+		_methodParameterTypes68 = new String[] { "java.util.Map" };
 
 		_methodName69 = "getVirtualLabClassStatisticsList";
 
@@ -2713,11 +2713,12 @@ public class SimulationJobLocalServiceClp implements SimulationJobLocalService {
 	}
 
 	@Override
-	public void executeSchedulerOfClassStatistics()
+	public void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName68,
-				_methodParameterTypes68, new Object[] {  });
+				_methodParameterTypes68,
+				new Object[] { ClpSerializer.translateInput(params) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);

@@ -1658,9 +1658,12 @@ public class SimulationJobLocalServiceImpl
 		}
 	}
 	
-	public void executeSchedulerOfClassStatistics() throws SystemException {
+	public void executeSchedulerOfClassStatistics(Map params) throws SystemException {
 		try {
-			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics();
+			System.out.println("1...executeSchedulerOfClassStatistics");
+			System.out.println("params : " + params.toString());
+			List<Object[]> virtualClassStatisticsList = simulationJobFinder.getVirtualClassListForInsertStatistics(params);
+			System.out.println("virtualClassStatisticsList size : " + virtualClassStatisticsList.size());
 			
 			List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
 			
@@ -1698,9 +1701,12 @@ public class SimulationJobLocalServiceImpl
 						VirtualLabClassStatisticsPK virtualLabClassStatisticsPK = new VirtualLabClassStatisticsPK(virtualLabId, classId);
 						if(hasClassStatistics){
 							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.getVirtualLabClassStatistics(virtualLabClassStatisticsPK);
-							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(new Date().toString()));
+							Date currDate = new Date();
+							String currDateStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(currDate);
+							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currDateStr));
 						} else {
 							virtualLabClassStatistics = VirtualLabClassStatisticsLocalServiceUtil.createVirtualLabClassStatistics(virtualLabClassStatisticsPK);
+							virtualLabClassStatistics.setClassCreateDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 							virtualLabClassStatistics.setLastModifiedDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 						}
 						virtualLabClassStatistics.setGroupId(groupId);
@@ -1711,7 +1717,6 @@ public class SimulationJobLocalServiceImpl
 						virtualLabClassStatistics.setRegisterStudentCnt(registerStudentCnt);
 						virtualLabClassStatistics.setVirtualLabUsersId(virtualLabUsersIdObj);
 						virtualLabClassStatistics.setScienceAppId(scienceAppIdObj);
-						virtualLabClassStatistics.setClassCreateDt(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(classCreateDt));
 						virtualLabClassStatistics.setVirtualLabUseYn(virtualLabUseYn);
 						virtualLabClassStatistics.setClassUseYn(classUseYn);
 						
@@ -1726,6 +1731,7 @@ public class SimulationJobLocalServiceImpl
 						virtualLabClassStatistics.setCputime(avgerageRuntime);
 						
 						if(hasClassStatistics){
+							System.out.println("1.....");
 							virtualLabClassStatistics.setNew(false);
 							VirtualLabClassStatisticsLocalServiceUtil.updateVirtualLabClassStatistics(virtualLabClassStatistics);
 							updateCnt += 1;
@@ -1769,6 +1775,7 @@ public class SimulationJobLocalServiceImpl
 					Long executeStudentcount = (Long) resultArray[11];
 					Long executeCount = (Long) resultArray[12];
 					String avgerageRuntime = (String) resultArray[13];
+					String lastModifiedDt = CustomUtil.strNull(resultArray[14]);
 					
 					resultRow = new HashMap<String, Object>();
 					resultRow.put("groupId", groupId);
@@ -1792,6 +1799,7 @@ public class SimulationJobLocalServiceImpl
 					resultRow.put("executeCount", executeCount);
 					resultRow.put("executeStudentcount", executeStudentcount);
 					resultRow.put("avgerageRuntime", avgerageRuntime);
+					resultRow.put("lastModifiedDt", lastModifiedDt);
 					
 					List<String> scienceAppTitleList = new ArrayList<String>();
 

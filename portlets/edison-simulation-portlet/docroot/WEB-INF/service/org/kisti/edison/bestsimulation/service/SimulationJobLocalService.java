@@ -561,7 +561,7 @@ public interface SimulationJobLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.kisti.edison.bestsimulation.NoSuchSimulationJobException;
 
-	public void executeSchedulerOfClassStatistics()
+	public void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

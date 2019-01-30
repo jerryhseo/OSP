@@ -198,6 +198,15 @@
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<css-class-wrapper>edison-virtuallab-class-statistics-scheduler container</css-class-wrapper>
 	</portlet>
+	
+	<portlet>
+		<portlet-name>edison-statistics-class-management</portlet-name>
+		<icon>/icon.png</icon>
+		<configuration-action-class>org.kisti.edison.bestsimulation.portlet.simulation.ConfigurationController</configuration-action-class>
+		<action-url-redirect>true</action-url-redirect>
+		<css-class-wrapper>edison-statistics-class-management container</css-class-wrapper>		
+		<add-default-resource>true</add-default-resource>
+	</portlet>
     
 	<role-mapper>
 		<role-name>administrator</role-name>

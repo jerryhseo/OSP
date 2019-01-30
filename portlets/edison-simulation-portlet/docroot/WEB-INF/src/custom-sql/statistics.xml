@@ -521,6 +521,11 @@
 				LEFT OUTER JOIN
 				  EDVIR_VirtualLabScienceAppLink EVLSAL
 				ON EVLSALC.scienceAppSeqNo = EVLSAL.scienceAppSeqNo
+			WHERE
+				1=1
+				<isNotEmpty property="labId">
+					AND EVL.virtualLabId = #labId#
+				</isNotEmpty>
 			GROUP BY
 				EVL.virtualLabUniversityField,
 				EVL.virtualLabId,

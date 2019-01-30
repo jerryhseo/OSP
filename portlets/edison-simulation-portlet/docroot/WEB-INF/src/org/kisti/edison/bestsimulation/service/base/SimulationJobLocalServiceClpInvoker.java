@@ -380,7 +380,7 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		_methodName152 = "executeSchedulerOfClassStatistics";
 
-		_methodParameterTypes152 = new String[] {  };
+		_methodParameterTypes152 = new String[] { "java.util.Map" };
 
 		_methodName153 = "getVirtualLabClassStatisticsList";
 
@@ -819,7 +819,7 @@ public class SimulationJobLocalServiceClpInvoker {
 
 		if (_methodName152.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes152, parameterTypes)) {
-			SimulationJobLocalServiceUtil.executeSchedulerOfClassStatistics();
+			SimulationJobLocalServiceUtil.executeSchedulerOfClassStatistics((java.util.Map)arguments[0]);
 
 			return null;
 		}

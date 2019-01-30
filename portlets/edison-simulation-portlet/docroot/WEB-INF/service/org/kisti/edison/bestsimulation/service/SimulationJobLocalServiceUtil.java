@@ -697,9 +697,9 @@ public class SimulationJobLocalServiceUtil {
 		getService().deleteJob(jobUuid);
 	}
 
-	public static void executeSchedulerOfClassStatistics()
+	public static void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().executeSchedulerOfClassStatistics();
+		getService().executeSchedulerOfClassStatistics(params);
 	}
 
 	public static java.util.List<java.util.Map<java.lang.String, java.lang.Object>> getVirtualLabClassStatisticsList(
