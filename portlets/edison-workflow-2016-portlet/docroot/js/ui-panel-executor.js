@@ -2106,7 +2106,7 @@ var UIPanelExecutor = (function (namespace, $, designer, executor, toastr) {
 							}
 						}
 					}
-
+					
 				} else {
 					disconnectedInputPorts.push(port.id);
 
