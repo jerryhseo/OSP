@@ -21,6 +21,7 @@
 	  <portlet id="edison-tab"></portlet>
 	  <portlet id="edison-file-manager" />
 	  <portlet id="edison-virtuallab-class-statistics-scheduler"></portlet>
+	  <portlet id="edison-statistics-class-management" />
 	</category>
 	<category name="OSP Workbench">
 		<portlet id="SimulationDashboard" />

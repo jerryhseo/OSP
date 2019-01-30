@@ -742,9 +742,9 @@ public class SimulationJobLocalServiceWrapper
 	}
 
 	@Override
-	public void executeSchedulerOfClassStatistics()
+	public void executeSchedulerOfClassStatistics(java.util.Map params)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		_simulationJobLocalService.executeSchedulerOfClassStatistics();
+		_simulationJobLocalService.executeSchedulerOfClassStatistics(params);
 	}
 
 	@Override
