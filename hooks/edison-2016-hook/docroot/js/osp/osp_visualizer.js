@@ -32,7 +32,7 @@
             var offset = $('#p_p_id'+namespace).offset();
             console.log('Block visualizer: '+namespace, offset, $('#p_p_id'+namespace).width(), $('#p_p_id'+namespace).height() );
             $('#p_p_id'+namespace).block({
-                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/processing.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
+                        message:'<img src=\"'+Liferay.ThemeDisplay.getPathThemeImages()+'/common/loading.gif\" style=\"position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;\"/>',
                         css: {
                             'width':$('#p_p_id'+namespace).width()+'px',
                             'height':$('#p_p_id'+namespace).height()+'px',

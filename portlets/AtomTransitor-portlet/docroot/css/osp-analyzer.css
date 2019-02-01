@@ -1,11 +1,11 @@
 .osp-analyzer {
 	height: 100%;
-   	min-height:200px;
-   	margin: 0;
-   	padding-top: 0px;
-    padding-right: 0px !important;
-    padding-bottom: 5px;
-    padding-left: 0px !important;
+	min-height:200px;
+	margin: 0;
+	padding-top: 0px;
+	padding-right: 0px !important;
+	padding-bottom: 5px;
+	padding-left: 0px !important;
 }
 
 .osp-analyzer .header{
@@ -17,13 +17,13 @@
 	padding-left: 0;
 	padding-right: 0;
 }
-.osp-analyzer .no-header-frame{ 
+.osp-analyzer .no-header-frame{
 	height: 100%;
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
 }
-.osp-analyzer .frame{ 
+.osp-analyzer .frame{
 	height: calc(100% - 45px);
 	height: -o-calc(100% - 45px); /* opera */
 	height: -webkit-calc(100% - 45px); /* google, safari */
@@ -33,19 +33,19 @@
 	overflow: hidden;
 }
 .osp-analyzer .canvas {
-   	height:100%;
-   	margin:0;
-   	padding:0;
-   	
-   	overflow:auto;
+	height:100%;
+	margin:0;
+	padding:0;
+
+	overflow:auto;
 }
 .osp-analyzer .iframe-canvas {
-   	border:none;
-   	height:100%;
-   	width:100%;
-   	margin:0;
-   	padding:0;
-   	overflow:hidden;
+	border:none;
+	height:100%;
+	width:100%;
+	margin:0;
+	padding:0;
+	overflow:hidden;
 }
 
 .osp-analyzer .hidden {

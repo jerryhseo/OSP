@@ -323,11 +323,11 @@ public class SimulationShareLocalServiceUtil {
 	}
 
 	/**
-	* JobUUid를 통한 공유 항목 삭제 후 재정의
+	* JobUUid�몴占� 占쎈꽰占쎈립 �⑤벊�� 占쎈퉮筌륅옙 占쎄텣占쎌젫 占쎌뜎 占쎌삺占쎌젟占쎌벥
 	*
 	* @param jobUuid
 	* @param classId
-	* @param customIds - 다수 일경우 delimeter는 ,
+	* @param customIds - 占쎈뼄占쎈땾 占쎌뵬野껋럩�뒭 delimeter占쎈뮉 ,
 	* @throws SystemException
 	*/
 	public static void removeAndCreateByJobUUids(java.lang.String jobUuid,

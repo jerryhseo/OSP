@@ -8,7 +8,7 @@
   padding-left: 0px !important; }
 
 .osp-editor .header {
-  height: 35px;
+  height: 60px;
   padding: 0;
   margin: 5px; }
 
@@ -23,16 +23,16 @@
   overflow: hidden; }
 
 .osp-editor .frame {
-  height: calc(100% - 45px);
-  height: -o-calc(100% - 45px);
+  height: calc(100% - 75px);
+  height: -o-calc(100% - 75px);
   /* opera */
-  height: -webkit-calc(100% - 45px);
+  height: -webkit-calc(100% - 75px);
   /* google, safari */
-  height: -moz-calc(100% - 45px);
+  height: -moz-calc(100% - 75px);
   /* firefox */
   padding: 0;
   margin: 0;
-  overflow: hidden; }
+  overflow: auto; }
 
 .osp-editor .canvas {
   height: 100%;
@@ -42,7 +42,8 @@
 
 .osp-editor .iframe-canvas {
   border: none;
-  height: 95%;
+  height: 90%;
+  width: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden; }
