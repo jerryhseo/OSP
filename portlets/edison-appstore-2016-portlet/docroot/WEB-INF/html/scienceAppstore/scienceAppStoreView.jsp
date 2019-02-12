@@ -745,6 +745,10 @@
 		background-color: #9babc7 !important;
 	}
 	
+	.<portlet:namespace/>scienceAppCategoryList[parent-category-id=""]{
+		background-color: #ed1c24 !important;
+	}
+	
 	.<portlet:namespace/>science-app-relate-data-table{
 		border-top : 2px solid #327bb9 !important;
 	}
@@ -804,7 +808,7 @@
 						<div class="box box-solid">
 							<div class="box-body box-profile">
 								<!-- <img  src="./img/sumnail.png" alt="2D Comp P"> -->
-								<img class="profile-user-img img-responsive" alt="${solver.currentTitle}" src="/documents/${solver.iconRepositoryId}/${solver.iconId}/${solver.iconTitle}/${solver.iconUuid}?imageThumbnail=2" width="104px" style="height: 78px !important;" onerror="this.src='${contextPath}/images/comm_proj/noimage.png'">
+								<img class="profile-user-img img-responsive" alt="${solver.currentTitle}" src="/documents/${solver.iconRepositoryId}/${solver.iconId}/${solver.iconTitle}/${solver.iconUuid}?imageThumbnail=2" style="width: 145px !important; height: 100px !important;" onerror="this.src='${contextPath}/images/comm_proj/noimage.png'">
 								
 								<div class="h20"></div>
 								
@@ -881,16 +885,14 @@
 									<% if(isLogin) {%>
 										<li class="list-group-item">
 											<b><liferay-ui:message key='edison-appstore-bookmark' /></b> 
-											<div class="pull-right">
-												<!-- 즐겨찾기 -->
-												<button id="<portlet:namespace/>appFavoriteBtn_on" class="btn btn-default btn-xs" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>deleteFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
-													<i class="icon-star" style="color: blue;"></i>
-												</button>
-												
-												<button id="<portlet:namespace/>appFavoriteBtn_off" class="btn btn-default  btn-xs" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>addFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
-													<i class="icon-star-empty"></i>
-												</button>
-											</div>
+											<!-- 즐겨찾기 -->
+											<button id="<portlet:namespace/>appFavoriteBtn_on" class="btn btn-default btn-xs pull-right" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>deleteFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
+												<i class="icon-star" style="color: blue;"></i>
+											</button>
+											
+											<button id="<portlet:namespace/>appFavoriteBtn_off" class="btn btn-default btn-xs pull-right" type="button" style="display: none; padding: 0px 10px;" onclick="<portlet:namespace/>addFavoriteApp(${solver.scienceAppId}, ${params.solverGroupId}); return false;">
+												<i class="icon-star-empty"></i>
+											</button>
 										</li>
 										
 										
@@ -931,7 +933,7 @@
 								<hr>
 								<strong class="<portlet:namespace/>app-relation-info">
 									<i class="fa fa-map-marker margin-r-5"></i> 
-									<liferay-ui:message key='related-content' />
+									<liferay-ui:message key='edison-science-appstore-view-relate-info' />
 								</strong>
 								
 								<p class="text-muted <portlet:namespace/>app-relation-info" style="margin-left: 10px; margin-top: 5px; line-height: 1.7em;">
