@@ -2500,7 +2500,7 @@ function <portlet:namespace/>moveWorkflow(targetWorkflowId){
 							dataType = "C";
 							dataTypeClass = "primary";
 							
-							if(dataList[i].contentUrl != ''){
+							if(dataList[i].contentUrl != '' && dataList[i].contentUrl != null){
 								hasContentUrl = true;
 								contentUrl = dataList[i].contentUrl;
 							}
